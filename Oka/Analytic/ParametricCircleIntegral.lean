@@ -1,4 +1,5 @@
 import Mathlib
+import Oka.LocalOkaRing
 
 /-!
 # Analyticity of parametric circle integrals
@@ -7,11 +8,276 @@ Work in progress: SCV foundations for the local Weierstrass division theorem.
 -/
 
 open Complex
+open scoped Topology
 
-theorem analyticAt_of_differentiableOn {m : ℕ} {f : (Fin m → ℂ) → ℂ}
-    {s : Set (Fin m → ℂ)} (hs : IsOpen s) (hf : DifferentiableOn ℂ f s)
-    {x₀ : Fin m → ℂ} (hx₀ : x₀ ∈ s) : AnalyticAt ℂ f x₀ :=
-  sorry
+open MvPowerSeries in
+lemma analyticAt_of_represents {m : ℕ} {P : MvPowerSeries (Fin m) ℂ} {g : (Fin m → ℂ) → ℂ}
+    (hP : LocallyConvergent P) (hrep : Represents P g) : AnalyticAt ℂ g 0 := by
+  refine hP.analyticAt.congr ?_
+  filter_upwards [hrep] with x hx
+  exact hx.tsum_eq
+
+lemma analyticAt_of_shift {m : ℕ} {f : (Fin m → ℂ) → ℂ} {x₀ : Fin m → ℂ}
+    (h : AnalyticAt ℂ (fun y ↦ f (x₀ + y)) 0) : AnalyticAt ℂ f x₀ := by
+  have hcomp : AnalyticAt ℂ ((fun y ↦ f (x₀ + y)) ∘ (fun x ↦ x - x₀)) x₀ :=
+    AnalyticAt.comp (by simpa using h) (analyticAt_id.sub analyticAt_const)
+  have hfe : ((fun y ↦ f (x₀ + y)) ∘ (fun x ↦ x - x₀)) = f := by
+    funext x
+    simp only [Function.comp_apply]
+    congr 1
+    abel
+  rwa [hfe] at hcomp
+
+/-- Peel off the `0`-th coordinate of a `Fin (m+1)`-indexed `Finsupp`. -/
+noncomputable def finsuppConsEquiv (m : ℕ) : (Fin (m + 1) →₀ ℕ) ≃ ℕ × (Fin m →₀ ℕ) where
+  toFun t := (t 0, Finsupp.tail t)
+  invFun p := Finsupp.cons p.1 p.2
+  left_inv t := Finsupp.cons_tail t
+  right_inv p := by obtain ⟨y, s⟩ := p; simp
+
+@[simp] lemma finsuppConsEquiv_apply (m : ℕ) (t : Fin (m + 1) →₀ ℕ) :
+    finsuppConsEquiv m t = (t 0, Finsupp.tail t) := rfl
+
+@[simp] lemma finsuppConsEquiv_symm_apply (m : ℕ) (p : ℕ × (Fin m →₀ ℕ)) :
+    (finsuppConsEquiv m).symm p = Finsupp.cons p.1 p.2 := rfl
+
+set_option maxHeartbeats 400000 in
+-- heavy defeq in the Finsupp/Fin.succ tensor induction
+theorem summable_norm_multiGeometric :
+    ∀ (m : ℕ) (a : Fin m → ℂ), (∀ i, ‖a i‖ < 1) →
+      Summable (fun d : Fin m →₀ ℕ ↦ ‖∏ i, (a i) ^ (d i)‖) := by
+  intro m
+  induction m with
+  | zero =>
+      intro a _
+      exact (hasSum_single (0 : Fin 0 →₀ ℕ)
+        (f := fun d : Fin 0 →₀ ℕ ↦ ‖∏ i, (a i) ^ (d i)‖)
+        (fun b' hb' => absurd (Subsingleton.elim b' 0) hb')).summable
+  | succ m ih =>
+      intro a ha
+      have hf : Summable (fun k : ℕ ↦ ‖(a 0) ^ k‖) := by
+        simp_rw [norm_pow]
+        exact summable_geometric_of_lt_one (norm_nonneg _) (ha 0)
+      have hg : Summable (fun t : Fin m →₀ ℕ ↦ ‖∏ i, (a (Fin.succ i)) ^ (t i)‖) :=
+        ih (fun i : Fin m => a (Fin.succ i)) (fun i : Fin m => ha (Fin.succ i))
+      have hfun :
+          (fun d : Fin (m + 1) →₀ ℕ ↦ ‖∏ i, (a i) ^ (d i)‖) ∘ (finsuppConsEquiv m).symm
+            = fun x : ℕ × (Fin m →₀ ℕ) ↦ ‖(a 0) ^ x.1 * ∏ i, (a (Fin.succ i)) ^ (x.2 i)‖ := by
+        funext x
+        simp only [Function.comp_apply, finsuppConsEquiv_symm_apply,
+          Fin.prod_univ_succ, Finsupp.cons_zero, Finsupp.cons_succ]
+      refine (Equiv.summable_iff (finsuppConsEquiv m).symm).mp ?_
+      rw [hfun]
+      exact Summable.mul_norm
+        (f := fun k : ℕ => (a 0) ^ k)
+        (g := fun t : Fin m →₀ ℕ => ∏ i, (a (Fin.succ i)) ^ (t i)) hf hg
+
+set_option maxHeartbeats 400000 in
+-- heavy defeq in the Finsupp/Fin.succ tensor induction
+theorem hasSum_multiGeometric :
+    ∀ (m : ℕ) (a : Fin m → ℂ), (∀ i, ‖a i‖ < 1) →
+      HasSum (fun d : Fin m →₀ ℕ ↦ ∏ i, (a i) ^ (d i)) (∏ i, (1 - a i)⁻¹) := by
+  intro m
+  induction m with
+  | zero =>
+      intro a _
+      have e1 : (fun d : Fin 0 →₀ ℕ ↦ ∏ i, (a i) ^ (d i)) = fun _ => (1 : ℂ) := by
+        funext d; simp
+      have e2 : (∏ i, (1 - a i)⁻¹ : ℂ) = 1 := by simp
+      rw [e1, e2]
+      exact hasSum_single (0 : Fin 0 →₀ ℕ) (f := fun _ : Fin 0 →₀ ℕ => (1 : ℂ))
+        (fun b' hb' => absurd (Subsingleton.elim b' 0) hb')
+  | succ m ih =>
+      intro a ha
+      have hf : HasSum (fun k : ℕ ↦ (a 0) ^ k) (1 - a 0)⁻¹ :=
+        hasSum_geometric_of_norm_lt_one (ha 0)
+      have hg : HasSum (fun t : Fin m →₀ ℕ ↦ ∏ i, (a (Fin.succ i)) ^ (t i))
+          (∏ i, (1 - a (Fin.succ i))⁻¹) :=
+        ih (fun i : Fin m => a (Fin.succ i)) (fun i : Fin m => ha (Fin.succ i))
+      have hnf : Summable (fun k : ℕ ↦ ‖(a 0) ^ k‖) := by
+        simp_rw [norm_pow]
+        exact summable_geometric_of_lt_one (norm_nonneg _) (ha 0)
+      have hng : Summable (fun t : Fin m →₀ ℕ ↦ ‖∏ i, (a (Fin.succ i)) ^ (t i)‖) :=
+        summable_norm_multiGeometric m (fun i : Fin m => a (Fin.succ i))
+          (fun i : Fin m => ha (Fin.succ i))
+      have hsummable : Summable
+          (fun x : ℕ × (Fin m →₀ ℕ) ↦ (a 0) ^ x.1 * ∏ i, (a (Fin.succ i)) ^ (x.2 i)) :=
+        summable_mul_of_summable_norm
+          (f := fun k : ℕ => (a 0) ^ k)
+          (g := fun t : Fin m →₀ ℕ => ∏ i, (a (Fin.succ i)) ^ (t i)) hnf hng
+      have hmul := hf.mul hg hsummable
+      have hval : (∏ i, (1 - a i)⁻¹ : ℂ)
+          = (1 - a 0)⁻¹ * ∏ i : Fin m, (1 - a (Fin.succ i))⁻¹ := Fin.prod_univ_succ _
+      have hfun :
+          (fun d : Fin (m + 1) →₀ ℕ ↦ ∏ i, (a i) ^ (d i)) ∘ (finsuppConsEquiv m).symm
+            = fun x : ℕ × (Fin m →₀ ℕ) ↦ (a 0) ^ x.1 * ∏ i, (a (Fin.succ i)) ^ (x.2 i) := by
+        funext x
+        simp only [Function.comp_apply, finsuppConsEquiv_symm_apply,
+          Fin.prod_univ_succ, Finsupp.cons_zero, Finsupp.cons_succ]
+      rw [hval]
+      refine (Equiv.hasSum_iff (finsuppConsEquiv m).symm).mp ?_
+      rw [hfun]
+      exact hmul
+
+/-- Geometric expansion of the Cauchy kernel in the multi-index `d`. -/
+theorem hasSum_cauchyKernel {m : ℕ} (ζ w : Fin m → ℂ)
+    (hζ : ∀ i, ζ i ≠ 0) (hlt : ∀ i, ‖w i‖ < ‖ζ i‖) :
+    HasSum (fun d : Fin m →₀ ℕ ↦ (∏ i, (ζ i ^ (d i + 1))⁻¹) * ∏ i, (w i) ^ (d i))
+      (∏ i, (ζ i - w i)⁻¹) := by
+  have ha : ∀ i, ‖w i / ζ i‖ < 1 := by
+    intro i
+    rw [norm_div, div_lt_one (lt_of_le_of_lt (norm_nonneg _) (hlt i))]
+    exact hlt i
+  have hbase := hasSum_multiGeometric m (fun i => w i / ζ i) ha
+  have hmul := hbase.mul_left (∏ i, (ζ i)⁻¹)
+  have hval : (∏ i, (ζ i)⁻¹) * ∏ i, (1 - w i / ζ i)⁻¹ = ∏ i, (ζ i - w i)⁻¹ := by
+    rw [← Finset.prod_mul_distrib]
+    refine Finset.prod_congr rfl (fun i _ => ?_)
+    have h1 : (1 : ℂ) - w i / ζ i = (ζ i - w i) / ζ i := by
+      rw [sub_div, div_self (hζ i)]
+    rw [h1, inv_div, ← mul_div_assoc, inv_mul_cancel₀ (hζ i), one_div]
+  have hfun : (fun d : Fin m →₀ ℕ => (∏ i, (ζ i)⁻¹) * ∏ i, (w i / ζ i) ^ (d i))
+      = fun d => (∏ i, (ζ i ^ (d i + 1))⁻¹) * ∏ i, (w i) ^ (d i) := by
+    funext d
+    rw [← Finset.prod_mul_distrib, ← Finset.prod_mul_distrib]
+    refine Finset.prod_congr rfl (fun i _ => ?_)
+    rw [div_pow, div_eq_mul_inv, pow_succ, mul_inv_rev]
+    ring
+  rw [← hval, ← hfun]
+  exact hmul
+
+open MeasureTheory in
+/-- Term-by-term integration over a torus. -/
+theorem hasSum_torusIntegral {m : ℕ} {c : Fin m → ℂ} {R : Fin m → ℝ}
+    {F : (Fin m →₀ ℕ) → (Fin m → ℂ) → ℂ} {S : (Fin m → ℂ) → ℂ}
+    (hint : ∀ d, TorusIntegrable (F d) c R)
+    (hsum : Summable (fun d ↦ ∫ θ in Set.Icc (0 : Fin m → ℝ) (fun _ ↦ 2 * Real.pi),
+        ‖(∏ i, R i * Complex.exp (θ i * Complex.I) * Complex.I : ℂ) • F d (torusMap c R θ)‖))
+    (hpt : ∀ θ : Fin m → ℝ,
+        HasSum (fun d ↦ F d (torusMap c R θ)) (S (torusMap c R θ))) :
+    HasSum (fun d ↦ ∯ ζ in T(c, R), F d ζ) (∯ ζ in T(c, R), S ζ) := by
+  have key := hasSum_integral_of_summable_integral_norm
+    (μ := (volume : Measure (Fin m → ℝ)).restrict
+      (Set.Icc (0 : Fin m → ℝ) (fun _ ↦ 2 * Real.pi)))
+    (F := fun d θ ↦ (∏ i, R i * Complex.exp (θ i * Complex.I) * Complex.I : ℂ)
+      • F d (torusMap c R θ))
+    (fun d ↦ (hint d).function_integrable) hsum
+  have hintegrand :
+      (fun θ : Fin m → ℝ ↦ ∑' d, (∏ i, R i * Complex.exp (θ i * Complex.I) * Complex.I : ℂ)
+        • F d (torusMap c R θ))
+        = fun θ ↦ (∏ i, R i * Complex.exp (θ i * Complex.I) * Complex.I : ℂ)
+          • S (torusMap c R θ) := by
+    funext θ
+    exact ((hpt θ).const_smul
+      (∏ i, R i * Complex.exp (θ i * Complex.I) * Complex.I : ℂ)).tsum_eq
+  rw [hintegrand] at key
+  exact key
+
+open MeasureTheory in
+/-- Each Cauchy term is torus-integrable on the polydisc of radius `ρ`. -/
+theorem torusIntegrable_cauchyTerm {m : ℕ} {ρ : ℝ} (hρ : 0 < ρ)
+    {g : (Fin m → ℂ) → ℂ}
+    (hg : ContinuousOn g (Set.univ.pi fun _ : Fin m ↦ Metric.closedBall (0 : ℂ) ρ))
+    (x : Fin m → ℂ) (d : Fin m →₀ ℕ) :
+    TorusIntegrable
+      (fun ζ ↦ ((∏ i, (ζ i ^ (d i + 1))⁻¹) * ∏ i, (x i) ^ (d i)) * g ζ)
+      (0 : Fin m → ℂ) (fun _ ↦ ρ) := by
+  unfold TorusIntegrable
+  have hnorm : ∀ (θ : Fin m → ℝ) (i), ‖torusMap (0 : Fin m → ℂ) (fun _ ↦ ρ) θ i‖ = ρ := by
+    intro θ i
+    simp [torusMap, Complex.norm_exp_ofReal_mul_I, abs_of_pos hρ]
+  have htm : Continuous (fun θ : Fin m → ℝ ↦ torusMap (0 : Fin m → ℂ) (fun _ ↦ ρ) θ) := by
+    unfold torusMap; fun_prop
+  have hne : ∀ (θ : Fin m → ℝ) (i), torusMap (0 : Fin m → ℂ) (fun _ ↦ ρ) θ i ≠ 0 := by
+    intro θ i hz
+    have h := hnorm θ i
+    rw [hz, norm_zero] at h
+    exact (ne_of_lt hρ) h
+  have hker : Continuous
+      (fun θ : Fin m → ℝ ↦
+        (∏ i, (torusMap (0 : Fin m → ℂ) (fun _ ↦ ρ) θ i ^ (d i + 1))⁻¹) * ∏ i, (x i) ^ (d i)) := by
+    apply Continuous.mul _ continuous_const
+    apply continuous_finsetProd
+    intro i _
+    exact (((continuous_apply i).comp htm).pow _).inv₀ (fun θ ↦ pow_ne_zero _ (hne θ i))
+  have hmaps : Set.MapsTo (fun θ : Fin m → ℝ ↦ torusMap (0 : Fin m → ℂ) (fun _ ↦ ρ) θ)
+      (Set.Icc 0 fun _ ↦ 2 * Real.pi)
+      (Set.univ.pi fun _ : Fin m ↦ Metric.closedBall (0 : ℂ) ρ) := by
+    intro θ _
+    simp only [Set.mem_pi, Set.mem_univ, true_implies]
+    intro i
+    simp only [Metric.mem_closedBall, Complex.dist_eq, sub_zero, hnorm, le_refl]
+  exact ContinuousOn.integrableOn_compact isCompact_Icc
+    (hker.continuousOn.mul (hg.comp htm.continuousOn hmaps))
+
+open MeasureTheory in
+/-- Geometric summability of the integral-norms of the Cauchy terms. -/
+theorem summable_integral_norm_cauchyTerm {m : ℕ} {ρ : ℝ} (hρ : 0 < ρ)
+    {g : (Fin m → ℂ) → ℂ}
+    {x : Fin m → ℂ} (hx : ∀ i, ‖x i‖ < ρ) :
+    Summable (fun d : Fin m →₀ ℕ ↦
+      ∫ θ in Set.Icc (0 : Fin m → ℝ) (fun _ ↦ 2 * Real.pi),
+        ‖(∏ i, (ρ : ℂ) * Complex.exp (θ i * Complex.I) * Complex.I) •
+          (((∏ i, (torusMap (0 : Fin m → ℂ) (fun _ ↦ ρ) θ i ^ (d i + 1))⁻¹) *
+              ∏ i, (x i) ^ (d i)) *
+            g (torusMap (0 : Fin m → ℂ) (fun _ ↦ ρ) θ))‖) := by
+  have hρ0 : ρ ≠ 0 := ne_of_gt hρ
+  set tm : (Fin m → ℝ) → (Fin m → ℂ) := fun θ ↦ torusMap (0 : Fin m → ℂ) (fun _ ↦ ρ) θ with htm
+  have hnorm : ∀ (θ : Fin m → ℝ) (i), ‖tm θ i‖ = ρ := by
+    intro θ i
+    simp [htm, torusMap, Complex.norm_exp_ofReal_mul_I, abs_of_pos hρ]
+  have hpoint : ∀ (d : Fin m →₀ ℕ) (θ : Fin m → ℝ),
+      ‖(∏ i, (ρ : ℂ) * Complex.exp (θ i * Complex.I) * Complex.I) •
+          (((∏ i, (tm θ i ^ (d i + 1))⁻¹) * ∏ i, (x i) ^ (d i)) * g (tm θ))‖
+        = (∏ i, (‖x i‖ / ρ) ^ (d i)) * ‖g (tm θ)‖ := by
+    intro d θ
+    rw [norm_smul, norm_mul, norm_mul]
+    have hJac : ‖∏ i, (ρ : ℂ) * Complex.exp (θ i * Complex.I) * Complex.I‖ = ρ ^ m := by
+      rw [norm_prod]
+      have h1 : ∀ i ∈ (Finset.univ : Finset (Fin m)),
+          ‖(ρ : ℂ) * Complex.exp (θ i * Complex.I) * Complex.I‖ = ρ := by
+        intro i _
+        rw [norm_mul, norm_mul, Complex.norm_I, Complex.norm_exp_ofReal_mul_I,
+          Complex.norm_real, Real.norm_of_nonneg hρ.le, mul_one, mul_one]
+      rw [Finset.prod_congr rfl h1, Finset.prod_const, Finset.card_univ, Fintype.card_fin]
+    have hKer : ‖∏ i, (tm θ i ^ (d i + 1))⁻¹‖ = ∏ i, (ρ ^ (d i + 1))⁻¹ := by
+      rw [norm_prod]
+      refine Finset.prod_congr rfl (fun i _ => ?_)
+      rw [norm_inv, norm_pow, hnorm]
+    have hMon : ‖∏ i, (x i) ^ (d i)‖ = ∏ i, ‖x i‖ ^ (d i) := by
+      rw [norm_prod]
+      refine Finset.prod_congr rfl (fun i _ => ?_)
+      rw [norm_pow]
+    rw [hJac, hKer, hMon, ← mul_assoc]
+    congr 1
+    rw [← Finset.prod_mul_distrib,
+      show ρ ^ m = ∏ _i : Fin m, ρ from by
+        rw [Finset.prod_const, Finset.card_univ, Fintype.card_fin],
+      ← Finset.prod_mul_distrib]
+    refine Finset.prod_congr rfl (fun i _ => ?_)
+    rw [div_pow, pow_succ]
+    field_simp
+  have hEq : ∀ d : Fin m →₀ ℕ,
+      (∫ θ in Set.Icc (0 : Fin m → ℝ) (fun _ ↦ 2 * Real.pi),
+        ‖(∏ i, (ρ : ℂ) * Complex.exp (θ i * Complex.I) * Complex.I) •
+          (((∏ i, (tm θ i ^ (d i + 1))⁻¹) * ∏ i, (x i) ^ (d i)) * g (tm θ))‖)
+        = (∏ i, (‖x i‖ / ρ) ^ (d i)) *
+          ∫ θ in Set.Icc (0 : Fin m → ℝ) (fun _ ↦ 2 * Real.pi), ‖g (tm θ)‖ := by
+    intro d
+    simp_rw [hpoint d]
+    rw [integral_const_mul]
+  have hxρ : ∀ i, ‖x i / (ρ : ℂ)‖ < 1 := by
+    intro i
+    rw [norm_div, Complex.norm_real, Real.norm_of_nonneg hρ.le, div_lt_one hρ]
+    exact hx i
+  have hbase : Summable (fun d : Fin m →₀ ℕ ↦ ∏ i, (‖x i‖ / ρ) ^ (d i)) := by
+    refine (summable_norm_multiGeometric m (fun i ↦ x i / (ρ : ℂ)) hxρ).congr (fun d => ?_)
+    rw [norm_prod]
+    refine Finset.prod_congr rfl (fun i _ => ?_)
+    rw [norm_pow, norm_div, Complex.norm_real, Real.norm_of_nonneg hρ.le]
+  refine (hbase.mul_right
+    (∫ θ in Set.Icc (0 : Fin m → ℝ) (fun _ ↦ 2 * Real.pi), ‖g (tm θ)‖)).congr (fun d => ?_)
+  exact (hEq d).symm
 
 lemma differentiableOn_cons_slice {m : ℕ} {f : (Fin (m + 1) → ℂ) → ℂ}
     {c : Fin (m + 1) → ℂ} {R : Fin (m + 1) → ℝ}
@@ -152,3 +418,88 @@ theorem cauchy_torus_formula {m : ℕ} (f : (Fin m → ℂ) → ℂ) (c : Fin m 
         rw [← hcauchy, smul_smul, mul_inv_cancel₀ h2pi, one_smul]
       rw [hJ, smul_smul, ← pow_succ]
     rw [hval, smul_smul, ← mul_pow, inv_mul_cancel₀ h2pi, one_pow, one_smul]
+
+theorem analyticAt_of_differentiableOn {m : ℕ} {f : (Fin m → ℂ) → ℂ}
+    {s : Set (Fin m → ℂ)} (hs : IsOpen s) (hf : DifferentiableOn ℂ f s)
+    {x₀ : Fin m → ℂ} (hx₀ : x₀ ∈ s) : AnalyticAt ℂ f x₀ := by
+  obtain ⟨ε, hε, hball⟩ := Metric.isOpen_iff.mp hs x₀ hx₀
+  have hρ : (0 : ℝ) < ε / 2 := by linarith
+  have hsub : Metric.closedBall x₀ (ε / 2) ⊆ s :=
+    (Metric.closedBall_subset_ball (by linarith)).trans hball
+  refine analyticAt_of_shift ?_
+  set g : (Fin m → ℂ) → ℂ := fun y ↦ f (x₀ + y) with hg
+  -- (plumbing) g is differentiable on the 0-centred closed polydisc
+  have hgdiff : DifferentiableOn ℂ g
+      (Set.univ.pi fun _ : Fin m ↦ Metric.closedBall (0 : ℂ) (ε / 2)) := by
+    have hT : Differentiable ℂ (fun y : Fin m → ℂ ↦ x₀ + y) := by fun_prop
+    refine hf.comp hT.differentiableOn ?_
+    intro y hy
+    apply hsub
+    rw [Metric.mem_closedBall, dist_eq_norm, add_sub_cancel_left,
+      pi_norm_le_iff_of_nonneg hρ.le]
+    intro i
+    have hyi := hy i (Set.mem_univ i)
+    rwa [Metric.mem_closedBall, dist_eq_norm, sub_zero] at hyi
+  -- (core) the Cauchy coefficient power series
+  set P : MvPowerSeries (Fin m) ℂ := fun d ↦
+    (2 * ↑Real.pi * Complex.I)⁻¹ ^ m •
+      ∯ ζ in T((0 : Fin m → ℂ), fun _ ↦ ε / 2),
+        (∏ i, (ζ i ^ (d i + 1))⁻¹) • g ζ with hP
+  -- (core 1) coefficients decay geometrically ⇒ locally convergent
+  -- (core) geometric expansion + term-by-term integration ⇒ P represents g
+  have hRep : MvPowerSeries.Represents P g := by
+    have hnhds : ∀ᶠ y in 𝓝 (0 : Fin m → ℂ), ∀ i, ‖y i‖ < ε / 2 := by
+      rw [Filter.eventually_all]
+      intro i
+      exact (isOpen_lt (continuous_apply i).norm continuous_const).mem_nhds (by simpa using hρ)
+    filter_upwards [hnhds] with y hy
+    have hnorm : ∀ (θ : Fin m → ℝ) (i),
+        ‖torusMap (0 : Fin m → ℂ) (fun _ ↦ ε / 2) θ i‖ = ε / 2 := by
+      intro θ i
+      simp only [torusMap, Pi.zero_apply, zero_add, norm_mul,
+        Complex.norm_exp_ofReal_mul_I, mul_one, Complex.norm_real,
+        Real.norm_of_nonneg hρ.le]
+    have hne : ∀ (θ : Fin m → ℝ) (i),
+        torusMap (0 : Fin m → ℂ) (fun _ ↦ ε / 2) θ i ≠ 0 := by
+      intro θ i hz
+      have h := hnorm θ i
+      rw [hz, norm_zero] at h
+      exact (ne_of_lt hρ) h
+    have hpt : ∀ θ : Fin m → ℝ,
+        HasSum (fun d : Fin m →₀ ℕ ↦
+            ((∏ i, (torusMap (0:Fin m→ℂ) (fun _ ↦ ε/2) θ i ^ (d i + 1))⁻¹) *
+                ∏ i, (y i) ^ (d i)) * g (torusMap (0:Fin m→ℂ) (fun _ ↦ ε/2) θ))
+          ((∏ i, (torusMap (0:Fin m→ℂ) (fun _ ↦ ε/2) θ i - y i)⁻¹) *
+              g (torusMap (0:Fin m→ℂ) (fun _ ↦ ε/2) θ)) := by
+      intro θ
+      exact (hasSum_cauchyKernel (torusMap (0:Fin m→ℂ) (fun _ ↦ ε/2) θ) y
+        (fun i => hne θ i) (fun i => by rw [hnorm]; exact hy i)).mul_right _
+    have hB1 := hasSum_torusIntegral
+      (F := fun d ζ => ((∏ i, (ζ i ^ (d i + 1))⁻¹) * ∏ i, (y i) ^ (d i)) * g ζ)
+      (S := fun ζ => (∏ i, (ζ i - y i)⁻¹) * g ζ)
+      (fun d => torusIntegrable_cauchyTerm hρ hgdiff.continuousOn y d)
+      (summable_integral_norm_cauchyTerm hρ hy) hpt
+    have hw : ∀ i, y i ∈ Metric.ball (0:ℂ) (ε/2) := by
+      intro i; rw [Metric.mem_ball, dist_zero_right]; exact hy i
+    have hVE : (2 * ↑Real.pi * Complex.I)⁻¹ ^ m •
+        (∯ ζ in T((0:Fin m→ℂ), fun _ ↦ ε/2), (∏ i, (ζ i - y i)⁻¹) * g ζ) = g y := by
+      rw [cauchy_torus_formula g (0:Fin m→ℂ) (fun _ ↦ ε/2) (fun _ => hρ) hgdiff y hw]
+      simp only [smul_eq_mul]
+    rw [← hVE]
+    have hfun_eq : (fun d : Fin m →₀ ℕ ↦ (2 * ↑Real.pi * Complex.I)⁻¹ ^ m •
+        (∯ ζ in T((0:Fin m→ℂ), fun _ ↦ ε/2),
+          ((∏ i, (ζ i ^ (d i + 1))⁻¹) * ∏ i, (y i) ^ (d i)) * g ζ)) = P.term y := by
+      funext d
+      rw [MvPowerSeries.term, MvPowerSeries.coeff_apply, hP,
+        MvPowerSeries.evalMonomial, Finsupp.prod_fintype _ _ (fun i => pow_zero _),
+        show (fun ζ : Fin m → ℂ =>
+              ((∏ i, (ζ i ^ (d i + 1))⁻¹) * ∏ i, (y i) ^ (d i)) * g ζ)
+            = (fun ζ => (∏ i, (y i) ^ (d i)) * ((∏ i, (ζ i ^ (d i + 1))⁻¹) * g ζ)) from by
+          funext ζ; ring,
+        torusIntegral_const_mul]
+      simp only [smul_eq_mul]
+      ring
+    rw [← hfun_eq]
+    exact hB1.const_smul ((2 * ↑Real.pi * Complex.I)⁻¹ ^ m)
+  exact analyticAt_of_represents hRep.locallyConvergent hRep
+  -- (core 2) geometric expansion + term-by-term integration ⇒ P represents g
