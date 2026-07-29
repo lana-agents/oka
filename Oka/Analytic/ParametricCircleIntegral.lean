@@ -1,4 +1,19 @@
-import Mathlib
+/-
+Copyright (c) 2026 Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
+-/
+import Mathlib.Analysis.Complex.CauchyIntegral
+import Mathlib.Analysis.Analytic.ChangeOrigin
+import Mathlib.Analysis.Calculus.FDeriv.Analytic
+import Mathlib.Analysis.Normed.Ring.InfiniteSum
+import Mathlib.Analysis.SpecificLimits.Normed
+import Mathlib.MeasureTheory.Integral.TorusIntegral
+import Mathlib.MeasureTheory.Integral.DominatedConvergence
+import Mathlib.MeasureTheory.Integral.Prod
+import Mathlib.Algebra.BigOperators.Finsupp.Basic
+import Mathlib.Data.Finsupp.Fin
+import Mathlib.Data.Finsupp.Encodable
 import Oka.LocalOkaRing
 
 /-!
@@ -9,6 +24,53 @@ Work in progress: SCV foundations for the local Weierstrass division theorem.
 
 open Complex
 open scoped Topology
+
+namespace MvPowerSeries
+
+variable {ι : Type*} [Fintype ι] [DecidableEq ι] {P : MvPowerSeries ι ℂ}
+
+/-- If `P` converges absolutely at the constant point `ρ`, then `P.eval` is the sum of its
+formal multilinear series on the ball of radius `ρ`. -/
+theorem hasFPowerSeriesOnBall_of_summableAt_const {ρ : ℝ} (hρ : 0 < ρ)
+    (hsum : P.SummableAt (fun _ ↦ (ρ : ℂ))) :
+    HasFPowerSeriesOnBall P.eval (toFPS P) 0 (ENNReal.ofReal ρ) := by
+  refine ⟨?_, ENNReal.ofReal_pos.mpr hρ, ?_⟩
+  · have hbound : ∀ n : ℕ, ‖toFPS P n‖ * ((Real.toNNReal ρ : NNReal) : ℝ) ^ n ≤
+        ∑' d, ‖P.term (fun _ ↦ (ρ : ℂ)) d‖ := by
+      intro n
+      rw [Real.coe_toNNReal ρ hρ.le]
+      have h1 : ‖toFPS P n‖ * ρ ^ n ≤ (∑ d ∈ degFinset ι n, ‖coeff d P‖) * ρ ^ n :=
+        mul_le_mul_of_nonneg_right (norm_toFPS_le n) (by positivity)
+      have h2 : (∑ d ∈ degFinset ι n, ‖coeff d P‖) * ρ ^ n
+          = ∑ d ∈ degFinset ι n, ‖P.term (fun _ ↦ (ρ : ℂ)) d‖ := by
+        rw [Finset.sum_mul]
+        exact Finset.sum_congr rfl fun d hd ↦ (norm_term_const hρ.le hd).symm
+      have h3 : ∑ d ∈ degFinset ι n, ‖P.term (fun _ ↦ (ρ : ℂ)) d‖ ≤
+          ∑' d, ‖P.term (fun _ ↦ (ρ : ℂ)) d‖ :=
+        le_hasSum (hasSum_degree_norm hsum) n fun m _ ↦
+          Finset.sum_nonneg fun _ _ ↦ norm_nonneg _
+      rw [h2] at h1
+      exact h1.trans h3
+    exact (toFPS P).le_radius_of_bound _ hbound
+  · intro y hy
+    rw [Metric.eball_ofReal, mem_ball_zero_iff] at hy
+    have hle : ∀ i, ‖y i‖ ≤ ‖(fun _ ↦ (ρ : ℂ)) i‖ := fun i ↦ by
+      refine (norm_le_pi_norm y i).trans ?_
+      simp [Complex.norm_real, Real.norm_of_nonneg hρ.le, hy.le]
+    have := hasSum_degree (P := P) (x := y) (hsum.mono hle).hasSum
+    simpa only [toFPS_apply_diag, zero_add] using this
+
+omit [DecidableEq ι] in
+/-- `P.eval` is analytic at every point of the open ball of radius `ρ`. -/
+theorem analyticAt_eval_of_summableAt_const {ρ : ℝ} (hρ : 0 < ρ)
+    (hsum : P.SummableAt (fun _ ↦ (ρ : ℂ))) {x : ι → ℂ} (hx : ‖x‖ < ρ) :
+    AnalyticAt ℂ P.eval x := by
+  classical
+  refine (hasFPowerSeriesOnBall_of_summableAt_const hρ hsum).analyticOnNhd x ?_
+  rw [Metric.eball_ofReal, mem_ball_zero_iff]
+  exact hx
+
+end MvPowerSeries
 
 open MvPowerSeries in
 lemma analyticAt_of_represents {m : ℕ} {P : MvPowerSeries (Fin m) ℂ} {g : (Fin m → ℂ) → ℂ}
@@ -418,6 +480,233 @@ theorem cauchy_torus_formula {m : ℕ} (f : (Fin m → ℂ) → ℂ) (c : Fin m 
         rw [← hcauchy, smul_smul, mul_inv_cancel₀ h2pi, one_smul]
       rw [hJ, smul_smul, ← pow_succ]
     rw [hval, smul_smul, ← mul_pow, inv_mul_cancel₀ h2pi, one_pow, one_smul]
+
+/-- A continuous function satisfying the Cauchy representation on a polydisc is analytic. -/
+theorem analyticAt_of_cauchyRepr {m : ℕ} {g : (Fin m → ℂ) → ℂ} {ρ : ℝ} (hρ : 0 < ρ)
+    (hcont : ContinuousOn g (Set.univ.pi fun _ : Fin m ↦ Metric.closedBall (0 : ℂ) ρ))
+    (hrepr : ∀ y : Fin m → ℂ, (∀ i, ‖y i‖ < ρ) →
+      (2 * ↑Real.pi * Complex.I)⁻¹ ^ m •
+        (∯ ζ in T((0 : Fin m → ℂ), fun _ ↦ ρ), (∏ i, (ζ i - y i)⁻¹) * g ζ) = g y) :
+    AnalyticAt ℂ g 0 := by
+  set P : MvPowerSeries (Fin m) ℂ := fun d ↦
+    (2 * ↑Real.pi * Complex.I)⁻¹ ^ m •
+      ∯ ζ in T((0 : Fin m → ℂ), fun _ ↦ ρ),
+        (∏ i, (ζ i ^ (d i + 1))⁻¹) • g ζ with hP
+  have hRep : MvPowerSeries.Represents P g := by
+    have hnhds : ∀ᶠ y in 𝓝 (0 : Fin m → ℂ), ∀ i, ‖y i‖ < ρ := by
+      rw [Filter.eventually_all]
+      intro i
+      exact (isOpen_lt (continuous_apply i).norm continuous_const).mem_nhds (by simpa using hρ)
+    filter_upwards [hnhds] with y hy
+    have hnorm : ∀ (θ : Fin m → ℝ) (i),
+        ‖torusMap (0 : Fin m → ℂ) (fun _ ↦ ρ) θ i‖ = ρ := by
+      intro θ i
+      simp only [torusMap, Pi.zero_apply, zero_add, norm_mul,
+        Complex.norm_exp_ofReal_mul_I, mul_one, Complex.norm_real,
+        Real.norm_of_nonneg hρ.le]
+    have hne : ∀ (θ : Fin m → ℝ) (i),
+        torusMap (0 : Fin m → ℂ) (fun _ ↦ ρ) θ i ≠ 0 := by
+      intro θ i hz
+      have h := hnorm θ i
+      rw [hz, norm_zero] at h
+      exact (ne_of_lt hρ) h
+    have hpt : ∀ θ : Fin m → ℝ,
+        HasSum (fun d : Fin m →₀ ℕ ↦
+            ((∏ i, (torusMap (0:Fin m→ℂ) (fun _ ↦ ρ) θ i ^ (d i + 1))⁻¹) *
+                ∏ i, (y i) ^ (d i)) * g (torusMap (0:Fin m→ℂ) (fun _ ↦ ρ) θ))
+          ((∏ i, (torusMap (0:Fin m→ℂ) (fun _ ↦ ρ) θ i - y i)⁻¹) *
+              g (torusMap (0:Fin m→ℂ) (fun _ ↦ ρ) θ)) := by
+      intro θ
+      exact (hasSum_cauchyKernel (torusMap (0:Fin m→ℂ) (fun _ ↦ ρ) θ) y
+        (fun i => hne θ i) (fun i => by rw [hnorm]; exact hy i)).mul_right _
+    have hB1 := hasSum_torusIntegral
+      (F := fun d ζ => ((∏ i, (ζ i ^ (d i + 1))⁻¹) * ∏ i, (y i) ^ (d i)) * g ζ)
+      (S := fun ζ => (∏ i, (ζ i - y i)⁻¹) * g ζ)
+      (fun d => torusIntegrable_cauchyTerm hρ hcont y d)
+      (summable_integral_norm_cauchyTerm hρ hy) hpt
+    rw [← hrepr y hy]
+    have hfun_eq : (fun d : Fin m →₀ ℕ ↦ (2 * ↑Real.pi * Complex.I)⁻¹ ^ m •
+        (∯ ζ in T((0:Fin m→ℂ), fun _ ↦ ρ),
+          ((∏ i, (ζ i ^ (d i + 1))⁻¹) * ∏ i, (y i) ^ (d i)) * g ζ)) = P.term y := by
+      funext d
+      rw [MvPowerSeries.term, MvPowerSeries.coeff_apply, hP,
+        MvPowerSeries.evalMonomial, Finsupp.prod_fintype _ _ (fun i => pow_zero _),
+        show (fun ζ : Fin m → ℂ =>
+              ((∏ i, (ζ i ^ (d i + 1))⁻¹) * ∏ i, (y i) ^ (d i)) * g ζ)
+            = (fun ζ => (∏ i, (y i) ^ (d i)) * ((∏ i, (ζ i ^ (d i + 1))⁻¹) * g ζ)) from by
+          funext ζ; ring,
+        torusIntegral_const_mul]
+      simp only [smul_eq_mul]
+      ring
+    rw [← hfun_eq]
+    exact hB1.const_smul ((2 * ↑Real.pi * Complex.I)⁻¹ ^ m)
+  exact analyticAt_of_represents hRep.locallyConvergent hRep
+
+open MeasureTheory in
+/-- Fubini: a torus integral and a circle integral of a jointly continuous function commute. -/
+theorem torusIntegral_circleIntegral_swap {m : ℕ} (c : Fin m → ℂ) (R : Fin m → ℝ)
+    (ε : ℝ) (H : (Fin m → ℂ) → ℂ → ℂ)
+    (hH : Continuous fun p : (Fin m → ℝ) × ℝ ↦
+      H (torusMap c R p.1) (circleMap 0 ε p.2)) :
+    (∯ ξ in T(c, R), ∮ ζ in C(0, ε), H ξ ζ)
+      = ∮ ζ in C(0, ε), ∯ ξ in T(c, R), H ξ ζ := by
+  have h2pi : (0 : ℝ) ≤ 2 * Real.pi := by positivity
+  set A : (Fin m → ℝ) → ℝ → ℂ := fun φ θ ↦
+      (∏ i, (R i : ℂ) * Complex.exp (φ i * Complex.I) * Complex.I) *
+        (circleMap 0 ε θ * Complex.I * H (torusMap c R φ) (circleMap 0 ε θ)) with hA
+  have hcontA : Continuous (Function.uncurry A) := by
+    have h1 : Continuous fun p : (Fin m → ℝ) × ℝ ↦
+        (∏ i, (R i : ℂ) * Complex.exp (p.1 i * Complex.I) * Complex.I) := by
+      apply continuous_finsetProd
+      intro i _
+      fun_prop
+    have h2 : Continuous fun p : (Fin m → ℝ) × ℝ ↦ circleMap 0 ε p.2 * Complex.I := by
+      unfold circleMap; fun_prop
+    rw [hA]
+    change Continuous fun p : (Fin m → ℝ) × ℝ ↦
+      (∏ i, (R i : ℂ) * Complex.exp (p.1 i * Complex.I) * Complex.I) *
+        (circleMap 0 ε p.2 * Complex.I * H (torusMap c R p.1) (circleMap 0 ε p.2))
+    exact h1.mul (h2.mul hH)
+  have hint : Integrable (Function.uncurry A)
+      ((volume.restrict (Set.Icc (0 : Fin m → ℝ) fun _ ↦ 2 * Real.pi)).prod
+        (volume.restrict (Set.Ioc (0 : ℝ) (2 * Real.pi)))) := by
+    rw [Measure.prod_restrict]
+    refine IntegrableOn.mono_set ?_
+      (Set.prod_mono (subset_refl _) Set.Ioc_subset_Icc_self)
+    exact hcontA.continuousOn.integrableOn_compact (isCompact_Icc.prod isCompact_Icc)
+  simp only [torusIntegral, circleIntegral, deriv_circleMap,
+    intervalIntegral.integral_of_le h2pi, smul_eq_mul]
+  have hL : ∀ φ : Fin m → ℝ,
+      (∏ i, (R i : ℂ) * Complex.exp (φ i * Complex.I) * Complex.I) *
+          (∫ θ in Set.Ioc (0:ℝ) (2 * Real.pi),
+            circleMap 0 ε θ * Complex.I * H (torusMap c R φ) (circleMap 0 ε θ))
+        = ∫ θ in Set.Ioc (0:ℝ) (2 * Real.pi), A φ θ := by
+    intro φ
+    rw [← integral_const_mul]
+  have hR : ∀ θ : ℝ,
+      circleMap 0 ε θ * Complex.I *
+          (∫ φ in Set.Icc (0 : Fin m → ℝ) (fun _ ↦ 2 * Real.pi),
+            (∏ i, (R i : ℂ) * Complex.exp (φ i * Complex.I) * Complex.I) *
+              H (torusMap c R φ) (circleMap 0 ε θ))
+        = ∫ φ in Set.Icc (0 : Fin m → ℝ) (fun _ ↦ 2 * Real.pi), A φ θ := by
+    intro θ
+    rw [← integral_const_mul]
+    congr 1
+    funext φ
+    rw [hA]
+    ring
+  simp_rw [hL, hR]
+  exact integral_integral_swap hint
+
+open MeasureTheory in
+/-- A circle integral depending continuously on a parameter is continuous in the parameter. -/
+theorem continuousOn_circleIntegral {m : ℕ} {ε : ℝ} {s : Set (Fin m → ℂ)}
+    {G : (Fin m → ℂ) → ℂ → ℂ}
+    (hG : Continuous fun p : s × ℝ ↦ G (p.1 : Fin m → ℂ) (circleMap 0 ε p.2)) :
+    ContinuousOn (fun x ↦ ∮ ζ in C(0, ε), G x ζ) s := by
+  rw [continuousOn_iff_continuous_restrict]
+  change Continuous fun x : s ↦ ∫ θ in (0:ℝ)..(2 * Real.pi),
+      deriv (circleMap 0 ε) θ • G (x : Fin m → ℂ) (circleMap 0 ε θ)
+  have hJ : Continuous fun p : (s × ℝ) ↦ deriv (circleMap 0 ε) p.2 := by
+    simp only [deriv_circleMap]
+    unfold circleMap
+    fun_prop
+  exact intervalIntegral.continuous_parametric_intervalIntegral_of_continuous'
+    (f := fun (x : s) (θ : ℝ) ↦ deriv (circleMap 0 ε) θ • G (x : Fin m → ℂ) (circleMap 0 ε θ))
+    (hJ.smul hG) 0 (2 * Real.pi)
+
+open MeasureTheory in
+/-- A circle integral of a family that is holomorphic in the parameter is analytic. -/
+theorem analyticAt_circleIntegral {m : ℕ} {ε ρ : ℝ} (hε : 0 < ε) (hρ : 0 < ρ)
+    {G : (Fin m → ℂ) → ℂ → ℂ}
+    (hdiff : ∀ ζ : ℂ, ‖ζ‖ = ε → DifferentiableOn ℂ (fun x ↦ G x ζ)
+      (Set.univ.pi fun _ : Fin m ↦ Metric.closedBall (0 : ℂ) ρ))
+    (hcont : Continuous fun p : (Set.univ.pi fun _ : Fin m ↦ Metric.closedBall (0 : ℂ) ρ) × ℝ ↦
+      G (p.1 : Fin m → ℂ) (circleMap 0 ε p.2)) :
+    AnalyticAt ℂ (fun x ↦ ∮ ζ in C(0, ε), G x ζ) 0 := by
+  have htm : Continuous fun φ : Fin m → ℝ ↦ torusMap (0 : Fin m → ℂ) (fun _ ↦ ρ) φ := by
+    unfold torusMap; fun_prop
+  have hnorm : ∀ (φ : Fin m → ℝ) (i), ‖torusMap (0 : Fin m → ℂ) (fun _ ↦ ρ) φ i‖ = ρ := by
+    intro φ i
+    simp [torusMap, Complex.norm_exp_ofReal_mul_I, abs_of_pos hρ]
+  have hmem : ∀ φ : Fin m → ℝ,
+      torusMap (0 : Fin m → ℂ) (fun _ ↦ ρ) φ ∈
+        (Set.univ.pi fun _ : Fin m ↦ Metric.closedBall (0 : ℂ) ρ) := by
+    intro φ
+    simp only [Set.mem_pi, Set.mem_univ, true_implies]
+    intro i
+    simp only [Metric.mem_closedBall, Complex.dist_eq, sub_zero, hnorm, le_refl]
+  have hGtc : Continuous fun p : (Fin m → ℝ) × ℝ ↦
+      G (torusMap (0 : Fin m → ℂ) (fun _ ↦ ρ) p.1) (circleMap 0 ε p.2) :=
+    hcont.comp (((htm.comp continuous_fst).subtype_mk fun p ↦ hmem p.1).prodMk continuous_snd)
+  refine analyticAt_of_cauchyRepr hρ (continuousOn_circleIntegral hcont) ?_
+  intro y hy
+  have hyne : ∀ (φ : Fin m → ℝ) (i), torusMap (0 : Fin m → ℂ) (fun _ ↦ ρ) φ i - y i ≠ 0 := by
+    intro φ i h
+    have h1 : ‖y i‖ < ρ := hy i
+    rw [sub_eq_zero] at h
+    rw [← h, hnorm] at h1
+    exact lt_irrefl _ h1
+  have hHcont : Continuous fun p : (Fin m → ℝ) × ℝ ↦
+      (∏ i, (torusMap (0 : Fin m → ℂ) (fun _ ↦ ρ) p.1 i - y i)⁻¹) *
+        G (torusMap (0 : Fin m → ℂ) (fun _ ↦ ρ) p.1) (circleMap 0 ε p.2) := by
+    refine Continuous.mul ?_ hGtc
+    apply continuous_finsetProd
+    intro i _
+    exact (((continuous_apply i).comp (htm.comp continuous_fst)).sub continuous_const).inv₀
+      (fun p ↦ hyne p.1 i)
+  have hfib : ∀ ζ : ℂ, ‖ζ‖ = ε →
+      G y ζ = (2 * ↑Real.pi * Complex.I)⁻¹ ^ m •
+        ∯ ξ in T((0 : Fin m → ℂ), fun _ ↦ ρ), (∏ i, (ξ i - y i)⁻¹) • G ξ ζ := by
+    intro ζ hζ
+    refine cauchy_torus_formula (fun x ↦ G x ζ) 0 (fun _ ↦ ρ) (fun _ ↦ hρ) (hdiff ζ hζ) y
+      (fun i ↦ ?_)
+    simp only [Metric.mem_ball, Pi.zero_apply, dist_zero_right]
+    exact hy i
+  have h1 : (∮ ζ in C(0, ε), G y ζ)
+      = ∮ ζ in C(0, ε), (2 * ↑Real.pi * Complex.I)⁻¹ ^ m •
+          ∯ ξ in T((0 : Fin m → ℂ), fun _ ↦ ρ), (∏ i, (ξ i - y i)⁻¹) • G ξ ζ := by
+    refine circleIntegral.integral_congr hε.le ?_
+    intro ζ hζ
+    exact hfib ζ (mem_sphere_zero_iff_norm.mp hζ)
+  rw [h1, circleIntegral.integral_smul]
+  congr 1
+  simp only [smul_eq_mul]
+  rw [← torusIntegral_circleIntegral_swap (0 : Fin m → ℂ) (fun _ ↦ ρ) ε
+    (fun ξ ζ ↦ (∏ i, (ξ i - y i)⁻¹) * G ξ ζ) hHcont]
+  simp_rw [circleIntegral.integral_const_mul]
+
+/-- The affine map `x ↦ Fin.snoc (Fin.init x) ζ` is differentiable. -/
+lemma differentiable_snocInit {m : ℕ} (ζ : ℂ) :
+    Differentiable ℂ (fun x : Fin (m + 1) → ℂ ↦ (Fin.snoc (Fin.init x) ζ : Fin (m + 1) → ℂ)) := by
+  refine differentiable_pi.mpr fun j ↦ ?_
+  refine Fin.lastCases ?_ (fun i ↦ ?_) j
+  · simp only [Fin.snoc_last]
+    exact differentiable_const ζ
+  · simp only [Fin.snoc_castSucc, Fin.init_def]
+    exact differentiable_apply (𝕜 := ℂ) i.castSucc
+
+/-- A norm bound for `Fin.snoc (Fin.init x) ζ`. -/
+lemma norm_snocInit_le {m : ℕ} {x : Fin (m + 1) → ℂ} {ζ : ℂ} {a : ℝ}
+    (hx : ∀ i : Fin m, ‖x i.castSucc‖ ≤ a) (hζ : ‖ζ‖ ≤ a) :
+    ‖(Fin.snoc (Fin.init x) ζ : Fin (m + 1) → ℂ)‖ ≤ a := by
+  refine (pi_norm_le_iff_of_nonneg ((norm_nonneg ζ).trans hζ)).mpr fun j ↦ ?_
+  refine Fin.lastCases ?_ (fun i ↦ ?_) j
+  · simpa only [Fin.snoc_last] using hζ
+  · simpa only [Fin.snoc_castSucc, Fin.init_def] using hx i
+
+/-- Joint continuity of `(x, θ) ↦ Fin.snoc (Fin.init x) (circleMap 0 ε θ)`. -/
+lemma continuous_snocInit_circleMap {m : ℕ} (ε : ℝ) (s : Set (Fin (m + 1) → ℂ)) :
+    Continuous fun p : s × ℝ ↦
+      (Fin.snoc (Fin.init (p.1 : Fin (m + 1) → ℂ)) (circleMap 0 ε p.2) :
+        Fin (m + 1) → ℂ) := by
+  refine continuous_pi fun j ↦ ?_
+  refine Fin.lastCases ?_ (fun i ↦ ?_) j
+  · simp only [Fin.snoc_last]
+    unfold circleMap
+    fun_prop
+  · simp only [Fin.snoc_castSucc, Fin.init_def]
+    exact (continuous_apply i.castSucc).comp (continuous_subtype_val.comp continuous_fst)
 
 theorem analyticAt_of_differentiableOn {m : ℕ} {f : (Fin m → ℂ) → ℂ}
     {s : Set (Fin m → ℂ)} (hs : IsOpen s) (hf : DifferentiableOn ℂ f s)
