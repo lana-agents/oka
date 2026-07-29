@@ -5,6 +5,7 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Oka.OkaRing
 import Oka.LocalOkaRing
+import Oka.Analytic.ParametricCircleIntegral
 import Mathlib.MeasureTheory.Integral.CircleIntegral
 import Mathlib.Analysis.Calculus.InverseFunctionTheorem.Analytic
 import Mathlib.RingTheory.PowerSeries.WeierstrassPreparation
@@ -769,7 +770,7 @@ lemma localweierstrass_division_lemma_one
       (hq : IsLocalWeierstrassPolynomial (Polynomial.map (localOkaSubring _).val.toRingHom q))
       (f : LocalOkaRing (Fin (n + 1))) :
       ∃ (δ : ℝ) (hd : δ > 0) (ε : ℝ) (he : ε > 0),
-      ∀ (z : Fin (n+1) → ℂ)
+      ∀ (z : Fin (n + 1) → ℂ)
           (hz₁ : ∀ i : Fin n, ‖z i.castSucc‖ ≤ δ)
           (hz₂ : ‖z (Fin.last n)‖ = ε),
           ((f : MvPowerSeries (Fin (n+1)) ℂ)).SummableAt z ∧
@@ -808,8 +809,12 @@ lemma localweierstrass_division_lemma_two
     (hq : IsLocalWeierstrassPolynomial (Polynomial.map (localOkaSubring _).val.toRingHom q))
     (f : LocalOkaRing (Fin (n + 1)))
     (δ : ℝ) (hd : δ > 0) (ε : ℝ) (he : ε > 0)
-    (hf : ∀ z : Fin (n+1) → ℂ, (∀ i : Fin n, ‖z i.castSucc‖ ≤ δ) → ‖z (Fin.last n)‖ = ε →
-      (f : MvPowerSeries (Fin (n+1)) ℂ).SummableAt z)
+    (r : ℝ) (hεr : ε < r)
+    (hf : (f : MvPowerSeries (Fin (n + 1)) ℂ).SummableAt (fun _ ↦ (r : ℂ)))
+    (r : ℝ) (hεr : ε < r)
+    (hf : (f : MvPowerSeries (Fin (n + 1)) ℂ).SummableAt (fun _ ↦ (r : ℂ)))
+    (hq' : ((LocalOkaRing.fromPolynomial q : LocalOkaRing (Fin (n+1))) :
+        MvPowerSeries (Fin (n + 1)) ℂ).SummableAt (fun _ ↦ (r : ℂ)))
     (hq0 : ∀ z : Fin (n+1) → ℂ, (∀ i : Fin n, ‖z i.castSucc‖ ≤ δ) → ‖z (Fin.last n)‖ = ε →
       ((LocalOkaRing.fromPolynomial q : LocalOkaRing (Fin (n+1))) :
         MvPowerSeries (Fin (n+1)) ℂ).eval z ≠ 0) :
@@ -828,11 +833,146 @@ lemma localweierstrass_division_lemma_two
             (((LocalOkaRing.fromPolynomial q : LocalOkaRing (Fin (n+1))) :
                 MvPowerSeries (Fin (n+1)) ℂ).eval (Fin.snoc (Fin.init x) ζ)
               * (ζ - x (Fin.last n)))) 0 := by
-    sorry
+    have hr0 : (0 : ℝ) < r := lt_trans he hεr
+    set ρ : ℝ := min δ (ε / 2) with hρdef
+    have hρ : 0 < ρ := lt_min hd (by linarith)
+    have hρδ : ρ ≤ δ := min_le_left _ _
+    have hρε : ρ < ε := lt_of_le_of_lt (min_le_right _ _) (by linarith)
+    have hcirc : ∀ θ : ℝ, ‖circleMap 0 ε θ‖ = ε := by
+      intro θ; simp [norm_circleMap_zero, abs_of_pos he]
+    have hdiff : ∀ ζ : ℂ, ‖ζ‖ = ε →
+        DifferentiableOn ℂ (fun x : Fin (n+1) → ℂ ↦
+          (f : MvPowerSeries (Fin (n + 1)) ℂ).eval (Fin.snoc (Fin.init x) ζ) /
+            (((LocalOkaRing.fromPolynomial q : LocalOkaRing (Fin (n+1))) :
+                MvPowerSeries (Fin (n + 1)) ℂ).eval (Fin.snoc (Fin.init x) ζ)
+              * (ζ - x (Fin.last n))))
+          (Set.univ.pi fun _ : Fin (n+1) ↦ Metric.closedBall (0 : ℂ) ρ) := by
+      intro ζ hζ x hx
+      have hxi : ∀ i : Fin (n + 1), ‖x i‖ ≤ ρ := by
+        intro i
+        have h := hx i (Set.mem_univ i)
+        rwa [Metric.mem_closedBall, dist_zero_right] at h
+      have hz : ‖(Fin.snoc (Fin.init x) ζ : Fin (n+1) → ℂ)‖ < r := by
+        refine lt_of_le_of_lt (norm_snocInit_le (fun i ↦ ?_) (le_of_eq hζ)) hεr
+        exact le_trans (hxi i.castSucc) hρε.le
+      have hsn : DifferentiableAt ℂ
+          (fun y : Fin (n+1) → ℂ ↦ (Fin.snoc (Fin.init y) ζ : Fin (n+1) → ℂ)) x :=
+        (differentiable_snocInit ζ) x
+      have hnum : DifferentiableAt ℂ
+          (fun y : Fin (n+1) → ℂ ↦ (f : MvPowerSeries (Fin (n+1)) ℂ).eval
+            (Fin.snoc (Fin.init y) ζ)) x := by
+        have h := (MvPowerSeries.analyticAt_eval_of_summableAt_const hr0 hf
+          hz).differentiableAt.comp x hsn
+        simpa [Function.comp_def] using h
+      have hden1 : DifferentiableAt ℂ
+          (fun y : Fin (n+1) → ℂ ↦ ((LocalOkaRing.fromPolynomial q :
+              LocalOkaRing (Fin (n+1))) : MvPowerSeries (Fin (n+1)) ℂ).eval
+            (Fin.snoc (Fin.init y) ζ)) x := by
+        have h := (MvPowerSeries.analyticAt_eval_of_summableAt_const hr0 hq'
+          hz).differentiableAt.comp x hsn
+        simpa [Function.comp_def] using h
+      have hden2 : DifferentiableAt ℂ
+          (fun y : Fin (n+1) → ℂ ↦ ζ - y (Fin.last n)) x :=
+        ((differentiable_const ζ).sub (differentiable_apply (𝕜 := ℂ) (Fin.last n))) x
+      have hq0' : ((LocalOkaRing.fromPolynomial q : LocalOkaRing (Fin (n+1))) :
+          MvPowerSeries (Fin (n+1)) ℂ).eval (Fin.snoc (Fin.init x) ζ) ≠ 0 := by
+        refine hq0 _ (fun i ↦ ?_) ?_
+        · simp only [Fin.snoc_castSucc, Fin.init_def]
+          exact le_trans (hxi i.castSucc) hρδ
+        · simpa only [Fin.snoc_last] using hζ
+      have hζx : ζ - x (Fin.last n) ≠ 0 := by
+        intro h
+        rw [sub_eq_zero] at h
+        have h2 : ‖x (Fin.last n)‖ ≤ ρ := hxi _
+        rw [← h, hζ] at h2
+        linarith
+      have hden : DifferentiableAt ℂ
+          (fun y : Fin (n+1) → ℂ ↦ ((LocalOkaRing.fromPolynomial q :
+              LocalOkaRing (Fin (n+1))) : MvPowerSeries (Fin (n+1)) ℂ).eval
+            (Fin.snoc (Fin.init y) ζ) * (ζ - y (Fin.last n))) x := hden1.mul hden2
+      have hdeninv : DifferentiableAt ℂ
+          (fun y : Fin (n+1) → ℂ ↦ (((LocalOkaRing.fromPolynomial q :
+              LocalOkaRing (Fin (n+1))) : MvPowerSeries (Fin (n+1)) ℂ).eval
+            (Fin.snoc (Fin.init y) ζ) * (ζ - y (Fin.last n)))⁻¹) x :=
+        hden.inv (mul_ne_zero hq0' hζx)
+      have hres : DifferentiableAt ℂ
+          (fun y : Fin (n+1) → ℂ ↦ (f : MvPowerSeries (Fin (n+1)) ℂ).eval
+              (Fin.snoc (Fin.init y) ζ) /
+            (((LocalOkaRing.fromPolynomial q : LocalOkaRing (Fin (n+1))) :
+                MvPowerSeries (Fin (n+1)) ℂ).eval (Fin.snoc (Fin.init y) ζ)
+              * (ζ - y (Fin.last n)))) x := by
+        simp_rw [div_eq_mul_inv]
+        exact hnum.mul hdeninv
+      exact hres.differentiableWithinAt
+    have hcont : Continuous fun p :
+        (Set.univ.pi fun _ : Fin (n+1) ↦ Metric.closedBall (0 : ℂ) ρ) × ℝ ↦
+          (f : MvPowerSeries (Fin (n+1)) ℂ).eval
+              (Fin.snoc (Fin.init (p.1 : Fin (n+1) → ℂ)) (circleMap 0 ε p.2)) /
+            (((LocalOkaRing.fromPolynomial q : LocalOkaRing (Fin (n+1))) :
+                MvPowerSeries (Fin (n+1)) ℂ).eval
+                (Fin.snoc (Fin.init (p.1 : Fin (n+1) → ℂ)) (circleMap 0 ε p.2))
+              * (circleMap 0 ε p.2 - (p.1 : Fin (n+1) → ℂ) (Fin.last n))) := by
+      have hΦ := continuous_snocInit_circleMap (m := n) ε
+        (Set.univ.pi fun _ : Fin (n+1) ↦ Metric.closedBall (0 : ℂ) ρ)
+      have hznorm : ∀ p : (Set.univ.pi fun _ : Fin (n+1) ↦
+          Metric.closedBall (0 : ℂ) ρ) × ℝ,
+          ‖(Fin.snoc (Fin.init (p.1 : Fin (n+1) → ℂ)) (circleMap 0 ε p.2) :
+            Fin (n+1) → ℂ)‖ < r := by
+        intro p
+        refine lt_of_le_of_lt (norm_snocInit_le (fun i ↦ ?_) (le_of_eq (hcirc p.2))) hεr
+        have h := p.1.2 i.castSucc (Set.mem_univ _)
+        rw [Metric.mem_closedBall, dist_zero_right] at h
+        exact le_trans h hρε.le
+      have hnumc : Continuous fun p : (Set.univ.pi fun _ : Fin (n+1) ↦
+          Metric.closedBall (0 : ℂ) ρ) × ℝ ↦
+          (f : MvPowerSeries (Fin (n+1)) ℂ).eval
+            (Fin.snoc (Fin.init (p.1 : Fin (n+1) → ℂ)) (circleMap 0 ε p.2)) := by
+        rw [continuous_iff_continuousAt]
+        intro p
+        have h : ContinuousAt ((f : MvPowerSeries (Fin (n+1)) ℂ).eval ∘
+            fun p' : (Set.univ.pi fun _ : Fin (n+1) ↦ Metric.closedBall (0 : ℂ) ρ) × ℝ ↦
+              (Fin.snoc (Fin.init (p'.1 : Fin (n+1) → ℂ)) (circleMap 0 ε p'.2) :
+                Fin (n+1) → ℂ)) p :=
+          ContinuousAt.comp (MvPowerSeries.analyticAt_eval_of_summableAt_const hr0 hf
+            (hznorm p)).continuousAt hΦ.continuousAt
+        simpa [Function.comp_def] using h
+      have hqc : Continuous fun p : (Set.univ.pi fun _ : Fin (n+1) ↦
+          Metric.closedBall (0 : ℂ) ρ) × ℝ ↦
+          ((LocalOkaRing.fromPolynomial q : LocalOkaRing (Fin (n+1))) :
+              MvPowerSeries (Fin (n+1)) ℂ).eval
+            (Fin.snoc (Fin.init (p.1 : Fin (n+1) → ℂ)) (circleMap 0 ε p.2)) := by
+        rw [continuous_iff_continuousAt]
+        intro p
+        have h : ContinuousAt (((LocalOkaRing.fromPolynomial q :
+              LocalOkaRing (Fin (n+1))) : MvPowerSeries (Fin (n+1)) ℂ).eval ∘
+            fun p' : (Set.univ.pi fun _ : Fin (n+1) ↦ Metric.closedBall (0 : ℂ) ρ) × ℝ ↦
+              (Fin.snoc (Fin.init (p'.1 : Fin (n+1) → ℂ)) (circleMap 0 ε p'.2) :
+                Fin (n+1) → ℂ)) p :=
+          ContinuousAt.comp (MvPowerSeries.analyticAt_eval_of_summableAt_const hr0 hq'
+            (hznorm p)).continuousAt hΦ.continuousAt
+        simpa [Function.comp_def] using h
+      have hdenc : Continuous fun p : (Set.univ.pi fun _ : Fin (n+1) ↦
+          Metric.closedBall (0 : ℂ) ρ) × ℝ ↦
+          circleMap 0 ε p.2 - (p.1 : Fin (n+1) → ℂ) (Fin.last n) := by
+        refine Continuous.sub ?_ ?_
+        · unfold circleMap; fun_prop
+        · exact (continuous_apply (Fin.last n)).comp
+            (continuous_subtype_val.comp continuous_fst)
+      refine hnumc.div (hqc.mul hdenc) (fun p ↦ mul_ne_zero ?_ ?_)
+      · refine hq0 _ (fun i ↦ ?_) ?_
+        · simp only [Fin.snoc_castSucc, Fin.init_def]
+          have h := p.1.2 i.castSucc (Set.mem_univ _)
+          rw [Metric.mem_closedBall, dist_zero_right] at h
+          exact le_trans h hρδ
+        · simpa only [Fin.snoc_last] using hcirc p.2
+      · intro h
+        rw [sub_eq_zero] at h
+        have h2 := p.1.2 (Fin.last n) (Set.mem_univ _)
+        rw [Metric.mem_closedBall, dist_zero_right, ← h, hcirc] at h2
+        linarith
+    exact analyticAt_const.mul (analyticAt_circleIntegral he hρ hdiff hcont)
   obtain ⟨P, hconv, hrep⟩ := MvPowerSeries.exists_represents hF
   exact ⟨⟨P, hconv⟩, hrep⟩
-
-
 
 /-- The Weierstrass division theorem for germs; uniqueness is omitted. -/
 theorem localweierstrass_division
