@@ -708,6 +708,122 @@ lemma continuous_snocInit_circleMap {m : ℕ} (ε : ℝ) (s : Set (Fin (m + 1) �
   · simp only [Fin.snoc_castSucc, Fin.init_def]
     exact (continuous_apply i.castSucc).comp (continuous_subtype_val.comp continuous_fst)
 
+/-- The affine map `w ↦ Fin.snoc w ζ` is differentiable. -/
+lemma differentiable_snoc {m : ℕ} (ζ : ℂ) :
+    Differentiable ℂ (fun w : Fin m → ℂ ↦ (Fin.snoc w ζ : Fin (m + 1) → ℂ)) := by
+  refine differentiable_pi.mpr fun j ↦ ?_
+  refine Fin.lastCases ?_ (fun i ↦ ?_) j
+  · simp only [Fin.snoc_last]
+    exact differentiable_const ζ
+  · simp only [Fin.snoc_castSucc]
+    exact differentiable_apply (𝕜 := ℂ) i
+
+/-- A norm bound for `Fin.snoc w ζ`. -/
+lemma norm_snoc_le {m : ℕ} {w : Fin m → ℂ} {ζ : ℂ} {a : ℝ}
+    (hw : ∀ i, ‖w i‖ ≤ a) (hζ : ‖ζ‖ ≤ a) :
+    ‖(Fin.snoc w ζ : Fin (m + 1) → ℂ)‖ ≤ a := by
+  refine (pi_norm_le_iff_of_nonneg ((norm_nonneg ζ).trans hζ)).mpr fun j ↦ ?_
+  refine Fin.lastCases ?_ (fun i ↦ ?_) j
+  · simpa only [Fin.snoc_last] using hζ
+  · simpa only [Fin.snoc_castSucc] using hw i
+
+/-- Joint continuity of `(w, θ) ↦ Fin.snoc w (circleMap 0 ε θ)`. -/
+lemma continuous_snoc_circleMap {m : ℕ} (ε : ℝ) (s : Set (Fin m → ℂ)) :
+    Continuous fun p : s × ℝ ↦
+      (Fin.snoc (p.1 : Fin m → ℂ) (circleMap 0 ε p.2) : Fin (m + 1) → ℂ) := by
+  refine continuous_pi fun j ↦ ?_
+  refine Fin.lastCases ?_ (fun i ↦ ?_) j
+  · simp only [Fin.snoc_last]
+    unfold circleMap
+    fun_prop
+  · simp only [Fin.snoc_castSucc]
+    exact (continuous_apply i).comp (continuous_subtype_val.comp continuous_fst)
+
+/-- The affine map `s ↦ Fin.snoc w s` (varying the last coordinate) is differentiable. -/
+lemma differentiable_snoc_last {m : ℕ} (w : Fin m → ℂ) :
+    Differentiable ℂ (fun s : ℂ ↦ (Fin.snoc w s : Fin (m + 1) → ℂ)) := by
+  refine differentiable_pi.mpr fun j ↦ ?_
+  refine Fin.lastCases ?_ (fun i ↦ ?_) j
+  · simp only [Fin.snoc_last]
+    exact differentiable_id
+  · simp only [Fin.snoc_castSucc]
+    exact differentiable_const _
+
+open MeasureTheory in
+/-- Analyticity of a circle integral of `F/G · E` along the last coordinate. -/
+theorem analyticAt_circleIntegral_snoc {m : ℕ} {ε ρ r : ℝ}
+    (hε : 0 < ε) (hρ : 0 < ρ) (hρε : ρ < ε) (hεr : ε < r)
+    {F G : (Fin (m + 1) → ℂ) → ℂ}
+    (hF : ∀ z : Fin (m + 1) → ℂ, ‖z‖ < r → AnalyticAt ℂ F z)
+    (hG : ∀ z : Fin (m + 1) → ℂ, ‖z‖ < r → AnalyticAt ℂ G z)
+    (hG0 : ∀ w : Fin m → ℂ, (∀ i, ‖w i‖ ≤ ρ) → ∀ ζ : ℂ, ‖ζ‖ = ε →
+      G (Fin.snoc w ζ) ≠ 0)
+    {E : (Fin m → ℂ) → ℂ → ℂ}
+    (hEdiff : ∀ ζ : ℂ, ‖ζ‖ = ε → DifferentiableOn ℂ (fun w ↦ E w ζ)
+      (Set.univ.pi fun _ : Fin m ↦ Metric.closedBall (0 : ℂ) ρ))
+    (hEcont : Continuous fun p : (Set.univ.pi fun _ : Fin m ↦ Metric.closedBall (0 : ℂ) ρ) × ℝ ↦
+      E (p.1 : Fin m → ℂ) (circleMap 0 ε p.2)) :
+    AnalyticAt ℂ (fun w : Fin m → ℂ ↦
+      ∮ ζ in C(0, ε), F (Fin.snoc w ζ) / G (Fin.snoc w ζ) * E w ζ) 0 := by
+  have hcirc : ∀ θ : ℝ, ‖circleMap 0 ε θ‖ = ε := by
+    intro θ; simp [norm_circleMap_zero, abs_of_pos hε]
+  refine analyticAt_circleIntegral hε hρ ?_ ?_
+  · intro ζ hζ w hw
+    have hwi : ∀ i, ‖w i‖ ≤ ρ := by
+      intro i
+      have h := hw i (Set.mem_univ i)
+      rwa [Metric.mem_closedBall, dist_zero_right] at h
+    have hz : ‖(Fin.snoc w ζ : Fin (m + 1) → ℂ)‖ < r :=
+      lt_of_le_of_lt (norm_snoc_le (fun i ↦ le_trans (hwi i) hρε.le) (le_of_eq hζ)) hεr
+    have hsn : DifferentiableAt ℂ
+        (fun v : Fin m → ℂ ↦ (Fin.snoc v ζ : Fin (m + 1) → ℂ)) w := (differentiable_snoc ζ) w
+    have hFd : DifferentiableAt ℂ (fun v : Fin m → ℂ ↦ F (Fin.snoc v ζ)) w := by
+      have h := (hF _ hz).differentiableAt.comp w hsn
+      simpa [Function.comp_def] using h
+    have hGd : DifferentiableAt ℂ (fun v : Fin m → ℂ ↦ G (Fin.snoc v ζ)) w := by
+      have h := (hG _ hz).differentiableAt.comp w hsn
+      simpa [Function.comp_def] using h
+    have hGinv : DifferentiableAt ℂ (fun v : Fin m → ℂ ↦ (G (Fin.snoc v ζ))⁻¹) w :=
+      hGd.inv (hG0 w hwi ζ hζ)
+    have hquot : DifferentiableAt ℂ
+        (fun v : Fin m → ℂ ↦ F (Fin.snoc v ζ) / G (Fin.snoc v ζ)) w := by
+      simp_rw [div_eq_mul_inv]
+      exact hFd.mul hGinv
+    exact hquot.differentiableWithinAt.mul ((hEdiff ζ hζ) w hw)
+  · have hΦ := continuous_snoc_circleMap (m := m) ε
+      (Set.univ.pi fun _ : Fin m ↦ Metric.closedBall (0 : ℂ) ρ)
+    have hznorm : ∀ p : (Set.univ.pi fun _ : Fin m ↦ Metric.closedBall (0 : ℂ) ρ) × ℝ,
+        ‖(Fin.snoc (p.1 : Fin m → ℂ) (circleMap 0 ε p.2) : Fin (m + 1) → ℂ)‖ < r := by
+      intro p
+      refine lt_of_le_of_lt (norm_snoc_le (fun i ↦ ?_) (le_of_eq (hcirc p.2))) hεr
+      have h := p.1.2 i (Set.mem_univ _)
+      rw [Metric.mem_closedBall, dist_zero_right] at h
+      exact le_trans h hρε.le
+    have hFc : Continuous fun p : (Set.univ.pi fun _ : Fin m ↦
+        Metric.closedBall (0 : ℂ) ρ) × ℝ ↦
+        F (Fin.snoc (p.1 : Fin m → ℂ) (circleMap 0 ε p.2)) := by
+      rw [continuous_iff_continuousAt]
+      intro p
+      have h : ContinuousAt (F ∘ fun p' : (Set.univ.pi fun _ : Fin m ↦
+          Metric.closedBall (0 : ℂ) ρ) × ℝ ↦
+            (Fin.snoc (p'.1 : Fin m → ℂ) (circleMap 0 ε p'.2) : Fin (m + 1) → ℂ)) p :=
+        ContinuousAt.comp (hF _ (hznorm p)).continuousAt hΦ.continuousAt
+      simpa [Function.comp_def] using h
+    have hGc : Continuous fun p : (Set.univ.pi fun _ : Fin m ↦
+        Metric.closedBall (0 : ℂ) ρ) × ℝ ↦
+        G (Fin.snoc (p.1 : Fin m → ℂ) (circleMap 0 ε p.2)) := by
+      rw [continuous_iff_continuousAt]
+      intro p
+      have h : ContinuousAt (G ∘ fun p' : (Set.univ.pi fun _ : Fin m ↦
+          Metric.closedBall (0 : ℂ) ρ) × ℝ ↦
+            (Fin.snoc (p'.1 : Fin m → ℂ) (circleMap 0 ε p'.2) : Fin (m + 1) → ℂ)) p :=
+        ContinuousAt.comp (hG _ (hznorm p)).continuousAt hΦ.continuousAt
+      simpa [Function.comp_def] using h
+    refine (hFc.div hGc (fun p ↦ ?_)).mul hEcont
+    refine hG0 (p.1 : Fin m → ℂ) (fun i ↦ ?_) (circleMap 0 ε p.2) (hcirc p.2)
+    have h := p.1.2 i (Set.mem_univ _)
+    rwa [Metric.mem_closedBall, dist_zero_right] at h
+
 theorem analyticAt_of_differentiableOn {m : ℕ} {f : (Fin m → ℂ) → ℂ}
     {s : Set (Fin m → ℂ)} (hs : IsOpen s) (hf : DifferentiableOn ℂ f s)
     {x₀ : Fin m → ℂ} (hx₀ : x₀ ∈ s) : AnalyticAt ℂ f x₀ := by
