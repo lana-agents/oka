@@ -1505,7 +1505,7 @@ theorem localweierstrass_division
            (Polynomial.map (Subring.subtype (localOkaSubring _).toSubring) q))
       (f : LocalOkaRing (Fin (n + 1))) :
       ∃ (a : LocalOkaRing (Fin (n + 1)))
-        (b : (LocalOkaRing (Fin (n)))[X]) (hd : b.degree < q.degree),
+        (b : (LocalOkaRing (Fin (n)))[X]) (_ : b.degree < q.degree),
       f = a * (LocalOkaRing.fromPolynomial q) + (LocalOkaRing.fromPolynomial b) := by
   classical
   have hqm : IsLocalWeierstrassPolynomial
@@ -2122,9 +2122,9 @@ theorem. -/
 theorem localweierstrass_preparation
     (f : LocalOkaRing (Fin (n + 1)))
     (hf : (f : MvPowerSeries (Fin (n + 1)) ℂ).IsGeneralIn (.last _)) :
-    ∃ (u : LocalOkaRing (Fin (n + 1))) (hu : IsUnit u)
+    ∃ (u : LocalOkaRing (Fin (n + 1))) (_ : IsUnit u)
       (g : (LocalOkaRing (Fin (n)))[X])
-      (hg : IsLocalWeierstrassPolynomial
+      (_ : IsLocalWeierstrassPolynomial
            (Polynomial.map (Subring.subtype (localOkaSubring _).toSubring) g)),
       f = LocalOkaRing.fromPolynomial g * u := by
   classical

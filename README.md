@@ -14,6 +14,9 @@ coherence statement for arbitrary complex analytic spaces:
   `U ⊆ ℂ^ι` (`Oka/OkaRing.lean`), the local ring `LocalOkaRing ι` of convergent power series at
   the origin (`Oka/LocalOkaRing.lean`), and the structure sheaf `okaSheaf ι`
   (`Oka/StructureSheaf.lean`), which makes `ℂ^ι` a locally ringed space (`Oka/ComplexSpace.lean`).
+* **Several complex variables.** The Cauchy integral formula on a polydisc, and the analyticity
+  of a circle integral in its parameters (`Oka/Analytic/ParametricCircleIntegral.lean`). This is
+  the analytic input to the Weierstrass division theorem.
 * **Weierstrass theory.** Weierstrass polynomials, the preparation and division theorems for
   germs, and the dictionary between polynomials over `OkaRing U` and holomorphic functions on a
   cylinder (`Oka/Weierstrass.lean`).
@@ -43,13 +46,17 @@ Freitag) that the formalization follows.
 
 ## Status
 
-The overall architecture is complete: the main theorem is deduced from Oka's coherence lemma,
-which in turn is deduced from Weierstrass preparation and Oka's bounded degree lemma. The
-remaining `sorry`s are confined to the analytic core:
+The development is complete. `lake build` succeeds and there are no `sorry`s anywhere in the
+library: the main theorem is deduced from Oka's coherence lemma, which in turn is deduced from
+Weierstrass preparation and Oka's bounded degree lemma, and each of those is proved in full.
 
-* `localweierstrass_preparation` and `localweierstrass_division` in `Oka/Weierstrass.lean`, plus
-  two auxiliary analyticity lemmas used for them;
-* one step in the Weierstrass case of the bounded degree lemma in `Oka/OkaLemma.lean`.
+Both headline statements depend only on the three standard axioms of Lean:
+
+* `oka` (`Oka/Statement.lean`) depends on axioms `[propext, Classical.choice, Quot.sound]`;
+* `ComplexAnalytic.AnalyticSpace.isCoherentStructureSheaf` (`Oka/AnalyticSpace/Coherent.lean`)
+  depends on axioms `[propext, Classical.choice, Quot.sound]`.
+
+These can be reproduced with `#print axioms` in a file importing `Oka`.
 
 ## Building
 
