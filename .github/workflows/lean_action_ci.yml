@@ -17,4 +17,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v5
+
+      # A `sorry` is only a warning to Lean, so `lake build` would not fail on one. Catch it
+      # here, before the (slow) build. The negative lookarounds keep prose containing the word
+      # "sorry" from matching.
+      - name: Check for sorry
+        run: |
+          if grep -rnP '(?<![A-Za-z_])sorry(?![A-Za-z_])' --include='*.lean' Oka Oka.lean; then
+            echo "::error::found a sorry in the library"
+            exit 1
+          fi
+
+      # Builds the `Oka` library and the `OkaTest` library, whose `OkaTest/Axioms.lean` asserts
+      # that the main theorems depend only on `propext`, `Classical.choice` and `Quot.sound`.
       - uses: leanprover/lean-action@v1
