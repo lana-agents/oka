@@ -23,6 +23,8 @@ coherence statement for arbitrary complex analytic spaces:
 * **The Rückert basis theorem.** The ring of germs at the origin of holomorphic functions in
   finitely many variables is Noetherian (`Oka/Noetherian.lean`), deduced from Weierstrass
   division by the classical induction on the number of variables.
+* **Unique factorisation.** The germ ring is a unique factorisation domain
+  (`Oka/UFD.lean`), the second algebraic consequence of Weierstrass preparation.
 * **Noetherian local rings.** The stalks of the structure sheaf of a complex analytic space are
   Noetherian local rings (`Oka/AnalyticSpace/Noetherian.lean`), the companion statement to the
   coherence theorem.

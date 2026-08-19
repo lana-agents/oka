@@ -106,6 +106,13 @@ info: 'ComplexAnalytic.AnalyticSpace.instIsNoetherianRingStalk' depends on axiom
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.instIsNoetherianRingStalk
 
+/--
+info: 'LocalOkaRing.instUniqueFactorizationMonoid' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.instUniqueFactorizationMonoid
+
 /-! ### The main theorem -/
 
 /--
