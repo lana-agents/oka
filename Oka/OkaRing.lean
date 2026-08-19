@@ -3,8 +3,6 @@ Copyright (c) 2026 Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten. All righ
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
-import Mathlib.Algebra.Polynomial.AlgebraMap
-import Mathlib.Analysis.Analytic.Basic
 import Mathlib.Analysis.Analytic.Constructions
 import Mathlib.Analysis.Complex.Basic
 

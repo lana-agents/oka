@@ -3,15 +3,9 @@ Copyright (c) 2026 Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten. All righ
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
-
-import Oka.OkaRing
-import Oka.LocalOkaRing
 import Oka.Analytic.ParametricCircleIntegral
-import Mathlib.MeasureTheory.Integral.CircleIntegral
 import Mathlib.Analysis.Calculus.InverseFunctionTheorem.Analytic
-import Mathlib.RingTheory.PowerSeries.WeierstrassPreparation
 import Mathlib.RingTheory.AdicCompletion.Completeness
-import Mathlib.RingTheory.MvPowerSeries.Inverse
 
 /-!
 # The Weierstrass preparation theorem

@@ -9,6 +9,9 @@ import Mathlib.Analysis.Normed.Module.FiniteDimension
 import Mathlib.LinearAlgebra.Complex.FiniteDimensional
 import Mathlib.RingTheory.MvPowerSeries.Inverse
 import Mathlib.RingTheory.MvPowerSeries.Rename
+-- `Mathlib.RingTheory.Polynomial.DegreeLT` is not used in this file, but it supplies the
+-- `R[X]_d` notation that `Oka/OkaLemma.lean` relies on transitively; without it the
+-- statements there fail to parse.
 import Mathlib.RingTheory.Polynomial.DegreeLT
 import Mathlib.RingTheory.PowerSeries.Order
 import Oka.StructureSheaf
