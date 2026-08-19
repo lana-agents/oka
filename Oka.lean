@@ -27,5 +27,6 @@ import Oka.OkaRing
 import Oka.StalkEquiv
 import Oka.Statement
 import Oka.StructureSheaf
+import Oka.Topology.Sheaves.QuotientPresheaf
 import Oka.UFD
 import Oka.Weierstrass

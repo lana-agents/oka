@@ -129,6 +129,22 @@ info: 'LocalOkaRing.truncQuotientEquiv' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms LocalOkaRing.truncQuotientEquiv
 
+/-! ### Quotients of presheaves of rings -/
+
+/--
+info: 'TopCat.Presheaf.surjective_stalkFunctor_map_toQuotientSpan' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TopCat.Presheaf.surjective_stalkFunctor_map_toQuotientSpan
+
+/--
+info: 'TopCat.Presheaf.ker_stalkFunctor_map_toQuotientSpan' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TopCat.Presheaf.ker_stalkFunctor_map_toQuotientSpan
+
 /-! ### The main theorem -/
 
 /--
