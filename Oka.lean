@@ -20,6 +20,7 @@ import Oka.ChangeOfCoordinates
 import Oka.Coherent
 import Oka.ComplexSpace
 import Oka.LocalOkaRing
+import Oka.MaximalIdeal
 import Oka.Noetherian
 import Oka.OkaLemma
 import Oka.OkaRing

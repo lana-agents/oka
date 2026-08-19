@@ -113,6 +113,22 @@ info: 'LocalOkaRing.instUniqueFactorizationMonoid' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms LocalOkaRing.instUniqueFactorizationMonoid
 
+/-! ### The maximal ideal and the truncations -/
+
+/--
+info: 'LocalOkaRing.maximalIdeal_eq_span_coord' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.maximalIdeal_eq_span_coord
+
+/--
+info: 'LocalOkaRing.truncQuotientEquiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.truncQuotientEquiv
+
 /-! ### The main theorem -/
 
 /--
