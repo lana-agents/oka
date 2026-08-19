@@ -26,4 +26,5 @@ import Oka.OkaRing
 import Oka.StalkEquiv
 import Oka.Statement
 import Oka.StructureSheaf
+import Oka.UFD
 import Oka.Weierstrass
