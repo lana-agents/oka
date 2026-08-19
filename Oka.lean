@@ -11,6 +11,7 @@ import Oka.Algebra.Category.ModuleCat.Sheaf.Submodule
 import Oka.Analytic.ParametricCircleIntegral
 import Oka.AnalyticSpace.Basic
 import Oka.AnalyticSpace.Coherent
+import Oka.AnalyticSpace.Noetherian
 import Oka.AnalyticSpace.Relations
 import Oka.CategoryTheory.Sites.CoversTop.Over
 import Oka.CategoryTheory.Sites.Over
