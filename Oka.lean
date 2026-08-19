@@ -14,6 +14,7 @@ import Oka.AnalyticSpace.Coherent
 import Oka.CategoryTheory.Sites.CoversTop.Over
 import Oka.CategoryTheory.Sites.Over
 import Oka.CategoryTheory.Sites.Whiskering
+import Oka.ChangeOfCoordinates
 import Oka.Coherent
 import Oka.ComplexSpace
 import Oka.LocalOkaRing
