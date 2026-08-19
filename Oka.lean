@@ -24,6 +24,8 @@ import Oka.MaximalIdeal
 import Oka.Noetherian
 import Oka.OkaLemma
 import Oka.OkaRing
+import Oka.Polynomial
+import Oka.Polynomial.Germ
 import Oka.StalkEquiv
 import Oka.Statement
 import Oka.StructureSheaf
