@@ -83,6 +83,22 @@ info: 'localweierstrass_preparation' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms localweierstrass_preparation
 
+/-! ### The Rückert basis theorem -/
+
+/--
+info: 'LocalOkaRing.isNoetherianRing_fin' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.isNoetherianRing_fin
+
+/--
+info: 'LocalOkaRing.instIsNoetherianRing' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.instIsNoetherianRing
+
 /-! ### The main theorem -/
 
 /--
