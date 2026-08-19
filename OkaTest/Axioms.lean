@@ -99,6 +99,13 @@ info: 'LocalOkaRing.instIsNoetherianRing' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms LocalOkaRing.instIsNoetherianRing
 
+/--
+info: 'ComplexAnalytic.AnalyticSpace.instIsNoetherianRingStalk' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.instIsNoetherianRingStalk
+
 /-! ### The main theorem -/
 
 /--
