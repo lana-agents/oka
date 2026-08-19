@@ -4,15 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Mathlib.Analysis.Complex.CauchyIntegral
-import Mathlib.Analysis.Analytic.ChangeOrigin
-import Mathlib.Analysis.Calculus.FDeriv.Analytic
-import Mathlib.Analysis.Normed.Ring.InfiniteSum
-import Mathlib.Analysis.SpecificLimits.Normed
 import Mathlib.MeasureTheory.Integral.TorusIntegral
-import Mathlib.MeasureTheory.Integral.DominatedConvergence
-import Mathlib.MeasureTheory.Integral.Prod
-import Mathlib.Algebra.BigOperators.Finsupp.Basic
-import Mathlib.Data.Finsupp.Fin
 import Mathlib.Data.Finsupp.Encodable
 import Oka.LocalOkaRing
 
