@@ -5,9 +5,6 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Oka.Analytic.ParametricCircleIntegral
 import Mathlib.Analysis.Calculus.InverseFunctionTheorem.Analytic
--- Nothing here refers to Mathlib's Weierstrass preparation, but this import transitively
--- supplies `Polynomial.taylor`, which is used below.
-import Mathlib.RingTheory.PowerSeries.WeierstrassPreparation
 import Mathlib.RingTheory.AdicCompletion.Completeness
 
 /-!
