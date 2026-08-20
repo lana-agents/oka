@@ -3,7 +3,7 @@ Copyright (c) 2026 Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten. All righ
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
-import Mathlib.RingTheory.Finiteness.Defs
+import Mathlib.RingTheory.Finiteness.Ideal
 import Mathlib.RingTheory.Ideal.Maps
 
 /-!
@@ -12,8 +12,10 @@ import Mathlib.RingTheory.Ideal.Maps
 Material for `Mathlib/RingTheory/Ideal/Maps.lean`, whose `Ideal.comap_symm` and `Ideal.map_symm`
 are the neighbouring API; see `README.md` on the mirror tree.
 
-Mathlib has `Submodule.fg_map_iff` for `Submodule.map` along an injective *linear* map, but
-`Ideal.map` along a ring homomorphism is a different operation, and there is no `Ideal` analogue.
+Mathlib has `Ideal.FG.map` in the forward direction, and `Submodule.fg_map_iff` for
+`Submodule.map` along an injective *linear* map; `Ideal.map` along a ring homomorphism is a
+different operation, and nothing transports `Ideal.FG` backwards along a `RingEquiv`. The proof
+below is the forward lemma applied to `e.symm`.
 
 ## Main results
 
@@ -25,10 +27,6 @@ Mathlib has `Submodule.fg_map_iff` for `Submodule.map` along an injective *linea
 isomorphism. -/
 theorem Ideal.FG.of_map_ringEquiv {A B : Type*} [CommRing A] [CommRing B] (e : A ≃+* B)
     {I : Ideal A} (h : (I.map (e : A →+* B)).FG) : I.FG := by
-  classical
-  obtain ⟨s, hs⟩ := h
-  have hI : I = (I.map (e : A →+* B)).map (e.symm : B →+* A) := by
-    rw [Ideal.map_map, show (e.symm : B →+* A).comp (e : A →+* B) = RingHom.id A from
-      RingHom.ext e.symm_apply_apply, Ideal.map_id]
-  exact ⟨s.image e.symm, by
-    rw [Finset.coe_image, hI, ← hs, Ideal.map_span, RingEquiv.coe_toRingHom]⟩
+  have h2 := h.map (e.symm : B →+* A)
+  rwa [Ideal.map_map, show (e.symm : B →+* A).comp (e : A →+* B) = RingHom.id A from
+    RingHom.ext e.symm_apply_apply, Ideal.map_id] at h2
