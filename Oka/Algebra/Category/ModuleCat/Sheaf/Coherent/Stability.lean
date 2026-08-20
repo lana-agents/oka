@@ -7,10 +7,10 @@ module
 
 public import Mathlib.CategoryTheory.Abelian.CommSq
 public import Mathlib.CategoryTheory.Limits.Constructions.Over.Products
+public import Mathlib.CategoryTheory.Limits.Shapes.Pullback.IsPullback.Kernels
 public import Oka.Algebra.Category.ModuleCat.Sheaf.Coherent.Basic
 public import Oka.Algebra.Category.ModuleCat.Sheaf.Coherent.Locality
 public import Oka.Algebra.Category.ModuleCat.Sheaf.LocallySurjective
-public import Oka.CategoryTheory.Abelian.CommSq
 
 /-!
 # Stability properties of coherent sheaves of modules
@@ -151,13 +151,14 @@ image cases it cannot be got by transporting coherence along a mono or an epi.
 
 Write `Q` for `cokernel φ` and `p : N ⟶ Q` for the projection, and form the pullback
 `P := free I ×_Q N` of `ψ` along `p`. Its two projections have, by
-`CategoryTheory.IsPullback.kernelIso`, the same kernels as the maps they are base changes of:
-`kernel (fst) ≅ kernel p = Abelian.image φ`, which is of finite type because `M` is and `N` is
-coherent, and `kernel (snd) ≅ kernel ψ`, which is what we are after. Since `p` is an
-epimorphism so is `fst`, so `P` is an extension of `free I` by a sheaf of finite type and
-therefore of finite type (`SheafOfModules.IsFiniteType.of_epi_free` — this is where local
-surjectivity of an epimorphism enters). Finally `snd` maps the finite type sheaf `P` into the
-coherent sheaf `N`, so its kernel is of finite type. -/
+`CategoryTheory.Limits.isIso_kernel_map_of_isPullback` applied to the square and to its flip,
+the same kernels as the maps they are base changes of: `kernel (fst) ≅ kernel p =
+Abelian.image φ`, which is of finite type because `M` is and `N` is coherent, and
+`kernel (snd) ≅ kernel ψ`, which is what we are after. Since `p` is an epimorphism so is `fst`,
+so `P` is an extension of `free I` by a sheaf of finite type and therefore of finite type
+(`SheafOfModules.IsFiniteType.of_epi_free` — this is where local surjectivity of an
+epimorphism enters). Finally `snd` maps the finite type sheaf `P` into the coherent sheaf `N`,
+so its kernel is of finite type. -/
 lemma isFiniteType_kernel_free_to_cokernel {M N : SheafOfModules.{u} R} (φ : M ⟶ N)
     [M.IsFiniteType] [N.IsCoherent] {I : Type u} [Finite I]
     (ψ : free (R := R) I ⟶ Limits.cokernel φ) : (Limits.kernel ψ).IsFiniteType := by
@@ -165,13 +166,16 @@ lemma isFiniteType_kernel_free_to_cokernel {M N : SheafOfModules.{u} R} (φ : M 
       (cokernel.π φ) := IsPullback.of_hasPullback _ _
   haveI : Epi (pullback.fst ψ (cokernel.π φ)) := Abelian.epi_pullback_of_epi_g _ _
   haveI : (Abelian.image φ).IsCoherent := IsCoherent.image_of_isFiniteType φ
+  haveI := isIso_kernel_map_of_isPullback sq
   haveI : (kernel (pullback.fst ψ (cokernel.π φ))).IsFiniteType :=
-    IsFiniteType.of_iso (M := kernel (cokernel.π φ)) sq.flip.kernelIso.symm
+    IsFiniteType.of_iso (M := kernel (cokernel.π φ)) (asIso (kernel.map _ _ _ _ sq.w)).symm
   haveI : (Limits.pullback ψ (cokernel.π φ)).IsFiniteType :=
     IsFiniteType.of_epi_free (pullback.fst ψ (cokernel.π φ))
   haveI : (kernel (pullback.snd ψ (cokernel.π φ))).IsFiniteType :=
     isFiniteType_kernel_of_isCoherent (pullback.snd ψ (cokernel.π φ))
-  exact IsFiniteType.of_iso (M := kernel (pullback.snd ψ (cokernel.π φ))) sq.kernelIso
+  haveI := isIso_kernel_map_of_isPullback sq.flip
+  exact IsFiniteType.of_iso (M := kernel (pullback.snd ψ (cokernel.π φ)))
+    (asIso (kernel.map _ _ _ _ sq.flip.w))
 
 /-- **The cokernel of a morphism from a finite type sheaf of modules to a coherent sheaf of
 modules is coherent.**
