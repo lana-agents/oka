@@ -38,6 +38,8 @@ mirror tree.
   section is the image of its germ under the stalk map.
 - `AlgebraicGeometry.LocallyRingedSpace.range_ofRestrict_comp`: the image of the composite of two
   open subspace inclusions.
+- `AlgebraicGeometry.LocallyRingedSpace.hom_ext_restrict_of_isEmpty`: any two morphisms out of
+  the restriction to an open subset with no points are equal.
 -/
 
 open CategoryTheory TopologicalSpace Opposite
@@ -155,5 +157,20 @@ lemma range_ofRestrict_comp (A : LocallyRingedSpace.{u}) (S : Opens A)
     exact ⟨w.1, w.2, rfl⟩
   · rintro ⟨y, hy, rfl⟩
     exact ⟨⟨y, hy⟩, rfl⟩
+
+/-- **Any two morphisms out of the restriction to an empty open subset are equal.**
+
+There are no points, so the base maps agree and `hom_stalk_ext`'s remaining obligation is
+vacuous. This is what makes a compatibility condition on a *disjoint* pair of members of an open
+cover free — see `existsUnique_glueMorphisms_of_opens` in
+`Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean`. Stated with the carrier being empty
+rather than with `V = ⊥` so that no transport along an equation of opens is needed. -/
+theorem hom_ext_restrict_of_isEmpty {V : Opens X} (hV : (V : Set X) = ∅)
+    (f g : X.restrict V.isOpenEmbedding ⟶ Y) : f = g := by
+  have hempty : ∀ x : X.restrict V.isOpenEmbedding, False := fun x ↦ by
+    rw [Set.eq_empty_iff_forall_notMem] at hV
+    exact hV x.1 x.2
+  have hbase : f.base = g.base := ConcreteCategory.hom_ext _ _ fun x ↦ (hempty x).elim
+  exact hom_stalk_ext f g hbase fun x ↦ (hempty x).elim
 
 end AlgebraicGeometry.LocallyRingedSpace

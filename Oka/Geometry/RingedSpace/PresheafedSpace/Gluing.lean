@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Mathlib.Geometry.RingedSpace.PresheafedSpace.Gluing
+import Oka.Geometry.RingedSpace.OpenImmersion
 import Oka.Topology.Sheaves.Stalks
 
 /-!
@@ -383,5 +384,72 @@ lemma openCoverOfOpens_map {X : LocallyRingedSpace.{u}} {ι : Type u} (U : ι �
     (hU : ∀ x : X, ∃ i, x ∈ U i) (i : ι) :
     (openCoverOfOpens U hU).map i = X.ofRestrict (U i).isOpenEmbedding :=
   rfl
+
+
+section GlueOverOpens
+
+/-- **Morphisms out of the members of a cover of `X` by open subsets, agreeing on the pairwise
+intersections, glue** — and the glued morphism is unique.
+
+`AlgebraicGeometry.LocallyRingedSpace.OpenCover.existsUnique_glueMorphisms` says the same thing
+with the compatibility phrased on the *categorical pullback* of the two inclusions. That object
+is opaque: to discharge the hypothesis one has to know what its points are, and the tools that
+would discharge it — anything of the form "two morphisms out of this space with the same
+so-and-so are equal" — are statements about spaces one can name. **So the hypothesis there is
+not checkable by the machinery meant to check it**, which is why nothing has consumed that
+theorem since it was proved.
+
+Here the compatibility is an equation of morphisms out of `X.restrict (U i ⊓ U j)`, which is an
+open subspace of `X` and therefore something the caller already understands — for a complex
+analytic space, `ComplexAnalytic.AnalyticSpace.restrict` makes it an analytic space and
+`ComplexAnalytic.AnalyticSpace.hom_ext_complexAffineSpace` applies to it.
+
+The identification is
+`AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.range_pullback_to_base_of_left` — the
+pullback of two open immersions has as image the intersection of their images — followed by
+`AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.isoOfRangeEq`. -/
+theorem existsUnique_glueMorphisms_of_opens {X Y : LocallyRingedSpace.{u}} {ι : Type u}
+    (U : ι → Opens X) (hU : ∀ x : X, ∃ i, x ∈ U i)
+    (f : ∀ i, X.restrict (U i).isOpenEmbedding ⟶ Y)
+    (hf : ∀ i j, X.restrictLE (inf_le_left : U i ⊓ U j ≤ U i) ≫ f i =
+      X.restrictLE (inf_le_right : U i ⊓ U j ≤ U j) ≫ f j) :
+    ∃! φ : X ⟶ Y, ∀ i, X.ofRestrict (U i).isOpenEmbedding ≫ φ = f i := by
+  refine (openCoverOfOpens U hU).existsUnique_glueMorphisms f fun i j ↦ ?_
+  change pullback.fst (X.ofRestrict (U i).isOpenEmbedding)
+      (X.ofRestrict (U j).isOpenEmbedding) ≫ f i =
+    pullback.snd (X.ofRestrict (U i).isOpenEmbedding)
+      (X.ofRestrict (U j).isOpenEmbedding) ≫ f j
+  have hcond : X.restrictLE (inf_le_left : U i ⊓ U j ≤ U i) ≫
+        X.ofRestrict (U i).isOpenEmbedding =
+      X.restrictLE (inf_le_right : U i ⊓ U j ≤ U j) ≫ X.ofRestrict (U j).isOpenEmbedding := by
+    rw [restrictLE_fac, restrictLE_fac]
+  set e := pullback.lift _ _ hcond with he
+  have hfst : e ≫ pullback.fst (X.ofRestrict (U i).isOpenEmbedding)
+      (X.ofRestrict (U j).isOpenEmbedding) = X.restrictLE inf_le_left :=
+    pullback.lift_fst _ _ hcond
+  have hsnd : e ≫ pullback.snd (X.ofRestrict (U i).isOpenEmbedding)
+      (X.ofRestrict (U j).isOpenEmbedding) = X.restrictLE inf_le_right :=
+    pullback.lift_snd _ _ hcond
+  have hrange : Set.range (X.ofRestrict (U i ⊓ U j).isOpenEmbedding).base =
+      Set.range (pullback.fst (X.ofRestrict (U i).isOpenEmbedding)
+        (X.ofRestrict (U j).isOpenEmbedding) ≫ X.ofRestrict (U i).isOpenEmbedding).base := by
+    rw [IsOpenImmersion.range_pullback_to_base_of_left, range_ofRestrict, range_ofRestrict,
+      range_ofRestrict]
+    rfl
+  haveI : IsIso e := by
+    have huniq := IsOpenImmersion.lift_uniq
+      (pullback.fst (X.ofRestrict (U i).isOpenEmbedding) (X.ofRestrict (U j).isOpenEmbedding) ≫
+        X.ofRestrict (U i).isOpenEmbedding)
+      (X.ofRestrict (U i ⊓ U j).isOpenEmbedding) (le_of_eq hrange) e
+      (by rw [← Category.assoc, hfst, restrictLE_fac])
+    rw [show e = (IsOpenImmersion.isoOfRangeEq (X.ofRestrict (U i ⊓ U j).isOpenEmbedding)
+      (pullback.fst (X.ofRestrict (U i).isOpenEmbedding)
+        (X.ofRestrict (U j).isOpenEmbedding) ≫ X.ofRestrict (U i).isOpenEmbedding)
+      hrange).hom from huniq]
+    infer_instance
+  rw [← cancel_epi e, ← Category.assoc, ← Category.assoc, hfst, hsnd]
+  exact hf i j
+
+end GlueOverOpens
 
 end AlgebraicGeometry.LocallyRingedSpace
