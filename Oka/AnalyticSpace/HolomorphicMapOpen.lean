@@ -264,19 +264,6 @@ theorem AnalyticSpace.exists_hom_complexLine_restrict
       AnalyticSpace.coordPullback φ (ULift.up 0) = g :=
   ⟨AnalyticSpace.okaMapOpen fun _ ↦ g, AnalyticSpace.coordPullback_okaMapOpen _ _⟩
 
-/-- **`Hom(ℂ^n|V, ℂ) ≃ Γ(ℂ^n|V, 𝒪)`**: a morphism of complex analytic spaces from an open
-subspace of `ℂ^n` to `ℂ` is the same thing as a global holomorphic function on it.
-
-Injectivity is `ComplexAnalytic.AnalyticSpace.hom_ext_complexLine`, which holds for every `Z`;
-surjectivity is the theorem above, and is the half that does not. -/
-noncomputable def AnalyticSpace.homComplexLineEquivRestrict :
-    ((AnalyticSpace.complexAffineSpace.{u} n).restrict V ⟶
-        AnalyticSpace.complexAffineSpace.{u} 1) ≃
-      ((AnalyticSpace.complexAffineSpace.{u} n).restrict V).presheaf.obj (op ⊤) :=
-  Equiv.ofBijective (fun φ ↦ AnalyticSpace.coordPullback φ (ULift.up 0))
-    ⟨fun _ _ h ↦ AnalyticSpace.hom_ext_complexLine _ _ h,
-      fun g ↦ AnalyticSpace.exists_hom_complexLine_restrict g⟩
-
 end AnalyticSpace
 
 end ComplexAnalytic

@@ -98,7 +98,12 @@ to see why the `≤` route is the cheap one.
   `𝒪_Z` is the pullback of a section of `𝒪_{ℂ^n|V}` along a chart.**
 - `ComplexAnalytic.AnalyticSpace.exists_hom_complexLine_general`: **every global section of
   `𝒪_Z` is the pullback of the coordinate along a morphism `Z ⟶ ℂ`.**
-- `ComplexAnalytic.AnalyticSpace.homComplexLineEquivGeneral`: **`Hom(Z, ℂ) ≃ Γ(Z, 𝒪_Z)`.**
+- `ComplexAnalytic.AnalyticSpace.homComplexLineEquivGeneral`: **`Hom(Z, ℂ) ≃ Γ(Z, 𝒪_Z)`**, the
+  only bijection of this shape in the development — the `ℂ^n` and `ℂ^n|V` versions are its
+  special cases and were deleted in favour of it.
+- `ComplexAnalytic.AnalyticSpace.symm_homComplexLineEquivGeneral_coordPullback` and
+  `ComplexAnalytic.AnalyticSpace.coordPullback_symm_homComplexLineEquivGeneral`: **both round
+  trips**, which is what makes the choice term in the inverse harmless to a consumer.
 -/
 
 open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry Topology
@@ -318,9 +323,20 @@ theorem exists_hom_complexLine_general (Z : AnalyticSpace.{u}) (g : Z.presheaf.o
 the pullback of the coordinate.
 
 Injectivity is `ComplexAnalytic.AnalyticSpace.hom_ext_complexLine`, which has been general in `Z`
-since taxis #653; surjectivity is `exists_hom_complexLine_general`. As with the `ℂ^n` and
-`ℂ^n|V` versions this is `Equiv.ofBijective`, so the inverse is a choice term; the forward map is
-`ComplexAnalytic.AnalyticSpace.coordPullback` and is the thing to state results about. -/
+since taxis #653; surjectivity is `exists_hom_complexLine_general`.
+
+**This is the only bijection of this shape in the development.** There were briefly three — one
+for `ℂ^n`, one for `ℂ^n|V`, and this one — with the same forward map at three sources; the first
+two are subsumed by this at `Z = ℂ^n` and `Z = ℂ^n|V` and were deleted rather than kept in
+parallel (taxis #655). Their *existence* halves, `exists_hom_complexLine` and
+`exists_hom_complexLine_restrict`, are not redundant and remain: the second is what
+`exists_local_hom_of_chartLift` consumes, so the general case is built on the special one rather
+than replacing it.
+
+This is `Equiv.ofBijective`, so **its inverse is a choice term**. The forward map is
+`ComplexAnalytic.AnalyticSpace.coordPullback` and is the thing to state results about; the two
+lemmas below say what the inverse does without unfolding the choice, and that is what a consumer
+needs. -/
 noncomputable def homComplexLineEquivGeneral (Z : AnalyticSpace.{u}) :
     (Z ⟶ AnalyticSpace.complexAffineSpace.{u} 1) ≃ Z.presheaf.obj (op ⊤) :=
   Equiv.ofBijective (fun φ ↦ AnalyticSpace.coordPullback φ (ULift.up 0))
@@ -333,6 +349,30 @@ lemma homComplexLineEquivGeneral_apply (Z : AnalyticSpace.{u})
     (φ : Z ⟶ AnalyticSpace.complexAffineSpace.{u} 1) :
     homComplexLineEquivGeneral Z φ = AnalyticSpace.coordPullback φ (ULift.up 0) :=
   rfl
+
+/-- **The inverse of `ComplexAnalytic.AnalyticSpace.homComplexLineEquivGeneral` recovers the
+morphism a coordinate pullback came from**, with no choice left in it.
+
+The inverse is a choice term, so a consumer who has to unfold `Equiv.ofBijective` has been handed
+nothing. This is the half that says the choice is pinned on the image. -/
+@[simp]
+lemma symm_homComplexLineEquivGeneral_coordPullback (Z : AnalyticSpace.{u})
+    (φ : Z ⟶ AnalyticSpace.complexAffineSpace.{u} 1) :
+    (homComplexLineEquivGeneral Z).symm (AnalyticSpace.coordPullback φ (ULift.up 0)) = φ :=
+  (homComplexLineEquivGeneral Z).symm_apply_apply φ
+
+/-- **The morphism attached to a section does pull the coordinate back to that section.**
+
+This is the other round trip, and it is the one an existence argument uses: it says
+`(homComplexLineEquivGeneral Z).symm g` is a morphism with a named coordinate pullback rather
+than an opaque choice. Together with
+`ComplexAnalytic.AnalyticSpace.base_eq_eval_coordPullback` it makes that morphism computable on
+points. -/
+@[simp]
+lemma coordPullback_symm_homComplexLineEquivGeneral (Z : AnalyticSpace.{u})
+    (g : Z.presheaf.obj (op ⊤)) :
+    AnalyticSpace.coordPullback ((homComplexLineEquivGeneral Z).symm g) (ULift.up 0) = g :=
+  (homComplexLineEquivGeneral Z).apply_symm_apply g
 
 end ComplexAnalytic.AnalyticSpace
 

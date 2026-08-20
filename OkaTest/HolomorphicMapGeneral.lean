@@ -51,6 +51,14 @@ what already existed** if every `Z` it is applied to were an open subspace of `�
 Neither space is an open subspace of `ℂ^n`, so neither morphism was available from
 `exists_hom_complexLine` or `exists_hom_complexLine_restrict`.
 
+## The bijection, and its inverse named on a concrete input
+
+`ComplexAnalytic.AnalyticSpace.homComplexLineEquivGeneral` is `Equiv.ofBijective`, so its inverse
+is a choice term, and a consumer who has to unfold that has been handed nothing. The last section
+names **both** round trips at the node: forward to `nodeCoord j`, backward to `nodeToLine j`, and
+— the part that stops the round trip from being about a collapsed morphism — the morphism the
+inverse produces is surjective on points.
+
 ## What these do *not* show, said plainly
 
 The glued morphisms in the first two sections are not new: on `ℂ` the result is forced by
@@ -216,5 +224,55 @@ theorem base_hom_puncturedNode (j : ULift.{u} (Fin 2))
   (AnalyticSpace.base_eq_eval_coordPullback φ p (ULift.up 0)).trans
     ((congrArg (puncturedNodeSpace.{u}.eval (U := ⊤) p trivial) hφ).trans
       (eval_pullback_nodeCoord p j))
+
+/-! ### Both round trips of the bijection, at the node
+
+`ComplexAnalytic.AnalyticSpace.homComplexLineEquivGeneral` is `Equiv.ofBijective`, so its inverse
+is a choice term. The two lemmas beside its definition pin that choice down in general; these
+name both directions on a concrete pair, at a space which is not an open subspace of `ℂ^n` and at
+a morphism which is not a constant. -/
+
+/-- **Forward: the bijection sends the node's `j`-th coordinate morphism to its `j`-th coordinate
+function.**
+
+The two sides share no lemma: the left is `homComplexLineEquivGeneral`'s forward map, which is
+`ComplexAnalytic.AnalyticSpace.coordPullback`, and the right is reached through
+`ComplexAnalytic.Γ_map_nodeToLineHom_coord`, whose proof runs through the cut-out presentation of
+the node. -/
+theorem homComplexLineEquivGeneral_nodeToLine (j : ULift.{u} (Fin 2)) :
+    AnalyticSpace.homComplexLineEquivGeneral.{u} AnalyticSpace.node.{u} (nodeToLine.{u} j) =
+      nodeCoord.{u} j :=
+  Γ_map_nodeToLineHom_coord.{u} j
+
+/-- **Backward: the inverse sends the node's `j`-th coordinate function to `nodeToLine j`**, with
+no choice left in it.
+
+This is the statement taxis #655 asked for and the reason it asked: an `Equiv.ofBijective` whose
+inverse is never named on any input has handed a consumer nothing. -/
+theorem symm_homComplexLineEquivGeneral_nodeCoord (j : ULift.{u} (Fin 2)) :
+    (AnalyticSpace.homComplexLineEquivGeneral.{u} AnalyticSpace.node.{u}).symm
+        (nodeCoord.{u} j) = nodeToLine.{u} j :=
+  (Equiv.symm_apply_eq _).2 (homComplexLineEquivGeneral_nodeToLine.{u} j).symm
+
+/-- **The morphism the inverse produces is surjective on points**, so neither the bijection nor
+this round trip is about a constant morphism.
+
+Without this, `symm_homComplexLineEquivGeneral_nodeCoord` would be consistent with the inverse
+landing on a morphism collapsing the node to a point. -/
+theorem surjective_base_symm_homComplexLineEquivGeneral_nodeCoord (j : ULift.{u} (Fin 2)) :
+    Function.Surjective fun p : AnalyticSpace.node.{u} ↦
+      ((((AnalyticSpace.homComplexLineEquivGeneral.{u} AnalyticSpace.node.{u}).symm
+        (nodeCoord.{u} j)).toLRSHom.base p : ULift.{u} (Fin 1) → ℂ) (ULift.up 0)) :=
+  (congrArg (fun φ : AnalyticSpace.node.{u} ⟶ AnalyticSpace.complexAffineSpace.{u} 1 ↦
+    Function.Surjective fun p : AnalyticSpace.node.{u} ↦
+      ((φ.toLRSHom.base p : ULift.{u} (Fin 1) → ℂ) (ULift.up 0)))
+    (symm_homComplexLineEquivGeneral_nodeCoord.{u} j)).mpr
+      (surjective_base_nodeToLineHom.{u} j)
+
+/-- **The bijection at the node is not a bijection between singletons.** The two coordinate
+morphisms differ and so do the sections they go to, so both sides have at least two elements. -/
+theorem homComplexLineEquivGeneral_node_not_subsingleton :
+    ¬ Subsingleton (AnalyticSpace.node.{u} ⟶ AnalyticSpace.complexAffineSpace.{u} 1) := fun h ↦
+  nodeToLine_ne.{u} (h.elim _ _)
 
 end

@@ -155,13 +155,6 @@ info: 'ComplexAnalytic.AnalyticSpace.exists_hom_complexLine_restrict' depends on
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.exists_hom_complexLine_restrict
 
-/--
-info: 'ComplexAnalytic.AnalyticSpace.homComplexLineEquivRestrict' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms ComplexAnalytic.AnalyticSpace.homComplexLineEquivRestrict
-
 /-! ### From local morphisms to `ℂ` to a global one -/
 
 /--
@@ -228,3 +221,17 @@ info: 'ComplexAnalytic.AnalyticSpace.homComplexLineEquivGeneral' depends on axio
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.homComplexLineEquivGeneral
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.symm_homComplexLineEquivGeneral_coordPullback' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.symm_homComplexLineEquivGeneral_coordPullback
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.coordPullback_symm_homComplexLineEquivGeneral' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.coordPullback_symm_homComplexLineEquivGeneral

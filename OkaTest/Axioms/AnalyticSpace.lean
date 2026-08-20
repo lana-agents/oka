@@ -191,13 +191,6 @@ info: 'ComplexAnalytic.AnalyticSpace.hom_ext_complexAffineSpace' depends on axio
 #print axioms ComplexAnalytic.AnalyticSpace.hom_ext_complexAffineSpace
 
 /--
-info: 'ComplexAnalytic.AnalyticSpace.homComplexLineEquiv' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms ComplexAnalytic.AnalyticSpace.homComplexLineEquiv
-
-/--
 info: 'ComplexAnalytic.nodeCoord_ne' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
