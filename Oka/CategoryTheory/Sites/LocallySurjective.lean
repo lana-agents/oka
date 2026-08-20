@@ -3,10 +3,12 @@ Copyright (c) 2026 Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten. All righ
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
-import Mathlib.CategoryTheory.ConcreteCategory.EpiMono
-import Mathlib.CategoryTheory.Sites.Abelian
-import Mathlib.CategoryTheory.Sites.EpiMono
-import Oka.Algebra.Category.Grp.EpiMono
+module
+
+public import Mathlib.CategoryTheory.ConcreteCategory.EpiMono
+public import Mathlib.CategoryTheory.Sites.Abelian
+public import Mathlib.CategoryTheory.Sites.EpiMono
+public import Oka.Algebra.Category.Grp.EpiMono
 
 /-!
 # An epimorphism of sheaves of abelian groups is locally surjective
@@ -25,6 +27,12 @@ groups lifts on a covering sieve.**
 The direction that is not formal is `epi → locally surjective`; the converse is Mathlib's
 `CategoryTheory.Sheaf.epi_of_isLocallySurjective`.
 
+The universe of `AddCommGrpCat` is kept independent of the universes of the site, as it is in
+`CategoryTheory.Sheaf.isLocallySurjective_iff_epi'`. Tying it to the morphism universe of `C`
+would be enough for sheaves on a topological space but not for
+`Oka/Algebra/Category/ModuleCat/Sheaf/LocallySurjective.lean`, where the universe of the
+modules is a parameter of its own.
+
 There is no analytic content here, so this file is a candidate for upstreaming to Mathlib; it
 lives in the `Oka/`-mirror of the Mathlib directory tree for that reason, next to
 `Mathlib/CategoryTheory/Sites/LocallySurjective.lean`.
@@ -35,19 +43,21 @@ lives in the `Oka/`-mirror of the Mathlib directory tree for that reason, next t
 - `CategoryTheory.Sheaf.isLocallySurjective_of_epi_addCommGrp`
 -/
 
-universe v u
+@[expose] public section
+
+universe w v u
 
 namespace CategoryTheory.Sheaf
 
 variable {C : Type u} [Category.{v} C] {J : GrothendieckTopology C}
-  [HasSheafify J AddCommGrpCat.{v}] [J.WEqualsLocallyBijective AddCommGrpCat.{v}]
-  {F G : Sheaf J AddCommGrpCat.{v}}
+  [HasSheafify J AddCommGrpCat.{w}] [J.WEqualsLocallyBijective AddCommGrpCat.{w}]
+  {F G : Sheaf J AddCommGrpCat.{w}}
 
 /-- A morphism of sheaves of abelian groups is locally surjective exactly when it is an
 epimorphism. -/
 lemma isLocallySurjective_iff_epi_addCommGrp (f : F ⟶ G) :
     IsLocallySurjective f ↔ Epi f :=
-  isLocallySurjective_iff_epi' (A := AddCommGrpCat.{v}) f
+  isLocallySurjective_iff_epi' (A := AddCommGrpCat.{w}) f
 
 /-- An epimorphism of sheaves of abelian groups is locally surjective: every section of the
 target is, on a covering sieve, in the image. -/

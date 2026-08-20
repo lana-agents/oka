@@ -5,8 +5,10 @@ import Oka.Algebra.Category.ModuleCat.Sheaf.Coherent.Basic
 import Oka.Algebra.Category.ModuleCat.Sheaf.Coherent.Criterion
 import Oka.Algebra.Category.ModuleCat.Sheaf.Coherent.Locality
 import Oka.Algebra.Category.ModuleCat.Sheaf.Coherent.Stability
+import Oka.Algebra.Category.ModuleCat.Sheaf.Colimits
 import Oka.Algebra.Category.ModuleCat.Sheaf.Free
 import Oka.Algebra.Category.ModuleCat.Sheaf.Generators
+import Oka.Algebra.Category.ModuleCat.Sheaf.LocallySurjective
 import Oka.Algebra.Category.ModuleCat.Sheaf.PushforwardContinuous
 import Oka.Algebra.Category.ModuleCat.Sheaf.Submodule
 import Oka.Analytic.ParametricCircleIntegral

@@ -3,9 +3,11 @@ Copyright (c) 2026 Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten. All righ
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
-import Mathlib.Algebra.Category.Grp.Abelian
-import Mathlib.Algebra.Category.Grp.EpiMono
-import Mathlib.CategoryTheory.ConcreteCategory.EpiMono
+module
+
+public import Mathlib.Algebra.Category.Grp.Abelian
+public import Mathlib.Algebra.Category.Grp.EpiMono
+public import Mathlib.CategoryTheory.ConcreteCategory.EpiMono
 
 /-!
 # The forgetful functor on abelian groups preserves epimorphisms
@@ -38,6 +40,8 @@ lives in the `Oka/`-mirror of the Mathlib directory tree for that reason, next t
 - `AddCommGrpCat.instPreservesEpimorphismsForget`: the forgetful functor
   `AddCommGrpCat ⥤ Type` preserves epimorphisms.
 -/
+
+@[expose] public section
 
 open CategoryTheory
 
