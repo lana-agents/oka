@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Oka
+import OkaTest.OpenSubspace
 
 /-!
 # Non-vacuity of the gluing of morphisms of locally ringed spaces
@@ -27,12 +28,27 @@ nothing has been collapsed. `glue_incl` does the same over the same cover for a 
 family, landing on `𝟙`: a construction returning something determined by the cover alone could
 not satisfy both.
 
-**What this does not check, said plainly.** The two morphisms glued are restrictions of a single
-global one, so their agreement on the overlap is `pullback.condition` rather than a computation.
-A pair built genuinely independently would be a stronger witness; producing one needs a source
-whose cover has disconnected overlaps, which this development does not yet have. What the test
-does establish is that the compatibility hypothesis is satisfiable at a non-trivial cover, that
+The two morphisms glued over `punctureCover` are restrictions of a single global one, so their
+agreement on the overlap is `pullback.condition` rather than a computation. **That gap is closed
+in the last section**, which needed a source whose cover has *disconnected* overlaps and which
+this development did not have until `ComplexAnalytic.AnalyticSpace.restrict` and
+`ComplexAnalytic.nodeAxis_inf_eq_bot` existed. What the `punctureCover` tests establish on their
+own is that the compatibility hypothesis is satisfiable at a non-trivial cover, that
 `glueMorphisms` computes the morphism it should, and that `fromGlued` is an isomorphism there.
+
+## Gluing over a cover by opens, and a genuinely independent pair
+
+The last section is the non-vacuity of
+`AlgebraicGeometry.LocallyRingedSpace.existsUnique_glueMorphisms_of_opens`, whose compatibility
+hypothesis is an equation of morphisms out of `X.restrict (U i ⊓ U j)` rather than out of the
+categorical pullback. The witness is the **punctured node** covered by its two punctured axes,
+which are disjoint (`pnAxis_inf_carrier_eq_empty`, from `ComplexAnalytic.nodeAxis_inf_eq_bot`),
+so the compatibility is vacuous and *any* pair of morphisms out of the two pieces glues.
+
+`glue_pn_ne_nodeToLine` is what makes this a witness rather than an instantiation: the glued
+morphism takes the value `1` at the point `(0, 1)` where `ComplexAnalytic.nodeToLineHom 0` takes
+`0`, so it is **not** the restriction of either piece's morphism, and it is the first glued
+morphism in this development that is not something one already had.
 -/
 
 open CategoryTheory CategoryTheory.Limits TopologicalSpace Opposite AlgebraicGeometry
@@ -137,5 +153,103 @@ theorem glue_incl :
 `Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean` goes into, at a cover which is not the
 trivial one-member cover by `⊤`. -/
 example : IsIso punctureCover.{u}.fromGlued := inferInstance
+
+
+/-! ### Gluing over a cover by opens, with disconnected overlaps -/
+
+abbrev PN : LocallyRingedSpace.{u} := puncturedNodeSpace.{u}.toLocallyRingedSpace
+
+/-- The two punctured axes, as opens of the punctured node. -/
+def pnAxis (j : ULift.{u} (Fin 2)) : Opens (PN.{u}) :=
+  (Opens.map (AnalyticSpace.node.{u}.toLocallyRingedSpace.ofRestrict
+    puncturedNode.{u}.isOpenEmbedding).base).obj (nodeAxis.{u} j)
+
+theorem mem_pnAxis_iff (j : ULift.{u} (Fin 2)) (x : PN.{u}) :
+    x ∈ pnAxis.{u} j ↔ (x.1 : AnalyticSpace.node.{u}) ∈ nodeAxis.{u} j := Iff.rfl
+
+theorem pnAxis_covers (x : PN.{u}) : ∃ j, x ∈ pnAxis.{u} j := by
+  rcases x.2 with h | h
+  · exact ⟨ULift.up 0, h⟩
+  · exact ⟨ULift.up 1, h⟩
+
+theorem ulift_fin_two_cases (l : ULift.{u} (Fin 2)) :
+    l = ULift.up 0 ∨ l = ULift.up 1 := by
+  rcases l with ⟨l⟩
+  fin_cases l
+  · exact Or.inl rfl
+  · exact Or.inr rfl
+
+/-- **The two punctured axes are disjoint as opens of the punctured node**, so a pair of
+morphisms out of them is subject to no compatibility condition. -/
+theorem pnAxis_inf_carrier_eq_empty (i j : ULift.{u} (Fin 2)) (hij : i ≠ j) :
+    ((pnAxis.{u} i ⊓ pnAxis.{u} j : Opens (PN.{u})) : Set (PN.{u})) = ∅ := by
+  refine Set.eq_empty_iff_forall_notMem.2 fun x hx ↦ ?_
+  have hprod : (x.1 : AnalyticSpace.node.{u}).1.1 (ULift.up 0) *
+      (x.1 : AnalyticSpace.node.{u}).1.1 (ULift.up 1) = 0 :=
+    (mem_zeroLocus_nodeSection_iff _).1 (x.1).2
+  have key : ∀ l : ULift.{u} (Fin 2), (x.1 : AnalyticSpace.node.{u}).1.1 l ≠ 0 := by
+    intro l
+    rcases ulift_fin_two_cases i with hi | hi <;> rcases ulift_fin_two_cases j with hj | hj
+    · exact absurd (hi.trans hj.symm) hij
+    · rcases ulift_fin_two_cases l with hl | hl
+      · exact hl ▸ hi ▸ hx.1
+      · exact hl ▸ hj ▸ hx.2
+    · rcases ulift_fin_two_cases l with hl | hl
+      · exact hl ▸ hj ▸ hx.2
+      · exact hl ▸ hi ▸ hx.1
+    · exact absurd (hi.trans hj.symm) hij
+  exact mul_ne_zero (key (ULift.up 0)) (key (ULift.up 1)) hprod
+
+/-- On each punctured axis, the corresponding coordinate morphism of the node. -/
+def pnHom (j : ULift.{u} (Fin 2)) :
+    PN.{u}.restrict (pnAxis.{u} j).isOpenEmbedding ⟶ complexAffineSpace.{u} 1 :=
+  PN.{u}.ofRestrict (pnAxis.{u} j).isOpenEmbedding ≫
+    AnalyticSpace.node.{u}.toLocallyRingedSpace.ofRestrict puncturedNode.{u}.isOpenEmbedding ≫
+      nodeToLineHom.{u} j
+
+theorem existsUnique_glue_pn :
+    ∃! φ : PN.{u} ⟶ complexAffineSpace.{u} 1,
+      ∀ j, PN.{u}.ofRestrict (pnAxis.{u} j).isOpenEmbedding ≫ φ = pnHom.{u} j :=
+  LocallyRingedSpace.existsUnique_glueMorphisms_of_opens pnAxis.{u} pnAxis_covers.{u} pnHom.{u}
+    (fun i j ↦ by
+      rcases eq_or_ne i j with rfl | hij
+      · rfl
+      · exact LocallyRingedSpace.hom_ext_restrict_of_isEmpty
+          (pnAxis_inf_carrier_eq_empty i j hij) _ _)
+
+theorem base_glue_pn (φ : PN.{u} ⟶ complexAffineSpace.{u} 1)
+    (hφ : ∀ j, PN.{u}.ofRestrict (pnAxis.{u} j).isOpenEmbedding ≫ φ = pnHom.{u} j)
+    (j : ULift.{u} (Fin 2)) (x : PN.{u}) (hx : x ∈ pnAxis.{u} j) :
+    (φ.base x : ULift.{u} (Fin 1) → ℂ) (ULift.up 0) =
+      (x.1 : AnalyticSpace.node.{u}).1.1 j := by
+  have h := congrArg (fun m : PN.{u}.restrict (pnAxis.{u} j).isOpenEmbedding ⟶
+      complexAffineSpace.{u} 1 ↦
+    ((m.base ⟨x, hx⟩ : ULift.{u} (Fin 1) → ℂ) (ULift.up 0))) (hφ j)
+  refine h.trans ?_
+  exact base_nodeToLineHom j x.1 (ULift.up 0)
+
+/-- The glued morphism takes the value `1` at the point `(0, 1)`, where the *first* coordinate
+morphism takes `0`. So it is **not** the restriction of `nodeToLineHom 0`, and the pair glued was
+genuinely independent. -/
+theorem glue_pn_ne_nodeToLine (φ : PN.{u} ⟶ complexAffineSpace.{u} 1)
+    (hφ : ∀ j, PN.{u}.ofRestrict (pnAxis.{u} j).isOpenEmbedding ≫ φ = pnHom.{u} j) :
+    (φ.base ⟨axisPoint.{u} (ULift.up 1), axisPoint_mem _⟩ :
+        ULift.{u} (Fin 1) → ℂ) (ULift.up 0) ≠
+      ((AnalyticSpace.node.{u}.toLocallyRingedSpace.ofRestrict
+          puncturedNode.{u}.isOpenEmbedding ≫ nodeToLineHom.{u} (ULift.up 0)).base
+        ⟨axisPoint.{u} (ULift.up 1), axisPoint_mem _⟩ :
+          ULift.{u} (Fin 1) → ℂ) (ULift.up 0) := by
+  rw [base_glue_pn φ hφ (ULift.up 1) _ (show (axisPoint.{u} (ULift.up 1)) ∈
+      nodeAxis.{u} (ULift.up 1) from by
+    change (axisPoint.{u} (ULift.up 1)).1.1 (ULift.up 1) ≠ 0
+    rw [axisPoint_coord, if_pos rfl]
+    exact one_ne_zero)]
+  rw [show ((AnalyticSpace.node.{u}.toLocallyRingedSpace.ofRestrict
+      puncturedNode.{u}.isOpenEmbedding ≫ nodeToLineHom.{u} (ULift.up 0)).base
+      ⟨axisPoint.{u} (ULift.up 1), axisPoint_mem _⟩ : ULift.{u} (Fin 1) → ℂ) (ULift.up 0) =
+    (axisPoint.{u} (ULift.up 1)).1.1 (ULift.up 0) from
+      base_nodeToLineHom (ULift.up 0) (axisPoint.{u} (ULift.up 1)) (ULift.up 0)]
+  rw [axisPoint_coord, if_pos rfl, axisPoint_coord, if_neg (by simp)]
+  exact one_ne_zero
 
 end
