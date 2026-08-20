@@ -198,3 +198,33 @@ info: 'ComplexAnalytic.AnalyticSpace.exists_local_hom_of_chartLift' depends on a
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.exists_local_hom_of_chartLift
+
+/-! ### `Hom(Z, ℂ) ≃ Γ(Z, 𝒪_Z)` for a general `Z` -/
+
+/--
+info: 'ComplexAnalytic.Γ_map_restrictHom_toRestrictΓ' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.Γ_map_restrictHom_toRestrictΓ
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.exists_chartLift' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.exists_chartLift
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.exists_hom_complexLine_general' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.exists_hom_complexLine_general
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.homComplexLineEquivGeneral' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.homComplexLineEquivGeneral
