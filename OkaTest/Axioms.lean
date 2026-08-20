@@ -259,3 +259,40 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.isCutOutBy_zeroLocusSubspaceι' depe
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.isCutOutBy_zeroLocusSubspaceι
+
+/-! ### Local models, and the node as a complex analytic space -/
+
+/--
+info: 'ComplexAnalytic.isLocalModel_zeroLocus' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isLocalModel_zeroLocus
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.zeroLocus' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.zeroLocus
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isCoherentStructureSheaf_zeroLocus' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isCoherentStructureSheaf_zeroLocus
+
+/--
+info: 'ComplexAnalytic.mem_zeroLocus_nodeSection_iff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.mem_zeroLocus_nodeSection_iff
+
+/--
+info: 'ComplexAnalytic.isCoherentStructureSheaf_node' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isCoherentStructureSheaf_node
