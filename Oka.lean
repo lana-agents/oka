@@ -27,6 +27,7 @@ import Oka.ChangeOfCoordinates
 import Oka.Coherent
 import Oka.ComplexSpace
 import Oka.Data.Fin.Tuple.Basic
+import Oka.Geometry.RingedSpace.CutOut
 import Oka.Geometry.RingedSpace.LocallyRingedSpace
 import Oka.Geometry.RingedSpace.ZeroLocus
 import Oka.LocalOkaRing

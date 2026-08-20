@@ -472,3 +472,19 @@ info: 'SheafOfModules.exists_free_app_eq_of_epi' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms SheafOfModules.exists_free_app_eq_of_epi
+
+/-! ### The structure sheaf of a subspace cut out by global sections -/
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.isIso_quotientSheafifyToPushforward' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.isIso_quotientSheafifyToPushforward
+
+/--
+info: 'ComplexAnalytic.IsCutOutBy.pushforwardIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.IsCutOutBy.pushforwardIso
