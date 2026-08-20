@@ -96,3 +96,26 @@ info: 'ComplexAnalytic.AnalyticSpace.isCoherent_cokernel_sectionsHom' depends on
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.isCoherent_cokernel_sectionsHom
+
+/-! ### Non-vacuity of that quotient -/
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.not_epi_sectionsHom_of_germ_mem' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.not_epi_sectionsHom_of_germ_mem
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.not_isZero_cokernel_sectionsHom_of_germ_mem' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.not_isZero_cokernel_sectionsHom_of_germ_mem
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.isZero_cokernel_sectionsHom_one' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.isZero_cokernel_sectionsHom_one
