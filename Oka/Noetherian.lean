@@ -5,6 +5,7 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Oka.ChangeOfCoordinates
 import Oka.OkaLemma
+import Oka.RingTheory.Ideal.Maps
 
 /-!
 # The Rückert basis theorem
@@ -42,18 +43,6 @@ Noetherian `R`-module; consequently the image of `I` in it is finitely generated
 -/
 
 open Polynomial
-
-/-- Finite generation of an ideal can be checked after transporting it along a ring
-isomorphism. -/
-theorem Ideal.FG.of_map_ringEquiv {A B : Type*} [CommRing A] [CommRing B] (e : A ≃+* B)
-    {I : Ideal A} (h : (I.map (e : A →+* B)).FG) : I.FG := by
-  classical
-  obtain ⟨s, hs⟩ := h
-  have hI : I = (I.map (e : A →+* B)).map (e.symm : B →+* A) := by
-    rw [Ideal.map_map, show (e.symm : B →+* A).comp (e : A →+* B) = RingHom.id A from
-      RingHom.ext e.symm_apply_apply, Ideal.map_id]
-  exact ⟨s.image e.symm, by
-    rw [Finset.coe_image, hI, ← hs, Ideal.map_span, RingEquiv.coe_toRingHom]⟩
 
 namespace LocalOkaRing
 

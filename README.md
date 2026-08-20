@@ -77,6 +77,28 @@ coherence statement for arbitrary complex analytic spaces:
 `freitag_summary.md` contains a write-up of the classical proof of the coherence lemma (following
 Freitag) that the formalization follows.
 
+## Layout: the Mathlib mirror tree
+
+A file under `Oka/` whose path **mirrors a path under `Mathlib/`** does not contain
+complex-analytic mathematics. It holds general results about Mathlib's own types, declared into
+Mathlib's own namespaces, and is intended for upstreaming; its imports are the corresponding
+Mathlib file plus whatever else it genuinely needs, and nothing from the analytic side of this
+development. For example `Oka/CategoryTheory/Sites/Over.lean` extends
+`Mathlib/CategoryTheory/Sites/Over.lean`, `Oka/Algebra/Category/ModuleCat/Sheaf/` mirrors
+`Mathlib/Algebra/Category/ModuleCat/Sheaf/`, and `Oka/RingTheory/Ideal/Maps.lean` adds one
+missing lemma next to `Ideal.comap_symm` in `Mathlib/RingTheory/Ideal/Maps.lean`.
+
+**A new lemma with no complex-analytic content belongs in the mirror tree, not in the analytic
+file that happens to need it.** The two tests are whether the statement mentions anything defined
+in this repository, and whether it would make sense to a reader who had never heard of Oka's
+theorem. A `_root_.` prefix on a declaration inside an analytic file is the usual sign that
+something is in the wrong place. Keeping the separation is what makes the upstreamable material
+findable without reading the whole library.
+
+Not every general file is a mirror file: `Oka/UFD.lean` and
+`Oka/Analytic/ParametricCircleIntegral.lean` are general but have no single Mathlib counterpart
+to mirror, and stay where they are.
+
 ## Status
 
 The development is complete. `lake build` succeeds and there are no `sorry`s anywhere in the
