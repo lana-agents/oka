@@ -170,3 +170,15 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.Γ_map_over_ambient' depends on axio
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.Γ_map_over_ambient
+
+/-! ### The `Γ`-`Spec` adjunction
+
+`Oka/AlgebraicGeometry/GammaSpecAdjunction.lean`. Consumed by
+`Oka/Analytification/Presentation.lean`. -/
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.toΓSpec_naturality' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.toΓSpec_naturality

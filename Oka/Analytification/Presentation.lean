@@ -50,13 +50,14 @@ sheaves is a separate and later question (a GAGA input, not needed for the const
 
 ## Main definitions
 
-- `ComplexAnalytic.complexAffineSpaceTop`: `ℂ^n` presented as an open subspace of itself, which
-  is the shape `ComplexAnalytic.IsLocalModel` asks for. This is
-  `ComplexAnalytic.nodeAmbient` with `2` replaced by `n`, and the two are definitionally equal.
 - `ComplexAnalytic.polySection`: a tuple of polynomials read as holomorphic functions on `ℂ^n`.
 - `ComplexAnalytic.AnalyticSpace.analytification`: **the analytic space cut out by a tuple of
   polynomials.**
 - `ComplexAnalytic.presentationIdeal`: the ideal `(g₁, …, g_k)` they generate.
+- `ComplexAnalytic.analytificationι` and `ComplexAnalytic.analytificationIncl`: the closed
+  immersion of `X^an` into `ℂ^n` presented as an open subspace of itself, and into `ℂ^n`
+  itself. Which of the two a statement wants is not a matter of taste; see
+  `ComplexAnalytic.analytificationIncl`.
 - `ComplexAnalytic.analytificationToSpec`: **the comparison morphism
   `X^an ⟶ Spec (ℂ[x]/I)`.**
 - `ComplexAnalytic.quotientEval`: evaluation of an element of `ℂ[x]/I` at a point of `X^an`,
@@ -81,6 +82,17 @@ sheaves is a separate and later question (a GAGA input, not needed for the const
 - `ComplexAnalytic.analytificationToSpec_comp_specMk`: **the comparison morphism is the
   restriction of `ℂ^n ⟶ Spec ℂ[x]`**, i.e. the evident square commutes.
 
+## A note on namespaces, for whoever writes the next file in this directory
+
+Everything here is in `ComplexAnalytic`, which is the convention across `Oka/AnalyticSpace/`.
+**`Oka/Analytification/AffineSpace.lean`, next door, is not**: `complexSpaceToSpec`,
+`okaGlobalOfMvPolynomial`, `mem_complexSpaceToSpec_base_asIdeal_iff` and their neighbours are
+in the *root* namespace, as their guards in `OkaTest/Axioms/Analytification.lean` show. So a
+docstring here that reaches for one of them must write it unqualified. That is not a hypothetical
+— this file shipped with two `ComplexAnalytic.`-prefixed references to those names, both
+dangling, and they were found by `#check`ing every backticked name in the file rather than by
+reading.
+
 ## References
 
 - [Hans Grauert and Reinhold Remmert, *Coherent analytic sheaves*][grauert-remmert1984], §A
@@ -97,15 +109,6 @@ noncomputable section
 variable {n k : ℕ}
 
 /-! ### The space -/
-
-/-- **`ℂ^n` presented as an open subspace of itself**, which is the shape `IsLocalModel` and
-`AnalyticSpace.local_model` ask for.
-
-`ComplexAnalytic.nodeAmbient` is this at `n = 2`, and the two are definitionally equal — both
-are `abbrev`s for the same restriction. It is not redefined there because that file is earlier
-in the import order. -/
-abbrev complexAffineSpaceTop (n : ℕ) : LocallyRingedSpace.{u} :=
-  (complexAffineSpace.{u} n).restrict (⊤ : Opens (complexAffineSpace.{u} n)).isOpenEmbedding
 
 /-- A tuple of polynomials, read as a tuple of holomorphic functions on `ℂ^n` by
 `OkaRing.ofMvPolynomial`. `ComplexAnalytic.nodeSection` is this at `g = fun _ ↦ X₀ * X₁`. -/
@@ -175,6 +178,22 @@ abbrev analytificationι :
     (AnalyticSpace.analytification.{u} g).toLocallyRingedSpace ⟶ complexAffineSpaceTop.{u} n :=
   (complexAffineSpaceTop.{u} n).zeroLocusSubspaceι (polySection g)
 
+/-- **The inclusion of the analytification into `ℂ^n` itself**, as opposed to into `ℂ^n`
+presented as an open subspace of itself: `ComplexAnalytic.analytificationι` followed by
+`ofRestrict`.
+
+Both spellings are needed and they are not interchangeable. `analytificationι` is the one the
+construction runs through, because `OkaRing.ofMvPolynomial _ (g j)` at the open
+`ComplexAnalytic.complexAffineSpaceTop` elaborates to *is* the cutting section, definitionally,
+which is what makes `IsCutOutBy.c_app_eq_zero` apply on the nose. `analytificationIncl` is the
+one a statement about `ℂ^n` — such as `ComplexAnalytic.analytificationToSpec_comp_specMk` —
+has to be phrased in. -/
+abbrev analytificationIncl :
+    (AnalyticSpace.analytification.{u} g).toLocallyRingedSpace ⟶
+      complexSpace (ULift.{u} (Fin n)) :=
+  analytificationι g ≫ (complexAffineSpace.{u} n).ofRestrict
+    (⊤ : Opens (complexAffineSpace.{u} n)).isOpenEmbedding
+
 /-- A polynomial, read as a global section of `𝒪_{X^an}`: the holomorphic function it defines
 on `ℂ^n`, restricted to the analytification. -/
 def polyToGlobal : MvPolynomial (ULift.{u} (Fin n)) ℂ →+*
@@ -207,7 +226,7 @@ def quotientToGlobal :
 
 The canonical map to the spectrum of the global sections
 (`AlgebraicGeometry.LocallyRingedSpace.toΓSpec`) composed with `Spec` of
-`ComplexAnalytic.quotientToGlobal`. This is `ComplexAnalytic.complexSpaceToSpec`'s construction
+`ComplexAnalytic.quotientToGlobal`. This is `complexSpaceToSpec`'s construction
 with the quotient inserted, and `ComplexAnalytic.analytificationToSpec_comp_specMk` says the
 two agree over `Spec ℂ[x]`. -/
 def analytificationToSpec :
@@ -233,7 +252,7 @@ theorem eval_polyToGlobal (y : AnalyticSpace.analytification.{u} g)
 
 This is what makes `ComplexAnalytic.analytificationToSpec` recognisable as the classical
 comparison map rather than a formal composite, and it is the analogue for `X^an` of
-`ComplexAnalytic.mem_complexSpaceToSpec_base_asIdeal_iff` for `ℂ^n`. -/
+`mem_complexSpaceToSpec_base_asIdeal_iff` for `ℂ^n`. -/
 theorem mem_analytificationToSpec_base_asIdeal_iff (y : AnalyticSpace.analytification.{u} g)
     (p : MvPolynomial (ULift.{u} (Fin n)) ℂ) :
     Ideal.Quotient.mk (presentationIdeal g) p ∈ ((analytificationToSpec g).base y).asIdeal ↔
@@ -308,9 +327,7 @@ theorem mk_comp_quotientToGlobal :
     CommRingCat.ofHom (Ideal.Quotient.mk (presentationIdeal g)) ≫
         CommRingCat.ofHom (quotientToGlobal g) =
       okaGlobalOfMvPolynomial (ULift.{u} (Fin n)) ≫
-        LocallyRingedSpace.Γ.map (analytificationι g ≫
-          (complexAffineSpace.{u} n).ofRestrict
-            (⊤ : Opens (complexAffineSpace.{u} n)).isOpenEmbedding).op :=
+        LocallyRingedSpace.Γ.map (analytificationIncl g).op :=
   rfl
 
 /-- **The comparison morphism of `X^an` is the restriction of the comparison morphism of
@@ -331,9 +348,7 @@ theorem analytificationToSpec_comp_specMk :
     analytificationToSpec g ≫
         Spec.locallyRingedSpaceMap
           (CommRingCat.ofHom (Ideal.Quotient.mk (presentationIdeal g))) =
-      (analytificationι g ≫ (complexAffineSpace.{u} n).ofRestrict
-          (⊤ : Opens (complexAffineSpace.{u} n)).isOpenEmbedding) ≫
-        complexSpaceToSpec (ULift.{u} (Fin n)) := by
+      analytificationIncl g ≫ complexSpaceToSpec (ULift.{u} (Fin n)) := by
   rw [analytificationToSpec, complexSpaceToSpec, Category.assoc,
     ← Spec.locallyRingedSpaceMap_comp, ← Category.assoc,
     LocallyRingedSpace.toΓSpec_naturality, Category.assoc,

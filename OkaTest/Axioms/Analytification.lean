@@ -8,8 +8,8 @@ import Oka
 /-!
 # Axiom regression tests: Analytification
 
-The comparison morphism `ℂ^ι ⟶ Spec (MvPolynomial ι ℂ)` of `Oka/Analytification/` and its
-map on stalks.
+The comparison morphisms of `Oka/Analytification/`: `ℂ^ι ⟶ Spec (MvPolynomial ι ℂ)` and its
+map on stalks, and `X^an ⟶ Spec (ℂ[x]/I)` for a presented affine `ℂ`-algebra.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -81,16 +81,11 @@ info: 'stalkMap_eq_lift' depends on axioms: [propext, Classical.choice, Quot.sou
 
 /-! ### The analytification of a presented affine `ℂ`-algebra
 
-`Oka/Analytification/Presentation.lean`. `toΓSpec_naturality` is mirror-tree material from
-`Oka/AlgebraicGeometry/GammaSpecAdjunction.lean`; its guard is here, beside its only consumer,
-rather than in `OkaTest/Axioms/Sheaves.lean`. -/
-
-/--
-info: 'AlgebraicGeometry.LocallyRingedSpace.toΓSpec_naturality' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms AlgebraicGeometry.LocallyRingedSpace.toΓSpec_naturality
+`Oka/Analytification/Presentation.lean`. The guard for
+`AlgebraicGeometry.LocallyRingedSpace.toΓSpec_naturality`, which that file consumes, is in
+`OkaTest/Axioms/Sheaves.lean` with the rest of the mirror-tree `LocallyRingedSpace` material;
+it sat here while PR #71 was in the merge queue, to keep two branches from appending to the
+same file's tail, and that reason has expired. -/
 
 /--
 info: 'ComplexAnalytic.AnalyticSpace.analytification' depends on axioms:
