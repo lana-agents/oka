@@ -250,6 +250,14 @@ noncomputable def coord (i : ι) : LocalOkaRing ι :=
 @[simp]
 lemma coe_coord (i : ι) : (coord i : MvPowerSeries ι ℂ) = MvPowerSeries.X i := rfl
 
+/-- **A coordinate is a nonzero germ.** Mathlib has `PowerSeries.X_ne_zero` but no multivariate
+counterpart, so the coefficient argument is spelled out here: `X i` has coefficient `1` on the
+exponent `Finsupp.single i 1`. -/
+lemma coord_ne_zero (i : ι) : coord i ≠ 0 := fun h ↦ by
+  classical
+  simpa using congrArg
+    (fun P : LocalOkaRing ι ↦ MvPowerSeries.coeff (Finsupp.single i 1) (P : MvPowerSeries ι ℂ)) h
+
 -- Not `@[simp]`: `constantCoeff_apply` is `@[simp]` and rewrites the left-hand side to
 -- `MvPowerSeries.constantCoeff ↑(coord i)`, which `coe_coord` and
 -- `MvPowerSeries.constantCoeff_X` then finish, so the attribute here would never fire.

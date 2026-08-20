@@ -384,25 +384,38 @@ info: 'stalkMap_eq_lift' depends on axioms: [propext, Classical.choice, Quot.sou
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms stalkMap_eq_lift
-/-! ### Regularity of the germ ring, reduced -/
+/-! ### The germ ring is regular of dimension `n` -/
 
 /--
-info: 'LocalOkaRing.spanFinrank_maximalIdeal_le' depends on axioms:
+info: 'LocalOkaRing.quotientLastVarEquiv' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms LocalOkaRing.spanFinrank_maximalIdeal_le
+#print axioms LocalOkaRing.quotientLastVarEquiv
 
 /--
-info: 'LocalOkaRing.isRegularLocalRing_of_le_ringKrullDim' depends on axioms:
+info: 'LocalOkaRing.ringKrullDim_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.ringKrullDim_eq
+
+/--
+info: 'LocalOkaRing.ringKrullDim_eq_natCard' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms LocalOkaRing.isRegularLocalRing_of_le_ringKrullDim
+#print axioms LocalOkaRing.ringKrullDim_eq_natCard
 
 /--
-info: 'LocalOkaRing.isRegularLocalRing_fin_zero' depends on axioms:
+info: 'LocalOkaRing.instIsRegularLocalRing' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms LocalOkaRing.isRegularLocalRing_fin_zero
+#print axioms LocalOkaRing.instIsRegularLocalRing
+
+/--
+info: 'LocalOkaRing.spanFinrank_maximalIdeal_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.spanFinrank_maximalIdeal_eq
