@@ -16,6 +16,7 @@ import Oka.AnalyticSpace.LocalModel
 import Oka.AnalyticSpace.Noetherian
 import Oka.AnalyticSpace.Relations
 import Oka.AnalyticSpace.ZeroLocus
+import Oka.Analytification.AffineSpace
 import Oka.CategoryTheory.Sites.CoversTop.Over
 import Oka.CategoryTheory.Sites.Over
 import Oka.CategoryTheory.Sites.Whiskering

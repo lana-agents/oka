@@ -296,3 +296,39 @@ info: 'ComplexAnalytic.isCoherentStructureSheaf_node' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isCoherentStructureSheaf_node
+
+/-! ### The comparison morphism `ℂ^ι ⟶ Spec (MvPolynomial ι ℂ)` -/
+
+/--
+info: 'complexSpaceToSpec' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms complexSpaceToSpec
+
+/--
+info: 'mem_complexSpaceToSpec_base_asIdeal_iff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms mem_complexSpaceToSpec_base_asIdeal_iff
+
+/--
+info: 'isMaximal_complexSpaceToSpec_base_asIdeal' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms isMaximal_complexSpaceToSpec_base_asIdeal
+
+/--
+info: 'complexSpaceToSpec_base_injective' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms complexSpaceToSpec_base_injective
+
+/--
+info: 'complexAffineSpaceToAffineSpace' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms complexAffineSpaceToAffineSpace
