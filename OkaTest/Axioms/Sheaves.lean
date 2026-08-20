@@ -129,3 +129,12 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.hom_ext_of_isEmpty' depends on axiom
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.hom_ext_of_isEmpty
+
+/-! ### Locality of global sections -/
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.section_ext_of_cover' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.section_ext_of_cover

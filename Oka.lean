@@ -19,6 +19,7 @@ import Oka.AnalyticSpace.Continuity
 import Oka.AnalyticSpace.Evaluation
 import Oka.AnalyticSpace.Factorisation
 import Oka.AnalyticSpace.HolomorphicMap
+import Oka.AnalyticSpace.HolomorphicMapGeneral
 import Oka.AnalyticSpace.HolomorphicMapOpen
 import Oka.AnalyticSpace.HomToComplex
 import Oka.AnalyticSpace.IdealSheaf

@@ -44,6 +44,10 @@ mirror tree.
   ringed space with no points are equal.
 - `AlgebraicGeometry.LocallyRingedSpace.hom_ext_restrict_of_isEmpty`: its specialisation to the
   restriction to an open subset with no points, which is the form callers meet.
+- `AlgebraicGeometry.LocallyRingedSpace.Γ_map_ofRestrict_apply`: pulling a global section back
+  along the inclusion of an open subspace is restricting it.
+- `AlgebraicGeometry.LocallyRingedSpace.section_ext_of_cover`: **two global sections which agree
+  on every member of an open cover are equal.**
 -/
 
 open CategoryTheory TopologicalSpace Opposite
@@ -202,5 +206,61 @@ theorem hom_ext_restrict_of_isEmpty {V : Opens X} (hV : (V : Set X) = ∅)
     (f g : X.restrict V.isOpenEmbedding ⟶ Y) : f = g :=
   hom_ext_of_isEmpty (X := X.restrict V.isOpenEmbedding)
     ⟨fun x ↦ Set.eq_empty_iff_forall_notMem.1 hV x.1 x.2⟩ f g
+
+/-- **Pulling a global section back along the inclusion of an open subspace is restricting
+it.**
+
+Both sides are the map `𝒪_X(⊤) ⟶ 𝒪_X(U)` and `Opens X` is a preorder category, so there is only
+one such map; the proof is the same `change`/`congr` as
+`ComplexAnalytic.isCLinearHom_ofRestrict`. The open indexing the right-hand side is
+`U.isOpenEmbedding.isOpenMap.functor.obj ⊤` rather than `U`, because that is how the global
+sections of `X|U` are indexed — the two have the same points and are not definitionally
+equal. -/
+lemma Γ_map_ofRestrict_apply (X : LocallyRingedSpace.{u}) (U : Opens X)
+    (s : X.presheaf.obj (op ⊤)) :
+    (Γ.map (X.ofRestrict U.isOpenEmbedding).op).hom s =
+      (X.presheaf.map (homOfLE (le_top :
+        U.isOpenEmbedding.isOpenMap.functor.obj ⊤ ≤ ⊤)).op).hom s := by
+  change ((X.ofRestrict U.isOpenEmbedding).c.app (op ⊤)).hom s = _
+  change (X.presheaf.map _).hom s = (X.presheaf.map _).hom s
+  congr 2
+
+/-- **The germ on `X|U` of the restriction of a global section is its germ on `X`**, across the
+identification of the stalks of an open subspace with the stalks of the ambient space.
+
+This is `restrictStalkIso_hom_stalkAlgMap` with an arbitrary global section in place of a
+constant, and it is proved the same way. -/
+lemma germ_Γ_map_ofRestrict (X : LocallyRingedSpace.{u}) (U : Opens X)
+    (s : X.presheaf.obj (op ⊤)) (x : X.restrict U.isOpenEmbedding) :
+    (X.restrictStalkIso U.isOpenEmbedding x).hom
+        ((X.restrict U.isOpenEmbedding).presheaf.germ ⊤ x trivial
+          ((Γ.map (X.ofRestrict U.isOpenEmbedding).op).hom s)) =
+      X.presheaf.germ ⊤ x.1 trivial s := by
+  rw [Γ_map_ofRestrict_apply, restrictStalkIso_hom_eq_germ_apply]
+  exact X.presheaf.germ_res_apply (homOfLE le_top) x.1 _ s
+
+/-- **Two global sections which agree on every member of an open cover are equal.**
+
+The structure sheaf is a sheaf, so `TopCat.Presheaf.section_ext` reduces this to an equality of
+germs, and `germ_Γ_map_ofRestrict` reads the germ of a restricted section off the germ of the
+section. The cover is given as a family of opens together with the statement that every point
+lies in one of them, which is the shape `existsUnique_glueMorphisms_of_opens` takes and so the
+shape a caller already has.
+
+Stated with the restrictions spelled as `Γ.map (X.ofRestrict _).op` rather than as
+`X.presheaf.map`, because that is the spelling in which a morphism out of `X|U` produces
+them. -/
+theorem section_ext_of_cover (X : LocallyRingedSpace.{u}) {ι : Type*} (U : ι → Opens X)
+    (hU : ∀ x : X, ∃ i, x ∈ U i) (s t : X.presheaf.obj (op ⊤))
+    (h : ∀ i, (Γ.map (X.ofRestrict (U i).isOpenEmbedding).op).hom s =
+      (Γ.map (X.ofRestrict (U i).isOpenEmbedding).op).hom t) :
+    s = t := by
+  refine TopCat.Presheaf.section_ext X.sheaf ⊤ s t fun x _ ↦ ?_
+  obtain ⟨i, hi⟩ := hU x
+  have key := congrArg (fun a ↦ (X.restrictStalkIso (U i).isOpenEmbedding
+      (⟨x, hi⟩ : X.restrict (U i).isOpenEmbedding)).hom
+    ((X.restrict (U i).isOpenEmbedding).presheaf.germ ⊤ ⟨x, hi⟩ trivial a)) (h i)
+  exact (X.germ_Γ_map_ofRestrict (U i) s ⟨x, hi⟩).symm.trans
+    (key.trans (X.germ_Γ_map_ofRestrict (U i) t ⟨x, hi⟩))
 
 end AlgebraicGeometry.LocallyRingedSpace
