@@ -117,8 +117,9 @@ coherence statement for arbitrary complex analytic spaces:
   **existence** half, not this uniqueness half. The tuple of pullbacks is **natural in `Z`** for
   every morphism `Z' ⟶ Z`, which is the form a presentation-independence argument consumes; and
   the closed immersion of the node into `ℂ²` is the *unique* morphism of analytic spaces pulling
-  the coordinates back to the node's two coordinate functions, so a singular subspace is
-  recovered from two sections of its structure sheaf with no reference to how it was built.
+  the coordinates back to the node's two coordinate functions, so the *inclusion* of a singular
+  subspace is recovered from two sections of its structure sheaf with no reference to how it was
+  built. (What is recovered uniquely is the morphism; the subspace only through its image.)
 
 * **Comparison with algebraic geometry.** The canonical morphism of locally ringed spaces from
   `ℂ^ι` to `Spec (MvPolynomial ι ℂ)`, with its point map identified as `z ↦ ker (eval z)`, shown
