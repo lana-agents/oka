@@ -32,6 +32,13 @@ name = "Oka"
 
 # Regression tests. Kept out of the `Oka` library so that they are not imported by downstream
 # users, but built by `lake build` so that CI runs them.
+#
+# `OkaTest` itself is in the globs as well as `OkaTest.+`, so that the root module `OkaTest.lean`
+# is built rather than being a file nothing checks. The root exists for `lake exe lint-style`,
+# which takes module names and so had no way to reach the test library while it was a glob with
+# no root; `.orchestra/validation.sh` keeps it in step with `lake exe mk_all --lib OkaTest`.
+# Every `OkaTest.+` module is still its own build target, so a file missing from the root is
+# still built — `mk_all --check` is what reports it.
 [[lean_lib]]
 name = "OkaTest"
-globs = ["OkaTest.+"]
+globs = ["OkaTest", "OkaTest.+"]

@@ -38,6 +38,16 @@ lake exe cache get || exit 1
 # Verify all .lean files are imported by the root module `Oka.lean`.
 lake exe mk_all --lib Oka --git --check || exit 1
 
+# The same for the test library and `OkaTest.lean`. The test library used to be a glob with no
+# root module, which is why `lake exe lint-style` below could not be pointed at it: that
+# executable takes module names, so a library with no root is unreachable and `OkaTest/` was
+# text-linted by nothing at all. The root exists to close that, and this check is what keeps it
+# honest — without it a new test file would silently drop out of `lint-style`'s reach while
+# still being built, since every `OkaTest.+` module is its own build target.
+#
+# Regenerate with `lake exe mk_all --lib OkaTest --git` rather than editing `OkaTest.lean`.
+lake exe mk_all --lib OkaTest --git --check || exit 1
+
 # Verify everything builds, and that it builds without warnings.
 lake build --wfail || exit 1
 
@@ -65,9 +75,14 @@ lake lint || exit 1
 # `weak.linter.mathlibStandardSet`. Do not read a green `lint-style` as "Mathlib style has been
 # checked"; it is disjoint from, and much narrower than, the environment linters.
 #
-# The argument is the library root module `Oka` alone. `lake exe lint-style Oka OkaTest` fails
-# with `no such file OkaTest.lean`: the test library is a glob with no root module. The
-# `nolints file could not be read` warning is harmless and always present.
-lake exe lint-style Oka || exit 1
+# Both library root modules. `OkaTest` was absent here until 2026-08-20, not by choice but
+# because `lake exe lint-style Oka OkaTest` failed with `no such file OkaTest.lean` — the test
+# library had no root module — so half the tree was text-linted by nothing while every pull
+# request quoted a green `lint-style` as evidence that style had been checked. The root module
+# added above is what makes this line possible; the `mk_all --lib OkaTest` check above is what
+# stops it from silently going stale again.
+#
+# The `nolints file could not be read` warning is harmless and always present.
+lake exe lint-style Oka OkaTest || exit 1
 
 echo "Validation succeeded."

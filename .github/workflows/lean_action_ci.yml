@@ -53,8 +53,11 @@ jobs:
       # `elan` and the build cache are left in place by the step above, so this only has to link
       # the executable.
       #
-      # The argument is the library root module `Oka` alone; `lint-style Oka OkaTest` fails with
-      # `no such file OkaTest.lean`, the test library being a glob with no root module.
+      # Both library root modules. `OkaTest` was absent here until 2026-08-20, not by choice
+      # but because `lint-style Oka OkaTest` failed with `no such file OkaTest.lean` — the test
+      # library had no root module — so half the tree was text-linted by nothing. `OkaTest.lean`
+      # now exists and `.orchestra/validation.sh` runs `lake exe mk_all --lib OkaTest --git
+      # --check` to keep it in step with the files on disk.
       #
       # `!cancelled()` so that a failure of the step above does not hide a style error. Without
       # it GitHub marks this step `skipped`, and since an agent gets one CI run per push that
@@ -62,4 +65,4 @@ jobs:
       # to have built.
       - name: Check style
         if: ${{ !cancelled() }}
-        run: lake exe lint-style Oka
+        run: lake exe lint-style Oka OkaTest
