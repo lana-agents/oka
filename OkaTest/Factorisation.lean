@@ -31,8 +31,8 @@ do with the theorem. This file rules that out at the node.
   rather than unfolding `lift`, and `not_const_axisIncl` rules out the remaining degeneracy.
   `base_axisIncl_pair` states both coordinates of the image together, so that *"it is the
   inclusion of the first axis"* is one proposition rather than two theorems and a sentence, and
-  `image_axisIncl_on_node` says the image satisfies the node's equation arithmetically rather
-  than only by having the right type.
+  `exists_axisIncl_pair` closes it over the witness, leaving a statement with **no hypotheses**:
+  a morphism `ℂ ⟶ node` whose base map is `z ↦ (z, 0)` exists.
 
 **What this does not check.** That `existsUnique_liftHom` is applied to a `φ` built from global
 sections on a *general* `Z`; that needs the general-`Z` half of taxis #654, which does not
@@ -272,21 +272,6 @@ theorem exists_nonconstant_hom_complexLine_node :
   ⟨_, existsUnique_axisIncl.{u}.exists.choose_spec,
     not_const_axisIncl _ existsUnique_axisIncl.{u}.exists.choose_spec⟩
 
-/-- **The image of the axis inclusion lies on the node**, computed rather than inferred from
-the type.
-
-That `ψ` lands in `AnalyticSpace.node` is forced by its type and so says nothing about the
-construction. This says the same thing arithmetically: the second coordinate of the image is
-`0`, so the product of the two coordinates — which is the node's equation — is `0`. It is what
-gives `okaMapFun_axisFamily_one` a consumer; without it that theorem records a number nothing
-reads. -/
-theorem image_axisIncl_on_node
-    (ψ : AnalyticSpace.complexAffineSpace.{u} 1 ⟶ AnalyticSpace.node.{u})
-    (hψ : ψ.toLRSHom ≫ nodeAmbient.{u}.zeroLocusSubspaceι nodeSection.{u} = axisPhi.{u})
-    (z : ULift.{u} (Fin 1) → ℂ) :
-    (ψ.toLRSHom.base z).1.1 (ULift.up 0) * (ψ.toLRSHom.base z).1.1 (ULift.up 1) = 0 := by
-  rw [base_axisIncl ψ hψ z (ULift.up 1), okaMapFun_axisFamily_one, mul_zero]
-
 /-- **Both coordinates of the image, named together: `z ↦ (z, 0)`.**
 
 `base_axisIncl` is symbolic in `okaMapFun axisFamily`, and the two coordinate computations are
@@ -300,6 +285,25 @@ theorem base_axisIncl_pair
       (ψ.toLRSHom.base z).1.1 (ULift.up 1) = 0 :=
   ⟨(base_axisIncl ψ hψ z (ULift.up 0)).trans (okaMapFun_axisFamily_zero z),
     (base_axisIncl ψ hψ z (ULift.up 1)).trans (okaMapFun_axisFamily_one z)⟩
+
+/-- **A morphism of complex analytic spaces `ℂ ⟶ node` whose base map is `z ↦ (z, 0)` exists.**
+
+This is the sentence this section has been circling: `base_axisIncl_pair` is conditional on a `ψ`
+that nothing in its statement supplies, and `existsUnique_axisIncl` supplies one without saying
+where it sends a point. The `⟨_, proof⟩` shape joins them — the witness is fixed by
+`existsUnique_axisIncl.exists.choose` and consumed by `base_axisIncl_pair`, so the two are
+provably about the same morphism — and the result has **no hypotheses at all**.
+
+That the image lies on the node follows in one step (`mul_zero` on the second component), from a
+statement that cannot decay: a separate theorem saying only that would have an unused hypothesis
+and a one-line proof from the type of `ψ`, so its content would be *which* proof elaborates and
+nothing would protect it. -/
+theorem exists_axisIncl_pair :
+    ∃ ψ : AnalyticSpace.complexAffineSpace.{u} 1 ⟶ AnalyticSpace.node.{u},
+      ∀ z : ULift.{u} (Fin 1) → ℂ,
+        (ψ.toLRSHom.base z).1.1 (ULift.up 0) = z (ULift.up 0) ∧
+          (ψ.toLRSHom.base z).1.1 (ULift.up 1) = 0 :=
+  ⟨_, fun z ↦ base_axisIncl_pair _ existsUnique_axisIncl.{u}.exists.choose_spec z⟩
 
 /-! ### The locally ringed space form, which is a different statement
 

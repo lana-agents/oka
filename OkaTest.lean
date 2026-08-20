@@ -20,6 +20,7 @@ import OkaTest.EvalContinuous
 import OkaTest.Factorisation
 import OkaTest.GlueMorphisms
 import OkaTest.HolomorphicMap
+import OkaTest.HolomorphicMapOpen
 import OkaTest.HomToComplex
 import OkaTest.OpenSubspace
 import OkaTest.PushforwardFullyFaithful
