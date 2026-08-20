@@ -24,6 +24,7 @@ import Oka.AnalyticSpace.IdealSheaf
 import Oka.AnalyticSpace.LocalModel
 import Oka.AnalyticSpace.Noetherian
 import Oka.AnalyticSpace.Relations
+import Oka.AnalyticSpace.Restrict
 import Oka.Analytification.AffineSpace
 import Oka.CategoryTheory.Abelian.Basic
 import Oka.CategoryTheory.Sites.CoversTop.Basic

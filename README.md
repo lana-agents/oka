@@ -85,6 +85,15 @@ coherence statement for arbitrary complex analytic spaces:
   the next item, which is now available, together with independence of the local construction of
   the two choices it makes — the chart and the local lift — which is not.
 
+* **Charts may be shrunk.** Being cut out by global sections is local on the target: restricting
+  a closed immersion to the preimage of an open subset of the target still cuts it out, by the
+  restricted family, and `ℂ`-linearity survives (`Oka/AnalyticSpace/Restrict.lean`). This is what
+  an open subspace of a complex analytic space needs in order to be one itself — **which is not
+  yet proved**: `AnalyticSpace.local_model` wants a chart whose target is an open subset *of*
+  `ℂ^n`, and what the restriction produces is a restriction of a restriction, so transporting
+  along the isomorphism between them needs the companion of `IsCutOutBy.comp_iso` for an
+  isomorphism of the *target*, which is missing.
+
 * **Gluing.** Open covers of a locally ringed space, and the gluing of morphisms out of the
   members of one (`Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean`): a locally ringed space
   is the gluing of the members of any open cover of it, so morphisms out of the members which
