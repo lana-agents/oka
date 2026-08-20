@@ -21,11 +21,16 @@ if [ -n "$(git status --porcelain)" ]; then
   exit 1
 fi
 
-# Verify the library is free of `sorry`. Lean reports one as a warning rather than an
-# error, so the build below would not fail on it. The negative lookarounds keep
-# `sorryAx`, `unsorry` and `sorry_foo` from matching. The bare word *does* match in
-# comments and docstrings, so prose under `Oka/` should avoid it. This mirrors the check
-# in `.github/workflows/lean_action_ci.yml`.
+# Verify the library is free of `sorry`. This runs before the build because it is instant and
+# the build is not; it is a fast fail, not the only defence. **`lake build --wfail` below does
+# catch a `sorry`** — measured 2026-08-20 by planting one under `OkaTest/` and watching
+# `declaration uses \`sorry\`` become `error: build failed` — so the test library, which this
+# grep does not cover, is not unguarded. (This comment previously said the build "would not fail
+# on it", which is true of a bare `lake build` and false with `--wfail`.)
+#
+# The negative lookarounds keep `sorryAx`, `unsorry` and `sorry_foo` from matching. The bare word
+# *does* match in comments and docstrings, so prose under `Oka/` should avoid it. This mirrors
+# the check in `.github/workflows/lean_action_ci.yml`.
 if grep -rnP '(?<![A-Za-z_])sorry(?![A-Za-z_])' --include='*.lean' Oka Oka.lean; then
   echo 'Found a `sorry` in the library, at the location(s) listed above.'
   exit 1

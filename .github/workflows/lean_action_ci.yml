@@ -21,8 +21,10 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      # A `sorry` is only a warning to Lean, so `lake build` would not fail on one. Catch it
-      # here, before the (slow) build. The negative lookarounds keep prose containing the word
+      # A `sorry` is only a warning to Lean, so a bare `lake build` would not fail on one — but
+      # the build below runs with `--wfail`, which does. This is a fast fail before the slow
+      # build, not the only defence; in particular `OkaTest/`, which this grep does not cover,
+      # is guarded by `--wfail`. The negative lookarounds keep prose containing the word
       # "sorry" from matching.
       - name: Check for sorry
         run: |
