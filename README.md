@@ -34,6 +34,11 @@ coherence statement for arbitrary complex analytic spaces:
   division by the classical induction on the number of variables.
 * **Unique factorisation.** The germ ring is a unique factorisation domain
   (`Oka/UFD.lean`), the second algebraic consequence of Weierstrass preparation.
+* **Regularity and dimension.** The germ ring in `n` variables is a regular local ring of Krull
+  dimension `n` (`Oka/Regular.lean`), the third. The dimension is computed by cutting with one
+  coordinate at a time; the induction step is the isomorphism
+  `𝒪_n ≃+* 𝒪_{n+1} ⧸ (X_n)`, which is Weierstrass division by a degree-one Weierstrass
+  polynomial together with its uniqueness half.
 * **Noetherian local rings.** The stalks of the structure sheaf of a complex analytic space are
   Noetherian local rings (`Oka/AnalyticSpace/Noetherian.lean`), the companion statement to the
   coherence theorem.
