@@ -465,3 +465,10 @@ info: 'SheafOfModules.exists_forall_app_eq_of_epi' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms SheafOfModules.exists_forall_app_eq_of_epi
+
+/--
+info: 'SheafOfModules.exists_free_app_eq_of_epi' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.exists_free_app_eq_of_epi

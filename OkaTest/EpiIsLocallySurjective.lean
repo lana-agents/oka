@@ -56,6 +56,19 @@ example {L : Type u} [Finite L] (Z : Opens (complexSpace ι).toTopCat)
           (cokernel ((complexSpace ι).sectionsHom f)).val.map g.op (b l) :=
   exists_forall_app_eq_of_epi _ Z b
 
+/-- The form a lift of a map out of a finite free sheaf takes, at the same site: on a covering
+sieve, everything `ψ` produces is in the image of the quotient map. This is the statement issue
+#577 consumes. -/
+example {L : Type u} [Finite L]
+    (ψ : free (R := (complexSpace ι).ringSheaf) L ⟶ cokernel ((complexSpace ι).sectionsHom f))
+    (Z : Opens (complexSpace ι).toTopCat) :
+    ∃ S : Sieve Z, S ∈ Opens.grothendieckTopology (complexSpace ι).toTopCat Z ∧
+      ∀ ⦃W : Opens (complexSpace ι).toTopCat⦄ (g : W ⟶ Z), S g →
+        ∀ c : (free (R := (complexSpace ι).ringSheaf) L).val.obj (op W),
+          ∃ a, (cokernel.π ((complexSpace ι).sectionsHom f)).val.app (op W) a =
+            ψ.val.app (op W) c :=
+  exists_free_app_eq_of_epi _ ψ Z
+
 end ComplexSpace
 
 section AnalyticSpace

@@ -6,6 +6,7 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 module
 
 public import Oka.Algebra.Category.ModuleCat.Sheaf.Colimits
+public import Oka.Algebra.Category.ModuleCat.Sheaf.Free
 public import Oka.CategoryTheory.Sites.LocallySurjective
 
 /-!
@@ -31,7 +32,13 @@ phrased in the same shape as `SheafOfModules.LocallyGeneratesKernel`
 such that every arrow of `S` restricts the given section into the image. Together with
 `SheafOfModules.exists_forall_app_eq_of_epi`, which does the same for a finite family of
 sections at once by intersecting the sieves, this is what is needed to lift a map out of a
-finite free sheaf along an epimorphism, locally.
+finite free sheaf along an epimorphism, locally: that last statement is
+`SheafOfModules.exists_free_app_eq_of_epi`, which says that on a covering sieve *every* section
+in the image of `ψ : free L ⟶ N` is in the image of the epimorphism, not merely the images of
+the `L` generators. It is stated on sections rather than as a factorisation `free L ⟶ M` of
+sheaves, because a factorisation would have to be a morphism over each `W` of the sieve and so
+would drag in the over-site restriction of `free L`; the consumers — `LocallyGeneratesKernel`
+and its users — work with sections throughout.
 
 ## Main results
 
@@ -39,6 +46,7 @@ finite free sheaf along an epimorphism, locally.
 - `SheafOfModules.isLocallySurjective_toSheaf_map_of_epi`
 - `SheafOfModules.exists_app_eq_of_epi`
 - `SheafOfModules.exists_forall_app_eq_of_epi`
+- `SheafOfModules.exists_free_app_eq_of_epi`
 -/
 
 @[expose] public section
@@ -104,5 +112,36 @@ theorem exists_forall_app_eq_of_epi {I : Type*} [Finite I] (f : M ⟶ N) [Epi f]
     fun W g hg i ↦ ?_⟩
   have hle : (Finset.univ.inf T : J.Cover Z) ≤ T i := Finset.inf_le (Finset.mem_univ i)
   exact hle g hg
+
+section Free
+
+variable {C : Type u'} [Category.{v'} C] {J : GrothendieckTopology C} {R : Sheaf J RingCat.{u}}
+  [HasSheafify J AddCommGrpCat.{u}] [J.WEqualsLocallyBijective AddCommGrpCat.{u}]
+  {M N : SheafOfModules.{u} R}
+
+/-- **A morphism out of a finite free sheaf of modules lifts along an epimorphism on a covering
+sieve.**
+
+Over each object of the sieve, *every* section of `free L` is sent by `ψ` into the image of `f`,
+not merely the `L` generators: the generators lift by
+`SheafOfModules.exists_forall_app_eq_of_epi`, and an arbitrary section is an `R`-linear
+combination of them by `SheafOfModules.val_app_eq_sum`. -/
+theorem exists_free_app_eq_of_epi {L : Type u} [Finite L] (f : M ⟶ N) [Epi f]
+    (ψ : free (R := R) L ⟶ N) (Z : C) :
+    ∃ S : Sieve Z, S ∈ J Z ∧ ∀ ⦃W : C⦄ (g : W ⟶ Z), S g →
+      ∀ c : (free (R := R) L).val.obj (op W),
+        ∃ a, f.val.app (op W) a = ψ.val.app (op W) c := by
+  classical
+  cases nonempty_fintype L
+  obtain ⟨S, hS, hlift⟩ := exists_forall_app_eq_of_epi f Z
+    (fun l ↦ PresheafOfModules.sections.eval (N.freeHomEquiv ψ l) (op Z))
+  refine ⟨S, hS, fun W g hg c ↦ ?_⟩
+  choose a ha using hlift g hg
+  refine ⟨∑ l : L, freeEval (op W) c l • a l, ?_⟩
+  rw [map_sum, val_app_eq_sum]
+  refine Finset.sum_congr rfl fun l _ ↦ ?_
+  rw [map_smul, ha l, PresheafOfModules.sections_property]
+
+end Free
 
 end SheafOfModules
