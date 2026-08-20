@@ -21,11 +21,17 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      # A `sorry` is only a warning to Lean, so a bare `lake build` would not fail on one — but
-      # the build below runs with `--wfail`, which does. This is a fast fail before the slow
-      # build, not the only defence; in particular `OkaTest/`, which this grep does not cover,
-      # is guarded by `--wfail`. The negative lookarounds keep prose containing the word
-      # "sorry" from matching.
+      # A `sorry` is only a warning to Lean, so a bare `lake build` would not fail on one. The
+      # build below passes `--wfail`, which does — measured 2026-08-20 by planting one under
+      # `OkaTest/`. That is why this grep, which covers `Oka Oka.lean` only, is a fast fail
+      # before the slow build rather than the only defence: `OkaTest/` is guarded by `--wfail`.
+      #
+      # `--wfail` was added on 2026-08-20 and had never been passed here before, so until then
+      # every build linter in `weak.linter.mathlibStandardSet` — `sorry`, line length,
+      # copyright headers, `linter.style.show` — was enforced by `.orchestra/validation.sh`
+      # locally and by nothing in CI.
+      #
+      # The negative lookarounds keep prose containing the word "sorry" from matching.
       - name: Check for sorry
         run: |
           if grep -rnP '(?<![A-Za-z_])sorry(?![A-Za-z_])' --include='*.lean' Oka Oka.lean; then
@@ -41,9 +47,35 @@ jobs:
       # setting the action's default is to skip linting silently, which is worse than not having
       # the step: look for `Linting passed for Oka` in this step's log, not merely for a green
       # tick.
+      #
+      # `build-args: --wfail` turns Lean's warnings into build errors, which is what makes the
+      # build linters of `weak.linter.mathlibStandardSet` (line length, copyright headers,
+      # `linter.style.show`, `declaration uses 'sorry'`) a merge gate rather than advice.
+      # `.orchestra/validation.sh` has always run `lake build --wfail`; this step had not, and
+      # the divergence was invisible because both are spelled "the build". The action passes
+      # this input through verbatim: `scripts/lake_build.sh` is `eval "lake build $BUILD_ARGS"`,
+      # and with the input unset a CI log shows `BUILD_ARGS:` empty.
       - uses: leanprover/lean-action@v1
         with:
           lint: true
+          build-args: --wfail
+
+      # Both library root modules must import every file of their library. `Oka.lean` is
+      # maintained by hand-free regeneration (`lake exe mk_all --git`); `OkaTest.lean` exists so
+      # that `lake exe lint-style` can be pointed at the test library at all, and this check is
+      # what stops it from silently going stale — every `OkaTest.+` module is its own build
+      # target, so a new test file missing from the root still builds and just drops out of
+      # `lint-style`'s reach.
+      #
+      # `.orchestra/validation.sh` has run the `Oka` half since it was written and neither half
+      # was here; the script's header says the two must be kept in step, so both are here now.
+      #
+      # `!cancelled()` for the same reason as the style step below.
+      - name: Check root modules are complete
+        if: ${{ !cancelled() }}
+        run: |
+          lake exe mk_all --lib Oka --git --check
+          lake exe mk_all --lib OkaTest --git --check
 
       # Mathlib's text-based style linter, a separate executable from the environment linters
       # and not covered by `lake lint`. It checks *less* than its name suggests: trailing
@@ -58,8 +90,7 @@ jobs:
       # Both library root modules. `OkaTest` was absent here until 2026-08-20, not by choice
       # but because `lint-style Oka OkaTest` failed with `no such file OkaTest.lean` — the test
       # library had no root module — so half the tree was text-linted by nothing. `OkaTest.lean`
-      # now exists and `.orchestra/validation.sh` runs `lake exe mk_all --lib OkaTest --git
-      # --check` to keep it in step with the files on disk.
+      # now exists and the step above keeps it in step with the files on disk.
       #
       # `!cancelled()` so that a failure of the step above does not hide a style error. Without
       # it GitHub marks this step `skipped`, and since an agent gets one CI run per push that

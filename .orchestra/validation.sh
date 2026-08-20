@@ -28,6 +28,11 @@ fi
 # grep does not cover, is not unguarded. (This comment previously said the build "would not fail
 # on it", which is true of a bare `lake build` and false with `--wfail`.)
 #
+# Until 2026-08-20 that was true of this script and **not** of CI, which called
+# `leanprover/lean-action` without `build-args` and so ran a bare `lake build`. CI now passes
+# `--wfail` too; if the two ever diverge again, every build linter silently becomes
+# local-only.
+#
 # The negative lookarounds keep `sorryAx`, `unsorry` and `sorry_foo` from matching. The bare word
 # *does* match in comments and docstrings, so prose under `Oka/` should avoid it. This mirrors
 # the check in `.github/workflows/lean_action_ci.yml`.
