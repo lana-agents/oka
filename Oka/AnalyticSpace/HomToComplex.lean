@@ -19,10 +19,11 @@ does the second, `ComplexAnalytic.AnalyticSpace.hom_ext_complexAffineSpace`.
 
 Together with `ComplexAnalytic.AnalyticSpace.exists_hom_complexLine` of
 `Oka/AnalyticSpace/HolomorphicMap.lean`, which produces a morphism from a section, this gives
-`Hom(ℂ^n, ℂ) ≃ Γ(ℂ^n, 𝒪)` — `ComplexAnalytic.AnalyticSpace.homComplexLineEquiv`. That is the
-statement of taxis #628 for `Z = ℂ^n`; the general `Z` needs the *existence* half for a general
-`Z`, which is what taxis #654 and #657 are about, not the uniqueness half proved here, which is
-already general in `Z`.
+`Hom(ℂ^n, ℂ) ≃ Γ(ℂ^n, 𝒪)`. **That bijection is not packaged here**, because the uniqueness half
+proved below is already general in `Z` and the existence half is now general too: the single
+`ComplexAnalytic.AnalyticSpace.homComplexLineEquivGeneral` of
+`Oka/AnalyticSpace/HolomorphicMapGeneral.lean` covers `Z = ℂ^n` along with every other `Z`, and
+a second `Equiv` with the same forward map at one source would be a duplicate of it.
 
 ## The argument, and where each hypothesis is used
 
@@ -76,7 +77,6 @@ needs one computation which was not in the development —
 - `ComplexAnalytic.AnalyticSpace.hom_ext_complexAffineSpace`: **a morphism of complex analytic
   spaces `Z ⟶ ℂ^n` is determined by the pullbacks of the coordinate functions**, and
   `ComplexAnalytic.AnalyticSpace.hom_ext_complexLine` for `n = 1`.
-- `ComplexAnalytic.AnalyticSpace.homComplexLineEquiv`: `Hom(ℂ^n, ℂ) ≃ Γ(ℂ^n, 𝒪)`.
 - `ComplexAnalytic.nodeCoord_ne`: the two coordinate functions of the node are different
   sections — the rigidity theorem turning a fact about base maps into a fact about sections.
 - `ComplexAnalytic.AnalyticSpace.coordPullback_comp`: **the tuple of pullbacks of the
@@ -261,21 +261,6 @@ theorem hom_ext_complexLine (φ ψ : Z ⟶ AnalyticSpace.complexAffineSpace.{u} 
     obtain rfl : j = ULift.up 0 := Subsingleton.elim _ _
     exact h
 
-/-- **`Hom(ℂ^n, ℂ) ≃ Γ(ℂ^n, 𝒪)`**: a morphism of complex analytic spaces from `ℂ^n` to `ℂ` is
-the same thing as a global holomorphic function on `ℂ^n`, the correspondence being the pullback
-of the coordinate.
-
-This is taxis #628 for `Z = ℂ^n`. Injectivity is
-`ComplexAnalytic.AnalyticSpace.hom_ext_complexLine` and holds for every `Z`; surjectivity is
-`ComplexAnalytic.AnalyticSpace.exists_hom_complexLine` and is what does *not* yet hold for every
-`Z`, a section of `𝒪_Z` lifting to a holomorphic function only locally. -/
-noncomputable def homComplexLineEquiv (n : ℕ) :
-    (AnalyticSpace.complexAffineSpace.{u} n ⟶ AnalyticSpace.complexAffineSpace.{u} 1) ≃
-      (AnalyticSpace.complexAffineSpace.{u} n).presheaf.obj (op ⊤) :=
-  Equiv.ofBijective
-    (fun φ ↦ (LocallyRingedSpace.Γ.map φ.toLRSHom.op).hom (coord (ULift.up 0)))
-    ⟨fun _ _ h ↦ hom_ext_complexLine _ _ h, fun g ↦ exists_hom_complexLine g⟩
-
 /-! ### The `m`-fold statement, and its naturality in `Z` -/
 
 /-- **The tuple of pullbacks of the coordinate functions**, which is the map
@@ -306,11 +291,14 @@ lemma coordPullback_apply {Z : AnalyticSpace.{u}} {m : ℕ}
   rfl
 
 /-- **`Hom(ℂ^n, ℂ^m) ≃ Γ(ℂ^n, 𝒪)^m`**, the `m`-fold form of
-`ComplexAnalytic.AnalyticSpace.homComplexLineEquiv`.
+`ComplexAnalytic.AnalyticSpace.homComplexLineEquivGeneral` at `Z = ℂ^n`.
 
 Injectivity is `ComplexAnalytic.AnalyticSpace.hom_ext_complexAffineSpace` and holds for every
 source `Z`; surjectivity is `ComplexAnalytic.AnalyticSpace.okaMap` together with
-`ComplexAnalytic.Γ_map_okaMapHom_coord`, and is what does not yet hold for a general `Z`. -/
+`ComplexAnalytic.Γ_map_okaMapHom_coord`, and is what does not yet hold for a general `Z`. **This
+is the one `Equiv` in the development that is not subsumed by `homComplexLineEquivGeneral`**, and
+the reason is the `m`: at `m = 1` it would be a duplicate, and taxis #720 is the `m`-fold
+statement for a general `Z` which will subsume it. -/
 noncomputable def homComplexAffineSpaceEquiv (n m : ℕ) :
     (AnalyticSpace.complexAffineSpace.{u} n ⟶ AnalyticSpace.complexAffineSpace.{u} m) ≃
       (ULift.{u} (Fin m) → OkaRing (⊤ : TopologicalSpace.Opens (ULift.{u} (Fin n) → ℂ))) :=

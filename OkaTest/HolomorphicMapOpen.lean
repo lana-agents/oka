@@ -176,9 +176,15 @@ theorem base_invHom_via_eval (y : ↥punctured.{u}) (j : ULift.{u} (Fin 1)) :
         ((eval_restrict_complexAffineSpace punctured.{u} y invCoord.{u}).trans
           (evalHom_invCoord _))))
 
-/-- The bijection is not a bijection onto nothing: it sends `invHom` to `1/z₀`. -/
-theorem homComplexLineEquivRestrict_invHom :
-    AnalyticSpace.homComplexLineEquivRestrict.{u} invHom.{u} = invCoord.{u} :=
+/-- The bijection is not a bijection onto nothing: it sends `invHom` to `1/z₀`.
+
+There is no separate `ℂ^n|V` bijection: this is
+`ComplexAnalytic.AnalyticSpace.homComplexLineEquivGeneral` at the open subspace, which is where
+`ComplexAnalytic.AnalyticSpace.exists_hom_complexLine_restrict` is now consumed. -/
+theorem homComplexLineEquivGeneral_invHom :
+    AnalyticSpace.homComplexLineEquivGeneral.{u}
+      ((AnalyticSpace.complexAffineSpace.{u} 1).restrict punctured.{u}) invHom.{u} =
+        invCoord.{u} :=
   coordPullback_invHom _
 
 end

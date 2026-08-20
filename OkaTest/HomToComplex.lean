@@ -82,10 +82,15 @@ theorem okaMap_coord_eq_id :
 /-- **The bijection `Hom(ℂ^n, ℂ) ≃ Γ(ℂ^n, 𝒪)`, named on the whole of its image**: the morphism
 attached to a family of entire functions goes to that family's only member. Naming the function
 rather than exhibiting two of its values is what rules out a bijection which is secretly
-constant. -/
-theorem homComplexLineEquiv_okaMap {n : ℕ}
+constant.
+
+The bijection is `ComplexAnalytic.AnalyticSpace.homComplexLineEquivGeneral` at `Z = ℂ^n`; there
+is no separate `ℂ^n` bijection to test, and this is what the `ℂ^n` case of the general one says
+concretely. -/
+theorem homComplexLineEquivGeneral_okaMap {n : ℕ}
     (u : ULift.{u} (Fin 1) → OkaRing (⊤ : Opens (ULift.{u} (Fin n) → ℂ))) :
-    AnalyticSpace.homComplexLineEquiv.{u} n (AnalyticSpace.okaMap u) = u (ULift.up 0) :=
+    AnalyticSpace.homComplexLineEquivGeneral.{u} (AnalyticSpace.complexAffineSpace.{u} n)
+        (AnalyticSpace.okaMap u) = u (ULift.up 0) :=
   Γ_map_okaMapHom_coord u (ULift.up 0)
 
 /-- **The hom-set is not a singleton**, so the uniqueness theorem is about something: the two
@@ -98,12 +103,13 @@ theorem two_distinct_homs :
     nodeCoord_ne.{u} ((Γ_map_nodeToLineHom_coord (ULift.up 0)).symm.trans
       (hcon.trans (Γ_map_nodeToLineHom_coord (ULift.up 1))))⟩
 
-/-- **The inverse of the bijection, named.** `homComplexLineEquiv` is built by
+/-- **The inverse of the bijection, named.** `homComplexLineEquivGeneral` is built by
 `Equiv.ofBijective`, so its inverse is a choice term; this says that on the sections which come
 from a family of entire functions it is `okaMap`, with no choice left in it. -/
-theorem symm_homComplexLineEquiv_okaMap {n : ℕ}
+theorem symm_homComplexLineEquivGeneral_okaMap {n : ℕ}
     (u : ULift.{u} (Fin 1) → OkaRing (⊤ : Opens (ULift.{u} (Fin n) → ℂ))) :
-    (AnalyticSpace.homComplexLineEquiv.{u} n).symm (u (ULift.up 0)) =
+    (AnalyticSpace.homComplexLineEquivGeneral.{u}
+        (AnalyticSpace.complexAffineSpace.{u} n)).symm (u (ULift.up 0)) =
       AnalyticSpace.okaMap u :=
   (Equiv.symm_apply_eq _).2 (Γ_map_okaMapHom_coord u (ULift.up 0)).symm
 
