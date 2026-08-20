@@ -355,3 +355,32 @@ info: 'ComplexAnalytic.IsCutOutBy.baseLift_unique' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.IsCutOutBy.baseLift_unique
+
+/-! ### The stalk map of the comparison morphism -/
+
+/--
+info: 'toStalk_stalkMap_complexSpaceToSpec' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms toStalk_stalkMap_complexSpaceToSpec
+
+/--
+info: 'okaStalkEquiv_stalkMap_complexSpaceToSpec' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms okaStalkEquiv_stalkMap_complexSpaceToSpec
+
+/--
+info: 'isUnit_ofMvPolynomial_of_mem_primeCompl' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms isUnit_ofMvPolynomial_of_mem_primeCompl
+
+/--
+info: 'stalkMap_eq_lift' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms stalkMap_eq_lift
