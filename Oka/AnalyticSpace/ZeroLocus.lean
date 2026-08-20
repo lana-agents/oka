@@ -63,6 +63,8 @@ underlying set does its second piece of work.
 - `AlgebraicGeometry.LocallyRingedSpace.isClosedEmbedding_zeroLocusι` and
   `range_zeroLocusι`: the two topological conditions of `ComplexAnalytic.IsCutOutBy`,
   discharged for any candidate structure sheaf on the zero locus.
+- `AlgebraicGeometry.LocallyRingedSpace.mem_zeroLocus_restrict_iff`: the zero locus inside an
+  open subspace, described by germs on the ambient space.
 - `AlgebraicGeometry.LocallyRingedSpace.stalkMap_zeroLocusιHom`: the map on stalks is the
   projection onto the quotient by the germs of the `f i`, followed by an isomorphism; hence
   `surjective_stalkMap_zeroLocusιHom` and `ker_stalkMap_zeroLocusιHom`.
@@ -157,6 +159,24 @@ theorem range_zeroLocusι :
     Set.range (Y.zeroLocusι f) =
       {y | ∀ i, Y.presheaf.Γgerm y (f i) ∈ IsLocalRing.maximalIdeal (Y.presheaf.stalk y)} :=
   Subtype.range_val
+
+/-- The zero locus of a family of sections over an open subspace `V ⊆ X`, described in terms of
+germs on `X` itself: the stalks of `X.restrict V.isOpenEmbedding` are the stalks of `X`
+(`AlgebraicGeometry.LocallyRingedSpace.restrictStalkIso`), and an isomorphism of rings does not
+change which elements are units.
+
+This is what turns the abstract zero locus into a concrete subset of `ℂ^n`; see
+`mem_zeroLocus_restrict_complexSpace_iff` in `Oka/AnalyticSpace/LocalModel.lean`. -/
+theorem mem_zeroLocus_restrict_iff (X : LocallyRingedSpace.{u}) (V : Opens X) {κ : Type*}
+    (g : κ → (X.restrict V.isOpenEmbedding).presheaf.obj (op ⊤))
+    (y : X.restrict V.isOpenEmbedding) :
+    y ∈ (X.restrict V.isOpenEmbedding).zeroLocus g ↔
+      ∀ i, ¬ IsUnit (X.presheaf.germ (V.isOpenEmbedding.isOpenMap.functor.obj ⊤)
+        (Opens.inclusion' V y) ⟨y, trivial, rfl⟩ (g i)) := by
+  rw [mem_zeroLocus_iff_not_isUnit]
+  refine forall_congr' fun i ↦ not_congr ?_
+  rw [← X.restrictStalkIso_hom_eq_germ_apply V.isOpenEmbedding ⊤ y trivial (g i)]
+  exact (isUnit_map_iff (X.restrictStalkIso V.isOpenEmbedding y).hom.hom _).symm
 
 end Topology
 
