@@ -182,14 +182,22 @@ theorem isCLinearHom_axisPhi :
       (AnalyticSpace.complexAffineSpace.{u} 1).algebraMap (constantsAlgMap 2 ⊤) :=
   (isCLinearHom_okaMapHom axisFamily.{u}).comp (isCLinearHom_restrictTopIso_inv_constants.{u} 2)
 
-/-! **That the general form is general is checked here rather than asserted in its docstring.**
+/-! **The two `example`s below record the spelling a caller uses**, at a space whose coefficient
+field is not `constantsAlgMap` anything.
 
-`ComplexAnalytic.isCLinearHom_restrictTopIso_inv` claims to hold for an arbitrary complex
-analytic space carrying its own coefficient field, and not only for `ℂ^n` — which is the
-question taxis #691 raised about `eval_restrict` and which taxis #702 said to *check, not
-assume*. The two `example`s below are the check: the first instantiates it at an arbitrary
-`AnalyticSpace` with `X.algebraMap`, the second at the node, whose coefficient field is pulled
-back along its closed immersion and is not `constantsAlgMap` anything.
+They do *not* check that `ComplexAnalytic.isCLinearHom_restrictTopIso_inv` is general.
+Instantiating a universally quantified variable cannot fail: that lemma takes the coefficient
+field as a parameter `α`, so its generality is visible in its statement, and had it secretly
+been `constantsAlgMap`-only it would not have compiled at its own declaration. What the
+instantiations do establish is that the two spellings a caller reaches for elaborate — the
+`X.toLocallyRingedSpace.restrictTopIso` of an `AnalyticSpace`, and
+`resAlgMap X.algebraMap ⊤` as the target algebra structure — at an arbitrary space and at the
+node, whose coefficient field is pulled back along its closed immersion. That is the real
+answer to the question taxis #691 raised about `eval_restrict` and taxis #702 said to *check,
+not assume*.
+
+This paragraph replaces one claiming the `example`s checked the generality; the correction is
+oka-slot-2's, from the review of PR #72, and was deferred there rather than re-pushed.
 
 They are `example`s deliberately. A named general lemma in a test file is a duplicate waiting to
 happen — that is what this file's two `restrictTopIso` declarations were, and removing them is
