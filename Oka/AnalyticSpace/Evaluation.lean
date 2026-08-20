@@ -285,6 +285,62 @@ lemma eval_algebraMap (z : Z) (c : ℂ) :
     Z.eval z (U := ⊤) trivial (Z.algebraMap c) = c :=
   Z.evalStalk_stalkAlgMap z c
 
+/-- **Evaluation is natural in the space**: the value at `z` of the pullback of a germ is the
+value of that germ at `i z`.
+
+Stated for a morphism of the underlying locally ringed spaces together with `ℂ`-linearity rather
+than for a `ComplexAnalytic.AnalyticSpace.Hom`, because that is the form the development can
+currently instantiate — a closed immersion cutting out a chart is `ℂ`-linear and is a morphism
+of locally ringed spaces, but is not packaged as a morphism of analytic spaces.
+`ComplexAnalytic.AnalyticSpace.evalStalk_stalkMap_hom` is the corollary for an honest
+morphism.
+
+This is *not* an instance of `IsLocalRing.IsCoefficientField.evalHom_map`, which requires the map
+to be surjective; `i.stalkMap` is not. Surjectivity is not what makes it work. Write the germ as
+a constant plus an element of the maximal ideal
+(`ComplexAnalytic.AnalyticSpace.evalStalk_eq_iff`); the constant is carried to the constant by
+`ℂ`-linearity (`ComplexAnalytic.IsCLinearHom.stalkAlgMap`), and the rest stays in the maximal
+ideal because `i.stalkMap` is a **local** homomorphism, which is part of being a morphism of
+locally ringed spaces. Locality does here what surjectivity does there. -/
+theorem evalStalk_stalkMap {Z W : AnalyticSpace.{u}}
+    (i : Z.toLocallyRingedSpace ⟶ W.toLocallyRingedSpace)
+    (hlin : IsCLinearHom i Z.algebraMap W.algebraMap) (z : Z)
+    (a : W.presheaf.stalk (i.base z)) :
+    Z.evalStalk z ((i.stalkMap z).hom a) = W.evalStalk (i.base z) a := by
+  haveI : IsLocalHom (i.stalkMap z).hom := i.prop z
+  refine (Z.evalStalk_eq_iff _ _).2 ?_
+  have h : a - W.stalkAlgMap (i.base z) (W.evalStalk (i.base z) a) ∈
+      maximalIdeal (W.presheaf.stalk (i.base z)) :=
+    (W.evalStalk_eq_iff a _).1 rfl
+  have hlin' : (i.stalkMap z).hom
+      (W.stalkAlgMap (i.base z) (W.evalStalk (i.base z) a)) =
+      Z.stalkAlgMap z (W.evalStalk (i.base z) a) :=
+    hlin.stalkAlgMap z _
+  have hmap := _root_.map_nonunit (i.stalkMap z).hom _ h
+  rwa [map_sub, hlin'] at hmap
+
+/-- **The value at `z` of the pullback of a section is the value of that section at `i z`.**
+
+`ComplexAnalytic.AnalyticSpace.evalStalk_stalkMap` at the level of sections. This is what says
+that the underlying map of a `ℂ`-linear morphism is determined by the values of the pullbacks:
+applied to a coordinate function it computes `i.base z`. -/
+theorem eval_c_app {Z W : AnalyticSpace.{u}}
+    (i : Z.toLocallyRingedSpace ⟶ W.toLocallyRingedSpace)
+    (hlin : IsCLinearHom i Z.algebraMap W.algebraMap) {U : Opens W} (z : Z)
+    (hz : i.base z ∈ U) (s : W.presheaf.obj (op U)) :
+    Z.eval z (show z ∈ (Opens.map i.base).obj U from hz) (i.c.app (op U) s) =
+      W.eval (i.base z) hz s :=
+  (congrArg (Z.evalStalk z)
+    (LocallyRingedSpace.stalkMap_germ_apply i U z hz s).symm).trans
+    (evalStalk_stalkMap i hlin z _)
+
+/-- `ComplexAnalytic.AnalyticSpace.evalStalk_stalkMap` for a morphism of complex analytic
+spaces. -/
+theorem evalStalk_stalkMap_hom {Z W : AnalyticSpace.{u}} (φ : Z ⟶ W) (z : Z)
+    (a : W.presheaf.stalk (φ.toLRSHom.base z)) :
+    Z.evalStalk z ((φ.toLRSHom.stalkMap z).hom a) = W.evalStalk (φ.toLRSHom.base z) a :=
+  evalStalk_stalkMap φ.toLRSHom φ.isCLinear z a
+
 /-- **The residue field of a complex analytic space at a point, identified with `ℂ`.**
 
 `AlgebraicGeometry.LocallyRingedSpace.residueField` is Mathlib's residue field of the stalk;
