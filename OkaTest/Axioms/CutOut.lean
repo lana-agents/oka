@@ -137,3 +137,26 @@ info: 'ComplexAnalytic.IsCutOutBy.uniqueIso' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.IsCutOutBy.uniqueIso
+
+/-! ### Being cut out is local on the target -/
+
+/--
+info: 'ComplexAnalytic.restrictHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.restrictHom
+
+/--
+info: 'ComplexAnalytic.IsCutOutBy.restrictOpen' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.IsCutOutBy.restrictOpen
+
+/--
+info: 'ComplexAnalytic.isCLinearHom_restrictHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isCLinearHom_restrictHom
