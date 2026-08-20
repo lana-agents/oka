@@ -37,6 +37,7 @@ import Oka.ComplexSpace
 import Oka.Data.Fin.Tuple.Basic
 import Oka.Geometry.RingedSpace.CutOut
 import Oka.Geometry.RingedSpace.LocallyRingedSpace
+import Oka.Geometry.RingedSpace.PresheafedSpace.Gluing
 import Oka.Geometry.RingedSpace.ZeroLocus
 import Oka.LocalOkaRing
 import Oka.MaximalIdeal

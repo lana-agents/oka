@@ -25,6 +25,7 @@ lives in the `Oka/Topology/` mirror of the Mathlib directory tree for that reaso
 
 - `TopCat.Presheaf.stalkPushforward_naturality`
 - `TopCat.Presheaf.stalkCongr_hom_germ`
+- `TopCat.Presheaf.isIso_stalkSpecializes_of_eq`
 -/
 
 open CategoryTheory Limits TopologicalSpace Opposite
@@ -49,6 +50,21 @@ lemma stalkPushforward_naturality {X Y : TopCat.{v}} (g : X ⟶ Y) {F G : X.Pres
   simp only [pushforward_map_app, stalkFunctor_obj, stalkPushforward_germ,
     stalkPushforward_germ_assoc]
   exact (stalkFunctor_map_germ (C := C) ((Opens.map g).obj U) x hU T).symm
+
+/-- **The specialization map between the stalks at two points which are in fact equal is an
+isomorphism.**
+
+`TopCat.Presheaf.stalkCongr` says this for `Inseparable` points and returns an isomorphism; this
+is the `IsIso` form for a specialization arising from an equality, which is the shape in which it
+is needed after `AlgebraicGeometry.LocallyRingedSpace.stalkMap_congr_hom` — that lemma produces a
+`stalkSpecializes` whose proof argument is manufactured from an equation between morphisms, and
+one cannot name the resulting proof term in advance. -/
+lemma isIso_stalkSpecializes_of_eq {X : TopCat.{v}} (F : X.Presheaf C) {a b : X} (h : a ⤳ b)
+    (h' : b = a) : IsIso (F.stalkSpecializes h) := by
+  subst h'
+  have hid : F.stalkSpecializes h = 𝟙 _ := by simp
+  rw [hid]
+  infer_instance
 
 section Concrete
 
