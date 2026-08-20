@@ -224,6 +224,11 @@ lemma Represents.congr {P : MvPowerSeries ι ℂ} {f g : (ι → ℂ) → ℂ} (
     (h : f =ᶠ[𝓝 (0 : ι → ℂ)] g) : P.Represents g := by
   filter_upwards [hP, h] with x hx hx' using hx' ▸ hx
 
+/-- Two functions summed to by the same power series agree near the origin. -/
+lemma Represents.eventuallyEq {P : MvPowerSeries ι ℂ} {f g : (ι → ℂ) → ℂ}
+    (hf : P.Represents f) (hg : P.Represents g) : f =ᶠ[𝓝 (0 : ι → ℂ)] g := by
+  filter_upwards [hf, hg] with x hx hx' using hx.unique hx'
+
 lemma LocallyConvergent.represents_eval {P : MvPowerSeries ι ℂ} (hP : P.LocallyConvergent) :
     P.Represents P.eval := by
   filter_upwards [hP] with x hx using hx.hasSum
@@ -913,6 +918,17 @@ instance : IsLocalRing (LocalOkaRing ι) := by
   refine IsLocalRing.of_nonunits_add fun P Q hP hQ ↦ ?_
   rw [mem_nonunits_iff, isUnit_iff, not_not] at hP hQ ⊢
   rw [map_add, hP, hQ, add_zero]
+
+omit [Finite ι] in
+/-- A germ in no variables is its own constant term, so it is a unit as soon as it is nonzero:
+`LocalOkaRing ι` is a field for `ι` empty. -/
+theorem isUnit_iff_ne_zero [IsEmpty ι] {P : LocalOkaRing ι} : IsUnit P ↔ P ≠ 0 := by
+  rw [isUnit_iff, constantCoeff_apply, ne_eq, ne_eq, not_iff_not]
+  refine ⟨fun h ↦ ?_, fun h ↦ by rw [h]; simp⟩
+  refine LocalOkaRing.ext (MvPowerSeries.ext fun d ↦ ?_)
+  have hd : d = 0 := by ext i; exact (IsEmpty.false i).elim
+  subst hd
+  simp [MvPowerSeries.coeff_zero_eq_constantCoeff_apply, h]
 
 end LocalOkaRing
 
