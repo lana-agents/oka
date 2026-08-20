@@ -23,6 +23,7 @@ import Oka.ChangeOfCoordinates
 import Oka.Coherent
 import Oka.ComplexSpace
 import Oka.Data.Fin.Tuple.Basic
+import Oka.Geometry.RingedSpace.LocallyRingedSpace
 import Oka.LocalOkaRing
 import Oka.MaximalIdeal
 import Oka.Noetherian
@@ -31,6 +32,7 @@ import Oka.OkaLemma
 import Oka.OkaRing
 import Oka.Polynomial
 import Oka.Polynomial.Germ
+import Oka.RingTheory.Ideal.Maps
 import Oka.StalkEquiv
 import Oka.Statement
 import Oka.StructureSheaf

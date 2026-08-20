@@ -77,6 +77,36 @@ coherence statement for arbitrary complex analytic spaces:
 `freitag_summary.md` contains a write-up of the classical proof of the coherence lemma (following
 Freitag) that the formalization follows.
 
+## Layout: the Mathlib mirror tree
+
+A file under `Oka/` whose path **mirrors a path under `Mathlib/`** does not contain
+complex-analytic mathematics. It holds general results about Mathlib's own types, declared into
+Mathlib's own namespaces, and is intended for upstreaming; its imports are the corresponding
+Mathlib file plus whatever else it genuinely needs, and nothing from the analytic side of this
+development. For example `Oka/CategoryTheory/Sites/Over.lean` extends
+`Mathlib/CategoryTheory/Sites/Over.lean`, `Oka/Algebra/Category/ModuleCat/Sheaf/` mirrors
+`Mathlib/Algebra/Category/ModuleCat/Sheaf/`, and `Oka/RingTheory/Ideal/Maps.lean` adds one
+missing lemma next to `Ideal.comap_symm` in `Mathlib/RingTheory/Ideal/Maps.lean`.
+
+**A new lemma with no complex-analytic content belongs in the mirror tree, not in the analytic
+file that happens to need it.** The two tests are whether the statement mentions anything defined
+in this repository, and whether it would make sense to a reader who had never heard of Oka's
+theorem. A `_root_.` prefix on a *declaration* inside an analytic file is the usual sign that
+something is in the wrong place; grep for `_root_.` at the start of a `def`/`lemma`/`theorem`
+rather than for the bare string, which also matches ordinary disambiguating uses.
+Keeping the separation is what makes the upstreamable material findable without reading the
+whole library.
+
+A mirror file need not correspond to a Mathlib file that already exists: it may equally be a
+*proposed* new one, placed under the Mathlib directory it would belong to.
+`Oka/Topology/Sheaves/QuotientPresheaf.lean` is of that kind — `Mathlib/Topology/Sheaves/` has no
+`QuotientPresheaf.lean`.
+
+Not every file outside the mirror tree is analytic-space theory, and not every general file has a
+Mathlib counterpart to mirror. `Oka/Analytic/ParametricCircleIntegral.lean` is general complex
+analysis — the Cauchy formula on a polydisc, and analyticity of a parametrised circle integral —
+but spans several Mathlib files rather than extending one, and stays where it is.
+
 ## Status
 
 The development is complete. `lake build` succeeds and there are no `sorry`s anywhere in the

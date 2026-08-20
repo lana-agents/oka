@@ -5,6 +5,7 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Mathlib.Geometry.RingedSpace.OpenImmersion
 import Oka.ComplexSpace
+import Oka.Geometry.RingedSpace.LocallyRingedSpace
 
 /-!
 # Complex analytic spaces
@@ -44,8 +45,6 @@ assumed by most classical treatments should be added as a mixin where needed.
   analytic subspace of `Y` cut out by the global sections `f`.
 - `ComplexAnalytic.IsLocalModel X`: `X` is a local model, i.e. an analytic subspace of an open
   subset of some `ℂ^n`, as a locally ringed space.
-- `AlgebraicGeometry.LocallyRingedSpace.resAlgMap`: the `ℂ`-algebra structure induced on an
-  open subspace.
 - `ComplexAnalytic.constantsAlgMap`: the constant functions as the canonical `ℂ`-algebra
   structure on an open subspace of `ℂ^n`.
 - `ComplexAnalytic.IsCLinearHom i α β`: a morphism of locally ringed spaces is `ℂ`-linear
@@ -96,15 +95,6 @@ def IsLocalModel (X : LocallyRingedSpace.{u}) : Prop :=
     (i : X ⟶ (complexAffineSpace.{u} n).restrict U.isOpenEmbedding)
     (f : Fin k → ((complexAffineSpace.{u} n).restrict U.isOpenEmbedding).presheaf.obj (op ⊤)),
     IsCutOutBy i f
-
-/-- The underlying homeomorphism of an isomorphism of locally ringed spaces. -/
-noncomputable def _root_.AlgebraicGeometry.LocallyRingedSpace.homeoOfIso (e : X ≅ Y) : X ≃ₜ Y :=
-  TopCat.homeoOfIso (LocallyRingedSpace.forgetToTop.mapIso e)
-
-@[simp]
-lemma _root_.AlgebraicGeometry.LocallyRingedSpace.homeoOfIso_apply (e : X ≅ Y) (x : X) :
-    LocallyRingedSpace.homeoOfIso e x = e.hom.base x :=
-  rfl
 
 /-- Cutting out by a family of sections is invariant under precomposition with an isomorphism:
 if `i : X ⟶ Y` cuts out `X` by `f` and `e : X' ≅ X`, then `e.hom ≫ i` cuts out `X'` by `f`. -/
@@ -157,15 +147,6 @@ theorem IsLocalModel.of_iso {M N : LocallyRingedSpace.{u}} (e : N ≅ M) (hM : I
   exact ⟨n, k, U, e.hom ≫ i, f, hcut.comp_iso e⟩
 
 section CAlgebraStructure
-
-/-- The `ℂ`-algebra structure on the structure sheaf of a locally ringed space is recorded as
-a ring homomorphism `α : ℂ →+* Γ(X, 𝒪_X)` into the global sections; the ring of sections over
-every open subset then becomes a `ℂ`-algebra via restriction. In particular `α` induces a
-`ℂ`-algebra structure on every open subspace of `X`, which this definition provides. -/
-noncomputable def _root_.AlgebraicGeometry.LocallyRingedSpace.resAlgMap
-    (X : LocallyRingedSpace.{u}) (α : ℂ →+* X.presheaf.obj (op ⊤)) (U : Opens X) :
-    ℂ →+* (X.restrict U.isOpenEmbedding).presheaf.obj (op ⊤) :=
-  (X.presheaf.map (homOfLE le_top).op).hom.comp α
 
 /-- The canonical `ℂ`-algebra structure on an open subspace of `ℂ^n`: the constant
 holomorphic functions. This is the reference structure which the charts of an analytic space
