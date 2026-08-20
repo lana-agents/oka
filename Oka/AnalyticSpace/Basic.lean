@@ -45,6 +45,8 @@ assumed by most classical treatments should be added as a mixin where needed.
   analytic subspace of `Y` cut out by the global sections `f`.
 - `ComplexAnalytic.IsLocalModel X`: `X` is a local model, i.e. an analytic subspace of an open
   subset of some `ℂ^n`, as a locally ringed space.
+- `ComplexAnalytic.IsCutOutBy.baseLift`: a morphism into `Y` killing the sections which cut out
+  `X` factors uniquely through `X` on underlying topological spaces.
 - `ComplexAnalytic.constantsAlgMap`: the constant functions as the canonical `ℂ`-algebra
   structure on an open subspace of `ℂ^n`.
 - `ComplexAnalytic.IsCLinearHom i α β`: a morphism of locally ringed spaces is `ℂ`-linear
@@ -64,7 +66,7 @@ universe u
 
 namespace ComplexAnalytic
 
-variable {X Y : LocallyRingedSpace.{u}}
+variable {X Y Z : LocallyRingedSpace.{u}}
 
 /-- A closed immersion `i : X ⟶ Y` of locally ringed spaces *cuts out* `X` by the global
 sections `f₁, …, f_k` of `𝒪_Y` if `X` is the common zero locus of the `fⱼ` and `𝒪_X` is the
@@ -139,6 +141,67 @@ lemma IsCutOutBy.c_app_eq_zero {i : X ⟶ Y} {k : ℕ} {f : Fin k → Y.presheaf
   exact ((LocallyRingedSpace.stalkMap_germ_apply i ⊤ x trivial (f j)).symm.trans h0).trans
     (map_zero _).symm
 
+
+/-- **A global section pulling back to zero on `Z` has non-unit germ everywhere on the image of
+`Z`.** No `IsCutOutBy` hypothesis is involved: this is just the fact that a ring homomorphism
+carries units to units, applied to the stalk map of `φ`, whose target is a local ring and hence
+nontrivial.
+
+Together with `IsCutOutBy.range_base` this is what puts the image of `φ` inside the subspace cut
+out by the `f j`; see `IsCutOutBy.mem_range_base`. -/
+theorem Γgerm_mem_maximalIdeal_of_c_app_eq_zero {k : ℕ} {f : Fin k → Y.presheaf.obj (op ⊤)}
+    (φ : Z ⟶ Y) (hφ : ∀ j, φ.c.app (op ⊤) (f j) = 0) (z : Z) (j : Fin k) :
+    Y.presheaf.Γgerm (φ.base z) (f j) ∈
+      IsLocalRing.maximalIdeal (Y.presheaf.stalk (φ.base z)) := by
+  rw [IsLocalRing.mem_maximalIdeal, mem_nonunits_iff]
+  intro hu
+  have h0 : (φ.stalkMap z) (Y.presheaf.Γgerm (φ.base z) (f j)) = 0 :=
+    (LocallyRingedSpace.stalkMap_germ_apply φ ⊤ z trivial (f j)).trans
+      ((congrArg (Z.presheaf.germ ((Opens.map φ.base).obj ⊤) z trivial) (hφ j)).trans (map_zero _))
+  have : IsUnit (0 : Z.presheaf.stalk z) := by rw [← h0]; exact hu.map _
+  exact not_isUnit_zero this
+
+/-- A morphism into `Y` which kills the sections cutting out `X` lands, pointwise, in the image
+of `X`. This is the topological half of the mapping property of `IsCutOutBy`. -/
+theorem IsCutOutBy.mem_range_base {i : X ⟶ Y} {k : ℕ} {f : Fin k → Y.presheaf.obj (op ⊤)}
+    (hcut : IsCutOutBy i f) (φ : Z ⟶ Y) (hφ : ∀ j, φ.c.app (op ⊤) (f j) = 0) (z : Z) :
+    φ.base z ∈ Set.range i.base := by
+  rw [hcut.range_base]
+  exact fun j ↦ Γgerm_mem_maximalIdeal_of_c_app_eq_zero φ hφ z j
+
+/-- **The underlying continuous map of the factorisation.** A morphism `φ : Z ⟶ Y` killing the
+sections which cut out `X` factors, on underlying spaces, uniquely through `X`.
+
+Continuity is `IsInducing.continuous_iff`: `i` is a closed embedding, so a map into `X` is
+continuous as soon as its composite with `i` is, and that composite is `φ` itself
+(`IsCutOutBy.base_baseLift`).
+
+This is only the topological half. Producing an actual morphism of locally ringed spaces
+additionally needs the map on structure sheaves, which the stalkwise conditions of `IsCutOutBy`
+do not by themselves assemble; see the tracking issue. -/
+noncomputable def IsCutOutBy.baseLift {i : X ⟶ Y} {k : ℕ} {f : Fin k → Y.presheaf.obj (op ⊤)}
+    (hcut : IsCutOutBy i f) (φ : Z ⟶ Y) (hφ : ∀ j, φ.c.app (op ⊤) (f j) = 0) : C(Z, X) where
+  toFun z := (hcut.mem_range_base φ hφ z).choose
+  continuous_toFun :=
+    hcut.isClosedEmbedding.isEmbedding.isInducing.continuous_iff.2 (by
+      have h : ⇑i.base ∘ (fun z ↦ (hcut.mem_range_base φ hφ z).choose) = ⇑φ.base :=
+        funext fun z ↦ (hcut.mem_range_base φ hφ z).choose_spec
+      rw [h]
+      exact φ.base.hom.continuous)
+
+@[simp]
+lemma IsCutOutBy.base_baseLift {i : X ⟶ Y} {k : ℕ} {f : Fin k → Y.presheaf.obj (op ⊤)}
+    (hcut : IsCutOutBy i f) (φ : Z ⟶ Y) (hφ : ∀ j, φ.c.app (op ⊤) (f j) = 0) (z : Z) :
+    i.base (hcut.baseLift φ hφ z) = φ.base z :=
+  (hcut.mem_range_base φ hφ z).choose_spec
+
+/-- The topological factorisation is unique, because `i` is a closed embedding and so injective.
+Uniqueness of the factorisation as a morphism of locally ringed spaces will follow from this
+together with `IsCutOutBy.surjective_stalkMap`. -/
+theorem IsCutOutBy.baseLift_unique {i : X ⟶ Y} {k : ℕ} {f : Fin k → Y.presheaf.obj (op ⊤)}
+    (hcut : IsCutOutBy i f) (φ : Z ⟶ Y) (hφ : ∀ j, φ.c.app (op ⊤) (f j) = 0) (g : Z → X)
+    (hg : ∀ z, i.base (g z) = φ.base z) (z : Z) : g z = hcut.baseLift φ hφ z :=
+  hcut.isClosedEmbedding.injective ((hg z).trans (hcut.base_baseLift φ hφ z).symm)
 
 /-- Being a local model is invariant under isomorphism of locally ringed spaces. -/
 theorem IsLocalModel.of_iso {M N : LocallyRingedSpace.{u}} (e : N ≅ M) (hM : IsLocalModel M) :

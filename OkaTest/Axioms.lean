@@ -332,3 +332,26 @@ info: 'complexAffineSpaceToAffineSpace' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms complexAffineSpaceToAffineSpace
+
+/-! ### The topological half of the mapping property of `IsCutOutBy` -/
+
+/--
+info: 'ComplexAnalytic.Γgerm_mem_maximalIdeal_of_c_app_eq_zero' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.Γgerm_mem_maximalIdeal_of_c_app_eq_zero
+
+/--
+info: 'ComplexAnalytic.IsCutOutBy.baseLift' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.IsCutOutBy.baseLift
+
+/--
+info: 'ComplexAnalytic.IsCutOutBy.baseLift_unique' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.IsCutOutBy.baseLift_unique
