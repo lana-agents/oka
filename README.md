@@ -146,6 +146,14 @@ A mirror file need not correspond to a Mathlib file that already exists: it may 
 `Oka/Topology/Sheaves/QuotientPresheaf.lean` is of that kind — `Mathlib/Topology/Sheaves/` has no
 `QuotientPresheaf.lean`.
 
+**The mirror path is a claim about where the results would go upstream, and it has to survive the
+imports they need.** `IsLocalRing.IsCoefficientField` and its basic theory are in
+`Oka/RingTheory/LocalRing/ResidueField/Basic.lean`, but the rigidity statement about it needs
+Krull's intersection theorem, which would add 96 files to that Mathlib file's transitive imports
+— so it lives in `Oka/RingTheory/Filtration.lean` instead, next to Krull. **Split by destination,
+not by subject**: a mirror file whose declarations could not all go where its docstring says
+tells a Mathlib reviewer something untrue.
+
 Not every file outside the mirror tree is analytic-space theory, and not every general file has a
 Mathlib counterpart to mirror. `Oka/Analytic/ParametricCircleIntegral.lean` is general complex
 analysis — the Cauchy formula on a polydisc, and analyticity of a parametrised circle integral —

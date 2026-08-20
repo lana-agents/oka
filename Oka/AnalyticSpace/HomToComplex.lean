@@ -5,6 +5,7 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Oka.AnalyticSpace.HolomorphicMap
 import Oka.AnalyticSpace.Noetherian
+import Oka.RingTheory.Filtration
 import Oka.Topology.Sheaves.Stalks
 
 /-!
