@@ -37,4 +37,19 @@ lake exe mk_all --lib Oka --git --check || exit 1
 # Verify everything builds, and that it builds without warnings.
 lake build --wfail || exit 1
 
+# Verify Mathlib's environment linters are clean. These check the whole environment, not one
+# file: missing docstrings on definitions, names that break the naming convention, `@[simp]`
+# lemmas whose left-hand side is not in `simp` normal form, and about ten more. `lake build`
+# sees none of it, which is how the project reached 2026-08-20 with 19 findings nobody had
+# looked at. Two things worth knowing before editing this line:
+#
+#   * the argument is the library *root module* `Oka`, not `Oka OkaTest`. The test library has
+#     no root module, the same reason `lake exe lint-style Oka OkaTest` fails.
+#   * `#lint` in a scratch file that does nothing but `import Oka` is NOT a substitute: it only
+#     lints the current file's declarations and reports a green on an environment full of
+#     findings.
+#
+# Needs the oleans, so it has to come after the build; given those it takes a few seconds.
+lake exe batteries/runLinter Oka || exit 1
+
 echo "Validation succeeded."
