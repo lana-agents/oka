@@ -74,6 +74,9 @@ what makes `ComplexAnalytic.AnalyticSpace.eval` computable rather than merely we
 - `ComplexAnalytic.AnalyticSpace.evalStalk_eq_zero_iff` and
   `ComplexAnalytic.AnalyticSpace.evalStalk_ne_zero_iff_isUnit`: a germ vanishes at the point
   exactly when it lies in the maximal ideal, and is a unit exactly when it does not.
+- `ComplexAnalytic.AnalyticSpace.evalStalk_eq_iff`: the value of a germ is `c` exactly when the
+  germ differs from the constant `c` by one vanishing at the point. This characterises the value
+  without reference to the construction, and is what a computation of a value should go through.
 - `ComplexAnalytic.eval_ofCutOut`: on an analytic subspace of `V ⊆ ℂ^n`, the value of the
   restriction of a holomorphic function is the value of that function.
 - `ComplexAnalytic.eval_nodeCoord`, `ComplexAnalytic.nodeCoord_mul` and
@@ -245,6 +248,18 @@ lemma evalStalk_stalkAlgMap (z : Z) (c : ℂ) : Z.evalStalk z (Z.stalkAlgMap z c
 lemma evalStalk_eq_zero_iff {z : Z} {a : Z.presheaf.stalk z} :
     Z.evalStalk z a = 0 ↔ a ∈ maximalIdeal (Z.presheaf.stalk z) :=
   (Z.isCoefficientField_stalkAlgMap z).evalHom_eq_zero_iff
+
+/-- **The value of a germ is characterised by the maximal ideal**: `c` is the value of `a` at
+`z` exactly when `a` differs from the constant `c` by a germ vanishing at `z`.
+
+This is the form to use whenever a value has to be *computed*, because it turns an equation
+between complex numbers into a membership in `𝔪_z`, and that transports along any local
+homomorphism — in particular along the stalk maps of a chart, which is how
+`ComplexAnalytic.evalStalk_chart` computes values without touching the chain of transports that
+defines `evalStalk`. -/
+lemma evalStalk_eq_iff {z : Z} (a : Z.presheaf.stalk z) (c : ℂ) :
+    Z.evalStalk z a = c ↔ a - Z.stalkAlgMap z c ∈ maximalIdeal (Z.presheaf.stalk z) :=
+  (Z.isCoefficientField_stalkAlgMap z).evalHom_eq_iff
 
 lemma evalStalk_ne_zero_iff_isUnit {z : Z} {a : Z.presheaf.stalk z} :
     Z.evalStalk z a ≠ 0 ↔ IsUnit a := by
