@@ -30,6 +30,8 @@ mirror tree.
   algebra structures.
 - `AlgebraicGeometry.LocallyRingedSpace.Γ_map_comp_apply`: contravariant functoriality of the
   global sections, in applied form.
+- `AlgebraicGeometry.LocallyRingedSpace.hom_stalk_ext`: two morphisms with the same base map and
+  the same maps on stalks are equal.
 -/
 
 open CategoryTheory TopologicalSpace Opposite
@@ -49,6 +51,21 @@ lemma Γ_map_comp_apply {X Y Z : LocallyRingedSpace.{u}} (f : X ⟶ Y) (g : Y �
     (Γ.map (f ≫ g).op).hom a = (Γ.map f.op).hom ((Γ.map g.op).hom a) := by
   rw [op_comp, Functor.map_comp]
   rfl
+
+/-- **Two morphisms of locally ringed spaces with the same base map and the same maps on stalks
+are equal.**
+
+`AlgebraicGeometry.SheafedSpace.hom_stalk_ext` reflected along
+`AlgebraicGeometry.LocallyRingedSpace.forgetToSheafedSpace`, which is faithful. Mathlib has the
+`SheafedSpace` statement and the `Scheme` one but not this one.
+
+The `TopCat.Presheaf.stalkCongr` in the hypothesis is unavoidable: the two stalk maps have
+sources `Y.presheaf.stalk (f.base x)` and `Y.presheaf.stalk (g.base x)`, which are equal only
+propositionally. `TopCat.Presheaf.stalkCongr_hom_germ` is what evaluates it on a germ. -/
+lemma hom_stalk_ext (f g : X ⟶ Y) (h : f.base = g.base)
+    (h' : ∀ x, f.stalkMap x = (Y.presheaf.stalkCongr (h ▸ rfl)).hom ≫ g.stalkMap x) :
+    f = g :=
+  forgetToSheafedSpace.map_injective (SheafedSpace.hom_stalk_ext _ _ h h')
 
 /-- The underlying homeomorphism of an isomorphism of locally ringed spaces. -/
 noncomputable def homeoOfIso (e : X ≅ Y) : X ≃ₜ Y :=

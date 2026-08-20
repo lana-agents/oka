@@ -44,6 +44,10 @@ and `IsCoefficientField.evalHom` is the value of a germ at the point.
   constants. This is the transport principle that makes the notion usable: local rings are
   usually reached from a ring one understands by a surjection.
 - `IsLocalRing.IsCoefficientField.evalHom_map`: such a surjection commutes with evaluation.
+- `IsLocalRing.IsCoefficientField.isLocalHom_comp_evalHom`: the constant with the value at the
+  point is a *local* endomorphism of `S`. It is the cheapest example of a local homomorphism
+  which is not injective, and it is what shows the hypotheses of
+  `IsLocalRing.IsCoefficientField.ringHom_ext` are independent.
 -/
 
 namespace IsLocalRing
@@ -149,6 +153,20 @@ theorem evalHom_map (h : IsCoefficientField α) {f : S →+* T} (hf : Function.S
     ((h.of_surjective hf hcomp).sub_evalHom_mem _) ?_
   rw [← hcomp (h.evalHom a), ← map_sub]
   exact map_nonunit f _ (h.sub_evalHom_mem a)
+
+/-- **Replacing an element by the constant with its value is a local homomorphism.**
+
+`α ∘ evalHom` is an idempotent endomorphism of `S` fixing every constant, and it is local for a
+soft reason: it sends the maximal ideal to `0`, which is not a unit because a local ring is
+nontrivial. It is the standard witness that the hypothesis "θ and θ' agree on generators of the
+maximal ideal" cannot be dropped from
+`IsLocalRing.IsCoefficientField.ringHom_ext` — this map agrees with the identity on the
+constants and, as soon as `𝔪 ≠ 0`, differs from it. -/
+theorem isLocalHom_comp_evalHom (h : IsCoefficientField α) : IsLocalHom (α.comp h.evalHom) where
+  map_nonunit a ha := by
+    by_contra hna
+    rw [RingHom.comp_apply, h.evalHom_eq_zero_iff.2 (mem_maximalIdeal a |>.2 hna), map_zero] at ha
+    exact not_isUnit_zero ha
 
 /-- **A local homomorphism out of a local ring with a coefficient field is determined modulo
 `𝔪 ^ k` by its values on the constants and on generators of the maximal ideal.**

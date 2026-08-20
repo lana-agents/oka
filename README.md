@@ -83,6 +83,14 @@ coherence statement for arbitrary complex analytic spaces:
   space is not proved: a section of `𝒪_Z` lifts to a holomorphic function only locally, and
   assembling the resulting local morphisms needs a gluing theorem for morphisms of locally ringed
   spaces over an open cover of the source, which neither Mathlib nor this development has.
+* **Rigidity of morphisms to `ℂ^n`.** A morphism of complex analytic spaces `Z ⟶ ℂ^n` is
+  determined by the pullbacks of the `n` coordinate functions, for **every** `Z`
+  (`Oka/AnalyticSpace/HomToComplex.lean`). The content is that a local `ℂ`-algebra homomorphism
+  out of a stalk of `𝒪_{ℂ^n}` into a Noetherian local ring is determined by the images of the
+  coordinate germs, which is Krull's intersection theorem applied to the maximal ideal. Combined
+  with the previous item this gives `Hom(ℂ^n, ℂ) ≃ Γ(ℂ^n, 𝒪)`: a global holomorphic function on
+  `ℂ^n` is the same thing as a morphism of analytic spaces to `ℂ`. The same bijection for a
+  general `Z` is missing only its **existence** half, not this uniqueness half.
 
 * **Comparison with algebraic geometry.** The canonical morphism of locally ringed spaces from
   `ℂ^ι` to `Spec (MvPolynomial ι ℂ)`, with its point map identified as `z ↦ ker (eval z)`, shown

@@ -77,6 +77,8 @@ what makes `ComplexAnalytic.AnalyticSpace.eval` computable rather than merely we
 - `ComplexAnalytic.AnalyticSpace.evalStalk_eq_iff`: the value of a germ is `c` exactly when the
   germ differs from the constant `c` by one vanishing at the point. This characterises the value
   without reference to the construction, and is what a computation of a value should go through.
+- `ComplexAnalytic.eval_complexAffineSpace`: on `ℂ^n` itself the value of a global section is
+  its value as a holomorphic function.
 - `ComplexAnalytic.eval_ofCutOut`: on an analytic subspace of `V ⊆ ℂ^n`, the value of the
   restriction of a holomorphic function is the value of that function.
 - `ComplexAnalytic.eval_nodeCoord`, `ComplexAnalytic.nodeCoord_mul` and
@@ -356,6 +358,41 @@ lemma eval_eq_residueFieldEquiv_evaluation {U : Opens Z} (z : Z) (hz : z ∈ U)
   rfl
 
 end AnalyticSpace
+
+section ComplexAffineSpace
+
+variable {n : ℕ} (y : AnalyticSpace.complexAffineSpace.{u} n)
+  (s : (AnalyticSpace.complexAffineSpace.{u} n).presheaf.obj (op ⊤))
+
+/-- **On `ℂ^n` the value of a global section is its value as a holomorphic function.**
+
+`ComplexAnalytic.AnalyticSpace.evalStalk` is defined through a chart and a chain of transports,
+so it is not computed by unfolding. It is computed from its *characterisation*
+(`ComplexAnalytic.AnalyticSpace.evalStalk_eq_iff`): the value is `c` exactly when the germ
+differs from the constant `c` by a germ vanishing at the point, and on `ℂ^n` a germ vanishes at
+the point exactly when the function does (`ComplexAnalytic.germ_mem_maximalIdeal_iff`).
+
+The two `rw`s below are the only ones the proof can afford. A point of
+`ComplexAnalytic.AnalyticSpace.complexAffineSpace n` and a point of `ULift (Fin n) → ℂ` are the
+same thing at default transparency but not at the `instances` transparency `rw` and `simp` use,
+so every step that crosses that seam has to be a term. -/
+theorem eval_complexAffineSpace :
+    (AnalyticSpace.complexAffineSpace.{u} n).eval (U := ⊤) y trivial s =
+      OkaRing.evalHom (U := (⊤ : Opens (ULift.{u} (Fin n) → ℂ))) (x := y) trivial s := by
+  set c := OkaRing.evalHom (U := (⊤ : Opens (ULift.{u} (Fin n) → ℂ))) (x := y) trivial s with hc
+  refine ((AnalyticSpace.complexAffineSpace.{u} n).evalStalk_eq_iff _ _).2 ?_
+  rw [AnalyticSpace.stalkAlgMap, LocallyRingedSpace.stalkAlgMap_apply,
+    show ((AnalyticSpace.complexAffineSpace.{u} n).presheaf.germ ⊤ y trivial).hom s -
+          ((AnalyticSpace.complexAffineSpace.{u} n).presheaf.germ ⊤ y trivial).hom
+            ((AnalyticSpace.complexAffineSpace.{u} n).algebraMap c) =
+        ((AnalyticSpace.complexAffineSpace.{u} n).presheaf.germ ⊤ y trivial).hom
+          (s - (AnalyticSpace.complexAffineSpace.{u} n).algebraMap c) from (map_sub _ _ _).symm]
+  exact (germ_mem_maximalIdeal_iff (ι := ULift.{u} (Fin n)) (y := y) (U := ⊤) trivial _).2
+    ((map_sub (OkaRing.evalHom (U := (⊤ : Opens (ULift.{u} (Fin n) → ℂ))) (x := y) trivial)
+        s _).trans
+      (sub_eq_zero.2 (hc.trans (OkaRing.evalHom_algebraMap (U := ⊤) trivial c).symm)))
+
+end ComplexAffineSpace
 
 section OfCutOut
 
