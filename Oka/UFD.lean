@@ -47,8 +47,8 @@ makes `f` a unit times the germ of a Weierstrass polynomial `w ∈ R[X]`. The tw
 
 ## References
 
+- [Hans Grauert and Reinhold Remmert, *Analytische Stellenalgebren*][grauert-remmert1971], §I
 - [Hans Grauert and Reinhold Remmert, *Coherent analytic sheaves*][grauert-remmert1984], §A
-- [Hans Grauert and Reinhold Remmert, *Theory of Stein spaces*][grauert-remmert1979], Chapter II
 -/
 
 open Polynomial
@@ -59,7 +59,7 @@ variable {ι : Type*} [Finite ι]
 
 /-- The ring of germs at the origin is an integral domain, being a subring of the ring of
 formal power series. -/
-instance instIsDomain : IsDomain (LocalOkaRing ι) := NoZeroDivisors.to_isDomain _
+instance instIsDomain {ι : Type*} : IsDomain (LocalOkaRing ι) := NoZeroDivisors.to_isDomain _
 
 section Weierstrass
 
@@ -219,7 +219,7 @@ theorem prime_of_irreducible_succ [UniqueFactorizationMonoid (LocalOkaRing (Fin 
     {f : LocalOkaRing (Fin (n + 1))} (hf : Irreducible f) : Prime f := by
   obtain ⟨φ, u, hu, w, hw, hfeq⟩ := exists_congr_localweierstrass_preparation hf.ne_zero
   set E : LocalOkaRing (Fin (n + 1)) ≃* LocalOkaRing (Fin (n + 1)) :=
-    (LocalOkaRing.congr φ).toRingEquiv.toMulEquiv with hE
+    (LocalOkaRing.congr φ).toRingEquiv.toMulEquiv
   have hFirr : Irreducible (LocalOkaRing.congr φ f) := (MulEquiv.irreducible_iff E).mpr hf
   -- the germ of `w` is associated to the transported germ, hence irreducible
   have hass : Associated (LocalOkaRing.fromPolynomial w) (LocalOkaRing.congr φ f) :=

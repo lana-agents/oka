@@ -1369,12 +1369,12 @@ lemma LocallyConvergent.hasFPowerSeriesAt_eval {P : MvPowerSeries ι ℂ}
   obtain ⟨ρ, hρ, h⟩ := hP.hasFPowerSeriesOnBall
   exact h.hasFPowerSeriesAt
 
-set_option linter.unusedFintypeInType false in
 /-- The partial derivatives at the origin of the sum of a locally convergent power series are
 the linear coefficients of the series. -/
-lemma LocallyConvergent.fderiv_eval_zero {P : MvPowerSeries ι ℂ}
-    (hP : P.LocallyConvergent) (j : ι) :
+lemma LocallyConvergent.fderiv_eval_zero {ι : Type*} [Finite ι] [DecidableEq ι]
+    {P : MvPowerSeries ι ℂ} (hP : P.LocallyConvergent) (j : ι) :
     fderiv ℂ P.eval 0 (Pi.single j 1) = coeff (Finsupp.single j 1) P := by
+  haveI : Fintype ι := Fintype.ofFinite ι
   rw [hP.hasFPowerSeriesAt_eval.fderiv_eq]
   have h1 : (continuousMultilinearCurryFin1 ℂ (ι → ℂ) ℂ) (toFPS P 1) (Pi.single j 1) =
       toFPS P 1 (fun _ ↦ Pi.single j 1) := rfl
@@ -3338,14 +3338,14 @@ theorem MvPowerSeries.exists_direction {p : ℕ}
   rw [← heval]
   exact hvh i
 
-set_option linter.unusedFintypeInType false in
 /-- If the partial evaluation of `P` along the `i`-th axis vanishes, so does the represented
 function along that axis, near the origin. -/
-theorem MvPowerSeries.Represents.eventually_axis_eq_zero [DecidableEq ι]
+theorem MvPowerSeries.Represents.eventually_axis_eq_zero {ι : Type*} [Finite ι] [DecidableEq ι]
     {P : MvPowerSeries ι ℂ}
     {F : (ι → ℂ) → ℂ} (hP : P.Represents F) (i : ι) (h : partialEval i P = 0) :
     ∀ᶠ t : ℂ in nhds 0, F (t • Pi.single i 1) = 0 := by
   classical
+  haveI : Fintype ι := Fintype.ofFinite ι
   have htend : Filter.Tendsto (fun t : ℂ ↦ t • Pi.single i (1 : ℂ)) (nhds 0) (nhds 0) := by
     have h1 : Continuous (fun t : ℂ ↦ t • Pi.single i (1 : ℂ)) :=
       continuous_id.smul continuous_const

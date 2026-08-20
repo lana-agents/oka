@@ -35,6 +35,8 @@ The corresponding manoeuvre one level up, for holomorphic functions on an open s
 - `LocalOkaRing.congr_germ` and `LocalOkaRing.congr_toLocalOkaRingHom`: taking germs commutes
   with changing coordinates.
 - `LocalOkaRing.congr_refl` and `LocalOkaRing.congr_trans`: `congr` is functorial.
+- `LocalOkaRing.congrEquiv`: the germ ring depends on the variables only through a bijection of
+  the index type.
 - `LocalOkaRing.exists_congr_isGeneralIn`: finitely many nonzero germs become simultaneously
   general in the last variable after a common linear change of coordinates, and its
   one-germ specialisation `LocalOkaRing.exists_congr_isGeneralIn_of_ne_zero`.
@@ -53,21 +55,11 @@ exhibit a function which both sides sum to, and appeal to uniqueness.
 
 open Filter Topology TopologicalSpace MvPowerSeries
 
-namespace MvPowerSeries
-
-/-- Two functions summed to by the same power series agree near the origin. -/
-lemma Represents.eventuallyEq {ι : Type*} {P : MvPowerSeries ι ℂ} {f g : (ι → ℂ) → ℂ}
-    (hf : P.Represents f) (hg : P.Represents g) : f =ᶠ[𝓝 (0 : ι → ℂ)] g := by
-  filter_upwards [hf, hg] with x hx hx' using hx.unique hx'
-
-end MvPowerSeries
-
 namespace LocalOkaRing
 
 -- The whole file is phrased with `Fintype` rather than `Finite`, matching the `OkaRing` and
 -- `LocalOkaRing` API it builds on; the norm on `ι → ℂ`, and hence every analyticity statement
 -- used below, is only available for a `Fintype` index.
-set_option linter.unusedFintypeInType false
 
 variable {ι κ : Type*} [Fintype ι] [Fintype κ]
 
@@ -75,21 +67,14 @@ variable {ι κ : Type*} [Fintype ι] [Fintype κ]
 
 section Congr
 
-omit [Fintype ι] [Fintype κ] in
-/-- Precomposition with a linear change of coordinates preserves eventual equality at the
-origin, since a linear equivalence is continuous and fixes the origin. -/
-lemma eventuallyEq_comp_symm (φ : (ι → ℂ) ≃L[ℂ] (κ → ℂ)) {f g : (ι → ℂ) → ℂ}
-    (h : f =ᶠ[𝓝 (0 : ι → ℂ)] g) :
-    f ∘ (φ.symm : (κ → ℂ) → (ι → ℂ)) =ᶠ[𝓝 (0 : κ → ℂ)] g ∘ (φ.symm : (κ → ℂ) → (ι → ℂ)) := by
-  have htend : Tendsto (φ.symm : (κ → ℂ) → (ι → ℂ)) (𝓝 0) (𝓝 0) := by
-    simpa using φ.symm.continuous.tendsto (0 : κ → ℂ)
-  exact htend.eventually h
-
 /-- The sum of a locally convergent power series, precomposed with a linear change of
 coordinates, is again the sum of a locally convergent power series. -/
-lemma exists_represents_comp_symm (φ : (ι → ℂ) ≃L[ℂ] (κ → ℂ)) (P : LocalOkaRing ι) :
+lemma exists_represents_comp_symm {ι κ : Type*} [Finite ι] [Finite κ]
+    (φ : (ι → ℂ) ≃L[ℂ] (κ → ℂ)) (P : LocalOkaRing ι) :
     ∃ Q : MvPowerSeries κ ℂ, Q.LocallyConvergent ∧
       Q.Represents ((P : MvPowerSeries ι ℂ).eval ∘ (φ.symm : (κ → ℂ) → (ι → ℂ))) := by
+  haveI : Fintype ι := Fintype.ofFinite ι
+  haveI : Fintype κ := Fintype.ofFinite κ
   refine MvPowerSeries.exists_represents (AnalyticAt.comp ?_ ?_)
   · simpa using P.2.analyticAt
   · exact (φ.symm : (κ → ℂ) →L[ℂ] (ι → ℂ)).analyticAt 0
@@ -110,8 +95,10 @@ lemma congrAux_represents {φ : (ι → ℂ) ≃L[ℂ] (κ → ℂ)} {P : LocalO
     {f : (ι → ℂ) → ℂ} (hf : (P : MvPowerSeries ι ℂ).Represents f) :
     ((congrAux φ P : LocalOkaRing κ) : MvPowerSeries κ ℂ).Represents
       (f ∘ (φ.symm : (κ → ℂ) → (ι → ℂ))) :=
+  -- `φ.symm` is continuous and fixes the origin, so it tends to `0` at `0`
   (congrAux_represents_eval φ P).congr
-    (eventuallyEq_comp_symm φ (P.2.represents_eval.eventuallyEq hf))
+    ((P.2.represents_eval.eventuallyEq hf).comp_tendsto
+      (by simpa using φ.symm.continuous.tendsto (0 : κ → ℂ)))
 
 /-- `congrAux φ P` is determined by summing to `f ∘ φ⁻¹`, for `f` any function that `P` sums
 to; this is the identity theorem for convergent power series. -/
@@ -196,6 +183,13 @@ lemma congr_trans {μ : Type*} [Fintype μ] (φ : (ι → ℂ) ≃L[ℂ] (κ →
     simp
   rw [h]
   exact congr_represents (congr_represents P.2.represents_eval)
+
+/-- Relabelling the variables identifies the germ rings: a bijection `ι ≃ κ` induces the
+`ℂ`-linear change of coordinates permuting the coordinates of `ℂ^ι`, hence a `ℂ`-algebra
+isomorphism of the germ rings at the origin. -/
+noncomputable def congrEquiv (e : ι ≃ κ) :
+    LocalOkaRing ι ≃ₐ[ℂ] LocalOkaRing κ :=
+  congr (LinearEquiv.toContinuousLinearEquiv (LinearEquiv.funCongrLeft ℂ ℂ e.symm))
 
 end Congr
 

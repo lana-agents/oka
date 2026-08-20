@@ -33,11 +33,10 @@ Noetherian `R`-module; consequently the image of `I` in it is finitely generated
 - `LocalOkaRing.isNoetherianRing_fin` and `LocalOkaRing.instIsNoetherianRing`: the Rückert
   basis theorem, `IsNoetherianRing (LocalOkaRing (Fin n))` and, transported along a relabelling
   of the variables, `IsNoetherianRing (LocalOkaRing ι)` for any finite `ι`.
-- `LocalOkaRing.congrEquiv`: the germ ring depends on the variables only through a bijection of
-  the index type.
 
 ## References
 
+- [Hans Grauert and Reinhold Remmert, *Analytische Stellenalgebren*][grauert-remmert1971], §I
 - [Hans Grauert and Reinhold Remmert, *Coherent analytic sheaves*][grauert-remmert1984], §A
 - [Hans Grauert and Reinhold Remmert, *Theory of Stein spaces*][grauert-remmert1979], Chapter II
 -/
@@ -62,17 +61,7 @@ namespace LocalOkaRing
 
 section IsEmpty
 
-variable {ι : Type*} [Finite ι] [IsEmpty ι]
-
-/-- A germ in no variables is its own constant term, so it is a unit as soon as it is nonzero:
-`LocalOkaRing ι` is a field for `ι` empty. -/
-theorem isUnit_iff_ne_zero {P : LocalOkaRing ι} : IsUnit P ↔ P ≠ 0 := by
-  rw [isUnit_iff, constantCoeff_apply, ne_eq, ne_eq, not_iff_not]
-  refine ⟨fun h ↦ ?_, fun h ↦ by rw [h]; simp⟩
-  refine LocalOkaRing.ext (MvPowerSeries.ext fun d ↦ ?_)
-  have hd : d = 0 := by ext i; exact (IsEmpty.false i).elim
-  subst hd
-  simp [MvPowerSeries.coeff_zero_eq_constantCoeff_apply, h]
+variable {ι : Type*} [IsEmpty ι]
 
 /-- The ring of germs in no variables is Noetherian, being a field. -/
 theorem isNoetherianRing_of_isEmpty : IsNoetherianRing (LocalOkaRing ι) := by
@@ -169,13 +158,6 @@ theorem isNoetherianRing_fin : ∀ n : ℕ, IsNoetherianRing (LocalOkaRing (Fin 
         mul_assoc, hv, mul_one]
     rw [hgv]
     exact Ideal.mul_mem_right _ _ (Ideal.mem_map_of_mem _ hfI)
-
-/-- Relabelling the variables identifies the germ rings: a bijection `ι ≃ κ` induces the
-`ℂ`-linear change of coordinates permuting the coordinates of `ℂ^ι`, hence a `ℂ`-algebra
-isomorphism of the germ rings at the origin. -/
-noncomputable def congrEquiv {ι κ : Type*} [Fintype ι] [Fintype κ] (e : ι ≃ κ) :
-    LocalOkaRing ι ≃ₐ[ℂ] LocalOkaRing κ :=
-  congr (LinearEquiv.toContinuousLinearEquiv (LinearEquiv.funCongrLeft ℂ ℂ e.symm))
 
 /-- **The Rückert basis theorem**: the ring of germs at the origin of holomorphic functions in
 finitely many complex variables is Noetherian. Together with `LocalOkaRing.instIsLocalRing` it

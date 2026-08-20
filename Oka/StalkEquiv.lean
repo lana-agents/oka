@@ -62,12 +62,16 @@ lemma okaStalkHom_germ {y : ι → ℂ} {U : Opens (ι → ℂ)} (hy : y ∈ U) 
   exact ConcreteCategory.congr_hom (colimit.ι_desc (okaStalkCocone y)
     (op (⟨U, hy⟩ : OpenNhds (X := TopCat.of (ι → ℂ)) y))) f
 
+/-- Every germ at `y` of the structure sheaf is the germ of a holomorphic function on some
+neighbourhood of `y`, so the Taylor expansion map is surjective. -/
 lemma okaStalkHom_surjective (y : ι → ℂ) :
     Function.Surjective (okaStalkHom y).hom := by
   intro P
   obtain ⟨W, hy, f, hf⟩ := LocalOkaRing.exists_okaRing_germ P y
   exact ⟨(okaCommPresheaf ι).germ W y hy f, by rw [okaStalkHom_germ hy f, hf]⟩
 
+/-- A holomorphic function whose Taylor series at `y` vanishes vanishes on a neighbourhood of
+`y`, so the Taylor expansion map is injective: this is the identity theorem. -/
 lemma okaStalkHom_injective (y : ι → ℂ) :
     Function.Injective (okaStalkHom y).hom := by
   rw [injective_iff_map_eq_zero]
@@ -91,9 +95,13 @@ lemma okaStalkEquiv_germ {y : ι → ℂ} {U : Opens (ι → ℂ)} (hy : y ∈ U
     okaStalkEquiv y ((okaCommPresheaf ι).germ U y hy f) = OkaRing.germ hy f :=
   okaStalkHom_germ hy f
 
+-- Deliberately not `@[simp]`: this lemma's left-hand side is a strict instance of
+-- `okaStalkEquiv_germ`'s, so it would be shadowed by it. Note that *neither* fires at present,
+-- for an unrelated and more general reason: `simp` cannot match any `TopCat.Presheaf.germ`
+-- lemma over a concrete `TopCat.of _` space, not even Mathlib's own. Use `rw`, or pass the
+-- index type — `simp [okaStalkEquiv_germ (ι := ι)]` does fire. See issue #583.
 /-- The stalk isomorphism is `ℂ`-linear: it sends the germ of a constant function to the
 corresponding constant power series. -/
-@[simp]
 lemma okaStalkEquiv_germ_algebraMap {y : ι → ℂ} {U : Opens (ι → ℂ)} (hy : y ∈ U) (c : ℂ) :
     okaStalkEquiv y ((okaCommPresheaf ι).germ U y hy (algebraMap ℂ (OkaRing U) c)) =
       algebraMap ℂ (LocalOkaRing ι) c := by
@@ -107,6 +115,7 @@ lemma constantCoeff_okaStalkEquiv_germ {y : ι → ℂ} {U : Opens (ι → ℂ)}
       OkaRing.evalHom hy f := by
   rw [okaStalkEquiv_germ hy, OkaRing.constantCoeff_germ]
 
+/-- Being a unit is detected by the stalk isomorphism, it being an isomorphism. -/
 lemma isUnit_okaStalkEquiv_iff {y : ι → ℂ} (a : (okaCommPresheaf ι).stalk y) :
     IsUnit (okaStalkEquiv y a) ↔ IsUnit a :=
   ⟨fun h ↦ by simpa using h.map (okaStalkEquiv y).symm, fun h ↦ h.map (okaStalkEquiv y)⟩

@@ -164,11 +164,6 @@ theorem exists_eq_sum_X_mul [Fintype ι] [Nonempty ι]
 
 /-! ### The formal picture -/
 
-section Formal
-
-variable [Fintype ι]
-
-omit [Fintype ι] in
 lemma mem_maximalIdeal_iff {P : MvPowerSeries ι ℂ} :
     P ∈ IsLocalRing.maximalIdeal (MvPowerSeries ι ℂ) ↔ constantCoeff P = 0 := by
   rw [IsLocalRing.mem_maximalIdeal, mem_nonunits_iff, isUnit_iff_constantCoeff,
@@ -177,7 +172,7 @@ lemma mem_maximalIdeal_iff {P : MvPowerSeries ι ℂ} :
 /-- The `k`-th power of the maximal ideal of `MvPowerSeries ι ℂ` consists of the series whose
 coefficients in total degree less than `k` vanish. This is the formal counterpart of
 `LocalOkaRing.mem_maximalIdeal_pow_iff`. -/
-theorem mem_maximalIdeal_pow_iff {k : ℕ} {P : MvPowerSeries ι ℂ} :
+theorem mem_maximalIdeal_pow_iff [Fintype ι] {k : ℕ} {P : MvPowerSeries ι ℂ} :
     P ∈ IsLocalRing.maximalIdeal (MvPowerSeries ι ℂ) ^ k ↔
       ∀ d : ι →₀ ℕ, ∑ i, d i < k → coeff d P = 0 := by
   classical
@@ -222,8 +217,6 @@ theorem mem_maximalIdeal_pow_iff {k : ℕ} {P : MvPowerSeries ι ℂ} :
         refine Submodule.sum_mem _ fun i _ ↦ Ideal.mul_mem_mul ?_ ?_
         · exact mem_maximalIdeal_iff.mpr (by simp)
         · exact ih.mpr fun e he ↦ hQvan k hP i e he
-
-end Formal
 
 /-- A power series with only finitely many nonzero coefficients converges everywhere. -/
 lemma locallyConvergent_of_coeff_eq_zero {P : MvPowerSeries ι ℂ} {s : Finset (ι →₀ ℕ)}
@@ -392,7 +385,11 @@ theorem mem_maximalIdeal_pow_iff {k : ℕ} {P : LocalOkaRing ι} :
 /-! ### The truncations agree with those of the formal power series -/
 
 /-- The truncation of a formal power series to total degree less than `k`. It has finite
-support, so it is a germ. -/
+support, so it is a germ.
+
+This is not Mathlib's `MvPowerSeries.trunc`, which truncates below a fixed *multidegree*
+`n : σ →₀ ℕ` and lands in `MvPolynomial`; the bound here is on the *total* degree, which is what
+the filtration by powers of the maximal ideal uses. -/
 noncomputable def trunc (k : ℕ) (F : MvPowerSeries ι ℂ) : LocalOkaRing ι :=
   ⟨fun d ↦ if ∑ i, d i < k then MvPowerSeries.coeff d F else 0, by
     classical
