@@ -6,12 +6,17 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 import Mathlib.Topology.Sheaves.Stalks
 
 /-!
-# Naturality of the map on stalks induced by a pushforward
+# Two missing lemmas about stalks
 
 `TopCat.Presheaf.stalkPushforward C g F x : (g _* F).stalk (g x) ⟶ F.stalk x` is natural in `F`.
 Mathlib has the definition and its compatibility with germs, identities and composites of `g`,
 but not this naturality square, which is what one needs to move a morphism of presheaves on the
 source space through a stalk computation on the target space.
+
+`TopCat.Presheaf.stalkCongr F e : F.stalk x ≅ F.stalk y` for inseparable `x` and `y` likewise
+has its compatibility with germs in Mathlib only as an equality of morphisms, for
+`stalkSpecializes`; `TopCat.Presheaf.stalkCongr_hom_germ` is the applied form, which is what one
+needs after `AlgebraicGeometry.SheafedSpace.hom_stalk_ext` puts such a transport into a goal.
 
 There is no analytic content here, so this file is a candidate for upstreaming to Mathlib; it
 lives in the `Oka/Topology/` mirror of the Mathlib directory tree for that reason.
@@ -19,6 +24,7 @@ lives in the `Oka/Topology/` mirror of the Mathlib directory tree for that reaso
 ## Main results
 
 - `TopCat.Presheaf.stalkPushforward_naturality`
+- `TopCat.Presheaf.stalkCongr_hom_germ`
 -/
 
 open CategoryTheory Limits TopologicalSpace Opposite
@@ -43,5 +49,28 @@ lemma stalkPushforward_naturality {X Y : TopCat.{v}} (g : X ⟶ Y) {F G : X.Pres
   simp only [pushforward_map_app, stalkFunctor_obj, stalkPushforward_germ,
     stalkPushforward_germ_assoc]
   exact (stalkFunctor_map_germ (C := C) ((Opens.map g).obj U) x hU T).symm
+
+section Concrete
+
+variable {FC : C → C → Type*} {CC : C → Type v} [∀ X Y, FunLike (FC X Y) (CC X) (CC Y)]
+variable [ConcreteCategory.{v} C FC]
+
+/-- **Transporting a germ between the stalks at two inseparable points is the germ at the other
+point.**
+
+Mathlib has `TopCat.Presheaf.germ_stalkSpecializes` as an equality of morphisms; this is the
+applied form for the isomorphism `TopCat.Presheaf.stalkCongr`, which is what one needs after
+`AlgebraicGeometry.SheafedSpace.hom_stalk_ext` puts a `stalkCongr` transport into the goal.
+
+Note that the membership `hy` is an argument rather than derived from `hx`: any proof will do,
+and taking it as given is what lets the caller write the germ at `y` in whatever form the
+surrounding statement already produced. -/
+lemma stalkCongr_hom_germ {X : TopCat.{v}} (F : X.Presheaf C) {x y : X} (e : Inseparable x y)
+    (U : Opens X) (hx : x ∈ U) (hy : y ∈ U) (s : ToType (F.obj (op U))) :
+    ConcreteCategory.hom (F.stalkCongr e).hom (F.germ U x hx s) = F.germ U y hy s :=
+  (ConcreteCategory.comp_apply (F.germ U x hx) (F.stalkSpecializes e.ge) s).symm.trans
+    (ConcreteCategory.congr_hom (F.germ_stalkSpecializes (h := e.ge) (U := U) (hy := hx)) s)
+
+end Concrete
 
 end TopCat.Presheaf

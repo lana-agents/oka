@@ -147,3 +147,38 @@ info: 'ComplexAnalytic.okaStalk_ringHom_ext' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.okaStalk_ringHom_ext
+
+/-! ### A morphism to `ℂ^n` is determined by the pullbacks of the coordinates
+
+`AlgebraicGeometry.LocallyRingedSpace.hom_stalk_ext` is general locally-ringed-space material
+with no row of its own in the topic table of `OkaTest/Axioms.lean`; it sits here because the
+only thing that uses it is the rigidity statement below. If a reviewer prefers it in
+`OkaTest/Axioms/Sheaves.lean` that is a two-line change. -/
+
+/--
+info: 'ComplexAnalytic.eval_complexAffineSpace' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.eval_complexAffineSpace
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.hom_stalk_ext' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.hom_stalk_ext
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hom_ext_complexAffineSpace' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hom_ext_complexAffineSpace
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.homComplexLineEquiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.homComplexLineEquiv

@@ -3,27 +3,43 @@ Copyright (c) 2026 Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten. All righ
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
-import Oka.AnalyticSpace.Evaluation
+import Oka.AnalyticSpace.HolomorphicMap
+import Oka.AnalyticSpace.Noetherian
+import Oka.Topology.Sheaves.Stalks
 
 /-!
-# A germ on `ℂ^ι` is determined by where the coordinates go
+# A morphism to `ℂ^n` is determined by the pullbacks of the coordinates
 
 Taxis #653 asks for two things: that evaluation is natural in the space, and that a morphism of
-analytic spaces `Z ⟶ ℂ^n` is determined by the pullbacks of the coordinate functions. The first
-is done, in `Oka/AnalyticSpace/Evaluation.lean`
-(`ComplexAnalytic.AnalyticSpace.evalStalk_stalkMap` and `eval_c_app`). This file is **the
-algebraic heart of the second, and not the second itself**; see `## What this file does not do`.
+complex analytic spaces `Z ⟶ ℂ^n` is determined by the pullbacks of the coordinate functions.
+The first is `ComplexAnalytic.AnalyticSpace.evalStalk_stalkMap` and
+`ComplexAnalytic.AnalyticSpace.eval_c_app`, in `Oka/AnalyticSpace/Evaluation.lean`. This file
+does the second, `ComplexAnalytic.AnalyticSpace.hom_ext_complexAffineSpace`.
 
-What it proves is that a local `ℂ`-algebra homomorphism out of a stalk of `𝒪_{ℂ^ι}`, into a
-Noetherian local ring, is determined by the images of the germs of the coordinate functions —
-`ComplexAnalytic.okaStalk_ringHom_ext`. That is the statement the injectivity of
-`Hom(Z, ℂ^n) → Γ(Z, 𝒪_Z)^n` reduces to once the morphisms are compared on stalks.
+Together with `ComplexAnalytic.AnalyticSpace.exists_hom_complexLine` of
+`Oka/AnalyticSpace/HolomorphicMap.lean`, which produces a morphism from a section, this gives
+`Hom(ℂ^n, ℂ) ≃ Γ(ℂ^n, 𝒪)` — `ComplexAnalytic.AnalyticSpace.homComplexLineEquiv`. That is the
+statement of taxis #628 for `Z = ℂ^n`; the general `Z` needs the *existence* half for a general
+`Z`, which is what taxis #654 and #657 are about, not the uniqueness half proved here, which is
+already general in `Z`.
 
-## Why it is true, and where each hypothesis is used
+## The argument, and where each hypothesis is used
 
-The general fact is `IsLocalRing.IsCoefficientField.ringHom_ext`, in the mirror tree: for `S`
-local with a coefficient field `α : K →+* S` and a **finitely generated** maximal ideal, and `A`
-local **Noetherian**, two homomorphisms `S → A` with `θ` local agreeing on the constants and on
+Two morphisms with the same pullbacks agree, in three steps.
+
+**The base maps agree.** By `ComplexAnalytic.AnalyticSpace.eval_c_app` the `j`-th coordinate of
+`φ.base z` is the value at `z` of the pullback of the `j`-th coordinate function, and on `ℂ^n`
+the value of a section is its value as a holomorphic function
+(`ComplexAnalytic.eval_complexAffineSpace`). So the two base maps are computed by the same
+formula from the same data.
+
+**The stalk maps agree.** This is the content, and it is
+`ComplexAnalytic.okaStalk_ringHom_ext`: a local `ℂ`-algebra homomorphism out of a stalk of
+`𝒪_{ℂ^ι}` into a Noetherian local ring is determined by the images of the germs of the
+coordinate functions. The general fact behind it is
+`IsLocalRing.IsCoefficientField.ringHom_ext`, in the mirror tree: for `S` local with a
+coefficient field `α : K →+* S` and a **finitely generated** maximal ideal, and `A` local
+**Noetherian**, two homomorphisms `S → A` with `θ` local agreeing on the constants and on
 generators of `𝔪_S` are equal. The proof is an induction: an element is a constant plus an
 `S`-combination of the generators, so `θ x - θ' x` is a sum of terms `θ (v i) * (θ q - θ' q)`
 with the second factor in `𝔪_A ^ k` by induction and the first in `𝔪_A` because `θ` is local.
@@ -40,30 +56,26 @@ coordinate functions normalised to vanish at the point. That is
 needs one computation which was not in the development —
 `OkaRing.germ_ofMvPolynomial_X`, that the Taylor series of `zᵢ` at `y` is `yᵢ + Xᵢ`.
 
-## What this file does not do
-
-**It does not prove that a morphism `Z ⟶ ℂ^n` is determined by the pullbacks of the
-coordinates.** Of the four steps of taxis #653's route, this file and
-`Oka/AnalyticSpace/Evaluation.lean` do steps 1, 3 and 4; step 2 is missing. Precisely, what
-remains is to go from "the stalk maps of `φ` and `ψ` at every point agree" to `φ = ψ`, which is
-`AlgebraicGeometry.SheafedSpace.hom_stalk_ext` (`Mathlib/Geometry/RingedSpace/SheafedSpace.lean`)
-transported through `LocallyRingedSpace.forgetToSheafedSpace` and
-`ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace`, both faithful. Its statement carries
-a `TopCat.Presheaf.stalkCongr` transport along the equality of base maps, and it is that
-transport, not the algebra, that is left.
-
-The base maps do agree, and that half is available: by
-`ComplexAnalytic.AnalyticSpace.eval_c_app` the `j`-th coordinate of `φ.base z` is the value at
-`z` of the pullback of the `j`-th coordinate function, so equal pullbacks give equal base maps.
+**Equal base maps and equal stalk maps give equal morphisms.** That is
+`AlgebraicGeometry.LocallyRingedSpace.hom_stalk_ext`, reflected along the faithful
+`ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace`. Its hypothesis carries a
+`TopCat.Presheaf.stalkCongr` transport, because the two stalk maps have sources
+`𝒪_{ℂ^n, φ z}` and `𝒪_{ℂ^n, ψ z}` — equal points, but only propositionally;
+`TopCat.Presheaf.stalkCongr_hom_germ` is what evaluates that transport on a germ.
 
 ## Main results
 
 - `OkaRing.germ_ofMvPolynomial_X`: the Taylor series of the `i`-th coordinate function at `y` is
   `y i + Xᵢ`.
 - `ComplexAnalytic.maximalIdeal_stalk_eq_span_stalkCoord`: the maximal ideal of a stalk of
-  `𝒪_{ℂ^ι}` is generated by the normalised coordinate germs.
-- `ComplexAnalytic.okaStalk_ringHom_ext`: **a local `ℂ`-algebra map out of such a stalk into a
-  Noetherian local ring is determined by the images of the coordinate germs.**
+  `𝒪_{ℂ^ι}` is generated by the normalised coordinate germs, which are nonzero
+  (`ComplexAnalytic.stalkCoord_ne_zero`).
+- `ComplexAnalytic.okaStalk_ringHom_ext`: a local `ℂ`-algebra map out of such a stalk into a
+  Noetherian local ring is determined by the images of the coordinate germs.
+- `ComplexAnalytic.AnalyticSpace.hom_ext_complexAffineSpace`: **a morphism of complex analytic
+  spaces `Z ⟶ ℂ^n` is determined by the pullbacks of the coordinate functions**, and
+  `ComplexAnalytic.AnalyticSpace.hom_ext_complexLine` for `n = 1`.
+- `ComplexAnalytic.AnalyticSpace.homComplexLineEquiv`: `Hom(ℂ^n, ℂ) ≃ Γ(ℂ^n, 𝒪)`.
 
 ## References
 
@@ -156,5 +168,101 @@ theorem okaStalk_ringHom_ext {y : ι → ℂ} {A : Type*} [CommRing A] [IsLocalR
   (isCoefficientField_germ_algebraMap (U := ⊤) (y := y) trivial).ringHom_ext
     (maximalIdeal_stalk_eq_span_stalkCoord y) hconst fun i ↦ by
       rw [stalkCoord, map_sub, map_sub, hconst, hcoord]
+
+/-- **A normalised coordinate germ is nonzero.**
+
+Without this `ComplexAnalytic.maximalIdeal_stalk_eq_span_stalkCoord` is not known to be a
+statement about a nonzero ideal: `ComplexAnalytic.stalkCoord_mem_maximalIdeal` rules out the
+generators being everything, and this rules out their being nothing. -/
+theorem stalkCoord_ne_zero (y : ι → ℂ) (i : ι) : stalkCoord y i ≠ 0 := fun h ↦
+  LocalOkaRing.coord_ne_zero i (by rw [← okaStalkEquiv_stalkCoord y i, h, map_zero])
+
+namespace AnalyticSpace
+
+variable {Z : AnalyticSpace.{u}} {n : ℕ}
+
+/-- The `j`-th coordinate function of `ℂ^n` takes at `y` the value `y j`. -/
+theorem eval_coord (y : AnalyticSpace.complexAffineSpace.{u} n) (j : ULift.{u} (Fin n)) :
+    (AnalyticSpace.complexAffineSpace.{u} n).eval (U := ⊤) y trivial (coord j) = y j :=
+  (eval_complexAffineSpace y _).trans (evalHom_coord j)
+
+/-- **Step one: equal pullbacks of the coordinates force equal base maps.**
+
+The `j`-th coordinate of `φ.base z` is the value at `z` of the pullback of the `j`-th coordinate
+function, by `ComplexAnalytic.AnalyticSpace.eval_c_app` and
+`ComplexAnalytic.AnalyticSpace.eval_coord`. This is the sense in which naturality of evaluation
+makes the base map of a morphism computable. -/
+theorem base_eq_of_Γ_map_eq (φ ψ : Z ⟶ AnalyticSpace.complexAffineSpace.{u} n)
+    (h : ∀ j : ULift.{u} (Fin n), (LocallyRingedSpace.Γ.map φ.toLRSHom.op).hom (coord j) =
+      (LocallyRingedSpace.Γ.map ψ.toLRSHom.op).hom (coord j))
+    (z : Z) : φ.toLRSHom.base z = ψ.toLRSHom.base z := by
+  funext j
+  have hφ := eval_c_app φ.toLRSHom φ.isCLinear (U := ⊤) z trivial (coord j)
+  have hψ := eval_c_app ψ.toLRSHom ψ.isCLinear (U := ⊤) z trivial (coord j)
+  rw [eval_coord] at hφ hψ
+  rw [← hφ, ← hψ]
+  exact congrArg _ (h j)
+
+/-- **A morphism of complex analytic spaces `Z ⟶ ℂ^n` is determined by the pullbacks of the
+coordinate functions.**
+
+This is the injectivity half of `Hom(Z, ℂ^n) → Γ(Z, 𝒪_Z)^n`, and it holds for every `Z`. See the
+module docstring for the three steps and for where each hypothesis of
+`ComplexAnalytic.okaStalk_ringHom_ext` is used. -/
+theorem hom_ext_complexAffineSpace (φ ψ : Z ⟶ AnalyticSpace.complexAffineSpace.{u} n)
+    (h : ∀ j : ULift.{u} (Fin n), (LocallyRingedSpace.Γ.map φ.toLRSHom.op).hom (coord j) =
+      (LocallyRingedSpace.Γ.map ψ.toLRSHom.op).hom (coord j)) :
+    φ = ψ := by
+  refine AnalyticSpace.forgetToLocallyRingedSpace.map_injective ?_
+  have hbase : φ.toLRSHom.base = ψ.toLRSHom.base :=
+    ConcreteCategory.hom_ext _ _ (base_eq_of_Γ_map_eq φ ψ h)
+  refine LocallyRingedSpace.hom_stalk_ext _ _ hbase fun z ↦ ?_
+  have hins : Inseparable (φ.toLRSHom.base z) (ψ.toLRSHom.base z) := by
+    rw [base_eq_of_Γ_map_eq φ ψ h z]
+  haveI hloc : IsLocalHom (φ.toLRSHom.stalkMap z).hom := φ.toLRSHom.prop z
+  haveI hnoeth : IsNoetherianRing (Z.presheaf.stalk z) := instIsNoetherianRingStalk Z z
+  have key : (φ.toLRSHom.stalkMap z).hom = (ψ.toLRSHom.stalkMap z).hom.comp
+      (((AnalyticSpace.complexAffineSpace.{u} n).presheaf.stalkCongr hins).hom).hom := by
+    refine @okaStalk_ringHom_ext (ULift.{u} (Fin n)) _ (φ.toLRSHom.base z) _ _ _ hnoeth _ _ hloc
+      (fun c ↦ ?_) (fun j ↦ ?_)
+    · refine Eq.trans ((φ.isCLinear.stalkAlgMap z c).trans (ψ.isCLinear.stalkAlgMap z c).symm)
+        (congrArg (ψ.toLRSHom.stalkMap z).hom
+          (TopCat.Presheaf.stalkCongr_hom_germ (AnalyticSpace.complexAffineSpace.{u} n).presheaf
+            hins ⊤ trivial trivial
+            ((AnalyticSpace.complexAffineSpace.{u} n).algebraMap c)).symm)
+    · refine Eq.trans ?_ (congrArg (ψ.toLRSHom.stalkMap z).hom
+        (TopCat.Presheaf.stalkCongr_hom_germ (AnalyticSpace.complexAffineSpace.{u} n).presheaf
+          hins ⊤ trivial trivial (coord j)).symm)
+      exact (LocallyRingedSpace.stalkMap_germ_apply φ.toLRSHom ⊤ z trivial _).trans
+        ((congrArg (Z.presheaf.germ ((Opens.map φ.toLRSHom.base).obj ⊤) z trivial) (h j)).trans
+          (LocallyRingedSpace.stalkMap_germ_apply ψ.toLRSHom ⊤ z trivial _).symm)
+  exact ConcreteCategory.hom_ext _ _ fun a ↦ DFunLike.congr_fun key a
+
+/-- **A morphism of complex analytic spaces `Z ⟶ ℂ` is determined by the pullback of the
+coordinate function**, which is taxis #653(b) as asked. -/
+theorem hom_ext_complexLine (φ ψ : Z ⟶ AnalyticSpace.complexAffineSpace.{u} 1)
+    (h : (LocallyRingedSpace.Γ.map φ.toLRSHom.op).hom (coord (ULift.up 0)) =
+      (LocallyRingedSpace.Γ.map ψ.toLRSHom.op).hom (coord (ULift.up 0))) :
+    φ = ψ :=
+  hom_ext_complexAffineSpace φ ψ fun j ↦ by
+    obtain rfl : j = ULift.up 0 := Subsingleton.elim _ _
+    exact h
+
+/-- **`Hom(ℂ^n, ℂ) ≃ Γ(ℂ^n, 𝒪)`**: a morphism of complex analytic spaces from `ℂ^n` to `ℂ` is
+the same thing as a global holomorphic function on `ℂ^n`, the correspondence being the pullback
+of the coordinate.
+
+This is taxis #628 for `Z = ℂ^n`. Injectivity is
+`ComplexAnalytic.AnalyticSpace.hom_ext_complexLine` and holds for every `Z`; surjectivity is
+`ComplexAnalytic.AnalyticSpace.exists_hom_complexLine` and is what does *not* yet hold for every
+`Z`, a section of `𝒪_Z` lifting to a holomorphic function only locally. -/
+noncomputable def homComplexLineEquiv (n : ℕ) :
+    (AnalyticSpace.complexAffineSpace.{u} n ⟶ AnalyticSpace.complexAffineSpace.{u} 1) ≃
+      (AnalyticSpace.complexAffineSpace.{u} n).presheaf.obj (op ⊤) :=
+  Equiv.ofBijective
+    (fun φ ↦ (LocallyRingedSpace.Γ.map φ.toLRSHom.op).hom (coord (ULift.up 0)))
+    ⟨fun _ _ h ↦ hom_ext_complexLine _ _ h, fun g ↦ exists_hom_complexLine g⟩
+
+end AnalyticSpace
 
 end ComplexAnalytic
