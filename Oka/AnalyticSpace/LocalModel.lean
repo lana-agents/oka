@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Oka.AnalyticSpace.Coherent
-import Oka.Geometry.RingedSpace.CutOut
 import Oka.Geometry.RingedSpace.ZeroLocus
 import Oka.Polynomial
 import Oka.StalkEquiv
@@ -58,8 +57,6 @@ restriction are the stalks of the ambient space
 
 ## Main results
 
-- `ComplexAnalytic.IsCutOutBy.pushforwardIso`: `i_* 𝒪_X ≅ 𝒪_Y ⧸ (f₁, …, f_k)` for a closed
-  immersion cutting out the `f j` — the converse of `isCutOutBy_zeroLocusSubspaceι`.
 - `ComplexAnalytic.isCLinearHom_ofRestrict`: the inclusion of an open subspace is `ℂ`-linear
   for the restricted `ℂ`-algebra structure.
 - `ComplexAnalytic.isLocalModel_zeroLocus`: **the zero locus of finitely many holomorphic
@@ -120,47 +117,12 @@ theorem isCutOutBy_zeroLocusSubspaceι {k : ℕ} (g : Fin k → Y.presheaf.obj (
 
 end AlgebraicGeometry.LocallyRingedSpace
 
+-- `ComplexAnalytic.IsCutOutBy.pushforwardIso`, the converse of
+-- `isCutOutBy_zeroLocusSubspaceι`, used to live here. It moved to
+-- `Oka/AnalyticSpace/Factorisation.lean`, which is its only consumer, and this file dropped the
+-- `Oka.Geometry.RingedSpace.CutOut` import with it.
+
 namespace ComplexAnalytic
-
-section Quotient
-
-variable {X Y : LocallyRingedSpace.{u}} {i : X ⟶ Y} {k : ℕ}
-  {f : Fin k → Y.presheaf.obj (op ⊤)}
-
-/-- The image of a closed immersion cutting out the `f j` is their zero locus, in the spelling
-`Oka/Geometry/RingedSpace/ZeroLocus.lean` uses. `ComplexAnalytic.IsCutOutBy.range_base` states
-the same set by hand, because `IsCutOutBy` is stated without reference to the mirror tree. -/
-theorem IsCutOutBy.range_base_eq_zeroLocus (hcut : IsCutOutBy i f) :
-    Set.range i.base = Y.zeroLocus f :=
-  hcut.range_base.trans (Set.ext fun _ ↦ (Y.mem_zeroLocus_iff f).symm)
-
-/-- **The structure sheaf of a subspace cut out by global sections is the quotient sheaf**:
-`i_* 𝒪_X ≅ 𝒪_Y ⧸ (f₁, …, f_k)`.
-
-This is the converse of `AlgebraicGeometry.LocallyRingedSpace.isCutOutBy_zeroLocusSubspaceι`,
-and it is what makes `IsCutOutBy` a characterisation rather than a list of properties: a closed
-immersion satisfying the four conditions has the same structure sheaf, after pushing forward,
-as the one `Oka/Geometry/RingedSpace/ZeroLocus.lean` builds.
-
-It does **not** by itself give the mapping property, nor uniqueness of `X` up to isomorphism:
-descending an isomorphism of the pushforwards to an isomorphism upstairs needs `i_*` to be
-fully faithful, which is not available. See the module docstring of
-`Oka/Geometry/RingedSpace/CutOut.lean`. -/
-def IsCutOutBy.pushforwardIso (hcut : IsCutOutBy i f) :
-    Y.quotientSheafify f ≅ i.base _* X.presheaf :=
-  LocallyRingedSpace.quotientSheafifyIsoPushforward i f hcut.c_app_eq_zero
-    hcut.isClosedEmbedding.isInducing hcut.surjective_stalkMap hcut.ker_stalkMap
-    hcut.isClosedEmbedding.isClosed_range hcut.range_base_eq_zeroLocus
-
-/-- The underlying morphism of `ComplexAnalytic.IsCutOutBy.pushforwardIso` is the comparison
-morphism, so the isomorphism really is induced by `i.c`. -/
-@[simp]
-lemma IsCutOutBy.pushforwardIso_hom (hcut : IsCutOutBy i f) :
-    hcut.pushforwardIso.hom =
-      LocallyRingedSpace.quotientSheafifyToPushforward i f hcut.c_app_eq_zero :=
-  rfl
-
-end Quotient
 
 section CLinear
 
