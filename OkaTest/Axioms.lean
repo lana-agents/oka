@@ -567,3 +567,21 @@ info: 'ComplexAnalytic.nodeCoord_ne_zero' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.nodeCoord_ne_zero
+
+
+
+/-! ### Pushforward along an embedding is fully faithful -/
+
+/--
+info: 'TopCat.Presheaf.pushforwardFullyFaithful' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TopCat.Presheaf.pushforwardFullyFaithful
+
+/--
+info: 'TopCat.Sheaf.pushforwardFullyFaithful' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TopCat.Sheaf.pushforwardFullyFaithful
