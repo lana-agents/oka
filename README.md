@@ -113,13 +113,25 @@ coherence statement for arbitrary complex analytic spaces:
   with the morphisms given by holomorphic maps, two items above, this gives
   `Hom(ℂ^n, ℂ) ≃ Γ(ℂ^n, 𝒪)`: a global holomorphic function on
   `ℂ^n` is the same thing as a morphism of analytic spaces to `ℂ`, and the `m`-fold form
-  `Hom(ℂ^n, ℂ^m) ≃ Γ(ℂ^n, 𝒪)^m`. The same bijection for a general `Z` is missing only its
-  **existence** half, not this uniqueness half. The tuple of pullbacks is **natural in `Z`** for
+  `Hom(ℂ^n, ℂ^m) ≃ Γ(ℂ^n, 𝒪)^m`. The tuple of pullbacks is **natural in `Z`** for
   every morphism `Z' ⟶ Z`, which is the form a presentation-independence argument consumes; and
   the closed immersion of the node into `ℂ²` is the *unique* morphism of analytic spaces pulling
   the coordinates back to the node's two coordinate functions, so the *inclusion* of a singular
   subspace is recovered from two sections of its structure sheaf with no reference to how it was
   built. (What is recovered uniquely is the morphism; the subspace only through its image.)
+
+* **`ℂ^m` represents `Z ↦ Γ(Z, 𝒪_Z)^m`.** For **every** complex analytic space `Z`, a morphism
+  `Z ⟶ ℂ^m` is the same thing as an `m`-tuple of global holomorphic functions on `Z`, the
+  correspondence being the pullbacks of the coordinates
+  (`Oka/AnalyticSpace/HolomorphicMapGeneral.lean`). The uniqueness half is the rigidity above;
+  the existence half is proved by lifting the sections through a chart supplied by the local
+  model of `Z`, gluing the resulting local morphisms, and discharging compatibility on overlaps
+  by uniqueness rather than by computing it. **No product of analytic spaces is used or
+  available**: `ℂ^m` is a concrete space and a family of holomorphic functions maps into it
+  directly, so the `m` sections travel together through one chart throughout. Applied to the
+  node's two coordinate functions the theorem returns the closed immersion of the node into
+  `ℂ²` — a morphism produced by a general theorem and then recognised as one that was
+  constructed by hand.
 
 * **Comparison with algebraic geometry.** The canonical morphism of locally ringed spaces from
   `ℂ^ι` to `Spec (MvPolynomial ι ℂ)`, with its point map identified as `z ↦ ker (eval z)`, shown

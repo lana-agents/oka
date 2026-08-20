@@ -59,6 +59,10 @@ continuity.
 
 - `ComplexAnalytic.Γ_map_okaMapOpenHom_coord`: **pulling the `j`-th coordinate of `ℂ^κ` back
   along `okaMapOpenHom u` gives `u j`** — the construction is inverse to taking coordinates.
+- `ComplexAnalytic.AnalyticSpace.exists_hom_complexAffineSpace_restrict`: every family of `m`
+  global sections of `𝒪_{ℂ^n|V}` is the tuple of coordinate pullbacks along a morphism
+  `ℂ^n|V ⟶ ℂ^m`, and `ComplexAnalytic.AnalyticSpace.exists_hom_complexLine_restrict`, its
+  `m = 1` case, which is the spelling callers want.
 - `ComplexAnalytic.AnalyticSpace.exists_hom_complexLine_restrict`: every global section of
   `𝒪_{ℂ^n|V}` is the pullback of the coordinate along a morphism `ℂ^n|V ⟶ ℂ`.
 -/
@@ -251,18 +255,38 @@ theorem AnalyticSpace.coordPullback_okaMapOpen (j : ULift.{u} (Fin m)) :
     AnalyticSpace.coordPullback (AnalyticSpace.okaMapOpen u) j = u j :=
   Γ_map_okaMapOpenHom_coord u j
 
+/-- **Every family of `m` global sections of `𝒪_{ℂ^n|V}` is the tuple of coordinate pullbacks
+along a morphism of complex analytic spaces `ℂ^n|V ⟶ ℂ^m`.**
+
+This is one line because `ComplexAnalytic.AnalyticSpace.okaMapOpen` is already `m`-fold: a
+family of holomorphic functions on `V` *is* a map to `ℂ^m`, with no product structure on
+analytic spaces needed and none available. Only the statement was ever one-dimensional. -/
+theorem AnalyticSpace.exists_hom_complexAffineSpace_restrict
+    (g : ULift.{u} (Fin m) →
+      ((AnalyticSpace.complexAffineSpace.{u} n).restrict V).presheaf.obj (op ⊤)) :
+    ∃ φ : (AnalyticSpace.complexAffineSpace.{u} n).restrict V ⟶
+        AnalyticSpace.complexAffineSpace.{u} m,
+      ∀ j, AnalyticSpace.coordPullback φ j = g j :=
+  ⟨AnalyticSpace.okaMapOpen g, AnalyticSpace.coordPullback_okaMapOpen g⟩
+
 /-- **Every global section of `𝒪_{ℂ^n|V}` is the pullback of the coordinate along a morphism of
 complex analytic spaces `ℂ^n|V ⟶ ℂ`.**
 
 This is taxis #628 for `Z` an open subspace of `ℂ^n`. Together with
 `ComplexAnalytic.AnalyticSpace.hom_ext_complexLine`, which is already general in `Z`, it gives
-`Hom(ℂ^n|V, ℂ) ≃ Γ(ℂ^n|V, 𝒪)`. -/
+`Hom(ℂ^n|V, ℂ) ≃ Γ(ℂ^n|V, 𝒪)`.
+
+It is the `m = 1` case of
+`ComplexAnalytic.AnalyticSpace.exists_hom_complexAffineSpace_restrict` rather than a parallel
+statement, and it is kept because the `m = 1` spelling — one section, one equation, no index —
+is what every caller of it wants. -/
 theorem AnalyticSpace.exists_hom_complexLine_restrict
     (g : ((AnalyticSpace.complexAffineSpace.{u} n).restrict V).presheaf.obj (op ⊤)) :
     ∃ φ : (AnalyticSpace.complexAffineSpace.{u} n).restrict V ⟶
         AnalyticSpace.complexAffineSpace.{u} 1,
       AnalyticSpace.coordPullback φ (ULift.up 0) = g :=
-  ⟨AnalyticSpace.okaMapOpen fun _ ↦ g, AnalyticSpace.coordPullback_okaMapOpen _ _⟩
+  let ⟨φ, hφ⟩ := AnalyticSpace.exists_hom_complexAffineSpace_restrict (m := 1) fun _ ↦ g
+  ⟨φ, hφ (ULift.up 0)⟩
 
 end AnalyticSpace
 
