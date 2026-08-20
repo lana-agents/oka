@@ -14,6 +14,7 @@ import Oka.Algebra.Category.ModuleCat.Sheaf.Submodule
 import Oka.Analytic.ParametricCircleIntegral
 import Oka.AnalyticSpace.Basic
 import Oka.AnalyticSpace.Coherent
+import Oka.AnalyticSpace.Evaluation
 import Oka.AnalyticSpace.IdealSheaf
 import Oka.AnalyticSpace.LocalModel
 import Oka.AnalyticSpace.Noetherian
@@ -42,6 +43,7 @@ import Oka.Polynomial
 import Oka.Polynomial.Germ
 import Oka.Regular
 import Oka.RingTheory.Ideal.Maps
+import Oka.RingTheory.LocalRing.ResidueField.Basic
 import Oka.StalkEquiv
 import Oka.Statement
 import Oka.StructureSheaf

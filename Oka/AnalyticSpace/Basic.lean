@@ -274,6 +274,19 @@ lemma IsCLinearHom.comp {X Y Z : LocallyRingedSpace.{u}} {f : X ⟶ Y} {g : Y �
     IsCLinearHom (f ≫ g) α γ := fun c ↦ by
   rw [op_comp, Functor.map_comp, ConcreteCategory.comp_apply, hg c, hf c]
 
+/-- **A `ℂ`-linear morphism is `ℂ`-linear on stalks**: the map on stalks carries the germ of the
+constant `c` upstairs to the germ of the constant `c` downstairs.
+
+This is the form in which `ℂ`-linearity is used, `IsCLinearHom` itself being a statement about
+global sections only. -/
+lemma IsCLinearHom.stalkAlgMap {X Y : LocallyRingedSpace.{u}} {i : X ⟶ Y}
+    {α : ℂ →+* X.presheaf.obj (op ⊤)} {β : ℂ →+* Y.presheaf.obj (op ⊤)}
+    (h : IsCLinearHom i α β) (x : X) (c : ℂ) :
+    (i.stalkMap x).hom (Y.stalkAlgMap β (i.base x) c) = X.stalkAlgMap α x c := by
+  change (i.stalkMap x) (Y.presheaf.germ ⊤ (i.base x) trivial (β c)) = _
+  rw [LocallyRingedSpace.stalkMap_germ_apply]
+  exact congrArg (X.presheaf.germ ⊤ x trivial) (h c)
+
 end CAlgebraStructure
 
 /-- A **complex analytic space** is a locally ringed space `X`, together with a `ℂ`-algebra

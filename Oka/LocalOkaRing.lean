@@ -902,6 +902,18 @@ lemma constantCoeff_apply (P : LocalOkaRing ι) :
     constantCoeff P = MvPowerSeries.constantCoeff (P : MvPowerSeries ι ℂ) :=
   rfl
 
+-- Not `@[simp]`: `constantCoeff_apply` is `@[simp]` and rewrites the left-hand side to
+-- `MvPowerSeries.constantCoeff ↑(algebraMap ℂ (LocalOkaRing ι) c)`, which
+-- `Subalgebra.coe_algebraMap` and `MvPowerSeries.constantCoeff_C` then finish, so the attribute
+-- here would never fire.
+/-- A constant power series has that constant as its constant term. -/
+lemma constantCoeff_algebraMap (c : ℂ) :
+    constantCoeff (algebraMap ℂ (LocalOkaRing ι) c) = c := by
+  rw [constantCoeff_apply, show ((algebraMap ℂ (LocalOkaRing ι) c : LocalOkaRing ι) :
+    MvPowerSeries ι ℂ) = algebraMap ℂ (MvPowerSeries ι ℂ) c from rfl,
+    MvPowerSeries.algebraMap_apply, MvPowerSeries.constantCoeff_C]
+  simp
+
 instance : Nontrivial (LocalOkaRing ι) :=
   ⟨0, 1, fun h ↦ by simpa using congrArg constantCoeff h⟩
 
