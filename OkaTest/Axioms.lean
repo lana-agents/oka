@@ -10,6 +10,7 @@ import OkaTest.Axioms.ComplexSpace
 import OkaTest.Axioms.CutOut
 import OkaTest.Axioms.LocalOkaRing
 import OkaTest.Axioms.MainTheorem
+import OkaTest.Axioms.Morphisms
 import OkaTest.Axioms.SheafOfModules
 import OkaTest.Axioms.Sheaves
 import OkaTest.Axioms.Weierstrass
@@ -52,6 +53,7 @@ happened to open.**
 | sheaves of modules and coherence | `OkaTest/Axioms/SheafOfModules.lean` |
 | zero loci and closed immersions | `OkaTest/Axioms/CutOut.lean` |
 | analytic spaces, local models, the node | `OkaTest/Axioms/AnalyticSpace.lean` |
+| morphisms of analytic spaces | `OkaTest/Axioms/Morphisms.lean` |
 
 That rule is the whole point of the split, and it is not a matter of taste. Until 2026-08-20
 every assertion lived in this one file and every pull request appended to its end, so git
