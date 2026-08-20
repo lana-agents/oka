@@ -419,3 +419,26 @@ info: 'LocalOkaRing.spanFinrank_maximalIdeal_eq' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms LocalOkaRing.spanFinrank_maximalIdeal_eq
+
+/-! ### Uniqueness of the factorisation through a subspace cut out by global sections -/
+
+/--
+info: 'ComplexAnalytic.IsCutOutBy.mono' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.IsCutOutBy.mono
+
+/--
+info: 'ComplexAnalytic.IsCutOutBy.hom_ext' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.IsCutOutBy.hom_ext
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.mono_of_isCutOutBy' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.mono_of_isCutOutBy
