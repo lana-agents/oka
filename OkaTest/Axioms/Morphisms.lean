@@ -125,3 +125,39 @@ info: 'ComplexAnalytic.IsCutOutBy.existsUnique_liftHom' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.IsCutOutBy.existsUnique_liftHom
+
+/-! ### Morphisms out of an open subspace of `ℂ^n` -/
+
+/--
+info: 'ComplexAnalytic.okaMapOpenHom' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.okaMapOpenHom
+
+/--
+info: 'ComplexAnalytic.Γ_map_okaMapOpenHom_coord' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.Γ_map_okaMapOpenHom_coord
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.okaMapOpen' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.okaMapOpen
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.exists_hom_complexLine_restrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.exists_hom_complexLine_restrict
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.homComplexLineEquivRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.homComplexLineEquivRestrict
