@@ -23,6 +23,7 @@ import Oka.AnalyticSpace.HomToComplex
 import Oka.AnalyticSpace.IdealSheaf
 import Oka.AnalyticSpace.LocalModel
 import Oka.AnalyticSpace.Noetherian
+import Oka.AnalyticSpace.OpenSubspace
 import Oka.AnalyticSpace.Relations
 import Oka.AnalyticSpace.Restrict
 import Oka.Analytification.AffineSpace
@@ -38,6 +39,7 @@ import Oka.ComplexSpace
 import Oka.Data.Fin.Tuple.Basic
 import Oka.Geometry.RingedSpace.CutOut
 import Oka.Geometry.RingedSpace.LocallyRingedSpace
+import Oka.Geometry.RingedSpace.OpenImmersion
 import Oka.Geometry.RingedSpace.PresheafedSpace.Gluing
 import Oka.Geometry.RingedSpace.ZeroLocus
 import Oka.LocalOkaRing

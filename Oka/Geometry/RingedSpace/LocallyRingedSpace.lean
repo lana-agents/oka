@@ -32,6 +32,10 @@ mirror tree.
   global sections, in applied form.
 - `AlgebraicGeometry.LocallyRingedSpace.hom_stalk_ext`: two morphisms with the same base map and
   the same maps on stalks are equal.
+- `AlgebraicGeometry.LocallyRingedSpace.Γgerm_Γ_map`: the germ of the pullback of a global
+  section is the image of its germ under the stalk map.
+- `AlgebraicGeometry.LocallyRingedSpace.range_ofRestrict_comp`: the image of the composite of two
+  open subspace inclusions.
 -/
 
 open CategoryTheory TopologicalSpace Opposite
@@ -110,5 +114,34 @@ lemma restrictStalkIso_hom_stalkAlgMap {R : Type*} [NonAssocSemiring R]
         ((X.presheaf.map (homOfLE le_top).op).hom (α c))) = _
   rw [restrictStalkIso_hom_eq_germ_apply]
   exact X.presheaf.germ_res_apply (homOfLE le_top) x.1 _ (α c)
+
+/-- **The germ of the pullback of a global section is the image of its germ under the stalk
+map.**
+
+This is `AlgebraicGeometry.LocallyRingedSpace.stalkMap_germ_apply` specialised to `U = ⊤` and
+read from right to left, which is the direction a computation with `Γ.map` wants. The
+specialisation costs nothing because `(Opens.map φ.base).obj ⊤` and `⊤` are definitionally
+equal, and so are `φ.c.app (op ⊤)` and `Γ.map φ.op`. -/
+lemma Γgerm_Γ_map (φ : X ⟶ Y) (a : Y.presheaf.obj (op ⊤)) (x : X) :
+    X.presheaf.Γgerm x ((Γ.map φ.op).hom a) = (φ.stalkMap x).hom (Y.presheaf.Γgerm (φ.base x) a) :=
+  (stalkMap_germ_apply φ ⊤ x trivial a).symm
+
+/-- **The image of the composite of two open subspace inclusions** `X|S|T ⟶ X|S ⟶ X` is the
+image of `T` under the inclusion of `S`.
+
+The point of stating it this way rather than as `S ⊓ T'` for `T` the preimage of some `T'` is
+that `T` is an arbitrary open of `X|S`, which is the shape a chart of a restricted analytic
+space arrives in. -/
+lemma range_ofRestrict_comp (A : LocallyRingedSpace.{u}) (S : Opens A)
+    (T : Opens (A.restrict S.isOpenEmbedding)) :
+    Set.range (((A.restrict S.isOpenEmbedding).ofRestrict T.isOpenEmbedding ≫
+        A.ofRestrict S.isOpenEmbedding).base) =
+      ((S.isOpenEmbedding.isOpenMap.functor.obj T : Opens A) : Set A) := by
+  ext z
+  constructor
+  · rintro ⟨w, rfl⟩
+    exact ⟨w.1, w.2, rfl⟩
+  · rintro ⟨y, hy, rfl⟩
+    exact ⟨⟨y, hy⟩, rfl⟩
 
 end AlgebraicGeometry.LocallyRingedSpace

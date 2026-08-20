@@ -85,14 +85,18 @@ coherence statement for arbitrary complex analytic spaces:
   the next item, which is now available, together with independence of the local construction of
   the two choices it makes — the chart and the local lift — which is not.
 
-* **Charts may be shrunk.** Being cut out by global sections is local on the target: restricting
-  a closed immersion to the preimage of an open subset of the target still cuts it out, by the
-  restricted family, and `ℂ`-linearity survives (`Oka/AnalyticSpace/Restrict.lean`). This is what
-  an open subspace of a complex analytic space needs in order to be one itself — **which is not
-  yet proved**: `AnalyticSpace.local_model` wants a chart whose target is an open subset *of*
-  `ℂ^n`, and what the restriction produces is a restriction of a restriction, so transporting
-  along the isomorphism between them needs the companion of `IsCutOutBy.comp_iso` for an
-  isomorphism of the *target*, which is missing.
+* **Open subspaces.** An open subspace of a complex analytic space is a complex analytic space
+  (`ComplexAnalytic.AnalyticSpace.restrict` in `Oka/AnalyticSpace/OpenSubspace.lean`), and its
+  inclusion is a morphism of complex analytic spaces. Two ingredients: being cut out by global
+  sections is local on the target, so a chart may be shrunk to the overlap with the open subset
+  (`Oka/AnalyticSpace/Restrict.lean`); and the resulting chart, whose target is a restriction of
+  a restriction of `ℂ^n`, is transported to one with target an open subset *of* `ℂ^n`. Both
+  identifications are instances of one construction — two open immersions with the same image
+  have isomorphic sources, which Mathlib has for presheafed spaces and for schemes but not for
+  locally ringed spaces (`Oka/Geometry/RingedSpace/OpenImmersion.lean`) — and both preserve
+  `ℂ`-linearity for the same reason, that they are morphisms *over* the ambient space. The
+  worked example is **the node minus the origin**, which is a proper open subspace of a singular
+  space and is *disconnected*: the two punctured axes are open, disjoint and cover it.
 
 * **Gluing.** Open covers of a locally ringed space, and the gluing of morphisms out of the
   members of one (`Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean`): a locally ringed space

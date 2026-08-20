@@ -90,3 +90,12 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.openCoverOfOpens' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.openCoverOfOpens
+
+/-! ### Two open immersions of locally ringed spaces with the same image -/
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.isoOfRangeEq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.isoOfRangeEq
