@@ -144,3 +144,23 @@ info: 'ComplexAnalytic.AnalyticSpace.isCoherentStructureSheaf' depends on axioms
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.isCoherentStructureSheaf
+
+/-! ### The analytic Nullstellensatz (easy inclusion only)
+
+New assertions are appended **at the end of this file**, not before the main-theorem section.
+Every feature branch used to insert just before `/-! ### The main theorem -/`, which made this
+file a standing merge-conflict point between concurrent pull requests; see issue #558. -/
+
+/--
+info: 'LocalOkaRing.radical_le_vanishingIdeal' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.radical_le_vanishingIdeal
+
+/--
+info: 'LocalOkaRing.vanishingIdeal_bot' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.vanishingIdeal_bot
