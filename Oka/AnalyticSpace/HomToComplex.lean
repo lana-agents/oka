@@ -79,6 +79,12 @@ needs one computation which was not in the development —
 - `ComplexAnalytic.AnalyticSpace.homComplexLineEquiv`: `Hom(ℂ^n, ℂ) ≃ Γ(ℂ^n, 𝒪)`.
 - `ComplexAnalytic.nodeCoord_ne`: the two coordinate functions of the node are different
   sections — the rigidity theorem turning a fact about base maps into a fact about sections.
+- `ComplexAnalytic.AnalyticSpace.coordPullback_comp`: **the tuple of pullbacks of the
+  coordinates is natural in `Z`**, for every `Z' ⟶ Z`.
+- `ComplexAnalytic.AnalyticSpace.homComplexAffineSpaceEquiv`: `Hom(ℂ^n, ℂ^m) ≃ Γ(ℂ^n, 𝒪)^m`.
+- `ComplexAnalytic.eq_nodeIncl_of_coordPullback`: the closed immersion of the node into `ℂ²` is
+  the **unique** morphism of analytic spaces pulling the coordinates back to the node's two
+  coordinate functions.
 
 ## References
 
@@ -266,6 +272,63 @@ noncomputable def homComplexLineEquiv (n : ℕ) :
     (fun φ ↦ (LocallyRingedSpace.Γ.map φ.toLRSHom.op).hom (coord (ULift.up 0)))
     ⟨fun _ _ h ↦ hom_ext_complexLine _ _ h, fun g ↦ exists_hom_complexLine g⟩
 
+/-! ### The `m`-fold statement, and its naturality in `Z` -/
+
+/-- **The tuple of pullbacks of the coordinate functions**, which is the map
+`Hom(Z, ℂ^m) → Γ(Z, 𝒪_Z)^m` that `ComplexAnalytic.AnalyticSpace.hom_ext_complexAffineSpace`
+says is injective. -/
+def coordPullback {Z : AnalyticSpace.{u}} {m : ℕ}
+    (φ : Z ⟶ AnalyticSpace.complexAffineSpace.{u} m) :
+    ULift.{u} (Fin m) → Z.presheaf.obj (op ⊤) :=
+  fun j ↦ (LocallyRingedSpace.Γ.map φ.toLRSHom.op).hom (coord j)
+
+/-- **`ComplexAnalytic.AnalyticSpace.coordPullback` is natural in `Z`**: precomposing a morphism
+to `ℂ^m` with `χ : Z' ⟶ Z` pulls its tuple of coordinate functions back along `χ`.
+
+This holds for **every** `Z' ⟶ Z` and needs nothing analytic — it is contravariant
+functoriality of the global sections, `AlgebraicGeometry.LocallyRingedSpace.Γ_map_comp_apply`.
+It is what a presentation-independence argument consumes, and the bare bijection is not enough
+for one. -/
+theorem coordPullback_comp {Z' Z : AnalyticSpace.{u}} {m : ℕ} (χ : Z' ⟶ Z)
+    (φ : Z ⟶ AnalyticSpace.complexAffineSpace.{u} m) (j : ULift.{u} (Fin m)) :
+    coordPullback (χ ≫ φ) j =
+      (LocallyRingedSpace.Γ.map χ.toLRSHom.op).hom (coordPullback φ j) :=
+  LocallyRingedSpace.Γ_map_comp_apply χ.toLRSHom φ.toLRSHom (coord j)
+
+/-- The value of `ComplexAnalytic.AnalyticSpace.coordPullback`, unfolded. -/
+lemma coordPullback_apply {Z : AnalyticSpace.{u}} {m : ℕ}
+    (φ : Z ⟶ AnalyticSpace.complexAffineSpace.{u} m) (j : ULift.{u} (Fin m)) :
+    coordPullback φ j = (LocallyRingedSpace.Γ.map φ.toLRSHom.op).hom (coord j) :=
+  rfl
+
+/-- **`Hom(ℂ^n, ℂ^m) ≃ Γ(ℂ^n, 𝒪)^m`**, the `m`-fold form of
+`ComplexAnalytic.AnalyticSpace.homComplexLineEquiv`.
+
+Injectivity is `ComplexAnalytic.AnalyticSpace.hom_ext_complexAffineSpace` and holds for every
+source `Z`; surjectivity is `ComplexAnalytic.AnalyticSpace.okaMap` together with
+`ComplexAnalytic.Γ_map_okaMapHom_coord`, and is what does not yet hold for a general `Z`. -/
+noncomputable def homComplexAffineSpaceEquiv (n m : ℕ) :
+    (AnalyticSpace.complexAffineSpace.{u} n ⟶ AnalyticSpace.complexAffineSpace.{u} m) ≃
+      (ULift.{u} (Fin m) → OkaRing (⊤ : TopologicalSpace.Opens (ULift.{u} (Fin n) → ℂ))) :=
+  Equiv.ofBijective coordPullback
+    ⟨fun _ _ h ↦ hom_ext_complexAffineSpace _ _ (congrFun h),
+      fun u ↦ ⟨AnalyticSpace.okaMap u, funext fun j ↦ Γ_map_okaMapHom_coord u j⟩⟩
+
+/-- `ComplexAnalytic.AnalyticSpace.homComplexAffineSpaceEquiv` is the tuple of pullbacks. -/
+@[simp]
+lemma homComplexAffineSpaceEquiv_apply {n m : ℕ}
+    (φ : AnalyticSpace.complexAffineSpace.{u} n ⟶ AnalyticSpace.complexAffineSpace.{u} m) :
+    homComplexAffineSpaceEquiv.{u} n m φ = coordPullback φ :=
+  rfl
+
+/-- The inverse of `ComplexAnalytic.AnalyticSpace.homComplexAffineSpaceEquiv`, named: it is
+`ComplexAnalytic.AnalyticSpace.okaMap`, with no choice left in it. -/
+@[simp]
+lemma homComplexAffineSpaceEquiv_symm_apply {n m : ℕ}
+    (u : ULift.{u} (Fin m) → OkaRing (⊤ : TopologicalSpace.Opens (ULift.{u} (Fin n) → ℂ))) :
+    (homComplexAffineSpaceEquiv.{u} n m).symm u = AnalyticSpace.okaMap u :=
+  (Equiv.symm_apply_eq _).2 (funext fun j ↦ Γ_map_okaMapHom_coord u j).symm
+
 end AnalyticSpace
 
 section Node
@@ -282,6 +345,40 @@ theorem nodeCoord_ne : nodeCoord.{u} (ULift.up 0) ≠ nodeCoord.{u} (ULift.up 1)
   nodeToLine_ne.{u} (AnalyticSpace.hom_ext_complexLine _ _
     ((Γ_map_nodeToLineHom_coord (ULift.up 0)).trans
       (hcon.trans (Γ_map_nodeToLineHom_coord (ULift.up 1)).symm)))
+
+/-- **The inclusion of the node into `ℂ²`, as a morphism of complex analytic spaces.**
+
+The closed immersion of `Oka/AnalyticSpace/LocalModel.lean` lands in the `restrict ⊤`
+presentation of `ℂ²`; composing with `ofRestrict` lands it in
+`ComplexAnalytic.AnalyticSpace.complexAffineSpace 2` itself, and both halves are `ℂ`-linear. -/
+def nodeIncl : AnalyticSpace.node.{u} ⟶ AnalyticSpace.complexAffineSpace.{u} 2 :=
+  ⟨nodeAmbient.{u}.zeroLocusSubspaceι nodeSection.{u} ≫
+      (complexAffineSpace.{u} 2).ofRestrict (⊤ : Opens (complexAffineSpace.{u} 2)).isOpenEmbedding,
+    isCLinearHom_zeroLocusSubspaceι_nodeSection.comp (isCLinearHom_ofRestrict_complexSpace _)⟩
+
+/-- **The inclusion of the node into `ℂ²` is recovered from its two coordinate functions**, and
+by `ComplexAnalytic.AnalyticSpace.hom_ext_complexAffineSpace` it is the *only* morphism of
+complex analytic spaces `node ⟶ ℂ²` that is.
+
+This is the `m`-fold statement at a space which is not `ℂ^n`: the closed immersion defining the
+node is reconstructed from two sections of its structure sheaf, with no reference to how it was
+built. -/
+theorem coordPullback_nodeIncl (j : ULift.{u} (Fin 2)) :
+    AnalyticSpace.coordPullback nodeIncl.{u} j = nodeCoord.{u} j := by
+  refine Eq.trans (LocallyRingedSpace.Γ_map_comp_apply
+    (nodeAmbient.{u}.zeroLocusSubspaceι nodeSection.{u})
+    ((complexAffineSpace.{u} 2).ofRestrict
+      (⊤ : Opens (complexAffineSpace.{u} 2)).isOpenEmbedding) (coord j)) ?_
+  rw [Γ_map_ofRestrict, coord_def, OkaRing.restrict_ofMvPolynomial]
+  rfl
+
+/-- **The inclusion of the node into `ℂ²` is the unique morphism of analytic spaces pulling the
+coordinates back to `ComplexAnalytic.nodeCoord`.** -/
+theorem eq_nodeIncl_of_coordPullback
+    (φ : AnalyticSpace.node.{u} ⟶ AnalyticSpace.complexAffineSpace.{u} 2)
+    (h : ∀ j, AnalyticSpace.coordPullback φ j = nodeCoord.{u} j) : φ = nodeIncl.{u} :=
+  AnalyticSpace.hom_ext_complexAffineSpace _ _ fun j ↦
+    (h j).trans (coordPullback_nodeIncl j).symm
 
 end Node
 

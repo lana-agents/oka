@@ -80,3 +80,26 @@ info: 'ComplexAnalytic.nodeToLine_ne' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.nodeToLine_ne
+
+/-! ### The `m`-fold statement and its naturality -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.coordPullback_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.coordPullback_comp
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.homComplexAffineSpaceEquiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.homComplexAffineSpaceEquiv
+
+/--
+info: 'ComplexAnalytic.eq_nodeIncl_of_coordPullback' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.eq_nodeIncl_of_coordPullback

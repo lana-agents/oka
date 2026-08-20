@@ -31,11 +31,19 @@ finite generation of `𝔪_S` is assumed directly and is all that is used.
 
 The notion `IsCoefficientField` and everything else about it lives in the mirror of
 `Mathlib/RingTheory/LocalRing/ResidueField/Basic.lean`, which is where it would go upstream.
-These two results cannot: they need `Mathlib.RingTheory.Filtration`, which adds 96 files to that
-file's transitive imports (1228 → 1291), and Mathlib would not take that for two corollaries.
-`Mathlib.RingTheory.Filtration` does **not** transitively import
-`Mathlib.RingTheory.LocalRing.ResidueField.Basic`, so there is no cycle and this is the file the
-results would go in upstream.
+These two results cannot: they need `Mathlib.RingTheory.Filtration`, and Mathlib would not add
+that import to `ResidueField/Basic.lean` for two corollaries.
+
+The two Mathlib files are **import-incomparable**: neither transitively imports the other
+(closures of 1547 and 1494 files respectively). So there is no cycle, but there is also no free
+choice — *either* destination has to gain an import. What picks this one is the asymmetry of the
+cost:
+
+* adding `ResidueField.Basic` to `Filtration` costs **31** files;
+* adding `Filtration` to `ResidueField.Basic` costs **84**.
+
+Cheaper by a factor of about 2.7, and in the direction Mathlib already prefers: a corollary goes
+with the theorem it follows from rather than with the notion it is about.
 
 ## Main results
 
