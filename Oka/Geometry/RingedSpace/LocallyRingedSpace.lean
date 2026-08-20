@@ -30,6 +30,8 @@ mirror tree.
   algebra structures.
 - `AlgebraicGeometry.LocallyRingedSpace.Γ_map_comp_apply`: contravariant functoriality of the
   global sections, in applied form.
+- `AlgebraicGeometry.LocallyRingedSpace.Γ_map_id_apply`: its identity companion, which is what
+  collapses a pair of mutually inverse morphisms in such a computation.
 - `AlgebraicGeometry.LocallyRingedSpace.hom_stalk_ext`: two morphisms with the same base map and
   the same maps on stalks are equal.
 - `AlgebraicGeometry.LocallyRingedSpace.Γgerm_Γ_map`: the germ of the pullback of a global
@@ -54,6 +56,16 @@ lemma Γ_map_comp_apply {X Y Z : LocallyRingedSpace.{u}} (f : X ⟶ Y) (g : Y �
     (a : Z.presheaf.obj (op ⊤)) :
     (Γ.map (f ≫ g).op).hom a = (Γ.map f.op).hom ((Γ.map g.op).hom a) := by
   rw [op_comp, Functor.map_comp]
+  rfl
+
+/-- **The identity acts as the identity on global sections**, in applied form.
+
+The companion of `AlgebraicGeometry.LocallyRingedSpace.Γ_map_comp_apply`: together they are what
+turns `e.inv ≫ e.hom = 𝟙` into a statement about a section, which is how one crosses an
+isomorphism of locally ringed spaces without computing either of its two maps on sections. -/
+lemma Γ_map_id_apply (X : LocallyRingedSpace.{u}) (a : X.presheaf.obj (op ⊤)) :
+    (Γ.map (𝟙 X).op).hom a = a := by
+  rw [op_id, CategoryTheory.Functor.map_id]
   rfl
 
 /-- **Two morphisms of locally ringed spaces with the same base map and the same maps on stalks
