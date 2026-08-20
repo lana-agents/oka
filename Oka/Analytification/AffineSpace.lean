@@ -5,7 +5,7 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Mathlib.AlgebraicGeometry.AffineSpace
 import Mathlib.AlgebraicGeometry.GammaSpecAdjunction
-import Oka.Polynomial
+import Oka.Polynomial.Germ
 import Oka.StalkEquiv
 
 /-!
@@ -50,12 +50,27 @@ affine space in Mathlib's sense is then `complexAffineSpaceToAffineSpace`, which
 - `isMaximal_complexSpaceToSpec_base_asIdeal`: that ideal is maximal, so `ℂ^ι` maps into the
   closed points of `Spec (MvPolynomial ι ℂ)`.
 - `complexSpaceToSpec_base_injective`: the map on points is injective.
+- `toStalk_stalkMap_complexSpaceToSpec` and `okaStalkEquiv_stalkMap_complexSpaceToSpec`: **the
+  map on stalks is the localisation-to-germs map** — a polynomial goes to the germ at `z` of the
+  holomorphic function it defines. Since the stalk of `Spec R` at `p` *is* the localisation of
+  `R` at `p`, and `isUnit_ofMvPolynomial_of_mem_primeCompl` says the denominators become units,
+  this determines the stalk map completely.
 
 ## What is not here
 
-The description of the induced map on stalks — the localisation of `MvPolynomial ι ℂ` at
-`ker (eval z)` mapping to the ring of convergent power series — and its **flatness**, which is
-the analytic input to GAGA. Neither is proved; the comparison is not complete without them.
+**Flatness** of the stalk map, which is the analytic input to GAGA. It is not proved, and the
+comparison is not complete without it.
+
+The stalk map is also not *packaged* as an `IsLocalization.lift`, though the two theorems above
+determine it uniquely. That packaging is blocked, and the obstruction is worth recording because
+it will recur. Mathlib registers `Algebra R ((Spec.structureSheaf R).presheaf.stalk p)` and
+`IsLocalization.AtPrime ((Spec.structureSheaf R).presheaf.stalk p) p.asIdeal`, but a morphism of
+locally ringed spaces produces the stalk in the `Spec.locallyRingedSpaceObj R` spelling. The two
+are definitionally equal and `Spec.locallyRingedSpaceObj` is a `def`, so instance search — which
+unfolds only at reducible transparency — never gets there. Restating both instances in the second
+spelling does *not* fix it either: the point `(complexSpaceToSpec ι).base z` then has to be
+unified with a `PrimeSpectrum` across the same `TopCat.of` seam, and that `isDefEq` still times
+out at a million heartbeats.
 -/
 
 open CategoryTheory Opposite AlgebraicGeometry TopologicalSpace
@@ -158,5 +173,67 @@ def complexAffineSpaceToAffineSpace :
     (AffineSpace.SpecIso (ULift.{0} (Fin n)) (CommRingCat.of ℂ)).inv.toLRSHom
 
 end AffineSpace
+
+
+section Stalk
+
+open StructureSheaf
+
+/-- **The stalk map, restricted along `toStalk`, is the germ map.** A polynomial, regarded as a
+global section of the structure sheaf of `Spec (MvPolynomial ι ℂ)`, is carried to the germ at `z`
+of the holomorphic function it defines.
+
+This is the characterising property: the stalk of `Spec R` at `p` is the localisation of `R` at
+`p` (`AlgebraicGeometry.StructureSheaf.IsLocalization.to_stalk`), so a ring homomorphism out of
+it is determined by its restriction along `toStalk`. `stalkMap_complexSpaceToSpec` is that
+statement.
+
+The proof composes two Mathlib lemmas — `AlgebraicGeometry.stalkMap_toStalk` for the `Spec` half
+and `AlgebraicGeometry.LocallyRingedSpace.toStalk_stalkMap_toΓSpec` for the unit half — and never
+unfolds `toΓSpecSheafedSpace`. The final step uses `congrArg` rather than `rw` because the
+rewrite is rejected across the `TopCat.of` transparency seam; see `OkaTest/SimpDiscrTree.lean`. -/
+theorem toStalk_stalkMap_complexSpaceToSpec (z : ι → ℂ) (p : MvPolynomial ι ℂ) :
+    (complexSpaceToSpec ι).stalkMap z
+        (toStalk (MvPolynomial ι ℂ) ((complexSpaceToSpec ι).base z) p) =
+      (complexSpace ι).presheaf.Γgerm z (okaGlobalOfMvPolynomial ι p) := by
+  have h1 := stalkMap_toStalk_apply (okaGlobalOfMvPolynomial ι)
+    ((complexSpace ι).toΓSpecFun z) p
+  have h2 := ConcreteCategory.congr_hom ((complexSpace ι).toStalk_stalkMap_toΓSpec z)
+    (okaGlobalOfMvPolynomial ι p)
+  simp only [ConcreteCategory.comp_apply] at h1 h2
+  have key : (complexSpaceToSpec ι).stalkMap z =
+      (Spec.locallyRingedSpaceMap (okaGlobalOfMvPolynomial ι)).stalkMap
+        ((complexSpace ι).toΓSpecFun z) ≫ (complexSpace ι).toΓSpec.stalkMap z :=
+    LocallyRingedSpace.stalkMap_comp _ _ _
+  rw [key]
+  -- `change`, not `rw`: the two spellings of the base point differ across the `TopCat.of`
+  -- seam and a rewrite is rejected there as not type-correct.
+  change (complexSpace ι).toΓSpec.stalkMap z
+      ((Spec.sheafedSpaceMap (okaGlobalOfMvPolynomial ι)).hom.stalkMap
+        ((complexSpace ι).toΓSpecFun z)
+        (toStalk (MvPolynomial ι ℂ)
+          (PrimeSpectrum.comap (okaGlobalOfMvPolynomial ι).hom
+            ((complexSpace ι).toΓSpecFun z)) p)) = _
+  exact (congrArg ((complexSpace ι).toΓSpec.stalkMap z) h1).trans h2
+
+/-- Transported along `okaStalkEquiv`, the previous statement reads: a polynomial goes to its
+germ at `z` as an element of `LocalOkaRing ι`, which is `LocalOkaRing.ofMvPolynomial`. -/
+theorem okaStalkEquiv_stalkMap_complexSpaceToSpec (z : ι → ℂ) (p : MvPolynomial ι ℂ) :
+    okaStalkEquiv z ((complexSpaceToSpec ι).stalkMap z
+        (toStalk (MvPolynomial ι ℂ) ((complexSpaceToSpec ι).base z) p)) =
+      LocalOkaRing.ofMvPolynomial z p := by
+  rw [toStalk_stalkMap_complexSpaceToSpec]
+  exact okaStalkEquiv_germ (U := ⊤) trivial (OkaRing.ofMvPolynomial ⊤ p)
+
+/-- A polynomial not in the point underneath `z` — that is, one which does not vanish at `z` —
+has invertible germ. This is what lets the localisation of `MvPolynomial ι ℂ` at that point map
+to the germs at all. -/
+theorem isUnit_ofMvPolynomial_of_mem_primeCompl (z : ι → ℂ)
+    (y : ((complexSpaceToSpec ι).base z).asIdeal.primeCompl) :
+    IsUnit (LocalOkaRing.ofMvPolynomial z (y : MvPolynomial ι ℂ)) := by
+  rw [LocalOkaRing.isUnit_ofMvPolynomial_iff]
+  exact fun h ↦ y.2 ((mem_complexSpaceToSpec_base_asIdeal_iff z _).2 h)
+
+end Stalk
 
 end
