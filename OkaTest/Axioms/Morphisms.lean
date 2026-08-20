@@ -104,6 +104,12 @@ info: 'ComplexAnalytic.eq_nodeIncl_of_coordPullback' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.eq_nodeIncl_of_coordPullback
 
+/--
+info: 'ComplexAnalytic.base_nodeIncl' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.base_nodeIncl
+
 /-! ### The mapping property for morphisms of complex analytic spaces -/
 
 /--

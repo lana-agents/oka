@@ -24,6 +24,16 @@ look if their hypotheses were redundant. This file rules out each of those.
   the node. That value is already known by a route sharing no lemma with this one
   (`ComplexAnalytic.eval_nodeCoord`, through `eval_ofCutOut`), so the two agreeing is a check on
   both.
+* `exists_ne_nodeIncl` records that the hom-set `node ⟶ ℂ²` is not a singleton — the witness is
+  `nodeDiag`, the inclusion followed by `z ↦ (z₀, z₀)`, which pulls **both** coordinates back to
+  `nodeCoord 0`. Without it `ComplexAnalytic.eq_nodeIncl_of_coordPullback` would be a uniqueness
+  statement with nothing to be unique among, and `nodeIncl_coordPullback_ne` would be a fact
+  about one morphism rather than about the hom-set.
+* `base_nodeIncl_via_coordPullback` and `coordPullback_comp_routes_agree` are index checks: each
+  computes a value that is already known by a route sharing no lemma, so a permuted coordinate
+  in `ComplexAnalytic.coordPullback_nodeIncl` or in
+  `ComplexAnalytic.AnalyticSpace.coordPullback_comp` at this instance breaks them and nothing
+  else.
 * `two_distinct_homs` records that the hom-set the uniqueness theorem is about is not a
   singleton. The evidence that rigidity is *productive* rather than merely satisfiable is
   `ComplexAnalytic.nodeCoord_ne`, which is in the library because it is a new fact about the
@@ -112,8 +122,11 @@ theorem toLRSHom_comp {Z Z' Z'' : AnalyticSpace.{u}} (χ : Z ⟶ Z') (φ : Z' �
 Instantiating at one non-identity `χ` rules out the lemma being about the identity, but the
 failure worth ruling out is about *composition*, so both morphisms here are non-identity and
 neither is the other's inverse: `χ` is the closed immersion of the node into `ℂ²`, `φ` is the
-morphism attached to the non-linear family `z ↦ z₀²`. The two sides are computed by routes that
-meet only at `AnalyticSpace.coordPullback_comp` itself. -/
+morphism attached to the non-linear family `z ↦ z₀²`.
+
+Both sides here are computed by one chain, through `AnalyticSpace.coordPullback_comp` and then
+`ComplexAnalytic.Γ_map_okaMapHom_coord`; the second route is `eval_coordPullback_comp_via_base`
+below, which pushes the point through the base maps instead and touches neither. -/
 theorem coordPullback_comp_nodeIncl_sq (j : ULift.{u} (Fin 1)) :
     AnalyticSpace.coordPullback
         (nodeIncl.{u} ≫ AnalyticSpace.okaMap (fun _ : ULift.{u} (Fin 1) ↦
@@ -150,14 +163,114 @@ theorem coordPullback_comp_nodeIncl {m : ℕ}
     (congrArg (LocallyRingedSpace.Γ.map nodeIncl.{u}.toLRSHom.op).hom
       (Γ_map_okaMapHom_coord u j))
 
-/-- **The uniqueness of the node's inclusion is about a hom-set with more than one element**:
-`nodeToLine` composed with a morphism `ℂ ⟶ ℂ²` would be a second morphism `node ⟶ ℂ²`, and the
-two coordinate morphisms already differ. -/
+/-- **The node's inclusion pulls the two coordinates back to different sections.** This is a
+statement about the one morphism `ComplexAnalytic.nodeIncl`; that the hom-set it lives in has
+more than one element is `exists_ne_nodeIncl` below, which consumes this. -/
 theorem nodeIncl_coordPullback_ne :
     AnalyticSpace.coordPullback nodeIncl.{u} (ULift.up 0) ≠
       AnalyticSpace.coordPullback nodeIncl.{u} (ULift.up 1) :=
   (coordPullback_nodeIncl (ULift.up 0)).symm ▸
     ((coordPullback_nodeIncl (ULift.up 1)).symm ▸ nodeCoord_ne.{u})
+
+/-- **A second morphism `node ⟶ ℂ²`**: the inclusion followed by the morphism of `ℂ²` attached
+to the family `(z₀, z₀)`, so on points it is `p ↦ (p₀, p₀)`.
+
+No morphism `ℂ ⟶ ℂ²` is needed, contrary to what one might expect from `nodeToLine`:
+`ComplexAnalytic.AnalyticSpace.okaMap` already exists at `m = 2`. -/
+def nodeDiag : AnalyticSpace.node.{u} ⟶ AnalyticSpace.complexAffineSpace.{u} 2 :=
+  nodeIncl.{u} ≫ AnalyticSpace.okaMap (fun _ : ULift.{u} (Fin 2) ↦ coord (ULift.up 0))
+
+/-- **`nodeDiag` pulls *both* coordinates back to `nodeCoord 0`**, where `nodeIncl` pulls them
+back to `nodeCoord 0` and `nodeCoord 1`. This is the whole content of `nodeDiag_ne_nodeIncl`,
+and it is `coordPullback_comp_nodeIncl` — the single-morphism naturality test — instantiated at
+a constant family. -/
+theorem coordPullback_nodeDiag (j : ULift.{u} (Fin 2)) :
+    AnalyticSpace.coordPullback nodeDiag.{u} j = nodeCoord.{u} (ULift.up 0) :=
+  (coordPullback_comp_nodeIncl (fun _ : ULift.{u} (Fin 2) ↦ coord (ULift.up 0)) j).trans
+    (coordPullback_nodeIncl (ULift.up 0))
+
+/-- `nodeDiag` and `nodeIncl` are different morphisms: if they were equal, `nodeIncl` would pull
+the two coordinates back to the same section. -/
+theorem nodeDiag_ne_nodeIncl : nodeDiag.{u} ≠ nodeIncl.{u} := fun hcon ↦
+  nodeIncl_coordPullback_ne.{u}
+    ((congrArg (fun φ : AnalyticSpace.node.{u} ⟶ AnalyticSpace.complexAffineSpace.{u} 2 ↦
+        AnalyticSpace.coordPullback φ (ULift.up 0)) hcon).symm.trans
+      ((coordPullback_nodeDiag (ULift.up 0)).trans
+        ((coordPullback_nodeDiag (ULift.up 1)).symm.trans
+          (congrArg (fun φ : AnalyticSpace.node.{u} ⟶ AnalyticSpace.complexAffineSpace.{u} 2 ↦
+            AnalyticSpace.coordPullback φ (ULift.up 1)) hcon))))
+
+/-- **The hom-set `node ⟶ ℂ²` has more than one element**, so
+`ComplexAnalytic.eq_nodeIncl_of_coordPullback` — which says `nodeIncl` is the *only* morphism
+pulling the coordinates back to the node's coordinate functions — is not a statement about a
+singleton. -/
+theorem exists_ne_nodeIncl :
+    ∃ φ : AnalyticSpace.node.{u} ⟶ AnalyticSpace.complexAffineSpace.{u} 2, φ ≠ nodeIncl.{u} :=
+  ⟨nodeDiag.{u}, nodeDiag_ne_nodeIncl.{u}⟩
+
+/-- **The pullback computation `ComplexAnalytic.coordPullback_nodeIncl` has the right coordinate
+index.**
+
+`ComplexAnalytic.base_nodeIncl` is the same equation proved by `rfl`. This proof goes the long
+way round — naturality of evaluation (`AnalyticSpace.eval_c_app`), the value of a coordinate on
+`ℂ²` (`AnalyticSpace.eval_coord`), the pullback computation, and the value of `nodeCoord` at a
+point (`ComplexAnalytic.eval_nodeCoord`, which reaches it through `eval_ofCutOut`). A permuted
+index in `coordPullback_nodeIncl` would leave both `rfl` and every other statement in the
+library intact and would break exactly this. -/
+theorem base_nodeIncl_via_coordPullback (p : AnalyticSpace.node.{u}) (j : ULift.{u} (Fin 2)) :
+    ((nodeIncl.{u}).toLRSHom.base p : ULift.{u} (Fin 2) → ℂ) j = p.1.1 j :=
+  (AnalyticSpace.eval_coord ((nodeIncl.{u}).toLRSHom.base p) j).symm.trans
+    ((AnalyticSpace.eval_c_app (Z := AnalyticSpace.node.{u})
+        (W := AnalyticSpace.complexAffineSpace.{u} 2) nodeIncl.{u}.toLRSHom
+        nodeIncl.{u}.isCLinear (U := ⊤) p trivial (coord j)).symm.trans
+      ((congrArg ((AnalyticSpace.node.{u}).eval (U := ⊤) p trivial)
+        (coordPullback_nodeIncl.{u} j)).trans (eval_nodeCoord.{u} p j)))
+
+/-- **The composite of `coordPullback_comp_nodeIncl_sq`, computed through the base maps.**
+
+This is the second route that theorem's docstring needs: it evaluates the pullback at a point of
+the node by pushing the point through the base map of the composite, so it uses neither
+`AnalyticSpace.coordPullback_comp` nor
+`AlgebraicGeometry.LocallyRingedSpace.Γ_map_comp_apply`. -/
+theorem eval_coordPullback_comp_via_base (p : AnalyticSpace.node.{u}) (j : ULift.{u} (Fin 1)) :
+    (AnalyticSpace.node.{u}).eval (U := ⊤) p trivial
+        (AnalyticSpace.coordPullback
+          (nodeIncl.{u} ≫ AnalyticSpace.okaMap (fun _ : ULift.{u} (Fin 1) ↦
+            coord (ULift.up 0) * coord (ULift.up 0))) j) =
+      p.1.1 (ULift.up 0) * p.1.1 (ULift.up 0) := by
+  set φ := nodeIncl.{u} ≫ AnalyticSpace.okaMap (fun _ : ULift.{u} (Fin 1) ↦
+    coord (ULift.up 0) * coord (ULift.up 0)) with hφ
+  refine Eq.trans (AnalyticSpace.eval_c_app (Z := AnalyticSpace.node.{u})
+    (W := AnalyticSpace.complexAffineSpace.{u} 1) φ.toLRSHom φ.isCLinear
+    (U := ⊤) p trivial (coord j)) ?_
+  refine Eq.trans (AnalyticSpace.eval_coord (φ.toLRSHom.base p) j) ?_
+  change okaMapFun (fun _ : ULift.{u} (Fin 1) ↦ coord (ULift.up 0) * coord (ULift.up 0))
+    ((nodeIncl.{u}).toLRSHom.base p) j = _
+  rw [okaMapFun_apply, map_mul, evalHom_coord, base_nodeIncl]
+
+/-- The value of `nodeCoord 0 * nodeCoord 0` at a point of the node, computed with no reference
+to any composite: `eval` is a ring homomorphism and `ComplexAnalytic.eval_nodeCoord` gives each
+factor. -/
+theorem eval_nodeCoord_sq (p : AnalyticSpace.node.{u}) :
+    (AnalyticSpace.node.{u}).eval (U := ⊤) p trivial
+        (nodeCoord.{u} (ULift.up 0) * nodeCoord.{u} (ULift.up 0)) =
+      p.1.1 (ULift.up 0) * p.1.1 (ULift.up 0) :=
+  (map_mul ((AnalyticSpace.node.{u}).eval (U := ⊤) p trivial) _ _).trans
+    (congrArg₂ (· * ·) (eval_nodeCoord.{u} p (ULift.up 0)) (eval_nodeCoord.{u} p (ULift.up 0)))
+
+/-- **The two routes to the composite's coordinate agree**, on a number rather than on a
+symbolic expression. The left-hand side is reached through
+`AnalyticSpace.coordPullback_comp`, by `coordPullback_comp_nodeIncl_sq_eq`; the right-hand side
+through the base maps, by `eval_coordPullback_comp_via_base`. `eval_nodeCoord_sq` computes the
+same number a third way, so an error in `coordPullback_comp` at this instance would have to be
+matched by an error in the base-map computation to survive. -/
+theorem coordPullback_comp_routes_agree (p : AnalyticSpace.node.{u}) (j : ULift.{u} (Fin 1)) :
+    (AnalyticSpace.node.{u}).eval (U := ⊤) p trivial
+        (nodeCoord.{u} (ULift.up 0) * nodeCoord.{u} (ULift.up 0)) =
+      p.1.1 (ULift.up 0) * p.1.1 (ULift.up 0) :=
+  (congrArg ((AnalyticSpace.node.{u}).eval (U := ⊤) p trivial)
+    (coordPullback_comp_nodeIncl_sq_eq.{u} j)).symm.trans
+      (eval_coordPullback_comp_via_base p j)
 
 /-! ### Naturality of evaluation, at a non-identity morphism -/
 
