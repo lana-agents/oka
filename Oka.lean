@@ -48,6 +48,7 @@ import Oka.RingTheory.LocalRing.ResidueField.Basic
 import Oka.StalkEquiv
 import Oka.Statement
 import Oka.StructureSheaf
+import Oka.Topology.Sheaves.Functors
 import Oka.Topology.Sheaves.QuotientPresheaf
 import Oka.Topology.Sheaves.Stalks
 import Oka.UFD
