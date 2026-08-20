@@ -154,3 +154,19 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.Γ_map_hom_inv_apply' depends on axi
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.Γ_map_hom_inv_apply
+
+/-! ### Sections and germs on an open subspace -/
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.germ_eq_stalkMap_ofRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.germ_eq_stalkMap_ofRestrict
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.Γ_map_over_ambient' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.Γ_map_over_ambient

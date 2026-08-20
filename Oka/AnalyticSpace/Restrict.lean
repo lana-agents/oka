@@ -87,6 +87,9 @@ cut-out along that isomorphism.
 - `ComplexAnalytic.stalkMap_restrictHom_eq`: the stalk map of the restriction, factored.
 - `ComplexAnalytic.IsCutOutBy.iso_comp`: being cut out is transported by an isomorphism of the
   target, along which the cutting family is pulled back.
+- `ComplexAnalytic.Γ_map_restrictHom_toRestrictΓ`: **the sheaf map of the restriction is the
+  sheaf map of `i`**, on a section over `V` viewed as a global section of `𝒪_{B|V}` — which is
+  what makes a chart usable on a section that does not extend.
 -/
 
 open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry Topology
@@ -361,6 +364,48 @@ theorem IsCutOutBy.iso_comp {C : LocallyRingedSpace.{u}} {i : A ⟶ B}
     rw [← Set.range_comp]
     refine congrArg Set.range (funext fun j ↦ ?_)
     exact (eq.symm_apply_eq).2 (hgerm (i.base a) j).symm
+
+/-- **The sheaf map of `ComplexAnalytic.restrictHom` is the sheaf map of `i`**, on a section of
+`𝒪_B` over `V` viewed as a global section of `𝒪_{B|V}`.
+
+This is the fact that makes a chart usable on a section that does **not** extend to the whole
+chart target. `restrictHom_fac` computes `Γ.map (restrictHom i V).op` only on sections pulled
+back from `Γ(B, 𝒪)`, and `restrictHom` is an `IsOpenImmersion.lift`, whose sheaf map is not
+otherwise computable — so `AlgebraicGeometry.LocallyRingedSpace.exists_localLift`'s output, which
+is a section over an open subset and generally over nothing larger, was out of reach.
+
+The proof is entirely on stalks and uses **no equation of opens**: `section_ext` reduces to
+germs, `Γgerm_Γ_map` turns `Γ.map` into `stalkMap`, `stalkMap_restrictHom` factors that through
+`i.stalkMap`, and
+`AlgebraicGeometry.LocallyRingedSpace.germ_eq_stalkMap_ofRestrict` handles both restrictions. -/
+theorem Γ_map_restrictHom_toRestrictΓ (i : A ⟶ B) (V : Opens B) (u : B.presheaf.obj (op V)) :
+    (LocallyRingedSpace.Γ.map (restrictHom i V).op).hom (B.toRestrictΓ V u) =
+      A.toRestrictΓ ((Opens.map i.base).obj V) (i.c.app (op V) u) := by
+  refine TopCat.Presheaf.section_ext
+    (A.restrict ((Opens.map i.base).obj V).isOpenEmbedding).sheaf ⊤ _ _ fun y _ ↦ ?_
+  refine Eq.trans (LocallyRingedSpace.Γgerm_Γ_map (restrictHom i V) (B.toRestrictΓ V u) y) ?_
+  refine Eq.trans (congrArg (fun a ↦ ((restrictHom i V).stalkMap y).hom a)
+    (B.Γgerm_toRestrictΓ V u ((restrictHom i V).base y))) ?_
+  refine Eq.trans (ConcreteCategory.comp_apply
+    ((B.ofRestrict V.isOpenEmbedding).stalkMap ((restrictHom i V).base y))
+    ((restrictHom i V).stalkMap y) _).symm ?_
+  refine Eq.trans (congrArg (fun m : B.presheaf.stalk
+      ((B.ofRestrict V.isOpenEmbedding).base ((restrictHom i V).base y)) ⟶
+      (A.restrict ((Opens.map i.base).obj V).isOpenEmbedding).presheaf.stalk y ↦
+    m.hom (B.presheaf.germ V _ ((restrictHom i V).base y).2 u))
+      (stalkMap_restrictHom i V y)) ?_
+  refine Eq.trans (ConcreteCategory.comp_apply _ _ _) ?_
+  refine Eq.trans (ConcreteCategory.comp_apply _ _ _) ?_
+  refine Eq.trans (congrArg (fun a ↦
+    ((A.ofRestrict ((Opens.map i.base).obj V).isOpenEmbedding).stalkMap y).hom
+      ((i.stalkMap ((A.ofRestrict ((Opens.map i.base).obj V).isOpenEmbedding).base y)).hom a))
+    (TopCat.Presheaf.stalkCongr_hom_germ B.presheaf
+      (Inseparable.of_eq (base_restrictHom i V y)) V _ y.2 u)) ?_
+  refine Eq.trans (congrArg (fun a ↦
+      ((A.ofRestrict ((Opens.map i.base).obj V).isOpenEmbedding).stalkMap y).hom a)
+    (LocallyRingedSpace.stalkMap_germ_apply i V
+      ((A.ofRestrict ((Opens.map i.base).obj V).isOpenEmbedding).base y) _ u)) ?_
+  exact (A.Γgerm_toRestrictΓ ((Opens.map i.base).obj V) (i.c.app (op V) u) y).symm
 
 /-- Restricting a `ℂ`-linear morphism to the preimage of an open subset of the target is
 `ℂ`-linear for the restricted algebra structures. -/
