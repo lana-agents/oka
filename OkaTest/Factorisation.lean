@@ -156,9 +156,15 @@ were general statements stated at `n = 2` inside this test file, and both are no
   spelling that `IsCutOutBy` demands and that this file consumes at `n = 2`.
 
 `nodeSection_eq` stays, because it is the one part of the pattern that really is about the node.
-The general fact hiding behind it is not a lemma but the observation stated on
-`Γ_map_inv_hom_apply`: **the pullback along `restrictTopIso.hom` is always a `rfl`**, so a
-section of the ambient space can always be written in the form the collapse needs.
+What hides behind it is not a lemma but the observation recorded on `Γ_map_inv_hom_apply`:
+`Γ.map X.restrictTopIso.hom.op` is **definitionally the restriction map** `⊤ ⟶ functor.obj ⊤`.
+
+**That is weaker than "the pullback along `restrictTopIso.hom` is always a `rfl`"**, which is
+how taxis #702 stated it and which is false: for a section given abstractly the two sides have
+different types, `Γ(X, ⊤)` and `Γ(X, functor.obj ⊤)`, and those are not definitionally equal
+even for `X = ℂ^n`. What is `rfl` is the pullback of a section whose presentation does not
+mention the open it lives on — a polynomial, a constant, a coordinate. Both halves are compiled
+beside `nodeSection_eq` below rather than left as prose.
 -/
 
 /-- The family `(z, 0)` of two entire functions on `ℂ¹`, which is the morphism `ℂ ⟶ ℂ²` onto
@@ -211,6 +217,29 @@ theorem nodeSection_eq (j : Fin 1) :
     nodeSection.{u} j =
       (LocallyRingedSpace.Γ.map ((complexAffineSpace.{u} 2).restrictTopIso.hom).op).hom
           (OkaRing.ofMvPolynomial ⊤ nodePoly.{u}) :=
+  rfl
+
+/-! The two claims the paragraph above makes about *why* `nodeSection_eq` is a `rfl`, compiled.
+
+The first is the reason: pulling back along `restrictTopIso.hom` **is** restricting, for every
+locally ringed space and every section, definitionally. The second is what that buys — the
+generalisation of `nodeSection_eq` itself, for every `n` and every polynomial, of which
+`nodeSection_eq` is the case `n = 2`, `P = nodePoly`.
+
+The claim these do **not** support is the one taxis #702 made and this file used to imply: that
+the pullback is a `rfl` for an arbitrary section. It is not, and it is not even well-typed —
+`(Γ.map X.restrictTopIso.hom.op).hom a = a` is rejected with a type mismatch between
+`Γ(X, ⊤)` and `Γ(X, functor.obj ⊤)`, for a general `X` and also for `X = ℂ^n`. -/
+
+example (X : LocallyRingedSpace.{u}) (a : X.presheaf.obj (op ⊤)) :
+    (LocallyRingedSpace.Γ.map X.restrictTopIso.hom.op).hom a =
+      (X.presheaf.map (homOfLE le_top).op).hom a :=
+  rfl
+
+example (n : ℕ) (P : MvPolynomial (ULift.{u} (Fin n)) ℂ) :
+    (LocallyRingedSpace.Γ.map (complexAffineSpace.{u} n).restrictTopIso.hom.op).hom
+        (OkaRing.ofMvPolynomial ⊤ P) =
+      OkaRing.ofMvPolynomial _ P :=
   rfl
 
 /-- **The morphism `z ↦ (z, 0)` of `ℂ ⟶ ℂ²` kills the node's equation `z₀ z₁`**, so it satisfies

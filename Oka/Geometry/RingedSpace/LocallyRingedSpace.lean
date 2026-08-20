@@ -93,10 +93,15 @@ the direction that *is* a `rfl`, then collapse the resulting pair with this lemm
 proof is `Iso.inv_hom_id` read through
 `AlgebraicGeometry.LocallyRingedSpace.Γ_map_comp_apply`.
 
-For `restrictTopIso` the direction that is a `rfl` is `hom`, and it is a `rfl` for *every*
-section — `X|⊤` has the same presheaf as `X` on the nose — so the technique always applies
-there. `OkaTest/Factorisation.lean` carries it out at `ℂ²`, and `nodeSection_eq` there is the
-`rfl` in question. -/
+For `restrictTopIso` the direction to write the section along is `hom`, because
+`Γ.map X.restrictTopIso.hom.op` is *definitionally the restriction map*
+`X.presheaf.map (homOfLE le_top).op` from `⊤` to the image of `⊤`. It is therefore a `rfl`
+for any section whose presentation does not mention the open it lives on — a polynomial, a
+constant, a coordinate — but **not** for a section given abstractly: the two sides then have
+different types, `Γ(X, ⊤)` and `Γ(X, functor.obj ⊤)`, which are not definitionally equal even
+for `X = ℂ^n`. `OkaTest/Factorisation.lean` carries the technique out at `ℂ²`, where
+`nodeSection_eq` is the `rfl` in question, and checks both halves of this paragraph beside
+it. -/
 lemma Γ_map_inv_hom_apply (e : X ≅ Y) (a : Y.presheaf.obj (op ⊤)) :
     (Γ.map e.inv.op).hom ((Γ.map e.hom.op).hom a) = a :=
   (Γ_map_comp_apply e.inv e.hom a).symm.trans
