@@ -3,6 +3,10 @@
 #
 #   bash .orchestra/validation.sh
 #
+# `.github/workflows/lean_action_ci.yml` runs the same checks in CI and the two must be kept in
+# step; if you add a check here, add it there. What "lint" means is defined once, as
+# `lintDriver` in `lakefile.toml`, so that at least that much cannot drift.
+#
 # Exits 0 only if every check below passes; the first failing check stops the script and
 # exits non-zero.
 
@@ -41,15 +45,29 @@ lake build --wfail || exit 1
 # file: missing docstrings on definitions, names that break the naming convention, `@[simp]`
 # lemmas whose left-hand side is not in `simp` normal form, and about ten more. `lake build`
 # sees none of it, which is how the project reached 2026-08-20 with 19 findings nobody had
-# looked at. Two things worth knowing before editing this line:
+# looked at.
 #
-#   * the argument is the library *root module* `Oka`, not `Oka OkaTest`. The test library has
-#     no root module, the same reason `lake exe lint-style Oka OkaTest` fails.
-#   * `#lint` in a scratch file that does nothing but `import Oka` is NOT a substitute: it only
-#     lints the current file's declarations and reports a green on an environment full of
-#     findings.
+# The linter and the module it runs on are configured once, as `lintDriver` in `lakefile.toml`,
+# so that this script and the CI workflow cannot disagree about what "lint" means. Note that
+# `#lint` in a scratch file that does nothing but `import Oka` is NOT a substitute: it only
+# lints the current file's declarations and reports a green on an environment full of findings.
 #
 # Needs the oleans, so it has to come after the build; given those it takes a few seconds.
-lake exe batteries/runLinter Oka || exit 1
+lake lint || exit 1
+
+# Verify Mathlib's text-based style linter is clean. Until now it was enforced by nothing at
+# all, despite being quoted in every pull request description on this project.
+#
+# It checks *less* than its name suggests. As of this Mathlib the whole list is: trailing
+# whitespace, a space before a semicolon, Windows line endings, disallowed unicode and variant
+# selectors, the string "Adaptation note", and module-name casing. Line length and copyright
+# headers are *build* linters, caught by `lake build --wfail` above via
+# `weak.linter.mathlibStandardSet`. Do not read a green `lint-style` as "Mathlib style has been
+# checked"; it is disjoint from, and much narrower than, the environment linters.
+#
+# The argument is the library root module `Oka` alone. `lake exe lint-style Oka OkaTest` fails
+# with `no such file OkaTest.lean`: the test library is a glob with no root module. The
+# `nolints file could not be read` warning is harmless and always present.
+lake exe lint-style Oka || exit 1
 
 echo "Validation succeeded."
