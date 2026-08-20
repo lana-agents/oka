@@ -7,7 +7,10 @@ module
 
 public import Mathlib.CategoryTheory.Abelian.CommSq
 public import Mathlib.CategoryTheory.Limits.Constructions.Over.Products
+public import Mathlib.CategoryTheory.Limits.Shapes.Pullback.IsPullback.Kernels
 public import Oka.Algebra.Category.ModuleCat.Sheaf.Coherent.Basic
+public import Oka.Algebra.Category.ModuleCat.Sheaf.Coherent.Locality
+public import Oka.Algebra.Category.ModuleCat.Sheaf.LocallySurjective
 
 /-!
 # Stability properties of coherent sheaves of modules
@@ -21,6 +24,8 @@ site `(C, J)` where `C` has pullbacks:
   a finite type sheaf to a coherent sheaf is of finite type.
 - `SheafOfModules.IsCoherent.image_of_isFiniteType`: the image of a morphism from a finite
   type sheaf to a coherent sheaf is coherent.
+- `SheafOfModules.IsCoherent.cokernel`: the cokernel of a morphism from a finite type sheaf to
+  a coherent sheaf is coherent — the third leg of two-out-of-three.
 
 We work over small sites since the sheafification and local bijectivity instances
 for the involved sites (and their iterated slice sites) are then available; this
@@ -134,5 +139,69 @@ omit [HasPullbacks C] in
 lemma IsCoherent.image [HasBinaryProducts C] {M N : SheafOfModules.{u} R} (φ : M ⟶ N)
     [M.IsCoherent] [N.IsCoherent] : (Abelian.image φ).IsCoherent :=
   .image_of_isFiniteType φ
+
+section Cokernel
+
+variable [HasBinaryProducts C]
+
+/-- **The sheaf of relations between finitely many sections of a quotient is of finite type.**
+
+This is the whole content of `SheafOfModules.IsCoherent.cokernel`, and unlike the kernel and
+image cases it cannot be got by transporting coherence along a mono or an epi.
+
+Write `Q` for `cokernel φ` and `p : N ⟶ Q` for the projection, and form the pullback
+`P := free I ×_Q N` of `ψ` along `p`. Its two projections have, by
+`CategoryTheory.Limits.isIso_kernel_map_of_isPullback` applied to the square and to its flip,
+the same kernels as the maps they are base changes of: `kernel (fst) ≅ kernel p =
+Abelian.image φ`, which is of finite type because `M` is and `N` is coherent, and
+`kernel (snd) ≅ kernel ψ`, which is what we are after. Since `p` is an epimorphism so is `fst`,
+so `P` is an extension of `free I` by a sheaf of finite type and therefore of finite type
+(`SheafOfModules.IsFiniteType.of_epi_free` — this is where local surjectivity of an
+epimorphism enters). Finally `snd` maps the finite type sheaf `P` into the coherent sheaf `N`,
+so its kernel is of finite type. -/
+lemma isFiniteType_kernel_free_to_cokernel {M N : SheafOfModules.{u} R} (φ : M ⟶ N)
+    [M.IsFiniteType] [N.IsCoherent] {I : Type u} [Finite I]
+    (ψ : free (R := R) I ⟶ Limits.cokernel φ) : (Limits.kernel ψ).IsFiniteType := by
+  have sq : IsPullback (pullback.fst ψ (cokernel.π φ)) (pullback.snd ψ (cokernel.π φ)) ψ
+      (cokernel.π φ) := IsPullback.of_hasPullback _ _
+  haveI : Epi (pullback.fst ψ (cokernel.π φ)) := Abelian.epi_pullback_of_epi_g _ _
+  haveI : (Abelian.image φ).IsCoherent := IsCoherent.image_of_isFiniteType φ
+  haveI := isIso_kernel_map_of_isPullback sq
+  haveI : (kernel (pullback.fst ψ (cokernel.π φ))).IsFiniteType :=
+    IsFiniteType.of_iso (M := kernel (cokernel.π φ)) (asIso (kernel.map _ _ _ _ sq.w)).symm
+  haveI : (Limits.pullback ψ (cokernel.π φ)).IsFiniteType :=
+    IsFiniteType.of_epi_free (pullback.fst ψ (cokernel.π φ))
+  haveI : (kernel (pullback.snd ψ (cokernel.π φ))).IsFiniteType :=
+    isFiniteType_kernel_of_isCoherent (pullback.snd ψ (cokernel.π φ))
+  haveI := isIso_kernel_map_of_isPullback sq.flip
+  exact IsFiniteType.of_iso (M := kernel (pullback.snd ψ (cokernel.π φ)))
+    (asIso (kernel.map _ _ _ _ sq.flip.w))
+
+/-- **The cokernel of a morphism from a finite type sheaf of modules to a coherent sheaf of
+modules is coherent.**
+
+With `SheafOfModules.IsCoherent.kernel` and `SheafOfModules.IsCoherent.image` this completes
+two-out-of-three for coherence. Only the *source* being of finite type is needed, which is what
+the application to ideal sheaves requires: there the source is a finite free sheaf, of which no
+coherence is available a priori. The apparently stronger statement with `[M.IsCoherent]` is the
+same theorem, since `cokernel φ ≅ cokernel (Abelian.image.ι φ)`. -/
+lemma IsCoherent.cokernel {M N : SheafOfModules.{u} R} (φ : M ⟶ N)
+    [M.IsFiniteType] [N.IsCoherent] : (Limits.cokernel φ).IsCoherent where
+  isFiniteType := isFiniteType_cokernel φ
+  hasFiniteTypeRelations X := by
+    intro I _ ψ
+    haveI : HasBinaryProducts (Over X) := Over.ConstructProducts.over_binaryProduct_of_pullback
+    haveI : (M.over X).IsFiniteType := IsFiniteType.over M X
+    haveI : (N.over X).IsCoherent := IsCoherent.over N X
+    -- `kernel` alone resolves to `SheafOfModules.IsCoherent.kernel` here: declaring a lemma
+    -- named `IsCoherent.cokernel` opens `SheafOfModules.IsCoherent` in its own body.
+    haveI : (Limits.kernel (ψ ≫ (PreservesCokernel.iso (overFunctor R X) φ).hom)).IsFiniteType :=
+      isFiniteType_kernel_free_to_cokernel (M := M.over X) (N := N.over X) (φ.over X)
+        (ψ ≫ (PreservesCokernel.iso (overFunctor R X) φ).hom)
+    exact IsFiniteType.of_iso
+      (M := Limits.kernel (ψ ≫ (PreservesCokernel.iso (overFunctor R X) φ).hom))
+      (kernelCompMono ψ (PreservesCokernel.iso (overFunctor R X) φ).hom)
+
+end Cokernel
 
 end SheafOfModules

@@ -488,3 +488,39 @@ info: 'ComplexAnalytic.IsCutOutBy.pushforwardIso' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.IsCutOutBy.pushforwardIso
+/-! ### Coherence of a quotient by a coherent subsheaf -/
+
+/--
+info: 'SheafOfModules.IsCoherent.cokernel' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.IsCoherent.cokernel
+
+/--
+info: 'SheafOfModules.IsFiniteType.of_epi_free' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.IsFiniteType.of_epi_free
+
+/--
+info: 'SheafOfModules.isFiniteType_free_biprod' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.isFiniteType_free_biprod
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.isCoherent_cokernel_sectionsHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.isCoherent_cokernel_sectionsHom
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isCoherent_cokernel_sectionsHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isCoherent_cokernel_sectionsHom

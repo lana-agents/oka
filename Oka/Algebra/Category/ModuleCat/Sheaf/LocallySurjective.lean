@@ -7,6 +7,9 @@ module
 
 public import Oka.Algebra.Category.ModuleCat.Sheaf.Colimits
 public import Oka.Algebra.Category.ModuleCat.Sheaf.Free
+public import Oka.Algebra.Category.ModuleCat.Sheaf.Generators
+public import Oka.CategoryTheory.Abelian.Basic
+public import Oka.CategoryTheory.Sites.CoversTop.Basic
 public import Oka.CategoryTheory.Sites.LocallySurjective
 
 /-!
@@ -143,5 +146,57 @@ theorem exists_free_app_eq_of_epi {L : Type u} [Finite L] (f : M ⟶ N) [Epi f]
   rw [map_smul, ha l, PresheafOfModules.sections_property]
 
 end Free
+
+section Extension
+
+variable {C : Type u} [SmallCategory C] [HasPullbacks C] [HasBinaryProducts C]
+  {J : GrothendieckTopology C} {R : Sheaf J RingCat.{u}}
+
+/-- Auxiliary statement for `SheafOfModules.IsFiniteType.of_epi_free`: over an object on which
+`π` is surjective on sections, the source is of finite type. -/
+lemma isFiniteType_over_of_surjective_val_app {P : SheafOfModules.{u} R} {I : Type u} [Finite I]
+    (π : P ⟶ free (R := R) I) [Epi π] [(kernel π).IsFiniteType] {W : C}
+    (hsurj : Function.Surjective ((π.over W).val.app (op (Over.mk (𝟙 W))))) :
+    IsFiniteType (R := R.over W) (P.over W) := by
+  haveI : HasBinaryProducts (Over W) := Over.ConstructProducts.over_binaryProduct_of_pullback
+  have hT : IsTerminal (Over.mk (𝟙 W)) := Over.mkIdTerminal
+  choose a ha using fun i ↦ hsurj (PresheafOfModules.sections.eval
+    (((free (R := R) I).over W).freeHomEquiv (overFreeIso I W).hom i) (op (Over.mk (𝟙 W))))
+  have huv : (P.over W).freeHomEquiv.symm (fun i ↦ sectionOfTerminal hT (P.over W) (a i)) ≫
+      π.over W = (overFreeIso I W).hom := by
+    rw [freeHomEquiv_symm_comp]
+    refine Equiv.symm_apply_eq _ |>.2 ?_
+    funext i
+    rw [sectionsMap_sectionOfTerminal hT (π.over W) (a i), ha i, sectionOfTerminal_eval]
+  haveI : Epi ((P.over W).freeHomEquiv.symm
+      (fun i ↦ sectionOfTerminal hT (P.over W) (a i)) ≫ π.over W) := by
+    rw [huv]; infer_instance
+  haveI : IsFiniteType (R := R.over W) ((kernel π).over W) := IsFiniteType.over (kernel π) W
+  haveI : IsFiniteType (R := R.over W) (kernel (π.over W)) :=
+    IsFiniteType.of_iso (M := (kernel π).over W) (overKernelIso π W)
+  haveI : IsFiniteType (R := R.over W) ((free (R := R.over W) I) ⊞ kernel (π.over W)) :=
+    isFiniteType_free_biprod _
+  haveI := Abelian.epi_biprod_desc_kernel_ι (π.over W)
+    ((P.over W).freeHomEquiv.symm (fun i ↦ sectionOfTerminal hT (P.over W) (a i))) ‹_›
+  exact IsFiniteType.of_epi (N := P.over W) (biprod.desc
+    ((P.over W).freeHomEquiv.symm (fun i ↦ sectionOfTerminal hT (P.over W) (a i)))
+    (kernel.ι (π.over W)))
+
+/-- **An extension of a finite free sheaf of modules by a sheaf of finite type is of finite
+type.**
+
+This is the one place where local surjectivity of an epimorphism is genuinely needed: a free
+sheaf is not projective, so the tautological sections of `free I` lift along `π` only on a
+cover. On each member of that cover the lift and the kernel jointly generate
+(`CategoryTheory.Abelian.epi_biprod_desc_kernel_ι`), and being of finite type is local. -/
+lemma IsFiniteType.of_epi_free {P : SheafOfModules.{u} R} {I : Type u} [Finite I]
+    (π : P ⟶ free (R := R) I) [Epi π] [(kernel π).IsFiniteType] : P.IsFiniteType := by
+  choose S hS hlift using fun Z ↦ exists_free_app_eq_of_epi π (𝟙 (free (R := R) I)) Z
+  refine IsFiniteType.of_coversTop_of_forall P _
+    (GrothendieckTopology.coversTop_of_sieves J S hS) (fun t ↦ ?_)
+  obtain ⟨Z, W, g, hg⟩ := t
+  exact isFiniteType_over_of_surjective_val_app π (fun c ↦ hlift Z g hg c)
+
+end Extension
 
 end SheafOfModules

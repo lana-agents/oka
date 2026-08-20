@@ -36,6 +36,8 @@ by `SheafOfModules.isFiniteType_free`, so nothing more is required.
 - `AlgebraicGeometry.LocallyRingedSpace.isFiniteType_kernel_sectionsHom`: the sheaf of relations
   between finitely many global sections is of finite type. On `ℂ^n` this is Oka's coherence
   lemma, read through the sheaf-of-modules formalism.
+- `AlgebraicGeometry.LocallyRingedSpace.isCoherent_cokernel_sectionsHom`: the quotient
+  `𝒪_Y ⧸ (f₁, …, f_k)` is coherent.
 - `ComplexAnalytic.AnalyticSpace.isCoherent_idealSheaf`: the same for a complex analytic space,
   where the hypothesis is discharged by the main theorem.
 
@@ -132,6 +134,18 @@ theorem isFiniteType_kernel_sectionsHom (h : Y.IsCoherentStructureSheaf) {I : Ty
   haveI : (SheafOfModules.unit Y.ringSheaf).IsCoherent := h
   SheafOfModules.isFiniteType_kernel_of_isCoherent _
 
+/-- **The quotient of the structure sheaf by a finitely generated ideal sheaf is coherent**, on
+a locally ringed space with coherent structure sheaf.
+
+This is the third leg of two-out-of-three, `SheafOfModules.IsCoherent.cokernel`, and again only
+the finite type of the source `𝒪_Y ^ I` is used. The quotient is the structure sheaf of the
+closed subspace cut out by the `f i`, so this is what makes the theory of coherent sheaves
+available on an analytic subspace rather than only on the ambient space. -/
+theorem isCoherent_cokernel_sectionsHom (h : Y.IsCoherentStructureSheaf) {I : Type u} [Finite I]
+    (f : I → Y.presheaf.obj (op ⊤)) : (cokernel (Y.sectionsHom f)).IsCoherent :=
+  haveI : (SheafOfModules.unit Y.ringSheaf).IsCoherent := h
+  SheafOfModules.IsCoherent.cokernel _
+
 end AlgebraicGeometry.LocallyRingedSpace
 
 namespace ComplexAnalytic.AnalyticSpace
@@ -155,5 +169,12 @@ theorem isFiniteType_kernel_sectionsHom {I : Type u} [Finite I]
     (f : I → X.presheaf.obj (op ⊤)) :
     (kernel (X.toLocallyRingedSpace.sectionsHom f)).IsFiniteType :=
   X.toLocallyRingedSpace.isFiniteType_kernel_sectionsHom X.isCoherentStructureSheaf f
+
+/-- **The quotient of the structure sheaf of a complex analytic space by a finitely generated
+ideal sheaf is coherent.** -/
+theorem isCoherent_cokernel_sectionsHom {I : Type u} [Finite I]
+    (f : I → X.presheaf.obj (op ⊤)) :
+    (cokernel (X.toLocallyRingedSpace.sectionsHom f)).IsCoherent :=
+  X.toLocallyRingedSpace.isCoherent_cokernel_sectionsHom X.isCoherentStructureSheaf f
 
 end ComplexAnalytic.AnalyticSpace
