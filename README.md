@@ -108,8 +108,13 @@ coherence statement for arbitrary complex analytic spaces:
   coordinate germs, which is Krull's intersection theorem applied to the maximal ideal. Combined
   with the morphisms given by holomorphic maps, two items above, this gives
   `Hom(ℂ^n, ℂ) ≃ Γ(ℂ^n, 𝒪)`: a global holomorphic function on
-  `ℂ^n` is the same thing as a morphism of analytic spaces to `ℂ`. The same bijection for a
-  general `Z` is missing only its **existence** half, not this uniqueness half.
+  `ℂ^n` is the same thing as a morphism of analytic spaces to `ℂ`, and the `m`-fold form
+  `Hom(ℂ^n, ℂ^m) ≃ Γ(ℂ^n, 𝒪)^m`. The same bijection for a general `Z` is missing only its
+  **existence** half, not this uniqueness half. The tuple of pullbacks is **natural in `Z`** for
+  every morphism `Z' ⟶ Z`, which is the form a presentation-independence argument consumes; and
+  the closed immersion of the node into `ℂ²` is the *unique* morphism of analytic spaces pulling
+  the coordinates back to the node's two coordinate functions, so a singular subspace is
+  recovered from two sections of its structure sheaf with no reference to how it was built.
 
 * **Comparison with algebraic geometry.** The canonical morphism of locally ringed spaces from
   `ℂ^ι` to `Spec (MvPolynomial ι ℂ)`, with its point map identified as `z ↦ ker (eval z)`, shown

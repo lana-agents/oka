@@ -97,6 +97,68 @@ theorem symm_homComplexLineEquiv_okaMap {n : ℕ}
       AnalyticSpace.okaMap u :=
   (Equiv.symm_apply_eq _).2 (Γ_map_okaMapHom_coord u (ULift.up 0)).symm
 
+/-- **The composition `AnalyticSpace.coordPullback_comp` is about is the one it looks like.**
+
+`ComplexAnalytic.AnalyticSpace.coordPullback_comp` is a one-line proof of a statement general in
+`Z`, and the way it could be hollow is if `(χ ≫ φ).toLRSHom` were not
+`χ.toLRSHom ≫ φ.toLRSHom` — in which case the lemma would be a true statement about a different
+composition. This says the two agree, on the nose. -/
+theorem toLRSHom_comp {Z Z' Z'' : AnalyticSpace.{u}} (χ : Z ⟶ Z') (φ : Z' ⟶ Z'') :
+    (χ ≫ φ).toLRSHom = χ.toLRSHom ≫ φ.toLRSHom :=
+  rfl
+
+/-- **Naturality of `coordPullback` at a composite of two non-identity morphisms.**
+
+Instantiating at one non-identity `χ` rules out the lemma being about the identity, but the
+failure worth ruling out is about *composition*, so both morphisms here are non-identity and
+neither is the other's inverse: `χ` is the closed immersion of the node into `ℂ²`, `φ` is the
+morphism attached to the non-linear family `z ↦ z₀²`. The two sides are computed by routes that
+meet only at `AnalyticSpace.coordPullback_comp` itself. -/
+theorem coordPullback_comp_nodeIncl_sq (j : ULift.{u} (Fin 1)) :
+    AnalyticSpace.coordPullback
+        (nodeIncl.{u} ≫ AnalyticSpace.okaMap (fun _ : ULift.{u} (Fin 1) ↦
+          coord (ULift.up 0) * coord (ULift.up 0))) j =
+      (LocallyRingedSpace.Γ.map nodeIncl.{u}.toLRSHom.op).hom
+        (coord (ULift.up 0) * coord (ULift.up 0)) :=
+  (AnalyticSpace.coordPullback_comp nodeIncl.{u} _ j).trans
+    (congrArg (LocallyRingedSpace.Γ.map nodeIncl.{u}.toLRSHom.op).hom
+      (Γ_map_okaMapHom_coord _ j))
+
+/-- The same composite, computed **without** `AnalyticSpace.coordPullback_comp`: the pullback of
+the coordinate along the composite is the product of the node's first coordinate function with
+itself. Together with `coordPullback_comp_nodeIncl_sq` this pins the naturality statement to a
+named section of `𝒪_node`. -/
+theorem coordPullback_comp_nodeIncl_sq_eq (j : ULift.{u} (Fin 1)) :
+    AnalyticSpace.coordPullback
+        (nodeIncl.{u} ≫ AnalyticSpace.okaMap (fun _ : ULift.{u} (Fin 1) ↦
+          coord (ULift.up 0) * coord (ULift.up 0))) j =
+      nodeCoord.{u} (ULift.up 0) * nodeCoord.{u} (ULift.up 0) := by
+  refine (coordPullback_comp_nodeIncl_sq j).trans ?_
+  refine (map_mul (LocallyRingedSpace.Γ.map nodeIncl.{u}.toLRSHom.op).hom _ _).trans ?_
+  exact congrArg₂ (· * ·) (coordPullback_nodeIncl (ULift.up 0))
+    (coordPullback_nodeIncl (ULift.up 0))
+
+/-- **Naturality of `coordPullback`, instantiated at a non-identity `χ`.** With `χ` the
+inclusion of the node into `ℂ²` and `φ` the morphism attached to a family of entire functions,
+naturality says the coordinates of the composite are the family restricted to the node. -/
+theorem coordPullback_comp_nodeIncl {m : ℕ}
+    (u : ULift.{u} (Fin m) → OkaRing (⊤ : Opens (ULift.{u} (Fin 2) → ℂ)))
+    (j : ULift.{u} (Fin m)) :
+    AnalyticSpace.coordPullback (nodeIncl.{u} ≫ AnalyticSpace.okaMap u) j =
+      (LocallyRingedSpace.Γ.map nodeIncl.{u}.toLRSHom.op).hom (u j) :=
+  (AnalyticSpace.coordPullback_comp nodeIncl.{u} (AnalyticSpace.okaMap u) j).trans
+    (congrArg (LocallyRingedSpace.Γ.map nodeIncl.{u}.toLRSHom.op).hom
+      (Γ_map_okaMapHom_coord u j))
+
+/-- **The uniqueness of the node's inclusion is about a hom-set with more than one element**:
+`nodeToLine` composed with a morphism `ℂ ⟶ ℂ²` would be a second morphism `node ⟶ ℂ²`, and the
+two coordinate morphisms already differ. -/
+theorem nodeIncl_coordPullback_ne :
+    AnalyticSpace.coordPullback nodeIncl.{u} (ULift.up 0) ≠
+      AnalyticSpace.coordPullback nodeIncl.{u} (ULift.up 1) :=
+  (coordPullback_nodeIncl (ULift.up 0)).symm ▸
+    ((coordPullback_nodeIncl (ULift.up 1)).symm ▸ nodeCoord_ne.{u})
+
 /-! ### Naturality of evaluation, at a non-identity morphism -/
 
 /-- **Naturality of evaluation, instantiated at `nodeToLine j`**, a morphism between two
