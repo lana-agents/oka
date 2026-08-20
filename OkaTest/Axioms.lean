@@ -128,6 +128,21 @@ info: 'LocalOkaRing.truncQuotientEquiv' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms LocalOkaRing.truncQuotientEquiv
+/-! ### Polynomials as holomorphic functions -/
+
+/--
+info: 'OkaRing.ofMvPolynomial' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms OkaRing.ofMvPolynomial
+
+/--
+info: 'LocalOkaRing.ofMvPolynomial' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.ofMvPolynomial
 
 /-! ### Quotients of presheaves of rings -/
 

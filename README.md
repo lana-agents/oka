@@ -17,6 +17,9 @@ coherence statement for arbitrary complex analytic spaces:
 * **Several complex variables.** The Cauchy integral formula on a polydisc, and the analyticity
   of a circle integral in its parameters (`Oka/Analytic/ParametricCircleIntegral.lean`). This is
   the analytic input to the Weierstrass division theorem.
+* **Polynomials are holomorphic.** A polynomial in `ι` complex variables defines a holomorphic
+  function on every open subset of `ℂ^ι` (`Oka/Polynomial.lean`), and a germ at every point
+  (`Oka/Polynomial/Germ.lean`). This is the bridge from algebraic to analytic equations.
 * **Weierstrass theory.** Weierstrass polynomials, the preparation and division theorems for
   germs, and the dictionary between polynomials over `OkaRing U` and holomorphic functions on a
   cylinder (`Oka/Weierstrass.lean`).
