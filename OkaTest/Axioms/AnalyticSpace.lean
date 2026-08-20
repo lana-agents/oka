@@ -182,3 +182,10 @@ info: 'ComplexAnalytic.AnalyticSpace.homComplexLineEquiv' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.homComplexLineEquiv
+
+/--
+info: 'ComplexAnalytic.nodeCoord_ne' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.nodeCoord_ne

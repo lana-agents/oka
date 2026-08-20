@@ -76,6 +76,8 @@ needs one computation which was not in the development —
   spaces `Z ⟶ ℂ^n` is determined by the pullbacks of the coordinate functions**, and
   `ComplexAnalytic.AnalyticSpace.hom_ext_complexLine` for `n = 1`.
 - `ComplexAnalytic.AnalyticSpace.homComplexLineEquiv`: `Hom(ℂ^n, ℂ) ≃ Γ(ℂ^n, 𝒪)`.
+- `ComplexAnalytic.nodeCoord_ne`: the two coordinate functions of the node are different
+  sections — the rigidity theorem turning a fact about base maps into a fact about sections.
 
 ## References
 
@@ -264,5 +266,22 @@ noncomputable def homComplexLineEquiv (n : ℕ) :
     ⟨fun _ _ h ↦ hom_ext_complexLine _ _ h, fun g ↦ exists_hom_complexLine g⟩
 
 end AnalyticSpace
+
+section Node
+
+/-- **The two coordinate functions of the node are different sections of `𝒪_node`.**
+
+`ComplexAnalytic.nodeToLine_ne` says the two coordinate *morphisms* differ, which is a statement
+about base maps; `ComplexAnalytic.AnalyticSpace.hom_ext_complexLine` converts it into a
+statement about the sections they pull the coordinate back to. This is the direction in which
+the uniqueness theorem produces information rather than confirming it:
+`ComplexAnalytic.nodeCoord_mul` and `ComplexAnalytic.nodeCoord_ne_zero` say the product of the
+two vanishes and neither does, and neither of them distinguishes the two. -/
+theorem nodeCoord_ne : nodeCoord.{u} (ULift.up 0) ≠ nodeCoord.{u} (ULift.up 1) := fun hcon ↦
+  nodeToLine_ne.{u} (AnalyticSpace.hom_ext_complexLine _ _
+    ((Γ_map_nodeToLineHom_coord (ULift.up 0)).trans
+      (hcon.trans (Γ_map_nodeToLineHom_coord (ULift.up 1)).symm)))
+
+end Node
 
 end ComplexAnalytic

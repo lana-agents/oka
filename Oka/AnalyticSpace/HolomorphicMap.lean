@@ -74,6 +74,7 @@ Two things are then missing, and neither is in this repository or in Mathlib:
   `ComplexAnalytic.not_injective_base_nodeToLineHom`: `nodeToLine j` is surjective on points and
   is **not** injective on them, so it is not a bijection on points. That the node is not
   homeomorphic to `ℂ` by *any* map is true and is not proved here.
+- `ComplexAnalytic.nodeToLine_ne`: the two coordinate morphisms out of the node are different.
 
 ## References
 
@@ -356,6 +357,35 @@ def nodeToLine (j : ULift.{u} (Fin 2)) :
     isCLinearHom_zeroLocusSubspaceι_nodeSection.comp
       ((isCLinearHom_ofRestrict_complexSpace _).comp
         (isCLinearHom_okaMapHom fun _ : ULift.{u} (Fin 1) ↦ coord j))⟩
+
+/-- **The two coordinate morphisms out of the node are different.**
+
+The point exhibited is `(1, 0)`, which lies on the node. This is a statement about the
+morphisms rather than a check on any one construction, which is why it is here and not in
+`OkaTest/HolomorphicMap.lean`; `ComplexAnalytic.nodeCoord_ne` turns it into the corresponding
+statement about *sections* using the rigidity of
+`ComplexAnalytic.AnalyticSpace.hom_ext_complexLine`. -/
+theorem nodeToLine_ne : nodeToLine.{u} (ULift.up 0) ≠ nodeToLine.{u} (ULift.up 1) := by
+  classical
+  have hne : (ULift.up 0 : ULift.{u} (Fin 2)) ≠ ULift.up 1 := fun hcon ↦ by
+    simpa using congrArg ULift.down hcon
+  set x : ULift.{u} (Fin 2) → ℂ := fun l ↦ if l = ULift.up 0 then 1 else 0 with hx
+  have hx0 : x (ULift.up 0) * x (ULift.up 1) = 0 := by
+    rw [hx]
+    dsimp only
+    rw [if_neg hne.symm, mul_zero]
+  set p : AnalyticSpace.node.{u} :=
+    ⟨⟨x, trivial⟩, (mem_zeroLocus_nodeSection_iff _).2 hx0⟩ with hp
+  intro hcon
+  have h := congrArg (fun φ : AnalyticSpace.node.{u} ⟶ AnalyticSpace.complexAffineSpace.{u} 1 ↦
+    (φ.toLRSHom.base p : ULift.{u} (Fin 1) → ℂ) (ULift.up 0)) hcon
+  rw [show ((nodeToLine.{u} (ULift.up 0)).toLRSHom.base p : ULift.{u} (Fin 1) → ℂ)
+      (ULift.up 0) = x (ULift.up 0) from base_nodeToLineHom _ p _,
+    show ((nodeToLine.{u} (ULift.up 1)).toLRSHom.base p : ULift.{u} (Fin 1) → ℂ)
+      (ULift.up 0) = x (ULift.up 1) from base_nodeToLineHom _ p _, hx] at h
+  dsimp only at h
+  rw [if_pos rfl, if_neg hne.symm] at h
+  exact one_ne_zero h
 
 end Node
 

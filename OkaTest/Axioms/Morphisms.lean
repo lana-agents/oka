@@ -73,3 +73,10 @@ info: 'ComplexAnalytic.not_injective_base_nodeToLineHom' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.not_injective_base_nodeToLineHom
+
+/--
+info: 'ComplexAnalytic.nodeToLine_ne' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.nodeToLine_ne
