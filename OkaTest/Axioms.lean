@@ -524,3 +524,46 @@ info: 'ComplexAnalytic.AnalyticSpace.isCoherent_cokernel_sectionsHom' depends on
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.isCoherent_cokernel_sectionsHom
+/-! ### The residue field of a complex analytic space is `ℂ` -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.existsUnique_sub_stalkAlgMap_mem_maximalIdeal' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.existsUnique_sub_stalkAlgMap_mem_maximalIdeal
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.evalStalk_eq_zero_iff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.evalStalk_eq_zero_iff
+
+/--
+info: 'ComplexAnalytic.eval_ofCutOut' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.eval_ofCutOut
+
+/--
+info: 'ComplexAnalytic.eval_nodeCoord' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.eval_nodeCoord
+
+/--
+info: 'ComplexAnalytic.nodeCoord_mul' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.nodeCoord_mul
+
+/--
+info: 'ComplexAnalytic.nodeCoord_ne_zero' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.nodeCoord_ne_zero
