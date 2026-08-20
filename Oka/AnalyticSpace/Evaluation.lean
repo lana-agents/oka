@@ -5,6 +5,7 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Mathlib.Geometry.RingedSpace.LocallyRingedSpace.ResidueField
 import Oka.AnalyticSpace.LocalModel
+import Oka.AnalyticSpace.OpenSubspace
 import Oka.MaximalIdeal
 import Oka.RingTheory.LocalRing.ResidueField.Basic
 
@@ -79,6 +80,7 @@ what makes `ComplexAnalytic.AnalyticSpace.eval` computable rather than merely we
   without reference to the construction, and is what a computation of a value should go through.
 - `ComplexAnalytic.eval_complexAffineSpace`: on `ℂ^n` itself the value of a global section is
   its value as a holomorphic function.
+- `ComplexAnalytic.eval_restrict_complexAffineSpace`: the same on an **open** subspace `ℂ^n|V`.
 - `ComplexAnalytic.eval_ofCutOut`: on an analytic subspace of `V ⊆ ℂ^n`, the value of the
   restriction of a holomorphic function is the value of that function.
 - `ComplexAnalytic.eval_nodeCoord`, `ComplexAnalytic.nodeCoord_mul` and
@@ -393,6 +395,37 @@ theorem eval_complexAffineSpace :
       (sub_eq_zero.2 (hc.trans (OkaRing.evalHom_algebraMap (U := ⊤) trivial c).symm)))
 
 end ComplexAffineSpace
+
+section Restrict
+
+variable {n : ℕ} (V : Opens (complexAffineSpace.{u} n))
+
+/-- **On an open subspace `ℂ^n|V`, the value of a global section is `OkaRing.evalHom`.**
+
+The third of this file's three computation rules, beside
+`ComplexAnalytic.eval_complexAffineSpace` for `ℂ^n` itself and `ComplexAnalytic.eval_ofCutOut`
+for a cut-out subspace. It is what makes a base-map computation on `ℂ^n|V` checkable by a route
+other than unfolding the construction.
+
+**It is one line, and the reason is worth stating because it is not visible from the
+statement.** `(AnalyticSpace.restrict (complexAffineSpace n) V).algebraMap` is *definitionally*
+`constantsAlgMap n V` — `AnalyticSpace.restrict_algebraMap` gives `resAlgMap`, and
+`ComplexAnalytic.constantsAlgMap_eq_resAlgMap` is `rfl` — so the coefficient field
+`AnalyticSpace.evalStalk` uses and the one
+`ComplexAnalytic.isCoefficientField_stalkAlgMap_constantsAlgMap` provides are the *same* one,
+and `IsLocalRing.IsCoefficientField.evalHom` agrees on the nose with no transport.
+
+The point of the section is indexed by `V.isOpenEmbedding.isOpenMap.functor.obj ⊤` rather than
+by `V`: those two opens have the same points and are not definitionally equal, which is why the
+witness is `⟨w, trivial, rfl⟩` rather than `w.2`. -/
+theorem eval_restrict_complexAffineSpace
+    (w : ((AnalyticSpace.complexAffineSpace.{u} n).restrict V))
+    (g : ((AnalyticSpace.complexAffineSpace.{u} n).restrict V).presheaf.obj (op ⊤)) :
+    ((AnalyticSpace.complexAffineSpace.{u} n).restrict V).eval (U := ⊤) w trivial g =
+      OkaRing.evalHom (U := V.isOpenEmbedding.isOpenMap.functor.obj ⊤) ⟨w, trivial, rfl⟩ g :=
+  evalHom_isCoefficientField_stalkAlgMap_constantsAlgMap n V w g
+
+end Restrict
 
 section OfCutOut
 

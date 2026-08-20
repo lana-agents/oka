@@ -156,6 +156,13 @@ info: 'ComplexAnalytic.eval_complexAffineSpace' depends on axioms:
 #print axioms ComplexAnalytic.eval_complexAffineSpace
 
 /--
+info: 'ComplexAnalytic.eval_restrict_complexAffineSpace' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.eval_restrict_complexAffineSpace
+
+/--
 info: 'AlgebraicGeometry.LocallyRingedSpace.hom_stalk_ext' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/

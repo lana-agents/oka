@@ -28,7 +28,9 @@ file exists to make it meaningful.
   `ComplexAnalytic.AnalyticSpace.exists_hom_complexLine` followed by restriction.
 * `base_invHom` computes the base map of the morphism the theorem produces — it is `z ↦ 1/z`,
   not something the construction could have returned by ignoring its input — and
-  `base_invHom_two` puts a number on it.
+  `base_invHom_two` puts a number on it. `base_invHom_via_eval` computes the same map by a route
+  sharing no lemma, which is what pins the extension-by-zero convention of
+  `ComplexAnalytic.okaMapOpenFun`; `base_invHom` alone cannot, since it is `rfl`.
 
 **What this does not check.** That the construction is ever applied to a `V` which is not an
 open subset of `ℂ^n` — that is taxis #654's general `Z`, which needs the chart step and a
@@ -149,6 +151,30 @@ theorem base_invHom_two :
     (invHom.{u}.toLRSHom.base ⟨fun _ ↦ (2 : ℂ), two_ne_zero⟩ : ULift.{u} (Fin 1) → ℂ)
         (ULift.up 0) = 2⁻¹ :=
   base_invHom _ _
+
+/-- **The same base map, by a route sharing no lemma with `base_invHom`.**
+
+`base_invHom` goes through `ComplexAnalytic.base_okaMapOpenHom`, which is `rfl`, so on its own it
+cannot be evidence: it reads the base map off the construction. This reads it off
+`coordPullback_invHom` instead, through naturality of evaluation
+(`ComplexAnalytic.AnalyticSpace.eval_c_app`), the value of a coordinate on `ℂ¹`
+(`ComplexAnalytic.AnalyticSpace.eval_coord`) and the value of a global section on `ℂ¹|V`
+(`ComplexAnalytic.eval_restrict_complexAffineSpace`).
+
+**The two agreeing is what pins `ComplexAnalytic.okaMapOpenFun`'s extension-by-zero
+convention**: an error in it breaks this route and not the `rfl` one. Do not replace this proof
+with `base_invHom`; the content is that both elaborate. -/
+theorem base_invHom_via_eval (y : ↥punctured.{u}) (j : ULift.{u} (Fin 1)) :
+    (invHom.{u}.toLRSHom.base y : ULift.{u} (Fin 1) → ℂ) j = (y.1 (ULift.up 0))⁻¹ :=
+  (AnalyticSpace.eval_coord (invHom.{u}.toLRSHom.base y) j).symm.trans
+    ((AnalyticSpace.eval_c_app
+        (Z := (AnalyticSpace.complexAffineSpace.{u} 1).restrict punctured.{u})
+        (W := AnalyticSpace.complexAffineSpace.{u} 1) invHom.{u}.toLRSHom
+        invHom.{u}.isCLinear (U := ⊤) y trivial (coord j)).symm.trans
+      ((congrArg (((AnalyticSpace.complexAffineSpace.{u} 1).restrict punctured.{u}).eval
+          (U := ⊤) y trivial) (coordPullback_invHom.{u} j)).trans
+        ((eval_restrict_complexAffineSpace punctured.{u} y invCoord.{u}).trans
+          (evalHom_invCoord _))))
 
 /-- The bijection is not a bijection onto nothing: it sends `invHom` to `1/z₀`. -/
 theorem homComplexLineEquivRestrict_invHom :
