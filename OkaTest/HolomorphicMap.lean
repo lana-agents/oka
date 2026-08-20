@@ -21,8 +21,9 @@ neither constant nor the identity, and that the pullback map on global sections 
 * `okaMap_sq_ne_id` turns that into the statement that the morphism of analytic spaces is not the
   identity, which is the specific degeneracy the construction could have.
 * `eq_coord_base_nodeToLine` does the same for the node, whose ambient space it is *not*: the
-  underlying map of `nodeToLine j` is `p ↦ p_j`, and `nodeToLine_ne` exhibits the two coordinate
-  morphisms as different.
+  underlying map of `nodeToLine j` is `p ↦ p_j`. That the two coordinate morphisms are different
+  is `ComplexAnalytic.nodeToLine_ne`, which is in the library rather than here: it is a fact
+  about the morphisms, not a check on this file.
 * `Γ_map_nodeToLine_ne_zero` is the check on the sheaf side rather than the space side: the
   pullback of the coordinate along `nodeToLine j` is a **nonzero** section of `𝒪_node`, so the
   morphism does not factor through a point.
@@ -73,30 +74,6 @@ theorem eq_coord_base_nodeToLine (j : ULift.{u} (Fin 2)) :
       ((nodeToLine.{u} j).toLRSHom.base p : ULift.{u} (Fin 1) → ℂ)) =
         fun p _ ↦ p.1.1 j :=
   funext fun p ↦ funext fun l ↦ base_nodeToLineHom j p l
-
-/-- **The two coordinate morphisms out of the node are different**, so `nodeToLine` is not a
-constant construction. The point exhibited is `(1, 0)`, which lies on the node. -/
-theorem nodeToLine_ne : nodeToLine.{u} (ULift.up 0) ≠ nodeToLine.{u} (ULift.up 1) := by
-  classical
-  have hne : (ULift.up 0 : ULift.{u} (Fin 2)) ≠ ULift.up 1 := fun hcon ↦ by
-    simpa using congrArg ULift.down hcon
-  set x : ULift.{u} (Fin 2) → ℂ := fun l ↦ if l = ULift.up 0 then 1 else 0 with hx
-  have hx0 : x (ULift.up 0) * x (ULift.up 1) = 0 := by
-    rw [hx]
-    dsimp only
-    rw [if_neg hne.symm, mul_zero]
-  set p : AnalyticSpace.node.{u} :=
-    ⟨⟨x, trivial⟩, (mem_zeroLocus_nodeSection_iff _).2 hx0⟩ with hp
-  intro hcon
-  have h := congrArg (fun φ : AnalyticSpace.node.{u} ⟶ AnalyticSpace.complexAffineSpace.{u} 1 ↦
-    (φ.toLRSHom.base p : ULift.{u} (Fin 1) → ℂ) (ULift.up 0)) hcon
-  rw [show ((nodeToLine.{u} (ULift.up 0)).toLRSHom.base p : ULift.{u} (Fin 1) → ℂ)
-      (ULift.up 0) = x (ULift.up 0) from base_nodeToLineHom _ p _,
-    show ((nodeToLine.{u} (ULift.up 1)).toLRSHom.base p : ULift.{u} (Fin 1) → ℂ)
-      (ULift.up 0) = x (ULift.up 1) from base_nodeToLineHom _ p _, hx] at h
-  dsimp only at h
-  rw [if_pos rfl, if_neg hne.symm] at h
-  exact one_ne_zero h
 
 /-- **The pullback of the coordinate along `nodeToLine j` is a nonzero section of `𝒪_node`.**
 

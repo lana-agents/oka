@@ -24,6 +24,12 @@ look if their hypotheses were redundant. This file rules out each of those.
   the node. That value is already known by a route sharing no lemma with this one
   (`ComplexAnalytic.eval_nodeCoord`, through `eval_ofCutOut`), so the two agreeing is a check on
   both.
+* `two_distinct_homs` records that the hom-set the uniqueness theorem is about is not a
+  singleton. The evidence that rigidity is *productive* rather than merely satisfiable is
+  `ComplexAnalytic.nodeCoord_ne`, which is in the library because it is a new fact about the
+  node rather than a check on this file: `nodeToLine_ne` is a statement about base maps, and
+  rigidity converts it into one about **sections**, which neither `nodeCoord_mul` nor
+  `nodeCoord_ne_zero` gives.
 * `hcoord_not_redundant` shows the hypothesis of `ComplexAnalytic.okaStalk_ringHom_ext` that the
   two maps agree on the coordinates cannot be dropped: `α ∘ evalHom`, the constant with the
   value at the point, is a local `ℂ`-algebra endomorphism of the stalk fixing every constant
@@ -71,6 +77,25 @@ theorem homComplexLineEquiv_okaMap {n : ℕ}
     (u : ULift.{u} (Fin 1) → OkaRing (⊤ : Opens (ULift.{u} (Fin n) → ℂ))) :
     AnalyticSpace.homComplexLineEquiv.{u} n (AnalyticSpace.okaMap u) = u (ULift.up 0) :=
   Γ_map_okaMapHom_coord u (ULift.up 0)
+
+/-- **The hom-set is not a singleton**, so the uniqueness theorem is about something: the two
+coordinate morphisms out of the node differ, and so do the sections they produce. -/
+theorem two_distinct_homs :
+    ∃ φ ψ : AnalyticSpace.node.{u} ⟶ AnalyticSpace.complexAffineSpace.{u} 1,
+      φ ≠ ψ ∧ (LocallyRingedSpace.Γ.map φ.toLRSHom.op).hom (coord (ULift.up 0)) ≠
+        (LocallyRingedSpace.Γ.map ψ.toLRSHom.op).hom (coord (ULift.up 0)) :=
+  ⟨nodeToLine.{u} (ULift.up 0), nodeToLine.{u} (ULift.up 1), nodeToLine_ne.{u}, fun hcon ↦
+    nodeCoord_ne.{u} ((Γ_map_nodeToLineHom_coord (ULift.up 0)).symm.trans
+      (hcon.trans (Γ_map_nodeToLineHom_coord (ULift.up 1))))⟩
+
+/-- **The inverse of the bijection, named.** `homComplexLineEquiv` is built by
+`Equiv.ofBijective`, so its inverse is a choice term; this says that on the sections which come
+from a family of entire functions it is `okaMap`, with no choice left in it. -/
+theorem symm_homComplexLineEquiv_okaMap {n : ℕ}
+    (u : ULift.{u} (Fin 1) → OkaRing (⊤ : Opens (ULift.{u} (Fin n) → ℂ))) :
+    (AnalyticSpace.homComplexLineEquiv.{u} n).symm (u (ULift.up 0)) =
+      AnalyticSpace.okaMap u :=
+  (Equiv.symm_apply_eq _).2 (Γ_map_okaMapHom_coord u (ULift.up 0)).symm
 
 /-! ### Naturality of evaluation, at a non-identity morphism -/
 
