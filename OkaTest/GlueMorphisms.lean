@@ -49,8 +49,19 @@ so the compatibility is vacuous and *any* pair of morphisms out of the two piece
 `k ≠ j` the glued morphism takes the value `1` at `axisPoint j`, where the restriction of
 `ComplexAnalytic.nodeToLineHom k` takes `0`. Both coordinates are instances of it —
 `glue_pn_ne_nodeToLine` and `glue_pn_ne_nodeToLine_one` — so the glued morphism is **not** the
-restriction of *either* piece's morphism, and it is the first glued morphism in this development
-that is not something one already had.
+restriction of *either* piece's morphism.
+
+That is the whole of what is claimed here, and it is deliberately weaker than what this paragraph
+said until #710. It used to add that this is *the first glued morphism in this development that is
+not something one already had* — a claim about every morphism the development can build rather
+than about the two the theorem names, proved by nothing, and with a concrete candidate falsifier:
+the glued morphism is determined by its coordinate pullback, and `nodeCoord 0 + nodeCoord 1`
+plausibly restricts to `nodeCoord j` on `pnAxis j`, since there `z_j` is nonvanishing and
+`z_j · z_{1-j} = 0`. If so the glued morphism is a restriction of
+`nodeIncl ≫ okaMap (fun _ ↦ X₀ + X₁)`, available since PR #47. That refutation is *not* compiled
+— the step it needs, that a nonvanishing section of `𝒪_X` is a unit, is not in this repository —
+so the clause was not false on the record, merely unsupported, which is why it is deleted rather
+than replaced by its negation.
 
 `exists_glue_pn_ne_nodeToLine` ties all three to `existsUnique_glue_pn`, so that they are not
 three statements about a hypothesis nothing satisfies; and `hom_ext_pullback_pnAxis` checks the
