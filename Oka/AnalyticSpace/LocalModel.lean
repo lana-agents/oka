@@ -4,17 +4,20 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Oka.AnalyticSpace.Coherent
-import Oka.AnalyticSpace.ZeroLocus
+import Oka.Geometry.RingedSpace.ZeroLocus
 import Oka.Polynomial
 import Oka.StalkEquiv
 
 /-!
 # Local models, and the analytic spaces they carve out
 
-`Oka/AnalyticSpace/ZeroLocus.lean` makes the zero locus of finitely many global sections of the
-structure sheaf of an arbitrary locally ringed space `Y` into a locally ringed space, and shows
-that its inclusion satisfies `ComplexAnalytic.IsCutOutBy`. Here we specialise `Y` to an open
-subset of `ℂ^n` and read off the two consequences the definitions of
+`Oka/Geometry/RingedSpace/ZeroLocus.lean` makes the zero locus of finitely many global sections
+of the structure sheaf of an arbitrary locally ringed space `Y` into a locally ringed space, and
+establishes the four properties of its inclusion — closed embedding, range, surjectivity on
+stalks, kernels of the stalk maps — that `ComplexAnalytic.IsCutOutBy` packages. Assembling them
+into that predicate is `isCutOutBy_zeroLocusSubspaceι` below, which lives here rather than in the
+mirror tree because `IsCutOutBy` is analytic-space vocabulary. Here we then specialise `Y` to an
+open subset of `ℂ^n` and read off the two consequences the definitions of
 `Oka/AnalyticSpace/Basic.lean` were designed for: such a zero locus is a
 `ComplexAnalytic.IsLocalModel`, and it is a `ComplexAnalytic.AnalyticSpace`.
 
@@ -97,6 +100,22 @@ theorem mem_zeroLocus_restrict_complexSpace_iff (V : Opens (complexSpace.{u} ι)
   exact (IsLocalRing.mem_maximalIdeal _).symm
 
 end ComplexSpace
+
+namespace AlgebraicGeometry.LocallyRingedSpace
+
+variable (Y : LocallyRingedSpace.{u})
+
+/-- **The zero locus of finitely many global sections is cut out by them**: the inclusion of
+the zero locus, with the quotient structure sheaf, satisfies all four conditions of
+`ComplexAnalytic.IsCutOutBy`. -/
+theorem isCutOutBy_zeroLocusSubspaceι {k : ℕ} (g : Fin k → Y.presheaf.obj (op ⊤)) :
+    ComplexAnalytic.IsCutOutBy (Y.zeroLocusSubspaceι g) g where
+  isClosedEmbedding := Y.isClosedEmbedding_zeroLocusι g
+  range_base := Y.range_zeroLocusι g
+  surjective_stalkMap z := Y.surjective_stalkMap_zeroLocusιHom g z
+  ker_stalkMap z := Y.ker_stalkMap_zeroLocusιHom g z
+
+end AlgebraicGeometry.LocallyRingedSpace
 
 namespace ComplexAnalytic
 

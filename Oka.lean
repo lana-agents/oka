@@ -16,7 +16,6 @@ import Oka.AnalyticSpace.IdealSheaf
 import Oka.AnalyticSpace.LocalModel
 import Oka.AnalyticSpace.Noetherian
 import Oka.AnalyticSpace.Relations
-import Oka.AnalyticSpace.ZeroLocus
 import Oka.Analytification.AffineSpace
 import Oka.CategoryTheory.Sites.CoversTop.Over
 import Oka.CategoryTheory.Sites.LocallySurjective
@@ -27,6 +26,7 @@ import Oka.Coherent
 import Oka.ComplexSpace
 import Oka.Data.Fin.Tuple.Basic
 import Oka.Geometry.RingedSpace.LocallyRingedSpace
+import Oka.Geometry.RingedSpace.ZeroLocus
 import Oka.LocalOkaRing
 import Oka.MaximalIdeal
 import Oka.Noetherian
