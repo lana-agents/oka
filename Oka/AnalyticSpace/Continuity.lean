@@ -51,8 +51,6 @@ needs no compatibility of the two `IsCoefficientField` structures.
   function on `Z`.
 - `ComplexAnalytic.evalStalk_chart`: on a chart, the value of the pullback of a holomorphic
   function is the value of that function.
-- `ComplexAnalytic.AnalyticSpace.evalStalk_eq_iff`: `evalStalk z a = c` exactly when
-  `a - c ∈ 𝔪_z`.
 
 ## References
 
@@ -96,22 +94,6 @@ lemma germ_restrict_mem_maximalIdeal_iff
   exact germ_mem_maximalIdeal_iff _ v
 
 end Chart
-
-namespace AnalyticSpace
-
-variable (Z : AnalyticSpace.{u})
-
-/-- **The value of a germ is characterised by the maximal ideal**: `c` is the value of `a` at
-`z` exactly when `a` differs from the constant `c` by a germ vanishing at `z`.
-
-This is the form in which `AnalyticSpace.evalStalk` is used whenever a value has to be
-*computed*: it turns an equation between complex numbers into a membership in `𝔪_z`, which
-transports along any local homomorphism. -/
-lemma evalStalk_eq_iff {z : Z} (a : Z.presheaf.stalk z) (c : ℂ) :
-    Z.evalStalk z a = c ↔ a - Z.stalkAlgMap z c ∈ maximalIdeal (Z.presheaf.stalk z) := by
-  rw [← Z.evalStalk_eq_zero_iff, map_sub, evalStalk_stalkAlgMap, sub_eq_zero]
-
-end AnalyticSpace
 
 section ChartEval
 

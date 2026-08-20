@@ -34,6 +34,9 @@ and `IsCoefficientField.evalHom` is the value of a germ at the point.
 
 ## Main results
 
+- `IsLocalRing.IsCoefficientField.evalHom_eq_iff`: the value of `a` is `c` exactly when `a - α c`
+  lies in the maximal ideal. This characterises `evalHom` without reference to the residue field,
+  and is what every consumer of a value should use.
 - `IsLocalRing.IsCoefficientField.existsUnique_sub_mem_maximalIdeal`: the constant is unique.
 - `IsLocalRing.IsCoefficientField.of_surjective`: a coefficient field is inherited by any
   quotient, more precisely by the target of any surjective ring homomorphism compatible with the
@@ -98,20 +101,29 @@ lemma evalHom_eq_zero_iff (h : IsCoefficientField α) {a : S} :
   rw [show h.evalHom a = h.residueFieldEquiv (residue S a) from rfl,
     map_eq_zero_iff _ h.residueFieldEquiv.injective, residue_eq_zero_iff]
 
+/-- **The value of `a` is `c` exactly when `a` differs from the constant `c` by an element of the
+maximal ideal.**
+
+This is the characterisation of `IsCoefficientField.evalHom`, and it is what makes it usable:
+`evalHom` is defined through the residue field, but nothing that consumes a value needs to know
+that. In particular an equation between values transports along any local homomorphism, because
+membership in the maximal ideal does. -/
+lemma evalHom_eq_iff (h : IsCoefficientField α) {a : S} {c : K} :
+    h.evalHom a = c ↔ a - α c ∈ maximalIdeal S := by
+  rw [← h.evalHom_eq_zero_iff, map_sub, h.evalHom_const, sub_eq_zero]
+
 lemma sub_evalHom_mem (h : IsCoefficientField α) (a : S) :
-    a - α (h.evalHom a) ∈ maximalIdeal S := by
-  rw [← h.evalHom_eq_zero_iff, map_sub, h.evalHom_const, sub_self]
+    a - α (h.evalHom a) ∈ maximalIdeal S :=
+  h.evalHom_eq_iff.1 rfl
 
 /-- **Every element of `S` is congruent to a unique constant modulo the maximal ideal.**
 
 Existence is the definition of a coefficient field; uniqueness holds for any homomorphism from a
-field, because the difference of two distinct constants is a unit. -/
+field, because the difference of two distinct constants is a unit. Both halves are
+`IsCoefficientField.evalHom_eq_iff` read in the two directions. -/
 theorem existsUnique_sub_mem_maximalIdeal (h : IsCoefficientField α) (a : S) :
-    ∃! c : K, a - α c ∈ maximalIdeal S := by
-  refine ⟨h.evalHom a, h.sub_evalHom_mem a, fun c hc ↦ ?_⟩
-  replace hc : a - α c ∈ maximalIdeal S := hc
-  rw [← h.evalHom_eq_zero_iff, map_sub, h.evalHom_const, sub_eq_zero] at hc
-  exact hc.symm
+    ∃! c : K, a - α c ∈ maximalIdeal S :=
+  ⟨h.evalHom a, h.sub_evalHom_mem a, fun _ hc ↦ (h.evalHom_eq_iff.2 hc).symm⟩
 
 /-- **A coefficient field is inherited along a surjection compatible with the constants.**
 
