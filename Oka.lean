@@ -39,6 +39,7 @@ import Oka.CategoryTheory.Sites.Over
 import Oka.CategoryTheory.Sites.Whiskering
 import Oka.ChangeOfCoordinates
 import Oka.Coherent
+import Oka.Completion
 import Oka.ComplexSpace
 import Oka.Data.Fin.Tuple.Basic
 import Oka.Geometry.RingedSpace.CutOut
@@ -55,6 +56,7 @@ import Oka.OkaRing
 import Oka.Polynomial
 import Oka.Polynomial.Germ
 import Oka.Regular
+import Oka.RingTheory.AdicCompletion.Algebra
 import Oka.RingTheory.Filtration
 import Oka.RingTheory.Ideal.Maps
 import Oka.RingTheory.LocalRing.ResidueField.Basic

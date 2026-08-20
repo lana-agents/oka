@@ -13,6 +13,7 @@ import OkaTest.Axioms.SheafOfModules
 import OkaTest.Axioms.Sheaves
 import OkaTest.Axioms.Weierstrass
 import OkaTest.CoherentCokernel
+import OkaTest.Completion
 import OkaTest.CutOutQuotient
 import OkaTest.CutOutRestrict
 import OkaTest.DividedDifference

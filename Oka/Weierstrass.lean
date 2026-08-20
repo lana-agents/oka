@@ -119,9 +119,15 @@ theorem MvPowerSeries.maximalIdeal_eq_span_X {σ : Type*} [Finite σ] [LinearOrd
     rw [constantCoeff_X] at h0
     exact not_isUnit_zero h0
 
-instance instIsAdicCompleteMaximalIdealMvPowerSeries
-    {σ : Type*} [Finite σ] [LinearOrder σ] :
+/-- **The formal power series ring is complete for its maximal-adic topology.**
+
+No order on `σ` is assumed: `MvPowerSeries.maximalIdeal_eq_span_X` needs one to pick a smallest
+variable occurring in a monomial, but its *statement* does not mention the order, so any linear
+order will do and a finite type has one. -/
+instance instIsAdicCompleteMaximalIdealMvPowerSeries {σ : Type*} [Finite σ] :
     IsAdicComplete (IsLocalRing.maximalIdeal (MvPowerSeries σ ℂ)) (MvPowerSeries σ ℂ) := by
+  obtain ⟨n, ⟨e⟩⟩ := Finite.exists_equiv_fin σ
+  letI : LinearOrder σ := LinearOrder.lift' e e.injective
   rw [MvPowerSeries.maximalIdeal_eq_span_X]
   infer_instance
 
