@@ -11,6 +11,7 @@ import Oka.Algebra.Category.ModuleCat.Sheaf.Generators
 import Oka.Algebra.Category.ModuleCat.Sheaf.LocallySurjective
 import Oka.Algebra.Category.ModuleCat.Sheaf.PushforwardContinuous
 import Oka.Algebra.Category.ModuleCat.Sheaf.Submodule
+import Oka.AlgebraicGeometry.GammaSpecAdjunction
 import Oka.Analytic.DividedDifference
 import Oka.Analytic.ParametricCircleIntegral
 import Oka.AnalyticSpace.Basic
@@ -29,6 +30,7 @@ import Oka.AnalyticSpace.OpenSubspace
 import Oka.AnalyticSpace.Relations
 import Oka.AnalyticSpace.Restrict
 import Oka.Analytification.AffineSpace
+import Oka.Analytification.Presentation
 import Oka.CategoryTheory.Abelian.Basic
 import Oka.CategoryTheory.Sites.CoversTop.Basic
 import Oka.CategoryTheory.Sites.CoversTop.Over

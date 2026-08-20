@@ -78,3 +78,79 @@ info: 'stalkMap_eq_lift' depends on axioms: [propext, Classical.choice, Quot.sou
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms stalkMap_eq_lift
+
+/-! ### The analytification of a presented affine `ℂ`-algebra
+
+`Oka/Analytification/Presentation.lean`. `toΓSpec_naturality` is mirror-tree material from
+`Oka/AlgebraicGeometry/GammaSpecAdjunction.lean`; its guard is here, beside its only consumer,
+rather than in `OkaTest/Axioms/Sheaves.lean`. -/
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.toΓSpec_naturality' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.toΓSpec_naturality
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.analytification' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.analytification
+
+/--
+info: 'ComplexAnalytic.mem_zeroLocus_polySection_iff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.mem_zeroLocus_polySection_iff
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.mem_toΓSpec_base_asIdeal_iff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.mem_toΓSpec_base_asIdeal_iff
+
+/--
+info: 'ComplexAnalytic.analytificationToSpec' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationToSpec
+
+/--
+info: 'ComplexAnalytic.mem_analytificationToSpec_base_asIdeal_iff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.mem_analytificationToSpec_base_asIdeal_iff
+
+/--
+info: 'ComplexAnalytic.analytificationToSpec_base_asIdeal' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationToSpec_base_asIdeal
+
+/--
+info: 'ComplexAnalytic.isMaximal_analytificationToSpec_base_asIdeal' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isMaximal_analytificationToSpec_base_asIdeal
+
+/--
+info: 'ComplexAnalytic.analytificationToSpec_base_injective' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationToSpec_base_injective
+
+/--
+info: 'ComplexAnalytic.analytificationToSpec_comp_specMk' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationToSpec_comp_specMk

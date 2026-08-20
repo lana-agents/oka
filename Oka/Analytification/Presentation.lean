@@ -1,0 +1,347 @@
+/-
+Copyright (c) 2026 Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
+-/
+import Oka.AlgebraicGeometry.GammaSpecAdjunction
+import Oka.AnalyticSpace.Evaluation
+import Oka.Analytification.AffineSpace
+
+/-!
+# The analytification of a presented affine `ℂ`-algebra
+
+Fix polynomials `g₁, …, g_k ∈ ℂ[x₁, …, x_n]` and write `I = (g₁, …, g_k)`. This file builds the
+complex analytic space
+
+```
+X^an = { z ∈ ℂ^n | g₁ z = ⋯ = g_k z = 0 }
+```
+
+and the comparison morphism of locally ringed spaces `X^an ⟶ Spec (ℂ[x]/I)`.
+
+The space is nothing new: it is `ComplexAnalytic.AnalyticSpace.zeroLocus` applied to the
+polynomials read as holomorphic functions by `OkaRing.ofMvPolynomial`, and its structure sheaf
+is coherent by Oka's theorem. What this file adds is the *comparison with algebraic geometry*:
+the ring map that sends a polynomial to the holomorphic function it defines, restricted to
+`X^an`, kills `I` — that is `ComplexAnalytic.IsCutOutBy.c_app_eq_zero`, the statement that the
+sections cutting a subspace out pull back to zero — so it factors through `ℂ[x]/I`, and the
+`Γ`-`Spec` adjunction turns the factorisation into a morphism `X^an ⟶ Spec (ℂ[x]/I)`.
+
+The content is then the identification of that morphism's map on points
+(`ComplexAnalytic.mem_analytificationToSpec_base_asIdeal_iff`): the prime of `Spec (ℂ[x]/I)`
+underneath `z ∈ X^an` is the ideal of functions vanishing at `z`. Without it the morphism would
+be a formal composite; with it, it is the classical comparison map, it lands in the closed
+points, and it is injective.
+
+## What this is *not*, and the sentence to read before citing it
+
+**`analytification g` depends on the tuple `g`, not on the algebra `ℂ[x]/I`.** Two presentations
+of the same finitely generated `ℂ`-algebra produce two analytic spaces and **nothing here says
+they agree.** There is no presentation-independence, no functoriality, and no universal
+property in this file; those are the remainder of the analytification issue and they need
+`Hom(Z, ℂ^n) ≃ Γ(Z, 𝒪_Z)^n`, which this file does not use and does not provide. The name
+`analytification` is used because that is what the object is, but every statement below is a
+statement about a *chosen* presentation.
+
+Also absent: the comparison of *structure sheaves*. `analytificationToSpec` is a morphism of
+locally ringed spaces, so it carries a map `𝒪_{Spec} ⟶ π_* 𝒪_{X^an}`, but nothing here
+identifies that map, and the flatness which would make analytification exact on coherent
+sheaves is a separate and later question (a GAGA input, not needed for the construction).
+
+## Main definitions
+
+- `ComplexAnalytic.complexAffineSpaceTop`: `ℂ^n` presented as an open subspace of itself, which
+  is the shape `ComplexAnalytic.IsLocalModel` asks for. This is
+  `ComplexAnalytic.nodeAmbient` with `2` replaced by `n`, and the two are definitionally equal.
+- `ComplexAnalytic.polySection`: a tuple of polynomials read as holomorphic functions on `ℂ^n`.
+- `ComplexAnalytic.AnalyticSpace.analytification`: **the analytic space cut out by a tuple of
+  polynomials.**
+- `ComplexAnalytic.presentationIdeal`: the ideal `(g₁, …, g_k)` they generate.
+- `ComplexAnalytic.analytificationToSpec`: **the comparison morphism
+  `X^an ⟶ Spec (ℂ[x]/I)`.**
+- `ComplexAnalytic.quotientEval`: evaluation of an element of `ℂ[x]/I` at a point of `X^an`,
+  which is well defined precisely because the points of `X^an` are the common zeros.
+
+## Main results
+
+- `ComplexAnalytic.mem_zeroLocus_polySection_iff`: **the points of `X^an` are the common zeros
+  of the `gⱼ`.** This is `ComplexAnalytic.mem_zeroLocus_nodeSection_iff` for an arbitrary tuple.
+- `ComplexAnalytic.AnalyticSpace.mem_toΓSpec_base_asIdeal_iff`: for **any** complex analytic
+  space `Z`, the prime of `Spec Γ(Z, 𝒪_Z)` underneath `z` is the ideal of global sections
+  vanishing at `z`. This mentions no polynomials and belongs beside the evaluation API of
+  `Oka/AnalyticSpace/Evaluation.lean`; it is here only because that file does not import the
+  `Γ`-`Spec` adjunction and should not acquire it for one lemma.
+- `ComplexAnalytic.mem_analytificationToSpec_base_asIdeal_iff` and
+  `ComplexAnalytic.analytificationToSpec_base_asIdeal`: **the point of `Spec (ℂ[x]/I)`
+  underneath `z` is the ideal of functions vanishing at `z`**, i.e. the kernel of
+  `ComplexAnalytic.quotientEval`.
+- `ComplexAnalytic.isMaximal_analytificationToSpec_base_asIdeal` and
+  `ComplexAnalytic.analytificationToSpec_base_injective`: the comparison morphism lands in the
+  closed points and is injective on points.
+- `ComplexAnalytic.analytificationToSpec_comp_specMk`: **the comparison morphism is the
+  restriction of `ℂ^n ⟶ Spec ℂ[x]`**, i.e. the evident square commutes.
+
+## References
+
+- [Hans Grauert and Reinhold Remmert, *Coherent analytic sheaves*][grauert-remmert1984], §A
+-/
+
+open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry Topology
+
+universe u
+
+namespace ComplexAnalytic
+
+noncomputable section
+
+variable {n k : ℕ}
+
+/-! ### The space -/
+
+/-- **`ℂ^n` presented as an open subspace of itself**, which is the shape `IsLocalModel` and
+`AnalyticSpace.local_model` ask for.
+
+`ComplexAnalytic.nodeAmbient` is this at `n = 2`, and the two are definitionally equal — both
+are `abbrev`s for the same restriction. It is not redefined there because that file is earlier
+in the import order. -/
+abbrev complexAffineSpaceTop (n : ℕ) : LocallyRingedSpace.{u} :=
+  (complexAffineSpace.{u} n).restrict (⊤ : Opens (complexAffineSpace.{u} n)).isOpenEmbedding
+
+/-- A tuple of polynomials, read as a tuple of holomorphic functions on `ℂ^n` by
+`OkaRing.ofMvPolynomial`. `ComplexAnalytic.nodeSection` is this at `g = fun _ ↦ X₀ * X₁`. -/
+def polySection (g : Fin k → MvPolynomial (ULift.{u} (Fin n)) ℂ) :
+    Fin k → (complexAffineSpaceTop.{u} n).presheaf.obj (op ⊤) :=
+  fun j ↦ OkaRing.ofMvPolynomial _ (g j)
+
+/-- **The analytic space cut out by a tuple of polynomials**: the common zero locus of the `gⱼ`
+in `ℂ^n`, with the structure sheaf `𝒪_{ℂ^n} ⧸ (g₁, …, g_k)`.
+
+Its structure sheaf is coherent, by `AnalyticSpace.isCoherentStructureSheaf`; see
+`ComplexAnalytic.AnalyticSpace.isCoherentStructureSheaf_zeroLocus`. Read the module docstring
+before citing this as *the* analytification: it depends on `g` and not only on the algebra
+`ℂ[x]/(g)`. -/
+def AnalyticSpace.analytification (g : Fin k → MvPolynomial (ULift.{u} (Fin n)) ℂ) :
+    AnalyticSpace.{u} :=
+  AnalyticSpace.zeroLocus ⊤ (polySection g)
+
+/-- **The points of the analytification are the common zeros of the `gⱼ`.**
+
+Without this the construction is a formal composite; this is what makes it the zero locus. The
+proof is `ComplexAnalytic.mem_zeroLocus_nodeSection_iff`'s, for an arbitrary tuple: a germ of a
+holomorphic function on `ℂ^n` is a non-unit exactly when the function vanishes, and the value
+of `OkaRing.ofMvPolynomial p` is `MvPolynomial.eval`. -/
+theorem mem_zeroLocus_polySection_iff (g : Fin k → MvPolynomial (ULift.{u} (Fin n)) ℂ)
+    (y : complexAffineSpaceTop.{u} n) :
+    y ∈ (complexAffineSpaceTop.{u} n).zeroLocus (polySection g) ↔
+      ∀ j, MvPolynomial.eval (y.1 : ULift.{u} (Fin n) → ℂ) (g j) = 0 := by
+  rw [mem_zeroLocus_restrict_complexSpace_iff]
+  exact forall_congr' fun j ↦
+    Iff.of_eq (congrArg (· = (0 : ℂ)) (OkaRing.evalHom_ofMvPolynomial _ _ (g j)))
+
+/-! ### The prime underneath a point, for an arbitrary analytic space
+
+The one general fact needed below. It belongs with the evaluation API of
+`Oka/AnalyticSpace/Evaluation.lean` and is here only because that file does not import the
+`Γ`-`Spec` adjunction; see the module docstring. -/
+
+/-- **The prime of `Spec Γ(Z, 𝒪_Z)` underneath `z` is the ideal of global sections vanishing at
+`z`**, for an arbitrary complex analytic space `Z`.
+
+Both halves are already available and this only joins them: Mathlib's
+`AlgebraicGeometry.LocallyRingedSpace.notMem_prime_iff_unit_in_stalk` says the complement of the
+prime consists of the sections with unit germ, and
+`ComplexAnalytic.AnalyticSpace.evalStalk_ne_zero_iff_isUnit` says a germ is a unit exactly when
+its value is nonzero — which is the content of the residue field of `Z` being `ℂ`. -/
+theorem AnalyticSpace.mem_toΓSpec_base_asIdeal_iff (Z : AnalyticSpace.{u}) (z : Z)
+    (a : Z.presheaf.obj (op ⊤)) :
+    a ∈ (Z.toLocallyRingedSpace.toΓSpec.base z).asIdeal ↔ Z.eval (U := ⊤) z trivial a = 0 := by
+  rw [← not_iff_not, ← ne_eq, AnalyticSpace.eval_apply,
+    AnalyticSpace.evalStalk_ne_zero_iff_isUnit]
+  exact LocallyRingedSpace.notMem_prime_iff_unit_in_stalk (X := Z.toLocallyRingedSpace) a z
+
+/-! ### The comparison morphism -/
+
+section Comparison
+
+variable (g : Fin k → MvPolynomial (ULift.{u} (Fin n)) ℂ)
+
+/-- The ideal generated by the tuple `g`, so that the algebra being analytified is
+`MvPolynomial (ULift (Fin n)) ℂ ⧸ presentationIdeal g`. -/
+abbrev presentationIdeal : Ideal (MvPolynomial (ULift.{u} (Fin n)) ℂ) := Ideal.span (Set.range g)
+
+/-- The closed immersion of the analytification into `ℂ^n`, presented as an open subspace of
+itself. -/
+abbrev analytificationι :
+    (AnalyticSpace.analytification.{u} g).toLocallyRingedSpace ⟶ complexAffineSpaceTop.{u} n :=
+  (complexAffineSpaceTop.{u} n).zeroLocusSubspaceι (polySection g)
+
+/-- A polynomial, read as a global section of `𝒪_{X^an}`: the holomorphic function it defines
+on `ℂ^n`, restricted to the analytification. -/
+def polyToGlobal : MvPolynomial (ULift.{u} (Fin n)) ℂ →+*
+    (AnalyticSpace.analytification.{u} g).presheaf.obj (op ⊤) :=
+  (LocallyRingedSpace.Γ.map (analytificationι g).op).hom.comp
+    (OkaRing.ofMvPolynomial _).toRingHom
+
+/-- **Each `gⱼ` restricts to the zero section of `𝒪_{X^an}`.**
+
+This is the whole reason the comparison morphism exists, and it is
+`ComplexAnalytic.IsCutOutBy.c_app_eq_zero` on the nose: the sections cutting a subspace out pull
+back to zero on it. No compatibility lemma is needed because `polySection g j` *is*
+`OkaRing.ofMvPolynomial _ (g j)` by definition. -/
+theorem polyToGlobal_apply_eq_zero (j : Fin k) : polyToGlobal g (g j) = 0 :=
+  ((complexAffineSpaceTop.{u} n).isCutOutBy_zeroLocusSubspaceι (polySection g)).c_app_eq_zero j
+
+/-- Reading polynomials as global sections of `𝒪_{X^an}` kills the ideal they generate. -/
+theorem presentationIdeal_le_ker : presentationIdeal g ≤ RingHom.ker (polyToGlobal g) :=
+  Ideal.span_le.2 (Set.range_subset_iff.2 fun j ↦ polyToGlobal_apply_eq_zero g j)
+
+/-- **`ℂ[x]/I` acts on the analytification by holomorphic functions**: the factorisation of
+`ComplexAnalytic.polyToGlobal` through the quotient, which exists by
+`ComplexAnalytic.presentationIdeal_le_ker`. -/
+def quotientToGlobal :
+    MvPolynomial (ULift.{u} (Fin n)) ℂ ⧸ presentationIdeal g →+*
+      (AnalyticSpace.analytification.{u} g).presheaf.obj (op ⊤) :=
+  Ideal.Quotient.lift _ (polyToGlobal g) fun _ ha ↦ presentationIdeal_le_ker g ha
+
+/-- **The comparison morphism `X^an ⟶ Spec (ℂ[x]/I)`.**
+
+The canonical map to the spectrum of the global sections
+(`AlgebraicGeometry.LocallyRingedSpace.toΓSpec`) composed with `Spec` of
+`ComplexAnalytic.quotientToGlobal`. This is `ComplexAnalytic.complexSpaceToSpec`'s construction
+with the quotient inserted, and `ComplexAnalytic.analytificationToSpec_comp_specMk` says the
+two agree over `Spec ℂ[x]`. -/
+def analytificationToSpec :
+    (AnalyticSpace.analytification.{u} g).toLocallyRingedSpace ⟶
+      Spec.locallyRingedSpaceObj
+        (CommRingCat.of (MvPolynomial (ULift.{u} (Fin n)) ℂ ⧸ presentationIdeal g)) :=
+  (AnalyticSpace.analytification.{u} g).toLocallyRingedSpace.toΓSpec ≫
+    Spec.locallyRingedSpaceMap (CommRingCat.ofHom (quotientToGlobal g))
+
+/-! ### The map on points -/
+
+/-- The value at a point of `X^an` of the section attached to a polynomial is the value of the
+polynomial there: `ComplexAnalytic.eval_ofCutOut` at the closed immersion cutting `X^an` out. -/
+theorem eval_polyToGlobal (y : AnalyticSpace.analytification.{u} g)
+    (p : MvPolynomial (ULift.{u} (Fin n)) ℂ) :
+    (AnalyticSpace.analytification.{u} g).eval (U := ⊤) y trivial (polyToGlobal g p) =
+      MvPolynomial.eval (y.1.1 : ULift.{u} (Fin n) → ℂ) p :=
+  eval_ofCutOut
+    ((complexAffineSpaceTop.{u} n).isCutOutBy_zeroLocusSubspaceι (polySection g)) y
+    (OkaRing.ofMvPolynomial _ p)
+
+/-- **The point of `Spec (ℂ[x]/I)` underneath `y` is the ideal of functions vanishing at `y`.**
+
+This is what makes `ComplexAnalytic.analytificationToSpec` recognisable as the classical
+comparison map rather than a formal composite, and it is the analogue for `X^an` of
+`ComplexAnalytic.mem_complexSpaceToSpec_base_asIdeal_iff` for `ℂ^n`. -/
+theorem mem_analytificationToSpec_base_asIdeal_iff (y : AnalyticSpace.analytification.{u} g)
+    (p : MvPolynomial (ULift.{u} (Fin n)) ℂ) :
+    Ideal.Quotient.mk (presentationIdeal g) p ∈ ((analytificationToSpec g).base y).asIdeal ↔
+      MvPolynomial.eval (y.1.1 : ULift.{u} (Fin n) → ℂ) p = 0 := by
+  refine Iff.trans ?_ (Iff.of_eq (congrArg (· = (0 : ℂ)) (eval_polyToGlobal g y p)))
+  exact AnalyticSpace.mem_toΓSpec_base_asIdeal_iff _ y (polyToGlobal g p)
+
+/-- Every `gⱼ` vanishes at every point of the analytification — the half of
+`ComplexAnalytic.mem_zeroLocus_polySection_iff` that a point of `X^an` carries with it. -/
+theorem eval_eq_zero_of_mem (y : AnalyticSpace.analytification.{u} g) (j : Fin k) :
+    MvPolynomial.eval (y.1.1 : ULift.{u} (Fin n) → ℂ) (g j) = 0 :=
+  (mem_zeroLocus_polySection_iff g y.1).1 y.2 j
+
+/-- **Evaluation of an element of `ℂ[x]/I` at a point of `X^an`.** Well defined exactly because
+the points of `X^an` are the common zeros of the `gⱼ`. -/
+def quotientEval (y : AnalyticSpace.analytification.{u} g) :
+    MvPolynomial (ULift.{u} (Fin n)) ℂ ⧸ presentationIdeal g →+* ℂ :=
+  Ideal.Quotient.lift _ (MvPolynomial.eval (y.1.1 : ULift.{u} (Fin n) → ℂ))
+    fun _ ha ↦ Ideal.span_le.2
+      (Set.range_subset_iff.2 fun j ↦ RingHom.mem_ker.2 (eval_eq_zero_of_mem g y j)) ha
+
+/-- `ComplexAnalytic.mem_analytificationToSpec_base_asIdeal_iff` as an equality of ideals: the
+point underneath `y` is the kernel of evaluation at `y`. -/
+theorem analytificationToSpec_base_asIdeal (y : AnalyticSpace.analytification.{u} g) :
+    ((analytificationToSpec g).base y).asIdeal = RingHom.ker (quotientEval g y) := by
+  refine Ideal.ext fun q ↦ ?_
+  obtain ⟨p, rfl⟩ := Ideal.Quotient.mk_surjective q
+  exact (mem_analytificationToSpec_base_asIdeal_iff g y p).trans RingHom.mem_ker.symm
+
+/-- **The comparison morphism lands in the closed points of `Spec (ℂ[x]/I)`**: evaluation at a
+point of `X^an` is a surjection onto the field `ℂ`, so its kernel is maximal. -/
+theorem isMaximal_analytificationToSpec_base_asIdeal (y : AnalyticSpace.analytification.{u} g) :
+    ((analytificationToSpec g).base y).asIdeal.IsMaximal := by
+  rw [analytificationToSpec_base_asIdeal]
+  exact RingHom.ker_isMaximal_of_surjective (quotientEval g y)
+    fun c ↦ ⟨Ideal.Quotient.mk _ (MvPolynomial.C c), MvPolynomial.eval_C c⟩
+
+/-- **The comparison morphism is injective on points**, by the same argument as for `ℂ^n`: the
+polynomial `xᵢ - wᵢ` vanishes at `w` and hence at any point with the same image. -/
+theorem analytificationToSpec_base_injective :
+    Function.Injective
+      fun y : AnalyticSpace.analytification.{u} g ↦ (analytificationToSpec g).base y := by
+  intro y w h
+  -- As in `complexSpaceToSpec_base_injective`, the equality of points is fed to `congrArg`
+  -- rather than to `rw`: the carriers involved are definitionally equal but not at `instances`
+  -- transparency, and a `rw` across that seam is rejected outright.
+  have key (p : MvPolynomial (ULift.{u} (Fin n)) ℂ) :
+      MvPolynomial.eval (y.1.1 : ULift.{u} (Fin n) → ℂ) p = 0 ↔
+        MvPolynomial.eval (w.1.1 : ULift.{u} (Fin n) → ℂ) p = 0 :=
+    (mem_analytificationToSpec_base_asIdeal_iff g y p).symm.trans
+      ((Iff.of_eq (congrArg (fun q : PrimeSpectrum (MvPolynomial (ULift.{u} (Fin n)) ℂ ⧸
+          presentationIdeal g) ↦ Ideal.Quotient.mk _ p ∈ q.asIdeal) h)).trans
+        (mem_analytificationToSpec_base_asIdeal_iff g w p))
+  refine Subtype.ext (Subtype.ext (funext fun i ↦ ?_))
+  have hz :=
+    (key (MvPolynomial.X i - MvPolynomial.C ((w.1.1 : ULift.{u} (Fin n) → ℂ) i))).2 (by simp)
+  simpa [sub_eq_zero] using hz
+
+/-! ### Compatibility with the comparison morphism of `ℂ^n` -/
+
+/-- Reading a polynomial as a section of `𝒪_{X^an}` is the same whether one restricts it from
+`ℂ^n` or reads it directly on the open subspace `ℂ^n|⊤`.
+
+**This is a `rfl`, and the reason is worth recording**, because taxis #702 established that
+`functor.obj ⊤` and `⊤` are *not* definitionally equal even at `⊤` and even over `ℂ^n`, so an
+arbitrary section would need a transport here. A polynomial does not, because
+`Γ.map (ofRestrict U).op` is definitionally the restriction map of the presheaf, the restriction
+map of `okaCommPresheaf` is definitionally `OkaRing.restrict`, and
+`OkaRing.restrict_ofMvPolynomial` is itself a `rfl`: the *presentation* of the section does not
+mention its open. -/
+theorem mk_comp_quotientToGlobal :
+    CommRingCat.ofHom (Ideal.Quotient.mk (presentationIdeal g)) ≫
+        CommRingCat.ofHom (quotientToGlobal g) =
+      okaGlobalOfMvPolynomial (ULift.{u} (Fin n)) ≫
+        LocallyRingedSpace.Γ.map (analytificationι g ≫
+          (complexAffineSpace.{u} n).ofRestrict
+            (⊤ : Opens (complexAffineSpace.{u} n)).isOpenEmbedding).op :=
+  rfl
+
+/-- **The comparison morphism of `X^an` is the restriction of the comparison morphism of
+`ℂ^n`**: the square
+
+```
+X^an  ⟶  Spec (ℂ[x]/I)
+ ↓              ↓
+ℂ^n   ⟶  Spec ℂ[x]
+```
+
+commutes. Together with `ComplexAnalytic.mem_analytificationToSpec_base_asIdeal_iff` this pins
+`analytificationToSpec` down as the classical map.
+
+The proof is formal — naturality of `toΓSpec`, functoriality of `Spec`, and
+`ComplexAnalytic.mk_comp_quotientToGlobal` — and uses nothing analytic. -/
+theorem analytificationToSpec_comp_specMk :
+    analytificationToSpec g ≫
+        Spec.locallyRingedSpaceMap
+          (CommRingCat.ofHom (Ideal.Quotient.mk (presentationIdeal g))) =
+      (analytificationι g ≫ (complexAffineSpace.{u} n).ofRestrict
+          (⊤ : Opens (complexAffineSpace.{u} n)).isOpenEmbedding) ≫
+        complexSpaceToSpec (ULift.{u} (Fin n)) := by
+  rw [analytificationToSpec, complexSpaceToSpec, Category.assoc,
+    ← Spec.locallyRingedSpaceMap_comp, ← Category.assoc,
+    LocallyRingedSpace.toΓSpec_naturality, Category.assoc,
+    ← Spec.locallyRingedSpaceMap_comp]
+  exact congrArg _ (congrArg Spec.locallyRingedSpaceMap (mk_comp_quotientToGlobal g))
+
+end Comparison
+
+end
+
+end ComplexAnalytic
