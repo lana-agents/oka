@@ -122,3 +122,10 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.existsUnique_glueMorphisms_of_opens'
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.existsUnique_glueMorphisms_of_opens
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.hom_ext_of_isEmpty' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.hom_ext_of_isEmpty

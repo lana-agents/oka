@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Mathlib.Geometry.RingedSpace.OpenImmersion
+import Oka.Geometry.RingedSpace.LocallyRingedSpace
 
 /-!
 # Two open immersions with the same image have isomorphic sources
@@ -114,11 +115,6 @@ end Pullback
 end AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion
 
 namespace AlgebraicGeometry.LocallyRingedSpace
-
-/-- The image of an open subspace inclusion is that open subset. -/
-theorem range_ofRestrict (X : LocallyRingedSpace.{u}) (V : TopologicalSpace.Opens X) :
-    Set.range (X.ofRestrict V.isOpenEmbedding).base = (V : Set X) :=
-  Subtype.range_val
 
 /-- **The inclusion of a smaller open subspace into a larger one.**
 

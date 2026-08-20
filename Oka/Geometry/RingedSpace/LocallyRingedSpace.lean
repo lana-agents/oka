@@ -36,10 +36,14 @@ mirror tree.
   the same maps on stalks are equal.
 - `AlgebraicGeometry.LocallyRingedSpace.Γgerm_Γ_map`: the germ of the pullback of a global
   section is the image of its germ under the stalk map.
+- `AlgebraicGeometry.LocallyRingedSpace.range_ofRestrict`: the image of an open subspace
+  inclusion is that open subset.
 - `AlgebraicGeometry.LocallyRingedSpace.range_ofRestrict_comp`: the image of the composite of two
   open subspace inclusions.
-- `AlgebraicGeometry.LocallyRingedSpace.hom_ext_restrict_of_isEmpty`: any two morphisms out of
-  the restriction to an open subset with no points are equal.
+- `AlgebraicGeometry.LocallyRingedSpace.hom_ext_of_isEmpty`: any two morphisms out of a locally
+  ringed space with no points are equal.
+- `AlgebraicGeometry.LocallyRingedSpace.hom_ext_restrict_of_isEmpty`: its specialisation to the
+  restriction to an open subset with no points, which is the form callers meet.
 -/
 
 open CategoryTheory TopologicalSpace Opposite
@@ -140,6 +144,16 @@ lemma Γgerm_Γ_map (φ : X ⟶ Y) (a : Y.presheaf.obj (op ⊤)) (x : X) :
     X.presheaf.Γgerm x ((Γ.map φ.op).hom a) = (φ.stalkMap x).hom (Y.presheaf.Γgerm (φ.base x) a) :=
   (stalkMap_germ_apply φ ⊤ x trivial a).symm
 
+/-- **The image of an open subspace inclusion is that open subset.**
+
+It lives here, next to the composite version below, rather than in
+`Oka/Geometry/RingedSpace/OpenImmersion.lean` where `restrictLE` consumes it: nothing about it
+needs open-immersion theory, and `LocallyRingedSpace.ofRestrict` — the thing it is about — is
+mirrored from the Mathlib file this one mirrors. -/
+theorem range_ofRestrict (X : LocallyRingedSpace.{u}) (V : Opens X) :
+    Set.range (X.ofRestrict V.isOpenEmbedding).base = (V : Set X) :=
+  Subtype.range_val
+
 /-- **The image of the composite of two open subspace inclusions** `X|S|T ⟶ X|S ⟶ X` is the
 image of `T` under the inclusion of `S`.
 
@@ -158,19 +172,35 @@ lemma range_ofRestrict_comp (A : LocallyRingedSpace.{u}) (S : Opens A)
   · rintro ⟨y, hy, rfl⟩
     exact ⟨⟨y, hy⟩, rfl⟩
 
-/-- **Any two morphisms out of the restriction to an empty open subset are equal.**
+/-- **Any two morphisms out of a locally ringed space with no points are equal.**
 
 There are no points, so the base maps agree and `hom_stalk_ext`'s remaining obligation is
-vacuous. This is what makes a compatibility condition on a *disjoint* pair of members of an open
-cover free — see `existsUnique_glueMorphisms_of_opens` in
+vacuous. `hom_ext_restrict_of_isEmpty` below is the specialisation callers actually meet, but
+this is the statement the proof makes: `restrict` plays no part in it.
+
+Beyond generality for its own sake, it is the form needed to discharge the compatibility
+hypothesis of `AlgebraicGeometry.LocallyRingedSpace.OpenCover.existsUnique_glueMorphisms`, which
+is an equation of morphisms out of the *categorical pullback* — a space that is not a `restrict`
+of anything and whose emptiness is what
+`AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.range_pullback_to_base_of_left` computes.
+
+The hypothesis is explicit rather than an `[IsEmpty X]` instance because the carrier of
+`X.restrict V` for an empty `V` is not something instance search finds, so the wrapper below
+would have to build the term regardless. -/
+theorem hom_ext_of_isEmpty {X Y : LocallyRingedSpace.{u}} (hX : IsEmpty X) (f g : X ⟶ Y) :
+    f = g :=
+  hom_stalk_ext f g (ConcreteCategory.hom_ext _ _ fun x ↦ (hX.elim x)) fun x ↦ (hX.elim x)
+
+/-- **Any two morphisms out of the restriction to an empty open subset are equal.**
+
+This is what makes a compatibility condition on a *disjoint* pair of members of an open cover
+free — see `existsUnique_glueMorphisms_of_opens` in
 `Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean`. Stated with the carrier being empty
-rather than with `V = ⊥` so that no transport along an equation of opens is needed. -/
+rather than with `V = ⊥` so that no transport along an equation of opens is needed; that, and
+not the emptiness argument, is the whole reason it exists beside `hom_ext_of_isEmpty`. -/
 theorem hom_ext_restrict_of_isEmpty {V : Opens X} (hV : (V : Set X) = ∅)
-    (f g : X.restrict V.isOpenEmbedding ⟶ Y) : f = g := by
-  have hempty : ∀ x : X.restrict V.isOpenEmbedding, False := fun x ↦ by
-    rw [Set.eq_empty_iff_forall_notMem] at hV
-    exact hV x.1 x.2
-  have hbase : f.base = g.base := ConcreteCategory.hom_ext _ _ fun x ↦ (hempty x).elim
-  exact hom_stalk_ext f g hbase fun x ↦ (hempty x).elim
+    (f g : X.restrict V.isOpenEmbedding ⟶ Y) : f = g :=
+  hom_ext_of_isEmpty (X := X.restrict V.isOpenEmbedding)
+    ⟨fun x ↦ Set.eq_empty_iff_forall_notMem.1 hV x.1 x.2⟩ f g
 
 end AlgebraicGeometry.LocallyRingedSpace
