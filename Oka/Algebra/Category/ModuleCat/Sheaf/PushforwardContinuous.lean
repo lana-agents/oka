@@ -5,6 +5,7 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 module
 
+public import Mathlib.Algebra.Category.ModuleCat.Sheaf.Abelian
 public import Mathlib.Algebra.Category.ModuleCat.Sheaf.Free
 public import Mathlib.Algebra.Category.ModuleCat.Sheaf.PullbackContinuous
 
@@ -35,6 +36,25 @@ variable [HasWeakSheafify J AddCommGrpCat.{u}] [J.WEqualsLocallyBijective AddCom
 noncomputable def overFreeIso (I : Type u) (X : C) :
     free (R := R.over X) I ≅ (free (R := R) I).over X :=
   mapFreeIso (overFunctor R X) I (Iso.refl _)
+
+end
+
+section
+
+variable {C : Type u'} [Category.{v'} C] [HasBinaryProducts C] {J : GrothendieckTopology C}
+  {R : Sheaf J RingCat.{u}} [HasSheafify J AddCommGrpCat.{u}]
+  [J.WEqualsLocallyBijective AddCommGrpCat.{u}]
+  [∀ (X : C), HasSheafify (J.over X) AddCommGrpCat.{u}]
+  [∀ (X : C), (J.over X).WEqualsLocallyBijective AddCommGrpCat.{u}]
+
+/-- **Restriction to `Over X` commutes with binary biproducts.**
+
+Restriction is a left adjoint (`SheafOfModules.overFunctor`), so it preserves the coproduct;
+in an additive category the coproduct is the biproduct. -/
+noncomputable def overBiprodIso (M N : SheafOfModules.{u} R) (X : C) :
+    (M ⊞ N).over X ≅ (M.over X) ⊞ (N.over X) :=
+  (overFunctor R X).mapIso (biprod.isoCoprod M N) ≪≫
+    (PreservesColimitPair.iso (overFunctor R X) M N).symm ≪≫ (biprod.isoCoprod _ _).symm
 
 end
 

@@ -199,6 +199,24 @@ lemma sectionOfTerminal_val (b : M.val.obj (Opposite.op T)) (Z : Cᵒᵖ) :
       M.val.map (hT.from Z.unop).op b :=
   rfl
 
+/-- A section is determined by its value over the terminal object: the two directions of
+`SheafOfModules.sectionOfTerminal` are mutually inverse. -/
+@[simp]
+lemma sectionOfTerminal_eval (s : M.sections) :
+    sectionOfTerminal hT M (PresheafOfModules.sections.eval s (Opposite.op T)) = s := by
+  ext Z
+  exact PresheafOfModules.sections_property s (hT.from Z.unop).op
+
+variable {M} in
+/-- Pushing a section forward along a morphism is pushing its value over the terminal object
+forward. -/
+lemma sectionsMap_sectionOfTerminal {N : SheafOfModules.{u} R} (p : M ⟶ N)
+    (b : M.val.obj (Opposite.op T)) :
+    sectionsMap p (sectionOfTerminal hT M b) =
+      sectionOfTerminal hT N (p.val.app (Opposite.op T) b) := by
+  ext Z
+  exact PresheafOfModules.naturality_apply p.val (hT.from Z.unop).op b
+
 end Sections
 
 end SheafOfModules
