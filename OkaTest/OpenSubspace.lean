@@ -217,6 +217,6 @@ theorem injective_base_puncturedNodeIncl :
   refine ⟨fun a b h ↦ Subtype.ext (by exact h), fun hsurj ↦ ?_⟩
   obtain ⟨q, hq⟩ := hsurj nodeOrigin.{u}
   have hq' : (q.1 : AnalyticSpace.node.{u}) = nodeOrigin.{u} := hq
-  exact (mem_puncturedNode_iff _).1 q.2 hq' 
+  exact (mem_puncturedNode_iff _).1 q.2 hq'
 
 end
