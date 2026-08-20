@@ -135,13 +135,6 @@ info: 'ComplexAnalytic.AnalyticSpace.eval_c_app' depends on axioms:
 #print axioms ComplexAnalytic.AnalyticSpace.eval_c_app
 
 /--
-info: 'IsLocalRing.IsCoefficientField.ringHom_ext' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms IsLocalRing.IsCoefficientField.ringHom_ext
-
-/--
 info: 'ComplexAnalytic.okaStalk_ringHom_ext' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
