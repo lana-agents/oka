@@ -735,7 +735,7 @@ theorem okaRowConclusion_toOkaRing (hn : ∀ q, OkaStatement q n) (V : Opens (Fi
       rw [Finset.sum_congr rfl fun i _ ↦ hterm i]
       -- the sum vanishes since `κ t` is a relation between the `F i`
       have h7 := hκK t
-      simp only [K_deg, LinearMap.mem_ker, LinearMap.coe_comp,
+      simp only [kDeg, LinearMap.mem_ker, LinearMap.coe_comp,
         LinearMap.coe_restrictScalars, Function.comp_apply,
         Module.Basis.constr_apply_fintype, Pi.basisFun_equivFun, LinearEquiv.refl_apply,
         smul_eq_mul] at h7
