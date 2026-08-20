@@ -235,3 +235,58 @@ info: 'ComplexAnalytic.AnalyticSpace.coordPullback_symm_homComplexLineEquivGener
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.coordPullback_symm_homComplexLineEquivGeneral
+
+/-! ### The `m`-fold statement: `Hom(Z, ℂ^m) ≃ Γ(Z, 𝒪_Z)^m`
+
+`Oka/AnalyticSpace/HolomorphicMapOpen.lean` and
+`Oka/AnalyticSpace/HolomorphicMapGeneral.lean`. The `m = 1` results guarded above are now
+instances of these rather than separate proofs. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.exists_hom_complexAffineSpace_restrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.exists_hom_complexAffineSpace_restrict
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.exists_hom_complexAffineSpace_of_local' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.exists_hom_complexAffineSpace_of_local
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.exists_hom_complexAffineSpace_general' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.exists_hom_complexAffineSpace_general
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.homComplexAffineSpaceEquivGeneral' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.homComplexAffineSpaceEquivGeneral
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.symm_homComplexAffineSpaceEquivGeneral_coordPullback' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.symm_homComplexAffineSpaceEquivGeneral_coordPullback
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.coordPullback_symm_homComplexAffineSpaceEquivGeneral' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.coordPullback_symm_homComplexAffineSpaceEquivGeneral
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.homComplexAffineSpaceEquiv_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.homComplexAffineSpaceEquiv_eq

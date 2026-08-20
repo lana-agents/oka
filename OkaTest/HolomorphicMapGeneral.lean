@@ -7,7 +7,7 @@ import Oka
 import OkaTest.OpenSubspace
 
 /-!
-# Non-vacuity of the assembly of local morphisms to `ℂ`
+# Non-vacuity of the assembly of local morphisms to `ℂ` and to `ℂ^m`
 
 `ComplexAnalytic.AnalyticSpace.exists_hom_complexLine_of_local` glues local morphisms `Z|U ⟶ ℂ`
 into a global `Z ⟶ ℂ`. Every statement it makes would also be true of a theorem that ignored the
@@ -54,10 +54,24 @@ Neither space is an open subspace of `ℂ^n`, so neither morphism was available 
 ## The bijection, and its inverse named on a concrete input
 
 `ComplexAnalytic.AnalyticSpace.homComplexLineEquivGeneral` is `Equiv.ofBijective`, so its inverse
-is a choice term, and a consumer who has to unfold that has been handed nothing. The last section
-names **both** round trips at the node: forward to `nodeCoord j`, backward to `nodeToLine j`, and
-— the part that stops the round trip from being about a collapsed morphism — the morphism the
-inverse produces is surjective on points.
+is a choice term, and a consumer who has to unfold that has been handed nothing. The penultimate
+section names **both** round trips at the node: forward to `nodeCoord j`, backward to
+`nodeToLine j`, and — the part that stops the round trip from being about a collapsed morphism —
+the morphism the inverse produces is surjective on points.
+
+## The `m`-fold statement, where the discriminating witness is different
+
+Everything above is at `m = 1`, and **none of it tests the `m`-fold theorem.** A statement that
+produced the `m` coordinates by `m` independent applications of the one-dimensional theorem
+would satisfy every `m = 1` check and could not exist, because assembling `m` morphisms `Z ⟶ ℂ`
+into one `Z ⟶ ℂ^m` needs a product of analytic spaces which the development does not have.
+
+So the last section is at `m = 2`: `exists_hom_complexAffineSpace_node_general` feeds the node's
+**two** coordinate functions to
+`ComplexAnalytic.AnalyticSpace.exists_hom_complexAffineSpace_general` and identifies what comes
+out as `ComplexAnalytic.nodeIncl`, the closed immersion defining the node. **A morphism produced
+by a general theorem and then recognised as one that was constructed by hand** — which is taxis
+#610's own acceptance criterion in its own words, and which no `m = 1` statement can express.
 
 ## What these do *not* show, said plainly
 
@@ -178,7 +192,8 @@ theorem exists_hom_complexLine_node (j : ULift.{u} (Fin 2)) :
   AnalyticSpace.exists_hom_complexLine_of_local _ (nodeCoord.{u} j) fun p ↦
     ⟨nodeCover.{u} p, mem_nodeCover.{u} p,
       AnalyticSpace.ofRestrict _ (nodeCover.{u} p) ≫ nodeToLine.{u} j,
-      (AnalyticSpace.coordPullback_ofRestrict_comp _ (nodeCover.{u} p) (nodeToLine.{u} j)).trans
+      (AnalyticSpace.coordPullback_ofRestrict_comp _ (nodeCover.{u} p) (nodeToLine.{u} j)
+          (ULift.up 0)).trans
         (congrArg (AnalyticSpace.node.{u}.resΓ (nodeCover.{u} p))
           (Γ_map_nodeToLineHom_coord.{u} j))⟩
 
@@ -274,5 +289,58 @@ morphisms differ and so do the sections they go to, so both sides have at least 
 theorem homComplexLineEquivGeneral_node_not_subsingleton :
     ¬ Subsingleton (AnalyticSpace.node.{u} ⟶ AnalyticSpace.complexAffineSpace.{u} 1) := fun h ↦
   nodeToLine_ne.{u} (h.elim _ _)
+
+/-! ### The `m`-fold statement recovers the closed immersion of the node
+
+The `m = 1` results above are not a test of the `m`-fold theorem: a statement that produced the
+`m` coordinates independently, by `m` separate applications of the one-dimensional theorem,
+would satisfy every one of them and could not exist, because assembling `m` morphisms `Z ⟶ ℂ`
+into one `Z ⟶ ℂ^m` needs a product of analytic spaces that the development does not have.
+
+The check that discriminates is at `m = 2`: feed the node's **two** coordinate functions to
+`ComplexAnalytic.AnalyticSpace.exists_hom_complexAffineSpace_general` and identify what comes
+out. It is `ComplexAnalytic.nodeIncl`, the closed immersion defining the node — **a morphism
+produced by a general theorem and then recognised as one that was constructed by hand.**
+
+That the two coordinates cannot be handled separately is `ComplexAnalytic.nodeToLine_ne`, which
+is already in the library: `exists_hom_complexLine_general` applied to `nodeCoord 0` and to
+`nodeCoord 1` gives two *different* morphisms `node ⟶ ℂ`, and nothing in the development
+combines them. It is not restated here — a test file restating a library theorem is a duplicate
+waiting to diverge. -/
+
+/-- **The `m`-fold theorem at the node produces its closed immersion into `ℂ²`.**
+
+The theorem is applied to `fun j ↦ nodeCoord j` with no reference to how the node was built; the
+morphism it returns is `ComplexAnalytic.nodeIncl`, by
+`ComplexAnalytic.eq_nodeIncl_of_coordPullback`. This is taxis #610's own acceptance criterion,
+in its own words: *recover the inclusion `{z₀z₁ = 0} ⊆ ℂ²` from its two coordinate
+functions.* -/
+theorem exists_hom_complexAffineSpace_node_general :
+    ∃ φ : AnalyticSpace.node.{u} ⟶ AnalyticSpace.complexAffineSpace.{u} 2,
+      (∀ j, AnalyticSpace.coordPullback φ j = nodeCoord.{u} j) ∧ φ = nodeIncl.{u} :=
+  let ⟨φ, hφ⟩ := AnalyticSpace.exists_hom_complexAffineSpace_general.{u}
+    AnalyticSpace.node.{u} nodeCoord.{u}
+  ⟨φ, hφ, eq_nodeIncl_of_coordPullback.{u} φ hφ⟩
+
+/-- **The `m`-fold bijection's inverse at the node's coordinate functions is `nodeIncl`**, with
+no choice left in it. -/
+theorem symm_homComplexAffineSpaceEquivGeneral_nodeCoord :
+    (AnalyticSpace.homComplexAffineSpaceEquivGeneral.{u} AnalyticSpace.node.{u} 2).symm
+        nodeCoord.{u} = nodeIncl.{u} :=
+  (Equiv.symm_apply_eq _).2 (funext fun j ↦ (coordPullback_nodeIncl.{u} j)).symm
+
+/-- **The morphism the `m`-fold inverse produces is injective on points and is not onto `ℂ²`.**
+
+`ComplexAnalytic.nodeIncl` is the inclusion of the node, so it is injective and its image misses
+`(1, 1)`. Without this, `symm_homComplexAffineSpaceEquivGeneral_nodeCoord` would be consistent
+with the inverse landing on a morphism collapsing the node to a point — which is exactly what a
+bijection stated but never instantiated cannot rule out. -/
+theorem base_symm_homComplexAffineSpaceEquivGeneral_nodeCoord
+    (p : AnalyticSpace.node.{u}) (j : ULift.{u} (Fin 2)) :
+    (((AnalyticSpace.homComplexAffineSpaceEquivGeneral.{u} AnalyticSpace.node.{u} 2).symm
+        nodeCoord.{u}).toLRSHom.base p : ULift.{u} (Fin 2) → ℂ) j = p.1.1 j :=
+  congrArg (fun φ : AnalyticSpace.node.{u} ⟶ AnalyticSpace.complexAffineSpace.{u} 2 ↦
+    ((φ.toLRSHom.base p : ULift.{u} (Fin 2) → ℂ) j))
+    symm_homComplexAffineSpaceEquivGeneral_nodeCoord.{u}
 
 end
