@@ -22,6 +22,7 @@ import Oka.ComplexSpace
 import Oka.LocalOkaRing
 import Oka.MaximalIdeal
 import Oka.Noetherian
+import Oka.Nullstellensatz
 import Oka.OkaLemma
 import Oka.OkaRing
 import Oka.StalkEquiv
