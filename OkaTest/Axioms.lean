@@ -180,3 +180,18 @@ info: 'LocalOkaRing.vanishingIdeal_bot' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms LocalOkaRing.vanishingIdeal_bot
+/-! ### The zero locus of a family of global sections -/
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.isClosed_zeroLocus' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.isClosed_zeroLocus
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.range_zeroLocusι' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.range_zeroLocusι
