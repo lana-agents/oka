@@ -61,6 +61,10 @@ restriction are the stalks of the ambient space
   for the restricted `ℂ`-algebra structure, and
   `ComplexAnalytic.isCLinearHom_ofRestrict_constants`, the same statement spelled with
   `constantsAlgMap` so that callers needing that spelling do not have to rewrite.
+- `ComplexAnalytic.isCLinearHom_restrictTopIso_inv`: the inverse of `restrictTopIso` is
+  `ℂ`-linear, for *any* locally ringed space and any `ℂ`-algebra structure on its global
+  sections, and `ComplexAnalytic.isCLinearHom_restrictTopIso_inv_constants`, the same statement
+  spelled with `constantsAlgMap`.
 - `ComplexAnalytic.isLocalModel_zeroLocus`: **the zero locus of finitely many holomorphic
   functions on an open subset of `ℂ^n` is a local model.**
 - `ComplexAnalytic.AnalyticSpace.isCoherentStructureSheaf_zeroLocus`: its structure sheaf is
@@ -150,6 +154,35 @@ theorem isCLinearHom_ofRestrict_constants (n : ℕ)
     IsCLinearHom ((complexAffineSpace.{u} n).ofRestrict V.isOpenEmbedding)
       (constantsAlgMap n V) (Algebra.algebraMap ℂ (OkaRing ⊤)) :=
   isCLinearHom_ofRestrict _ _ V
+
+/-- **The inverse of `restrictTopIso` is `ℂ`-linear**, for an arbitrary locally ringed space and
+an arbitrary `ℂ`-algebra structure `α` on its global sections.
+
+No transport is needed and nothing is computed: `restrictTopIso.inv` composed with `ofRestrict`
+is the identity — that is `Iso.inv_hom_id`, since `restrictTopIso.hom` *is* `ofRestrict ⊤` — so
+`ComplexAnalytic.IsCLinearHom.of_comp` supplies the linearity from the identity's and
+`ComplexAnalytic.isCLinearHom_ofRestrict`'s. In particular this is **free for a general
+`AnalyticSpace` carrying its own coefficient field**, not only for `ℂ^n`: the analytic structure
+plays no part. -/
+theorem isCLinearHom_restrictTopIso_inv (X : LocallyRingedSpace.{u})
+    (α : ℂ →+* X.presheaf.obj (op ⊤)) :
+    IsCLinearHom X.restrictTopIso.inv α (X.resAlgMap α ⊤) :=
+  IsCLinearHom.of_comp X.restrictTopIso.inv_hom_id (IsCLinearHom.id α)
+    (isCLinearHom_ofRestrict X α ⊤)
+
+/-- **The inverse of `restrictTopIso` on `ℂ^n` is `ℂ`-linear for `constantsAlgMap`**, for every
+`n`.
+
+`ComplexAnalytic.isCLinearHom_restrictTopIso_inv` already gives this with the algebra structure
+spelled as `resAlgMap`; the two are equal by `ComplexAnalytic.constantsAlgMap_eq_resAlgMap`,
+which is `rfl`. As with `ComplexAnalytic.isCLinearHom_ofRestrict_constants`, the point is the
+*stated* type: `IsCutOutBy` and `IsCutOutBy.existsUnique_liftHom` demand `constantsAlgMap n V`,
+so a caller crossing into the `restrict ⊤` presentation of `ℂ^n` can apply this directly. -/
+theorem isCLinearHom_restrictTopIso_inv_constants (n : ℕ) :
+    IsCLinearHom (complexAffineSpace.{u} n).restrictTopIso.inv
+      (Algebra.algebraMap ℂ (OkaRing (⊤ : Opens (ULift.{u} (Fin n) → ℂ))))
+      (constantsAlgMap n ⊤) :=
+  isCLinearHom_restrictTopIso_inv _ _
 
 end CLinear
 

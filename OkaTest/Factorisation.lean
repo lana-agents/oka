@@ -141,8 +141,24 @@ returns for it is the inclusion of one axis of the node.
 `complexAffineSpace 2` that `okaMapHom` maps into, and the `nodeAmbient = ℂ²|⊤` that
 `IsCutOutBy` and `existsUnique_liftHom` demand. It is not even a `rfl` that fails, because the
 two global-section rings are different types. The route below does not compute it at all:
-`nodeSection` is rewritten as a pullback along `restrictTopIso.hom`, which *is* a `rfl`, and the
-pair then collapses through `inv_hom_id` and `LocallyRingedSpace.Γ_map_comp_apply`.
+`nodeSection` is rewritten as a pullback along `restrictTopIso.hom`, which *is* a `rfl`
+(`nodeSection_eq`), and the pair then collapses.
+
+**Neither half of that crossing lives here any more**, which is what taxis #702 was for. Both
+were general statements stated at `n = 2` inside this test file, and both are now general:
+
+* `AlgebraicGeometry.LocallyRingedSpace.Γ_map_inv_hom_apply` collapses the pair, for an
+  arbitrary **isomorphism of locally ringed spaces** — `restrictTopIso` never entered its proof,
+  which used only `Iso.inv_hom_id`, `Γ_map_comp_apply` and `Γ_map_id_apply`;
+* `ComplexAnalytic.isCLinearHom_restrictTopIso_inv` gives the `ℂ`-linearity of the inverse for an
+  arbitrary locally ringed space and an arbitrary `ℂ`-algebra structure on its global sections,
+  with `ComplexAnalytic.isCLinearHom_restrictTopIso_inv_constants` the `constantsAlgMap`
+  spelling that `IsCutOutBy` demands and that this file consumes at `n = 2`.
+
+`nodeSection_eq` stays, because it is the one part of the pattern that really is about the node.
+The general fact hiding behind it is not a lemma but the observation stated on
+`Γ_map_inv_hom_apply`: **the pullback along `restrictTopIso.hom` is always a `rfl`**, so a
+section of the ambient space can always be written in the form the collapse needs.
 -/
 
 /-- The family `(z, 0)` of two entire functions on `ℂ¹`, which is the morphism `ℂ ⟶ ℂ²` onto
@@ -155,43 +171,47 @@ that `IsCutOutBy` uses. -/
 def axisPhi : (AnalyticSpace.complexAffineSpace.{u} 1).toLocallyRingedSpace ⟶ nodeAmbient.{u} :=
   okaMapHom axisFamily.{u} ≫ (complexAffineSpace.{u} 2).restrictTopIso.inv
 
-/-- The inverse of `restrictTopIso` is `ℂ`-linear. No transport is needed: it is `ℂ`-linear
-because its composite with `ofRestrict` is the identity, which is
-`ComplexAnalytic.IsCLinearHom.of_comp`. -/
-theorem isCLinearHom_restrictTopIso_inv :
-    IsCLinearHom ((complexAffineSpace.{u} 2).restrictTopIso.inv)
-      (Algebra.algebraMap ℂ (OkaRing (⊤ : Opens (ULift.{u} (Fin 2) → ℂ))))
-      (constantsAlgMap 2 ⊤) :=
-  IsCLinearHom.of_comp (q := (complexAffineSpace.{u} 2).ofRestrict
-      (⊤ : Opens (complexAffineSpace.{u} 2)).isOpenEmbedding)
-    ((complexAffineSpace.{u} 2).restrictTopIso.inv_hom_id)
-    (IsCLinearHom.id _) (isCLinearHom_ofRestrict_complexSpace ⊤)
-
 theorem isCLinearHom_axisPhi :
     IsCLinearHom axisPhi.{u}
       (AnalyticSpace.complexAffineSpace.{u} 1).algebraMap (constantsAlgMap 2 ⊤) :=
-  (isCLinearHom_okaMapHom axisFamily.{u}).comp isCLinearHom_restrictTopIso_inv.{u}
+  (isCLinearHom_okaMapHom axisFamily.{u}).comp (isCLinearHom_restrictTopIso_inv_constants.{u} 2)
+
+/-! **That the general form is general is checked here rather than asserted in its docstring.**
+
+`ComplexAnalytic.isCLinearHom_restrictTopIso_inv` claims to hold for an arbitrary complex
+analytic space carrying its own coefficient field, and not only for `ℂ^n` — which is the
+question taxis #691 raised about `eval_restrict` and which taxis #702 said to *check, not
+assume*. The two `example`s below are the check: the first instantiates it at an arbitrary
+`AnalyticSpace` with `X.algebraMap`, the second at the node, whose coefficient field is pulled
+back along its closed immersion and is not `constantsAlgMap` anything.
+
+They are `example`s deliberately. A named general lemma in a test file is a duplicate waiting to
+happen — that is what this file's two `restrictTopIso` declarations were, and removing them is
+what taxis #702 was filed for. What is wanted here is evidence that the hypothesis is meetable,
+which an anonymous instantiation supplies and a name would outlive. -/
+
+example (X : AnalyticSpace.{u}) :
+    IsCLinearHom X.toLocallyRingedSpace.restrictTopIso.inv X.algebraMap
+      (X.toLocallyRingedSpace.resAlgMap X.algebraMap ⊤) :=
+  isCLinearHom_restrictTopIso_inv _ _
+
+example :
+    IsCLinearHom (AnalyticSpace.node.{u}).toLocallyRingedSpace.restrictTopIso.inv
+      (AnalyticSpace.node.{u}).algebraMap
+      ((AnalyticSpace.node.{u}).toLocallyRingedSpace.resAlgMap
+        (AnalyticSpace.node.{u}).algebraMap ⊤) :=
+  isCLinearHom_restrictTopIso_inv _ _
 
 /-- `nodeSection` is the pullback of the polynomial `z₀ z₁` along `restrictTopIso.hom`, on the
-nose. This is the equation that makes the `eqToHom` above avoidable. -/
+nose. This is the equation that makes the `eqToHom` above avoidable, and it is the one part of
+the crossing that is genuinely about the node: the two general halves are
+`AlgebraicGeometry.LocallyRingedSpace.Γ_map_inv_hom_apply` and
+`ComplexAnalytic.isCLinearHom_restrictTopIso_inv`. -/
 theorem nodeSection_eq (j : Fin 1) :
     nodeSection.{u} j =
       (LocallyRingedSpace.Γ.map ((complexAffineSpace.{u} 2).restrictTopIso.hom).op).hom
           (OkaRing.ofMvPolynomial ⊤ nodePoly.{u}) :=
   rfl
-
-/-- Crossing `restrictTopIso` in both directions is the identity on global sections — proved
-without computing either direction, from `inv_hom_id` alone. -/
-theorem Γ_map_restrictTopIso_inv_hom (P : OkaRing (⊤ : Opens (ULift.{u} (Fin 2) → ℂ))) :
-    (LocallyRingedSpace.Γ.map ((complexAffineSpace.{u} 2).restrictTopIso.inv).op).hom
-        ((LocallyRingedSpace.Γ.map ((complexAffineSpace.{u} 2).restrictTopIso.hom).op).hom P) =
-      P :=
-  (LocallyRingedSpace.Γ_map_comp_apply ((complexAffineSpace.{u} 2).restrictTopIso.inv)
-      ((complexAffineSpace.{u} 2).restrictTopIso.hom) P).symm.trans
-    ((congrArg (fun m : complexAffineSpace.{u} 2 ⟶ complexAffineSpace.{u} 2 ↦
-        (LocallyRingedSpace.Γ.map m.op).hom P)
-      ((complexAffineSpace.{u} 2).restrictTopIso.inv_hom_id)).trans
-      (LocallyRingedSpace.Γ_map_id_apply (complexAffineSpace.{u} 2) P))
 
 /-- **The morphism `z ↦ (z, 0)` of `ℂ ⟶ ℂ²` kills the node's equation `z₀ z₁`**, so it satisfies
 the hypothesis `hφ` of the mapping property. The second coordinate of the family is `0`, and
@@ -202,7 +222,8 @@ theorem c_app_axisPhi_nodeSection (j : Fin 1) :
     ((LocallyRingedSpace.Γ_map_comp_apply (okaMapHom axisFamily.{u})
         ((complexAffineSpace.{u} 2).restrictTopIso.inv) _).trans
       ((congrArg ((LocallyRingedSpace.Γ.map (okaMapHom axisFamily.{u}).op).hom)
-          ((Γ_map_restrictTopIso_inv_hom.{u} _).trans
+          ((LocallyRingedSpace.Γ_map_inv_hom_apply
+                (complexAffineSpace.{u} 2).restrictTopIso _).trans
             (map_mul (OkaRing.ofMvPolynomial (⊤ : Opens (ULift.{u} (Fin 2) → ℂ)))
               (MvPolynomial.X (ULift.up 0)) (MvPolynomial.X (ULift.up 1))))).trans
         ((map_mul ((LocallyRingedSpace.Γ.map (okaMapHom axisFamily.{u}).op).hom)
@@ -317,10 +338,10 @@ Everything above leaves `Hom(node, node)` possibly a singleton, and two of the s
 would be true if it were. This section rules that out, by the one morphism the node's equation
 makes obvious: `z₀ z₁ = 0` is symmetric, so `p ↦ (p₁, p₀)` maps the node to itself.
 
-**Both halves of the construction landed today and neither existed this morning**:
 `ComplexAnalytic.IsCutOutBy.existsUnique_liftHom` supplies the factorisation, and the
-`restrictTopIso` crossing built for `axisPhi` above supplies the bridge from `okaMapHom`'s target
-`ℂ²` to `IsCutOutBy`'s `ℂ²|⊤`. The same three seams apply here as there and are not repeated:
+`restrictTopIso` crossing — now the two general lemmas named in the section above, rather than
+anything built here — supplies the bridge from `okaMapHom`'s target `ℂ²` to `IsCutOutBy`'s
+`ℂ²|⊤`. The same three seams apply here as there and are not repeated:
 `rw` will not fire across the `Γ.map` of a composite, `rw [coordPullback_nodeIncl]` will not fire
 on a goal spelled with `Γ.map`, and `(𝟙 X).toLRSHom` needs the ascription `(𝟙 X : X ⟶ X)`.
 -/
@@ -338,7 +359,7 @@ def swapPhi : (AnalyticSpace.node.{u}).toLocallyRingedSpace ⟶ nodeAmbient.{u} 
 theorem isCLinearHom_swapPhi :
     IsCLinearHom swapPhi.{u} (AnalyticSpace.node.{u}).algebraMap (constantsAlgMap 2 ⊤) :=
   nodeIncl.{u}.isCLinear.comp
-    ((isCLinearHom_okaMapHom swapFamily.{u}).comp isCLinearHom_restrictTopIso_inv.{u})
+    ((isCLinearHom_okaMapHom swapFamily.{u}).comp (isCLinearHom_restrictTopIso_inv_constants.{u} 2))
 
 /-- **The swap kills the node's equation**, because `z₁ z₀ = z₀ z₁` and the node satisfies the
 latter. This is where the symmetry of `nodePoly` is used and it is the whole reason the swap is
@@ -353,7 +374,8 @@ theorem c_app_swapPhi_nodeSection (j : Fin 1) :
       ((LocallyRingedSpace.Γ_map_comp_apply (okaMapHom swapFamily.{u})
           ((complexAffineSpace.{u} 2).restrictTopIso.inv) _).trans
         ((congrArg ((LocallyRingedSpace.Γ.map (okaMapHom swapFamily.{u}).op).hom)
-            ((Γ_map_restrictTopIso_inv_hom.{u} _).trans
+            ((LocallyRingedSpace.Γ_map_inv_hom_apply
+                (complexAffineSpace.{u} 2).restrictTopIso _).trans
               (map_mul (OkaRing.ofMvPolynomial (⊤ : Opens (ULift.{u} (Fin 2) → ℂ)))
                 (MvPolynomial.X (ULift.up 0)) (MvPolynomial.X (ULift.up 1))))).trans
           ((map_mul ((LocallyRingedSpace.Γ.map (okaMapHom swapFamily.{u}).op).hom)
