@@ -57,9 +57,12 @@ open Filter Topology TopologicalSpace MvPowerSeries
 
 namespace LocalOkaRing
 
--- The whole file is phrased with `Fintype` rather than `Finite`, matching the `OkaRing` and
--- `LocalOkaRing` API it builds on; the norm on `ι → ℂ`, and hence every analyticity statement
--- used below, is only available for a `Fintype` index.
+-- The section variables below are `Fintype` rather than `Finite`, matching the `OkaRing` and
+-- `LocalOkaRing` API this file builds on: the norm on `ι → ℂ`, and hence every analyticity
+-- statement used in the proofs, needs the `Fintype` data. That is a fact about the *proofs*,
+-- not about the statements — where a statement does not mention the norm, bind `[Finite ι]`
+-- on the declaration and recover the data inside the proof with `Fintype.ofFinite`, as
+-- `exists_represents_comp_symm` just below does.
 
 variable {ι κ : Type*} [Fintype ι] [Fintype κ]
 

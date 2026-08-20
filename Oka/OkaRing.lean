@@ -5,6 +5,7 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Mathlib.Analysis.Analytic.Constructions
 import Mathlib.Analysis.Complex.Basic
+import Oka.Data.Fin.Tuple.Basic
 
 /-!
 # The ring of holomorphic functions on an open subset of `ℂ^ι`
@@ -167,7 +168,8 @@ lemma TopologicalSpace.Opens.extend'_mono {U V : Opens (Fin n → ℂ)} (h : U �
   rw [mem_extend'] at hx ⊢
   exact h hx
 
-@[simp]
+-- Not `@[simp]`: `mem_extend'` and `Fin.init_zero` are both `@[simp]` and prove this between
+-- them, so the attribute here would only be a duplicate.
 lemma TopologicalSpace.Opens.zero_mem_extend' {U : Opens (Fin n → ℂ)} :
     (0 : Fin (n + 1) → ℂ) ∈ U.extend' ↔ (0 : Fin n → ℂ) ∈ U := by
   rw [mem_extend']

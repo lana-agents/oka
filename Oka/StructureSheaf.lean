@@ -69,9 +69,18 @@ lemma evalHom_restrict {U V : Opens (ι → ℂ)} (h : V ≤ U) {x : ι → ℂ}
     OkaRing.evalHom hx (OkaRing.restrict h f) = OkaRing.evalHom (h hx) f :=
   rfl
 
-@[simp]
+-- Not `@[simp]`: `evalHom_apply` is `@[simp]` and unfolds `evalHom` to `toFun`, so the
+-- left-hand side here is never in normal form. `toFun_algebraMap` below is the form `simp`
+-- actually meets.
 lemma evalHom_algebraMap {U : Opens (ι → ℂ)} {x : ι → ℂ} (hx : x ∈ U) (c : ℂ) :
     OkaRing.evalHom hx (algebraMap ℂ (OkaRing U) c) = c :=
+  rfl
+
+/-- `evalHom_algebraMap` in `simp` normal form: a constant function has that constant as its
+value at every point. -/
+@[simp]
+lemma toFun_algebraMap {U : Opens (ι → ℂ)} (c : ℂ) (p : U) :
+    OkaRing.toFun U (algebraMap ℂ (OkaRing U) c) p = c :=
   rfl
 
 end OkaRing
