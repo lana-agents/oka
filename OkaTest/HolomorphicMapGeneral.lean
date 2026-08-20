@@ -34,15 +34,38 @@ which the assembly is applied. `base_glue_nodeCoord` computes the glued morphism
 gets `p ↦ p_j`, through `ComplexAnalytic.AnalyticSpace.base_eq_eval_coordPullback` and
 `ComplexAnalytic.eval_nodeCoord` — so the morphism is identified, not merely produced.
 
+## The general theorem, and the two spaces it is applied to
+
+`ComplexAnalytic.AnalyticSpace.exists_hom_complexLine_general` needs no cover from the caller.
+The risk there is different and taxis #694 named it: the theorem would be **no stronger than
+what already existed** if every `Z` it is applied to were an open subspace of `ℂ^n`, since
+`exists_hom_complexLine_restrict` covers those. So it is applied to two spaces that are not.
+
+* **The node** (`exists_hom_complexLine_node_general`), with `g` a coordinate function.
+  `base_glue_nodeCoord` identifies the morphism on points as `p ↦ p_j`.
+* **The punctured node** (`exists_hom_complexLine_puncturedNode`), which is an open subspace of
+  the node and of nothing simpler, with `g` the pullback of a coordinate function.
+  `base_hom_puncturedNode` identifies it on points, through
+  `ComplexAnalytic.eval_pullback_nodeCoord`.
+
+Neither space is an open subspace of `ℂ^n`, so neither morphism was available from
+`exists_hom_complexLine` or `exists_hom_complexLine_restrict`.
+
 ## What these do *not* show, said plainly
 
-Neither glued morphism is new. On `ℂ` the result is forced to agree with
-`ComplexAnalytic.AnalyticSpace.exists_hom_complexLine`'s morphism by uniqueness, and on the node
-with `ComplexAnalytic.nodeToLine j`, whose restrictions are the local pieces used there. A
-witness that produced a morphism nobody already had would need a `Z` and a `g` for which the
-local existence hypothesis holds and the global statement was not already known — and no such
-pair exists in this development, because the hypothesis is currently only obtainable where the
-conclusion already is. That is a fact about how much of taxis #694 is done, not about this file.
+The glued morphisms in the first two sections are not new: on `ℂ` the result is forced by
+uniqueness to agree with `exists_hom_complexLine`'s morphism, and on the node with
+`ComplexAnalytic.nodeToLine j`, whose restrictions are the local pieces used there.
+
+**And the general theorem's witnesses are not new either, for a reason worth stating.** Taxis
+#694 asked for a section of `𝒪_node` which is *not* the pullback of an ambient holomorphic
+function, on the grounds that the general theorem would be no stronger without one. **No such
+section can be named in this development**: every global section of `𝒪_node` it can write down
+is a pullback from `ℂ²`, because the node's structure sheaf is only ever presented through
+`nodeAmbient`. That is a limitation of what the development can *name*, not of the theorem —
+`exists_hom_complexLine_general` quantifies over every `Z` and every `g` — but it does mean the
+strongest available witness is a space outside the previous theorems' reach rather than a
+section outside them.
 
 **On the import of `OkaTest.OpenSubspace`.** It is for one named witness, `nodeOrigin`. Test
 files importing one another was, until PR #66, unprecedented outside the `OkaTest/Axioms.lean`
@@ -160,5 +183,38 @@ theorem base_glue_nodeCoord (j : ULift.{u} (Fin 2))
     (φ.toLRSHom.base p : ULift.{u} (Fin 1) → ℂ) (ULift.up 0) = p.1.1 j :=
   (AnalyticSpace.base_eq_eval_coordPullback φ p (ULift.up 0)).trans
     ((congrArg (AnalyticSpace.node.{u}.eval (U := ⊤) p trivial) hφ).trans (eval_nodeCoord p j))
+
+/-! ### The general theorem, on two spaces which are not open subspaces of `ℂ^n` -/
+
+/-- **A coordinate function of the node is a coordinate pullback**, from the general theorem
+rather than from a cover. -/
+theorem exists_hom_complexLine_node_general (j : ULift.{u} (Fin 2)) :
+    ∃ φ : AnalyticSpace.node.{u} ⟶ AnalyticSpace.complexAffineSpace.{u} 1,
+      AnalyticSpace.coordPullback φ (ULift.up 0) = nodeCoord.{u} j :=
+  AnalyticSpace.exists_hom_complexLine_general _ (nodeCoord.{u} j)
+
+/-- **The punctured node, which is an open subspace of the node and of nothing simpler, admits a
+morphism to `ℂ` with prescribed coordinate pullback.**
+
+`ComplexAnalytic.AnalyticSpace.exists_hom_complexLine_restrict` does not apply here: its source
+must be an open subspace of `ℂ^n`, and this is an open subspace of the node. -/
+theorem exists_hom_complexLine_puncturedNode (j : ULift.{u} (Fin 2)) :
+    ∃ φ : puncturedNodeSpace.{u} ⟶ AnalyticSpace.complexAffineSpace.{u} 1,
+      AnalyticSpace.coordPullback φ (ULift.up 0) =
+        (LocallyRingedSpace.Γ.map puncturedNodeIncl.{u}.toLRSHom.op).hom (nodeCoord.{u} j) :=
+  AnalyticSpace.exists_hom_complexLine_general _ _
+
+/-- **The morphism out of the punctured node is `p ↦ p_j` on points**, computed from its
+coordinate pullback rather than assumed. -/
+theorem base_hom_puncturedNode (j : ULift.{u} (Fin 2))
+    (φ : puncturedNodeSpace.{u} ⟶ AnalyticSpace.complexAffineSpace.{u} 1)
+    (hφ : AnalyticSpace.coordPullback φ (ULift.up 0) =
+      (LocallyRingedSpace.Γ.map puncturedNodeIncl.{u}.toLRSHom.op).hom (nodeCoord.{u} j))
+    (p : puncturedNodeSpace.{u}) :
+    (φ.toLRSHom.base p : ULift.{u} (Fin 1) → ℂ) (ULift.up 0) =
+      (p.1 : AnalyticSpace.node.{u}).1.1 j :=
+  (AnalyticSpace.base_eq_eval_coordPullback φ p (ULift.up 0)).trans
+    ((congrArg (puncturedNodeSpace.{u}.eval (U := ⊤) p trivial) hφ).trans
+      (eval_pullback_nodeCoord p j))
 
 end
