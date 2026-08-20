@@ -16,6 +16,7 @@ import Oka.AnalyticSpace.Basic
 import Oka.AnalyticSpace.Coherent
 import Oka.AnalyticSpace.Continuity
 import Oka.AnalyticSpace.Evaluation
+import Oka.AnalyticSpace.Factorisation
 import Oka.AnalyticSpace.IdealSheaf
 import Oka.AnalyticSpace.LocalModel
 import Oka.AnalyticSpace.Noetherian
@@ -49,6 +50,7 @@ import Oka.StalkEquiv
 import Oka.Statement
 import Oka.StructureSheaf
 import Oka.Topology.Sheaves.Functors
+import Oka.Topology.Sheaves.Presheaf
 import Oka.Topology.Sheaves.QuotientPresheaf
 import Oka.Topology.Sheaves.Stalks
 import Oka.UFD

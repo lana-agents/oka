@@ -37,18 +37,18 @@ Invertibility is checked on stalks, and the two cases are genuinely different.
   everything. On the right, `(i(X))ᶜ` is an open neighbourhood of `y` whose preimage is empty,
   and the sections of a sheaf over `∅` form the terminal ring.
 
-## What this does **not** give
+## What this file does not do, and where it is done
 
 The mapping property of a subspace cut out by global sections — that a morphism `φ : Z ⟶ Y`
 killing the `f j` factors through `i` — needs one more ingredient beyond the isomorphism proved
-here: that `i_*` is **fully faithful**, equivalently that `i⁻¹ i_* ≅ 𝟙` for an embedding `i`.
-Neither is in Mathlib and neither is proved here. With it, the chain
-`Hom(𝒪_X, ψ_*𝒪_Z) ≅ Hom(i_*𝒪_X, φ_*𝒪_Z) ≅ Hom(𝒪_Y ⧸ (f), φ_*𝒪_Z)` closes, the last step
-because `φ.c` also kills the `f j`, and the underlying continuous map is the one a closed
-embedding onto the zero locus already determines. The same missing ingredient is what stands
-between this file and "any two closed immersions cutting out the same sections are isomorphic":
-the isomorphism of structure sheaves is available *after* pushing forward, and descending it
-along `i_*` is exactly full faithfulness.
+here: that `i_*` is **fully faithful**. That is not in Mathlib; it is
+`TopCat.Presheaf.pushforwardFullyFaithful` in `Oka/Topology/Sheaves/Functors.lean`, and with it
+the chain `Hom(𝒪_X, ψ_*𝒪_Z) ≅ Hom(i_*𝒪_X, φ_*𝒪_Z) ≅ Hom(𝒪_Y ⧸ (f), φ_*𝒪_Z)` closes, the last
+step because `φ.c` also kills the `f j`. The assembly is analytic-side vocabulary and lives in
+`Oka/AnalyticSpace/Factorisation.lean`; the same ingredient is what turns the isomorphism proved
+here into "any two closed immersions cutting out the same sections are isomorphic", since the
+isomorphism of structure sheaves is available *after* pushing forward and descending it along
+`i_*` is exactly full faithfulness.
 
 ## Main definitions
 
