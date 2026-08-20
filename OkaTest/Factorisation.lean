@@ -33,17 +33,23 @@ do with the theorem. This file rules that out at the node.
   inclusion of the first axis"* is one proposition rather than two theorems and a sentence, and
   `exists_axisIncl_pair` closes it over the witness, leaving a statement with **no hypotheses**:
   a morphism `ℂ ⟶ node` whose base map is `z ↦ (z, 0)` exists.
+* `exists_ne_id_node` runs the theorem a third time, at the **swap of the two axes**, and gets an
+  endomorphism of the node that is not the identity. That is what makes
+  `eq_id_of_comp_zeroLocusSubspaceι` and `exists_liftHom` statements about a hom-set with more
+  than one element rather than about `{𝟙}`; see the paragraph below.
 
 **What this does not check.** That `existsUnique_liftHom` is applied to a `φ` built from global
 sections on a *general* `Z`; that needs the general-`Z` half of taxis #654, which does not
 exist. The case `Z = ℂ^n` is available today through `ComplexAnalytic.AnalyticSpace.okaMap` and
 is done below.
 
-**What is still open, and should not be quietly absorbed.** Whether `Hom(node, node)` has more
-than one element. `eq_id_of_comp_zeroLocusSubspaceι` and `exists_liftHom` would *both* hold if
-it did not: the second is the first's `∃!` read for existence, and `𝟙` witnesses it through
-`Category.id_comp`. Nothing in the development builds a second endomorphism of the node, and
-`existsUnique_axisIncl`'s source is `ℂ` rather than the node, so it does not settle it either.
+**`Hom(node, node)` is not a singleton, and until this file said so nothing showed it.**
+`eq_id_of_comp_zeroLocusSubspaceι` and `exists_liftHom` would *both* hold if it were: the second
+is the first's `∃!` read for existence, and `𝟙` witnesses it through `Category.id_comp`. So
+those two are statements about a hom-set that needed exhibiting, and `existsUnique_axisIncl`
+does not exhibit it — its source is `ℂ`. The last section of the analytic-space material does:
+`exists_ne_id_node`, from the **swap of the two axes**, which is an endomorphism of the node
+precisely because `z₀ z₁ = 0` is symmetric.
 
 The last section does the same for the **locally ringed space** form,
 `ComplexAnalytic.IsCutOutBy.existsUnique_lift`, and for
@@ -304,6 +310,130 @@ theorem exists_axisIncl_pair :
         (ψ.toLRSHom.base z).1.1 (ULift.up 0) = z (ULift.up 0) ∧
           (ψ.toLRSHom.base z).1.1 (ULift.up 1) = 0 :=
   ⟨_, fun z ↦ base_axisIncl_pair _ existsUnique_axisIncl.{u}.exists.choose_spec z⟩
+
+/-! ### A second endomorphism of the node: the swap of the two axes
+
+Everything above leaves `Hom(node, node)` possibly a singleton, and two of the statements above
+would be true if it were. This section rules that out, by the one morphism the node's equation
+makes obvious: `z₀ z₁ = 0` is symmetric, so `p ↦ (p₁, p₀)` maps the node to itself.
+
+**Both halves of the construction landed today and neither existed this morning**:
+`ComplexAnalytic.IsCutOutBy.existsUnique_liftHom` supplies the factorisation, and the
+`restrictTopIso` crossing built for `axisPhi` above supplies the bridge from `okaMapHom`'s target
+`ℂ²` to `IsCutOutBy`'s `ℂ²|⊤`. The same three seams apply here as there and are not repeated:
+`rw` will not fire across the `Γ.map` of a composite, `rw [coordPullback_nodeIncl]` will not fire
+on a goal spelled with `Γ.map`, and `(𝟙 X).toLRSHom` needs the ascription `(𝟙 X : X ⟶ X)`.
+-/
+
+/-- The family `(z₁, z₀)` on `ℂ²`: the swap of the two coordinates. -/
+def swapFamily : ULift.{u} (Fin 2) → OkaRing (⊤ : Opens (ULift.{u} (Fin 2) → ℂ)) :=
+  fun j ↦ if j = ULift.up 0 then coord (ULift.up 1) else coord (ULift.up 0)
+
+/-- The morphism `p ↦ (p₁, p₀)` of `node ⟶ ℂ²`, landing in the `restrict ⊤` presentation of
+`ℂ²` that `IsCutOutBy` uses. -/
+def swapPhi : (AnalyticSpace.node.{u}).toLocallyRingedSpace ⟶ nodeAmbient.{u} :=
+  nodeIncl.{u}.toLRSHom ≫ okaMapHom swapFamily.{u} ≫
+    (complexAffineSpace.{u} 2).restrictTopIso.inv
+
+theorem isCLinearHom_swapPhi :
+    IsCLinearHom swapPhi.{u} (AnalyticSpace.node.{u}).algebraMap (constantsAlgMap 2 ⊤) :=
+  nodeIncl.{u}.isCLinear.comp
+    ((isCLinearHom_okaMapHom swapFamily.{u}).comp isCLinearHom_restrictTopIso_inv.{u})
+
+/-- **The swap kills the node's equation**, because `z₁ z₀ = z₀ z₁` and the node satisfies the
+latter. This is where the symmetry of `nodePoly` is used and it is the whole reason the swap is
+an endomorphism rather than merely a morphism to `ℂ²`. -/
+theorem c_app_swapPhi_nodeSection (j : Fin 1) :
+    ((swapPhi.{u}).c.app (op ⊤)).hom (nodeSection.{u} j) = 0 := by
+  have h1 : (LocallyRingedSpace.Γ.map ((okaMapHom swapFamily.{u} ≫
+        (complexAffineSpace.{u} 2).restrictTopIso.inv)).op).hom (nodeSection.{u} j) =
+      swapFamily.{u} (ULift.up 0) * swapFamily.{u} (ULift.up 1) :=
+    (congrArg ((LocallyRingedSpace.Γ.map (okaMapHom swapFamily.{u} ≫
+        (complexAffineSpace.{u} 2).restrictTopIso.inv).op).hom) (nodeSection_eq.{u} j)).trans
+      ((LocallyRingedSpace.Γ_map_comp_apply (okaMapHom swapFamily.{u})
+          ((complexAffineSpace.{u} 2).restrictTopIso.inv) _).trans
+        ((congrArg ((LocallyRingedSpace.Γ.map (okaMapHom swapFamily.{u}).op).hom)
+            ((Γ_map_restrictTopIso_inv_hom.{u} _).trans
+              (map_mul (OkaRing.ofMvPolynomial (⊤ : Opens (ULift.{u} (Fin 2) → ℂ)))
+                (MvPolynomial.X (ULift.up 0)) (MvPolynomial.X (ULift.up 1))))).trans
+          ((map_mul ((LocallyRingedSpace.Γ.map (okaMapHom swapFamily.{u}).op).hom)
+              (coord (ULift.up 0)) (coord (ULift.up 1))).trans
+            (congrArg₂ (· * ·) (Γ_map_okaMapHom_coord swapFamily.{u} (ULift.up 0))
+              (Γ_map_okaMapHom_coord swapFamily.{u} (ULift.up 1))))))
+  have e0 : swapFamily.{u} (ULift.up 0) = coord (ULift.up 1) := if_pos rfl
+  have e1 : swapFamily.{u} (ULift.up 1) = coord (ULift.up 0) :=
+    if_neg (fun h : (ULift.up 1 : ULift.{u} (Fin 2)) = ULift.up 0 ↦ by
+      simpa using congrArg ULift.down h)
+  refine Eq.trans (LocallyRingedSpace.Γ_map_comp_apply nodeIncl.{u}.toLRSHom
+    (okaMapHom swapFamily.{u} ≫ (complexAffineSpace.{u} 2).restrictTopIso.inv)
+    (nodeSection.{u} j)) ?_
+  refine Eq.trans (congrArg ((LocallyRingedSpace.Γ.map nodeIncl.{u}.toLRSHom.op).hom)
+    (h1.trans (congrArg₂ (· * ·) e0 e1))) ?_
+  exact ((map_mul ((LocallyRingedSpace.Γ.map nodeIncl.{u}.toLRSHom.op).hom) _ _).trans
+    ((congrArg₂ (· * ·) (coordPullback_nodeIncl.{u} (ULift.up 1))
+      (coordPullback_nodeIncl.{u} (ULift.up 0))).trans (mul_comm _ _))).trans nodeCoord_mul.{u}
+
+/-- **The swap factors through the node**, so it is an endomorphism of it. -/
+theorem existsUnique_nodeSwap :
+    ∃! ψ : AnalyticSpace.node.{u} ⟶ AnalyticSpace.node.{u},
+      ψ.toLRSHom ≫ nodeAmbient.{u}.zeroLocusSubspaceι nodeSection.{u} = swapPhi.{u} :=
+  IsCutOutBy.existsUnique_liftHom (W := AnalyticSpace.node.{u}) (n := 2) (k := 1) (V := ⊤)
+    (nodeAmbient.{u}.isCutOutBy_zeroLocusSubspaceι nodeSection.{u}) swapPhi.{u}
+    isCLinearHom_swapPhi.{u} c_app_swapPhi_nodeSection.{u}
+
+/-- Where the swap sends a point, read off the equation it satisfies rather than by unfolding
+`lift` — the same one-`congrArg` shape as `base_axisIncl`. -/
+theorem base_nodeSwap (ψ : AnalyticSpace.node.{u} ⟶ AnalyticSpace.node.{u})
+    (hψ : ψ.toLRSHom ≫ nodeAmbient.{u}.zeroLocusSubspaceι nodeSection.{u} = swapPhi.{u})
+    (p : AnalyticSpace.node.{u}) (j : ULift.{u} (Fin 2)) :
+    ((ψ.toLRSHom.base p).1.1 j) =
+      okaMapFun swapFamily.{u} (nodeIncl.{u}.toLRSHom.base p) j :=
+  congrArg (fun m : (AnalyticSpace.node.{u}).toLocallyRingedSpace ⟶ nodeAmbient.{u} ↦
+    ((m.base p : nodeAmbient.{u}).1 j)) hψ
+
+/-- The first coordinate of the swap is the second coordinate of the point. -/
+theorem okaMapFun_swapFamily_zero (z : ULift.{u} (Fin 2) → ℂ) :
+    okaMapFun swapFamily.{u} z (ULift.up 0) = z (ULift.up 1) :=
+  (okaMapFun_apply swapFamily.{u} z (ULift.up 0)).trans
+    ((congrArg (OkaRing.evalHom (U := ⊤) (x := z) trivial)
+      (show swapFamily.{u} (ULift.up 0) = coord (ULift.up 1) from if_pos rfl)).trans
+        (evalHom_coord (ULift.up 1)))
+
+/-- **The swap is not the identity.**
+
+The test point is `(1, 0)`, and it is obtained from `exists_axisIncl_pair` above rather than
+constructed: the axis inclusion sends `1` to it, so its coordinates are known without proving
+membership of the node by hand. That also gives `exists_axisIncl_pair` a consumer.
+
+The swap sends it to `(0, 1)`, whose first coordinate is `0`; the identity leaves it, and its
+first coordinate is `1`. -/
+theorem ne_id_nodeSwap (ψ : AnalyticSpace.node.{u} ⟶ AnalyticSpace.node.{u})
+    (hψ : ψ.toLRSHom ≫ nodeAmbient.{u}.zeroLocusSubspaceι nodeSection.{u} = swapPhi.{u}) :
+    ψ ≠ 𝟙 AnalyticSpace.node.{u} := by
+  intro hcon
+  subst hcon
+  obtain ⟨χ, hχ⟩ := exists_axisIncl_pair.{u}
+  set p := χ.toLRSHom.base (fun _ ↦ (1 : ℂ)) with hp
+  have hp0 : p.1.1 (ULift.up 0) = 1 := (hχ (fun _ ↦ (1 : ℂ))).1
+  have hp1 : p.1.1 (ULift.up 1) = 0 := (hχ (fun _ ↦ (1 : ℂ))).2
+  have h := base_nodeSwap _ hψ p (ULift.up 0)
+  rw [okaMapFun_swapFamily_zero, base_nodeIncl, hp1] at h
+  have hbase : (((𝟙 AnalyticSpace.node.{u} :
+        AnalyticSpace.node.{u} ⟶ AnalyticSpace.node.{u})).toLRSHom.base p).1.1 (ULift.up 0) =
+      p.1.1 (ULift.up 0) := rfl
+  rw [hbase, hp0] at h
+  exact one_ne_zero h
+
+/-- **`Hom(node, node)` has more than one element.**
+
+This is what `eq_id_of_comp_zeroLocusSubspaceι` and `exists_liftHom` above are statements about,
+and until now nothing showed the hom-set was not `{𝟙}` — in which case both would have been
+true and empty. The `⟨_, proof⟩` shape fixes the witness by `existsUnique_nodeSwap` and consumes
+it by `ne_id_nodeSwap`, so the two are provably about the same morphism. -/
+theorem exists_ne_id_node :
+    ∃ ψ : AnalyticSpace.node.{u} ⟶ AnalyticSpace.node.{u}, ψ ≠ 𝟙 AnalyticSpace.node.{u} :=
+  ⟨existsUnique_nodeSwap.{u}.exists.choose,
+    ne_id_nodeSwap _ existsUnique_nodeSwap.{u}.exists.choose_spec⟩
 
 /-! ### The locally ringed space form, which is a different statement
 
