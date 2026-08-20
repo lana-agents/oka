@@ -53,35 +53,22 @@ from that one equation.
   `AlgebraicGeometry.LocallyRingedSpace.stalkMap_congr_hom` together with
   `TopCat.Presheaf.stalkCongr_hom_germ` is what makes that transport tractable.
 
-## What this does *not* give
+## Shrinking a chart
 
-**It does not give `ComplexAnalytic.AnalyticSpace.restrict`: an open subspace of a complex
-analytic space is still not known to be a complex analytic space.** What is missing is one more
-lemma of the same shape, and it is worth naming precisely because it was not visible before this
-file existed.
+Together with `ComplexAnalytic.IsCutOutBy.iso_comp` — the companion of
+`ComplexAnalytic.IsCutOutBy.comp_iso` for an isomorphism of the **target** — this is what makes
+an open subspace of a complex analytic space a complex analytic space, in
+`Oka/AnalyticSpace/OpenSubspace.lean`.
 
-`AnalyticSpace.local_model` demands a chart whose target is `ℂ^n` restricted to an open subset
-**of `ℂ^n`**. What `restrictOpen` produces is a chart whose target is `(ℂ^n|V)|V'`, a restriction
-of a restriction. Those two are isomorphic — the `isoRestrict` of
-`AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion`, applied to the composite of the two
-inclusions, gives the isomorphism with no bespoke `restrictRestrict` needed — but transporting
-`IsCutOutBy` along it needs the isomorphism on the **target**, and only the source version
-exists:
-
-```
-ComplexAnalytic.IsCutOutBy.comp_iso : IsCutOutBy i f → (e : X' ≅ X) → IsCutOutBy (e.hom ≫ i) f
-```
-
-The missing companion is
-
-```
-IsCutOutBy.iso_comp : IsCutOutBy i f → (e : B ≅ C) →
-  IsCutOutBy (i ≫ e.hom) (fun j ↦ (LocallyRingedSpace.Γ.map e.inv.op).hom (f j))
-```
-
-whose two stalk conditions are compositions with isomorphisms, and whose `range_base` needs the
-same germ transport as `Γgerm_restrictSections` above, through `e.hom.stalkMap` instead of
-through `ofRestrict`. Nothing about it looks hard; it is simply not here.
+`iso_comp` is here rather than next to `comp_iso` in `Oka/AnalyticSpace/Basic.lean` because its
+`range_base` condition goes through `ComplexAnalytic.mem_maximalIdeal_stalkMap_iff`, which is in
+this file. The reason the pair is
+needed at all: `AnalyticSpace.local_model` demands a chart whose target is `ℂ^n` restricted to
+an open subset **of `ℂ^n`**, and what `restrictOpen` produces is a chart whose target is
+`(ℂ^n|V)|V'`, a restriction of a restriction. The two are isomorphic — by
+`AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.isoOfRangeEq`, since both map into `ℂ^n`
+with the same image, so no bespoke `restrictRestrict` is needed — and `iso_comp` transports the
+cut-out along that isomorphism.
 
 ## Main definitions
 
@@ -98,6 +85,8 @@ through `ofRestrict`. Nothing about it looks hard; it is simply not here.
 - `ComplexAnalytic.isCLinearHom_restrictHom`: the restriction of a `ℂ`-linear morphism is
   `ℂ`-linear.
 - `ComplexAnalytic.stalkMap_restrictHom_eq`: the stalk map of the restriction, factored.
+- `ComplexAnalytic.IsCutOutBy.iso_comp`: being cut out is transported by an isomorphism of the
+  target, along which the cutting family is pulled back.
 -/
 
 open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry Topology
@@ -316,6 +305,68 @@ theorem IsCutOutBy.restrictOpen {i : A ⟶ B} {f : Fin k → B.presheaf.obj (op 
   range_base := range_base_restrictHom hcut V
   surjective_stalkMap := surjective_stalkMap_restrictHom hcut V
   ker_stalkMap := ker_stalkMap_restrictHom hcut V
+
+/-- **Being cut out by global sections is transported by an isomorphism of the target**: if
+`i : A ⟶ B` cuts out `A` by `f` and `e : B ≅ C`, then `i ≫ e.hom` cuts out `A` by the family `f`
+pulled back along `e.inv`.
+
+This is the companion of `ComplexAnalytic.IsCutOutBy.comp_iso`, which does the same for an
+isomorphism of the *source* and needs no change of family. Here the family has to move, because
+the cutting sections live on the target.
+
+Everything reduces to one computation, `hgerm`: the germ of `f j` at `b` is the image of the
+germ of the pulled-back section at `e.hom.base b` under `e.hom.stalkMap b`. The two stalk
+conditions are then compositions with an isomorphism, and `range_base` is the same computation
+read through `ComplexAnalytic.mem_maximalIdeal_stalkMap_iff`. -/
+theorem IsCutOutBy.iso_comp {C : LocallyRingedSpace.{u}} {i : A ⟶ B}
+    {f : Fin k → B.presheaf.obj (op ⊤)} (hcut : IsCutOutBy i f) (e : B ≅ C) :
+    IsCutOutBy (i ≫ e.hom) (fun j ↦ (LocallyRingedSpace.Γ.map e.inv.op).hom (f j)) := by
+  set g : Fin k → C.presheaf.obj (op ⊤) :=
+    fun j ↦ (LocallyRingedSpace.Γ.map e.inv.op).hom (f j) with hg
+  have hgerm (b : B) (j : Fin k) :
+      (e.hom.stalkMap b).hom (C.presheaf.Γgerm (e.hom.base b) (g j)) =
+        B.presheaf.Γgerm b (f j) := by
+    rw [← LocallyRingedSpace.Γgerm_Γ_map, hg]
+    refine congrArg (B.presheaf.Γgerm b) ?_
+    rw [← LocallyRingedSpace.Γ_map_comp_apply, e.hom_inv_id, op_id,
+      CategoryTheory.Functor.map_id]
+    rfl
+  have hmem (b : B) (j : Fin k) :
+      C.presheaf.Γgerm (e.hom.base b) (g j) ∈
+          IsLocalRing.maximalIdeal (C.presheaf.stalk (e.hom.base b)) ↔
+        B.presheaf.Γgerm b (f j) ∈ IsLocalRing.maximalIdeal (B.presheaf.stalk b) := by
+    rw [← hgerm b j]
+    exact (mem_maximalIdeal_stalkMap_iff e.hom b _).symm
+  have hcomp (a : A) (v : C.presheaf.stalk ((i ≫ e.hom).base a)) :
+      ((i ≫ e.hom).stalkMap a).hom v =
+        (i.stalkMap a).hom ((e.hom.stalkMap (i.base a)).hom v) := by
+    rw [LocallyRingedSpace.stalkMap_comp]
+    rfl
+  refine ⟨(LocallyRingedSpace.homeoOfIso e).isClosedEmbedding.comp hcut.isClosedEmbedding, ?_,
+    fun a ↦ ?_, fun a ↦ ?_⟩
+  · rw [show ⇑(i ≫ e.hom).base = ⇑e.hom.base ∘ ⇑i.base from rfl, Set.range_comp,
+      hcut.range_base]
+    refine Set.ext fun y ↦ ?_
+    obtain ⟨b, rfl⟩ := (LocallyRingedSpace.homeoOfIso e).surjective y
+    exact ((LocallyRingedSpace.homeoOfIso e).injective.mem_set_image (a := b)).trans
+      (forall_congr' fun j ↦ (hmem b j).symm)
+  · intro c
+    obtain ⟨v, rfl⟩ := hcut.surjective_stalkMap a c
+    obtain ⟨w, rfl⟩ := (ConcreteCategory.bijective_of_isIso
+      (e.hom.stalkMap (i.base a))).surjective v
+    exact ⟨w, hcomp a w⟩
+  · set eq := (asIso (e.hom.stalkMap (i.base a))).commRingCatIsoToRingEquiv with heq
+    have hstep : RingHom.ker ((i ≫ e.hom).stalkMap a).hom =
+        Ideal.comap eq (RingHom.ker (i.stalkMap a).hom) := by
+      ext v
+      change ((i ≫ e.hom).stalkMap a).hom v = 0 ↔
+        (i.stalkMap a).hom ((e.hom.stalkMap (i.base a)).hom v) = 0
+      rw [hcomp a v]
+    rw [hstep, hcut.ker_stalkMap, ← Ideal.map_symm eq, Ideal.map_span]
+    congr 1
+    rw [← Set.range_comp]
+    refine congrArg Set.range (funext fun j ↦ ?_)
+    exact (eq.symm_apply_eq).2 (hgerm (i.base a) j).symm
 
 /-- Restricting a `ℂ`-linear morphism to the preimage of an open subset of the target is
 `ℂ`-linear for the restricted algebra structures. -/

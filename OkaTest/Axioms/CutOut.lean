@@ -160,3 +160,10 @@ info: 'ComplexAnalytic.isCLinearHom_restrictHom' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isCLinearHom_restrictHom
+
+/--
+info: 'ComplexAnalytic.IsCutOutBy.iso_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.IsCutOutBy.iso_comp

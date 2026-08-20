@@ -53,9 +53,13 @@ assumed by most classical treatments should be added as a mixin where needed.
 - `ComplexAnalytic.AnalyticSpace.mono_of_isCutOutBy`: the same for a morphism of analytic
   spaces.
 - `ComplexAnalytic.constantsAlgMap`: the constant functions as the canonical `ℂ`-algebra
-  structure on an open subspace of `ℂ^n`.
+  structure on an open subspace of `ℂ^n`, and
+  `ComplexAnalytic.constantsAlgMap_eq_resAlgMap`, which identifies it with the restriction of
+  the structure on `ℂ^n`.
 - `ComplexAnalytic.IsCLinearHom i α β`: a morphism of locally ringed spaces is `ℂ`-linear
   with respect to `ℂ`-algebra structures on its source and target.
+- `ComplexAnalytic.IsCLinearHom.of_comp`: a morphism over a common target is `ℂ`-linear for the
+  algebra structures pulled back from that target.
 - `ComplexAnalytic.AnalyticSpace`: a complex analytic space.
 - `ComplexAnalytic.AnalyticSpace.complexAffineSpace`: `ℂ^n` as a complex analytic space.
 
@@ -250,6 +254,17 @@ noncomputable def constantsAlgMap (n : ℕ) (V : Opens (complexAffineSpace.{u} n
     ℂ →+* ((complexAffineSpace.{u} n).restrict V.isOpenEmbedding).presheaf.obj (op ⊤) :=
   Algebra.algebraMap ℂ (OkaRing (V.isOpenEmbedding.isOpenMap.functor.obj ⊤))
 
+/-- **The reference structure on an open subspace of `ℂ^n` is the restriction of the reference
+structure on `ℂ^n`.** Both sides are the constant function with value `c` on the open subset, so
+this is `rfl`; it is stated because the two spellings arise from different places — the left
+from `AnalyticSpace.local_model`, the right from
+`AlgebraicGeometry.LocallyRingedSpace.resAlgMap` — and nothing else says they agree. -/
+lemma constantsAlgMap_eq_resAlgMap (n : ℕ) (V : Opens (complexAffineSpace.{u} n)) :
+    constantsAlgMap n V =
+      (complexAffineSpace.{u} n).resAlgMap
+        (Algebra.algebraMap ℂ (OkaRing (⊤ : Opens (ULift.{u} (Fin n) → ℂ)))) V :=
+  rfl
+
 /-- A morphism `i : X ⟶ Y` of locally ringed spaces whose structure sheaves carry `ℂ`-algebra
 structures `α` and `β` is **`ℂ`-linear** if pulling back global sections intertwines `β` and
 `α`. Since the `ℂ`-algebra structure on the sections over any open subset is the restriction
@@ -273,6 +288,24 @@ lemma IsCLinearHom.comp {X Y Z : LocallyRingedSpace.{u}} {f : X ⟶ Y} {g : Y �
     (hf : IsCLinearHom f α β) (hg : IsCLinearHom g β γ) :
     IsCLinearHom (f ≫ g) α γ := fun c ↦ by
   rw [op_comp, Functor.map_comp, ConcreteCategory.comp_apply, hg c, hf c]
+
+/-- **A morphism over a common target is `ℂ`-linear** for the algebra structures pulled back
+from that target.
+
+If `p : P ⟶ A` and `q : Q ⟶ A` are `ℂ`-linear for `αP` and `αQ` over one and the same `α` on
+`A`, then any `g : P ⟶ Q` with `g ≫ q = p` is `ℂ`-linear for `αP` and `αQ`. Nothing is assumed
+about `g`: the conclusion is `Γ.map g.op (αQ c) = αP c`, and `αQ c` is `α c` pulled back along
+`q`, so the claim is contravariant functoriality of `Γ` applied to the factorisation.
+
+This is what carries `ℂ`-linearity across an identification of two presentations of the same
+open subspace, where `g` is an isomorphism over the ambient space and the two algebra
+structures are both restrictions of the ambient one. -/
+lemma IsCLinearHom.of_comp {P Q A : LocallyRingedSpace.{u}} {g : P ⟶ Q} {q : Q ⟶ A} {p : P ⟶ A}
+    (hfac : g ≫ q = p) {αP : ℂ →+* P.presheaf.obj (op ⊤)} {αQ : ℂ →+* Q.presheaf.obj (op ⊤)}
+    {α : ℂ →+* A.presheaf.obj (op ⊤)} (hp : IsCLinearHom p αP α) (hq : IsCLinearHom q αQ α) :
+    IsCLinearHom g αP αQ := fun c ↦ by
+  rw [← hq c, ← LocallyRingedSpace.Γ_map_comp_apply, hfac]
+  exact hp c
 
 /-- **A `ℂ`-linear morphism is `ℂ`-linear on stalks**: the map on stalks carries the germ of the
 constant `c` upstairs to the germ of the constant `c` downstairs.

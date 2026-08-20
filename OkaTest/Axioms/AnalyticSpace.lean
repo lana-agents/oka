@@ -182,3 +182,26 @@ info: 'ComplexAnalytic.nodeCoord_ne' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.nodeCoord_ne
+
+/-! ### An open subspace of a complex analytic space is a complex analytic space -/
+
+/--
+info: 'ComplexAnalytic.exists_local_model_restrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.exists_local_model_restrict
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.restrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.restrict
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.ofRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.ofRestrict
