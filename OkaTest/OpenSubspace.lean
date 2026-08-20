@@ -59,6 +59,20 @@ coordinates, and it is the decomposition that disconnects it. -/
 def puncturedNode : Opens (AnalyticSpace.node.{u}) :=
   nodeAxis.{u} (ULift.up 0) ⊔ nodeAxis.{u} (ULift.up 1)
 
+/-- **The two punctured axes are disjoint**, because `z₀ z₁ = 0` on the node and neither factor
+vanishes on either axis.
+
+Together with the definition of `puncturedNode` this makes `⟨rfl, nodeAxis_inf_eq_bot⟩` a
+two-element open cover of the punctured node by *disjoint* nonempty opens, as an object rather
+than as a remark. `not_preconnectedSpace_puncturedNodeSpace` below asserts that a pair of
+morphisms out of the two pieces is subject to no compatibility condition, and disjointness is
+what that rests on; it was previously proved only as an intermediate step inside that theorem's
+`hcompl` and never stated. -/
+theorem nodeAxis_inf_eq_bot :
+    nodeAxis.{u} (ULift.up 0) ⊓ nodeAxis.{u} (ULift.up 1) = ⊥ := by
+  refine Opens.ext (Set.eq_empty_iff_forall_notMem.2 fun p hp ↦ ?_)
+  exact mul_ne_zero hp.1 hp.2 ((mem_zeroLocus_nodeSection_iff p.1).1 p.2)
+
 /-- The origin, as a point of the node. -/
 def nodeOrigin : AnalyticSpace.node.{u} :=
   ⟨⟨(0 : ULift.{u} (Fin 2) → ℂ), trivial⟩, origin_mem_zeroLocus_nodeSection.{u}⟩
@@ -128,9 +142,9 @@ node. It is neither empty nor everything: `(1, 0)` is in it and `(0, 1)` is not.
 
 This is what makes the punctured node worth having beyond witnessing that
 `AnalyticSpace.restrict` is not vacuous: it is an analytic space with a two-element open cover
-by *disjoint* nonempty opens, so a pair of morphisms out of the two pieces is subject to no
-compatibility condition at all. Whether some other analytic space already in this development
-has that property is not investigated. -/
+by *disjoint* nonempty opens — disjoint by `nodeAxis_inf_eq_bot` above — so a pair of morphisms
+out of the two pieces is subject to no compatibility condition at all. Whether some other
+analytic space already in this development has that property is not investigated. -/
 theorem not_preconnectedSpace_puncturedNodeSpace :
     ¬ PreconnectedSpace puncturedNodeSpace.{u} := by
   intro hconn

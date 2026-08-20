@@ -250,7 +250,12 @@ theorem eval_coordPullback_comp_via_base (p : AnalyticSpace.node.{u}) (j : ULift
 
 /-- The value of `nodeCoord 0 * nodeCoord 0` at a point of the node, computed with no reference
 to any composite: `eval` is a ring homomorphism and `ComplexAnalytic.eval_nodeCoord` gives each
-factor. -/
+factor.
+
+**This has the same statement as `coordPullback_comp_routes_agree` below and is not redundant
+with it.** The content is that **two proofs sharing no lemma both elaborate**, which is not
+visible in either statement — proof irrelevance means the two cannot be compared, only both
+checked. Deleting either destroys the check. -/
 theorem eval_nodeCoord_sq (p : AnalyticSpace.node.{u}) :
     (AnalyticSpace.node.{u}).eval (U := ⊤) p trivial
         (nodeCoord.{u} (ULift.up 0) * nodeCoord.{u} (ULift.up 0)) =
@@ -258,12 +263,15 @@ theorem eval_nodeCoord_sq (p : AnalyticSpace.node.{u}) :
   (map_mul ((AnalyticSpace.node.{u}).eval (U := ⊤) p trivial) _ _).trans
     (congrArg₂ (· * ·) (eval_nodeCoord.{u} p (ULift.up 0)) (eval_nodeCoord.{u} p (ULift.up 0)))
 
-/-- **The two routes to the composite's coordinate agree**, on a number rather than on a
-symbolic expression. The left-hand side is reached through
-`AnalyticSpace.coordPullback_comp`, by `coordPullback_comp_nodeIncl_sq_eq`; the right-hand side
-through the base maps, by `eval_coordPullback_comp_via_base`. `eval_nodeCoord_sq` computes the
-same number a third way, so an error in `coordPullback_comp` at this instance would have to be
-matched by an error in the base-map computation to survive. -/
+/-- **The two routes to the composite's coordinate agree**, at the level of the *value* rather
+than of the section. The left-hand side is reached through `AnalyticSpace.coordPullback_comp`,
+by `coordPullback_comp_nodeIncl_sq_eq`; the right-hand side through the base maps, by
+`eval_coordPullback_comp_via_base`. `eval_nodeCoord_sq` above establishes the same statement a
+third way, using no composite at all, so an error in `coordPullback_comp` at this instance would
+have to be matched by an error in the base-map computation to survive.
+
+Note that `p` is still a variable, so the two sides are symbolic in it; what has been discharged
+is the *section*, not the point. -/
 theorem coordPullback_comp_routes_agree (p : AnalyticSpace.node.{u}) (j : ULift.{u} (Fin 1)) :
     (AnalyticSpace.node.{u}).eval (U := ⊤) p trivial
         (nodeCoord.{u} (ULift.up 0) * nodeCoord.{u} (ULift.up 0)) =

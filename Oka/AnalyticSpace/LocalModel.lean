@@ -58,7 +58,9 @@ restriction are the stalks of the ambient space
 ## Main results
 
 - `ComplexAnalytic.isCLinearHom_ofRestrict`: the inclusion of an open subspace is `ℂ`-linear
-  for the restricted `ℂ`-algebra structure.
+  for the restricted `ℂ`-algebra structure, and
+  `ComplexAnalytic.isCLinearHom_ofRestrict_constants`, the same statement spelled with
+  `constantsAlgMap` so that callers needing that spelling do not have to rewrite.
 - `ComplexAnalytic.isLocalModel_zeroLocus`: **the zero locus of finitely many holomorphic
   functions on an open subset of `ℂ^n` is a local model.**
 - `ComplexAnalytic.AnalyticSpace.isCoherentStructureSheaf_zeroLocus`: its structure sheaf is
@@ -135,6 +137,19 @@ theorem isCLinearHom_ofRestrict (X : LocallyRingedSpace.{u}) (α : ℂ →+* X.p
   change ((X.ofRestrict U.isOpenEmbedding).c.app (op ⊤)).hom (α c) = _
   change (X.presheaf.map _).hom (α c) = (X.presheaf.map _).hom (α c)
   congr 2
+
+/-- **The inclusion of an open subset of `ℂ^n` is `ℂ`-linear for `constantsAlgMap`.**
+
+`ComplexAnalytic.isCLinearHom_ofRestrict` already gives this, for the algebra structure spelled
+as `resAlgMap`; the two are equal by `ComplexAnalytic.constantsAlgMap_eq_resAlgMap`, which is
+`rfl`. The point of restating it is the *stated* type: a caller that needs the `constantsAlgMap`
+spelling can apply this directly instead of rewriting along that equation, which is what
+`Oka/AnalyticSpace/OpenSubspace.lean` used to do twice. -/
+theorem isCLinearHom_ofRestrict_constants (n : ℕ)
+    (V : TopologicalSpace.Opens (complexAffineSpace.{u} n)) :
+    IsCLinearHom ((complexAffineSpace.{u} n).ofRestrict V.isOpenEmbedding)
+      (constantsAlgMap n V) (Algebra.algebraMap ℂ (OkaRing ⊤)) :=
+  isCLinearHom_ofRestrict _ _ V
 
 end CLinear
 

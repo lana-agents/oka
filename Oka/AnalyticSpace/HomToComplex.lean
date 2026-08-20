@@ -380,8 +380,10 @@ This is `rfl` — `ComplexAnalytic.nodeIncl` is built from `zeroLocusSubspaceι`
 whose base maps are the two subtype inclusions — and it is stated because nothing else says it,
 and because it is what makes the pullback computation `ComplexAnalytic.coordPullback_nodeIncl`
 falsifiable: `OkaTest/HomToComplex.lean` proves this same equation a second time through
-`ComplexAnalytic.AnalyticSpace.eval_c_app` and `ComplexAnalytic.eval_nodeCoord`, and a wrong
-coordinate index anywhere in that chain would make the two disagree. -/
+`ComplexAnalytic.AnalyticSpace.eval_c_app` and `ComplexAnalytic.eval_nodeCoord`. A wrong
+coordinate index anywhere in that chain would not make the two *disagree* — they are the same
+proposition, so they cannot — it would make the second **fail to elaborate**, which is what the
+check consists of. -/
 theorem base_nodeIncl (p : AnalyticSpace.node.{u}) (j : ULift.{u} (Fin 2)) :
     ((nodeIncl.{u}).toLRSHom.base p : ULift.{u} (Fin 2) → ℂ) j = p.1.1 j :=
   rfl

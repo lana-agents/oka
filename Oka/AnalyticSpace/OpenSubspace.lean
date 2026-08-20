@@ -129,9 +129,8 @@ theorem exists_local_model_restrict (X : AnalyticSpace.{u}) (U : X.Opens)
       (((complexAffineSpace.{u} n).restrict V.isOpenEmbedding).resAlgMap
         (constantsAlgMap n V) V') (constantsAlgMap n V'') :=
     IsCLinearHom.of_comp (LocallyRingedSpace.IsOpenImmersion.isoOfRangeEq_hom_fac _ _ hrange₂)
-      ((isCLinearHom_ofRestrict _ _ V').comp
-        (constantsAlgMap_eq_resAlgMap n V ▸ isCLinearHom_ofRestrict _ _ V))
-      (constantsAlgMap_eq_resAlgMap n V'' ▸ isCLinearHom_ofRestrict _ _ V'')
+      ((isCLinearHom_ofRestrict _ _ V').comp (isCLinearHom_ofRestrict_constants n V))
+      (isCLinearHom_ofRestrict_constants n V'')
   exact ⟨⟨W, hxW⟩, n, k, V'', (e₁.hom ≫ restrictHom i V') ≫ e₂.hom,
     fun j ↦ (LocallyRingedSpace.Γ.map e₂.inv.op).hom (restrictSections V' f j),
     ((hcut.restrictOpen V').comp_iso e₁).iso_comp e₂,
