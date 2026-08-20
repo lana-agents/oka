@@ -30,3 +30,19 @@ info: 'TopCat.Presheaf.ker_stalkFunctor_map_toQuotientSpan' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms TopCat.Presheaf.ker_stalkFunctor_map_toQuotientSpan
 
+
+/-! ### Pushforward along an embedding is fully faithful -/
+
+/--
+info: 'TopCat.Presheaf.pushforwardFullyFaithful' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TopCat.Presheaf.pushforwardFullyFaithful
+
+/--
+info: 'TopCat.Sheaf.pushforwardFullyFaithful' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TopCat.Sheaf.pushforwardFullyFaithful

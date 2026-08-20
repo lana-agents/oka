@@ -121,3 +121,19 @@ info: 'ComplexAnalytic.IsCutOutBy.pushforwardIso' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.IsCutOutBy.pushforwardIso
+
+/-! ### The mapping property of a subspace cut out by global sections -/
+
+/--
+info: 'ComplexAnalytic.IsCutOutBy.existsUnique_lift' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.IsCutOutBy.existsUnique_lift
+
+/--
+info: 'ComplexAnalytic.IsCutOutBy.uniqueIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.IsCutOutBy.uniqueIso
