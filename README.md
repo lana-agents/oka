@@ -80,15 +80,25 @@ coherence statement for arbitrary complex analytic spaces:
   `ℂ^n ⟶ ℂ`. Composing with the inclusion of a closed analytic subspace gives the development's
   first morphism between two *different* analytic spaces: the two coordinate morphisms from the
   node to `ℂ`, which are surjective on points. The same statement for a **general** analytic
-  space is not proved: a section of `𝒪_Z` lifts to a holomorphic function only locally, and
-  assembling the resulting local morphisms needs a gluing theorem for morphisms of locally ringed
-  spaces over an open cover of the source, which neither Mathlib nor this development has.
+  space is not proved: a section of `𝒪_Z` lifts to a holomorphic function only locally, so the
+  construction runs on an open cover of `Z` and stops. Assembling the pieces needs the gluing of
+  the next item, which is now available, together with independence of the local construction of
+  the two choices it makes — the chart and the local lift — which is not.
+
+* **Gluing.** Open covers of a locally ringed space, and the gluing of morphisms out of the
+  members of one (`Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean`): a locally ringed space
+  is the gluing of the members of any open cover of it, so morphisms out of the members which
+  agree on the overlaps glue to a unique morphism out of the whole space. Mathlib has this for
+  schemes and glues locally ringed *spaces*, but does not glue morphisms out of one. This is a
+  mirror-tree file with no analytic content.
+
 * **Rigidity of morphisms to `ℂ^n`.** A morphism of complex analytic spaces `Z ⟶ ℂ^n` is
   determined by the pullbacks of the `n` coordinate functions, for **every** `Z`
   (`Oka/AnalyticSpace/HomToComplex.lean`). The content is that a local `ℂ`-algebra homomorphism
   out of a stalk of `𝒪_{ℂ^n}` into a Noetherian local ring is determined by the images of the
   coordinate germs, which is Krull's intersection theorem applied to the maximal ideal. Combined
-  with the previous item this gives `Hom(ℂ^n, ℂ) ≃ Γ(ℂ^n, 𝒪)`: a global holomorphic function on
+  with the morphisms given by holomorphic maps, two items above, this gives
+  `Hom(ℂ^n, ℂ) ≃ Γ(ℂ^n, 𝒪)`: a global holomorphic function on
   `ℂ^n` is the same thing as a morphism of analytic spaces to `ℂ`. The same bijection for a
   general `Z` is missing only its **existence** half, not this uniqueness half.
 

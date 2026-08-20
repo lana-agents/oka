@@ -46,3 +46,47 @@ info: 'TopCat.Sheaf.pushforwardFullyFaithful' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms TopCat.Sheaf.pushforwardFullyFaithful
+
+/-! ### Gluing locally ringed spaces along an open cover -/
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.GlueData.ι_eq_iff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.GlueData.ι_eq_iff
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.GlueData.isOpen_iff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.GlueData.isOpen_iff
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.OpenCover.isIso_fromGlued' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.OpenCover.isIso_fromGlued
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.OpenCover.glueMorphisms' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.OpenCover.glueMorphisms
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.OpenCover.existsUnique_glueMorphisms' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.OpenCover.existsUnique_glueMorphisms
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.openCoverOfOpens' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.openCoverOfOpens
