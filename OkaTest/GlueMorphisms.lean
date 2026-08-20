@@ -52,6 +52,12 @@ so the compatibility is vacuous and *any* pair of morphisms out of the two piece
 restriction of *either* piece's morphism, and it is the first glued morphism in this development
 that is not something one already had.
 
+`exists_glue_pn_ne_nodeToLine` ties all three to `existsUnique_glue_pn`, so that they are not
+three statements about a hypothesis nothing satisfies; and `hom_ext_pullback_pnAxis` checks the
+claim `hom_ext_of_isEmpty`'s docstring makes about itself — that the general form, unlike the
+`restrict` form beside it, applies to the *categorical pullback*, which is the object the
+original compatibility hypothesis is stated over.
+
 The general form is stated first and the two named coordinates derived from it deliberately.
 Until #698 this file proved only the `k = 0` half while asserting "either" in this paragraph,
 which is the third time on this project that the coordinate needed for the conclusion was proved
@@ -298,5 +304,50 @@ theorem glue_pn_ne_nodeToLine_one (φ : PN.{u} ⟶ complexAffineSpace.{u} 1)
         ⟨axisPoint.{u} (ULift.up 0), axisPoint_mem _⟩ :
           ULift.{u} (Fin 1) → ℂ) (ULift.up 0) :=
   glue_pn_ne_nodeToLine_of_ne φ hφ (ULift.up 0) (ULift.up 1) (by simp)
+
+/-- **The glued morphism exists and differs from every piece's morphism.**
+
+The three theorems above are stated about any `φ` satisfying the gluing equations, which would
+be true of nothing at all if no such `φ` existed. This ties them to `existsUnique_glue_pn`: one
+existential whose witness is produced by the first component and consumed by the second, so the
+two components are statements about the same morphism rather than about two that print alike. -/
+theorem exists_glue_pn_ne_nodeToLine :
+    ∃ φ : PN.{u} ⟶ complexAffineSpace.{u} 1,
+      (∀ j, PN.{u}.ofRestrict (pnAxis.{u} j).isOpenEmbedding ≫ φ = pnHom.{u} j) ∧
+        ∀ j k : ULift.{u} (Fin 2), k ≠ j →
+          (φ.base ⟨axisPoint.{u} j, axisPoint_mem _⟩ : ULift.{u} (Fin 1) → ℂ) (ULift.up 0) ≠
+            ((AnalyticSpace.node.{u}.toLocallyRingedSpace.ofRestrict
+                puncturedNode.{u}.isOpenEmbedding ≫ nodeToLineHom.{u} k).base
+              ⟨axisPoint.{u} j, axisPoint_mem _⟩ : ULift.{u} (Fin 1) → ℂ) (ULift.up 0) :=
+  let ⟨φ, hφ, _⟩ := existsUnique_glue_pn.{u}
+  ⟨φ, hφ, fun j k hkj ↦ glue_pn_ne_nodeToLine_of_ne φ hφ j k hkj⟩
+
+/-- **`hom_ext_of_isEmpty` really does discharge the *pullback* form of the compatibility.**
+
+`Oka/Geometry/RingedSpace/LocallyRingedSpace.lean` claims that this, and not the `restrict`
+form beside it, is what the hypothesis of
+`AlgebraicGeometry.LocallyRingedSpace.OpenCover.existsUnique_glueMorphisms` needs — the
+categorical pullback being a space that is not a `restrict` of anything, which is the whole
+reason that hypothesis went unmet for as long as it did. This is that claim, at the one pair of
+opens in the development known to be disjoint: `hom_ext_restrict_of_isEmpty` does not typecheck
+against this goal and the general form does.
+
+The emptiness is not assumed. It is computed from `pnAxis_inf_carrier_eq_empty` through
+`range_pullback_to_base_of_left`, which is the lemma that made the pullback's carrier knowable
+in the first place. -/
+theorem hom_ext_pullback_pnAxis (i j : ULift.{u} (Fin 2)) (hij : i ≠ j)
+    (f g : pullback (PN.{u}.ofRestrict (pnAxis.{u} i).isOpenEmbedding)
+        (PN.{u}.ofRestrict (pnAxis.{u} j).isOpenEmbedding) ⟶ complexAffineSpace.{u} 1) :
+    f = g := by
+  refine LocallyRingedSpace.hom_ext_of_isEmpty ⟨fun x ↦ ?_⟩ f g
+  have hmem : (pullback.fst (PN.{u}.ofRestrict (pnAxis.{u} i).isOpenEmbedding)
+        (PN.{u}.ofRestrict (pnAxis.{u} j).isOpenEmbedding) ≫
+        PN.{u}.ofRestrict (pnAxis.{u} i).isOpenEmbedding).base x ∈
+      Set.range (pullback.fst (PN.{u}.ofRestrict (pnAxis.{u} i).isOpenEmbedding)
+        (PN.{u}.ofRestrict (pnAxis.{u} j).isOpenEmbedding) ≫
+        PN.{u}.ofRestrict (pnAxis.{u} i).isOpenEmbedding).base := ⟨x, rfl⟩
+  rw [LocallyRingedSpace.IsOpenImmersion.range_pullback_to_base_of_left,
+    LocallyRingedSpace.range_ofRestrict, LocallyRingedSpace.range_ofRestrict] at hmem
+  exact Set.eq_empty_iff_forall_notMem.1 (pnAxis_inf_carrier_eq_empty i j hij) _ hmem
 
 end
