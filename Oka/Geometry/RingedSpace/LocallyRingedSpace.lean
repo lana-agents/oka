@@ -23,6 +23,10 @@ mirror tree.
   recorded as a ring homomorphism into the global sections, restricted to an open subspace.
 - `AlgebraicGeometry.LocallyRingedSpace.stalkAlgMap`: the same algebra structure, taken at a
   stalk.
+- `AlgebraicGeometry.LocallyRingedSpace.toRestrictΓ`: **a section over `U`, as a global section
+  of `X|U`.** The global sections of `X|U` are indexed by `U.functor.obj ⊤` rather than by `U`,
+  so this is a restriction map and not a coercion; it is the spelling every statement below
+  about sections on an open subspace is phrased in.
 
 ## Main results
 
@@ -306,30 +310,19 @@ theorem section_ext_of_cover (X : LocallyRingedSpace.{u}) {ι : Type*} (U : ι �
   exact (X.germ_Γ_map_ofRestrict (U i) s ⟨x, hi⟩).symm.trans
     (key.trans (X.germ_Γ_map_ofRestrict (U i) t ⟨x, hi⟩))
 
-/-! ### Sections over an open subset, as global sections of the open subspace -/
+/-! ### Sections over an open subset, as global sections of the open subspace
 
-/-- The open indexing the global sections of `X|U` is contained in `U`. Only the inequality is
-ever needed — the two opens are in fact equal, but `germ_res_apply` moves germs across a `≤` and
-an equation of opens would have to be transported. -/
-lemma functor_obj_top_le {X : LocallyRingedSpace.{u}} (U : Opens X) :
-    U.isOpenEmbedding.isOpenMap.functor.obj ⊤ ≤ U := by
-  rintro _ ⟨y, -, rfl⟩
-  exact y.2
+The three inequalities between opens that the section below runs on are all Mathlib's, and are
+spelled inline at their call sites rather than restated here:
 
-/-- The image of an open of `X|U` contains the image of a smaller one. -/
-lemma functor_mono {X : LocallyRingedSpace.{u}} (U : Opens X)
-    {O₁ O₂ : Opens (X.restrict U.isOpenEmbedding)} (h : O₁ ≤ O₂) :
-    U.isOpenEmbedding.isOpenMap.functor.obj O₁ ≤
-      U.isOpenEmbedding.isOpenMap.functor.obj O₂ := by
-  rintro _ ⟨w, hw, rfl⟩
-  exact ⟨w, h hw, rfl⟩
-
-/-- Every open of `X|U` is contained in the preimage of its image. -/
-lemma le_map_functor {X : LocallyRingedSpace.{u}} (U : Opens X)
-    (O : Opens (X.restrict U.isOpenEmbedding)) :
-    O ≤ (Opens.map (X.ofRestrict U.isOpenEmbedding).base).obj
-      (U.isOpenEmbedding.isOpenMap.functor.obj O) :=
-  fun w hw ↦ ⟨w, hw, rfl⟩
+* `U.functor.obj ⊤ ≤ U` is `(TopologicalSpace.Opens.isOpenEmbedding_obj_top U).le`. The
+  underlying **equation** `U.functor.obj ⊤ = U` is a Mathlib `@[simp]` lemma, so it is free; what
+  is not free is *transporting* along it, which is why only the `≤` is ever used.
+* `O₁ ≤ O₂ → U.functor.obj O₁ ≤ U.functor.obj O₂` is functoriality,
+  `(U.isOpenEmbedding.isOpenMap.functor.map (homOfLE h)).le`.
+* `O ≤ (Opens.map ι).obj (U.functor.obj O)` is the unit of `IsOpenMap.adjunction`,
+  `(U.isOpenEmbedding.isOpenMap.adjunction.unit.app O).le`.
+-/
 
 /-- **A section over `U` as a global section of `X|U`.**
 
@@ -339,14 +332,15 @@ types and a section over `U` has to be *restricted* to become a global section o
 `abbrev`, so that a caller holding the restriction map recognises it without unfolding. -/
 abbrev toRestrictΓ (X : LocallyRingedSpace.{u}) (U : Opens X) (u : X.presheaf.obj (op U)) :
     (X.restrict U.isOpenEmbedding).presheaf.obj (op ⊤) :=
-  (X.presheaf.map (homOfLE (functor_obj_top_le U)).op).hom u
+  (X.presheaf.map (homOfLE (Opens.isOpenEmbedding_obj_top U).le).op).hom u
 
 /-- **A germ on an open subspace is the image of a germ upstairs**, under the stalk map of the
 inclusion.
 
 This is the one tool every germ computation about open subspaces in this file and in
 `Oka/AnalyticSpace/Restrict.lean` runs through. Its point is that it needs **no equation of
-opens**: `germ_res_apply` moves a germ across `le_map_functor`, and the leftover restriction map
+opens**: `germ_res_apply` moves a germ across the unit of `IsOpenMap.adjunction`, and the
+leftover restriction map
 is the identity because `Opens X` is a preorder and there is only one morphism
 `U.functor.obj O ⟶ U.functor.obj O`. -/
 lemma germ_eq_stalkMap_ofRestrict (X : LocallyRingedSpace.{u}) (U : Opens X)
@@ -364,7 +358,7 @@ lemma germ_eq_stalkMap_ofRestrict (X : LocallyRingedSpace.{u}) (U : Opens X)
   refine Eq.trans ?_ (stalkMap_germ_apply (X.ofRestrict U.isOpenEmbedding)
     (U.isOpenEmbedding.isOpenMap.functor.obj O) w ⟨w, hO, rfl⟩ b).symm
   refine Eq.trans ?_ ((X.restrict U.isOpenEmbedding).presheaf.germ_res_apply
-    (homOfLE (le_map_functor U O)) w hO _)
+    (homOfLE (U.isOpenEmbedding.isOpenMap.adjunction.unit.app O).le) w hO _)
   refine congrArg ((X.restrict U.isOpenEmbedding).presheaf.germ O w hO) ?_
   change b = (X.presheaf.map _).hom ((X.presheaf.map _).hom b)
   rw [← ConcreteCategory.comp_apply, ← X.presheaf.map_comp]
@@ -378,7 +372,8 @@ lemma Γgerm_toRestrictΓ (X : LocallyRingedSpace.{u}) (U : Opens X)
       ((X.ofRestrict U.isOpenEmbedding).stalkMap w).hom (X.presheaf.germ U w.1 w.2 u) :=
   (X.germ_eq_stalkMap_ofRestrict U ⊤ w trivial _).trans
     (congrArg ((X.ofRestrict U.isOpenEmbedding).stalkMap w).hom
-      (X.presheaf.germ_res_apply (homOfLE (functor_obj_top_le U)) w.1 ⟨w, trivial, rfl⟩ u))
+      (X.presheaf.germ_res_apply (homOfLE (Opens.isOpenEmbedding_obj_top U).le) w.1
+        ⟨w, trivial, rfl⟩ u))
 
 /-- Two restrictions composed is one restriction. The three inequalities are unrelated inputs:
 `Opens X` is a preorder, so any two morphisms with the same source and target are equal. -/

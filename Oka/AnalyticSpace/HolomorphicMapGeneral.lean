@@ -28,8 +28,9 @@ previously known only for `Z = ℂ^n` and for `Z = ℂ^n|V`.
    `𝒪_{ℂ^n|V}` along a chart. The chart comes from `AnalyticSpace.local_model`; the section from
    `AlgebraicGeometry.LocallyRingedSpace.exists_localLift`, applied not to the chart `i` itself
    but to `i` **composed with the inclusion of its target into `ℂ^n`** — which is what makes the
-   lifted section live on an open of `ℂ^n` rather than on an open of `ℂ^n|V`, removing one of
-   the three seams below before it appears.
+   lifted section live on an open of `ℂ^n` rather than on an open of `ℂ^n|V`. Taxis #709
+   predicted three seams here; this removes one of them before it appears, and the two that
+   remain are the ones listed below.
 2. **The local morphism** — `exists_local_hom_of_chartLift`: compose the chart with the morphism
    `ℂ^n|V ⟶ ℂ` that `exists_hom_complexLine_restrict` builds from that section.
 3. **The gluing** — `exists_hom_complexLine_of_local`.
@@ -70,11 +71,18 @@ general, over nothing larger. Two seams follow, and they are not symmetric.
   sheaf map is not otherwise computable. `ComplexAnalytic.Γ_map_restrictHom_toRestrictΓ` is what
   closes this, entirely on stalks.
 
-**Neither needed an equation of opens.** The obvious plan is to prove
-`U.isOpenEmbedding.isOpenMap.functor.obj ⊤ = U` and transport along it. That is never necessary:
+**Neither needed an equation of opens.** The obvious plan is to reach for
+`U.isOpenEmbedding.isOpenMap.functor.obj ⊤ = U` and transport along it. Getting that equation is
+not the difficulty — it is `TopologicalSpace.Opens.isOpenEmbedding_obj_top`, a Mathlib `@[simp]`
+lemma. **Transporting along it is**, and it is never necessary:
 `AlgebraicGeometry.LocallyRingedSpace.germ_res_apply` moves a germ across a `≤`, and the two
 inequalities one needs — `functor.obj O ≤ U` and `O ≤ (Opens.map ι).obj (functor.obj O)` — are
-one-line `rintro`s. Every predicted transport evaporates.
+the `.le` of that same `@[simp]` lemma and the unit of `IsOpenMap.adjunction`. Every predicted
+transport evaporates.
+
+The equation is nonetheless not *definitional*, even at `⊤` and even over `ℂ^n` — taxis #702 —
+so a transport really would have to be carried, not discharged by `rfl`. Both facts are needed
+to see why the `≤` route is the cheap one.
 
 ## Main results
 
@@ -245,7 +253,7 @@ theorem exists_chartLift (Z : AnalyticSpace.{u}) (g : Z.presheaf.obj (op ⊤)) (
       U₀.1.isOpenEmbedding.isOpenMap.functor.obj
         ((Opens.map (i ≫ (_root_.complexAffineSpace.{u} n).ofRestrict
           V.isOpenEmbedding).base).obj A) :=
-    LocallyRingedSpace.functor_mono U₀.1 hB'A
+    (U₀.1.isOpenEmbedding.isOpenMap.functor.map (homOfLE hB'A)).le
   have hr1 := LocallyRingedSpace.range_ofRestrict Z.toLocallyRingedSpace
     (U₀.1.isOpenEmbedding.isOpenMap.functor.obj B')
   have hr2 := LocallyRingedSpace.range_ofRestrict_comp Z.toLocallyRingedSpace U₀.1
@@ -282,11 +290,11 @@ theorem exists_chartLift (Z : AnalyticSpace.{u}) (g : Z.presheaf.obj (op ⊤)) (
     refine Eq.trans (congrArg (Z.toLocallyRingedSpace.toRestrictΓ
         (U₀.1.isOpenEmbedding.isOpenMap.functor.obj B'))
       (LocallyRingedSpace.restrict_map_apply Z.toLocallyRingedSpace U₀.1 hB'top
-        (LocallyRingedSpace.functor_mono U₀.1 hB'top) _)) ?_
+        (U₀.1.isOpenEmbedding.isOpenMap.functor.map (homOfLE hB'top)).le _)) ?_
     refine Eq.trans (congrArg (Z.toLocallyRingedSpace.toRestrictΓ
         (U₀.1.isOpenEmbedding.isOpenMap.functor.obj B'))
       (congrArg (fun b ↦ (Z.toLocallyRingedSpace.presheaf.map
-          (homOfLE (LocallyRingedSpace.functor_mono U₀.1 hB'top)).op).hom b)
+          (homOfLE (U₀.1.isOpenEmbedding.isOpenMap.functor.map (homOfLE hB'top)).le).op).hom b)
         (LocallyRingedSpace.Γ_map_ofRestrict_apply Z.toLocallyRingedSpace U₀.1 g))) ?_
     refine Eq.trans (congrArg (Z.toLocallyRingedSpace.toRestrictΓ
         (U₀.1.isOpenEmbedding.isOpenMap.functor.obj B'))
