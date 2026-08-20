@@ -219,17 +219,30 @@ end Reindex
 
 section Translate
 
+/-- **Precomposing a holomorphic function on `U` with a map which is analytic only on `V` and
+sends `V` into `U` gives a holomorphic function on `V`.**
+
+`ψ` is a map defined on all of `κ → ℂ`, but analyticity is required only at the points of `V`,
+which is all the conclusion can see. That is what makes this usable when `ψ` comes from a
+holomorphic function on a *proper* open subset — extended by zero outside it, as
+`OkaRing.toGlobalFun` does — where analyticity off `V` is false and irrelevant. -/
+lemma OkaAnalytic.comp_analyticOn {κ : Type u} [Fintype κ] {U : Opens (ι → ℂ)}
+    {V : Opens (κ → ℂ)} (ψ : (κ → ℂ) → (ι → ℂ)) (hψ : ∀ y ∈ V, AnalyticAt ℂ ψ y)
+    (h : ∀ y ∈ V, ψ y ∈ U) {f : U → ℂ} (hf : OkaAnalytic f) :
+    OkaAnalytic (fun y : V ↦ f ⟨ψ y, h y y.2⟩) := by
+  have key : ∀ y ∈ V, AnalyticAt ℂ (Function.extend Subtype.val f 0 ∘ ψ) y := fun y hy ↦
+    ((okaAnalytic_iff f).1 hf _ (h y hy)).comp (hψ y hy)
+  refine (funext fun z ↦ ?_ : (fun y : V ↦ f ⟨ψ y, h y y.2⟩) =
+    fun y : V ↦ (Function.extend Subtype.val f 0 ∘ ψ) y) ▸ okaAnalytic_restrict key
+  exact (Subtype.val_injective.extend_apply _ _ ⟨ψ z, h z z.2⟩).symm
+
 /-- Precomposing a holomorphic function on `U` with an entire map sending `V` into `U` gives a
 holomorphic function on `V`. -/
 lemma OkaAnalytic.comp_analytic {κ : Type u} [Fintype κ] {U : Opens (ι → ℂ)} {V : Opens (κ → ℂ)}
     (ψ : (κ → ℂ) → (ι → ℂ)) (hψ : ∀ y, AnalyticAt ℂ ψ y) (h : ∀ y ∈ V, ψ y ∈ U)
     {f : U → ℂ} (hf : OkaAnalytic f) :
-    OkaAnalytic (fun y : V ↦ f ⟨ψ y, h y y.2⟩) := by
-  have key : ∀ y ∈ V, AnalyticAt ℂ (Function.extend Subtype.val f 0 ∘ ψ) y := fun y hy ↦
-    ((okaAnalytic_iff f).1 hf _ (h y hy)).comp (hψ y)
-  refine (funext fun z ↦ ?_ : (fun y : V ↦ f ⟨ψ y, h y y.2⟩) =
-    fun y : V ↦ (Function.extend Subtype.val f 0 ∘ ψ) y) ▸ okaAnalytic_restrict key
-  exact (Subtype.val_injective.extend_apply _ _ ⟨ψ z, h z z.2⟩).symm
+    OkaAnalytic (fun y : V ↦ f ⟨ψ y, h y y.2⟩) :=
+  hf.comp_analyticOn ψ (fun y _ ↦ hψ y) h
 
 namespace TopologicalSpace.Opens
 
