@@ -24,6 +24,20 @@ info: 'ComplexAnalytic.isLocalModel_zeroLocus' depends on axioms:
 #print axioms ComplexAnalytic.isLocalModel_zeroLocus
 
 /--
+info: 'ComplexAnalytic.isCLinearHom_restrictTopIso_inv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isCLinearHom_restrictTopIso_inv
+
+/--
+info: 'ComplexAnalytic.isCLinearHom_restrictTopIso_inv_constants' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isCLinearHom_restrictTopIso_inv_constants
+
+/--
 info: 'ComplexAnalytic.AnalyticSpace.zeroLocus' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/

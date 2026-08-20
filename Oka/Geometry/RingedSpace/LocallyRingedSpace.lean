@@ -32,6 +32,10 @@ mirror tree.
   global sections, in applied form.
 - `AlgebraicGeometry.LocallyRingedSpace.Γ_map_id_apply`: its identity companion, which is what
   collapses a pair of mutually inverse morphisms in such a computation.
+- `AlgebraicGeometry.LocallyRingedSpace.Γ_map_inv_hom_apply` and
+  `AlgebraicGeometry.LocallyRingedSpace.Γ_map_hom_inv_apply`: **crossing an isomorphism of
+  locally ringed spaces in both directions is the identity on global sections**, proved without
+  computing either direction.
 - `AlgebraicGeometry.LocallyRingedSpace.hom_stalk_ext`: two morphisms with the same base map and
   the same maps on stalks are equal.
 - `AlgebraicGeometry.LocallyRingedSpace.Γgerm_Γ_map`: the germ of the pullback of a global
@@ -77,6 +81,38 @@ lemma Γ_map_id_apply (X : LocallyRingedSpace.{u}) (a : X.presheaf.obj (op ⊤))
     (Γ.map (𝟙 X).op).hom a = a := by
   rw [op_id, CategoryTheory.Functor.map_id]
   rfl
+
+/-- **Crossing an isomorphism of locally ringed spaces in both directions is the identity on
+global sections** — proved without computing either direction.
+
+Neither `Γ.map e.hom.op` nor `Γ.map e.inv.op` need be computable; in the case this was
+extracted from — `e := X.restrictTopIso`, crossing between `X` and `X|⊤` — `Γ.map e.inv.op` is
+an `eqToHom` between two *different* types of global-section ring, so no equation naming it
+typechecks at all. **The technique is never to name it**: write the section as a pullback along
+the direction that *is* a `rfl`, then collapse the resulting pair with this lemma, whose whole
+proof is `Iso.inv_hom_id` read through
+`AlgebraicGeometry.LocallyRingedSpace.Γ_map_comp_apply`.
+
+For `restrictTopIso` the direction to write the section along is `hom`, because
+`Γ.map X.restrictTopIso.hom.op` is *definitionally the restriction map*
+`X.presheaf.map (homOfLE le_top).op` from `⊤` to the image of `⊤`. It is therefore a `rfl`
+for any section whose presentation does not mention the open it lives on — a polynomial, a
+constant, a coordinate — but **not** for a section given abstractly: the two sides then have
+different types, `Γ(X, ⊤)` and `Γ(X, functor.obj ⊤)`, which are not definitionally equal even
+for `X = ℂ^n`. `OkaTest/Factorisation.lean` carries the technique out at `ℂ²`, where
+`nodeSection_eq` is the `rfl` in question, and checks both halves of this paragraph beside
+it. -/
+lemma Γ_map_inv_hom_apply (e : X ≅ Y) (a : Y.presheaf.obj (op ⊤)) :
+    (Γ.map e.inv.op).hom ((Γ.map e.hom.op).hom a) = a :=
+  (Γ_map_comp_apply e.inv e.hom a).symm.trans
+    ((congrArg (fun m : Y ⟶ Y ↦ (Γ.map m.op).hom a) e.inv_hom_id).trans (Γ_map_id_apply Y a))
+
+/-- The companion of `AlgebraicGeometry.LocallyRingedSpace.Γ_map_inv_hom_apply`, crossing in the
+other order. Same proof with `Iso.hom_inv_id` in place of `Iso.inv_hom_id`. -/
+lemma Γ_map_hom_inv_apply (e : X ≅ Y) (a : X.presheaf.obj (op ⊤)) :
+    (Γ.map e.hom.op).hom ((Γ.map e.inv.op).hom a) = a :=
+  (Γ_map_comp_apply e.hom e.inv a).symm.trans
+    ((congrArg (fun m : X ⟶ X ↦ (Γ.map m.op).hom a) e.hom_inv_id).trans (Γ_map_id_apply X a))
 
 /-- **Two morphisms of locally ringed spaces with the same base map and the same maps on stalks
 are equal.**

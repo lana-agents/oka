@@ -138,3 +138,19 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.section_ext_of_cover' depends on axi
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.section_ext_of_cover
+
+/-! ### Crossing an isomorphism on global sections -/
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.Γ_map_inv_hom_apply' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.Γ_map_inv_hom_apply
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.Γ_map_hom_inv_apply' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.Γ_map_hom_inv_apply
