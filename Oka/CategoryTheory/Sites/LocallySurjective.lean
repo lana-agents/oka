@@ -3,6 +3,7 @@ Copyright (c) 2026 Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten. All righ
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
+import Mathlib.CategoryTheory.ConcreteCategory.EpiMono
 import Mathlib.CategoryTheory.Sites.Abelian
 import Mathlib.CategoryTheory.Sites.EpiMono
 import Oka.Algebra.Category.Grp.EpiMono
@@ -14,8 +15,10 @@ import Oka.Algebra.Category.Grp.EpiMono
 concrete category is locally surjective exactly when it is an epimorphism, given three
 hypotheses. For `AddCommGrpCat` two of them — `HasSheafCompose` and, via
 `CategoryTheory.sheafIsAbelian`, `Balanced` — are already available, and the third,
-`HasFunctorialSurjectiveInjectiveFactorization`, is supplied by
-`Oka/Algebra/Category/Grp/EpiMono.lean`. This file records the resulting statement, which is
+`HasFunctorialSurjectiveInjectiveFactorization`, follows from Mathlib's generic instance for
+concrete categories once `(forget AddCommGrpCat).PreservesEpimorphisms` is supplied, which
+is what `Oka/Algebra/Category/Grp/EpiMono.lean` does. This file records the resulting
+statement, which is
 what one actually reaches for: **a section of the target of an epimorphism of sheaves of abelian
 groups lifts on a covering sieve.**
 
