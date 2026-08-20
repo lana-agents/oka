@@ -16,13 +16,20 @@ two agree, and that they therefore cancel.
 There is nothing to it: a natural transformation `(Opens.map f).op ⟶ (Opens.map g).op` has
 components in `(Opens X)ᵒᵖ`, which is a poset, so there is at most one of them. The statement
 is worth having because it is the step where a proof about `PresheafedSpace.ext` meets a
-construction phrased with `pushforwardEq`, and because neither `rw` nor `simp` can do it:
-`TopCat.Presheaf` is a `def` for a functor category, so goals of this shape are reported as
-"not type-correct under the `instances` transparency level" and both tactics refuse.
+construction phrased with `pushforwardEq`.
 
-`TopCat.Presheaf.comp_pushforwardEq_inv_comp_whiskerRight` is stated in the exact shape a
-composite of two morphisms produces, for the same reason: it is meant to be applied by `exact`,
-which unifies up to definitional equality, rather than rewritten with.
+It is the *cancellation*, not the identification, that tactics cannot do. `rw` and `simp` apply
+`whiskerRight_eq_pushforwardEq_hom` and reassociate the composite without complaint; what fails
+is the last step, cancelling the `inv ≫ hom` they are left with. `TopCat.Presheaf` is a `def`
+for a functor category, so on `(α ≫ β ≫ (pushforwardEq h F).inv) ≫ (pushforwardEq h F).hom =
+α ≫ β` the rewrite `Iso.inv_hom_id` reports "did not find an occurrence of the pattern", with a
+note that the target is not type-correct under the `instances` transparency level; after
+reassociating, `Category.comp_id` fails the same way on `α ≫ β ≫ 𝟙 _ = α ≫ β`, and
+`simp only [Category.comp_id]` reports the lemma as unused and leaves the goal open.
+
+`TopCat.Presheaf.comp_pushforwardEq_inv_comp_whiskerRight` therefore does that cancellation once,
+in term mode, and is stated in the exact shape a composite of two morphisms produces: it is meant
+to be applied by `exact`, which unifies up to definitional equality, rather than rewritten with.
 
 ## Main results
 
@@ -52,8 +59,9 @@ lemma whiskerRight_eq_pushforwardEq_hom (h : f = g) (F : X.Presheaf C)
 `TopCat.Presheaf.pushforwardEq`.
 
 Stated for a composite `α ≫ β ≫ _` rather than for the pair alone, because that is the shape the
-`c`-component of a composition of morphisms of presheafed spaces has, and because `rw` cannot
-reassociate across the `TopCat.Presheaf` seam. -/
+`c`-component of a composition of morphisms of presheafed spaces has, and because a caller given
+only the pair form could not finish with it: `rw` reassociates and applies it happily, and then
+cannot cancel the identity it is left with. See the module docstring. -/
 lemma comp_pushforwardEq_inv_comp_whiskerRight (h : f = g) (F : X.Presheaf C)
     {P Q : Y.Presheaf C} (α : P ⟶ Q) (β : Q ⟶ g _* F)
     (e : (Opens.map f).op ⟶ (Opens.map g).op) :
