@@ -1,0 +1,32 @@
+/-
+Copyright (c) 2026 Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
+-/
+import Oka
+
+/-!
+# Axiom regression tests: General sheaf theory
+
+Results about presheaves and sheaves that mention nothing analytic — the mirror-tree material
+of `Oka/Topology/Sheaves/` and `Oka/CategoryTheory/`.
+
+See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
+-/
+
+/-! ### Quotients of presheaves of rings -/
+
+/--
+info: 'TopCat.Presheaf.surjective_stalkFunctor_map_toQuotientSpan' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TopCat.Presheaf.surjective_stalkFunctor_map_toQuotientSpan
+
+/--
+info: 'TopCat.Presheaf.ker_stalkFunctor_map_toQuotientSpan' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TopCat.Presheaf.ker_stalkFunctor_map_toQuotientSpan
+
