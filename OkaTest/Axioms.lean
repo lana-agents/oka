@@ -442,3 +442,33 @@ info: 'ComplexAnalytic.AnalyticSpace.mono_of_isCutOutBy' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.mono_of_isCutOutBy
+
+/-! ### Epimorphisms of sheaves of modules are locally surjective -/
+
+/--
+info: 'SheafOfModules.preservesEpimorphisms_toSheaf' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.preservesEpimorphisms_toSheaf
+
+/--
+info: 'SheafOfModules.isLocallySurjective_toSheaf_map_iff_epi' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.isLocallySurjective_toSheaf_map_iff_epi
+
+/--
+info: 'SheafOfModules.exists_forall_app_eq_of_epi' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.exists_forall_app_eq_of_epi
+
+/--
+info: 'SheafOfModules.exists_free_app_eq_of_epi' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.exists_free_app_eq_of_epi
