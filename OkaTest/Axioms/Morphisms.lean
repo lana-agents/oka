@@ -161,3 +161,40 @@ info: 'ComplexAnalytic.AnalyticSpace.homComplexLineEquivRestrict' depends on axi
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.homComplexLineEquivRestrict
+
+/-! ### From local morphisms to `ℂ` to a global one -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.restrictLE' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.restrictLE
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.base_eq_eval_coordPullback' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.base_eq_eval_coordPullback
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.restrictLE_comp_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.restrictLE_comp_eq
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.exists_hom_complexLine_of_local' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.exists_hom_complexLine_of_local
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.exists_local_hom_of_chartLift' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.exists_local_hom_of_chartLift

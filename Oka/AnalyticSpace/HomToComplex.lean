@@ -82,6 +82,9 @@ needs one computation which was not in the development —
 - `ComplexAnalytic.AnalyticSpace.coordPullback_comp`: **the tuple of pullbacks of the
   coordinates is natural in `Z`**, for every `Z' ⟶ Z`.
 - `ComplexAnalytic.AnalyticSpace.homComplexAffineSpaceEquiv`: `Hom(ℂ^n, ℂ^m) ≃ Γ(ℂ^n, 𝒪)^m`.
+- `ComplexAnalytic.AnalyticSpace.base_eq_eval_coordPullback`: **the base map of a morphism to
+  `ℂ^m` is the evaluation of its coordinate pullbacks**, which is what makes a morphism obtained
+  from an existence theorem computable on points.
 - `ComplexAnalytic.base_nodeIncl`: that closed immersion is the inclusion on points.
 - `ComplexAnalytic.eq_nodeIncl_of_coordPullback`: the closed immersion of the node into `ℂ²` is
   the **unique** morphism of analytic spaces pulling the coordinates back to the node's two
@@ -321,6 +324,20 @@ lemma homComplexAffineSpaceEquiv_apply {n m : ℕ}
     (φ : AnalyticSpace.complexAffineSpace.{u} n ⟶ AnalyticSpace.complexAffineSpace.{u} m) :
     homComplexAffineSpaceEquiv.{u} n m φ = coordPullback φ :=
   rfl
+
+/-- **The base map of a morphism to `ℂ^m` is the evaluation of its coordinate pullbacks**: the
+`j`-th coordinate of `φ.base z` is the value at `z` of the `j`-th pulled-back coordinate.
+
+`ComplexAnalytic.AnalyticSpace.base_eq_of_Γ_map_eq` is the two-morphism form of the same
+computation and is what the uniqueness theorem uses. This one-morphism form is what a *caller*
+needs: a morphism produced by an existence theorem is otherwise opaque on points, and this says
+its base map is determined by data the theorem already hands over. -/
+theorem base_eq_eval_coordPullback {Z : AnalyticSpace.{u}} {m : ℕ}
+    (φ : Z ⟶ AnalyticSpace.complexAffineSpace.{u} m) (z : Z) (j : ULift.{u} (Fin m)) :
+    (φ.toLRSHom.base z : ULift.{u} (Fin m) → ℂ) j =
+      Z.eval (U := ⊤) z trivial (coordPullback φ j) :=
+  ((AnalyticSpace.eval_c_app φ.toLRSHom φ.isCLinear (U := ⊤) z trivial (coord j)).trans
+    (AnalyticSpace.eval_coord _ j)).symm
 
 /-- The inverse of `ComplexAnalytic.AnalyticSpace.homComplexAffineSpaceEquiv`, named: it is
 `ComplexAnalytic.AnalyticSpace.okaMap`, with no choice left in it. -/

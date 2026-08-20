@@ -52,6 +52,10 @@ transport of algebra structures along an isomorphism is needed anywhere.
   complex analytic space.**
 - `ComplexAnalytic.AnalyticSpace.ofRestrict`: its inclusion, as a morphism of complex analytic
   spaces.
+- `ComplexAnalytic.AnalyticSpace.restrictLE`: the inclusion of a smaller open subspace into a
+  larger one, as a morphism of complex analytic spaces.
+- `ComplexAnalytic.AnalyticSpace.resΓ`: the restriction of a global section of `𝒪_X` to an open
+  subspace.
 
 ## Main results
 
@@ -170,6 +174,61 @@ def ofRestrict (X : AnalyticSpace.{u}) (U : X.Opens) : X.restrict U ⟶ X :=
 lemma base_ofRestrict (X : AnalyticSpace.{u}) (U : X.Opens) (x : X.restrict U) :
     (X.ofRestrict U).toLRSHom.base x = x.1 :=
   rfl
+
+/-- **The inclusion of a smaller open subspace into a larger one**, as a morphism of complex
+analytic spaces.
+
+The underlying morphism of locally ringed spaces is
+`AlgebraicGeometry.LocallyRingedSpace.restrictLE`. It is `ℂ`-linear because it is a morphism
+*over* `X` and both algebra structures are the ambient one restricted, which is exactly the
+hypothesis of `ComplexAnalytic.IsCLinearHom.of_comp`; no transport of algebra structures along
+anything is needed. -/
+def restrictLE (X : AnalyticSpace.{u}) {V W : X.Opens} (h : V ≤ W) :
+    X.restrict V ⟶ X.restrict W :=
+  ⟨X.toLocallyRingedSpace.restrictLE h,
+    IsCLinearHom.of_comp (LocallyRingedSpace.restrictLE_fac _ h)
+      (isCLinearHom_ofRestrict X.toLocallyRingedSpace X.algebraMap V)
+      (isCLinearHom_ofRestrict X.toLocallyRingedSpace X.algebraMap W)⟩
+
+/-- The underlying morphism of locally ringed spaces of
+`ComplexAnalytic.AnalyticSpace.restrictLE`. -/
+lemma toLRSHom_restrictLE (X : AnalyticSpace.{u}) {V W : X.Opens} (h : V ≤ W) :
+    (X.restrictLE h).toLRSHom = X.toLocallyRingedSpace.restrictLE h :=
+  rfl
+
+/-- **`ComplexAnalytic.AnalyticSpace.restrictLE` is a morphism over `X`.** This, rather than the
+morphism itself, is what every use of it consumes. -/
+lemma restrictLE_fac (X : AnalyticSpace.{u}) {V W : X.Opens} (h : V ≤ W) :
+    X.restrictLE h ≫ X.ofRestrict W = X.ofRestrict V :=
+  forgetToLocallyRingedSpace.map_injective (LocallyRingedSpace.restrictLE_fac _ h)
+
+/-- **The restriction of a global section of `𝒪_X` to an open subspace**, as a global section of
+`𝒪_{X|U}`.
+
+An `abbrev` rather than a `def`, so that a caller holding
+`(LocallyRingedSpace.Γ.map (X.ofRestrict U).op).hom g` — which is how a computation with
+`ComplexAnalytic.AnalyticSpace.coordPullback` produces it — does not have to unfold anything to
+recognise it. -/
+abbrev resΓ (X : AnalyticSpace.{u}) (U : X.Opens) (g : X.presheaf.obj (op ⊤)) :
+    (X.restrict U).presheaf.obj (op ⊤) :=
+  (LocallyRingedSpace.Γ.map (X.toLocallyRingedSpace.ofRestrict U.isOpenEmbedding).op).hom g
+
+/-- **Restricting twice is restricting once.**
+
+Spelled at the level of locally ringed spaces throughout — `Γ.map` of the underlying morphism
+rather than of the morphism of analytic spaces. That is not cosmetic: the same proof written
+against `X.restrictLE h` and `X.ofRestrict W` as morphisms of analytic spaces does not
+elaborate in a million heartbeats, because unifying `(f ≫ g).toLRSHom` with
+`f.toLRSHom ≫ g.toLRSHom` forces the category instance open at every step. -/
+lemma resΓ_restrictLE (X : AnalyticSpace.{u}) {V W : X.Opens} (h : V ≤ W)
+    (g : X.presheaf.obj (op ⊤)) :
+    (LocallyRingedSpace.Γ.map (X.toLocallyRingedSpace.restrictLE h).op).hom (X.resΓ W g) =
+      X.resΓ V g :=
+  (LocallyRingedSpace.Γ_map_comp_apply (X.toLocallyRingedSpace.restrictLE h)
+      (X.toLocallyRingedSpace.ofRestrict W.isOpenEmbedding) g).symm.trans
+    (congrArg (fun m : X.toLocallyRingedSpace.restrict V.isOpenEmbedding ⟶
+        X.toLocallyRingedSpace ↦ (LocallyRingedSpace.Γ.map m.op).hom g)
+      (LocallyRingedSpace.restrictLE_fac X.toLocallyRingedSpace h))
 
 end AnalyticSpace
 
