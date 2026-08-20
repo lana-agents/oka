@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import OkaTest.Axioms.AnalyticSpace
+import OkaTest.Axioms.Analysis
 import OkaTest.Axioms.Analytification
 import OkaTest.Axioms.ComplexSpace
 import OkaTest.Axioms.CutOut
@@ -43,6 +44,7 @@ happened to open.**
 | --- | --- |
 | Oka's theorem and the coherence of `𝒪_X` | `OkaTest/Axioms/MainTheorem.lean` |
 | Weierstrass division and preparation | `OkaTest/Axioms/Weierstrass.lean` |
+| complex analysis in one and several variables | `OkaTest/Axioms/Analysis.lean` |
 | `LocalOkaRing`: Rückert, maximal ideal, regularity | `OkaTest/Axioms/LocalOkaRing.lean` |
 | `OkaRing` and the structure sheaf of `ℂ^ι` | `OkaTest/Axioms/ComplexSpace.lean` |
 | the comparison morphism to `Spec` | `OkaTest/Axioms/Analytification.lean` |

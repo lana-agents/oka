@@ -11,6 +11,7 @@ import Oka.Algebra.Category.ModuleCat.Sheaf.Generators
 import Oka.Algebra.Category.ModuleCat.Sheaf.LocallySurjective
 import Oka.Algebra.Category.ModuleCat.Sheaf.PushforwardContinuous
 import Oka.Algebra.Category.ModuleCat.Sheaf.Submodule
+import Oka.Analytic.DividedDifference
 import Oka.Analytic.ParametricCircleIntegral
 import Oka.AnalyticSpace.Basic
 import Oka.AnalyticSpace.Coherent
