@@ -1,3 +1,6 @@
+# The checks here mirror `.orchestra/validation.sh`, which is what an agent runs before opening
+# a pull request; keep the two in step. What "lint" means is defined once, as `lintDriver` in
+# `lakefile.toml`, so at least that cannot drift.
 name: Lean Action CI
 
 on:
@@ -30,4 +33,33 @@ jobs:
 
       # Builds the `Oka` library and the `OkaTest` library, whose `OkaTest/Axioms.lean` asserts
       # that the main theorems depend only on `propext`, `Classical.choice` and `Quot.sound`.
+      #
+      # `lint: true` makes the action run `lake lint` after the build, which the `lintDriver` in
+      # `lakefile.toml` resolves to Mathlib's environment linters over `Oka`. Without that
+      # setting the action's default is to skip linting silently, which is worse than not having
+      # the step: look for `Linting passed for Oka` in this step's log, not merely for a green
+      # tick.
       - uses: leanprover/lean-action@v1
+        with:
+          lint: true
+
+      # Mathlib's text-based style linter, a separate executable from the environment linters
+      # and not covered by `lake lint`. It checks *less* than its name suggests: trailing
+      # whitespace, a space before a semicolon, Windows line endings, disallowed unicode and
+      # variant selectors, the string "Adaptation note", and module-name casing — and nothing
+      # else. Line length and copyright headers are *build* linters, which this project gets
+      # from `weak.linter.mathlibStandardSet` plus `--wfail`, so a green tick here does not mean
+      # "Mathlib style has been checked".
+      # `elan` and the build cache are left in place by the step above, so this only has to link
+      # the executable.
+      #
+      # The argument is the library root module `Oka` alone; `lint-style Oka OkaTest` fails with
+      # `no such file OkaTest.lean`, the test library being a glob with no root module.
+      #
+      # `!cancelled()` so that a failure of the step above does not hide a style error. Without
+      # it GitHub marks this step `skipped`, and since an agent gets one CI run per push that
+      # turns two findings into two round trips. It is text-based and does not need the library
+      # to have built.
+      - name: Check style
+        if: ${{ !cancelled() }}
+        run: lake exe lint-style Oka
