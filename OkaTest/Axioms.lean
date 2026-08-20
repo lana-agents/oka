@@ -30,7 +30,29 @@ the corresponding `#print axioms` (for instance with `lake env lean OkaTest/Axio
 in the editor) and paste the message Lean actually prints back into the expected docstring.
 The expected message must stay `[propext, Classical.choice, Quot.sound]`: any other axiom —
 `sorryAx` above all — is a regression, not something to record.
+
+New assertions go at the **end** of the file, under a new `/-! ### … -/` heading, and never in
+the middle. The main theorem is stated first precisely so that the tail of the file is a pure
+append zone: every feature branch used to insert just before `/-! ### The main theorem -/`,
+which made this file a standing merge conflict between concurrent pull requests. See issue
+#558.
 -/
+
+/-! ### The main theorem -/
+
+/--
+info: 'ComplexAnalytic.IsLocalModel.hasLocalRelations' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.IsLocalModel.hasLocalRelations
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isCoherentStructureSheaf' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isCoherentStructureSheaf
 
 /-! ### Oka's coherence lemma on `ℂ^n` -/
 
@@ -160,27 +182,7 @@ info: 'TopCat.Presheaf.ker_stalkFunctor_map_toQuotientSpan' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms TopCat.Presheaf.ker_stalkFunctor_map_toQuotientSpan
 
-/-! ### The main theorem -/
-
-/--
-info: 'ComplexAnalytic.IsLocalModel.hasLocalRelations' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms ComplexAnalytic.IsLocalModel.hasLocalRelations
-
-/--
-info: 'ComplexAnalytic.AnalyticSpace.isCoherentStructureSheaf' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms ComplexAnalytic.AnalyticSpace.isCoherentStructureSheaf
-
-/-! ### The analytic Nullstellensatz (easy inclusion only)
-
-New assertions are appended **at the end of this file**, not before the main-theorem section.
-Every feature branch used to insert just before `/-! ### The main theorem -/`, which made this
-file a standing merge-conflict point between concurrent pull requests; see issue #558. -/
+/-! ### The analytic Nullstellensatz (easy inclusion only) -/
 
 /--
 info: 'LocalOkaRing.radical_le_vanishingIdeal' depends on axioms:
@@ -195,6 +197,7 @@ info: 'LocalOkaRing.vanishingIdeal_bot' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms LocalOkaRing.vanishingIdeal_bot
+
 /-! ### The zero locus of a family of global sections -/
 
 /--
@@ -210,6 +213,13 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.range_zeroLocusι' depends on axioms
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.range_zeroLocusι
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.isClosedEmbedding_zeroLocusι' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.isClosedEmbedding_zeroLocusι
 
 /-! ### Coherence of finitely generated ideal sheaves -/
 

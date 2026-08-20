@@ -107,8 +107,10 @@ lemma okaStalkEquiv_germ_algebraMap {y : ι → ℂ} {U : Opens (ι → ℂ)} (h
       algebraMap ℂ (LocalOkaRing ι) c := by
   rw [okaStalkEquiv_germ hy, AlgHom.commutes]
 
+-- Not `@[simp]`, for a second reason on top of the `germ` matching failure described above:
+-- `LocalOkaRing.constantCoeff_apply` is `@[simp]` and rewrites the left-hand side to
+-- `MvPowerSeries.constantCoeff ↑(…)`, so this statement is not in `simp` normal form either.
 /-- Reading off the constant term of the Taylor series at `y` is evaluation at `y`. -/
-@[simp]
 lemma constantCoeff_okaStalkEquiv_germ {y : ι → ℂ} {U : Opens (ι → ℂ)} (hy : y ∈ U)
     (f : OkaRing U) :
     LocalOkaRing.constantCoeff (okaStalkEquiv y ((okaCommPresheaf ι).germ U y hy f)) =
@@ -130,7 +132,7 @@ lemma mem_maximalIdeal_stalk_iff {y : ι → ℂ} (a : (okaCommPresheaf ι).stal
 
 /-- The maximal ideal of the stalk at `y` corresponds to the maximal ideal of `LocalOkaRing ι`,
 which is the ideal of series with vanishing constant term. -/
-@[simp]
+-- Not `@[simp]`: this is `IsLocalRing.map_ringEquiv_maximalIdeal`, which is already `@[simp]`.
 lemma map_okaStalkEquiv_maximalIdeal (y : ι → ℂ) :
     (IsLocalRing.maximalIdeal ((okaCommPresheaf ι).stalk y)).map (okaStalkEquiv y) =
       IsLocalRing.maximalIdeal (LocalOkaRing ι) :=

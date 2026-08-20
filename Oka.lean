@@ -21,6 +21,7 @@ import Oka.CategoryTheory.Sites.Whiskering
 import Oka.ChangeOfCoordinates
 import Oka.Coherent
 import Oka.ComplexSpace
+import Oka.Data.Fin.Tuple.Basic
 import Oka.LocalOkaRing
 import Oka.MaximalIdeal
 import Oka.Noetherian

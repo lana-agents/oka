@@ -24,9 +24,10 @@ Weierstrass theory.
 ## Main results
 
 - `LocalOkaRing.constantCoeff_ofMvPolynomial`: the constant term of the germ at `y` is the
-  value `MvPolynomial.eval y p`. In particular the germ is a unit exactly when `p` does not
-  vanish at `y`, which is what identifies the zero set of a family of polynomials with the
-  points where their germs are non-units.
+  value `MvPolynomial.eval y p`, with `LocalOkaRing.constantCoeff_coe_ofMvPolynomial` its
+  `simp` normal form. In particular the germ is a unit exactly when `p` does not vanish at `y`,
+  which is what identifies the zero set of a family of polynomials with the points where their
+  germs are non-units.
 -/
 
 open TopologicalSpace
@@ -44,10 +45,21 @@ lemma ofMvPolynomial_eq (y : ι → ℂ) (p : MvPolynomial ι ℂ) :
   rfl
 
 /-- The constant term of the germ at `y` of a polynomial is its value at `y`. -/
-@[simp]
 lemma constantCoeff_ofMvPolynomial (y : ι → ℂ) (p : MvPolynomial ι ℂ) :
     LocalOkaRing.constantCoeff (ofMvPolynomial y p) = MvPolynomial.eval y p := by
   rw [ofMvPolynomial_eq, OkaRing.constantCoeff_germ, OkaRing.evalHom_ofMvPolynomial]
+
+/-- `constantCoeff_ofMvPolynomial` in `simp` normal form.
+
+`LocalOkaRing.constantCoeff_apply` is itself a `simp` lemma, so `simp` rewrites
+`LocalOkaRing.constantCoeff P` to `MvPowerSeries.constantCoeff ↑P` before it ever sees
+`constantCoeff_ofMvPolynomial`; tagging that lemma `@[simp]` therefore does nothing. This is the
+form a goal is actually in by the time `simp` gets there. -/
+@[simp]
+lemma constantCoeff_coe_ofMvPolynomial (y : ι → ℂ) (p : MvPolynomial ι ℂ) :
+    MvPowerSeries.constantCoeff ((ofMvPolynomial y p : LocalOkaRing ι) : MvPowerSeries ι ℂ) =
+      MvPolynomial.eval y p := by
+  rw [← constantCoeff_apply, constantCoeff_ofMvPolynomial]
 
 /-- The germ at `y` of a polynomial is a unit exactly when the polynomial does not vanish
 at `y`. -/

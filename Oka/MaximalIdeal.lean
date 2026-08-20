@@ -250,7 +250,9 @@ noncomputable def coord (i : ι) : LocalOkaRing ι :=
 @[simp]
 lemma coe_coord (i : ι) : (coord i : MvPowerSeries ι ℂ) = MvPowerSeries.X i := rfl
 
-@[simp]
+-- Not `@[simp]`: `constantCoeff_apply` is `@[simp]` and rewrites the left-hand side to
+-- `MvPowerSeries.constantCoeff ↑(coord i)`, which `coe_coord` and
+-- `MvPowerSeries.constantCoeff_X` then finish, so the attribute here would never fire.
 lemma constantCoeff_coord (i : ι) : constantCoeff (coord i) = 0 := by
   rw [constantCoeff_apply, coe_coord, ← MvPowerSeries.coeff_zero_eq_constantCoeff_apply]
   classical
