@@ -95,11 +95,11 @@ lemma okaStalkEquiv_germ {y : ι → ℂ} {U : Opens (ι → ℂ)} (hy : y ∈ U
     okaStalkEquiv y ((okaCommPresheaf ι).germ U y hy f) = OkaRing.germ hy f :=
   okaStalkHom_germ hy f
 
--- Deliberately not `@[simp]`: the attribute would never fire. `simp only
--- [okaStalkEquiv_germ_algebraMap]` reports the lemma as an unused argument and leaves the goal
--- untouched. The same is true of `okaStalkEquiv_germ` and `constantCoeff_okaStalkEquiv_germ`
--- below, which still carry the attribute; all three are usable by `rw` and `exact`, and are
--- used that way here. See issue #583.
+-- Deliberately not `@[simp]`: this lemma's left-hand side is a strict instance of
+-- `okaStalkEquiv_germ`'s, so it would be shadowed by it. Note that *neither* fires at present,
+-- for an unrelated and more general reason: `simp` cannot match any `TopCat.Presheaf.germ`
+-- lemma over a concrete `TopCat.of _` space, not even Mathlib's own. Use `rw`, or pass the
+-- index type — `simp [okaStalkEquiv_germ (ι := ι)]` does fire. See issue #583.
 /-- The stalk isomorphism is `ℂ`-linear: it sends the germ of a constant function to the
 corresponding constant power series. -/
 lemma okaStalkEquiv_germ_algebraMap {y : ι → ℂ} {U : Opens (ι → ℂ)} (hy : y ∈ U) (c : ℂ) :
