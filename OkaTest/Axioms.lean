@@ -210,3 +210,19 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.range_zeroLocusι' depends on axioms
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.range_zeroLocusι
+
+/-! ### Coherence of finitely generated ideal sheaves -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isCoherent_idealSheaf' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isCoherent_idealSheaf
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isFiniteType_kernel_sectionsHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFiniteType_kernel_sectionsHom
