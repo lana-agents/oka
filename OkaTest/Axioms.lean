@@ -384,3 +384,25 @@ info: 'stalkMap_eq_lift' depends on axioms: [propext, Classical.choice, Quot.sou
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms stalkMap_eq_lift
+/-! ### Regularity of the germ ring, reduced -/
+
+/--
+info: 'LocalOkaRing.spanFinrank_maximalIdeal_le' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.spanFinrank_maximalIdeal_le
+
+/--
+info: 'LocalOkaRing.isRegularLocalRing_of_le_ringKrullDim' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.isRegularLocalRing_of_le_ringKrullDim
+
+/--
+info: 'LocalOkaRing.isRegularLocalRing_fin_zero' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.isRegularLocalRing_fin_zero

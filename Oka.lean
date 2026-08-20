@@ -35,6 +35,7 @@ import Oka.OkaLemma
 import Oka.OkaRing
 import Oka.Polynomial
 import Oka.Polynomial.Germ
+import Oka.Regular
 import Oka.RingTheory.Ideal.Maps
 import Oka.StalkEquiv
 import Oka.Statement
