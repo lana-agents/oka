@@ -47,6 +47,11 @@ assumed by most classical treatments should be added as a mixin where needed.
   subset of some `ℂ^n`, as a locally ringed space.
 - `ComplexAnalytic.IsCutOutBy.baseLift`: a morphism into `Y` killing the sections which cut out
   `X` factors uniquely through `X` on underlying topological spaces.
+- `ComplexAnalytic.IsCutOutBy.mono`: such a closed immersion is a monomorphism, so the
+  factorisation is unique as a morphism of locally ringed spaces
+  (`ComplexAnalytic.IsCutOutBy.hom_ext`).
+- `ComplexAnalytic.AnalyticSpace.mono_of_isCutOutBy`: the same for a morphism of analytic
+  spaces.
 - `ComplexAnalytic.constantsAlgMap`: the constant functions as the canonical `ℂ`-algebra
   structure on an open subspace of `ℂ^n`.
 - `ComplexAnalytic.IsCLinearHom i α β`: a morphism of locally ringed spaces is `ℂ`-linear
@@ -203,6 +208,33 @@ theorem IsCutOutBy.baseLift_unique {i : X ⟶ Y} {k : ℕ} {f : Fin k → Y.pres
     (hg : ∀ z, i.base (g z) = φ.base z) (z : Z) : g z = hcut.baseLift φ hφ z :=
   hcut.isClosedEmbedding.injective ((hg z).trans (hcut.base_baseLift φ hφ z).symm)
 
+/-- **A closed immersion witnessing `IsCutOutBy` is a monomorphism.**
+
+Only two of the four conditions are used: the underlying map is injective because it is a closed
+embedding, and the maps on stalks are epimorphisms because they are surjective. Mathlib's
+`AlgebraicGeometry.SheafedSpace.mono_of_base_injective_of_stalk_epi` turns that pair into a
+monomorphism of sheafed spaces, and `forgetToSheafedSpace`, being faithful, reflects it.
+
+Note the detour through `forgetToSheafedSpace`: `LocallyRingedSpace.Hom.toShHom` is an
+`InducedCategory.Hom`, so `i.toShHom.base` does not project and the hypotheses cannot be stated
+that way. -/
+theorem IsCutOutBy.mono {i : X ⟶ Y} {k : ℕ} {f : Fin k → Y.presheaf.obj (op ⊤)}
+    (hcut : IsCutOutBy i f) : Mono i := by
+  have hb : Function.Injective (LocallyRingedSpace.forgetToSheafedSpace.map i).hom.base :=
+    hcut.isClosedEmbedding.injective
+  have hs : ∀ x, Epi ((LocallyRingedSpace.forgetToSheafedSpace.map i).hom.stalkMap x) := fun x ↦
+    ConcreteCategory.epi_of_surjective _ (hcut.surjective_stalkMap x)
+  exact LocallyRingedSpace.forgetToSheafedSpace.mono_of_mono_map
+    (SheafedSpace.mono_of_base_injective_of_stalk_epi _ hb hs)
+
+/-- **The factorisation through a subspace cut out by global sections is unique**, when it
+exists. Together with `IsCutOutBy.baseLift` this is the uniqueness half of the mapping property
+of `IsCutOutBy`; existence of the map on structure sheaves is not proved here. -/
+theorem IsCutOutBy.hom_ext {i : X ⟶ Y} {k : ℕ} {f : Fin k → Y.presheaf.obj (op ⊤)}
+    (hcut : IsCutOutBy i f) (ψ₁ ψ₂ : Z ⟶ X) (h : ψ₁ ≫ i = ψ₂ ≫ i) : ψ₁ = ψ₂ :=
+  haveI := hcut.mono
+  (cancel_mono i).1 h
+
 /-- Being a local model is invariant under isomorphism of locally ringed spaces. -/
 theorem IsLocalModel.of_iso {M N : LocallyRingedSpace.{u}} (e : N ≅ M) (hM : IsLocalModel M) :
     IsLocalModel N := by
@@ -317,6 +349,18 @@ instance : forgetToLocallyRingedSpace.Faithful where
     cases g
     cases h
     rfl
+
+/-- **A morphism of analytic spaces whose underlying morphism cuts out its source is a
+monomorphism**, hence the factorisation through it is unique when it exists
+(`CategoryTheory.cancel_mono`).
+
+This is `ComplexAnalytic.IsCutOutBy.mono` reflected along `forgetToLocallyRingedSpace`, which is
+faithful; no `ℂ`-linearity bookkeeping is needed, because faithfulness already knows that a
+morphism of analytic spaces is determined by its underlying morphism. -/
+theorem mono_of_isCutOutBy {B C : AnalyticSpace.{u}} (j : B ⟶ C) {k : ℕ}
+    {f : Fin k → C.toLocallyRingedSpace.presheaf.obj (op ⊤)}
+    (hcut : IsCutOutBy j.toLRSHom f) : Mono j :=
+  forgetToLocallyRingedSpace.mono_of_mono_map hcut.mono
 
 end AnalyticSpace
 
