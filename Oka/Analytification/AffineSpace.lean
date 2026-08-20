@@ -67,16 +67,26 @@ are definitionally equal, and `Spec.locallyRingedSpaceObj` is a `def`, so instan
 unfolds only at reducible transparency — never reaches the `stalk` head and finds neither.
 
 The failure is **instant**, a keying miss during instance search rather than a defeq blow-up, and
-a search that fails instantly can be routed around. The route is `complexSpaceToSpecStalk`, an
-`abbrev` — hence reducible — on which the transported instances are keyed. Restating the
-instances on the bare `Spec.locallyRingedSpaceObj` spelling does *not* work; the abbreviation is
-the load-bearing part.
+a search that fails on keying can be routed around: transport the instances with
+`inferInstanceAs`, as the `Stalk` section below does. What is load-bearing is that they are
+stated **at the concrete point** `(complexSpaceToSpec ι).base z`. A *generic* transported
+instance, over `R : CommRingCat` and `p : PrimeSpectrum R`, is still not found, because search
+would then have to see `(complexSpaceToSpec ι).base z` — whose type is
+`↥(Spec.locallyRingedSpaceObj _).toTopCat` — as a `PrimeSpectrum`, and that is the same
+reducibility wall one step further out. `complexSpaceToSpecStalk` being an `abbrev` is a
+readability convenience and plays no part: demoting it to a `def` and restating the instances on
+the full spelling builds unchanged.
 
-Separately, `algebraMap _ (complexSpaceToSpecStalk z) = toStalk _ _` **is** `rfl`, Mathlib's
-instance being literally `(toStalk R p).hom.toAlgebra` — but proving it that way times out at
-400000 heartbeats, because the `whnf` falls on the expensive side of the spelling seam. Cite
-`StructureSheaf.stalkAlgebra_map` instead. Generally: *a `rfl` that is true is not therefore
-affordable; find the Mathlib lemma that already paid for it.*
+Separately, `algebraMap _ (complexSpaceToSpecStalk z) = toStalk _ _` is `rfl`, Mathlib's instance
+being literally `(toStalk R p).hom.toAlgebra`, and proving it by `rfl` is cheap. What is *not*
+cheap is crossing that seam while the goal in `stalkMap_eq_lift` is still wrapped in
+`RingHom.comp`: a `change` spelling the left-hand side with `toStalk`, put *in place of* the
+`simp only [RingHom.comp_apply]` step, times out at `whnf` on the default heartbeat budget. The
+same `change` placed *after* that `simp only` costs nothing. So the rule is not "never cross the
+seam" but *unwrap the goal before you do* — and rewriting with
+`algebraMap_complexSpaceToSpecStalk` avoids the question altogether, which is why that lemma
+exists. (Write it as `change`, not `show`: a goal-changing `show` is flagged by
+`linter.style.show` and fails the build under `--wfail`.)
 
 ## What is not here
 
@@ -250,11 +260,9 @@ theorem isUnit_ofMvPolynomial_of_mem_primeCompl (z : ι → ℂ)
 /-- The stalk of `Spec (MvPolynomial ι ℂ)` at the point underneath `z`, in the spelling a
 morphism of locally ringed spaces produces it.
 
-This is an `abbrev`, and that is load-bearing rather than cosmetic. Mathlib's `Algebra` and
-`IsLocalization.AtPrime` instances are registered on `(Spec.structureSheaf R).presheaf.stalk p`;
-`Spec.locallyRingedSpaceObj` is a `def`, so instance search — which unfolds only at reducible
-transparency — never reaches the `stalk` head and the instances are invisible. An `abbrev` *is*
-reducible, so keying the transported instances on it gives the search something it will unfold. -/
+An abbreviation for readability only; a `def` would do just as well. What matters is that the two
+instances below are stated at *this concrete point* rather than for a general `PrimeSpectrum`,
+which is what lets instance search find them at all. See the module docstring. -/
 abbrev complexSpaceToSpecStalk (z : ι → ℂ) : CommRingCat.{u} :=
   (Spec.locallyRingedSpaceObj (CommRingCat.of (MvPolynomial ι ℂ))).presheaf.stalk
     ((complexSpaceToSpec ι).base z)
@@ -276,11 +284,12 @@ instance (z : ι → ℂ) :
 
 /-- The structure map of the localisation is `toStalk`.
 
-This is `rfl` — Mathlib's instance is literally `(toStalk R p).hom.toAlgebra` — but proving it
-that way times out at 400000 heartbeats, because the `whnf` has to be taken on the expensive side
-of the spelling seam. `StructureSheaf.stalkAlgebra_map` is the same `rfl` taken on the cheap
-side. **A `rfl` that is true is not therefore affordable; find the Mathlib lemma that already
-paid for it.** -/
+Mathlib's instance is literally `(toStalk R p).hom.toAlgebra`, so this is `rfl`, and `rfl` proves
+it cheaply; `StructureSheaf.stalkAlgebra_map` is the same equation and is preferred here only as
+the more robust citation. **Having it as a named lemma is what matters**, so that
+`stalkMap_eq_lift` can `rw` with it and never has to make the elaborator see through the equation
+while the goal is still wrapped in `RingHom.comp` — which is where the cost is. See the module
+docstring. -/
 lemma algebraMap_complexSpaceToSpecStalk (z : ι → ℂ) (p : MvPolynomial ι ℂ) :
     algebraMap (MvPolynomial ι ℂ) (complexSpaceToSpecStalk z) p =
       toStalk (MvPolynomial ι ℂ) ((complexSpaceToSpec ι).base z) p :=
