@@ -28,6 +28,8 @@ mirror tree.
 - `AlgebraicGeometry.LocallyRingedSpace.restrictStalkIso_hom_stalkAlgMap`: the identification of
   the stalks of an open subspace with the stalks of the ambient space is compatible with the
   algebra structures.
+- `AlgebraicGeometry.LocallyRingedSpace.Γ_map_comp_apply`: contravariant functoriality of the
+  global sections, in applied form.
 -/
 
 open CategoryTheory TopologicalSpace Opposite
@@ -37,6 +39,16 @@ universe u
 namespace AlgebraicGeometry.LocallyRingedSpace
 
 variable {X Y : LocallyRingedSpace.{u}}
+
+/-- **Contravariant functoriality of the global sections, applied to an element.**
+
+`Γ.map_comp` is a statement about morphisms of `CommRingCat`; this is the form a computation of
+the pullback of a global section along a composite actually needs. -/
+lemma Γ_map_comp_apply {X Y Z : LocallyRingedSpace.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
+    (a : Z.presheaf.obj (op ⊤)) :
+    (Γ.map (f ≫ g).op).hom a = (Γ.map f.op).hom ((Γ.map g.op).hom a) := by
+  rw [op_comp, Functor.map_comp]
+  rfl
 
 /-- The underlying homeomorphism of an isomorphism of locally ringed spaces. -/
 noncomputable def homeoOfIso (e : X ≅ Y) : X ≃ₜ Y :=

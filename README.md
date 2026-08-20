@@ -73,6 +73,17 @@ coherence statement for arbitrary complex analytic spaces:
   identified with the union of the two coordinate axes
   (`Oka/AnalyticSpace/LocalModel.lean`). Until this landed the only example of an analytic
   space in the development was `ℂ^n` itself.
+* **Morphisms given by holomorphic maps.** A family of `m` entire holomorphic functions on
+  `ℂ^n` defines a morphism of complex analytic spaces `ℂ^n ⟶ ℂ^m`, and pulling the coordinates
+  back along it recovers the family (`Oka/AnalyticSpace/HolomorphicMap.lean`). In particular
+  every global section of `𝒪_{ℂ^n}` is the pullback of the coordinate along a morphism
+  `ℂ^n ⟶ ℂ`. Composing with the inclusion of a closed analytic subspace gives the development's
+  first morphism between two *different* analytic spaces: the two coordinate morphisms from the
+  node to `ℂ`, which are surjective on points. The same statement for a **general** analytic
+  space is not proved: a section of `𝒪_Z` lifts to a holomorphic function only locally, and
+  assembling the resulting local morphisms needs a gluing theorem for morphisms of locally ringed
+  spaces over an open cover of the source, which neither Mathlib nor this development has.
+
 * **Comparison with algebraic geometry.** The canonical morphism of locally ringed spaces from
   `ℂ^ι` to `Spec (MvPolynomial ι ℂ)`, with its point map identified as `z ↦ ker (eval z)`, shown
   injective and landing in the closed points, and its stalk map identified as the
