@@ -3,7 +3,15 @@ Copyright (c) 2026 Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten. All righ
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
-import Oka
+import OkaTest.Axioms.AnalyticSpace
+import OkaTest.Axioms.Analytification
+import OkaTest.Axioms.ComplexSpace
+import OkaTest.Axioms.CutOut
+import OkaTest.Axioms.LocalOkaRing
+import OkaTest.Axioms.MainTheorem
+import OkaTest.Axioms.SheafOfModules
+import OkaTest.Axioms.Sheaves
+import OkaTest.Axioms.Weierstrass
 
 /-!
 # Axiom regression test
@@ -13,557 +21,50 @@ The library is `sorry`-free, and its results rest only on the three standard axi
 nothing in an ordinary `lake build` would notice if one were reintroduced — the proof of a
 theorem depending on it would simply start depending on `sorryAx` as well.
 
-This file pins that down: each `#guard_msgs` below fails the build if the axiom dependencies of
-the named theorem ever change. Together with the `sorry` grep in
-`.github/workflows/lean_action_ci.yml` it is what keeps the completeness claim in `README.md`
+The files imported above pin that down: each `#guard_msgs` in them fails the build if the axiom
+dependencies of the named theorem ever change. Together with the `sorry` grep in
+`.github/workflows/lean_action_ci.yml` that is what keeps the completeness claim in `README.md`
 honest.
 
-The file is not part of the `Oka` library; it is the `OkaTest` library of `lakefile.toml`,
-which `defaultTargets` also builds, so plain `lake build` exercises it. The layout follows
-Mathlib's own `MathlibTest`: a test library must live in a directory of its own, outside the
-source tree of the library it tests, or Lake rejects its imports.
+These files are not part of the `Oka` library; they are the `OkaTest` library of
+`lakefile.toml`, whose `globs = ["OkaTest.+"]` picks up every module under `OkaTest/` and which
+`defaultTargets` also builds, so plain `lake build` exercises them. Adding a file under
+`OkaTest/Axioms/` therefore needs no change to `lakefile.toml`. The layout follows Mathlib's own
+`MathlibTest`: a test library must live in a directory of its own, outside the source tree of
+the library it tests, or Lake rejects its imports.
 
-## Updating this file
+## Where to put a new assertion
 
-If a theorem below is legitimately restated or renamed, do **not** delete its assertion. Run
-the corresponding `#print axioms` (for instance with `lake env lean OkaTest/Axioms.lean`, or
+**Add it to the file for its topic, under the matching `/-! ### … -/` heading, and if there is
+no such file, add a new one and one import line here. Never append to whichever file you
+happened to open.**
+
+| topic | file |
+| --- | --- |
+| Oka's theorem and the coherence of `𝒪_X` | `OkaTest/Axioms/MainTheorem.lean` |
+| Weierstrass division and preparation | `OkaTest/Axioms/Weierstrass.lean` |
+| `LocalOkaRing`: Rückert, maximal ideal, regularity | `OkaTest/Axioms/LocalOkaRing.lean` |
+| `OkaRing` and the structure sheaf of `ℂ^ι` | `OkaTest/Axioms/ComplexSpace.lean` |
+| the comparison morphism to `Spec` | `OkaTest/Axioms/Analytification.lean` |
+| general presheaf and sheaf theory | `OkaTest/Axioms/Sheaves.lean` |
+| sheaves of modules and coherence | `OkaTest/Axioms/SheafOfModules.lean` |
+| zero loci and closed immersions | `OkaTest/Axioms/CutOut.lean` |
+| analytic spaces, local models, the node | `OkaTest/Axioms/AnalyticSpace.lean` |
+
+That rule is the whole point of the split, and it is not a matter of taste. Until 2026-08-20
+every assertion lived in this one file and every pull request appended to its end, so git
+reported a conflict between *any* two concurrent pull requests: only one could merge per rebase
+round, and each of the others needed a rebase, a force-push, a re-`attach_pr` and a fresh
+review of a tree whose library files were byte-identical to the one already approved. That cost
+four such cycles in a single morning. Issue #558's append-at-the-end convention reduced the
+damage but could not remove it, because two additions at the end of a file still collide.
+Concurrent pull requests that touch *different files* do not. See issue #640.
+
+## Updating an assertion
+
+If a theorem is legitimately restated or renamed, do **not** delete its assertion. Run the
+corresponding `#print axioms` (for instance with `lake env lean OkaTest/Axioms/<File>.lean`, or
 in the editor) and paste the message Lean actually prints back into the expected docstring.
 The expected message must stay `[propext, Classical.choice, Quot.sound]`: any other axiom —
 `sorryAx` above all — is a regression, not something to record.
-
-New assertions go at the **end** of the file, under a new `/-! ### … -/` heading, and never in
-the middle. The main theorem is stated first precisely so that the tail of the file is a pure
-append zone: every feature branch used to insert just before `/-! ### The main theorem -/`,
-which made this file a standing merge conflict between concurrent pull requests. See issue
-#558.
 -/
-
-/-! ### The main theorem -/
-
-/--
-info: 'ComplexAnalytic.IsLocalModel.hasLocalRelations' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms ComplexAnalytic.IsLocalModel.hasLocalRelations
-
-/--
-info: 'ComplexAnalytic.AnalyticSpace.isCoherentStructureSheaf' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms ComplexAnalytic.AnalyticSpace.isCoherentStructureSheaf
-
-/-! ### Oka's coherence lemma on `ℂ^n` -/
-
-/-- info: 'oka' depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs in
-#print axioms oka
-
-/-- info: 'oka'' depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs in
-#print axioms oka'
-
-/-- info: 'oka_fin' depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs in
-#print axioms oka_fin
-
-/-- info: 'okaStatement' depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs in
-#print axioms okaStatement
-
-/-! ### Oka's bounded degree lemma -/
-
-/-- info: 'oka_lemma' depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs in
-#print axioms oka_lemma
-
-/-- info: 'oka_lemma_weierstrass' depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs in
-#print axioms oka_lemma_weierstrass
-
-/-! ### Weierstrass theory -/
-
-/--
-info: 'localweierstrass_division' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms localweierstrass_division
-
-/--
-info: 'localweierstrass_division_unique' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms localweierstrass_division_unique
-
-/--
-info: 'localweierstrass_preparation' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms localweierstrass_preparation
-
-/-! ### The Rückert basis theorem -/
-
-/--
-info: 'LocalOkaRing.isNoetherianRing_fin' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms LocalOkaRing.isNoetherianRing_fin
-
-/--
-info: 'LocalOkaRing.instIsNoetherianRing' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms LocalOkaRing.instIsNoetherianRing
-
-/--
-info: 'ComplexAnalytic.AnalyticSpace.instIsNoetherianRingStalk' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms ComplexAnalytic.AnalyticSpace.instIsNoetherianRingStalk
-
-/--
-info: 'LocalOkaRing.instUniqueFactorizationMonoid' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms LocalOkaRing.instUniqueFactorizationMonoid
-
-/-! ### The maximal ideal and the truncations -/
-
-/--
-info: 'LocalOkaRing.maximalIdeal_eq_span_coord' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms LocalOkaRing.maximalIdeal_eq_span_coord
-
-/--
-info: 'LocalOkaRing.truncQuotientEquiv' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms LocalOkaRing.truncQuotientEquiv
-/-! ### Polynomials as holomorphic functions -/
-
-/--
-info: 'OkaRing.ofMvPolynomial' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms OkaRing.ofMvPolynomial
-
-/--
-info: 'LocalOkaRing.ofMvPolynomial' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms LocalOkaRing.ofMvPolynomial
-
-/-! ### Quotients of presheaves of rings -/
-
-/--
-info: 'TopCat.Presheaf.surjective_stalkFunctor_map_toQuotientSpan' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms TopCat.Presheaf.surjective_stalkFunctor_map_toQuotientSpan
-
-/--
-info: 'TopCat.Presheaf.ker_stalkFunctor_map_toQuotientSpan' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms TopCat.Presheaf.ker_stalkFunctor_map_toQuotientSpan
-
-/-! ### The analytic Nullstellensatz (easy inclusion only) -/
-
-/--
-info: 'LocalOkaRing.radical_le_vanishingIdeal' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms LocalOkaRing.radical_le_vanishingIdeal
-
-/--
-info: 'LocalOkaRing.vanishingIdeal_bot' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms LocalOkaRing.vanishingIdeal_bot
-
-/-! ### The zero locus of a family of global sections -/
-
-/--
-info: 'AlgebraicGeometry.LocallyRingedSpace.isClosed_zeroLocus' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms AlgebraicGeometry.LocallyRingedSpace.isClosed_zeroLocus
-
-/--
-info: 'AlgebraicGeometry.LocallyRingedSpace.range_zeroLocusι' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms AlgebraicGeometry.LocallyRingedSpace.range_zeroLocusι
-
-/--
-info: 'AlgebraicGeometry.LocallyRingedSpace.isClosedEmbedding_zeroLocusι' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms AlgebraicGeometry.LocallyRingedSpace.isClosedEmbedding_zeroLocusι
-
-/-! ### Coherence of finitely generated ideal sheaves -/
-
-/--
-info: 'ComplexAnalytic.AnalyticSpace.isCoherent_idealSheaf' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms ComplexAnalytic.AnalyticSpace.isCoherent_idealSheaf
-
-/--
-info: 'ComplexAnalytic.AnalyticSpace.isFiniteType_kernel_sectionsHom' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms ComplexAnalytic.AnalyticSpace.isFiniteType_kernel_sectionsHom
-
-/-! ### The closed subspace cut out by a family of global sections -/
-
-/--
-info: 'AlgebraicGeometry.LocallyRingedSpace.stalkMap_zeroLocusιHom' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms AlgebraicGeometry.LocallyRingedSpace.stalkMap_zeroLocusιHom
-
-/--
-info: 'AlgebraicGeometry.LocallyRingedSpace.zeroLocusStalkQuotientEquiv' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms AlgebraicGeometry.LocallyRingedSpace.zeroLocusStalkQuotientEquiv
-
-/--
-info: 'AlgebraicGeometry.LocallyRingedSpace.isCutOutBy_zeroLocusSubspaceι' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms AlgebraicGeometry.LocallyRingedSpace.isCutOutBy_zeroLocusSubspaceι
-
-/-! ### Local models, and the node as a complex analytic space -/
-
-/--
-info: 'ComplexAnalytic.isLocalModel_zeroLocus' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms ComplexAnalytic.isLocalModel_zeroLocus
-
-/--
-info: 'ComplexAnalytic.AnalyticSpace.zeroLocus' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms ComplexAnalytic.AnalyticSpace.zeroLocus
-
-/--
-info: 'ComplexAnalytic.AnalyticSpace.isCoherentStructureSheaf_zeroLocus' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms ComplexAnalytic.AnalyticSpace.isCoherentStructureSheaf_zeroLocus
-
-/--
-info: 'ComplexAnalytic.mem_zeroLocus_nodeSection_iff' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms ComplexAnalytic.mem_zeroLocus_nodeSection_iff
-
-/--
-info: 'ComplexAnalytic.isCoherentStructureSheaf_node' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms ComplexAnalytic.isCoherentStructureSheaf_node
-
-/-! ### The comparison morphism `ℂ^ι ⟶ Spec (MvPolynomial ι ℂ)` -/
-
-/--
-info: 'complexSpaceToSpec' depends on axioms: [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms complexSpaceToSpec
-
-/--
-info: 'mem_complexSpaceToSpec_base_asIdeal_iff' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms mem_complexSpaceToSpec_base_asIdeal_iff
-
-/--
-info: 'isMaximal_complexSpaceToSpec_base_asIdeal' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms isMaximal_complexSpaceToSpec_base_asIdeal
-
-/--
-info: 'complexSpaceToSpec_base_injective' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms complexSpaceToSpec_base_injective
-
-/--
-info: 'complexAffineSpaceToAffineSpace' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms complexAffineSpaceToAffineSpace
-
-/-! ### The topological half of the mapping property of `IsCutOutBy` -/
-
-/--
-info: 'ComplexAnalytic.Γgerm_mem_maximalIdeal_of_c_app_eq_zero' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms ComplexAnalytic.Γgerm_mem_maximalIdeal_of_c_app_eq_zero
-
-/--
-info: 'ComplexAnalytic.IsCutOutBy.baseLift' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms ComplexAnalytic.IsCutOutBy.baseLift
-
-/--
-info: 'ComplexAnalytic.IsCutOutBy.baseLift_unique' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms ComplexAnalytic.IsCutOutBy.baseLift_unique
-
-/-! ### The stalk map of the comparison morphism -/
-
-/--
-info: 'toStalk_stalkMap_complexSpaceToSpec' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms toStalk_stalkMap_complexSpaceToSpec
-
-/--
-info: 'okaStalkEquiv_stalkMap_complexSpaceToSpec' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms okaStalkEquiv_stalkMap_complexSpaceToSpec
-
-/--
-info: 'isUnit_ofMvPolynomial_of_mem_primeCompl' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms isUnit_ofMvPolynomial_of_mem_primeCompl
-
-/--
-info: 'stalkMap_eq_lift' depends on axioms: [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms stalkMap_eq_lift
-/-! ### The germ ring is regular of dimension `n` -/
-
-/--
-info: 'LocalOkaRing.quotientLastVarEquiv' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms LocalOkaRing.quotientLastVarEquiv
-
-/--
-info: 'LocalOkaRing.ringKrullDim_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms LocalOkaRing.ringKrullDim_eq
-
-/--
-info: 'LocalOkaRing.ringKrullDim_eq_natCard' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms LocalOkaRing.ringKrullDim_eq_natCard
-
-/--
-info: 'LocalOkaRing.instIsRegularLocalRing' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms LocalOkaRing.instIsRegularLocalRing
-
-/--
-info: 'LocalOkaRing.spanFinrank_maximalIdeal_eq' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms LocalOkaRing.spanFinrank_maximalIdeal_eq
-
-/-! ### Uniqueness of the factorisation through a subspace cut out by global sections -/
-
-/--
-info: 'ComplexAnalytic.IsCutOutBy.mono' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms ComplexAnalytic.IsCutOutBy.mono
-
-/--
-info: 'ComplexAnalytic.IsCutOutBy.hom_ext' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms ComplexAnalytic.IsCutOutBy.hom_ext
-
-/--
-info: 'ComplexAnalytic.AnalyticSpace.mono_of_isCutOutBy' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms ComplexAnalytic.AnalyticSpace.mono_of_isCutOutBy
-
-/-! ### Epimorphisms of sheaves of modules are locally surjective -/
-
-/--
-info: 'SheafOfModules.preservesEpimorphisms_toSheaf' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms SheafOfModules.preservesEpimorphisms_toSheaf
-
-/--
-info: 'SheafOfModules.isLocallySurjective_toSheaf_map_iff_epi' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms SheafOfModules.isLocallySurjective_toSheaf_map_iff_epi
-
-/--
-info: 'SheafOfModules.exists_forall_app_eq_of_epi' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms SheafOfModules.exists_forall_app_eq_of_epi
-
-/--
-info: 'SheafOfModules.exists_free_app_eq_of_epi' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms SheafOfModules.exists_free_app_eq_of_epi
-
-/-! ### The structure sheaf of a subspace cut out by global sections -/
-
-/--
-info: 'AlgebraicGeometry.LocallyRingedSpace.isIso_quotientSheafifyToPushforward' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms AlgebraicGeometry.LocallyRingedSpace.isIso_quotientSheafifyToPushforward
-
-/--
-info: 'ComplexAnalytic.IsCutOutBy.pushforwardIso' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms ComplexAnalytic.IsCutOutBy.pushforwardIso
-/-! ### Coherence of a quotient by a coherent subsheaf -/
-
-/--
-info: 'SheafOfModules.IsCoherent.cokernel' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms SheafOfModules.IsCoherent.cokernel
-
-/--
-info: 'SheafOfModules.IsFiniteType.of_epi_free' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms SheafOfModules.IsFiniteType.of_epi_free
-
-/--
-info: 'SheafOfModules.isFiniteType_free_biprod' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms SheafOfModules.isFiniteType_free_biprod
-
-/--
-info: 'AlgebraicGeometry.LocallyRingedSpace.isCoherent_cokernel_sectionsHom' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms AlgebraicGeometry.LocallyRingedSpace.isCoherent_cokernel_sectionsHom
-
-/--
-info: 'ComplexAnalytic.AnalyticSpace.isCoherent_cokernel_sectionsHom' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms ComplexAnalytic.AnalyticSpace.isCoherent_cokernel_sectionsHom
-/-! ### The residue field of a complex analytic space is `ℂ` -/
-
-/--
-info: 'ComplexAnalytic.AnalyticSpace.existsUnique_sub_stalkAlgMap_mem_maximalIdeal' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms ComplexAnalytic.AnalyticSpace.existsUnique_sub_stalkAlgMap_mem_maximalIdeal
-
-/--
-info: 'ComplexAnalytic.AnalyticSpace.evalStalk_eq_zero_iff' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms ComplexAnalytic.AnalyticSpace.evalStalk_eq_zero_iff
-
-/--
-info: 'ComplexAnalytic.eval_ofCutOut' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms ComplexAnalytic.eval_ofCutOut
-
-/--
-info: 'ComplexAnalytic.eval_nodeCoord' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms ComplexAnalytic.eval_nodeCoord
-
-/--
-info: 'ComplexAnalytic.nodeCoord_mul' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms ComplexAnalytic.nodeCoord_mul
-
-/--
-info: 'ComplexAnalytic.nodeCoord_ne_zero' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms ComplexAnalytic.nodeCoord_ne_zero
