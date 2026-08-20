@@ -215,8 +215,8 @@ theorem continuousAt_eval (z₀ : U) :
     have h1 : Z.presheaf.germ U x.1 (hWU ⟨x, hx, rfl⟩) g =
         (Z.toLocallyRingedSpace.restrictStalkIso U₀.1.isOpenEmbedding x).hom
           ((i.stalkMap x).hom
-            (((complexAffineSpace.{u} n).restrict V.isOpenEmbedding).presheaf.germ A
-              (i.base x) (hB'A hx) u)) :=
+            (((complexAffineSpace.{u} n).toLocallyRingedSpace.restrict
+                V.isOpenEmbedding).presheaf.germ A (i.base x) (hB'A hx) u)) :=
       (((congrArg
             (fun z ↦ (Z.toLocallyRingedSpace.restrictStalkIso U₀.1.isOpenEmbedding x).hom z)
             ((LocallyRingedSpace.stalkMap_germ_apply i A x (hB'A hx) u).trans h2)).trans
@@ -236,13 +236,13 @@ theorem continuousAt_eval (z₀ : U) :
   rw [continuousOn_iff_continuous_restrict]
   have hqcont : Continuous fun z : S ↦
       ((i.base ⟨z.1.1, hWU₀ _ z.2⟩ :
-        ((complexAffineSpace.{u} n).restrict V.isOpenEmbedding)).1 :
+        ((complexAffineSpace.{u} n).toLocallyRingedSpace.restrict V.isOpenEmbedding)).1 :
           ULift.{u} (Fin n) → ℂ) :=
     continuous_subtype_val.comp (i.base.hom.continuous.comp
       (Continuous.subtype_mk (continuous_subtype_val.comp continuous_subtype_val) _))
   have hmaps : ∀ z : S, ((i.base ⟨z.1.1, hWU₀ _ z.2⟩ :
-      ((complexAffineSpace.{u} n).restrict V.isOpenEmbedding)).1 : ULift.{u} (Fin n) → ℂ) ∈
-        V.isOpenEmbedding.isOpenMap.functor.obj A :=
+      ((complexAffineSpace.{u} n).toLocallyRingedSpace.restrict V.isOpenEmbedding)).1 :
+        ULift.{u} (Fin n) → ℂ) ∈ V.isOpenEmbedding.isOpenMap.functor.obj A :=
     fun z ↦ ⟨i.base ⟨z.1.1, hWU₀ _ z.2⟩, hB'A (hmemB' _ z.2), rfl⟩
   have hrestrict : (S.restrict fun z : U ↦ Z.eval z.1 z.2 g) =
       (fun y : V.isOpenEmbedding.isOpenMap.functor.obj A ↦ OkaRing.evalHom y.2 u) ∘
