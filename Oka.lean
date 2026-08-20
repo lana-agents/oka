@@ -1,3 +1,4 @@
+import Oka.Algebra.Category.Grp.EpiMono
 import Oka.Algebra.Category.ModuleCat.Presheaf.Submodule
 import Oka.Algebra.Category.ModuleCat.Sheaf.Annihilator
 import Oka.Algebra.Category.ModuleCat.Sheaf.Coherent.Basic
@@ -18,6 +19,7 @@ import Oka.AnalyticSpace.Relations
 import Oka.AnalyticSpace.ZeroLocus
 import Oka.Analytification.AffineSpace
 import Oka.CategoryTheory.Sites.CoversTop.Over
+import Oka.CategoryTheory.Sites.LocallySurjective
 import Oka.CategoryTheory.Sites.Over
 import Oka.CategoryTheory.Sites.Whiskering
 import Oka.ChangeOfCoordinates
