@@ -51,6 +51,8 @@ restriction are the stalks of the ambient space
   holomorphic functions inside an open subset of `ℂ^n` is a complex analytic space.
 - `ComplexAnalytic.AnalyticSpace.zeroLocus`: the analytic subspace of an open subset of `ℂ^n`
   cut out by finitely many holomorphic functions.
+- `ComplexAnalytic.complexAffineSpaceTop`: `ℂ^n` presented as an open subspace of itself, which
+  is the shape the definitions above ask for. `ComplexAnalytic.nodeAmbient` is it at `n = 2`.
 - `ComplexAnalytic.nodePoly`, `ComplexAnalytic.nodeSection` and
   `ComplexAnalytic.AnalyticSpace.node`: the node `{z ∈ ℂ² | z₀ z₁ = 0}` as a complex analytic
   space.
@@ -260,12 +262,24 @@ theorem AnalyticSpace.isCoherentStructureSheaf_zeroLocus :
 
 end ZeroLocus
 
+section AmbientTop
+
+/-- **`ℂ^n` presented as an open subspace of itself**, which is the shape `IsLocalModel` and
+`AnalyticSpace.local_model` ask for: both quantify over an open subset of `ℂ^n` rather than over
+`ℂ^n` itself, so even the trivial chart has to be spelled as a restriction.
+
+`ComplexAnalytic.nodeAmbient` is this at `n = 2`, by definition. -/
+abbrev complexAffineSpaceTop (n : ℕ) : LocallyRingedSpace.{u} :=
+  (complexAffineSpace.{u} n).restrict (⊤ : Opens (complexAffineSpace.{u} n)).isOpenEmbedding
+
+end AmbientTop
+
 section Node
 
 /-- The ambient space of the node: `ℂ²`, presented as an open subspace of itself, which is the
 shape `IsLocalModel` and `AnalyticSpace.local_model` ask for. -/
 abbrev nodeAmbient : LocallyRingedSpace.{u} :=
-  (complexAffineSpace.{u} 2).restrict (⊤ : Opens (complexAffineSpace.{u} 2)).isOpenEmbedding
+  complexAffineSpaceTop.{u} 2
 
 /-- The polynomial `z₀ z₁` on `ℂ²`, whose zero locus is the union of the two coordinate axes.
 The coordinates of `complexAffineSpace 2` are indexed by `ULift (Fin 2)`. -/
