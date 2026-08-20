@@ -103,3 +103,19 @@ info: 'ComplexAnalytic.eq_nodeIncl_of_coordPullback' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.eq_nodeIncl_of_coordPullback
+
+/-! ### The mapping property for morphisms of complex analytic spaces -/
+
+/--
+info: 'ComplexAnalytic.IsCutOutBy.isCLinearHom_lift' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.IsCutOutBy.isCLinearHom_lift
+
+/--
+info: 'ComplexAnalytic.IsCutOutBy.existsUnique_liftHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.IsCutOutBy.existsUnique_liftHom

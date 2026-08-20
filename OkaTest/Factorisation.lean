@@ -6,59 +6,97 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 import Oka
 
 /-!
-# Non-vacuity of the mapping property of `IsCutOutBy`
+# Non-vacuity of the mapping property for morphisms of analytic spaces
 
-`ComplexAnalytic.IsCutOutBy.existsUnique_lift` says that a morphism killing the sections which
-cut out `X` factors uniquely through `i`. Two things could make that empty: nothing might
-satisfy `IsCutOutBy`, and — subtler — no interesting `φ` might satisfy the hypothesis
-`φ.c.app ⊤ (f j) = 0`.
+`ComplexAnalytic.IsCutOutBy.existsUnique_liftHom` says that a `ℂ`-linear morphism killing the
+sections which cut out a subspace factors uniquely through that subspace, as a morphism of
+complex analytic spaces. **It would be true and empty if its hypotheses held only at the
+identity**, or if the `∃!` were about a hom-set with one element for a reason having nothing to
+do with the theorem. This file rules that out at the node.
 
-Neither happens. `AlgebraicGeometry.LocallyRingedSpace.isCutOutBy_zeroLocusSubspaceι` supplies a
-witness for any family of global sections on any locally ringed space, and the node
-`{z ∈ ℂ² | z₀ z₁ = 0}` instantiates it at a singular complex analytic space. And `i` itself
-always satisfies the hypothesis (`ComplexAnalytic.IsCutOutBy.c_app_eq_zero`), so the mapping
-property always has at least one non-degenerate instance — on which, as `lift_self` below
-checks, the factorisation comes out as the identity rather than as some unrelated map.
+* `c_app_nodeSection_eq_zero` shows the hypothesis `hφ` is **the node's equation**: the
+  pullbacks of the two coordinates multiply to zero (`ComplexAnalytic.nodeCoord_mul`), and that
+  is literally what `φ.c.app ⊤ (nodeSection j) = 0` says once `nodePoly` is expanded. So the
+  hypothesis is not a technical side condition; it is `z₀ z₁ = 0`.
+* `eq_id_of_comp_zeroLocusSubspaceι` runs the theorem where the answer is known: the node's own
+  closed immersion factors through the node, and the factorisation has to be the **identity**.
+  If it came out as anything else the theorem would be about the wrong morphism.
+* `exists_liftHom` records that the factorisation the theorem produces really does compose back
+  to `φ`, which is the half of `∃!` that uniqueness cannot supply.
+
+**What this does not check.** That `existsUnique_liftHom` is ever applied to a `φ` which is not
+already a factorisation — the interesting case for analytification is a morphism `Z ⟶ ℂ^n` built
+from `n` global sections, which needs the existence half of taxis #654 and does not exist yet.
+So this file tests that the theorem computes correctly, not that it is used.
 -/
 
-open CategoryTheory Limits TopologicalSpace Opposite AlgebraicGeometry ComplexAnalytic
+open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry ComplexAnalytic
 
 universe u
 
 noncomputable section
 
-variable {X Y : LocallyRingedSpace.{u}} {i : X ⟶ Y} {k : ℕ}
-  {f : Fin k → Y.presheaf.obj (op ⊤)}
+/-- The hypothesis `hφ` of `existsUnique_liftHom`, at the node's own closed immersion, **is the
+node's equation** `z₀ z₁ = 0` — reached through `ComplexAnalytic.nodeCoord_mul`, a statement
+about the two coordinate *functions* on the node, rather than through
+`IsCutOutBy.c_app_eq_zero`, which is the generic reason. -/
+theorem c_app_nodeSection_eq_zero (j : Fin 1) :
+    (((nodeAmbient.{u}.zeroLocusSubspaceι nodeSection.{u}).c.app (op ⊤)).hom
+      (nodeSection.{u} j)) = 0 := by
+  refine Eq.trans ?_ nodeCoord_mul.{u}
+  refine Eq.trans (congrArg
+    ((LocallyRingedSpace.Γ.map (nodeAmbient.{u}.zeroLocusSubspaceι nodeSection.{u}).op).hom)
+    (show nodeSection.{u} j =
+        OkaRing.ofMvPolynomial _ (MvPolynomial.X (ULift.up 0)) *
+          OkaRing.ofMvPolynomial _ (MvPolynomial.X (ULift.up 1)) from
+      (map_mul (OkaRing.ofMvPolynomial _) _ _))) ?_
+  exact map_mul _ _ _
 
-/-- **The factorisation of `i` through itself is the identity.** The construction is not merely
-*some* morphism with the right source and target: on the one instance where the answer is
-forced, it gives the right answer. -/
-theorem lift_self (hcut : IsCutOutBy i f) : hcut.lift i hcut.c_app_eq_zero = 𝟙 X :=
-  hcut.hom_ext _ _ (by rw [hcut.lift_comp, Category.id_comp])
+/-- The analytic space the mapping property produces for the node's own cut-out family **is**
+the node. Stated separately because it is a `rfl` that the elaborator will not find while it is
+also solving for `n`, `k` and `V`. -/
+theorem ofCutOut_nodeSection_eq_node :
+    AnalyticSpace.ofCutOut (nodeAmbient.{u}.isCutOutBy_zeroLocusSubspaceι nodeSection.{u}) =
+      AnalyticSpace.node.{u} :=
+  rfl
 
-/-- The mapping property at the node `{z ∈ ℂ² | z₀ z₁ = 0}`, a complex analytic space which is
-not a manifold: a morphism into `ℂ²` killing `z₀ z₁` factors uniquely through the node. -/
-example (Z : LocallyRingedSpace.{u}) (φ : Z ⟶ nodeAmbient.{u})
-    (hφ : ∀ j, φ.c.app (op ⊤) (nodeSection.{u} j) = 0) :
-    ∃! ψ : Z ⟶ nodeAmbient.{u}.zeroLocusSubspace nodeSection.{u},
-      ψ ≫ nodeAmbient.{u}.zeroLocusSubspaceι nodeSection.{u} = φ :=
-  (nodeAmbient.{u}.isCutOutBy_zeroLocusSubspaceι nodeSection.{u}).existsUnique_lift φ hφ
+/-- The mapping property, instantiated at the node: its own closed immersion factors through it.
+The `∃!` is recorded here once so that the two consequences below do not each pay for
+elaborating it.
 
-/-- The hypothesis is satisfiable at the node by something other than the zero morphism: the
-inclusion of the node itself kills `z₀ z₁`. -/
-example : ∀ j, (nodeAmbient.{u}.zeroLocusSubspaceι nodeSection.{u}).c.app (op ⊤)
-    (nodeSection.{u} j) = 0 :=
-  (nodeAmbient.{u}.isCutOutBy_zeroLocusSubspaceι nodeSection.{u}).c_app_eq_zero
+`n`, `k`, `V` and `W` are supplied explicitly. Left to unification the elaborator does not
+finish inside the default heartbeat budget: it has to solve `?V.isOpenEmbedding` against
+`nodeAmbient`'s `⊤.isOpenEmbedding` while simultaneously matching `constantsAlgMap ?n ?V`
+against `constantsAlgMap 2 ⊤` in `hlin`. Naming them costs four annotations and takes the
+elaboration from a timeout to a second. -/
+theorem existsUnique_liftHom_node :
+    ∃! ψ : AnalyticSpace.node.{u} ⟶
+        AnalyticSpace.ofCutOut (nodeAmbient.{u}.isCutOutBy_zeroLocusSubspaceι nodeSection.{u}),
+      ψ.toLRSHom ≫ nodeAmbient.{u}.zeroLocusSubspaceι nodeSection.{u} =
+        nodeAmbient.{u}.zeroLocusSubspaceι nodeSection.{u} :=
+  IsCutOutBy.existsUnique_liftHom (W := AnalyticSpace.node.{u}) (n := 2) (k := 1) (V := ⊤)
+    (nodeAmbient.{u}.isCutOutBy_zeroLocusSubspaceι nodeSection.{u})
+    (nodeAmbient.{u}.zeroLocusSubspaceι nodeSection.{u})
+    isCLinearHom_zeroLocusSubspaceι_nodeSection.{u} c_app_nodeSection_eq_zero.{u}
 
-/-- The node is not the empty space, so the isomorphism below and the mapping property above
-are not statements about `∅`: the origin lies on it. -/
-example : Nonempty (nodeAmbient.{u}.zeroLocusSpace nodeSection.{u}) :=
-  ⟨⟨⟨(0 : ULift.{u} (Fin 2) → ℂ), trivial⟩, origin_mem_zeroLocus_nodeSection.{u}⟩⟩
+/-- **The node's own closed immersion factors through the node, and the factorisation is the
+identity.** This is the theorem run where the answer is known independently: a factorisation
+that came out as anything else would mean the theorem is about the wrong morphism. -/
+theorem eq_id_of_comp_zeroLocusSubspaceι
+    (ψ : AnalyticSpace.node.{u} ⟶
+      AnalyticSpace.ofCutOut (nodeAmbient.{u}.isCutOutBy_zeroLocusSubspaceι nodeSection.{u}))
+    (hψ : ψ.toLRSHom ≫ nodeAmbient.{u}.zeroLocusSubspaceι nodeSection.{u} =
+      nodeAmbient.{u}.zeroLocusSubspaceι nodeSection.{u}) :
+    ψ = 𝟙 AnalyticSpace.node.{u} :=
+  (existsUnique_liftHom_node.{u}.unique hψ (Category.id_comp _))
 
-/-- **Two presentations of the same subspace are canonically isomorphic**, and the isomorphism
-is over `Y`. Instantiated at a genuinely different pair: `X'` here is any space isomorphic to
-`X`, cut out by the same sections through the transported immersion
-(`ComplexAnalytic.IsCutOutBy.comp_iso`). -/
-example {X' : LocallyRingedSpace.{u}} (hcut : IsCutOutBy i f) (e : X' ≅ X) :
-    (hcut.uniqueIso (hcut.comp_iso e)).hom ≫ (e.hom ≫ i) = i :=
-  hcut.uniqueIso_hom_comp (hcut.comp_iso e)
+/-- The existence half, which uniqueness cannot supply: the factorisation composes back to the
+morphism it factors. -/
+theorem exists_liftHom :
+    ∃ ψ : AnalyticSpace.node.{u} ⟶
+        AnalyticSpace.ofCutOut (nodeAmbient.{u}.isCutOutBy_zeroLocusSubspaceι nodeSection.{u}),
+      ψ.toLRSHom ≫ nodeAmbient.{u}.zeroLocusSubspaceι nodeSection.{u} =
+        nodeAmbient.{u}.zeroLocusSubspaceι nodeSection.{u} :=
+  existsUnique_liftHom_node.{u}.exists
+
+end

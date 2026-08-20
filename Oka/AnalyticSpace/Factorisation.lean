@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Oka.AnalyticSpace.Basic
+import Oka.AnalyticSpace.LocalModel
 import Oka.Geometry.RingedSpace.CutOut
 import Oka.Topology.Sheaves.Functors
 import Oka.Topology.Sheaves.Presheaf
@@ -57,10 +58,32 @@ stalks, and a map whose precomposition with a surjection is local is itself loca
 - `ComplexAnalytic.IsCutOutBy.uniqueIso`: the canonical isomorphism between two subspaces cut
   out by the same sections.
 
+## The `ℂ`-linear form
+
+`existsUnique_lift` is a statement about **locally ringed** spaces. What the analytification
+programme consumes is the same statement for morphisms of complex analytic spaces, and that is
+`ComplexAnalytic.IsCutOutBy.existsUnique_liftHom` at the end of this file. It costs almost
+nothing on top:
+
+* the lift is `ℂ`-linear for the *pulled-back* algebra structure on the subspace — which is by
+  definition the one `ComplexAnalytic.AnalyticSpace.ofCutOut` gives it — because
+  `IsCLinearHom ψ α β` unfolds to `Γ.map ψ.op (β c) = α c` and `β` is `γ` pulled back along
+  `i`, so the claim *is* `lift_comp` fed into the hypothesis;
+* uniqueness needs nothing new, because `AnalyticSpace.forgetToLocallyRingedSpace` is faithful,
+  so it reduces to `ComplexAnalytic.IsCutOutBy.hom_ext`.
+
+The `Oka.AnalyticSpace.LocalModel` import exists only for `AnalyticSpace.ofCutOut`, which is
+what supplies the analytic-space structure on the subspace. Nothing else in this file needs it,
+and nothing imports this file except the root module.
+
 ## Main results
 
 - `ComplexAnalytic.IsCutOutBy.lift_comp`: `ψ ≫ i = φ`.
 - `ComplexAnalytic.IsCutOutBy.existsUnique_lift`: the factorisation exists and is unique.
+- `ComplexAnalytic.IsCutOutBy.isCLinearHom_lift`: the factorisation of a `ℂ`-linear morphism is
+  `ℂ`-linear.
+- `ComplexAnalytic.IsCutOutBy.existsUnique_liftHom`: **the mapping property for morphisms of
+  complex analytic spaces.**
 
 ## References
 
@@ -222,6 +245,23 @@ theorem existsUnique_lift : ∃! ψ : Z ⟶ X, ψ ≫ i = φ :=
   ⟨hcut.lift φ hφ, hcut.lift_comp φ hφ,
     fun ψ hψ ↦ hcut.hom_ext ψ _ (hψ.trans (hcut.lift_comp φ hφ).symm)⟩
 
+/-- **The factorisation of a `ℂ`-linear morphism is `ℂ`-linear**, for the pulled-back
+`ℂ`-algebra structure on the subspace — which is the one `ComplexAnalytic.AnalyticSpace.ofCutOut`
+gives it.
+
+There is no analytic content: `IsCLinearHom ψ α β` is `∀ c, Γ.map ψ.op (β c) = α c`, and here
+`β` is `γ` pulled back along `i`, so the claim unfolds to
+`Γ.map (lift ≫ i).op (γ c) = α c`, which is `lift_comp` and then the hypothesis.
+
+It has to be a term rather than a `rw`: the pattern `((Γ.map i.op).hom.comp γ) c` is visibly
+present in the goal but `rw` will not fire on it, the usual `CommRingCat` coercion seam. -/
+theorem isCLinearHom_lift {α : ℂ →+* Z.presheaf.obj (op ⊤)} {γ : ℂ →+* Y.presheaf.obj (op ⊤)}
+    (hlin : IsCLinearHom φ α γ) :
+    IsCLinearHom (hcut.lift φ hφ) α ((LocallyRingedSpace.Γ.map i.op).hom.comp γ) := fun c ↦
+  (LocallyRingedSpace.Γ_map_comp_apply (hcut.lift φ hφ) i (γ c)).symm.trans
+    ((congrArg (fun m : Z ⟶ Y ↦ (LocallyRingedSpace.Γ.map m.op).hom (γ c))
+      (hcut.lift_comp φ hφ)).trans (hlin c))
+
 end Construction
 
 section Unique
@@ -254,5 +294,33 @@ lemma uniqueIso_inv_comp (hcut : IsCutOutBy i f) (hcut' : IsCutOutBy i' f) :
   hcut.lift_comp i' hcut'.c_app_eq_zero
 
 end Unique
+
+section AnalyticSpaceHom
+
+/-- **The mapping property of `IsCutOutBy` for morphisms of complex analytic spaces.**
+
+A morphism of complex analytic spaces `ψ : W ⟶ ℂ^n|V` whose underlying morphism kills the
+sections `f` cutting out a subspace factors, uniquely, through that subspace as a morphism of
+complex analytic spaces.
+
+This is the form the analytification programme consumes;
+`ComplexAnalytic.IsCutOutBy.existsUnique_lift` is the same statement one category lower, for
+locally ringed spaces, and does not by itself give this one — the lift has to be shown
+`ℂ`-linear (`ComplexAnalytic.IsCutOutBy.isCLinearHom_lift`) and the uniqueness has to be
+transported across `AnalyticSpace.forgetToLocallyRingedSpace`, which is faithful. -/
+theorem existsUnique_liftHom {W : AnalyticSpace.{u}} {n k : ℕ}
+    {V : Opens (complexAffineSpace.{u} n)} {M : LocallyRingedSpace.{u}}
+    {i : M ⟶ (complexAffineSpace.{u} n).restrict V.isOpenEmbedding}
+    {f : Fin k → ((complexAffineSpace.{u} n).restrict V.isOpenEmbedding).presheaf.obj (op ⊤)}
+    (hcut : IsCutOutBy i f)
+    (φ : W.toLocallyRingedSpace ⟶ (complexAffineSpace.{u} n).restrict V.isOpenEmbedding)
+    (hlin : IsCLinearHom φ W.algebraMap (constantsAlgMap n V))
+    (hφ : ∀ j, (φ.c.app (op ⊤)).hom (f j) = 0) :
+    ∃! ψ : W ⟶ AnalyticSpace.ofCutOut hcut, ψ.toLRSHom ≫ i = φ :=
+  ⟨⟨hcut.lift φ hφ, hcut.isCLinearHom_lift φ hφ hlin⟩, hcut.lift_comp φ hφ, fun ψ hψ ↦
+    AnalyticSpace.forgetToLocallyRingedSpace.map_injective
+      (hcut.hom_ext ψ.toLRSHom _ (hψ.trans (hcut.lift_comp φ hφ).symm))⟩
+
+end AnalyticSpaceHom
 
 end ComplexAnalytic.IsCutOutBy
