@@ -3,6 +3,7 @@ Copyright (c) 2026 Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten. All righ
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
+import Mathlib.RingTheory.Filtration
 import Mathlib.RingTheory.LocalRing.ResidueField.Basic
 
 /-!
@@ -148,6 +149,59 @@ theorem evalHom_map (h : IsCoefficientField α) {f : S →+* T} (hf : Function.S
     ((h.of_surjective hf hcomp).sub_evalHom_mem _) ?_
   rw [← hcomp (h.evalHom a), ← map_sub]
   exact map_nonunit f _ (h.sub_evalHom_mem a)
+
+/-- **A local homomorphism out of a local ring with a coefficient field is determined modulo
+`𝔪 ^ k` by its values on the constants and on generators of the maximal ideal.**
+
+The induction is the whole content: an element is a constant plus an element of `𝔪`, and an
+element of `𝔪` is an `S`-combination of the generators, so the difference of the two values is a
+sum of terms `θ (v i) * (θ x - θ' x)` with the second factor in `𝔪 ^ k` by induction. Each
+`θ (v i)` lies in the maximal ideal of `A` because `θ` is local and `v i` is a non-unit. -/
+theorem sub_mem_pow_maximalIdeal {A : Type*} [CommRing A] [IsLocalRing A]
+    (h : IsCoefficientField α) {ι : Type*} [Finite ι] {v : ι → S}
+    (hv : maximalIdeal S = Ideal.span (Set.range v))
+    {θ θ' : S →+* A} [IsLocalHom θ] (hconst : ∀ c, θ (α c) = θ' (α c))
+    (hgen : ∀ i, θ (v i) = θ' (v i)) (k : ℕ) (x : S) :
+    θ x - θ' x ∈ maximalIdeal A ^ k := by
+  cases nonempty_fintype ι
+  induction k generalizing x with
+  | zero => simp
+  | succ k ih =>
+    obtain ⟨c, hc⟩ := h x
+    rw [hv] at hc
+    obtain ⟨q, hq⟩ := (Submodule.mem_span_range_iff_exists_fun _).1 hc
+    have hx : x = α c + ∑ i, q i * v i := by
+      rw [show ∑ i, q i * v i = ∑ i, q i • v i from rfl, hq]
+      ring
+    have hstep : θ x - θ' x = ∑ i, θ (v i) * (θ (q i) - θ' (q i)) := by
+      rw [hx, map_add, map_add, map_sum, map_sum, hconst c, add_sub_add_left_eq_sub,
+        ← Finset.sum_sub_distrib]
+      exact Finset.sum_congr rfl fun i _ ↦ by rw [map_mul, map_mul, hgen i]; ring
+    rw [hstep, pow_succ']
+    refine Submodule.sum_mem _ fun i _ ↦ Ideal.mul_mem_mul ?_ (ih (q i))
+    exact map_nonunit θ _ (hv ▸ Ideal.subset_span ⟨i, rfl⟩)
+
+/-- **A local homomorphism out of a local ring with a coefficient field, into a Noetherian local
+ring, is determined by its values on the constants and on generators of the maximal ideal.**
+
+`IsLocalRing.IsCoefficientField.sub_mem_pow_maximalIdeal` puts the difference of the two values
+in every power of the maximal ideal of the target; Krull's intersection theorem
+(`Ideal.iInf_pow_eq_bot_of_isLocalRing`, which is where the Noetherian hypothesis enters) then
+says it is zero.
+
+The hypothesis that the maximal ideal of `S` is *finitely* generated cannot be dropped in this
+form, since the induction consumes a finite sum; `S` itself need not be Noetherian. -/
+theorem ringHom_ext {A : Type*} [CommRing A] [IsLocalRing A] [IsNoetherianRing A]
+    (h : IsCoefficientField α) {ι : Type*} [Finite ι] {v : ι → S}
+    (hv : maximalIdeal S = Ideal.span (Set.range v))
+    {θ θ' : S →+* A} [IsLocalHom θ] (hconst : ∀ c, θ (α c) = θ' (α c))
+    (hgen : ∀ i, θ (v i) = θ' (v i)) :
+    θ = θ' := by
+  refine RingHom.ext fun x ↦ sub_eq_zero.1 ?_
+  have hmem : θ x - θ' x ∈ ⨅ k : ℕ, maximalIdeal A ^ k :=
+    Ideal.mem_iInf.2 fun k ↦ h.sub_mem_pow_maximalIdeal hv hconst hgen k x
+  rwa [Ideal.iInf_pow_eq_bot_of_isLocalRing _ (maximalIdeal.isMaximal A).ne_top,
+    Ideal.mem_bot] at hmem
 
 end IsCoefficientField
 

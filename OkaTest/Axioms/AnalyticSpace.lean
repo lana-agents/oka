@@ -117,3 +117,33 @@ info: 'ComplexAnalytic.AnalyticSpace.continuous_eval_top' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.continuous_eval_top
+
+/-! ### Naturality of evaluation, and rigidity of germs on `ℂ^ι` -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.evalStalk_stalkMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.evalStalk_stalkMap
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.eval_c_app' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.eval_c_app
+
+/--
+info: 'IsLocalRing.IsCoefficientField.ringHom_ext' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms IsLocalRing.IsCoefficientField.ringHom_ext
+
+/--
+info: 'ComplexAnalytic.okaStalk_ringHom_ext' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.okaStalk_ringHom_ext

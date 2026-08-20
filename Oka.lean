@@ -17,6 +17,7 @@ import Oka.AnalyticSpace.Basic
 import Oka.AnalyticSpace.Coherent
 import Oka.AnalyticSpace.Continuity
 import Oka.AnalyticSpace.Evaluation
+import Oka.AnalyticSpace.HomToComplex
 import Oka.AnalyticSpace.IdealSheaf
 import Oka.AnalyticSpace.LocalModel
 import Oka.AnalyticSpace.Noetherian
