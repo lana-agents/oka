@@ -82,6 +82,7 @@ needs one computation which was not in the development —
 - `ComplexAnalytic.AnalyticSpace.coordPullback_comp`: **the tuple of pullbacks of the
   coordinates is natural in `Z`**, for every `Z' ⟶ Z`.
 - `ComplexAnalytic.AnalyticSpace.homComplexAffineSpaceEquiv`: `Hom(ℂ^n, ℂ^m) ≃ Γ(ℂ^n, 𝒪)^m`.
+- `ComplexAnalytic.base_nodeIncl`: that closed immersion is the inclusion on points.
 - `ComplexAnalytic.eq_nodeIncl_of_coordPullback`: the closed immersion of the node into `ℂ²` is
   the **unique** morphism of analytic spaces pulling the coordinates back to the node's two
   coordinate functions.
@@ -370,6 +371,19 @@ theorem coordPullback_nodeIncl (j : ULift.{u} (Fin 2)) :
     ((complexAffineSpace.{u} 2).ofRestrict
       (⊤ : Opens (complexAffineSpace.{u} 2)).isOpenEmbedding) (coord j)) ?_
   rw [Γ_map_ofRestrict, coord_def, OkaRing.restrict_ofMvPolynomial]
+  rfl
+
+/-- **The inclusion of the node into `ℂ²` is the inclusion on points**: the `j`-th coordinate of
+the image of `p` is the `j`-th coordinate of `p`.
+
+This is `rfl` — `ComplexAnalytic.nodeIncl` is built from `zeroLocusSubspaceι` and `ofRestrict`,
+whose base maps are the two subtype inclusions — and it is stated because nothing else says it,
+and because it is what makes the pullback computation `ComplexAnalytic.coordPullback_nodeIncl`
+falsifiable: `OkaTest/HomToComplex.lean` proves this same equation a second time through
+`ComplexAnalytic.AnalyticSpace.eval_c_app` and `ComplexAnalytic.eval_nodeCoord`, and a wrong
+coordinate index anywhere in that chain would make the two disagree. -/
+theorem base_nodeIncl (p : AnalyticSpace.node.{u}) (j : ULift.{u} (Fin 2)) :
+    ((nodeIncl.{u}).toLRSHom.base p : ULift.{u} (Fin 2) → ℂ) j = p.1.1 j :=
   rfl
 
 /-- **The inclusion of the node into `ℂ²` is the unique morphism of analytic spaces pulling the
