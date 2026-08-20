@@ -94,3 +94,26 @@ info: 'ComplexAnalytic.nodeCoord_ne_zero' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.nodeCoord_ne_zero
+
+/-! ### Continuity of the value of a section -/
+
+/--
+info: 'ComplexAnalytic.evalStalk_chart' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.evalStalk_chart
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.continuous_eval' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.continuous_eval
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.continuous_eval_top' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.continuous_eval_top

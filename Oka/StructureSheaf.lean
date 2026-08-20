@@ -129,6 +129,20 @@ lemma OkaRing.toGlobalFun_apply {U : Opens (ι → ℂ)} (f : OkaRing U) {x : ι
     f.toGlobalFun _ x = f.toFun _ ⟨x, hx⟩ :=
   Subtype.val_injective.extend_apply (f := (Subtype.val : U → ι → ℂ)) _ _ ⟨x, hx⟩
 
+/-- **A holomorphic function is continuous on its domain.** -/
+lemma OkaRing.continuousOn_toGlobalFun {U : Opens (ι → ℂ)} (f : OkaRing U) :
+    ContinuousOn (f.toGlobalFun _) U :=
+  fun x hx ↦ ((okaAnalytic_iff _).1 f.2 x hx).continuousAt.continuousWithinAt
+
+/-- **The value of a holomorphic function depends continuously on the point.**
+
+This is `OkaRing.continuousOn_toGlobalFun` read through `OkaRing.evalHom`, and it is the form
+in which the value map of a complex analytic space is shown to be continuous. -/
+lemma OkaRing.continuous_evalHom {U : Opens (ι → ℂ)} (f : OkaRing U) :
+    Continuous fun x : U ↦ OkaRing.evalHom x.2 f := by
+  refine (continuousOn_iff_continuous_restrict.1 f.continuousOn_toGlobalFun).congr fun x ↦ ?_
+  exact f.toGlobalFun_apply x.2
+
 /-- Holomorphic functions restrict to holomorphic functions. -/
 lemma OkaAnalytic.restrict {U V : Opens (ι → ℂ)} (h : U ≤ V) {f : V → ℂ} (hf : OkaAnalytic f) :
     OkaAnalytic (f ∘ Opens.inclusion h) := by

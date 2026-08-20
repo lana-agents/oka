@@ -14,6 +14,7 @@ import Oka.Algebra.Category.ModuleCat.Sheaf.Submodule
 import Oka.Analytic.ParametricCircleIntegral
 import Oka.AnalyticSpace.Basic
 import Oka.AnalyticSpace.Coherent
+import Oka.AnalyticSpace.Continuity
 import Oka.AnalyticSpace.Evaluation
 import Oka.AnalyticSpace.IdealSheaf
 import Oka.AnalyticSpace.LocalModel
