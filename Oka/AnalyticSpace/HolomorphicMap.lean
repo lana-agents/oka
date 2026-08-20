@@ -70,8 +70,10 @@ Two things are then missing, and neither is in this repository or in Mathlib:
   the pullback of the coordinate along a morphism of analytic spaces `ℂ^n ⟶ ℂ`.**
 - `ComplexAnalytic.Γ_map_nodeToLineHom_coord`: on the node, the section recovered from
   `nodeToLine j` is `ComplexAnalytic.nodeCoord j`.
-- `ComplexAnalytic.surjective_base_nodeToLineHom`: `nodeToLine j` is surjective on points, so it
-  is neither constant nor injective.
+- `ComplexAnalytic.surjective_base_nodeToLineHom` and
+  `ComplexAnalytic.not_injective_base_nodeToLineHom`: `nodeToLine j` is surjective on points and
+  is **not** injective on them, so it is not a bijection on points. That the node is not
+  homeomorphic to `ℂ` by *any* map is true and is not proved here.
 
 ## References
 
@@ -304,6 +306,47 @@ theorem surjective_base_nodeToLineHom (j : ULift.{u} (Fin 2)) :
     · rw [if_neg h, zero_mul]
   exact ⟨⟨⟨x, trivial⟩, (mem_zeroLocus_nodeSection_iff _).2 hx0⟩,
     (base_nodeToLineHom j _ (ULift.up 0)).trans (if_pos rfl)⟩
+
+/-- **The morphism `nodeToLineHom j` is not injective on points**: the other axis of the node is
+a whole line of preimages of `0`.
+
+With `surjective_base_nodeToLineHom` this says the map is onto but not one-to-one; surjectivity
+alone would not, since a surjection can be a bijection. It says nothing about maps other than
+this one, so it is not the statement that the node is not homeomorphic to `ℂ`. The points
+exhibited are a pair on the axis whose
+`j`-th coordinate vanishes, so `k` — the coordinate `nodeToLine j` forgets — has to be chosen
+rather than fixed. -/
+theorem not_injective_base_nodeToLineHom (j : ULift.{u} (Fin 2)) :
+    ¬ Function.Injective fun p : AnalyticSpace.node.{u} ↦
+      ((nodeToLineHom.{u} j).base p : ULift.{u} (Fin 1) → ℂ) (ULift.up 0) := by
+  classical
+  set k : ULift.{u} (Fin 2) := if j = ULift.up 0 then ULift.up 1 else ULift.up 0 with hk
+  have hjk : j ≠ k := by
+    rw [hk]
+    split
+    · next h => rw [h]; exact fun hcon ↦ by simpa using congrArg ULift.down hcon
+    · next h => exact fun hcon ↦ h hcon
+  have hmem : ∀ c : ℂ, (fun l ↦ if l = k then c else 0 : ULift.{u} (Fin 2) → ℂ) (ULift.up 0) *
+      (fun l ↦ if l = k then c else 0 : ULift.{u} (Fin 2) → ℂ) (ULift.up 1) = 0 := by
+    intro c
+    dsimp only
+    rcases eq_or_ne (ULift.up 0 : ULift.{u} (Fin 2)) k with h | h
+    · rw [if_neg (fun hcon : (ULift.up 1 : ULift.{u} (Fin 2)) = k ↦ by
+        simpa using congrArg ULift.down (h.trans hcon.symm)), mul_zero]
+    · rw [if_neg h, zero_mul]
+  intro hinj
+  have h := hinj (a₁ := ⟨⟨fun l ↦ if l = k then 1 else 0, trivial⟩,
+      (mem_zeroLocus_nodeSection_iff _).2 (hmem 1)⟩)
+    (a₂ := ⟨⟨fun l ↦ if l = k then 2 else 0, trivial⟩,
+      (mem_zeroLocus_nodeSection_iff _).2 (hmem 2)⟩) ?_
+  · have h2 := congrArg (fun p : AnalyticSpace.node.{u} ↦ p.1.1 k) h
+    dsimp only at h2
+    rw [if_pos rfl, if_pos rfl] at h2
+    norm_num at h2
+  · dsimp only
+    rw [base_nodeToLineHom, base_nodeToLineHom]
+    dsimp only
+    rw [if_neg hjk, if_neg hjk]
 
 /-- **The node maps to `ℂ` by each of its two coordinate functions**, as a morphism of complex
 analytic spaces. -/
