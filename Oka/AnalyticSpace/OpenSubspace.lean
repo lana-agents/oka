@@ -113,7 +113,7 @@ theorem exists_local_model_restrict (X : AnalyticSpace.{u}) (U : X.Opens)
         V'.isOpenEmbedding ≫ (complexAffineSpace.{u} n).ofRestrict V.isOpenEmbedding).base) =
       Set.range (((complexAffineSpace.{u} n).ofRestrict V''.isOpenEmbedding).base) := by
     refine Eq.trans (range_ofRestrict_comp (complexAffineSpace.{u} n) V V') ?_
-    exact (range_ofRestrict V'').symm
+    exact (LocallyRingedSpace.range_ofRestrict (complexAffineSpace.{u} n) V'').symm
   set e₁ := LocallyRingedSpace.IsOpenImmersion.isoOfRangeEq _ _ hrange with he₁def
   set e₂ := LocallyRingedSpace.IsOpenImmersion.isoOfRangeEq _ _ hrange₂ with he₂def
   have he₁ : IsCLinearHom e₁.hom

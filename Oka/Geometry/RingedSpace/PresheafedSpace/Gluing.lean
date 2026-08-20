@@ -385,7 +385,6 @@ lemma openCoverOfOpens_map {X : LocallyRingedSpace.{u}} {ι : Type u} (U : ι �
     (openCoverOfOpens U hU).map i = X.ofRestrict (U i).isOpenEmbedding :=
   rfl
 
-
 section GlueOverOpens
 
 /-- **Morphisms out of the members of a cover of `X` by open subsets, agreeing on the pairwise

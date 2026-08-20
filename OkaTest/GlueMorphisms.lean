@@ -45,10 +45,29 @@ categorical pullback. The witness is the **punctured node** covered by its two p
 which are disjoint (`pnAxis_inf_carrier_eq_empty`, from `ComplexAnalytic.nodeAxis_inf_eq_bot`),
 so the compatibility is vacuous and *any* pair of morphisms out of the two pieces glues.
 
-`glue_pn_ne_nodeToLine` is what makes this a witness rather than an instantiation: the glued
-morphism takes the value `1` at the point `(0, 1)` where `ComplexAnalytic.nodeToLineHom 0` takes
-`0`, so it is **not** the restriction of either piece's morphism, and it is the first glued
-morphism in this development that is not something one already had.
+`glue_pn_ne_nodeToLine_of_ne` is what makes this a witness rather than an instantiation: for
+`k ≠ j` the glued morphism takes the value `1` at `axisPoint j`, where the restriction of
+`ComplexAnalytic.nodeToLineHom k` takes `0`. Both coordinates are instances of it —
+`glue_pn_ne_nodeToLine` and `glue_pn_ne_nodeToLine_one` — so the glued morphism is **not** the
+restriction of *either* piece's morphism, and it is the first glued morphism in this development
+that is not something one already had.
+
+The general form is stated first and the two named coordinates derived from it deliberately.
+Until #698 this file proved only the `k = 0` half while asserting "either" in this paragraph,
+which is the third time on this project that the coordinate needed for the conclusion was proved
+and the one that made the sentence true was not. A statement quantified over `j` and `k` cannot
+lose a coordinate that way.
+
+## A note on the import of `OkaTest.OpenSubspace`
+
+This is the first `OkaTest`-to-`OkaTest` import outside the `OkaTest/Axioms.lean` aggregator, and
+it is intentional. Three agents ran `git grep '^import OkaTest' -- OkaTest/`, found only the
+aggregator, and read that as a convention; it is a small sample rather than a rule — until the
+last section here there was simply nothing in one test file that another wanted. Now there is:
+`nodeAxis`, `axisPoint`, `axisPoint_mem` and `ComplexAnalytic.nodeAxis_inf_eq_bot`. The
+alternatives are duplicating roughly forty lines of scaffolding, which is how a test suite rots,
+or promoting node scaffolding into `Oka/`, which is worse because it is not library material.
+Reuse across `OkaTest/` is allowed; there is no cycle risk and no build-graph cost worth naming.
 -/
 
 open CategoryTheory CategoryTheory.Limits TopologicalSpace Opposite AlgebraicGeometry
@@ -154,7 +173,6 @@ theorem glue_incl :
 trivial one-member cover by `⊤`. -/
 example : IsIso punctureCover.{u}.fromGlued := inferInstance
 
-
 /-! ### Gluing over a cover by opens, with disconnected overlaps -/
 
 abbrev PN : LocallyRingedSpace.{u} := puncturedNodeSpace.{u}.toLocallyRingedSpace
@@ -228,9 +246,36 @@ theorem base_glue_pn (φ : PN.{u} ⟶ complexAffineSpace.{u} 1)
   refine h.trans ?_
   exact base_nodeToLineHom j x.1 (ULift.up 0)
 
+/-- **The glued morphism is not the restriction of any one piece's morphism.**
+
+At `axisPoint j` — the point of the node whose `j`-th coordinate is `1` and whose other
+coordinate is `0` — the glued morphism takes the value `1`, because it agrees there with the
+`j`-th piece; the restriction of `nodeToLineHom k` for `k ≠ j` reads the *other* coordinate and
+takes `0`. So the pair glued was genuinely independent.
+
+Quantifying over both indices rather than fixing one is the point: with two pieces there are two
+statements to make and the second is the one that historically does not get made. -/
+theorem glue_pn_ne_nodeToLine_of_ne (φ : PN.{u} ⟶ complexAffineSpace.{u} 1)
+    (hφ : ∀ j, PN.{u}.ofRestrict (pnAxis.{u} j).isOpenEmbedding ≫ φ = pnHom.{u} j)
+    (j k : ULift.{u} (Fin 2)) (hkj : k ≠ j) :
+    (φ.base ⟨axisPoint.{u} j, axisPoint_mem _⟩ : ULift.{u} (Fin 1) → ℂ) (ULift.up 0) ≠
+      ((AnalyticSpace.node.{u}.toLocallyRingedSpace.ofRestrict
+          puncturedNode.{u}.isOpenEmbedding ≫ nodeToLineHom.{u} k).base
+        ⟨axisPoint.{u} j, axisPoint_mem _⟩ : ULift.{u} (Fin 1) → ℂ) (ULift.up 0) := by
+  rw [base_glue_pn φ hφ j _ (show (axisPoint.{u} j) ∈ nodeAxis.{u} j from by
+    change (axisPoint.{u} j).1.1 j ≠ 0
+    rw [axisPoint_coord, if_pos rfl]
+    exact one_ne_zero)]
+  rw [show ((AnalyticSpace.node.{u}.toLocallyRingedSpace.ofRestrict
+      puncturedNode.{u}.isOpenEmbedding ≫ nodeToLineHom.{u} k).base
+      ⟨axisPoint.{u} j, axisPoint_mem _⟩ : ULift.{u} (Fin 1) → ℂ) (ULift.up 0) =
+    (axisPoint.{u} j).1.1 k from
+      base_nodeToLineHom k (axisPoint.{u} j) (ULift.up 0)]
+  rw [axisPoint_coord, if_pos rfl, axisPoint_coord, if_neg hkj]
+  exact one_ne_zero
+
 /-- The glued morphism takes the value `1` at the point `(0, 1)`, where the *first* coordinate
-morphism takes `0`. So it is **not** the restriction of `nodeToLineHom 0`, and the pair glued was
-genuinely independent. -/
+morphism takes `0`. So it is **not** the restriction of `nodeToLineHom 0`. -/
 theorem glue_pn_ne_nodeToLine (φ : PN.{u} ⟶ complexAffineSpace.{u} 1)
     (hφ : ∀ j, PN.{u}.ofRestrict (pnAxis.{u} j).isOpenEmbedding ≫ φ = pnHom.{u} j) :
     (φ.base ⟨axisPoint.{u} (ULift.up 1), axisPoint_mem _⟩ :
@@ -238,18 +283,20 @@ theorem glue_pn_ne_nodeToLine (φ : PN.{u} ⟶ complexAffineSpace.{u} 1)
       ((AnalyticSpace.node.{u}.toLocallyRingedSpace.ofRestrict
           puncturedNode.{u}.isOpenEmbedding ≫ nodeToLineHom.{u} (ULift.up 0)).base
         ⟨axisPoint.{u} (ULift.up 1), axisPoint_mem _⟩ :
-          ULift.{u} (Fin 1) → ℂ) (ULift.up 0) := by
-  rw [base_glue_pn φ hφ (ULift.up 1) _ (show (axisPoint.{u} (ULift.up 1)) ∈
-      nodeAxis.{u} (ULift.up 1) from by
-    change (axisPoint.{u} (ULift.up 1)).1.1 (ULift.up 1) ≠ 0
-    rw [axisPoint_coord, if_pos rfl]
-    exact one_ne_zero)]
-  rw [show ((AnalyticSpace.node.{u}.toLocallyRingedSpace.ofRestrict
-      puncturedNode.{u}.isOpenEmbedding ≫ nodeToLineHom.{u} (ULift.up 0)).base
-      ⟨axisPoint.{u} (ULift.up 1), axisPoint_mem _⟩ : ULift.{u} (Fin 1) → ℂ) (ULift.up 0) =
-    (axisPoint.{u} (ULift.up 1)).1.1 (ULift.up 0) from
-      base_nodeToLineHom (ULift.up 0) (axisPoint.{u} (ULift.up 1)) (ULift.up 0)]
-  rw [axisPoint_coord, if_pos rfl, axisPoint_coord, if_neg (by simp)]
-  exact one_ne_zero
+          ULift.{u} (Fin 1) → ℂ) (ULift.up 0) :=
+  glue_pn_ne_nodeToLine_of_ne φ hφ (ULift.up 1) (ULift.up 0) (by simp)
+
+/-- The other half, and the one that makes the module docstring's "either" true: the glued
+morphism takes the value `1` at the point `(1, 0)`, where the *second* coordinate morphism takes
+`0`. So it is **not** the restriction of `nodeToLineHom 1` either. -/
+theorem glue_pn_ne_nodeToLine_one (φ : PN.{u} ⟶ complexAffineSpace.{u} 1)
+    (hφ : ∀ j, PN.{u}.ofRestrict (pnAxis.{u} j).isOpenEmbedding ≫ φ = pnHom.{u} j) :
+    (φ.base ⟨axisPoint.{u} (ULift.up 0), axisPoint_mem _⟩ :
+        ULift.{u} (Fin 1) → ℂ) (ULift.up 0) ≠
+      ((AnalyticSpace.node.{u}.toLocallyRingedSpace.ofRestrict
+          puncturedNode.{u}.isOpenEmbedding ≫ nodeToLineHom.{u} (ULift.up 1)).base
+        ⟨axisPoint.{u} (ULift.up 0), axisPoint_mem _⟩ :
+          ULift.{u} (Fin 1) → ℂ) (ULift.up 0) :=
+  glue_pn_ne_nodeToLine_of_ne φ hφ (ULift.up 0) (ULift.up 1) (by simp)
 
 end

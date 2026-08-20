@@ -99,16 +99,10 @@ namespace ComplexAnalytic
 
 variable {A B : LocallyRingedSpace.{u}}
 
-lemma range_ofRestrict (V : Opens B) :
-    Set.range (B.ofRestrict V.isOpenEmbedding).base = (V : Set B) := by
-  ext y; constructor
-  · rintro ⟨⟨y, hy⟩, rfl⟩; exact hy
-  · exact fun hy ↦ ⟨⟨y, hy⟩, rfl⟩
-
 lemma range_comp_le (i : A ⟶ B) (V : Opens B) :
     Set.range ((A.ofRestrict ((Opens.map i.base).obj V).isOpenEmbedding ≫ i).base) ⊆
       Set.range (B.ofRestrict V.isOpenEmbedding).base := by
-  rw [range_ofRestrict]
+  rw [LocallyRingedSpace.range_ofRestrict]
   rintro _ ⟨⟨x, hx⟩, rfl⟩
   exact hx
 
