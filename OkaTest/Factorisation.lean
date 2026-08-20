@@ -29,6 +29,10 @@ do with the theorem. This file rules that out at the node.
   of nothing. What comes back is the inclusion of one axis — the first morphism `ℂ ⟶ node` in
   the development. `base_axisIncl` **computes** its base map from the equation it satisfies
   rather than unfolding `lift`, and `not_const_axisIncl` rules out the remaining degeneracy.
+  `base_axisIncl_pair` states both coordinates of the image together, so that *"it is the
+  inclusion of the first axis"* is one proposition rather than two theorems and a sentence, and
+  `image_axisIncl_on_node` says the image satisfies the node's equation arithmetically rather
+  than only by having the right type.
 
 **What this does not check.** That `existsUnique_liftHom` is applied to a `φ` built from global
 sections on a *general* `Z`; that needs the general-`Z` half of taxis #654, which does not
@@ -267,6 +271,35 @@ theorem exists_nonconstant_hom_complexLine_node :
         ψ.toLRSHom.base (fun _ ↦ (0 : ℂ)) ≠ ψ.toLRSHom.base (fun _ ↦ (1 : ℂ)) :=
   ⟨_, existsUnique_axisIncl.{u}.exists.choose_spec,
     not_const_axisIncl _ existsUnique_axisIncl.{u}.exists.choose_spec⟩
+
+/-- **The image of the axis inclusion lies on the node**, computed rather than inferred from
+the type.
+
+That `ψ` lands in `AnalyticSpace.node` is forced by its type and so says nothing about the
+construction. This says the same thing arithmetically: the second coordinate of the image is
+`0`, so the product of the two coordinates — which is the node's equation — is `0`. It is what
+gives `okaMapFun_axisFamily_one` a consumer; without it that theorem records a number nothing
+reads. -/
+theorem image_axisIncl_on_node
+    (ψ : AnalyticSpace.complexAffineSpace.{u} 1 ⟶ AnalyticSpace.node.{u})
+    (hψ : ψ.toLRSHom ≫ nodeAmbient.{u}.zeroLocusSubspaceι nodeSection.{u} = axisPhi.{u})
+    (z : ULift.{u} (Fin 1) → ℂ) :
+    (ψ.toLRSHom.base z).1.1 (ULift.up 0) * (ψ.toLRSHom.base z).1.1 (ULift.up 1) = 0 := by
+  rw [base_axisIncl ψ hψ z (ULift.up 1), okaMapFun_axisFamily_one, mul_zero]
+
+/-- **Both coordinates of the image, named together: `z ↦ (z, 0)`.**
+
+`base_axisIncl` is symbolic in `okaMapFun axisFamily`, and the two coordinate computations are
+separate theorems, so nothing until now states the sentence *"the factorisation is the inclusion
+of the first axis"* as one proposition. This does. -/
+theorem base_axisIncl_pair
+    (ψ : AnalyticSpace.complexAffineSpace.{u} 1 ⟶ AnalyticSpace.node.{u})
+    (hψ : ψ.toLRSHom ≫ nodeAmbient.{u}.zeroLocusSubspaceι nodeSection.{u} = axisPhi.{u})
+    (z : ULift.{u} (Fin 1) → ℂ) :
+    (ψ.toLRSHom.base z).1.1 (ULift.up 0) = z (ULift.up 0) ∧
+      (ψ.toLRSHom.base z).1.1 (ULift.up 1) = 0 :=
+  ⟨(base_axisIncl ψ hψ z (ULift.up 0)).trans (okaMapFun_axisFamily_zero z),
+    (base_axisIncl ψ hψ z (ULift.up 1)).trans (okaMapFun_axisFamily_one z)⟩
 
 /-! ### The locally ringed space form, which is a different statement
 
