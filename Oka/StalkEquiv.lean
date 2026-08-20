@@ -97,9 +97,14 @@ lemma okaStalkEquiv_germ {y : ι → ℂ} {U : Opens (ι → ℂ)} (hy : y ∈ U
 
 -- Deliberately not `@[simp]`: this lemma's left-hand side is a strict instance of
 -- `okaStalkEquiv_germ`'s, so it would be shadowed by it. Note that *neither* fires at present,
--- for an unrelated and more general reason: `simp` cannot match any `TopCat.Presheaf.germ`
--- lemma over a concrete `TopCat.of _` space, not even Mathlib's own. Use `rw`, or pass the
--- index type — `simp [okaStalkEquiv_germ (ι := ι)]` does fire. See issue #583.
+-- for an unrelated and far more general reason, which has nothing to do with germs, presheaves
+-- or `TopCat`: a lemma stated over a *variable* object of a bundled category indexes that
+-- object's carrier in its discrimination-tree keys as a projection, whereas a goal over a
+-- *concrete* object has the carrier reduced away before its lookup keys are taken, so the
+-- lemma is never retrieved. `rw` is unaffected, and pinning the object restores `simp` —
+-- `simp [okaStalkEquiv_germ (ι := ι)]` does fire. `OkaTest/SimpDiscrTree.lean` measures the
+-- keys, reproduces it in three lines with `CommRingCat` and `+`, and holds the tripwires that
+-- will fail once it is fixed upstream. See issue #583.
 /-- The stalk isomorphism is `ℂ`-linear: it sends the germ of a constant function to the
 corresponding constant power series. -/
 lemma okaStalkEquiv_germ_algebraMap {y : ι → ℂ} {U : Opens (ι → ℂ)} (hy : y ∈ U) (c : ℂ) :
@@ -107,7 +112,7 @@ lemma okaStalkEquiv_germ_algebraMap {y : ι → ℂ} {U : Opens (ι → ℂ)} (h
       algebraMap ℂ (LocalOkaRing ι) c := by
   rw [okaStalkEquiv_germ hy, AlgHom.commutes]
 
--- Not `@[simp]`, for a second reason on top of the `germ` matching failure described above:
+-- Not `@[simp]`, for a second reason on top of the matching failure described above:
 -- `LocalOkaRing.constantCoeff_apply` is `@[simp]` and rewrites the left-hand side to
 -- `MvPowerSeries.constantCoeff ↑(…)`, so this statement is not in `simp` normal form either.
 /-- Reading off the constant term of the Taylor series at `y` is evaluation at `y`. -/
