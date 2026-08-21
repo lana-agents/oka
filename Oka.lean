@@ -31,6 +31,7 @@ import Oka.AnalyticSpace.Relations
 import Oka.AnalyticSpace.Restrict
 import Oka.Analytification.AffineSpace
 import Oka.Analytification.Presentation
+import Oka.Analytification.UniversalProperty
 import Oka.CategoryTheory.Abelian.Basic
 import Oka.CategoryTheory.Sites.CoversTop.Basic
 import Oka.CategoryTheory.Sites.CoversTop.Over

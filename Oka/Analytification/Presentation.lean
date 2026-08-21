@@ -35,13 +35,24 @@ points, and it is injective.
 
 ## What this is *not*, and the sentence to read before citing it
 
-**`analytification g` depends on the tuple `g`, not on the algebra `ℂ[x]/I`.** Two presentations
-of the same finitely generated `ℂ`-algebra produce two analytic spaces and **nothing here says
-they agree.** There is no presentation-independence, no functoriality, and no universal
-property in this file; those are the remainder of the analytification issue and they need
-`Hom(Z, ℂ^n) ≃ Γ(Z, 𝒪_Z)^n`, which this file does not use and does not provide. The name
-`analytification` is used because that is what the object is, but every statement below is a
-statement about a *chosen* presentation.
+**`analytification g` depends on the tuple `g`, not on the algebra `ℂ[x]/I`, and nothing *in
+this file* says otherwise.** There is no presentation-independence, no functoriality and no
+universal property here; this file does not use `Hom(Z, ℂ^n) ≃ Γ(Z, 𝒪_Z)^n` and does not provide
+it. The name `analytification` is used because that is what the object is, but every statement
+below is a statement about a *chosen* presentation.
+
+**Two of those three now exist next door, and a reader who needs them should go there rather
+than conclude they are missing.** `Oka/Analytification/UniversalProperty.lean` proves the
+mapping property — morphisms `Z ⟶ X^an` correspond to tuples of global sections of `𝒪_Z`
+satisfying the equations — and deduces from it that the analytification depends only on the
+**ideal** `(g₁, …, g_k)`, so that two tuples spanning the same ideal, of possibly different
+lengths, give canonically isomorphic spaces. It also proves that
+`ComplexAnalytic.polyToGlobal` below *is* substitution of the coordinates of `X^an`.
+
+**What is still missing after that** is a change of *variables* — two presentations of the same
+algebra in different numbers of variables — and functoriality. So the sentence to carry away is
+narrower than it was: the construction is independent of the generators chosen for a fixed
+ideal in a fixed polynomial ring, and independence of the presentation as a whole is open.
 
 Also absent: the comparison of *structure sheaves*. `analytificationToSpec` is a morphism of
 locally ringed spaces, so it carries a map `𝒪_{Spec} ⟶ π_* 𝒪_{X^an}`, but nothing here
