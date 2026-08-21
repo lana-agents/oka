@@ -149,3 +149,47 @@ info: 'ComplexAnalytic.analytificationToSpec_comp_specMk' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.analytificationToSpec_comp_specMk
+
+/-! ### The universal property of the analytification -/
+
+/--
+info: 'ComplexAnalytic.Γ_map_comp_ofMvPolynomial' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.Γ_map_comp_ofMvPolynomial
+
+/--
+info: 'ComplexAnalytic.analytificationInclHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationInclHom
+
+/--
+info: 'ComplexAnalytic.eval₂_analytificationCoord_eq_zero' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.eval₂_analytificationCoord_eq_zero
+
+/--
+info: 'ComplexAnalytic.existsUnique_hom_analytification' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.existsUnique_hom_analytification
+
+/--
+info: 'ComplexAnalytic.hom_ext_analytification' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.hom_ext_analytification
+
+/--
+info: 'ComplexAnalytic.analytificationIsoOfPresentationIdealEq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationIsoOfPresentationIdealEq
