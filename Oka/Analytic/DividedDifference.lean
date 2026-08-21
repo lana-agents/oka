@@ -58,8 +58,12 @@ several complex variables is analytic. That is why Hartogs does not arise.
 
 ## Status: no consumer in this repository, and that is expected
 
-**`AnalyticAt.dslope_comp` is cited nowhere in `Oka/` or `OkaTest/` outside this file and its
-axiom guard, and it should not be deleted on that account.** It was built for the
+**No proof in `Oka/` uses `AnalyticAt.dslope_comp`, and it should not be deleted on that
+account.** It is exercised non-vacuously in `OkaTest/DividedDifference.lean`
+(`analyticAt_dslope_comp_sq`, together with `analyticAt_dslope_comp_sq_eq` naming the resulting
+function as `z + z ^ 3`), and cited in the module docstrings of
+`Oka/AnalyticSpace/HolomorphicMap.lean` and `Oka/AnalyticSpace/HolomorphicMapGeneral.lean`. What
+it has no consumer *for* is a proof in the library. It was built for the
 independence-of-lift step that `Hom(Z, ℂ) ≃ Γ(Z, 𝒪_Z)` was expected to need: two lifts of the
 same section differ by an element of the ideal cutting out the chart, and `h(G) - h(G')` has to
 be shown to lie in that ideal, for which the cofactor `dslope h (G ·) (G' ·)` must be
@@ -279,10 +283,10 @@ then `z ↦ dslope h (G z) (G' z)` is analytic at `z₀`. This is `analyticAt_ds
 with `AnalyticAt.pi`, and it is the form in which joint analyticity is consumed: with only the
 one-variable `dslope` lemmas of Mathlib, `G'` would have to be constant.
 
-**This has no consumer in this repository and is not expected to acquire one**: the argument it
-was built for was abandoned in favour of a uniqueness argument. It is retained as a Mathlib
-upstreaming candidate; see `## Status` in the module docstring, which is the disposition rather
-than a fresh observation. -/
+**No proof in the library uses this, and none is expected to**: the argument it was built for was
+abandoned in favour of a uniqueness argument. It is exercised in `OkaTest/DividedDifference.lean`
+and retained as a Mathlib upstreaming candidate; see `## Status` in the module docstring, which is
+the disposition rather than a fresh observation. -/
 theorem AnalyticAt.dslope_comp {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E]
     {G G' : E → ℂ} {z₀ : E} (hR : 0 < R) (hd : DifferentiableOn ℂ h (closedBall 0 R))
     (hG : AnalyticAt ℂ G z₀) (hG' : AnalyticAt ℂ G' z₀) (hGb : ‖G z₀‖ < R)
