@@ -9,8 +9,8 @@ import Oka
 # Axiom regression tests: Analytification
 
 The comparison morphisms of `Oka/Analytification/`: `ℂ^ι ⟶ Spec (MvPolynomial ι ℂ)` and its
-map on stalks, `X^an ⟶ Spec (ℂ[x]/I)` for a presented affine `ℂ`-algebra, and the local ring of
-`𝔸^ι` at the origin with its completion.
+map on stalks, `X^an ⟶ Spec (ℂ[x]/I)` for a presented affine `ℂ`-algebra, the local ring of
+`𝔸^ι` at the origin with its completion, and the faithful flatness of the germs over it.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -228,3 +228,37 @@ info: 'ComplexAnalytic.flat_polyLocalToMvPowerSeries' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.flat_polyLocalToMvPowerSeries
+
+/-! ### The germs are faithfully flat over the local ring at the origin
+
+`Oka/Analytification/Flatness.lean`. `coe_polyLocalToGerm` is guarded alongside the flatness
+because it is what makes the two maps out of `ℂ[x]_{(x)}` into a scalar tower; without it the
+descent has nothing to run in. -/
+
+/--
+info: 'ComplexAnalytic.polyLocalToGerm' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.polyLocalToGerm
+
+/--
+info: 'ComplexAnalytic.coe_polyLocalToGerm' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coe_polyLocalToGerm
+
+/--
+info: 'ComplexAnalytic.flat_polyLocalToGerm' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.flat_polyLocalToGerm
+
+/--
+info: 'ComplexAnalytic.faithfullyFlat_polyLocalToGerm' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.faithfullyFlat_polyLocalToGerm

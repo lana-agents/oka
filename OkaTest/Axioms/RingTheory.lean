@@ -9,7 +9,8 @@ import Oka
 # Axiom regression tests: general commutative ring theory
 
 The mirror-tree results about local rings with a coefficient field, about adic completions, and
-about localising at a maximal ideal. Nothing here mentions anything complex-analytic.
+about localising at a maximal ideal, and about descent of flatness. Nothing here mentions
+anything complex-analytic.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -55,3 +56,12 @@ info: 'MvPolynomial.idealOfVars.isMaximal' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms MvPolynomial.idealOfVars.isMaximal
+
+/-! ### Descent of flatness along the middle ring -/
+
+/--
+info: 'Module.Flat.of_faithfullyFlat_tower' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms Module.Flat.of_faithfullyFlat_tower

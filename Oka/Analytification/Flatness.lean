@@ -1,0 +1,203 @@
+/-
+Copyright (c) 2026 Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
+-/
+import Mathlib.RingTheory.RingHom.FaithfullyFlat
+import Oka.Analytification.LocalRing
+import Oka.Completion
+import Oka.Polynomial.Germ
+import Oka.RingTheory.Flat.Descent
+
+/-!
+# The germ ring is faithfully flat over the local ring of affine space
+
+**The analytic input to GAGA**, at the origin: writing `𝒪_{𝔸^ι, 0} = ℂ[x]_{(x)}` for the local
+ring of affine space and `𝒪_{ℂ^ι, 0} = ℂ{x}` for the ring of germs of holomorphic functions,
+
+```
+ComplexAnalytic.faithfullyFlat_polyLocalToGerm :
+  (ComplexAnalytic.polyLocalToGerm (ι := ι)).toRingHom.FaithfullyFlat
+```
+
+so a system of equations with polynomial coefficients has a convergent solution as soon as it has
+a formal one, and an ideal of `𝒪_{𝔸^ι, 0}` is recovered from the ideal it generates in the germs.
+
+## What makes it short, and it is not the local criterion
+
+The classical route to this statement is the local criterion for flatness: a local homomorphism
+of Noetherian local rings is flat when the induced map of completions is. **That is not used
+here, and it is not needed**, because the two completions are not merely isomorphic — they are
+the *same ring*:
+
+* `ℂ⟦x⟧` is the completion of `ℂ{x}` and is **faithfully flat** over it
+  (`LocalOkaRing.instFaithfullyFlat`, `Oka/Completion.lean`);
+* `ℂ⟦x⟧` is the completion of `ℂ[x]_{(x)}` and is therefore **flat** over it
+  (`ComplexAnalytic.flat_polyLocalToMvPowerSeries`, `Oka/Analytification/LocalRing.lean`).
+
+Flatness of `ℂ[x]_{(x)} → ℂ{x}` then follows by descent along the *middle* ring:
+`Module.Flat.of_faithfullyFlat_tower` in the mirror tree, which is Mathlib's
+`cancelBaseChange` square plus the fact that a faithfully flat extension **reflects**
+injectivity. Faithfulness is then free from `Module.FaithfullyFlat.of_flat_of_isLocalHom`, since
+both rings are local and the map is local — and *that* is inherited from the completion, where
+Mathlib already knows `algebraMap R R̂` is a local hom.
+
+## What is here
+
+* `ComplexAnalytic.polyLocalToGerm`: the map itself, which did not exist before. A rational
+  function regular at the origin has a germ, by `IsLocalization.liftAlgHom` and the fact that a
+  polynomial not vanishing at the origin is an invertible germ.
+* `ComplexAnalytic.coe_polyLocalToGerm`: the triangle — the germ of such a function, read as a
+  formal power series, is its Taylor expansion. This is what makes `ℂ[x]_{(x)} → ℂ{x} → ℂ⟦x⟧` a
+  scalar tower, which is what the descent consumes.
+* `ComplexAnalytic.coe_ofMvPolynomial_zero`: at the origin the germ of a polynomial is the
+  polynomial. It is stated here rather than beside `LocalOkaRing.ofMvPolynomial` in
+  `Oka/Polynomial/Germ.lean` only because the proof names `LocalOkaRing.coord`, which lives in
+  `Oka/MaximalIdeal.lean` and is not in that file's import closure.
+
+## What is *not* here
+
+**Everything is at the origin.** Taxis #600 asks for flatness at an arbitrary point `z`, i.e. for
+`ℂ[x]_{ker (eval z)} → 𝒪_{ℂ^ι, z}`. The algebraic side translates by the automorphism `xᵢ ↦ xᵢ +
+zᵢ`; the analytic side does not, because **this development has no germ ring at a point other
+than the origin** — `LocalOkaRing ι` is the germs at `0` by construction. A general-point
+statement therefore needs a definition first, and is not merely a translation of this one.
+
+**This is not GAGA**, and it is not the exactness of analytification on coherent sheaves. It is
+the local input those arguments consume.
+
+## References
+
+- [Hans Grauert and Reinhold Remmert, *Coherent analytic sheaves*][grauert-remmert1984], §A
+-/
+
+open MvPowerSeries IsLocalRing
+
+universe u
+
+noncomputable section
+
+namespace ComplexAnalytic
+
+variable {ι : Type u} [Fintype ι]
+
+/-! ### At the origin, the germ of a polynomial is the polynomial -/
+
+/-- The germ at the origin of the `i`-th coordinate function is the `i`-th coordinate. -/
+theorem ofMvPolynomial_zero_X (i : ι) :
+    LocalOkaRing.ofMvPolynomial (0 : ι → ℂ) (MvPolynomial.X i) = LocalOkaRing.coord i := by
+  refine OkaRing.germ_eq_of_represents (U := ⊤) (y := 0) trivial ?_
+  rw [LocalOkaRing.coe_coord]
+  refine (MvPowerSeries.represents_X i).congr (Filter.Eventually.of_forall fun z ↦ ?_)
+  change z i = (OkaRing.ofMvPolynomial ⊤ (MvPolynomial.X i)).toGlobalFun ⊤ (z + 0)
+  rw [OkaRing.toGlobalFun_ofMvPolynomial (U := ⊤) trivial]
+  simp
+
+/-- **At the origin, the germ of a polynomial is the polynomial**, read as a power series.
+
+Both sides are `ℂ`-algebra maps out of `MvPolynomial`, so this is `MvPolynomial.algHom_ext` and
+the value at a variable. It is what makes the local ring of `𝔸^ι` at the origin, the germ ring
+and the formal power series comparable: all three agree on polynomials. -/
+theorem coe_ofMvPolynomial_zero (p : MvPolynomial ι ℂ) :
+    ((LocalOkaRing.ofMvPolynomial (0 : ι → ℂ) p : LocalOkaRing ι) : MvPowerSeries ι ℂ) =
+      (p : MvPowerSeries ι ℂ) := by
+  have h : (localOkaSubring ι).val.comp (LocalOkaRing.ofMvPolynomial (0 : ι → ℂ)) =
+      MvPolynomial.coeToMvPowerSeries.algHom ℂ := by
+    refine MvPolynomial.algHom_ext fun i ↦ ?_
+    rw [AlgHom.comp_apply, ofMvPolynomial_zero_X, Subalgebra.val_apply, LocalOkaRing.coe_coord]
+    simp
+  exact congrArg (fun f : MvPolynomial ι ℂ →ₐ[ℂ] MvPowerSeries ι ℂ ↦ f p) h
+
+/-! ### The local ring of affine space maps to the germs -/
+
+/-- **A rational function regular at the origin has a germ**: the local ring of `𝔸^ι` at the
+origin maps to the ring of germs of holomorphic functions.
+
+This is the map whose flatness is the analytic input to GAGA, and it did not exist before: a
+polynomial not vanishing at the origin is an invertible *germ*
+(`LocalOkaRing.isUnit_ofMvPolynomial_iff`), so the localisation's universal property applies. -/
+def polyLocalToGerm : polyLocal ι →ₐ[ℂ] LocalOkaRing ι :=
+  IsLocalization.liftAlgHom (M := (MvPolynomial.idealOfVars ι ℂ).primeCompl)
+    (f := LocalOkaRing.ofMvPolynomial (0 : ι → ℂ)) fun y ↦
+      (LocalOkaRing.isUnit_ofMvPolynomial_iff _ _).mpr fun hcon ↦ y.2 (by
+        have hy : (y : MvPolynomial ι ℂ) ∈ RingHom.ker (MvPolynomial.eval fun _ : ι ↦ (0 : ℂ)) :=
+          RingHom.mem_ker.mpr hcon
+        rwa [← MvPolynomial.idealOfVars_eq_ker_eval_zero] at hy)
+
+@[simp]
+theorem polyLocalToGerm_algebraMap (q : MvPolynomial ι ℂ) :
+    polyLocalToGerm (algebraMap (MvPolynomial ι ℂ) (polyLocal ι) q) =
+      LocalOkaRing.ofMvPolynomial (0 : ι → ℂ) q :=
+  IsLocalization.lift_eq _ q
+
+theorem val_comp_polyLocalToGerm :
+    ((localOkaSubring ι).val.comp (polyLocalToGerm (ι := ι))).toRingHom =
+      (polyLocalToMvPowerSeries (ι := ι)).toRingHom := by
+  refine IsLocalization.ringHom_ext (MvPolynomial.idealOfVars ι ℂ).primeCompl ?_
+  refine RingHom.ext fun q ↦ ?_
+  change ((polyLocalToGerm (algebraMap (MvPolynomial ι ℂ) (polyLocal ι) q) :
+    LocalOkaRing ι) : MvPowerSeries ι ℂ) = _
+  rw [polyLocalToGerm_algebraMap, coe_ofMvPolynomial_zero]
+  exact (polyLocalToMvPowerSeries_algebraMap q).symm
+
+/-- **The triangle**: the germ of a rational function regular at the origin is, as a formal
+power series, its Taylor expansion.
+
+Without this the two maps out of `ℂ[x]_{(x)}` — into the germs and into the formal power series —
+would be unrelated, and there would be no scalar tower for the descent to run in. -/
+theorem coe_polyLocalToGerm (a : polyLocal ι) :
+    ((polyLocalToGerm a : LocalOkaRing ι) : MvPowerSeries ι ℂ) = polyLocalToMvPowerSeries a :=
+  RingHom.congr_fun val_comp_polyLocalToGerm a
+
+/-! ### Flatness -/
+
+/-- An isomorphism is a local homomorphism. -/
+theorem isLocalHom_polyLocalAdicCompletionEquiv {ι : Type u} [Finite ι] :
+    IsLocalHom (polyLocalAdicCompletionEquiv (ι := ι)).toAlgHom.toRingHom :=
+  ⟨fun a h ↦ by
+    simpa using h.map (polyLocalAdicCompletionEquiv (ι := ι)).symm.toAlgHom.toRingHom⟩
+
+/-- The Taylor expansion of a rational function regular at the origin is a **local**
+homomorphism, because it is the canonical map into a completion read through an isomorphism. -/
+theorem isLocalHom_polyLocalToMvPowerSeries {ι : Type u} [Finite ι] :
+    IsLocalHom (polyLocalToMvPowerSeries (ι := ι)).toRingHom := by
+  haveI := isLocalHom_polyLocalAdicCompletionEquiv (ι := ι)
+  rw [← algHom_comp_algebraMap_eq]
+  exact RingHom.isLocalHom_comp _ _
+
+/-- A rational function regular at the origin whose germ is invertible does not vanish at the
+origin: `ComplexAnalytic.polyLocalToGerm` is a local homomorphism. -/
+theorem isLocalHom_polyLocalToGerm : IsLocalHom (polyLocalToGerm (ι := ι)).toRingHom := by
+  haveI : IsLocalHom (((localOkaSubring ι).val.toRingHom).comp
+      (polyLocalToGerm (ι := ι)).toRingHom) := by
+    rw [show ((localOkaSubring ι).val.toRingHom).comp (polyLocalToGerm (ι := ι)).toRingHom =
+      (polyLocalToMvPowerSeries (ι := ι)).toRingHom from val_comp_polyLocalToGerm]
+    exact isLocalHom_polyLocalToMvPowerSeries
+  exact isLocalHom_of_comp _ ((localOkaSubring ι).val.toRingHom)
+
+/-- **The germs are flat over the local ring of `𝔸^ι` at the origin.**
+
+By descent along the middle ring of `ℂ[x]_{(x)} → ℂ{x} → ℂ⟦x⟧`: the formal power series are flat
+over the first and faithfully flat over the second, and a faithfully flat extension reflects
+injectivity. No local criterion for flatness is used; see the module docstring. -/
+theorem flat_polyLocalToGerm : (polyLocalToGerm (ι := ι)).toRingHom.Flat := by
+  letI : Algebra (polyLocal ι) (LocalOkaRing ι) := (polyLocalToGerm (ι := ι)).toRingHom.toAlgebra
+  letI : Algebra (polyLocal ι) (MvPowerSeries ι ℂ) :=
+    (polyLocalToMvPowerSeries (ι := ι)).toRingHom.toAlgebra
+  haveI : IsScalarTower (polyLocal ι) (LocalOkaRing ι) (MvPowerSeries ι ℂ) :=
+    IsScalarTower.of_algebraMap_eq fun a ↦ (coe_polyLocalToGerm a).symm
+  haveI : Module.Flat (polyLocal ι) (MvPowerSeries ι ℂ) := flat_polyLocalToMvPowerSeries
+  exact Module.Flat.of_faithfullyFlat_tower (polyLocal ι) (LocalOkaRing ι) (MvPowerSeries ι ℂ)
+
+/-- **The germs are faithfully flat over the local ring of `𝔸^ι` at the origin**: the analytic
+input to GAGA, at the origin.
+
+Faithfulness costs nothing beyond flatness here, because both rings are local and
+`ComplexAnalytic.polyLocalToGerm` is a local homomorphism. -/
+theorem faithfullyFlat_polyLocalToGerm : (polyLocalToGerm (ι := ι)).toRingHom.FaithfullyFlat := by
+  letI : Algebra (polyLocal ι) (LocalOkaRing ι) := (polyLocalToGerm (ι := ι)).toRingHom.toAlgebra
+  haveI : Module.Flat (polyLocal ι) (LocalOkaRing ι) := flat_polyLocalToGerm
+  haveI : IsLocalHom (algebraMap (polyLocal ι) (LocalOkaRing ι)) := isLocalHom_polyLocalToGerm
+  exact Module.FaithfullyFlat.of_flat_of_isLocalHom
+
+end ComplexAnalytic
