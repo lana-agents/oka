@@ -81,8 +81,9 @@ a bijection onto `Γ(Z, 𝒪_Z)`, not onto `ULift (Fin 1) → Γ(Z, 𝒪_Z)`. Th
   `ComplexAnalytic.AnalyticSpace.hom_ext_complexAffineSpace` says they are equal. That is
   `ComplexAnalytic.AnalyticSpace.restrictLE_comp_eq`. **It is also why the two
   independence-of-choices arguments the original plan for this theorem called for are not
-  needed**, and why `ComplexAnalytic.AnalyticAt.dslope_comp`, built for one of them, is still
-  consumed by nothing.
+  needed**: uniqueness on an overlap replaces both. `AnalyticAt.dslope_comp` was built for one of
+  them and is consequently unused; its disposition is recorded in the `## Status` section of
+  `Oka/Analytic/DividedDifference.lean` and should be read there rather than re-derived here.
 * **The glued morphism must be recognised as a morphism of *analytic* spaces**, and its
   coordinate pullback must be recognised as `g`. Both are equalities of global sections that
   hold on each member of the cover, so both are
@@ -108,7 +109,7 @@ general, over nothing larger. Two seams follow, and they are not symmetric.
 `U.isOpenEmbedding.isOpenMap.functor.obj ⊤ = U` and transport along it. Getting that equation is
 not the difficulty — it is `TopologicalSpace.Opens.isOpenEmbedding_obj_top`, a Mathlib `@[simp]`
 lemma. **Transporting along it is**, and it is never necessary:
-`AlgebraicGeometry.LocallyRingedSpace.germ_res_apply` moves a germ across a `≤`, and the two
+`TopCat.Presheaf.germ_res_apply` moves a germ across a `≤`, and the two
 inequalities one needs — `functor.obj O ≤ U` and `O ≤ (Opens.map ι).obj (functor.obj O)` — are
 the `.le` of that same `@[simp]` lemma and the unit of `IsOpenMap.adjunction`. Every predicted
 transport evaporates.

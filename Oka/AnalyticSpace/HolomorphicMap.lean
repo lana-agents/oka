@@ -51,7 +51,10 @@ Two things are then missing, and neither is in this repository or in Mathlib:
   `AnalyticAt.dslope_comp` of `Oka/Analytic/DividedDifference.lean` exists for: two lifts differ
   by a section of the
   ideal cutting out the chart, and `h ∘ G - h ∘ G' = (G - G') · dslope h G' G` therefore lies in
-  that ideal too. That file is deliberately not imported here: nothing below uses it.
+  that ideal too. **That route was not the one taken** — uniqueness on an overlap replaced both
+  independence arguments — so this paragraph records the plan rather than the outcome; the
+  disposition of that lemma is the `## Status` section of `Oka/Analytic/DividedDifference.lean`.
+  That file is deliberately not imported here: nothing below uses it.
 
 ## Main definitions
 

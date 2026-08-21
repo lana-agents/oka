@@ -56,6 +56,37 @@ several complex variables is analytic. That is why Hartogs does not arise.
 - `sub_eq_mul_dividedDifference`: the divided-difference identity for the Cauchy-kernel formula,
   proved directly and used to identify it with `dslope`.
 
+## Status: no consumer in this repository, and that is expected
+
+**No proof in `Oka/` uses `AnalyticAt.dslope_comp`, and it should not be deleted on that
+account.** It is exercised non-vacuously in `OkaTest/DividedDifference.lean`
+(`analyticAt_dslope_comp_sq`, together with `analyticAt_dslope_comp_sq_eq` naming the resulting
+function as `z + z ^ 3`), and cited in the module docstrings of
+`Oka/AnalyticSpace/HolomorphicMap.lean` and `Oka/AnalyticSpace/HolomorphicMapGeneral.lean`. What
+it has no consumer *for* is a proof in the library. It was built for the
+independence-of-lift step that `Hom(Z, ℂ) ≃ Γ(Z, 𝒪_Z)` was expected to need: two lifts of the
+same section differ by an element of the ideal cutting out the chart, and `h(G) - h(G')` has to
+be shown to lie in that ideal, for which the cofactor `dslope h (G ·) (G' ·)` must be
+holomorphic. **That route was abandoned**:
+`ComplexAnalytic.AnalyticSpace.hom_ext_complexAffineSpace` discharges the compatibility directly,
+once `ComplexAnalytic.AnalyticSpace.restrict` makes a chart overlap an analytic space, so no
+independence argument is needed at all. The analytification programme, the last place a consumer
+could have appeared, does not use it either.
+
+**What is here is nevertheless general one-variable complex analysis that Mathlib does not have.**
+Nothing in this file mentions analytic spaces, sheaves or anything else from this repository;
+`AnalyticAt.dslope_comp` is stated over an arbitrary `ℂ`-normed space. Every `dslope` lemma in
+Mathlib fixes the first argument and varies the second, so the statement about the *pair* is
+absent there — checked by conclusion rather than by name. So the absence of an in-repo consumer is
+what an upstreaming candidate looks like, not what dead code looks like, and this paragraph exists
+so that the observation is not re-reported a sixth time in place of a decision.
+
+**For a future upstreaming pass**, the file should be split rather than moved whole:
+`analyticAt_dslope_pair` belongs beside `Mathlib/Analysis/Calculus/DSlope.lean`, and
+`dividedDifference` with its Cauchy-kernel lemmas belongs wherever
+`Oka/Analytic/ParametricCircleIntegral.lean` ends up, since it is about the several-variables
+Cauchy formula as much as about `dslope`.
+
 ## References
 
 - [Lars Hörmander, *An introduction to complex analysis in several variables*][hormander1990],
@@ -250,7 +281,12 @@ theorem analyticAt_dslope_pair (hR : 0 < R) (hd : DifferentiableOn ℂ h (closed
 If `G` and `G'` are analytic at `z₀` with values there in the disc on which `h` is holomorphic,
 then `z ↦ dslope h (G z) (G' z)` is analytic at `z₀`. This is `analyticAt_dslope_pair` composed
 with `AnalyticAt.pi`, and it is the form in which joint analyticity is consumed: with only the
-one-variable `dslope` lemmas of Mathlib, `G'` would have to be constant. -/
+one-variable `dslope` lemmas of Mathlib, `G'` would have to be constant.
+
+**No proof in the library uses this, and none is expected to**: the argument it was built for was
+abandoned in favour of a uniqueness argument. It is exercised in `OkaTest/DividedDifference.lean`
+and retained as a Mathlib upstreaming candidate; see `## Status` in the module docstring, which is
+the disposition rather than a fresh observation. -/
 theorem AnalyticAt.dslope_comp {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E]
     {G G' : E → ℂ} {z₀ : E} (hR : 0 < R) (hd : DifferentiableOn ℂ h (closedBall 0 R))
     (hG : AnalyticAt ℂ G z₀) (hG' : AnalyticAt ℂ G' z₀) (hGb : ‖G z₀‖ < R)
