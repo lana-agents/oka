@@ -81,8 +81,9 @@ a bijection onto `Γ(Z, 𝒪_Z)`, not onto `ULift (Fin 1) → Γ(Z, 𝒪_Z)`. Th
   `ComplexAnalytic.AnalyticSpace.hom_ext_complexAffineSpace` says they are equal. That is
   `ComplexAnalytic.AnalyticSpace.restrictLE_comp_eq`. **It is also why the two
   independence-of-choices arguments the original plan for this theorem called for are not
-  needed**, and why `AnalyticAt.dslope_comp`, built for one of them, is still
-  consumed by nothing.
+  needed**: uniqueness on an overlap replaces both. `AnalyticAt.dslope_comp` was built for one of
+  them and is consequently unused; its disposition is recorded in the `## Status` section of
+  `Oka/Analytic/DividedDifference.lean` and should be read there rather than re-derived here.
 * **The glued morphism must be recognised as a morphism of *analytic* spaces**, and its
   coordinate pullback must be recognised as `g`. Both are equalities of global sections that
   hold on each member of the cover, so both are
