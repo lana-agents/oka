@@ -77,8 +77,8 @@ a bijection onto `Γ(Z, 𝒪_Z)`, not onto `ULift (Fin 1) → Γ(Z, 𝒪_Z)`. Th
   subspace inclusions is not an analytic space, so the compatibility hypothesis of the older
   lemma cannot be met by the tool meant to meet it.
 * **The compatibility itself is uniqueness, not a computation.** Two local morphisms restricted
-  to an overlap have the same coordinate pullback there — both are `g` restricted — so
-  `ComplexAnalytic.AnalyticSpace.hom_ext_complexLine` says they are equal. That is
+  to an overlap have the same `j`-th coordinate pullback there — both are `g j` restricted — so
+  `ComplexAnalytic.AnalyticSpace.hom_ext_complexAffineSpace` says they are equal. That is
   `ComplexAnalytic.AnalyticSpace.restrictLE_comp_eq`. **It is also why the two
   independence-of-choices arguments the original plan for this theorem called for are not
   needed**, and why `ComplexAnalytic.AnalyticAt.dslope_comp`, built for one of them, is still
@@ -165,8 +165,8 @@ theorem coordPullback_restrictLE_comp (Z : AnalyticSpace.{u}) {m : ℕ}
     ((congrArg (fun a ↦ (LocallyRingedSpace.Γ.map
         (Z.toLocallyRingedSpace.restrictLE h).op).hom a) hψ).trans (Z.resΓ_restrictLE h g))
 
-/-- **Restricting a global morphism to `ℂ` supplies the local data**, with the local section
-being the restriction of the global one.
+/-- **Restricting a global morphism to `ℂ^m` supplies the local data**, with the local sections
+being the restrictions of the global ones.
 
 This is `ComplexAnalytic.AnalyticSpace.coordPullback_comp` for the inclusion of an open
 subspace, and it is what makes the hypothesis of
@@ -178,14 +178,15 @@ theorem coordPullback_ofRestrict_comp (Z : AnalyticSpace.{u}) {m : ℕ} (U : Z.O
       Z.resΓ U (AnalyticSpace.coordPullback φ j) :=
   AnalyticSpace.coordPullback_comp (Z.ofRestrict U) φ j
 
-/-- **Two local morphisms to `ℂ` whose coordinate pullbacks are the restrictions of one global
-section agree on the overlap.**
+/-- **Two local morphisms to `ℂ^m` whose coordinate pullbacks are the restrictions of one
+global family of sections agree on the overlap.**
 
 This is the compatibility hypothesis of
 `AlgebraicGeometry.LocallyRingedSpace.existsUnique_glueMorphisms_of_opens`, and it is discharged
-by *uniqueness*: both restricted morphisms pull the coordinate back to `g` restricted to
-`V ⊓ W`, and `ComplexAnalytic.AnalyticSpace.hom_ext_complexLine` applies because `Z|(V ⊓ W)` is
-an analytic space. No agreement of the two morphisms is assumed and none is computed. -/
+by *uniqueness*: both restricted morphisms pull the `j`-th coordinate back to `g j` restricted to
+`V ⊓ W`, and `ComplexAnalytic.AnalyticSpace.hom_ext_complexAffineSpace` applies because
+`Z|(V ⊓ W)` is an analytic space. No agreement of the two morphisms is assumed and none is
+computed. -/
 theorem restrictLE_comp_eq (Z : AnalyticSpace.{u}) {m : ℕ}
     (g : ULift.{u} (Fin m) → Z.presheaf.obj (op ⊤))
     {V W : Z.Opens} (ψV : Z.restrict V ⟶ AnalyticSpace.complexAffineSpace.{u} m)
