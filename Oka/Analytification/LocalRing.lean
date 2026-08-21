@@ -58,6 +58,14 @@ lemmas).
 of a Noetherian local ring is flat over it (`AdicCompletion.flat_of_isNoetherian`, with the
 Hilbert basis theorem supplying Noetherianness), and that completion is `ℂ⟦x⟧`.
 
+**Everything here is at the origin, and taxis #730 asks for an arbitrary point.** For
+`p = ker (eval z)` the same statements hold, by the automorphism of `ℂ[x]` sending `xᵢ` to
+`xᵢ + zᵢ`, which carries `p` to the ideal of variables; that translation is **not done here**.
+It is not currently worth doing: the *analytic* local ring of this development is
+`LocalOkaRing ι`, the germs at the **origin**, so a statement about `ℂ[x]_{p}` at a general `z`
+would have no partner to be compared with. `Oka/ChangeOfCoordinates.lean` is where the germ-ring
+side of such a translation would come from.
+
 **This is not yet the flatness of `𝒪_{𝔸^ι, 0} → 𝒪_{ℂ^ι, 0}`** — the map to the *germ* ring, which
 is what a GAGA argument consumes. What is missing is one descent step: `ℂ{x} → ℂ⟦x⟧` is
 faithfully flat (`LocalOkaRing.instFaithfullyFlat`, `Oka/Completion.lean`) and `ℂ[x]_{(x)} →
