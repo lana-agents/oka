@@ -34,6 +34,15 @@ coherence statement for arbitrary complex analytic spaces:
   division by the classical induction on the number of variables.
 * **Unique factorisation.** The germ ring is a unique factorisation domain
   (`Oka/UFD.lean`), the second algebraic consequence of Weierstrass preparation.
+* **The completion of the germ ring.** The `𝔪`-adic completion of the ring of convergent power
+  series is the ring of **formal** power series, by the isomorphism induced by the inclusion
+  (`Oka/Completion.lean`). The analytic content is the agreement of the truncations, the
+  local-algebra item above; this is the passage to the limit. Since the completion of a Noetherian
+  local ring is faithfully flat over it, `MvPowerSeries ι ℂ` is **faithfully flat** over
+  `LocalOkaRing ι` — so a germ that lies **formally** in an ideal of germs lies in it already, and
+  a germ formally divisible by a coordinate is divisible by it with a convergent cofactor. This is
+  *not* the flatness of `𝒪_{𝔸^n, z} → 𝒪_{ℂ^n, z}`, the input to GAGA, which needs two further
+  steps and is not proved.
 * **Regularity and dimension.** The germ ring in `n` variables is a regular local ring of Krull
   dimension `n` (`Oka/Regular.lean`), the third. The dimension is computed by cutting with one
   coordinate at a time; the induction step is the isomorphism

@@ -8,8 +8,8 @@ import Oka
 /-!
 # Axiom regression tests: general commutative ring theory
 
-The mirror-tree results about local rings with a coefficient field. Nothing here mentions
-anything complex-analytic.
+The mirror-tree results about local rings with a coefficient field, and about adic completions.
+Nothing here mentions anything complex-analytic.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -22,3 +22,13 @@ info: 'IsLocalRing.IsCoefficientField.ringHom_ext' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms IsLocalRing.IsCoefficientField.ringHom_ext
+
+
+/-! ### The projections of an adic completion -/
+
+/--
+info: 'AdicCompletion.factorPow_evalₐ' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AdicCompletion.factorPow_evalₐ
