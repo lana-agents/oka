@@ -30,6 +30,7 @@ import Oka.AnalyticSpace.OpenSubspace
 import Oka.AnalyticSpace.Relations
 import Oka.AnalyticSpace.Restrict
 import Oka.Analytification.AffineSpace
+import Oka.Analytification.LocalRing
 import Oka.Analytification.Presentation
 import Oka.Analytification.UniversalProperty
 import Oka.CategoryTheory.Abelian.Basic
@@ -61,6 +62,8 @@ import Oka.RingTheory.AdicCompletion.Algebra
 import Oka.RingTheory.Filtration
 import Oka.RingTheory.Ideal.Maps
 import Oka.RingTheory.LocalRing.ResidueField.Basic
+import Oka.RingTheory.Localization.Ideal
+import Oka.RingTheory.MvPolynomial.Ideal
 import Oka.StalkEquiv
 import Oka.Statement
 import Oka.StructureSheaf

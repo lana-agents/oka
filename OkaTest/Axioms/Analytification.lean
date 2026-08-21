@@ -9,7 +9,8 @@ import Oka
 # Axiom regression tests: Analytification
 
 The comparison morphisms of `Oka/Analytification/`: `ℂ^ι ⟶ Spec (MvPolynomial ι ℂ)` and its
-map on stalks, and `X^an ⟶ Spec (ℂ[x]/I)` for a presented affine `ℂ`-algebra.
+map on stalks, `X^an ⟶ Spec (ℂ[x]/I)` for a presented affine `ℂ`-algebra, and the local ring of
+`𝔸^ι` at the origin with its completion.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -193,3 +194,37 @@ info: 'ComplexAnalytic.analytificationIsoOfPresentationIdealEq' depends on axiom
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.analytificationIsoOfPresentationIdealEq
+
+/-! ### The local ring at the origin and its completion
+
+`Oka/Analytification/LocalRing.lean`. `polyLocalAdicCompletionEquiv_of_algebraMap` is guarded
+alongside the isomorphism because it is what says the isomorphism is the one induced by the
+inclusion of polynomials. -/
+
+/--
+info: 'ComplexAnalytic.polyLocalToMvPowerSeries' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.polyLocalToMvPowerSeries
+
+/--
+info: 'ComplexAnalytic.polyLocalAdicCompletionEquiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.polyLocalAdicCompletionEquiv
+
+/--
+info: 'ComplexAnalytic.polyLocalAdicCompletionEquiv_of_algebraMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.polyLocalAdicCompletionEquiv_of_algebraMap
+
+/--
+info: 'ComplexAnalytic.flat_polyLocalToMvPowerSeries' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.flat_polyLocalToMvPowerSeries
