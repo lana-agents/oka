@@ -151,6 +151,16 @@ coherence statement for arbitrary complex analytic spaces:
   series. The flatness of `ℂ[x]_{(x)} → ℂ{x}` that GAGA needs does *not* follow yet: the algebra
   map between those two rings has not been built.
 
+* **The analytic input to GAGA, at the origin.** The ring of germs `ℂ{x}` is **faithfully flat**
+  over the local ring `ℂ[x]_{(x)}` of `𝔸^ι_ℂ` at the origin (`Oka/Analytification/Flatness.lean`)
+  — so a system of polynomial equations solvable by germs is solvable by rational functions
+  regular at the origin, and a rational function is determined by its germ. **The classical local
+  criterion for flatness is not used and is not needed**: the two rings have the *same*
+  completion, `ℂ⟦x⟧`, which is flat over the first and faithfully flat over the second, and
+  flatness descends along a faithfully flat extension of the middle ring of a tower. Only the
+  origin is treated, because the germ ring of this development is the germs at the origin; and
+  this is the *input* to GAGA, not GAGA.
+
 * **Comparison with algebraic geometry.** The canonical morphism of locally ringed spaces from
   `ℂ^ι` to `Spec (MvPolynomial ι ℂ)`, with its point map identified as `z ↦ ker (eval z)`, shown
   injective and landing in the closed points, and its stalk map identified as the

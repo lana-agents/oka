@@ -90,10 +90,16 @@ exists. (Write it as `change`, not `show`: a goal-changing `show` is flagged by
 
 ## What is not here
 
-**Flatness** of the stalk map, which is the analytic input to GAGA. It is not proved, and the
-comparison is not complete without it. Note that `Module.Flat` cannot even be *stated* for this
-map without the `Algebra` instance above, so the two instances in the `Stalk` section below are a
-prerequisite for that work rather than decoration.
+**Flatness of the stalk map as stated here.** The analytic input to GAGA is now proved, but in
+a different spelling: `Oka/Analytification/Flatness.lean` shows that `ℂ{x}` is faithfully flat
+over `ℂ[x]_{(x)}`, i.e. over `Localization.AtPrime (MvPolynomial.idealOfVars ι ℂ)`, **at the
+origin**, as a statement about honest rings with no `Spec` stalk in it. Two things are missing
+before that becomes a statement about *this* morphism's stalk map: the identification of the
+source stalk with that localisation — which is the packaging `Oka/Analytification/AffineSpace.lean`
+and #599 could not do, for the transparency reason recorded above — and any point other than the
+origin, where this development has no germ ring at all. Note that `Module.Flat` cannot be
+*stated* for the stalk map without the `Algebra` instance above, so the two instances in the
+`Stalk` section below remain a prerequisite for that packaging rather than decoration.
 -/
 
 open CategoryTheory Opposite AlgebraicGeometry TopologicalSpace

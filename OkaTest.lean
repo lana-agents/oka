@@ -22,6 +22,7 @@ import OkaTest.DividedDifference
 import OkaTest.EpiIsLocallySurjective
 import OkaTest.EvalContinuous
 import OkaTest.Factorisation
+import OkaTest.GermFlatness
 import OkaTest.GlueMorphisms
 import OkaTest.HolomorphicMap
 import OkaTest.HolomorphicMapGeneral
