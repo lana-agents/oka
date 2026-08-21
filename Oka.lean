@@ -30,6 +30,7 @@ import Oka.AnalyticSpace.OpenSubspace
 import Oka.AnalyticSpace.Relations
 import Oka.AnalyticSpace.Restrict
 import Oka.Analytification.AffineSpace
+import Oka.Analytification.ChangeOfVariables
 import Oka.Analytification.Flatness
 import Oka.Analytification.LocalRing
 import Oka.Analytification.Presentation
