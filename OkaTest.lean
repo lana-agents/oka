@@ -1,4 +1,5 @@
 import OkaTest.Analytification
+import OkaTest.AnalytificationChangeOfVariables
 import OkaTest.AnalytificationLocalRing
 import OkaTest.AnalytificationUniversalProperty
 import OkaTest.Axioms

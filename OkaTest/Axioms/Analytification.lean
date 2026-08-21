@@ -262,3 +262,33 @@ info: 'ComplexAnalytic.faithfullyFlat_polyLocalToGerm' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.faithfullyFlat_polyLocalToGerm
+
+/-! ### Presentation-independence -/
+
+/--
+info: 'ComplexAnalytic.eval₂Hom_transported' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.eval₂Hom_transported
+
+/--
+info: 'ComplexAnalytic.analytificationMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationMap
+
+/--
+info: 'ComplexAnalytic.analytificationMap_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationMap_comp
+
+/--
+info: 'ComplexAnalytic.analytificationIsoOfPresHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationIsoOfPresHom
