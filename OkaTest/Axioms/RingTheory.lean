@@ -8,8 +8,8 @@ import Oka
 /-!
 # Axiom regression tests: general commutative ring theory
 
-The mirror-tree results about local rings with a coefficient field, and about adic completions.
-Nothing here mentions anything complex-analytic.
+The mirror-tree results about local rings with a coefficient field, about adic completions, and
+about localising at a maximal ideal. Nothing here mentions anything complex-analytic.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -32,3 +32,26 @@ info: 'AdicCompletion.factorPow_evalₐ' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AdicCompletion.factorPow_evalₐ
+
+/-! ### Recognising a ring as an adic completion, and localising at a maximal ideal -/
+
+/--
+info: 'AdicCompletion.equivOfQuotientEquiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AdicCompletion.equivOfQuotientEquiv
+
+/--
+info: 'IsLocalization.quotientPowAtPrimeEquiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms IsLocalization.quotientPowAtPrimeEquiv
+
+/--
+info: 'MvPolynomial.idealOfVars.isMaximal' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms MvPolynomial.idealOfVars.isMaximal

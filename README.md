@@ -142,6 +142,15 @@ coherence statement for arbitrary complex analytic spaces:
   `ℂ²` — a morphism produced by a general theorem and then recognised as one that was
   constructed by hand.
 
+* **The local ring of affine space at the origin.** The polynomials localised at the ideal of
+  variables have completion `MvPowerSeries ι ℂ` — the same ring as the completion of the germ
+  ring, by the isomorphism induced by the inclusion of polynomials
+  (`Oka/Analytification/LocalRing.lean`). Localising changes nothing modulo `𝔪 ^ k`, because
+  everything outside a maximal ideal is already invertible there. Consequently **`ℂ⟦x⟧` is flat
+  over `ℂ[x]_{(x)}`**, and a rational function regular at the origin is determined by its Taylor
+  series. The flatness of `ℂ[x]_{(x)} → ℂ{x}` that GAGA needs does *not* follow yet: the algebra
+  map between those two rings has not been built.
+
 * **Comparison with algebraic geometry.** The canonical morphism of locally ringed spaces from
   `ℂ^ι` to `Spec (MvPolynomial ι ℂ)`, with its point map identified as `z ↦ ker (eval z)`, shown
   injective and landing in the closed points, and its stalk map identified as the
