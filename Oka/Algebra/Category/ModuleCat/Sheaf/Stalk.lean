@@ -34,8 +34,8 @@ in `AlgebraicGeometry.LocallyRingedSpace.ringSheaf`'s docstring: **a definitiona
 
 **What the seam costs this file is one instance:
 `CategoryTheory.Limits.PreservesFiniteLimits (TopCat.Sheaf.stalkFunctor X x)`.** Delete it,
-re-elaborate the file, and the `SheafOfModules.stalkFunctor` instance below it fails with
-`failed to synthesize PreservesFiniteLimits (Sheaf.stalkFunctor X x)`.
+re-elaborate the file, and the `SheafOfModules.stalkFunctorAddCommGrp` instance below it fails
+with `failed to synthesize PreservesFiniteLimits (Sheaf.stalkFunctor X x)`.
 
 `(TopCat.Sheaf.stalkFunctor X x).Additive` is a transport across the same seam, and it too is
 genuinely not found by search — `inferInstance` on it fails if the declaration below is removed.
@@ -65,8 +65,8 @@ elaborates and then fails to find `PreservesZeroMorphisms`.
 
 - `TopCat.Sheaf.stalkFunctor`: the stalk at `x` of a sheaf of abelian groups on `X`, as a
   functor, at the `CategoryTheory.Sheaf` spelling of the site.
-- `SheafOfModules.stalkFunctor`: the stalk at `x` of a sheaf of modules on `X`, as a functor to
-  `AddCommGrpCat`.
+- `SheafOfModules.stalkFunctorAddCommGrp`: the stalk at `x` of a sheaf of modules on `X`, as a
+  functor to `AddCommGrpCat`.
 
 ## Main results
 
@@ -118,8 +118,8 @@ noncomputable instance (x : X) : (TopCat.Sheaf.stalkFunctor X x).Additive :=
     TopCat.Presheaf.stalkFunctor AddCommGrpCat.{u} x).Additive)
 
 /-- The stalk functor preserves finite limits. **This is the one instance the site spelling
-costs**: without it the `SheafOfModules.stalkFunctor` instance below fails to synthesize. See
-the module docstring. -/
+costs**: without it the `SheafOfModules.stalkFunctorAddCommGrp` instance below fails to
+synthesize. See the module docstring. -/
 noncomputable instance (x : X) : PreservesFiniteLimits (TopCat.Sheaf.stalkFunctor X x) :=
   inferInstanceAs (PreservesFiniteLimits (TopCat.Sheaf.forget AddCommGrpCat.{u} X ⋙
     TopCat.Presheaf.stalkFunctor AddCommGrpCat.{u} x))
@@ -137,17 +137,21 @@ theorem TopCat.Sheaf.exact_iff_stalk_exact
     S.Exact ↔ ∀ x : X, (S.map (TopCat.Sheaf.stalkFunctor X x)).Exact :=
   TopCat.Sheaf.exact_iff_stalkFunctor_map_exact S
 
-/-- **The stalk at `x`, as a functor on sheaves of modules on `X`.**
+/-- **The stalk at `x`, as a functor on sheaves of modules on `X`, valued in abelian groups.**
 
-Valued in `AddCommGrpCat` rather than in modules over the stalk of the sheaf of rings: the
-module structure is `Mathlib/Algebra/Category/ModuleCat/Stalk.lean`'s and is available on the
-object, but the functor to abelian groups is what detects exactness and is what this file is
-for. -/
-noncomputable abbrev SheafOfModules.stalkFunctor (x : X) :
+The module structure on the stalk is
+`Mathlib/Algebra/Category/ModuleCat/Stalk.lean`'s and is available on the object; the functor to
+abelian groups is what detects exactness, which is what this file is for. **The name carries
+`AddCommGrp` because the unqualified `SheafOfModules.stalkFunctor` is the module-valued stalk
+functor**, in `Oka/Algebra/Category/ModuleCat/Sheaf/PullbackStalk.lean` — that is the one a
+reader expects under the plain name, and it is what the base-change theorem is a statement
+about. -/
+noncomputable abbrev SheafOfModules.stalkFunctorAddCommGrp (x : X) :
     SheafOfModules.{u} R ⥤ AddCommGrpCat.{u} :=
   SheafOfModules.toSheaf R ⋙ TopCat.Sheaf.stalkFunctor X x
 
-noncomputable instance (x : X) : PreservesFiniteLimits (SheafOfModules.stalkFunctor (R := R) x) :=
+noncomputable instance (x : X) :
+    PreservesFiniteLimits (SheafOfModules.stalkFunctorAddCommGrp (R := R) x) :=
   comp_preservesFiniteLimits _ _
 
 /-- **A short complex of sheaves of modules on a space is exact if it is exact on every stalk.**
@@ -158,6 +162,6 @@ abelian categories that preserves zero morphisms reflects exactness — that is
 spellings agree. **The converse is true and is not here**; see the module docstring for what it
 needs and why the intended consumer does not. -/
 theorem SheafOfModules.exact_of_stalk_exact (S : ShortComplex (SheafOfModules.{u} R))
-    (h : ∀ x : X, (S.map (SheafOfModules.stalkFunctor x)).Exact) : S.Exact :=
+    (h : ∀ x : X, (S.map (SheafOfModules.stalkFunctorAddCommGrp x)).Exact) : S.Exact :=
   Functor.reflects_exact_of_faithful (SheafOfModules.toSheaf R) S
     ((TopCat.Sheaf.exact_iff_stalk_exact (S.map (SheafOfModules.toSheaf R))).mpr h)
