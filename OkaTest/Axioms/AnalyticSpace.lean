@@ -219,3 +219,56 @@ info: 'ComplexAnalytic.AnalyticSpace.ofRestrict' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.ofRestrict
+
+/-! ### Being a complex analytic space is a local condition
+
+`Oka/AnalyticSpace/Local.lean`. -/
+
+/--
+info: 'ComplexAnalytic.HasLocalModels' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.HasLocalModels
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hasLocalModels' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hasLocalModels
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.ofHasLocalModels' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.ofHasLocalModels
+
+/--
+info: 'ComplexAnalytic.HasLocalModels.restrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.HasLocalModels.restrict
+
+/--
+info: 'ComplexAnalytic.HasLocalModels.of_iSup_eq_top' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.HasLocalModels.of_iSup_eq_top
+
+/--
+info: 'ComplexAnalytic.hasLocalModels_iff_iSup_eq_top' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.hasLocalModels_iff_iSup_eq_top
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.ofOpens' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.ofOpens

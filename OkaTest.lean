@@ -1,3 +1,4 @@
+import OkaTest.AnalyticSpaceLocal
 import OkaTest.Analytification
 import OkaTest.AnalytificationChangeOfVariables
 import OkaTest.AnalytificationComparison

@@ -107,6 +107,18 @@ coherence statement for arbitrary complex analytic spaces:
   worked example is **the node minus the origin**, which is a proper open subspace of a singular
   space and is *disconnected*: the two punctured axes are open, disjoint and cover it.
 
+* **Being a complex analytic space is local.** The `local_model` field of
+  `ComplexAnalytic.AnalyticSpace` is isolated as a predicate `ComplexAnalytic.HasLocalModels` on
+  a locally ringed space together with a `ℂ`-algebra structure on its global sections, and it is
+  proved local: a space covered by open subspaces that have charts has charts
+  (`ComplexAnalytic.HasLocalModels.of_iSup_eq_top` in `Oka/AnalyticSpace/Local.lean`), so a
+  locally ringed space covered by analytic open subspaces is an analytic space. The chart the
+  hypothesis supplies lives on a restriction of a restriction and the conclusion wants one on a
+  single restriction; the two are identified by the same construction the open-subspace item
+  above uses. This is what every statement about gluing analytic spaces needs, and it is the
+  half of that problem which is a *property*. The other half — the `ℂ`-algebra structure of a
+  glued space — is **data**, because `algebraMap` lands in global sections, and is not here.
+
 * **Gluing.** Open covers of a locally ringed space, and the gluing of morphisms out of the
   members of one (`Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean`): a locally ringed space
   is the gluing of the members of any open cover of it, so morphisms out of the members which
