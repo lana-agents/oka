@@ -65,11 +65,14 @@ general `PrimeSpectrum`.
 
 ## What is not here
 
-* **Flatness of this stalk map**, which is what the identifications above are for. It needs, in
-  addition, the identification of the *target* `𝒪_{X^an, y}` with the germ ring modulo `I` —
-  `AlgebraicGeometry.LocallyRingedSpace.zeroLocusStalkQuotientEquiv` composed with
-  `okaStalkEquiv` — and the compatibility of the two identifications with the stalk map. See the
-  `## What is not here` section of `Oka/Analytification/FlatnessAtAPoint.lean`.
+* **Flatness of this stalk map**, which is what the identifications above are for. It is not
+  missing: `Oka/Analytification/PresentationFlatness.lean` supplies the remaining piece — the
+  identification of the *target* `𝒪_{X^an, y}` with the germ ring modulo `I`, which is the
+  zero locus construction's stalk computation transported across the restriction of `ℂ^n` to
+  `⊤` — together with the compatibility of the two identifications with
+  the stalk map, and concludes `ComplexAnalytic.faithfullyFlat_stalkMap_analytificationToSpec`.
+  **`ComplexAnalytic.analytificationStalkQuotEquiv` is the source half of that argument**, and is
+  the reason this file exists in the shape it does.
 * **Anything analytic.** The only analytic input used here is
   `ComplexAnalytic.AnalyticSpace.evalStalk_ne_zero_iff_isUnit`, i.e. that the residue field of an
   analytic space is `ℂ`; everything else is the `Γ`–`Spec` adjunction and localisation.

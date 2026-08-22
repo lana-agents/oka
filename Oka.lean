@@ -38,6 +38,7 @@ import Oka.Analytification.FlatnessAtAPoint
 import Oka.Analytification.Functor
 import Oka.Analytification.LocalRing
 import Oka.Analytification.Presentation
+import Oka.Analytification.PresentationFlatness
 import Oka.Analytification.PresentationStalk
 import Oka.Analytification.Sheaf
 import Oka.Analytification.UniversalProperty
@@ -74,6 +75,7 @@ import Oka.RingTheory.Ideal.Maps
 import Oka.RingTheory.LocalRing.ResidueField.Basic
 import Oka.RingTheory.Localization.Ideal
 import Oka.RingTheory.MvPolynomial.Ideal
+import Oka.RingTheory.RingHom.FaithfullyFlat
 import Oka.StalkEquiv
 import Oka.Statement
 import Oka.StructureSheaf

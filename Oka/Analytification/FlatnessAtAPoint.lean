@@ -77,16 +77,16 @@ the local input those arguments consume, now available at every point of `ℂ^ι
 at the origin.
 
 **Nor is it the stalk map of `X^an ⟶ X` for a presented algebra**, which is the map a GAGA
-argument for an affine scheme other than `𝔸^ι` actually meets.
-`Oka/Analytification/PresentationStalk.lean` identifies that map — as
-`IsLocalization.lift` of *"a class in `ℂ[x] ⧸ I` goes to the germ of the holomorphic function it
-defines"* — and identifies its **source** as the stalk here modulo `I`
-(`ComplexAnalytic.analytificationStalkQuotEquiv`), which with `Module.Flat.quotIdealMap` is two
-of the three inputs to its flatness. The third is missing: the identification of the **target**
-`𝒪_{X^an, y}` with `LocalOkaRing ι` modulo `I`, which is
-`AlgebraicGeometry.LocallyRingedSpace.zeroLocusStalkQuotientEquiv` composed with
-`LocallyRingedSpace.restrictStalkIso` and `okaStalkEquiv`, together with the compatibility of the
-two identifications with the stalk map.
+argument for an affine scheme other than `𝔸^ι` actually meets. That is
+`Oka/Analytification/PresentationFlatness.lean`, and it is a deduction from the statement here
+by base change along `ℂ[x]_q ↠ (ℂ[x] ⧸ I)_q` rather than a new analytic input. What it needed on
+top of `Oka/Analytification/PresentationStalk.lean` was the identification of the **target**
+`𝒪_{X^an, y}` with the germ ring modulo `I` — which turned out to be the zero locus
+construction's own stalk computation,
+`AlgebraicGeometry.LocallyRingedSpace.surjective_stalkMap_zeroLocusιHom` and
+`AlgebraicGeometry.LocallyRingedSpace.ker_stalkMap_zeroLocusιHom`, transported across the stalk
+isomorphism of `(complexAffineSpace n).ofRestrict ⊤` — and the compatibility of the two
+identifications with the stalk map.
 
 ## References
 
@@ -265,5 +265,70 @@ theorem faithfullyFlat_stalkMap_complexSpaceToSpec :
 theorem flat_stalkMap_complexSpaceToSpec :
     ((complexSpaceToSpec ι).stalkMap z).hom.Flat :=
   (faithfullyFlat_stalkMap_complexSpaceToSpec z).flat
+
+
+/-! ### The germ of a polynomial, as a map out of `MvPolynomial ι ℂ`
+
+The two lemmas below say that reading a polynomial as a germ at `z` is *injective*, i.e. that a
+nonzero polynomial has nonzero germ at every point. That is not a new analytic fact — it is a
+corollary of the faithful flatness above, since a faithfully flat ring map is injective — but it
+is the statement a non-vacuity argument about a presented analytification needs, and there is no
+other route to it in this development. -/
+
+/-- **The germ at `z` of the holomorphic function a polynomial defines**, as a ring homomorphism
+into the stalk of `𝒪_{ℂ^ι}` at `z`.
+
+This is `okaGlobalOfMvPolynomial` followed by the germ map. Through `okaStalkEquiv` it is
+`LocalOkaRing.ofMvPolynomial z`; it is stated on the stalk rather than on `LocalOkaRing ι`
+because that is the ring the stalk map of `complexSpaceToSpec` lands in. -/
+def germOfMvPolynomial : MvPolynomial ι ℂ →+* (complexSpace ι).presheaf.stalk z :=
+  ((complexSpace ι).presheaf.Γgerm z).hom.comp (okaGlobalOfMvPolynomial ι).hom
+
+/-- **The stalk map of `ℂ^ι ⟶ 𝔸^ι_ℂ` restricted along `toStalk` is the germ map.**
+
+This is `toStalk_stalkMap_complexSpaceToSpec` with the structure map of the
+localisation spelled as `algebraMap` rather than as `toStalk`, which is the form in which the
+composite can be fed to `Ideal.map_map`. -/
+theorem stalkMap_complexSpaceToSpec_comp_algebraMap :
+    (((complexSpaceToSpec ι).stalkMap z).hom).comp
+      (algebraMap (MvPolynomial ι ℂ) (complexSpaceToSpecStalk z)) = germOfMvPolynomial z := by
+  refine RingHom.ext fun p ↦ ?_
+  simp only [RingHom.comp_apply]
+  rw [algebraMap_complexSpaceToSpecStalk]
+  exact toStalk_stalkMap_complexSpaceToSpec _ p
+
+/-- **A polynomial has invertible germ at `z` exactly when it does not vanish there**, on the
+`ComplexAnalytic.germOfMvPolynomial` spelling.
+
+`not_isUnit_germ_ofMvPolynomial_iff` states this on the `okaCommPresheaf`
+spelling of the structure sheaf, which is definitionally but not syntactically the same; this
+restatement is what a `rw` can use. -/
+theorem not_isUnit_germOfMvPolynomial_iff (p : MvPolynomial ι ℂ) :
+    ¬ IsUnit (germOfMvPolynomial z p) ↔ MvPolynomial.eval z p = 0 :=
+  not_isUnit_germ_ofMvPolynomial_iff z p
+
+/-- The stalk of `Spec (MvPolynomial ι ℂ)` under `z` contains the polynomials: it is a
+localisation of a domain at a set of nonzero divisors. -/
+theorem injective_algebraMap_complexSpaceToSpecStalk :
+    Function.Injective (algebraMap (MvPolynomial ι ℂ) (complexSpaceToSpecStalk z)) :=
+  IsLocalization.injective _
+    (Ideal.primeCompl_le_nonZeroDivisors ((complexSpaceToSpec ι).base z).asIdeal)
+
+/-- **A nonzero polynomial has nonzero germ at every point of `ℂ^ι`.**
+
+The polynomials inject into the local ring of `𝔸^ι` at `z` because that is a localisation of a
+domain, and the local ring injects into the germs because the map between them is faithfully
+flat — `Module.FaithfullyFlat` supplies `FaithfulSMul`, and a faithful scalar action by a
+commutative ring is exactly injectivity of its structure map. So this is a consequence of
+`ComplexAnalytic.faithfullyFlat_stalkMap_complexSpaceToSpec` rather than of anything about power
+series. -/
+theorem injective_germOfMvPolynomial : Function.Injective (germOfMvPolynomial z) := by
+  rw [← stalkMap_complexSpaceToSpec_comp_algebraMap, RingHom.coe_comp]
+  refine Function.Injective.comp ?_ (injective_algebraMap_complexSpaceToSpecStalk z)
+  letI := (((complexSpaceToSpec ι).stalkMap z).hom).toAlgebra
+  haveI : Module.FaithfullyFlat (complexSpaceToSpecStalk z)
+      ((complexSpace ι).presheaf.stalk z) := faithfullyFlat_stalkMap_complexSpaceToSpec z
+  exact FaithfulSMul.algebraMap_injective (complexSpaceToSpecStalk z)
+    ((complexSpace ι).presheaf.stalk z)
 
 end ComplexAnalytic

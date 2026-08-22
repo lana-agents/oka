@@ -69,10 +69,13 @@ why it must stay that way.
 ## What is not here
 
 * **GAGA.** *Left* exactness of this functor on coherent sheaves is the theorem — right
-  exactness is above and is free — and it is where the
-  flatness of the stalk maps — `ComplexAnalytic.faithfullyFlat_stalkMap_complexSpaceToSpec` for
-  the ambient case, and the presented case which is still open — gets consumed. Nothing here
-  computes this functor on stalks, which is what such an argument needs.
+  exactness is above and is free — and it is where the flatness of the stalk maps gets consumed.
+  **Both halves of that flatness now exist**:
+  `ComplexAnalytic.faithfullyFlat_stalkMap_complexSpaceToSpec` for the ambient case and
+  `ComplexAnalytic.faithfullyFlat_stalkMap_analytificationToSpec` for the presented one, which is
+  the one this functor's source is about. What is missing is no longer a flatness statement but a
+  bridge to it: **nothing here computes this functor on stalks**, which is what an argument from
+  flatness needs.
 * **Coherence of the image.** That the analytification of a coherent sheaf is coherent is a
   separate statement; `ComplexAnalytic.AnalyticSpace.isCoherentStructureSheaf` gives it for the
   structure sheaf and nothing here extends that to the image of this functor.
