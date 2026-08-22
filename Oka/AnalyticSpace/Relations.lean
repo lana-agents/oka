@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Mathlib.Algebra.Category.ModuleCat.Sheaf.PullbackFree
+import Oka.Topology.Category.TopCat.Opens
 import Oka.ComplexSpace
 import Oka.Coherent
 
@@ -27,7 +28,9 @@ ringed space instead of `ℂ^ι`.
 - `AlgebraicGeometry.LocallyRingedSpace.Hom.toRingSheafHom`: the induced morphism of sheaves of
   rings, and `AlgebraicGeometry.LocallyRingedSpace.Hom.pullbackModules`, the pullback of
   `𝒪`-modules along it, and `AlgebraicGeometry.LocallyRingedSpace.Hom.pullbackModulesUnitToUnit`,
-  the canonical map from the pullback of `𝒪_Y` to `𝒪_X`. Material for a Mathlib file that does
+  the canonical map from the pullback of `𝒪_Y` to `𝒪_X` — **which is an isomorphism**,
+  `AlgebraicGeometry.LocallyRingedSpace.isIso_pullbackModulesUnitToUnit`, and with it pullback
+  sends free sheaves to free sheaves. Material for a Mathlib file that does
   not exist — Mathlib has these for schemes only, `AlgebraicGeometry.Scheme.Hom.toRingCatSheafHom`
   among them — and they live here, next to `ringSheaf`, because they must agree with it on how
   the site is spelled; see `ringSheaf`'s docstring.
@@ -128,6 +131,44 @@ about. -/
 noncomputable def Hom.pullbackModulesUnitToUnit {X : LocallyRingedSpace.{u}} (f : X ⟶ Y) :
     f.pullbackModules.obj (SheafOfModules.unit Y.ringSheaf) ⟶ SheafOfModules.unit X.ringSheaf :=
   SheafOfModules.pullbackObjUnitToUnit.{u} f.toRingSheafHom
+
+variable {Y} in
+/-- **The pullback of `𝒪_Y` is `𝒪_X`**: the canonical map above is an isomorphism.
+
+Mathlib proves this for a *final* functor between the sites
+(`Mathlib/Algebra/Category/ModuleCat/Sheaf/PullbackFree.lean`), and here that functor is
+`TopologicalSpace.Opens.map f.base`, which is final because `Opens` is filtered —
+`TopologicalSpace.Opens.final_map`.
+
+**The `inferInstanceAs` is load-bearing and the universe annotation on it is too.**
+`Hom.pullbackModulesUnitToUnit` is a plain `def`, so instance search does not unfold it; and
+`SheafOfModules.pullbackObjUnitToUnit` written without `.{u}` elaborates with a universe
+metavariable, at which the instance does not fire either. Both were measured, and the second is
+the one that looks like a missing instance and is not. -/
+instance isIso_pullbackModulesUnitToUnit {X : LocallyRingedSpace.{u}} (f : X ⟶ Y) :
+    IsIso (Hom.pullbackModulesUnitToUnit.{u} f) :=
+  inferInstanceAs (IsIso (SheafOfModules.pullbackObjUnitToUnit.{u} f.toRingSheafHom))
+
+variable {Y} in
+/-- **The pullback of the structure sheaf is the structure sheaf**, as an isomorphism. -/
+noncomputable def Hom.pullbackModulesUnitIso {X : LocallyRingedSpace.{u}} (f : X ⟶ Y) :
+    f.pullbackModules.obj (SheafOfModules.unit Y.ringSheaf) ≅ SheafOfModules.unit X.ringSheaf :=
+  asIso (Hom.pullbackModulesUnitToUnit.{u} f)
+
+variable {Y} in
+/-- **The pullback of a free sheaf of modules is free**, on the same index type — which need not
+be finite. Mathlib's `SheafOfModules.pullbackObjFreeIso` at `Hom.toRingSheafHom`. -/
+noncomputable def Hom.pullbackModulesFreeIso {X : LocallyRingedSpace.{u}} (f : X ⟶ Y)
+    (I : Type u) :
+    f.pullbackModules.obj (SheafOfModules.free I) ≅ SheafOfModules.free I :=
+  SheafOfModules.pullbackObjFreeIso.{u} f.toRingSheafHom I
+
+variable {Y} in
+/-- **Pullback of `𝒪`-modules commutes with the free-sheaf functor**, naturally. -/
+noncomputable def Hom.freeFunctorCompPullbackModulesIso {X : LocallyRingedSpace.{u}}
+    (f : X ⟶ Y) :
+    SheafOfModules.freeFunctor ⋙ f.pullbackModules ≅ SheafOfModules.freeFunctor :=
+  SheafOfModules.freeFunctorCompPullbackIso.{u} f.toRingSheafHom
 
 /-- A locally ringed space has **coherent structure sheaf** if `𝒪_Y` is coherent as a sheaf of
 modules over itself. -/

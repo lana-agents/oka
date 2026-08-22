@@ -87,6 +87,7 @@ import Oka.RingTheory.RingHom.FaithfullyFlat
 import Oka.StalkEquiv
 import Oka.Statement
 import Oka.StructureSheaf
+import Oka.Topology.Category.TopCat.Opens
 import Oka.Topology.Sheaves.Functors
 import Oka.Topology.Sheaves.Presheaf
 import Oka.Topology.Sheaves.QuotientPresheaf
