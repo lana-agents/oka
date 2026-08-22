@@ -272,6 +272,21 @@ coherence statement for arbitrary complex analytic spaces:
   the adjunction with pushforward; left exactness is GAGA and is where the flatness of the stalk
   maps gets consumed. The analytification of `𝒪_X` maps canonically to `𝒪_{X^an}`, which is the
   map a comparison theorem between the two is about.
+* **GAGA's local half: the analytification of a sheaf is exact.** For a presented affine
+  `ℂ`-algebra, `ComplexAnalytic.analytificationSheaf` preserves finite limits
+  (`ComplexAnalytic.preservesFiniteLimits_analytificationSheaf` in
+  `Oka/Analytification/Sheaf.lean`) — and preserves colimits already, being a left adjoint — so
+  it is **exact**. **No coherence or finiteness hypothesis appears**: the statement is for all
+  sheaves of modules, which is stronger than the classical form and is what the inputs give.
+  The general statement is that pullback of `𝒪`-modules along a morphism of locally ringed
+  spaces with flat stalk maps is left exact
+  (`AlgebraicGeometry.LocallyRingedSpace.Hom.preservesFiniteLimits_pullbackModules`,
+  proved in `Oka/Algebra/Category/ModuleCat/Sheaf/PullbackExact.lean`); the analytification is
+  that at `ComplexAnalytic.faithfullyFlat_stalkMap_analytificationToSpec`. The route is
+  monomorphisms rather than short complexes — a right-exact additive functor is exact as soon as
+  it preserves monomorphisms, and monomorphisms of sheaves of modules are detected on stalks —
+  which needs only the direction of stalkwise exactness that is available. **Flatness enters at
+  exactly one step**, measured by deleting it and checking that step and no other fails.
 * **The stalk of a pullback of `𝒪`-modules is the base change of the stalk.**
   `(f^* M)_x ≅ 𝒪_{X,x} ⊗_{𝒪_{Y,f x}} M_{f x}`, naturally in `M`, for any morphism of locally
   ringed spaces (`Oka/AnalyticSpace/PullbackModulesStalk.lean`), built on a **skyscraper presheaf

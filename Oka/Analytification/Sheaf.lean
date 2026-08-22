@@ -3,7 +3,9 @@ Copyright (c) 2026 Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten. All righ
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
+import Oka.AnalyticSpace.PullbackModulesStalk
 import Oka.AnalyticSpace.Relations
+import Oka.Analytification.PresentationFlatness
 import Oka.Analytification.Presentation
 
 /-!
@@ -62,20 +64,28 @@ why it must stay that way.
 ## Main results
 
 - `ComplexAnalytic.preservesColimits_analytificationSheaf`: **the analytification of a sheaf is
-  right exact**, free from the adjunction. The half of exactness that is *not* free is
-  preservation of finite limits, and that is where the flatness of the stalk maps has to be
-  consumed — which is what makes this the useful thing to state before GAGA rather than after.
+  right exact**, free from the adjunction.
+- `ComplexAnalytic.preservesFiniteLimits_analytificationSheaf`: **the analytification of a sheaf
+  is left exact** — *GAGA's local half*, and the two together say the functor is exact.
+
+## Exactness, and that no coherence hypothesis appears
+
+**Left exactness is unrestricted.** `preservesFiniteLimits_analytificationSheaf` is stated for all
+sheaves of modules on `Spec (ℂ[x] ⧸ I)`, with no finiteness or coherence hypothesis anywhere, and
+none of its inputs has one. Coherence is what the classical GAGA *comparison* theorem needs; the
+exactness which is its local input is true without it, so the unrestricted form is what is stated
+— it is strictly stronger and a consumer can restrict it.
+
+The proof consumes flatness at exactly one place — that `ModuleCat.extendScalars` along
+`(analytificationToSpec g).stalkMap y` preserves monomorphisms — and
+`Oka/Algebra/Category/ModuleCat/Sheaf/PullbackExact.lean` records the measurement that deleting
+it breaks that step and nothing else.
 
 ## What is not here
 
-* **GAGA.** *Left* exactness of this functor on coherent sheaves is the theorem — right
-  exactness is above and is free — and it is where the flatness of the stalk maps gets consumed.
-  **Both halves of that flatness now exist**:
-  `ComplexAnalytic.faithfullyFlat_stalkMap_complexSpaceToSpec` for the ambient case and
-  `ComplexAnalytic.faithfullyFlat_stalkMap_analytificationToSpec` for the presented one, which is
-  the one this functor's source is about. What is missing is no longer a flatness statement but a
-  bridge to it: **nothing here computes this functor on stalks**, which is what an argument from
-  flatness needs.
+* **The comparison theorem.** GAGA proper also asserts that `Hom` and cohomology agree between
+  `X` and `X^an` for coherent sheaves. Exactness of analytification is its local input and is a
+  strictly smaller statement.
 * **Coherence of the image.** That the analytification of a coherent sheaf is coherent is a
   separate statement; `ComplexAnalytic.AnalyticSpace.isCoherentStructureSheaf` gives it for the
   structure sheaf and nothing here extends that to the image of this functor.
@@ -140,5 +150,23 @@ def analytificationSheafUnitToUnit :
       SheafOfModules.unit
         (AnalyticSpace.analytification.{u} g).toLocallyRingedSpace.ringSheaf :=
   (analytificationToSpec.{u} g).pullbackModulesUnitToUnit
+
+/-- **GAGA's local half: the analytification of a sheaf is left exact.**
+
+Together with `ComplexAnalytic.preservesColimits_analytificationSheaf`, which is free from the
+adjunction, this says the functor is **exact**.
+
+It is `AlgebraicGeometry.LocallyRingedSpace.Hom.preservesFiniteLimits_pullbackModules` — pullback
+of `𝒪`-modules along a morphism with flat stalk maps is left exact — instantiated at the
+comparison morphism, whose stalk maps are faithfully flat by
+`ComplexAnalytic.faithfullyFlat_stalkMap_analytificationToSpec`. **That flatness is the only
+analytic input**, and it is the only place any flatness is consumed.
+
+There is **no coherence or finiteness hypothesis**; see the module docstring on why the
+unrestricted statement is the right one. -/
+theorem preservesFiniteLimits_analytificationSheaf :
+    Limits.PreservesFiniteLimits (analytificationSheaf.{u} g) :=
+  (analytificationToSpec.{u} g).preservesFiniteLimits_pullbackModules
+    fun y ↦ (faithfullyFlat_stalkMap_analytificationToSpec.{u} g y).flat
 
 end ComplexAnalytic

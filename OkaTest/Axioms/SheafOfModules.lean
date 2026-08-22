@@ -195,3 +195,36 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.Hom.pullbackModulesStalkIso' depends
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.Hom.pullbackModulesStalkIso
 
+/-! ### Pullback along a stalkwise flat morphism is left exact
+
+`Oka/Algebra/Category/ModuleCat/Sheaf/PullbackExact.lean` and
+`Oka/AnalyticSpace/PullbackModulesStalk.lean`. -/
+
+/--
+info: 'SheafOfModules.mono_of_forall_mono_stalkFunctor_map' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.mono_of_forall_mono_stalkFunctor_map
+
+/--
+info: 'SheafOfModules.preservesMonomorphisms_pullback' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.preservesMonomorphisms_pullback
+
+/--
+info: 'SheafOfModules.preservesFiniteLimits_pullback' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.preservesFiniteLimits_pullback
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.Hom.preservesFiniteLimits_pullbackModules' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.Hom.preservesFiniteLimits_pullbackModules
+
