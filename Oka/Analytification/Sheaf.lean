@@ -60,6 +60,9 @@ why it must stay that way.
 - `ComplexAnalytic.analytificationSheafUnitToUnit`: **the analytification of `𝒪_X` maps
   canonically to `𝒪_{X^an}`** — the map a comparison theorem between the two structure sheaves
   is a statement about.
+- `ComplexAnalytic.analytificationSheafUnitIso`: **that map is an isomorphism**, so the
+  analytification of `𝒪_X` *is* `𝒪_{X^an}`; and `ComplexAnalytic.analytificationSheafFreeIso`,
+  the same for a free sheaf on any index type.
 
 ## Main results
 
@@ -168,5 +171,29 @@ theorem preservesFiniteLimits_analytificationSheaf :
     Limits.PreservesFiniteLimits (analytificationSheaf.{u} g) :=
   (analytificationToSpec.{u} g).preservesFiniteLimits_pullbackModules
     fun y ↦ (faithfullyFlat_stalkMap_analytificationToSpec.{u} g y).flat
+
+/-- **The analytification of `𝒪_X` is `𝒪_{X^an}`.**
+
+`AlgebraicGeometry.LocallyRingedSpace.Hom.pullbackModulesUnitIso` at the comparison morphism. It
+needs nothing analytic — only that `TopologicalSpace.Opens.map` is a final functor — and it is
+what makes `ComplexAnalytic.analytificationSheafUnitToUnit` a comparison rather than merely a
+map. -/
+def analytificationSheafUnitIso :
+    (analytificationSheaf.{u} g).obj
+        (SheafOfModules.unit
+          (Spec.locallyRingedSpaceObj
+            (CommRingCat.of
+              (MvPolynomial (ULift.{u} (Fin n)) ℂ ⧸ presentationIdeal.{u} g))).ringSheaf) ≅
+      SheafOfModules.unit
+        (AnalyticSpace.analytification.{u} g).toLocallyRingedSpace.ringSheaf :=
+  (analytificationToSpec.{u} g).pullbackModulesUnitIso
+
+/-- **The analytification of a free sheaf is free**, on the same index type, which need not be
+finite. This is the base case of any argument that the analytification of a coherent sheaf is
+coherent: a coherent sheaf is locally a cokernel of a map of free sheaves, and the analytification
+is right exact. -/
+def analytificationSheafFreeIso (I : Type u) :
+    (analytificationSheaf.{u} g).obj (SheafOfModules.free I) ≅ SheafOfModules.free I :=
+  (analytificationToSpec.{u} g).pullbackModulesFreeIso I
 
 end ComplexAnalytic

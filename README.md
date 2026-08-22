@@ -260,6 +260,16 @@ coherence statement for arbitrary complex analytic spaces:
   functors land in locally ringed spaces; **`Scheme` does not appear**, which is why the source
   category needs no passage to affine schemes. The worked instance is the node: its comparison
   morphism in two variables is recovered from the one in three.
+* **The analytification of `𝒪_X` is `𝒪_{X^an}`.** The canonical map
+  `ComplexAnalytic.analytificationSheafUnitToUnit` is an **isomorphism**
+  (`ComplexAnalytic.analytificationSheafUnitIso`), and with it the analytification of a free sheaf
+  is free on the same index type, finite or not
+  (`ComplexAnalytic.analytificationSheafFreeIso`) — the base case of any argument that the
+  analytification of a coherent sheaf is coherent. Mathlib supplies both once the functor between
+  the two sites is **final**, and `TopologicalSpace.Opens.map f` is
+  (`Oka/Topology/Category/TopCat/Opens.lean`): over a lattice, both conditions of
+  `Functor.final_of_exists_of_isFiltered` are `⊤` and `Subsingleton.elim`. Nothing analytic is
+  used.
 * **The analytification of a sheaf.** For a presented affine `ℂ`-algebra, pulling sheaves of
   modules back along the comparison morphism `X^an ⟶ Spec (ℂ[x]/I)`
   (`Oka/Analytification/Sheaf.lean`) — the functor whose exactness on coherent sheaves is GAGA.

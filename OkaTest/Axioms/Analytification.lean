@@ -611,3 +611,33 @@ info: 'ComplexAnalytic.preservesFiniteLimits_analytificationSheaf' depends on ax
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.preservesFiniteLimits_analytificationSheaf
 
+/-! ### The analytification of `𝒪_X` is `𝒪_{X^an}` -/
+
+/--
+info: 'TopologicalSpace.Opens.final_map' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TopologicalSpace.Opens.final_map
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.isIso_pullbackModulesUnitToUnit' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.isIso_pullbackModulesUnitToUnit
+
+/--
+info: 'ComplexAnalytic.analytificationSheafUnitIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationSheafUnitIso
+
+/--
+info: 'ComplexAnalytic.analytificationSheafFreeIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationSheafFreeIso
+

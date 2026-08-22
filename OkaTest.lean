@@ -7,6 +7,7 @@ import OkaTest.AnalytificationFlatness
 import OkaTest.AnalytificationFunctor
 import OkaTest.AnalytificationLocalRing
 import OkaTest.AnalytificationSheaf
+import OkaTest.AnalytificationSheafUnit
 import OkaTest.AnalytificationStalk
 import OkaTest.AnalytificationUniversalProperty
 import OkaTest.Axioms
