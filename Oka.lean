@@ -37,6 +37,7 @@ import Oka.Analytification.FlatnessAtAPoint
 import Oka.Analytification.Functor
 import Oka.Analytification.LocalRing
 import Oka.Analytification.Presentation
+import Oka.Analytification.PresentationStalk
 import Oka.Analytification.UniversalProperty
 import Oka.CategoryTheory.Abelian.Basic
 import Oka.CategoryTheory.Sites.CoversTop.Basic

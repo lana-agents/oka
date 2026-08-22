@@ -69,7 +69,6 @@ isomorphism of presented algebras into an isomorphism of analytifications, which
 
 ## Main definitions
 
-- `ComplexAnalytic.PresentedAlgebra`: the `ℂ`-algebra `ℂ[x₁, …, x_n] ⧸ (g₁, …, g_k)`.
 - `ComplexAnalytic.PresHom`: a `ℂ`-algebra map between two presented algebras, spelled as a ring
   map plus the commutation it must satisfy — **there is no `Algebra ℂ` instance on these
   quotients and none is manufactured.**
@@ -126,15 +125,6 @@ theorem quotientToGlobal_mk_X (g : Fin k → MvPolynomial (ULift.{u} (Fin n)) �
     (MvPolynomial.eval₂Hom_X' _ _ i)
 
 /-! ### `ℂ`-algebra maps of presented algebras -/
-
-/-- The `ℂ`-algebra `ℂ[x₁, …, x_n] ⧸ (g₁, …, g_k)` presented by a tuple. -/
-abbrev PresentedAlgebra (n k : ℕ) (g : Fin k → MvPolynomial (ULift.{u} (Fin n)) ℂ) : Type u :=
-  MvPolynomial (ULift.{u} (Fin n)) ℂ ⧸ presentationIdeal.{u} g
-
-/-- The structure map `ℂ → ℂ[x] ⧸ I`. -/
-abbrev presentedAlgebraMap (g : Fin k → MvPolynomial (ULift.{u} (Fin n)) ℂ) :
-    ℂ →+* PresentedAlgebra.{u} n k g :=
-  (Ideal.Quotient.mk (presentationIdeal.{u} g)).comp MvPolynomial.C
 
 /-- A `ℂ`-algebra map between two presented algebras, spelled as a ring map together with the
 commutation it has to satisfy. -/

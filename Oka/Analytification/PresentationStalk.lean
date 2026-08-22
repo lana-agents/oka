@@ -3,7 +3,6 @@ Copyright (c) 2026 Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten. All righ
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
-import Oka.Analytification.FlatnessAtAPoint
 import Oka.Analytification.Presentation
 
 /-!
@@ -25,11 +24,11 @@ The two ends:
 ## What this is the analogue of
 
 `Oka/Analytification/AffineSpace.lean` does the same for the ambient comparison morphism
-`ℂ^ι ⟶ 𝔸^ι_ℂ`: `ComplexAnalytic.complexSpaceToSpecStalk` with its two transported instances,
-and `ComplexAnalytic.stalkMap_eq_lift`. **Every statement here is that file's statement with a
+`ℂ^ι ⟶ 𝔸^ι_ℂ`: `complexSpaceToSpecStalk` with its two transported instances,
+and `stalkMap_eq_lift`. **Every statement here is that file's statement with a
 quotient inserted, and every proof here is that file's proof**, because
-`ComplexAnalytic.analytificationToSpec` is `ComplexAnalytic.complexSpaceToSpec`'s construction
-with `ComplexAnalytic.quotientToGlobal` in place of `ComplexAnalytic.okaGlobalOfMvPolynomial`.
+`ComplexAnalytic.analytificationToSpec` is `complexSpaceToSpec`'s construction
+with `ComplexAnalytic.quotientToGlobal` in place of `okaGlobalOfMvPolynomial`.
 
 That is worth saying explicitly, because it is the answer to a question the issue this file
 closes flagged as its schedule risk. The `Spec.locallyRingedSpaceObj` transparency problem
@@ -55,10 +54,11 @@ general `PrimeSpectrum`.
   defines.
 - `ComplexAnalytic.stalkMap_analytificationToSpec_eq_lift`: **the stalk map is
   `IsLocalization.lift` of `ComplexAnalytic.quotientToGerm`.** This is the analogue of
-  `ComplexAnalytic.stalkMap_eq_lift` and it is the form a flatness argument consumes: a map out
+  `stalkMap_eq_lift` and it is the form a flatness argument consumes: a map out
   of a localisation, with no stalk left in the source.
-- `ComplexAnalytic.isUnit_quotientToGerm_of_mem_primeCompl`: a class not vanishing at `y` has
-  invertible germ — the hypothesis of the lift.
+- `ComplexAnalytic.isUnit_quotientToGerm_iff` and
+  `ComplexAnalytic.isUnit_quotientToGerm_of_mem_primeCompl`: a class has invertible germ at `y`
+  exactly when it does not vanish there — the hypothesis of the lift.
 - `ComplexAnalytic.algebraMapSubmonoid_primeCompl_eq`: the multiplicative set the quotient
   inherits is the one the quotient's own point defines. Stated as an equality of **submonoids**,
   for the reason `ComplexAnalytic.primeCompl_complexSpaceToSpec_base` is.
@@ -89,9 +89,6 @@ noncomputable section
 
 variable {n k : ℕ} (g : Fin k → MvPolynomial (ULift.{u} (Fin n)) ℂ)
 
-/-- The `ℂ`-algebra a presentation presents, spelled as the quotient it is. -/
-abbrev presAlg : Type u := MvPolynomial (ULift.{u} (Fin n)) ℂ ⧸ presentationIdeal g
-
 /-- The point of `ℂ^n` underlying a point of the analytification. -/
 abbrev basePt (y : AnalyticSpace.analytification.{u} g) : ULift.{u} (Fin n) → ℂ := y.1.1
 
@@ -106,15 +103,15 @@ An abbreviation for readability only. What matters is that the two instances bel
 search find them at all; see `Oka/Analytification/AffineSpace.lean`, where the same is done for
 the ambient comparison morphism and where the failure mode is measured. -/
 abbrev analytificationToSpecStalk (y : AnalyticSpace.analytification.{u} g) : CommRingCat.{u} :=
-  (Spec.locallyRingedSpaceObj (CommRingCat.of (presAlg g))).presheaf.stalk
+  (Spec.locallyRingedSpaceObj (CommRingCat.of (PresentedAlgebra.{u} n k g))).presheaf.stalk
     ((analytificationToSpec g).base y)
 
 /-- Mathlib's `Algebra` instance on the stalk of a `Spec`, transported to the spelling a morphism
 of locally ringed spaces produces. -/
 instance (y : AnalyticSpace.analytification.{u} g) :
-    Algebra (presAlg g) (analytificationToSpecStalk g y) :=
-  inferInstanceAs (Algebra (presAlg g)
-    ((Spec.structureSheaf (CommRingCat.of (presAlg g))).presheaf.stalk
+    Algebra (PresentedAlgebra.{u} n k g) (analytificationToSpecStalk g y) :=
+  inferInstanceAs (Algebra (PresentedAlgebra.{u} n k g)
+    ((Spec.structureSheaf (CommRingCat.of (PresentedAlgebra.{u} n k g))).presheaf.stalk
       ((analytificationToSpec g).base y)))
 
 /-- **The stalk of `Spec (ℂ[x] ⧸ I)` under `y` is the localisation of `ℂ[x] ⧸ I` there**,
@@ -123,21 +120,21 @@ instance (y : AnalyticSpace.analytification.{u} g) :
     IsLocalization.AtPrime (analytificationToSpecStalk g y)
       ((analytificationToSpec g).base y).asIdeal :=
   inferInstanceAs (IsLocalization.AtPrime
-    ((Spec.structureSheaf (CommRingCat.of (presAlg g))).presheaf.stalk
+    ((Spec.structureSheaf (CommRingCat.of (PresentedAlgebra.{u} n k g))).presheaf.stalk
       ((analytificationToSpec g).base y)) _)
 
 /-- The structure map of the localisation is `toStalk`. As for the ambient case this is `rfl`,
 and it is stated so that the lift below never has to cross the spelling seam while the goal is
 still wrapped in `RingHom.comp`. -/
 lemma algebraMap_analytificationToSpecStalk (y : AnalyticSpace.analytification.{u} g)
-    (a : presAlg g) :
-    algebraMap (presAlg g) (analytificationToSpecStalk g y) a =
-      toStalk (presAlg g) ((analytificationToSpec g).base y) a :=
-  StructureSheaf.stalkAlgebra_map (presAlg g) ((analytificationToSpec g).base y) a
+    (a : PresentedAlgebra.{u} n k g) :
+    algebraMap (PresentedAlgebra.{u} n k g) (analytificationToSpecStalk g y) a =
+      toStalk (PresentedAlgebra.{u} n k g) ((analytificationToSpec g).base y) a :=
+  StructureSheaf.stalkAlgebra_map (PresentedAlgebra.{u} n k g) ((analytificationToSpec g).base y) a
 
 /-- **A class in `ℂ[x] ⧸ I`, as a germ of a holomorphic function on `X^an` at `y`.** -/
 def quotientToGerm (y : AnalyticSpace.analytification.{u} g) :
-    presAlg g →+* (AnalyticSpace.analytification.{u} g).presheaf.stalk y :=
+    PresentedAlgebra.{u} n k g →+* (AnalyticSpace.analytification.{u} g).presheaf.stalk y :=
   ((AnalyticSpace.analytification.{u} g).presheaf.Γgerm y).hom.comp (quotientToGlobal g)
 
 /-- **The characterising property of the stalk map**: the image of `a` under `toStalk` goes to the
@@ -148,14 +145,14 @@ is determined by its restriction along `toStalk`; this is that restriction.
 
 The proof composes `AlgebraicGeometry.stalkMap_toStalk` for the `Spec` half with
 `AlgebraicGeometry.LocallyRingedSpace.toStalk_stalkMap_toΓSpec` for the unit half, and is
-`ComplexAnalytic.toStalk_stalkMap_complexSpaceToSpec`'s proof verbatim with
-`ComplexAnalytic.quotientToGlobal` in place of `ComplexAnalytic.okaGlobalOfMvPolynomial`. The
+`toStalk_stalkMap_complexSpaceToSpec`'s proof verbatim with
+`ComplexAnalytic.quotientToGlobal` in place of `okaGlobalOfMvPolynomial`. The
 last step uses `congrArg` rather than `rw` because the rewrite is rejected across the
 `TopCat.of` transparency seam. -/
 theorem toStalk_stalkMap_analytificationToSpec (y : AnalyticSpace.analytification.{u} g)
-    (a : presAlg g) :
+    (a : PresentedAlgebra.{u} n k g) :
     (analytificationToSpec g).stalkMap y
-        (toStalk (presAlg g) ((analytificationToSpec g).base y) a) =
+        (toStalk (PresentedAlgebra.{u} n k g) ((analytificationToSpec g).base y) a) =
       (AnalyticSpace.analytification.{u} g).presheaf.Γgerm y (quotientToGlobal g a) := by
   have h1 := stalkMap_toStalk_apply (CommRingCat.ofHom (quotientToGlobal g))
     ((AnalyticSpace.analytification.{u} g).toLocallyRingedSpace.toΓSpecFun y) a
@@ -174,7 +171,7 @@ theorem toStalk_stalkMap_analytificationToSpec (y : AnalyticSpace.analytificatio
   change (AnalyticSpace.analytification.{u} g).toLocallyRingedSpace.toΓSpec.stalkMap y
       ((Spec.sheafedSpaceMap (CommRingCat.ofHom (quotientToGlobal g))).hom.stalkMap
         ((AnalyticSpace.analytification.{u} g).toLocallyRingedSpace.toΓSpecFun y)
-        (toStalk (presAlg g)
+        (toStalk (PresentedAlgebra.{u} n k g)
           (PrimeSpectrum.comap (CommRingCat.ofHom (quotientToGlobal g)).hom
             ((AnalyticSpace.analytification.{u} g).toLocallyRingedSpace.toΓSpecFun y)) a)) = _
   exact (congrArg ((AnalyticSpace.analytification.{u} g).toLocallyRingedSpace.toΓSpec.stalkMap y)
@@ -187,29 +184,35 @@ This is `ComplexAnalytic.AnalyticSpace.mem_toΓSpec_base_asIdeal_iff` — *the p
 which it is because the base map of `analytificationToSpec` is the comap of
 `ComplexAnalytic.quotientToGlobal` along that of `toΓSpec`. -/
 theorem mem_analytificationToSpec_base_asIdeal_iff_eval
-    (y : AnalyticSpace.analytification.{u} g) (a : presAlg g) :
+    (y : AnalyticSpace.analytification.{u} g) (a : PresentedAlgebra.{u} n k g) :
     a ∈ ((analytificationToSpec g).base y).asIdeal ↔
       AnalyticSpace.eval (Z := AnalyticSpace.analytification.{u} g) (U := ⊤) y trivial
         (quotientToGlobal g a) = 0 :=
   AnalyticSpace.mem_toΓSpec_base_asIdeal_iff _ y (quotientToGlobal g a)
 
-/-- **A class not vanishing at `y` has invertible germ**, which is what lets the localisation map
-to the stalk of `X^an` at all.
+/-- **A class has invertible germ at `y` exactly when it does not vanish there.**
 
 The analytic content is `ComplexAnalytic.AnalyticSpace.evalStalk_ne_zero_iff_isUnit`: the residue
 field of a complex analytic space at a point is `ℂ`, so a germ is a unit exactly when its value
 is nonzero. -/
+theorem isUnit_quotientToGerm_iff (y : AnalyticSpace.analytification.{u} g)
+    (a : PresentedAlgebra.{u} n k g) :
+    IsUnit (quotientToGerm g y a) ↔ a ∉ ((analytificationToSpec g).base y).asIdeal := by
+  rw [← AnalyticSpace.evalStalk_ne_zero_iff_isUnit,
+    mem_analytificationToSpec_base_asIdeal_iff_eval]
+  exact Iff.rfl
+
+/-- **A class not vanishing at `y` has invertible germ**, which is what lets the localisation map
+to the stalk of `X^an` at all. -/
 theorem isUnit_quotientToGerm_of_mem_primeCompl (y : AnalyticSpace.analytification.{u} g)
     (a : ((analytificationToSpec g).base y).asIdeal.primeCompl) :
-    IsUnit (quotientToGerm g y (a : presAlg g)) := by
-  rw [← AnalyticSpace.evalStalk_ne_zero_iff_isUnit]
-  intro h
-  exact a.2 ((mem_analytificationToSpec_base_asIdeal_iff_eval g y a).2 h)
+    IsUnit (quotientToGerm g y (a : PresentedAlgebra.{u} n k g)) :=
+  (isUnit_quotientToGerm_iff g y a).2 a.2
 
 /-- **The stalk map of `X^an ⟶ Spec (ℂ[x] ⧸ I)` is the localisation-to-germs map.**
 
 Informally: *a fraction of classes whose denominator does not vanish at `y` is the germ at `y` of
-the holomorphic function it defines.* This is the analogue of `ComplexAnalytic.stalkMap_eq_lift`
+the holomorphic function it defines.* This is the analogue of `stalkMap_eq_lift`
 and, like it, is the form in which a flatness argument can consume the stalk map: the source is
 an honest localisation and the map is determined by its restriction to `ℂ[x] ⧸ I`. -/
 theorem stalkMap_analytificationToSpec_eq_lift (y : AnalyticSpace.analytification.{u} g) :
@@ -234,7 +237,7 @@ because `Ideal.primeCompl` takes the `Ideal.IsPrime` instance as an argument and
 fails on the motive — the same trap, and the same way round it, as
 `ComplexAnalytic.primeCompl_complexSpaceToSpec_base`. -/
 theorem algebraMapSubmonoid_primeCompl_eq (y : AnalyticSpace.analytification.{u} g) :
-    Algebra.algebraMapSubmonoid (presAlg g)
+    Algebra.algebraMapSubmonoid (PresentedAlgebra.{u} n k g)
         ((complexSpaceToSpec (ULift.{u} (Fin n))).base (basePt g y)).asIdeal.primeCompl =
       ((analytificationToSpec g).base y).asIdeal.primeCompl := by
   ext u
@@ -242,7 +245,7 @@ theorem algebraMapSubmonoid_primeCompl_eq (y : AnalyticSpace.analytification.{u}
     Submonoid.mem_mk, Subsemigroup.mem_mk, Set.mem_compl_iff, SetLike.mem_coe]
   constructor
   · rintro ⟨a, ha, rfl⟩
-    rw [show (algebraMap (MvPolynomial (ULift.{u} (Fin n)) ℂ) (presAlg g) a) =
+    rw [show (algebraMap (MvPolynomial (ULift.{u} (Fin n)) ℂ) (PresentedAlgebra.{u} n k g) a) =
       Ideal.Quotient.mk (presentationIdeal g) a from rfl,
       mem_analytificationToSpec_base_asIdeal_iff]
     rwa [mem_complexSpaceToSpec_base_asIdeal_iff] at ha
@@ -264,15 +267,19 @@ abbrev complexSpaceToSpecStalkQuot (y : AnalyticSpace.analytification.{u} g) : T
 Both sides are localisations of `ℂ[x] ⧸ I` at the same multiplicative set: the left by the
 instance above, the right by Mathlib's `IsLocalization` instance for a quotient of a
 localisation, once `ComplexAnalytic.algebraMapSubmonoid_primeCompl_eq` identifies the two
-multiplicative sets. So this is `IsLocalization.algEquiv` and there is nothing to prove. -/
+multiplicative sets. So this is `IsLocalization.algEquiv` and there is nothing to prove.
+
+The `▸` transports a `Prop`-valued class along an equality of *submonoids*, which is an explicit
+argument of `IsLocalization`; it is not a cast of data. It has to be a submonoid equality rather
+than an ideal one for the reason `ComplexAnalytic.algebraMapSubmonoid_primeCompl_eq` records. -/
 def analytificationStalkQuotEquiv (y : AnalyticSpace.analytification.{u} g) :
-    analytificationToSpecStalk g y ≃ₐ[presAlg g] complexSpaceToSpecStalkQuot g y :=
+    analytificationToSpecStalk g y ≃ₐ[PresentedAlgebra.{u} n k g] complexSpaceToSpecStalkQuot g y :=
   haveI : IsLocalization
-      (Algebra.algebraMapSubmonoid (presAlg g)
+      (Algebra.algebraMapSubmonoid (PresentedAlgebra.{u} n k g)
         ((complexSpaceToSpec (ULift.{u} (Fin n))).base (basePt g y)).asIdeal.primeCompl)
       (analytificationToSpecStalk g y) := (algebraMapSubmonoid_primeCompl_eq g y) ▸ inferInstance
   IsLocalization.algEquiv
-    (Algebra.algebraMapSubmonoid (presAlg g)
+    (Algebra.algebraMapSubmonoid (PresentedAlgebra.{u} n k g)
       ((complexSpaceToSpec (ULift.{u} (Fin n))).base (basePt g y)).asIdeal.primeCompl)
     (analytificationToSpecStalk g y) (complexSpaceToSpecStalkQuot g y)
 

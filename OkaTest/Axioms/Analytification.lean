@@ -11,8 +11,9 @@ import Oka
 The comparison morphisms of `Oka/Analytification/`: `ℂ^ι ⟶ Spec (MvPolynomial ι ℂ)` and its
 map on stalks, `X^an ⟶ Spec (ℂ[x]/I)` for a presented affine `ℂ`-algebra, the local ring of
 `𝔸^ι` at the origin with its completion, the faithful flatness of the germs over it and the same
-at an arbitrary point — where it becomes a statement about the stalk map itself — and the
-analytification as a functor on finitely generated `ℂ`-algebras.
+at an arbitrary point — where it becomes a statement about the stalk map itself — the
+analytification as a functor on finitely generated `ℂ`-algebras, and the stalk map of the
+comparison morphism of a presented algebra.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -388,3 +389,49 @@ info: 'ComplexAnalytic.analytificationFGAlgCompIso' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.analytificationFGAlgCompIso
+
+/-! ### The stalk map of `X^an ⟶ Spec (ℂ[x] ⧸ I)`
+
+`Oka/Analytification/PresentationStalk.lean`. -/
+
+/--
+info: 'ComplexAnalytic.quotientToGerm' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.quotientToGerm
+
+/--
+info: 'ComplexAnalytic.toStalk_stalkMap_analytificationToSpec' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.toStalk_stalkMap_analytificationToSpec
+
+/--
+info: 'ComplexAnalytic.isUnit_quotientToGerm_iff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isUnit_quotientToGerm_iff
+
+/--
+info: 'ComplexAnalytic.stalkMap_analytificationToSpec_eq_lift' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.stalkMap_analytificationToSpec_eq_lift
+
+/--
+info: 'ComplexAnalytic.algebraMapSubmonoid_primeCompl_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.algebraMapSubmonoid_primeCompl_eq
+
+/--
+info: 'ComplexAnalytic.analytificationStalkQuotEquiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationStalkQuotEquiv

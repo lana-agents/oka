@@ -76,6 +76,18 @@ which is what `IsLocalization.ringEquivOfRingEquiv` wants and needs no instance 
 the local input those arguments consume, now available at every point of `ℂ^ι` rather than only
 at the origin.
 
+**Nor is it the stalk map of `X^an ⟶ X` for a presented algebra**, which is the map a GAGA
+argument for an affine scheme other than `𝔸^ι` actually meets.
+`Oka/Analytification/PresentationStalk.lean` identifies that map — as
+`IsLocalization.lift` of *"a class in `ℂ[x] ⧸ I` goes to the germ of the holomorphic function it
+defines"* — and identifies its **source** as the stalk here modulo `I`
+(`ComplexAnalytic.analytificationStalkQuotEquiv`), which with `Module.Flat.quotIdealMap` is two
+of the three inputs to its flatness. The third is missing: the identification of the **target**
+`𝒪_{X^an, y}` with `LocalOkaRing ι` modulo `I`, which is
+`AlgebraicGeometry.LocallyRingedSpace.zeroLocusStalkQuotientEquiv` composed with
+`LocallyRingedSpace.restrictStalkIso` and `okaStalkEquiv`, together with the compatibility of the
+two identifications with the stalk map.
+
 ## References
 
 - [Hans Grauert and Reinhold Remmert, *Coherent analytic sheaves*][grauert-remmert1984], §A
