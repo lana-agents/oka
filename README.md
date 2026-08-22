@@ -188,6 +188,17 @@ coherence statement for arbitrary complex analytic spaces:
   lands in the closed points, and restricts the comparison morphism of `ℂ^n`
   (`Oka/Analytification/Presentation.lean`). The analytification of `ℂ[x, y]/(xy)` is the node,
   definitionally.
+* **The stalk map of that comparison morphism.** The stalk of `Spec (ℂ[x] ⧸ I)` under a point `y`
+  of `X^an` is a localisation of `ℂ[x] ⧸ I`, and — since localisation commutes with quotients —
+  it is the stalk of `Spec ℂ[x]` under `y` modulo `I`; the stalk map is the unique extension to
+  that localisation of *"a class in `ℂ[x] ⧸ I` goes to the germ at `y` of the holomorphic
+  function it defines"*, a class having invertible germ exactly when it does not vanish at `y`
+  (`Oka/Analytification/PresentationStalk.lean`). This is the presented analogue of the stalk-map
+  identification for `ℂ^ι` above, and it is what a GAGA argument for an affine scheme other than
+  `𝔸^ι` meets; **its flatness is not proved**, and what is still needed for it is the
+  identification of the target `𝒪_{X^an, y}` with the germ ring modulo `I`. The worked instance
+  is the node: the germ of `y` at `(1, 0)` is **zero**, because near that point the node is the
+  `x`-axis — a statement `ℂ²` cannot make.
 * **The universal property of that analytification.** For every complex analytic space `Z`,
   morphisms `Z ⟶ X^an` correspond to tuples `a₁, …, a_n` of global sections of `𝒪_Z` satisfying
   `gⱼ(a₁, …, a_n) = 0`, by pulling back the coordinates along the inclusion `X^an ↪ ℂ^n`

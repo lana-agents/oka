@@ -2,6 +2,7 @@ import OkaTest.Analytification
 import OkaTest.AnalytificationChangeOfVariables
 import OkaTest.AnalytificationFunctor
 import OkaTest.AnalytificationLocalRing
+import OkaTest.AnalytificationStalk
 import OkaTest.AnalytificationUniversalProperty
 import OkaTest.Axioms
 import OkaTest.Axioms.Analysis

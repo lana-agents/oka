@@ -98,6 +98,14 @@ origin, as a statement about honest rings with no `Spec` stalk in it, and
 defined here is faithfully flat at every point.** It is stated there rather than here only
 because it needs the germ ring, which this file does not import.
 
+**And the two instances in the `Stalk` section below have a second consumer.**
+`Oka/Analytification/PresentationStalk.lean` restates them for `Spec (ℂ[x] ⧸ I)` under a point of
+`X^an`, word for word, and identifies the stalk map of `ComplexAnalytic.analytificationToSpec`
+the way `stalkMap_eq_lift` below identifies this one. **The transparency problem
+this file's docstring measures does not fire there either**, and for the same reason: what makes
+instance search work is that the instances are stated at the concrete point rather than for a
+general `PrimeSpectrum`.
+
 The two instances in the `Stalk` section below are what made that possible, and they are not
 decoration: `RingHom.Flat` of the stalk map can be *stated* without them, but identifying its
 source as a localisation cannot, and that identification is the whole of the crossing. Reading
