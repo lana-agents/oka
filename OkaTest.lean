@@ -3,6 +3,7 @@ import OkaTest.AnalytificationChangeOfVariables
 import OkaTest.AnalytificationComparison
 import OkaTest.AnalytificationFunctor
 import OkaTest.AnalytificationLocalRing
+import OkaTest.AnalytificationSheaf
 import OkaTest.AnalytificationStalk
 import OkaTest.AnalytificationUniversalProperty
 import OkaTest.Axioms

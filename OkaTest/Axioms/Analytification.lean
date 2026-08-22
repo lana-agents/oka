@@ -13,7 +13,9 @@ map on stalks, `X^an ⟶ Spec (ℂ[x]/I)` for a presented affine `ℂ`-algebra, 
 `𝔸^ι` at the origin with its completion, the faithful flatness of the germs over it and the same
 at an arbitrary point — where it becomes a statement about the stalk map itself — the
 analytification as a functor on finitely generated `ℂ`-algebras, the stalk map of the
-comparison morphism of a presented algebra, and the naturality of the comparison morphism.
+analytification as a functor on finitely generated `ℂ`-algebras, the stalk map of the
+comparison morphism of a presented algebra, the naturality of the comparison morphism, and
+the analytification of a sheaf.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -475,3 +477,50 @@ info: 'ComplexAnalytic.analytificationFGAlgToSpec_app' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.analytificationFGAlgToSpec_app
+
+/-! ### The analytification of a sheaf
+
+`Oka/Analytification/Sheaf.lean`, and the general pullback of `𝒪`-modules along a morphism of
+locally ringed spaces it is built from. -/
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.Hom.toRingSheafHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.Hom.toRingSheafHom
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.Hom.pullbackModules' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.Hom.pullbackModules
+
+/--
+info: 'ComplexAnalytic.analytificationSheaf' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationSheaf
+
+/--
+info: 'ComplexAnalytic.analytificationSheafAdj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationSheafAdj
+
+/--
+info: 'ComplexAnalytic.preservesColimits_analytificationSheaf' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.preservesColimits_analytificationSheaf
+
+/--
+info: 'ComplexAnalytic.analytificationSheafUnitToUnit' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationSheafUnitToUnit
