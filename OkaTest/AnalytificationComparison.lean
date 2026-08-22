@@ -25,8 +25,11 @@ What is checked:
   and it is not something the two constructions share by definition: the two spaces are
   analytifications of different tuples in different numbers of variables, and the two spectra are
   spectra of different quotients of different polynomial rings.
-* `analytificationFGAlgToSpec_app_nodeAlg` — the algebra-level transformation has a computable
-  component at the node's algebra, through `ComplexAnalytic.analytificationFGAlgToSpec_app`.
+* `analytificationFGAlgToSpec_app_nodeAlg` — **the algebra-level comparison morphism of the
+  node's algebra is the node's own comparison morphism**, through the comparison isomorphism.
+  Not a component formula in terms of the presentation `Classical.choice` produced, which would
+  say only that the general lemma applies here, but one naming
+  `ComplexAnalytic.analytificationToSpec nodeTuple2` on the nose.
 -/
 
 open CategoryTheory Opposite AlgebraicGeometry
@@ -61,14 +64,20 @@ theorem analytificationToSpec_nodeTuple2_eq :
     CommRingCat.hom_ext presHom23_comp_presHom32.{u}
   rw [h, Spec.locallyRingedSpaceMap_id, Category.comp_id]
 
-/-- The algebra-level transformation has a component at the node's algebra, and it is computed by
-`ComplexAnalytic.analytificationFGAlgToSpec_app` rather than left opaque. -/
+/-- **The algebra-level comparison morphism of the node's algebra is the node's own comparison
+morphism**, through the comparison isomorphism.
+
+This is the statement the test used to be unable to make. `ComplexAnalytic.analytificationFGAlg`
+is defined through the inverse of an equivalence, so its value at an algebra is the
+analytification of *whichever* presentation `Classical.choice` produced, and a component formula
+in terms of that presentation says only that the general lemma applies here. This says the
+right-hand side is `ComplexAnalytic.analytificationToSpec nodeTuple2` — the morphism
+`Oka/Analytification/Presentation.lean` built for the node, named on the nose. -/
 theorem analytificationFGAlgToSpec_app_nodeAlg :
     analytificationFGAlgToSpec.{u}.app (toFGAlg.{u}.obj nodePres2.{u}) =
-      analytificationToSpec.{u}
-          (toFGAlg.{u}.asEquivalence.inverse.obj (toFGAlg.{u}.obj nodePres2.{u})).g ≫
-        (toCommRingCatOp.{u} ⋙ Spec.toLocallyRingedSpace.{u}).map
-          (toFGAlg.{u}.asEquivalence.counitIso.hom.app (toFGAlg.{u}.obj nodePres2.{u})) :=
-  analytificationFGAlgToSpec_app.{u} _
+      AnalyticSpace.forgetToLocallyRingedSpace.{u}.map
+          (analytificationFGAlgObjIso.{u} nodePres2.{u}).hom ≫
+        analytificationToSpec.{u} nodeTuple2.{u} :=
+  analytificationFGAlgToSpec_app_toFGAlg_obj.{u} nodePres2.{u}
 
 end

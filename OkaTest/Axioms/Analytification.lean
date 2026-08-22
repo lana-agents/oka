@@ -524,3 +524,17 @@ info: 'ComplexAnalytic.analytificationSheafUnitToUnit' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.analytificationSheafUnitToUnit
+
+/--
+info: 'ComplexAnalytic.analytificationFGAlgObjIso_hom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationFGAlgObjIso_hom
+
+/--
+info: 'ComplexAnalytic.analytificationFGAlgToSpec_app_toFGAlg_obj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationFGAlgToSpec_app_toFGAlg_obj

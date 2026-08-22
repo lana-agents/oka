@@ -68,6 +68,9 @@ functor would be a definition nothing can be computed from.
   algebra.**
 - `ComplexAnalytic.instIsEquivalenceToFGAlg`: presentations *are* finitely generated
   `ℂ`-algebras.
+- `ComplexAnalytic.analytificationFGAlgObjIso_hom`: the comparison isomorphism is the functor
+  applied to the inverse of the unit — the only content in it, and what lets a consumer compose
+  with it.
 
 ## What is not here
 
@@ -270,6 +273,23 @@ algebra a presentation presents is the analytification of that presentation. -/
 def analytificationFGAlgObjIso (P : Presentation.{u}) :
     analytificationFGAlg.{u}.obj (toFGAlg.{u}.obj P) ≅ AnalyticSpace.analytification.{u} P.g :=
   analytificationFGAlgCompIso.{u}.app P
+
+/-- **The comparison isomorphism is the functor applied to the inverse of the unit.**
+
+Everything in `ComplexAnalytic.analytificationFGAlgCompIso` except this is associators and
+unitors, so this is the only content in it, and it is what a consumer needs in order to compose
+with it. The two identities are dropped by hand because the two spellings of the objects are
+definitionally but not syntactically equal and `Category.id_comp` has to be told which category
+it is in. -/
+theorem analytificationFGAlgObjIso_hom (P : Presentation.{u}) :
+    (analytificationFGAlgObjIso.{u} P).hom =
+      analytificationFunctor.{u}.map (toFGAlg.{u}.asEquivalence.unitIso.inv.app P) := by
+  simp only [analytificationFGAlgObjIso, analytificationFGAlgCompIso, NatIso.trans_app,
+    Iso.trans_hom, Iso.app_hom, Iso.symm_hom, Functor.associator_inv_app,
+    Functor.isoWhiskerRight_hom, Functor.whiskerRight_app, Functor.id_obj,
+    Functor.leftUnitor_hom_app]
+  refine (Category.id_comp (obj := AnalyticSpace.{u}) _).trans
+    (Category.comp_id (obj := AnalyticSpace.{u}) _)
 
 end
 
