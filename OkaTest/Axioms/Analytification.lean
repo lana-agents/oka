@@ -601,3 +601,13 @@ info: 'ComplexAnalytic.flat_stalkMap_analytificationToSpec' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.flat_stalkMap_analytificationToSpec
+
+/-! ### GAGA's local half: the analytification of a sheaf is exact -/
+
+/--
+info: 'ComplexAnalytic.preservesFiniteLimits_analytificationSheaf' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.preservesFiniteLimits_analytificationSheaf
+

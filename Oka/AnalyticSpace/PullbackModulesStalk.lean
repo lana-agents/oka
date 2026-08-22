@@ -3,7 +3,7 @@ Copyright (c) 2026 Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten. All righ
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
-import Oka.Algebra.Category.ModuleCat.Sheaf.PullbackStalk
+import Oka.Algebra.Category.ModuleCat.Sheaf.PullbackExact
 import Oka.AnalyticSpace.Relations
 
 /-!
@@ -47,15 +47,21 @@ and stating the agreement as a lemma is what makes it break if either side moves
 
 - `AlgebraicGeometry.LocallyRingedSpace.Hom.pullbackModulesStalkIso`: **the stalk of a pullback
   is the base change of the stalk.**
+- `AlgebraicGeometry.LocallyRingedSpace.Hom.preservesFiniteLimits_pullbackModules`: **pullback of
+  `𝒪`-modules along a stalkwise flat morphism is left exact.**
 
-## Why this is the local input to GAGA and not GAGA
+## Why the base change is the local input to GAGA, and where the flatness goes
 
 `ComplexAnalytic.analytificationSheaf` is `Hom.pullbackModules` along the comparison morphism, so
 this computes it on stalks — which is the thing every account of the analytification line has said
-was missing. **It consumes no flatness and needs none**: the base-change formula holds for an
-arbitrary morphism of locally ringed spaces. Flatness is what turns the formula into *exactness*
-of the pullback, and that is a separate theorem; the flatness it will consume is
-`ComplexAnalytic.faithfullyFlat_stalkMap_analytificationToSpec`.
+was missing. **The base-change isomorphism consumes no flatness and needs none**: it holds for an
+arbitrary morphism of locally ringed spaces.
+
+Flatness is what turns the formula into *exactness* of the pullback, and that is
+`Hom.preservesFiniteLimits_pullbackModules` below, whose proof is in
+`Oka/Algebra/Category/ModuleCat/Sheaf/PullbackExact.lean`. Applied to the comparison morphism it
+consumes `ComplexAnalytic.faithfullyFlat_stalkMap_analytificationToSpec`, and that is GAGA's
+local half.
 -/
 
 open CategoryTheory TopologicalSpace Opposite Limits
@@ -107,5 +113,12 @@ def Hom.pullbackModulesStalkIso {X : LocallyRingedSpace.{u}} (f : X ⟶ Y) (x : 
       Y.stalkFunctor (f.base x) ⋙ ModuleCat.extendScalars (f.stalkMap x).hom :=
   SheafOfModules.pullbackStalkIso
     (hS := Y.isSheaf_ringSheaf) (hR := X.isSheaf_ringSheaf) f.c x
+
+/-- **If every stalk map of `f` is flat, pullback of `𝒪`-modules along `f` is left exact.** -/
+theorem Hom.preservesFiniteLimits_pullbackModules {X Y : LocallyRingedSpace.{u}} (f : X ⟶ Y)
+    (hflat : ∀ x : X, ((f.stalkMap x).hom).Flat) :
+    Limits.PreservesFiniteLimits f.pullbackModules :=
+  SheafOfModules.preservesFiniteLimits_pullback
+    (hS := Y.isSheaf_ringSheaf) (hR := X.isSheaf_ringSheaf) f.c hflat
 
 end AlgebraicGeometry.LocallyRingedSpace

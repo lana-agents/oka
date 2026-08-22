@@ -11,6 +11,7 @@ import Oka.Algebra.Category.ModuleCat.Sheaf.Colimits
 import Oka.Algebra.Category.ModuleCat.Sheaf.Free
 import Oka.Algebra.Category.ModuleCat.Sheaf.Generators
 import Oka.Algebra.Category.ModuleCat.Sheaf.LocallySurjective
+import Oka.Algebra.Category.ModuleCat.Sheaf.PullbackExact
 import Oka.Algebra.Category.ModuleCat.Sheaf.PullbackStalk
 import Oka.Algebra.Category.ModuleCat.Sheaf.PushforwardContinuous
 import Oka.Algebra.Category.ModuleCat.Sheaf.Stalk

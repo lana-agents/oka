@@ -2,6 +2,7 @@ import OkaTest.AnalyticSpaceLocal
 import OkaTest.Analytification
 import OkaTest.AnalytificationChangeOfVariables
 import OkaTest.AnalytificationComparison
+import OkaTest.AnalytificationExact
 import OkaTest.AnalytificationFlatness
 import OkaTest.AnalytificationFunctor
 import OkaTest.AnalytificationLocalRing
