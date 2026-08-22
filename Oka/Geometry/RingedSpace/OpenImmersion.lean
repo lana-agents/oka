@@ -136,13 +136,19 @@ This is the universal property of `X|V` as an object *mapped into*, the half tha
 and this says everything landing in `V` maps to `X|V`.
 
 It is `IsOpenImmersion.lift` at `f = ofRestrict`, with `range_ofRestrict` turning the hypothesis
-into the containment of images that `lift` wants. Stating it is worth a name because
-`IsOpenImmersion.lift` needs the instance `IsOpenImmersion (X.ofRestrict V.isOpenEmbedding)`, and
-**instance search for that instance fails whenever `V` reaches the call site spelled through a
-coercion other than `X.toTopCat`** — for instance as an open of the carrier of a complex analytic
-space, where `TopologicalSpace.Opens.inclusion' V` elaborates at `… ⟶ ↑X.toPresheafedSpace`.
-Definitionally equal, not found by instance search. Passing `V` as an argument to this
-declaration crosses that seam at default transparency, where it is free. -/
+into the containment of images that `lift` wants.
+
+**Stating it is worth a name because of where that rewrite has to happen.** An open of the
+carrier of a complex analytic space reaches a call site with `TopologicalSpace.Opens.inclusion' V`
+elaborated at `… ⟶ ↑X.toPresheafedSpace` rather than at `… ⟶ X.toTopCat`; the two are
+definitionally equal, and calling `IsOpenImmersion.lift` there *does* get an instance —
+`OkaTest/Nonvanishing.lean` records that `inferInstance` finds
+`IsOpenImmersion (X.ofRestrict U.isOpenEmbedding)` at exactly that spelling — but the
+`rw [range_ofRestrict]` inside the proof obligation then fails, reporting *"did not find an
+occurrence of the pattern"* with the note that **the target is not type-correct under the
+`instances` transparency level**; the mismatch of the two spellings appears only in the
+`Full error:` block. Here `V` is an ordinary argument spelled through `X`, the rewrite is
+performed once, and callers never meet it. -/
 noncomputable def liftRestrict : Z ⟶ X.restrict V.isOpenEmbedding :=
   IsOpenImmersion.lift (X.ofRestrict V.isOpenEmbedding) φ (by rw [range_ofRestrict]; exact h)
 
