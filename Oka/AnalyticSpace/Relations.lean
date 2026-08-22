@@ -55,16 +55,22 @@ applies.
 **The site is spelled `↑Y.toPresheafedSpace` rather than `↑Y`, and that is load-bearing.** The
 two are definitionally equal, but `TopologicalSpace.Opens.map f.base` — for `f` a morphism of
 locally ringed spaces — carries its implicit type arguments in the first spelling, and instance
-search does not cross the two: with `↑Y` here, Mathlib's
+search does not cross the two. `↑Y` elaborates to `↑Y.toTopCat`, and that is what makes the two
+discrimination-tree keys differ, since the key is built from the elaborated implicit arguments;
+so with `↑Y` here, Mathlib's
 
 `instance : (Opens.map f).IsContinuous (Opens.grothendieckTopology Y)
   (Opens.grothendieckTopology X)`
 
-is not found for `f.base`, and **declaring the instance oneself in the other spelling does not
-help**, because the discrimination-tree key is built from the elaborated implicit arguments.
-Measured twice. The consequence, if this is ever changed back, is that
-`AlgebraicGeometry.LocallyRingedSpace.Hom.toRingSheafHom` below cannot be stated and
-`SheafOfModules.pullback` cannot be applied to a morphism of locally ringed spaces at all. -/
+is not found for `f.base`. Measured in three sessions.
+
+**The consequence is a cost and not an impossibility, which is a correction of what this
+docstring used to say.** The missing instance can be declared by hand — `inferInstanceAs` from
+the `↑Y.toPresheafedSpace` spelling of the same statement transports it — and with it
+`AlgebraicGeometry.LocallyRingedSpace.Hom.toRingSheafHom` below can be stated at the `↑Y` site
+after all; without it, it cannot, and that half was measured too. So the old spelling costs one
+transported instance, which every consumer would then need, where the spelling used here costs
+none and is what `Opens.map` produces anyway. **Do not tidy it back.** -/
 noncomputable def ringSheaf :
     Sheaf (Opens.grothendieckTopology ↑Y.toPresheafedSpace) RingCat.{u} :=
   ⟨Y.presheaf ⋙ forget₂ CommRingCat.{u} RingCat.{u},
