@@ -64,6 +64,7 @@ import Oka.Regular
 import Oka.RingTheory.AdicCompletion.Algebra
 import Oka.RingTheory.Filtration
 import Oka.RingTheory.Flat.Descent
+import Oka.RingTheory.Flat.Quotient
 import Oka.RingTheory.Ideal.Maps
 import Oka.RingTheory.LocalRing.ResidueField.Basic
 import Oka.RingTheory.Localization.Ideal
