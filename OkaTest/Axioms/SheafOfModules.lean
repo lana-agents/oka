@@ -9,7 +9,8 @@ import Oka
 # Axiom regression tests: Sheaves of modules and coherence
 
 The mirror-tree theory of `Oka/Algebra/Category/ModuleCat/Sheaf/`, and its first analytic
-consequences: ideal sheaves and quotients of the structure sheaf.
+consequences: ideal sheaves and quotients of the structure sheaf, together with stalks of
+sheaves of modules on a space and the exactness they detect.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -119,3 +120,21 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.isZero_cokernel_sectionsHom_one' dep
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.isZero_cokernel_sectionsHom_one
+
+/-! ### Stalks of sheaves of modules on a space, and exactness
+
+`Oka/Algebra/Category/ModuleCat/Sheaf/Stalk.lean`. -/
+
+/--
+info: 'TopCat.Sheaf.exact_iff_stalk_exact' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TopCat.Sheaf.exact_iff_stalk_exact
+
+/--
+info: 'SheafOfModules.exact_of_stalk_exact' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.exact_of_stalk_exact
