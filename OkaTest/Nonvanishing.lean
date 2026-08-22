@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Oka
+import OkaTest.OpenSubspace
 
 /-!
 # Non-vacuity of the non-vanishing locus and of `liftOpen`
@@ -13,17 +14,20 @@ Both declarations tested here are satisfied by degenerate data. `nonvanishing` i
 already the inclusion of an open subspace, it produces something the repository already had. So
 the checks below are chosen to rule those two readings out.
 
-* **The non-vanishing locus is computed on a space which is not `ℂ^n`.**
-  `mem_nonvanishing_nodeCoord_iff` says the non-vanishing locus of the `j`-th coordinate function
-  of the node is `{p | p_j ≠ 0}` — the punctured `j`-th axis, which `OkaTest/OpenSubspace.lean`
-  constructs by hand as `nodeAxis j`, openness proof included. Here openness comes from
-  `ComplexAnalytic.AnalyticSpace.nonvanishing` and is not proved again. It is a **proper nonempty**
-  open subset: `nonvanishing_nodeCoord_ne_top` and `ne_bot`.
+* **The non-vanishing locus is computed on a space which is not `ℂ^n`, and it is an open subset
+  the development already had.** `nonvanishing_nodeCoord_eq_nodeAxis` says the non-vanishing locus
+  of the `j`-th coordinate function of the node **is** `nodeAxis j`, the punctured `j`-th axis
+  that `OkaTest/OpenSubspace.lean` constructs by hand, openness proof included — so the two
+  routes to that open subset agree, and this one proves nothing about openness. It is a **proper
+  nonempty** open subset: `nonvanishing_nodeCoord_ne_top` and `ne_bot`.
 
 * **On a space with zero divisors the two loci are disjoint.** `nodeCoord 0 * nodeCoord 1 = 0`
   on the node, so `nonvanishing_nodeCoord_inf_eq_bot` follows from
   `ComplexAnalytic.AnalyticSpace.nonvanishing_mul`. This is what a locus defined through germs
-  buys over one defined by hand: it interacts with the ring structure.
+  buys over one defined by hand: it interacts with the ring structure. Composed with the equality
+  above it **reproves `nodeAxis_inf_eq_bot`**, which `OkaTest/OpenSubspace.lean` gets from a
+  pointwise argument — two independent proofs of one statement, which is what makes the equality
+  a check rather than a definition unfolded.
 
 * **`liftOpen` is run at a morphism that is not an inclusion of open subspaces.** `nodeIncl`
   embeds the node in `ℂ²`, and the section `1 - z₀ z₁` is invertible at every point of the node
@@ -51,49 +55,41 @@ noncomputable section
 
 /-! ### The non-vanishing locus of a coordinate on the node -/
 
-/-- **The non-vanishing locus of the `j`-th coordinate function of the node is the punctured
-`j`-th axis.** `OkaTest/OpenSubspace.lean` builds the same open subset by hand, with its own
-continuity argument; here it is `ComplexAnalytic.AnalyticSpace.nonvanishing` and the value is
-read off by `ComplexAnalytic.eval_nodeCoord`. -/
+/-- **A point of the node lies in the non-vanishing locus of the `j`-th coordinate function
+exactly when its `j`-th coordinate is nonzero.** `ComplexAnalytic.eval_nodeCoord` reads the value
+off; nothing else is involved. -/
 theorem mem_nonvanishing_nodeCoord_iff (p : AnalyticSpace.node.{u}) (j : ULift.{u} (Fin 2)) :
     p ∈ (AnalyticSpace.node.{u}).nonvanishing (nodeCoord.{u} j) ↔ p.1.1 j ≠ 0 := by
   rw [AnalyticSpace.mem_nonvanishing_iff, eval_nodeCoord]
 
-/-- The point of the node whose `j`-th coordinate is `1` and whose other coordinate is `0`. -/
-def nodeAxisPoint (j : ULift.{u} (Fin 2)) : AnalyticSpace.node.{u} := by
-  classical
-  refine ⟨⟨fun l ↦ if l = j then 1 else 0, trivial⟩, (mem_zeroLocus_nodeSection_iff _).2 ?_⟩
-  dsimp only
-  rcases eq_or_ne (ULift.up 0 : ULift.{u} (Fin 2)) j with h | h
-  · rw [if_neg (fun hcon : (ULift.up 1 : ULift.{u} (Fin 2)) = j ↦ by
-      simpa using congrArg ULift.down (h.trans hcon.symm)), mul_zero]
-  · rw [if_neg h, zero_mul]
+/-- **The non-vanishing locus of the `j`-th coordinate function of the node is the punctured
+`j`-th axis.**
 
-lemma nodeAxisPoint_coord (j l : ULift.{u} (Fin 2)) :
-    (nodeAxisPoint.{u} j).1.1 l = if l = j then 1 else 0 := rfl
-
-/-- The origin of `ℂ²`, as a point of the node. -/
-def nodeOriginPoint : AnalyticSpace.node.{u} :=
-  ⟨(⟨(0 : ULift.{u} (Fin 2) → ℂ), trivial⟩ : nodeAmbient.{u}),
-    origin_mem_zeroLocus_nodeSection.{u}⟩
+`nodeAxis` is built by hand in `OkaTest/OpenSubspace.lean`, with its own continuity argument for
+openness; `ComplexAnalytic.AnalyticSpace.nonvanishing` gets the same open subset out of
+`AlgebraicGeometry.RingedSpace.basicOpen` and proves nothing topological. That the two agree is
+what makes the definition the right one rather than merely a definition. -/
+theorem nonvanishing_nodeCoord_eq_nodeAxis (j : ULift.{u} (Fin 2)) :
+    (AnalyticSpace.node.{u}).nonvanishing (nodeCoord.{u} j) = nodeAxis.{u} j :=
+  TopologicalSpace.Opens.ext (Set.ext fun p ↦ mem_nonvanishing_nodeCoord_iff p j)
 
 /-- **The punctured axis is not everything**: the origin is a point of the node at which the
 coordinate vanishes. -/
 theorem nonvanishing_nodeCoord_ne_top (j : ULift.{u} (Fin 2)) :
     (AnalyticSpace.node.{u}).nonvanishing (nodeCoord.{u} j) ≠ ⊤ := by
   intro hcon
-  have hmem : nodeOriginPoint.{u} ∈ (AnalyticSpace.node.{u}).nonvanishing (nodeCoord.{u} j) := by
+  have hmem : nodeOrigin.{u} ∈ (AnalyticSpace.node.{u}).nonvanishing (nodeCoord.{u} j) := by
     rw [hcon]
     trivial
-  exact (mem_nonvanishing_nodeCoord_iff nodeOriginPoint.{u} j).1 hmem rfl
+  exact (mem_nonvanishing_nodeCoord_iff nodeOrigin.{u} j).1 hmem rfl
 
 /-- **The punctured axis is not empty**: `(1, 0)` and `(0, 1)` are points of the node. -/
 theorem nonvanishing_nodeCoord_ne_bot (j : ULift.{u} (Fin 2)) :
     (AnalyticSpace.node.{u}).nonvanishing (nodeCoord.{u} j) ≠ ⊥ := by
   intro hcon
-  have hmem : nodeAxisPoint.{u} j ∈ (AnalyticSpace.node.{u}).nonvanishing (nodeCoord.{u} j) :=
+  have hmem : axisPoint.{u} j ∈ (AnalyticSpace.node.{u}).nonvanishing (nodeCoord.{u} j) :=
     (mem_nonvanishing_nodeCoord_iff _ j).2
-      (by rw [nodeAxisPoint_coord, if_pos rfl]; exact one_ne_zero)
+      (by rw [axisPoint_coord, if_pos rfl]; exact one_ne_zero)
   rw [hcon] at hmem
   exact hmem
 
@@ -106,6 +102,14 @@ theorem nonvanishing_nodeCoord_inf_eq_bot :
   rw [← AnalyticSpace.nonvanishing_mul, nodeCoord_mul]
   refine eq_bot_iff.2 fun p hp ↦ ?_
   exact ((AnalyticSpace.mem_nonvanishing_iff (AnalyticSpace.node.{u}) 0).1 hp (map_zero _)).elim
+
+/-- **`nodeAxis_inf_eq_bot` a second time, from the node's equation rather than pointwise.**
+`OkaTest/OpenSubspace.lean` proves it by taking a point and using `z₀ z₁ = 0` on it; here it is
+`nodeCoord_mul` and the fact that the non-vanishing locus of a product is an intersection, with
+no point mentioned. -/
+example : nodeAxis.{u} (ULift.up 0) ⊓ nodeAxis.{u} (ULift.up 1) = ⊥ := by
+  rw [← nonvanishing_nodeCoord_eq_nodeAxis, ← nonvanishing_nodeCoord_eq_nodeAxis]
+  exact nonvanishing_nodeCoord_inf_eq_bot.{u}
 
 /-! ### Lifting the inclusion of the node into a proper open subspace of `ℂ²` -/
 
