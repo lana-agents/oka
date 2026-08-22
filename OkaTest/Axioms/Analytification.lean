@@ -10,7 +10,8 @@ import Oka
 
 The comparison morphisms of `Oka/Analytification/`: `ℂ^ι ⟶ Spec (MvPolynomial ι ℂ)` and its
 map on stalks, `X^an ⟶ Spec (ℂ[x]/I)` for a presented affine `ℂ`-algebra, the local ring of
-`𝔸^ι` at the origin with its completion, and the faithful flatness of the germs over it.
+`𝔸^ι` at the origin with its completion, the faithful flatness of the germs over it, and the
+analytification as a functor on finitely generated `ℂ`-algebras.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -292,3 +293,40 @@ info: 'ComplexAnalytic.analytificationIsoOfPresHom' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.analytificationIsoOfPresHom
+
+/-! ### The analytification as a functor -/
+
+/--
+info: 'ComplexAnalytic.analytificationFunctor' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationFunctor
+
+/--
+info: 'ComplexAnalytic.exists_presentation' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.exists_presentation
+
+/--
+info: 'ComplexAnalytic.toFGAlgFullyFaithful' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.toFGAlgFullyFaithful
+
+/--
+info: 'ComplexAnalytic.analytificationFGAlg' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationFGAlg
+
+/--
+info: 'ComplexAnalytic.analytificationFGAlgCompIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationFGAlgCompIso

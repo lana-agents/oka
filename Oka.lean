@@ -32,6 +32,7 @@ import Oka.AnalyticSpace.Restrict
 import Oka.Analytification.AffineSpace
 import Oka.Analytification.ChangeOfVariables
 import Oka.Analytification.Flatness
+import Oka.Analytification.Functor
 import Oka.Analytification.LocalRing
 import Oka.Analytification.Presentation
 import Oka.Analytification.UniversalProperty

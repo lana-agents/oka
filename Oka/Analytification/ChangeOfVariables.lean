@@ -55,11 +55,13 @@ isomorphism of presented algebras into an isomorphism of analytifications, which
 ## What is still not here
 
 * **A functor.** `ComplexAnalytic.analytificationMap` is contravariant, identity-preserving and
-  composition-preserving, so the data of one exists — but `ComplexAnalytic.PresHom` is not
-  bundled as a category, nothing is stated as a `CategoryTheory.Functor`, and the assignment on
-  objects still takes a *tuple* rather than a finitely presented `ℂ`-algebra. Making the
-  analytification a functor means choosing a presentation for each algebra, which is a
-  construction this file does not perform.
+  composition-preserving, so the data of one exists, but nothing here is stated as a
+  `CategoryTheory.Functor` and the assignment on objects still takes a *tuple* rather than a
+  finitely presented `ℂ`-algebra. That is `Oka/Analytification/Functor.lean`, which bundles
+  `ComplexAnalytic.PresHom` as a category and this file's two functoriality lemmas as
+  `ComplexAnalytic.analytificationFunctor`, and then removes the presentation from the source.
+  The presentation is not *constructed* there — the earlier version of this paragraph said it
+  would have to be — but chosen, by the inverse of an equivalence of categories.
 * **The comparison with `Spec`.** `ComplexAnalytic.analytificationToSpec` is not shown natural in
   the presentation.
 * **Anything analytic.** Every proof here is `MvPolynomial.ringHom_ext` and category-theoretic
