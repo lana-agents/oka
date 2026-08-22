@@ -68,9 +68,21 @@ positives.  A candidate resolves if any of the following holds.
   that shape, because the namespace either exists with declarations in it or does not resolve
   at all.
 
-* **Short-head rule.**  The head component is at most two characters.  `i.stalkMap`, `Γ.map`,
-  `φ.symm`, `U.extend'`, `w.2` are field notation on a local binder; no namespace on this project
-  or in Mathlib is that short, so nothing is hidden.
+* **Short-head rule.**  The head component is at most two characters *and is not a root
+  namespace* — no constant begins with it.  `i.stalkMap`, `Γ.map`, `φ.symm`, `U.extend'`, `w.2`
+  are field notation on a local binder.
+
+  The second condition is not decoration.  An earlier version of this rule said that no namespace
+  on this project or in Mathlib is that short; that is **false** — `Eq`, `Or`, `Ne` and `Id` are,
+  with 52, 24, 38 and 20 constants under them, `Eq.symm` and `Eq.mp` among them — so without it a
+  misspelled `Eq.symmm` is accepted silently.
+
+  *Root* namespace rather than namespace-anywhere, and the difference is the whole live
+  population of this rule.  `Γ`, `M`, `V`, `X` and `w` all occur as interior components of some
+  constant (`…Γ.map`, `…M.foo`), so the namespace-anywhere test rejects every one of the seven
+  short heads actually used in this tree and reports twelve false positives.  None of them occurs
+  at the root, and `Eq`, `Or`, `Ne`, `Id` all do.  Measured, not assumed — the first version of
+  this rule assumed and was wrong in both directions on the same day.
 
 Anything left over is a finding unless `scripts/docstring-names-ignore.txt` lists it.
 
@@ -95,7 +107,8 @@ IGNORE_FILE = os.path.join("scripts", "docstring-names-ignore.txt")
 DUMP_SCRIPT = os.path.join("scripts", "DumpEnvNames.lean")
 ROOTS = ("Oka", "OkaTest")
 
-# A candidate whose head component is at most this long is field notation on a local binder.
+# A candidate whose head component is at most this long, and is not a root namespace, is field
+# notation on a local binder rather than a declaration reference.
 MAX_LOCAL_HEAD = 2
 
 
@@ -177,18 +190,21 @@ def candidates() -> dict[str, list[tuple[str, int]]]:
     return found
 
 
-def scan(dump: str, wanted: set[str], heads: set[str]) -> tuple[set[str], set[str], int]:
-    """One pass over the dump: which of `wanted` occur as a suffix, which of `heads` as a namespace.
+def scan(dump: str, wanted: set[str],
+         heads: set[str]) -> tuple[set[str], set[str], set[str], int]:
+    """One pass over the dump, classifying `wanted` and `heads` against every name in it.
 
     A *suffix* is a run of whole components reaching the end of the name; a *namespace* is a run
-    of whole components with at least one component after it.  Iterating over the dump and
-    testing its runs against the two small sets, rather than indexing every run of every name,
-    keeps this linear in the dump with nothing but the two sets held in memory.
+    of whole components with at least one component after it; a *root namespace* is a namespace
+    run that also starts at the first component.  Iterating over the dump and testing its runs
+    against the two small sets, rather than indexing every run of every name, keeps this linear
+    in the dump with nothing but those sets held in memory.
 
-    Returns `(resolved, namespaces, lines)`.
+    Returns `(resolved, namespaces, root_namespaces, lines)`.
     """
     resolved: set[str] = set()
     namespaces: set[str] = set()
+    root_namespaces: set[str] = set()
     lines = 0
     with open(dump, encoding="utf-8") as f:
         for line in f:
@@ -208,7 +224,9 @@ def scan(dump: str, wanted: set[str], heads: set[str]) -> tuple[set[str], set[st
                             resolved.add(run)
                     elif run in heads:
                         namespaces.add(run)
-    return resolved, namespaces, lines
+                        if i == 0:
+                            root_namespaces.add(run)
+    return resolved, namespaces, root_namespaces, lines
 
 
 def read_ignore() -> set[str]:
@@ -262,7 +280,7 @@ def main() -> int:
     wanted |= heads
 
     dump = args.dump or build_dump()
-    resolved, namespaces, dumped = scan(dump, wanted, heads)
+    resolved, namespaces, root_namespaces, dumped = scan(dump, wanted, heads)
     if not args.dump:
         os.unlink(dump)
 
@@ -274,12 +292,16 @@ def main() -> int:
                 return True
         return False
 
+    def is_local_binder(name: str) -> bool:
+        head = name.split(".")[0]
+        return len(head) <= MAX_LOCAL_HEAD and head not in root_namespaces
+
     ignored = read_ignore()
     findings = [
         name for name in sorted(found)
         if name not in resolved
         and name not in ignored
-        and len(name.split(".")[0]) > MAX_LOCAL_HEAD
+        and not is_local_binder(name)
         and not os.path.exists(os.path.join(REPO, name))
         and not is_field_notation(name)
     ]
