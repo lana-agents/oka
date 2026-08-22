@@ -71,11 +71,12 @@ functor would be a definition nothing can be computed from.
 
 ## What is not here
 
-* **Naturality of the comparison with `Spec`.** `ComplexAnalytic.analytificationToSpec` is still
-  not shown natural in the presentation, so this is a functor to `AnalyticSpace` and **not yet
-  the analytification as a functor over affine `ℂ`-schemes of finite type**. That is the next
-  step and it is the one that makes `X^an ⟶ X` part of the structure rather than a separate
-  construction per presentation.
+* **Naturality of the comparison with `Spec`** is not here, and is no longer missing: it is
+  `Oka/Analytification/Comparison.lean`, which makes `ComplexAnalytic.analytificationToSpec` a
+  natural transformation on presentations and then, along the equivalence below, one on the
+  finitely generated `ℂ`-algebras themselves. That is what makes `X^an ⟶ X` part of the
+  structure rather than a separate construction per presentation. It stays in a separate file
+  because this one is about the *source* category and that one is about the target.
 * **Anything non-affine.** A functor on schemes locally of finite type would be built from this
   one by gluing, and nothing here glues.
 * **Anything analytic.** Every proof in this file is category-theoretic bookkeeping or
@@ -94,6 +95,12 @@ restriction but the precise statement of what the construction covers. Affine sc
 and `ComplexAnalytic.analytificationMap` are stated for a tuple
 `g : Fin k → MvPolynomial (ULift (Fin n)) ℂ`; this structure is that tuple with its two indices,
 and nothing more. It exists so that `PresHom` has a category to live in.
+
+**And it is not the subject of `Oka/Analytification/Presentation.lean`.**
+`ComplexAnalytic.Presentation` here is the bundled triple `(n, k, g)` that gives
+`ComplexAnalytic.PresHom` a category to live in; `Oka/Analytification/Presentation.lean` is a
+different thing — the construction of `X^an` from one such tuple, which this file's objects
+index.
 
 ## References
 

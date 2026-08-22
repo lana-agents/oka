@@ -63,7 +63,9 @@ isomorphism of presented algebras into an isomorphism of analytifications, which
   The presentation is not *constructed* there — the earlier version of this paragraph said it
   would have to be — but chosen, by the inverse of an equivalence of categories.
 * **The comparison with `Spec`.** `ComplexAnalytic.analytificationToSpec` is not shown natural in
-  the presentation.
+  the presentation *here*; it is, in `Oka/Analytification/Comparison.lean`, and the ring-level
+  square it is `Spec` of is `ComplexAnalytic.Γ_map_analytificationMap_comp_quotientToGlobal`
+  below — proved for functoriality rather than for that.
 * **Anything analytic.** Every proof here is `MvPolynomial.ringHom_ext` and category-theoretic
   bookkeeping; the analytic content is upstream, in the universal property.
 
