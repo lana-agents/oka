@@ -53,6 +53,8 @@ universe u
 
 noncomputable section
 
+namespace OkaTest.Nonvanishing
+
 /-! ### The non-vanishing locus of a coordinate on the node -/
 
 /-- **A point of the node lies in the non-vanishing locus of the `j`-th coordinate function
@@ -178,5 +180,7 @@ theorem liftOpen_ofRestrict_eq_restrictLE {X : AnalyticSpace.{u}} {V W : X.Opens
       X.restrictLE h :=
   AnalyticSpace.hom_ext_restrict W _ _
     ((AnalyticSpace.liftOpen_fac _ _ _).trans (X.restrictLE_fac h).symm)
+
+end OkaTest.Nonvanishing
 
 end
