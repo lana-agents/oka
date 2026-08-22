@@ -102,7 +102,7 @@ and not `*`: `Y.ringSheaf.obj.obj (op V)` and `Y.presheaf.obj (op V)` share a ca
 not the same type as far as elaboration is concerned. -/
 @[simp]
 lemma val_app_sectionsHom {I : Type u} [Fintype I] [DecidableEq I]
-    (f : I → Y.presheaf.obj (op ⊤)) (V : Opens Y)
+    (f : I → Y.presheaf.obj (op ⊤)) (V : Opens ↑Y.toPresheafedSpace)
     (b : (SheafOfModules.free (R := Y.ringSheaf) I).val.obj (op V)) :
     (Y.sectionsHom f).val.app (op V) b =
       ∑ i : I, SheafOfModules.freeEval (R := Y.ringSheaf) (I := I) (op V) b i •

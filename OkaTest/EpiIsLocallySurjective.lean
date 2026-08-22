@@ -38,20 +38,20 @@ example : Sheaf.IsLocallySurjective
 
 /-- The section-level form, at the same site: a section of `𝒪 ⧸ (f₁, …, f_k)` over an open set
 of `ℂ^ι` is, on a covering sieve, the image of a section of `𝒪`. -/
-example (Z : Opens (complexSpace ι).toTopCat)
+example (Z : Opens ↑(complexSpace ι).toPresheafedSpace)
     (b : (cokernel ((complexSpace ι).sectionsHom f)).val.obj (op Z)) :
-    ∃ S : Sieve Z, S ∈ Opens.grothendieckTopology (complexSpace ι).toTopCat Z ∧
-      ∀ ⦃W : Opens (complexSpace ι).toTopCat⦄ (g : W ⟶ Z), S g →
+    ∃ S : Sieve Z, S ∈ Opens.grothendieckTopology ↑(complexSpace ι).toPresheafedSpace Z ∧
+      ∀ ⦃W : Opens ↑(complexSpace ι).toPresheafedSpace⦄ (g : W ⟶ Z), S g →
         ∃ a, (cokernel.π ((complexSpace ι).sectionsHom f)).val.app (op W) a =
           (cokernel ((complexSpace ι).sectionsHom f)).val.map g.op b :=
   exists_app_eq_of_epi _ Z b
 
 /-- The finite-family form, at the same site: finitely many sections lift on **one** covering
 sieve. This is the shape a lift of a map out of a finite free sheaf needs. -/
-example {L : Type u} [Finite L] (Z : Opens (complexSpace ι).toTopCat)
+example {L : Type u} [Finite L] (Z : Opens ↑(complexSpace ι).toPresheafedSpace)
     (b : L → (cokernel ((complexSpace ι).sectionsHom f)).val.obj (op Z)) :
-    ∃ S : Sieve Z, S ∈ Opens.grothendieckTopology (complexSpace ι).toTopCat Z ∧
-      ∀ ⦃W : Opens (complexSpace ι).toTopCat⦄ (g : W ⟶ Z), S g →
+    ∃ S : Sieve Z, S ∈ Opens.grothendieckTopology ↑(complexSpace ι).toPresheafedSpace Z ∧
+      ∀ ⦃W : Opens ↑(complexSpace ι).toPresheafedSpace⦄ (g : W ⟶ Z), S g →
         ∀ l, ∃ a, (cokernel.π ((complexSpace ι).sectionsHom f)).val.app (op W) a =
           (cokernel ((complexSpace ι).sectionsHom f)).val.map g.op (b l) :=
   exists_forall_app_eq_of_epi _ Z b
@@ -61,9 +61,9 @@ sieve, everything `ψ` produces is in the image of the quotient map. This is the
 #577 consumes. -/
 example {L : Type u} [Finite L]
     (ψ : free (R := (complexSpace ι).ringSheaf) L ⟶ cokernel ((complexSpace ι).sectionsHom f))
-    (Z : Opens (complexSpace ι).toTopCat) :
-    ∃ S : Sieve Z, S ∈ Opens.grothendieckTopology (complexSpace ι).toTopCat Z ∧
-      ∀ ⦃W : Opens (complexSpace ι).toTopCat⦄ (g : W ⟶ Z), S g →
+    (Z : Opens ↑(complexSpace ι).toPresheafedSpace) :
+    ∃ S : Sieve Z, S ∈ Opens.grothendieckTopology ↑(complexSpace ι).toPresheafedSpace Z ∧
+      ∀ ⦃W : Opens ↑(complexSpace ι).toPresheafedSpace⦄ (g : W ⟶ Z), S g →
         ∀ c : (free (R := (complexSpace ι).ringSheaf) L).val.obj (op W),
           ∃ a, (cokernel.π ((complexSpace ι).sectionsHom f)).val.app (op W) a =
             ψ.val.app (op W) c :=

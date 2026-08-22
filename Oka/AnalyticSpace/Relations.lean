@@ -23,6 +23,10 @@ ringed space instead of `ℂ^ι`.
 ## Main definitions
 
 - `AlgebraicGeometry.LocallyRingedSpace.ringSheaf`: the structure sheaf as a sheaf of rings.
+- `AlgebraicGeometry.LocallyRingedSpace.Hom.toRingSheafHom`: the induced morphism of sheaves of
+  rings. Material for a Mathlib file that does not exist — Mathlib has it for schemes only, as
+  `AlgebraicGeometry.Scheme.Hom.toRingCatSheafHom` — and it lives here, next to `ringSheaf`,
+  because the two must agree on how the site is spelled; see `ringSheaf`'s docstring.
 - `AlgebraicGeometry.LocallyRingedSpace.IsCoherentStructureSheaf`: `𝒪_Y` is coherent over itself.
 - `AlgebraicGeometry.LocallyRingedSpace.HasLocalRelations`: the concrete relations condition.
 
@@ -42,11 +46,47 @@ variable (Y : LocallyRingedSpace.{u})
 
 /-- The structure sheaf of a locally ringed space, viewed as a sheaf of rings rather than of
 commutative rings. This is the form in which the theory of `SheafOfModules` and coherence
-applies. -/
-noncomputable def ringSheaf : Sheaf (Opens.grothendieckTopology Y) RingCat.{u} :=
+applies.
+
+**The site is spelled `↑Y.toPresheafedSpace` rather than `↑Y`, and that is load-bearing.** The
+two are definitionally equal, but `TopologicalSpace.Opens.map f.base` — for `f` a morphism of
+locally ringed spaces — carries its implicit type arguments in the first spelling, and instance
+search does not cross the two: with `↑Y` here, Mathlib's
+
+`instance : (Opens.map f).IsContinuous (Opens.grothendieckTopology Y)
+  (Opens.grothendieckTopology X)`
+
+is not found for `f.base`, and **declaring the instance oneself in the other spelling does not
+help**, because the discrimination-tree key is built from the elaborated implicit arguments.
+Measured twice. The consequence, if this is ever changed back, is that
+`AlgebraicGeometry.LocallyRingedSpace.Hom.toRingSheafHom` below cannot be stated and
+`SheafOfModules.pullback` cannot be applied to a morphism of locally ringed spaces at all. -/
+noncomputable def ringSheaf :
+    Sheaf (Opens.grothendieckTopology ↑Y.toPresheafedSpace) RingCat.{u} :=
   ⟨Y.presheaf ⋙ forget₂ CommRingCat.{u} RingCat.{u},
     (TopCat.Presheaf.isSheaf_iff_isSheaf_comp
       (forget₂ CommRingCat.{u} RingCat.{u}) Y.presheaf).1 Y.IsSheaf⟩
+
+/-- Sheafification is available at the site `ComplexAnalytic.ringSheaf` uses.
+
+Mathlib has this for `Opens.grothendieckTopology ↑Y.toTopCat`; the two spellings are
+definitionally equal and instance search does not cross them, for the reason above. -/
+instance hasSheafify_toPresheafedSpace :
+    HasSheafify (Opens.grothendieckTopology ↑Y.toPresheafedSpace) AddCommGrpCat.{u} :=
+  inferInstanceAs (HasSheafify (Opens.grothendieckTopology ↑Y.toTopCat) AddCommGrpCat.{u})
+
+variable {Y} in
+/-- **The morphism of sheaves of rings attached to a morphism of locally ringed spaces.**
+
+Mathlib has this for schemes, as `AlgebraicGeometry.Scheme.Hom.toRingCatSheafHom`, and not for
+locally ringed spaces; this is that definition verbatim. It is what
+`SheafOfModules.pullback` consumes, and hence what makes the pullback of
+`𝒪`-modules along a morphism of locally ringed spaces — the analytification of a sheaf, among
+other things — available at all. -/
+noncomputable def Hom.toRingSheafHom {X : LocallyRingedSpace.{u}} (f : X ⟶ Y) :
+    Y.ringSheaf ⟶ ((Opens.map f.base).sheafPushforwardContinuous
+      RingCat.{u} _ _).obj X.ringSheaf where
+  hom := Functor.whiskerRight f.c _
 
 /-- A locally ringed space has **coherent structure sheaf** if `𝒪_Y` is coherent as a sheaf of
 modules over itself. -/
