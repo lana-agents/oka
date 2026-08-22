@@ -11,3 +11,21 @@
 # false positive of a shape not on that list, prefer fixing the rule to growing this file.
 #
 # This file is empty, and the intention is that it stays that way.
+
+# Real Mathlib declarations that this project does **not** import, so they resolve nowhere in the
+# environment of `Oka` + `OkaTest` and the checker is right to report them. They are cited in
+# prose as the scheme-level analogues of what `Oka/AnalyticSpace/Relations.lean` and
+# `Oka/Analytification/Sheaf.lean` build for locally ringed spaces, and naming them is the point
+# of the sentences they appear in. Both live in `Mathlib/AlgebraicGeometry/Modules/`, which is
+# behind `Mathlib/AlgebraicGeometry/AffineScheme.lean` and is not worth importing for a docstring.
+#
+# This is the first class of false positive found that is not a defect in the prose and not
+# fixable by a rule: the name is correct, the declaration exists, and the only thing wrong is
+# that this build cannot see it. If the checker ever grows a second environment dump covering
+# more of Mathlib, the entries below should go.
+#
+# Both are fully qualified deliberately. An entry for a *short* form — `Scheme.Modules`, say —
+# would silently absorb a future, different declaration with that suffix, which is the opposite
+# of what this checker is for; the prose is written with the full path instead.
+AlgebraicGeometry.Scheme.Hom.toRingCatSheafHom
+AlgebraicGeometry.Scheme.Modules

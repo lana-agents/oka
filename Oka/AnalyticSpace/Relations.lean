@@ -3,6 +3,7 @@ Copyright (c) 2026 Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten. All righ
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
+import Mathlib.Algebra.Category.ModuleCat.Sheaf.PullbackFree
 import Oka.ComplexSpace
 import Oka.Coherent
 
@@ -24,9 +25,12 @@ ringed space instead of `ℂ^ι`.
 
 - `AlgebraicGeometry.LocallyRingedSpace.ringSheaf`: the structure sheaf as a sheaf of rings.
 - `AlgebraicGeometry.LocallyRingedSpace.Hom.toRingSheafHom`: the induced morphism of sheaves of
-  rings. Material for a Mathlib file that does not exist — Mathlib has it for schemes only, as
-  `AlgebraicGeometry.Scheme.Hom.toRingCatSheafHom` — and it lives here, next to `ringSheaf`,
-  because the two must agree on how the site is spelled; see `ringSheaf`'s docstring.
+  rings, and `AlgebraicGeometry.LocallyRingedSpace.Hom.pullbackModules`, the pullback of
+  `𝒪`-modules along it, and `AlgebraicGeometry.LocallyRingedSpace.Hom.pullbackModulesUnitToUnit`,
+  the canonical map from the pullback of `𝒪_Y` to `𝒪_X`. Material for a Mathlib file that does
+  not exist — Mathlib has these for schemes only, `AlgebraicGeometry.Scheme.Hom.toRingCatSheafHom`
+  among them — and they live here, next to `ringSheaf`, because they must agree with it on how
+  the site is spelled; see `ringSheaf`'s docstring.
 - `AlgebraicGeometry.LocallyRingedSpace.IsCoherentStructureSheaf`: `𝒪_Y` is coherent over itself.
 - `AlgebraicGeometry.LocallyRingedSpace.HasLocalRelations`: the concrete relations condition.
 
@@ -67,7 +71,7 @@ noncomputable def ringSheaf :
     (TopCat.Presheaf.isSheaf_iff_isSheaf_comp
       (forget₂ CommRingCat.{u} RingCat.{u}) Y.presheaf).1 Y.IsSheaf⟩
 
-/-- Sheafification is available at the site `ComplexAnalytic.ringSheaf` uses.
+/-- Sheafification is available at the site `AlgebraicGeometry.LocallyRingedSpace.ringSheaf` uses.
 
 Mathlib has this for `Opens.grothendieckTopology ↑Y.toTopCat`; the two spellings are
 definitionally equal and instance search does not cross them, for the reason above. -/
@@ -87,6 +91,37 @@ noncomputable def Hom.toRingSheafHom {X : LocallyRingedSpace.{u}} (f : X ⟶ Y) 
     Y.ringSheaf ⟶ ((Opens.map f.base).sheafPushforwardContinuous
       RingCat.{u} _ _).obj X.ringSheaf where
   hom := Functor.whiskerRight f.c _
+
+variable {Y} in
+/-- **Pullback of `𝒪`-modules along a morphism of locally ringed spaces.**
+
+`SheafOfModules.pullback`, which Mathlib defines as the left adjoint of
+`SheafOfModules.pushforward` for any morphism of sheaves of rings over a continuous functor of
+sites, applied to `AlgebraicGeometry.LocallyRingedSpace.Hom.toRingSheafHom`. Mathlib uses exactly
+this to make `AlgebraicGeometry.Scheme.Modules` functorial; nothing about it is special to
+schemes, and the only thing that had to be supplied for locally ringed spaces is the morphism of
+sheaves of rings above. -/
+noncomputable def Hom.pullbackModules {X : LocallyRingedSpace.{u}} (f : X ⟶ Y) :
+    SheafOfModules.{u} Y.ringSheaf ⥤ SheafOfModules.{u} X.ringSheaf :=
+  SheafOfModules.pullback.{u} f.toRingSheafHom
+
+variable {Y} in
+/-- **Pullback is left adjoint to pushforward**, which is what determines it: it is defined as
+that left adjoint, so this is the adjunction and not a theorem about it. -/
+noncomputable def Hom.pullbackModulesAdj {X : LocallyRingedSpace.{u}} (f : X ⟶ Y) :
+    f.pullbackModules ⊣ SheafOfModules.pushforward.{u} f.toRingSheafHom :=
+  SheafOfModules.pullbackPushforwardAdjunction.{u} f.toRingSheafHom
+
+variable {Y} in
+/-- **The pullback of the structure sheaf maps canonically to the structure sheaf.**
+
+`SheafOfModules.pullbackObjUnitToUnit`, which needs no hypothesis on `f` beyond the adjunction
+that defines the pullback. This is the map that makes `𝒪_X` an algebra over the pullback of
+`𝒪_Y`, and it is what a comparison theorem between the two structure sheaves is a statement
+about. -/
+noncomputable def Hom.pullbackModulesUnitToUnit {X : LocallyRingedSpace.{u}} (f : X ⟶ Y) :
+    f.pullbackModules.obj (SheafOfModules.unit Y.ringSheaf) ⟶ SheafOfModules.unit X.ringSheaf :=
+  SheafOfModules.pullbackObjUnitToUnit.{u} f.toRingSheafHom
 
 /-- A locally ringed space has **coherent structure sheaf** if `𝒪_Y` is coherent as a sheaf of
 modules over itself. -/
