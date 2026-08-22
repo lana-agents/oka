@@ -22,32 +22,44 @@ exact on every stalk. What this file adds is the transfer of that to sheaves of 
 which is one step — `SheafOfModules.toSheaf` is faithful, and
 `CategoryTheory.Functor.reflects_exact_of_faithful` needs nothing more than that.
 
-## The seam this file exists to cross, and it costs one instance
+## The seam this file exists to cross, and the one instance it costs
 
 `TopCat.Sheaf C X` is a `def` for `CategoryTheory.Sheaf (Opens.grothendieckTopology X) C`, and
 `SheafOfModules.toSheaf` lands in the second spelling while every stalk lemma is stated in the
 first. **The two `Category` instances are equal by `rfl`** — checked — but instance search does
-not cross them, so `Abelian (CategoryTheory.Sheaf (Opens.grothendieckTopology X) AddCommGrpCat)`
-is not found even though `Abelian (TopCat.Sheaf AddCommGrpCat X)` is, and without it
-`SheafOfModules.toSheaf` has no `PreservesZeroMorphisms` and `ShortComplex.map` cannot be
-applied to it.
-
-`abelianSheafOpensGrothendieckTopology` below is that transport, by `inferInstanceAs`, and it
-is the whole cost. This is the same shape as the site spelling recorded in
-`AlgebraicGeometry.LocallyRingedSpace.ringSheaf`'s docstring: **a definitional equality that
+not cross them, so a statement about `TopCat.Sheaf.forget ⋙ TopCat.Presheaf.stalkFunctor` is not
+found at a goal spelled the other way round. This is the same shape as the site spelling recorded
+in `AlgebraicGeometry.LocallyRingedSpace.ringSheaf`'s docstring: **a definitional equality that
 `rfl` sees and the discrimination tree does not.**
 
-Two consequences worth knowing before using this file:
+**What the seam costs this file is one instance:
+`CategoryTheory.Limits.PreservesFiniteLimits (TopCat.Sheaf.stalkFunctor X x)`.** Delete it,
+re-elaborate the file, and the `SheafOfModules.stalkFunctor` instance below it fails with
+`failed to synthesize PreservesFiniteLimits (Sheaf.stalkFunctor X x)`.
 
-* the same transport is needed for `CategoryTheory.Functor.Additive` and for
-  `CategoryTheory.Limits.PreservesFiniteLimits` of `TopCat.Sheaf.stalkFunctor`, and both are
-  supplied here;
-* at the point of use the site has to be spelled so that it matches. For an
-  `AlgebraicGeometry.LocallyRingedSpace` `Y`, whose `AlgebraicGeometry.LocallyRingedSpace.ringSheaf`
-  lives over `Opens.grothendieckTopology ↑Y.toPresheafedSpace`, the space to pass is
-  `TopCat.of ↑Y.toPresheafedSpace` and **not** `Y.toTopCat`; with `Y.toTopCat` the statement
-  elaborates and then fails to find `PreservesZeroMorphisms`.
-  `OkaTest/SheafOfModulesStalk.lean` records both.
+`(TopCat.Sheaf.stalkFunctor X x).Additive` is a transport across the same seam, and it too is
+genuinely not found by search — `inferInstance` on it fails if the declaration below is removed.
+But **deleting it alone leaves the file compiling**, because `PreservesZeroMorphisms` already
+follows from `PreservesFiniteLimits`; only when *both* go does
+`TopCat.Sheaf.exact_iff_stalk_exact` additionally lose
+`failed to synthesize (stalkFunctor X x).PreservesZeroMorphisms`. So it is kept as API for a
+consumer that wants additivity, not as part of the cost, and it is labelled that way below.
+
+An earlier version of this file also carried an `Abelian (CategoryTheory.Sheaf
+(Opens.grothendieckTopology X) AddCommGrpCat)` transport and said here that the seam made that
+instance unfindable. **That was false in the direction that matters:**
+`CategoryTheory.sheafIsAbelian` (`Mathlib/CategoryTheory/Sites/Abelian.lean`) is stated for a
+general site and applies at this one directly, and Mathlib's `Abelian (TopCat.Sheaf C X)` is
+itself `inferInstanceAs` of it — so the spelling called unreachable is the primitive one. The
+transport is recorded here rather than silently dropped because the negative is the kind a
+reader would act on: **do not re-add it.**
+
+At the point of use the site still has to be spelled so that it matches. For an
+`AlgebraicGeometry.LocallyRingedSpace` `Y`, whose `AlgebraicGeometry.LocallyRingedSpace.ringSheaf`
+lives over `Opens.grothendieckTopology ↑Y.toPresheafedSpace`, the space to pass is
+`TopCat.of ↑Y.toPresheafedSpace` and **not** `Y.toTopCat`; with `Y.toTopCat` the statement
+elaborates and then fails to find `PreservesZeroMorphisms`.
+`OkaTest/SheafOfModulesStalk.lean` records it.
 
 ## Main definitions
 
@@ -88,17 +100,6 @@ universe u
 
 variable {X : TopCat.{u}} {R : CategoryTheory.Sheaf (Opens.grothendieckTopology X) RingCat.{u}}
 
-/-- Sheaves of abelian groups on a space form an abelian category, at the
-`CategoryTheory.Sheaf` spelling of the site.
-
-Mathlib has this for `TopCat.Sheaf AddCommGrpCat X`, which is the same type by a `def`; instance
-search does not cross the two, and this transport is what lets `SheafOfModules.toSheaf` — whose
-codomain is spelled the other way — be used with `CategoryTheory.ShortComplex.map`. See the
-module docstring. -/
-noncomputable instance abelianSheafOpensGrothendieckTopology (X : TopCat.{u}) :
-    Abelian (CategoryTheory.Sheaf (Opens.grothendieckTopology X) AddCommGrpCat.{u}) :=
-  inferInstanceAs (Abelian (TopCat.Sheaf AddCommGrpCat.{u} X))
-
 /-- **The stalk at `x`, as a functor on sheaves of abelian groups on `X`**, at the
 `CategoryTheory.Sheaf` spelling of the site.
 
@@ -108,10 +109,17 @@ noncomputable abbrev TopCat.Sheaf.stalkFunctor (X : TopCat.{u}) (x : X) :
     CategoryTheory.Sheaf (Opens.grothendieckTopology X) AddCommGrpCat.{u} ⥤ AddCommGrpCat.{u} :=
   TopCat.Sheaf.forget AddCommGrpCat.{u} X ⋙ TopCat.Presheaf.stalkFunctor AddCommGrpCat.{u} x
 
+/-- The stalk functor is additive. A transport across the site spelling — the statement is
+Mathlib's, at `TopCat.Sheaf.forget ⋙ TopCat.Presheaf.stalkFunctor`, and search does not find it
+here — but **not one this file needs**: its `PreservesZeroMorphisms` comes from
+`PreservesFiniteLimits` below. Kept as API. -/
 noncomputable instance (x : X) : (TopCat.Sheaf.stalkFunctor X x).Additive :=
   inferInstanceAs ((TopCat.Sheaf.forget AddCommGrpCat.{u} X ⋙
     TopCat.Presheaf.stalkFunctor AddCommGrpCat.{u} x).Additive)
 
+/-- The stalk functor preserves finite limits. **This is the one instance the site spelling
+costs**: without it the `SheafOfModules.stalkFunctor` instance below fails to synthesize. See
+the module docstring. -/
 noncomputable instance (x : X) : PreservesFiniteLimits (TopCat.Sheaf.stalkFunctor X x) :=
   inferInstanceAs (PreservesFiniteLimits (TopCat.Sheaf.forget AddCommGrpCat.{u} X ⋙
     TopCat.Presheaf.stalkFunctor AddCommGrpCat.{u} x))
