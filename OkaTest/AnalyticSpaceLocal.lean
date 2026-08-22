@@ -93,4 +93,56 @@ example : reassembled.{u}.toLocallyRingedSpace = complexAffineSpace.{u} 1 := rfl
 
 example : reassembled.{u}.algebraMap = (AnalyticSpace.complexAffineSpace.{u} 1).algebraMap := rfl
 
+/-! ### The `ℂ`-algebra structure, glued from the pieces
+
+The examples above hand `AnalyticSpace.ofOpens` the `ℂ`-algebra structure of the **ambient**
+space. That is not the shape a gluing construction produces: there the pieces are what one has.
+`AnalyticSpace.ofOpensCompatible` takes the structures on the members, and these tests run it on
+the same cover — neither member of which is `⊤` — and check that the round trip returns the
+structure it started from, on the nose.
+-/
+
+/-- The constants of `ℂ`, restricted to each member of the cover. -/
+def coverAlg (i : Bool) : ℂ →+* (complexAffineSpace.{u} 1).presheaf.obj (op (cover.{u} i)) :=
+  ((complexAffineSpace.{u} 1).presheaf.map (homOfLE (le_top : cover.{u} i ≤ ⊤)).op).hom.comp
+    (AnalyticSpace.complexAffineSpace.{u} 1).algebraMap
+
+theorem isCompatible_coverAlg (c : ℂ) :
+    TopCat.Presheaf.IsCompatible (complexAffineSpace.{u} 1).presheaf cover.{u}
+      fun i ↦ coverAlg.{u} i c :=
+  LocallyRingedSpace.isCompatible_map_le_top _
+
+theorem hasLocalModels_coverAlg (i : Bool) :
+    HasLocalModels ((complexAffineSpace.{u} 1).restrict (cover.{u} i).isOpenEmbedding)
+      (((complexAffineSpace.{u} 1).presheaf.map
+          (homOfLE (Opens.isOpenEmbedding_obj_top (cover.{u} i)).le).op).hom.comp
+        (coverAlg.{u} i)) := by
+  have key : (((complexAffineSpace.{u} 1).presheaf.map
+        (homOfLE (Opens.isOpenEmbedding_obj_top (cover.{u} i)).le).op).hom.comp
+      (coverAlg.{u} i)) =
+      (complexAffineSpace.{u} 1).resAlgMap
+        (AnalyticSpace.complexAffineSpace.{u} 1).algebraMap (cover.{u} i) :=
+    (LocallyRingedSpace.resAlgMap_eq_comp _ _).symm
+  rw [key]
+  exact hasLocalModels_cover.{u} i
+
+/-- **`ℂ`, reassembled from a cover with the `ℂ`-algebra structure given on the pieces** rather
+than on the ambient space. -/
+def reassembledCompatible : AnalyticSpace.{u} :=
+  AnalyticSpace.ofOpensCompatible (complexAffineSpace.{u} 1) cover.{u} iSup_cover.{u}
+    coverAlg.{u} isCompatible_coverAlg.{u} hasLocalModels_coverAlg.{u}
+
+example : reassembledCompatible.{u}.toLocallyRingedSpace = complexAffineSpace.{u} 1 := rfl
+
+/-- **The glued `ℂ`-algebra structure is the one the pieces came from.** This is the round trip,
+and it is what says the gluing is doing the right thing rather than merely type-checking: the
+uniqueness half of the sheaf condition identifies the gluing of the restrictions of a global
+section with that section. -/
+example : reassembledCompatible.{u}.algebraMap
+    = (AnalyticSpace.complexAffineSpace.{u} 1).algebraMap :=
+  RingHom.ext fun c ↦
+    LocallyRingedSpace.glueSection_eq iSup_cover.{u} (fun i ↦ coverAlg.{u} i c)
+      (isCompatible_coverAlg.{u} c)
+      ((AnalyticSpace.complexAffineSpace.{u} 1).algebraMap c) fun _ ↦ rfl
+
 end OkaTest.AnalyticSpaceLocal

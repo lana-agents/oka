@@ -272,3 +272,21 @@ info: 'ComplexAnalytic.AnalyticSpace.ofOpens' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.ofOpens
+
+/-! ### The `ℂ`-algebra structure of a glued analytic space
+
+`Oka/AnalyticSpace/Local.lean`. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.ofOpensCompatible' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.ofOpensCompatible
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.map_ofOpensCompatible_algebraMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.map_ofOpensCompatible_algebraMap

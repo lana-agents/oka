@@ -182,3 +182,63 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.toΓSpec_naturality' depends on axio
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.toΓSpec_naturality
+
+/-! ### Gluing an algebra structure over an open cover
+
+`Oka/Geometry/RingedSpace/LocallyRingedSpace.lean`. -/
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.existsUnique_glueSection' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.existsUnique_glueSection
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.glueSection' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.glueSection
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.glueSection_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.glueSection_eq
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.isCompatible_map_le_top' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.isCompatible_map_le_top
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.glueSection_map_le_top' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.glueSection_map_le_top
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.resAlgMap_eq_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.resAlgMap_eq_comp
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.glueAlgMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.glueAlgMap
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.resAlgMap_glueAlgMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.resAlgMap_glueAlgMap
