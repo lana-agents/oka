@@ -36,6 +36,7 @@ import OkaTest.HolomorphicMapGeneral
 import OkaTest.HolomorphicMapOpen
 import OkaTest.HomToComplex
 import OkaTest.OpenSubspace
+import OkaTest.PullbackModulesStalk
 import OkaTest.PushforwardFullyFaithful
 import OkaTest.SheafOfModulesStalk
 import OkaTest.SimpDiscrTree

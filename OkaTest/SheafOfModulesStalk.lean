@@ -44,7 +44,8 @@ universe u
 locally ringed space, with the site spelled as `ringSheaf` spells it. -/
 example (Y : LocallyRingedSpace.{u}) (S : ShortComplex (SheafOfModules.{u} Y.ringSheaf))
     (h : ∀ x : TopCat.of ↑Y.toPresheafedSpace,
-      (S.map (SheafOfModules.stalkFunctor (X := TopCat.of ↑Y.toPresheafedSpace) x)).Exact) :
+      (S.map (SheafOfModules.stalkFunctorAddCommGrp
+        (X := TopCat.of ↑Y.toPresheafedSpace) x)).Exact) :
     S.Exact :=
   SheafOfModules.exact_of_stalk_exact S h
 
@@ -53,7 +54,7 @@ is about. -/
 example (ι : Type u) [Fintype ι]
     (S : ShortComplex (SheafOfModules.{u} (complexSpace ι).ringSheaf))
     (h : ∀ x : TopCat.of ↑(complexSpace ι).toPresheafedSpace,
-      (S.map (SheafOfModules.stalkFunctor
+      (S.map (SheafOfModules.stalkFunctorAddCommGrp
         (X := TopCat.of ↑(complexSpace ι).toPresheafedSpace) x)).Exact) :
     S.Exact :=
   SheafOfModules.exact_of_stalk_exact S h

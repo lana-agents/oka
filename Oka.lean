@@ -1,4 +1,6 @@
 import Oka.Algebra.Category.Grp.EpiMono
+import Oka.Algebra.Category.ModuleCat.Presheaf.PullbackStalk
+import Oka.Algebra.Category.ModuleCat.Presheaf.Skyscraper
 import Oka.Algebra.Category.ModuleCat.Presheaf.Submodule
 import Oka.Algebra.Category.ModuleCat.Sheaf.Annihilator
 import Oka.Algebra.Category.ModuleCat.Sheaf.Coherent.Basic
@@ -9,9 +11,11 @@ import Oka.Algebra.Category.ModuleCat.Sheaf.Colimits
 import Oka.Algebra.Category.ModuleCat.Sheaf.Free
 import Oka.Algebra.Category.ModuleCat.Sheaf.Generators
 import Oka.Algebra.Category.ModuleCat.Sheaf.LocallySurjective
+import Oka.Algebra.Category.ModuleCat.Sheaf.PullbackStalk
 import Oka.Algebra.Category.ModuleCat.Sheaf.PushforwardContinuous
 import Oka.Algebra.Category.ModuleCat.Sheaf.Stalk
 import Oka.Algebra.Category.ModuleCat.Sheaf.Submodule
+import Oka.Algebra.Category.ModuleCat.Stalk
 import Oka.Algebra.MvPolynomial.Taylor
 import Oka.AlgebraicGeometry.GammaSpecAdjunction
 import Oka.Analytic.DividedDifference
@@ -29,6 +33,7 @@ import Oka.AnalyticSpace.IdealSheaf
 import Oka.AnalyticSpace.LocalModel
 import Oka.AnalyticSpace.Noetherian
 import Oka.AnalyticSpace.OpenSubspace
+import Oka.AnalyticSpace.PullbackModulesStalk
 import Oka.AnalyticSpace.Relations
 import Oka.AnalyticSpace.Restrict
 import Oka.Analytification.AffineSpace

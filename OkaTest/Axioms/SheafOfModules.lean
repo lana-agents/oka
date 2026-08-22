@@ -138,3 +138,60 @@ info: 'SheafOfModules.exact_of_stalk_exact' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms SheafOfModules.exact_of_stalk_exact
+
+/-! ### The stalk of a pullback of sheaves of modules is the base change of the stalk
+
+`Oka/Algebra/Category/ModuleCat/Presheaf/Skyscraper.lean`,
+`Oka/Algebra/Category/ModuleCat/Presheaf/PullbackStalk.lean`,
+`Oka/Algebra/Category/ModuleCat/Sheaf/PullbackStalk.lean` and
+`Oka/AnalyticSpace/PullbackModulesStalk.lean`. -/
+
+/--
+info: 'PresheafOfModules.stalkSkyscraperAdj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms PresheafOfModules.stalkSkyscraperAdj
+
+/--
+info: 'PresheafOfModules.skyscraperAb_isSheaf' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms PresheafOfModules.skyscraperAb_isSheaf
+
+/--
+info: 'PresheafOfModules.pushforwardSkyscraperIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms PresheafOfModules.pushforwardSkyscraperIso
+
+/--
+info: 'PresheafOfModules.pullbackStalkIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms PresheafOfModules.pullbackStalkIso
+
+/--
+info: 'SheafOfModules.stalkSkyscraperAdj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.stalkSkyscraperAdj
+
+/--
+info: 'SheafOfModules.pullbackStalkIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.pullbackStalkIso
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.Hom.pullbackModulesStalkIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.Hom.pullbackModulesStalkIso
+
