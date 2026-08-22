@@ -11,25 +11,27 @@ import OkaTest.AnalyticSpaceLocal
 
 `ComplexAnalytic.AnalyticSpace.ofOpenCover` would be `…ofOpensCompatible` wearing a hat if the
 only covers it were ever applied to had members of the form `X.restrict U` mapping in by
-`X.ofRestrict U`. **That is the degeneracy to rule out here**, and it is the live one: the only
-open cover the development constructs is `AlgebraicGeometry.LocallyRingedSpace.openCoverOfOpens`,
-whose members are exactly restrictions, and on such a cover
-`AlgebraicGeometry.LocallyRingedSpace.OpenCover.isoRestrict` is an identity in all but name.
+`X.ofRestrict U`. **That is the degeneracy to rule out here**, and it is the live one: before
+this file the only open cover the development constructed was
+`AlgebraicGeometry.LocallyRingedSpace.openCoverOfOpens`, whose members are exactly restrictions
+and whose maps are exactly the inclusions.
 
 The cover below is the two punctured copies of `ℂ` of `OkaTest/AnalyticSpaceLocal.lean` — reused,
 so that `cover_ne_top` continues to guard against a member being the whole space — with each
-member presented as `(ℂ|Uᵢ)|⊤` rather than as `ℂ|Uᵢ`. That is a genuinely different locally
-ringed space: it is not `X.restrict V` for any `V : Opens X`, its inclusion is a composite of two
-open immersions, and `isoRestrict` at it is a real `isoOfRangeEq` rather than an identity.
+member presented as `(ℂ|Uᵢ)|⊤` rather than as `ℂ|Uᵢ`. It is of course *isomorphic* to `ℂ|Uᵢ`;
+what matters is that it is not of the form `X.restrict V` — its carrier is a subtype of a
+subtype — so `AlgebraicGeometry.LocallyRingedSpace.OpenCover.isoRestrict` at it is a genuine
+`isoOfRangeEq` between two different presentations, and the charts and the `ℂ`-algebra structure
+have to be carried across it.
 
 ## What this does and does not rule out
 
 It checks that a cover by abstract members is accepted and that the glued `ℂ`-algebra structure
-is the one the members came from — a **round trip**, and the same one `OkaTest/AnalyticSpaceLocal.
-lean` runs for `ofOpensCompatible`. As recorded there, a round trip is the strongest test
-available while every space in the development already carries a global `ℂ`-algebra structure:
-on a sheaf, every compatible family over a cover of `⊤` *is* the restriction family of a unique
-global section, so there is no independent input to feed in.
+is the one the members came from — a **round trip**, the same one
+`OkaTest/AnalyticSpaceLocal.lean` runs for `ofOpensCompatible`. As recorded there, a round trip
+is the strongest test available while every space in the development already carries a global
+`ℂ`-algebra structure: on a sheaf, every compatible family over a cover of `⊤` *is* the
+restriction family of a unique global section, so there is no independent input to feed in.
 
 **The last section goes further**, and it is what the round trip cannot do on its own: it runs
 `ComplexAnalytic.AnalyticSpace.ofGlueData` on the *glued* space of this cover — a
@@ -64,8 +66,8 @@ abbrev restrictedLine (i : ULift.{u} Bool) : LocallyRingedSpace.{u} :=
 
 /-- **The `i`-th member of the cover: the punctured plane, presented as `(ℂ|Uᵢ)|⊤`.**
 
-This is the point of the test. It is isomorphic to `ℂ|Uᵢ` and is not equal to it — nor to
-`ℂ|V` for any `V : Opens ℂ` — so `AnalyticSpace.ofOpenCover` has to transport both the charts
+This is the point of the test. It is isomorphic to `ℂ|Uᵢ` but is not *of the form* `ℂ|V` for a
+`V : Opens ℂ`, so `ComplexAnalytic.AnalyticSpace.ofOpenCover` has to transport both the charts
 and the `ℂ`-algebra structure across an isomorphism it computes itself. -/
 abbrev member (i : ULift.{u} Bool) : LocallyRingedSpace.{u} :=
   (restrictedLine.{u} i).restrict (⊤ : Opens (restrictedLine.{u} i)).isOpenEmbedding
