@@ -27,6 +27,11 @@ mirror tree.
   of `X|U`.** The global sections of `X|U` are indexed by `U.functor.obj ⊤` rather than by `U`,
   so this is a restriction map and not a coercion; it is the spelling every statement below
   about sections on an open subspace is phrased in.
+- `AlgebraicGeometry.LocallyRingedSpace.glueSection`: the global section a compatible family
+  over an open cover glues to.
+- `AlgebraicGeometry.LocallyRingedSpace.glueAlgMap`: **an algebra structure on `𝒪_X` glued from
+  compatible algebra structures over an open cover.** The converse of `resAlgMap`, and unlike it
+  a genuine gluing, because an algebra structure is a map into *global* sections.
 
 ## Main results
 
@@ -43,6 +48,9 @@ mirror tree.
   computing either direction.
 - `AlgebraicGeometry.LocallyRingedSpace.hom_stalk_ext`: two morphisms with the same base map and
   the same maps on stalks are equal.
+- `AlgebraicGeometry.LocallyRingedSpace.resAlgMap_glueAlgMap`: restricting a glued algebra
+  structure to a member of the cover returns the given one, across the
+  `functor.obj ⊤`-versus-`U` seam.
 - `AlgebraicGeometry.LocallyRingedSpace.Γgerm_Γ_map`: the germ of the pullback of a global
   section is the image of its germ under the stalk map.
 - `AlgebraicGeometry.LocallyRingedSpace.range_ofRestrict`: the image of an open subspace
@@ -446,5 +454,132 @@ lemma Γ_map_over_ambient (X : LocallyRingedSpace.{u}) (S : Opens X)
   refine Eq.trans ?_ (X.Γgerm_toRestrictΓ W _ y).symm
   exact (congrArg ((X.ofRestrict W.isOpenEmbedding).stalkMap y).hom
     (X.presheaf.germ_res_apply (homOfLE hW) y.1 y.2 a)).symm
+
+/-! ### Gluing an algebra structure over an open cover
+
+`resAlgMap` restricts an algebra structure from a space to an open subspace. This section is the
+converse, and the asymmetry between the two is the point: `resAlgMap` is a composition and costs
+nothing, while going back is a **gluing** and needs the sheaf condition, because an algebra
+structure is a map into *global* sections.
+
+Everything here is `TopCat.Sheaf.existsUnique_gluing'` at `V = ⊤`. The only thing worth saying is
+how the ring homomorphism is obtained: **not** by gluing a homomorphism, but by gluing the section
+`α c` for each `c` separately and then reading the four ring axioms off the *uniqueness* half —
+both sides of each axiom restrict to the same thing on every member of the cover, so they are
+equal. Trying it the other way round means carrying the axioms through the gluing.
+
+The opens are indexed as `U i` here rather than as `(U i).functor.obj ⊤`, which is the opposite of
+the convention in the section above; `resAlgMap_glueAlgMap` is where the two meet, and it is the
+only place in this section that has to cross that seam.
+-/
+
+variable {ι : Type*} {U : ι → Opens X}
+
+/-- **A compatible family of sections over an open cover of `X` glues to a unique global
+section.** `TopCat.Sheaf.existsUnique_gluing'` at `V = ⊤`. -/
+theorem existsUnique_glueSection (hU : ⨆ i, U i = ⊤)
+    (s : ∀ i, X.presheaf.obj (op (U i)))
+    (h : TopCat.Presheaf.IsCompatible X.presheaf U s) :
+    ∃! t : X.presheaf.obj (op ⊤),
+      ∀ i, (X.presheaf.map (homOfLE (le_top : U i ≤ ⊤)).op).hom t = s i :=
+  X.sheaf.existsUnique_gluing' U ⊤ (fun _ ↦ homOfLE le_top) (le_of_eq hU.symm) s h
+
+/-- The global section a compatible family glues to. -/
+noncomputable def glueSection (hU : ⨆ i, U i = ⊤) (s : ∀ i, X.presheaf.obj (op (U i)))
+    (h : TopCat.Presheaf.IsCompatible X.presheaf U s) : X.presheaf.obj (op ⊤) :=
+  (existsUnique_glueSection hU s h).choose
+
+@[simp]
+lemma map_glueSection (hU : ⨆ i, U i = ⊤) (s : ∀ i, X.presheaf.obj (op (U i)))
+    (h : TopCat.Presheaf.IsCompatible X.presheaf U s) (i : ι) :
+    (X.presheaf.map (homOfLE (le_top : U i ≤ ⊤)).op).hom (glueSection hU s h) = s i :=
+  (existsUnique_glueSection hU s h).choose_spec.1 i
+
+/-- **Anything restricting to the family on every member of the cover is the gluing.** This is
+the uniqueness half, and it is what proves the ring axioms of `glueAlgMap` below. -/
+lemma glueSection_eq (hU : ⨆ i, U i = ⊤) (s : ∀ i, X.presheaf.obj (op (U i)))
+    (h : TopCat.Presheaf.IsCompatible X.presheaf U s) (t : X.presheaf.obj (op ⊤))
+    (ht : ∀ i, (X.presheaf.map (homOfLE (le_top : U i ≤ ⊤)).op).hom t = s i) :
+    glueSection hU s h = t :=
+  ((existsUnique_glueSection hU s h).choose_spec.2 t ht).symm
+
+/-- **The restrictions of one global section to the members of a cover form a compatible
+family.** Both sides of the compatibility condition are the restriction to `U i ⊓ U j`, and
+`Opens X` is a preorder category, so there is only one such map. -/
+lemma isCompatible_map_le_top (t : X.presheaf.obj (op ⊤)) :
+    TopCat.Presheaf.IsCompatible X.presheaf U
+      fun i ↦ (X.presheaf.map (homOfLE (le_top : U i ≤ ⊤)).op).hom t := fun i j ↦ by
+  change ((X.presheaf.map _) ≫ (X.presheaf.map _)).hom t =
+    ((X.presheaf.map _) ≫ (X.presheaf.map _)).hom t
+  rw [← X.presheaf.map_comp, ← X.presheaf.map_comp]
+  congr 2
+
+/-- **Gluing the restrictions of a global section returns that section.** The round trip, and
+the cheapest witness that `glueSection` is not vacuous. -/
+@[simp]
+lemma glueSection_map_le_top (hU : ⨆ i, U i = ⊤) (t : X.presheaf.obj (op ⊤)) :
+    glueSection hU _ (isCompatible_map_le_top t) = t :=
+  glueSection_eq _ _ _ t fun _ ↦ rfl
+
+/-- **Restricting in two steps.** `resAlgMap` restricts a global section all the way to
+`U.functor.obj ⊤`; this factors that through the sections over `U`, which is the indexing a
+family given on the members of a cover arrives in. -/
+lemma resAlgMap_eq_comp {R : Type*} [NonAssocSemiring R] (α : R →+* X.presheaf.obj (op ⊤))
+    (V : Opens X) :
+    X.resAlgMap α V =
+      (X.presheaf.map (homOfLE (Opens.isOpenEmbedding_obj_top V).le).op).hom.comp
+        ((X.presheaf.map (homOfLE (le_top : V ≤ ⊤)).op).hom.comp α) :=
+  RingHom.ext fun c ↦ by
+    change (X.presheaf.map _).hom _ = (X.presheaf.map _).hom ((X.presheaf.map _).hom (α c))
+    change _ = ((X.presheaf.map _) ≫ (X.presheaf.map _)).hom _
+    rw [← X.presheaf.map_comp]
+    congr 2
+
+section GlueAlgMap
+
+variable {R : Type*} [CommRing R] (hU : ⨆ i, U i = ⊤) (α : ∀ i, R →+* X.presheaf.obj (op (U i)))
+  (h : ∀ c : R, TopCat.Presheaf.IsCompatible X.presheaf U fun i ↦ α i c)
+
+/-- **An algebra structure on `𝒪_X` glued from compatible algebra structures over an open
+cover.**
+
+The underlying function sends `c` to the gluing of the family `α i c`; each of the four ring
+axioms is an instance of `glueSection_eq`, because both sides restrict to the same section on
+every member of the cover. -/
+noncomputable def glueAlgMap : R →+* X.presheaf.obj (op ⊤) where
+  toFun c := glueSection hU (fun i ↦ α i c) (h c)
+  map_one' := glueSection_eq _ _ _ 1 fun i ↦ (map_one _).trans (map_one (α i)).symm
+  map_mul' a b := glueSection_eq _ _ _ _ fun i ↦ (map_mul _ _ _).trans
+    ((congrArg₂ (· * ·) (map_glueSection hU _ (h a) i)
+      (map_glueSection hU _ (h b) i)).trans (map_mul (α i) a b).symm)
+  map_zero' := glueSection_eq _ _ _ 0 fun i ↦ (map_zero _).trans (map_zero (α i)).symm
+  map_add' a b := glueSection_eq _ _ _ _ fun i ↦ (map_add _ _ _).trans
+    ((congrArg₂ (· + ·) (map_glueSection hU _ (h a) i)
+      (map_glueSection hU _ (h b) i)).trans (map_add (α i) a b).symm)
+
+@[simp]
+lemma map_glueAlgMap (i : ι) (c : R) :
+    (X.presheaf.map (homOfLE (le_top : U i ≤ ⊤)).op).hom (glueAlgMap hU α h c) = α i c :=
+  map_glueSection hU (fun i ↦ α i c) (h c) i
+
+/-- **Restricting the glued algebra structure to a member of the cover returns the given one**,
+across the `functor.obj ⊤`-versus-`U i` seam.
+
+`resAlgMap` lands in `Γ(X|U i)`, indexed by `(U i).functor.obj ⊤`; the family `α` is indexed by
+`U i`. The two are not definitionally equal, so the statement cannot be `= α i` and the
+right-hand side has to carry the restriction `Γ(X, U i) ⟶ Γ(X, (U i).functor.obj ⊤)`. This is the
+same map `toRestrictΓ` is, and this lemma is what lets a caller feed a family of algebra
+structures on the members of a cover to `ComplexAnalytic.AnalyticSpace.ofOpens`. -/
+lemma resAlgMap_glueAlgMap (i : ι) :
+    X.resAlgMap (glueAlgMap hU α h) (U i) =
+      (X.presheaf.map (homOfLE (Opens.isOpenEmbedding_obj_top (U i)).le).op).hom.comp (α i) :=
+  RingHom.ext fun c ↦ by
+    change (X.presheaf.map _).hom _ = (X.presheaf.map _).hom ((α i) c)
+    rw [← map_glueAlgMap hU α h i c]
+    change _ = ((X.presheaf.map _) ≫ (X.presheaf.map _)).hom _
+    rw [← X.presheaf.map_comp]
+    congr 2
+
+end GlueAlgMap
 
 end AlgebraicGeometry.LocallyRingedSpace

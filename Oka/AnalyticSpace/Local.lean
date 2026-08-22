@@ -26,8 +26,14 @@ Every statement about gluing complex analytic spaces needs it. `Oka/Geometry/Rin
 PresheafedSpace/Gluing.lean` supplies `AlgebraicGeometry.LocallyRingedSpace.OpenCover` and
 identifies a locally ringed space with the gluing of a cover of it, so the locally-ringed-space
 half of gluing is available; what is missing to glue *analytic* spaces is this property being
-local, together with the `ℂ`-algebra structure of a glued space. The second is genuinely data —
-the global sections of a glued space are a limit — and is not here.
+local, together with the `ℂ`-algebra structure of a glued space.
+
+**Both are here.** They behave differently and that is why they are separated: `local_model` is a
+*property* and is local, while `algebraMap` is *data* and lands in **global** sections, so it does
+not restrict from a cover for free — recovering it from structures on the members is a gluing,
+and it is `AlgebraicGeometry.LocallyRingedSpace.glueAlgMap`, which lives in the mirror tree
+because nothing about it is analytic. `ComplexAnalytic.AnalyticSpace.ofOpensCompatible` is the two
+halves together.
 
 ## Main definitions
 
@@ -35,7 +41,11 @@ the global sections of a glued space are a limit — and is not here.
   as a predicate on a locally ringed space together with a `ℂ`-algebra structure on its global
   sections.
 - `ComplexAnalytic.AnalyticSpace.ofOpens`: a locally ringed space covered by open subspaces that
-  have local models, as a complex analytic space.
+  have local models, as a complex analytic space, for a `ℂ`-algebra structure given on the
+  ambient space.
+- `ComplexAnalytic.AnalyticSpace.ofOpensCompatible`: the same with the `ℂ`-algebra structure
+  given on the **members** of the cover and glued, which is the form a gluing construction
+  produces.
 
 ## Main results
 
@@ -45,19 +55,25 @@ the global sections of a glued space are a limit — and is not here.
 - `ComplexAnalytic.HasLocalModels.of_iSup_eq_top`: **having local models is local** — a space
   covered by open subspaces that have local models has local models.
 - `ComplexAnalytic.hasLocalModels_iff_iSup_eq_top`: the two together.
+- `ComplexAnalytic.AnalyticSpace.map_ofOpensCompatible_algebraMap`: the glued `ℂ`-algebra
+  structure restricts to the given one on each member of the cover.
 
 ## What is not here
 
-* **The `ℂ`-algebra structure on a glued space.** `algebraMap` is a map into *global* sections,
-  so unlike `local_model` it does not restrict from a cover for free: gluing the `αᵢ` of a cover
-  needs the transition maps to be `ℂ`-linear and then the sheaf condition on `𝒪_X`. Everything
-  here takes the `ℂ`-algebra structure as given on the ambient space and restricts it, which is
-  what `ComplexAnalytic.AnalyticSpace.restrict` does too.
+* **`ℂ`-linearity of the transition maps as a hypothesis.** `ofOpensCompatible` asks only that
+  the algebra structures agree on the overlaps, spelled as `TopCat.Presheaf.IsCompatible`, which
+  is all the sheaf condition needs. A formulation in terms of `ComplexAnalytic.IsCLinearHom` of
+  the inclusions would be equivalent and is not stated, because nothing produces its hypothesis
+  in that shape.
 * **Gluing along abstract open immersions rather than open subsets.** The cover here is a family
   of `TopologicalSpace.Opens X`, not an `AlgebraicGeometry.LocallyRingedSpace.OpenCover`, whose
   members are arbitrary spaces mapping in by open immersions. Bridging the two needs the
   transport of `HasLocalModels` along a `ℂ`-linear isomorphism, which is not stated here because
-  nothing yet needs it; `ComplexAnalytic.IsCutOutBy.comp_iso` is the ingredient.
+  nothing yet needs it; `ComplexAnalytic.IsCutOutBy.comp_iso` is the ingredient. **This is now
+  the one thing between this file and gluing an analytic space out of an
+  `AlgebraicGeometry.LocallyRingedSpace.GlueData`**, since
+  `AlgebraicGeometry.LocallyRingedSpace.OpenCover.isIso_fromGlued` already identifies a space
+  with the gluing of a cover of it.
 -/
 
 open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry Topology
@@ -163,5 +179,56 @@ def AnalyticSpace.ofOpens (X : LocallyRingedSpace.{u}) (α : ℂ →+* X.preshea
     (h : ∀ i, HasLocalModels (X.restrict (U i).isOpenEmbedding) (X.resAlgMap α (U i))) :
     AnalyticSpace.{u} :=
   AnalyticSpace.ofHasLocalModels X α (HasLocalModels.of_iSup_eq_top hU h)
+
+/-- **A locally ringed space covered by analytic open subspaces, with no ambient `ℂ`-algebra
+structure given, is a complex analytic space.**
+
+`ComplexAnalytic.AnalyticSpace.ofOpens` takes the `ℂ`-algebra structure on the *ambient* space
+and restricts it; this version takes one on each member of the cover, agreeing on the overlaps,
+and glues them with `AlgebraicGeometry.LocallyRingedSpace.glueAlgMap`. That is the form a gluing
+construction produces, because the pieces are what one has and the ambient space is what one is
+building.
+
+The algebra structures are indexed by `U i` rather than by `(U i).functor.obj ⊤`, which is how
+`AlgebraicGeometry.LocallyRingedSpace.resAlgMap` indexes them; the restriction map between the
+two is what the hypothesis `h` carries, and
+`AlgebraicGeometry.LocallyRingedSpace.resAlgMap_glueAlgMap` is what crosses it. -/
+def AnalyticSpace.ofOpensCompatible (X : LocallyRingedSpace.{u})
+    {ι : Type*} (U : ι → TopologicalSpace.Opens X) (hU : ⨆ i, U i = ⊤)
+    (α : ∀ i, ℂ →+* X.presheaf.obj (op (U i)))
+    (hα : ∀ c : ℂ, TopCat.Presheaf.IsCompatible X.presheaf U fun i ↦ α i c)
+    (h : ∀ i, HasLocalModels (X.restrict (U i).isOpenEmbedding)
+      ((X.presheaf.map (homOfLE (Opens.isOpenEmbedding_obj_top (U i)).le).op).hom.comp (α i))) :
+    AnalyticSpace.{u} :=
+  AnalyticSpace.ofOpens X (LocallyRingedSpace.glueAlgMap hU α hα) U hU fun i ↦ by
+    rw [LocallyRingedSpace.resAlgMap_glueAlgMap]
+    exact h i
+
+@[simp]
+lemma AnalyticSpace.ofOpensCompatible_toLocallyRingedSpace (X : LocallyRingedSpace.{u})
+    {ι : Type*} (U : ι → TopologicalSpace.Opens X) (hU : ⨆ i, U i = ⊤)
+    (α : ∀ i, ℂ →+* X.presheaf.obj (op (U i)))
+    (hα : ∀ c : ℂ, TopCat.Presheaf.IsCompatible X.presheaf U fun i ↦ α i c)
+    (h : ∀ i, HasLocalModels (X.restrict (U i).isOpenEmbedding)
+      ((X.presheaf.map (homOfLE (Opens.isOpenEmbedding_obj_top (U i)).le).op).hom.comp (α i))) :
+    (AnalyticSpace.ofOpensCompatible X U hU α hα h).toLocallyRingedSpace = X :=
+  rfl
+
+/-- **The glued `ℂ`-algebra structure restricts to the given one on each member of the cover.**
+Stated as the sections over `U i` rather than as the global sections of `X|U i`, which is the
+side of the seam the input lives on.
+
+Not a `simp` lemma: `AnalyticSpace.ofOpensCompatible_toLocallyRingedSpace` rewrites inside its
+own left-hand side, which the `simpNF` linter reports. -/
+lemma AnalyticSpace.map_ofOpensCompatible_algebraMap (X : LocallyRingedSpace.{u})
+    {ι : Type*} (U : ι → TopologicalSpace.Opens X) (hU : ⨆ i, U i = ⊤)
+    (α : ∀ i, ℂ →+* X.presheaf.obj (op (U i)))
+    (hα : ∀ c : ℂ, TopCat.Presheaf.IsCompatible X.presheaf U fun i ↦ α i c)
+    (h : ∀ i, HasLocalModels (X.restrict (U i).isOpenEmbedding)
+      ((X.presheaf.map (homOfLE (Opens.isOpenEmbedding_obj_top (U i)).le).op).hom.comp (α i)))
+    (i : ι) (c : ℂ) :
+    (X.presheaf.map (homOfLE (le_top : U i ≤ ⊤)).op).hom
+        ((AnalyticSpace.ofOpensCompatible X U hU α hα h).algebraMap c) = α i c :=
+  LocallyRingedSpace.map_glueAlgMap hU α hα i c
 
 end ComplexAnalytic

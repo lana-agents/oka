@@ -115,9 +115,19 @@ coherence statement for arbitrary complex analytic spaces:
   locally ringed space covered by analytic open subspaces is an analytic space. The chart the
   hypothesis supplies lives on a restriction of a restriction and the conclusion wants one on a
   single restriction; the two are identified by the same construction the open-subspace item
-  above uses. This is what every statement about gluing analytic spaces needs, and it is the
-  half of that problem which is a *property*. The other half — the `ℂ`-algebra structure of a
-  glued space — is **data**, because `algebraMap` lands in global sections, and is not here.
+  above uses. This is the half of gluing which is a *property*.
+
+  The other half is **data**: `algebraMap` lands in *global* sections, so it does not restrict
+  from a cover for free, and recovering it from structures on the members is a gluing —
+  `AlgebraicGeometry.LocallyRingedSpace.glueAlgMap`
+  (`Oka/Geometry/RingedSpace/LocallyRingedSpace.lean`), from the sheaf condition, with the four
+  ring axioms read off the *uniqueness* half rather than carried through the gluing. The two
+  together are `ComplexAnalytic.AnalyticSpace.ofOpensCompatible`, which takes the `ℂ`-algebra
+  structures on the members of the cover and is the form a gluing construction produces. What is
+  still missing before an analytic space can be glued out of a
+  `AlgebraicGeometry.LocallyRingedSpace.GlueData` is one lemma: transport of the local-model
+  condition along a `ℂ`-linear isomorphism, needed because the members of an `OpenCover` are
+  arbitrary spaces mapping in by open immersions rather than restrictions.
 
 * **Gluing.** Open covers of a locally ringed space, and the gluing of morphisms out of the
   members of one (`Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean`): a locally ringed space
