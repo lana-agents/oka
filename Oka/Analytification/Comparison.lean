@@ -90,6 +90,10 @@ statement costs four lines rather than a comparison of two composites.
   `ComplexAnalytic.analytificationFGAlgToSpec_app`: the components of the two natural
   transformations. The first is `rfl`; the second is what keeps the algebra-level one from being
   a definition nothing can be computed from.
+- `ComplexAnalytic.analytificationFGAlgToSpec_app_toFGAlg_obj`: **the algebra-level component at
+  a presentation one has**, rather than at the one `Classical.choice` produced. A triangle
+  identity of the equivalence, and the analogue for the transformation of what
+  `ComplexAnalytic.analytificationFGAlgObjIso` is for the functor.
 
 ## What is not here
 
@@ -227,5 +231,33 @@ theorem analytificationFGAlgToSpec_app (X : (isFiniteType.{u}.FullSubcategory)�
     (congrArg (fun m ↦ analytificationToSpec.{u}
       (toFGAlg.{u}.asEquivalence.inverse.obj X).g ≫ m)
       (Category.comp_id (obj := LocallyRingedSpace.{u}) _))
+
+/-- **The algebra-level comparison morphism, at a presentation one has.**
+
+`ComplexAnalytic.analytificationFGAlgToSpec_app` computes the component in terms of the
+presentation `Classical.choice` produced, which is the thing one cannot see past. This computes it
+in terms of a presentation in hand, through the comparison isomorphism — the exact analogue of
+what `ComplexAnalytic.analytificationFGAlgObjIso` does for
+`ComplexAnalytic.analytificationFGAlg`, and required for the same reason: without it the
+transformation is a definition nothing can be evaluated at.
+
+It is a triangle identity of the equivalence. Naturality of
+`ComplexAnalytic.analytificationToSpecNatTrans` at the inverse of the unit turns the right-hand
+side into the component at the chosen presentation followed by `Spec` of the unit's inverse, and
+`CategoryTheory.Equivalence.counit_app_functor` identifies that with the counit. -/
+theorem analytificationFGAlgToSpec_app_toFGAlg_obj (P : Presentation.{u}) :
+    analytificationFGAlgToSpec.{u}.app (toFGAlg.{u}.obj P) =
+      AnalyticSpace.forgetToLocallyRingedSpace.{u}.map (analytificationFGAlgObjIso.{u} P).hom ≫
+        analytificationToSpec.{u} P.g := by
+  have hnat := analytificationToSpecNatTrans.{u}.naturality
+    (toFGAlg.{u}.asEquivalence.unitIso.inv.app P)
+  simp only [Functor.comp_map, Functor.id_obj, analytificationToSpecNatTrans_app] at hnat
+  rw [analytificationFGAlgToSpec_app, analytificationFGAlgObjIso_hom]
+  refine Eq.trans ?_ hnat.symm
+  have hc : toFGAlg.{u}.asEquivalence.counitIso.hom.app (toFGAlg.{u}.obj P) =
+      toFGAlg.{u}.map (toFGAlg.{u}.asEquivalence.unitIso.inv.app P) :=
+    toFGAlg.{u}.asEquivalence.counit_app_functor P
+  rw [specFunctor_map, hc]
+  rfl
 
 end ComplexAnalytic
