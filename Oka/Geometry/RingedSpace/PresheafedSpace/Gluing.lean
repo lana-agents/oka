@@ -51,6 +51,11 @@ with one `Iso.trans` removed.
 - `AlgebraicGeometry.LocallyRingedSpace.OpenCover.glueMorphisms`: the glued morphism.
 - `AlgebraicGeometry.LocallyRingedSpace.openCoverOfOpens`: the open cover attached to a family of
   open subsets covering the space.
+- `AlgebraicGeometry.LocallyRingedSpace.OpenCover.opensRange`: the image of a member of a cover,
+  as an open subset, with `…OpenCover.isoRestrict` identifying that member with the restriction
+  to its image and `…OpenCover.restrictAlgMap` carrying an algebra structure across.
+- `AlgebraicGeometry.LocallyRingedSpace.GlueData.openCover`: the members of a glue data are an
+  open cover of the glued space.
 
 ## Main results
 
@@ -59,6 +64,9 @@ with one `Iso.trans` removed.
   gluing is open exactly when its preimage in every member is.
 - `AlgebraicGeometry.LocallyRingedSpace.OpenCover.isIso_fromGlued`: **a locally ringed space is
   the gluing of the members of any open cover of it.**
+- `AlgebraicGeometry.LocallyRingedSpace.OpenCover.iSup_opensRange`: the images of the members of
+  a cover cover the space, which is `OpenCover.covers` in the form the cover-indexed API asks
+  for.
 - `AlgebraicGeometry.LocallyRingedSpace.OpenCover.existsUnique_glueMorphisms`: **morphisms out of
   the members of an open cover which agree on the overlaps glue to a unique morphism out of the
   whole space**, with `ι_glueMorphisms` and `hom_ext` as the two halves.
@@ -359,6 +367,106 @@ theorem existsUnique_glueMorphisms {Y : LocallyRingedSpace.{u}} (f : ∀ j, 𝒰
   ⟨𝒰.glueMorphisms f hf, 𝒰.ι_glueMorphisms f hf, fun _ hφ ↦
     𝒰.hom_ext _ _ fun j ↦ (hφ j).trans (𝒰.ι_glueMorphisms f hf j).symm⟩
 
+/-! ### The members of a cover as open subspaces
+
+An `OpenCover`'s members are arbitrary locally ringed spaces mapping into `X` by open immersions,
+which is what a `GlueData` produces; the constructions that consume a cover — notably
+`ComplexAnalytic.AnalyticSpace.ofOpens` — take a family of *opens* of `X` and restrict. The three
+declarations below are the dictionary: the image of a member as an open subset, the fact that
+those images cover, and the isomorphism between a member and the restriction to its image.
+
+The isomorphism is `IsOpenImmersion.isoOfRangeEq` and the range equality is `range_ofRestrict`,
+so nothing here is a computation; what it buys is that a property or a structure known on the
+members can be transported to the restrictions, where the cover-indexed API lives.
+-/
+
+/-- **The image of the `j`-th member of an open cover, as an open subset of `X`.** -/
+def opensRange (j : 𝒰.J) : Opens X :=
+  ⟨Set.range (𝒰.map j).base, (𝒰.isOpen j).base_open.isOpen_range⟩
+
+@[simp]
+lemma coe_opensRange (j : 𝒰.J) : (𝒰.opensRange j : Set X) = Set.range (𝒰.map j).base :=
+  rfl
+
+/-- **The images of the members of an open cover cover `X`**, which is `OpenCover.covers` in the
+form the cover-indexed API asks for. -/
+lemma iSup_opensRange : ⨆ j, 𝒰.opensRange j = ⊤ :=
+  Opens.ext <| Set.eq_univ_of_forall fun x ↦ by
+    rw [Opens.coe_iSup]
+    exact Set.mem_iUnion.2 ⟨𝒰.idx x, 𝒰.covers x⟩
+
+/-- **A member of an open cover is the open subspace of `X` on its image.**
+
+Both `𝒰.map j` and `X.ofRestrict (𝒰.opensRange j).isOpenEmbedding` are open immersions with the
+same image — by `range_ofRestrict`, and for the second one that is a definitional unfolding of
+`opensRange` — so `IsOpenImmersion.isoOfRangeEq` identifies their sources. -/
+noncomputable def isoRestrict (j : 𝒰.J) :
+    X.restrict (𝒰.opensRange j).isOpenEmbedding ≅ 𝒰.obj j :=
+  IsOpenImmersion.isoOfRangeEq _ _ (X.range_ofRestrict (𝒰.opensRange j))
+
+@[reassoc (attr := simp)]
+lemma isoRestrict_hom_fac (j : 𝒰.J) :
+    (𝒰.isoRestrict j).hom ≫ 𝒰.map j = X.ofRestrict (𝒰.opensRange j).isOpenEmbedding :=
+  IsOpenImmersion.isoOfRangeEq_hom_fac _ _ _
+
+/-- **An algebra structure on a member of the cover, carried to the open subspace of `X` on its
+image.** This is `comapAlgMap` along `isoRestrict`, and it is what puts a family of structures
+given on abstract members into the indexing `glueAlgMapRestrict` consumes. -/
+noncomputable def restrictAlgMap {R : Type*} [NonAssocSemiring R] (j : 𝒰.J)
+    (α : R →+* (𝒰.obj j).presheaf.obj (op ⊤)) :
+    R →+* (X.restrict (𝒰.opensRange j).isOpenEmbedding).presheaf.obj (op ⊤) :=
+  comapAlgMap (𝒰.isoRestrict j).hom α
+
+/-- **If the structure on a member is pulled back from one on `X`, carrying it to the open
+subspace gives the restriction of that structure.**
+
+This is what makes the gluing of `ComplexAnalytic.AnalyticSpace.ofOpenCover` checkable: it turns
+a family that came from an ambient structure back into the family of its restrictions, on which
+compatibility is `isCompatible_map_le_top` and the gluing is `glueSection_map_le_top`. The proof
+is `isoRestrict_hom_fac` read through `comapAlgMap_comp`; nothing is computed. -/
+lemma restrictAlgMap_comapAlgMap {R : Type*} [NonAssocSemiring R] (j : 𝒰.J)
+    (γ : R →+* X.presheaf.obj (op ⊤)) :
+    𝒰.restrictAlgMap j (comapAlgMap (𝒰.map j) γ) = X.resAlgMap γ (𝒰.opensRange j) := by
+  rw [restrictAlgMap, ← comapAlgMap_comp, isoRestrict_hom_fac, comapAlgMap_ofRestrict]
+
+/-- **A family of structures pulled back from one on `X` is compatible on the overlaps**, so it
+satisfies the hypothesis of `glueAlgMapRestrict` with nothing to check.
+
+Every member of the carried family is a restriction of the single global section `γ c`, by
+`restrictAlgMap_comapAlgMap`, and `isCompatible_map_le_top` is exactly that case. This is the
+hypothesis-discharging half of `glueAlgMapRestrict_comapAlgMap` below, and it is
+stated separately because a caller of `ComplexAnalytic.AnalyticSpace.ofOpenCover` needs it before
+it can name the space the theorem is about. -/
+theorem isCompatible_restrictAlgMap_comapAlgMap {R : Type*} [NonAssocSemiring R]
+    (γ : R →+* X.presheaf.obj (op ⊤)) (c : R) :
+    TopCat.Presheaf.IsCompatible X.presheaf
+      (fun j ↦ (𝒰.opensRange j).isOpenEmbedding.isOpenMap.functor.obj ⊤)
+      fun j ↦ 𝒰.restrictAlgMap j (comapAlgMap (𝒰.map j) γ) c := by
+  have key : (fun j ↦ 𝒰.restrictAlgMap j (comapAlgMap (𝒰.map j) γ) c) =
+      fun j ↦ (X.presheaf.map (homOfLE (le_top :
+        (𝒰.opensRange j).isOpenEmbedding.isOpenMap.functor.obj ⊤ ≤ ⊤)).op).hom (γ c) :=
+    funext fun j ↦ congrArg (fun m : R →+* _ ↦ m c) (𝒰.restrictAlgMap_comapAlgMap j γ)
+  rw [key]
+  exact isCompatible_map_le_top _
+
+/-- **Gluing the family a global structure induces on the members of a cover returns that
+structure**: the round trip, in the `OpenCover` indexing.
+
+`glueSection_map_le_top` is the same statement for a single section and is what this reduces to;
+the content is `restrictAlgMap_comapAlgMap`, which says the carried family *is* the family of
+restrictions. It is what identifies the output of `ComplexAnalytic.AnalyticSpace.ofOpenCover` on
+a cover of a space that already carries a structure — and note that it makes no reference to the
+members being restrictions, which is the point of the whole section. -/
+theorem glueAlgMapRestrict_comapAlgMap {R : Type*} [CommRing R]
+    (γ : R →+* X.presheaf.obj (op ⊤)) :
+    glueAlgMapRestrict 𝒰.iSup_opensRange
+        (fun j ↦ 𝒰.restrictAlgMap j (comapAlgMap (𝒰.map j) γ))
+        (𝒰.isCompatible_restrictAlgMap_comapAlgMap γ) = γ :=
+  RingHom.ext fun c ↦
+    glueSection_eq ((iSup_isOpenEmbedding_obj_top _).trans 𝒰.iSup_opensRange) _
+      (𝒰.isCompatible_restrictAlgMap_comapAlgMap γ c) (γ c)
+      fun j ↦ (congrArg (fun m : R →+* _ ↦ m c) (𝒰.restrictAlgMap_comapAlgMap j γ)).symm
+
 end OpenCover
 
 /-- **A family of open subsets covering `X` is an open cover of `X`** by the corresponding open
@@ -384,6 +492,22 @@ lemma openCoverOfOpens_map {X : LocallyRingedSpace.{u}} {ι : Type u} (U : ι �
     (hU : ∀ x : X, ∃ i, x ∈ U i) (i : ι) :
     (openCoverOfOpens U hU).map i = X.ofRestrict (U i).isOpenEmbedding :=
   rfl
+
+/-- **The members of a glue data are an open cover of the glued space.**
+
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.ι_isOpenImmersion` and
+`…GlueData.ι_jointly_surjective` are Mathlib's; this packages them, and it is the form in which
+a gluing is fed to anything that consumes a cover. It is the converse direction to
+`OpenCover.gluedCover`, and unlike `OpenCover.isIso_fromGlued` it costs nothing.
+
+The index of a point is *chosen*, so this definition is noncomputable and non-canonical in the
+same way `openCoverOfOpens` is; nothing downstream depends on which index is picked. -/
+noncomputable def GlueData.openCover (D : GlueData.{u}) : OpenCover D.toGlueData.glued where
+  J := D.J
+  obj := D.U
+  map := D.toGlueData.ι
+  idx x := (D.ι_jointly_surjective x).choose
+  covers x := (D.ι_jointly_surjective x).choose_spec
 
 section GlueOverOpens
 

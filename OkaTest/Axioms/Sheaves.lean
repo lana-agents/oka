@@ -242,3 +242,120 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.resAlgMap_glueAlgMap' depends on axi
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.resAlgMap_glueAlgMap
+
+/-! ### Pulling an algebra structure back, and gluing one given on the members of a cover
+
+`Oka/Geometry/RingedSpace/LocallyRingedSpace.lean` and
+`Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean`. -/
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.comapAlgMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.comapAlgMap
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.comapAlgMap_ofRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.comapAlgMap_ofRestrict
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.comapAlgMap_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.comapAlgMap_comp
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.comapAlgMap_hom_injective' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.comapAlgMap_hom_injective
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.iSup_isOpenEmbedding_obj_top' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.iSup_isOpenEmbedding_obj_top
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.glueAlgMapRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.glueAlgMapRestrict
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.resAlgMap_glueAlgMapRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.resAlgMap_glueAlgMapRestrict
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.OpenCover.opensRange' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.OpenCover.opensRange
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.OpenCover.iSup_opensRange' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.OpenCover.iSup_opensRange
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.OpenCover.isoRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.OpenCover.isoRestrict
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.OpenCover.isoRestrict_hom_fac' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.OpenCover.isoRestrict_hom_fac
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.OpenCover.restrictAlgMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.OpenCover.restrictAlgMap
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.OpenCover.restrictAlgMap_comapAlgMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.OpenCover.restrictAlgMap_comapAlgMap
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.GlueData.openCover' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.GlueData.openCover
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.OpenCover.isCompatible_restrictAlgMap_comapAlgMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.OpenCover.isCompatible_restrictAlgMap_comapAlgMap
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.OpenCover.glueAlgMapRestrict_comapAlgMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.OpenCover.glueAlgMapRestrict_comapAlgMap

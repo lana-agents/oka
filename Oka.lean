@@ -26,6 +26,7 @@ import Oka.AnalyticSpace.Coherent
 import Oka.AnalyticSpace.Continuity
 import Oka.AnalyticSpace.Evaluation
 import Oka.AnalyticSpace.Factorisation
+import Oka.AnalyticSpace.Glue
 import Oka.AnalyticSpace.HolomorphicMap
 import Oka.AnalyticSpace.HolomorphicMapGeneral
 import Oka.AnalyticSpace.HolomorphicMapOpen
