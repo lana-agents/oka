@@ -95,4 +95,26 @@ lake lint || exit 1
 # The `nolints file could not be read` warning is harmless and always present.
 lake exe lint-style Oka OkaTest || exit 1
 
+# Verify that every backticked dotted name in a comment or docstring resolves to something.
+#
+# Nothing above looks inside a comment. `lake build --wfail` sees only elaborated terms, `lake
+# lint` checks declaration *names*, `lint-style` checks whitespace and line length, `mk_all
+# --check` checks imports, and the declaration-name diff that every pull request body runs
+# compares declarations rather than the prose citing them. A backticked name in a `/-- … -/`
+# block that names nothing at all passed every one of them until this line existed, and on
+# 2026-08-20/21 that cost four separate findings in one day, each caught by a human who happened
+# to be reading the file for another reason.
+#
+# `scripts/check_docstring_names.py` documents its own rules; the short version is that it is
+# deliberately permissive — a name resolves if *any* declaration in the environment ends with
+# it, or it is a module, or a file in the repository, or field notation — because a check that
+# cries wolf is worse than none on a project that quotes a green `validation.sh` as evidence in
+# every pull request body. `scripts/docstring-names-ignore.txt` is the escape hatch and is
+# empty; prefer fixing a rule to growing it.
+#
+# It runs `lake env lean scripts/DumpEnvNames.lean` to read the environment, so it has to come
+# after the build; given the oleans it takes about ten seconds, nine of them the import. It
+# needs `python3`, which is the only thing in this script that does.
+python3 scripts/check_docstring_names.py || exit 1
+
 echo "Validation succeeded."

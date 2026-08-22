@@ -17,7 +17,7 @@ public import Oka.CategoryTheory.Sites.LocallySurjective
 
 An epimorphism of sheaves is not surjective on sections; it is only *locally* surjective, and
 that is the form in which it is used. Mathlib proves the equivalence for sheaves of types
-(`CategoryTheory.Presheaf.isLocallySurjective_iff_epi`) and, given a functorial
+(`CategoryTheory.Sheaf.isLocallySurjective_iff_epi`) and, given a functorial
 surjective–injective factorisation, for sheaves valued in a concrete category
 (`CategoryTheory.Sheaf.isLocallySurjective_iff_epi'`). Neither applies to `SheafOfModules R`,
 which is not a category of the form `Sheaf J A`.

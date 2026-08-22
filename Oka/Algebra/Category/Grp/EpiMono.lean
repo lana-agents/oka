@@ -37,8 +37,9 @@ lives in the `Oka/`-mirror of the Mathlib directory tree for that reason, next t
 
 ## Main results
 
-- `AddCommGrpCat.instPreservesEpimorphismsForget`: the forgetful functor
-  `AddCommGrpCat ⥤ Type` preserves epimorphisms.
+- the forgetful functor `AddCommGrpCat ⥤ Type` preserves epimorphisms. The instance below is
+  anonymous, so the name Lean generates for it is not one to cite; it is the
+  `CategoryTheory.Functor.PreservesEpimorphisms` instance for `forget AddCommGrpCat`.
 -/
 
 @[expose] public section

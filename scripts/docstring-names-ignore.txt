@@ -1,0 +1,13 @@
+# Backticked dotted names that `scripts/check_docstring_names.py` should not try to resolve.
+#
+# One name per line; `#` starts a comment. Matching is on the whole backticked string and is not
+# scoped to a file, so an entry here exempts that spelling everywhere in the tree.
+#
+# Before adding a line, check that the name is not simply wrong — that is what this checker is
+# for, and every entry here is a place it has been told to stop looking. The rules in the
+# checker's own docstring already cover, without any entry: generalised field notation on a
+# declaration (`restrictTopIso.hom`) or on a local binder (`i.stalkMap`), module names
+# (`Oka.Weierstrass`), and paths to files in the repository (`README.md`). If you have hit a
+# false positive of a shape not on that list, prefer fixing the rule to growing this file.
+#
+# This file is empty, and the intention is that it stays that way.

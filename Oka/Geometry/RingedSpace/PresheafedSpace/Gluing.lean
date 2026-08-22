@@ -12,7 +12,7 @@ import Oka.Topology.Sheaves.Stalks
 
 Mathlib glues locally ringed *spaces* — `AlgebraicGeometry.LocallyRingedSpace.GlueData` in
 `Mathlib/Geometry/RingedSpace/PresheafedSpace/Gluing.lean` — but it does not glue *morphisms* out
-of one. `AlgebraicGeometry.Scheme.OpenCover.glueMorphisms` exists and is one of the most-used
+of one. `AlgebraicGeometry.Scheme.Cover.glueMorphisms` exists and is one of the most-used
 pieces of the scheme API; the analogue for a locally ringed space is absent, and this file
 supplies it. Material for `Mathlib/Geometry/RingedSpace/PresheafedSpace/Gluing.lean`; see
 `README.md` on the mirror tree.

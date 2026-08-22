@@ -78,7 +78,7 @@ sheaf, so the `example` preceding this one is, on its own, consistent with
 `cokernel (sectionsHom nodeFamily)` being `0`.
 
 The witness is the origin, where `z₀ z₁` vanishes: by
-`ComplexAnalytic.germ_mem_maximalIdeal_iff` its germ there lies in the maximal ideal of
+`germ_mem_maximalIdeal_iff` its germ there lies in the maximal ideal of
 `𝒪_{ℂ², 0}`, which is the hypothesis of
 `AlgebraicGeometry.LocallyRingedSpace.not_isZero_cokernel_sectionsHom_of_germ_mem`. -/
 theorem not_isZero_cokernel_sectionsHom_nodeFamily :

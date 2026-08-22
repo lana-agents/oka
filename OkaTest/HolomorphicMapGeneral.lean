@@ -46,7 +46,7 @@ what already existed** if every `Z` it is applied to were an open subspace of `â
 * **The punctured node** (`exists_hom_complexLine_puncturedNode`), which is an open subspace of
   the node and of nothing simpler, with `g` the pullback of a coordinate function.
   `base_hom_puncturedNode` identifies it on points, through
-  `ComplexAnalytic.eval_pullback_nodeCoord`.
+  `eval_pullback_nodeCoord`.
 
 Neither space is an open subspace of `â„‚^n`, so neither morphism was available from
 `exists_hom_complexLine` or `exists_hom_complexLine_restrict`.
