@@ -31,13 +31,12 @@ available while every space in the development already carries a global `ℂ`-al
 on a sheaf, every compatible family over a cover of `⊤` *is* the restriction family of a unique
 global section, so there is no independent input to feed in.
 
-**The test that is still missing, and what it waits on.** A cover of a space that does not
-already carry a global structure — the gluing of a
-`AlgebraicGeometry.LocallyRingedSpace.GlueData`, which is a multicoequalizer and carries nothing.
-`ComplexAnalytic.AnalyticSpace.ofGlueData` is stated for exactly that and is **not instantiated
-here**: no `GlueData` is constructed anywhere in the repository, and building one means supplying
-the transition isomorphisms and the cocycle condition. Its axiom guard below is a type-check and
-nothing more, and it should be replaced by a genuine instance when a glue data exists.
+**The last section goes further**, and it is what the round trip cannot do on its own: it runs
+`ComplexAnalytic.AnalyticSpace.ofGlueData` on the *glued* space of this cover — a
+multicoequalizer, which is not a `restrict` of anything and carries no `ℂ`-algebra structure
+until the gluing puts one there. The structures on the pieces are still pullbacks of a single
+structure on that space, so it is still a round trip in the sense above; what is new is that the
+space being given a structure is produced by the gluing rather than assumed.
 -/
 
 open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry ComplexAnalytic
@@ -200,5 +199,64 @@ example : HasLocalModels line.{u} constants.{u} :=
   HasLocalModels.of_iso line.{u}.restrictTopIso.symm
     (isCLinearHom_restrictTopIso_inv line.{u} constants.{u})
     ((AnalyticSpace.complexAffineSpace.{u} 1).hasLocalModels.restrict ⊤)
+
+/-! ### `ofGlueData` at the gluing of this cover
+
+The cover above is a cover of `ℂ`, a space that carries the constants to begin with. This section
+runs `ComplexAnalytic.AnalyticSpace.ofGlueData` on the **glued** space of the same cover — a
+multicoequalizer, which carries nothing at all until something puts a structure on it, and which
+is not a `restrict` of anything.
+
+What is still a round trip, stated precisely: the structures on the pieces are the pullbacks of
+one structure on the glued space, namely the constants pulled back along `fromGlued`. That is
+unavoidable for the reason `OkaTest/AnalyticSpaceLocal.lean` records — on a sheaf every
+compatible family over a cover of `⊤` is the restriction family of a unique global section — and
+the thing this section adds over that one is that **the space carrying the glued structure is
+produced by the gluing** rather than given in advance.
+-/
+
+/-- The glue data of the cover above; its glued space is a multicoequalizer. -/
+abbrev gluedData : LocallyRingedSpace.GlueData.{u} := coverOfMembers.{u}.gluedCover
+
+/-- The `ℂ`-algebra structure the glued space is given: the constants of `ℂ`, pulled back along
+`fromGlued`. -/
+def gluedConstants : ℂ →+* (gluedData.{u}.toGlueData.glued).presheaf.obj (op ⊤) :=
+  LocallyRingedSpace.comapAlgMap coverOfMembers.{u}.fromGlued constants.{u}
+
+/-- **On each piece, that structure is the piece's own structure**, because
+`ι j ≫ fromGlued = 𝒰.map j`. Pure `comapAlgMap_comp`; nothing about the glued space's sheaf is
+computed. -/
+theorem comapAlgMap_gluedConstants (j : gluedData.{u}.J) :
+    LocallyRingedSpace.comapAlgMap (gluedData.{u}.openCover.map j) gluedConstants.{u} =
+      memberAlg.{u} j := by
+  rw [gluedConstants, ← LocallyRingedSpace.comapAlgMap_comp]
+  exact congrArg (fun f ↦ LocallyRingedSpace.comapAlgMap f constants.{u})
+    (coverOfMembers.{u}.ι_fromGlued j)
+
+theorem hasLocalModels_gluedPiece (j : gluedData.{u}.J) :
+    HasLocalModels (gluedData.{u}.openCover.obj j)
+      (LocallyRingedSpace.comapAlgMap (gluedData.{u}.openCover.map j) gluedConstants.{u}) := by
+  rw [comapAlgMap_gluedConstants]
+  exact hasLocalModels_member.{u} j
+
+/-- **The gluing of the two punctured planes, as a complex analytic space.** The first use of
+`ofGlueData`, and the first analytic space in the development whose underlying locally ringed
+space is not a restriction of one that was already there. -/
+def gluedAnalytic : AnalyticSpace.{u} :=
+  AnalyticSpace.ofGlueData gluedData.{u}
+    (fun j ↦ LocallyRingedSpace.comapAlgMap (gluedData.{u}.openCover.map j) gluedConstants.{u})
+    (gluedData.{u}.openCover.isCompatible_restrictAlgMap_comapAlgMap gluedConstants.{u})
+    hasLocalModels_gluedPiece.{u}
+
+example : gluedAnalytic.{u}.toLocallyRingedSpace = gluedData.{u}.toGlueData.glued :=
+  AnalyticSpace.ofGlueData_toLocallyRingedSpace gluedData.{u}
+    (fun j ↦ LocallyRingedSpace.comapAlgMap (gluedData.{u}.openCover.map j) gluedConstants.{u})
+    (gluedData.{u}.openCover.isCompatible_restrictAlgMap_comapAlgMap gluedConstants.{u})
+    hasLocalModels_gluedPiece.{u}
+
+/-- **The structure the gluing produces on the glued space is the one the pieces came from.** -/
+theorem algebraMap_gluedAnalytic : gluedAnalytic.{u}.algebraMap = gluedConstants.{u} :=
+  AnalyticSpace.algebraMap_ofOpenCover_comapAlgMap gluedData.{u}.openCover gluedConstants.{u}
+    hasLocalModels_gluedPiece.{u}
 
 end OkaTest.AnalyticSpaceGlue

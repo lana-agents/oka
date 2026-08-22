@@ -65,6 +65,8 @@ carry the three together, bundle then.
 - `ComplexAnalytic.AnalyticSpace.comapAlgMap_ofOpenCover_algebraMap`: **the glued `ℂ`-algebra
   structure pulls back to the given one on every member of the cover** — the statement that says
   the construction is the right one rather than merely well-typed.
+- `ComplexAnalytic.AnalyticSpace.algebraMap_ofOpenCover_comapAlgMap`: on a cover of a space that
+  already carries a structure, the gluing returns that structure.
 
 ## What is not here
 
@@ -193,6 +195,25 @@ lemma comapAlgMap_ofOpenCover_algebraMap (j : 𝒰.J) :
     rw [LocallyRingedSpace.OpenCover.restrictAlgMap_comapAlgMap]
     exact LocallyRingedSpace.resAlgMap_glueAlgMapRestrict 𝒰.iSup_opensRange
       (fun j ↦ 𝒰.restrictAlgMap j (α j)) hα j
+
+/-- **On a cover of a space that already carries a `ℂ`-algebra structure, gluing the induced
+structures returns it.**
+
+The round trip, and the form in which `ComplexAnalytic.AnalyticSpace.ofOpenCover` is checkable:
+the compatibility hypothesis comes for free
+(`AlgebraicGeometry.LocallyRingedSpace.OpenCover.isCompatible_restrictAlgMap_comapAlgMap`) and
+the conclusion is
+`AlgebraicGeometry.LocallyRingedSpace.OpenCover.glueAlgMapRestrict_comapAlgMap`,
+which holds by the uniqueness half of the sheaf condition.
+
+Note what it does *not* assume: nothing about the members being restrictions of `X`. It applies
+verbatim to the gluing of a glue data, where `γ` is a structure on the glued space — which is how
+`ComplexAnalytic.AnalyticSpace.ofGlueData` gets tested at all. -/
+theorem algebraMap_ofOpenCover_comapAlgMap (γ : ℂ →+* X.presheaf.obj (op ⊤))
+    (hγ : ∀ j, HasLocalModels (𝒰.obj j) (LocallyRingedSpace.comapAlgMap (𝒰.map j) γ)) :
+    (ofOpenCover 𝒰 (fun j ↦ LocallyRingedSpace.comapAlgMap (𝒰.map j) γ)
+      (𝒰.isCompatible_restrictAlgMap_comapAlgMap γ) hγ).algebraMap = γ :=
+  𝒰.glueAlgMapRestrict_comapAlgMap γ
 
 /-- **The gluing of a glue data of locally ringed spaces whose pieces are complex analytic
 spaces, with compatible `ℂ`-algebra structures, is a complex analytic space.**

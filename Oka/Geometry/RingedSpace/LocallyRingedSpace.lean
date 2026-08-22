@@ -184,7 +184,13 @@ section back along any morphism is `Γ.map`, and the ring axioms are its.
 
 Note that `f` determines the pulled-back structure, and conversely: two structures on `Γ(X, 𝒪_X)`
 that are both `f`-compatible with one and the same structure on `Γ(Y, 𝒪_Y)` are equal, because
-each of them *is* this composite. That is `ComplexAnalytic.IsCLinearHom.eq`. -/
+each of them *is* this composite. That is `ComplexAnalytic.IsCLinearHom.eq`.
+
+**Two places wrote this composite out before it had a name** and are left as they are:
+`ComplexAnalytic.polyToGlobal` and the statement of
+`ComplexAnalytic.Γ_map_comp_ofMvPolynomial`, both at `R = MvPolynomial (ULift (Fin n)) ℂ`. They
+are not rephrased because the second is a theorem *statement* that several proofs consume in its
+current spelling; a caller writing a new one should use this. -/
 noncomputable def comapAlgMap {R : Type*} [NonAssocSemiring R] (f : X ⟶ Y)
     (α : R →+* Y.presheaf.obj (op ⊤)) : R →+* X.presheaf.obj (op ⊤) :=
   (Γ.map f.op).hom.comp α

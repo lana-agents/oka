@@ -429,6 +429,44 @@ lemma restrictAlgMap_comapAlgMap {R : Type*} [NonAssocSemiring R] (j : 𝒰.J)
     𝒰.restrictAlgMap j (comapAlgMap (𝒰.map j) γ) = X.resAlgMap γ (𝒰.opensRange j) := by
   rw [restrictAlgMap, ← comapAlgMap_comp, isoRestrict_hom_fac, comapAlgMap_ofRestrict]
 
+/-- **A family of structures pulled back from one on `X` is compatible on the overlaps**, so it
+satisfies the hypothesis of `glueAlgMapRestrict` with nothing to check.
+
+Every member of the carried family is a restriction of the single global section `γ c`, by
+`restrictAlgMap_comapAlgMap`, and `isCompatible_map_le_top` is exactly that case. This is the
+hypothesis-discharging half of `glueAlgMapRestrict_comapAlgMap` below, and it is
+stated separately because a caller of `ComplexAnalytic.AnalyticSpace.ofOpenCover` needs it before
+it can name the space the theorem is about. -/
+theorem isCompatible_restrictAlgMap_comapAlgMap {R : Type*} [NonAssocSemiring R]
+    (γ : R →+* X.presheaf.obj (op ⊤)) (c : R) :
+    TopCat.Presheaf.IsCompatible X.presheaf
+      (fun j ↦ (𝒰.opensRange j).isOpenEmbedding.isOpenMap.functor.obj ⊤)
+      fun j ↦ 𝒰.restrictAlgMap j (comapAlgMap (𝒰.map j) γ) c := by
+  have key : (fun j ↦ 𝒰.restrictAlgMap j (comapAlgMap (𝒰.map j) γ) c) =
+      fun j ↦ (X.presheaf.map (homOfLE (le_top :
+        (𝒰.opensRange j).isOpenEmbedding.isOpenMap.functor.obj ⊤ ≤ ⊤)).op).hom (γ c) :=
+    funext fun j ↦ congrArg (fun m : R →+* _ ↦ m c) (𝒰.restrictAlgMap_comapAlgMap j γ)
+  rw [key]
+  exact isCompatible_map_le_top _
+
+/-- **Gluing the family a global structure induces on the members of a cover returns that
+structure**: the round trip, in the `OpenCover` indexing.
+
+`glueSection_map_le_top` is the same statement for a single section and is what this reduces to;
+the content is `restrictAlgMap_comapAlgMap`, which says the carried family *is* the family of
+restrictions. It is what identifies the output of `ComplexAnalytic.AnalyticSpace.ofOpenCover` on
+a cover of a space that already carries a structure — and note that it makes no reference to the
+members being restrictions, which is the point of the whole section. -/
+theorem glueAlgMapRestrict_comapAlgMap {R : Type*} [CommRing R]
+    (γ : R →+* X.presheaf.obj (op ⊤)) :
+    glueAlgMapRestrict 𝒰.iSup_opensRange
+        (fun j ↦ 𝒰.restrictAlgMap j (comapAlgMap (𝒰.map j) γ))
+        (𝒰.isCompatible_restrictAlgMap_comapAlgMap γ) = γ :=
+  RingHom.ext fun c ↦
+    glueSection_eq ((iSup_isOpenEmbedding_obj_top _).trans 𝒰.iSup_opensRange) _
+      (𝒰.isCompatible_restrictAlgMap_comapAlgMap γ c) (γ c)
+      fun j ↦ (congrArg (fun m : R →+* _ ↦ m c) (𝒰.restrictAlgMap_comapAlgMap j γ)).symm
+
 end OpenCover
 
 /-- **A family of open subsets covering `X` is an open cover of `X`** by the corresponding open

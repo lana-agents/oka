@@ -149,8 +149,10 @@ coherence statement for arbitrary complex analytic spaces:
   `AlgebraicGeometry.LocallyRingedSpace.GlueData` whose pieces are
   (`ComplexAnalytic.AnalyticSpace.ofGlueData`). The glued structure is identified by
   `ComplexAnalytic.AnalyticSpace.comapAlgMap_ofOpenCover_algebraMap`: it pulls back to the given
-  one on every member. **What no test yet exercises is `ofGlueData` at an actual glue data** —
-  nothing in the repository constructs one.
+  one on every member. `OkaTest/AnalyticSpaceGlue.lean` runs both on a cover of `ℂ` by two
+  punctured planes presented as `(ℂ|Uᵢ)|⊤` — members that are not open subsets of `ℂ` — and then
+  on the **gluing** of that cover, a multicoequalizer which is not a restriction of anything and
+  carries no `ℂ`-algebra structure until the gluing produces one.
 
 * **Gluing.** Open covers of a locally ringed space, and the gluing of morphisms out of the
   members of one (`Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean`): a locally ringed space
