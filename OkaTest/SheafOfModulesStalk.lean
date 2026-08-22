@@ -28,6 +28,12 @@ comes from `AlgebraicGeometry.LocallyRingedSpace.ringSheaf`, whose site is spell
 The second `example` instantiates at `complexSpace`, so that the applicability
 is on record for the structure sheaf this development actually uses rather than only for a
 variable.
+
+The last `example` is a different kind of test. `Oka/Algebra/Category/ModuleCat/Sheaf/Stalk.lean`
+once carried an `Abelian` transport for this site and a docstring paragraph saying the seam made
+that instance unfindable; both are gone, because `CategoryTheory.sheafIsAbelian` is general in
+the site and applies here directly. That is a claim about instance search, so the honest form of
+it is a check that fails if it stops being true — which is what the `inferInstance` there is.
 -/
 
 open CategoryTheory Limits TopologicalSpace AlgebraicGeometry
@@ -51,3 +57,12 @@ example (ι : Type u) [Fintype ι]
         (X := TopCat.of ↑(complexSpace ι).toPresheafedSpace) x)).Exact) :
     S.Exact :=
   SheafOfModules.exact_of_stalk_exact S h
+
+/-- **`Abelian` at this spelling of the site needs no transport.** `CategoryTheory.sheafIsAbelian`
+is stated for a general site and applies directly, so the instance
+`Oka/Algebra/Category/ModuleCat/Sheaf/Stalk.lean` used to declare by hand was redundant. If this
+`example` ever breaks, that file's account of what the seam costs is wrong again and the
+paragraph naming `PreservesFiniteLimits` as the whole cost has to be revisited. -/
+noncomputable example (X : TopCat.{u}) :
+    Abelian (CategoryTheory.Sheaf (Opens.grothendieckTopology X) AddCommGrpCat.{u}) :=
+  inferInstance
