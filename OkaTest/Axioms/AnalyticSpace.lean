@@ -290,3 +290,56 @@ info: 'ComplexAnalytic.AnalyticSpace.map_ofOpensCompatible_algebraMap' depends o
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.map_ofOpensCompatible_algebraMap
+
+/-! ### The non-vanishing locus of a section, and mapping into an open subspace
+
+`Oka/AnalyticSpace/Nonvanishing.lean`. -/
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.liftRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.liftRestrict
+
+/--
+info: 'AlgebraicGeometry.RingedSpace.isUnit_res_of_le_basicOpen' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.RingedSpace.isUnit_res_of_le_basicOpen
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.liftOpen' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.liftOpen
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.liftOpen_fac' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.liftOpen_fac
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hom_ext_restrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hom_ext_restrict
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.mem_nonvanishing_iff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.mem_nonvanishing_iff
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isUnit_resΓ_of_le_nonvanishing' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isUnit_resΓ_of_le_nonvanishing

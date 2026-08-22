@@ -107,6 +107,20 @@ coherence statement for arbitrary complex analytic spaces:
   worked example is **the node minus the origin**, which is a proper open subspace of a singular
   space and is *disconnected*: the two punctured axes are open, disjoint and cover it.
 
+* **The non-vanishing locus, and mapping *into* an open subspace.** The set on which a global
+  section of `𝒪_X` does not vanish is Mathlib's `AlgebraicGeometry.RingedSpace.basicOpen`; what
+  the analytic side adds is that a point lies in it exactly when the *value* of the section there
+  is nonzero (`ComplexAnalytic.AnalyticSpace.mem_nonvanishing_iff`), which is the residue field
+  being `ℂ`, and that the section is invertible on every open subspace contained in it. The
+  second half is the universal property of `X|U` in the direction `restrict` did not have: a
+  morphism whose image lies in `U` factors uniquely through `X|U`
+  (`ComplexAnalytic.AnalyticSpace.liftOpen` in `Oka/AnalyticSpace/Nonvanishing.lean`, from
+  `AlgebraicGeometry.LocallyRingedSpace.liftRestrict`). Together they are the shape in which a
+  localisation `A_f` of a finitely generated `ℂ`-algebra will meet the analytic side. The worked
+  example is the node inside `ℂ²`: the section `1 - z₀z₁` is invertible at every point of the
+  node *because of the node's equation*, so the node lifts to the proper open subspace
+  `ℂ²|{1 - z₀z₁ ≠ 0}`.
+
 * **Being a complex analytic space is local.** The `local_model` field of
   `ComplexAnalytic.AnalyticSpace` is isolated as a predicate `ComplexAnalytic.HasLocalModels` on
   a locally ringed space together with a `ℂ`-algebra structure on its global sections, and it is

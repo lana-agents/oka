@@ -28,10 +28,14 @@ of a complex analytic space is compared with a chart of the ambient space
 
 - `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.isoOfRangeEq`: two open immersions with
   the same image have isomorphic sources.
+- `AlgebraicGeometry.LocallyRingedSpace.liftRestrict`: **a morphism whose image lies in an open
+  subset factors through that open subspace** — the universal property of `X|V` as a target,
+  which Mathlib has only in the form `IsOpenImmersion.lift` against an arbitrary open immersion.
 - `AlgebraicGeometry.LocallyRingedSpace.restrictLE`: the inclusion of a smaller open subspace
-  into a larger one. Mathlib has `ofRestrict` for the inclusion into `X` itself and nothing for
-  one open subspace inside another, although `IsOpenImmersion.lift` — which is what this is —
-  is there. It lives in this file rather than beside `ofRestrict` because `lift` does.
+  into a larger one, which is `liftRestrict` of `ofRestrict`. Mathlib has `ofRestrict` for the
+  inclusion into `X` itself and nothing for one open subspace inside another, although
+  `IsOpenImmersion.lift` — which is what this is — is there. Both live in this file rather than
+  beside `ofRestrict` because `lift` does.
 
 ## Main results
 
@@ -44,6 +48,10 @@ of a complex analytic space is compared with a chart of the ambient space
   the proofs below are those transcribed, with `LocallyRingedSpace.forgetToTop` in place of
   `Scheme.forgetToTop`. Together with `isoOfRangeEq` it is what identifies the pullback of two
   open subspace inclusions with the subspace on their intersection.
+- `AlgebraicGeometry.LocallyRingedSpace.liftRestrict_fac` and
+  `AlgebraicGeometry.LocallyRingedSpace.hom_ext_restrict`: the factorisation through an open
+  subspace is one, and is unique. A morphism *into* `X|V` is determined by its composite with
+  `ofRestrict`, since an open immersion is a monomorphism.
 -/
 
 open CategoryTheory Limits
@@ -116,15 +124,64 @@ end AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion
 
 namespace AlgebraicGeometry.LocallyRingedSpace
 
+section LiftRestrict
+
+variable {Z X : LocallyRingedSpace.{u}} (φ : Z ⟶ X) (V : TopologicalSpace.Opens X)
+  (h : Set.range φ.base ⊆ (V : Set X))
+
+/-- **A morphism whose image lies in an open subset factors through that open subspace.**
+
+This is the universal property of `X|V` as an object *mapped into*, the half that
+`LocallyRingedSpace.ofRestrict` on its own does not provide: `ofRestrict` says `X|V` maps to `X`,
+and this says everything landing in `V` maps to `X|V`.
+
+It is `IsOpenImmersion.lift` at `f = ofRestrict`, with `range_ofRestrict` turning the hypothesis
+into the containment of images that `lift` wants. Stating it is worth a name because
+`IsOpenImmersion.lift` needs the instance `IsOpenImmersion (X.ofRestrict V.isOpenEmbedding)`, and
+**instance search for that instance fails whenever `V` reaches the call site spelled through a
+coercion other than `X.toTopCat`** — for instance as an open of the carrier of a complex analytic
+space, where `TopologicalSpace.Opens.inclusion' V` elaborates at `… ⟶ ↑X.toPresheafedSpace`.
+Definitionally equal, not found by instance search. Passing `V` as an argument to this
+declaration crosses that seam at default transparency, where it is free. -/
+noncomputable def liftRestrict : Z ⟶ X.restrict V.isOpenEmbedding :=
+  IsOpenImmersion.lift (X.ofRestrict V.isOpenEmbedding) φ (by rw [range_ofRestrict]; exact h)
+
+/-- **`liftRestrict` is a factorisation of `φ`.** This, rather than the morphism itself, is what
+every use of it consumes. -/
+@[reassoc (attr := simp)]
+lemma liftRestrict_fac : liftRestrict φ V h ≫ X.ofRestrict V.isOpenEmbedding = φ :=
+  IsOpenImmersion.lift_fac _ _ _
+
+/-- **The factorisation through an open subspace is unique.** -/
+lemma liftRestrict_uniq (l : Z ⟶ X.restrict V.isOpenEmbedding)
+    (hl : l ≫ X.ofRestrict V.isOpenEmbedding = φ) : l = liftRestrict φ V h :=
+  IsOpenImmersion.lift_uniq _ _ _ _ hl
+
+/-- **The point of `X|V` underneath a point of `Z` is the image point of `φ`.** -/
+@[simp]
+lemma base_ofRestrict_base_liftRestrict (z : Z) :
+    (X.ofRestrict V.isOpenEmbedding).base ((liftRestrict φ V h).base z) = φ.base z :=
+  congrArg (fun m : Z ⟶ X ↦ m.base z) (liftRestrict_fac φ V h)
+
+/-- **Two morphisms into an open subspace agreeing after inclusion are equal**, because an open
+immersion is a monomorphism. Stated separately from `liftRestrict_uniq` because the usual
+situation is two morphisms and no third one they are both factorisations of. -/
+lemma hom_ext_restrict (l₁ l₂ : Z ⟶ X.restrict V.isOpenEmbedding)
+    (h : l₁ ≫ X.ofRestrict V.isOpenEmbedding = l₂ ≫ X.ofRestrict V.isOpenEmbedding) :
+    l₁ = l₂ := by
+  rw [← cancel_mono (X.ofRestrict V.isOpenEmbedding)]
+  exact h
+
+end LiftRestrict
+
 /-- **The inclusion of a smaller open subspace into a larger one.**
 
-`IsOpenImmersion.lift` gives it: the inclusion of `V` into `X` factors through the inclusion of
-`W` because its image is contained in `W`. What makes it usable is `restrictLE_fac` below, which
-is the only property of it that anything consumes. -/
+`liftRestrict` gives it: the inclusion of `V` into `X` lands in `W`, so it factors through the
+inclusion of `W`. What makes it usable is `restrictLE_fac` below, which is the only property of
+it that anything consumes. -/
 noncomputable def restrictLE (X : LocallyRingedSpace.{u}) {V W : TopologicalSpace.Opens X}
     (h : V ≤ W) : X.restrict V.isOpenEmbedding ⟶ X.restrict W.isOpenEmbedding :=
-  IsOpenImmersion.lift (X.ofRestrict W.isOpenEmbedding) (X.ofRestrict V.isOpenEmbedding)
-    (by rw [range_ofRestrict, range_ofRestrict]; exact h)
+  liftRestrict (X.ofRestrict V.isOpenEmbedding) W (by rw [range_ofRestrict]; exact h)
 
 /-- **`restrictLE` is a morphism over `X`**: including a smaller open subspace into a larger one
 and then into `X` is including it into `X`. -/
@@ -132,6 +189,6 @@ and then into `X` is including it into `X`. -/
 theorem restrictLE_fac (X : LocallyRingedSpace.{u}) {V W : TopologicalSpace.Opens X}
     (h : V ≤ W) :
     X.restrictLE h ≫ X.ofRestrict W.isOpenEmbedding = X.ofRestrict V.isOpenEmbedding :=
-  IsOpenImmersion.lift_fac _ _ _
+  liftRestrict_fac _ _ _
 
 end AlgebraicGeometry.LocallyRingedSpace
