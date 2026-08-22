@@ -26,6 +26,7 @@ import Oka.AnalyticSpace.HolomorphicMapGeneral
 import Oka.AnalyticSpace.HolomorphicMapOpen
 import Oka.AnalyticSpace.HomToComplex
 import Oka.AnalyticSpace.IdealSheaf
+import Oka.AnalyticSpace.Local
 import Oka.AnalyticSpace.LocalModel
 import Oka.AnalyticSpace.Noetherian
 import Oka.AnalyticSpace.OpenSubspace
