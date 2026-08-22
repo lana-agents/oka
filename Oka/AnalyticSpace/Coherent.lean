@@ -22,8 +22,7 @@ sections and restriction maps. It is therefore a local condition
 
 Since every point of an analytic space has a neighbourhood which is a local model, it
 remains to see that the structure sheaf of a local model has locally finitely generated
-relations. This is
-`ComplexAnalytic.IsLocalModel.hasLocalRelationsOn`, the one ingredient still open, and it is
+relations. This is `ComplexAnalytic.IsLocalModel.hasLocalRelations`, proved below, and it is
 where Oka's theorem for `ℂ^n` enters: a local model is cut out by finitely many holomorphic
 functions `f₁, …, f_k` inside an open subset `Y` of some `ℂ^n`, and near a point of it a
 relation between sections `s₁, …, s_m` of `𝒪_M` is obtained by lifting the `sᵢ` to sections

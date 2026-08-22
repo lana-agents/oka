@@ -32,7 +32,7 @@ The two morphisms glued over `punctureCover` are restrictions of a single global
 agreement on the overlap is `pullback.condition` rather than a computation. **That gap is closed
 in the last section**, which needed a source whose cover has *disconnected* overlaps and which
 this development did not have until `ComplexAnalytic.AnalyticSpace.restrict` and
-`ComplexAnalytic.nodeAxis_inf_eq_bot` existed. What the `punctureCover` tests establish on their
+`nodeAxis_inf_eq_bot` existed. What the `punctureCover` tests establish on their
 own is that the compatibility hypothesis is satisfiable at a non-trivial cover, that
 `glueMorphisms` computes the morphism it should, and that `fromGlued` is an isomorphism there.
 
@@ -42,7 +42,7 @@ The last section is the non-vacuity of
 `AlgebraicGeometry.LocallyRingedSpace.existsUnique_glueMorphisms_of_opens`, whose compatibility
 hypothesis is an equation of morphisms out of `X.restrict (U i ⊓ U j)` rather than out of the
 categorical pullback. The witness is the **punctured node** covered by its two punctured axes,
-which are disjoint (`pnAxis_inf_carrier_eq_empty`, from `ComplexAnalytic.nodeAxis_inf_eq_bot`),
+which are disjoint (`pnAxis_inf_carrier_eq_empty`, from `nodeAxis_inf_eq_bot`),
 so the compatibility is vacuous and *any* pair of morphisms out of the two pieces glues.
 
 `glue_pn_ne_nodeToLine_of_ne` is what makes this a witness rather than an instantiation: for
@@ -81,7 +81,7 @@ This is the first `OkaTest`-to-`OkaTest` import outside the `OkaTest/Axioms.lean
 it is intentional. Three agents ran `git grep '^import OkaTest' -- OkaTest/`, found only the
 aggregator, and read that as a convention; it is a small sample rather than a rule — until the
 last section here there was simply nothing in one test file that another wanted. Now there is:
-`nodeAxis`, `axisPoint`, `axisPoint_mem` and `ComplexAnalytic.nodeAxis_inf_eq_bot`. The
+`nodeAxis`, `axisPoint`, `axisPoint_mem` and `nodeAxis_inf_eq_bot`. The
 alternatives are duplicating roughly forty lines of scaffolding, which is how a test suite rots,
 or promoting node scaffolding into `Oka/`, which is worse because it is not library material.
 Reuse across `OkaTest/` is allowed; there is no cycle risk and no build-graph cost worth naming.

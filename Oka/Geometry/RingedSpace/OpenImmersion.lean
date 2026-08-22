@@ -88,7 +88,7 @@ instance preservesPullback_forgetToTop :
 
 set_option backward.isDefEq.respectTransparency false in
 /-- **The image of the second projection of a pullback along an open immersion is the preimage
-of the image.** Transcribed from `AlgebraicGeometry.range_pullbackSnd`. -/
+of the image.** Transcribed from `AlgebraicGeometry.IsOpenImmersion.range_pullbackSnd`. -/
 theorem range_pullbackSnd :
     Set.range (pullback.snd f h).base = h.base ⁻¹' (Set.range f.base) := by
   rw [← show _ = (pullback.snd f h).base from

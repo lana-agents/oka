@@ -40,7 +40,7 @@ so the construction above produces a morphism only on each member of an open cov
 Two things are then missing, and neither is in this repository or in Mathlib:
 
 * **Gluing morphisms of locally ringed spaces over an open cover of the source.** Mathlib has
-  `AlgebraicGeometry.Scheme.OpenCover.glueMorphisms` and nothing for `LocallyRingedSpace`;
+  `AlgebraicGeometry.Scheme.Cover.glueMorphisms` and nothing for `LocallyRingedSpace`;
   `Mathlib/Geometry/RingedSpace/PresheafedSpace/Gluing.lean` provides
   `AlgebraicGeometry.LocallyRingedSpace.GlueData`, which glues *spaces* — mapping out of a glued
   space is then `Multicoequalizer.desc` — but nothing identifies a locally ringed space with the

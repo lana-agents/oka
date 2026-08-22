@@ -99,3 +99,15 @@ jobs:
       - name: Check style
         if: ${{ !cancelled() }}
         run: lake exe lint-style Oka OkaTest
+
+      # Every backticked dotted name in a comment or docstring must resolve to a declaration, a
+      # module, a file in the repository, or field notation on one of those. Nothing else in
+      # this workflow looks inside a comment: the build sees only elaborated terms, `lake lint`
+      # checks declaration *names*, and the step above checks whitespace and line length. See
+      # `scripts/check_docstring_names.py` for the rules and for what a green here does not mean.
+      #
+      # This reads the environment with `lake env lean`, so it needs the build above to have
+      # produced the oleans — hence no `!cancelled()` here, unlike the two steps above, which
+      # are text-based and do not.
+      - name: Check names in docstrings
+        run: python3 scripts/check_docstring_names.py

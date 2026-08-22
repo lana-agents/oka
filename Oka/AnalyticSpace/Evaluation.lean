@@ -372,7 +372,7 @@ variable {n : ℕ} (y : AnalyticSpace.complexAffineSpace.{u} n)
 so it is not computed by unfolding. It is computed from its *characterisation*
 (`ComplexAnalytic.AnalyticSpace.evalStalk_eq_iff`): the value is `c` exactly when the germ
 differs from the constant `c` by a germ vanishing at the point, and on `ℂ^n` a germ vanishes at
-the point exactly when the function does (`ComplexAnalytic.germ_mem_maximalIdeal_iff`).
+the point exactly when the function does (`germ_mem_maximalIdeal_iff`).
 
 The two `rw`s below are the only ones the proof can afford. A point of
 `ComplexAnalytic.AnalyticSpace.complexAffineSpace n` and a point of `ULift (Fin n) → ℂ` are the

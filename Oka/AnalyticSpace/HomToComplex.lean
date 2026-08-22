@@ -185,8 +185,8 @@ theorem okaStalk_ringHom_ext {y : ι → ℂ} {A : Type*} [CommRing A] [IsLocalR
 /-- **A normalised coordinate germ is nonzero.**
 
 Without this `ComplexAnalytic.maximalIdeal_stalk_eq_span_stalkCoord` is not known to be a
-statement about a nonzero ideal: `ComplexAnalytic.stalkCoord_mem_maximalIdeal` rules out the
-generators being everything, and this rules out their being nothing. -/
+statement about a nonzero ideal: `stalkCoord_mem_maximalIdeal`, in `OkaTest/HomToComplex.lean`,
+rules out the generators being everything, and this rules out their being nothing. -/
 theorem stalkCoord_ne_zero (y : ι → ℂ) (i : ι) : stalkCoord y i ≠ 0 := fun h ↦
   LocalOkaRing.coord_ne_zero i (by rw [← okaStalkEquiv_stalkCoord y i, h, map_zero])
 
