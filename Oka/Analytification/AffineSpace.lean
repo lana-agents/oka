@@ -98,6 +98,15 @@ origin, as a statement about honest rings with no `Spec` stalk in it, and
 defined here is faithfully flat at every point.** It is stated there rather than here only
 because it needs the germ ring, which this file does not import.
 
+**And that in turn is no longer the end of the line.**
+`Oka/Analytification/PresentationFlatness.lean` quotients it by a presentation:
+`ComplexAnalytic.faithfullyFlat_stalkMap_analytificationToSpec` is the same statement for
+`X^an ⟶ Spec (ℂ[x] ⧸ I)`, which is the map a GAGA argument for an affine `ℂ`-scheme of finite
+type actually meets. It also has a corollary that belongs to this file's subject even though it
+is stated downstream: **a nonzero polynomial has nonzero germ at every point of `ℂ^ι`**
+(`ComplexAnalytic.injective_germOfMvPolynomial`), because a faithfully flat ring map is
+injective.
+
 **And the two instances in the `Stalk` section below have a second consumer.**
 `Oka/Analytification/PresentationStalk.lean` restates them for `Spec (ℂ[x] ⧸ I)` under a point of
 `X^an`, word for word, and identifies the stalk map of `ComplexAnalytic.analytificationToSpec`

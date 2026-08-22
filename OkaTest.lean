@@ -1,6 +1,7 @@
 import OkaTest.Analytification
 import OkaTest.AnalytificationChangeOfVariables
 import OkaTest.AnalytificationComparison
+import OkaTest.AnalytificationFlatness
 import OkaTest.AnalytificationFunctor
 import OkaTest.AnalytificationLocalRing
 import OkaTest.AnalytificationSheaf

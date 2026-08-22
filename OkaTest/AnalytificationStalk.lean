@@ -29,11 +29,12 @@ The second is deduced from the first together with `x y = 0` in `ℂ[x, y] ⧸ (
 right shape: the witness is a *consequence* of the ideal being nonzero rather than an extra
 analytic input.
 
-**What is still not tested here**, and is worth saying rather than leaving to be discovered:
-that the germs of `x` and `y` at the *origin* are both nonzero — so that the node's stalk there
-is not a domain. That is a statement about the target stalk `𝒪_{X^an, y}` and needs its
-identification with the germ ring modulo `I`, which is the outstanding half; see
-`Oka/Analytification/PresentationStalk.lean`'s `## What is not here`.
+**What was still not tested here** — that the germs of `x` and `y` at the *origin* are both
+nonzero, so that the node's stalk there is not a domain — is tested in
+`OkaTest/AnalytificationFlatness.lean`, which has the identification of the target stalk
+`𝒪_{X^an, y}` with the germ ring modulo `I` that it needs
+(`ComplexAnalytic.germQuotEquivStalk`). It is left out of this file rather than folded in
+because it belongs with the result whose non-vacuity it establishes.
 -/
 
 open CategoryTheory Opposite AlgebraicGeometry TopologicalSpace

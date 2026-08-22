@@ -81,3 +81,12 @@ info: 'Module.FaithfullyFlat.quotIdealMap' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms Module.FaithfullyFlat.quotIdealMap
+
+/-! ### Quotienting a faithfully flat ring map by an ideal of the source -/
+
+/--
+info: 'RingHom.FaithfullyFlat.quotIdealMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms RingHom.FaithfullyFlat.quotIdealMap

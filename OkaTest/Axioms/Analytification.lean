@@ -13,9 +13,8 @@ map on stalks, `X^an ⟶ Spec (ℂ[x]/I)` for a presented affine `ℂ`-algebra, 
 `𝔸^ι` at the origin with its completion, the faithful flatness of the germs over it and the same
 at an arbitrary point — where it becomes a statement about the stalk map itself — the
 analytification as a functor on finitely generated `ℂ`-algebras, the stalk map of the
-analytification as a functor on finitely generated `ℂ`-algebras, the stalk map of the
-comparison morphism of a presented algebra, the naturality of the comparison morphism, and
-the analytification of a sheaf.
+comparison morphism of a presented algebra, the naturality of the comparison morphism, the
+faithful flatness of that stalk map, and the analytification of a sheaf.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -538,3 +537,67 @@ info: 'ComplexAnalytic.analytificationFGAlgToSpec_app_toFGAlg_obj' depends on ax
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.analytificationFGAlgToSpec_app_toFGAlg_obj
+
+/-! ### The germ of a polynomial, and the flatness of the stalk map of `X^an ⟶ Spec (ℂ[x] ⧸ I)`
+
+`Oka/Analytification/FlatnessAtAPoint.lean` and `Oka/Analytification/PresentationFlatness.lean`.
+`ComplexAnalytic.injective_germOfMvPolynomial` is guarded alongside the flatness because it is
+what the non-vacuity test rests on, and `ComplexAnalytic.stalkMap_analytificationToSpec_eq_comp`
+because a flatness deduced through three identifications is only as good as the square that says
+they commute. -/
+
+/--
+info: 'ComplexAnalytic.germOfMvPolynomial' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.germOfMvPolynomial
+
+/--
+info: 'ComplexAnalytic.injective_germOfMvPolynomial' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.injective_germOfMvPolynomial
+
+/--
+info: 'ComplexAnalytic.ker_stalkMap_analytificationIncl' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.ker_stalkMap_analytificationIncl
+
+/--
+info: 'ComplexAnalytic.germQuotEquivStalk' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.germQuotEquivStalk
+
+/--
+info: 'ComplexAnalytic.germQuotEquivStalk_mk_germOfMvPolynomial' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.germQuotEquivStalk_mk_germOfMvPolynomial
+
+/--
+info: 'ComplexAnalytic.stalkMap_analytificationToSpec_eq_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.stalkMap_analytificationToSpec_eq_comp
+
+/--
+info: 'ComplexAnalytic.faithfullyFlat_stalkMap_analytificationToSpec' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.faithfullyFlat_stalkMap_analytificationToSpec
+
+/--
+info: 'ComplexAnalytic.flat_stalkMap_analytificationToSpec' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.flat_stalkMap_analytificationToSpec
