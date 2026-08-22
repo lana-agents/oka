@@ -10,6 +10,7 @@ import Oka.Algebra.Category.ModuleCat.Sheaf.Free
 import Oka.Algebra.Category.ModuleCat.Sheaf.Generators
 import Oka.Algebra.Category.ModuleCat.Sheaf.LocallySurjective
 import Oka.Algebra.Category.ModuleCat.Sheaf.PushforwardContinuous
+import Oka.Algebra.Category.ModuleCat.Sheaf.Stalk
 import Oka.Algebra.Category.ModuleCat.Sheaf.Submodule
 import Oka.Algebra.MvPolynomial.Taylor
 import Oka.AlgebraicGeometry.GammaSpecAdjunction
