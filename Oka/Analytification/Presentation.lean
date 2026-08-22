@@ -49,10 +49,13 @@ satisfying the equations — and deduces from it that the analytification depend
 lengths, give canonically isomorphic spaces. It also proves that
 `ComplexAnalytic.polyToGlobal` below *is* substitution of the coordinates of `X^an`.
 
-**What is still missing after that** is a change of *variables* — two presentations of the same
-algebra in different numbers of variables — and functoriality. So the sentence to carry away is
-narrower than it was: the construction is independent of the generators chosen for a fixed
-ideal in a fixed polynomial ring, and independence of the presentation as a whole is open.
+**Both of the things that were still missing after that now exist as well.** A change of
+*variables* — two presentations of the same algebra in different numbers of variables — is
+`Oka/Analytification/ChangeOfVariables.lean`; functoriality is `Oka/Analytification/Functor.lean`,
+where the analytification becomes a functor of the finitely generated `ℂ`-algebra with no
+presentation in its statement; and `ComplexAnalytic.analytificationToSpec` below is natural in
+the presentation, in `Oka/Analytification/Comparison.lean`. So the sentence to carry away is that
+**every statement in this file is about a chosen presentation, and none of them has to be**.
 
 Also absent: the comparison of *structure sheaves*. `analytificationToSpec` is a morphism of
 locally ringed spaces, so it carries a map `𝒪_{Spec} ⟶ π_* 𝒪_{X^an}`, but nothing here

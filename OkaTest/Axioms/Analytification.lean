@@ -12,8 +12,8 @@ The comparison morphisms of `Oka/Analytification/`: `ℂ^ι ⟶ Spec (MvPolynomi
 map on stalks, `X^an ⟶ Spec (ℂ[x]/I)` for a presented affine `ℂ`-algebra, the local ring of
 `𝔸^ι` at the origin with its completion, the faithful flatness of the germs over it and the same
 at an arbitrary point — where it becomes a statement about the stalk map itself — the
-analytification as a functor on finitely generated `ℂ`-algebras, and the stalk map of the
-comparison morphism of a presented algebra.
+analytification as a functor on finitely generated `ℂ`-algebras, the stalk map of the
+comparison morphism of a presented algebra, and the naturality of the comparison morphism.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -435,3 +435,43 @@ info: 'ComplexAnalytic.analytificationStalkQuotEquiv' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.analytificationStalkQuotEquiv
+
+/-! ### The comparison morphism is natural
+
+`Oka/Analytification/Comparison.lean`. The component lemmas are guarded alongside the two natural
+transformations because a transformation whose components nobody can compute is inert, which is
+the same obligation `ComplexAnalytic.analytificationFGAlgObjIso` discharges above. -/
+
+/--
+info: 'ComplexAnalytic.analytificationToSpec_naturality' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationToSpec_naturality
+
+/--
+info: 'ComplexAnalytic.analytificationToSpecNatTrans' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationToSpecNatTrans
+
+/--
+info: 'ComplexAnalytic.specFunctor_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specFunctor_eq
+
+/--
+info: 'ComplexAnalytic.analytificationFGAlgToSpec' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationFGAlgToSpec
+
+/--
+info: 'ComplexAnalytic.analytificationFGAlgToSpec_app' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationFGAlgToSpec_app
