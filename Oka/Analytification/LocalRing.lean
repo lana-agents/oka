@@ -58,20 +58,20 @@ lemmas).
 of a Noetherian local ring is flat over it (`AdicCompletion.flat_of_isNoetherian`, with the
 Hilbert basis theorem supplying Noetherianness), and that completion is `ℂ⟦x⟧`.
 
-**Everything here is at the origin, and taxis #730 asks for an arbitrary point.** For
-`p = ker (eval z)` the same statements hold, by the automorphism of `ℂ[x]` sending `xᵢ` to
-`xᵢ + zᵢ`, which carries `p` to the ideal of variables; that translation is **not done here**.
-It is not currently worth doing: the *analytic* local ring of this development is
-`LocalOkaRing ι`, the germs at the **origin**, so a statement about `ℂ[x]_{p}` at a general `z`
-would have no partner to be compared with. `Oka/ChangeOfCoordinates.lean` is where the germ-ring
-side of such a translation would come from.
+**Everything here is at the origin.** For `p = ker (eval z)` the same statements hold, by the
+automorphism of `ℂ[x]` sending `xᵢ` to `xᵢ + zᵢ`, which carries `p` to the ideal of variables;
+that translation is **not done here**, and it is not needed here either, because what consumes
+these results — `Oka/Analytification/FlatnessAtAPoint.lean` — translates the *conclusion* rather
+than re-running the argument. It does so with `MvPolynomial.taylorEquiv`; note that a translation
+is affine and not linear, so `Oka/ChangeOfCoordinates.lean`, which handles linear changes of
+coordinate, is not what does it.
 
-**This is not yet the flatness of `𝒪_{𝔸^ι, 0} → 𝒪_{ℂ^ι, 0}`** — the map to the *germ* ring, which
-is what a GAGA argument consumes. What is missing is one descent step: `ℂ{x} → ℂ⟦x⟧` is
-faithfully flat (`LocalOkaRing.instFaithfullyFlat`, `Oka/Completion.lean`) and `ℂ[x]_{(x)} →
-ℂ⟦x⟧` is flat, and flatness of `ℂ[x]_{(x)} → ℂ{x}` follows — but the algebra map
-`ℂ[x]_{(x)} → ℂ{x}` does not exist in this development yet, so the statement cannot even be
-written. That is the remainder of the flatness issue and it is deliberately not attempted here.
+**This is not itself the flatness of `𝒪_{𝔸^ι, 0} → 𝒪_{ℂ^ι, 0}`** — the map to the *germ* ring,
+which is what a GAGA argument consumes. That is one descent step further on and is
+`Oka/Analytification/Flatness.lean`: `ℂ{x} → ℂ⟦x⟧` is faithfully flat
+(`LocalOkaRing.instFaithfullyFlat`, `Oka/Completion.lean`) and `ℂ[x]_{(x)} → ℂ⟦x⟧` is flat, so
+`ℂ[x]_{(x)} → ℂ{x}` is flat by cancellation on the right of the tower. That file also had to
+build the algebra map `ℂ[x]_{(x)} → ℂ{x}`, which did not exist when this one was written.
 
 ## Main definitions
 

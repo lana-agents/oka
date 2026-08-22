@@ -25,6 +25,7 @@ import OkaTest.EpiIsLocallySurjective
 import OkaTest.EvalContinuous
 import OkaTest.Factorisation
 import OkaTest.GermFlatness
+import OkaTest.GermFlatnessAtAPoint
 import OkaTest.GlueMorphisms
 import OkaTest.HolomorphicMap
 import OkaTest.HolomorphicMapGeneral

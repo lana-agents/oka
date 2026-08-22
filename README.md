@@ -41,8 +41,8 @@ coherence statement for arbitrary complex analytic spaces:
   local ring is faithfully flat over it, `MvPowerSeries ι ℂ` is **faithfully flat** over
   `LocalOkaRing ι` — so a germ that lies **formally** in an ideal of germs lies in it already, and
   a germ formally divisible by a coordinate is divisible by it with a convergent cofactor. This is
-  *not* the flatness of `𝒪_{𝔸^n, z} → 𝒪_{ℂ^n, z}`, the input to GAGA, which needs two further
-  steps and is not proved.
+  *not* the flatness of `𝒪_{𝔸^n, z} → 𝒪_{ℂ^n, z}`, the input to GAGA; it is one of the two
+  ingredients that item is deduced from below.
 * **Regularity and dimension.** The germ ring in `n` variables is a regular local ring of Krull
   dimension `n` (`Oka/Regular.lean`), the third. The dimension is computed by cutting with one
   coordinate at a time; the induction step is the isomorphism
@@ -157,17 +157,30 @@ coherence statement for arbitrary complex analytic spaces:
   regular at the origin, and a rational function is determined by its germ. **The classical local
   criterion for flatness is not used and is not needed**: the two rings have the *same*
   completion, `ℂ⟦x⟧`, which is flat over the first and faithfully flat over the second, and
-  flatness descends along a faithfully flat extension of the middle ring of a tower. Only the
-  origin is treated, because the germ ring of this development is the germs at the origin; and
-  this is the *input* to GAGA, not GAGA.
+  flatness descends along a faithfully flat extension of the middle ring of a tower. This is the
+  *input* to GAGA, not GAGA.
+
+* **The analytic input to GAGA, at every point, and for the stalk map itself.** The stalk map of
+  the comparison morphism `ℂ^ι ⟶ 𝔸^ι_ℂ` is **faithfully flat at every point** of `ℂ^ι`
+  (`Oka/Analytification/FlatnessAtAPoint.lean`) — the statement about the morphism, not about a
+  pair of rings chosen to be comparable. Both of the previous item's restrictions come off by
+  translating rather than by re-running the argument. On the algebraic side translation is the
+  automorphism `xᵢ ↦ xᵢ + zᵢ` of `ℂ[x]`, which carries the polynomials vanishing at `z` onto
+  those vanishing at the origin; on the analytic side there is nothing to translate, because the
+  germ ring at every point already *is* `LocalOkaRing ι`, by Taylor expansion there. The one new
+  lemma is that the germ at `z` of a polynomial is the germ at the origin of the shifted
+  polynomial `p(x + z)`, which is `LocalOkaRing.ofMvPolynomial_taylorAlgHom`, proved from
+  `OkaRing.germ_shift`. Crossing from honest rings to the stalk map is then the identification of
+  the stalk of `Spec ℂ[x]` under `z` with the local ring at `z` — both are localisations of
+  `ℂ[x]` at the same submonoid — together with the characterisation of the stalk map that the
+  previous comparison item already proved.
 
 * **Comparison with algebraic geometry.** The canonical morphism of locally ringed spaces from
   `ℂ^ι` to `Spec (MvPolynomial ι ℂ)`, with its point map identified as `z ↦ ker (eval z)`, shown
   injective and landing in the closed points, and its stalk map identified as the
   localisation-to-germs map — a rational function regular at `z` is the germ there of the
   holomorphic function it defines (`Oka/Analytification/AffineSpace.lean`). This is the base case
-  of analytification; **flatness** of that stalk map, the analytic input to GAGA, is not yet
-  proved.
+  of analytification; **flatness** of that stalk map is proved in the item above.
 * **Analytification of a presented affine `ℂ`-algebra.** For polynomials `g₁, …, g_k`, the
   analytic space `{z ∈ ℂ^n | g₁ z = ⋯ = g_k z = 0}` together with a comparison morphism of
   locally ringed spaces to `Spec (ℂ[x₁, …, x_n]/(g₁, …, g_k))`, whose point map is identified —

@@ -57,11 +57,17 @@ Mathlib already knows `algebraMap R R̂` is a local hom.
 
 ## What is *not* here
 
-**Everything is at the origin.** Taxis #600 asks for flatness at an arbitrary point `z`, i.e. for
-`ℂ[x]_{ker (eval z)} → 𝒪_{ℂ^ι, z}`. The algebraic side translates by the automorphism `xᵢ ↦ xᵢ +
-zᵢ`; the analytic side does not, because **this development has no germ ring at a point other
-than the origin** — `LocalOkaRing ι` is the germs at `0` by construction. A general-point
-statement therefore needs a definition first, and is not merely a translation of this one.
+**Everything is at the origin.** The general-point statement is
+`Oka/Analytification/FlatnessAtAPoint.lean`, which deduces it from this one by translating: the
+algebraic side by the automorphism `xᵢ ↦ xᵢ + zᵢ`, and the analytic side by the fact that the
+germ at `z` of a polynomial is the germ at the origin of the shifted polynomial
+(`LocalOkaRing.ofMvPolynomial_taylorAlgHom`).
+
+An earlier version of this paragraph said the analytic side *could not* be translated, because
+`LocalOkaRing ι` is the germs at `0` by construction and so there was no germ ring at any other
+point to compare with. That was true of the definition and false of the development: `okaStalkEquiv`
+identifies the stalk of `𝒪_{ℂ^ι}` at **every** point with `LocalOkaRing ι`, by Taylor expansion
+there, and had done so since long before this file was written.
 
 **This is not GAGA**, and it is not the exactness of analytification on coherent sheaves. It is
 the local input those arguments consume.
