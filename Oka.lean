@@ -34,6 +34,7 @@ import Oka.AnalyticSpace.IdealSheaf
 import Oka.AnalyticSpace.Local
 import Oka.AnalyticSpace.LocalModel
 import Oka.AnalyticSpace.Noetherian
+import Oka.AnalyticSpace.Nonvanishing
 import Oka.AnalyticSpace.OpenSubspace
 import Oka.AnalyticSpace.PullbackModulesStalk
 import Oka.AnalyticSpace.Relations
@@ -61,6 +62,7 @@ import Oka.Coherent
 import Oka.Completion
 import Oka.ComplexSpace
 import Oka.Data.Fin.Tuple.Basic
+import Oka.Geometry.RingedSpace.Basic
 import Oka.Geometry.RingedSpace.CutOut
 import Oka.Geometry.RingedSpace.LocallyRingedSpace
 import Oka.Geometry.RingedSpace.OpenImmersion
