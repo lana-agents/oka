@@ -343,3 +343,49 @@ info: 'ComplexAnalytic.AnalyticSpace.isUnit_resΓ_of_le_nonvanishing' depends on
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.isUnit_resΓ_of_le_nonvanishing
+
+/-! ### Gluing an analytic space out of a cover by abstract spaces
+
+`Oka/AnalyticSpace/Glue.lean`. -/
+
+/--
+info: 'ComplexAnalytic.IsCLinearHom.eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.IsCLinearHom.eq
+
+/--
+info: 'ComplexAnalytic.isCLinearHom_comapAlgMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isCLinearHom_comapAlgMap
+
+/--
+info: 'ComplexAnalytic.HasLocalModels.of_iso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.HasLocalModels.of_iso
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.ofOpenCover' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.ofOpenCover
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.comapAlgMap_ofOpenCover_algebraMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.comapAlgMap_ofOpenCover_algebraMap
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.ofGlueData' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.ofGlueData

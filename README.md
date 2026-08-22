@@ -137,11 +137,20 @@ coherence statement for arbitrary complex analytic spaces:
   (`Oka/Geometry/RingedSpace/LocallyRingedSpace.lean`), from the sheaf condition, with the four
   ring axioms read off the *uniqueness* half rather than carried through the gluing. The two
   together are `ComplexAnalytic.AnalyticSpace.ofOpensCompatible`, which takes the `ℂ`-algebra
-  structures on the members of the cover and is the form a gluing construction produces. What is
-  still missing before an analytic space can be glued out of a
-  `AlgebraicGeometry.LocallyRingedSpace.GlueData` is one lemma: transport of the local-model
-  condition along a `ℂ`-linear isomorphism, needed because the members of an `OpenCover` are
-  arbitrary spaces mapping in by open immersions rather than restrictions.
+  structures on the members of the cover and is the form a gluing construction produces.
+
+  **Both halves transport along an isomorphism**, which is what makes them apply to a cover whose
+  members are arbitrary spaces mapping in by open immersions rather than restrictions:
+  `ComplexAnalytic.HasLocalModels.of_iso` for the property and
+  `AlgebraicGeometry.LocallyRingedSpace.comapAlgMap` for the data, in
+  `Oka/AnalyticSpace/Glue.lean`. With them, a locally ringed space with an open cover whose
+  members carry compatible analytic structures is an analytic space
+  (`ComplexAnalytic.AnalyticSpace.ofOpenCover`), and so is the gluing of a
+  `AlgebraicGeometry.LocallyRingedSpace.GlueData` whose pieces are
+  (`ComplexAnalytic.AnalyticSpace.ofGlueData`). The glued structure is identified by
+  `ComplexAnalytic.AnalyticSpace.comapAlgMap_ofOpenCover_algebraMap`: it pulls back to the given
+  one on every member. **What no test yet exercises is `ofGlueData` at an actual glue data** —
+  nothing in the repository constructs one.
 
 * **Gluing.** Open covers of a locally ringed space, and the gluing of morphisms out of the
   members of one (`Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean`): a locally ringed space

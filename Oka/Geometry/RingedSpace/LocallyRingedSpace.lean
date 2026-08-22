@@ -32,6 +32,11 @@ mirror tree.
 - `AlgebraicGeometry.LocallyRingedSpace.glueAlgMap`: **an algebra structure on `𝒪_X` glued from
   compatible algebra structures over an open cover.** The converse of `resAlgMap`, and unlike it
   a genuine gluing, because an algebra structure is a map into *global* sections.
+- `AlgebraicGeometry.LocallyRingedSpace.comapAlgMap`: an algebra structure pulled back along an
+  arbitrary morphism. `resAlgMap` is its special case at `ofRestrict`.
+- `AlgebraicGeometry.LocallyRingedSpace.glueAlgMapRestrict`: `glueAlgMap` with the family indexed
+  by the global sections of the open subspaces rather than by the opens, which is the indexing a
+  cover by abstract spaces produces and the one in which no seam has to be crossed.
 
 ## Main results
 
@@ -51,6 +56,10 @@ mirror tree.
 - `AlgebraicGeometry.LocallyRingedSpace.resAlgMap_glueAlgMap`: restricting a glued algebra
   structure to a member of the cover returns the given one, across the
   `functor.obj ⊤`-versus-`U` seam.
+- `AlgebraicGeometry.LocallyRingedSpace.resAlgMap_glueAlgMapRestrict`: the same for
+  `glueAlgMapRestrict`, and there it is an equation of algebra structures on the nose.
+- `AlgebraicGeometry.LocallyRingedSpace.comapAlgMap_ofRestrict`: pulling an algebra structure
+  back along the inclusion of an open subspace is restricting it.
 - `AlgebraicGeometry.LocallyRingedSpace.Γgerm_Γ_map`: the germ of the pullback of a global
   section is the image of its germ under the stalk map.
 - `AlgebraicGeometry.LocallyRingedSpace.range_ofRestrict`: the image of an open subspace
@@ -164,6 +173,21 @@ noncomputable def resAlgMap {R : Type*} [NonAssocSemiring R] (X : LocallyRingedS
     (α : R →+* X.presheaf.obj (op ⊤)) (U : Opens X) :
     R →+* (X.restrict U.isOpenEmbedding).presheaf.obj (op ⊤) :=
   (X.presheaf.map (homOfLE le_top).op).hom.comp α
+
+/-- **An algebra structure on the structure sheaf of `Y`, pulled back along a morphism
+`f : X ⟶ Y`.**
+
+`resAlgMap` is the special case `f = X.ofRestrict U` — see `comapAlgMap_ofRestrict` — and this
+is the form needed when the subspace arrives as an abstract space mapping in by an open
+immersion rather than as a `restrict`. Nothing here is about open immersions: pulling a global
+section back along any morphism is `Γ.map`, and the ring axioms are its.
+
+Note that `f` determines the pulled-back structure, and conversely: two structures on `Γ(X, 𝒪_X)`
+that are both `f`-compatible with one and the same structure on `Γ(Y, 𝒪_Y)` are equal, because
+each of them *is* this composite. That is `ComplexAnalytic.IsCLinearHom.eq`. -/
+noncomputable def comapAlgMap {R : Type*} [NonAssocSemiring R] (f : X ⟶ Y)
+    (α : R →+* Y.presheaf.obj (op ⊤)) : R →+* X.presheaf.obj (op ⊤) :=
+  (Γ.map f.op).hom.comp α
 
 /-- The `R`-algebra structure a ring homomorphism `α : R →+* Γ(X, 𝒪_X)` induces on the stalk at
 a point: the germ there of the constant sections. -/
@@ -279,6 +303,39 @@ lemma Γ_map_ofRestrict_apply (X : LocallyRingedSpace.{u}) (U : Opens X)
   change ((X.ofRestrict U.isOpenEmbedding).c.app (op ⊤)).hom s = _
   change (X.presheaf.map _).hom s = (X.presheaf.map _).hom s
   congr 2
+
+/-- **Pulling an algebra structure back along a composite is pulling it back twice.**
+`Γ_map_comp_apply` at each constant. -/
+lemma comapAlgMap_comp {R : Type*} [NonAssocSemiring R] {Z : LocallyRingedSpace.{u}} (f : X ⟶ Y)
+    (g : Y ⟶ Z) (γ : R →+* Z.presheaf.obj (op ⊤)) :
+    comapAlgMap (f ≫ g) γ = comapAlgMap f (comapAlgMap g γ) :=
+  RingHom.ext fun c ↦ Γ_map_comp_apply f g (γ c)
+
+/-- **Pulling an algebra structure back along an isomorphism loses nothing.**
+
+Two structures on `Γ(Y, 𝒪_Y)` with the same pullback along `e.hom` are equal, because
+`Γ.map e.inv.op` undoes `Γ.map e.hom.op` — `Γ_map_inv_hom_apply`, which is proved without
+computing either direction. This is what says that transporting an algebra structure across an
+identification of two presentations of the same space is a bijection and not merely a map. -/
+lemma comapAlgMap_hom_injective {R : Type*} [NonAssocSemiring R] (e : X ≅ Y) :
+    Function.Injective fun α : R →+* Y.presheaf.obj (op ⊤) ↦ comapAlgMap e.hom α :=
+  fun α α' h ↦ RingHom.ext fun c ↦ by
+    have h' : (Γ.map e.hom.op).hom (α c) = (Γ.map e.hom.op).hom (α' c) :=
+      congrArg (fun m : R →+* X.presheaf.obj (op ⊤) ↦ m c) h
+    have h'' := congrArg (fun a ↦ (Γ.map e.inv.op).hom a) h'
+    rw [Γ_map_inv_hom_apply, Γ_map_inv_hom_apply] at h''
+    exact h''
+
+/-- **Pulling an algebra structure back along the inclusion of an open subspace is restricting
+it**: `AlgebraicGeometry.LocallyRingedSpace.comapAlgMap` at `ofRestrict` is
+`AlgebraicGeometry.LocallyRingedSpace.resAlgMap`.
+
+This is `Γ_map_ofRestrict_apply` at each constant, and it is what lets a statement about an
+abstract open subspace be read as a statement about a restriction. -/
+lemma comapAlgMap_ofRestrict {R : Type*} [NonAssocSemiring R] (X : LocallyRingedSpace.{u})
+    (α : R →+* X.presheaf.obj (op ⊤)) (U : Opens X) :
+    comapAlgMap (X.ofRestrict U.isOpenEmbedding) α = X.resAlgMap α U :=
+  RingHom.ext fun c ↦ X.Γ_map_ofRestrict_apply U (α c)
 
 /-- **The germ on `X|U` of the restriction of a global section is its germ on `X`**, across the
 identification of the stalks of an open subspace with the stalks of the ambient space.
@@ -581,5 +638,51 @@ lemma resAlgMap_glueAlgMap (i : ι) :
     congr 2
 
 end GlueAlgMap
+
+section GlueAlgMapRestrict
+
+/-- **A family of opens and the family of images of the global opens of the corresponding open
+subspaces have the same supremum** — indeed they are the same family, by
+`TopologicalSpace.Opens.isOpenEmbedding_obj_top` at each index. It is stated because the two
+spellings index the two sides of the seam this section exists to cross. -/
+lemma iSup_isOpenEmbedding_obj_top {ι : Type*} (U : ι → Opens X) :
+    ⨆ i, (U i).isOpenEmbedding.isOpenMap.functor.obj ⊤ = ⨆ i, U i :=
+  iSup_congr fun i ↦ Opens.isOpenEmbedding_obj_top (U i)
+
+variable {R : Type*} [CommRing R] {ι : Type*} {U : ι → Opens X}
+
+/-- **An algebra structure on `𝒪_X` glued from algebra structures on the global sections of the
+members of an open cover.**
+
+`glueAlgMap` takes the family indexed by the opens `U i` themselves; this variant takes it
+indexed by `Γ(X|U i, 𝒪)`, which is `X.presheaf.obj (op ((U i).functor.obj ⊤))` and *not*
+`X.presheaf.obj (op (U i))`. The two differ by the seam this file's gluing section documents,
+and the point of stating the variant is that **the seam then never has to be crossed**:
+`resAlgMap_glueAlgMapRestrict` below is an equation on the nose, where `resAlgMap_glueAlgMap`
+has to carry a restriction map on its right-hand side.
+
+That is the indexing a cover whose members are *abstract* spaces produces — the structure one
+has is on the global sections of the member, and no open of `X` is involved in stating it. -/
+noncomputable def glueAlgMapRestrict (hU : ⨆ i, U i = ⊤)
+    (β : ∀ i, R →+* (X.restrict (U i).isOpenEmbedding).presheaf.obj (op ⊤))
+    (h : ∀ c : R, TopCat.Presheaf.IsCompatible X.presheaf
+      (fun i ↦ (U i).isOpenEmbedding.isOpenMap.functor.obj ⊤) fun i ↦ β i c) :
+    R →+* X.presheaf.obj (op ⊤) :=
+  glueAlgMap ((iSup_isOpenEmbedding_obj_top U).trans hU) β h
+
+/-- **Restricting the glued algebra structure to a member of the cover returns the given one.**
+
+Unlike `resAlgMap_glueAlgMap` this is an equation of the two algebra structures themselves, with
+no restriction map in the way: both sides land in `Γ(X|U i, 𝒪)`, and the restriction `resAlgMap`
+applies is the very one `map_glueAlgMap` computes. -/
+@[simp]
+lemma resAlgMap_glueAlgMapRestrict (hU : ⨆ i, U i = ⊤)
+    (β : ∀ i, R →+* (X.restrict (U i).isOpenEmbedding).presheaf.obj (op ⊤))
+    (h : ∀ c : R, TopCat.Presheaf.IsCompatible X.presheaf
+      (fun i ↦ (U i).isOpenEmbedding.isOpenMap.functor.obj ⊤) fun i ↦ β i c) (i : ι) :
+    X.resAlgMap (glueAlgMapRestrict hU β h) (U i) = β i :=
+  RingHom.ext fun c ↦ map_glueAlgMap ((iSup_isOpenEmbedding_obj_top U).trans hU) β h i c
+
+end GlueAlgMapRestrict
 
 end AlgebraicGeometry.LocallyRingedSpace

@@ -67,13 +67,11 @@ halves together.
   in that shape.
 * **Gluing along abstract open immersions rather than open subsets.** The cover here is a family
   of `TopologicalSpace.Opens X`, not an `AlgebraicGeometry.LocallyRingedSpace.OpenCover`, whose
-  members are arbitrary spaces mapping in by open immersions. Bridging the two needs the
-  transport of `HasLocalModels` along a `ℂ`-linear isomorphism, which is not stated here because
-  nothing yet needs it; `ComplexAnalytic.IsCutOutBy.comp_iso` is the ingredient. **This is now
-  the one thing between this file and gluing an analytic space out of an
-  `AlgebraicGeometry.LocallyRingedSpace.GlueData`**, since
-  `AlgebraicGeometry.LocallyRingedSpace.OpenCover.isIso_fromGlued` already identifies a space
-  with the gluing of a cover of it.
+  members are arbitrary spaces mapping in by open immersions. That bridge is
+  `Oka/AnalyticSpace/Glue.lean`: `ComplexAnalytic.HasLocalModels.of_iso` transports the property
+  along a `ℂ`-linear isomorphism and `ComplexAnalytic.AnalyticSpace.ofOpenCover` is the resulting
+  construction. It is not here because it needs
+  `AlgebraicGeometry.LocallyRingedSpace.OpenCover`, which this file does not import.
 -/
 
 open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry Topology
