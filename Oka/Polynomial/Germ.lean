@@ -3,6 +3,7 @@ Copyright (c) 2026 Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten. All righ
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
+import Oka.Algebra.MvPolynomial.Taylor
 import Oka.Polynomial
 import Oka.Weierstrass
 
@@ -28,6 +29,11 @@ Weierstrass theory.
   `simp` normal form. In particular the germ is a unit exactly when `p` does not vanish at `y`,
   which is what identifies the zero set of a family of polynomials with the points where their
   germs are non-units.
+- `LocalOkaRing.ofMvPolynomial_taylorAlgHom`: **the germ at `y` is the germ at the origin of the
+  shifted polynomial** `p(x + y)`. Since `LocalOkaRing ι` is the germ ring at the origin by
+  construction, this is what lets a statement about germs at `y` be transported to one about
+  germs at the origin, and it is a statement about *polynomials* only in that both sides are
+  spelled with `LocalOkaRing.ofMvPolynomial`.
 -/
 
 open TopologicalSpace
@@ -66,5 +72,29 @@ at `y`. -/
 lemma isUnit_ofMvPolynomial_iff (y : ι → ℂ) (p : MvPolynomial ι ℂ) :
     IsUnit (ofMvPolynomial y p) ↔ MvPolynomial.eval y p ≠ 0 := by
   rw [isUnit_iff, constantCoeff_ofMvPolynomial]
+
+/-- **The germ at `y` of a polynomial is the germ at the origin of the polynomial shifted by
+`y`.**
+
+The germ at `y` is by definition the Taylor series at the origin of the translate of the
+function (`OkaRing.germ`), and translating the *function* attached to `p` is reading the shifted
+*polynomial* `p(x + y)` as a function — which is `MvPolynomial.eval_taylorAlgHom`. So no analysis
+is involved: the two ingredients are `OkaRing.germ_shift`, which moves the base point, and
+`OkaRing.germ_restrict`, which crosses from `(⊤ : Opens (ι → ℂ)).shift y` back to `⊤`. -/
+lemma ofMvPolynomial_taylorAlgHom (y : ι → ℂ) (p : MvPolynomial ι ℂ) :
+    ofMvPolynomial (0 : ι → ℂ) (MvPolynomial.taylorAlgHom y p) = ofMvPolynomial y p := by
+  have h0 : (0 : ι → ℂ) ∈ (⊤ : Opens (ι → ℂ)).shift y := by simp
+  have hshift : OkaRing.shift (⊤ : Opens (ι → ℂ)) y (OkaRing.ofMvPolynomial ⊤ p) =
+      OkaRing.ofMvPolynomial ((⊤ : Opens (ι → ℂ)).shift y) (MvPolynomial.taylorAlgHom y p) :=
+    Subtype.ext (funext fun w ↦ (MvPolynomial.eval_taylorAlgHom y (w : ι → ℂ) p).symm)
+  calc ofMvPolynomial (0 : ι → ℂ) (MvPolynomial.taylorAlgHom y p)
+      = OkaRing.germ h0
+          (OkaRing.restrict le_top (OkaRing.ofMvPolynomial ⊤ (MvPolynomial.taylorAlgHom y p))) :=
+        (OkaRing.germ_restrict le_top h0 _).symm
+    _ = OkaRing.germ h0 (OkaRing.shift ⊤ y (OkaRing.ofMvPolynomial ⊤ p)) := by
+        rw [OkaRing.restrict_ofMvPolynomial, hshift]
+    _ = ofMvPolynomial y p :=
+        OkaRing.germ_shift (U := ⊤) y (show y ∈ (⊤ : Opens (ι → ℂ)) from trivial) h0
+          (zero_add y) _
 
 end LocalOkaRing

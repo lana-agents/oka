@@ -10,7 +10,8 @@ import Oka
 
 The comparison morphisms of `Oka/Analytification/`: `ℂ^ι ⟶ Spec (MvPolynomial ι ℂ)` and its
 map on stalks, `X^an ⟶ Spec (ℂ[x]/I)` for a presented affine `ℂ`-algebra, the local ring of
-`𝔸^ι` at the origin with its completion, the faithful flatness of the germs over it, and the
+`𝔸^ι` at the origin with its completion, the faithful flatness of the germs over it and the same
+at an arbitrary point — where it becomes a statement about the stalk map itself — and the
 analytification as a functor on finitely generated `ℂ`-algebras.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
@@ -263,6 +264,63 @@ info: 'ComplexAnalytic.faithfullyFlat_polyLocalToGerm' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.faithfullyFlat_polyLocalToGerm
+
+/-! ### The same at an arbitrary point, and for the geometric stalk map
+
+`Oka/Analytification/FlatnessAtAPoint.lean`. `polyLocalToGermAt_eq_comp` is guarded alongside the
+two flatness statements because it is the *only* mathematical step between them and the results
+at the origin — everything else in that file is transport — and
+`LocalOkaRing.ofMvPolynomial_taylorAlgHom` because it is in turn the only step in it that is
+about germs rather than about localisations. -/
+
+/--
+info: 'MvPolynomial.map_taylorEquiv_primeCompl' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms MvPolynomial.map_taylorEquiv_primeCompl
+
+/--
+info: 'LocalOkaRing.ofMvPolynomial_taylorAlgHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.ofMvPolynomial_taylorAlgHom
+
+/--
+info: 'ComplexAnalytic.polyLocalToGermAt' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.polyLocalToGermAt
+
+/--
+info: 'ComplexAnalytic.polyLocalToGermAt_eq_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.polyLocalToGermAt_eq_comp
+
+/--
+info: 'ComplexAnalytic.faithfullyFlat_polyLocalToGermAt' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.faithfullyFlat_polyLocalToGermAt
+
+/--
+info: 'ComplexAnalytic.okaStalkEquiv_comp_stalkMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.okaStalkEquiv_comp_stalkMap
+
+/--
+info: 'ComplexAnalytic.faithfullyFlat_stalkMap_complexSpaceToSpec' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.faithfullyFlat_stalkMap_complexSpaceToSpec
 
 /-! ### Presentation-independence -/
 

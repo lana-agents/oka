@@ -90,16 +90,21 @@ exists. (Write it as `change`, not `show`: a goal-changing `show` is flagged by
 
 ## What is not here
 
-**Flatness of the stalk map as stated here.** The analytic input to GAGA is now proved, but in
-a different spelling: `Oka/Analytification/Flatness.lean` shows that `ℂ{x}` is faithfully flat
-over `ℂ[x]_{(x)}`, i.e. over `Localization.AtPrime (MvPolynomial.idealOfVars ι ℂ)`, **at the
-origin**, as a statement about honest rings with no `Spec` stalk in it. Two things are missing
-before that becomes a statement about *this* morphism's stalk map: the identification of the
-source stalk with that localisation — which is the packaging `Oka/Analytification/AffineSpace.lean`
-and #599 could not do, for the transparency reason recorded above — and any point other than the
-origin, where this development has no germ ring at all. Note that `Module.Flat` cannot be
-*stated* for the stalk map without the `Algebra` instance above, so the two instances in the
-`Stalk` section below remain a prerequisite for that packaging rather than decoration.
+**Flatness of the stalk map is not here, but it is no longer missing.**
+`Oka/Analytification/Flatness.lean` shows that `ℂ{x}` is faithfully flat over `ℂ[x]_{(x)}` at the
+origin, as a statement about honest rings with no `Spec` stalk in it, and
+`Oka/Analytification/FlatnessAtAPoint.lean` turns that into
+`ComplexAnalytic.faithfullyFlat_stalkMap_complexSpaceToSpec`: **the stalk map of the morphism
+defined here is faithfully flat at every point.** It is stated there rather than here only
+because it needs the germ ring, which this file does not import.
+
+The two instances in the `Stalk` section below are what made that possible, and they are not
+decoration: `RingHom.Flat` of the stalk map can be *stated* without them, but identifying its
+source as a localisation cannot, and that identification is the whole of the crossing. Reading
+`complexSpaceToSpec_base_asIdeal` into an `IsLocalization` goal by `rw` does *not* work —
+`Ideal.primeCompl` takes the `Ideal.IsPrime` instance as an argument, so the motive is
+ill-typed; `ComplexAnalytic.primeCompl_complexSpaceToSpec_base` gives the equality of submonoids
+instead.
 -/
 
 open CategoryTheory Opposite AlgebraicGeometry TopologicalSpace

@@ -11,6 +11,7 @@ import Oka.Algebra.Category.ModuleCat.Sheaf.Generators
 import Oka.Algebra.Category.ModuleCat.Sheaf.LocallySurjective
 import Oka.Algebra.Category.ModuleCat.Sheaf.PushforwardContinuous
 import Oka.Algebra.Category.ModuleCat.Sheaf.Submodule
+import Oka.Algebra.MvPolynomial.Taylor
 import Oka.AlgebraicGeometry.GammaSpecAdjunction
 import Oka.Analytic.DividedDifference
 import Oka.Analytic.ParametricCircleIntegral
@@ -32,6 +33,7 @@ import Oka.AnalyticSpace.Restrict
 import Oka.Analytification.AffineSpace
 import Oka.Analytification.ChangeOfVariables
 import Oka.Analytification.Flatness
+import Oka.Analytification.FlatnessAtAPoint
 import Oka.Analytification.Functor
 import Oka.Analytification.LocalRing
 import Oka.Analytification.Presentation
