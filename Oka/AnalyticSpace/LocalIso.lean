@@ -81,9 +81,9 @@ everywhere else here: `ComplexAnalytic.AnalyticSpace.Hom` is a
 category structure is defined through `toLRSHom`.
 
 **Note which points the second field ranges over.** `isIso_stalkMap` is quantified over points
-of the **source**, so it says nothing at points of the target outside the image; a morphism can
-satisfy it and still miss most of the target, which is why the topological field is needed
-separately.
+of the **source**, so it says nothing at points of the target outside the image. That is a remark
+about how to read the field, not a reason the other one is needed: a local homeomorphism can miss
+most of the target too.
 
 **Neither implication between the fields is settled here.** No counterexample to either direction
 is exhibited and neither is proved, so the two-field definition is a design choice and not a
