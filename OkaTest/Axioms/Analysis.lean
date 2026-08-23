@@ -35,3 +35,19 @@ info: 'dividedDifference_eq_dslope' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms dividedDifference_eq_dslope
+
+/-! ### `x ↦ xⁿ` on the nonzero elements of a proper normed field -/
+
+/--
+info: 'isClosedMap_npow' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms isClosedMap_npow
+
+/--
+info: 'finite_fiber_npow' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms finite_fiber_npow
