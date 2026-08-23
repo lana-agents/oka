@@ -64,6 +64,10 @@ transport of algebra structures along an isomorphism is needed anywhere.
 
 - `ComplexAnalytic.exists_local_model_restrict`: the chart of `X|U` at a point, which is the
   `local_model` field of `AnalyticSpace.restrict`.
+- `ComplexAnalytic.AnalyticSpace.isIso_stalkMap_ofRestrict`: **the inclusion of an open subspace
+  is an isomorphism on stalks**, at the spelling a caller of `ofRestrict` holds. Mathlib has the
+  statement; what this adds is a discrimination-tree key, exactly as
+  `AlgebraicGeometry.LocallyRingedSpace.isOpenImmersion_ofRestrict` does one field further in.
 -/
 
 open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry Topology
@@ -177,6 +181,21 @@ def ofRestrict (X : AnalyticSpace.{u}) (U : X.Opens) : X.restrict U ⟶ X :=
 lemma base_ofRestrict (X : AnalyticSpace.{u}) (U : X.Opens) (x : X.restrict U) :
     (X.ofRestrict U).toLRSHom.base x = x.1 :=
   rfl
+
+/-- **The inclusion of an open subspace is an isomorphism on stalks**, at the spelling a caller
+who built the morphism with `ComplexAnalytic.AnalyticSpace.ofRestrict` actually holds.
+
+Mathlib's `AlgebraicGeometry.LocallyRingedSpace.ofRestrict_stalkMap_isIso` is the same statement,
+and it is **not** found here: the two terms are `rfl`-equal and headed by
+`ComplexAnalytic.AnalyticSpace.Hom.toLRSHom` and by
+`AlgebraicGeometry.LocallyRingedSpace.ofRestrict` respectively, so they are different
+discrimination-tree keys. This is the same seam that
+`AlgebraicGeometry.LocallyRingedSpace.isOpenImmersion_ofRestrict` exists for, one field further
+in, and it is settled the same way — by naming the instance at the spelling that is used. -/
+instance isIso_stalkMap_ofRestrict (X : AnalyticSpace.{u}) (U : X.Opens) (x : X.restrict U) :
+    IsIso ((X.ofRestrict U).toLRSHom.stalkMap x) :=
+  inferInstanceAs (IsIso
+    ((X.toLocallyRingedSpace.ofRestrict U.isOpenEmbedding).stalkMap x))
 
 /-- **The inclusion of a smaller open subspace into a larger one**, as a morphism of complex
 analytic spaces.
