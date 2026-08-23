@@ -492,3 +492,43 @@ info: 'ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale' depend
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale
+
+/-! ### The number of sheets, constant over a preconnected base
+
+`IsEvenlyCovered.eventually` and the two `IsCoveringMap` statements are mirror-tree topology, in
+`Oka/Topology/Covering/Basic.lean`; the two `ComplexAnalytic` ones are their application to the
+third rung. -/
+
+/--
+info: 'IsEvenlyCovered.eventually' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms IsEvenlyCovered.eventually
+
+/--
+info: 'IsCoveringMap.eventually_nonempty_homeomorph' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms IsCoveringMap.eventually_nonempty_homeomorph
+
+/--
+info: 'IsCoveringMap.nonempty_homeomorph_fiber' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms IsCoveringMap.nonempty_homeomorph_fiber
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.nonempty_homeomorph_fiber_of_isFiniteEtale' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.nonempty_homeomorph_fiber_of_isFiniteEtale
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale

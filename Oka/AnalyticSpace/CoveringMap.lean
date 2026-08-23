@@ -30,15 +30,42 @@ hypothesis rather than an instance that will be found. It is Mathlib's hypothesi
 separate the finitely many points of a fibre, and it is where the statement below is weaker than
 the classical one, which is stated for Hausdorff spaces throughout.
 
-**Connectedness of the target is not needed.** `Oka/AnalyticSpace/LocalIso.lean` phrased this rung
-as being about a connected base, and that was a hypothesis the argument never uses: a point
-outside the range is evenly covered by the empty index type. What connectedness does buy is that
-the *number of sheets* is constant, which is a different statement and is not here.
+**Connectedness of the target is not needed for the rung**, and `Oka/AnalyticSpace/LocalIso.lean`
+used to phrase it as being about a connected base, which the argument never uses: a point outside
+the range is evenly covered by the empty index type.
+
+## What connectedness *is* for, and it is now here
+
+`ComplexAnalytic.AnalyticSpace.nonempty_homeomorph_fiber_of_isFiniteEtale`: over a **preconnected**
+target, any two fibres of a finite étale morphism are homeomorphic, and
+`ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale` is the same statement counted. That
+is the *number of sheets*, and it is the statement the connectedness hypothesis the earlier
+phrasing carried was reaching for.
+
+None of it is analytic. It is `IsCoveringMap.nonempty_homeomorph_fiber` in
+`Oka/Topology/Covering/Basic.lean` — a clopen argument resting on local constancy of the fibre —
+composed with the rung above, and the module docstring there is where the mathematics is
+described.
+
+**`Nat.card` is not a junk value here, and that is worth saying because in general it is.**
+`Nat.card` of an infinite type is `0`, so an equality of `Nat.card`s is uninformative unless the
+types are known finite. They are: `ComplexAnalytic.AnalyticSpace.IsFinite.finite_fiber` is a field
+of the hypothesis. A reader who does not have that in view cannot distinguish
+`card_fiber_eq_of_isFiniteEtale` from `0 = 0`, so the homeomorphism form is stated as well and is
+the one that survives without finiteness.
+
+**`PreconnectedSpace` and not `ConnectedSpace`**, for the reason given in the mirror-tree file: the
+base being nonempty is never used.
 
 ## What is not here
 
-* **The constancy of the degree of a finite étale morphism**, which is the statement connectedness
-  of the target is for.
+* **That any *particular* finite étale morphism has any particular degree.** The statement above
+  says all fibres have the same cardinality; computing it — that `z ↦ z²` on the punctured line is
+  *two*-sheeted, say — is a statement about roots in `ℂ` and not about covering maps, and is not
+  proved here or in `OkaTest/FiniteMorphism.lean`.
+* **A `degree` function on morphisms.** What is stated is one theorem about two points; a
+  `Nat`-valued field or definition would carry a well-definedness obligation and nothing consumes
+  one.
 * **The converse.** `IsCoveringMap.isLocalHomeomorph` returns the topological field of
   `IsLocalIso`, but no topological hypothesis can return the stalk field, so there is no `↔` and
   none is stated.
@@ -50,6 +77,9 @@ the *number of sheets* is constant, which is a different statement and is not he
 
 - `ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale`: **the underlying map of a
   finite étale morphism out of a Hausdorff analytic space is a covering map.**
+- `ComplexAnalytic.AnalyticSpace.nonempty_homeomorph_fiber_of_isFiniteEtale` and
+  `ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale`: **the number of sheets is
+  constant over a preconnected base.**
 
 ## References
 
@@ -79,5 +109,37 @@ theorem isCoveringMap_base_of_isFiniteEtale {X Y : AnalyticSpace.{u}} (f : X ⟶
   (IsFinite.isClosedMap (f := f)).isCoveringMap_of_isLocalHomeomorph
     (fun y ↦ have := IsFinite.finite_fiber (f := f) y; Set.toFinite _)
     IsLocalIso.isLocalHomeomorph
+
+/-- **The number of sheets of a finite étale morphism is constant over a preconnected base**, in
+the form that does not mention counting: any two fibres are homeomorphic.
+
+The rung above, then `IsCoveringMap.nonempty_homeomorph_fiber`. Nothing analytic is added; the
+content is the clopen argument in `Oka/Topology/Covering/Basic.lean`, and the only reason this
+statement exists separately is that the two hypotheses it needs — `[T2Space X]` on the source and
+`[PreconnectedSpace Y]` on the target — belong to different halves of the composite and neither is
+automatic for an analytic space.
+
+`Nonempty` rather than a chosen homeomorphism: the identification comes from an evenly covered
+neighbourhood and depends on it. -/
+theorem nonempty_homeomorph_fiber_of_isFiniteEtale {X Y : AnalyticSpace.{u}} (f : X ⟶ Y)
+    [IsFiniteEtale f] [T2Space X] [PreconnectedSpace Y] (y₁ y₂ : Y) :
+    Nonempty ((f.toLRSHom.base ⁻¹' {y₁}) ≃ₜ (f.toLRSHom.base ⁻¹' {y₂})) :=
+  IsCoveringMap.nonempty_homeomorph_fiber (isCoveringMap_base_of_isFiniteEtale f) y₁ y₂
+
+/-- **The same, counted.**
+
+`Nat.card` is the honest spelling here **only because the fibres are known finite**:
+`ComplexAnalytic.AnalyticSpace.IsFinite.finite_fiber` is a field of `IsFiniteEtale`, so no junk
+value is involved. Without that this would be `0 = 0` for a morphism with infinite fibres, which
+is why `ComplexAnalytic.AnalyticSpace.nonempty_homeomorph_fiber_of_isFiniteEtale` is stated too
+and is the form to quote when finiteness is not in hand.
+
+It says the fibres all have the same size; it does **not** say what that size is. Computing it for
+a given morphism is a separate matter with no covering-space content — see the module
+docstring. -/
+theorem card_fiber_eq_of_isFiniteEtale {X Y : AnalyticSpace.{u}} (f : X ⟶ Y)
+    [IsFiniteEtale f] [T2Space X] [PreconnectedSpace Y] (y₁ y₂ : Y) :
+    Nat.card (f.toLRSHom.base ⁻¹' {y₁}) = Nat.card (f.toLRSHom.base ⁻¹' {y₂}) :=
+  Nat.card_congr (nonempty_homeomorph_fiber_of_isFiniteEtale f y₁ y₂).some.toEquiv
 
 end ComplexAnalytic.AnalyticSpace
