@@ -325,3 +325,48 @@ info: 'AlgebraicGeometry.Scheme.Modules.isoTildeΓ' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.Scheme.Modules.isoTildeΓ
+
+/-! ### Restriction of generating sections, and the two affine steps -/
+
+/--
+info: 'SheafOfModules.GeneratingSections.restrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.GeneratingSections.restrict
+
+/--
+info: 'SheafOfModules.GeneratingSections.isFiniteType_restrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.GeneratingSections.isFiniteType_restrict
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.exists_finset_basicOpen_generatingSections' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.exists_finset_basicOpen_generatingSections
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.sectionsToBasicOpen' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.sectionsToBasicOpen
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.isLocalizedModule_away_sectionsToBasicOpen' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.isLocalizedModule_away_sectionsToBasicOpen
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.isLocalizedModule_away_sectionsToBasicOpen_of_isCoherent'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  AlgebraicGeometry.Scheme.Modules.isLocalizedModule_away_sectionsToBasicOpen_of_isCoherent
