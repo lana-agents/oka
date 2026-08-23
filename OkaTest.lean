@@ -39,6 +39,7 @@ import OkaTest.Factorisation
 import OkaTest.FiniteMorphism
 import OkaTest.GermFlatness
 import OkaTest.GermFlatnessAtAPoint
+import OkaTest.GlueDataAnalytic
 import OkaTest.GlueMorphisms
 import OkaTest.HolomorphicMap
 import OkaTest.HolomorphicMapGeneral
@@ -47,6 +48,7 @@ import OkaTest.HomToComplex
 import OkaTest.LocalisationFunctor
 import OkaTest.Nonvanishing
 import OkaTest.OpenSubspace
+import OkaTest.ProjectiveLine
 import OkaTest.PullbackModulesStalk
 import OkaTest.PushforwardFullyFaithful
 import OkaTest.SheafOfModulesStalk

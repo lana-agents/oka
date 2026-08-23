@@ -249,7 +249,46 @@ coherence statement for arbitrary complex analytic spaces:
   the node along the punctured axis — the smallest cover with a triple of distinct indices, so
   the smallest one that exercises `t'` at all — and checks that the three copies are **distinct**
   points of the gluing over the origin, which is what stops the construction from quietly
-  returning one member. The analytic structure on the gluing is a further step and is not taken.
+  returning one member. The analytic structure on the gluing is a further step, and is the bullet
+  below rather than this one.
+
+* **The analytic structure on a gluing** (`Oka/AnalyticSpace/Glue.lean`).
+  `ComplexAnalytic.AnalyticSpace.ofGlueData` already turned an
+  `AlgebraicGeometry.LocallyRingedSpace.GlueData` of analytic pieces into an analytic space, but
+  its compatibility hypothesis is `TopCat.Presheaf.IsCompatible` on the **glued** space, which is
+  the spelling the sheaf condition consumes and not the one a geometric input arrives in — and
+  the lemma that discharged it,
+  `AlgebraicGeometry.LocallyRingedSpace.OpenCover.isCompatible_restrictAlgMap_comapAlgMap`, needs
+  the structures to be pulled back from an ambient one, which is exactly what a glue data does not
+  have. `AlgebraicGeometry.LocallyRingedSpace.GlueData.isCompatible_restrictAlgMap` closes that
+  gap, and `ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear` is the construction with the
+  hypothesis in geometric form: **on each overlap the two structures it inherits agree**.
+  **The proof computes no section.** An algebra structure on a space is a morphism to `Spec R`
+  (`AlgebraicGeometry.LocallyRingedSpace.toSpecOfAlgMap`, the `Γ`-`Spec` adjunction with the ring
+  map unwrapped); the hypothesis says those morphisms agree on the overlaps, which are the
+  categorical pullbacks by
+  `AlgebraicGeometry.LocallyRingedSpace.GlueData.vIsoPullback`; so they glue by
+  `AlgebraicGeometry.LocallyRingedSpace.OpenCover.existsUnique_glueMorphisms`, and the glued
+  morphism *is* the ambient structure that was missing. `OkaTest/GlueDataAnalytic.lean` takes the
+  node apart along a two-member open cover — the second member neither `⊤` nor `⊥` — and glues it
+  back, checking the result both on each member and globally against the structure it started
+  from. What is **not** done is the same at `ComplexAnalytic.coverGlueData`, and the obstruction
+  is measured and recorded there: that glue data's `f` and `t` are
+  `CategoryTheory.GlueData.ofGlueData'`'s dependent `dite`s.
+
+* **Two copies of the affine line, glued along `D(z)` by `z ↦ 1/z`**
+  (`OkaTest/ProjectiveLine.lean`). The transition is the automorphism of `ℂ[z, t] ⧸ (t z - 1)`
+  exchanging the two variables, and `ComplexAnalytic.lineSwapIso_ne_refl` proves it is **not** the
+  identity — so this is the only place where `ComplexAnalytic.coverGlueData`'s one input that the
+  members and their opens do not determine is given anything but `Iso.refl`. Two members is the
+  smallest
+  cover with no triple of distinct indices, so the range and cocycle hypotheses are vacuous and
+  the transition is all there is; three members, in `OkaTest/AffineCover.lean`, is the opposite
+  extreme and the two examples are complementary. What is proved about the space is that the
+  origin of one copy is glued to nothing, so the two copies of it are distinct points and neither
+  member's inclusion is surjective — the glued space is covered by two affine lines and is
+  neither of them. **It is not shown compact and not shown to differ from the analytification of a
+  single presentation**, so the name records where the charts came from and nothing more.
 
 * **Gluing.** Open covers of a locally ringed space, and the gluing of morphisms out of the
   members of one (`Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean`): a locally ringed space
@@ -373,7 +412,11 @@ coherence statement for arbitrary complex analytic spaces:
   have isomorphic analytifications (`Oka/Analytification/ChangeOfVariables.lean`). The node is
   exhibited as the analytification of `ℂ[x, y, z]/(x y, z)` as well as of `ℂ[x, y]/(x y)`. The
   universal property does all the work: no comparison of two ambient `ℂ^n`s and no change of
-  coordinates appears.
+  coordinates appears. A change of coordinates is nevertheless how such a map is usually written
+  down, and `ComplexAnalytic.PresHom.ofRename` builds one from a renaming of the variables
+  carrying the target's relations into the source's ideal, with
+  `ComplexAnalytic.Presentation.isoOfRename` turning a mutually inverse pair of renamings into an
+  isomorphism of presentations.
 * **Analytification as a functor.** Presentations form a category, the analytification is a
   functor on it, and that functor is **equivalent to one on the finitely generated `ℂ`-algebras
   themselves** (`Oka/Analytification/Functor.lean`): reading a presentation as the algebra it

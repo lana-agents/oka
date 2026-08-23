@@ -52,6 +52,9 @@ functor would be a definition nothing can be computed from.
   algebras.
 - `ComplexAnalytic.analytificationFunctor : Presentation ⥤ AnalyticSpace`: **the analytification,
   as a functor on presentations.**
+- `ComplexAnalytic.Presentation.isoOfRename`: **a pair of mutually inverse renamings of the
+  variables is an isomorphism of presentations**, and so, through the functor, an isomorphism of
+  analytifications.
 - `ComplexAnalytic.isFiniteType`: finite type, as a property of an object of `CommAlgCat ℂ`.
 - `ComplexAnalytic.toFGAlg : Presentation ⥤ (isFiniteType.FullSubcategory)ᵒᵖ`: a presentation,
   read as the finitely generated `ℂ`-algebra it presents.
@@ -159,6 +162,34 @@ def analytificationFunctor : Presentation.{u} ⥤ AnalyticSpace.{u} where
   map ψ := analytificationMap.{u} ψ
   map_id _ := analytificationMap_id.{u}
   map_comp ψ χ := analytificationMap_comp.{u} ψ χ
+
+/-- **A pair of mutually inverse renamings of the variables, each carrying the other
+presentation's relations into this one's ideal, is an isomorphism of presentations.**
+
+`ComplexAnalytic.PresHom.ofRename` twice, with
+`ComplexAnalytic.PresHom.ofRename_comp_ofRename` for both triangles. It is stated here rather
+than beside those, because an isomorphism needs the `Category` instance above and that instance
+is what this file exists to give.
+
+Mind the direction. A morphism `P ⟶ Q` is a `ComplexAnalytic.PresHom P.g Q.g`, whose ring map
+runs `Q.alg → P.alg`, so the renaming `σ` underlying `hom` sends the variables of `Q` to those
+of `P`. The two hypotheses `hστ` and `hτσ` are equalities of maps of *variables*, not of
+polynomials — which is why an isomorphism of presented algebras of this shape costs no
+commutative algebra at all.
+
+Applying `ComplexAnalytic.analytificationFunctor` to the result is how a change of coordinates
+becomes an isomorphism of analytic spaces; `OkaTest/ProjectiveLine.lean` glues `ℙ¹` out of two
+copies of `𝔸¹` along one of them. -/
+def Presentation.isoOfRename {P Q : Presentation.{u}}
+    (σ : ULift.{u} (Fin Q.n) → ULift.{u} (Fin P.n))
+    (τ : ULift.{u} (Fin P.n) → ULift.{u} (Fin Q.n))
+    (h : ∀ j, MvPolynomial.rename σ (Q.g j) ∈ presentationIdeal.{u} P.g)
+    (h' : ∀ j, MvPolynomial.rename τ (P.g j) ∈ presentationIdeal.{u} Q.g)
+    (hστ : σ ∘ τ = _root_.id) (hτσ : τ ∘ σ = _root_.id) : P ≅ Q where
+  hom := PresHom.ofRename.{u} σ h
+  inv := PresHom.ofRename.{u} τ h'
+  hom_inv_id := PresHom.ofRename_comp_ofRename.{u} σ h τ h' hστ
+  inv_hom_id := PresHom.ofRename_comp_ofRename.{u} τ h' σ h hτσ
 
 /-! ### Presentations are the finitely generated `ℂ`-algebras -/
 

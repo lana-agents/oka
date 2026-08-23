@@ -40,9 +40,11 @@ presentation — the node with a tripled origin is intuitively not affine, but p
 invariant nothing in this repository computes. Nor is there an analytic structure on the gluing:
 that is `ComplexAnalytic.AnalyticSpace.ofGlueData`, which needs the compatibility of the algebra
 structures on the glued space and is a separate step. And the transition here is the identity, so
-nothing exercises a *non-trivial* algebra isomorphism between the two descriptions of an overlap;
-`ℙ¹` from two copies of `𝔸¹` with `z ↦ 1/z` is the example that would, and it needs that
-isomorphism of presented algebras to be constructed first.
+nothing in *this* file exercises a non-trivial algebra isomorphism between the two descriptions of
+an overlap; `OkaTest/ProjectiveLine.lean` is the example that does, gluing two copies of `𝔸¹`
+along `D(z)` by `z ↦ 1/z`. The two files are complementary and neither replaces the other: with
+two members there is no triple of distinct indices, so `t'` and the cocycle are vacuous there and
+have content only here.
 -/
 
 open CategoryTheory CategoryTheory.Limits TopologicalSpace AlgebraicGeometry
@@ -144,8 +146,22 @@ theorem hcocycle_nodeCover (i j k : triple.{u}) (hij : i ≠ j) (hik : i ≠ k) 
 /-! ### The gluing -/
 
 /-- The `CategoryTheory.GlueData'` behind the gluing, named because
-`CategoryTheory.GlueData'.f'` below cannot be stated with a `_` for it: the unifier meets
-`?D.J =?= triple` — a projection applied to a metavariable — and unfolds forever. -/
+`CategoryTheory.GlueData'.f'` below cannot be stated with a `_` for it. With `_` in its place the
+index `j` is checked against the expected type `GlueData'.J ?D`, a projection applied to a
+metavariable, which the elaborator will not solve for `?D`, so the application is rejected:
+
+```
+error: Application type mismatch: The argument
+  j
+has type
+  triple
+but is expected to have type
+  GlueData'.J ?m.24
+```
+
+**It fails at once and nothing diverges** — measured, at four seconds for this whole file, with
+that as the only error. An earlier version of this docstring said the unifier *unfolds forever*;
+the conclusion was right and the mechanism was not. -/
 abbrev nodeTripleGlueData' : GlueData' LocallyRingedSpace.{u} :=
   coverGlueData'.{u} nodeCoverObj.{u} nodeCoverPoly.{u} nodeCoverGlue.{u} hrange_nodeCover.{u}
     hsymm_nodeCover.{u} hcocycle_nodeCover.{u}
