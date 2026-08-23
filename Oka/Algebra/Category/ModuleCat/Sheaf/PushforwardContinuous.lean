@@ -34,11 +34,17 @@ over `^(public )?import` in `.lake/packages/mathlib`, **with comments masked fir
 files of Mathlib carry a line beginning `import …` inside a docstring — 29 such lines, two of them
 a bare `import Mathlib` — and an unmasked search follows them. The one that reaches this closure is
 `Mathlib/Tactic/FunProp.lean`, whose documentation shows
-`import Mathlib.Analysis.Complex.Trigonometric` in an example; that single phantom edge adds 274
-analysis modules to the baseline and, because they land on *both* sides of the subtraction, deflates
-the marginal cost as well. Unmasked, this paragraph read 75 against 1747, and the instrument that
-produced those figures had been validated on the two figures already in the tree — 2 for
-`Mathlib.RingTheory.Localization.Finiteness` into `Mathlib/AlgebraicGeometry/Modules/Tilde.lean` and
+`import Mathlib.Analysis.Complex.Trigonometric` in an example; that single phantom edge takes this
+baseline from 1473 to 1744 — **271** modules, of which only **8** are under `Mathlib/Analysis/`, the
+rest being the algebra, topology and order substrate that one analysis module sits on. What it adds
+is a fact about the baseline and not about the edge: against a closure that already reaches complex
+analysis it adds nothing. Two further phantom edges, in `Mathlib/Tactic/ExtractGoal.lean` and
+`Mathlib/Tactic/MinImports.lean`, account for the remaining three of the 274 modules this closure
+inflates by when nothing is masked. The phantom modules land on *both* sides of the subtraction, so
+they deflate the marginal cost as well: unmasked, this paragraph read 75 against 1747, and the
+instrument that produced those figures had been validated on the two figures already in the tree —
+2 for `Mathlib.RingTheory.Localization.Finiteness` into
+`Mathlib/AlgebraicGeometry/Modules/Tilde.lean` and
 3 for `Mathlib.Algebra.Category.ModuleCat.Sheaf.Generators` into
 `Mathlib/AlgebraicGeometry/Modules/Sheaf.lean` — which **both reproduce on the broken instrument**,
 because neither of those targets reaches a comment-embedded import. Two agreeing deltas in one

@@ -29,7 +29,14 @@ block counts as the module docstring when **both**
 
 **Both halves are needed and neither alone suffices**, which is worth stating because the obvious
 implementation has only the first half or neither.  `/-! ### … -/` section headers are `/-!`
-blocks too: 58 of this repository's 175 files contain one.  Taking merely "the first `/-! … -/`
+blocks too, and in this tree they are ordinary rather than exotic: **59** of the files this script
+covers held one on 2026-08-23, about a third of them, and `OkaTest/FiniteMorphism.lean` has eleven
+`/-!` blocks.  Two notes on that 59, both of which cost a wrong number on the way here.  A one-line
+grep for `/-!` followed on the same line by `##` returns 58, because it cannot see
+`Oka/LocalOkaRing.lean`, whose header is written across two lines — the count above is the one this
+script's own predicate gives, which is the one the argument needs.  And there is deliberately no
+denominator: the script prints it (`checked N files`) on every run, and a hardcoded copy of it went
+stale in three places within a day of being written.  Taking merely "the first `/-! … -/`
 block anywhere" accepts a section header found *after* declarations, which the first condition
 rules out — but it also accepts one standing immediately after the imports, where the first
 condition is satisfied and only the second catches it.  Under either half alone, a file in that
@@ -211,7 +218,8 @@ def self_test() -> int:
         ("a declaration docstring only", "/-- Not a module docstring. -/\ndef f := 1\n", False),
         # The case whose absence let a file with no module docstring pass.  A `/-! ### … -/`
         # section header is a `/-!` block, so a check that takes the first one anywhere accepts
-        # it; 58 of the 175 files covered here contain such a header.
+        # it.  This is an ordinary shape in this tree rather than a contrived one; the module
+        # docstring has the count and says what it is and is not a count of.
         (
             "a section header and no module docstring",
             "import Mathlib\n\n/-! ### A section header -/\n\ntheorem t : True := trivial\n",

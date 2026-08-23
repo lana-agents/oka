@@ -727,9 +727,10 @@ rule: a **module** docstring whose body is not whitespace. It says nothing about
 contains, and in particular does not require a `# Title` line. What it does insist on is that the
 `/-! … -/` block it looks at really is the module docstring — nothing but comments, `module` and
 imports before it, and not a `##`-or-deeper heading itself. Both halves are needed: a section
-header is a `/-!` block too, and 58 of the 175 files here contain one, so a check that takes
+header is a `/-!` block too and about a third of the files here contain one, so a check that takes
 merely the first `/-!` block passes a file whose module docstring has been deleted outright. The
-script's own docstring gives the measurement and its `--self-test` pins both halves.
+script's own docstring gives the measurement — with the count, the date it was taken, and why the
+obvious one-line grep for it returns a smaller number — and its `--self-test` pins both halves.
 
 It exists because nothing else could see an empty one: an empty `/-! -/` elaborates, so the build
 does not fail on it, and the name checker looks *inside* a docstring, so on an empty one it finds
