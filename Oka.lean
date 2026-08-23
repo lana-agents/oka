@@ -81,6 +81,7 @@ import Oka.Coherent
 import Oka.Completion
 import Oka.ComplexSpace
 import Oka.Data.Fin.Tuple.Basic
+import Oka.FieldTheory.IsAlgClosed.Basic
 import Oka.Geometry.RingedSpace.Basic
 import Oka.Geometry.RingedSpace.CutOut
 import Oka.Geometry.RingedSpace.LocallyRingedSpace

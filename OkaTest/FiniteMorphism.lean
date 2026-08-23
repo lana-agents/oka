@@ -5,6 +5,7 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Oka
 import Mathlib.Analysis.Normed.Module.Connected
+import Mathlib.Analysis.Complex.Polynomial.Basic
 import OkaTest.HolomorphicMap
 
 /-!
@@ -104,15 +105,17 @@ derived from — so read it as a test of the rung and not as a fact about the ma
   morphism which is not an isomorphism. **The stalk half of
   `ComplexAnalytic.AnalyticSpace.IsLocalIso` is exercised by it**, and by nothing else: the
   non-example `ComplexAnalytic.axisIncl` fails the topological field alone.
-* **The *value* of the number of sheets.** The bullet that used to stand here said two things:
-  that nothing shows `ComplexAnalytic.sq` two-sheeted, and that the constancy of the number of
-  sheets over a connected base is not proved anywhere. **The second is retired** — it is
+* **A `degree` function on morphisms**, and nothing else about the number of sheets. The bullet
+  that used to stand here said two things, and **both are now retired**: that the constancy of the
+  number of sheets over a connected base was not proved anywhere — it is,
   `ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale`, applied here as
-  `ComplexAnalytic.card_fiber_sq_eq`, which says all fibres of `ComplexAnalytic.sq` have the same
-  cardinality. **The first stands, and it is what makes that a weak test**: the common value is
-  not computed, so nothing here distinguishes the statement from what a one-sheeted map would
-  satisfy. Computing it means exhibiting the fibre over a nonzero `w` as a two-element set, which
-  is a statement about square roots in `ℂ` and has no covering-space content.
+  `ComplexAnalytic.card_fiber_sq_eq` — and that nothing showed `ComplexAnalytic.sq` two-sheeted,
+  which `ComplexAnalytic.card_fiber_base_sq` now does. So the constancy statement has a witness
+  whose common value is **2** rather than something a one-sheeted map would also satisfy, and the
+  bullet's complaint that it was a weak test is answered.
+  What is **not** here, and is not wanted, is a `Nat`-valued `degree` function on morphisms: one
+  theorem about one map is not an invariant, and a definition would carry a well-definedness
+  obligation nothing consumes.
   **The distinction the bullet before that one drew still holds**: `IsCoveringMap` is a condition
   on a map of topological spaces, so neither `ComplexAnalytic.isCoveringMap_base_sq` nor Mathlib's
   `isCoveringMap_npow` is about a covering *of analytic spaces*, a notion this repository does not
@@ -1014,12 +1017,17 @@ that theorem is applied. Its three hypotheses are all supplied in this file:
 `ComplexAnalytic.isFiniteEtale_sq`, `ComplexAnalytic.t2Space_restrict_punctured` and
 `ComplexAnalytic.preconnectedSpace_restrict_punctured`.
 
-**This is a weak statement and the module docstring says why.** The common value is not computed,
-so nothing here rules out its being `1`; what the theorem tests is that the hypotheses of the
-constancy statement are simultaneously satisfiable by something other than an isomorphism, for
-which they are trivially satisfiable. `Nat.card` is not a junk value, because
-`ComplexAnalytic.finite_fiber_base_sq` gives finiteness — see
-`ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale`'s docstring, where that is the
+**This used to be a weak statement and the paragraph here said so**, because the common value was
+not computed and nothing ruled out its being `1`. `ComplexAnalytic.card_fiber_base_sq` below
+computes it, and it is `2`, so the hypotheses of the constancy statement are now satisfied at a
+morphism where the conclusion is not what an isomorphism would give. **This theorem is kept and is
+not made redundant by that one**: what it exercises is
+`ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale`, and a witness for a general theorem
+is not retired by a stronger fact about the witness. It remains the only place that theorem is
+applied.
+
+`Nat.card` is not a junk value, because `ComplexAnalytic.finite_fiber_base_sq` gives finiteness —
+see `ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale`'s docstring, where that is the
 reason the homeomorphism form is stated alongside. -/
 theorem card_fiber_sq_eq (y₁ y₂ : (AnalyticSpace.complexAffineSpace.{u} 1).restrict
     punctured.{u}) :
@@ -1027,6 +1035,54 @@ theorem card_fiber_sq_eq (y₁ y₂ : (AnalyticSpace.complexAffineSpace.{u} 1).r
       Nat.card ((ComplexAnalytic.sq.{u}).toLRSHom.base ⁻¹' {y₂}) :=
   haveI := isFiniteEtale_sq.{u}
   AnalyticSpace.card_fiber_eq_of_isFiniteEtale ComplexAnalytic.sq.{u} y₁ y₂
+
+/-- **Every fibre of `ComplexAnalytic.sq` has exactly two points**, so the squaring map of the
+punctured line is a genuinely two-sheeted cover.
+
+This is what `ComplexAnalytic.card_fiber_sq_eq` above does *not* say. That theorem says all fibres
+have the same cardinality; this one computes it, and the value is not `1`, so the constancy
+statement now has a witness at which it is not the statement an isomorphism would satisfy.
+
+**No covering-space theory is used.** The content is `IsAlgClosed.card_setOf_pow_eq` — over an
+algebraically closed field `x ^ n = a` has exactly `n` solutions when `(n : F) ≠ 0` and `a ≠ 0` —
+carried across `ComplexAnalytic.base_sq_eq_conj` exactly as
+`ComplexAnalytic.finite_fiber_base_sq` carries `finite_fiber_npow`. The two shuffles are the same
+one and `Equiv.subtypeEquiv` does the second half, because a homeomorphism's preimage of a set is
+in bijection with that set by the underlying equivalence and nothing topological is wanted.
+
+`Mathlib.Analysis.Complex.Polynomial.Basic` is imported by this file for `Complex.isAlgClosed`
+alone, and `Oka` does not bring it in. **The way that was established is worth recording, because
+the obvious instrument gets it wrong.** A breadth-first search over `import` lines that does not
+mask comments reports that module as reachable from `Mathlib/Analysis/Complex/CoveringMap.lean` —
+through `Mathlib.Tactic.FunProp`, whose *documentation* shows an example `import` line, which is
+not an import. Masked, it is not reachable; and the compiler agrees, since without this import
+`IsAlgClosed ℂ` fails to synthesize with `failed to synthesize instance of type class
+IsAlgClosed ℂ`. See `Oka/FieldTheory/IsAlgClosed/Basic.lean` for the measurement.
+
+**This does not retire the `degree` clauses.** All four places that record the absence of a
+`Nat`-valued degree function on morphisms still record it, and correctly: one theorem about one map
+is not an invariant, and a `degree` definition would carry a well-definedness obligation that
+nothing here consumes. -/
+theorem card_fiber_base_sq (y : ((AnalyticSpace.complexAffineSpace.{u} 1).restrict
+    punctured.{u} : Type u)) :
+    Nat.card (((ComplexAnalytic.sq.{u}).toLRSHom.base :
+      ((AnalyticSpace.complexAffineSpace.{u} 1).restrict punctured.{u} : Type u) → _) ⁻¹'
+      {y}) = 2 := by
+  rw [base_sq_eq_conj]
+  have h : ((puncturedHomeo.{u}.symm ∘ npowPunctured ∘ puncturedHomeo.{u}) ⁻¹' {y}) =
+      puncturedHomeo.{u} ⁻¹' (npowPunctured ⁻¹' {puncturedHomeo.{u} y}) := by
+    ext p
+    simp [Homeomorph.symm_apply_eq]
+  rw [h]
+  have key : Nat.card (npowPunctured ⁻¹' {puncturedHomeo.{u} y}) = 2 := by
+    refine Eq.trans (Nat.card_congr ?_)
+      (IsAlgClosed.card_setOf_pow_eq (n := 2) (by norm_num) (puncturedHomeo.{u} y).2)
+    exact Equiv.mk (fun p ↦ ⟨(p.1 : ℂ), congrArg Subtype.val p.2⟩)
+      (fun x ↦ ⟨⟨(x : ℂ), fun hz ↦ (puncturedHomeo.{u} y).2 (by rw [← x.2, hz]; norm_num)⟩,
+        Subtype.ext x.2⟩)
+      (fun _ ↦ rfl) (fun _ ↦ rfl)
+  rw [← key]
+  exact Nat.card_congr (Equiv.subtypeEquiv puncturedHomeo.{u}.toEquiv fun _ ↦ Iff.rfl)
 
 end
 

@@ -59,10 +59,12 @@ base being nonempty is never used.
 
 ## What is not here
 
-* **That any *particular* finite étale morphism has any particular degree.** The statement above
-  says all fibres have the same cardinality; computing it — that `z ↦ z²` on the punctured line is
-  *two*-sheeted, say — is a statement about roots in `ℂ` and not about covering maps, and is not
-  proved here or in `OkaTest/FiniteMorphism.lean`.
+* **The degree of any finite étale morphism other than the one witness.** The bullet that used to
+  stand here said no particular morphism had any particular degree computed. That is retired for
+  `ComplexAnalytic.sq`: `ComplexAnalytic.card_fiber_base_sq` in `OkaTest/FiniteMorphism.lean` puts
+  every fibre of the squaring map of the punctured line at **2** points. It is a statement about
+  roots in `ℂ` and not about covering maps — its content is
+  `IsAlgClosed.card_setOf_pow_eq` — and it is the only morphism here for which the value is known.
 * **A `degree` function on morphisms.** What is stated is one theorem about two points; a
   `Nat`-valued field or definition would carry a well-definedness obligation and nothing consumes
   one.
