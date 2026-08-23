@@ -51,10 +51,15 @@ says the composition lemma has the strength it claims and no more.
 * **No finite étale morphism other than an isomorphism.** `ComplexAnalytic.axisIncl` is finite and
   is *not* a local isomorphism (`ComplexAnalytic.not_isLocalIso_axisIncl`), which is what says the
   second rung restricts the first; but the only positive witness for
-  `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` here is the identity. See that statement's
-  docstring for what a real one would take.
+  `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` here is still the identity. **The candidate is
+  built and nothing is claimed about it**: `ComplexAnalytic.sq`, the squaring map of the punctured
+  line, exists below and is proved not injective, so it is not an isomorphism — but neither
+  `ComplexAnalytic.AnalyticSpace.IsFinite` nor `…IsLocalIso` is proved for it, and neither should
+  be read into any statement here.
 * **Nothing exercises the stalk half of `ComplexAnalytic.AnalyticSpace.IsLocalIso`.** The
-  non-example above fails the topological field alone.
+  non-example above fails the topological field alone, and `ComplexAnalytic.sq` — which is the map
+  that would exercise it — has no stalk statement here. That needs a local holomorphic inverse of
+  `z ↦ z²`, which this repository does not build.
 -/
 
 open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry Topology Filter
@@ -360,6 +365,121 @@ that exists, everything below the identity is unexercised, and no statement here
 saying otherwise. -/
 example : AnalyticSpace.IsFiniteEtale (𝟙 (AnalyticSpace.complexAffineSpace.{u} 1)) :=
   inferInstance
+
+/-! ### The squaring map of the punctured line, as far as it goes
+
+The limitation recorded above — that the only positive witness for
+`ComplexAnalytic.AnalyticSpace.IsFiniteEtale` is the identity — is about `ℂ ∖ {0}` and `z ↦ z²`,
+and **this section builds that map and proves nothing about its finiteness or its stalks.** It is
+here because the construction was the part nobody had priced: a morphism whose *target* is an open
+subspace needed `ComplexAnalytic.AnalyticSpace.liftRestrict`, which did not exist.
+
+What is proved is that the map exists, what its underlying map is, and that it is **not
+injective** — so if it is ever shown finite étale, the class will be strictly larger than the
+isomorphisms. What is *not* proved is `IsFinite`, `IsLocalIso` or `IsFiniteEtale` for it; see
+`## What is not checked here`. -/
+
+/-- `z²`, as a one-element family of entire functions on `ℂ`. -/
+def sqFamily : ULift.{u} (Fin 1) → OkaRing (⊤ : Opens (ULift.{u} (Fin 1) → ℂ)) :=
+  fun _ ↦ coord (ULift.up 0) * coord (ULift.up 0)
+
+/-- **The squaring map `ℂ ⟶ ℂ`**, before restricting to the punctured line. -/
+def sqAll : AnalyticSpace.complexAffineSpace.{u} 1 ⟶ AnalyticSpace.complexAffineSpace.{u} 1 :=
+  AnalyticSpace.okaMap sqFamily.{u}
+
+/-- **Its underlying map is `z ↦ z²`.** -/
+theorem base_sqAll (p : AnalyticSpace.complexAffineSpace.{u} 1) :
+    ((sqAll.{u}).toLRSHom.base p : ULift.{u} (Fin 1) → ℂ) =
+      fun _ ↦ (p : ULift.{u} (Fin 1) → ℂ) (ULift.up 0) *
+        (p : ULift.{u} (Fin 1) → ℂ) (ULift.up 0) := by
+  refine funext fun l ↦ ?_
+  change okaMapFun sqFamily.{u} _ l = _
+  rw [okaMapFun_apply, sqFamily, map_mul, evalHom_coord]
+
+/-- **`ℂ ∖ {0}`**, as an open subspace of the affine line: the non-vanishing locus of `z`. -/
+def punctured : (AnalyticSpace.complexAffineSpace.{u} 1).Opens :=
+  (AnalyticSpace.complexAffineSpace.{u} 1).nonvanishing (coord (ULift.up 0))
+
+/-- **A point of the affine line lies in it exactly when its coordinate is nonzero.**
+`ComplexAnalytic.AnalyticSpace.mem_nonvanishing_iff` turns membership into non-vanishing of the
+*value*, and `ComplexAnalytic.eval_complexAffineSpace` computes that value on `ℂ^n`. -/
+theorem mem_punctured_iff (p : AnalyticSpace.complexAffineSpace.{u} 1) :
+    p ∈ punctured.{u} ↔ (p : ULift.{u} (Fin 1) → ℂ) (ULift.up 0) ≠ 0 := by
+  rw [punctured, AnalyticSpace.mem_nonvanishing_iff]
+  rw [eval_complexAffineSpace, evalHom_coord]
+
+/-- **The square of a nonzero number is nonzero**, in the form
+`ComplexAnalytic.AnalyticSpace.liftRestrict` asks for. -/
+theorem range_subset_punctured :
+    Set.range ((((AnalyticSpace.complexAffineSpace.{u} 1).ofRestrict punctured.{u} ≫
+        sqAll.{u}).toLRSHom.base) :
+      (AnalyticSpace.complexAffineSpace.{u} 1).restrict punctured.{u} →
+        AnalyticSpace.complexAffineSpace.{u} 1) ⊆ (punctured.{u} : Set _) := by
+  rintro _ ⟨p, rfl⟩
+  have hp : (p.1 : ULift.{u} (Fin 1) → ℂ) (ULift.up 0) ≠ 0 :=
+    (mem_punctured_iff.{u} p.1).1 p.2
+  have hcomp : (((AnalyticSpace.complexAffineSpace.{u} 1).ofRestrict punctured.{u} ≫
+      sqAll.{u}).toLRSHom.base p) = (sqAll.{u}).toLRSHom.base p.1 := rfl
+  rw [hcomp]
+  refine (mem_punctured_iff.{u} _).2 ?_
+  rw [show (((sqAll.{u}).toLRSHom.base p.1 : AnalyticSpace.complexAffineSpace.{u} 1) :
+      ULift.{u} (Fin 1) → ℂ) = _ from base_sqAll.{u} p.1]
+  exact mul_ne_zero hp hp
+
+/-- **The squaring map of the punctured line, `ℂ ∖ {0} ⟶ ℂ ∖ {0}`.**
+
+The target is an open subspace, which is why this needs
+`ComplexAnalytic.AnalyticSpace.liftRestrict`: `ComplexAnalytic.AnalyticSpace.okaMap` produces
+morphisms into `ℂ^n` and nothing before produced one into a restriction of it. -/
+def sq : (AnalyticSpace.complexAffineSpace.{u} 1).restrict punctured.{u} ⟶
+    (AnalyticSpace.complexAffineSpace.{u} 1).restrict punctured.{u} :=
+  AnalyticSpace.liftRestrict
+    ((AnalyticSpace.complexAffineSpace.{u} 1).ofRestrict punctured.{u} ≫ sqAll.{u})
+    punctured.{u} range_subset_punctured.{u}
+
+/-- **Its underlying map is `z ↦ z²`.**
+
+Computed through `ComplexAnalytic.AnalyticSpace.liftRestrict_fac` rather than by unfolding: the
+lift is opaque and the composite it factors is not. -/
+theorem base_sq (p : (AnalyticSpace.complexAffineSpace.{u} 1).restrict punctured.{u}) :
+    (((sq.{u}).toLRSHom.base p).1 : ULift.{u} (Fin 1) → ℂ) =
+      fun _ ↦ (p.1 : ULift.{u} (Fin 1) → ℂ) (ULift.up 0) *
+        (p.1 : ULift.{u} (Fin 1) → ℂ) (ULift.up 0) := by
+  have h := congrArg (fun m : _ ⟶ AnalyticSpace.complexAffineSpace.{u} 1 ↦ m.toLRSHom.base p)
+    (AnalyticSpace.liftRestrict_fac
+      ((AnalyticSpace.complexAffineSpace.{u} 1).ofRestrict punctured.{u} ≫ sqAll.{u})
+      punctured.{u} range_subset_punctured.{u})
+  rw [show (((sq.{u}).toLRSHom.base p).1 : AnalyticSpace.complexAffineSpace.{u} 1) = _ from h]
+  exact base_sqAll.{u} p.1
+
+/-- **It is not injective**: `1` and `-1` are two points of `ℂ ∖ {0}` with the same square.
+
+So it is not an isomorphism, and if it is ever shown finite étale then
+`ComplexAnalytic.AnalyticSpace.IsFiniteEtale` contains something the identity does not — which is
+the whole reason to want this map. **Nothing here shows it finite étale**, and no statement below
+should be read as saying so. -/
+theorem not_injective_base_sq :
+    ¬ Function.Injective ((sq.{u}).toLRSHom.base :
+      (AnalyticSpace.complexAffineSpace.{u} 1).restrict punctured.{u} →
+        (AnalyticSpace.complexAffineSpace.{u} 1).restrict punctured.{u}) := by
+  have h1 : ((fun _ ↦ (1 : ℂ)) : ULift.{u} (Fin 1) → ℂ) ∈ punctured.{u} :=
+    (mem_punctured_iff.{u} _).2 one_ne_zero
+  have h2 : ((fun _ ↦ (-1 : ℂ)) : ULift.{u} (Fin 1) → ℂ) ∈ punctured.{u} :=
+    (mem_punctured_iff.{u} _).2 (neg_ne_zero.2 one_ne_zero)
+  intro hinj
+  have hne : (⟨(fun _ ↦ (1 : ℂ) : ULift.{u} (Fin 1) → ℂ), h1⟩ :
+      (AnalyticSpace.complexAffineSpace.{u} 1).restrict punctured.{u}) ≠
+    ⟨(fun _ ↦ (-1 : ℂ) : ULift.{u} (Fin 1) → ℂ), h2⟩ := by
+    intro h
+    have := congrFun (congrArg Subtype.val h) (ULift.up 0)
+    norm_num at this
+  refine hne (hinj ?_)
+  refine Subtype.ext (funext fun l ↦ ?_)
+  rw [show (((sq.{u}).toLRSHom.base ⟨(fun _ ↦ (1 : ℂ) : ULift.{u} (Fin 1) → ℂ), h1⟩).1 :
+      ULift.{u} (Fin 1) → ℂ) = _ from base_sq.{u} _,
+    show (((sq.{u}).toLRSHom.base ⟨(fun _ ↦ (-1 : ℂ) : ULift.{u} (Fin 1) → ℂ), h2⟩).1 :
+      ULift.{u} (Fin 1) → ℂ) = _ from base_sq.{u} _]
+  norm_num
 
 end
 
