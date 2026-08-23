@@ -693,3 +693,28 @@ info: 'ComplexAnalytic.localisationOpen_ne_top' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.localisationOpen_ne_top
+
+/-! ### The analytification of a finitely presented sheaf is coherent
+
+`Oka/Analytification/SheafCoherent.lean`. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isCoherent_free' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isCoherent_free
+
+/--
+info: 'ComplexAnalytic.isCoherent_analytificationSheaf_cokernel' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isCoherent_analytificationSheaf_cokernel
+
+/--
+info: 'ComplexAnalytic.isCoherent_analytificationSheaf_cokernel_sectionsHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isCoherent_analytificationSheaf_cokernel_sectionsHom

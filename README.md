@@ -121,6 +121,21 @@ coherence statement for arbitrary complex analytic spaces:
   node *because of the node's equation*, so the node lifts to the proper open subspace
   `ℂ²|{1 - z₀z₁ ≠ 0}`.
 
+* **Coherence in every finite rank, and of an analytified presentation.** Oka's theorem says
+  `𝒪_X` is coherent; a *presentation* is pushed through the stability results only if `𝒪_X^m` is
+  coherent too, and that is an induction on the rank with no analysis in it
+  (`SheafOfModules.IsCoherent.free`). Its step is coherence of a binary biproduct, which rests on
+  the observation that the kernel of a map into `A ⊞ B` is an *iterated* kernel —
+  `CategoryTheory.Limits.kernelBiprodLiftIso`, in
+  `Oka/CategoryTheory/Limits/Shapes/KernelBiprod.lean` — so that the finite-type-kernel condition
+  can be applied one component at a time. With it,
+  `ComplexAnalytic.isCoherent_analytificationSheaf_cokernel` says the **analytification of a
+  cokernel of finite free sheaves on `Spec (ℂ[x] ⧸ I)` is coherent**, which is the local input
+  GAGA consumes: right exactness carries the cokernel across, and the target is free, hence
+  coherent. The statement for a *coherent* sheaf rather than a presented one is out of reach here
+  and for a reason that is not analytic — it needs the dictionary between sheaves of modules on
+  `Spec A` and `A`-modules, which this repository does not have.
+
 * **Being a complex analytic space is local.** The `local_model` field of
   `ComplexAnalytic.AnalyticSpace` is isolated as a predicate `ComplexAnalytic.HasLocalModels` on
   a locally ringed space together with a `ℂ`-algebra structure on its global sections, and it is

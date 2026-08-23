@@ -228,3 +228,28 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.Hom.preservesFiniteLimits_pullbackMo
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.Hom.preservesFiniteLimits_pullbackModules
 
+
+/-! ### Coherence of free sheaves of modules
+
+`Oka/Algebra/Category/ModuleCat/Sheaf/Coherent/Free.lean` and its categorical input. -/
+
+/--
+info: 'CategoryTheory.Limits.kernelBiprodLiftIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms CategoryTheory.Limits.kernelBiprodLiftIso
+
+/--
+info: 'SheafOfModules.IsCoherent.biprod' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.IsCoherent.biprod
+
+/--
+info: 'SheafOfModules.IsCoherent.free' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.IsCoherent.free

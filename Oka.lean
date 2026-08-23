@@ -5,6 +5,7 @@ import Oka.Algebra.Category.ModuleCat.Presheaf.Submodule
 import Oka.Algebra.Category.ModuleCat.Sheaf.Annihilator
 import Oka.Algebra.Category.ModuleCat.Sheaf.Coherent.Basic
 import Oka.Algebra.Category.ModuleCat.Sheaf.Coherent.Criterion
+import Oka.Algebra.Category.ModuleCat.Sheaf.Coherent.Free
 import Oka.Algebra.Category.ModuleCat.Sheaf.Coherent.Locality
 import Oka.Algebra.Category.ModuleCat.Sheaf.Coherent.Stability
 import Oka.Algebra.Category.ModuleCat.Sheaf.Colimits
@@ -52,8 +53,10 @@ import Oka.Analytification.Presentation
 import Oka.Analytification.PresentationFlatness
 import Oka.Analytification.PresentationStalk
 import Oka.Analytification.Sheaf
+import Oka.Analytification.SheafCoherent
 import Oka.Analytification.UniversalProperty
 import Oka.CategoryTheory.Abelian.Basic
+import Oka.CategoryTheory.Limits.Shapes.KernelBiprod
 import Oka.CategoryTheory.Sites.CoversTop.Basic
 import Oka.CategoryTheory.Sites.CoversTop.Over
 import Oka.CategoryTheory.Sites.LocallySurjective
