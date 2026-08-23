@@ -147,11 +147,15 @@ coherence statement for arbitrary complex analytic spaces:
   locally isomorphic. Identities, composites and isomorphisms are local isomorphisms, and
   `OkaTest/FiniteMorphism.lean` shows the second rung genuinely restricts the first: `z ↦ (z, 0)`
   is finite and **not** a local isomorphism, because a local homeomorphism is open, its range is
-  also closed, and `ℂ²` is connected. **The only positive witness is the identity** — a finite
-  étale morphism that is not an isomorphism needs a source that is not simply connected and is not
-  built here — and nothing exercises the stalk half of the definition. Neither `IsCoveringMap` nor
-  the theorem that a finite local isomorphism onto a connected base is one appears; that is a
-  third rung.
+  also closed, and `ℂ²` is connected. **The only positive witness is the identity.** The
+  candidate for a better one is built and left unclaimed: `ComplexAnalytic.sq`, the squaring map
+  of `ℂ ∖ {0}`, exists in that file — it needed
+  `ComplexAnalytic.AnalyticSpace.liftRestrict`, since nothing before produced a morphism whose
+  *target* is an open subspace — and is proved not injective and, separately,
+  **not an isomorphism** (`ComplexAnalytic.not_isIso_sq`); **neither its finiteness nor anything
+  about its stalks is proved**, so nothing exercises the stalk half of the definition.
+  Neither `IsCoveringMap` nor the theorem that a finite local isomorphism onto a connected base is
+  one appears; that is a third rung.
 
 * **Coherence in every finite rank, and of an analytified presentation.** Oka's theorem says
   `𝒪_X` is coherent; a *presentation* is pushed through the stability results only if `𝒪_X^m` is
@@ -333,6 +337,16 @@ coherence statement for arbitrary complex analytic spaces:
   from. What is **not** done is the same at `ComplexAnalytic.coverGlueData`, and the obstruction
   is measured and recorded there: that glue data's `f` and `t` are
   `CategoryTheory.GlueData.ofGlueData'`'s dependent `dite`s.
+
+  `ComplexAnalytic.AnalyticSpace.glueMorphisms`, in the same file, is the morphism-level statement
+  on top of all of that — a morphism *out of* a covered analytic space, glued from `ℂ`-linear
+  morphisms out of the members of an open cover of its source. Its content is that
+  `ComplexAnalytic.IsCLinearHom` is a condition on **global** sections while each piece gives it
+  only after restriction, and the second gluing that closes the gap is the round trip
+  `AlgebraicGeometry.LocallyRingedSpace.OpenCover.glueAlgMapRestrict_comapAlgMap`, already written
+  for the object-level construction. `OkaTest/GlueMorphisms.lean` exercises it only where the
+  hypotheses are automatic — at the restrictions of one morphism, recovered and shown not to be
+  the identity — and **no pair of independent morphisms of analytic spaces is glued anywhere.**
 
 * **Two copies of the affine line, glued along `D(z)` by `z ↦ 1/z`**
   (`OkaTest/ProjectiveLine.lean`). The transition is the automorphism of `ℂ[z, t] ⧸ (t z - 1)`

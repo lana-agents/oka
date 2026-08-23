@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Oka
+import OkaTest.HolomorphicMap
 import OkaTest.OpenSubspace
 
 /-!
@@ -30,15 +31,16 @@ not satisfy both.
 
 The two morphisms glued over `punctureCover` are restrictions of a single global one, so their
 agreement on the overlap is `pullback.condition` rather than a computation. **That gap is closed
-in the last section**, which needed a source whose cover has *disconnected* overlaps and which
-this development did not have until `ComplexAnalytic.AnalyticSpace.restrict` and
-`nodeAxis_inf_eq_bot` existed. What the `punctureCover` tests establish on their
-own is that the compatibility hypothesis is satisfiable at a non-trivial cover, that
+in the disconnected-overlaps section**, which needed a source whose cover has *disconnected*
+overlaps and which this development did not have until
+`ComplexAnalytic.AnalyticSpace.restrict` and `nodeAxis_inf_eq_bot` existed. What the
+`punctureCover` tests establish on their own is that the compatibility hypothesis is
+satisfiable at a non-trivial cover, that
 `glueMorphisms` computes the morphism it should, and that `fromGlued` is an isomorphism there.
 
 ## Gluing over a cover by opens, and a genuinely independent pair
 
-The last section is the non-vacuity of
+That section is the non-vacuity of
 `AlgebraicGeometry.LocallyRingedSpace.existsUnique_glueMorphisms_of_opens`, whose compatibility
 hypothesis is an equation of morphisms out of `X.restrict (U i ⊓ U j)` rather than out of the
 categorical pullback. The witness is the **punctured node** covered by its two punctured axes,
@@ -75,16 +77,31 @@ which is the third time on this project that the coordinate needed for the concl
 and the one that made the sentence true was not. A statement quantified over `j` and `k` cannot
 lose a coordinate that way.
 
-## A note on the import of `OkaTest.OpenSubspace`
+## Gluing a morphism of **analytic** spaces
 
-This is the first `OkaTest`-to-`OkaTest` import outside the `OkaTest/Axioms.lean` aggregator, and
-it is intentional. Three agents ran `git grep '^import OkaTest' -- OkaTest/`, found only the
-aggregator, and read that as a convention; it is a small sample rather than a rule — until the
-last section here there was simply nothing in one test file that another wanted. Now there is:
+The last section carries the construction across to
+`ComplexAnalytic.AnalyticSpace.glueMorphisms`, whose extra content over the locally-ringed-space
+version is the `ℂ`-linearity of the result. What it checks is weaker than either section above
+it and its own docstring says so: the family glued is the restrictions of a single morphism, so
+the `ℂ`-linearity hypothesis is automatic and **no independent pair of analytic morphisms is
+glued anywhere**.
+
+## A note on the imports of `OkaTest.OpenSubspace` and `OkaTest.HolomorphicMap`
+
+`OkaTest.OpenSubspace` was the first `OkaTest`-to-`OkaTest` import outside the
+`OkaTest/Axioms.lean` aggregator, and it is intentional. Three agents ran
+`git grep '^import OkaTest' -- OkaTest/`, found only the aggregator, and read that as a
+convention; it is a small sample rather than a rule — until the disconnected-overlaps section
+here there was simply nothing in one test file that another wanted. Now there is:
 `nodeAxis`, `axisPoint`, `axisPoint_mem` and `nodeAxis_inf_eq_bot`. The
 alternatives are duplicating roughly forty lines of scaffolding, which is how a test suite rots,
 or promoting node scaffolding into `Oka/`, which is worse because it is not library material.
 Reuse across `OkaTest/` is allowed; there is no cycle risk and no build-graph cost worth naming.
+
+`OkaTest.HolomorphicMap` is the second, and it is the same judgement: the analytic gluing in the
+last section needs a morphism `ℂ ⟶ ℂ` which is not the identity, `sqFamily` and `okaMap_sq_ne_id`
+are exactly that and are already tested there, and building a second such morphism here would be
+a witness nothing compares with the first.
 -/
 
 open CategoryTheory CategoryTheory.Limits TopologicalSpace Opposite AlgebraicGeometry
@@ -360,5 +377,47 @@ theorem hom_ext_pullback_pnAxis (i j : ULift.{u} (Fin 2)) (hij : i ≠ j)
   rw [LocallyRingedSpace.IsOpenImmersion.range_pullback_to_base_of_left,
     LocallyRingedSpace.range_ofRestrict, LocallyRingedSpace.range_ofRestrict] at hmem
   exact Set.eq_empty_iff_forall_notMem.1 (pnAxis_inf_carrier_eq_empty i j hij) _ hmem
+
+/-! ### Gluing a morphism of **analytic** spaces
+
+`ComplexAnalytic.AnalyticSpace.glueMorphisms` is the same construction with the `ℂ`-linearity of
+the result carried along. `punctureCover` is a cover of `ℂ` and `ℂ` is
+`ComplexAnalytic.AnalyticSpace.complexAffineSpace 1`, so it is a cover of an analytic space and the
+analytic construction applies to it directly.
+
+**What is checked here and what is not.** The family glued is the restrictions of a *single*
+morphism, so its compatibility is `pullback.condition` and the round trip
+`ComplexAnalytic.AnalyticSpace.glueMorphisms_map_comp` identifies the output with the morphism it
+came from. That is the same shape as the `punctureCover` tests above and it establishes that the
+hypotheses are satisfiable at a two-member cover neither of whose members is `⊤`, and that the
+output is the intended one. **It does not glue two independent morphisms of analytic spaces**: the
+disjoint-overlap witness that does that for locally ringed spaces, in the section above, is at the
+`existsUnique_glueMorphisms_of_opens` API rather than at `OpenCover`, and no analytic pair has been
+built at a cover with disconnected overlaps. So the `ℂ`-linearity hypothesis is exercised here only
+where it is automatic.
+
+`okaMap_sq_ne_id`, from `OkaTest/HolomorphicMap.lean`, is what keeps the round trip from being
+vacuous: the morphism recovered is **not** the identity, so the construction is not returning
+something the cover alone determines. -/
+
+/-- The two restrictions agree on the overlap, because they are restrictions of one morphism. -/
+theorem sq_compat (x y : punctureCover.{u}.J) :
+    pullback.fst (punctureCover.{u}.map x) (punctureCover.{u}.map y) ≫
+        (punctureCover.{u}.map x ≫ (AnalyticSpace.okaMap sqFamily.{u}).toLRSHom) =
+      pullback.snd (punctureCover.{u}.map x) (punctureCover.{u}.map y) ≫
+        (punctureCover.{u}.map y ≫ (AnalyticSpace.okaMap sqFamily.{u}).toLRSHom) := by
+  rw [← Category.assoc, ← Category.assoc, pullback.condition]
+
+/-- **The glued morphism of analytic spaces is `z ↦ z²`**, at a two-member cover neither of whose
+members is the whole space. -/
+example :
+    AnalyticSpace.glueMorphisms punctureCover.{u}
+        (fun j ↦ punctureCover.{u}.map j ≫ (AnalyticSpace.okaMap sqFamily.{u}).toLRSHom)
+        sq_compat.{u}
+        (AnalyticSpace.isCLinearHom_map_comp punctureCover.{u}
+          (AnalyticSpace.okaMap sqFamily.{u})) =
+      AnalyticSpace.okaMap sqFamily.{u} :=
+  AnalyticSpace.glueMorphisms_map_comp punctureCover.{u} (AnalyticSpace.okaMap sqFamily.{u})
+    sq_compat.{u}
 
 end

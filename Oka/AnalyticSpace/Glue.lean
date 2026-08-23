@@ -59,6 +59,10 @@ carry the three together, bundle then.
   structures on its members — the hypothesis in the form a geometric input arrives in.
 - `ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear`: `ComplexAnalytic.AnalyticSpace.ofGlueData`
   with that hypothesis in place of the sheaf-condition one.
+- `ComplexAnalytic.AnalyticSpace.glueMorphisms`: **a morphism of analytic spaces glued from
+  `ℂ`-linear morphisms out of the members of an open cover.** The object-level constructions above
+  build the source; this is the morphism-level statement, and it is the first thing a space glued
+  out of more than one piece needs.
 
 ## Main results
 
@@ -78,6 +82,10 @@ carry the three together, bundle then.
   `ComplexAnalytic.AnalyticSpace.algebraMap_ofGlueDataCLinear_comapAlgMap`: the hypothesis is
   automatic when the structures come from the gluing, and in that case the construction returns
   the structure it came from.
+- `ComplexAnalytic.AnalyticSpace.isCLinearHom_glueMorphisms`: **the glued morphism is
+  `ℂ`-linear**, which is what makes `ComplexAnalytic.AnalyticSpace.glueMorphisms` possible, and
+  `ComplexAnalytic.AnalyticSpace.glueMorphisms_map_comp`: the hypotheses are automatic for the
+  restrictions of a single morphism, and the construction returns it.
 
 ## What is not here
 
@@ -91,14 +99,13 @@ carry the three together, bundle then.
   (`Oka/Analytification/DistinguishedOpen.lean` says so). The glue data itself is now built —
   `ComplexAnalytic.coverGlueData` in `Oka/Analytification/AffineCover.lean` — and so is the
   passage from a glue data to an analytic space, below, and the two are put together in
-  `OkaTest/AffineCover.lean`. The input is still the cover **as data** rather than a scheme, since
-  this repository constructs no `AlgebraicGeometry.Scheme` beyond Mathlib's `Spec` and has no
-  cover API for one.
-* **A morphism-level statement.** `AlgebraicGeometry.LocallyRingedSpace.OpenCover.glueMorphisms`
-  glues morphisms of locally ringed spaces, and a `ℂ`-linear version — a morphism of analytic
-  spaces glued from `ℂ`-linear pieces — is not stated, because `ComplexAnalytic.IsCLinearHom` is
-  a condition on *global* sections and checking it for the glued morphism is a second gluing.
-  Nothing needs it yet.
+  `OkaTest/AffineCover.lean` and `OkaTest/ProjectiveLine.lean`. The input is still the cover **as
+  data** rather than a scheme, since this repository constructs no `AlgebraicGeometry.Scheme`
+  beyond Mathlib's `Spec` and has no cover API for one.
+* **The analytification of a *morphism* of non-affine spaces.**
+  `ComplexAnalytic.AnalyticSpace.glueMorphisms` below now glues a morphism out of a covered
+  analytic space, which is the ingredient that was missing; what is still absent is anything that
+  produces the pieces from a morphism of presentations covering-wise. Nothing needs it yet.
 -/
 
 open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry Topology
@@ -389,6 +396,116 @@ lemma ofGlueData_toLocallyRingedSpace (D : LocallyRingedSpace.GlueData.{u})
     (h : ∀ j, HasLocalModels (D.U j) (α j)) :
     (ofGlueData D α hα h).toLocallyRingedSpace = D.toGlueData.glued :=
   rfl
+
+/-! ### Gluing a morphism
+
+`AlgebraicGeometry.LocallyRingedSpace.OpenCover.glueMorphisms` glues morphisms of locally ringed
+spaces out of the members of an open cover. What it does not give is the `ℂ`-linearity of the
+result, and that is not formal: `ComplexAnalytic.IsCLinearHom` is a condition on **global**
+sections, while each piece gives it only after restriction to its member.
+
+**The second gluing that closes the gap is already written.** The two structures to be compared
+are `AlgebraicGeometry.LocallyRingedSpace.comapAlgMap` of the glued morphism and `X.algebraMap`;
+they agree after pullback along every `𝒰.map j`, and
+`AlgebraicGeometry.LocallyRingedSpace.OpenCover.glueAlgMapRestrict_comapAlgMap` — the round trip
+saying that gluing the family a global structure induces on the members returns that structure —
+turns "agree on the cover" into "equal". So no sheaf argument is written here; the one written for
+the object-level gluing is reused. **`ComplexAnalytic.IsCLinearHom.of_comp`, which has discharged
+every other `ℂ`-linearity obligation in this development, does *not* apply**: it wants a
+factorisation through a common target, and here the cover is on the *source*.
+-/
+
+/-- **The morphism glued from `ℂ`-linear pieces is `ℂ`-linear.**
+
+The hypothesis on each piece is `ℂ`-linearity for the structure the member inherits from `X` —
+`AlgebraicGeometry.LocallyRingedSpace.comapAlgMap (𝒰.map j) X.algebraMap` — which is the form in
+which it arrives, since a member of an `AlgebraicGeometry.LocallyRingedSpace.OpenCover` is an
+abstract space mapping in and carries no structure of its own. -/
+theorem isCLinearHom_glueMorphisms {X Y : AnalyticSpace.{u}}
+    (𝒰 : X.toLocallyRingedSpace.OpenCover) (f : ∀ j, 𝒰.obj j ⟶ Y.toLocallyRingedSpace)
+    (hf : ∀ x y, Limits.pullback.fst (𝒰.map x) (𝒰.map y) ≫ f x =
+      Limits.pullback.snd (𝒰.map x) (𝒰.map y) ≫ f y)
+    (hlin : ∀ j, IsCLinearHom (f j)
+      (LocallyRingedSpace.comapAlgMap (𝒰.map j) X.algebraMap) Y.algebraMap) :
+    IsCLinearHom (𝒰.glueMorphisms f hf) X.algebraMap Y.algebraMap := by
+  suffices h : LocallyRingedSpace.comapAlgMap (𝒰.glueMorphisms f hf) Y.algebraMap =
+      X.algebraMap from fun c ↦ congrArg (fun m : ℂ →+* _ ↦ m c) h
+  have key : ∀ j, LocallyRingedSpace.comapAlgMap (𝒰.map j)
+      (LocallyRingedSpace.comapAlgMap (𝒰.glueMorphisms f hf) Y.algebraMap) =
+      LocallyRingedSpace.comapAlgMap (𝒰.map j) X.algebraMap := by
+    intro j
+    rw [← LocallyRingedSpace.comapAlgMap_comp, 𝒰.ι_glueMorphisms f hf j]
+    exact RingHom.ext (hlin j)
+  have e1 := 𝒰.glueAlgMapRestrict_comapAlgMap
+    (LocallyRingedSpace.comapAlgMap (𝒰.glueMorphisms f hf) Y.algebraMap)
+  have e2 := 𝒰.glueAlgMapRestrict_comapAlgMap X.algebraMap
+  rw [← e1, ← e2]
+  congr 1
+  exact funext fun j ↦ congrArg (𝒰.restrictAlgMap j) (key j)
+
+/-- **A morphism of complex analytic spaces glued from `ℂ`-linear morphisms out of the members of
+an open cover of its source.**
+
+The underlying morphism is `AlgebraicGeometry.LocallyRingedSpace.OpenCover.glueMorphisms`; the
+content of this definition is the field, which is
+`ComplexAnalytic.AnalyticSpace.isCLinearHom_glueMorphisms`. -/
+def glueMorphisms {X Y : AnalyticSpace.{u}} (𝒰 : X.toLocallyRingedSpace.OpenCover)
+    (f : ∀ j, 𝒰.obj j ⟶ Y.toLocallyRingedSpace)
+    (hf : ∀ x y, Limits.pullback.fst (𝒰.map x) (𝒰.map y) ≫ f x =
+      Limits.pullback.snd (𝒰.map x) (𝒰.map y) ≫ f y)
+    (hlin : ∀ j, IsCLinearHom (f j)
+      (LocallyRingedSpace.comapAlgMap (𝒰.map j) X.algebraMap) Y.algebraMap) : X ⟶ Y :=
+  ⟨𝒰.glueMorphisms f hf, isCLinearHom_glueMorphisms 𝒰 f hf hlin⟩
+
+/-- The underlying morphism of locally ringed spaces of
+`ComplexAnalytic.AnalyticSpace.glueMorphisms`. -/
+lemma toLRSHom_glueMorphisms {X Y : AnalyticSpace.{u}} (𝒰 : X.toLocallyRingedSpace.OpenCover)
+    (f : ∀ j, 𝒰.obj j ⟶ Y.toLocallyRingedSpace)
+    (hf : ∀ x y, Limits.pullback.fst (𝒰.map x) (𝒰.map y) ≫ f x =
+      Limits.pullback.snd (𝒰.map x) (𝒰.map y) ≫ f y)
+    (hlin : ∀ j, IsCLinearHom (f j)
+      (LocallyRingedSpace.comapAlgMap (𝒰.map j) X.algebraMap) Y.algebraMap) :
+    (glueMorphisms 𝒰 f hf hlin).toLRSHom = 𝒰.glueMorphisms f hf :=
+  rfl
+
+/-- **It restricts to the given morphism on each member**, which is what a caller consumes.
+Uniqueness is `AlgebraicGeometry.LocallyRingedSpace.OpenCover.existsUnique_glueMorphisms` at the
+locally-ringed-space level and needs no `ℂ`-linear version:
+`ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace` is faithful, so a morphism of analytic
+spaces is determined by its underlying one. -/
+lemma ι_glueMorphisms {X Y : AnalyticSpace.{u}} (𝒰 : X.toLocallyRingedSpace.OpenCover)
+    (f : ∀ j, 𝒰.obj j ⟶ Y.toLocallyRingedSpace)
+    (hf : ∀ x y, Limits.pullback.fst (𝒰.map x) (𝒰.map y) ≫ f x =
+      Limits.pullback.snd (𝒰.map x) (𝒰.map y) ≫ f y)
+    (hlin : ∀ j, IsCLinearHom (f j)
+      (LocallyRingedSpace.comapAlgMap (𝒰.map j) X.algebraMap) Y.algebraMap) (j : 𝒰.J) :
+    𝒰.map j ≫ (glueMorphisms 𝒰 f hf hlin).toLRSHom = f j :=
+  𝒰.ι_glueMorphisms f hf j
+
+/-- **The `ℂ`-linearity hypothesis is automatic for the restrictions of a single morphism.**
+
+`ComplexAnalytic.AnalyticSpace.comapAlgMap_toLRSHom` is the whole content: the structure a member
+inherits from `X` is what `φ` pulls back from `Y`. This is the analogue for morphisms of
+`ComplexAnalytic.glueDataCLinear_comapAlgMap`. -/
+theorem isCLinearHom_map_comp {X Y : AnalyticSpace.{u}} (𝒰 : X.toLocallyRingedSpace.OpenCover)
+    (φ : X ⟶ Y) (j : 𝒰.J) :
+    IsCLinearHom (𝒰.map j ≫ φ.toLRSHom)
+      (LocallyRingedSpace.comapAlgMap (𝒰.map j) X.algebraMap) Y.algebraMap := fun c ↦
+  congrArg (fun m : ℂ →+* _ ↦ m c)
+    ((LocallyRingedSpace.comapAlgMap_comp (𝒰.map j) φ.toLRSHom Y.algebraMap).trans
+      (congrArg (LocallyRingedSpace.comapAlgMap (𝒰.map j)) (comapAlgMap_toLRSHom φ)))
+
+/-- **And in that case the construction returns the morphism it came from** — the round trip, and
+what says the output is the intended one rather than merely well-typed. Together with
+`ComplexAnalytic.AnalyticSpace.isCLinearHom_map_comp` it says the hypotheses are not merely
+satisfiable but automatic where the answer is already known. -/
+theorem glueMorphisms_map_comp {X Y : AnalyticSpace.{u}}
+    (𝒰 : X.toLocallyRingedSpace.OpenCover) (φ : X ⟶ Y)
+    (hf : ∀ x y, Limits.pullback.fst (𝒰.map x) (𝒰.map y) ≫ (𝒰.map x ≫ φ.toLRSHom) =
+      Limits.pullback.snd (𝒰.map x) (𝒰.map y) ≫ (𝒰.map y ≫ φ.toLRSHom)) :
+    glueMorphisms 𝒰 (fun j ↦ 𝒰.map j ≫ φ.toLRSHom) hf (isCLinearHom_map_comp 𝒰 φ) = φ :=
+  forgetToLocallyRingedSpace.map_injective
+    (𝒰.hom_ext _ _ fun j ↦ 𝒰.ι_glueMorphisms _ hf j)
 
 end AnalyticSpace
 
