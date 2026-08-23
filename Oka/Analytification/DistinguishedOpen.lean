@@ -85,10 +85,16 @@ where `D(z₀)` is the punctured axis that `OkaTest/OpenSubspace.lean` builds by
   vanish there.
 - `ComplexAnalytic.localisationOpen_ne_top`: **`D(f)` is a proper open subset** whenever `f` has a
   zero on `X^an`.
+- `ComplexAnalytic.localisationOpen_mul`: **`D(f · f') = D(f) ⊓ D(f')`** — the triple overlap of
+  an affine cover, as one of the opens this file is about rather than an intersection of two.
 - `ComplexAnalytic.isOpenImmersion_localisationProj`: **the projection is an open immersion of
   locally ringed spaces** — the `f_open` field of any
   `AlgebraicGeometry.LocallyRingedSpace.GlueData` built out of an affine cover, and the second
   thing such a glue data needs from this file, alongside the isomorphism.
+- `ComplexAnalytic.range_base_localisationProj`: **the image of the projection is exactly
+  `D(f)`** — the equality, where `ComplexAnalytic.range_base_localisationProj_subset` is the
+  containment. The side condition of an open-immersion lift is a containment *in* this range, so
+  the equality is what lets a statement about `D(f)` discharge it.
 
 ## What is not here
 
@@ -534,7 +540,41 @@ theorem localisationOpen_ne_top (y : AnalyticSpace.analytification.{u} g)
   rw [hcon]
   trivial
 
+/-- **`D(f · f') = D(f) ⊓ D(f')`.**
+
+The triple-overlap identity a glue data built from an affine cover needs: in `A_i^an` the overlap
+of `D(f_ij)` with `D(f_ik)` is the distinguished open of the product, so it is again one of the
+opens this file is about rather than merely an intersection of two.
+
+`ComplexAnalytic.polyToGlobal` is a ring map, so the section of the product is the product of the
+sections, and `ComplexAnalytic.AnalyticSpace.nonvanishing_mul` is the statement for sections. -/
+theorem localisationOpen_mul (f' : MvPolynomial (ULift.{u} (Fin n)) ℂ) :
+    localisationOpen.{u} g (f * f') =
+      localisationOpen.{u} g f ⊓ localisationOpen.{u} g f' := by
+  rw [localisationOpen, map_mul, AnalyticSpace.nonvanishing_mul]
+
 /-! ### The projection is an open immersion -/
+
+/-- **The projection factors as the comparison isomorphism followed by the inclusion of `D(f)`**,
+at the locally-ringed-space spelling.
+
+`ComplexAnalytic.localisationIso_hom_ofRestrict` is this equation one level up, between morphisms
+of analytic spaces; this is it after `ComplexAnalytic.AnalyticSpace.Hom.toLRSHom`, which is the
+form both statements below consume, since `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion`
+and `AlgebraicGeometry.LocallyRingedSpace.range_ofRestrict` are about locally ringed spaces. -/
+theorem toLRSHom_localisationProj :
+    (localisationProj.{u} g f).toLRSHom =
+      (localisationIso.{u} g f).hom.toLRSHom ≫
+        ((AnalyticSpace.analytification.{u} g).ofRestrict (localisationOpen.{u} g f)).toLRSHom :=
+  congrArg AnalyticSpace.Hom.toLRSHom (localisationIso_hom_ofRestrict.{u} g f).symm
+
+/-- **The comparison isomorphism is an isomorphism of locally ringed spaces.** It is carried
+across by `ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace`; stated because both
+statements below need it as an instance and instance search does not produce it from the
+`Iso`. -/
+theorem isIso_toLRSHom_localisationIso_hom :
+    IsIso ((localisationIso.{u} g f).hom.toLRSHom) :=
+  (AnalyticSpace.forgetToLocallyRingedSpace.{u}.mapIso (localisationIso.{u} g f)).isIso_hom
 
 /-- **The projection `(A_f)^an ⟶ X^an` is an open immersion of locally ringed spaces.**
 
@@ -562,14 +602,40 @@ theorem isOpenImmersion_localisationProj :
   haveI : LocallyRingedSpace.IsOpenImmersion
       ((AnalyticSpace.analytification.{u} g).ofRestrict (localisationOpen.{u} g f)).toLRSHom :=
     LocallyRingedSpace.isOpenImmersion_ofRestrict.{u} _ (localisationOpen.{u} g f)
-  haveI : IsIso ((localisationIso.{u} g f).hom.toLRSHom) :=
-    (AnalyticSpace.forgetToLocallyRingedSpace.{u}.mapIso (localisationIso.{u} g f)).isIso_hom
-  have e : (localisationProj.{u} g f).toLRSHom =
-      (localisationIso.{u} g f).hom.toLRSHom ≫
-        ((AnalyticSpace.analytification.{u} g).ofRestrict (localisationOpen.{u} g f)).toLRSHom :=
-    congrArg AnalyticSpace.Hom.toLRSHom (localisationIso_hom_ofRestrict.{u} g f).symm
-  rw [e]
+  haveI := isIso_toLRSHom_localisationIso_hom.{u} g f
+  rw [toLRSHom_localisationProj]
   infer_instance
+
+/-- **The image of the projection is exactly `D(f)`.**
+
+`ComplexAnalytic.range_base_localisationProj_subset` is the containment, which is all the
+universal property needs; this is the equality, which is what an open-immersion lift needs — the
+side condition of `AlgebraicGeometry.LocallyRingedSpace.liftRestrict` and of Mathlib's
+`IsOpenImmersion.lift` is a containment *in* this range, so it has to be rewritten into a
+containment in `D(f)` before anything about `D(f)` can discharge it.
+
+The isomorphism half of `ComplexAnalytic.toLRSHom_localisationProj` is surjective on points
+(`AlgebraicGeometry.LocallyRingedSpace.homeoOfIso`), so the image is the image of the inclusion,
+which is `AlgebraicGeometry.LocallyRingedSpace.range_ofRestrict`.
+
+**The last step is `exact` and not `rw`, and that is not a stylistic choice.** `rw
+[LocallyRingedSpace.range_ofRestrict]` here fails with *did not find an occurrence of the
+pattern*: the goal is headed by `ComplexAnalytic.AnalyticSpace.Hom.toLRSHom` and the lemma by
+`AlgebraicGeometry.LocallyRingedSpace.ofRestrict`, which are `rfl`-equal and are different
+discrimination-tree keys — the same seam
+`AlgebraicGeometry.LocallyRingedSpace.isOpenImmersion_ofRestrict` records for instance search.
+The term crosses it; neither instance search nor `rw`'s pattern match does. -/
+theorem range_base_localisationProj :
+    Set.range (localisationProj.{u} g f).toLRSHom.base =
+      (localisationOpen.{u} g f : Set (AnalyticSpace.analytification.{u} g)) := by
+  haveI := isIso_toLRSHom_localisationIso_hom.{u} g f
+  have hs : Set.range (localisationIso.{u} g f).hom.toLRSHom.base = Set.univ :=
+    Set.range_eq_univ.2
+      (LocallyRingedSpace.homeoOfIso (asIso ((localisationIso.{u} g f).hom.toLRSHom))).surjective
+  rw [toLRSHom_localisationProj, LocallyRingedSpace.comp_base, TopCat.coe_comp, Set.range_comp,
+    hs, Set.image_univ]
+  exact (AnalyticSpace.analytification.{u} g).toLocallyRingedSpace.range_ofRestrict
+    (localisationOpen.{u} g f)
 
 end
 

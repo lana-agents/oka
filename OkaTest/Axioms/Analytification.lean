@@ -14,8 +14,9 @@ map on stalks, `X^an ⟶ Spec (ℂ[x]/I)` for a presented affine `ℂ`-algebra, 
 at an arbitrary point — where it becomes a statement about the stalk map itself — the
 analytification as a functor on finitely generated `ℂ`-algebras, the stalk map of the
 comparison morphism of a presented algebra, the naturality of the comparison morphism, the
-faithful flatness of that stalk map, the analytification of a sheaf, and the identification of
-the analytification of `A_f` with the non-vanishing locus of `f`.
+faithful flatness of that stalk map, the analytification of a sheaf, the identification of
+the analytification of `A_f` with the non-vanishing locus of `f`, and the glue data of an affine
+cover with distinguished overlaps.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -757,3 +758,40 @@ info: 'ComplexAnalytic.isOpenImmersion_analytificationMap_localisationPresHom' d
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isOpenImmersion_analytificationMap_localisationPresHom
+
+/-! ### The glue data of an affine cover with distinguished overlaps -/
+
+/--
+info: 'ComplexAnalytic.localisationOpen_mul' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.localisationOpen_mul
+
+/--
+info: 'ComplexAnalytic.range_base_localisationProj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.range_base_localisationProj
+
+/--
+info: 'ComplexAnalytic.coverTransition' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverTransition
+
+/--
+info: 'ComplexAnalytic.coverGlueData' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverGlueData
+
+/--
+info: 'ComplexAnalytic.coverGlueData_U' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverGlueData_U

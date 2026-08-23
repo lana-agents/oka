@@ -70,6 +70,9 @@ with one `Iso.trans` removed.
 - `AlgebraicGeometry.LocallyRingedSpace.OpenCover.existsUnique_glueMorphisms`: **morphisms out of
   the members of an open cover which agree on the overlaps glue to a unique morphism out of the
   whole space**, with `ι_glueMorphisms` and `hom_ext` as the two halves.
+- `AlgebraicGeometry.LocallyRingedSpace.isOpenImmersion_f'`: the `f_open` field of a glue data
+  built by `CategoryTheory.GlueData.ofGlueData'`, which is what makes that route to a
+  `AlgebraicGeometry.LocallyRingedSpace.GlueData` cheaper than building one directly.
 -/
 
 open CategoryTheory CategoryTheory.Limits TopologicalSpace Opposite Topology
@@ -528,9 +531,10 @@ analytic space, `ComplexAnalytic.AnalyticSpace.restrict` makes it an analytic sp
 `ComplexAnalytic.AnalyticSpace.hom_ext_complexAffineSpace` applies to it.
 
 The identification is
-`AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.range_pullback_to_base_of_left` — the
-pullback of two open immersions has as image the intersection of their images — followed by
-`AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.isoOfRangeEq`. -/
+`AlgebraicGeometry.LocallyRingedSpace.restrictInfIsoPullback`, which packages exactly that: the
+pullback of two open immersions has as image the intersection of their images
+(`…IsOpenImmersion.range_pullback_to_base_of_left`), so `…IsOpenImmersion.isoOfRangeEq` identifies
+it with `X|(U ⊓ V)`. -/
 theorem existsUnique_glueMorphisms_of_opens {X Y : LocallyRingedSpace.{u}} {ι : Type u}
     (U : ι → Opens X) (hU : ∀ x : X, ∃ i, x ∈ U i)
     (f : ∀ i, X.restrict (U i).isOpenEmbedding ⟶ Y)
@@ -542,37 +546,40 @@ theorem existsUnique_glueMorphisms_of_opens {X Y : LocallyRingedSpace.{u}} {ι :
       (X.ofRestrict (U j).isOpenEmbedding) ≫ f i =
     pullback.snd (X.ofRestrict (U i).isOpenEmbedding)
       (X.ofRestrict (U j).isOpenEmbedding) ≫ f j
-  have hcond : X.restrictLE (inf_le_left : U i ⊓ U j ≤ U i) ≫
-        X.ofRestrict (U i).isOpenEmbedding =
-      X.restrictLE (inf_le_right : U i ⊓ U j ≤ U j) ≫ X.ofRestrict (U j).isOpenEmbedding := by
-    rw [restrictLE_fac, restrictLE_fac]
-  set e := pullback.lift _ _ hcond with he
-  have hfst : e ≫ pullback.fst (X.ofRestrict (U i).isOpenEmbedding)
-      (X.ofRestrict (U j).isOpenEmbedding) = X.restrictLE inf_le_left :=
-    pullback.lift_fst _ _ hcond
-  have hsnd : e ≫ pullback.snd (X.ofRestrict (U i).isOpenEmbedding)
-      (X.ofRestrict (U j).isOpenEmbedding) = X.restrictLE inf_le_right :=
-    pullback.lift_snd _ _ hcond
-  have hrange : Set.range (X.ofRestrict (U i ⊓ U j).isOpenEmbedding).base =
-      Set.range (pullback.fst (X.ofRestrict (U i).isOpenEmbedding)
-        (X.ofRestrict (U j).isOpenEmbedding) ≫ X.ofRestrict (U i).isOpenEmbedding).base := by
-    rw [IsOpenImmersion.range_pullback_to_base_of_left, range_ofRestrict, range_ofRestrict,
-      range_ofRestrict]
-    rfl
-  haveI : IsIso e := by
-    have huniq := IsOpenImmersion.lift_uniq
-      (pullback.fst (X.ofRestrict (U i).isOpenEmbedding) (X.ofRestrict (U j).isOpenEmbedding) ≫
-        X.ofRestrict (U i).isOpenEmbedding)
-      (X.ofRestrict (U i ⊓ U j).isOpenEmbedding) (le_of_eq hrange) e
-      (by rw [← Category.assoc, hfst, restrictLE_fac])
-    rw [show e = (IsOpenImmersion.isoOfRangeEq (X.ofRestrict (U i ⊓ U j).isOpenEmbedding)
-      (pullback.fst (X.ofRestrict (U i).isOpenEmbedding)
-        (X.ofRestrict (U j).isOpenEmbedding) ≫ X.ofRestrict (U i).isOpenEmbedding)
-      hrange).hom from huniq]
-    infer_instance
-  rw [← cancel_epi e, ← Category.assoc, ← Category.assoc, hfst, hsnd]
+  rw [← cancel_epi (X.restrictInfIsoPullback (U i) (U j)).hom, ← Category.assoc, ← Category.assoc,
+    restrictInfIsoPullback_hom_fst, restrictInfIsoPullback_hom_snd]
   exact hf i j
 
 end GlueOverOpens
+
+section GlueDataPrime
+
+/-- **The morphisms of the glue data `CategoryTheory.GlueData.ofGlueData'` builds are open
+immersions as soon as the ones it was given are.**
+
+`CategoryTheory.GlueData'` asks for the overlaps only when `i ≠ j` and discharges `f_id`, `t_id`
+and the degenerate branches of `t'`, which is a large part of the obligations of a glue data and
+exactly the part that is bookkeeping. What it does not carry is
+`AlgebraicGeometry.LocallyRingedSpace.GlueData`'s `f_open` field, and the morphism that field is
+checked against is `CategoryTheory.GlueData'.f'`, a `dif` on `i = j`. This says the `dif` costs
+nothing: on the diagonal `f'` is an `eqToHom`, hence an isomorphism, hence an open immersion; off
+it, it is an `eqToHom` followed by the given morphism.
+
+**Worth stating because `CategoryTheory.GlueData.ofGlueData'` has no call sites in Mathlib at
+all** — `grep` finds it only in its own defining file — so it has no projection or `simp` lemmas
+and a caller has no way to know in advance which of its fields are cheap to use. This one is; the
+`V`, `t` and `t'` fields are not, and nothing in this repository looks at them, since
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.openCover` and hence
+`ComplexAnalytic.AnalyticSpace.ofGlueData` read only `U`, `ι` and `glued`. -/
+theorem isOpenImmersion_f' (D : CategoryTheory.GlueData' LocallyRingedSpace.{u})
+    (h : ∀ i j hij, IsOpenImmersion (D.f i j hij)) (i j : D.J) :
+    IsOpenImmersion (D.f' i j) := by
+  dsimp only [CategoryTheory.GlueData'.f']
+  split_ifs with hij
+  · infer_instance
+  · haveI := h i j hij
+    infer_instance
+
+end GlueDataPrime
 
 end AlgebraicGeometry.LocallyRingedSpace

@@ -417,3 +417,17 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.isOpenImmersion_ofRestrict' depends 
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.isOpenImmersion_ofRestrict
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.restrictInfIsoPullback' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.restrictInfIsoPullback
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.isOpenImmersion_f'' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.isOpenImmersion_f'

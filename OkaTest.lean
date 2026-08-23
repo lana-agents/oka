@@ -1,3 +1,4 @@
+import OkaTest.AffineCover
 import OkaTest.AnalyticSpaceGlue
 import OkaTest.AnalyticSpaceLocal
 import OkaTest.Analytification
