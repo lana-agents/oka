@@ -398,3 +398,66 @@ info: 'AlgebraicGeometry.Scheme.Modules.module_finite_moduleSpecΓFunctor_obj' d
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.Scheme.Modules.module_finite_moduleSpecΓFunctor_obj
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.overEquivUnitIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.overEquivUnitIso
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.generatingSectionsRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.generatingSectionsRestrict
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.finite_I_generatingSectionsRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.finite_I_generatingSectionsRestrict
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.module_finite_sections_of_restrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.module_finite_sections_of_restrict
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.module_finite_Γ_of_isAffine' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.module_finite_Γ_of_isAffine
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.module_finite_sections_of_isAffineOpen' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.module_finite_sections_of_isAffineOpen
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.isScalarTower_sections' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.isScalarTower_sections
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.module_finite_sections_basicOpen' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.module_finite_sections_basicOpen
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.module_finite_moduleSpecΓFunctor_obj_of_isFiniteType'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.module_finite_moduleSpecΓFunctor_obj_of_isFiniteType
