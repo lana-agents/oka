@@ -25,6 +25,7 @@ import Oka.AlgebraicGeometry.GammaSpecAdjunction
 import Oka.AlgebraicGeometry.Modules.Sheaf
 import Oka.AlgebraicGeometry.Modules.Tilde
 import Oka.AlgebraicGeometry.StructureSheaf
+import Oka.Analysis.Complex.CoveringMap
 import Oka.Analytic.DividedDifference
 import Oka.Analytic.ParametricCircleIntegral
 import Oka.AnalyticSpace.Basic

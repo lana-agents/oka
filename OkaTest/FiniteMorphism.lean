@@ -55,6 +55,12 @@ of germs, so an analytic local inverse makes it bijective — applied at Mathlib
 `z ↦ z²`. Nothing here builds a branch of the square root, and the *only* use of the puncture is
 that `2z ≠ 0`.
 
+**With the topological field — `ComplexAnalytic.isLocalHomeomorph_base_sq`, from Mathlib's
+`isCoveringMap_npow` — and finiteness, this assembles into
+`ComplexAnalytic.isFiniteEtale_sq`.** That is the statement the two rungs were for: a finite étale
+morphism which is **not** an isomorphism, so `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` is
+strictly larger than the isomorphisms and neither rung is idle.
+
 ## What is not checked here
 
 * **Nothing about structure sheaves.** `ComplexAnalytic.AnalyticSpace.IsFinite` is a condition on
@@ -68,17 +74,20 @@ that `2z ≠ 0`.
 * **No finite étale morphism other than an isomorphism.** `ComplexAnalytic.axisIncl` is finite and
   is *not* a local isomorphism (`ComplexAnalytic.not_isLocalIso_axisIncl`), which is what says the
   second rung restricts the first; but the only positive witness for
-  `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` here is still the identity. **The candidate is
-  built, its stalk maps are isomorphisms, and its finiteness is not claimed**:
-  `ComplexAnalytic.sq`, the squaring map of the punctured line, exists below and is proved not
-  injective and, separately, not an isomorphism (`ComplexAnalytic.not_isIso_sq`) — but
-  `ComplexAnalytic.AnalyticSpace.IsFinite` is not proved for it, `…IsLocalIso` needs a
-  topological field that is not here, and neither should be read into any statement below.
-* **The stalk half of `ComplexAnalytic.AnalyticSpace.IsLocalIso` is exercised, and the
-  topological half is not.** `ComplexAnalytic.isIso_stalkMap_sq` below proves the stalk field for
-  `ComplexAnalytic.sq` — the first isomorphism of stalks in this repository that is neither an
-  identity nor a field of an `IsCutOutBy` — but `IsLocalHomeomorph sq.toLRSHom.base` is **not**
-  proved here, so `…IsLocalIso sq` is not stated and must not be read into anything below.
+  `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` here is **no longer** the identity, and the two
+  bullets that used to stand here are retired rather than weakened. `ComplexAnalytic.sq`, the
+  squaring map of the punctured line, is proved finite (`ComplexAnalytic.isFinite_sq`), a local
+  homeomorphism (`ComplexAnalytic.isLocalHomeomorph_base_sq`), an isomorphism on every stalk
+  (`ComplexAnalytic.isIso_stalkMap_sq`) and **not** an isomorphism
+  (`ComplexAnalytic.not_isIso_sq`) — hence `ComplexAnalytic.isFiniteEtale_sq`, a finite étale
+  morphism which is not an isomorphism. **The stalk half of
+  `ComplexAnalytic.AnalyticSpace.IsLocalIso` is exercised by it**, and by nothing else: the
+  non-example `ComplexAnalytic.axisIncl` fails the topological field alone.
+* **Nothing here is a covering map.** `ComplexAnalytic.sq` is the two-sheeted cover of the
+  punctured line and Mathlib's `isCoveringMap_npow` says so about `z ↦ z²` on `{z : ℂ // z ≠ 0}`,
+  but no statement here is about `IsCoveringMap` of a morphism of *analytic spaces*, and the
+  theorem that a finite local isomorphism onto a connected base is one — the third rung — is not
+  proved anywhere in this repository.
 -/
 
 open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry Topology Filter
@@ -352,7 +361,8 @@ and the range is neither, being nonempty and not all of `ℂ²`
 
 **Nothing about stalks is used**: the topological field alone fails. That is worth saying, because
 it means the example does not exercise
-`ComplexAnalytic.AnalyticSpace.IsLocalIso.isIso_stalkMap`, and nothing here does. -/
+`ComplexAnalytic.AnalyticSpace.IsLocalIso.isIso_stalkMap` — `ComplexAnalytic.isIso_stalkMap_sq`
+is what does, and it is a different map. -/
 theorem not_isLocalIso_axisIncl : ¬ AnalyticSpace.IsLocalIso axisIncl.{u} := by
   intro h
   haveI : PreconnectedSpace (AnalyticSpace.complexAffineSpace.{u} 2) :=
@@ -376,27 +386,29 @@ theorem not_isFiniteEtale_axisIncl : ¬ AnalyticSpace.IsFiniteEtale axisIncl.{u}
 
 /-- **And the class is not empty**: the identity is finite étale.
 
-This is the degenerate witness and it is the only positive one here. **A finite étale morphism
-which is not an isomorphism is not exhibited anywhere in this repository**, and building one needs
-a source that is not simply connected — `z ↦ z²` from `ℂ ∖ {0}` to itself is the standard
-example, needing `ComplexAnalytic.AnalyticSpace.restrict` on both sides and the square map. Until
-that exists, everything below the identity is unexercised, and no statement here should be read as
-saying otherwise. -/
+This is the degenerate witness. It is kept because it is the cheapest possible check that
+`ComplexAnalytic.AnalyticSpace.IsFiniteEtale` is inhabited at all, and because it was for a while
+the *only* one: the non-degenerate witness is `ComplexAnalytic.isFiniteEtale_sq` below, `z ↦ z²`
+from `ℂ ∖ {0}` to itself, which needed `ComplexAnalytic.AnalyticSpace.liftRestrict`, a
+covering-map statement from Mathlib and a germ dictionary to state. **Neither witness makes the
+other redundant**: this one says the class is nonempty at zero cost, and that one says it is
+larger than the isomorphisms. -/
 example : AnalyticSpace.IsFiniteEtale (𝟙 (AnalyticSpace.complexAffineSpace.{u} 1)) :=
   inferInstance
 
 /-! ### The squaring map of the punctured line, and its stalk maps
 
-The limitation recorded above — that the only positive witness for
-`ComplexAnalytic.AnalyticSpace.IsFiniteEtale` is the identity — is about `ℂ ∖ {0}` and `z ↦ z²`,
-and **this section builds that map and proves its stalk maps are isomorphisms.** The construction
-came first and was the part nobody had priced: a morphism whose *target* is an open subspace
-needed `ComplexAnalytic.AnalyticSpace.liftRestrict`, which did not exist.
+The limitation this file used to record — that the only positive witness for
+`ComplexAnalytic.AnalyticSpace.IsFiniteEtale` was the identity — was about `ℂ ∖ {0}` and `z ↦ z²`,
+and **this section builds that map**; the two after it prove everything the witness needs, and
+`ComplexAnalytic.isFiniteEtale_sq` at the end retires the limitation. It is
+here because the construction was the part nobody had priced: a morphism whose *target* is an open
+subspace needed `ComplexAnalytic.AnalyticSpace.liftRestrict`, which did not exist.
 
-What is proved is that the map exists, what its underlying map is, that it is **not injective**
-and hence not an isomorphism, and — in the subsection below — that every one of its stalk maps
-*is* an isomorphism. What is *not* proved is `IsFinite`, the topological field of `IsLocalIso`, or
-`IsFiniteEtale`; see `## What is not checked here`. -/
+This section proves that the map exists, what its underlying map is, and that it is **not
+injective** and hence not an isomorphism. The next proves it **finite** and a **local
+homeomorphism**; the one after that proves every one of its **stalk maps is an isomorphism**; and
+`ComplexAnalytic.isFiniteEtale_sq` at the end assembles them. -/
 
 /-- **The squaring map `ℂ ⟶ ℂ`**, before restricting to the punctured line: the morphism
 `OkaTest/HolomorphicMap.lean` builds from `sqFamily` and proves is not the identity
@@ -497,9 +509,9 @@ theorem not_injective_base_sq :
       ULift.{u} (Fin 1) → ℂ) = _ from base_sq.{u} _]
   norm_num
 
-/-- **So it is not an isomorphism**, which is what makes the map worth building: if it is ever
-shown finite étale then `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` will contain something the
-identity does not.
+/-- **So it is not an isomorphism**, which is what makes the map worth building: with
+`ComplexAnalytic.isFiniteEtale_sq` below, `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` contains
+something the identity does not.
 
 An isomorphism of analytic spaces gives a homeomorphism of the underlying spaces through
 `ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace` and
@@ -508,12 +520,133 @@ functor is applied to the *iso* rather than the morphism, so no instance has to 
 `ComplexAnalytic.AnalyticSpace.Hom.toLRSHom` — the seam
 `ComplexAnalytic.AnalyticSpace.isLocalIso_of_isIso` documents does not arise on this route.
 
-**This is still not a statement that it is finite étale.** -/
+**This is not itself a statement that it is finite étale**; that is
+`ComplexAnalytic.isFiniteEtale_sq`, which needs the three sections below. -/
 theorem not_isIso_sq : ¬ IsIso sq.{u} := fun _ ↦
   not_injective_base_sq.{u}
     (LocallyRingedSpace.homeoOfIso
       (AnalyticSpace.forgetToLocallyRingedSpace.{u}.mapIso (asIso sq.{u}))).injective
 
+/-! ### `sq` is finite, and a local homeomorphism
+
+The two topological halves of the witness. **Neither of them is about stalks**; the stalk field of
+`ComplexAnalytic.AnalyticSpace.IsLocalIso` is the section after this one, and
+`ComplexAnalytic.isLocalIso_sq` puts them together.
+
+Both halves go through one bridge — `ComplexAnalytic.puncturedHomeo`, which identifies the
+underlying space of the punctured line with `{z : ℂ // z ≠ 0}` — and then quote Mathlib about
+`x ↦ x ^ 2` on the nonzero elements of `ℂ`. **The analysis is not done here and was not written
+here**: `isCoveringMap_npow` is Mathlib's, and `isClosedMap_npow` and `finite_fiber_npow` are in
+`Oka/Analysis/Complex/CoveringMap.lean`, stated for an arbitrary proper normed field because
+nothing in them is complex-analytic. -/
+
+/-- **`z ↦ z ^ 2` on the nonzero complex numbers**, in the exact form Mathlib's
+`isCoveringMap_npow`, `isClosedMap_npow` and `finite_fiber_npow` are stated in. Named so that the
+three quotations below need no `convert`. -/
+def npowPunctured : {z : ℂ // z ≠ 0} → {z : ℂ // z ≠ 0} :=
+  fun z ↦ ⟨z ^ 2, pow_ne_zero 2 z.2⟩
+
+/-- **The underlying space of the punctured line is `ℂ ∖ {0}`.**
+
+`ComplexAnalytic.punctured` is an open of `ℂ¹ = ULift (Fin 1) → ℂ`, so the underlying space of
+the restriction is a subtype of a one-element function type rather than of `ℂ`.
+`Homeomorph.funUnique` removes the function type and `Homeomorph.subtype` carries the membership
+condition across, using `ComplexAnalytic.mem_punctured_iff`.
+
+**This is the whole of the plumbing**, and both statements below are Mathlib's theorems conjugated
+by it. -/
+def puncturedHomeo :
+    ((AnalyticSpace.complexAffineSpace.{u} 1).restrict punctured.{u} : Type u) ≃ₜ
+      {z : ℂ // z ≠ 0} :=
+  (Homeomorph.funUnique.{u} (ULift.{u} (Fin 1)) ℂ).subtype fun p ↦
+    (mem_punctured_iff.{u} p).trans (by
+      simp only [Homeomorph.funUnique_apply, Subsingleton.elim (ULift.up (0 : Fin 1)) default]
+      exact Iff.rfl)
+
+/-- **Its underlying map is `z ↦ z ^ 2` read through that bridge.** -/
+theorem puncturedHomeo_base_sq
+    (p : ((AnalyticSpace.complexAffineSpace.{u} 1).restrict punctured.{u} : Type u)) :
+    puncturedHomeo.{u} ((ComplexAnalytic.sq.{u}).toLRSHom.base p) =
+      npowPunctured (puncturedHomeo.{u} p) := by
+  refine Subtype.ext ?_
+  change ((ComplexAnalytic.sq.{u}).toLRSHom.base p).1 (ULift.up 0) = _
+  rw [show (((ComplexAnalytic.sq.{u}).toLRSHom.base p).1 : ULift.{u} (Fin 1) → ℂ) = _
+    from base_sq.{u} p]
+  exact (_root_.sq _).symm
+
+/-- **The same, as an equality of maps.**
+
+The composite form, rather than the pointwise one above, is what lets `IsClosedMap` and
+`IsLocalHomeomorph` transfer by composing with a homeomorphism. -/
+theorem base_sq_eq_conj :
+    ((ComplexAnalytic.sq.{u}).toLRSHom.base :
+        ((AnalyticSpace.complexAffineSpace.{u} 1).restrict punctured.{u} : Type u) → _) =
+      puncturedHomeo.{u}.symm ∘ npowPunctured ∘ puncturedHomeo.{u} := by
+  refine funext fun p ↦ ?_
+  rw [Function.comp_apply, Function.comp_apply, ← puncturedHomeo_base_sq.{u} p]
+  exact (puncturedHomeo.{u}.symm_apply_apply _).symm
+
+/-- **The underlying map of `ComplexAnalytic.sq` is closed.**
+
+`isClosedMap_npow` on `ℂ`, conjugated by `ComplexAnalytic.puncturedHomeo`.
+
+**This is the half of `IsFinite` that `OkaTest/FiniteMorphism.lean` warns about.**
+`ComplexAnalytic.not_isClosedMap_base_proj` above is a map whose underlying function is not
+closed, and `ℂ ∖ {0}` is not compact, so no properness shortcut is available at this level; what
+does the work is that `x ↦ x ^ n` is closed on all of a proper normed field and that the nonzero
+elements are exactly the preimage of themselves. -/
+theorem isClosedMap_base_sq :
+    IsClosedMap ((ComplexAnalytic.sq.{u}).toLRSHom.base :
+      ((AnalyticSpace.complexAffineSpace.{u} 1).restrict punctured.{u} : Type u) → _) := by
+  rw [base_sq_eq_conj]
+  exact (puncturedHomeo.{u}.symm.isClosedMap.comp (isClosedMap_npow 2 two_ne_zero)).comp
+    puncturedHomeo.{u}.isClosedMap
+
+/-- **Its fibres are finite.** `finite_fiber_npow` at `n = 2`, carried across the bridge; the
+fibre over `w` is the two square roots of `w`. -/
+theorem finite_fiber_base_sq
+    (y : ((AnalyticSpace.complexAffineSpace.{u} 1).restrict punctured.{u} : Type u)) :
+    Finite (((ComplexAnalytic.sq.{u}).toLRSHom.base :
+      ((AnalyticSpace.complexAffineSpace.{u} 1).restrict punctured.{u} : Type u) → _) ⁻¹' {y}) := by
+  rw [base_sq_eq_conj]
+  have h : ((puncturedHomeo.{u}.symm ∘ npowPunctured ∘ puncturedHomeo.{u}) ⁻¹' {y}) =
+      puncturedHomeo.{u} ⁻¹' (npowPunctured ⁻¹' {puncturedHomeo.{u} y}) := by
+    ext p
+    simp [Homeomorph.symm_apply_eq]
+  rw [h]
+  haveI : Finite (npowPunctured ⁻¹' {puncturedHomeo.{u} y}) :=
+    finite_fiber_npow 2 two_ne_zero (puncturedHomeo.{u} y)
+  exact Finite.of_injective
+    (fun p ↦ (⟨puncturedHomeo.{u} p.1, p.2⟩ : (npowPunctured ⁻¹' {puncturedHomeo.{u} y})))
+    fun a b hab ↦ Subtype.ext (puncturedHomeo.{u}.injective (congrArg Subtype.val hab))
+
+/-- **`ComplexAnalytic.sq` is finite**: closed with finite fibres.
+
+Together with `ComplexAnalytic.not_isIso_sq` this is a finite morphism which is not an
+isomorphism, on a source which is *not* a closed subspace of the target — unlike
+`ComplexAnalytic.axisIncl`, which is finite because it is a closed embedding. **This one field is
+not by itself finite étale**: `ComplexAnalytic.isFiniteEtale_sq` needs it together with the two
+fields of `ComplexAnalytic.AnalyticSpace.IsLocalIso`. -/
+theorem isFinite_sq : AnalyticSpace.IsFinite (ComplexAnalytic.sq.{u}) where
+  isClosedMap := isClosedMap_base_sq.{u}
+  finite_fiber y := finite_fiber_base_sq.{u} y
+
+/-- **The underlying map of `ComplexAnalytic.sq` is a local homeomorphism.**
+
+`isCoveringMap_npow` — Mathlib's, and it is *the* statement that `z ↦ zⁿ` is a covering map of
+`ℂ ∖ {0}` — conjugated by `ComplexAnalytic.puncturedHomeo`. Nothing about the inverse function
+theorem is used here directly; the covering-map statement already contains it.
+
+**This is one of the two fields of `ComplexAnalytic.AnalyticSpace.IsLocalIso`**; the other, that
+every stalk map of `sq` is an isomorphism, is `ComplexAnalytic.isIso_stalkMap_sq` below, and the
+two are assembled in `ComplexAnalytic.isLocalIso_sq`. -/
+theorem isLocalHomeomorph_base_sq :
+    IsLocalHomeomorph ((ComplexAnalytic.sq.{u}).toLRSHom.base :
+      ((AnalyticSpace.complexAffineSpace.{u} 1).restrict punctured.{u} : Type u) → _) := by
+  rw [base_sq_eq_conj]
+  exact (puncturedHomeo.{u}.symm.isLocalHomeomorph.comp
+    (isCoveringMap_npow (𝕜 := ℂ) 2 (by norm_num)).isLocalHomeomorph).comp
+      puncturedHomeo.{u}.isLocalHomeomorph
 /-! ### The stalk maps of the squaring map are isomorphisms
 
 This is the field of `ComplexAnalytic.AnalyticSpace.IsLocalIso` that nothing in this repository
@@ -522,7 +655,8 @@ the local inverse of an analytic function with nonvanishing derivative is analyt
 is the germ dictionary in `Oka/AnalyticSpace/StalkLocalInverse.lean`, which turns such a local
 inverse into an isomorphism of stalks.
 
-**The topological field is not proved here**, so `IsLocalIso sq` is not stated. -/
+**The other field is the section above**, and the two are assembled in
+`ComplexAnalytic.isLocalIso_sq` at the end of the file. -/
 
 /-- `z ↦ z²` is analytic at every point of `ℂ`. -/
 theorem analyticAt_sqFun (x : ℂ) : AnalyticAt ℂ (fun w : ℂ ↦ w ^ 2) x :=
@@ -657,6 +791,37 @@ theorem isIso_stalkMap_sq (x : (AnalyticSpace.complexAffineSpace.{u} 1).restrict
   have hc : IsIso ((((AnalyticSpace.complexAffineSpace.{u} 1).ofRestrict punctured.{u} ≫
       sqAll.{u}).toLRSHom).stalkMap x) := he ▸ hcomp
   exact @LocallyRingedSpace.isIso_stalkMap_liftRestrict _ _ _ _ range_subset_punctured.{u} x hc
+
+/-! ### The witness, assembled
+
+Everything above is a separate statement about `ComplexAnalytic.sq`; this is the one sentence they
+were for. **`ComplexAnalytic.AnalyticSpace.IsFiniteEtale` now has a positive witness other than
+the identity**, and `ComplexAnalytic.not_isIso_sq` says it is not an isomorphism, so the class is
+strictly larger than the isomorphisms.
+
+Neither field is proved here — `IsLocalIso`'s two fields are
+`ComplexAnalytic.isLocalHomeomorph_base_sq` and `ComplexAnalytic.isIso_stalkMap_sq`, and
+`IsFiniteEtale`'s other field is `ComplexAnalytic.isFinite_sq`. -/
+
+/-- **`ComplexAnalytic.sq` is a local isomorphism.** Its two fields are the two preceding
+sections. -/
+theorem isLocalIso_sq : AnalyticSpace.IsLocalIso (ComplexAnalytic.sq.{u}) where
+  isLocalHomeomorph := isLocalHomeomorph_base_sq.{u}
+  isIso_stalkMap x := isIso_stalkMap_sq.{u} x
+
+/-- **`ComplexAnalytic.sq` is finite étale, and it is not an isomorphism.**
+
+This is what `OkaTest/FiniteMorphism.lean` existed to be unable to say. With
+`ComplexAnalytic.not_isIso_sq`, `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` is now known to
+contain something the isomorphisms do not — which is the whole claim `ComplexAnalytic.axisIncl`
+could not make, since it fails the local-isomorphism condition rather than satisfying it.
+
+**It is still not a covering map here.** That a finite local isomorphism onto a connected base is
+an `AlgebraicGeometry`-level `IsCoveringMap` is the third rung and is not proved in this
+repository, and no statement here should be read as it. -/
+theorem isFiniteEtale_sq : AnalyticSpace.IsFiniteEtale (ComplexAnalytic.sq.{u}) where
+  isFinite := isFinite_sq.{u}
+  isLocalIso := isLocalIso_sq.{u}
 
 end
 
