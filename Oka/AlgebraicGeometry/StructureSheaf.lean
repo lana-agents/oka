@@ -11,10 +11,11 @@ import Mathlib.AlgebraicGeometry.StructureSheaf
 
 Material for `Mathlib/AlgebraicGeometry/StructureSheaf.lean`; see `README.md` on the mirror tree.
 
-Mathlib has `AlgebraicGeometry.StructureSheaf.isUnit_toStalk`: the germ of `a` at `x` is a unit
-when `x ∈ basicOpen a`. The converse — that the germ lies in the maximal ideal when `a` lies in
-the prime — is not stated, and it is the direction every consumer wants, because it is the
-hypothesis of the criteria that say a quotient sheaf is *not* zero.
+Mathlib proves the other direction — the germ of `a` at `x` is a unit when `x ∈ basicOpen a` —
+as `isUnit_toStalk` in `Mathlib/AlgebraicGeometry/StructureSheaf.lean`, and **that declaration is
+not `public` under the module system, so it is not merely unstated here but uncitable**. The
+direction below is the one every consumer wants anyway, because it is the hypothesis of the
+criteria that say a quotient sheaf is *not* zero.
 
 Both are one step from the stalk being the localisation at the prime
 (`AlgebraicGeometry.StructureSheaf.IsLocalization.to_stalk`), and the step is
