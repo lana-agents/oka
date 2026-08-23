@@ -543,8 +543,13 @@ spanning `Finset` and the generators over each `D(g)`;
 `AlgebraicGeometry.Scheme.Modules.isLocalizedModule_away_sectionsToBasicOpen` says the restriction
 map exhibits it as the localisation of `Γ M` away from `g`.
 
-**Coherence is neither used nor available**: nothing in this repository proves a sheaf on a `Spec`
-coherent, and the hypotheses here are the two that `OkaTest/AffineSections.lean` exhibits.
+**Coherence is not used**, and the hypotheses here are the two that
+`OkaTest/AffineSections.lean` exhibits. This sentence used to read *"neither used nor available"*,
+as the one on `AlgebraicGeometry.Scheme.Modules.module_finite_moduleSpecΓFunctor_obj` above did;
+**the "available" half is retired** by `AlgebraicGeometry.isCoherentStructureSheaf_spec`, and the
+very sheaf `OkaTest/AffineSections.lean` exhibits is proved coherent there, by
+`OkaTest.AffineSections.isCoherent_cokernel_specXHom`. The "used" half stands: nothing on this
+line wants coherence, and these two hypotheses are the weaker ones.
 
 The localisation instances and the two `Module` instances at the
 `AlgebraicGeometry.modulesSpecToSheaf` spelling are handed over rather than searched for, for the
@@ -652,8 +657,15 @@ presented because both index types are finite
 
 **A finite global presentation is strictly more than quasicoherent-of-finite-type, and the
 strengthening is necessary rather than convenient**: see the module docstring for the
-counterexample. It is *weaker* than `SheafOfModules.IsCoherent`, which is uninstantiated in this
-repository, and `OkaTest/AffineSections.lean` instantiates this one.
+counterexample. It is *weaker* than `SheafOfModules.IsCoherent`, and
+`OkaTest/AffineSections.lean` instantiates **both**, at one sheaf: `𝒪_{Spec A} ⧸ (x)` carries the
+finite global presentation this theorem consumes and is also coherent, by
+`OkaTest.AffineSections.isCoherent_cokernel_specXHom`. So the contrast is between the hypotheses
+and not between what can be exhibited. **The clause here used to say that
+`SheafOfModules.IsCoherent` was uninstantiated in this repository** — already loose, since
+`OkaTest/CoherentFree.lean` instantiates it analytically, and false on a `Spec` since
+`AlgebraicGeometry.isCoherentStructureSheaf_spec`; it is retired rather than renumbered, because
+what it was for was the contrast and the contrast is what changed.
 
 The `Module.FinitePresentation` instance is named at the `𝟭 (ModuleCat R)` spelling before the
 final transport, because that is the spelling `tilde.toTildeΓNatIso.app` presents and search does

@@ -32,9 +32,10 @@ from them, at the ring `A = ℂ[x, y] ⧸ (xy)` that the rest of the test librar
    past the rank-one case, which is the theorem above.
 3. `isCoherent_cokernel_specXFamily` — `𝒪_{Spec A} ⧸ (x)`, a **proper nonzero quotient**:
    `OkaTest.CoherentFree.not_isZero_cokernel_specXFamily` says it is not zero, and
-   `OkaTest.CoherentFree.notMem_maximalIdeal_germ_specX_ptX` says the ideal is not the unit
-   ideal. This is the one at which the relations half of coherence is doing work, since the
-   presenting map is not an epimorphism.
+   `OkaTest.CoherentFree.notMem_maximalIdeal_germ_specX_ptX` says `x` is a unit at the point of
+   the node with `x = 1`, so `x ≠ 0`, so the ideal is not the zero ideal and the quotient is not
+   `𝒪_{Spec A}` back again. This is the one at which the relations half of coherence is doing
+   work, since the presenting map is not an epimorphism.
 4. `isIso_fromTildeΓ_cokernel_specXFamily` —
    `AlgebraicGeometry.Scheme.Modules.isIso_fromTildeΓ_of_isCoherent` applied to it. That theorem
    is the affine dictionary, and `OkaTest/CoherentPresentation.lean` recorded it as stated and
@@ -56,7 +57,8 @@ rather than as a `haveI`. The same seam is documented on
 
 * **That `𝒪_{Spec A} ⧸ (x)` is not free**, and hence that item 3 is not secretly item 2 again.
   `OkaTest/CoherentFree.lean` says the same about its analytification and does not prove it
-  either; what is available is that the quotient is nonzero and the ideal proper.
+  either; what is available is that the quotient is nonzero, i.e. `(x) ≠ 𝒪_{Spec A}`, and that
+  `x ≠ 0`, i.e. `(x)` is not the zero ideal.
 * **That a non-noetherian ring fails.** Nothing here exhibits a ring whose structure sheaf is not
   coherent, so noetherianity is not shown to be necessary. It is not: `𝒪_{Spec A}` is coherent
   for any **coherent** ring `A`, and coherent rings need not be noetherian. That is mathematics
@@ -100,10 +102,18 @@ theorem isCoherent_free_nodeSpec :
 /-- **`𝒪_{Spec A} ⧸ (x)` is coherent**, for `x` the class of the first coordinate.
 
 `AlgebraicGeometry.LocallyRingedSpace.isCoherent_cokernel_sectionsHom` — the two-out-of-three
-step `SheafOfModules.IsCoherent.cokernel` — fed the coherence of the structure sheaf. It is not
-the zero sheaf, by `OkaTest.CoherentFree.not_isZero_cokernel_specXFamily`, and `(x)` is not the
-unit ideal, by `OkaTest.CoherentFree.notMem_maximalIdeal_germ_specX_ptX`; so this is a proper
-nonzero quotient and not a restatement of the free case.
+step `SheafOfModules.IsCoherent.cokernel` — fed with the coherence of the structure sheaf.
+
+**Proper and nonzero, and the two halves come from different lemmas.** It is not the zero sheaf
+by `OkaTest.CoherentFree.not_isZero_cokernel_specXFamily`, which rests on
+`OkaTest.CoherentFree.germ_specXFamily_mem`: `x` lies in the maximal ideal at the prime under the
+origin, so the quotient does not vanish there. And `(x)` is not the *zero* ideal by
+`OkaTest.CoherentFree.notMem_maximalIdeal_germ_specX_ptX`, which says `x` is a **unit** at the
+point of the node with `x = 1` — so `x ≠ 0`, and the quotient is not `𝒪_{Spec A}` back again.
+Note which way round that second lemma points: being a unit somewhere makes `(x)` the whole
+ideal in that stalk and the quotient zero *near that point*. So what it witnesses is `x ≠ 0`, and
+not `(x) ≠ 𝒪` — that one is the first lemma's. Together: a proper nonzero quotient, and not a
+restatement of the free case.
 
 Until this statement the same sheaf was only known to be **finitely presented** after
 analytification; it is now coherent before it. -/

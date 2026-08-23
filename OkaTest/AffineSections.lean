@@ -241,8 +241,9 @@ example (g : nodeA.{u}) :
 
 `AlgebraicGeometry.Scheme.Modules.isLocalizedModule_away_sectionsToBasicOpen_of_isCoherent`, which
 this file recorded as uninstantiable because nothing proved a sheaf on a `Spec` coherent. It is
-strictly weaker than the statement above — it is that statement with a stronger hypothesis — and
-it is instantiated here only because the record said it could not be. -/
+weaker than the statement above — it is that statement with a stronger hypothesis — and it is
+instantiated here only because the record said it could not be. Not *strictly* weaker: that would
+need coherence to be genuinely stronger at some sheaf, and nothing here shows it. -/
 example (g : nodeA.{u}) :
     IsLocalizedModule.Away g
       (Scheme.Modules.sectionsToBasicOpen.{u}
@@ -393,9 +394,11 @@ instance isFinite_specXPresentation : (specXPresentation.{u}).IsFinite where
 and finitely presented coincide, and `Module.Finite nodeA (Γ M)` is already proved above. What
 this checks is that the *hypothesis* is inhabited: that a sheaf on a `Spec` in this repository
 carries a finite global `SheafOfModules.Presentation` at all. Without it
-`AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ` would be a statement with no witness here,
-which is exactly the situation `OkaTest/CoherentPresentation.lean` records for
-`SheafOfModules.IsCoherent`.
+`AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ` would be a statement with no witness here
+— the situation `OkaTest/CoherentPresentation.lean` **used** to record for
+`SheafOfModules.IsCoherent`, and which it now records in the past tense, because
+`AlgebraicGeometry.isCoherentStructureSheaf_spec` supplied the missing witness and
+`OkaTest.AffineSections.isCoherent_cokernel_specXHom` above instantiates it at this very sheaf.
 
 The `IsFinite` instance is supplied positionally, and neither `haveI` nor `letI` of exactly
 `(specXPresentation.{u}).IsFinite` in scope is enough — both leave `failed to synthesize
@@ -412,8 +415,11 @@ example : Module.FinitePresentation nodeA.{u}
 `SheafOfModules.IsFinitePresentation` asks for a finite presentation over the members of some
 covering; `SheafOfModules.Presentation.isFinitePresentation` supplies it from the global one, on
 the trivial covering. So this witness does not exercise the locality — see the module docstring —
-and what it checks is that the class is inhabited on a `Spec` in this repository at all, which is
-what `OkaTest/CoherentPresentation.lean` records is *not* true of `SheafOfModules.IsCoherent`.
+and what it checks is that the class is inhabited on a `Spec` in this repository at all. That
+used to be the point of contrast with `SheafOfModules.IsCoherent`, which
+`OkaTest/CoherentPresentation.lean` recorded as inhabited nowhere on a `Spec`; the contrast is
+gone, because `AlgebraicGeometry.isCoherentStructureSheaf_spec` inhabits it and
+`OkaTest.AffineSections.isCoherent_cokernel_specXHom` does so at this very sheaf.
 
 The universes and the `IsFinite` instance are both supplied positionally, for the reason recorded
 on the previous example: neither is inferred, and `haveI` does not help. -/
