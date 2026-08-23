@@ -334,6 +334,16 @@ coherence statement for arbitrary complex analytic spaces:
   is measured and recorded there: that glue data's `f` and `t` are
   `CategoryTheory.GlueData.ofGlueData'`'s dependent `dite`s.
 
+  `ComplexAnalytic.AnalyticSpace.glueMorphisms`, in the same file, is the morphism-level statement
+  on top of all of that — a morphism *out of* a covered analytic space, glued from `ℂ`-linear
+  morphisms out of the members of an open cover of its source. Its content is that
+  `ComplexAnalytic.IsCLinearHom` is a condition on **global** sections while each piece gives it
+  only after restriction, and the second gluing that closes the gap is the round trip
+  `AlgebraicGeometry.LocallyRingedSpace.OpenCover.glueAlgMapRestrict_comapAlgMap`, already written
+  for the object-level construction. `OkaTest/GlueMorphisms.lean` exercises it only where the
+  hypotheses are automatic — at the restrictions of one morphism, recovered and shown not to be
+  the identity — and **no pair of independent morphisms of analytic spaces is glued anywhere.**
+
 * **Two copies of the affine line, glued along `D(z)` by `z ↦ 1/z`**
   (`OkaTest/ProjectiveLine.lean`). The transition is the automorphism of `ℂ[z, t] ⧸ (t z - 1)`
   exchanging the two variables, and `ComplexAnalytic.lineSwapIso_ne_refl` proves it is **not** the
