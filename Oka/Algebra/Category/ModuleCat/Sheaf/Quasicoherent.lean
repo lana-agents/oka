@@ -19,20 +19,24 @@ presentations, it produces quasicoherent data of `M` on the composite cover. Mat
 the composite is quasicoherent data and **not** that it is finite when the pieces are, which is
 what a construction producing local *finite* presentations needs on the way out.
 
-## The proof is `exact`, and that is the whole point
+## The proof is definitional, and that is the whole point
 
 `SheafOfModules.Presentation.IsFinite` is finiteness of the two index types and nothing else, and
 neither transport `bind` performs — `SheafOfModules.Presentation.map` along the equivalence with
-the iterated slice, then `SheafOfModules.Presentation.ofIsIso` — touches an index type. So the
-finiteness wanted **is** the finiteness given, up to definitional unfolding, and each field is
-discharged by `exact` at the source's instance.
+the iterated slice, then `SheafOfModules.Presentation.ofIsIso` — touches an index type.
+`SheafOfModules.Presentation.map_generators_I` and `SheafOfModules.Presentation.map_relations_I`
+are the statements of that for the first, and both hold by `rfl`. So the finiteness wanted **is**
+the finiteness given, up to definitional unfolding, and each field below is the source's
+`SheafOfModules.GeneratingSections.IsFiniteType.finite` put back inside the constructor.
 
-Instance search does not find it on its own: `bind` and `SheafOfModules.Presentation.ofIsIso` are
-ordinary definitions, so `infer_instance` on the composite goal fails even though every
-intermediate instance exists (Mathlib has one for `ofIsIso`, and one for
-`SheafOfModules.Presentation.map` is a three-line consequence of
-`SheafOfModules.Presentation.map_generators_I`). That is why this is stated rather than left to
-the elaborator at the call site.
+Instance search does not find it on its own, and **the blocker is
+`SheafOfModules.QuasicoherentData.bind` itself and not the layer below it**. `bind` is an ordinary
+definition, so search does not unfold it far enough to see the presentations it is assembled from,
+and never reaches `SheafOfModules.Presentation.ofIsIso` or `SheafOfModules.Presentation.map` at
+all. Mathlib does have an `IsFinite` instance for `ofIsIso` and none for `map`, but that gap is not
+the cause: supplying the missing one — three lines, since both index types are the source's —
+still leaves `infer_instance` failing on the composite goal. That is why this is stated rather
+than left to the elaborator at the call site.
 
 ## Main results
 

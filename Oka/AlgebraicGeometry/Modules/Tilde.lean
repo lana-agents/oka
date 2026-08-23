@@ -34,10 +34,13 @@ passage to a global statement is the quasi-compactness argument on `Spec R`, whi
 repository. A consumer wanting "coherent sheaf on `Spec A` = finitely presented `A`-module" needs
 that step and will not find it here.
 
+## Main definitions
+
+- `AlgebraicGeometry.Scheme.Modules.isoTildeΓ`
+
 ## Main results
 
 - `AlgebraicGeometry.Scheme.Modules.isIso_fromTildeΓ_of_isCoherent`
-- `AlgebraicGeometry.Scheme.Modules.isoTildeΓ`
 -/
 
 @[expose] public section
