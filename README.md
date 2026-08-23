@@ -183,9 +183,15 @@ coherence statement for arbitrary complex analytic spaces:
   **number of sheets is constant**, and that is
   `ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale` — over a *preconnected* target
   any two fibres of a finite étale morphism have the same cardinality, by the clopen argument in
-  `Oka/Topology/Covering/Basic.lean` off the local constancy of a fibre. **The value of that common
-  cardinality is not computed for any morphism**, so nothing here says `z ↦ z²` is two-sheeted, and
-  there is no `degree` function. `ComplexAnalytic.isCoveringMap_base_sq` applies the rung to the
+  `Oka/Topology/Covering/Basic.lean` off the local constancy of a fibre. **That common cardinality
+  is computed for one morphism**: `ComplexAnalytic.card_fiber_base_sq` says every fibre of
+  `z ↦ z²` on the punctured line has exactly **2** points, so the constancy statement has a witness
+  at which the constant is not `1`. Its content is
+  `IsAlgClosed.card_setOf_pow_eq` (`Oka/FieldTheory/IsAlgClosed/Basic.lean`) — over an algebraically
+  closed field `x ^ n = a` has exactly `n` solutions when `(n : F) ≠ 0` and `a ≠ 0` — and not
+  anything about covering maps. The sentence that used to stand here said no such value was computed
+  anywhere; **there is still no `degree` function on morphisms**, and one theorem about one map is
+  not one. `ComplexAnalytic.isCoveringMap_base_sq` applies the rung to the
   squaring map, and is a test of the rung rather than new information about `z ↦ z²`, which
   Mathlib already covers. **There is still no notion of a covering *of analytic spaces***: this is
   a statement about the underlying map, and the stalk field of `…IsLocalIso` plays no part in it.

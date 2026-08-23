@@ -8,9 +8,10 @@ import Oka
 /-!
 # Axiom regression tests: general commutative ring theory
 
-The mirror-tree results about local rings with a coefficient field, about adic completions, and
-about localising at a maximal ideal, and about descent and quotient base change of flatness.
-Nothing here mentions anything complex-analytic.
+The mirror-tree results about local rings with a coefficient field, about adic completions, about
+localising at a maximal ideal, about descent and quotient base change of flatness, about relations
+between elements of a ring localising, and about counting the `n`-th roots of an element of an
+algebraically closed field. Nothing here mentions anything complex-analytic.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -116,3 +117,15 @@ info: 'IsLocalization.exists_fun_eq_sum_of_sum_mul_eq_zero' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms IsLocalization.exists_fun_eq_sum_of_sum_mul_eq_zero
+
+/-! ### Counting `n`-th roots over an algebraically closed field
+
+`Oka/FieldTheory/IsAlgClosed/Basic.lean`, which is what puts a number on the fibres of
+`ComplexAnalytic.sq`. -/
+
+/--
+info: 'IsAlgClosed.card_setOf_pow_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms IsAlgClosed.card_setOf_pow_eq
