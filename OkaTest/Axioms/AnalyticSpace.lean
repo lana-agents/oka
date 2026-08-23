@@ -574,3 +574,47 @@ info: 'ComplexAnalytic.AnalyticSpace.comapAlgMap_toLRSHom' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.comapAlgMap_toLRSHom
+
+/-! ### Gluing a morphism -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isCLinearHom_glueMorphisms' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isCLinearHom_glueMorphisms
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.glueMorphisms' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.glueMorphisms
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.toLRSHom_glueMorphisms' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.toLRSHom_glueMorphisms
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.ι_glueMorphisms' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.ι_glueMorphisms
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isCLinearHom_map_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isCLinearHom_map_comp
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.glueMorphisms_map_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.glueMorphisms_map_comp
