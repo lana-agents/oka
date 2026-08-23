@@ -361,4 +361,72 @@ theorem hom_ext_pullback_pnAxis (i j : ULift.{u} (Fin 2)) (hij : i ≠ j)
     LocallyRingedSpace.range_ofRestrict, LocallyRingedSpace.range_ofRestrict] at hmem
   exact Set.eq_empty_iff_forall_notMem.1 (pnAxis_inf_carrier_eq_empty i j hij) _ hmem
 
+/-! ### Gluing a morphism of **analytic** spaces
+
+`ComplexAnalytic.AnalyticSpace.glueMorphisms` is the same construction with the `ℂ`-linearity of
+the result carried along. `punctureCover` is a cover of `ℂ` and `ℂ` is
+`ComplexAnalytic.AnalyticSpace.complexAffineSpace 1`, so it is a cover of an analytic space and the
+analytic construction applies to it directly.
+
+**What is checked here and what is not.** The family glued is the restrictions of a *single*
+morphism, so its compatibility is `pullback.condition` and the round trip
+`ComplexAnalytic.AnalyticSpace.glueMorphisms_map_comp` identifies the output with the morphism it
+came from. That is the same shape as the `punctureCover` tests above and it establishes that the
+hypotheses are satisfiable at a two-member cover neither of whose members is `⊤`, and that the
+output is the intended one. **It does not glue two independent morphisms of analytic spaces**: the
+disjoint-overlap witness that does that for locally ringed spaces, in the section above, is at the
+`existsUnique_glueMorphisms_of_opens` API rather than at `OpenCover`, and no analytic pair has been
+built at a cover with disconnected overlaps. So the `ℂ`-linearity hypothesis is exercised here only
+where it is automatic.
+
+`shiftHom_ne_id` is what keeps the round trip from being vacuous: the morphism
+recovered is **not** the identity, so the construction is not returning something the cover alone
+determines. -/
+
+/-- `z + 1`, as a one-element family of entire functions on `ℂ`. -/
+def shiftFamily : ULift.{u} (Fin 1) → OkaRing (⊤ : Opens (ULift.{u} (Fin 1) → ℂ)) :=
+  fun _ ↦ coord (ULift.up 0) + 1
+
+/-- **The translation `z ↦ z + 1` of `ℂ`, as a morphism of complex analytic spaces.** -/
+def shiftHom : AnalyticSpace.complexAffineSpace.{u} 1 ⟶ AnalyticSpace.complexAffineSpace.{u} 1 :=
+  AnalyticSpace.okaMap shiftFamily.{u}
+
+/-- **Its underlying map is `z ↦ z + 1`.** -/
+theorem base_shiftHom (p : AnalyticSpace.complexAffineSpace.{u} 1) :
+    ((shiftHom.{u}).toLRSHom.base p : ULift.{u} (Fin 1) → ℂ) =
+      fun _ ↦ (p : ULift.{u} (Fin 1) → ℂ) (ULift.up 0) + 1 := by
+  refine funext fun l ↦ ?_
+  change okaMapFun shiftFamily.{u} _ l = _
+  rw [okaMapFun_apply, shiftFamily, map_add, evalHom_coord, map_one]
+
+/-- The two restrictions agree on the overlap, because they are restrictions of one morphism. -/
+theorem shift_compat (x y : punctureCover.{u}.J) :
+    pullback.fst (punctureCover.{u}.map x) (punctureCover.{u}.map y) ≫
+        (punctureCover.{u}.map x ≫ shiftHom.{u}.toLRSHom) =
+      pullback.snd (punctureCover.{u}.map x) (punctureCover.{u}.map y) ≫
+        (punctureCover.{u}.map y ≫ shiftHom.{u}.toLRSHom) := by
+  rw [← Category.assoc, ← Category.assoc, pullback.condition]
+
+/-- **The glued morphism of analytic spaces is the translation**, at a two-member cover neither of
+whose members is the whole space. -/
+example :
+    AnalyticSpace.glueMorphisms punctureCover.{u}
+        (fun j ↦ punctureCover.{u}.map j ≫ shiftHom.{u}.toLRSHom) shift_compat.{u}
+        (AnalyticSpace.isCLinearHom_map_comp punctureCover.{u} shiftHom.{u}) = shiftHom.{u} :=
+  AnalyticSpace.glueMorphisms_map_comp punctureCover.{u} shiftHom.{u} shift_compat.{u}
+
+/-- **And the morphism recovered is not the identity**, so the round trip above is not the
+statement that this construction returns `𝟙`. -/
+theorem shiftHom_ne_id : shiftHom.{u} ≠ 𝟙 (AnalyticSpace.complexAffineSpace.{u} 1) := by
+  intro h
+  have hb := congrArg (fun m : AnalyticSpace.complexAffineSpace.{u} 1 ⟶ _ ↦
+    m.toLRSHom.base (fun _ ↦ (0 : ℂ))) h
+  have h0 : (((shiftHom.{u}).toLRSHom.base (fun _ ↦ (0 : ℂ))) :
+      ULift.{u} (Fin 1) → ℂ) (ULift.up 0) = 1 := by
+    rw [show (((shiftHom.{u}).toLRSHom.base (fun _ ↦ (0 : ℂ))) : ULift.{u} (Fin 1) → ℂ) = _
+      from base_shiftHom.{u} _]
+    norm_num
+  rw [hb] at h0
+  exact zero_ne_one h0
+
 end
