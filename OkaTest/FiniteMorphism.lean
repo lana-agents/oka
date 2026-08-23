@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Oka
+import OkaTest.HolomorphicMap
 
 /-!
 # Non-vacuity of finiteness for morphisms of complex analytic spaces
@@ -379,22 +380,20 @@ injective** — so if it is ever shown finite étale, the class will be strictly
 isomorphisms. What is *not* proved is `IsFinite`, `IsLocalIso` or `IsFiniteEtale` for it; see
 `## What is not checked here`. -/
 
-/-- `z²`, as a one-element family of entire functions on `ℂ`. -/
-def sqFamily : ULift.{u} (Fin 1) → OkaRing (⊤ : Opens (ULift.{u} (Fin 1) → ℂ)) :=
-  fun _ ↦ coord (ULift.up 0) * coord (ULift.up 0)
-
-/-- **The squaring map `ℂ ⟶ ℂ`**, before restricting to the punctured line. -/
+/-- **The squaring map `ℂ ⟶ ℂ`**, before restricting to the punctured line: the morphism
+`OkaTest/HolomorphicMap.lean` builds from `sqFamily` and proves is not the identity
+(`okaMap_sq_ne_id`). -/
 def sqAll : AnalyticSpace.complexAffineSpace.{u} 1 ⟶ AnalyticSpace.complexAffineSpace.{u} 1 :=
-  AnalyticSpace.okaMap sqFamily.{u}
+  AnalyticSpace.okaMap _root_.sqFamily.{u}
 
-/-- **Its underlying map is `z ↦ z²`.** -/
+/-- **Its underlying map is `z ↦ z²`**, from `eq_sq_okaMapFun`. -/
 theorem base_sqAll (p : AnalyticSpace.complexAffineSpace.{u} 1) :
     ((sqAll.{u}).toLRSHom.base p : ULift.{u} (Fin 1) → ℂ) =
       fun _ ↦ (p : ULift.{u} (Fin 1) → ℂ) (ULift.up 0) *
         (p : ULift.{u} (Fin 1) → ℂ) (ULift.up 0) := by
-  refine funext fun l ↦ ?_
-  change okaMapFun sqFamily.{u} _ l = _
-  rw [okaMapFun_apply, sqFamily, map_mul, evalHom_coord]
+  change okaMapFun _root_.sqFamily.{u} (p : ULift.{u} (Fin 1) → ℂ) = _
+  rw [eq_sq_okaMapFun]
+  exact funext fun _ ↦ _root_.sq _
 
 /-- **`ℂ ∖ {0}`**, as an open subspace of the affine line: the non-vanishing locus of `z`. -/
 def punctured : (AnalyticSpace.complexAffineSpace.{u} 1).Opens :=
