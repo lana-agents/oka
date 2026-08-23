@@ -718,9 +718,17 @@ lake build
 ### Checking
 
 `bash .orchestra/validation.sh` is the check. It builds with `--wfail`, runs Mathlib's
-environment linters and text linters, verifies both root modules against `mk_all`, and checks
-that every backticked dotted name in a comment resolves. **A claim that something compiles means
-this script.**
+environment linters and text linters, verifies both root modules against `mk_all`, checks that
+every backticked dotted name in a comment resolves, and checks that every file has a module
+docstring with a non-empty body. **A claim that something compiles means this script.**
+
+The last of those, `scripts/check_module_docstrings.py`, is the narrow rule and only the narrow
+rule: a `/-! … -/` block whose body is not whitespace. It says nothing about what the body
+contains, and in particular does not require a `# Title` line — a second convention would need
+every file looked at one by one. It exists because nothing else could see an empty one: an empty
+`/-! -/` elaborates, so the build does not fail on it, and the name checker looks *inside* a
+docstring, so on an empty one it finds nothing to check and passes. Seven files under `Oka/`
+carried an empty module docstring from the second commit in the repository until it was added.
 
 For the edit loop there is `bash scripts/check_file.sh FILE.lean`, which takes a couple of
 seconds and applies the *same* Lean options the build applies:

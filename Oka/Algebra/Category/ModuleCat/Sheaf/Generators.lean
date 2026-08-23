@@ -13,6 +13,64 @@ public import Oka.Algebra.Category.ModuleCat.Sheaf.PushforwardContinuous
 public import Oka.CategoryTheory.Sites.Over
 
 /-!
+# Sheaves of modules of finite type: transport, quotients, change of site, locality
+
+Material for `Mathlib/Algebra/Category/ModuleCat/Sheaf/Generators.lean`; see `README.md` on the
+mirror tree. That file imports none of `Mathlib.Algebra.Category.Grp.FilteredColimits`,
+`Mathlib.Data.Finite.Sum`, `Mathlib.Algebra.Category.ModuleCat.Sheaf.Quasicoherent` or
+`Mathlib.CategoryTheory.Limits.Constructions.Over.Products`, so upstreaming this file adds those
+four imports — **ten** files to the target's own transitive closure, measured rather than
+estimated, with the target's closure as the baseline rather than this file's. The two `Oka`
+imports cost nothing beyond that: `Oka/Algebra/Category/ModuleCat/Sheaf/PushforwardContinuous.lean`
+and `Oka/CategoryTheory/Sites/Over.lean` are themselves mirror files whose targets are already in
+the closure — though the first of those carries an import cost of its own, recorded in its module
+docstring.
+
+Mathlib defines `SheafOfModules.GeneratingSections`, `SheafOfModules.LocalGeneratorsData` and the
+predicate `SheafOfModules.IsFiniteType`, and proves that generating sections push forward along an
+epimorphism. What it does not have, and what every finiteness argument in this development needs,
+is the **stability** of `SheafOfModules.IsFiniteType`. That is this file, in six groups.
+
+* **Transport.** `SheafOfModules.IsFiniteType.of_iso` and
+  `SheafOfModules.isFiniteType_of_isIso`, packaged as the `CategoryTheory.ObjectProperty`
+  `SheafOfModules.isFiniteType` with its `IsClosedUnderIsomorphisms` instance.
+* **Quotients.** `SheafOfModules.IsFiniteType.of_epi`, that the target of an epimorphism out of a
+  sheaf of finite type is of finite type, and its slicewise form
+  `SheafOfModules.IsFiniteType.of_epi_over`.
+* **Change of site.** `SheafOfModules.LocalGeneratorsData.pushforward` and
+  `SheafOfModules.isFiniteType_pushforward`, with the sharper
+  `SheafOfModules.isFiniteType_pushforward_of_isLeftAdjoint` for a pushforward that has the extra
+  adjoint.
+* **Locality.** `SheafOfModules.LocalGeneratorsData.bind` refines a cover by a cover, and
+  `SheafOfModules.IsFiniteType.of_coversTop` draws the conclusion: finite type over every member
+  of a family covering the top is finite type. `SheafOfModules.IsFiniteType.over` is the single
+  slice in the other direction, and `SheafOfModules.IsFiniteType.of_coversTop_of_forall` is the
+  form that quantifies over the covering family rather than taking one.
+* **Biproducts and free sheaves.** `SheafOfModules.freeGeneratingSections`,
+  `SheafOfModules.GeneratingSections.biprod`, `SheafOfModules.IsFiniteType.of_generatingSections`,
+  and `SheafOfModules.isFiniteType_free_biprod` with its slicewise companion
+  `SheafOfModules.isFiniteType_over_free_biprod`: a finite free sheaf plus a sheaf of finite type
+  is of finite type.
+* **The iterated slice.** Four statements transporting `SheafOfModules.IsFiniteType` across
+  `SheafOfModules.overOverEquivalence`, and `SheafOfModules.GeneratingSections.restrict`, which
+  moves generating sections along a morphism of the site.
+
+The consumers are `Oka/Algebra/Category/ModuleCat/Sheaf/Coherent/Basic.lean`,
+`Oka/Algebra/Category/ModuleCat/Sheaf/LocallySurjective.lean` and
+`Oka/AlgebraicGeometry/Modules/Tilde.lean`, the last of which reduces finiteness of the module of
+global sections on a `Spec` to finiteness over a distinguished open.
+
+**Not every declaration below carries a docstring**: nineteen of the thirty-one do not, of which
+seven are anonymous instances. `lake lint` passes on all of them, because Mathlib's `docBlame`
+linter covers definitions and `docBlameThm`, which covers theorems, is off. That is a separate
+item and not this file's to fix.
+
+## Main results
+
+- `SheafOfModules.IsFiniteType.of_epi`
+- `SheafOfModules.IsFiniteType.of_coversTop`
+- `SheafOfModules.isFiniteType_pushforward`
+- `SheafOfModules.GeneratingSections.restrict`
 -/
 
 @[expose] public section
