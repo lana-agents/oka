@@ -11,17 +11,22 @@ import OkaTest.CoherentFree
 
 `AlgebraicGeometry.Scheme.Modules.exists_finset_basicOpen_generatingSections` and
 `AlgebraicGeometry.Scheme.Modules.isLocalizedModule_away_sectionsToBasicOpen` are hypothetical
-statements about a sheaf of modules on a `Spec`, and this repository is short of those: the note
-in `OkaTest/CoherentPresentation.lean` records that **no sheaf on a `Spec` is proved coherent
-here**, since every coherent sheaf this development exhibits lives on an analytic space.
+statements about a sheaf of modules on a `Spec`, and this file is what makes them not vacuous.
 
-Every statement on that line is therefore made under hypotheses weaker than coherence —
+Every statement on that line is made under hypotheses weaker than coherence —
 `SheafOfModules.IsFiniteType`, `SheafOfModules.IsQuasicoherent` and
-`SheafOfModules.IsFinitePresentation` — and this file is the reason: at the weaker hypotheses
-there **is** a witness, and it is not a degenerate one. That now covers the whole argument twice
-over, from its two local steps to
+`SheafOfModules.IsFinitePresentation` — because those are what the proofs use, and this file is
+the reason it is worth doing: at the weaker hypotheses there **is** a witness, and it is not a
+degenerate one. That covers the whole argument twice over, from its two local steps to
 `AlgebraicGeometry.Scheme.Modules.module_finite_moduleSpecΓFunctor_obj_of_isFiniteType` and to
 `AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ_of_isFinitePresentation`.
+
+**The paragraph that used to stand here gave a second reason for the weak hypotheses, and it is
+retired.** It said they were also *forced*, because no sheaf on a `Spec` was proved coherent
+anywhere in this repository. `AlgebraicGeometry.isCoherentStructureSheaf_spec` now proves
+`𝒪_{Spec A}` coherent for noetherian `A`, and
+`OkaTest.AffineSections.isCoherent_cokernel_specXHom` below proves the witness of this very file
+coherent. So coherence is available and the statements stay at quasicoherence on the merits.
 
 ## The witness
 
@@ -57,12 +62,14 @@ itself.
 
 ## What is *not* checked here
 
-* **The coherent corollary
-  `AlgebraicGeometry.Scheme.Modules.isLocalizedModule_away_sectionsToBasicOpen_of_isCoherent` is
-  not instantiated**, for exactly the reason `OkaTest/CoherentPresentation.lean` gives about
-  `AlgebraicGeometry.Scheme.Modules.isIso_fromTildeΓ_of_isCoherent`: nothing here proves a sheaf
-  on a `Spec` coherent. That will change when the structure sheaf of a noetherian `Spec` is shown
-  coherent, and not before.
+* **The bullet that used to stand here said the coherent corollary
+  `AlgebraicGeometry.Scheme.Modules.isLocalizedModule_away_sectionsToBasicOpen_of_isCoherent` was
+  not instantiated**, because nothing proved a sheaf on a `Spec` coherent, and that *"that will
+  change when the structure sheaf of a noetherian `Spec` is shown coherent, and not before"*. It
+  has changed: `AlgebraicGeometry.isCoherentStructureSheaf_spec`, and the corollary is
+  instantiated below at the same witness. What is *not* checked is that the coherent corollary
+  reaches anything the quasicoherent one does not — it cannot, being the same statement with a
+  stronger hypothesis.
 * **Nothing here computes the `Finset` of
   `exists_finset_basicOpen_generatingSections`.** The statement is existential and the witness
   above is globally generated, so `{1}` would do; what the instantiation checks is that the
@@ -126,6 +133,23 @@ instance isQuasicoherent_cokernel_specXHom : (cokernel specXHom.{u}).IsQuasicohe
 instance isFiniteType_cokernel_specXHom : (cokernel specXHom.{u}).IsFiniteType :=
   IsFiniteType.of_epi (M := free (R := (nodeSpec.{u}).ringSheaf) PUnit.{u + 1})
     (cokernel.π specXHom.{u})
+
+/-- **And coherent**, which it was not known to be when this file was written.
+
+`SheafOfModules.IsCoherent.cokernel` at a source of finite type and a **coherent** target: the
+target is `free PUnit` on `Spec A`, coherent by `AlgebraicGeometry.Scheme.isCoherent_free` out of
+`AlgebraicGeometry.isCoherentStructureSheaf_spec`, since `A` is noetherian. The `haveI` is at the
+`AlgebraicGeometry.LocallyRingedSpace.ringSheaf` spelling and the theorem supplying it is at
+`AlgebraicGeometry.Scheme.ringCatSheaf`; the two agree at default transparency, which is the same
+crossing the ascriptions below perform.
+
+**This is not what the statements in this file are proved from**, and deliberately: they are
+stated at quasicoherence, which is weaker and is what their proofs use. It is here so that the
+coherent corollary can be instantiated too. -/
+instance isCoherent_cokernel_specXHom : (cokernel specXHom.{u}).IsCoherent :=
+  haveI : (free (R := (nodeSpec.{u}).ringSheaf) PUnit.{u + 1}).IsCoherent :=
+    (Spec nodeA.{u}).isCoherent_free _
+  SheafOfModules.IsCoherent.cokernel specXHom.{u}
 
 /-- **And not the zero sheaf**, which is what stops both instantiations below from being about
 nothing. `OkaTest.CoherentFree.not_isZero_cokernel_specXFamily` is the statement before the
@@ -202,7 +226,8 @@ example : ∃ s : Finset nodeA.{u},
   Scheme.Modules.exists_finset_basicOpen_generatingSections.{u} _
 
 /-- **Restriction to `D(g)` is the localisation away from `g`**, for `𝒪_{Spec A} ⧸ (x)` and any
-`g`. Quasicoherence is the whole hypothesis; coherence is not available here and is not needed. -/
+`g`. Quasicoherence is the whole hypothesis and coherence is not needed; it is available, and the
+example just below applies the corollary that asks for it. -/
 example (g : nodeA.{u}) :
     IsLocalizedModule.Away g
       (Scheme.Modules.sectionsToBasicOpen.{u}
@@ -211,6 +236,22 @@ example (g : nodeA.{u}) :
     isQuasicoherent_cokernel_specXHom.{u}
   haveI : Epi (cokernel.π specXHom.{u}) := coequalizer.π_epi
   Scheme.Modules.isLocalizedModule_away_sectionsToBasicOpen.{u} _ g
+
+/-- **The coherent corollary, at the same witness.**
+
+`AlgebraicGeometry.Scheme.Modules.isLocalizedModule_away_sectionsToBasicOpen_of_isCoherent`, which
+this file recorded as uninstantiable because nothing proved a sheaf on a `Spec` coherent. It is
+weaker than the statement above — it is that statement with a stronger hypothesis — and it is
+instantiated here only because the record said it could not be. Not *strictly* weaker: that would
+need coherence to be genuinely stronger at some sheaf, and nothing here shows it. -/
+example (g : nodeA.{u}) :
+    IsLocalizedModule.Away g
+      (Scheme.Modules.sectionsToBasicOpen.{u}
+        (cokernel specXHom.{u} : (Spec nodeA.{u}).Modules) g).hom :=
+  haveI : (cokernel specXHom.{u} : (Spec nodeA.{u}).Modules).IsCoherent :=
+    isCoherent_cokernel_specXHom.{u}
+  haveI : Epi (cokernel.π specXHom.{u}) := coequalizer.π_epi
+  Scheme.Modules.isLocalizedModule_away_sectionsToBasicOpen_of_isCoherent.{u} _ g
 
 /-- **At `g = x` the localisation above is not the trivial one.** The germ of `x` at the prime
 under the origin of the node lies in the maximal ideal there, so `x` is not a unit in that stalk,
@@ -353,9 +394,11 @@ instance isFinite_specXPresentation : (specXPresentation.{u}).IsFinite where
 and finitely presented coincide, and `Module.Finite nodeA (Γ M)` is already proved above. What
 this checks is that the *hypothesis* is inhabited: that a sheaf on a `Spec` in this repository
 carries a finite global `SheafOfModules.Presentation` at all. Without it
-`AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ` would be a statement with no witness here,
-which is exactly the situation `OkaTest/CoherentPresentation.lean` records for
-`SheafOfModules.IsCoherent`.
+`AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ` would be a statement with no witness here
+— the situation `OkaTest/CoherentPresentation.lean` **used** to record for
+`SheafOfModules.IsCoherent`, and which it now records in the past tense, because
+`AlgebraicGeometry.isCoherentStructureSheaf_spec` supplied the missing witness and
+`OkaTest.AffineSections.isCoherent_cokernel_specXHom` above instantiates it at this very sheaf.
 
 The `IsFinite` instance is supplied positionally, and neither `haveI` nor `letI` of exactly
 `(specXPresentation.{u}).IsFinite` in scope is enough — both leave `failed to synthesize
@@ -372,8 +415,11 @@ example : Module.FinitePresentation nodeA.{u}
 `SheafOfModules.IsFinitePresentation` asks for a finite presentation over the members of some
 covering; `SheafOfModules.Presentation.isFinitePresentation` supplies it from the global one, on
 the trivial covering. So this witness does not exercise the locality — see the module docstring —
-and what it checks is that the class is inhabited on a `Spec` in this repository at all, which is
-what `OkaTest/CoherentPresentation.lean` records is *not* true of `SheafOfModules.IsCoherent`.
+and what it checks is that the class is inhabited on a `Spec` in this repository at all. That
+used to be the point of contrast with `SheafOfModules.IsCoherent`, which
+`OkaTest/CoherentPresentation.lean` recorded as inhabited nowhere on a `Spec`; the contrast is
+gone, because `AlgebraicGeometry.isCoherentStructureSheaf_spec` inhabits it and
+`OkaTest.AffineSections.isCoherent_cokernel_specXHom` does so at this very sheaf.
 
 The universes and the `IsFinite` instance are both supplied positionally, for the reason recorded
 on the previous example: neither is inferred, and `haveI` does not help. -/

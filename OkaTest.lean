@@ -54,3 +54,4 @@ import OkaTest.PullbackModulesStalk
 import OkaTest.PushforwardFullyFaithful
 import OkaTest.SheafOfModulesStalk
 import OkaTest.SimpDiscrTree
+import OkaTest.SpecCoherent

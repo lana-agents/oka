@@ -104,3 +104,15 @@ info: 'Module.FinitePresentation.of_ringEquiv' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms Module.FinitePresentation.of_ringEquiv
+
+/-! ### Relations between elements of a ring localise
+
+`Oka/RingTheory/Localization/Module.lean`, the one piece of general commutative algebra behind
+the coherence of the structure sheaf of a noetherian scheme. -/
+
+/--
+info: 'IsLocalization.exists_fun_eq_sum_of_sum_mul_eq_zero' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms IsLocalization.exists_fun_eq_sum_of_sum_mul_eq_zero
