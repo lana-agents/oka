@@ -47,27 +47,50 @@ The first and the third are here:
   `Module.Finite.of_localizationSpan_finite'` within reach: its spanning `Finset` is the first
   step's, and its `IsLocalizedModule.Away` is this.
 
-## What is still missing, and it is one statement
+## The second step, and what is left of it
 
-> `Module.Finite Γ(Spec R, D(g)) Γ(M, D(g))` — that finitely many sections which generate `M`
-> over `D(g)` **as a sheaf** generate its sections over `D(g)` **as a module**.
+The mathematical content of the affine dictionary is that **an epimorphism of quasicoherent
+sheaves on `Spec R` is surjective on global sections**, which is false for sheaves of modules in
+general. That is `AlgebraicGeometry.Scheme.Modules.surjective_moduleSpecΓFunctor_map`, and it is
+here: `AlgebraicGeometry.tildeEquiv` is an *equivalence*, so it carries the epimorphism to a
+surjection of `R`-modules. No cohomology and no stalks are needed — the vanishing that would
+otherwise be required is already inside the statement that the counit is an isomorphism.
 
-An epimorphism of sheaves is not surjective on sections in general; on an affine and for a
-quasicoherent sheaf it is, and that is the mathematical content of the affine dictionary. Two
-routes are known and neither is short: through `AlgebraicGeometry.tildeEquiv` being an
-equivalence, hence reflecting epimorphisms, after reading `M` restricted to `D(g)` as a
-`(Spec (Localization.Away g)).Modules`; or through stalks, using Mathlib's
-`AlgebraicGeometry.tilde.toStalk` being a localisation at the prime together with
-`Submodule.eq_top_of_localization_maximal`.
+Its corollary `AlgebraicGeometry.Scheme.Modules.module_finite_moduleSpecΓFunctor_obj` is the
+`⊤` case of what the affine-locality argument wants: finitely many **global** sections generating
+`M` as a sheaf generate `Γ M` as a module.
+
+**What is left is a change of site.**
+
+> `Module.Finite Γ(Spec R, D(g)) Γ(M, D(g))` — the same statement over a distinguished open.
+
+`D(g)` is `Spec (Localization.Away g)`, so this *is* the theorem above, at a different affine, and
+what has to be built is the translation. **How much work that is has not been established here**,
+and the parts below are listed as measured or not rather than as easy or hard:
+
+* `AlgebraicGeometry.basicOpenIsoSpecAway` gives the isomorphism of schemes, and
+  `AlgebraicGeometry.Scheme.Modules.restrict` transports the module along it. The encouraging half
+  is measured: `AlgebraicGeometry.Scheme.Modules.restrict_obj` is `rfl` and
+  `AlgebraicGeometry.Scheme.Modules.restrictAppIso` is `Iso.refl`, so the *sections* need no
+  transport at all.
+* The unmeasured halves are that `restrict` preserves quasicoherence, and that a
+  `SheafOfModules.GeneratingSections` of `M.over (D g)` — which lives over the slice site
+  `Over (D g)` — becomes one of the restricted module over `Spec (Localization.Away g)`.
+* And the module structures have to be reconciled: `Γ(M, D g)` carries a `Γ(Spec R, D g)`-action,
+  the restriction carries a `Localization.Away g`-action, and
+  `Module.Finite.of_localizationSpan_finite'` wants an `IsScalarTower` between them, which is a
+  declared-instance decision this file has not taken.
 
 **Until that lands, nothing here produces a *global* presentation of `M` as a cokernel of finite
-free sheaves, and nothing here shows `Γ M` finitely generated.** A consumer wanting the full
-dictionary needs that step and will not find it in this repository.
+free sheaves for a sheaf that is merely of finite type, and nothing here shows `Γ M` finitely
+generated from local data.** A consumer wanting the full dictionary needs that step and will not
+find it in this repository.
 
 ## Main definitions
 
 - `AlgebraicGeometry.Scheme.Modules.isoTildeΓ`
 - `AlgebraicGeometry.Scheme.Modules.sectionsToBasicOpen`
+- `AlgebraicGeometry.Scheme.Modules.freeΓIso`
 
 ## Main results
 
@@ -75,6 +98,8 @@ dictionary needs that step and will not find it in this repository.
 - `AlgebraicGeometry.Scheme.Modules.exists_finset_basicOpen_generatingSections`
 - `AlgebraicGeometry.Scheme.Modules.isLocalizedModule_away_sectionsToBasicOpen`, and its
   coherent corollary `…_of_isCoherent`
+- `AlgebraicGeometry.Scheme.Modules.surjective_moduleSpecΓFunctor_map`, and its corollary
+  `AlgebraicGeometry.Scheme.Modules.module_finite_moduleSpecΓFunctor_obj`
 -/
 
 @[expose] public section
@@ -205,5 +230,81 @@ theorem isLocalizedModule_away_sectionsToBasicOpen_of_isCoherent [M.IsCoherent] 
     IsLocalizedModule.Away g (sectionsToBasicOpen M g).hom :=
   haveI := SheafOfModules.IsCoherent.isQuasicoherent M
   isLocalizedModule_away_sectionsToBasicOpen M g
+
+
+/-! ### Epimorphisms are surjective on global sections
+
+An epimorphism of sheaves of modules is not surjective on sections in general. On `Spec R` and
+between *quasicoherent* sheaves it is, and that is the mathematical content of the affine
+dictionary: everything else in the argument is bookkeeping.
+-/
+
+/-- **An epimorphism of quasicoherent sheaves on `Spec R` is surjective on global sections.**
+
+`AlgebraicGeometry.tildeEquiv` is an *equivalence* between `ModuleCat R` and the quasicoherent
+`𝒪_{Spec R}`-modules, so it carries the epimorphism to an epimorphism of `R`-modules, which is a
+surjection. **No cohomology and no stalks enter**: the vanishing that would otherwise be needed is
+already inside the statement that the counit is an isomorphism.
+
+`Epi f` is an explicit argument rather than an instance. At a call site the epimorphism usually
+arrives as `SheafOfModules.GeneratingSections.epi`, and instance search does not find it there even
+when it is in scope as a local instance — `σ.π` is an `abbrev` for
+`SheafOfModules.freeHomEquiv.symm σ.s`, and the two are defeq at default transparency but search
+runs at reducible transparency. Taking the hypothesis explicitly removes the question. -/
+theorem surjective_moduleSpecΓFunctor_map {M N : (Spec R).Modules}
+    [M.IsQuasicoherent] [N.IsQuasicoherent] (f : M ⟶ N) (hf : Epi f) :
+    Function.Surjective (moduleSpecΓFunctor.map f).hom := by
+  haveI := hf
+  rw [← ModuleCat.epi_iff_surjective]
+  let f' : (⟨M, ‹_›⟩ : (SheafOfModules.isQuasicoherent (Spec R).ringCatSheaf).FullSubcategory) ⟶
+    ⟨N, ‹_›⟩ := ObjectProperty.homMk f
+  haveI : Epi f' := (ObjectProperty.ι _).epi_of_epi_map (f := f') (by exact ‹Epi f›)
+  exact (tildeEquiv (R := R)).inverse.map_epi f'
+
+/-- **A free sheaf on `Spec R` is quasicoherent.**
+
+Mathlib already has `IsIso (AlgebraicGeometry.Scheme.Modules.fromTildeΓ (SheafOfModules.free ι))`
+as an instance, and this is `AlgebraicGeometry.isQuasicoherent_iff_isIso_fromTildeΓ` applied to it.
+
+The instance has to be named through `inferInstanceAs` rather than left to a bare `inferInstance`,
+because `AlgebraicGeometry.isQuasicoherent_iff_isIso_fromTildeΓ _` leaves the expected type a
+metavariable at the point where the argument is elaborated. Writing the type out is the whole
+fix. -/
+theorem isQuasicoherent_free (I : Type u) :
+    (SheafOfModules.free.{u} (R := (Spec R).ringCatSheaf) I).IsQuasicoherent :=
+  (isQuasicoherent_iff_isIso_fromTildeΓ _).mpr
+    (inferInstanceAs (IsIso (Scheme.Modules.fromTildeΓ (R := R) (SheafOfModules.free.{u} I))))
+
+/-- **The global sections of the free sheaf on `Spec R` are the free module.**
+
+`AlgebraicGeometry.tildeFinsupp` says `free I` is `(I →₀ R)^~`, and the unit of the adjunction is
+an isomorphism, so its global sections are `I →₀ R`. -/
+noncomputable def freeΓIso (I : Type u) :
+    ModuleCat.of R (I →₀ R) ≅
+      moduleSpecΓFunctor.obj (SheafOfModules.free.{u} (R := (Spec R).ringCatSheaf) I) :=
+  (tilde.toTildeΓNatIso (R := R)).app (ModuleCat.of R (I →₀ R)) ≪≫
+    moduleSpecΓFunctor.mapIso (tildeFinsupp I)
+
+/-- **Finitely many global sections generating a quasicoherent sheaf on `Spec R` as a sheaf
+generate its global sections as a module.**
+
+This is the statement an epimorphism of sheaves does not give for free, and with it
+`Module.Finite.of_localizationSpan_finite'` is within reach of `Module.Finite R (Γ M)`; see the
+module docstring for what still stands between them.
+
+Coherence is not needed and is not available: nothing in this repository proves a sheaf on a
+`Spec` coherent, so the hypotheses are quasicoherence and a finite generating family, which
+`OkaTest/AffineSections.lean` exhibits. -/
+theorem module_finite_moduleSpecΓFunctor_obj {M : (Spec R).Modules} [M.IsQuasicoherent]
+    (σ : M.GeneratingSections) [Finite σ.I] :
+    Module.Finite R (moduleSpecΓFunctor.obj M) := by
+  haveI := isQuasicoherent_free (R := R) σ.I
+  have hπ : Function.Surjective (moduleSpecΓFunctor.map σ.π).hom :=
+    surjective_moduleSpecΓFunctor_map σ.π σ.epi
+  have hiso : Function.Surjective (freeΓIso (R := R) σ.I).hom.hom :=
+    (ConcreteCategory.bijective_of_isIso (freeΓIso (R := R) σ.I).hom).2
+  exact Module.Finite.of_surjective
+    (((freeΓIso (R := R) σ.I).hom ≫ moduleSpecΓFunctor.map σ.π).hom)
+    (by rw [ModuleCat.hom_comp]; exact hπ.comp hiso)
 
 end AlgebraicGeometry.Scheme.Modules
