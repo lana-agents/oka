@@ -89,14 +89,13 @@ where `D(z₀)` is the punctured axis that `OkaTest/OpenSubspace.lean` builds by
 ## What is not here
 
 **That `ℂ[x, t] ⧸ (g, t·f - 1)` is a localisation of `ℂ[x] ⧸ (g)` is not proved anywhere in this
-repository.** Every declaration below is named `localisation…` and the first paragraph calls
-`localisationPresentation g f` "the presentation of `A_f`", and both are the *classical* fact
-rather than a formal one: nothing connects
-`ComplexAnalytic.PresentedAlgebra (localisationPresentation g f)` to the localisation
-`Localization.Away (Ideal.Quotient.mk (presentationIdeal g) f)` of
-`ComplexAnalytic.PresentedAlgebra g`.
-`Localization`, `IsLocalization` and `Away` do not occur in this file, and what is proved is a
-theorem about the analytification of one particular tuple. **A consumer analytifying an actual
+repository.** The `localisation…` names below, and the first paragraph's
+`A_f = ℂ[x₁, …, x_n, t] ⧸ (g₁, …, g_k, t·f - 1)`, are the *classical* fact rather than a formal
+one: nothing connects `ComplexAnalytic.PresentedAlgebra (localisationPresentation g f)` to the
+localisation `Localization.Away (Ideal.Quotient.mk (presentationIdeal g) f)` of
+`ComplexAnalytic.PresentedAlgebra g`. `Localization`, `IsLocalization` and `Away` occur nowhere in
+this file outside this section, and in no declaration anywhere in it; what is proved is a
+statement about the analytification of one particular tuple. **A consumer analytifying an actual
 scheme will need the algebraic identification**, and will have to prove it.
 
 It is not out of reach. `Localization.awayEquivAdjoin r : Away r ≃ₐ[R] AdjoinRoot (C r * X - 1)`
