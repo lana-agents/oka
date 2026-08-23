@@ -25,10 +25,11 @@ class carries both.
 
 **Why stalks rather than "locally an open immersion".**
 `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion` is available and one could ask for a cover
-of the source on which the morphism restricts to one. That is equivalent and worse to *use*: it
-quantifies over covers, so every consumer begins by choosing one, whereas the stalk condition is
-checkable at a point and this repository already has the machinery for it —
-`ComplexAnalytic.IsCutOutBy` carries `surjective_stalkMap` and `ker_stalkMap` as fields, and
+of the source on which the morphism restricts to one. That is presumably equivalent — a theorem,
+and not proved here — and it is worse to *use* either way: it quantifies over covers, so every
+consumer begins by choosing one, whereas the stalk condition is checkable at a point, and this
+repository already has the machinery for it: `ComplexAnalytic.IsCutOutBy` carries
+`surjective_stalkMap` and `ker_stalkMap` as fields, and
 `AlgebraicGeometry.LocallyRingedSpace.stalkMap_comp` is what makes the composition below one line.
 
 **Why not `IsCoveringMap`.** Mathlib has it, and it is a *global* condition — every point of the
@@ -79,10 +80,17 @@ everywhere else here: `ComplexAnalytic.AnalyticSpace.Hom` is a
 `AlgebraicGeometry.LocallyRingedSpace.Hom` together with a `ℂ`-linearity condition and its
 category structure is defined through `toLRSHom`.
 
-**Neither field implies the other.** A closed embedding which is not an isomorphism has
-isomorphisms on no stalk outside its image and is not a local homeomorphism either
-(`OkaTest/FiniteMorphism.lean` exhibits one); and a homeomorphism of underlying spaces carrying a
-non-isomorphism of structure sheaves would satisfy the first and not the second. -/
+**Note which points the second field ranges over.** `isIso_stalkMap` is quantified over points
+of the **source**, so it says nothing at points of the target outside the image; a morphism can
+satisfy it and still miss most of the target, which is why the topological field is needed
+separately.
+
+**Neither implication between the fields is settled here.** No counterexample to either direction
+is exhibited and neither is proved, so the two-field definition is a design choice and not a
+theorem. What *is* checked is that the topological field is not idle:
+`OkaTest.FiniteMorphism.not_isLocalIso_axisIncl` rules out the closed immersion of an axis into
+`ℂ²` **using that field alone** — its own docstring records that nothing about stalks enters. That
+morphism fails both fields, so it witnesses no implication in either direction. -/
 class IsLocalIso {X Y : AnalyticSpace.{u}} (f : X ⟶ Y) : Prop where
   /-- The underlying map is a local homeomorphism. -/
   isLocalHomeomorph : IsLocalHomeomorph f.toLRSHom.base
@@ -104,10 +112,23 @@ instance isLocalIso_id (X : AnalyticSpace.{u}) : IsLocalIso (𝟙 X) where
 
 /-- **A composite of local isomorphisms is a local isomorphism.**
 
-`IsLocalHomeomorph.comp` and `AlgebraicGeometry.LocallyRingedSpace.stalkMap_comp`. The two stalk
-instances have to be produced by hand rather than left to `infer_instance`: the composite's second
-factor is the stalk map of `g` **at the image point**, and search does not find it from the class
-field at the spelling the goal is in. -/
+`IsLocalHomeomorph.comp` and `AlgebraicGeometry.LocallyRingedSpace.stalkMap_comp`.
+
+**Why the two stalk hypotheses are passed explicitly, through
+`CategoryTheory.IsIso.comp_isIso'`, rather than left to instance search.** After the rewrite the
+goal's first stalk is indexed at `(f ≫ g).base x` while `h2` is indexed at `g.base (f.base x)`.
+Those are the same point by `rfl` **at default transparency only**: reducing `(f ≫ g).base` to
+`g.base ∘ f.base` unfolds the composition of `AlgebraicGeometry.LocallyRingedSpace.Hom`, which is
+not reducible. **Instance search runs at reducible transparency**, so it cannot see that the two
+`IsIso` statements are about the same morphism, and neither `infer_instance` with both hypotheses
+as local instances nor `apply CategoryTheory.IsIso.comp_isIso` succeeds — the latter unifies the
+composite at default transparency and then fails on the very hypothesis in scope, one level down
+and by the same cause.
+
+The control is one keyword: `with_reducible exact CategoryTheory.IsIso.comp_isIso' h2 h1` fails
+with exactly that mismatch of stalk objects, and removing `with_reducible` compiles. Nothing about
+the composite shape is at fault — `CategoryTheory.IsIso.comp_isIso` is an instance and closes the
+generic goal; `comp_isIso'` is Mathlib's explicit-argument form, provided for this situation. -/
 instance isLocalIso_comp {X Y Z : AnalyticSpace.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
     [IsLocalIso f] [IsLocalIso g] : IsLocalIso (f ≫ g) where
   isLocalHomeomorph := by
@@ -120,7 +141,7 @@ instance isLocalIso_comp {X Y Z : AnalyticSpace.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
     have h2 : IsIso (g.toLRSHom.stalkMap ((ConcreteCategory.hom f.toLRSHom.base) x)) :=
       IsLocalIso.isIso_stalkMap _
     rw [h, LocallyRingedSpace.stalkMap_comp]
-    exact @CategoryTheory.IsIso.comp_isIso _ _ _ _ _ _ _ h2 h1
+    exact CategoryTheory.IsIso.comp_isIso' h2 h1
 
 /-- **An isomorphism is a local isomorphism.**
 

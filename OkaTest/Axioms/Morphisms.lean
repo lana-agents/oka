@@ -387,6 +387,13 @@ info: 'ComplexAnalytic.AnalyticSpace.IsFiniteEtale' depends on axioms:
 #print axioms ComplexAnalytic.AnalyticSpace.IsFiniteEtale
 
 /--
+info: 'ComplexAnalytic.AnalyticSpace.isFiniteEtale_id' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFiniteEtale_id
+
+/--
 info: 'ComplexAnalytic.AnalyticSpace.isFiniteEtale_comp' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
