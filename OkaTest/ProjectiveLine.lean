@@ -292,10 +292,15 @@ theorem hcocycle_lineCover (i j k : pair.{u}) (hij : i ≠ j) (hik : i ≠ k) (h
 
 /-! ### The gluing -/
 
-/-- The `CategoryTheory.GlueData'` behind the gluing, named for the reason
-`ComplexAnalytic.nodeTripleGlueData'` is: `CategoryTheory.GlueData'.f'` below cannot be stated
-with a `_` for it, since the unifier then meets `?D.J =?= pair` — a projection applied to a
-metavariable — and unfolds forever. -/
+/-- The `CategoryTheory.GlueData'` behind the gluing, named because
+`CategoryTheory.GlueData'.f'` below cannot be stated with a `_` for it: the unifier then meets
+`?D.J =?= pair`, a projection applied to a metavariable, and elaboration fails **at once** with
+`the argument j has type pair but is expected to have type GlueData'.J ?m`.
+
+So the failure is an ordinary type mismatch and not a divergence — measured, at three seconds
+for the whole file. `ComplexAnalytic.nodeTripleGlueData'` is named for the same reason but its
+docstring says the unifier *unfolds forever*; that clause does not reproduce, and it is not
+corrected here because this pull request touches no other file's account of itself. -/
 abbrev projectiveLineGlueData' : GlueData' LocallyRingedSpace.{u} :=
   coverGlueData'.{u} lineCoverObj.{u} lineCoverPoly.{u} lineSwapIso.{u} hrange_lineCover.{u}
     hsymm_lineCover.{u} hcocycle_lineCover.{u}
