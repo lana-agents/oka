@@ -30,10 +30,13 @@ The two nonzero statements both come from `not_isZero_free`, whose proof is that
 is a retract of any free sheaf on a nonempty index type, and that a complex analytic space with
 a point has a nonzero structure sheaf, since `1` and `0` have different values there.
 
-* **A quotient that is neither `0` nor free.** `𝒪_{Spec A} ⧸ (x)` for `x` the class of the first
-  coordinate: its analytification is coherent, and the sheaf being analytified is **not the zero
-  sheaf** (`not_isZero_cokernel_specXFamily`), because `x` vanishes at the origin of the node and
-  so its germ at the corresponding prime lies in the maximal ideal. The hypothesis is a real
+* **A quotient that is not zero, and a presenting map that is not an epimorphism.**
+  `𝒪_{Spec A} ⧸ (x)` for `x` the class of the first coordinate: its analytification is coherent,
+  and the sheaf being analytified is **not the zero sheaf**
+  (`not_isZero_cokernel_specXFamily`), because `x` vanishes at the origin of the node and so its
+  germ at the corresponding prime lies in the maximal ideal. Equivalently the presenting map
+  `sectionsHom {x}` is not an epimorphism, which is what distinguishes this instance from the two
+  above, where the presenting map is zero. The hypothesis is a real
   condition and not one every section satisfies: at the point `(1, 0)` of the node the germ of
   `x` is a **unit** (`notMem_maximalIdeal_germ_specX_ptX`), and
   `AlgebraicGeometry.LocallyRingedSpace.isZero_cokernel_sectionsHom_one` is the quotient by the
@@ -41,9 +44,12 @@ a point has a nonzero structure sheaf, since `1` and `0` have different values t
 
 ## What this still does not test
 
-That `𝒪_{Spec A} ⧸ (x)` is not *isomorphic* to `𝒪_{Spec A}`, which would need `x ≠ 0` in
-`ℂ[x, y] ⧸ (xy)` and a comparison of the two sheaves. What is recorded is that it is a proper
-quotient in the sense that the ideal is not the unit ideal, and that it is not zero.
+**Two things about `𝒪_{Spec A} ⧸ (x)`, and the stronger of them is that it is not free.** Nothing
+here shows it is not a free sheaf of modules; that is true — `A ⧸ (x) ≅ ℂ[y]` is killed by `x`
+and so is not free over `A` — and it is an annihilator argument that this file does not make, so
+it is not asserted. Nor is it shown to be non-isomorphic to `𝒪_{Spec A}`, which is weaker and
+would follow from non-freeness. What *is* recorded is that the quotient is not zero, that the
+ideal is not the unit ideal, and hence that the presenting map is not an epimorphism.
 -/
 
 open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry Limits ComplexAnalytic
@@ -134,7 +140,8 @@ theorem not_isZero_analytification_nodeSpecPresentation :
 /-! ### A quotient of `𝒪_{Spec A}` that is not zero
 
 `A = ℂ[x, y] ⧸ (xy)`, and the section is the class of `x`. This is the instantiation that
-exercises the theorem at a sheaf which is neither zero nor free; the two above do not.
+exercises the theorem at a proper nonzero quotient of `𝒪_{Spec A}`; the two above are free
+sheaves.
 -/
 
 /-- `Spec A` for `A = ℂ[x, y] ⧸ (xy)`, as a locally ringed space. -/
@@ -182,8 +189,8 @@ theorem not_isZero_cokernel_specXFamily :
   (nodeSpec.{u}).not_isZero_cokernel_sectionsHom_of_germ_mem specXFamily.{u} _
     germ_specXFamily_mem.{u}
 
-/-- **Its analytification is coherent** — the theorem at a sheaf which is neither zero nor
-free. -/
+/-- **Its analytification is coherent** — the theorem at a proper nonzero quotient of
+`𝒪_{Spec A}`, rather than at a free sheaf as in the two instances above. -/
 example : ((analytificationSheaf.{u} nodeG.{u}).obj
     (cokernel ((nodeSpec.{u}).sectionsHom specXFamily.{u}))).IsCoherent :=
   isCoherent_analytificationSheaf_cokernel_sectionsHom.{u} nodeG.{u} specXFamily.{u}

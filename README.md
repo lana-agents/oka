@@ -135,8 +135,8 @@ coherence statement for arbitrary complex analytic spaces:
   coherent. The statement for a *coherent* sheaf rather than a presented one is out of reach here
   and for a reason that is not analytic — it needs the dictionary between sheaves of modules on
   `Spec A` and `A`-modules, which this repository does not have. The worked instance is
-  `𝒪_{Spec A} ⧸ (x)` for `A = ℂ[x, y] ⧸ (xy)`: it is neither zero nor free, and it is not zero
-  *because* `x` vanishes at the origin of the node — which is
+  `𝒪_{Spec A} ⧸ (x)` for `A = ℂ[x, y] ⧸ (xy)`: a nonzero proper quotient rather than a free
+  sheaf, and it is nonzero *because* `x` vanishes at the origin of the node — which is
   `AlgebraicGeometry.StructureSheaf.germ_algebraMap_mem_maximalIdeal_iff`, and the first place
   this development touches a section of the structure sheaf of a `Spec` directly rather than
   through the `Γ`-`Spec` adjunction.
