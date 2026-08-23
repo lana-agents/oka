@@ -204,9 +204,10 @@ coherence statement for arbitrary complex analytic spaces:
   out the part of each member that meets each other, and an isomorphism of the two presentations
   of every overlap, `ComplexAnalytic.coverGlueData` builds an
   `AlgebraicGeometry.LocallyRingedSpace.GlueData` whose pieces are the analytifications. The
-  input is the cover **as data** rather than a scheme, because this repository has no
-  `AlgebraicGeometry.Scheme` objects; `ComplexAnalytic.toFGAlg` being an equivalence is what says
-  nothing is lost by that. The construction goes through `CategoryTheory.GlueData'`, which asks
+  input is the cover **as data** rather than a scheme, because every `AlgebraicGeometry.Scheme`
+  this repository mentions is a `Spec` and nothing constructs a non-affine one or carries a cover
+  of one; `ComplexAnalytic.toFGAlg` being an equivalence is what says nothing is lost by that.
+  The construction goes through `CategoryTheory.GlueData'`, which asks
   for the overlaps only when `i ≠ j`, and the difficulty is that its `t'` is a morphism between
   categorical pullbacks: `AlgebraicGeometry.LocallyRingedSpace.restrictInfIsoPullback` identifies
   those with open subspaces `X|(U ⊓ V)`, after which `t'` is a conjugate of a morphism of open

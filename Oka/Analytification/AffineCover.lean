@@ -18,10 +18,14 @@ descriptions of each overlap, it builds the glue data.
 
 ## The input, and why it is presentations rather than a scheme
 
-**This repository has no `AlgebraicGeometry.Scheme` objects.** `grep -rn "Scheme" Oka/ OkaTest/`
-finds the name only inside prose; `Oka/Analytification/Comparison.lean` has a titled section
-arguing that this is a result rather than an omission. So "analytify a scheme locally of finite
-type over `ℂ`" cannot be *stated* here, and what this file takes is the cover **as data**: an
+**Every `AlgebraicGeometry.Scheme` this repository mentions is a `Spec`, and nothing constructs a
+non-affine one or carries a cover of one.** Measured at `master` = `31f5a2f`: every occurrence of
+`Scheme` outside backticks under `Oka/` and `OkaTest/` is `AlgebraicGeometry.Scheme.Modules` —
+two of them the `namespace` and `end` of `Oka/AlgebraicGeometry/Modules/Tilde.lean`, four of them
+axiom guards for its two declarations — and in all of them the scheme is `Spec R`.
+`Oka/Analytification/Comparison.lean` has a titled section arguing that the absence of a
+*general* scheme here is a result rather than an omission. So "analytify a scheme locally of
+finite type over `ℂ`" cannot be *stated*, and what this file takes is the cover **as data**: an
 index type `J`, a `ComplexAnalytic.Presentation` for each index, a polynomial `poly i j` cutting
 out the part of the `i`-th member that meets the `j`-th, and an isomorphism of the two
 presentations of the overlap.

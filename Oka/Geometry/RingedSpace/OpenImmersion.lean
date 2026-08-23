@@ -288,8 +288,10 @@ theorem isIso_pullbackLift_restrictLE :
 
 /-- **The subspace on an intersection is the pullback of the two open subspaces.**
 
-`X|(U ⊓ V) ≅ X|U ×_X X|V`, over `X` on both sides — the three factorisation lemmas below say so,
-and they are what every use of this consumes.
+`X|(U ⊓ V) ≅ X|U ×_X X|V`, over `X` on both sides — the two factorisation lemmas below,
+`restrictInfIsoPullback_hom_fst` and `restrictInfIsoPullback_hom_snd`, say so, and they are what
+every use of this consumes. (`restrictInfIsoPullback_hom` is not one of them: it unfolds the
+comparison, exists only to prove those two, and its own docstring says not to reach for it.)
 
 **This is what makes a pullback of open immersions computable at all.** The module docstring of
 `Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean` records the problem it solves: a
