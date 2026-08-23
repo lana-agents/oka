@@ -146,8 +146,22 @@ theorem hcocycle_nodeCover (i j k : triple.{u}) (hij : i ≠ j) (hik : i ≠ k) 
 /-! ### The gluing -/
 
 /-- The `CategoryTheory.GlueData'` behind the gluing, named because
-`CategoryTheory.GlueData'.f'` below cannot be stated with a `_` for it: the unifier meets
-`?D.J =?= triple` — a projection applied to a metavariable — and unfolds forever. -/
+`CategoryTheory.GlueData'.f'` below cannot be stated with a `_` for it. With `_` in its place the
+index `j` is checked against the expected type `GlueData'.J ?D`, a projection applied to a
+metavariable, which the elaborator will not solve for `?D`, so the application is rejected:
+
+```
+error: Application type mismatch: The argument
+  j
+has type
+  triple
+but is expected to have type
+  GlueData'.J ?m.24
+```
+
+**It fails at once and nothing diverges** — measured, at four seconds for this whole file, with
+that as the only error. An earlier version of this docstring said the unifier *unfolds forever*;
+the conclusion was right and the mechanism was not. -/
 abbrev nodeTripleGlueData' : GlueData' LocallyRingedSpace.{u} :=
   coverGlueData'.{u} nodeCoverObj.{u} nodeCoverPoly.{u} nodeCoverGlue.{u} hrange_nodeCover.{u}
     hsymm_nodeCover.{u} hcocycle_nodeCover.{u}
