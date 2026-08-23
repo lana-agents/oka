@@ -20,6 +20,7 @@ import Oka.Algebra.Category.ModuleCat.Sheaf.Submodule
 import Oka.Algebra.Category.ModuleCat.Stalk
 import Oka.Algebra.MvPolynomial.Taylor
 import Oka.AlgebraicGeometry.GammaSpecAdjunction
+import Oka.AlgebraicGeometry.StructureSheaf
 import Oka.Analytic.DividedDifference
 import Oka.Analytic.ParametricCircleIntegral
 import Oka.AnalyticSpace.Basic

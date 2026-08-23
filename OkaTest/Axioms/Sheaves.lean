@@ -359,3 +359,21 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.OpenCover.glueAlgMapRestrict_comapAl
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.OpenCover.glueAlgMapRestrict_comapAlgMap
+
+/-! ### The germ of a global section of `𝒪_{Spec R}` at a prime
+
+`Oka/AlgebraicGeometry/StructureSheaf.lean`. Mirror-tree material with nothing analytic in it. -/
+
+/--
+info: 'AlgebraicGeometry.StructureSheaf.germ_algebraMap_mem_maximalIdeal_iff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.StructureSheaf.germ_algebraMap_mem_maximalIdeal_iff
+
+/--
+info: 'AlgebraicGeometry.StructureSheaf.germ_algebraMap_mem_maximalIdeal_iff'' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.StructureSheaf.germ_algebraMap_mem_maximalIdeal_iff'
