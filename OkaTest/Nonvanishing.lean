@@ -167,6 +167,24 @@ theorem base_nodeInclLift (p : AnalyticSpace.node.{u}) (j : ULift.{u} (Fin 2)) :
   congrArg (fun y : AnalyticSpace.complexAffineSpace.{u} 2 ↦ y j)
     (AnalyticSpace.base_liftOpen nodeIncl.{u} ambientOpen.{u} range_base_nodeIncl_subset.{u} p)
 
+/-! ### The instance the `liftRestrict` docstring is about
+
+`AlgebraicGeometry.LocallyRingedSpace.liftRestrict` exists because the open of an analytic space
+reaches a call site spelled through `↑X.toPresheafedSpace` rather than `X.toTopCat`. Which
+failure that produces depends on the **expected type**: at
+`ComplexAnalytic.AnalyticSpace.liftOpen`'s, instance search fails; at the one below — a morphism
+into `X.toLocallyRingedSpace.restrict U.isOpenEmbedding` — it succeeds and the
+`range_ofRestrict` rewrite fails instead.
+
+This is the second half as a test rather than as a recollection. The first half cannot be one: a
+tactic that fails is not recordable. If `IsOpenImmersion (X.ofRestrict …)` ever stops being found
+at *this* spelling, the docstring's account becomes wrong and this line breaks.
+-/
+
+example (X : AnalyticSpace.{u}) (U : X.Opens) :
+    LocallyRingedSpace.IsOpenImmersion
+      (X.toLocallyRingedSpace.ofRestrict U.isOpenEmbedding) := inferInstance
+
 /-! ### The lift agrees with `restrictLE` where both apply -/
 
 /-- **Lifting the inclusion of an open subspace along a larger open subspace gives
