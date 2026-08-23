@@ -350,6 +350,20 @@ info: 'ComplexAnalytic.AnalyticSpace.not_isFinite_of_infinite_fiber' depends on 
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.not_isFinite_of_infinite_fiber
 
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isProperMap_base_of_isFinite' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isProperMap_base_of_isFinite
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isFinite_iff_isProperMap_base_and_finite_fiber' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFinite_iff_isProperMap_base_and_finite_fiber
+
 /-! ### Local isomorphisms and finite étale morphisms -/
 
 /--

@@ -34,12 +34,33 @@ the class is stated in the `ComplexAnalytic` namespace rather than for
 `AlgebraicGeometry.LocallyRingedSpace` in the mirror tree, where its name would read as the
 scheme-theoretic condition and would specialise to a different one.
 
+## Properness, and exactly what agrees with what
+
+A finite morphism is proper: `ComplexAnalytic.AnalyticSpace.isProperMap_base_of_isFinite`. That
+is a theorem rather than part of the definition, and it needs **no separation hypothesis** — a
+finite set is compact in any topological space, unlike the covering-map statement in
+`Oka/AnalyticSpace/CoveringMap.lean`, which does need one on the source.
+
+**The converse is false, and this file used to say "proper and finite-with-finite-fibres agree"
+in a way that invited the false reading.** Properness gives *compact* fibres, and a compact fibre
+is finite only when it is also discrete, so properness alone does not imply finiteness. What is
+true is the agreement with finiteness of the fibres carried on **both** sides: `IsFinite f` iff
+the underlying map is proper and has finite fibres, which is
+`ComplexAnalytic.AnalyticSpace.isFinite_iff_isProperMap_base_and_finite_fiber`. Read that way the
+content of the agreement is exactly `IsProperMap ↔ IsClosedMap` **given** finite fibres, which is
+where the two directions sit: one is `IsProperMap.isClosedMap`, the other is the compactness of a
+finite set.
+
+There is deliberately no `IsProper` class. `IsProperMap` on `f.toLRSHom.base` already is the
+statement; a class would have to carry its own identity, composition and non-vacuity API to earn
+its place, and nothing here or downstream consumes one.
+
 ## What is not here, and it is the whole of the subject
 
 **Grauert's finite mapping theorem** — that `f_*𝒪_X` is a coherent `𝒪_Y`-module for finite `f` —
 is what makes this definition useful, and it is not proved here or anywhere in this repository.
-Nothing below mentions a pushforward. **Properness** is likewise absent: for these maps proper and
-finite-with-finite-fibres agree, and that agreement is a theorem rather than a definition.
+Nothing below mentions a pushforward. That absence stands; the properness clause that used to
+stand beside it does not, and is now the section above.
 
 **Finite covers are a further condition and are not defined here.** The Riemann existence theorem
 is about finite *étale* covers — finite together with being a local isomorphism — and that is a
@@ -66,6 +87,9 @@ stated here rather than left to be discovered.
   every local model this development builds.
 - `ComplexAnalytic.AnalyticSpace.not_isFinite_of_infinite_fiber`: the criterion a non-example is
   exhibited by.
+- `ComplexAnalytic.AnalyticSpace.isProperMap_base_of_isFinite`: **a finite morphism is proper**,
+  and `ComplexAnalytic.AnalyticSpace.isFinite_iff_isProperMap_base_and_finite_fiber` is the
+  agreement in both directions.
 
 ## References
 
@@ -163,5 +187,43 @@ point at a set for. -/
 theorem not_isFinite_of_infinite_fiber {X Y : AnalyticSpace.{u}} (f : X ⟶ Y) (y : Y)
     (h : Infinite (f.toLRSHom.base ⁻¹' {y})) : ¬ IsFinite f := fun hf ↦
   (not_finite_iff_infinite.2 h) (hf.finite_fiber y)
+
+/-- **A finite morphism is proper**, in the sense that its underlying map is an `IsProperMap`.
+
+`isProperMap_iff_isClosedMap_and_compact_fibers` asks for three things and the class supplies two
+of them directly; the third, continuity, is not a field of
+`ComplexAnalytic.AnalyticSpace.IsFinite` and does not need to be, since the underlying map is a
+`TopCat` morphism and carries its continuity with it.
+
+**No separation hypothesis is used and none is available.** A finite set is compact in an
+arbitrary topological space (`Set.Finite.isCompact`), so compactness of the fibres falls out of
+`ComplexAnalytic.AnalyticSpace.IsFinite.finite_fiber` alone. That is not true of the covering-map
+statement in `Oka/AnalyticSpace/CoveringMap.lean`, which genuinely needs `[T2Space X]`; the
+hypothesis should not be carried over here out of symmetry with it.
+
+**The converse fails**: properness gives compact fibres, not finite ones. See
+`ComplexAnalytic.AnalyticSpace.isFinite_iff_isProperMap_base_and_finite_fiber` for the agreement
+that does hold, and the module docstring for why the weaker-sounding statement is the honest
+one. -/
+theorem isProperMap_base_of_isFinite {X Y : AnalyticSpace.{u}} (f : X ⟶ Y) [IsFinite f] :
+    IsProperMap (f.toLRSHom.base : X → Y) :=
+  isProperMap_iff_isClosedMap_and_compact_fibers.2
+    ⟨f.toLRSHom.base.hom.continuous, IsFinite.isClosedMap,
+      fun y ↦ have := IsFinite.finite_fiber (f := f) y; (Set.toFinite _).isCompact⟩
+
+/-- **A morphism is finite exactly when its underlying map is proper and has finite fibres.**
+
+This is the agreement the module docstring is careful about: finiteness of the fibres appears on
+*both* sides, because properness does not imply it. With it assumed, the whole content is that a
+proper map is closed (`IsProperMap.isClosedMap`) and that a closed map with finite — hence
+compact — fibres is proper.
+
+`ComplexAnalytic.AnalyticSpace.isFinite_iff`, generated by `@[mk_iff]` on the class, is the
+same statement with `IsClosedMap` in place of `IsProperMap`. -/
+theorem isFinite_iff_isProperMap_base_and_finite_fiber {X Y : AnalyticSpace.{u}} (f : X ⟶ Y) :
+    IsFinite f ↔ IsProperMap (f.toLRSHom.base : X → Y) ∧
+      ∀ y : Y, Finite (f.toLRSHom.base ⁻¹' {y}) :=
+  ⟨fun _ ↦ ⟨isProperMap_base_of_isFinite f, fun y ↦ IsFinite.finite_fiber y⟩,
+    fun h ↦ ⟨h.1.isClosedMap, h.2⟩⟩
 
 end ComplexAnalytic.AnalyticSpace

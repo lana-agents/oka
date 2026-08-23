@@ -133,9 +133,14 @@ coherence statement for arbitrary complex analytic spaces:
   and not surjective; `(z, w) ↦ z` fails **both** conditions — the fibre over the origin is
   infinite, and its underlying map is not closed, because the hyperbola `z w = 1` is closed while
   its image `ℂ ∖ {0}` is not; and their composite is finite although the second factor is not, so
-  finiteness is not right-cancellable. **What makes finiteness useful is Grauert's finite mapping theorem, that
-  `f_*𝒪_X` is coherent for finite `f`, and that is not proved here**; nor is properness defined,
-  nor are there fibre products to base-change along.
+  finiteness is not right-cancellable. **A finite morphism is proper**
+  (`ComplexAnalytic.AnalyticSpace.isProperMap_base_of_isFinite`), with no separation hypothesis,
+  because a finite set is compact in any space; the converse is false, since properness gives only
+  *compact* fibres, so the agreement the file states carries finiteness of the fibres on both
+  sides (`…isFinite_iff_isProperMap_base_and_finite_fiber`). There is no `IsProper` class, and
+  properness is not shown of anything except by way of finiteness. **What makes finiteness useful
+  is Grauert's finite mapping theorem, that `f_*𝒪_X` is coherent for finite `f`, and that is not
+  proved here**, nor are there fibre products to base-change along.
 
 * **Local isomorphisms and finite étale morphisms** (`Oka/AnalyticSpace/LocalIso.lean`), the
   second rung of the Riemann existence theorem's analytic side.

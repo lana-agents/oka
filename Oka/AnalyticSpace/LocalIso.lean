@@ -37,8 +37,10 @@ repository already has the machinery for it: `ComplexAnalytic.IsCutOutBy` carrie
 **Why not `IsCoveringMap`.** Mathlib has it, and it is a *global* condition — every point of the
 target has an evenly covered neighbourhood — strictly stronger than being a local homeomorphism.
 For a **finite** local isomorphism the two agree, and that agreement is a theorem, of the same
-kind as properness-versus-finiteness, which `Oka/AnalyticSpace/Finite.lean` already declines to
-conflate. It is not in the definition and it is not proved here; it is
+kind as properness-versus-finiteness, which `Oka/AnalyticSpace/Finite.lean` keeps out of its
+definition and proves separately as
+`ComplexAnalytic.AnalyticSpace.isFinite_iff_isProperMap_base_and_finite_fiber`. It is not in the
+definition and it is not proved here; it is
 `ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale` in
 `Oka/AnalyticSpace/CoveringMap.lean`, the third rung, which imports this file.
 
