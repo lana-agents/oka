@@ -370,3 +370,31 @@ info: 'AlgebraicGeometry.Scheme.Modules.isLocalizedModule_away_sectionsToBasicOp
 #guard_msgs (whitespace := lax) in
 #print axioms
   AlgebraicGeometry.Scheme.Modules.isLocalizedModule_away_sectionsToBasicOpen_of_isCoherent
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.surjective_moduleSpecΓFunctor_map' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.surjective_moduleSpecΓFunctor_map
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.isQuasicoherent_free' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.isQuasicoherent_free
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.freeΓIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.freeΓIso
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.module_finite_moduleSpecΓFunctor_obj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.module_finite_moduleSpecΓFunctor_obj
