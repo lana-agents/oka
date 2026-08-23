@@ -61,6 +61,15 @@ that `2z ≠ 0`.
 morphism which is **not** an isomorphism, so `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` is
 strictly larger than the isomorphisms and neither rung is idle.
 
+**And it is where the third rung is exercised.**
+`ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale`
+(`Oka/AnalyticSpace/CoveringMap.lean`) says a finite étale morphism out of a Hausdorff analytic
+space has a covering map for its underlying map; `ComplexAnalytic.isCoveringMap_base_sq` is the
+only place it is applied, and the only place at which its hypotheses are shown to be satisfiable
+by anything other than an isomorphism. **It proves nothing new about `z ↦ z²`** — Mathlib's
+`isCoveringMap_npow` already covers that, and is what the local-homeomorphism field above is
+derived from — so read it as a test of the rung and not as a fact about the map.
+
 ## What is not checked here
 
 * **Nothing about structure sheaves.** `ComplexAnalytic.AnalyticSpace.IsFinite` is a condition on
@@ -83,11 +92,14 @@ strictly larger than the isomorphisms and neither rung is idle.
   morphism which is not an isomorphism. **The stalk half of
   `ComplexAnalytic.AnalyticSpace.IsLocalIso` is exercised by it**, and by nothing else: the
   non-example `ComplexAnalytic.axisIncl` fails the topological field alone.
-* **Nothing here is a covering map.** `ComplexAnalytic.sq` is the two-sheeted cover of the
-  punctured line and Mathlib's `isCoveringMap_npow` says so about `z ↦ z²` on `{z : ℂ // z ≠ 0}`,
-  but no statement here is about `IsCoveringMap` of a morphism of *analytic spaces*, and the
-  theorem that a finite local isomorphism onto a connected base is one — the third rung — is not
-  proved anywhere in this repository.
+* **The number of sheets.** `ComplexAnalytic.isCoveringMap_base_sq` says the underlying map of
+  `ComplexAnalytic.sq` is a covering map — the third rung,
+  `ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale`, applied at the witness —
+  but nothing here says it is *two*-sheeted, and the theorem that the number of sheets is constant
+  over a connected base is not proved anywhere in this repository. **The distinction the bullet
+  that used to stand here drew still holds**: `IsCoveringMap` is a condition on a map of
+  topological spaces, so neither that statement nor Mathlib's `isCoveringMap_npow` is about a
+  covering *of analytic spaces*, a notion this repository does not have.
 -/
 
 open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry Topology Filter
@@ -816,12 +828,60 @@ This is what `OkaTest/FiniteMorphism.lean` existed to be unable to say. With
 contain something the isomorphisms do not — which is the whole claim `ComplexAnalytic.axisIncl`
 could not make, since it fails the local-isomorphism condition rather than satisfying it.
 
-**It is still not a covering map here.** That a finite local isomorphism onto a connected base is
-an `AlgebraicGeometry`-level `IsCoveringMap` is the third rung and is not proved in this
-repository, and no statement here should be read as it. -/
+**Its underlying map is a covering map**, which is the section below: the third rung,
+`ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale`, consumes exactly this
+theorem. That was the clause this docstring used to have to withhold. It remains a statement about
+the underlying map and not about the structure sheaves. -/
 theorem isFiniteEtale_sq : AnalyticSpace.IsFiniteEtale (ComplexAnalytic.sq.{u}) where
   isFinite := isFinite_sq.{u}
   isLocalIso := isLocalIso_sq.{u}
+
+/-! ### The witness is a covering map: the third rung, exercised
+
+`ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale` in
+`Oka/AnalyticSpace/CoveringMap.lean` says the underlying map of a finite étale morphism out of a
+Hausdorff analytic space is a covering map. This is the only place it is applied.
+
+**Nothing here is new about `ComplexAnalytic.sq`, and the section would be misread if that were
+not said.** That `z ↦ z²` is a covering map of `ℂ ∖ {0}` is Mathlib's `isCoveringMap_npow`, which
+is already what `ComplexAnalytic.isLocalHomeomorph_base_sq` above is derived from; conjugating it
+with `ComplexAnalytic.puncturedHomeo` would give the conclusion below in two lines and without the
+rung. What is tested here is the **rung** — that its hypotheses are the ones a witness in this
+repository actually has, and that its conclusion follows from `ComplexAnalytic.isFiniteEtale_sq`
+with no further input about `sq` beyond the separation of its source.
+
+**Only the underlying map is a covering map.** `IsCoveringMap` is a condition on a map of
+topological spaces, so `ComplexAnalytic.isCoveringMap_base_sq` says nothing about structure
+sheaves; there is no notion of a covering *of analytic spaces* in this repository, and the stalk
+field of `ComplexAnalytic.AnalyticSpace.IsLocalIso` plays no part in the third rung. -/
+
+/-- **The punctured line is Hausdorff.** `ComplexAnalytic.puncturedHomeo` again: `{z : ℂ // z ≠ 0}`
+is a subspace of `ℂ`.
+
+An analytic space carries no separation axiom — `Oka/AnalyticSpace/Basic.lean` declines to impose
+one, as `AlgebraicGeometry.Scheme` does — so this is a hypothesis of
+`ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale` that has to be supplied here.
+
+Declared as an instance rather than a theorem so that the application below is one line. Its head
+is a particular restriction of a particular space, both defined in this file, so it cannot fire
+anywhere it is not wanted, and there is no competing `T2Space` instance for an analytic space to
+disagree with. -/
+instance t2Space_restrict_punctured :
+    T2Space ((AnalyticSpace.complexAffineSpace.{u} 1).restrict punctured.{u} : Type u) :=
+  puncturedHomeo.{u}.symm.t2Space
+
+/-- **The underlying map of `ComplexAnalytic.sq` is a covering map**, from
+`ComplexAnalytic.isFiniteEtale_sq` and the third rung.
+
+This is the first — and so far only — application of
+`ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale` at anything other than an
+isomorphism, so it is what says the rung is not vacuous. It is *not* independent evidence that
+`z ↦ z²` covers the punctured line: see the section docstring. -/
+theorem isCoveringMap_base_sq :
+    IsCoveringMap ((ComplexAnalytic.sq.{u}).toLRSHom.base :
+      ((AnalyticSpace.complexAffineSpace.{u} 1).restrict punctured.{u} : Type u) → _) :=
+  haveI := isFiniteEtale_sq.{u}
+  AnalyticSpace.isCoveringMap_base_of_isFiniteEtale ComplexAnalytic.sq.{u}
 
 end
 

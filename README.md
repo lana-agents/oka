@@ -166,8 +166,19 @@ coherence statement for arbitrary complex analytic spaces:
   `AnalyticAt.analyticAt_localInverse` and **no branch of the square root is built here.** Its two
   halves are not symmetric: injectivity uses only the *right* inverse and only its continuity,
   while surjectivity uses only the *left* inverse and is the one place analyticity is the point.
-  **Neither `IsCoveringMap` of a morphism of analytic spaces nor the theorem that a finite local
-  isomorphism onto a connected base is one appears**; that is a third rung.
+  **The third rung is `ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale`**
+  (`Oka/AnalyticSpace/CoveringMap.lean`): the underlying map of a finite étale morphism out of a
+  **Hausdorff** analytic space is a covering map. All of the topology is Mathlib's — closed with
+  finite fibres and a local homeomorphism is a covering map, which Mathlib proves for
+  `IsCoveringMapOn` and which the mirror tree restates globally
+  (`Oka/Topology/Covering/Basic.lean`) — and the two conditions are literally the fields of the
+  first two rungs. Hausdorffness is a genuine hypothesis: an analytic space is no more assumed
+  separated here than a scheme is. Connectedness of the target is **not** needed, and the earlier
+  statement of this rung wrongly carried it; what connectedness gives is that the number of sheets
+  is constant, which is not proved. `ComplexAnalytic.isCoveringMap_base_sq` applies the rung to the
+  squaring map, and is a test of the rung rather than new information about `z ↦ z²`, which
+  Mathlib already covers. **There is still no notion of a covering *of analytic spaces***: this is
+  a statement about the underlying map, and the stalk field of `…IsLocalIso` plays no part in it.
 
 * **Coherence in every finite rank, and of an analytified presentation.** Oka's theorem says
   `𝒪_X` is coherent; a *presentation* is pushed through the stability results only if `𝒪_X^m` is

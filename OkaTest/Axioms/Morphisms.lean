@@ -8,8 +8,9 @@ import Oka
 /-!
 # Axiom regression tests: morphisms of complex analytic spaces
 
-The morphisms of analytic spaces built from holomorphic maps, and the first morphism out of a
-space which is not `ℂ^n`.
+The morphisms of analytic spaces built from holomorphic maps, the first morphism out of a
+space which is not `ℂ^n`, and the classes of morphisms — finite, local isomorphism, finite étale —
+together with the topological criteria they are proved from.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -471,3 +472,23 @@ info: 'ComplexAnalytic.AnalyticSpace.isIso_stalkMap_okaMap' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.isIso_stalkMap_okaMap
+
+/-! ### The third rung: a finite étale morphism is a covering map
+
+The first of the two is the mirror-tree topological criterion in
+`Oka/Topology/Covering/Basic.lean` and says nothing about analytic spaces; it is guarded here
+rather than apart from its only consumer. -/
+
+/--
+info: 'IsClosedMap.isCoveringMap_of_isLocalHomeomorph' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms IsClosedMap.isCoveringMap_of_isLocalHomeomorph
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale
