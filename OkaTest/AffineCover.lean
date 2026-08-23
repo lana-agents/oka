@@ -37,9 +37,9 @@ triples of distinct indices and both are vacuous.
 
 **What is not checked here.** Nothing says the glued space is not the analytification of *some*
 presentation — the node with a tripled origin is intuitively not affine, but proving it needs an
-invariant nothing in this repository computes. Nor is there an analytic structure on the gluing:
-that is `ComplexAnalytic.AnalyticSpace.ofGlueData`, which needs the compatibility of the algebra
-structures on the glued space and is a separate step. And the transition here is the identity, so
+invariant nothing in this repository computes — and `ComplexAnalytic.nodeTripleSpace` below does
+not change that: an analytic structure is a statement about the sheaves and says nothing about
+affineness. And the transition here is the identity, so
 nothing in *this* file exercises a non-trivial algebra isomorphism between the two descriptions of
 an overlap; `OkaTest/ProjectiveLine.lean` is the example that does, gluing two copies of `𝔸¹`
 along `D(z)` by `z ↦ 1/z`. The two files are complementary and neither replaces the other: with

@@ -439,10 +439,15 @@ that `CategoryTheory.GlueData.ofGlueData'` fills the diagonal with, by
 Two places want a term rather than a rewrite and the second is not optional. The diagonal case is
 an equation of *morphisms*, so `congrArg` disposes of it without touching the structures. Off the
 diagonal both sides carry the same `eqToHom` prefix, and
-`AlgebraicGeometry.LocallyRingedSpace.comapAlgMap_comp` has to be applied as a term there:
-`rw` will not fire, because the composition's object positions still hold unreduced
-`CategoryTheory.GlueData.ofGlueData'` projections and `rw` matches at reducible transparency —
-the same seam `Oka/CategoryTheory/GlueData.lean`'s module docstring records. -/
+`AlgebraicGeometry.LocallyRingedSpace.comapAlgMap_comp` has to be applied **as a term**: the
+corresponding `rw` reports *did not find an occurrence of the pattern
+`comapAlgMap (?f ≫ ?g) ?γ`* against a goal that visibly has that shape, and it still does after
+`dsimp only [CategoryTheory.GlueData.ofGlueData']`, so delta-reducing the projections in the goal
+is not the remedy. **Why it fails is not established here** and no explanation should be read
+into it; the contrast worth having is that
+`ComplexAnalytic.comapAlgMap_coverIncl_eq` above rewrites with the same lemma twice and
+successfully, at the same category, on a composite that has not come through
+`CategoryTheory.GlueData.ofGlueData'_f_of_ne` carrying its `eqToHom`. -/
 theorem glueDataCLinear_coverGlueData :
     GlueDataCLinear.{u} (coverGlueData.{u} obj poly glue hrange hsymm hcocycle)
       fun j ↦ (AnalyticSpace.analytification.{u} (obj j).g).algebraMap := by
