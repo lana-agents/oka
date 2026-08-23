@@ -121,6 +121,22 @@ coherence statement for arbitrary complex analytic spaces:
   node *because of the node's equation*, so the node lifts to the proper open subspace
   `ℂ²|{1 - z₀z₁ ≠ 0}`.
 
+* **Finite morphisms.** A morphism of complex analytic spaces is **finite** when its underlying
+  map is closed with finite fibres — the classical definition — which is
+  `ComplexAnalytic.AnalyticSpace.IsFinite` in `Oka/AnalyticSpace/Finite.lean`. The identities are
+  finite, composites of finite morphisms are finite, and **a closed embedding is finite**, hence
+  so is every morphism cutting its source out of its target by global sections. Mathlib's
+  `AlgebraicGeometry.IsFinite` for schemes is a different condition with a different proof
+  technique behind it — affine-locality plus `RingHom.Finite` — and none of it transfers, since
+  there are no affines in the analytic category. `OkaTest/FiniteMorphism.lean` shows the class is
+  neither empty nor everything, on the two morphisms between `ℂ` and `ℂ²`: `z ↦ (z, 0)` is finite
+  and not surjective; `(z, w) ↦ z` fails **both** conditions — the fibre over the origin is
+  infinite, and its underlying map is not closed, because the hyperbola `z w = 1` is closed while
+  its image `ℂ ∖ {0}` is not; and their composite is finite although the second factor is not, so
+  finiteness is not right-cancellable. **What makes finiteness useful is Grauert's finite mapping theorem, that
+  `f_*𝒪_X` is coherent for finite `f`, and that is not proved here**; nor is properness defined,
+  nor are there fibre products to base-change along.
+
 * **Coherence in every finite rank, and of an analytified presentation.** Oka's theorem says
   `𝒪_X` is coherent; a *presentation* is pushed through the stability results only if `𝒪_X^m` is
   coherent too, and that is an induction on the rank with no analysis in it
