@@ -358,4 +358,46 @@ lemma IsFiniteType.of_overOverEquivalence_inverse_obj {X : C} {Y : Over X}
 
 end overOver
 
+section restrict
+
+variable [HasPullbacks C] [∀ (X : C), HasSheafify (J.over X) AddCommGrpCat.{u}]
+  [∀ (X : C), (J.over X).WEqualsLocallyBijective AddCommGrpCat.{u}]
+
+/-- **Generating sections restrict along a morphism of the site.**
+
+If `M` is generated over `Y` by a family of sections, it is generated over any `X` lying over
+`Y` by their restrictions. This is the operation an argument that refines a covering needs:
+`SheafOfModules.IsFiniteType` hands out generators over the members of *some* covering, and a
+caller which wants them over a covering of its own choosing has to move them.
+
+The two functors that do it are Mathlib's. `SheafOfModules.overMap` is the pushforward along
+`CategoryTheory.Over.map f`, a left adjoint when `C` has pullbacks and therefore colimit
+preserving, so `SheafOfModules.GeneratingSections.map` applies to it; and
+`SheafOfModules.overFunctorMap` says that restricting to `Over Y` and then extending to `Over X`
+is restricting to `Over X`, so `SheafOfModules.GeneratingSections.ofEpi` along its component
+lands where it should. Nothing here is specific to a topological site.
+
+**`HasPullbacks C` is the load-bearing hypothesis**: without it `SheafOfModules.overMap` is not
+known to be a left adjoint, so it is not known to preserve colimits and
+`SheafOfModules.GeneratingSections.map` does not apply.
+
+It is **not** the only hypothesis beyond the ones `SheafOfModules.IsFiniteType` carries.
+That class asks for `HasWeakSheafify` on the slice sites and this needs the stronger
+`HasSheafify`; re-declaring the definition under `IsFiniteType`'s hypotheses plus
+`HasPullbacks C` fails with `failed to synthesize HasSheafify (J.over X) AddCommGrpCat`. -/
+noncomputable def GeneratingSections.restrict {M : SheafOfModules.{u} R} {X Y : C} (f : X ⟶ Y)
+    (σ : (M.over Y).GeneratingSections) : (M.over X).GeneratingSections :=
+  (σ.map (overMap R f) (overMapUnitIso f).symm).ofEpi (((overFunctorMap R f).app M).hom)
+
+/-- **Restriction preserves finiteness of a family of generating sections**, because neither
+`SheafOfModules.GeneratingSections.map` nor `SheafOfModules.GeneratingSections.ofEpi` changes the
+index type. `unfold` is needed: `SheafOfModules.GeneratingSections.restrict` is an ordinary
+definition, so instance search does not see the two constructions it is built from. -/
+instance GeneratingSections.isFiniteType_restrict {M : SheafOfModules.{u} R} {X Y : C} (f : X ⟶ Y)
+    (σ : (M.over Y).GeneratingSections) [σ.IsFiniteType] : (σ.restrict f).IsFiniteType := by
+  unfold GeneratingSections.restrict
+  infer_instance
+
+end restrict
+
 end SheafOfModules
