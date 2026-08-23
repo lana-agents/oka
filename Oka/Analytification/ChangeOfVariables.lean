@@ -74,6 +74,10 @@ isomorphism of presented algebras into an isomorphism of analytifications, which
 - `ComplexAnalytic.PresHom`: a `ℂ`-algebra map between two presented algebras, spelled as a ring
   map plus the commutation it must satisfy — **there is no `Algebra ℂ` instance on these
   quotients and none is manufactured.**
+- `ComplexAnalytic.PresHom.ofRename`: **a renaming of the variables carrying the target's
+  relations into the source's ideal is such a map** — the family of `PresHom`s an explicit
+  change of coordinates arrives in, and the only construction here that produces one with
+  content in it.
 - `ComplexAnalytic.transported`: the tuple of sections of `𝒪_{X^an}` that a `PresHom` names.
 - `ComplexAnalytic.analytificationMap`: **the induced morphism of analytifications.**
 - `ComplexAnalytic.analytificationIsoOfPresHom`: **two presentations of one algebra have
@@ -83,6 +87,10 @@ isomorphism of presented algebras into an isomorphism of analytifications, which
 
 - `ComplexAnalytic.eval₂Hom_transported`: substituting the transported tuple is applying the
   `ℂ`-algebra map.
+- `ComplexAnalytic.PresHom.ofRename_comp_ofRename`: two renamings inverse to each other give
+  mutually inverse `ℂ`-algebra maps, which is what makes such a pair an isomorphism of
+  presentations (`ComplexAnalytic.Presentation.isoOfRename`, in
+  `Oka/Analytification/Functor.lean`, where presentations have a category).
 - `ComplexAnalytic.Γ_map_analytificationMap_comp_quotientToGlobal`: `quotientToGlobal` is natural
   along the induced morphism.
 - `ComplexAnalytic.analytificationMap_id` and `ComplexAnalytic.analytificationMap_comp`:
@@ -155,6 +163,71 @@ def PresHom.id (g : Fin k → MvPolynomial (ULift.{u} (Fin n)) ℂ) : PresHom.{u
 def PresHom.comp (ψ : PresHom.{u} g g') (χ : PresHom.{u} g' g'') : PresHom.{u} g g'' :=
   ⟨ψ.toRingHom.comp χ.toRingHom, by
     rw [RingHom.comp_assoc, χ.commutes, ψ.commutes]⟩
+
+/-! ### `ℂ`-algebra maps from a renaming of the variables
+
+Nothing above produces a `ComplexAnalytic.PresHom` with any content in it: the two constructions
+are the identity and composition. This section produces the standard family, a map of *variables*
+sending each relation of the target presentation into the ideal of the source one — which is what
+a change of coordinates is. `ComplexAnalytic.localisationPresHom`, the structure map `A ⟶ A_f`, is
+one of these, at `ComplexAnalytic.localisationIncl`. -/
+
+/-- **A renaming of the variables carrying the target's relations into the source's ideal is a
+`ℂ`-algebra map of the presented algebras.**
+
+Note the direction, which is the one the rest of the file runs in: the ring map of a
+`ComplexAnalytic.PresHom g g'` goes `ℂ[y] ⧸ (g') → ℂ[x] ⧸ (g)`, so `σ` renames the variables of
+the *target* presentation `g'` into those of the *source* `g`, and the hypothesis is about
+`g' j` and not about `g j`.
+
+The commutation is `MvPolynomial.rename_C`: a renaming fixes the constants, which is exactly
+what the field demands. -/
+def PresHom.ofRename (σ : ULift.{u} (Fin n') → ULift.{u} (Fin n))
+    (h : ∀ j, MvPolynomial.rename σ (g' j) ∈ presentationIdeal.{u} g) :
+    PresHom.{u} g g' where
+  toRingHom :=
+    Ideal.Quotient.lift (presentationIdeal.{u} g')
+      ((Ideal.Quotient.mk (presentationIdeal.{u} g)).comp
+        (MvPolynomial.rename σ : _ →ₐ[ℂ] _).toRingHom)
+      (by
+        have hle : presentationIdeal.{u} g' ≤
+            RingHom.ker ((Ideal.Quotient.mk (presentationIdeal.{u} g)).comp
+              (MvPolynomial.rename σ : _ →ₐ[ℂ] _).toRingHom) := by
+          rw [presentationIdeal, Ideal.span_le]
+          rintro _ ⟨j, rfl⟩
+          simpa [RingHom.mem_ker, Ideal.Quotient.eq_zero_iff_mem] using h j
+        exact fun a ha ↦ hle ha)
+  commutes := by
+    refine RingHom.ext fun c ↦ ?_
+    simp [presentedAlgebraMap]
+
+/-- The value of `ComplexAnalytic.PresHom.ofRename` on the class of a polynomial: `rfl`, stated
+as a `simp` lemma so that a call site need not unfold the definition. -/
+@[simp]
+theorem PresHom.ofRename_toRingHom_mk (σ : ULift.{u} (Fin n') → ULift.{u} (Fin n))
+    (h : ∀ j, MvPolynomial.rename σ (g' j) ∈ presentationIdeal.{u} g)
+    (p : MvPolynomial (ULift.{u} (Fin n')) ℂ) :
+    (PresHom.ofRename.{u} σ h).toRingHom (Ideal.Quotient.mk (presentationIdeal.{u} g') p) =
+      Ideal.Quotient.mk (presentationIdeal.{u} g) (MvPolynomial.rename σ p) :=
+  rfl
+
+/-- **Two renamings inverse to each other give mutually inverse `ℂ`-algebra maps.**
+
+Only `σ ∘ τ = id` is assumed, and only the composite in that order is computed; applying it
+twice, with the two hypotheses swapped, is what an isomorphism needs. Both sides are ring
+maps out of a quotient of a polynomial ring, so the proof is `Ideal.Quotient.ringHom_ext`
+followed by `MvPolynomial.ringHom_ext`, and the variable case is the hypothesis. -/
+theorem PresHom.ofRename_comp_ofRename (σ : ULift.{u} (Fin n') → ULift.{u} (Fin n))
+    (h : ∀ j, MvPolynomial.rename σ (g' j) ∈ presentationIdeal.{u} g)
+    (τ : ULift.{u} (Fin n) → ULift.{u} (Fin n'))
+    (h' : ∀ j, MvPolynomial.rename τ (g j) ∈ presentationIdeal.{u} g')
+    (hστ : σ ∘ τ = _root_.id) :
+    (PresHom.ofRename.{u} σ h).comp (PresHom.ofRename.{u} τ h') = PresHom.id.{u} g := by
+  refine PresHom.ext (Ideal.Quotient.ringHom_ext (MvPolynomial.ringHom_ext (fun c ↦ ?_)
+    (fun i ↦ ?_)))
+  · simp [PresHom.comp, PresHom.id]
+  · have hi : σ (τ i) = i := congrFun hστ i
+    simp [PresHom.comp, PresHom.id, hi]
 
 /-! ### The induced morphism of analytifications -/
 
