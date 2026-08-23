@@ -15,6 +15,8 @@ public import Oka.Algebra.Category.ModuleCat.Sheaf.Generators
 # A module on an affine scheme and its global sections
 
 Material for `Mathlib/AlgebraicGeometry/Modules/Tilde.lean`; see `README.md` on the mirror tree.
+That file does not currently import `Mathlib.RingTheory.Localization.Finiteness`, which the
+change of site below needs, so upstreaming it adds that import — two files to its closure.
 
 Mathlib proves `AlgebraicGeometry.isQuasicoherent_iff_isIso_fromTildeΓ`: an
 `𝒪_{Spec R}`-module `M` is quasicoherent exactly when the counit
@@ -367,6 +369,14 @@ ring acting on a *fixed* carrier rather than a map of carriers, which is why
   and agree by `rfl`;
 * `AlgebraicGeometry.Scheme.Modules.module_finite_sections_of_restrict` crosses back over
   `V.isoSpec.inv`, landing at the open `V.isoSpec.inv ''ᵁ ⊤`, which is `⊤`.
+
+The last step is a `▸` along an equality of opens, and so is the corresponding one in
+`AlgebraicGeometry.Scheme.Modules.module_finite_sections_of_isAffineOpen`. **Both are harmless
+because `Module.Finite` is a `Prop`**: the transport moves a proof and no data, so no term
+downstream can meet a stuck `Eq.mpr`. Neither open equality is `rfl` —
+`AlgebraicGeometry.Scheme.Opens.ι_image_top` is `TopologicalSpace.Opens.isOpenEmbedding_obj_top`,
+which is the `functor.obj ⊤`-versus-`U` seam, and Mathlib's own
+`AlgebraicGeometry.Scheme.Opens.topIso` is an `eqToIso` along it.
 
 `PreservesColimitsOfSize.{u, u}` for `restrictFunctor` is written out rather than left to search,
 as Mathlib's own `AlgebraicGeometry.Scheme.Modules.presentationRestrict` does, and for the same

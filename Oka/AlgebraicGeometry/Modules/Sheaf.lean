@@ -13,6 +13,8 @@ public import Oka.RingTheory.Finiteness.Basic
 # Restricting a module along an open immersion: generators and finiteness of sections
 
 Material for `Mathlib/AlgebraicGeometry/Modules/Sheaf.lean`; see `README.md` on the mirror tree.
+That file does not currently import `Mathlib.Algebra.Category.ModuleCat.Sheaf.Generators`, which
+the declarations here need, so upstreaming them adds that import — three files to its closure.
 
 Two facts about `AlgebraicGeometry.Scheme.Modules.restrict`, both of them bookkeeping in the
 sense that neither uses anything about the sheaves beyond what Mathlib already proves, and both
@@ -115,9 +117,13 @@ The carriers are the same type (`AlgebraicGeometry.Scheme.Modules.restrict_obj`,
 `AlgebraicGeometry.Scheme.Modules.smul_restrictAppIso_hom` read elementwise — after which the
 proof is that lemma applied, with no rewriting.
 
-The `Module Γ(V, U) Γ(M, f ''ᵁ U)` instance is handed over rather than searched for: it exists at
-the spelling `Γ(M.restrict f, U)`, and instance search runs at reducible transparency, where the
-two spellings are not the same. -/
+The `Module Γ(V, U) Γ(M, f ''ᵁ U)` instance is supplied by `@`-application, and **that is the
+part to copy**: putting it in scope with `haveI` does *not* work, nor does
+`set_option backward.isDefEq.respectTransparency false`. Search has to unify the two carriers to
+use an instance it has been given, and it unifies at reducible transparency, where
+`Γ(M.restrict f, U)` and `Γ(M, f ''ᵁ U)` are not the same — `exact x` compiles across them and
+`with_reducible exact x` is a type mismatch. Handing the instance to the elaborator positionally
+is what avoids the unification. -/
 theorem module_finite_sections_of_restrict {V W : Scheme.{u}} (f : V ⟶ W) [IsOpenImmersion f]
     (M : W.Modules) (U : V.Opens) [Module.Finite Γ(V, U) Γ(M.restrict f, U)] :
     Module.Finite Γ(W, f ''ᵁ U) Γ(M, f ''ᵁ U) :=
