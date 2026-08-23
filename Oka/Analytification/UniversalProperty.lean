@@ -169,6 +169,23 @@ theorem Γ_map_ofMvPolynomial (p : MvPolynomial (ULift.{u} (Fin n)) ℂ) :
       MvPolynomial.eval₂ Z.algebraMap (AnalyticSpace.coordPullback φ) p :=
   RingHom.congr_fun (Γ_map_comp_ofMvPolynomial φ) p
 
+/-- **Pulling back a polynomial expression in global sections substitutes the pulled-back
+sections.**
+
+For *any* morphism of complex analytic spaces, not only for one into `ℂ^n`: `MvPolynomial.eval₂`
+commutes with `ComplexAnalytic.AnalyticSpace.Hom.pullbackΓ` because that is a ring homomorphism
+(`MvPolynomial.eval₂_comp_left`) and because it carries the constants of `W` to the constants of
+`Z`, which is exactly `φ.isCLinear`. Nothing analytic happens here; it is the reason a
+factorisation of a morphism through an open subspace can be checked on polynomials. -/
+theorem AnalyticSpace.pullbackΓ_eval₂ {Z W : AnalyticSpace.{u}} (φ : Z ⟶ W) {σ : Type*}
+    (a : σ → W.presheaf.obj (op ⊤)) (p : MvPolynomial σ ℂ) :
+    φ.pullbackΓ (MvPolynomial.eval₂ W.algebraMap a p) =
+      MvPolynomial.eval₂ Z.algebraMap (fun i ↦ φ.pullbackΓ (a i)) p :=
+  (MvPolynomial.eval₂_comp_left (LocallyRingedSpace.Γ.map φ.toLRSHom.op).hom W.algebraMap a
+      p).trans
+    (congrArg (fun r ↦ MvPolynomial.eval₂ r (fun i ↦ φ.pullbackΓ (a i)) p)
+      (RingHom.ext φ.isCLinear))
+
 end Substitution
 
 /-! ### The inclusion of the analytification, as a morphism of analytic spaces -/
@@ -214,6 +231,15 @@ theorem polyToGlobal_eq_eval₂Hom :
     polyToGlobal.{u} g = MvPolynomial.eval₂Hom
       (AnalyticSpace.analytification.{u} g).algebraMap (analytificationCoord.{u} g) :=
   Γ_map_comp_ofMvPolynomial (analytificationInclHom.{u} g)
+
+/-- **A variable, read as a global section of `𝒪_{X^an}`, is the corresponding coordinate
+function.** The `ComplexAnalytic.polyToGlobal` companion of
+`ComplexAnalytic.quotientToGlobal_mk_X`. -/
+@[simp]
+theorem polyToGlobal_X (i : ULift.{u} (Fin n)) :
+    polyToGlobal.{u} g (MvPolynomial.X i) = analytificationCoord.{u} g i :=
+  (RingHom.congr_fun (polyToGlobal_eq_eval₂Hom.{u} g) (MvPolynomial.X i)).trans
+    (MvPolynomial.eval₂Hom_X' _ _ i)
 
 /-- **The coordinates of `X^an` satisfy the defining equations.**
 

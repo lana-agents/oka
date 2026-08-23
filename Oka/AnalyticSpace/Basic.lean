@@ -396,6 +396,36 @@ instance : forgetToLocallyRingedSpace.Faithful where
     cases h
     rfl
 
+/-- **The pullback of a global section of `𝒪_Y` along `φ : X ⟶ Y`.**
+
+This is `AlgebraicGeometry.LocallyRingedSpace.Γ.map φ.toLRSHom.op` with its target written as
+`presheaf.obj (op ⊤)` rather than as `Γ.obj`. The two are definitionally equal, and the
+distinction is not cosmetic — **`Γ.obj (op X.toLocallyRingedSpace)` is not syntactically
+`X.presheaf.obj (op ⊤)`, and instance search does not cross that**:
+
+```lean
+example {X Y : AnalyticSpace} (φ : X ⟶ Y) (a : X.presheaf.obj (op ⊤))
+    (s : Y.presheaf.obj (op ⊤)) : X.presheaf.obj (op ⊤) :=
+  a * (LocallyRingedSpace.Γ.map φ.toLRSHom.op).hom s
+-- failed to synthesize instance of type class
+--   HMul ↑(X.presheaf.obj (op ⊤)) ↑(LocallyRingedSpace.Γ.obj (op X.toLocallyRingedSpace)) ?m
+```
+
+`OkaTest/AnalytificationDistinguishedOpen.lean` records that the same product *does* elaborate
+through this declaration. The knock-on effect is what actually costs a proof: a `rw` which puts a
+raw `Γ.map … |>.hom` term inside a product elaborated at the other spelling leaves a goal that is
+not type-correct under the `instances` transparency level, and every later `rw` on that goal is
+rejected with "did not find an occurrence of the pattern".
+
+An `abbrev`, so that a caller holding `(Γ.map φ.toLRSHom.op).hom s` recognises it without
+unfolding. `ComplexAnalytic.AnalyticSpace.coordPullback` and
+`ComplexAnalytic.AnalyticSpace.resΓ` are this at particular morphisms; they are stated
+independently and each is definitionally this one, so a lemma about either applies to the
+other. -/
+abbrev Hom.pullbackΓ {X Y : AnalyticSpace.{u}} (φ : X ⟶ Y) (s : Y.presheaf.obj (op ⊤)) :
+    X.presheaf.obj (op ⊤) :=
+  (LocallyRingedSpace.Γ.map φ.toLRSHom.op).hom s
+
 /-- **A morphism of analytic spaces whose underlying morphism cuts out its source is a
 monomorphism**, hence the factorisation through it is unique when it exists
 (`CategoryTheory.cancel_mono`).
