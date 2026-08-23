@@ -147,21 +147,27 @@ coherence statement for arbitrary complex analytic spaces:
   locally isomorphic. Identities, composites and isomorphisms are local isomorphisms, and
   `OkaTest/FiniteMorphism.lean` shows the second rung genuinely restricts the first: `z ↦ (z, 0)`
   is finite and **not** a local isomorphism, because a local homeomorphism is open, its range is
-  also closed, and `ℂ²` is connected. **The only positive witness for `IsFiniteEtale` is still the
-  identity, and the candidate is one field short.** `ComplexAnalytic.sq`, the squaring map of
-  `ℂ ∖ {0}`, is in that file — it needed `ComplexAnalytic.AnalyticSpace.liftRestrict`, since
-  nothing before produced a morphism whose *target* is an open subspace — and it is proved
-  **not an isomorphism** (`ComplexAnalytic.not_isIso_sq`), **finite**
-  (`ComplexAnalytic.isFinite_sq`) and a **local homeomorphism**
-  (`ComplexAnalytic.isLocalHomeomorph_base_sq`). The last two are Mathlib's `isCoveringMap_npow`
-  and `isClosedMap_pow` conjugated by one homeomorphism, since the underlying space of the
+  also closed, and `ℂ²` is connected. **The second rung now has a positive witness other than the
+  identity**: `ComplexAnalytic.isFiniteEtale_sq`, the squaring map of `ℂ ∖ {0}`, which is finite
+  and a local isomorphism and is **not** an isomorphism (`ComplexAnalytic.not_isIso_sq`). It
+  needed `ComplexAnalytic.AnalyticSpace.liftRestrict`, since nothing before produced a morphism
+  whose *target* is an open subspace, and its four ingredients come from four different places.
+  Finiteness and the local-homeomorphism field are Mathlib's `isClosedMap_pow` and
+  `isCoveringMap_npow` conjugated by one homeomorphism, since the underlying space of the
   punctured line is a subtype of `ULift (Fin 1) → ℂ` rather than of `ℂ`; the closedness and
   fibre-finiteness of `x ↦ xⁿ` on the nonzero elements of a proper normed field are in the mirror
   tree (`Oka/Analysis/Complex/CoveringMap.lean`), because nothing in them is complex-analytic.
-  **What is not proved is the stalk field**, so nothing exercises the stalk half of the definition
-  and neither `IsLocalIso sq` nor `IsFiniteEtale sq` is claimed. Neither `IsCoveringMap` of a
-  *morphism of analytic spaces* nor the theorem that a finite local isomorphism onto a connected
-  base is one appears; that is a third rung.
+  **The stalk field is `ComplexAnalytic.isIso_stalkMap_sq`** — the first isomorphism of stalks
+  here that is neither an identity nor a field of an `IsCutOutBy` — and what makes it cheap is the
+  **germ dictionary** `ComplexAnalytic.isIso_stalkMap_okaMapHom`
+  (`Oka/AnalyticSpace/StalkLocalInverse.lean`): the stalk map of a holomorphic map is
+  precomposition of germs, so a map with an analytic local inverse near a point is an isomorphism
+  on the stalk there. The local inverse itself is Mathlib's
+  `AnalyticAt.analyticAt_localInverse` and **no branch of the square root is built here.** Its two
+  halves are not symmetric: injectivity uses only the *right* inverse and only its continuity,
+  while surjectivity uses only the *left* inverse and is the one place analyticity is the point.
+  **Neither `IsCoveringMap` of a morphism of analytic spaces nor the theorem that a finite local
+  isomorphism onto a connected base is one appears**; that is a third rung.
 
 * **Coherence in every finite rank, and of an analytified presentation.** Oka's theorem says
   `𝒪_X` is coherent; a *presentation* is pushed through the stability results only if `𝒪_X^m` is

@@ -10,6 +10,8 @@ import Mathlib.Algebra.Polynomial.Roots
 # `x ↦ xⁿ` on the nonzero elements of a proper normed field is closed with finite fibres
 
 Material for `Mathlib/Analysis/Complex/CoveringMap.lean`; see `README.md` on the mirror tree.
+That file's import closure already contains everything these need — including
+`Mathlib.Algebra.Polynomial.Roots` — so upstreaming them costs it **no** new imports.
 That file proves `isCoveringMap_npow`: for `n ≠ 0` in `𝕜`, the map
 `x ↦ xⁿ` from `{x : 𝕜 // x ≠ 0}` to itself is a covering map. These are the two remaining
 properties of that map that a *finiteness* statement needs and that being a covering map does not

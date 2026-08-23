@@ -60,6 +60,9 @@ of a complex analytic space is compared with a chart of the ambient space
   `AlgebraicGeometry.LocallyRingedSpace.hom_ext_restrict`: the factorisation through an open
   subspace is one, and is unique. A morphism *into* `X|V` is determined by its composite with
   `ofRestrict`, since an open immersion is a monomorphism.
+- `AlgebraicGeometry.LocallyRingedSpace.isIso_stalkMap_liftRestrict`: **factoring through an open
+  subspace does not change the stalk maps.** The inclusion is an isomorphism on stalks, so the
+  stalk map of the lift is invertible as soon as the stalk map of the morphism it factors is.
 -/
 
 open CategoryTheory Limits
@@ -193,6 +196,33 @@ lemma hom_ext_restrict (l₁ l₂ : Z ⟶ X.restrict V.isOpenEmbedding)
     l₁ = l₂ := by
   rw [← cancel_mono (X.ofRestrict V.isOpenEmbedding)]
   exact h
+
+/-- **Factoring through an open subspace does not change the stalk maps.**
+
+The inclusion of an open subspace is an isomorphism on stalks
+(`AlgebraicGeometry.LocallyRingedSpace.ofRestrict_stalkMap_isIso`), so the two factors of
+`liftRestrict_fac` differ on stalks by an isomorphism and one is invertible exactly when the
+other is. This is what lets a statement about the stalks of a morphism into `X|V` be proved
+about the morphism it factors, which is typically defined on the nose while the lift is opaque.
+
+Only the direction used below is stated; the converse is `IsIso.comp_isIso` and needs no name.
+
+**The final application is positional and that is not decoration.** With `f` written out and the
+two instances supplied in order it compiles; leaving `f` to be inferred from `hcomp` does not,
+and neither does an ordinary `IsIso.of_isIso_comp_left f g` with `haveI := hcomp` — nor with
+`letI := hcomp` — in scope, which reports `failed to synthesize` at `IsIso (f ≫ g)`. Why is not
+established here and no explanation should be read into this note; what reproduces is the
+above. -/
+lemma isIso_stalkMap_liftRestrict (z : Z) [IsIso (φ.stalkMap z)] :
+    IsIso ((liftRestrict φ V h).stalkMap z) := by
+  have hcomp : IsIso ((liftRestrict φ V h ≫ X.ofRestrict V.isOpenEmbedding).stalkMap z) := by
+    rw [liftRestrict_fac]
+    infer_instance
+  rw [stalkMap_comp] at hcomp
+  have hiso : IsIso ((X.ofRestrict V.isOpenEmbedding).stalkMap ((liftRestrict φ V h).base z)) :=
+    inferInstance
+  exact @IsIso.of_isIso_comp_left _ _ _ _ _
+    ((X.ofRestrict V.isOpenEmbedding).stalkMap ((liftRestrict φ V h).base z)) _ hiso hcomp
 
 /-- **The inclusion of an open subspace is an open immersion**, with the open passed as an
 ordinary argument.
