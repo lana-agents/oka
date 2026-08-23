@@ -386,20 +386,22 @@ theorem not_isFiniteEtale_axisIncl : ¬ AnalyticSpace.IsFiniteEtale axisIncl.{u}
 
 /-- **And the class is not empty**: the identity is finite étale.
 
-This is the degenerate witness and it is the only positive one here. **A finite étale morphism
-which is not an isomorphism is not exhibited anywhere in this repository**, and building one needs
-a source that is not simply connected — `z ↦ z²` from `ℂ ∖ {0}` to itself is the standard
-example, needing `ComplexAnalytic.AnalyticSpace.restrict` on both sides and the square map. Until
-that exists, everything below the identity is unexercised, and no statement here should be read as
-saying otherwise. -/
+This is the degenerate witness. It is kept because it is the cheapest possible check that
+`ComplexAnalytic.AnalyticSpace.IsFiniteEtale` is inhabited at all, and because it was for a while
+the *only* one: the non-degenerate witness is `ComplexAnalytic.isFiniteEtale_sq` below, `z ↦ z²`
+from `ℂ ∖ {0}` to itself, which needed `ComplexAnalytic.AnalyticSpace.liftRestrict`, a
+covering-map statement from Mathlib and a germ dictionary to state. **Neither witness makes the
+other redundant**: this one says the class is nonempty at zero cost, and that one says it is
+larger than the isomorphisms. -/
 example : AnalyticSpace.IsFiniteEtale (𝟙 (AnalyticSpace.complexAffineSpace.{u} 1)) :=
   inferInstance
 
 /-! ### The squaring map of the punctured line, and its stalk maps
 
-The limitation recorded above — that the only positive witness for
-`ComplexAnalytic.AnalyticSpace.IsFiniteEtale` is the identity — is about `ℂ ∖ {0}` and `z ↦ z²`,
-and **this section builds that map**; the two after it prove everything the witness needs. It is
+The limitation this file used to record — that the only positive witness for
+`ComplexAnalytic.AnalyticSpace.IsFiniteEtale` was the identity — was about `ℂ ∖ {0}` and `z ↦ z²`,
+and **this section builds that map**; the two after it prove everything the witness needs, and
+`ComplexAnalytic.isFiniteEtale_sq` at the end retires the limitation. It is
 here because the construction was the part nobody had priced: a morphism whose *target* is an open
 subspace needed `ComplexAnalytic.AnalyticSpace.liftRestrict`, which did not exist.
 
@@ -507,9 +509,9 @@ theorem not_injective_base_sq :
       ULift.{u} (Fin 1) → ℂ) = _ from base_sq.{u} _]
   norm_num
 
-/-- **So it is not an isomorphism**, which is what makes the map worth building: if it is ever
-shown finite étale then `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` will contain something the
-identity does not.
+/-- **So it is not an isomorphism**, which is what makes the map worth building: with
+`ComplexAnalytic.isFiniteEtale_sq` below, `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` contains
+something the identity does not.
 
 An isomorphism of analytic spaces gives a homeomorphism of the underlying spaces through
 `ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace` and
@@ -518,7 +520,8 @@ functor is applied to the *iso* rather than the morphism, so no instance has to 
 `ComplexAnalytic.AnalyticSpace.Hom.toLRSHom` — the seam
 `ComplexAnalytic.AnalyticSpace.isLocalIso_of_isIso` documents does not arise on this route.
 
-**This is still not a statement that it is finite étale.** -/
+**This is not itself a statement that it is finite étale**; that is
+`ComplexAnalytic.isFiniteEtale_sq`, which needs the three sections below. -/
 theorem not_isIso_sq : ¬ IsIso sq.{u} := fun _ ↦
   not_injective_base_sq.{u}
     (LocallyRingedSpace.homeoOfIso
@@ -621,9 +624,9 @@ theorem finite_fiber_base_sq
 
 Together with `ComplexAnalytic.not_isIso_sq` this is a finite morphism which is not an
 isomorphism, on a source which is *not* a closed subspace of the target — unlike
-`ComplexAnalytic.axisIncl`, which is finite because it is a closed embedding. **It is still not a
-statement that `sq` is finite étale**; see `ComplexAnalytic.isLocalHomeomorph_base_sq` and the
-module docstring for what is and is not proved. -/
+`ComplexAnalytic.axisIncl`, which is finite because it is a closed embedding. **This one field is
+not by itself finite étale**: `ComplexAnalytic.isFiniteEtale_sq` needs it together with the two
+fields of `ComplexAnalytic.AnalyticSpace.IsLocalIso`. -/
 theorem isFinite_sq : AnalyticSpace.IsFinite (ComplexAnalytic.sq.{u}) where
   isClosedMap := isClosedMap_base_sq.{u}
   finite_fiber y := finite_fiber_base_sq.{u} y
