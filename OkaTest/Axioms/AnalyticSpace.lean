@@ -410,3 +410,10 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.hom_ext_restrict' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.hom_ext_restrict
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.isOpenImmersion_ofRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.isOpenImmersion_ofRestrict

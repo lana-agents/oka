@@ -191,7 +191,11 @@ coherence statement for arbitrary complex analytic spaces:
   `ComplexAnalytic.localisationIso_inv_analytificationMap` exhibits the open immersion as a
   composite of the comparison with a morphism the functor produces from a `ℂ`-algebra map — which
   is the form a glue data consumes, its transition isomorphisms coming from isomorphisms of
-  `ℂ`-algebras and nothing else. That `ℂ[x, t] ⧸ (g, t·f - 1)`
+  `ℂ`-algebras and nothing else. `ComplexAnalytic.isOpenImmersion_localisationProj` then supplies
+  the one field an `AlgebraicGeometry.LocallyRingedSpace.GlueData` has beyond a
+  `CategoryTheory.GlueData` — that each `f i j` is an open immersion — and
+  `OkaTest/AnalytificationDistinguishedOpen.lean` checks at the node that it is not an
+  isomorphism, which an open immersion satisfying `D(f) = ⊤` would be. That `ℂ[x, t] ⧸ (g, t·f - 1)`
   really is `A_f` is classical and is *not* formalised — the file says so; the geometry does not
   use it.
 

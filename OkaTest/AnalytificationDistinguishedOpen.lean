@@ -37,6 +37,12 @@ presentation and the identity morphism. The checks below rule both readings out,
   the projection, which is the containment `ComplexAnalytic.range_base_localisationProj_subset`
   seen at a point that is genuinely outside.
 
+* **The open immersion is not an isomorphism.** `not_isIso_localisationProj_nodePres`: an
+  isomorphism of locally ringed spaces has a surjective underlying map
+  (`AlgebraicGeometry.LocallyRingedSpace.homeoOfIso`), and the origin is not in the image. Without
+  it `ComplexAnalytic.isOpenImmersion_localisationProj` would be satisfied by an equivalence, and
+  an open immersion that is an isomorphism carries no information about a cover.
+
 * **The seam behind `ComplexAnalytic.AnalyticSpace.Hom.pullbackΓ` is recorded rather than
   recalled.** The one-line `example` at the top of the file is the product that motivates that
   declaration; the same expression written at the raw `Γ.map` spelling fails instance search, and
@@ -153,5 +159,19 @@ theorem nodeOrigin_notMem_range_base_localisationProj :
       Set.range (localisationProj.{u} nodePres.{u} nodeX.{u}).toLRSHom.base := fun h ↦
   (mem_localisationOpen_iff.{u} nodePres.{u} nodeX.{u}).1
     (range_base_localisationProj_subset.{u} nodePres.{u} nodeX.{u} h) (MvPolynomial.eval_X _)
+
+/-- **The projection is an open immersion which is not an isomorphism.**
+
+`ComplexAnalytic.isOpenImmersion_localisationProj` says every such projection is an open
+immersion, and an open immersion which happens to be an isomorphism says nothing about a cover —
+which is the degeneracy the statement invites, since `D(f) = ⊤` makes it one. This rules it out at
+the node with `f = z₀`: an isomorphism of locally ringed spaces has a surjective underlying map,
+by `AlgebraicGeometry.LocallyRingedSpace.homeoOfIso`, and the origin of the node is not in the
+image. -/
+theorem not_isIso_localisationProj_nodePres :
+    ¬ IsIso (localisationProj.{u} nodePres.{u} nodeX.{u}).toLRSHom := fun _ ↦
+  nodeOrigin_notMem_range_base_localisationProj.{u}
+    ((LocallyRingedSpace.homeoOfIso
+      (asIso (localisationProj.{u} nodePres.{u} nodeX.{u}).toLRSHom)).surjective nodeOrigin.{u})
 
 end
