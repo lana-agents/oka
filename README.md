@@ -780,3 +780,25 @@ rather than hardcoding them.
 **It is not a substitute for `validation.sh`.** It does not run `mk_all --check`, `lake lint`,
 `lake exe lint-style`, the docstring-name checker or the `sorry` grep, and it knows nothing about
 files that do not import the one being checked. Its own `--help` lists this too.
+
+The other tool — also a tool and not a gate — is `python3 scripts/import_cost.py FILE.lean`, which
+computes what upstreaming a mirror file would add to its Mathlib target's transitive imports:
+
+```sh
+python3 scripts/import_cost.py Oka/Algebra/Category/ModuleCat/Sheaf/Generators.lean
+python3 scripts/import_cost.py --self-test
+```
+
+**Use it rather than writing the search again.** The obvious one-line regex over `import` lines
+follows `import` lines that are *inside docstrings*, of which Mathlib has 29 across 14 files —
+two of them a bare `import Mathlib`, at which point the computed closure becomes the whole
+library. One such line in `Mathlib/Tactic/FunProp.lean`'s documentation is in almost every
+closure and adds 274 modules on its own. Two figures stated in this repository were taken with an
+unmasked search and were wrong; **the usual way of validating one — checking it against a figure
+the tree already carries — does not catch this**, because both such figures reproduce on the
+broken instrument. The script's `--self-test` has the fixture that does catch it, and its module
+docstring explains why the regression cases alone are not enough.
+
+Nothing checks the figures in docstrings against the script, and nothing can: they are English
+prose, phrased twenty different ways. This is for an author to run before writing one and a
+reviewer to run before believing one.
