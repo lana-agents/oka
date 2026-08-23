@@ -90,3 +90,10 @@ info: 'RingHom.FaithfullyFlat.quotIdealMap' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms RingHom.FaithfullyFlat.quotIdealMap
+
+/--
+info: 'Module.Finite.of_ringEquiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms Module.Finite.of_ringEquiv

@@ -22,6 +22,7 @@ import Oka.Algebra.Category.ModuleCat.Sheaf.Submodule
 import Oka.Algebra.Category.ModuleCat.Stalk
 import Oka.Algebra.MvPolynomial.Taylor
 import Oka.AlgebraicGeometry.GammaSpecAdjunction
+import Oka.AlgebraicGeometry.Modules.Sheaf
 import Oka.AlgebraicGeometry.Modules.Tilde
 import Oka.AlgebraicGeometry.StructureSheaf
 import Oka.Analysis.Complex.CoveringMap
@@ -94,6 +95,7 @@ import Oka.Polynomial.Germ
 import Oka.Regular
 import Oka.RingTheory.AdicCompletion.Algebra
 import Oka.RingTheory.Filtration
+import Oka.RingTheory.Finiteness.Basic
 import Oka.RingTheory.Flat.Descent
 import Oka.RingTheory.Flat.Quotient
 import Oka.RingTheory.Ideal.Maps

@@ -7,7 +7,7 @@ import Oka
 import OkaTest.CoherentFree
 
 /-!
-# Non-vacuity of the two affine steps
+# Non-vacuity of the affine-locality argument
 
 `AlgebraicGeometry.Scheme.Modules.exists_finset_basicOpen_generatingSections` and
 `AlgebraicGeometry.Scheme.Modules.isLocalizedModule_away_sectionsToBasicOpen` are hypothetical
@@ -15,9 +15,11 @@ statements about a sheaf of modules on a `Spec`, and this repository is short of
 in `OkaTest/CoherentPresentation.lean` records that **no sheaf on a `Spec` is proved coherent
 here**, since every coherent sheaf this development exhibits lives on an analytic space.
 
-Both statements are therefore stated under hypotheses weaker than coherence —
+Every statement on that line is therefore made under hypotheses weaker than coherence —
 `SheafOfModules.IsFiniteType` and `SheafOfModules.IsQuasicoherent` — and this file is the reason:
-at the weaker hypotheses there **is** a witness, and it is not a degenerate one.
+at the weaker hypotheses there **is** a witness, and it is not a degenerate one. That now covers
+the whole argument, from its two local steps to
+`AlgebraicGeometry.Scheme.Modules.module_finite_moduleSpecΓFunctor_obj_of_isFiniteType`.
 
 ## The witness
 
@@ -65,10 +67,11 @@ itself.
   hypothesis is inhabited away from the zero sheaf, not that the conclusion is sharp. The
   conclusion is sharp only for a sheaf which is *not* globally generated, and this repository
   exhibits none on a `Spec`.
-* **The step the two are stated for is still missing**, namely `Module.Finite Γ(Spec R, D(g))
-  Γ(M, D(g))`; see the module docstring of `Oka/AlgebraicGeometry/Modules/Tilde.lean`. So no
-  statement here is that `Γ M` is a finitely generated `A`-module, and none should be read that
-  way.
+* **`Γ M` is not shown finitely *presented*.** `Module.Finite nodeA` is proved below, and
+  `Module.FinitePresentation` is a further step — the same argument run again on the relations —
+  which is not in this repository. Nor does anything here produce a **global**
+  `SheafOfModules.Presentation` of a sheaf that is merely of finite type; the witness has one
+  because it was built as a cokernel of finite free sheaves, not because it was derived.
 -/
 
 open CategoryTheory Limits AlgebraicGeometry TopologicalSpace Opposite PrimeSpectrum SheafOfModules
@@ -241,5 +244,71 @@ example : Module.Finite nodeA.{u}
       (cokernel.π specXHom.{u}) coequalizer.π_epi
   haveI : Finite σ.I := inferInstanceAs (Finite PUnit.{u + 1})
   Scheme.Modules.module_finite_moduleSpecΓFunctor_obj σ
+
+/-! ### The change of site, and the conclusion
+
+`AlgebraicGeometry.Scheme.Modules.module_finite_sections_basicOpen` and
+`AlgebraicGeometry.Scheme.Modules.module_finite_moduleSpecΓFunctor_obj_of_isFiniteType` are the
+two statements that finish the affine-locality argument, and they are instantiated here at the
+same witness for the same reason as everything above it. -/
+
+/-- **`Γ(M, D(x))` is a finite `Γ(Spec A, D(x))`-module**, at `M = 𝒪_{Spec A} ⧸ (x)` and `g = x`.
+
+This is the change of site, at the distinguished open the rest of the file is about: the
+neighbouring statement `AlgebraicGeometry.Scheme.Modules.isLocalizedModule_away_sectionsToBasicOpen`
+is instantiated at every `g`, and `OkaTest.CoherentFree.germ_specXFamily_mem` above says that at
+`g = x` the open is not the whole space, so this is not the `⊤` case in disguise.
+
+The generating family over `D(x)` is the global one pushed to the slice site by
+`SheafOfModules.GeneratingSections.map` along `SheafOfModules.overFunctor` — the same construction
+`SheafOfModules.GeneratingSections.localGeneratorsData` uses — so the sheaf is generated over
+`D(x)` by one section. **Naming it in a `let` with its type written out is load-bearing**: inlined
+into the final `exact`, elaboration reaches `(deterministic) timeout at whnf, 200000 heartbeats`.
+
+`Epi (cokernel.π specXHom)` and `Finite σ.I` are handed over rather than searched for, for the
+reason the previous example records. -/
+example :
+    Module.Finite Γ(Spec nodeA.{u}, PrimeSpectrum.basicOpen specX.{u})
+      Γ((cokernel specXHom.{u} : (Spec nodeA.{u}).Modules),
+        PrimeSpectrum.basicOpen specX.{u}) := by
+  haveI : (cokernel specXHom.{u} : (Spec nodeA.{u}).Modules).IsQuasicoherent :=
+    isQuasicoherent_cokernel_specXHom.{u}
+  haveI : Epi (cokernel.π specXHom.{u}) := coequalizer.π_epi
+  let σ : (cokernel specXHom.{u} : (Spec nodeA.{u}).Modules).GeneratingSections :=
+    @SheafOfModules.GeneratingSections.ofEpi _ _ _ _ _ _ _ _
+      (freeGeneratingSections (R := (nodeSpec.{u}).ringSheaf) PUnit.{u + 1})
+      (cokernel.π specXHom.{u}) coequalizer.π_epi
+  haveI : Finite σ.I := inferInstanceAs (Finite PUnit.{u + 1})
+  have hpc : PreservesColimitsOfSize.{u, u}
+      (SheafOfModules.overFunctor (Spec nodeA.{u}).ringCatSheaf
+        (PrimeSpectrum.basicOpen specX.{u})) := inferInstance
+  let τ : ((cokernel specXHom.{u} : (Spec nodeA.{u}).Modules).over
+      (PrimeSpectrum.basicOpen specX.{u})).GeneratingSections :=
+    σ.map (SheafOfModules.overFunctor (Spec nodeA.{u}).ringCatSheaf
+      (PrimeSpectrum.basicOpen specX.{u})) (Iso.refl _)
+  haveI : Finite τ.I := inferInstanceAs (Finite σ.I)
+  exact Scheme.Modules.module_finite_sections_basicOpen
+    (cokernel specXHom.{u} : (Spec nodeA.{u}).Modules) specX.{u} τ
+
+/-- **`Γ M` is a finite `A`-module**, at `M = 𝒪_{Spec A} ⧸ (x)`, from quasicoherence and finite
+type alone.
+
+This is the affine-locality argument assembled, and it is a different check from the example
+above it even though the conclusion looks the same as that one's: there the generating family was
+*supplied* and the statement was
+`AlgebraicGeometry.Scheme.Modules.module_finite_moduleSpecΓFunctor_obj`; here nothing is supplied
+but the two instances, and the family is produced inside the proof by
+`AlgebraicGeometry.Scheme.Modules.exists_finset_basicOpen_generatingSections`. **It is the
+hypothesis pair that is being checked to be inhabited**, not the conclusion.
+
+Both instances are named rather than searched for, as everywhere else in this file. -/
+example : Module.Finite nodeA.{u}
+    ((moduleSpecΓFunctor (R := nodeA.{u})).obj
+      (cokernel specXHom.{u} : (Spec nodeA.{u}).Modules) : Type u) :=
+  haveI : (cokernel specXHom.{u} : (Spec nodeA.{u}).Modules).IsQuasicoherent :=
+    isQuasicoherent_cokernel_specXHom.{u}
+  haveI : (cokernel specXHom.{u} : (Spec nodeA.{u}).Modules).IsFiniteType :=
+    isFiniteType_cokernel_specXHom.{u}
+  Scheme.Modules.module_finite_moduleSpecΓFunctor_obj_of_isFiniteType _
 
 end OkaTest.AffineSections
