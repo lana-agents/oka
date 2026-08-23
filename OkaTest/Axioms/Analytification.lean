@@ -741,6 +741,13 @@ info: 'ComplexAnalytic.isCoherent_analytificationSheaf_cokernel_sectionsHom' dep
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isCoherent_analytificationSheaf_cokernel_sectionsHom
 
+/--
+info: 'ComplexAnalytic.isCoherent_analytificationSheaf_of_isCoherent' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isCoherent_analytificationSheaf_of_isCoherent
+
 /-! ### The distinguished open, through the functor -/
 
 /--

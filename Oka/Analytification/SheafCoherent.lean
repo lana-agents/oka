@@ -4,51 +4,58 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Oka.Algebra.Category.ModuleCat.Sheaf.Coherent.Free
+import Oka.AlgebraicGeometry.Modules.Tilde
 import Oka.AnalyticSpace.Coherent
 import Oka.AnalyticSpace.IdealSheaf
 import Oka.Analytification.Sheaf
 
 /-!
-# The analytification of a finitely presented sheaf is coherent
+# The analytification of a coherent sheaf is coherent
 
 `Oka/Analytification/Sheaf.lean` builds the analytification of a sheaf of modules on
 `Spec (ℂ[x] ⧸ I)` and proves it **exact** — right exactness from the adjunction, left exactness
 from the flatness of the stalk maps of the comparison morphism. This file draws the conclusion
-GAGA consumes: **the analytification of a cokernel of finite free sheaves is coherent.**
+GAGA consumes: **the analytification of a coherent sheaf is coherent**
+(`ComplexAnalytic.isCoherent_analytificationSheaf_of_isCoherent`), through the presented case
+(`ComplexAnalytic.isCoherent_analytificationSheaf_cokernel`) which is where the analysis is.
 
-## Why the statement is about a presentation and not about a coherent sheaf
+## The coherent statement, and the route it does *not* take
 
-The apparently stronger *"`M` coherent implies `M^an` coherent"* is **not** provable from what is
-here, and the obstruction is not analytic. `SheafOfModules.IsCoherent` quantifies over every
-object of the site and over every morphism `free L ⟶ M.over X`; downstairs those `L`-indexed
-families are not in the image of the functor, so no argument of the form "apply the functor to
-an upstairs presentation" reaches them. The classical route instead *gets* a presentation from
-coherence, and on an affine scheme that is the passage from a coherent sheaf to a finitely
-presented module.
+The direct argument does not work and the obstruction is not analytic.
+`SheafOfModules.IsCoherent` quantifies over every object of the site and over every morphism
+`free L ⟶ M.over X`; downstairs those `L`-indexed families are not in the image of the functor,
+so no argument of the form "apply the functor to an upstairs presentation" reaches them.
 
-**The module-level half of that passage is now available for a coherent `M`, and one step of the
-sheaf-level half is not.** `SheafOfModules.IsCoherent.isFinitePresentation` says a coherent sheaf
-is finitely presented *on a covering*, and on `Spec A` that gives `M ≅ (Γ M)^~`
-(`AlgebraicGeometry.Scheme.Modules.isIso_fromTildeΓ_of_isCoherent`). What the theorem below
-consumes is more: a **global** presentation of `M` as a cokernel of finite free sheaves.
+**The classical route instead gets a presentation out of coherence, and that is what this file
+now does.** On `Spec A` the passage is entirely algebraic and happens in
+`Oka/AlgebraicGeometry/Modules/Tilde.lean`:
 
-`AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ_of_isFinitePresentation` now takes the
-presentation-on-a-covering to `Module.FinitePresentation A (Γ M)`, so for a coherent `M` that
-module-level statement is available. **What is still missing is the last step and only the last
-step**: reading a finite presentation of the *module* `Γ M` back as a
-`SheafOfModules.Presentation` of `M`, through `M ≅ (Γ M)^~` and right-exactness of `tilde`. That
-is not formalised here and is not measured; the description this paragraph carried before — that
-the quasi-compactness argument does not reach the module-level statement at all — was correct
-until that theorem landed and is no longer.
+* `SheafOfModules.IsCoherent.isFinitePresentation` — a coherent sheaf is finitely presented on
+  *some* covering;
+* `AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ_of_isFinitePresentation` — hence `Γ M` is
+  a finitely presented `A`-module, which is the quasi-compactness argument on `Spec A`;
+* `AlgebraicGeometry.Scheme.Modules.exists_isFinite_presentation_of_isCoherent` — hence `M` has a
+  finite **global** `SheafOfModules.Presentation`, through `M ≅ (Γ M)^~` and
+  `AlgebraicGeometry.presentationTilde`.
 
-Note also that **finite presentation is not the same argument as the finite-type one run again on
-the relations**: it is false at quasicoherent-plus-finite-type, for the reason in the module
-docstring of `Oka/AlgebraicGeometry/Modules/Tilde.lean`, which is why the hypothesis above is
-`SheafOfModules.IsFinitePresentation` and not `SheafOfModules.IsFiniteType`.
+**So the local-to-global step happens at the level of modules and never at the level of sheaves**,
+which is why no analytic input is needed for it and why the presented statement below is still
+the one carrying all of the mathematics.
 
-So the presented form is still the strongest statement available, and it is the form the
-classical proof of GAGA uses anyway: coherent sheaves on `Spec A` are, by the affine dictionary,
-cokernels of maps of finite frees.
+Note that **finite presentation is not the finite-type argument run again on the relations**: it
+is false at quasicoherent-plus-finite-type, for the reason in the module docstring of
+`Oka/AlgebraicGeometry/Modules/Tilde.lean`. That is why `SheafOfModules.IsFiniteType` does not
+appear anywhere on this route.
+
+## The coherent statement has no witness in this repository, and that is not a defect of it
+
+`OkaTest/CoherentPresentation.lean` records that **no sheaf on a `Spec` is proved coherent here** —
+every coherent sheaf this development exhibits lives on an analytic space. So
+`ComplexAnalytic.isCoherent_analytificationSheaf_of_isCoherent` is stated at a hypothesis that is
+uninhabited in this tree, and the presented form is the one with a witness. **Do not read the
+coherent statement as superseding the presented one**: it is a corollary of it, its hypothesis is
+strictly stronger, and until a sheaf on a `Spec` is proved coherent the presented form is what any
+consumer here can actually apply.
 
 ## The proof, which is three transports and no new mathematics
 
@@ -62,6 +69,9 @@ moves the cokernel across the functor. Nothing is computed.
 
 - `ComplexAnalytic.isCoherent_analytificationSheaf_cokernel`: **the analytification of the
   cokernel of a morphism of finite free sheaves is coherent.**
+- `ComplexAnalytic.isCoherent_analytificationSheaf_of_isCoherent`: **the analytification of a
+  coherent sheaf is coherent**, which is the previous statement plus the affine dictionary and
+  has no witness here.
 - `ComplexAnalytic.isCoherent_analytificationSheaf_cokernel_sectionsHom`: the same for the
   quotient of `𝒪_{Spec A}` by a finitely generated ideal sheaf, which is the shape a subscheme
   of `Spec (ℂ[x] ⧸ I)` arrives in.
@@ -151,5 +161,49 @@ theorem isCoherent_analytificationSheaf_cokernel_sectionsHom {I : Type u} [Finit
         (MvPolynomial (ULift.{u} (Fin n)) ℂ ⧸ presentationIdeal.{u} g))).sectionsHom f ≫
           (SheafOfModules.freePUnitIso).inv)))
     ((analytificationSheaf.{u} g).mapIso (cokernelCompIsIso _ _))
+
+set_option backward.isDefEq.respectTransparency false in
+/-- **The analytification of a coherent sheaf is coherent.**
+
+The statement GAGA is usually quoted as needing, and it is
+`ComplexAnalytic.isCoherent_analytificationSheaf_cokernel` plus the affine dictionary. All of the
+analysis is in that theorem — Oka's coherence of `𝒪_X` in every finite rank, and right exactness
+of the analytification; **this adds no analysis at all.** What it adds is
+`AlgebraicGeometry.Scheme.Modules.exists_isFinite_presentation_of_isCoherent`, which turns
+coherence on `Spec A` into a finite *global* presentation, and
+`SheafOfModules.Presentation.cokernelIso`, which reads that presentation as a cokernel of finite
+free sheaves so the presented theorem applies. See the module docstring for why the
+local-to-global step is algebraic.
+
+**This hypothesis is uninhabited in this repository**, and `OkaTest/CoherentPresentation.lean`
+says so: nothing here proves a sheaf on a `Spec` coherent. The theorem is not vacuous as
+mathematics — it is the standard statement — but it is vacuous *as a check*, so
+`ComplexAnalytic.isCoherent_analytificationSheaf_cokernel` remains the form with a witness and the
+form to apply.
+
+**The `set_option` is the `Spec R` versus `Spec (CommRingCat.of ↑R)` seam.** The hypothesis
+arrives as `M.IsCoherent` at the `AlgebraicGeometry.LocallyRingedSpace.ringSheaf` spelling of the
+base and is consumed at the `AlgebraicGeometry.Scheme.Modules` spelling; the two are definitionally
+equal — that equality is `rfl`, measured — but instance search does not cross it without the
+option. Measured by deleting it; no explanation is offered. -/
+theorem isCoherent_analytificationSheaf_of_isCoherent
+    (M : SheafOfModules.{u} (Spec.locallyRingedSpaceObj (CommRingCat.of
+        (MvPolynomial (ULift.{u} (Fin n)) ℂ ⧸ presentationIdeal.{u} g))).ringSheaf)
+    [M.IsCoherent] :
+    ((analytificationSheaf.{u} g).obj M).IsCoherent := by
+  obtain ⟨P, hP⟩ := AlgebraicGeometry.Scheme.Modules.exists_isFinite_presentation_of_isCoherent
+    (R := CommRingCat.of (MvPolynomial (ULift.{u} (Fin n)) ℂ ⧸ presentationIdeal.{u} g)) M
+  haveI := hP
+  haveI : Finite P.generators.I :=
+    SheafOfModules.GeneratingSections.IsFiniteType.finite (σ := P.generators)
+  haveI : Finite P.relations.I :=
+    SheafOfModules.GeneratingSections.IsFiniteType.finite (σ := P.relations)
+  haveI : ((analytificationSheaf.{u} g).obj (cokernel
+      ((SheafOfModules.freeHomEquiv _).symm P.relations.s ≫ kernel.ι P.generators.π))).IsCoherent :=
+    isCoherent_analytificationSheaf_cokernel.{u} g _
+  exact SheafOfModules.IsCoherent.of_iso
+    (M := (analytificationSheaf.{u} g).obj (cokernel
+      ((SheafOfModules.freeHomEquiv _).symm P.relations.s ≫ kernel.ι P.generators.π)))
+    ((analytificationSheaf.{u} g).mapIso P.cokernelIso)
 
 end ComplexAnalytic

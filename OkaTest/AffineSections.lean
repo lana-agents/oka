@@ -442,4 +442,41 @@ example : Module.FinitePresentation nodeA.{u}
       (cokernel specXHom.{u} : (Spec nodeA.{u}).Modules) : Type u) :=
   Scheme.Modules.finitePresentation_Γ_of_isFinitePresentation _
 
+/-! ### The converse, and why this example is circular
+
+`AlgebraicGeometry.Scheme.Modules.exists_isFinite_presentation` recovers a finite global
+`SheafOfModules.Presentation` from `Module.FinitePresentation A (Γ M)` for a quasicoherent `M`,
+which is the direction that closes the affine dictionary. **The example below is not a test of it
+in the sense the ones above are tests**, and it is worth saying exactly why rather than letting a
+green example imply more than it checks.
+
+The witness `𝒪_{Spec A} ⧸ (x)` was *built* as a cokernel of finite free sheaves — that is what
+`OkaTest.AffineSections.specXPresentation` is — so it had a finite global presentation before any
+theorem on this line was applied to it, and its `Module.FinitePresentation A (Γ M)` was derived
+*from* that presentation. So the conclusion of the theorem below is one of its own ancestors: the
+example checks that the statement typechecks and that its hypotheses are simultaneously
+inhabited, and **it does not check that the theorem produces a presentation that was not already
+there.**
+
+**A non-circular witness would be a quasicoherent sheaf on a `Spec` whose global sections are
+known finitely presented for some reason other than a presentation in hand, and this repository
+has none.** The nearest thing would be a coherent sheaf on a noetherian `Spec`, which is what
+`AlgebraicGeometry.Scheme.Modules.exists_isFinite_presentation_of_isCoherent` consumes and which
+`OkaTest/CoherentPresentation.lean` records is not available here.
+-/
+
+/-- **The witness has a finite global presentation recovered from its module of sections.**
+
+Circular, and the section docstring says how: the hypothesis this consumes is supplied on the
+line below by `AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ_of_isFinitePresentation`,
+which was itself proved from the presentation this produces. Included because the theorem should
+have at least one application in the tree, and because a statement with no instantiation at all is
+how an unusable hypothesis goes unnoticed — not because it is evidence about the theorem. -/
+example : ∃ P : (cokernel specXHom.{u} : (Spec nodeA.{u}).Modules).Presentation, P.IsFinite :=
+  haveI : Module.FinitePresentation nodeA.{u}
+      ((moduleSpecΓFunctor (R := nodeA.{u})).obj
+        (cokernel specXHom.{u} : (Spec nodeA.{u}).Modules) : Type u) :=
+    Scheme.Modules.finitePresentation_Γ_of_isFinitePresentation _
+  Scheme.Modules.exists_isFinite_presentation _
+
 end OkaTest.AffineSections

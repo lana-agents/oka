@@ -34,9 +34,7 @@ the coherence of an algebraic structure sheaf. **That is exactly what happened.*
 `A`, and `OkaTest/SpecCoherent.lean` instantiates the affine statement at `𝒪_{Spec A} ⧸ (x)` for
 `A = ℂ[x, y] ⧸ (xy)` — a nonzero proper quotient, not a free sheaf and not the zero sheaf.
 
-What is still true of *this* file is narrower and is why the three witnesses below are unchanged:
-**they are analytifications**, which live on the analytic space and not on `Spec A`, so none of
-them exercises the affine dictionary. The witness that does is in `OkaTest/SpecCoherent.lean`.
+PLACEHOLDER_PARAGRAPH_TO_REWRITE
 
 ## What is also not tested
 

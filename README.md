@@ -201,9 +201,13 @@ coherence statement for arbitrary complex analytic spaces:
   `ComplexAnalytic.isCoherent_analytificationSheaf_cokernel` says the **analytification of a
   cokernel of finite free sheaves on `Spec (ℂ[x] ⧸ I)` is coherent**, which is the local input
   GAGA consumes: right exactness carries the cokernel across, and the target is free, hence
-  coherent. The statement for a *coherent* sheaf rather than a presented one is still out of
-  reach, and for a reason that is not analytic, but the gap is now named and half closed — see
-  the bullet below. The worked instance is
+  coherent. **The statement for a *coherent* sheaf is now a corollary of it**,
+  `ComplexAnalytic.isCoherent_analytificationSheaf_of_isCoherent`: on `Spec A` coherence gives a
+  finite *global* presentation
+  (`AlgebraicGeometry.Scheme.Modules.exists_isFinite_presentation_of_isCoherent`), which the
+  presented theorem consumes. The local-to-global step in that is algebraic and there is no
+  analytic input to it at all. **The presented form is still the one with a witness**, because
+  nothing here proves a sheaf on a `Spec` coherent. The worked instance is
   `𝒪_{Spec A} ⧸ (x)` for `A = ℂ[x, y] ⧸ (xy)`: a nonzero proper quotient rather than a free
   sheaf, and it is nonzero *because* `x` vanishes at the origin of the node — which is
   `AlgebraicGeometry.StructureSheaf.germ_algebraMap_mem_maximalIdeal_iff`, and the first place
@@ -293,11 +297,21 @@ coherence statement for arbitrary complex analytic spaces:
   what it needed that was not in Mathlib is the presentation-level
   `SheafOfModules.Presentation.restrict` and the sibling `Module.FinitePresentation.of_ringEquiv`,
   whose proof is *not* `Module.Finite.of_ringEquiv`'s — `Module.FinitePresentation` has no
-  `of_restrictScalars` to reduce to. Every statement on this line is
-  instantiated in `OkaTest/AffineSections.lean` at `𝒪_{Spec A} ⧸ (x)` — the same witness, read on
-  the algebraic side instead of after analytification, nonzero, with a presenting map that is
-  neither an epimorphism nor zero, and with `D(x) ≠ ⊤` checked so the change of site is not
-  exercised only at the whole space.
+  `of_restrictScalars` to reduce to. **And the converse closes the dictionary**:
+  `AlgebraicGeometry.Scheme.Modules.exists_isFinite_presentation` gives a finite *global*
+  `SheafOfModules.Presentation` back from `Module.FinitePresentation R (Γ M)` for a quasicoherent
+  `M`, so on a `Spec` the two conditions are the same one. That direction costs nothing:
+  `Module.FinitePresentation` is *defined* by a spanning `Finset` together with finite generation
+  of the kernel of `Rˢ → M`, which is exactly the pair of sets Mathlib's
+  `AlgebraicGeometry.presentationTilde` asks for, so `M ≅ (Γ M)^~` is the only other ingredient.
+  Its corollary `…exists_isFinite_presentation_of_isCoherent` is the whole affine half of the
+  dictionary in one statement, and is what upgrades the analytification bullet above from a
+  presented sheaf to a coherent one. Every statement on this line **except the coherent
+  corollary** is instantiated in `OkaTest/AffineSections.lean` at `𝒪_{Spec A} ⧸ (x)` — the same
+  witness, read on the algebraic side instead of after analytification, nonzero, with a presenting
+  map that is neither an epimorphism nor zero, and with `D(x) ≠ ⊤` checked so the change of site
+  is not exercised only at the whole space. The coherent corollary has no witness anywhere here,
+  for the reason the bullet above it gives.
 
 * **Being a complex analytic space is local.** The `local_model` field of
   `ComplexAnalytic.AnalyticSpace` is isolated as a predicate `ComplexAnalytic.HasLocalModels` on

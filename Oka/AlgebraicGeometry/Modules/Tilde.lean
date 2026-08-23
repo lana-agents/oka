@@ -169,6 +169,24 @@ sibling of `Module.Finite.of_ringEquiv` — whose proof is *not* the same, since
 `Module.FinitePresentation` has no `of_restrictScalars` to reduce to. Both are recorded where they
 would go upstream and both say so.
 
+## And the converse, which closes the dictionary
+
+`AlgebraicGeometry.Scheme.Modules.exists_isFinite_presentation` goes back: a **quasicoherent** `M`
+on `Spec R` with `Module.FinitePresentation R (Γ M)` has a finite global
+`SheafOfModules.Presentation`. So for quasicoherent sheaves on a `Spec` the two conditions on this
+line — a finite global presentation, and finite presentation of the module of global sections —
+are the same condition, and the coherent corollary
+`AlgebraicGeometry.Scheme.Modules.exists_isFinite_presentation_of_isCoherent` is the whole affine
+half of the dictionary in one statement.
+
+**Quasicoherence is not removable and is not a technical hypothesis.** It is what makes
+`AlgebraicGeometry.Scheme.Modules.fromTildeΓ` an isomorphism, and without `M ≅ (Γ M)^~` a
+presentation of `(Γ M)^~` says nothing about `M`.
+
+The section docstring on `### Back up` says what the proof is; the short version is that
+`Module.FinitePresentation` is *defined* by exactly the two sets
+`AlgebraicGeometry.presentationTilde` asks for, so there is no construction to do.
+
 ## Main definitions
 
 - `AlgebraicGeometry.Scheme.Modules.isoTildeΓ`
@@ -198,6 +216,10 @@ would go upstream and both say so.
   again
 - `AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ_of_isFinitePresentation`: **the global
   sections of a sheaf of finite presentation on `Spec R` are a finitely presented `R`-module**
+- `AlgebraicGeometry.Scheme.Modules.exists_isFinite_presentation`: **the converse**, for a
+  quasicoherent sheaf, and with it
+  `AlgebraicGeometry.Scheme.Modules.exists_isFinite_presentation_of_isCoherent`: **a coherent
+  sheaf on `Spec R` has a finite global presentation**
 -/
 
 @[expose] public section
@@ -852,6 +874,113 @@ theorem finitePresentation_Γ_of_isFinitePresentation (N : (Spec R).Modules)
   exact finitePresentation_sections_basicOpen N (g : R) P
 
 end LocalFinitePresentation
+
+/-! ### Back up: a finitely presented `Γ M` gives a global presentation of `M`
+
+Everything above goes from a presentation to a module. This goes back, and closes the affine
+dictionary: a quasicoherent `M` on `Spec R` whose global sections are a finitely presented
+`R`-module has a finite **global** `SheafOfModules.Presentation`.
+
+**The whole of it is already in Mathlib and the only thing to notice is what
+`Module.FinitePresentation` unfolds to.** `AlgebraicGeometry.presentationTilde` builds a
+presentation of `M^~` from a spanning set `s ⊆ M` and a spanning set `t` of the kernel of
+`Rˢ → M`; `Module.FinitePresentation R M` is, by definition, a **`Finset`** `s` spanning `M`
+together with finite generation of that same kernel. So the two sets `presentationTilde` wants are
+exactly the two the class hands out, and they are finite for free — no route through
+`Module.FinitePresentation.exists_fin`, no cokernel of a map of finite free modules built by hand,
+and no right-exactness argument for `tilde`.
+
+Then `AlgebraicGeometry.Scheme.Modules.fromTildeΓ` is an isomorphism for a quasicoherent `M`
+(Mathlib's `AlgebraicGeometry.Scheme.Modules.isIso_fromTildeΓ_of_isQuasicoherent`), and
+`SheafOfModules.Presentation.ofIsIso` carries the presentation across.
+
+**The conclusion is an existential and not a definition.** A `SheafOfModules.Presentation` is data
+and the class `Module.FinitePresentation` is a `Prop`, so no canonical presentation can be
+extracted; a caller `obtain`s one. That is also why there is no instance here.
+-/
+
+section GlobalPresentation
+
+/-- **A finitely presented module has a finite presentation of its tilde.**
+
+`AlgebraicGeometry.presentationTilde` at the spanning set and the relation set that
+`Module.FinitePresentation` is *defined* by — see the section docstring — so the only work is
+noting that a `Finset` coerced to a `Set` has a `Finite` coercion to a type.
+
+The two fields are the given `Finite` instances, as everywhere else on this line:
+`SheafOfModules.Presentation.IsFinite` is finiteness of the two index types and nothing else, and
+`AlgebraicGeometry.presentationTilde`'s index types are `t` and `s` by construction. -/
+instance _root_.AlgebraicGeometry.isFinite_presentationTilde {N : ModuleCat.{u} R} (s : Set N)
+    [Finite s] (hs : Submodule.span R s = ⊤) (t : Set (s →₀ R)) [Finite t]
+    (ht : Submodule.span R t = LinearMap.ker (Finsupp.linearCombination R ((↑) : s → N))) :
+    (AlgebraicGeometry.presentationTilde.{u} N s hs t ht).IsFinite where
+  isFiniteType_generators := ⟨inferInstanceAs (Finite s)⟩
+  isFiniteType_relations := ⟨inferInstanceAs (Finite t)⟩
+
+/-- **The tilde of a finitely presented module has a finite global presentation.**
+
+`Module.FinitePresentation R N` unfolds to a `Finset s` with `Submodule.span R ↑s = ⊤` and
+finite generation of `LinearMap.ker (Finsupp.linearCombination R ((↑) : ↥s → N))`, which is
+literally the pair of hypotheses `AlgebraicGeometry.presentationTilde` asks for. Both sets are
+`Finset`s, so `AlgebraicGeometry.isFinite_presentationTilde` applies.
+
+An existential rather than a definition, because the class is a `Prop` and the presentation is
+data; see the section docstring. -/
+theorem exists_isFinite_presentation_tilde (N : ModuleCat.{u} R)
+    [Module.FinitePresentation R N] :
+    ∃ P : (AlgebraicGeometry.tilde N).Presentation, P.IsFinite := by
+  obtain ⟨s, hs, hker⟩ := ‹Module.FinitePresentation R N›
+  obtain ⟨t, ht⟩ := hker
+  haveI : Finite (s : Set N) := s.finite_toSet.to_subtype
+  haveI : Finite (t : Set ((s : Set N) →₀ R)) := t.finite_toSet.to_subtype
+  exact ⟨AlgebraicGeometry.presentationTilde.{u} N (s : Set N) hs (t : Set _) ht, inferInstance⟩
+
+set_option backward.isDefEq.respectTransparency false in
+/-- **A quasicoherent sheaf on `Spec R` with finitely presented global sections has a finite
+global presentation.**
+
+The converse of `AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ`, and with it the affine
+dictionary closes: for a quasicoherent `M` on a `Spec`, having a finite global
+`SheafOfModules.Presentation` and having `Module.FinitePresentation R (Γ M)` are the same
+condition.
+
+The previous statement at `Γ M`, then `SheafOfModules.Presentation.ofIsIso` along
+`AlgebraicGeometry.Scheme.Modules.fromTildeΓ`, which quasicoherence makes an isomorphism. **The
+`set_option` is needed** and is the `Spec R` versus `Spec (CommRingCat.of ↑R)` seam again:
+without it `IsIso M.fromTildeΓ` is not synthesised even with
+`AlgebraicGeometry.Scheme.Modules.isIso_fromTildeΓ_of_isQuasicoherent` supplied by hand. No
+explanation is offered; it is measured, by deleting it. -/
+theorem exists_isFinite_presentation (N : (Spec R).Modules) [N.IsQuasicoherent]
+    [Module.FinitePresentation R (moduleSpecΓFunctor.obj N : Type u)] :
+    ∃ P : N.Presentation, P.IsFinite := by
+  obtain ⟨P, hP⟩ := exists_isFinite_presentation_tilde
+    (moduleSpecΓFunctor.obj N : ModuleCat.{u} R)
+  haveI := hP
+  haveI := isIso_fromTildeΓ_of_isQuasicoherent N
+  exact ⟨P.ofIsIso N.fromTildeΓ, inferInstance⟩
+
+/-- **A coherent sheaf on `Spec R` has a finite global presentation.**
+
+The whole affine half of the dictionary in one statement, and every step of it is on this line:
+coherence gives quasicoherence and `SheafOfModules.IsFinitePresentation`
+(`SheafOfModules.IsCoherent.isFinitePresentation`, a presentation over *some* covering);
+`AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ_of_isFinitePresentation` turns that into
+`Module.FinitePresentation R (Γ M)`; and the previous statement turns *that* into a **global**
+presentation. The passage from local to global happens at the level of modules, where
+quasi-compactness of `Spec R` does it, and never at the level of sheaves.
+
+**Nothing in this repository proves a sheaf on a `Spec` coherent**, so this theorem has no witness
+here — `OkaTest/CoherentPresentation.lean` records that, and it is unchanged by this statement.
+What is checkable is the hypothesis one rung down: `SheafOfModules.IsFinitePresentation` *is*
+inhabited on a `Spec` here, at `OkaTest/AffineSections.lean`'s witness. -/
+theorem exists_isFinite_presentation_of_isCoherent (N : (Spec R).Modules) [N.IsCoherent] :
+    ∃ P : N.Presentation, P.IsFinite := by
+  haveI := SheafOfModules.IsCoherent.isQuasicoherent N
+  haveI := SheafOfModules.IsCoherent.isFinitePresentation N
+  haveI := finitePresentation_Γ_of_isFinitePresentation N
+  exact exists_isFinite_presentation N
+
+end GlobalPresentation
 
 end FinitePresentation
 

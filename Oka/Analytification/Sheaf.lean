@@ -92,13 +92,15 @@ it breaks that step and nothing else.
 * **Coherence of the image**, which is next door rather than here.
   `Oka/Analytification/SheafCoherent.lean` proves that the analytification of a **cokernel of
   finite free sheaves** is coherent, out of the exactness proved here and Oka's theorem in every
-  finite rank. The statement for a *coherent* sheaf rather than a presented one is a different
-  matter and is still not proved anywhere: it needs a **global** presentation of the coherent
-  sheaf, and `SheafOfModules.IsCoherent.isFinitePresentation` gives only a local one. The gap is
-  now one step wide rather than an argument wide —
-  `AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ_of_isFinitePresentation` turns the local
-  presentation into `Module.FinitePresentation A (Γ M)`, and what is unwritten is the passage
-  from that back to a presentation of the sheaf; see `Oka/Analytification/SheafCoherent.lean`.
+  finite rank. **The statement for a *coherent* sheaf is a corollary of it and is now proved**,
+  as `ComplexAnalytic.isCoherent_analytificationSheaf_of_isCoherent`: the bullet that used to
+  stand here said it needed a global presentation of the coherent sheaf and that
+  `SheafOfModules.IsCoherent.isFinitePresentation` gives only a local one, which was true, and the
+  local-to-global passage is
+  `AlgebraicGeometry.Scheme.Modules.exists_isFinite_presentation_of_isCoherent` — algebra on
+  `Spec A`, with no analytic input. **The presented form is still the one with a
+  witness**, since nothing in this repository proves a sheaf on a `Spec` coherent; see
+  `Oka/Analytification/SheafCoherent.lean`.
 * **Anything analytic.** Every line here is the `Γ`–`Spec` adjunction and category theory. The
   analytic content is upstream.
 
