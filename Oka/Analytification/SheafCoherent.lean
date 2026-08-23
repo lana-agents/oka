@@ -26,22 +26,25 @@ an upstairs presentation" reaches them. The classical route instead *gets* a pre
 coherence, and on an affine scheme that is the passage from a coherent sheaf to a finitely
 presented module.
 
-**Half of that passage is now available and the half that is missing is the half this statement
-needs.** `SheafOfModules.IsCoherent.isFinitePresentation` says a coherent sheaf is finitely
-presented *on a covering*, and on `Spec A` that gives `M ≅ (Γ M)^~`
-(`AlgebraicGeometry.Scheme.Modules.isIso_fromTildeΓ_of_isCoherent`). What it does not give is a
-**global** presentation of `M` as a cokernel of finite free sheaves — equivalently, that `Γ M` is
-a finitely presented `A`-module — and that is exactly what the theorem below consumes. The
-quasi-compactness argument on `Spec A` is now in this repository and still does not reach it, but
-for a different reason than was recorded here before.
-`AlgebraicGeometry.Scheme.Modules.module_finite_moduleSpecΓFunctor_obj_of_isFiniteType` makes
-`Γ M` a *finite* `A`-module, and **finite presentation is not the same argument run again on the
-relations**: it is false at those hypotheses (see the module docstring of
-`Oka/AlgebraicGeometry/Modules/Tilde.lean`).
-`AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ` has it from a finite **global**
-presentation — which is what the theorem below is given anyway — so what is missing for a
-*coherent* `M` is the passage from `SheafOfModules.IsCoherent`'s presentation-on-a-covering to a
-global one, and that is unfiled.
+**The module-level half of that passage is now available for a coherent `M`, and one step of the
+sheaf-level half is not.** `SheafOfModules.IsCoherent.isFinitePresentation` says a coherent sheaf
+is finitely presented *on a covering*, and on `Spec A` that gives `M ≅ (Γ M)^~`
+(`AlgebraicGeometry.Scheme.Modules.isIso_fromTildeΓ_of_isCoherent`). What the theorem below
+consumes is more: a **global** presentation of `M` as a cokernel of finite free sheaves.
+
+`AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ_of_isFinitePresentation` now takes the
+presentation-on-a-covering to `Module.FinitePresentation A (Γ M)`, so for a coherent `M` that
+module-level statement is available. **What is still missing is the last step and only the last
+step**: reading a finite presentation of the *module* `Γ M` back as a
+`SheafOfModules.Presentation` of `M`, through `M ≅ (Γ M)^~` and right-exactness of `tilde`. That
+is not formalised here and is not measured; the description this paragraph carried before — that
+the quasi-compactness argument does not reach the module-level statement at all — was correct
+until that theorem landed and is no longer.
+
+Note also that **finite presentation is not the same argument as the finite-type one run again on
+the relations**: it is false at quasicoherent-plus-finite-type, for the reason in the module
+docstring of `Oka/AlgebraicGeometry/Modules/Tilde.lean`, which is why the hypothesis above is
+`SheafOfModules.IsFinitePresentation` and not `SheafOfModules.IsFiniteType`.
 
 So the presented form is still the strongest statement available, and it is the form the
 classical proof of GAGA uses anyway: coherent sheaves on `Spec A` are, by the affine dictionary,
