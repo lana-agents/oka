@@ -234,40 +234,29 @@ example (i : triple.{u}) :
 
 `ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear` needs the transitions to be `ℂ`-linear
 (`ComplexAnalytic.GlueDataCLinear`), which reads `D.f` and `D.t` — and for a glue datum built by
-`CategoryTheory.GlueData.ofGlueData'` those are dependent `dite`s. The lemmas that unfold them are
-`Oka/CategoryTheory/GlueData.lean`'s; without them this section could not be written. -/
+`CategoryTheory.GlueData.ofGlueData'` those are dependent `dite`s.
+`ComplexAnalytic.glueDataCLinear_coverGlueData` discharges that hypothesis once and for all glue
+data this construction builds, using `Oka/CategoryTheory/GlueData.lean`'s unfolding lemmas to get
+past the `dite`s; without them this section could not be written. -/
 
 /-- The `ℂ`-algebra structure each member of the cover carries: the analytification's own. -/
 abbrev nodeAlg (j : triple.{u}) :
     ℂ →+* ((nodeTripleGlueData.{u}).U j).presheaf.obj (op ⊤) :=
   (AnalyticSpace.analytification.{u} (nodeCoverObj.{u} j).g).algebraMap
 
-/-- **The transitions are `ℂ`-linear.**
+/-- **The transitions are `ℂ`-linear**, by `ComplexAnalytic.glueDataCLinear_coverGlueData`.
 
-Both sides reduce to the same inclusion of the overlap, because the transition here is the
-identity (`ComplexAnalytic.coverTransition_hom_nodeCover`) and the three members are one space.
-The `eqToHom`s that `CategoryTheory.GlueData.ofGlueData'` inserts cancel in
-`CategoryTheory.GlueData.ofGlueData'_t_comp_f_of_ne`, which is the whole reason that lemma
-exists. -/
+Nothing here is special to this cover. That lemma discharges the hypothesis for **every** glue
+datum `ComplexAnalytic.coverGlueData` builds, because every morphism
+`ComplexAnalytic.coverTransition` is assembled from is a morphism of *analytic* spaces and carries
+its `ℂ`-linearity as a field; the
+`dite`s of `CategoryTheory.GlueData.ofGlueData'` are got past inside it, once, rather than here.
+`OkaTest/ProjectiveLine.lean` applies the same lemma at a glue datum whose transition is **not**
+the identity. -/
 theorem glueDataCLinear_nodeTripleGlueData :
-    GlueDataCLinear.{u} nodeTripleGlueData.{u} nodeAlg.{u} := by
-  intro i j
-  refine congrArg (fun m ↦ LocallyRingedSpace.comapAlgMap m (nodeAlg.{u} i)) ?_
-  by_cases h : i = j
-  · subst h
-    change (CategoryTheory.GlueData.ofGlueData' nodeTripleGlueData'.{u}).f i i =
-      (CategoryTheory.GlueData.ofGlueData' nodeTripleGlueData'.{u}).t i i ≫
-        (CategoryTheory.GlueData.ofGlueData' nodeTripleGlueData'.{u}).f i i
-    rw [CategoryTheory.GlueData.ofGlueData'_f_self, CategoryTheory.GlueData.ofGlueData'_t_self]
-    simp
-  · change (CategoryTheory.GlueData.ofGlueData' nodeTripleGlueData'.{u}).f i j =
-      (CategoryTheory.GlueData.ofGlueData' nodeTripleGlueData'.{u}).t i j ≫
-        (CategoryTheory.GlueData.ofGlueData' nodeTripleGlueData'.{u}).f j i
-    rw [CategoryTheory.GlueData.ofGlueData'_f_of_ne _ h,
-      CategoryTheory.GlueData.ofGlueData'_t_comp_f_of_ne _ h]
-    dsimp only [nodeTripleGlueData', coverGlueData']
-    rw [coverTransition_hom_nodeCover]
-    simp
+    GlueDataCLinear.{u} nodeTripleGlueData.{u} nodeAlg.{u} :=
+  glueDataCLinear_coverGlueData.{u} nodeCoverObj.{u} nodeCoverPoly.{u} nodeCoverGlue.{u}
+    hrange_nodeCover.{u} hsymm_nodeCover.{u} hcocycle_nodeCover.{u}
 
 /-- **Each member has local models**: it *is* an analytification, and the structure it carries is
 that analytification's own. -/

@@ -567,3 +567,10 @@ info: 'CategoryTheory.GlueData.ofGlueData'_t_comp_f_of_ne' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms CategoryTheory.GlueData.ofGlueData'_t_comp_f_of_ne
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.comapAlgMap_toLRSHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.comapAlgMap_toLRSHom

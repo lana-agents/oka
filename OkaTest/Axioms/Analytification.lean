@@ -823,3 +823,31 @@ info: 'ComplexAnalytic.coverGlueData_U' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.coverGlueData_U
+
+/--
+info: 'ComplexAnalytic.comapAlgMap_coverOverlapIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.comapAlgMap_coverOverlapIso
+
+/--
+info: 'ComplexAnalytic.comapAlgMap_coverGlueIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.comapAlgMap_coverGlueIso
+
+/--
+info: 'ComplexAnalytic.comapAlgMap_coverIncl_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.comapAlgMap_coverIncl_eq
+
+/--
+info: 'ComplexAnalytic.glueDataCLinear_coverGlueData' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.glueDataCLinear_coverGlueData
