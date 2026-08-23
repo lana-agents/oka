@@ -31,7 +31,10 @@ same site-spelling exercise the rest of this line does at every stage.
 
 `ComplexAnalytic.analytificationSheafFreeIso` holds for an **arbitrary** index type, not only a
 finite one, because Mathlib's `SheafOfModules.pullbackObjFreeIso` does. That is the base case of
-*"the analytification of a coherent sheaf is coherent"*, which is the next item and is not here.
+*"the analytification of a coherent sheaf is coherent"*, which the clause here used to call the
+next item and which is now `ComplexAnalytic.isCoherent_analytificationSheaf_of_isCoherent` in
+`Oka/Analytification/SheafCoherent.lean`. The finiteness of the index type enters there and not
+here.
 -/
 
 open CategoryTheory AlgebraicGeometry

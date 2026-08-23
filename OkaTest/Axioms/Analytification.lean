@@ -716,9 +716,15 @@ info: 'ComplexAnalytic.localisationOpen_ne_top' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.localisationOpen_ne_top
 
-/-! ### The analytification of a finitely presented sheaf is coherent
+/-! ### The analytification of a coherent sheaf is coherent
 
-`Oka/Analytification/SheafCoherent.lean`. -/
+`Oka/Analytification/SheafCoherent.lean`, whose title this header now matches: it used to read
+*the analytification of a finitely presented sheaf*, which was that file's title until the
+coherent statement was added, and which under-described the last of the four guards below.
+
+`ComplexAnalytic.AnalyticSpace.isCoherent_free` is the one of the four that lives elsewhere
+(`Oka/AnalyticSpace/Coherent.lean`); it is Oka's theorem in every finite rank, and the other
+three rest on it. -/
 
 /--
 info: 'ComplexAnalytic.AnalyticSpace.isCoherent_free' depends on axioms:
@@ -740,6 +746,13 @@ info: 'ComplexAnalytic.isCoherent_analytificationSheaf_cokernel_sectionsHom' dep
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isCoherent_analytificationSheaf_cokernel_sectionsHom
+
+/--
+info: 'ComplexAnalytic.isCoherent_analytificationSheaf_of_isCoherent' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isCoherent_analytificationSheaf_of_isCoherent
 
 /-! ### The distinguished open, through the functor -/
 

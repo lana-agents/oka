@@ -21,12 +21,22 @@ each transport is an ordinary definition.
 
 **The instance to state is the one at the outer definition, and not the one at
 `SheafOfModules.Presentation.map` underneath it.** An instance
-`(P.map F η).IsFinite` was written, at the full generality of `map`, and then deleted: nothing
-consumes it. Every consumer here — `SheafOfModules.Presentation.restrict` below,
+`(P.map F η).IsFinite` was written, at the full generality of `map`, and then deleted: nothing can
+consume it. Every consumer here — `SheafOfModules.Presentation.restrict` below,
 `SheafOfModules.Presentation.quasicoherentData`,
 `AlgebraicGeometry.Scheme.Modules.presentationRestrict` — is an ordinary definition wrapping the
-`map`, so search does not reach the `map` goal at all and the two fields have to be given at the
-wrapper regardless. Measured, by deleting it and rebuilding.
+`map`, and the two fields have to be given at the wrapper regardless.
+
+**An earlier version of this paragraph said the reason was that search "does not reach the `map`
+goal at all", and that is wrong; the conclusion is right and the correct reason is stronger.**
+A `set_option trace.Meta.synthInstance true` run on the goal left by `unfold` shows Mathlib's
+`SheafOfModules.Presentation.ofIsIso` instance firing and producing exactly the `map` goal — so
+search does reach it — and then failing to unify that goal with an instance whose head prints
+identically, the two `SheafOfModules.Presentation.map` applications differing in an argument that
+is not reducibly defeq. Supplying the missing instance does not help: not as a `haveI`, and **not
+as a global `instance` declared at exactly the shape `SheafOfModules.Presentation.restrict` uses**,
+which is a stronger negative than delete-and-rebuild gives. A `tryResolve` line whose two sides
+print the same is the signature of that, and it means no declaration is missing.
 
 `SheafOfModules.QuasicoherentData.bind` refines a cover: given a cover on which `M` has
 quasicoherent data, and, for each member, a cover of that member on which the restriction has
@@ -90,9 +100,25 @@ the same theorem stated at a global presentation, rather than merely differently
 this repository, what gives such a theorem a witness at all, since the only sheaf on a `Spec` here
 with any presentation is `OkaTest/AffineSections.lean`'s, and its presentation is global.
 
+## A presentation exhibits its sheaf as a cokernel of free sheaves
+
+`SheafOfModules.Presentation.cokernelIso` is the isomorphism `cokernel ψ ≅ M`, where
+`ψ : free P.relations.I ⟶ free P.generators.I` is the map a presentation is built out of. Mathlib
+has `SheafOfModules.Presentation.isColimit`, which says the relevant cofork is a colimit, and
+`SheafOfModules.presentationOfIsCokernelFree`, which goes the other way; what is missing is the
+isomorphism itself, which is what a consumer stated for a cokernel — such as
+`ComplexAnalytic.isCoherent_analytificationSheaf_cokernel` — actually wants. It is
+`CategoryTheory.Limits.IsColimit.coconePointUniqueUpToIso` and nothing else.
+
+**The map is written out rather than named**, because Mathlib does not name it either: it appears
+only inside the type of `SheafOfModules.Presentation.isColimit`, as
+`(freeHomEquiv _).symm P.relations.s ≫ kernel.ι P.generators.π`. Anything downstream has to spell
+it the same way.
+
 ## Main definitions
 
 - `SheafOfModules.Presentation.restrict`
+- `SheafOfModules.Presentation.cokernelIso`
 
 ## Main results
 
@@ -212,5 +238,32 @@ theorem Presentation.isFinitePresentation {M : SheafOfModules.{u} R} (P : M.Pres
   ⟨⟨P.quasicoherentData, inferInstance⟩⟩
 
 end globalPresentation
+
+section cokernel
+
+variable {C : Type u} [SmallCategory C] {J : GrothendieckTopology C} {R : Sheaf J RingCat.{u}}
+  [HasSheafify J AddCommGrpCat.{u}] [J.WEqualsLocallyBijective AddCommGrpCat.{u}]
+
+/-- **A presentation exhibits its sheaf as the cokernel of a map of free sheaves.**
+
+`SheafOfModules.Presentation.isColimit` says that the cofork on
+`(freeHomEquiv _).symm P.relations.s ≫ kernel.ι P.generators.π` with `P.generators.π` for its
+projection is a colimit; this reads that off as an isomorphism from the chosen cokernel, by
+`CategoryTheory.Limits.IsColimit.coconePointUniqueUpToIso`. There is no content beyond that.
+
+It is stated because the *cokernel* form is what consumers ask for. A theorem proved about
+`cokernel ψ` for a map of finite free sheaves — this repository's is
+`ComplexAnalytic.isCoherent_analytificationSheaf_cokernel` — applies to a sheaf with a finite
+presentation only through this isomorphism, and Mathlib provides the colimit but not the
+isomorphism.
+
+Note that the map is written out and not abbreviated. Mathlib does not name it: it exists only
+inside the type of `SheafOfModules.Presentation.isColimit`, so a consumer has to spell it
+identically or the two will not match. -/
+noncomputable def Presentation.cokernelIso {M : SheafOfModules.{u} R} (P : M.Presentation) :
+    cokernel ((freeHomEquiv _).symm P.relations.s ≫ kernel.ι P.generators.π) ≅ M :=
+  IsColimit.coconePointUniqueUpToIso (colimit.isColimit _) P.isColimit
+
+end cokernel
 
 end SheafOfModules

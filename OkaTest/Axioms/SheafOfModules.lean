@@ -632,3 +632,40 @@ info: 'AlgebraicGeometry.isCoherentStructureSheaf_spec' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.isCoherentStructureSheaf_spec
+
+/-! ### The converse: a finitely presented `Γ M` gives a global presentation of `M` -/
+
+/--
+info: 'SheafOfModules.Presentation.cokernelIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.Presentation.cokernelIso
+
+/--
+info: 'AlgebraicGeometry.isFinite_presentationTilde' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.isFinite_presentationTilde
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.exists_isFinite_presentation_tilde' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.exists_isFinite_presentation_tilde
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.exists_isFinite_presentation' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.exists_isFinite_presentation
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.exists_isFinite_presentation_of_isCoherent'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.exists_isFinite_presentation_of_isCoherent
