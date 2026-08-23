@@ -20,6 +20,7 @@ import Oka.Algebra.Category.ModuleCat.Sheaf.Quasicoherent
 import Oka.Algebra.Category.ModuleCat.Sheaf.Stalk
 import Oka.Algebra.Category.ModuleCat.Sheaf.Submodule
 import Oka.Algebra.Category.ModuleCat.Stalk
+import Oka.Algebra.Module.FinitePresentation
 import Oka.Algebra.MvPolynomial.Taylor
 import Oka.AlgebraicGeometry.GammaSpecAdjunction
 import Oka.AlgebraicGeometry.Modules.Sheaf

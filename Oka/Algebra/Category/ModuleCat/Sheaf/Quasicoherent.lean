@@ -8,10 +8,25 @@ module
 public import Mathlib.Algebra.Category.ModuleCat.Sheaf.Quasicoherent
 
 /-!
-# A quasicoherent datum bound together out of finite ones is finite
+# Finiteness of presentations: binding, mapping, and restricting along a morphism of the site
 
 Material for `Mathlib/Algebra/Category/ModuleCat/Sheaf/Quasicoherent.lean`; see `README.md` on
-the mirror tree.
+the mirror tree. Nothing here needs an import that file does not already have.
+
+Three gaps in Mathlib's `SheafOfModules.Presentation` API, all of the same shape: a presentation
+is transported by a construction that does not touch either index type, and
+`SheafOfModules.Presentation.IsFinite` is finiteness of the two index types and nothing else, so
+the finiteness wanted **is** the finiteness given — but instance search does not see it, because
+each transport is an ordinary definition.
+
+**The instance to state is the one at the outer definition, and not the one at
+`SheafOfModules.Presentation.map` underneath it.** An instance
+`(P.map F η).IsFinite` was written, at the full generality of `map`, and then deleted: nothing
+consumes it. Every consumer here — `SheafOfModules.Presentation.restrict` below,
+`SheafOfModules.Presentation.quasicoherentData`,
+`AlgebraicGeometry.Scheme.Modules.presentationRestrict` — is an ordinary definition wrapping the
+`map`, so search does not reach the `map` goal at all and the two fields have to be given at the
+wrapper regardless. Measured, by deleting it and rebuilding.
 
 `SheafOfModules.QuasicoherentData.bind` refines a cover: given a cover on which `M` has
 quasicoherent data, and, for each member, a cover of that member on which the restriction has
@@ -38,18 +53,63 @@ the cause: supplying the missing one — three lines, since both index types are
 still leaves `infer_instance` failing on the composite goal. That is why this is stated rather
 than left to the elaborator at the call site.
 
+## Restricting a presentation along a morphism of the site
+
+`SheafOfModules.Presentation.restrict` is the presentation-level analogue of this repository's
+`SheafOfModules.GeneratingSections.restrict`: if `M` has a presentation over `Y`, it has one over
+any `X` lying over `Y`. It is what an argument that refines a covering needs when the data being
+carried is a presentation rather than a generating family —
+`SheafOfModules.IsFinitePresentation` hands out presentations over the members of *some* covering,
+and a caller which wants them over a covering of its own choosing has to move them.
+
+**There was a reason to doubt that it would be as cheap as the generating-sections version, and
+it is worth recording that the doubt was well placed and wrong.**
+`SheafOfModules.GeneratingSections.restrict` finishes with
+`SheafOfModules.GeneratingSections.ofEpi`, and a presentation does *not* transport along an
+epimorphism: one would need generators of the
+kernel too. What makes it cheap is that the morphism `ofEpi` is applied to there is not merely an
+epimorphism — `SheafOfModules.overFunctorMap` is a natural *isomorphism*, built by
+`CategoryTheory.NatIso.ofComponents` from `Iso.refl` — and Mathlib already has the transport of a
+presentation along an isomorphism, `SheafOfModules.Presentation.ofIsIso`. So the definition below
+is the generating-sections one with `ofEpi` replaced by `ofIsIso`, under exactly the hypotheses
+that one carries and no new one.
+
+## A global presentation is a local one
+
+`SheafOfModules.Presentation.isFinitePresentation` says that a sheaf with a finite **global**
+presentation satisfies Mathlib's `SheafOfModules.IsFinitePresentation`, the class asserting a
+finite presentation over the members of *some* covering. Mathlib has
+`SheafOfModules.Presentation.quasicoherentData`, which puts a global presentation on the trivial
+covering, and `SheafOfModules.Presentation.isQuasicoherent`, which reads off quasicoherence from
+it; the finite version of the second is not there, and the instance it needs is the finite version
+of `SheafOfModules.Presentation.map` above, because `quasicoherentData` presents `M.over X` as
+`P.map` along a pushforward.
+
+It is what makes a theorem stated at `SheafOfModules.IsFinitePresentation` strictly stronger than
+the same theorem stated at a global presentation, rather than merely differently stated — and, in
+this repository, what gives such a theorem a witness at all, since the only sheaf on a `Spec` here
+with any presentation is `OkaTest/AffineSections.lean`'s, and its presentation is global.
+
+## Main definitions
+
+- `SheafOfModules.Presentation.restrict`
+
 ## Main results
 
 - `SheafOfModules.QuasicoherentData.isFinitePresentation_bind`
+- `SheafOfModules.Presentation.isFinite_restrict`
+- `SheafOfModules.Presentation.isFinitePresentation`
 -/
 
 @[expose] public section
 
-universe u
+universe u v' u'
 
 open CategoryTheory Limits
 
 namespace SheafOfModules
+
+section bind
 
 variable {C : Type u} [SmallCategory C] {J : GrothendieckTopology C} {R : Sheaf J RingCat.{u}}
   [HasSheafify J AddCommGrpCat.{u}] [J.WEqualsLocallyBijective AddCommGrpCat.{u}]
@@ -74,5 +134,83 @@ instance QuasicoherentData.isFinitePresentation_bind (M : SheafOfModules.{u} R) 
         ⟨GeneratingSections.IsFiniteType.finite (σ := ((D i.1).presentation i.2).generators)⟩
       isFiniteType_relations :=
         ⟨GeneratingSections.IsFiniteType.finite (σ := ((D i.1).presentation i.2).relations)⟩ }
+
+end bind
+
+section restrict
+
+variable {C : Type u'} [Category.{v'} C] {J : GrothendieckTopology C} {R : Sheaf J RingCat.{u}}
+  [HasPullbacks C] [∀ (X : C), HasSheafify (J.over X) AddCommGrpCat.{u}]
+  [∀ (X : C), (J.over X).WEqualsLocallyBijective AddCommGrpCat.{u}]
+
+/-- **A presentation restricts along a morphism of the site.**
+
+If `M` has a presentation over `Y`, it has one over any `X` lying over `Y`. This is the
+presentation-level analogue of this repository's `SheafOfModules.GeneratingSections.restrict`,
+and it is that definition with `SheafOfModules.GeneratingSections.ofEpi` replaced by
+`SheafOfModules.Presentation.ofIsIso`; see the module docstring for why that replacement is
+available and why it is the whole content. The hypotheses are the ones
+`SheafOfModules.GeneratingSections.restrict` already carries, `HasPullbacks C` being the
+load-bearing one: it is what makes `SheafOfModules.overMap` a left adjoint, hence colimit
+preserving, hence eligible for `SheafOfModules.Presentation.map`. Nothing here is specific to a
+topological site. -/
+noncomputable def Presentation.restrict {M : SheafOfModules.{u} R} {X Y : C} (f : X ⟶ Y)
+    (P : (M.over Y).Presentation) : (M.over X).Presentation :=
+  (P.map (overMap R f) (overMapUnitIso f).symm).ofIsIso (((overFunctorMap R f).app M).hom)
+
+/-- **Restriction preserves finiteness of a presentation**, because neither
+`SheafOfModules.Presentation.map` nor `SheafOfModules.Presentation.ofIsIso` changes either index
+type.
+
+The two fields are the source's, exactly as for
+`SheafOfModules.QuasicoherentData.isFinitePresentation_bind` and for the same reason. **They are
+given rather than left to `unfold` followed by `infer_instance`**, which is what
+`SheafOfModules.GeneratingSections.isFiniteType_restrict` does: after `unfold` the goal is
+`SheafOfModules.Presentation.ofIsIso`'s, whose `IsFinite` instance Mathlib does state, and search
+still fails on it — measured, and not explained here. -/
+instance Presentation.isFinite_restrict {M : SheafOfModules.{u} R} {X Y : C} (f : X ⟶ Y)
+    (P : (M.over Y).Presentation) [P.IsFinite] : (P.restrict f).IsFinite where
+  isFiniteType_generators := ⟨inferInstanceAs (Finite P.generators.I)⟩
+  isFiniteType_relations := ⟨inferInstanceAs (Finite P.relations.I)⟩
+
+end restrict
+
+section globalPresentation
+
+variable {C : Type u'} [Category.{v'} C] [HasBinaryProducts C] {J : GrothendieckTopology C}
+  {R : Sheaf J RingCat.{u}} [HasSheafify J AddCommGrpCat.{u}]
+  [J.WEqualsLocallyBijective AddCommGrpCat.{u}]
+  [∀ (X : C), HasSheafify (J.over X) AddCommGrpCat.{u}]
+  [∀ (X : C), (J.over X).WEqualsLocallyBijective AddCommGrpCat.{u}]
+
+/-- **The quasicoherent datum a finite global presentation puts on the trivial covering is
+finite.**
+
+`SheafOfModules.Presentation.quasicoherentData` presents `M.over X` as `P.map` along a pushforward
+along an identity, and `SheafOfModules.Presentation.map` changes neither index type; the two
+fields are the source's, as everywhere else in this file. -/
+instance Presentation.isFinitePresentation_quasicoherentData {M : SheafOfModules.{u} R}
+    (P : M.Presentation) [P.IsFinite] : P.quasicoherentData.IsFinitePresentation where
+  isFinite_presentation _ :=
+    { isFiniteType_generators := ⟨inferInstanceAs (Finite P.generators.I)⟩
+      isFiniteType_relations := ⟨inferInstanceAs (Finite P.relations.I)⟩ }
+
+/-- **A sheaf with a finite global presentation is of finite presentation.**
+
+The finite analogue of `SheafOfModules.Presentation.isQuasicoherent`, and the trivial covering is
+the whole of it. It is stated because it is what relates the two shapes a theorem about finite
+presentations can take — a hypothesis of a global `SheafOfModules.Presentation` that is finite,
+and Mathlib's class `SheafOfModules.IsFinitePresentation` — and without it a theorem at the class
+cannot be checked against a sheaf that was *built* as a cokernel of finite free sheaves, which is
+the only kind this repository has on a `Spec`.
+
+**Not an instance.** A `SheafOfModules.Presentation` is data and is not found by search, so this
+would be a hypothesis-free instance that can never fire; it is applied at a presentation in
+hand. -/
+theorem Presentation.isFinitePresentation {M : SheafOfModules.{u} R} (P : M.Presentation)
+    [P.IsFinite] : M.IsFinitePresentation :=
+  ⟨⟨P.quasicoherentData, inferInstance⟩⟩
+
+end globalPresentation
 
 end SheafOfModules

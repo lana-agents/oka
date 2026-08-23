@@ -97,3 +97,10 @@ info: 'Module.Finite.of_ringEquiv' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms Module.Finite.of_ringEquiv
+
+/--
+info: 'Module.FinitePresentation.of_ringEquiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms Module.FinitePresentation.of_ringEquiv

@@ -16,10 +16,12 @@ in `OkaTest/CoherentPresentation.lean` records that **no sheaf on a `Spec` is pr
 here**, since every coherent sheaf this development exhibits lives on an analytic space.
 
 Every statement on that line is therefore made under hypotheses weaker than coherence —
-`SheafOfModules.IsFiniteType` and `SheafOfModules.IsQuasicoherent` — and this file is the reason:
-at the weaker hypotheses there **is** a witness, and it is not a degenerate one. That now covers
-the whole argument, from its two local steps to
-`AlgebraicGeometry.Scheme.Modules.module_finite_moduleSpecΓFunctor_obj_of_isFiniteType`.
+`SheafOfModules.IsFiniteType`, `SheafOfModules.IsQuasicoherent` and
+`SheafOfModules.IsFinitePresentation` — and this file is the reason: at the weaker hypotheses
+there **is** a witness, and it is not a degenerate one. That now covers the whole argument twice
+over, from its two local steps to
+`AlgebraicGeometry.Scheme.Modules.module_finite_moduleSpecΓFunctor_obj_of_isFiniteType` and to
+`AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ_of_isFinitePresentation`.
 
 ## The witness
 
@@ -68,13 +70,21 @@ itself.
   conclusion is sharp only for a sheaf which is *not* globally generated, and this repository
   exhibits none on a `Spec`.
 * **`Γ M` *is* shown finitely presented below, and not from the same hypotheses.**
-  `Module.FinitePresentation` needs a finite **global** `SheafOfModules.Presentation`, which is
-  strictly more than quasicoherent-of-finite-type — see the module docstring of
+  `Module.FinitePresentation` needs a `SheafOfModules.Presentation`, which is strictly more than
+  quasicoherent-of-finite-type — see the module docstring of
   `Oka/AlgebraicGeometry/Modules/Tilde.lean` for why it has to be, since the statement is *false*
-  at the weaker hypotheses. The witness has such a presentation because it was **built** as a
-  cokernel of finite free sheaves, not because one was derived; nothing here produces a global
-  presentation for a sheaf that is merely of finite type, and nothing states the *local* form,
-  `SheafOfModules.IsFinitePresentation`.
+  at the weaker hypotheses. The witness has one because it was **built** as a cokernel of finite
+  free sheaves, not because one was derived; **nothing here produces a presentation for a sheaf
+  that is merely of finite type**, which is the gap that makes the finite-presentation statements
+  weaker in reach than the finite-type ones even though they are stronger in conclusion.
+
+  Both forms are instantiated below: the global one,
+  `AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ`, and Mathlib's class
+  `SheafOfModules.IsFinitePresentation`, which the witness satisfies through
+  `SheafOfModules.Presentation.isFinitePresentation` — its presentation is global, so the
+  covering is the trivial one. **So the local statement's witness here is not local**, and what
+  the instantiation checks is that its hypothesis is inhabited at all, not that it is inhabited
+  by something the global statement could not reach.
 -/
 
 open CategoryTheory Limits AlgebraicGeometry TopologicalSpace Opposite PrimeSpectrum SheafOfModules
@@ -316,11 +326,13 @@ example : Module.Finite nodeA.{u}
 
 /-! ### Finite presentation
 
-`AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ` asks for strictly more than the two
-instances above — a finite **global** presentation — and that is not a convenience: at
-quasicoherent-plus-finite-type the conclusion is false, for the reason recorded in the module
-docstring of `Oka/AlgebraicGeometry/Modules/Tilde.lean`. So the hypothesis needs its own
-non-vacuity check, and this is it. -/
+Both finite-presentation statements ask for strictly more than the two instances above — a
+`SheafOfModules.Presentation`, global for
+`AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ` and on a covering for
+`AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ_of_isFinitePresentation` — and that is not
+a convenience: at quasicoherent-plus-finite-type the conclusion is false, for the reason recorded
+in the module docstring of `Oka/AlgebraicGeometry/Modules/Tilde.lean`. So both hypotheses need
+their own non-vacuity check, and these are they. -/
 
 /-- **The witness has a finite global presentation.**
 
@@ -353,5 +365,35 @@ example : Module.FinitePresentation nodeA.{u}
     ((moduleSpecΓFunctor (R := nodeA.{u})).obj
       (cokernel specXHom.{u} : (Spec nodeA.{u}).Modules) : Type u) :=
   @Scheme.Modules.finitePresentation_Γ _ _ specXPresentation.{u} isFinite_specXPresentation.{u}
+
+/-- **And it is of finite presentation in Mathlib's sense**, which is the hypothesis of the
+*local* statement.
+
+`SheafOfModules.IsFinitePresentation` asks for a finite presentation over the members of some
+covering; `SheafOfModules.Presentation.isFinitePresentation` supplies it from the global one, on
+the trivial covering. So this witness does not exercise the locality — see the module docstring —
+and what it checks is that the class is inhabited on a `Spec` in this repository at all, which is
+what `OkaTest/CoherentPresentation.lean` records is *not* true of `SheafOfModules.IsCoherent`.
+
+The universes and the `IsFinite` instance are both supplied positionally, for the reason recorded
+on the previous example: neither is inferred, and `haveI` does not help. -/
+instance isFinitePresentation_cokernel_specXHom :
+    (cokernel specXHom.{u} : (Spec nodeA.{u}).Modules).IsFinitePresentation :=
+  @SheafOfModules.Presentation.isFinitePresentation.{u, u, u} _ _ _ _ _ _ _ _ _ _
+    specXPresentation.{u} isFinite_specXPresentation.{u}
+
+/-- **`Γ M` is a finitely presented `A`-module from the *local* hypothesis**, at
+`M = 𝒪_{Spec A} ⧸ (x)`.
+
+`AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ_of_isFinitePresentation` is the conclusion
+of the affine-locality argument run on presentations, and this is the same statement as the
+example above with the hypothesis weakened from a presentation in hand to Mathlib's class. Here
+the two coincide, because the instance above is built from that very presentation; what is being
+checked is that the local statement has a witness, not that it has one the global statement
+misses. -/
+example : Module.FinitePresentation nodeA.{u}
+    ((moduleSpecΓFunctor (R := nodeA.{u})).obj
+      (cokernel specXHom.{u} : (Spec nodeA.{u}).Modules) : Type u) :=
+  Scheme.Modules.finitePresentation_Γ_of_isFinitePresentation _
 
 end OkaTest.AffineSections

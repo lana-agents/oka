@@ -491,3 +491,96 @@ info: 'AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ' depends on axioms
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ
+
+/-! ### Restricting a presentation, and the local finite-presentation statement -/
+
+/--
+info: 'SheafOfModules.Presentation.restrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.Presentation.restrict
+
+/--
+info: 'SheafOfModules.Presentation.isFinite_restrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.Presentation.isFinite_restrict
+
+/--
+info: 'SheafOfModules.Presentation.isFinitePresentation_quasicoherentData' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.Presentation.isFinitePresentation_quasicoherentData
+
+/--
+info: 'SheafOfModules.Presentation.isFinitePresentation' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.Presentation.isFinitePresentation
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.presentationOverRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.presentationOverRestrict
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.isFinite_presentationOverRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.isFinite_presentationOverRestrict
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.finitePresentation_sections_of_restrict'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.finitePresentation_sections_of_restrict
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.isFinite_presentationRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.isFinite_presentationRestrict
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ_of_isAffine' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ_of_isAffine
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.finitePresentation_sections_of_isAffineOpen'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.finitePresentation_sections_of_isAffineOpen
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.finitePresentation_sections_basicOpen' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.finitePresentation_sections_basicOpen
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.exists_finset_basicOpen_presentation' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.exists_finset_basicOpen_presentation
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ_of_isFinitePresentation'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ_of_isFinitePresentation

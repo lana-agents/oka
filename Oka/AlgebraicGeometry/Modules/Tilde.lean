@@ -7,6 +7,7 @@ module
 
 public import Mathlib.AlgebraicGeometry.Modules.Tilde
 public import Mathlib.RingTheory.Localization.Finiteness
+public import Mathlib.RingTheory.LocalProperties.FinitePresentation
 public import Mathlib.Algebra.Module.FinitePresentation
 public import Oka.AlgebraicGeometry.Modules.Sheaf
 public import Oka.Algebra.Category.ModuleCat.Sheaf.Coherent.Presentation
@@ -16,8 +17,9 @@ public import Oka.Algebra.Category.ModuleCat.Sheaf.Generators
 # A module on an affine scheme and its global sections
 
 Material for `Mathlib/AlgebraicGeometry/Modules/Tilde.lean`; see `README.md` on the mirror tree.
-That file does not currently import `Mathlib.RingTheory.Localization.Finiteness`, which the
-change of site below needs, so upstreaming it adds that import — two files to its closure.
+That file does not currently import `Mathlib.RingTheory.Localization.Finiteness` or
+`Mathlib.RingTheory.LocalProperties.FinitePresentation`, which the two change-of-site arguments
+below need, so upstreaming it adds those imports — three files to its closure.
 
 Mathlib proves `AlgebraicGeometry.isQuasicoherent_iff_isIso_fromTildeΓ`: an
 `𝒪_{Spec R}`-module `M` is quasicoherent exactly when the counit
@@ -128,10 +130,40 @@ one that matters:
   `(tilde.functor R).preimage`, and exhibits `M` as the tilde of its cokernel; all that is added
   here is to keep that map instead of discarding it.
 
-**What is still not here is the *local* statement**, at Mathlib's
-`SheafOfModules.IsFinitePresentation` — the class asserting a finite presentation over *some*
-covering rather than globally. That needs the basic-open refinement of a presentation and a
-finite-presentation analogue of the change of site, and neither is measured.
+## The local statement, which is the one Mathlib's class asks for
+
+`AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ_of_isFinitePresentation`: **the global
+sections of a sheaf on `Spec R` of finite presentation are a finitely presented `R`-module**, at
+Mathlib's `SheafOfModules.IsFinitePresentation` — the class asserting a finite presentation over
+the members of *some* covering rather than a global one. It is the finite-
+presentation analogue of
+`AlgebraicGeometry.Scheme.Modules.module_finite_moduleSpecΓFunctor_obj_of_isFiniteType`, and it is
+assembled the same way, out of the same three pieces with `Module.Finite` replaced by
+`Module.FinitePresentation` throughout:
+
+* `AlgebraicGeometry.Scheme.Modules.exists_finset_basicOpen_presentation` refines the covering the
+  class supplies to finitely many `D(g)` spanning the unit ideal, carrying the *presentations*
+  along by `SheafOfModules.Presentation.restrict`;
+* `AlgebraicGeometry.Scheme.Modules.finitePresentation_sections_basicOpen` is the change of site,
+  through `AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ_of_isAffine` and
+  `AlgebraicGeometry.Scheme.Modules.finitePresentation_sections_of_isAffineOpen`;
+* `Module.FinitePresentation.of_localizationSpan'` assembles them, at the same choice of localised
+  ring — `Γ(Spec R, D(g))` — and the same `IsLocalizedModule` instance as the finite-type
+  argument.
+
+**It strictly generalises the global statement**, and not only informally:
+`SheafOfModules.Presentation.isFinitePresentation` turns a finite global presentation into the
+class, so `AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ` is its specialisation. The
+global one is kept because the local one is proved *through* it — the affine step of the change of
+site is `finitePresentation_Γ` at a restricted presentation — and because it is the form a caller
+holding a presentation wants.
+
+**Two things this cost that the finite-type argument did not.** Neither was in Mathlib and both
+are in the mirror tree: `SheafOfModules.Presentation.restrict`, the presentation-level analogue of
+`SheafOfModules.GeneratingSections.restrict`; and `Module.FinitePresentation.of_ringEquiv`, the
+sibling of `Module.Finite.of_ringEquiv` — whose proof is *not* the same, since
+`Module.FinitePresentation` has no `of_restrictScalars` to reduce to. Both are recorded where they
+would go upstream and both say so.
 
 ## Main definitions
 
@@ -155,6 +187,13 @@ finite-presentation analogue of the change of site, and neither is measured.
 - `AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ`: **a sheaf on `Spec R` with a finite
   global presentation has finitely presented global sections**, and the correction that finite
   type is not enough for it
+- `AlgebraicGeometry.Scheme.Modules.exists_finset_basicOpen_presentation`
+- `AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ_of_isAffine`,
+  `AlgebraicGeometry.Scheme.Modules.finitePresentation_sections_of_isAffineOpen` and
+  `AlgebraicGeometry.Scheme.Modules.finitePresentation_sections_basicOpen`: the change of site,
+  again
+- `AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ_of_isFinitePresentation`: **the global
+  sections of a sheaf of finite presentation on `Spec R` are a finitely presented `R`-module**
 -/
 
 @[expose] public section
@@ -624,6 +663,175 @@ theorem finitePresentation_Γ (P : M.Presentation) [P.IsFinite] :
   exact Module.FinitePresentation.of_equiv
     ((tilde.toTildeΓNatIso (R := R)).app (cokernel (presentationRelMap M P)) ≪≫
       moduleSpecΓFunctor.mapIso (isoTildeCokernel M P)).toLinearEquiv
+
+/-! ### The local statement
+
+Everything above about finite presentation is at a **global** `SheafOfModules.Presentation`.
+Mathlib's class `SheafOfModules.IsFinitePresentation` asks only for one over the members of some
+covering, and the passage from it to `Module.FinitePresentation R (Γ M)` is the quasi-compactness
+argument again, with `Module.Finite` replaced by `Module.FinitePresentation` and generating
+sections replaced by presentations at every step.
+-/
+
+/-- **Restricting a presentation along an open immersion preserves finiteness.**
+
+`AlgebraicGeometry.Scheme.Modules.presentationRestrict` is `SheafOfModules.Presentation.map` along
+`AlgebraicGeometry.Scheme.Modules.restrictFunctor`, which changes neither index type; the fields
+are the source's, as for `SheafOfModules.Presentation.isFinite_restrict` and for the same reason —
+`presentationRestrict` is an ordinary definition, so search does not see the `map` underneath
+it. -/
+instance isFinite_presentationRestrict {X Y : Scheme.{u}} (f : Y ⟶ X) [IsOpenImmersion f]
+    {N : X.Modules} (P : N.Presentation) [P.IsFinite] : (presentationRestrict f P).IsFinite where
+  isFiniteType_generators := ⟨inferInstanceAs (Finite P.generators.I)⟩
+  isFiniteType_relations := ⟨inferInstanceAs (Finite P.relations.I)⟩
+
+noncomputable section LocalFinitePresentation
+
+/-- **The global sections of a module on an affine scheme with a finite global presentation are a
+finitely presented module over the global sections of the scheme.**
+
+`AlgebraicGeometry.Scheme.Modules.module_finite_Γ_of_isAffine` with `Module.Finite` replaced by
+`Module.FinitePresentation`, generating sections by a presentation, and
+`SheafOfModules.GeneratingSections.map` by
+`AlgebraicGeometry.Scheme.Modules.presentationRestrict`; the three moves are the same and each is
+again a change of the ring acting on a fixed carrier. Read that docstring for what they are.
+
+The final `▸` is along an equality of opens and is harmless for the reason the finite-type
+version's is: `Module.FinitePresentation` is a `Prop`, so the transport moves a proof and no data
+and no term downstream can meet a stuck `Eq.mpr`. The same holds for the one in
+`AlgebraicGeometry.Scheme.Modules.finitePresentation_sections_of_isAffineOpen` below.
+
+**It needs no `set_option`, and the finite-type version does.** `module_finite_Γ_of_isAffine` and
+`module_finite_sections_of_isAffineOpen` both carry
+`set_option backward.isDefEq.respectTransparency false`; deleting it from either of the two
+statements here changes nothing, measured by deleting them. The assembly at the end of the file
+does need it, as its finite-type counterpart does. No explanation is offered for the difference. -/
+theorem finitePresentation_Γ_of_isAffine {V : Scheme.{u}} [IsAffine V] (N : V.Modules)
+    (P : N.Presentation) [P.IsFinite] :
+    Module.FinitePresentation Γ(V, ⊤) Γ(N, ⊤) := by
+  have : PreservesColimitsOfSize.{u, u} (restrictFunctor V.isoSpec.inv) := inferInstance
+  haveI hΓ : Module.FinitePresentation Γ(V, ⊤)
+      (moduleSpecΓFunctor.obj (N.restrict V.isoSpec.inv) : Type u) :=
+    finitePresentation_Γ _ (presentationRestrict V.isoSpec.inv P)
+  letI : Module Γ(V, ⊤) Γ(N.restrict V.isoSpec.inv, ⊤) :=
+    inferInstanceAs (Module Γ(V, ⊤) (moduleSpecΓFunctor.obj (N.restrict V.isoSpec.inv) : Type u))
+  haveI : Module.FinitePresentation Γ(V, ⊤) Γ(N.restrict V.isoSpec.inv, ⊤) := hΓ
+  haveI : Module.FinitePresentation Γ(Spec Γ(V, ⊤), ⊤) Γ(N.restrict V.isoSpec.inv, ⊤) :=
+    Module.FinitePresentation.of_ringEquiv
+      (Scheme.ΓSpecIso Γ(V, ⊤)).symm.commRingCatIsoToRingEquiv fun _ _ ↦ rfl
+  haveI h := finitePresentation_sections_of_restrict V.isoSpec.inv N ⊤
+  have he : (V.isoSpec.inv ''ᵁ (⊤ : (Spec Γ(V, ⊤)).Opens) : V.Opens) = ⊤ := by simp
+  exact he ▸ h
+
+/-- **The sections of a module over an affine open with a finite presentation there are a finitely
+presented module over the sections of the structure sheaf.**
+
+`AlgebraicGeometry.Scheme.Modules.module_finite_sections_of_isAffineOpen` with the same three
+replacements, and the crossing from the slice site `Over U` to the open subscheme's own site is
+`AlgebraicGeometry.Scheme.Modules.presentationOverRestrict` in place of
+`AlgebraicGeometry.Scheme.Modules.generatingSectionsRestrict`. This is the form the argument
+consumes, because `SheafOfModules.IsFinitePresentation` hands out presentations of `N.over U`. -/
+theorem finitePresentation_sections_of_isAffineOpen {X : Scheme.{u}} (N : X.Modules)
+    {U : X.Opens} (hU : IsAffineOpen U) (P : (N.over U).Presentation) [P.IsFinite] :
+    Module.FinitePresentation Γ(X, U) Γ(N, U) := by
+  haveI : IsAffine (U : Scheme.{u}) := hU
+  haveI := finitePresentation_Γ_of_isAffine (N.restrict U.ι) (presentationOverRestrict N U P)
+  haveI h := finitePresentation_sections_of_restrict U.ι N ⊤
+  exact U.ι_image_top ▸ h
+
+/-- **`Γ(M, D(g))` is a finitely presented `Γ(Spec R, D(g))`-module** when `M` has a finite
+presentation over `D(g)`.
+
+The specialisation of the previous statement at `AlgebraicGeometry.IsAffineOpen.Spec_basicOpen`,
+exactly as `AlgebraicGeometry.Scheme.Modules.module_finite_sections_basicOpen` is of its
+predecessor, and quasicoherence is not asked for here because a presentation gives it. -/
+theorem finitePresentation_sections_basicOpen (N : (Spec R).Modules) (g : R)
+    (P : (N.over (PrimeSpectrum.basicOpen g)).Presentation) [P.IsFinite] :
+    Module.FinitePresentation Γ(Spec R, PrimeSpectrum.basicOpen g)
+      Γ(N, PrimeSpectrum.basicOpen g) :=
+  finitePresentation_sections_of_isAffineOpen N (IsAffineOpen.Spec_basicOpen g) P
+
+/-- **A sheaf of finite presentation on `Spec R` has a finite presentation over each of finitely
+many distinguished opens which span the unit ideal.**
+
+`AlgebraicGeometry.Scheme.Modules.exists_finset_basicOpen_generatingSections` with presentations
+in place of generating families. The proof is that one line for line — basic opens are a basis,
+the resulting `D(g)` cover, so their `g` span the unit ideal, and `1` lies in the span of a finite
+subset — and the only difference is the last line, where
+`SheafOfModules.Presentation.restrict` carries a presentation from the member of the given
+covering to the `D(g)` inside it, in place of
+`SheafOfModules.GeneratingSections.restrict`.
+
+**That last line is the whole of what had to be new**, and there was a reason to expect otherwise:
+the generating-sections transport ends at `SheafOfModules.GeneratingSections.ofEpi`, and a
+presentation does not transport along an epimorphism. See
+`Oka/Algebra/Category/ModuleCat/Sheaf/Quasicoherent.lean` for why it does anyway. -/
+theorem exists_finset_basicOpen_presentation [M.IsFinitePresentation] :
+    ∃ s : Finset R, Ideal.span (s : Set R) = ⊤ ∧
+      ∀ g ∈ s, ∃ P : (M.over (PrimeSpectrum.basicOpen g)).Presentation, P.IsFinite := by
+  obtain ⟨q, hq⟩ := SheafOfModules.IsFinitePresentation.exists_quasicoherentData.{u, u} M
+  have hcov : ⨆ i, q.X i = ⊤ := (Opens.coversTop_iff (U := q.X) _).1 q.coversTop
+  have htop : (⨆ g : {g : R // ∃ i, (PrimeSpectrum.basicOpen g : (Spec R).Opens) ≤ q.X i},
+      (PrimeSpectrum.basicOpen g.1 : (Spec R).Opens)) = ⊤ := by
+    rw [eq_top_iff]
+    intro x _
+    have hx : x ∈ ⨆ i, q.X i := by rw [hcov]; trivial
+    obtain ⟨i, hi⟩ := Opens.mem_iSup.1 hx
+    obtain ⟨V, ⟨g, rfl⟩, hxV, hV⟩ :=
+      Opens.isBasis_iff_nbhd.1 PrimeSpectrum.isBasis_basic_opens hi
+    exact Opens.mem_iSup.2 ⟨⟨g, i, hV⟩, hxV⟩
+  rw [PrimeSpectrum.iSup_basicOpen_eq_top_iff] at htop
+  obtain ⟨s, hsub, hs1⟩ :=
+    Submodule.mem_span_finite_of_mem_span ((Ideal.eq_top_iff_one _).1 htop)
+  refine ⟨s, (Ideal.eq_top_iff_one _).2 hs1, fun g hg ↦ ?_⟩
+  obtain ⟨⟨g', i, hi⟩, rfl⟩ := hsub hg
+  haveI := hq.isFinite_presentation i
+  exact ⟨SheafOfModules.Presentation.restrict.{u} (homOfLE hi) (q.presentation i), inferInstance⟩
+
+set_option backward.isDefEq.respectTransparency false in
+/-- **The global sections of a sheaf of finite presentation on `Spec R` are a finitely presented
+`R`-module.**
+
+The three steps assembled by `Module.FinitePresentation.of_localizationSpan'`, at the same choice
+of localised ring `Γ(Spec R, D(g))` that
+`AlgebraicGeometry.Scheme.Modules.module_finite_moduleSpecΓFunctor_obj_of_isFiniteType` makes and
+with the same `AlgebraicGeometry.Scheme.Modules.isScalarTower_sections` and
+`AlgebraicGeometry.Scheme.Modules.isLocalizedModule_away_sectionsToBasicOpen`: the assembly lemma
+has the same shape as its `Module.Finite` counterpart and consumes them unchanged, which is the
+one thing on this line that was measured in advance and came out as predicted.
+
+`SheafOfModules.IsFinitePresentation` gives quasicoherence as an instance, so the localisation
+statement applies without a separate hypothesis.
+
+**This generalises `AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ`**, through
+`SheafOfModules.Presentation.isFinitePresentation`; that one is kept because this proof goes
+through it, at a restricted presentation on an affine.
+
+The `set_option` is needed and the two change-of-site statements above do not need theirs;
+deleting it here leaves `failed to synthesize ∀ (g : ↑↑s), IsLocalizedModule (Submonoid.powers ↑g)
+…`, the same instance hand-over its finite-type counterpart makes. -/
+theorem finitePresentation_Γ_of_isFinitePresentation (N : (Spec R).Modules)
+    [N.IsFinitePresentation] :
+    Module.FinitePresentation R (moduleSpecΓFunctor.obj N : Type u) := by
+  obtain ⟨s, hs, hP⟩ := exists_finset_basicOpen_presentation N
+  haveI : ∀ g : (s : Set R), IsLocalizedModule.Away (g : R) (sectionsToBasicOpen N (g : R)).hom :=
+    fun g ↦ isLocalizedModule_away_sectionsToBasicOpen N (g : R)
+  letI : ∀ g : (s : Set R), Module Γ(Spec R, PrimeSpectrum.basicOpen (g : R))
+      ((modulesSpecToSheaf.obj N).presheaf.obj (op (PrimeSpectrum.basicOpen (g : R))) : Type u) :=
+    fun g ↦ inferInstanceAs (Module Γ(Spec R, PrimeSpectrum.basicOpen (g : R))
+      Γ(N, PrimeSpectrum.basicOpen (g : R)))
+  haveI : ∀ g : (s : Set R), IsScalarTower R Γ(Spec R, PrimeSpectrum.basicOpen (g : R))
+      ((modulesSpecToSheaf.obj N).presheaf.obj (op (PrimeSpectrum.basicOpen (g : R))) : Type u) :=
+    fun g ↦ inferInstanceAs (IsScalarTower R Γ(Spec R, PrimeSpectrum.basicOpen (g : R))
+      Γ(N, PrimeSpectrum.basicOpen (g : R)))
+  refine Module.FinitePresentation.of_localizationSpan' (s : Set R) hs
+    (Rₚ := fun g ↦ Γ(Spec R, PrimeSpectrum.basicOpen (g : R)))
+    (fun g ↦ (sectionsToBasicOpen N (g : R)).hom) fun g ↦ ?_
+  obtain ⟨P, hP'⟩ := hP (g : R) (Finset.mem_coe.mp g.2)
+  haveI := hP'
+  exact finitePresentation_sections_basicOpen N (g : R) P
+
+end LocalFinitePresentation
 
 end FinitePresentation
 
