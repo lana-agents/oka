@@ -144,8 +144,9 @@ of the carrier of a complex analytic space produces `TopologicalSpace.Opens.incl
 and **which of the two failures one meets is decided by the expected type**, not by how `V` is
 spelled:
 
-* against `Z ⟶ (X.restrict U).toLocallyRingedSpace`, which is
-  `ComplexAnalytic.AnalyticSpace.liftOpen`'s type and where `restrict` is the *analytic* one,
+* against `Z ⟶ (X.restrict U).toLocallyRingedSpace`, which is the expected type of the
+  underlying-morphism component of `ComplexAnalytic.AnalyticSpace.liftOpen` — that morphism's own
+  type is `Z ⟶ X.restrict U`, and `restrict` there is the *analytic* one —
   `IsOpenImmersion.lift` reports `failed to synthesize instance of type class
   LocallyRingedSpace.IsOpenImmersion (X.ofRestrict ⋯)`;
 * against `Z ⟶ X.toLocallyRingedSpace.restrict V.isOpenEmbedding`, or with no expected type at

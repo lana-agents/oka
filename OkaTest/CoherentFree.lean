@@ -36,7 +36,8 @@ a point has a nonzero structure sheaf, since `1` and `0` have different values t
   (`not_isZero_cokernel_specXFamily`), because `x` vanishes at the origin of the node and so its
   germ at the corresponding prime lies in the maximal ideal. Equivalently the presenting map
   `sectionsHom {x}` is not an epimorphism, which is what distinguishes this instance from the two
-  above, where the presenting map is zero. The hypothesis is a real
+  above: the second of those presents `𝒪²` by the **zero** map, and the first has no presenting
+  map at all — it is a free sheaf of rank two, coherent directly. The hypothesis is a real
   condition and not one every section satisfies: at the point `(1, 0)` of the node the germ of
   `x` is a **unit** (`notMem_maximalIdeal_germ_specX_ptX`), and
   `AlgebraicGeometry.LocallyRingedSpace.isZero_cokernel_sectionsHom_one` is the quotient by the

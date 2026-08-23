@@ -137,7 +137,7 @@ theorem hasLocalModels_member (i : ULift.{u} Bool) :
 
 /-- **Carrying a member's structure onto the open subspace on its image returns the restriction
 of the constants.** This is `restrictAlgMap_comapAlgMap`, and it is what makes the compatibility
-hypothesis discharegable: the carried family is a family of restrictions of one global
+hypothesis dischargeable: the carried family is a family of restrictions of one global
 section. -/
 theorem restrictAlgMap_memberAlg (i : ULift.{u} Bool) :
     coverOfMembers.{u}.restrictAlgMap i (memberAlg.{u} i) =
