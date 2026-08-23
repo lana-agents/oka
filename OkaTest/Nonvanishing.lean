@@ -170,10 +170,15 @@ theorem base_nodeInclLift (p : AnalyticSpace.node.{u}) (j : ULift.{u} (Fin 2)) :
 /-! ### The instance the `liftRestrict` docstring is about
 
 `AlgebraicGeometry.LocallyRingedSpace.liftRestrict` exists because the open of an analytic space
-reaches a call site spelled through `↑X.toPresheafedSpace` rather than `X.toTopCat`, and the
-`range_ofRestrict` rewrite fails there. What does **not** fail is instance search, and this is
-that claim as a test rather than as a recollection: if `IsOpenImmersion (X.ofRestrict …)` ever
-stops being found at this spelling, the docstring's account becomes wrong and this line breaks.
+reaches a call site spelled through `↑X.toPresheafedSpace` rather than `X.toTopCat`. Which
+failure that produces depends on the **expected type**: at
+`ComplexAnalytic.AnalyticSpace.liftOpen`'s, instance search fails; at the one below — a morphism
+into `X.toLocallyRingedSpace.restrict U.isOpenEmbedding` — it succeeds and the
+`range_ofRestrict` rewrite fails instead.
+
+This is the second half as a test rather than as a recollection. The first half cannot be one: a
+tactic that fails is not recordable. If `IsOpenImmersion (X.ofRestrict …)` ever stops being found
+at *this* spelling, the docstring's account becomes wrong and this line breaks.
 -/
 
 example (X : AnalyticSpace.{u}) (U : X.Opens) :

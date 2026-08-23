@@ -138,17 +138,24 @@ and this says everything landing in `V` maps to `X|V`.
 It is `IsOpenImmersion.lift` at `f = ofRestrict`, with `range_ofRestrict` turning the hypothesis
 into the containment of images that `lift` wants.
 
-**Stating it is worth a name because of where that rewrite has to happen.** An open of the
-carrier of a complex analytic space reaches a call site with `TopologicalSpace.Opens.inclusion' V`
-elaborated at `… ⟶ ↑X.toPresheafedSpace` rather than at `… ⟶ X.toTopCat`; the two are
-definitionally equal, and calling `IsOpenImmersion.lift` there *does* get an instance —
-`OkaTest/Nonvanishing.lean` records that `inferInstance` finds
-`IsOpenImmersion (X.ofRestrict U.isOpenEmbedding)` at exactly that spelling — but the
-`rw [range_ofRestrict]` inside the proof obligation then fails, reporting *"did not find an
-occurrence of the pattern"* with the note that **the target is not type-correct under the
-`instances` transparency level**; the mismatch of the two spellings appears only in the
-`Full error:` block. Here `V` is an ordinary argument spelled through `X`, the rewrite is
-performed once, and callers never meet it. -/
+**Stating it is worth a name because the call site it exists for meets the seam twice.** An open
+of the carrier of a complex analytic space produces `TopologicalSpace.Opens.inclusion' V` at
+`… ⟶ ↑X.toPresheafedSpace` rather than at `… ⟶ X.toTopCat`. The two are definitionally equal,
+and **which of the two failures one meets is decided by the expected type**, not by how `V` is
+spelled:
+
+* against `Z ⟶ (X.restrict U).toLocallyRingedSpace`, which is
+  `ComplexAnalytic.AnalyticSpace.liftOpen`'s type and where `restrict` is the *analytic* one,
+  `IsOpenImmersion.lift` reports `failed to synthesize instance of type class
+  LocallyRingedSpace.IsOpenImmersion (X.ofRestrict ⋯)`;
+* against `Z ⟶ X.toLocallyRingedSpace.restrict V.isOpenEmbedding`, or with no expected type at
+  all, the instance **is** found — `OkaTest/Nonvanishing.lean` records that as a test rather than
+  as a recollection — and the `rw [range_ofRestrict]` fails instead, reporting *"did not find an
+  occurrence of the pattern"* with the note that the target is not type-correct under the
+  `instances` transparency level; the mismatch appears only in the `Full error:` block.
+
+Here `V` is an ordinary argument at the locally-ringed-space spelling, both sides cross at
+default transparency, the rewrite is performed once, and callers meet neither failure. -/
 noncomputable def liftRestrict : Z ⟶ X.restrict V.isOpenEmbedding :=
   IsOpenImmersion.lift (X.ofRestrict V.isOpenEmbedding) φ (by rw [range_ofRestrict]; exact h)
 
