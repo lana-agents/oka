@@ -516,3 +516,54 @@ info: 'ComplexAnalytic.AnalyticSpace.algebraMap_ofGlueDataCLinear_comapAlgMap' d
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.algebraMap_ofGlueDataCLinear_comapAlgMap
+
+/-! ### The fields of `CategoryTheory.GlueData.ofGlueData'` -/
+
+/--
+info: 'CategoryTheory.GlueData.ofGlueData'_f_self' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms CategoryTheory.GlueData.ofGlueData'_f_self
+
+/--
+info: 'CategoryTheory.GlueData.ofGlueData'_f_of_ne' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms CategoryTheory.GlueData.ofGlueData'_f_of_ne
+
+/--
+info: 'CategoryTheory.GlueData.ofGlueData'_t_self' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms CategoryTheory.GlueData.ofGlueData'_t_self
+
+/--
+info: 'CategoryTheory.GlueData.ofGlueData'_t_of_ne' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms CategoryTheory.GlueData.ofGlueData'_t_of_ne
+
+/--
+info: 'CategoryTheory.GlueData'.f'_self' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms CategoryTheory.GlueData'.f'_self
+
+/--
+info: 'CategoryTheory.GlueData'.f'_of_ne' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms CategoryTheory.GlueData'.f'_of_ne
+
+/--
+info: 'CategoryTheory.GlueData.ofGlueData'_t_comp_f_of_ne' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms CategoryTheory.GlueData.ofGlueData'_t_comp_f_of_ne

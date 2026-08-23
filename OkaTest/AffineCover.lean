@@ -47,7 +47,7 @@ two members there is no triple of distinct indices, so `t'` and the cocycle are 
 have content only here.
 -/
 
-open CategoryTheory CategoryTheory.Limits TopologicalSpace AlgebraicGeometry
+open CategoryTheory CategoryTheory.Limits TopologicalSpace AlgebraicGeometry Opposite
 
 universe u
 
@@ -186,17 +186,14 @@ example : coverOpen.{u} nodeCoverObj.{u} nodeCoverPoly.{u} (ULift.up 0) (ULift.u
 /-- **The inclusion of a member into the gluing is `CategoryTheory.GlueData'.f'` off the
 diagonal**, which is an `eqToHom` followed by the inclusion of the overlap.
 
-`eqToHom` appears here because `CategoryTheory.GlueData'.f'` is *defined* with one, and the `dite`
-it sits in is dependent — `rw [dif_neg]` reports *motive is not type correct*, so the branch has
-to be taken with `split_ifs`. -/
+`eqToHom` appears here because `CategoryTheory.GlueData'.f'` is *defined* with one. The `dite` it
+sits in is dependent, so the branch cannot be taken with `rw [dif_neg]`, which reports *motive is
+not type correct*; `AlgebraicGeometry.LocallyRingedSpace`'s glue data is not special in this and
+the unfolding is now `CategoryTheory.GlueData.ofGlueData'_f_of_ne`, in the mirror tree. -/
 theorem f_nodeTripleGlueData (i j : triple.{u}) (hij : i ≠ j) :
     nodeTripleGlueData.{u}.toGlueData.f i j =
-      eqToHom (dif_neg hij) ≫ coverIncl.{u} nodeCoverObj.{u} nodeCoverPoly.{u} i j := by
-  change CategoryTheory.GlueData'.f' nodeTripleGlueData'.{u} i j = _
-  dsimp only [CategoryTheory.GlueData'.f']
-  split_ifs with h
-  · exact absurd h hij
-  · rfl
+      eqToHom (dif_neg hij) ≫ coverIncl.{u} nodeCoverObj.{u} nodeCoverPoly.{u} i j :=
+  CategoryTheory.GlueData.ofGlueData'_f_of_ne nodeTripleGlueData'.{u} hij
 
 /-- The image of that inclusion lies in the overlap, which is what the point below needs. -/
 theorem range_f_subset_nodeTripleGlueData (i j : triple.{u}) (hij : i ≠ j) :
@@ -232,6 +229,77 @@ example (i : triple.{u}) :
     LocallyRingedSpace.IsOpenImmersion (nodeTripleGlueData.{u}.toGlueData.ι i) :=
   coverGlueData_ι_isOpenImmersion.{u} nodeCoverObj.{u} nodeCoverPoly.{u} nodeCoverGlue.{u}
     hrange_nodeCover.{u} hsymm_nodeCover.{u} hcocycle_nodeCover.{u} i
+
+/-! ### The analytic structure on the gluing
+
+`ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear` needs the transitions to be `ℂ`-linear
+(`ComplexAnalytic.GlueDataCLinear`), which reads `D.f` and `D.t` — and for a glue datum built by
+`CategoryTheory.GlueData.ofGlueData'` those are dependent `dite`s. The lemmas that unfold them are
+`Oka/CategoryTheory/GlueData.lean`'s; without them this section could not be written. -/
+
+/-- The `ℂ`-algebra structure each member of the cover carries: the analytification's own. -/
+abbrev nodeAlg (j : triple.{u}) :
+    ℂ →+* ((nodeTripleGlueData.{u}).U j).presheaf.obj (op ⊤) :=
+  (AnalyticSpace.analytification.{u} (nodeCoverObj.{u} j).g).algebraMap
+
+/-- **The transitions are `ℂ`-linear.**
+
+Both sides reduce to the same inclusion of the overlap, because the transition here is the
+identity (`ComplexAnalytic.coverTransition_hom_nodeCover`) and the three members are one space.
+The `eqToHom`s that `CategoryTheory.GlueData.ofGlueData'` inserts cancel in
+`CategoryTheory.GlueData.ofGlueData'_t_comp_f_of_ne`, which is the whole reason that lemma
+exists. -/
+theorem glueDataCLinear_nodeTripleGlueData :
+    GlueDataCLinear.{u} nodeTripleGlueData.{u} nodeAlg.{u} := by
+  intro i j
+  refine congrArg (fun m ↦ LocallyRingedSpace.comapAlgMap m (nodeAlg.{u} i)) ?_
+  by_cases h : i = j
+  · subst h
+    change (CategoryTheory.GlueData.ofGlueData' nodeTripleGlueData'.{u}).f i i =
+      (CategoryTheory.GlueData.ofGlueData' nodeTripleGlueData'.{u}).t i i ≫
+        (CategoryTheory.GlueData.ofGlueData' nodeTripleGlueData'.{u}).f i i
+    rw [CategoryTheory.GlueData.ofGlueData'_f_self, CategoryTheory.GlueData.ofGlueData'_t_self]
+    simp
+  · change (CategoryTheory.GlueData.ofGlueData' nodeTripleGlueData'.{u}).f i j =
+      (CategoryTheory.GlueData.ofGlueData' nodeTripleGlueData'.{u}).t i j ≫
+        (CategoryTheory.GlueData.ofGlueData' nodeTripleGlueData'.{u}).f j i
+    rw [CategoryTheory.GlueData.ofGlueData'_f_of_ne _ h,
+      CategoryTheory.GlueData.ofGlueData'_t_comp_f_of_ne _ h]
+    dsimp only [nodeTripleGlueData', coverGlueData']
+    rw [coverTransition_hom_nodeCover]
+    simp
+
+/-- **Each member has local models**: it *is* an analytification, and the structure it carries is
+that analytification's own. -/
+theorem hasLocalModels_nodeTripleGlueData (j : triple.{u}) :
+    HasLocalModels.{u} ((nodeTripleGlueData.{u}).U j) (nodeAlg.{u} j) :=
+  (AnalyticSpace.analytification.{u} (nodeCoverObj.{u} j).g).local_model
+
+/-- **Three copies of the node, glued along the punctured axis, as a complex analytic space.**
+
+This is the first analytic space in this repository glued out of more than one piece.
+`ComplexAnalytic.ι_nodeOrigin_ne` above says its three copies of the origin are three distinct
+points, and `AlgebraicGeometry.LocallyRingedSpace.GlueData.ι_jointly_surjective` says the three
+members cover it.
+
+**It is not shown to be non-affine**, and no statement below says so: that it is not the
+analytification of *some* presentation is a much stronger claim needing an invariant nothing here
+computes, and `Oka/Analytification/AffineCover.lean` records the same about it. -/
+def nodeTripleSpace : AnalyticSpace.{u} :=
+  AnalyticSpace.ofGlueDataCLinear.{u} nodeTripleGlueData.{u} nodeAlg.{u}
+    glueDataCLinear_nodeTripleGlueData.{u} hasLocalModels_nodeTripleGlueData.{u}
+
+/-- Its underlying locally ringed space is the gluing, on the nose. -/
+example : (nodeTripleSpace.{u}).toLocallyRingedSpace =
+    nodeTripleGlueData.{u}.toGlueData.glued := rfl
+
+/-- **The glued `ℂ`-algebra structure restricts on each member to the one that member was
+given** — the check that the construction is the intended one rather than merely well-typed. -/
+example (j : triple.{u}) :
+    LocallyRingedSpace.comapAlgMap (nodeTripleGlueData.{u}.toGlueData.ι j)
+      (nodeTripleSpace.{u}).algebraMap = nodeAlg.{u} j :=
+  AnalyticSpace.comapAlgMap_ofGlueDataCLinear_algebraMap.{u} _ _
+    glueDataCLinear_nodeTripleGlueData.{u} hasLocalModels_nodeTripleGlueData.{u} j
 
 end
 
