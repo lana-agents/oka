@@ -1,0 +1,343 @@
+/-
+Copyright (c) 2026 Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
+-/
+import Oka.Analytification.LocalisationFunctor
+import Oka.AnalyticSpace.Glue
+
+/-!
+# The glue data of an affine cover with distinguished overlaps
+
+`Oka/Analytification/DistinguishedOpen.lean` identifies the analytification of `A_f` with the
+distinguished open `D(f) ⊆ X^an`, **over `X^an`**, and `Oka/AnalyticSpace/Glue.lean` glues an
+analytic space out of an `AlgebraicGeometry.LocallyRingedSpace.GlueData` whose pieces are
+analytic. This file is the step between them: from a family of presentations, a distinguished
+open of each for every other member, and a `ℂ`-algebra isomorphism identifying the two
+descriptions of each overlap, it builds the glue data.
+
+## The input, and why it is presentations rather than a scheme
+
+**This repository has no `AlgebraicGeometry.Scheme` objects.** `grep -rn "Scheme" Oka/ OkaTest/`
+finds the name only inside prose; `Oka/Analytification/Comparison.lean` has a titled section
+arguing that this is a result rather than an omission. So "analytify a scheme locally of finite
+type over `ℂ`" cannot be *stated* here, and what this file takes is the cover **as data**: an
+index type `J`, a `ComplexAnalytic.Presentation` for each index, a polynomial `poly i j` cutting
+out the part of the `i`-th member that meets the `j`-th, and an isomorphism of the two
+presentations of the overlap.
+
+Nothing is lost by this beyond the phrase "locally of finite type": `ComplexAnalytic.toFGAlg` is
+an equivalence onto the finitely generated `ℂ`-algebras, so the input above **is** affine-cover
+data, transported. What the general form would add is a comparison theorem — that every scheme
+locally of finite type over `ℂ` arises this way — and a choice among Mathlib's cover APIs, and
+neither is needed by anything downstream.
+
+Only the **distinguished** case appears, because that is the case a cover needs: a scheme locally
+of finite type over `ℂ` is covered by affines whose pairwise intersections are covered by opens
+distinguished in both. `Oka/Analytification/DistinguishedOpen.lean` says in its own docstring
+that the analytification of a general open immersion is neither proved nor wanted.
+
+## The shape of the construction, and where the content is
+
+The route is `CategoryTheory.GlueData'` — the variant that asks for the overlaps only when
+`i ≠ j` — followed by `CategoryTheory.GlueData.ofGlueData'` and
+`AlgebraicGeometry.LocallyRingedSpace.isOpenImmersion_f'` for the `f_open` field. `GlueData'`
+discharges `f_id`, `t_id` and the three degenerate branches of `t'`, all of which are bookkeeping.
+
+What is left is `t'` and the cocycle, and **the whole of the difficulty is that `t'` is a
+morphism between categorical pullbacks**, which no tactic can compute with. That is what
+`AlgebraicGeometry.LocallyRingedSpace.restrictInfIsoPullback` is for: it identifies
+`pullback (f i j) (f i k)` with the open subspace `X_i|(D(f_ij) ⊓ D(f_ik))`, an object one can
+name and restrict. With that identification:
+
+* `t'` is `ComplexAnalytic.coverTriple` conjugated by two copies of it, and `t_fac` follows from
+  the two factorisations of the identification together with the mono-ness of an open immersion;
+* the **cocycle condition becomes exactly the hypothesis `hcocycle`**, because the conjugating
+  isomorphisms cancel in pairs — the middle one of `t' i j k` is the same isomorphism as the
+  first one of `t' j k i`, by construction.
+
+So the two hypotheses this file asks the caller for, `hrange` and `hcocycle`, are statements
+about morphisms of *open subspaces of the members*, which is the spelling a geometric input
+arrives in and the one `Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean`'s module docstring
+argues for.
+
+## The diagonal
+
+`poly` and `glue` are asked for at **every** pair, including `i = i`, but `hrange` and `hcocycle`
+are required only at triples of *distinct* indices, which is all `CategoryTheory.GlueData'`
+consumes. So the diagonal data is unconstrained and unused; `poly i i = 1` and
+`glue i i = Iso.refl` is the natural choice and nothing checks it. Making `poly` partial instead
+would push a `i ≠ j` argument through every definition below and into the type of every open
+subspace, which is a much larger tax than one unused value per index.
+
+## Main definitions
+
+- `ComplexAnalytic.coverSpace`, `ComplexAnalytic.coverOpen`, `ComplexAnalytic.coverPart`: the
+  `i`-th member `A_i^an`, the distinguished open `D(f_ij)` inside it, and that open as a space.
+- `ComplexAnalytic.coverTransition`: the transition isomorphism `X_i|D(f_ij) ≅ X_j|D(f_ji)`,
+  obtained from the given isomorphism of presentations by transporting it across
+  `ComplexAnalytic.localisationIso` at each end.
+- `ComplexAnalytic.coverTriple`: the transition on triple overlaps,
+  `X_i|(D(f_ij) ⊓ D(f_ik)) ⟶ X_j|(D(f_jk) ⊓ D(f_ji))`, which is what `t'` is built from.
+- `ComplexAnalytic.coverGlueData'` and `ComplexAnalytic.coverGlueData`: **the glue data.**
+
+## Main results
+
+- `ComplexAnalytic.coverGlueData_U` and `ComplexAnalytic.coverGlueData_ι_isOpenImmersion`: the
+  members of the glue data are the analytifications one put in, and they are open subspaces of
+  the gluing. Without the first, `coverGlueData` would be a well-typed object with no stated
+  relation to its input.
+
+## What is not here
+
+* **The analytic space.** `ComplexAnalytic.AnalyticSpace.ofGlueData` turns this glue data into an
+  analytic space once it is given the `ℂ`-algebra structure on each piece and their compatibility
+  on the gluing, and that compatibility is a sheaf-condition statement about the glued space, not
+  about this file's data. It is the next step and it is not taken here.
+* **`ℙ¹`, and any statement that the gluing is not affine.** `OkaTest/AffineCover.lean` glues
+  three copies of one member along one distinguished open, which exercises `t'` and the cocycle
+  at a real `f`; it does not exhibit a space that is not the analytification of a presentation,
+  which is a much stronger claim and needs an invariant nothing here computes.
+* **`Localization.Away`.** Nothing here needs
+  `ComplexAnalytic.PresentedAlgebra (localisationPresentation g f)` to *be* a localisation; it
+  needs the structure map and its analytification, both of which
+  `Oka/Analytification/LocalisationFunctor.lean` provides. See that file and
+  `Oka/Analytification/DistinguishedOpen.lean`'s `## What is not here`.
+-/
+
+open CategoryTheory CategoryTheory.Limits TopologicalSpace AlgebraicGeometry
+
+universe u
+
+namespace ComplexAnalytic
+
+noncomputable section
+
+variable {J : Type u} (obj : J → Presentation.{u})
+  (poly : ∀ i : J, J → MvPolynomial (ULift.{u} (Fin (obj i).n)) ℂ)
+
+/-! ### The members of the cover and their overlaps -/
+
+/-- **The `i`-th member of the cover**, `A_i^an`, as a locally ringed space.
+
+Everything in this file is spelled at the locally-ringed-space level, and deliberately:
+`ComplexAnalytic.AnalyticSpace`'s `Category` instance defines composition through `toLRSHom`, so
+unifying two composites of analytic morphisms forces it open and is expensive enough to exhaust
+the heartbeat budget on a three-term `Iso.trans`. A glue data is a locally-ringed-space object
+anyway. -/
+abbrev coverSpace (i : J) : LocallyRingedSpace.{u} :=
+  (AnalyticSpace.analytification.{u} (obj i).g).toLocallyRingedSpace
+
+/-- **The part of the `i`-th member that meets the `j`-th**, as an open subset: `D(f_ij)`. -/
+abbrev coverOpen (i j : J) : Opens (coverSpace.{u} obj i) :=
+  localisationOpen.{u} (obj i).g (poly i j)
+
+/-- **That open, as a space** — the object a glue data calls `V (i, j)`. -/
+abbrev coverPart (i j : J) : LocallyRingedSpace.{u} :=
+  (coverSpace.{u} obj i).restrict (coverOpen.{u} obj poly i j).isOpenEmbedding
+
+/-- **Its inclusion into the `i`-th member** — the morphism a glue data calls `f i j`, and the
+one its `f_open` field is about. -/
+abbrev coverIncl (i j : J) : coverPart.{u} obj poly i j ⟶ coverSpace.{u} obj i :=
+  (coverSpace.{u} obj i).ofRestrict (coverOpen.{u} obj poly i j).isOpenEmbedding
+
+/-- **The presentation of the overlap, from the `i` side**: `(A_i)_{f_ij}`, presented by
+`ComplexAnalytic.localisationPresentation`. This is the object the input isomorphism is between,
+and it is where the *algebra* enters — everything else in this file is geometry. -/
+abbrev coverOverlap (i j : J) : Presentation.{u} :=
+  ⟨(obj i).n + 1, (obj i).k + 1, localisationPresentation.{u} (obj i).g (poly i j)⟩
+
+/-- **The analytification of that presentation**, as a locally ringed space. -/
+abbrev coverOverlapSpace (i j : J) : LocallyRingedSpace.{u} :=
+  (AnalyticSpace.analytification.{u}
+    (localisationPresentation.{u} (obj i).g (poly i j))).toLocallyRingedSpace
+
+/-- **`ComplexAnalytic.localisationIso` at the locally-ringed-space level**: the analytification
+of `(A_i)_{f_ij}` is the open subspace `D(f_ij)` of `A_i^an`.
+
+Stated as a definition of its own rather than inlined into
+`ComplexAnalytic.coverTransition` because the three-term `Iso.trans` there has to unify the
+intermediate objects, and doing that against the *body* of a composite rather than against a
+declared type is what runs the heartbeat budget out. Naming the two factors fixes it. -/
+def coverOverlapIso (i j : J) :
+    coverOverlapSpace.{u} obj poly i j ≅ coverPart.{u} obj poly i j :=
+  AnalyticSpace.forgetToLocallyRingedSpace.{u}.mapIso (localisationIso.{u} (obj i).g (poly i j))
+
+variable (glue : ∀ i j : J, coverOverlap.{u} obj poly i j ≅ coverOverlap.{u} obj poly j i)
+
+/-- **The given isomorphism of presentations, analytified**, at the locally-ringed-space level.
+Named for the same reason as `ComplexAnalytic.coverOverlapIso`. -/
+def coverGlueIso (i j : J) :
+    coverOverlapSpace.{u} obj poly i j ≅ coverOverlapSpace.{u} obj poly j i :=
+  AnalyticSpace.forgetToLocallyRingedSpace.{u}.mapIso
+    (analytificationFunctor.{u}.mapIso (glue i j))
+
+/-- **The transition isomorphism `X_i|D(f_ij) ≅ X_j|D(f_ji)`** — the morphism a glue data calls
+`t i j`.
+
+It is the given algebra isomorphism read through `ComplexAnalytic.localisationIso` at each end.
+This is the only place the input's algebraic content is used, and it is why the file needs
+`Oka/Analytification/DistinguishedOpen.lean` rather than only the functor. -/
+def coverTransition (i j : J) : coverPart.{u} obj poly i j ≅ coverPart.{u} obj poly j i :=
+  (coverOverlapIso.{u} obj poly i j).symm ≪≫ coverGlueIso.{u} obj poly glue i j ≪≫
+    coverOverlapIso.{u} obj poly j i
+
+/-- **The transition, followed into the ambient `j`-th member.** This is the morphism the range
+hypothesis below is about: where the overlap of `i` and `j` goes inside `A_j^an`. -/
+def coverTransitionHom (i j : J) : coverPart.{u} obj poly i j ⟶ coverSpace.{u} obj j :=
+  (coverTransition.{u} obj poly glue i j).hom ≫ coverIncl.{u} obj poly j i
+
+/-- **The transition isomorphisms are inverse to each other**, provided the input isomorphisms
+are. `Functor.mapIso` commutes with `Iso.symm`, twice. -/
+theorem coverGlueIso_symm (hsymm : ∀ i j : J, glue j i = (glue i j).symm) (i j : J) :
+    coverGlueIso.{u} obj poly glue j i = (coverGlueIso.{u} obj poly glue i j).symm := by
+  rw [coverGlueIso, coverGlueIso, hsymm i j, Functor.mapIso_symm, Functor.mapIso_symm]
+  rfl
+
+/-! ### Triple overlaps -/
+
+/-- **The triple overlap `D(f_ij) ⊓ D(f_ik)` inside the `i`-th member**, as a space.
+
+By `ComplexAnalytic.localisationOpen_mul` this is again a distinguished open of `A_i^an`, namely
+`D(f_ij · f_ik)`; nothing below uses that, but it is the reason the classical construction works
+and the reason that lemma exists. -/
+abbrev coverTriplePart (i j k : J) : LocallyRingedSpace.{u} :=
+  (coverSpace.{u} obj i).restrict
+    (coverOpen.{u} obj poly i j ⊓ coverOpen.{u} obj poly i k).isOpenEmbedding
+
+/-- **The inclusion of the triple overlap into the double overlap of `i` and `j`.** -/
+abbrev coverTripleIncl (i j k : J) :
+    coverTriplePart.{u} obj poly i j k ⟶ coverPart.{u} obj poly i j :=
+  (coverSpace.{u} obj i).restrictLE (inf_le_left :
+    coverOpen.{u} obj poly i j ⊓ coverOpen.{u} obj poly i k ≤ coverOpen.{u} obj poly i j)
+
+variable (hrange : ∀ i j k : J, i ≠ j → i ≠ k → j ≠ k →
+  Set.range (coverTripleIncl.{u} obj poly i j k ≫ coverTransitionHom.{u} obj poly glue i j).base ⊆
+    ((coverOpen.{u} obj poly j k ⊓ coverOpen.{u} obj poly j i : Opens (coverSpace.{u} obj j)) :
+      Set (coverSpace.{u} obj j)))
+
+/-- **The transition on triple overlaps**, `X_i|(D(f_ij) ⊓ D(f_ik)) ⟶ X_j|(D(f_jk) ⊓ D(f_ji))`.
+
+This is `t'` before it is conjugated into the pullbacks, and the hypothesis `hrange` is exactly
+what says the classical statement — that the transition from `i` to `j` carries the part of the
+overlap that also meets `k` into the part of `D(f_ji)` that meets `k` — holds. It is not implied
+by anything: two members can be glued along an open without their glueings agreeing on triple
+overlaps, and that is what `hrange` and `hcocycle` rule out. -/
+def coverTriple (i j k : J) (hij : i ≠ j) (hik : i ≠ k) (hjk : j ≠ k) :
+    coverTriplePart.{u} obj poly i j k ⟶ coverTriplePart.{u} obj poly j k i :=
+  LocallyRingedSpace.liftRestrict
+    (coverTripleIncl.{u} obj poly i j k ≫ coverTransitionHom.{u} obj poly glue i j) _
+    (hrange i j k hij hik hjk)
+
+/-- **`coverTriple` is a morphism over the ambient member**, which is the only property of it
+anything consumes. -/
+@[reassoc (attr := simp)]
+theorem coverTriple_fac (i j k : J) (hij : i ≠ j) (hik : i ≠ k) (hjk : j ≠ k) :
+    coverTriple.{u} obj poly glue hrange i j k hij hik hjk ≫
+        (coverSpace.{u} obj j).ofRestrict
+          (coverOpen.{u} obj poly j k ⊓ coverOpen.{u} obj poly j i).isOpenEmbedding =
+      coverTripleIncl.{u} obj poly i j k ≫ coverTransitionHom.{u} obj poly glue i j :=
+  LocallyRingedSpace.liftRestrict_fac _ _ _
+
+/-! ### The glue data -/
+
+/-- **The glue data of the cover, in the form that only asks for the overlaps when `i ≠ j`.**
+
+`t'` is `ComplexAnalytic.coverTriple` conjugated by
+`AlgebraicGeometry.LocallyRingedSpace.restrictInfIsoPullback` at each end, which is what turns a
+morphism of open subspaces into a morphism of categorical pullbacks. Two consequences, and they
+are the whole reason for going through that identification:
+
+* `t_fac` reduces to an equation between two morphisms into `X_j|D(f_ji)`, which
+  `AlgebraicGeometry.LocallyRingedSpace.hom_ext_restrict` turns into an equation over `X_j`, and
+  there both sides are `coverTripleIncl ≫ coverTransitionHom` by `coverTriple_fac`;
+* `cocycle` is `hcocycle` and nothing else: the second conjugating isomorphism of `t' i j k` is
+  the *same* isomorphism as the first of `t' j k i`, so all six cancel in pairs. -/
+def coverGlueData' (hsymm : ∀ i j : J, glue j i = (glue i j).symm)
+    (hcocycle : ∀ i j k : J, ∀ hij : i ≠ j, ∀ hik : i ≠ k, ∀ hjk : j ≠ k,
+      coverTriple.{u} obj poly glue hrange i j k hij hik hjk ≫
+        coverTriple.{u} obj poly glue hrange j k i hjk hij.symm hik.symm ≫
+        coverTriple.{u} obj poly glue hrange k i j hik.symm hjk.symm hij = 𝟙 _) :
+    GlueData' LocallyRingedSpace.{u} where
+  J := J
+  U := coverSpace.{u} obj
+  V i j _ := coverPart.{u} obj poly i j
+  f i j _ := coverIncl.{u} obj poly i j
+  t i j _ := (coverTransition.{u} obj poly glue i j).hom
+  t' i j k hij hik hjk :=
+    ((coverSpace.{u} obj i).restrictInfIsoPullback
+      (coverOpen.{u} obj poly i j) (coverOpen.{u} obj poly i k)).inv ≫
+      coverTriple.{u} obj poly glue hrange i j k hij hik hjk ≫
+      ((coverSpace.{u} obj j).restrictInfIsoPullback
+        (coverOpen.{u} obj poly j k) (coverOpen.{u} obj poly j i)).hom
+  t_fac i j k hij hik hjk := by
+    rw [Category.assoc, Category.assoc,
+      LocallyRingedSpace.restrictInfIsoPullback_hom_snd, Iso.inv_comp_eq, ← Category.assoc,
+      LocallyRingedSpace.restrictInfIsoPullback_hom_fst]
+    refine LocallyRingedSpace.hom_ext_restrict _ _ _ ?_
+    rw [Category.assoc, LocallyRingedSpace.restrictLE_fac, coverTriple_fac]
+    rfl
+  t_inv i j _ := by
+    simp only [coverTransition, Iso.trans_hom, Iso.symm_hom, Category.assoc,
+      Iso.hom_inv_id_assoc, coverGlueIso_symm.{u} obj poly glue hsymm i j, Iso.symm_hom,
+      Iso.hom_inv_id_assoc, Iso.inv_hom_id]
+  cocycle i j k hij hik hjk := by
+    simp only [Category.assoc, Iso.hom_inv_id_assoc]
+    rw [reassoc_of% hcocycle i j k hij hik hjk, Iso.inv_hom_id]
+
+/-- **The glue data of an affine cover with distinguished overlaps.**
+
+`CategoryTheory.GlueData.ofGlueData'` of `ComplexAnalytic.coverGlueData'`, with the `f_open`
+field supplied by `AlgebraicGeometry.LocallyRingedSpace.isOpenImmersion_f'` — whose hypothesis is
+that each `f i j` is an open immersion, and each is `ofRestrict`.
+
+Note which of the two open-immersion facts about a distinguished open this uses:
+`AlgebraicGeometry.LocallyRingedSpace.isOpenImmersion_ofRestrict`, not
+`ComplexAnalytic.isOpenImmersion_localisationProj`. The two are the same fact at the two
+spellings of the overlap — as the open subspace, and as the analytification of the localisation —
+and this file takes the first, because that is the spelling at which the range computations `t'`
+needs are statements about `ComplexAnalytic.localisationOpen`. The algebraic description enters
+only through `ComplexAnalytic.coverTransition`. -/
+def coverGlueData (hsymm : ∀ i j : J, glue j i = (glue i j).symm)
+    (hcocycle : ∀ i j k : J, ∀ hij : i ≠ j, ∀ hik : i ≠ k, ∀ hjk : j ≠ k,
+      coverTriple.{u} obj poly glue hrange i j k hij hik hjk ≫
+        coverTriple.{u} obj poly glue hrange j k i hjk hij.symm hik.symm ≫
+        coverTriple.{u} obj poly glue hrange k i j hik.symm hjk.symm hij = 𝟙 _) :
+    LocallyRingedSpace.GlueData.{u} where
+  toGlueData :=
+    GlueData.ofGlueData' (coverGlueData'.{u} obj poly glue hrange hsymm hcocycle)
+  f_open i j :=
+    LocallyRingedSpace.isOpenImmersion_f'
+      (coverGlueData'.{u} obj poly glue hrange hsymm hcocycle)
+      (fun _ _ _ ↦ LocallyRingedSpace.isOpenImmersion_ofRestrict _ _) i j
+
+variable (hsymm : ∀ i j : J, glue j i = (glue i j).symm)
+  (hcocycle : ∀ i j k : J, ∀ hij : i ≠ j, ∀ hik : i ≠ k, ∀ hjk : j ≠ k,
+    coverTriple.{u} obj poly glue hrange i j k hij hik hjk ≫
+      coverTriple.{u} obj poly glue hrange j k i hjk hij.symm hik.symm ≫
+      coverTriple.{u} obj poly glue hrange k i j hik.symm hjk.symm hij = 𝟙 _)
+
+/-- **The members of the glue data are the analytifications one put in.**
+
+`rfl`, and stated because without it `ComplexAnalytic.coverGlueData` is a well-typed object with
+no recorded relation to its input: `CategoryTheory.GlueData.ofGlueData'` has no projection lemmas
+in Mathlib, so nothing else says what `U` is. -/
+@[simp]
+theorem coverGlueData_U (i : J) :
+    (coverGlueData.{u} obj poly glue hrange hsymm hcocycle).U i = coverSpace.{u} obj i :=
+  rfl
+
+/-- **The `i`-th member is an open subspace of the gluing.**
+
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.ι_isOpenImmersion` at this glue data, and the
+statement in which the construction is a *cover*: together with
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.ι_jointly_surjective`, the analytifications one
+started from are an open cover of the space this builds. -/
+theorem coverGlueData_ι_isOpenImmersion (i : J) :
+    LocallyRingedSpace.IsOpenImmersion
+      ((coverGlueData.{u} obj poly glue hrange hsymm hcocycle).toGlueData.ι i) :=
+  inferInstance
+
+end
+
+end ComplexAnalytic

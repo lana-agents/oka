@@ -199,6 +199,24 @@ coherence statement for arbitrary complex analytic spaces:
   really is `A_f` is classical and is *not* formalised — the file says so; the geometry does not
   use it.
 
+* **The glue data of an affine cover with distinguished overlaps**
+  (`Oka/Analytification/AffineCover.lean`). From a family of presentations, a polynomial cutting
+  out the part of each member that meets each other, and an isomorphism of the two presentations
+  of every overlap, `ComplexAnalytic.coverGlueData` builds an
+  `AlgebraicGeometry.LocallyRingedSpace.GlueData` whose pieces are the analytifications. The
+  input is the cover **as data** rather than a scheme, because this repository has no
+  `AlgebraicGeometry.Scheme` objects; `ComplexAnalytic.toFGAlg` being an equivalence is what says
+  nothing is lost by that. The construction goes through `CategoryTheory.GlueData'`, which asks
+  for the overlaps only when `i ≠ j`, and the difficulty is that its `t'` is a morphism between
+  categorical pullbacks: `AlgebraicGeometry.LocallyRingedSpace.restrictInfIsoPullback` identifies
+  those with open subspaces `X|(U ⊓ V)`, after which `t'` is a conjugate of a morphism of open
+  subspaces and the cocycle condition is exactly the hypothesis on triple overlaps, the
+  conjugating isomorphisms cancelling in pairs. `OkaTest/AffineCover.lean` glues three copies of
+  the node along the punctured axis — the smallest cover with a triple of distinct indices, so
+  the smallest one that exercises `t'` at all — and checks that the three copies are **distinct**
+  points of the gluing over the origin, which is what stops the construction from quietly
+  returning one member. The analytic structure on the gluing is a further step and is not taken.
+
 * **Gluing.** Open covers of a locally ringed space, and the gluing of morphisms out of the
   members of one (`Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean`): a locally ringed space
   is the gluing of the members of any open cover of it, so morphisms out of the members which

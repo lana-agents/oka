@@ -42,6 +42,7 @@ import Oka.AnalyticSpace.OpenSubspace
 import Oka.AnalyticSpace.PullbackModulesStalk
 import Oka.AnalyticSpace.Relations
 import Oka.AnalyticSpace.Restrict
+import Oka.Analytification.AffineCover
 import Oka.Analytification.AffineSpace
 import Oka.Analytification.ChangeOfVariables
 import Oka.Analytification.Comparison

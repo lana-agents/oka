@@ -304,7 +304,9 @@ noncomputable def restrictInfIsoPullback :
   asIso (pullback.lift (X.restrictLE (inf_le_left : U ⊓ V ≤ U))
     (X.restrictLE (inf_le_right : U ⊓ V ≤ V)) (X.restrictLE_inf_condition U V))
 
-@[simp]
+/-- **The comparison, unfolded.** Not a `simp` lemma: the simp normal form of a morphism out of
+`X|(U ⊓ V)` is the one in terms of `restrictLE` below, and rewriting `hom` to the raw
+`pullback.lift` takes those out of it. -/
 theorem restrictInfIsoPullback_hom :
     (X.restrictInfIsoPullback U V).hom =
       pullback.lift (X.restrictLE (inf_le_left : U ⊓ V ≤ U))
@@ -324,16 +326,6 @@ theorem restrictInfIsoPullback_hom_snd :
         pullback.snd (X.ofRestrict U.isOpenEmbedding) (X.ofRestrict V.isOpenEmbedding) =
       X.restrictLE (inf_le_right : U ⊓ V ≤ V) := by
   rw [restrictInfIsoPullback_hom, pullback.lift_snd]
-
-/-- **The isomorphism is one over `X`.** Both routes out of `X|(U ⊓ V)` into `X` are the
-inclusion, which is `restrictInfIsoPullback_hom_fst` followed by `restrictLE_fac`. -/
-@[reassoc (attr := simp)]
-theorem restrictInfIsoPullback_hom_fst_ofRestrict :
-    (X.restrictInfIsoPullback U V).hom ≫
-        pullback.fst (X.ofRestrict U.isOpenEmbedding) (X.ofRestrict V.isOpenEmbedding) ≫
-          X.ofRestrict U.isOpenEmbedding =
-      X.ofRestrict (U ⊓ V).isOpenEmbedding := by
-  rw [restrictInfIsoPullback_hom_fst_assoc, restrictLE_fac]
 
 end RestrictInf
 
