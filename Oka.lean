@@ -43,6 +43,7 @@ import Oka.AnalyticSpace.Restrict
 import Oka.Analytification.AffineSpace
 import Oka.Analytification.ChangeOfVariables
 import Oka.Analytification.Comparison
+import Oka.Analytification.DistinguishedOpen
 import Oka.Analytification.Flatness
 import Oka.Analytification.FlatnessAtAPoint
 import Oka.Analytification.Functor

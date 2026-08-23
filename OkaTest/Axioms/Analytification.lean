@@ -14,7 +14,8 @@ map on stalks, `X^an ⟶ Spec (ℂ[x]/I)` for a presented affine `ℂ`-algebra, 
 at an arbitrary point — where it becomes a statement about the stalk map itself — the
 analytification as a functor on finitely generated `ℂ`-algebras, the stalk map of the
 comparison morphism of a presented algebra, the naturality of the comparison morphism, the
-faithful flatness of that stalk map, and the analytification of a sheaf.
+faithful flatness of that stalk map, the analytification of a sheaf, and the identification of
+the analytification of `A_f` with the non-vanishing locus of `f`.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -641,3 +642,54 @@ info: 'ComplexAnalytic.analytificationSheafFreeIso' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.analytificationSheafFreeIso
 
+
+/-! ### The analytification of a distinguished open -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.pullbackΓ_eval₂' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.pullbackΓ_eval₂
+
+/--
+info: 'ComplexAnalytic.localisationIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.localisationIso
+
+/--
+info: 'ComplexAnalytic.localisationIso_hom_ofRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.localisationIso_hom_ofRestrict
+
+/--
+info: 'ComplexAnalytic.localisationIso_inv_localisationProj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.localisationIso_inv_localisationProj
+
+/--
+info: 'ComplexAnalytic.eval_localisationProj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.eval_localisationProj
+
+/--
+info: 'ComplexAnalytic.base_localisationProj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.base_localisationProj
+
+/--
+info: 'ComplexAnalytic.localisationOpen_ne_top' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.localisationOpen_ne_top
