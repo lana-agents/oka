@@ -12,7 +12,9 @@ import Oka.AnalyticSpace.Finite
 A holomorphic map is a **local isomorphism** when its underlying map is a local homeomorphism and
 every stalk map is an isomorphism, and **finite étale** when it is that and finite
 (`ComplexAnalytic.AnalyticSpace.IsFinite`). This is the second rung of the Riemann existence
-theorem's analytic side; the first is `Oka/AnalyticSpace/Finite.lean`.
+theorem's analytic side; the first is `Oka/AnalyticSpace/Finite.lean` and the third is
+`Oka/AnalyticSpace/CoveringMap.lean`, which deduces from these two that the underlying map of a
+finite étale morphism out of a Hausdorff analytic space is a covering map.
 
 ## Why two fields, and why one of them is not topological
 
@@ -34,15 +36,25 @@ repository already has the machinery for it: `ComplexAnalytic.IsCutOutBy` carrie
 
 **Why not `IsCoveringMap`.** Mathlib has it, and it is a *global* condition — every point of the
 target has an evenly covered neighbourhood — strictly stronger than being a local homeomorphism.
-For a **finite** local isomorphism onto a connected base the two agree, and that agreement is a
-theorem, of the same kind as properness-versus-finiteness, which `Oka/AnalyticSpace/Finite.lean`
-already declines to conflate. It is not in the definition and it is not proved here.
+For a **finite** local isomorphism the two agree, and that agreement is a theorem, of the same
+kind as properness-versus-finiteness, which `Oka/AnalyticSpace/Finite.lean` already declines to
+conflate. It is not in the definition and it is not proved here; it is
+`ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale` in
+`Oka/AnalyticSpace/CoveringMap.lean`, the third rung, which imports this file.
+
+**This paragraph used to say "onto a connected base", and connectedness is not a hypothesis of
+that theorem.** A point outside the range is evenly covered by the empty index type. What
+connectedness gives is that the number of sheets is constant, which is a different statement and
+is in neither file.
 
 ## What is not here
 
 * **The Riemann existence theorem**, and any statement relating covers to field extensions. This
   is the notion RET is *about*; nothing here mentions `ℂ(X)`.
-* **That a finite local isomorphism onto a connected base is a covering map.** The third rung.
+* **The constancy of the number of sheets of a finite étale morphism over a connected base.** The
+  third rung — that a finite local isomorphism is a covering map — *is* proved, in
+  `Oka/AnalyticSpace/CoveringMap.lean`; what needs connectedness is the degree, and that is not
+  proved anywhere.
 * **The analytification of a finite étale morphism** — the other blocker of #551, stateable only
   now that this exists.
 * **Grauert's finite mapping theorem**, which `Oka/AnalyticSpace/Finite.lean` already records as
@@ -166,7 +178,11 @@ This is what the Riemann existence theorem is about on the analytic side. It is 
 of its own rather than as a conjunction so that the instances below are found, and it carries no
 field beyond the two.
 
-**It is not `IsCoveringMap` and is not proved to imply it** — see the module docstring. -/
+**It is not `IsCoveringMap`** — that is a condition on the underlying map alone, and this one is
+not — but it does imply it for a Hausdorff source:
+`ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale` in
+`Oka/AnalyticSpace/CoveringMap.lean`. This docstring used to say the implication was unproved; see
+the module docstring for why the two notions are still kept apart. -/
 class IsFiniteEtale {X Y : AnalyticSpace.{u}} (f : X ⟶ Y) : Prop where
   /-- It is finite. -/
   isFinite : IsFinite f
