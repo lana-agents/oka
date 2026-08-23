@@ -130,9 +130,10 @@ coherence statement for arbitrary complex analytic spaces:
   technique behind it — affine-locality plus `RingHom.Finite` — and none of it transfers, since
   there are no affines in the analytic category. `OkaTest/FiniteMorphism.lean` shows the class is
   neither empty nor everything, on the two morphisms between `ℂ` and `ℂ²`: `z ↦ (z, 0)` is finite
-  and not surjective, `(z, w) ↦ z` is not finite because the fibre over the origin is infinite,
-  and their composite is finite although the second factor is not — so finiteness is not
-  right-cancellable. **What makes finiteness useful is Grauert's finite mapping theorem, that
+  and not surjective; `(z, w) ↦ z` fails **both** conditions — the fibre over the origin is
+  infinite, and its underlying map is not closed, because the hyperbola `z w = 1` is closed while
+  its image `ℂ ∖ {0}` is not; and their composite is finite although the second factor is not, so
+  finiteness is not right-cancellable. **What makes finiteness useful is Grauert's finite mapping theorem, that
   `f_*𝒪_X` is coherent for finite `f`, and that is not proved here**; nor is properness defined,
   nor are there fibre products to base-change along.
 

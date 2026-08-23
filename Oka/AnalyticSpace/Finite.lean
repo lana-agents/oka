@@ -18,9 +18,12 @@ and the two implications that make it non-vacuous.
 `AlgebraicGeometry.IsFinite` for schemes is `IsAffineHom f` together with `RingHom.Finite` on the
 sections over every affine open, and its whole API — `HasAffineProperty`, `affineAnd`, stability
 under composition and base change — is derived from affine-locality. **There are no affines in the
-analytic category**: `ComplexAnalytic.AnalyticSpace` is defined by local models, and a local model
-is a closed subspace of an open subset of `ℂ^n`, which is not a compact object of any kind. So
-none of that transfers and there is no `IsAffineHom` to extend.
+analytic category**, and the reason is that the machinery affine-locality is built out of does not
+exist here: there is no `Spec`–`Γ` adjunction for analytic spaces, so no class of objects on which
+a morphism's behaviour determines it globally, and no `HasAffineProperty` to state a property
+against. `ComplexAnalytic.AnalyticSpace` is defined by local models, and a local model is a closed
+subspace of an open subset of `ℂ^n` — a chart, not an affine. So none of that transfers and there
+is no `IsAffineHom` to extend.
 
 The two conditions are also not the same notion, so this is not a choice between spellings of one
 thing. For schemes, `Spec` of an infinite algebraic field extension `k ⟶ K` is a homeomorphism

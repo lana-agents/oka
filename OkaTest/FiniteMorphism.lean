@@ -16,14 +16,19 @@ spaces, with the two morphisms between `ℂ` and `ℂ²` that everyone draws fir
 * **`ComplexAnalytic.axisIncl`, `z ↦ (z, 0)`, is finite** and is not an isomorphism — its image is
   the first axis, a proper closed subset. It is finite because its underlying map is a closed
   embedding (`ComplexAnalytic.isClosedEmbedding_base_axisIncl`), which is proved here rather than
-  quoted: this development builds its closed immersions as `ComplexAnalytic.IsCutOutBy` data at
-  the locally-ringed-space level, and `Oka/AnalyticSpace/HolomorphicMapGeneral.lean` records that
-  nothing assembles a morphism of *analytic* spaces into `ℂ²` — so
-  `ComplexAnalytic.AnalyticSpace.isFinite_of_isCutOutBy` has no instance to be applied at and a
-  witness has to be built.
-* **`ComplexAnalytic.proj`, `(z, w) ↦ z`, is not finite**, because the fibre over the origin is
-  the second axis, which is infinite. This is the fibre condition failing, and it fails at a set
-  one can name.
+  quoted, because `ComplexAnalytic.AnalyticSpace.isFinite_of_isCutOutBy` has no instance to be
+  applied at. `ComplexAnalytic.IsCutOutBy` is a condition on a morphism of *locally ringed
+  spaces*, and cut-out data is produced — that is what
+  `AlgebraicGeometry.LocallyRingedSpace.isCutOutBy_zeroLocusSubspaceι` does — but never for a
+  morphism of *analytic* spaces:
+  `git grep 'IsCutOutBy.*toLRSHom'` over the whole repository returns two hits,
+  `ComplexAnalytic.AnalyticSpace.mono_of_isCutOutBy` and `isFinite_of_isCutOutBy` itself, and both
+  take it as a hypothesis. So a witness has to be built by hand.
+* **`ComplexAnalytic.proj`, `(z, w) ↦ z`, is not finite, and fails *both* conditions.** Its fibre
+  over the origin is the second axis, which is infinite; and its underlying map is not closed,
+  because the hyperbola `z w = 1` is closed in `ℂ²` and its image is `ℂ ∖ {0}`, which is not
+  closed in `ℂ`. So the example does not separate the two halves of the definition — it fails at
+  both — and `ComplexAnalytic.not_isClosedMap_base_proj` is what says so.
 
 ## The third statement, which is the reason both are here
 
@@ -45,7 +50,7 @@ says the composition lemma has the strength it claims and no more.
 * **Neither map is shown proper.** Properness is not defined here.
 -/
 
-open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry Topology
+open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry Topology Filter
 
 universe u
 
@@ -189,10 +194,80 @@ theorem infinite_fiber_proj : Infinite
     rw [show ((proj.{u}).toLRSHom.base _ : ULift.{u} (Fin 1) → ℂ) = _ from base_proj _]
     simp
 
-/-- **The projection is not finite.** Its underlying map *is* closed — it is an open surjection
-onto a locally compact space — but nothing here needs that: the fibre condition already fails. -/
+/-- **The projection is not finite**, by the fibre condition. Its underlying map fails the
+*closed* condition as well — `ComplexAnalytic.not_isClosedMap_base_proj` — so this is not an
+example separating the two halves of `ComplexAnalytic.AnalyticSpace.IsFinite`; it is one at which
+both fail, and each failure is exhibited at a set one can name. -/
 theorem not_isFinite_proj : ¬ AnalyticSpace.IsFinite proj.{u} :=
   AnalyticSpace.not_isFinite_of_infinite_fiber _ _ infinite_fiber_proj.{u}
+
+/-! ### And its underlying map is not closed either
+
+The half of `ComplexAnalytic.AnalyticSpace.IsFinite` that `ComplexAnalytic.not_isFinite_proj` does
+not touch. A projection along a *compact* factor is closed; along `ℂ` it is not, and the classical
+witness is the hyperbola. -/
+
+/-- **The hyperbola `z w = 1` in `ℂ²`**, the standard closed set whose image under the projection
+is not closed. -/
+def hyperbola : Set (AnalyticSpace.complexAffineSpace.{u} 2) :=
+  {p | (p : ULift.{u} (Fin 2) → ℂ) (ULift.up 0) * (p : ULift.{u} (Fin 2) → ℂ) (ULift.up 1) = 1}
+
+/-- It is closed, being the level set of a continuous function. -/
+theorem isClosed_hyperbola : IsClosed hyperbola.{u} := by
+  have h0 : Continuous fun p : AnalyticSpace.complexAffineSpace.{u} 2 ↦
+      (p : ULift.{u} (Fin 2) → ℂ) (ULift.up 0) := continuous_apply _
+  have h1 : Continuous fun p : AnalyticSpace.complexAffineSpace.{u} 2 ↦
+      (p : ULift.{u} (Fin 2) → ℂ) (ULift.up 1) := continuous_apply _
+  exact isClosed_eq (h0.mul h1) continuous_const
+
+/-- **Its image is `ℂ ∖ {0}`**: `z w = 1` forces `z ≠ 0`, and every nonzero `z` is hit, at
+`w = z⁻¹`. -/
+theorem image_hyperbola :
+    ((proj.{u}).toLRSHom.base : AnalyticSpace.complexAffineSpace.{u} 2 →
+        AnalyticSpace.complexAffineSpace.{u} 1) '' hyperbola.{u} =
+      {q : AnalyticSpace.complexAffineSpace.{u} 1 |
+        (q : ULift.{u} (Fin 1) → ℂ) (ULift.up 0) ≠ 0} := by
+  refine Set.ext fun q ↦ ⟨?_, fun hq ↦ ?_⟩
+  · rintro ⟨p, hp, rfl⟩
+    intro hzero
+    rw [show ((proj.{u}).toLRSHom.base p : ULift.{u} (Fin 1) → ℂ) = _ from base_proj _] at hzero
+    exact one_ne_zero (hp.symm.trans
+      (by rw [show (p : ULift.{u} (Fin 2) → ℂ) (ULift.up 0) = 0 from hzero, zero_mul]))
+  · refine ⟨fun l ↦ if l = ULift.up 0 then (q : ULift.{u} (Fin 1) → ℂ) (ULift.up 0)
+      else ((q : ULift.{u} (Fin 1) → ℂ) (ULift.up 0))⁻¹, ?_, ?_⟩
+    · change _ * _ = 1
+      simpa using mul_inv_cancel₀ hq
+    · refine funext fun l ↦ ?_
+      rw [show ((proj.{u}).toLRSHom.base _ : ULift.{u} (Fin 1) → ℂ) = _ from base_proj _]
+      dsimp only
+      rw [if_pos rfl]
+      exact congrArg _ (Subsingleton.elim _ _)
+
+/-- **The projection is not a closed map.**
+
+If it were, `ℂ ∖ {0}` would be closed in `ℂ`, so `{0}` would be open there — and `{0}` is not
+open in `ℂ`, since the punctured neighbourhood filter at `0` is not `⊥`. The passage from the
+one-variable affine space to `ℂ` is the continuous map `c ↦ (fun _ ↦ c)`, whose preimage of the
+zero set of the coordinate is exactly `{0}`. -/
+theorem not_isClosedMap_base_proj :
+    ¬ IsClosedMap ((proj.{u}).toLRSHom.base : AnalyticSpace.complexAffineSpace.{u} 2 →
+      AnalyticSpace.complexAffineSpace.{u} 1) := by
+  intro hclosed
+  have himg := hclosed _ isClosed_hyperbola.{u}
+  rw [image_hyperbola] at himg
+  have hopen : IsOpen {q : AnalyticSpace.complexAffineSpace.{u} 1 |
+      (q : ULift.{u} (Fin 1) → ℂ) (ULift.up 0) = 0} := by
+    have hc := himg.isOpen_compl
+    convert hc using 1
+    exact Set.ext fun _ ↦ (not_not).symm
+  have hdiag : Continuous fun c : ℂ ↦ (fun _ ↦ c : AnalyticSpace.complexAffineSpace.{u} 1) :=
+    continuous_pi fun _ ↦ continuous_id
+  have hzero : IsOpen ({0} : Set ℂ) := by
+    have hp := hopen.preimage hdiag
+    convert hp using 1
+    exact Set.ext fun _ ↦ Iff.rfl
+  have hb : (𝓝[≠] (0 : ℂ)) = ⊥ := by rwa [← isOpen_singleton_iff_punctured_nhds]
+  exact (inferInstance : (𝓝[≠] (0 : ℂ)).NeBot).ne hb
 
 /-! ### The composite, and what it says about the composition lemma -/
 
