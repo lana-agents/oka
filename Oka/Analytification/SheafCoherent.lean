@@ -24,12 +24,19 @@ object of the site and over every morphism `free L ⟶ M.over X`; downstairs tho
 families are not in the image of the functor, so no argument of the form "apply the functor to
 an upstairs presentation" reaches them. The classical route instead *gets* a presentation from
 coherence, and on an affine scheme that is the passage from a coherent sheaf to a finitely
-presented module — a dictionary between `SheafOfModules` on `Spec A` and `A`-modules which this
-repository does not have at all.
+presented module.
 
-So the presented form is the strongest statement available, and it is the form the classical
-proof of GAGA uses anyway: coherent sheaves on `Spec A` are, by definition of the affine
-dictionary, cokernels of maps of finite frees.
+**Half of that passage is now available and the half that is missing is the half this statement
+needs.** `SheafOfModules.IsCoherent.isFinitePresentation` says a coherent sheaf is finitely
+presented *on a covering*, and on `Spec A` that gives `M ≅ (Γ M)^~`
+(`AlgebraicGeometry.Scheme.Modules.isIso_fromTildeΓ_of_isCoherent`). What it does not give is a
+**global** presentation of `M` as a cokernel of finite free sheaves — equivalently, that `Γ M` is
+a finitely presented `A`-module — and that is exactly what the theorem below consumes. The
+missing step is the quasi-compactness argument on `Spec A` and it is not in this repository.
+
+So the presented form is still the strongest statement available, and it is the form the
+classical proof of GAGA uses anyway: coherent sheaves on `Spec A` are, by the affine dictionary,
+cokernels of maps of finite frees.
 
 ## The proof, which is three transports and no new mathematics
 

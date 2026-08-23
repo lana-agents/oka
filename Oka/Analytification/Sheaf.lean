@@ -93,8 +93,8 @@ it breaks that step and nothing else.
   `Oka/Analytification/SheafCoherent.lean` proves that the analytification of a **cokernel of
   finite free sheaves** is coherent, out of the exactness proved here and Oka's theorem in every
   finite rank. The statement for a *coherent* sheaf rather than a presented one is a different
-  matter and is not proved anywhere: it would need the dictionary between sheaves of modules on
-  `Spec A` and `A`-modules, which this repository does not have.
+  matter and is still not proved anywhere: it needs a **global** presentation of the coherent
+  sheaf, and `SheafOfModules.IsCoherent.isFinitePresentation` gives only a local one.
 * **Anything analytic.** Every line here is the `Γ`–`Spec` adjunction and category theory. The
   analytic content is upstream.
 

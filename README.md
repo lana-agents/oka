@@ -132,14 +132,32 @@ coherence statement for arbitrary complex analytic spaces:
   `ComplexAnalytic.isCoherent_analytificationSheaf_cokernel` says the **analytification of a
   cokernel of finite free sheaves on `Spec (ℂ[x] ⧸ I)` is coherent**, which is the local input
   GAGA consumes: right exactness carries the cokernel across, and the target is free, hence
-  coherent. The statement for a *coherent* sheaf rather than a presented one is out of reach here
-  and for a reason that is not analytic — it needs the dictionary between sheaves of modules on
-  `Spec A` and `A`-modules, which this repository does not have. The worked instance is
+  coherent. The statement for a *coherent* sheaf rather than a presented one is still out of
+  reach, and for a reason that is not analytic, but the gap is now named and half closed — see
+  the bullet below. The worked instance is
   `𝒪_{Spec A} ⧸ (x)` for `A = ℂ[x, y] ⧸ (xy)`: a nonzero proper quotient rather than a free
   sheaf, and it is nonzero *because* `x` vanishes at the origin of the node — which is
   `AlgebraicGeometry.StructureSheaf.germ_algebraMap_mem_maximalIdeal_iff`, and the first place
   this development touches a section of the structure sheaf of a `Spec` directly rather than
   through the `Γ`-`Spec` adjunction.
+
+* **Coherent implies locally finitely presented, and half of the affine dictionary.**
+  `SheafOfModules.IsCoherent.isFinitePresentation`
+  (`Oka/Algebra/Category/ModuleCat/Sheaf/Coherent/Presentation.lean`): a coherent sheaf of
+  modules is, on a covering of the terminal object, the cokernel of a morphism of finite free
+  sheaves. The two conditions differ only in *where* the finiteness is asserted — coherence
+  generates `M` on one cover and its relations on a further one, a `SheafOfModules.Presentation`
+  wants both over the same object — so the content is the refinement of the cover and there is no
+  local-to-global step in it. On an affine scheme Mathlib's
+  `AlgebraicGeometry.isQuasicoherent_iff_isIso_fromTildeΓ` then gives
+  `AlgebraicGeometry.Scheme.Modules.isIso_fromTildeΓ_of_isCoherent`: **a coherent
+  `𝒪_{Spec R}`-module is the sheaf associated with its own global sections.** What is *not* here
+  is the other half — that `Γ M` is a finitely *presented* `R`-module, equivalently that `M` has
+  a **global** presentation — which is the quasi-compactness argument on `Spec R` and is what
+  "the analytification of a coherent sheaf is coherent" is still waiting for. Nor is the affine
+  statement exercised: this repository proves no sheaf on a `Spec` to be coherent, since every
+  coherent sheaf it exhibits lives on an analytic space, and `OkaTest/CoherentPresentation.lean`
+  says so where the non-vacuity checks are.
 
 * **Being a complex analytic space is local.** The `local_model` field of
   `ComplexAnalytic.AnalyticSpace` is isolated as a predicate `ComplexAnalytic.HasLocalModels` on
