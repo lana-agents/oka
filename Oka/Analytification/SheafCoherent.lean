@@ -32,10 +32,16 @@ presented *on a covering*, and on `Spec A` that gives `M ≅ (Γ M)^~`
 (`AlgebraicGeometry.Scheme.Modules.isIso_fromTildeΓ_of_isCoherent`). What it does not give is a
 **global** presentation of `M` as a cokernel of finite free sheaves — equivalently, that `Γ M` is
 a finitely presented `A`-module — and that is exactly what the theorem below consumes. The
-quasi-compactness argument on `Spec A` is now in this repository and stops one step short of it:
+quasi-compactness argument on `Spec A` is now in this repository and still does not reach it, but
+for a different reason than was recorded here before.
 `AlgebraicGeometry.Scheme.Modules.module_finite_moduleSpecΓFunctor_obj_of_isFiniteType` makes
-`Γ M` a *finite* `A`-module, and finite presentation needs the same argument run again on the
-relations, which is not here.
+`Γ M` a *finite* `A`-module, and **finite presentation is not the same argument run again on the
+relations**: it is false at those hypotheses (see the module docstring of
+`Oka/AlgebraicGeometry/Modules/Tilde.lean`).
+`AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ` has it from a finite **global**
+presentation — which is what the theorem below is given anyway — so what is missing for a
+*coherent* `M` is the passage from `SheafOfModules.IsCoherent`'s presentation-on-a-covering to a
+global one, and that is unfiled.
 
 So the presented form is still the strongest statement available, and it is the form the
 classical proof of GAGA uses anyway: coherent sheaves on `Spec A` are, by the affine dictionary,
