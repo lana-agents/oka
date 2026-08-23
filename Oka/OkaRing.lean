@@ -30,6 +30,14 @@ abbrev linOfFun {R : Type*} [CommRing R]
   Module.Basis.constr (S := R)
     (Pi.basisFun _ _) f
 
+/-- The value of `linOfFun f` at a tuple `a`, as the sum `∑ i, a i * f i`.
+
+Stated over an arbitrary commutative ring and with no consumer in this repository: it came here
+with `linOfFun`, whose only use is in the statement of Oka's coherence lemma. -/
+lemma linOfFun_apply {A : Type*} [CommRing A] {n : ℕ} (f : Fin n → A) (a : Fin n → A) :
+    linOfFun f a = ∑ i, a i * f i := by
+  simp [linOfFun, Module.Basis.constr_apply_fintype, mul_comm]
+
 open TopologicalSpace
 
 variable {n : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]

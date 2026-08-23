@@ -23,6 +23,7 @@ import Oka.Algebra.Category.ModuleCat.Stalk
 import Oka.Algebra.Module.FinitePresentation
 import Oka.Algebra.MvPolynomial.Taylor
 import Oka.AlgebraicGeometry.GammaSpecAdjunction
+import Oka.AlgebraicGeometry.Modules.Coherent
 import Oka.AlgebraicGeometry.Modules.Sheaf
 import Oka.AlgebraicGeometry.Modules.Tilde
 import Oka.AlgebraicGeometry.StructureSheaf
@@ -77,7 +78,6 @@ import Oka.CategoryTheory.Sites.LocallySurjective
 import Oka.CategoryTheory.Sites.Over
 import Oka.CategoryTheory.Sites.Whiskering
 import Oka.ChangeOfCoordinates
-import Oka.Coherent
 import Oka.Completion
 import Oka.ComplexSpace
 import Oka.Data.Fin.Tuple.Basic
@@ -85,6 +85,8 @@ import Oka.FieldTheory.IsAlgClosed.Basic
 import Oka.Geometry.RingedSpace.Basic
 import Oka.Geometry.RingedSpace.CutOut
 import Oka.Geometry.RingedSpace.LocallyRingedSpace
+import Oka.Geometry.RingedSpace.LocallyRingedSpace.Coherent
+import Oka.Geometry.RingedSpace.LocallyRingedSpace.Modules
 import Oka.Geometry.RingedSpace.OpenImmersion
 import Oka.Geometry.RingedSpace.PresheafedSpace.Gluing
 import Oka.Geometry.RingedSpace.ZeroLocus
@@ -108,7 +110,6 @@ import Oka.RingTheory.Localization.Ideal
 import Oka.RingTheory.Localization.Module
 import Oka.RingTheory.MvPolynomial.Ideal
 import Oka.RingTheory.RingHom.FaithfullyFlat
-import Oka.SchemeCoherent
 import Oka.StalkEquiv
 import Oka.Statement
 import Oka.StructureSheaf

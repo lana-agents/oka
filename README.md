@@ -238,7 +238,8 @@ coherence statement for arbitrary complex analytic spaces:
   reason that this repository proved no sheaf on a `Spec` to be coherent, every coherent sheaf it
   exhibited living on an analytic space.
 
-* **The structure sheaf of a locally noetherian scheme is coherent** (`Oka/SchemeCoherent.lean`),
+* **The structure sheaf of a locally noetherian scheme is coherent**
+  (`Oka/AlgebraicGeometry/Modules/Coherent.lean`),
   and on `Spec A` for noetherian `A` that is
   `AlgebraicGeometry.isCoherentStructureSheaf_spec` — the algebraic counterpart of Oka's theorem,
   and the first coherent sheaf here that does not live on an analytic space. It goes through the
@@ -673,7 +674,8 @@ coherence statement for arbitrary complex analytic spaces:
 * **The main theorem.** `ComplexAnalytic.AnalyticSpace.isCoherentStructureSheaf` in
   `Oka/AnalyticSpace/Coherent.lean`: the structure sheaf of any complex analytic space is
   coherent. The deduction goes through the concrete, manifestly local condition
-  `HasLocalRelations` of `Oka/AnalyticSpace/Relations.lean`, which avoids transporting the
+  `HasLocalRelations` of `Oka/Geometry/RingedSpace/LocallyRingedSpace/Coherent.lean`, which
+  avoids transporting the
   coherence condition between sites.
 
 `freitag_summary.md` contains a write-up of the classical proof of the coherence lemma (following
@@ -711,6 +713,18 @@ Krull's intersection theorem, which would add 96 files to that Mathlib file's tr
 — so it lives in `Oka/RingTheory/Filtration.lean` instead, next to Krull. **Split by destination,
 not by subject**: a mirror file whose declarations could not all go where its docstring says
 tells a Mathlib reviewer something untrue.
+
+The largest worked example is the locally-ringed-space theory that used to be 575 of the 660
+lines of `Oka/AnalyticSpace/Relations.lean`. It went to three destinations and not one, each
+chosen on a measured import cost: the section, open-subspace and germ API to
+`Oka/Geometry/RingedSpace/LocallyRingedSpace.lean`, whose Mathlib target it costs **nothing**;
+the theory of sheaves of modules over `𝒪` to a proposed
+`Oka/Geometry/RingedSpace/LocallyRingedSpace/Modules.lean`, because putting it in the file above
+would have cost that target **164**; and the coherence theorem to a proposed
+`Oka/Geometry/RingedSpace/LocallyRingedSpace/Coherent.lean`. **What the split bought is visible
+in a fourth file**: the scheme-side theorem was at the root of `Oka/`, out of the mirror tree,
+purely because reaching `HasLocalRelations` meant importing `Oka.ComplexSpace`, and it is now
+`Oka/AlgebraicGeometry/Modules/Coherent.lean`.
 
 Not every file outside the mirror tree is analytic-space theory, and not every general file has a
 Mathlib counterpart to mirror. `Oka/Analytic/ParametricCircleIntegral.lean` is general complex

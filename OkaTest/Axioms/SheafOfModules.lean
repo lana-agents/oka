@@ -587,7 +587,7 @@ info: 'AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ_of_isFinitePresent
 
 /-! ### Coherence of the structure sheaf of a locally noetherian scheme
 
-`Oka/SchemeCoherent.lean`. The last of the six is the `Spec A` corollary that
+`Oka/AlgebraicGeometry/Modules/Coherent.lean`. The last of the six is the `Spec A` corollary that
 `OkaTest/SpecCoherent.lean` instantiates; the localisation lemma the proof rests on is guarded in
 `OkaTest/Axioms/RingTheory.lean`, since it is commutative algebra and not sheaf theory. -/
 
