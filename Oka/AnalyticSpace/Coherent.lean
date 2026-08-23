@@ -250,9 +250,9 @@ theorem AnalyticSpace.isCoherentStructureSheaf (X : AnalyticSpace.{u}) :
 is the form a *presentation* is pushed through: the target of a presentation is a finite free
 sheaf, and `SheafOfModules.IsCoherent.cokernel` needs its target coherent.
 
-`SheafOfModules.IsCoherentStructureSheaf` is a `def`, so instance search will not unfold it and
+`AlgebraicGeometry.LocallyRingedSpace.IsCoherentStructureSheaf` is a `def`, so instance search will not unfold it and
 the coherence of `𝒪_X` has to be introduced in its unfolded form — the same step
-`ComplexAnalytic.isCoherent_idealSheaf` documents. -/
+`AlgebraicGeometry.LocallyRingedSpace.isCoherent_idealSheaf` documents. -/
 theorem AnalyticSpace.isCoherent_free (X : AnalyticSpace.{u}) (I : Type u) [Finite I] :
     (SheafOfModules.free (R := X.toLocallyRingedSpace.ringSheaf) I).IsCoherent :=
   haveI : (SheafOfModules.unit X.toLocallyRingedSpace.ringSheaf).IsCoherent :=

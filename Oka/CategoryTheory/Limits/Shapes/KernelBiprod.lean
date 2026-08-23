@@ -27,8 +27,9 @@ of a map into `A` is small, and the kernel of a map into `B` is small" applies t
 intersection itself is not a kernel of anything with a single target.
 
 Mathlib has neither this nor its `prod.lift` analogue: a search for `kernel` together with
-`prod.lift` or `biprod.lift` finds only `CategoryTheory.NormalMono.Equalizers`, where a fork of
-this shape is built by hand for an unrelated purpose.
+`prod.lift` or `biprod.lift` finds only
+`Mathlib/CategoryTheory/Limits/Shapes/NormalMono/Equalizers.lean`, where a fork of this shape is
+built by hand for an unrelated purpose.
 
 ## Main definitions
 
