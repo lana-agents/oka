@@ -322,16 +322,12 @@ example (i : pair.{u}) :
 diagonal**, which is an `eqToHom` followed by the inclusion of the open subspace.
 
 `eqToHom` appears because `CategoryTheory.GlueData'.f'` is *defined* with one, and the `dite` it
-sits in is dependent — `rw [dif_neg]` reports *motive is not type correct*, so the branch has to
-be taken with `split_ifs`. -/
+sits in is dependent, so the branch cannot be taken with `rw [dif_neg]`. The unfolding is
+`CategoryTheory.GlueData.ofGlueData'_f_of_ne`, in the mirror tree, which does it once. -/
 theorem f_projectiveLineGlueData (i j : pair.{u}) (hij : i ≠ j) :
     projectiveLineGlueData.{u}.toGlueData.f i j =
-      eqToHom (dif_neg hij) ≫ coverIncl.{u} lineCoverObj.{u} lineCoverPoly.{u} i j := by
-  change CategoryTheory.GlueData'.f' projectiveLineGlueData'.{u} i j = _
-  dsimp only [CategoryTheory.GlueData'.f']
-  split_ifs with h
-  · exact absurd h hij
-  · rfl
+      eqToHom (dif_neg hij) ≫ coverIncl.{u} lineCoverObj.{u} lineCoverPoly.{u} i j :=
+  CategoryTheory.GlueData.ofGlueData'_f_of_ne projectiveLineGlueData'.{u} hij
 
 /-- **The overlap of two distinct members lands in `D(z)`**, which is what the two statements
 below need: a point off `D(z)` is glued to nothing. -/

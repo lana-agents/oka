@@ -259,7 +259,16 @@ coherence statement for arbitrary complex analytic spaces:
   this repository mentions is a `Spec` and nothing constructs a non-affine one or carries a cover
   of one; `ComplexAnalytic.toFGAlg` being an equivalence is what says nothing is lost by that.
   The construction goes through `CategoryTheory.GlueData'`, which asks
-  for the overlaps only when `i ≠ j`, and the difficulty is that its `t'` is a morphism between
+  for the overlaps only when `i ≠ j` and fills the diagonal with `dite`s;
+  `Oka/CategoryTheory/GlueData.lean` unfolds those once — Mathlib has no projection lemma for
+  `CategoryTheory.GlueData.ofGlueData'` at all — so a consumer of `f` or `t` does not meet a
+  dependent `dite` that neither `rw [dif_neg]` nor `split_ifs` will reduce. With them
+  `OkaTest/AffineCover.lean` puts an **analytic structure** on its gluing
+  (`ComplexAnalytic.nodeTripleSpace`, through
+  `ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear`), which is the first analytic space here
+  glued out of more than one piece — though it is *not* shown to be non-affine, and nothing
+  claims it is. The difficulty in the
+  construction itself is that its `t'` is a morphism between
   categorical pullbacks: `AlgebraicGeometry.LocallyRingedSpace.restrictInfIsoPullback` identifies
   those with open subspaces `X|(U ⊓ V)`, after which `t'` is a conjugate of a morphism of open
   subspaces and the cocycle condition is exactly the hypothesis on triple overlaps, the

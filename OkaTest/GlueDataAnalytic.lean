@@ -53,14 +53,14 @@ a pullback of two immersions neither of which is the identity.
 
 ## What is *not* checked here
 
-* **`ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear` is not instantiated at
-  `ComplexAnalytic.coverGlueData`**, the glue data an affine cover produces, which is the
-  application the whole line exists for. The obstruction is measured and is not the compatibility
-  lemma: `ComplexAnalytic.GlueDataCLinear` reads `D.f` and `D.t`, and for a glue data built by
-  `CategoryTheory.GlueData.ofGlueData'` those are `dite`s on `i = j` whose motives are dependent,
-  so neither `rw [dif_neg]` nor `split_ifs` reduces them in a composition —
-  `OkaTest.AffineCover.f_nodeTripleGlueData` had to take that branch by hand for `f` alone, and
-  `t` has no such lemma. Supplying the two is a separate piece of work.
+* **This is not the interesting instantiation, and it is not the only one.**
+  `ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear` is applied to a glue datum built by
+  `ComplexAnalytic.coverGlueData` in `OkaTest/AffineCover.lean`
+  (`ComplexAnalytic.nodeTripleSpace`), which is a gluing of three spaces rather than a space taken
+  apart and put back. What that one needs and this one does not is
+  `Oka/CategoryTheory/GlueData.lean`'s unfolding lemmas, since
+  `ComplexAnalytic.GlueDataCLinear` reads `D.f` and `D.t` and `CategoryTheory.GlueData.ofGlueData'`
+  supplies them as `dite`s.
 * **Nothing here says the glued space is not the node.** It is: the cover's
   `AlgebraicGeometry.LocallyRingedSpace.OpenCover.fromGlued` is an isomorphism, which is the point
   of the witness rather than a defect — a cover of a space one already understands is the shape in

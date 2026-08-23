@@ -63,6 +63,7 @@ import Oka.Analytification.Sheaf
 import Oka.Analytification.SheafCoherent
 import Oka.Analytification.UniversalProperty
 import Oka.CategoryTheory.Abelian.Basic
+import Oka.CategoryTheory.GlueData
 import Oka.CategoryTheory.Limits.Shapes.KernelBiprod
 import Oka.CategoryTheory.Sites.CoversTop.Basic
 import Oka.CategoryTheory.Sites.CoversTop.Over

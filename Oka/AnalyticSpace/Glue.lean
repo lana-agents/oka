@@ -90,10 +90,8 @@ carry the three together, bundle then.
   needs; the general open immersion is neither proved nor wanted
   (`Oka/Analytification/DistinguishedOpen.lean` says so). The glue data itself is now built —
   `ComplexAnalytic.coverGlueData` in `Oka/Analytification/AffineCover.lean` — and so is the
-  passage from a glue data to an analytic space, below. What is left is to put the two together,
-  which is a matter of checking `ComplexAnalytic.GlueDataCLinear` for a glue data whose `f` and
-  `t` are `CategoryTheory.GlueData.ofGlueData'`'s `dite`s; `OkaTest/GlueDataAnalytic.lean`
-  records what that costs. The input is still the cover **as data** rather than a scheme, since
+  passage from a glue data to an analytic space, below, and the two are put together in
+  `OkaTest/AffineCover.lean`. The input is still the cover **as data** rather than a scheme, since
   this repository constructs no `AlgebraicGeometry.Scheme` beyond Mathlib's `Spec` and has no
   cover API for one.
 * **A morphism-level statement.** `AlgebraicGeometry.LocallyRingedSpace.OpenCover.glueMorphisms`
