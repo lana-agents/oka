@@ -266,10 +266,14 @@ theorem surjective_moduleSpecΓFunctor_map {M N : (Spec R).Modules}
 Mathlib already has `IsIso (AlgebraicGeometry.Scheme.Modules.fromTildeΓ (SheafOfModules.free ι))`
 as an instance, and this is `AlgebraicGeometry.isQuasicoherent_iff_isIso_fromTildeΓ` applied to it.
 
-The instance has to be named through `inferInstanceAs` rather than left to a bare `inferInstance`,
-because `AlgebraicGeometry.isQuasicoherent_iff_isIso_fromTildeΓ _` leaves the expected type a
-metavariable at the point where the argument is elaborated. Writing the type out is the whole
-fix. -/
+The instance has to be named through `inferInstanceAs`, **and at Mathlib's spelling rather than at
+this statement's**: the goal here is about `SheafOfModules.free (R := (Spec R).ringCatSheaf) I`,
+while the instance is stated at
+`AlgebraicGeometry.Scheme.Modules.fromTildeΓ (R := R) (SheafOfModules.free.{u} I)`. The two are
+defeq and are different discrimination-tree keys, so `inferInstanceAs` at the goal's own spelling
+fails — with the type fully written out and no metavariable anywhere — while at Mathlib's it
+succeeds. Writing *a* type out is therefore not the fix; writing out the right one of the two
+is. -/
 theorem isQuasicoherent_free (I : Type u) :
     (SheafOfModules.free.{u} (R := (Spec R).ringCatSheaf) I).IsQuasicoherent :=
   (isQuasicoherent_iff_isIso_fromTildeΓ _).mpr
