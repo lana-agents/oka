@@ -29,9 +29,10 @@ Mathlib modules — into almost everything.
 Against the 1669 above it adds **223**; against
 `Mathlib/Algebra/Category/ModuleCat/Sheaf/PushforwardContinuous.lean`'s closure of 1473 it adds
 **271**, which is where this was first noticed. **And they are not analysis modules**: of the 223
-here, **8** are under `Mathlib/Analysis/` and the rest is the topology (122), order (34), algebra
-(29) and data (23) that `Mathlib.Analysis.Complex.Trigonometric` is built on. A sentence of the
-form *"that edge adds N analysis modules"* is wrong on both counts and this one used to be.
+here, **8** are under `Mathlib/Analysis/` and the other **215** are the substrate
+`Mathlib.Analysis.Complex.Trigonometric` is built on — topology 122, order 34, algebra 29, data
+23, and 7 modules of tactic and logic infrastructure. A sentence of the form *"that edge adds N
+analysis modules"* is wrong on both counts and this one used to be.
 
 ## Why this is not in `Oka/Analysis/Complex/CoveringMap.lean`
 
