@@ -117,21 +117,27 @@ The carriers are the same type (`AlgebraicGeometry.Scheme.Modules.restrict_obj`,
 `AlgebraicGeometry.Scheme.Modules.smul_restrictAppIso_hom` read elementwise — after which the
 proof is that lemma applied, with no rewriting.
 
-The `Module Γ(V, U) Γ(M, f ''ᵁ U)` instance is supplied by `@`-application, and **that is the
-part to copy**: putting it in scope with `haveI` does *not* work, nor does
-`set_option backward.isDefEq.respectTransparency false`. Search has to unify the two carriers to
-use an instance it has been given, and it unifies at reducible transparency, where
-`Γ(M.restrict f, U)` and `Γ(M, f ''ᵁ U)` are not the same — `exact x` compiles across them and
-`with_reducible exact x` is a type mismatch. Handing the instance to the elaborator positionally
-is what avoids the unification. -/
+The two `Module` instances are named rather than searched for. They exist at the spelling
+`Γ(M.restrict f, U)`, and search will not find them at `Γ(M, f ''ᵁ U)`: the two are defeq but not
+reducibly so — `exact x` compiles across them and `with_reducible exact x` is a type mismatch —
+and search unifies at reducible transparency.
+
+**Use `letI` and not `haveI` for the first of them.** With `haveI` the proof fails, and not with
+a synthesis error: the given instance *is* used, and
+`AlgebraicGeometry.Scheme.Modules.smul_restrictAppIso_hom` then sits at a different `Module`
+structure from the one `•` elaborates at.
+`set_option backward.isDefEq.respectTransparency false` does not rescue it either. Why `letI`
+succeeds is not established here and no explanation should be read into this note; what
+reproduces is the above, and `AlgebraicGeometry.Scheme.Modules.module_finite_Γ_of_isAffine`
+hands over the same kind of instance across the same two spellings the same way. -/
 theorem module_finite_sections_of_restrict {V W : Scheme.{u}} (f : V ⟶ W) [IsOpenImmersion f]
     (M : W.Modules) (U : V.Opens) [Module.Finite Γ(V, U) Γ(M.restrict f, U)] :
-    Module.Finite Γ(W, f ''ᵁ U) Γ(M, f ''ᵁ U) :=
-  @Module.Finite.of_ringEquiv Γ(V, U) Γ(W, f ''ᵁ U) Γ(M, f ''ᵁ U) _ _ _
-    (inferInstanceAs (Module Γ(V, U) Γ(M.restrict f, U))) _
-    (f.appIso U).symm.commRingCatIsoToRingEquiv
-    (fun a n ↦ smul_restrictAppIso_hom_apply f M U a n)
-    (inferInstanceAs (Module.Finite Γ(V, U) Γ(M.restrict f, U)))
+    Module.Finite Γ(W, f ''ᵁ U) Γ(M, f ''ᵁ U) := by
+  letI : Module Γ(V, U) Γ(M, f ''ᵁ U) := inferInstanceAs (Module Γ(V, U) Γ(M.restrict f, U))
+  haveI : Module.Finite Γ(V, U) Γ(M, f ''ᵁ U) :=
+    inferInstanceAs (Module.Finite Γ(V, U) Γ(M.restrict f, U))
+  exact Module.Finite.of_ringEquiv (f.appIso U).symm.commRingCatIsoToRingEquiv
+    fun a n ↦ smul_restrictAppIso_hom_apply f M U a n
 
 end
 
