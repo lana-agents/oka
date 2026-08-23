@@ -5,6 +5,7 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Oka.Analytification.LocalisationFunctor
 import Oka.AnalyticSpace.Glue
+import Oka.CategoryTheory.GlueData
 
 /-!
 # The glue data of an affine cover with distinguished overlaps
@@ -91,13 +92,20 @@ subspace, which is a much larger tax than one unused value per index.
   members of the glue data are the analytifications one put in, and they are open subspaces of
   the gluing. Without the first, `coverGlueData` would be a well-typed object with no stated
   relation to its input.
+- `ComplexAnalytic.glueDataCLinear_coverGlueData`: **the transitions are `ℂ`-linear**, for every
+  input, so `ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear` applies and the gluing is an
+  analytic space. The three lemmas it is built from —
+  `ComplexAnalytic.comapAlgMap_coverOverlapIso`, `ComplexAnalytic.comapAlgMap_coverGlueIso` and
+  `ComplexAnalytic.comapAlgMap_coverIncl_eq` — say where each factor of the transition gets its
+  `ℂ`-linearity from.
 
 ## What is not here
 
-* **The analytic space.** `ComplexAnalytic.AnalyticSpace.ofGlueData` turns this glue data into an
-  analytic space once it is given the `ℂ`-algebra structure on each piece and their compatibility
-  on the gluing, and that compatibility is a sheaf-condition statement about the glued space, not
-  about this file's data. It is the next step and it is not taken here.
+* **The analytic space itself.** `ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear` turns this
+  glue data into an analytic space, and `ComplexAnalytic.glueDataCLinear_coverGlueData` below
+  supplies the half of its input that is about the gluing; what is still needed at a call site is
+  that each member has local models, which is a statement about the member and not about this
+  file's data. `OkaTest/AffineCover.lean` and `OkaTest/ProjectiveLine.lean` take that step.
 * **Any statement that a gluing is not affine.** The two instances of this construction check
   different things and neither subsumes the other. `OkaTest/AffineCover.lean` glues three copies
   of the node along the punctured axis and shows that their three copies of the origin are three
@@ -346,6 +354,129 @@ theorem coverGlueData_ι_isOpenImmersion (i : J) :
     LocallyRingedSpace.IsOpenImmersion
       ((coverGlueData.{u} obj poly glue hrange hsymm hcocycle).toGlueData.ι i) :=
   inferInstance
+
+/-! ### The transitions are `ℂ`-linear
+
+`ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear` turns a glue data of analytic pieces into an
+analytic space provided its transitions are `ℂ`-linear (`ComplexAnalytic.GlueDataCLinear`). For a
+glue data built here that hypothesis is **automatic**, and the reason is that every morphism in
+sight is a morphism of *analytic* spaces, whose `ℂ`-linearity is a field rather than something to
+prove: `ComplexAnalytic.coverOverlapIso` is `ComplexAnalytic.localisationIso` and
+`ComplexAnalytic.coverGlueIso` is the given algebra isomorphism analytified, both read through
+`ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace`.
+
+The work is therefore transport rather than algebra, and it is done in the three lemmas below:
+each factor of `ComplexAnalytic.coverTransition` is recognised as an analytic morphism, and
+`ComplexAnalytic.AnalyticSpace.comapAlgMap_toLRSHom` turns that into the equation of
+`AlgebraicGeometry.LocallyRingedSpace.comapAlgMap`s the predicate is stated with.
+-/
+
+/-- **The overlap's own analytic structure is the one it inherits from the `i`-th member.**
+
+`ComplexAnalytic.coverOverlapIso` followed by the inclusion of `D(f_ij)` is
+`ComplexAnalytic.localisationProj` (`ComplexAnalytic.toLRSHom_localisationProj`), which is a
+morphism of analytic spaces, so this is that morphism's `ℂ`-linearity field. -/
+theorem comapAlgMap_coverOverlapIso (i j : J) :
+    LocallyRingedSpace.comapAlgMap
+        ((coverOverlapIso.{u} obj poly i j).hom ≫ coverIncl.{u} obj poly i j)
+        (AnalyticSpace.analytification.{u} (obj i).g).algebraMap =
+      (AnalyticSpace.analytification.{u} (coverOverlap.{u} obj poly i j).g).algebraMap := by
+  rw [show (coverOverlapIso.{u} obj poly i j).hom ≫ coverIncl.{u} obj poly i j =
+      (localisationProj.{u} (obj i).g (poly i j)).toLRSHom from
+    (toLRSHom_localisationProj.{u} (obj i).g (poly i j)).symm]
+  exact AnalyticSpace.comapAlgMap_toLRSHom _
+
+/-- **The given algebra isomorphism, analytified, carries one overlap's structure to the
+other's.**
+
+This is where the input's algebraic content is used, and it is free: `glue i j` is an isomorphism
+of *presentations*, so `ComplexAnalytic.analytificationFunctor` sends it to an isomorphism of
+analytic spaces, and its `ℂ`-linearity is that morphism's own field. Nothing here computes with
+the isomorphism. -/
+theorem comapAlgMap_coverGlueIso (i j : J) :
+    LocallyRingedSpace.comapAlgMap (coverGlueIso.{u} obj poly glue i j).hom
+        (AnalyticSpace.analytification.{u} (coverOverlap.{u} obj poly j i).g).algebraMap =
+      (AnalyticSpace.analytification.{u} (coverOverlap.{u} obj poly i j).g).algebraMap :=
+  AnalyticSpace.comapAlgMap_toLRSHom (analytificationFunctor.{u}.map (glue i j).hom)
+
+/-- **The two structures the overlap inherits agree**, before the `dite`s of
+`CategoryTheory.GlueData.ofGlueData'` are in the way: from the `i`-th member directly, and from
+the `j`-th through the transition.
+
+Both are compared after `ComplexAnalytic.coverOverlapIso`, which is legitimate because
+`AlgebraicGeometry.LocallyRingedSpace.comapAlgMap_hom_injective` says pulling back along an
+isomorphism loses nothing; there both sides become the overlap's own structure, by the two lemmas
+above and the cancellation of `ComplexAnalytic.coverOverlapIso` against itself inside
+`ComplexAnalytic.coverTransition`. -/
+theorem comapAlgMap_coverIncl_eq (i j : J) :
+    LocallyRingedSpace.comapAlgMap (coverIncl.{u} obj poly i j)
+        (AnalyticSpace.analytification.{u} (obj i).g).algebraMap =
+      LocallyRingedSpace.comapAlgMap
+        ((coverTransition.{u} obj poly glue i j).hom ≫ coverIncl.{u} obj poly j i)
+        (AnalyticSpace.analytification.{u} (obj j).g).algebraMap := by
+  refine LocallyRingedSpace.comapAlgMap_hom_injective (coverOverlapIso.{u} obj poly i j) ?_
+  dsimp only
+  rw [← LocallyRingedSpace.comapAlgMap_comp, ← LocallyRingedSpace.comapAlgMap_comp,
+    comapAlgMap_coverOverlapIso]
+  have ht : (coverOverlapIso.{u} obj poly i j).hom ≫
+      (coverTransition.{u} obj poly glue i j).hom ≫ coverIncl.{u} obj poly j i =
+        (coverGlueIso.{u} obj poly glue i j).hom ≫
+          ((coverOverlapIso.{u} obj poly j i).hom ≫ coverIncl.{u} obj poly j i) := by
+    simp [coverTransition]
+  rw [ht, LocallyRingedSpace.comapAlgMap_comp, comapAlgMap_coverOverlapIso,
+    comapAlgMap_coverGlueIso]
+
+/-- **The transitions of the glue data of an affine cover are `ℂ`-linear**, for the structures the
+members carry as analytifications. This is the hypothesis
+`ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear` asks for, so an affine cover with distinguished
+overlaps produces an *analytic space* and not merely a locally ringed space.
+
+The content is `ComplexAnalytic.comapAlgMap_coverIncl_eq`; the rest is getting past the `dite`s
+that `CategoryTheory.GlueData.ofGlueData'` fills the diagonal with, by
+`CategoryTheory.GlueData.ofGlueData'_f_of_ne` and
+`CategoryTheory.GlueData.ofGlueData'_t_comp_f_of_ne`.
+
+Two places want a term rather than a rewrite and the second is not optional. The diagonal case is
+an equation of *morphisms*, so `congrArg` disposes of it without touching the structures. Off the
+diagonal both sides carry the same `eqToHom` prefix, and
+`AlgebraicGeometry.LocallyRingedSpace.comapAlgMap_comp` has to be applied **as a term**: the
+corresponding `rw` reports *did not find an occurrence of the pattern
+`comapAlgMap (?f ≫ ?g) ?γ`* against a goal that visibly has that shape, and it still does after
+`dsimp only [CategoryTheory.GlueData.ofGlueData']`, so delta-reducing the projections in the goal
+is not the remedy. **Why it fails is not established here** and no explanation should be read
+into it; the contrast worth having is that
+`ComplexAnalytic.comapAlgMap_coverIncl_eq` above rewrites with the same lemma twice and
+successfully, at the same category, on a composite that has not come through
+`CategoryTheory.GlueData.ofGlueData'_f_of_ne` carrying its `eqToHom`. -/
+theorem glueDataCLinear_coverGlueData :
+    GlueDataCLinear.{u} (coverGlueData.{u} obj poly glue hrange hsymm hcocycle)
+      fun j ↦ (AnalyticSpace.analytification.{u} (obj j).g).algebraMap := by
+  intro i j
+  by_cases h : i = j
+  · subst h
+    refine congrArg (fun m ↦ LocallyRingedSpace.comapAlgMap m
+      (AnalyticSpace.analytification.{u} (obj i).g).algebraMap) ?_
+    change (CategoryTheory.GlueData.ofGlueData'
+        (coverGlueData'.{u} obj poly glue hrange hsymm hcocycle)).f i i =
+      (CategoryTheory.GlueData.ofGlueData'
+        (coverGlueData'.{u} obj poly glue hrange hsymm hcocycle)).t i i ≫
+        (CategoryTheory.GlueData.ofGlueData'
+          (coverGlueData'.{u} obj poly glue hrange hsymm hcocycle)).f i i
+    rw [CategoryTheory.GlueData.ofGlueData'_f_self, CategoryTheory.GlueData.ofGlueData'_t_self]
+    simp
+  · change LocallyRingedSpace.comapAlgMap ((CategoryTheory.GlueData.ofGlueData'
+        (coverGlueData'.{u} obj poly glue hrange hsymm hcocycle)).f i j) _ =
+      LocallyRingedSpace.comapAlgMap ((CategoryTheory.GlueData.ofGlueData'
+        (coverGlueData'.{u} obj poly glue hrange hsymm hcocycle)).t i j ≫
+        (CategoryTheory.GlueData.ofGlueData'
+          (coverGlueData'.{u} obj poly glue hrange hsymm hcocycle)).f j i) _
+    rw [CategoryTheory.GlueData.ofGlueData'_f_of_ne _ h,
+      CategoryTheory.GlueData.ofGlueData'_t_comp_f_of_ne _ h]
+    dsimp only [coverGlueData']
+    exact (LocallyRingedSpace.comapAlgMap_comp _ _ _).trans
+      ((congrArg (LocallyRingedSpace.comapAlgMap (eqToHom (dif_neg h)))
+        (comapAlgMap_coverIncl_eq.{u} obj poly glue i j)).trans
+          (LocallyRingedSpace.comapAlgMap_comp _ _ _).symm)
 
 end
 

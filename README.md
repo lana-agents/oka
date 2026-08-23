@@ -279,11 +279,16 @@ coherence statement for arbitrary complex analytic spaces:
   `Oka/CategoryTheory/GlueData.lean` unfolds those once — Mathlib has no projection lemma for
   `CategoryTheory.GlueData.ofGlueData'` at all — so a consumer of `f` or `t` does not meet a
   dependent `dite` that neither `rw [dif_neg]` nor `split_ifs` will reduce. With them
-  `OkaTest/AffineCover.lean` puts an **analytic structure** on its gluing
-  (`ComplexAnalytic.nodeTripleSpace`, through
-  `ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear`), which is the first analytic space here
-  glued out of more than one piece — though it is *not* shown to be non-affine, and nothing
-  claims it is. The difficulty in the
+  `ComplexAnalytic.glueDataCLinear_coverGlueData` shows the transitions are `ℂ`-linear for
+  **every** such glue data — the algebra is discharged when `ComplexAnalytic.analytificationFunctor`
+  is applied to the given isomorphism of presentations, so what is left is transport — and
+  `ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear` then makes the gluing an **analytic space**.
+  Two of them are built: `ComplexAnalytic.nodeTripleSpace` in `OkaTest/AffineCover.lean`, three
+  copies of the node along the punctured axis, and `ComplexAnalytic.projectiveLineSpace` in
+  `OkaTest/ProjectiveLine.lean`, two copies of the affine line along `D(z)` by `z ↦ 1/z` — where
+  the transition is **not** the identity (`ComplexAnalytic.lineSwapIso_ne_refl`), which is what
+  makes it a different test and not a second copy of the first. **Neither is shown to be
+  non-affine, neither is shown to be compact, and nothing claims either.** The difficulty in the
   construction itself is that its `t'` is a morphism between
   categorical pullbacks: `AlgebraicGeometry.LocallyRingedSpace.restrictInfIsoPullback` identifies
   those with open subspaces `X|(U ⊓ V)`, after which `t'` is a conjugate of a morphism of open
