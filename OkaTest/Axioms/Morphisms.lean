@@ -290,3 +290,61 @@ info: 'ComplexAnalytic.AnalyticSpace.homComplexAffineSpaceEquiv_eq' depends on a
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.homComplexAffineSpaceEquiv_eq
+
+/-! ### Finite morphisms -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.IsFinite' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.IsFinite
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isFinite_iff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFinite_iff
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isFinite_id' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFinite_id
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isFinite_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFinite_comp
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isFinite_of_isClosedEmbedding' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFinite_of_isClosedEmbedding
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isFinite_of_isIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFinite_of_isIso
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isFinite_of_isCutOutBy' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFinite_of_isCutOutBy
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.not_isFinite_of_infinite_fiber' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.not_isFinite_of_infinite_fiber
