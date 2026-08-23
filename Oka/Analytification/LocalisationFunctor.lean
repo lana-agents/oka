@@ -55,6 +55,10 @@ is all a `PresHom` wants. See `Oka/Analytification/DistinguishedOpen.lean` on th
   functor's value.
 - `ComplexAnalytic.localisationIso_inv_analytificationMap`: the inclusion of the open subspace,
   read through the functor — the form a glue data consumes.
+- `ComplexAnalytic.isOpenImmersion_analytificationMap_localisationPresHom`: **the functor's value
+  on the structure map is an open immersion**, which is
+  `ComplexAnalytic.isOpenImmersion_localisationProj` at this spelling and is the one a glue data
+  built out of `ComplexAnalytic.analytificationFunctor` will hold.
 -/
 
 open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry
@@ -157,6 +161,20 @@ theorem localisationIso_inv_analytificationMap :
   (congrArg (fun m ↦ (localisationIso.{u} g f).inv ≫ m)
       (analytificationMap_localisationPresHom.{u} g f)).trans
     (localisationIso_inv_localisationProj.{u} g f)
+
+/-- **The functor's value on the structure map `A ⟶ A_f` is an open immersion.**
+
+`ComplexAnalytic.isOpenImmersion_localisationProj` at this spelling, by
+`ComplexAnalytic.analytificationMap_localisationPresHom`. It is stated separately because a glue
+data assembled out of `ComplexAnalytic.analytificationFunctor` holds its morphisms in this form
+and not as `ComplexAnalytic.localisationProj`, and
+`AlgebraicGeometry.LocallyRingedSpace.GlueData`'s `f_open` field is checked against the morphism
+one actually has. -/
+theorem isOpenImmersion_analytificationMap_localisationPresHom :
+    LocallyRingedSpace.IsOpenImmersion
+      (analytificationMap.{u} (localisationPresHom.{u} g f)).toLRSHom := by
+  rw [analytificationMap_localisationPresHom]
+  exact isOpenImmersion_localisationProj.{u} g f
 
 /-- **The ring map on representatives**: the class of `p` goes to the class of `p` with its
 variables renamed. Stated because every consumer of

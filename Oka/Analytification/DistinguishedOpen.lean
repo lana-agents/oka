@@ -85,6 +85,10 @@ where `D(z₀)` is the punctured axis that `OkaTest/OpenSubspace.lean` builds by
   vanish there.
 - `ComplexAnalytic.localisationOpen_ne_top`: **`D(f)` is a proper open subset** whenever `f` has a
   zero on `X^an`.
+- `ComplexAnalytic.isOpenImmersion_localisationProj`: **the projection is an open immersion of
+  locally ringed spaces** — the `f_open` field of any
+  `AlgebraicGeometry.LocallyRingedSpace.GlueData` built out of an affine cover, and the second
+  thing such a glue data needs from this file, alongside the isomorphism.
 
 ## What is not here
 
@@ -529,6 +533,43 @@ theorem localisationOpen_ne_top (y : AnalyticSpace.analytification.{u} g)
   refine (mem_localisationOpen_iff.{u} g f).1 ?_ hy
   rw [hcon]
   trivial
+
+/-! ### The projection is an open immersion -/
+
+/-- **The projection `(A_f)^an ⟶ X^an` is an open immersion of locally ringed spaces.**
+
+This is what a glue data wants. `AlgebraicGeometry.LocallyRingedSpace.GlueData` is
+`CategoryTheory.GlueData` together with one extra field, `f_open`, asserting that each `f i j` is
+an open immersion, and in the glue data an affine cover produces `f i j` **is** this projection.
+
+It is `ComplexAnalytic.localisationIso_hom_ofRestrict` read as a factorisation:
+`localisationProj` is an isomorphism followed by the inclusion of an open subspace, and both of
+those are open immersions.
+
+Two seams are crossed by hand rather than by instance search, and neither is avoidable:
+
+* `AlgebraicGeometry.LocallyRingedSpace.isOpenImmersion_ofRestrict` supplies the inclusion's
+  instance. Searching for it directly at this spelling **fails** — see that lemma's docstring for
+  the measurement and the reason — so it is introduced as an ascribed `haveI`, where the term
+  crosses the seam even though the search does not.
+* `ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace` carries the isomorphism, which is
+  where `IsIso` comes from; `ComplexAnalytic.AnalyticSpace.Hom.toLRSHom` of a composite is a
+  composite by `rfl`, since the category instance is defined that way, and no lemma in `Oka/`
+  states it — `toLRSHom_comp`, in `OkaTest/HomToComplex.lean`, does, and the library cannot
+  import the test library. -/
+theorem isOpenImmersion_localisationProj :
+    LocallyRingedSpace.IsOpenImmersion (localisationProj.{u} g f).toLRSHom := by
+  haveI : LocallyRingedSpace.IsOpenImmersion
+      ((AnalyticSpace.analytification.{u} g).ofRestrict (localisationOpen.{u} g f)).toLRSHom :=
+    LocallyRingedSpace.isOpenImmersion_ofRestrict.{u} _ (localisationOpen.{u} g f)
+  haveI : IsIso ((localisationIso.{u} g f).hom.toLRSHom) :=
+    (AnalyticSpace.forgetToLocallyRingedSpace.{u}.mapIso (localisationIso.{u} g f)).isIso_hom
+  have e : (localisationProj.{u} g f).toLRSHom =
+      (localisationIso.{u} g f).hom.toLRSHom ≫
+        ((AnalyticSpace.analytification.{u} g).ofRestrict (localisationOpen.{u} g f)).toLRSHom :=
+    congrArg AnalyticSpace.Hom.toLRSHom (localisationIso_hom_ofRestrict.{u} g f).symm
+  rw [e]
+  infer_instance
 
 end
 

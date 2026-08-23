@@ -70,9 +70,17 @@ carry the three together, bundle then.
 
 ## What is not here
 
-* **The analytification of a non-affine scheme.** That needs this file *and* the analytification
-  of an open immersion of affine schemes to be an open immersion of analytic spaces, which is a
-  theorem about the analytification and is not stated anywhere.
+* **The analytification of a non-affine scheme.** What is missing is no longer a theorem about
+  the analytification: `ComplexAnalytic.localisationIso` identifies the analytification of `A_f`
+  with `D(f) ⊆ X^an` **over `X^an`**, `ComplexAnalytic.localisationIso_inv_analytificationMap`
+  reads that through the functor, and `ComplexAnalytic.isOpenImmersion_localisationProj` supplies
+  the `f_open` field of an `AlgebraicGeometry.LocallyRingedSpace.GlueData`. Only the
+  **distinguished** case is proved, which is the case a cover of a scheme locally of finite type
+  needs; the general open immersion is neither proved nor wanted
+  (`Oka/Analytification/DistinguishedOpen.lean` says so). What is left is the glue data itself —
+  the transition isomorphisms from `ℂ`-algebra isomorphisms on the overlaps, `t'`, and the
+  cocycle condition — together with the decision of how a cover arrives at all, since **this
+  repository has no `AlgebraicGeometry.Scheme` objects**.
 * **A morphism-level statement.** `AlgebraicGeometry.LocallyRingedSpace.OpenCover.glueMorphisms`
   glues morphisms of locally ringed spaces, and a `ℂ`-linear version — a morphism of analytic
   spaces glued from `ℂ`-linear pieces — is not stated, because `ComplexAnalytic.IsCLinearHom` is

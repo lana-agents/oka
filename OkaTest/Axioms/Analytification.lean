@@ -741,3 +741,19 @@ info: 'ComplexAnalytic.localisationIso_inv_analytificationMap' depends on axioms
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.localisationIso_inv_analytificationMap
+
+/-! ### The projection is an open immersion -/
+
+/--
+info: 'ComplexAnalytic.isOpenImmersion_localisationProj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isOpenImmersion_localisationProj
+
+/--
+info: 'ComplexAnalytic.isOpenImmersion_analytificationMap_localisationPresHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isOpenImmersion_analytificationMap_localisationPresHom
