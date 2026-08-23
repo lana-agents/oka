@@ -348,3 +348,54 @@ info: 'ComplexAnalytic.AnalyticSpace.not_isFinite_of_infinite_fiber' depends on 
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.not_isFinite_of_infinite_fiber
+
+/-! ### Local isomorphisms and finite étale morphisms -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.IsLocalIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.IsLocalIso
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isLocalIso_id' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isLocalIso_id
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isLocalIso_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isLocalIso_comp
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isLocalIso_of_isIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isLocalIso_of_isIso
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.IsFiniteEtale' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.IsFiniteEtale
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isFiniteEtale_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFiniteEtale_comp
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_isIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_isIso

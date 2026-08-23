@@ -48,6 +48,13 @@ says the composition lemma has the strength it claims and no more.
   points. Whether it cuts `ℂ` out of `ℂ²` by the second coordinate — the `IsCutOutBy` statement —
   is not proved, and only the topological half is used.
 * **Neither map is shown proper.** Properness is not defined here.
+* **No finite étale morphism other than an isomorphism.** `ComplexAnalytic.axisIncl` is finite and
+  is *not* a local isomorphism (`ComplexAnalytic.not_isLocalIso_axisIncl`), which is what says the
+  second rung restricts the first; but the only positive witness for
+  `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` here is the identity. See that statement's
+  docstring for what a real one would take.
+* **Nothing exercises the stalk half of `ComplexAnalytic.AnalyticSpace.IsLocalIso`.** The
+  non-example above fails the topological field alone.
 -/
 
 open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry Topology Filter
@@ -304,6 +311,54 @@ example : AnalyticSpace.IsFinite (𝟙 (AnalyticSpace.complexAffineSpace.{u} 1))
 /-- Composing two finite morphisms stays finite, at the witness above. -/
 example : AnalyticSpace.IsFinite (axisIncl.{u} ≫ 𝟙 (AnalyticSpace.complexAffineSpace.{u} 2)) :=
   haveI := isFinite_axisIncl.{u}
+  inferInstance
+
+/-! ### Finite is not finite étale
+
+`ComplexAnalytic.AnalyticSpace.IsFiniteEtale` is `IsFinite` together with
+`ComplexAnalytic.AnalyticSpace.IsLocalIso`, and the second is a real restriction: the witness this
+file already has is finite and is **not** a local isomorphism. -/
+
+/-- **The inclusion of the first axis is not a local isomorphism.**
+
+A local homeomorphism is an open map, so its range would be open; the range is also closed, since
+the inclusion is a closed embedding. `ℂ²` is connected, so a clopen subset is `∅` or everything —
+and the range is neither, being nonempty and not all of `ℂ²`
+(`ComplexAnalytic.not_surjective_base_axisIncl`).
+
+**Nothing about stalks is used**: the topological field alone fails. That is worth saying, because
+it means the example does not exercise
+`ComplexAnalytic.AnalyticSpace.IsLocalIso.isIso_stalkMap`, and nothing here does. -/
+theorem not_isLocalIso_axisIncl : ¬ AnalyticSpace.IsLocalIso axisIncl.{u} := by
+  intro h
+  haveI : PreconnectedSpace (AnalyticSpace.complexAffineSpace.{u} 2) :=
+    inferInstanceAs (PreconnectedSpace (ULift.{u} (Fin 2) → ℂ))
+  have hopen : IsOpen (Set.range ((axisIncl.{u}).toLRSHom.base :
+      AnalyticSpace.complexAffineSpace.{u} 1 → AnalyticSpace.complexAffineSpace.{u} 2)) :=
+    h.isLocalHomeomorph.isOpenMap.isOpen_range
+  have hclosed : IsClosed (Set.range ((axisIncl.{u}).toLRSHom.base :
+      AnalyticSpace.complexAffineSpace.{u} 1 → AnalyticSpace.complexAffineSpace.{u} 2)) :=
+    isClosedEmbedding_base_axisIncl.{u}.isClosed_range
+  rcases isClopen_iff.1 ⟨hclosed, hopen⟩ with hbot | htop
+  · exact absurd (Set.mem_range_self (f := ((axisIncl.{u}).toLRSHom.base :
+      AnalyticSpace.complexAffineSpace.{u} 1 → AnalyticSpace.complexAffineSpace.{u} 2))
+      (fun _ ↦ (0 : ℂ))) (by rw [hbot]; exact fun hc ↦ hc)
+  · exact not_surjective_base_axisIncl.{u} (Set.range_eq_univ.1 htop)
+
+/-- **So it is finite and not finite étale**, which is what says the second rung is a restriction
+on the first rather than a restatement of it. -/
+theorem not_isFiniteEtale_axisIncl : ¬ AnalyticSpace.IsFiniteEtale axisIncl.{u} := fun h ↦
+  not_isLocalIso_axisIncl.{u} h.isLocalIso
+
+/-- **And the class is not empty**: the identity is finite étale.
+
+This is the degenerate witness and it is the only positive one here. **A finite étale morphism
+which is not an isomorphism is not exhibited anywhere in this repository**, and building one needs
+a source that is not simply connected — `z ↦ z²` from `ℂ ∖ {0}` to itself is the standard
+example, needing `ComplexAnalytic.AnalyticSpace.restrict` on both sides and the square map. Until
+that exists, everything below the identity is unexercised, and no statement here should be read as
+saying otherwise. -/
+example : AnalyticSpace.IsFiniteEtale (𝟙 (AnalyticSpace.complexAffineSpace.{u} 1)) :=
   inferInstance
 
 end
