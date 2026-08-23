@@ -38,6 +38,7 @@ import OkaTest.EvalContinuous
 import OkaTest.Factorisation
 import OkaTest.GermFlatness
 import OkaTest.GermFlatnessAtAPoint
+import OkaTest.GlueDataAnalytic
 import OkaTest.GlueMorphisms
 import OkaTest.HolomorphicMap
 import OkaTest.HolomorphicMapGeneral

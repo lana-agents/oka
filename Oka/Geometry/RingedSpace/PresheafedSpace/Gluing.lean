@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Mathlib.Geometry.RingedSpace.PresheafedSpace.Gluing
+import Oka.AlgebraicGeometry.GammaSpecAdjunction
 import Oka.Geometry.RingedSpace.OpenImmersion
 import Oka.Topology.Sheaves.Stalks
 
@@ -70,6 +71,12 @@ with one `Iso.trans` removed.
 - `AlgebraicGeometry.LocallyRingedSpace.OpenCover.existsUnique_glueMorphisms`: **morphisms out of
   the members of an open cover which agree on the overlaps glue to a unique morphism out of the
   whole space**, with `ι_glueMorphisms` and `hom_ext` as the two halves.
+- `AlgebraicGeometry.LocallyRingedSpace.GlueData.vIsoPullback`: the overlap `V (i, j)` of a glue
+  data is the categorical pullback of the two inclusions into the gluing.
+- `AlgebraicGeometry.LocallyRingedSpace.GlueData.isCompatible_restrictAlgMap`: **algebra
+  structures on the members of a glue data which agree on the overlaps are compatible on the
+  gluing** — the hypothesis a caller can supply, in place of the sheaf-condition form, which for
+  a glue data has nothing to be pulled back from.
 - `AlgebraicGeometry.LocallyRingedSpace.isOpenImmersion_f'`: the `f_open` field of a glue data
   built by `CategoryTheory.GlueData.ofGlueData'`, which is what makes that route to a
   `AlgebraicGeometry.LocallyRingedSpace.GlueData` cheaper than building one directly.
@@ -581,5 +588,79 @@ theorem isOpenImmersion_f' (D : CategoryTheory.GlueData' LocallyRingedSpace.{u})
     infer_instance
 
 end GlueDataPrime
+
+namespace GlueData
+
+variable (D : GlueData.{u})
+
+/-- **The overlap `V (i, j)` of a glue data is the categorical pullback of the two inclusions
+into the gluing.**
+
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.vPullbackConeIsLimit` says the square is
+cartesian; this is the comparison isomorphism it produces, named because the two factorisations
+below are what any computation with it uses, and because a bare `IsLimit` cannot be composed
+with. -/
+noncomputable def vIsoPullback (i j : D.J) :
+    D.V (i, j) ≅ Limits.pullback (D.toGlueData.ι i) (D.toGlueData.ι j) :=
+  Limits.IsLimit.conePointUniqueUpToIso (D.vPullbackConeIsLimit i j) (Limits.limit.isLimit _)
+
+@[reassoc (attr := simp)]
+theorem vIsoPullback_hom_fst (i j : D.J) :
+    (D.vIsoPullback i j).hom ≫ Limits.pullback.fst _ _ = D.f i j :=
+  Limits.IsLimit.conePointUniqueUpToIso_hom_comp _ _ Limits.WalkingCospan.left
+
+@[reassoc (attr := simp)]
+theorem vIsoPullback_hom_snd (i j : D.J) :
+    (D.vIsoPullback i j).hom ≫ Limits.pullback.snd _ _ = D.t i j ≫ D.f j i :=
+  Limits.IsLimit.conePointUniqueUpToIso_hom_comp _ _ Limits.WalkingCospan.right
+
+/-- **Algebra structures on the members of a glue data which agree on the overlaps are compatible
+on the gluing.**
+
+This is what `ComplexAnalytic.AnalyticSpace.ofGlueData` needs and what nothing supplied.
+`AlgebraicGeometry.LocallyRingedSpace.OpenCover.isCompatible_restrictAlgMap_comapAlgMap`
+discharges the same conclusion, but its hypothesis is that the family is pulled back from a
+structure on the ambient space — which is exactly what a glue data does not have, since the
+gluing is what is being built. The hypothesis here is instead the geometric one: on each overlap
+the two structures it inherits, from the `i`-th member and from the `j`-th, agree.
+
+**`R` is in the universe of the spaces, and that is forced**: the proof goes through `Spec R`,
+and `Spec` of a ring in universe `v` is a locally ringed space in universe `v`. A caller whose
+ring lives lower — `ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear`, at `R = ℂ` — passes
+`ULift.{u} R`, which changes nothing, since `α` composed with `ULift.ringEquiv` has the same
+values and the two families of sections are equal on the nose.
+
+**The proof is the `Γ`-`Spec` adjunction and the gluing of morphisms, and no section is ever
+computed.** An algebra structure on a member is a morphism to `Spec R`
+(`AlgebraicGeometry.LocallyRingedSpace.toSpecOfAlgMap`); the hypothesis says those morphisms
+agree on the overlaps, which are the categorical pullbacks by
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.vIsoPullback`; so they glue, by
+`AlgebraicGeometry.LocallyRingedSpace.OpenCover.existsUnique_glueMorphisms`, to a morphism out of
+the gluing; and *that* is a structure on the gluing, whose restrictions are the given ones. The
+family is therefore pulled back from an ambient structure after all — one had to be built — and
+the lemma the glue data could not use applies. -/
+theorem isCompatible_restrictAlgMap {R : Type u} [CommRing R]
+    (α : ∀ j, R →+* (D.U j).presheaf.obj (op ⊤))
+    (h : ∀ i j, comapAlgMap (D.f i j) (α i) = comapAlgMap (D.t i j ≫ D.f j i) (α j)) (c : R) :
+    TopCat.Presheaf.IsCompatible D.toGlueData.glued.presheaf
+      (fun j ↦ (D.openCover.opensRange j).isOpenEmbedding.isOpenMap.functor.obj ⊤)
+      fun j ↦ D.openCover.restrictAlgMap j (α j) c := by
+  have hpb : ∀ i j : D.J, Limits.pullback.fst (D.toGlueData.ι i) (D.toGlueData.ι j) ≫
+      toSpecOfAlgMap (D.U i) (α i) =
+      Limits.pullback.snd (D.toGlueData.ι i) (D.toGlueData.ι j) ≫ toSpecOfAlgMap (D.U j) (α j) := by
+    intro i j
+    rw [← cancel_epi (D.vIsoPullback i j).hom, ← Category.assoc, ← Category.assoc,
+      vIsoPullback_hom_fst, vIsoPullback_hom_snd, comp_toSpecOfAlgMap, comp_toSpecOfAlgMap, h i j]
+  obtain ⟨g, hg, -⟩ :=
+    D.openCover.existsUnique_glueMorphisms (fun j ↦ toSpecOfAlgMap (D.U j) (α j)) hpb
+  obtain ⟨γ, hγ⟩ := exists_toSpecOfAlgMap_eq D.toGlueData.glued g
+  have hαγ : ∀ j : D.J, α j = comapAlgMap (D.toGlueData.ι j) γ := fun j ↦
+    toSpecOfAlgMap_injective (D.U j) <| by
+      rw [← comp_toSpecOfAlgMap (D.toGlueData.ι j) γ, hγ]
+      exact (hg j).symm
+  simp_rw [hαγ]
+  exact D.openCover.isCompatible_restrictAlgMap_comapAlgMap γ c
+
+end GlueData
 
 end AlgebraicGeometry.LocallyRingedSpace
