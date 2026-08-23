@@ -133,11 +133,21 @@ what the module docstring's retired paragraph is about. The sheaf is `𝒪_{Spec
 **not the zero sheaf** by `OkaTest.AffineSections.not_isZero_cokernel_specXHom`, so neither
 instantiation is about nothing.
 
-The coherence instance is supplied positionally with `@` in the first and by `haveI` in the
-second, because the two statements are over different spellings of the sheaf of rings —
-`AlgebraicGeometry.Scheme.ringCatSheaf` and
-`AlgebraicGeometry.LocallyRingedSpace.ringSheaf` — and instance search does not cross them, as
-`AlgebraicGeometry.Scheme.isCoherent_unit` records. -/
+The two statements take their coherence hypothesis at **different spellings of the sheaf of
+rings**, and that is the whole of why the instance is supplied by hand in one and not in the
+other. `OkaTest.AffineSections.isCoherent_cokernel_specXHom` is stated over
+`AlgebraicGeometry.LocallyRingedSpace.ringSheaf` of `OkaTest.CoherentFree.nodeSpec`.
+
+* `AlgebraicGeometry.Scheme.Modules.exists_isFinite_presentation_of_isCoherent` takes its
+  hypothesis over `AlgebraicGeometry.Scheme.ringCatSheaf` — **the other side of the seam** — so
+  instance search does not find it and it is supplied positionally with `@`. That is the seam
+  `AlgebraicGeometry.Scheme.isCoherent_unit` records: the two spellings agree by `rfl` and search
+  still does not cross them. Checked, and not assumed: drop the `@` and the argument, and
+  elaboration fails with `SheafOfModules.IsCoherent` unsynthesised at `cokernel specXHom`.
+* `ComplexAnalytic.isCoherent_analytificationSheaf_of_isCoherent` takes its hypothesis over
+  `AlgebraicGeometry.LocallyRingedSpace.ringSheaf` — **the same side the instance is already on**
+  — so there is no seam to cross and nothing has to be supplied. It is supplied by nothing below,
+  and that is the check: the example is the bare application. -/
 
 /-- **A coherent sheaf on `Spec A` has a finite global presentation**, at the witness.
 
@@ -157,8 +167,6 @@ hypothesis is a **presentation** and is weaker. This one takes coherence as give
 GAGA quotes; it is stated here rather than in `OkaTest/SpecCoherent.lean` because what it tests is
 the corollary of the affine dictionary that this file is about. -/
 example : ((analytificationSheaf.{u} nodeG.{u}).obj (cokernel specXHom.{u})).IsCoherent :=
-  haveI : (cokernel specXHom.{u}).IsCoherent :=
-    isCoherent_cokernel_specXHom.{u}
   isCoherent_analytificationSheaf_of_isCoherent.{u} nodeG.{u} _
 
 end OkaTest.CoherentPresentation
