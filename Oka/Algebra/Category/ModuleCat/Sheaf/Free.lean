@@ -8,6 +8,62 @@ module
 public import Mathlib.Algebra.Category.ModuleCat.Sheaf.Free
 
 /-!
+# Free sheaves of modules: coordinates, projections, and sections over a terminal object
+
+Material for `Mathlib/Algebra/Category/ModuleCat/Sheaf/Free.lean`; see `README.md` on the mirror
+tree. This file imports its target and nothing else, so upstreaming it adds nothing to that
+file's transitive imports — but see the note on destinations below, which is a different question
+from the import cost and is the one that matters here.
+
+Mathlib's `SheafOfModules.free I` is the coproduct of `I` copies of the unit, and its API is
+stated through `SheafOfModules.freeHomEquiv`: morphisms out of it are families of *global*
+sections. What this development needs is the same object read **over a fixed object of the site**,
+where a section of `free I` is a tuple of sections of `R`. Supplying that dictionary is most of
+this file.
+
+* `SheafOfModules.freeProj` is the `i`-th projection onto the unit, and
+  `SheafOfModules.sum_freeProj_comp_ιFree` says that for a *finite* index type the projections and
+  the inclusions sum to the identity — which is what makes a finite free sheaf usable as a
+  biproduct in practice.
+* `SheafOfModules.freeEval` reads a section over `Z` as a tuple of sections of `R` over `Z`,
+  `SheafOfModules.freeEvalSymm` inverts it for finite `I`, and `SheafOfModules.freeEvalEquiv`
+  packages the two as an equivalence.
+* `SheafOfModules.val_app_eq_sum` evaluates a morphism out of a finite free sheaf as the sum of
+  its coordinates against the images of the generators. That is the form in which a relation
+  between sections is checked, and it is what `Oka/AnalyticSpace/Relations.lean` and
+  `Oka/AnalyticSpace/IdealSheaf.lean` consume.
+
+Two smaller groups sit beside it. `SheafOfModules.freePUnitIso` and
+`SheafOfModules.isZero_free_of_isEmpty` are the free sheaf on one generator and on none; the first
+is what lets a theorem about a morphism of free sheaves be applied to a morphism into
+`SheafOfModules.unit`, which is how a quotient of the structure sheaf is presented.
+`SheafOfModules.sectionOfTerminal` and its two lemmas say that on a site with a terminal object a
+global section is constructed from, and determined by, its value there — which is what lets the
+`Oka/AnalyticSpace/` files, whose sites have a terminal object, work with global sections at all.
+
+**One declaration here would not go where this mirror path says, and saying so is cheaper than
+moving it in a documentation change.** `PresheafOfModules.map_apply_congr` is about
+`PresheafOfModules` and not about free sheaves; its destination is
+`Mathlib/Algebra/Category/ModuleCat/Presheaf.lean`, where `PresheafOfModules` is defined, and not
+the target of this path. It is used once, in `SheafOfModules.sectionOfTerminal`'s proof, which is
+why it is here. `README.md` says that a mirror file whose declarations could not all go where its
+docstring says tells a Mathlib reviewer something untrue; this paragraph is the alternative to
+that, and moving the lemma is a separate change.
+
+**Not every declaration below carries a docstring**: fourteen of the twenty-five do not, and all
+fourteen are `lemma`s. `lake lint` passes on them, because Mathlib's `docBlame` linter covers
+definitions and `docBlameThm`, which covers theorems, is off. That is a separate item and not
+this file's to fix.
+
+## Main definitions
+
+- `SheafOfModules.freeProj`, `SheafOfModules.freeEval`, `SheafOfModules.freeEvalEquiv`
+- `SheafOfModules.sectionOfTerminal`
+
+## Main results
+
+- `SheafOfModules.val_app_eq_sum`
+- `SheafOfModules.sum_freeProj_comp_ιFree`
 -/
 
 @[expose] public section

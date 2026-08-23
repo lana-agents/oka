@@ -743,9 +743,24 @@ lake build
 ### Checking
 
 `bash .orchestra/validation.sh` is the check. It builds with `--wfail`, runs Mathlib's
-environment linters and text linters, verifies both root modules against `mk_all`, and checks
-that every backticked dotted name in a comment resolves. **A claim that something compiles means
-this script.**
+environment linters and text linters, verifies both root modules against `mk_all`, checks that
+every backticked dotted name in a comment resolves, and checks that every file has a module
+docstring with a non-empty body. **A claim that something compiles means this script.**
+
+The last of those, `scripts/check_module_docstrings.py`, is the narrow rule and only the narrow
+rule: a **module** docstring whose body is not whitespace. It says nothing about what the body
+contains, and in particular does not require a `# Title` line. What it does insist on is that the
+`/-! … -/` block it looks at really is the module docstring — nothing but comments, `module` and
+imports before it, and not a `##`-or-deeper heading itself. Both halves are needed: a section
+header is a `/-!` block too and about a third of the files here contain one, so a check that takes
+merely the first `/-!` block passes a file whose module docstring has been deleted outright. The
+script's own docstring gives the measurement — with the count, the date it was taken, and why the
+obvious one-line grep for it returns a smaller number — and its `--self-test` pins both halves.
+
+It exists because nothing else could see an empty one: an empty `/-! -/` elaborates, so the build
+does not fail on it, and the name checker looks *inside* a docstring, so on an empty one it finds
+nothing to check and passes. Seven files under `Oka/` carried an empty module docstring from the
+second commit in the repository until it was added.
 
 For the edit loop there is `bash scripts/check_file.sh FILE.lean`, which takes a couple of
 seconds and applies the *same* Lean options the build applies:

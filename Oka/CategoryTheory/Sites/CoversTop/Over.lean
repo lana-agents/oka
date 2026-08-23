@@ -8,6 +8,31 @@ module
 public import Mathlib.CategoryTheory.Sites.CoversTop.Over
 
 /-!
+# A family covering the top object covers the top of every slice
+
+Material for `Mathlib/CategoryTheory/Sites/CoversTop/Over.lean`; see `README.md` on the mirror
+tree. This file imports its target and nothing else, so upstreaming it adds nothing to that
+file's transitive imports.
+
+Mathlib's file of that name has `CategoryTheory.GrothendieckTopology.CoversTop.over`, which is a
+*transitivity* statement: a family covering the top, refined by a family covering the top of each
+member's own slice, covers the top. The lemma here travels the other way, and it is the one a
+localisation argument reaches for: a single family covering the top of `C` already covers the top
+of `Over W`, for **every** `W` at once, by taking every object of `Over W` whose underlying object
+admits a morphism to some member of the family.
+
+The index type is `(i : I) × (V : C) × (V ⟶ X i) × (V ⟶ W)` and not a family of pullbacks, so no
+limits are assumed of the site and no choice is made. The price is a family far larger than
+necessary, which `CategoryTheory.GrothendieckTopology.CoversTop` does not mind: it asks only that
+the sieve generated over each object be covering.
+
+Its consumer here is `Oka/Algebra/Category/ModuleCat/Sheaf/Coherent/Locality.lean`, where the
+kernel of a morphism out of a free sheaf has to be seen to be of finite type over every slice of a
+covering family.
+
+## Main results
+
+- `CategoryTheory.GrothendieckTopology.CoversTop.over'`
 -/
 
 @[expose] public section

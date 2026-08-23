@@ -111,3 +111,15 @@ jobs:
       # are text-based and do not.
       - name: Check names in docstrings
         run: python3 scripts/check_docstring_names.py
+
+      # Every `.lean` file under `Oka/` and `OkaTest/` must have a module docstring with a
+      # non-empty body. The step above checks the names *inside* a docstring, so on an empty one
+      # it finds nothing to check and passes, and an empty `/-! -/` elaborates, so the build does
+      # not see it either. Seven files under `Oka/` carried one from the second commit in the
+      # repository until 2026-08-23 and every check in this workflow was green on all seven.
+      #
+      # Text only — no build and no oleans — hence `!cancelled()`, so that a failure of the build
+      # does not hide an empty docstring and turn two findings into two round trips.
+      - name: Check module docstrings are non-empty
+        if: ${{ !cancelled() }}
+        run: python3 scripts/check_module_docstrings.py
