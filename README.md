@@ -792,11 +792,15 @@ python3 scripts/import_cost.py --self-test
 **Use it rather than writing the search again.** The obvious one-line regex over `import` lines
 follows `import` lines that are *inside docstrings*, of which Mathlib has 29 across 14 files —
 two of them a bare `import Mathlib`, at which point the computed closure becomes the whole
-library. One such line in `Mathlib/Tactic/FunProp.lean`'s documentation is in almost every
-closure and adds 274 modules on its own. Two figures stated in this repository were taken with an
-unmasked search and were wrong; **the usual way of validating one — checking it against a figure
-the tree already carries — does not catch this**, because both such figures reproduce on the
-broken instrument. The script's `--self-test` has the fixture that does catch it, and its module
+library. One such line, in `Mathlib/Tactic/FunProp.lean`'s documentation, pulls the closure of
+`Mathlib.Analysis.Complex.Trigonometric` into almost every closure; **what that costs is a fact
+about the baseline and not about the edge**, so the script's docstring states it against named
+targets rather than as a number on its own. Two figures were computed this way on this project on
+2026-08-23, by two different agents; **neither reached `master`, and no check saw either of
+them** — nothing in `validation.sh` reads a number out of a docstring, and nothing can.
+**The usual way of validating such an instrument by hand — checking it against a figure the tree
+already carries — does not catch it either**, because both figures the tree carries reproduce on
+the broken instrument. The script's `--self-test` has the fixture that does catch it, and its module
 docstring explains why the regression cases alone are not enough.
 
 Nothing checks the figures in docstrings against the script, and nothing can: they are English
