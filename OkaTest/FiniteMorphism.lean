@@ -53,8 +53,9 @@ says the composition lemma has the strength it claims and no more.
   is *not* a local isomorphism (`ComplexAnalytic.not_isLocalIso_axisIncl`), which is what says the
   second rung restricts the first; but the only positive witness for
   `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` here is still the identity. **The candidate is
-  built and nothing is claimed about it**: `ComplexAnalytic.sq`, the squaring map of the punctured
-  line, exists below and is proved not injective, so it is not an isomorphism — but neither
+  built and nothing about its finiteness or its stalks is claimed**: `ComplexAnalytic.sq`, the
+  squaring map of the punctured line, exists below and is proved not injective and, separately,
+  not an isomorphism (`ComplexAnalytic.not_isIso_sq`) — but neither
   `ComplexAnalytic.AnalyticSpace.IsFinite` nor `…IsLocalIso` is proved for it, and neither should
   be read into any statement here.
 * **Nothing exercises the stalk half of `ComplexAnalytic.AnalyticSpace.IsLocalIso`.** The
