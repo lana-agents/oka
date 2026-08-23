@@ -147,11 +147,15 @@ coherence statement for arbitrary complex analytic spaces:
   locally isomorphic. Identities, composites and isomorphisms are local isomorphisms, and
   `OkaTest/FiniteMorphism.lean` shows the second rung genuinely restricts the first: `z ↦ (z, 0)`
   is finite and **not** a local isomorphism, because a local homeomorphism is open, its range is
-  also closed, and `ℂ²` is connected. **The only positive witness is the identity** — a finite
-  étale morphism that is not an isomorphism needs a source that is not simply connected and is not
-  built here — and nothing exercises the stalk half of the definition. Neither `IsCoveringMap` nor
-  the theorem that a finite local isomorphism onto a connected base is one appears; that is a
-  third rung.
+  also closed, and `ℂ²` is connected. **The only positive witness is the identity.** The
+  candidate for a better one is built and left unclaimed: `ComplexAnalytic.sq`, the squaring map
+  of `ℂ ∖ {0}`, exists in that file — it needed
+  `ComplexAnalytic.AnalyticSpace.liftRestrict`, since nothing before produced a morphism whose
+  *target* is an open subspace — and is proved not injective and, separately,
+  **not an isomorphism** (`ComplexAnalytic.not_isIso_sq`); **neither its finiteness nor anything
+  about its stalks is proved**, so nothing exercises the stalk half of the definition.
+  Neither `IsCoveringMap` nor the theorem that a finite local isomorphism onto a connected base is
+  one appears; that is a third rung.
 
 * **Coherence in every finite rank, and of an analytified presentation.** Oka's theorem says
   `𝒪_X` is coherent; a *presentation* is pushed through the stability results only if `𝒪_X^m` is
