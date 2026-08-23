@@ -40,6 +40,10 @@ of a complex analytic space is compared with a chart of the ambient space
   subspace is an open immersion, with the open as an ordinary argument.** Mathlib has the
   instance; what this adds is a spelling at which it can be *used* from an analytic space, as
   `liftRestrict` does for a different seam. Its docstring records the measurement.
+- `AlgebraicGeometry.LocallyRingedSpace.restrictInfIsoPullback`: **the subspace on an
+  intersection is the pullback of the two open subspaces**, `X|(U ⊓ V) ≅ X|U ×_X X|V`, over `X`.
+  It is `isoOfRangeEq` at `range_pullback_to_base_of_left`, and it is what turns a hypothesis
+  about an opaque categorical pullback into one about an open subspace.
 
 ## Main results
 
@@ -242,5 +246,95 @@ theorem restrictLE_fac (X : LocallyRingedSpace.{u}) {V W : TopologicalSpace.Open
     (h : V ≤ W) :
     X.restrictLE h ≫ X.ofRestrict W.isOpenEmbedding = X.ofRestrict V.isOpenEmbedding :=
   liftRestrict_fac _ _ _
+
+section RestrictInf
+
+variable (X : LocallyRingedSpace.{u}) (U V : TopologicalSpace.Opens X)
+
+/-- **The two inclusions of `X|(U ⊓ V)` agree over `X`**, which is the cone the isomorphism
+below is the comparison of. -/
+theorem restrictLE_inf_condition :
+    X.restrictLE (inf_le_left : U ⊓ V ≤ U) ≫ X.ofRestrict U.isOpenEmbedding =
+      X.restrictLE (inf_le_right : U ⊓ V ≤ V) ≫ X.ofRestrict V.isOpenEmbedding := by
+  rw [restrictLE_fac, restrictLE_fac]
+
+/-- **The comparison morphism `X|(U ⊓ V) ⟶ X|U ×_X X|V` is an isomorphism.**
+
+It is `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.lift` between two open immersions
+with the same image: the image of `pullback.fst ≫ ofRestrict U` is `↑U ∩ ↑V` by
+`AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.range_pullback_to_base_of_left`, and that
+is the image of `ofRestrict (U ⊓ V)` by `AlgebraicGeometry.LocallyRingedSpace.range_ofRestrict`;
+`AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.lift_uniq` identifies the comparison with
+`isoOfRangeEq`'s. Stated apart from `restrictInfIsoPullback` so that the isomorphism can be
+`asIso` of a term rather than the output of a tactic block, which is what makes its `hom` reduce
+to the comparison by `rfl`. -/
+theorem isIso_pullbackLift_restrictLE :
+    IsIso (pullback.lift (X.restrictLE (inf_le_left : U ⊓ V ≤ U))
+      (X.restrictLE (inf_le_right : U ⊓ V ≤ V)) (X.restrictLE_inf_condition U V)) := by
+  have hrange : Set.range (X.ofRestrict (U ⊓ V).isOpenEmbedding).base =
+      Set.range (pullback.fst (X.ofRestrict U.isOpenEmbedding)
+        (X.ofRestrict V.isOpenEmbedding) ≫ X.ofRestrict U.isOpenEmbedding).base := by
+    rw [IsOpenImmersion.range_pullback_to_base_of_left, range_ofRestrict, range_ofRestrict,
+      range_ofRestrict]
+    rfl
+  rw [show pullback.lift (X.restrictLE (inf_le_left : U ⊓ V ≤ U))
+        (X.restrictLE (inf_le_right : U ⊓ V ≤ V)) (X.restrictLE_inf_condition U V) =
+      (IsOpenImmersion.isoOfRangeEq (X.ofRestrict (U ⊓ V).isOpenEmbedding)
+        (pullback.fst (X.ofRestrict U.isOpenEmbedding)
+          (X.ofRestrict V.isOpenEmbedding) ≫ X.ofRestrict U.isOpenEmbedding) hrange).hom from
+    IsOpenImmersion.lift_uniq _ _ (le_of_eq hrange) _
+      (by rw [← Category.assoc, pullback.lift_fst, restrictLE_fac])]
+  infer_instance
+
+/-- **The subspace on an intersection is the pullback of the two open subspaces.**
+
+`X|(U ⊓ V) ≅ X|U ×_X X|V`, over `X` on both sides — the three factorisation lemmas below say so,
+and they are what every use of this consumes.
+
+**This is what makes a pullback of open immersions computable at all.** The module docstring of
+`Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean` records the problem it solves: a
+categorical pullback of two inclusions is opaque, so a hypothesis phrased on it cannot be
+discharged by the tools that discharge hypotheses about spaces one can name, whereas
+`X.restrict (U ⊓ V)` is an open subspace and `restrictLE`, `hom_ext_restrict` and — for a
+complex analytic space — `ComplexAnalytic.AnalyticSpace.restrict` all apply to it. -/
+noncomputable def restrictInfIsoPullback :
+    X.restrict (U ⊓ V).isOpenEmbedding ≅
+      pullback (X.ofRestrict U.isOpenEmbedding) (X.ofRestrict V.isOpenEmbedding) :=
+  haveI := X.isIso_pullbackLift_restrictLE U V
+  asIso (pullback.lift (X.restrictLE (inf_le_left : U ⊓ V ≤ U))
+    (X.restrictLE (inf_le_right : U ⊓ V ≤ V)) (X.restrictLE_inf_condition U V))
+
+@[simp]
+theorem restrictInfIsoPullback_hom :
+    (X.restrictInfIsoPullback U V).hom =
+      pullback.lift (X.restrictLE (inf_le_left : U ⊓ V ≤ U))
+        (X.restrictLE (inf_le_right : U ⊓ V ≤ V)) (X.restrictLE_inf_condition U V) :=
+  rfl
+
+@[reassoc (attr := simp)]
+theorem restrictInfIsoPullback_hom_fst :
+    (X.restrictInfIsoPullback U V).hom ≫
+        pullback.fst (X.ofRestrict U.isOpenEmbedding) (X.ofRestrict V.isOpenEmbedding) =
+      X.restrictLE (inf_le_left : U ⊓ V ≤ U) := by
+  rw [restrictInfIsoPullback_hom, pullback.lift_fst]
+
+@[reassoc (attr := simp)]
+theorem restrictInfIsoPullback_hom_snd :
+    (X.restrictInfIsoPullback U V).hom ≫
+        pullback.snd (X.ofRestrict U.isOpenEmbedding) (X.ofRestrict V.isOpenEmbedding) =
+      X.restrictLE (inf_le_right : U ⊓ V ≤ V) := by
+  rw [restrictInfIsoPullback_hom, pullback.lift_snd]
+
+/-- **The isomorphism is one over `X`.** Both routes out of `X|(U ⊓ V)` into `X` are the
+inclusion, which is `restrictInfIsoPullback_hom_fst` followed by `restrictLE_fac`. -/
+@[reassoc (attr := simp)]
+theorem restrictInfIsoPullback_hom_fst_ofRestrict :
+    (X.restrictInfIsoPullback U V).hom ≫
+        pullback.fst (X.ofRestrict U.isOpenEmbedding) (X.ofRestrict V.isOpenEmbedding) ≫
+          X.ofRestrict U.isOpenEmbedding =
+      X.ofRestrict (U ⊓ V).isOpenEmbedding := by
+  rw [restrictInfIsoPullback_hom_fst_assoc, restrictLE_fac]
+
+end RestrictInf
 
 end AlgebraicGeometry.LocallyRingedSpace
