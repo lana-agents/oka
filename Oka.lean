@@ -104,8 +104,10 @@ import Oka.RingTheory.Flat.Quotient
 import Oka.RingTheory.Ideal.Maps
 import Oka.RingTheory.LocalRing.ResidueField.Basic
 import Oka.RingTheory.Localization.Ideal
+import Oka.RingTheory.Localization.Module
 import Oka.RingTheory.MvPolynomial.Ideal
 import Oka.RingTheory.RingHom.FaithfullyFlat
+import Oka.SchemeCoherent
 import Oka.StalkEquiv
 import Oka.Statement
 import Oka.StructureSheaf

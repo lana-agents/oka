@@ -105,9 +105,13 @@ three steps are assembled by `Module.Finite.of_localizationSpan_finite'`, with
 `AlgebraicGeometry.Scheme.Modules.isScalarTower_sections` supplying the compatibility between the
 `R`-action and the `Γ(Spec R, D(g))`-action on `Γ(M, D(g))` that it asks for.
 
-Coherence is used nowhere on this line and is not available: nothing in this repository proves a
-sheaf on a `Spec` coherent, which is why every statement is at `SheafOfModules.IsQuasicoherent`
-plus `SheafOfModules.IsFiniteType`, and why `OkaTest/AffineSections.lean` can instantiate them.
+Coherence is used nowhere on this line, so every statement is at
+`SheafOfModules.IsQuasicoherent` plus `SheafOfModules.IsFiniteType`, which is why
+`OkaTest/AffineSections.lean` can instantiate them. **This sentence used to give a second reason
+— that coherence was not available at all, nothing in this repository proving a sheaf on a `Spec`
+coherent — and that half is retired**: `AlgebraicGeometry.isCoherentStructureSheaf_spec`, in
+`Oka/SchemeCoherent.lean`, proves `𝒪_{Spec A}` coherent for noetherian `A`. The hypotheses here
+are unchanged, because they are the weaker ones and the ones the proofs use.
 
 ## Finite presentation, and a correction
 
@@ -289,11 +293,14 @@ counit *is* the restriction map. Coherence enters only through
 isomorphism, and an isomorphism composed after a localisation map is again one
 (`IsLocalizedModule.of_linearEquiv`).
 
-**Stated for quasicoherent and not for coherent `M`.** Only quasicoherence is used, it is the
-weaker hypothesis, and it is the one this repository can currently *instantiate* on a `Spec`:
-`OkaTest/AffineSections.lean` exercises this at `𝒪_{Spec A} ⧸ (x)`, whereas no sheaf on a `Spec`
-is proved coherent anywhere here. The coherent case is
-`AlgebraicGeometry.Scheme.Modules.isLocalizedModule_away_sectionsToBasicOpen_of_isCoherent`.
+**Stated for quasicoherent and not for coherent `M`.** Only quasicoherence is used and it is the
+weaker hypothesis; `OkaTest/AffineSections.lean` exercises this at `𝒪_{Spec A} ⧸ (x)`. The
+coherent case is
+`AlgebraicGeometry.Scheme.Modules.isLocalizedModule_away_sectionsToBasicOpen_of_isCoherent`, and
+the clause here that used to say it could not be instantiated — no sheaf on a `Spec` being proved
+coherent anywhere in this repository — is retired by
+`AlgebraicGeometry.isCoherentStructureSheaf_spec`; that same witness is now also proved coherent,
+and the corollary is instantiated at it.
 
 `AlgebraicGeometry.tilde.toOpen`'s localisation instance has to be supplied to
 `IsLocalizedModule.of_linearEquiv` explicitly. Leaving it to be inferred fails: the goal is
@@ -390,9 +397,10 @@ This is the statement an epimorphism of sheaves does not give for free, and with
 `Module.Finite.of_localizationSpan_finite'` is within reach of `Module.Finite R (Γ M)`; see the
 module docstring for what still stands between them.
 
-Coherence is not needed and is not available: nothing in this repository proves a sheaf on a
-`Spec` coherent, so the hypotheses are quasicoherence and a finite generating family, which
-`OkaTest/AffineSections.lean` exhibits. -/
+Coherence is not needed, so the hypotheses are quasicoherence and a finite generating family,
+which `OkaTest/AffineSections.lean` exhibits. It is also no longer unavailable — the clause here
+that said so is retired by `AlgebraicGeometry.isCoherentStructureSheaf_spec` — but nothing on
+this line wants it. -/
 theorem module_finite_moduleSpecΓFunctor_obj {M : (Spec R).Modules} [M.IsQuasicoherent]
     (σ : M.GeneratingSections) [Finite σ.I] :
     Module.Finite R (moduleSpecΓFunctor.obj M) := by

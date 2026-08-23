@@ -23,20 +23,20 @@ that neither reading is available:
 Each is paired with the corresponding `not_isZero_…` from that file, which is what rules out the
 conclusion being about the zero sheaf.
 
-## What is *not* tested, and it is the affine half
+## The affine half, which used to be untested
 
+The clause that used to stand here said that
 `AlgebraicGeometry.Scheme.Modules.isIso_fromTildeΓ_of_isCoherent` — a coherent
-`𝒪_{Spec R}`-module is `(Γ M)^~` — is **not instantiated anywhere**, here or in the library,
-because **this repository proves no sheaf on a `Spec` to be coherent.** Coherence on the
-algebraic side would come from `𝒪_{Spec A}` being coherent for noetherian `A`, which is not
-formalised here; every coherent sheaf this repository exhibits lives on an analytic space, by
-Oka's theorem. The three witnesses below are analytifications, which are sheaves on the
-analytic space and not on `Spec A`.
+`𝒪_{Spec R}`-module is `(Γ M)^~` — was instantiated nowhere, because **this repository proved no
+sheaf on a `Spec` to be coherent**, and predicted that the first thing to instantiate it would be
+the coherence of an algebraic structure sheaf. **That is exactly what happened.**
+`AlgebraicGeometry.isCoherentStructureSheaf_spec` proves `𝒪_{Spec A}` coherent for noetherian
+`A`, and `OkaTest/SpecCoherent.lean` instantiates the affine statement at `𝒪_{Spec A} ⧸ (x)` for
+`A = ℂ[x, y] ⧸ (xy)` — a nonzero proper quotient, not a free sheaf and not the zero sheaf.
 
-So the affine statement is stated and unexercised, and that is recorded rather than hidden: it is
-a mirror-tree consequence of `SheafOfModules.IsCoherent.isQuasicoherent` and of Mathlib's
-`AlgebraicGeometry.isQuasicoherent_iff_isIso_fromTildeΓ`, and the first thing that instantiates
-it will be the coherence of an algebraic structure sheaf.
+What is still true of *this* file is narrower and is why the three witnesses below are unchanged:
+**they are analytifications**, which live on the analytic space and not on `Spec A`, so none of
+them exercises the affine dictionary. The witness that does is in `OkaTest/SpecCoherent.lean`.
 
 ## What is also not tested
 

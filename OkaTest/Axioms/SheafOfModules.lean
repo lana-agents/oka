@@ -584,3 +584,51 @@ info: 'AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ_of_isFinitePresent
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ_of_isFinitePresentation
+
+/-! ### Coherence of the structure sheaf of a locally noetherian scheme
+
+`Oka/SchemeCoherent.lean`. The last of the six is the `Spec A` corollary that
+`OkaTest/SpecCoherent.lean` instantiates; the localisation lemma the proof rests on is guarded in
+`OkaTest/Axioms/RingTheory.lean`, since it is commutative algebra and not sheaf theory. -/
+
+/--
+info: 'AlgebraicGeometry.Scheme.algebraMap_basicOpen_eq_res' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.algebraMap_basicOpen_eq_res
+
+/--
+info: 'AlgebraicGeometry.Scheme.hasLocalRelations' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.hasLocalRelations
+
+/--
+info: 'AlgebraicGeometry.Scheme.isCoherentStructureSheaf' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.isCoherentStructureSheaf
+
+/--
+info: 'AlgebraicGeometry.Scheme.isCoherent_unit' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.isCoherent_unit
+
+/--
+info: 'AlgebraicGeometry.Scheme.isCoherent_free' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.isCoherent_free
+
+/--
+info: 'AlgebraicGeometry.isCoherentStructureSheaf_spec' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.isCoherentStructureSheaf_spec

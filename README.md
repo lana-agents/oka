@@ -210,10 +210,29 @@ coherence statement for arbitrary complex analytic spaces:
   local-to-global step in it. On an affine scheme Mathlib's
   `AlgebraicGeometry.isQuasicoherent_iff_isIso_fromTildeΓ` then gives
   `AlgebraicGeometry.Scheme.Modules.isIso_fromTildeΓ_of_isCoherent`: **a coherent
-  `𝒪_{Spec R}`-module is the sheaf associated with its own global sections.** That statement is
-  not exercised: this repository proves no sheaf on a `Spec` to be coherent, since every coherent
-  sheaf it exhibits lives on an analytic space, and `OkaTest/CoherentPresentation.lean` says so
-  where the non-vacuity checks are.
+  `𝒪_{Spec R}`-module is the sheaf associated with its own global sections.** It **is** exercised,
+  by the bullet below; the sentence that used to stand here said it was not, and gave as the
+  reason that this repository proved no sheaf on a `Spec` to be coherent, every coherent sheaf it
+  exhibited living on an analytic space.
+
+* **The structure sheaf of a locally noetherian scheme is coherent** (`Oka/SchemeCoherent.lean`),
+  and on `Spec A` for noetherian `A` that is
+  `AlgebraicGeometry.isCoherentStructureSheaf_spec` — the algebraic counterpart of Oka's theorem,
+  and the first coherent sheaf here that does not live on an analytic space. It goes through the
+  same concrete condition Oka's theorem does,
+  `AlgebraicGeometry.LocallyRingedSpace.HasLocalRelations`, so nothing has to be transported
+  between sites; **what replaces Oka's coherence lemma is noetherianity of `Γ(X, U)` on an affine
+  open**, which gives generators for the relations over the whole of that open, and the only step
+  with content is that they stay generators after localising to a smaller basic open. That step
+  is `IsLocalization.exists_fun_eq_sum_of_sum_mul_eq_zero` in the mirror tree
+  (`Oka/RingTheory/Localization/Module.lean`), and it is clearing denominators twice rather than
+  any flatness. The general statement is about locally noetherian schemes because the argument
+  never uses affineness of the ambient space, only of a neighbourhood. `OkaTest/SpecCoherent.lean`
+  instantiates it at `A = ℂ[x, y] ⧸ (xy)`, at `𝒪_{Spec A}`, at a free sheaf of rank two, and at
+  the nonzero proper quotient `𝒪_{Spec A} ⧸ (x)`, and with the last of those instantiates the
+  affine dictionary of the bullet above. **This does not make GAGA's "coherent implies
+  analytification coherent" available**: that gap is at the sheaf level and is described in
+  `Oka/Analytification/SheafCoherent.lean`, and it is untouched.
 
 * **The affine-locality argument, and its conclusion: `Γ M` is a finite `R`-module**
   (`Oka/AlgebraicGeometry/Modules/Tilde.lean`). What the bullet above leaves open is anything at
