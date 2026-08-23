@@ -51,6 +51,11 @@ and `hcocycle` are quantified over triples of **pairwise distinct** indices, bec
   of this one's. With `AlgebraicGeometry.LocallyRingedSpace.GlueData.ι_jointly_surjective` and
   `ComplexAnalytic.coverGlueData_ι_isOpenImmersion` that says the glued space is covered by two
   copies of `𝔸¹` and is neither of them.
+* **It is a complex analytic space** (`ComplexAnalytic.projectiveLineSpace`), by
+  `ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear`, whose `ℂ`-linearity hypothesis is discharged
+  for every glue datum an affine cover produces by `ComplexAnalytic.glueDataCLinear_coverGlueData`
+  — so the transition being non-trivial costs nothing here, which is the point of applying it at
+  this file rather than only at `OkaTest/AffineCover.lean`'s identity.
 
 ## What is not proved here, and is not claimed anywhere below
 
@@ -63,12 +68,15 @@ the name. In particular:
 * it is **not** shown to differ from the analytification of a single presentation — the real
   theorem, and one that needs an invariant nothing here computes. `OkaTest/AffineCover.lean` says
   the same about the node with a tripled origin;
-* there is **no analytic structure** on it. That is `ComplexAnalytic.AnalyticSpace.ofGlueData`,
-  whose compatibility hypothesis is a statement about the *glued* space and a separate step; this
-  file stops at the locally ringed space.
+* nothing about the **analytic structure** it now carries says any of the above.
+  `ComplexAnalytic.projectiveLineSpace` below makes the gluing a complex analytic space, by
+  `ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear` and
+  `ComplexAnalytic.glueDataCLinear_coverGlueData`, and checks that the structure restricts on each
+  chart to the one that chart was given. That is a statement about the sheaves and it settles
+  neither compactness nor the question above.
 -/
 
-open CategoryTheory CategoryTheory.Limits TopologicalSpace AlgebraicGeometry
+open CategoryTheory CategoryTheory.Limits TopologicalSpace AlgebraicGeometry Opposite
 
 universe u
 
@@ -395,6 +403,62 @@ example (x : projectiveLineGlueData.{u}.toGlueData.glued) :
     ∃ (i : pair.{u}) (y : projectiveLineGlueData.{u}.U i),
       (projectiveLineGlueData.{u}.toGlueData.ι i).base y = x :=
   projectiveLineGlueData.{u}.ι_jointly_surjective x
+
+/-! ### The analytic structure
+
+`ComplexAnalytic.glueDataCLinear_coverGlueData` discharges the one hypothesis of
+`ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear` that is about the gluing rather than about the
+members, and it does so for **every** glue datum an affine cover produces — including this one,
+whose transition is not the identity (`ComplexAnalytic.lineSwapIso_ne_refl`). That the same lemma
+serves here and at `OkaTest/AffineCover.lean`'s identity transition is the point: the
+`ℂ`-linearity was never a property of the particular `glue`, it is a property of every
+isomorphism of presentations, discharged when `ComplexAnalytic.analytificationFunctor` was
+applied to it. -/
+
+/-- The `ℂ`-algebra structure each chart carries: the affine line's own, as an analytification. -/
+abbrev lineAlg (j : pair.{u}) :
+    ℂ →+* ((projectiveLineGlueData.{u}).U j).presheaf.obj (op ⊤) :=
+  (AnalyticSpace.analytification.{u} (lineCoverObj.{u} j).g).algebraMap
+
+/-- **Each chart has local models**: it *is* an analytification, and the structure it carries is
+that analytification's own. -/
+theorem hasLocalModels_projectiveLineGlueData (j : pair.{u}) :
+    HasLocalModels.{u} ((projectiveLineGlueData.{u}).U j) (lineAlg.{u} j) :=
+  (AnalyticSpace.analytification.{u} (lineCoverObj.{u} j).g).local_model
+
+/-- **Two copies of the affine line, glued along `D(z)` by `z ↦ 1/z`, as a complex analytic
+space.**
+
+The gluing already had all of its geometry:
+`ComplexAnalytic.not_surjective_ι_projectiveLineGlueData` says neither chart is the whole
+space, `ComplexAnalytic.ι_lineOrigin_ne` says `0` and `∞` are two points of it, and
+`ComplexAnalytic.lineSwapIso_ne_refl` says the transition is not the identity.
+What is added here is that it is an **analytic space**, and
+`ComplexAnalytic.AnalyticSpace.comapAlgMap_ofGlueDataCLinear_algebraMap` below is the check that
+the structure is the intended one rather than merely well-typed.
+
+**Nothing here says this is `ℙ¹`**, any more than the section above does; see this file's module
+docstring, whose `## What is not proved here` section covers the analytic structure as well. In
+particular it is not proved compact, and it is not proved to differ from the analytification of
+some presentation. -/
+def projectiveLineSpace : AnalyticSpace.{u} :=
+  AnalyticSpace.ofGlueDataCLinear.{u} projectiveLineGlueData.{u} lineAlg.{u}
+    (glueDataCLinear_coverGlueData.{u} lineCoverObj.{u} lineCoverPoly.{u} lineSwapIso.{u}
+      hrange_lineCover.{u} hsymm_lineCover.{u} hcocycle_lineCover.{u})
+    hasLocalModels_projectiveLineGlueData.{u}
+
+/-- Its underlying locally ringed space is the gluing, on the nose. -/
+example : (projectiveLineSpace.{u}).toLocallyRingedSpace =
+    projectiveLineGlueData.{u}.toGlueData.glued := rfl
+
+/-- **The glued `ℂ`-algebra structure restricts on each chart to the one that chart was given.** -/
+example (j : pair.{u}) :
+    LocallyRingedSpace.comapAlgMap (projectiveLineGlueData.{u}.toGlueData.ι j)
+      (projectiveLineSpace.{u}).algebraMap = lineAlg.{u} j :=
+  AnalyticSpace.comapAlgMap_ofGlueDataCLinear_algebraMap.{u} _ _
+    (glueDataCLinear_coverGlueData.{u} lineCoverObj.{u} lineCoverPoly.{u} lineSwapIso.{u}
+      hrange_lineCover.{u} hsymm_lineCover.{u} hcocycle_lineCover.{u})
+    hasLocalModels_projectiveLineGlueData.{u} j
 
 end
 

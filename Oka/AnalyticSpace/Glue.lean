@@ -129,6 +129,19 @@ lemma isCLinearHom_comapAlgMap {X Y : LocallyRingedSpace.{u}} (i : X ⟶ Y)
     IsCLinearHom i (LocallyRingedSpace.comapAlgMap i β) β :=
   fun _ ↦ rfl
 
+/-- **Pulling the target's structure back along a morphism of *analytic* spaces gives the
+source's.**
+
+This is `ComplexAnalytic.AnalyticSpace.Hom.isCLinear` — a field of every morphism of analytic
+spaces — restated as an equation of ring homomorphisms rather than as a condition holding at each
+constant. That is the form `ComplexAnalytic.GlueDataCLinear` consumes, since it is an equation
+between `AlgebraicGeometry.LocallyRingedSpace.comapAlgMap`s, and it is why `ℂ`-linearity costs
+nothing for a transition assembled out of analytic morphisms: the algebra was discharged when the
+morphisms were built. -/
+theorem AnalyticSpace.comapAlgMap_toLRSHom {X Y : AnalyticSpace.{u}} (f : X ⟶ Y) :
+    LocallyRingedSpace.comapAlgMap f.toLRSHom Y.algebraMap = X.algebraMap :=
+  RingHom.ext f.isCLinear
+
 /-- **Having local models transports along a `ℂ`-linear isomorphism.**
 
 The chart of `X` at `e.hom y` lives on `X|U`; what is wanted is a chart of `Y` at `y`, so the
