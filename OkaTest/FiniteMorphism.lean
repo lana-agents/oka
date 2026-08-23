@@ -454,10 +454,9 @@ theorem base_sq (p : (AnalyticSpace.complexAffineSpace.{u} 1).restrict punctured
 
 /-- **It is not injective**: `1` and `-1` are two points of `ℂ ∖ {0}` with the same square.
 
-So it is not an isomorphism, and if it is ever shown finite étale then
-`ComplexAnalytic.AnalyticSpace.IsFiniteEtale` contains something the identity does not — which is
-the whole reason to want this map. **Nothing here shows it finite étale**, and no statement below
-should be read as saying so. -/
+`ComplexAnalytic.not_isIso_sq` below is the consequence, and it is a separate statement because
+non-injectivity of the underlying map is not by itself non-invertibility of the morphism.
+**Nothing here shows it finite étale**, and no statement below should be read as saying so. -/
 theorem not_injective_base_sq :
     ¬ Function.Injective ((sq.{u}).toLRSHom.base :
       (AnalyticSpace.complexAffineSpace.{u} 1).restrict punctured.{u} →
@@ -480,6 +479,23 @@ theorem not_injective_base_sq :
     show (((sq.{u}).toLRSHom.base ⟨(fun _ ↦ (-1 : ℂ) : ULift.{u} (Fin 1) → ℂ), h2⟩).1 :
       ULift.{u} (Fin 1) → ℂ) = _ from base_sq.{u} _]
   norm_num
+
+/-- **So it is not an isomorphism**, which is what makes the map worth building: if it is ever
+shown finite étale then `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` will contain something the
+identity does not.
+
+An isomorphism of analytic spaces gives a homeomorphism of the underlying spaces through
+`ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace` and
+`AlgebraicGeometry.LocallyRingedSpace.homeoOfIso`, and a homeomorphism is injective. Note that the
+functor is applied to the *iso* rather than the morphism, so no instance has to be re-ascribed at
+`ComplexAnalytic.AnalyticSpace.Hom.toLRSHom` — the seam
+`ComplexAnalytic.AnalyticSpace.isLocalIso_of_isIso` documents does not arise on this route.
+
+**This is still not a statement that it is finite étale.** -/
+theorem not_isIso_sq : ¬ IsIso sq.{u} := fun _ ↦
+  not_injective_base_sq.{u}
+    (LocallyRingedSpace.homeoOfIso
+      (AnalyticSpace.forgetToLocallyRingedSpace.{u}.mapIso (asIso sq.{u}))).injective
 
 end
 

@@ -151,11 +151,11 @@ coherence statement for arbitrary complex analytic spaces:
   candidate for a better one is built and left unclaimed: `ComplexAnalytic.sq`, the squaring map
   of `ℂ ∖ {0}`, exists in that file — it needed
   `ComplexAnalytic.AnalyticSpace.liftRestrict`, since nothing before produced a morphism whose
-  *target* is an open subspace — and is proved not injective, hence not an isomorphism; **neither
-  its finiteness nor anything about its stalks is proved**, so nothing exercises the stalk half of
-  the definition. Neither `IsCoveringMap` nor
-  the theorem that a finite local isomorphism onto a connected base is one appears; that is a
-  third rung.
+  *target* is an open subspace — and is proved not injective and, separately,
+  **not an isomorphism** (`ComplexAnalytic.not_isIso_sq`); **neither its finiteness nor anything
+  about its stalks is proved**, so nothing exercises the stalk half of the definition.
+  Neither `IsCoveringMap` nor the theorem that a finite local isomorphism onto a connected base is
+  one appears; that is a third rung.
 
 * **Coherence in every finite rank, and of an analytified presentation.** Oka's theorem says
   `𝒪_X` is coherent; a *presentation* is pushed through the stability results only if `𝒪_X^m` is
