@@ -475,9 +475,9 @@ info: 'ComplexAnalytic.AnalyticSpace.isIso_stalkMap_okaMap' depends on axioms:
 
 /-! ### The third rung: a finite étale morphism is a covering map
 
-The first two of the five are the mirror-tree topological criteria in
-`Oka/Topology/Covering/Basic.lean` and say nothing about analytic spaces; they are guarded here
-rather than apart from their only consumers. -/
+The first of the two is the mirror-tree topological criterion in
+`Oka/Topology/Covering/Basic.lean` and says nothing about analytic spaces; it is guarded here
+rather than apart from its only consumer. -/
 
 /--
 info: 'IsClosedMap.isCoveringMap_of_isLocalHomeomorph' depends on axioms:

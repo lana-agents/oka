@@ -889,9 +889,8 @@ theorem isCoveringMap_base_sq :
   haveI := isFiniteEtale_sq.{u}
   AnalyticSpace.isCoveringMap_base_of_isFiniteEtale ComplexAnalytic.sq.{u}
 
-/-- **The punctured line is preconnected.** `ComplexAnalytic.puncturedHomeo` a third time, after
-`ComplexAnalytic.t2Space_restrict_punctured` and the two halves of finiteness: the statement is
-about `{z : ℂ // z ≠ 0}` and the bridge carries it.
+/-- **The punctured line is preconnected.** `ComplexAnalytic.puncturedHomeo` again: the statement
+is about `{z : ℂ // z ≠ 0}` and the bridge carries it.
 
 `ℂ ∖ {0}` is connected because `ℂ` has real rank `2 > 1`
 (`isConnected_compl_singleton_of_one_lt_rank`, with `Complex.rank_real_complex`), which is the
@@ -906,12 +905,14 @@ fire anywhere it is not wanted. `PreconnectedSpace` rather than `ConnectedSpace`
 what `ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale` asks for; the space is of
 course also nonempty, and nothing needs that.
 
-**The transport is `DenseRange.preconnectedSpace` and not a `Homeomorph` lemma**, because the
-`Homeomorph` namespace has no preconnectedness transport to match `Homeomorph.t2Space`, which is
-what `ComplexAnalytic.t2Space_restrict_punctured` just above uses. A homeomorphism is surjective,
-so its range is dense, and that is the shortest route Mathlib offers. (Naming the missing lemma in
-backticks would fail this repository's docstring-name check, which is the check working: a
-declaration that does not exist should not be spelled as though it did.) -/
+**The transport is `Homeomorph.connectedSpace_iff`, which is a transport of `ConnectedSpace` and
+not of `PreconnectedSpace`.** The `Homeomorph` namespace has no `PreconnectedSpace` transport to
+match the `Homeomorph.t2Space` that `ComplexAnalytic.t2Space_restrict_punctured` just above uses,
+and that is a real gap; it costs nothing here, because the connectedness of `ℂ ∖ {0}` arrives as
+`ConnectedSpace` in the first place and only becomes `PreconnectedSpace` at the last step, on this
+side of the bridge. Naming the absent `PreconnectedSpace` transport in backticks would fail this
+repository's docstring-name check, which is the check working: a declaration that does not exist
+should not be spelled as though it did. -/
 instance preconnectedSpace_restrict_punctured :
     PreconnectedSpace ((AnalyticSpace.complexAffineSpace.{u} 1).restrict punctured.{u} : Type u) :=
   haveI : ConnectedSpace {z : ℂ // z ≠ 0} := by
@@ -921,8 +922,7 @@ instance preconnectedSpace_restrict_punctured :
     have he : ({(0 : ℂ)}ᶜ : Set ℂ) = {z : ℂ | z ≠ 0} := by ext z; simp
     rw [he] at h
     exact isConnected_iff_connectedSpace.mp h
-  puncturedHomeo.{u}.symm.surjective.denseRange.preconnectedSpace
-    puncturedHomeo.{u}.symm.continuous
+  (puncturedHomeo.{u}.connectedSpace_iff.mpr ‹_›).toPreconnectedSpace
 
 /-- **All fibres of `ComplexAnalytic.sq` have the same number of points.**
 
