@@ -427,3 +427,47 @@ info: 'ComplexAnalytic.AnalyticSpace.liftRestrict_fac' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.liftRestrict_fac
+
+/-! ### The germ dictionary: a local inverse makes a holomorphic map a stalk isomorphism -/
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.isIso_stalkMap_liftRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.isIso_stalkMap_liftRestrict
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isIso_stalkMap_ofRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isIso_stalkMap_ofRestrict
+
+/--
+info: 'ComplexAnalytic.injective_stalkMap_okaMapHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.injective_stalkMap_okaMapHom
+
+/--
+info: 'ComplexAnalytic.surjective_stalkMap_okaMapHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.surjective_stalkMap_okaMapHom
+
+/--
+info: 'ComplexAnalytic.isIso_stalkMap_okaMapHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isIso_stalkMap_okaMapHom
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isIso_stalkMap_okaMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isIso_stalkMap_okaMap
