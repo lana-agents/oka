@@ -253,3 +253,75 @@ info: 'SheafOfModules.IsCoherent.free' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms SheafOfModules.IsCoherent.free
+
+/-! ### Coherent sheaves are locally finitely presented, and the affine dictionary -/
+
+/--
+info: 'SheafOfModules.QuasicoherentData.isFinitePresentation_bind' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.QuasicoherentData.isFinitePresentation_bind
+
+/--
+info: 'SheafOfModules.GeneratingSections.overKernelπIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.GeneratingSections.overKernelπIso
+
+/--
+info: 'SheafOfModules.GeneratingSections.presentationOver' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.GeneratingSections.presentationOver
+
+/--
+info: 'SheafOfModules.GeneratingSections.isFinite_presentationOver' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.GeneratingSections.isFinite_presentationOver
+
+/--
+info: 'SheafOfModules.GeneratingSections.quasicoherentDataOver' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.GeneratingSections.quasicoherentDataOver
+
+/--
+info: 'SheafOfModules.GeneratingSections.isFinitePresentation_quasicoherentDataOver' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.GeneratingSections.isFinitePresentation_quasicoherentDataOver
+
+/--
+info: 'SheafOfModules.IsCoherent.isFinitePresentation' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.IsCoherent.isFinitePresentation
+
+/--
+info: 'SheafOfModules.IsCoherent.isQuasicoherent' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.IsCoherent.isQuasicoherent
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.isIso_fromTildeΓ_of_isCoherent' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.isIso_fromTildeΓ_of_isCoherent
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.isoTildeΓ' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.isoTildeΓ

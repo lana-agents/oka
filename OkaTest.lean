@@ -27,6 +27,7 @@ import OkaTest.Axioms.Sheaves
 import OkaTest.Axioms.Weierstrass
 import OkaTest.CoherentCokernel
 import OkaTest.CoherentFree
+import OkaTest.CoherentPresentation
 import OkaTest.Completion
 import OkaTest.CutOutQuotient
 import OkaTest.CutOutRestrict

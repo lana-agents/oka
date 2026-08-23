@@ -7,6 +7,7 @@ import Oka.Algebra.Category.ModuleCat.Sheaf.Coherent.Basic
 import Oka.Algebra.Category.ModuleCat.Sheaf.Coherent.Criterion
 import Oka.Algebra.Category.ModuleCat.Sheaf.Coherent.Free
 import Oka.Algebra.Category.ModuleCat.Sheaf.Coherent.Locality
+import Oka.Algebra.Category.ModuleCat.Sheaf.Coherent.Presentation
 import Oka.Algebra.Category.ModuleCat.Sheaf.Coherent.Stability
 import Oka.Algebra.Category.ModuleCat.Sheaf.Colimits
 import Oka.Algebra.Category.ModuleCat.Sheaf.Free
@@ -15,11 +16,13 @@ import Oka.Algebra.Category.ModuleCat.Sheaf.LocallySurjective
 import Oka.Algebra.Category.ModuleCat.Sheaf.PullbackExact
 import Oka.Algebra.Category.ModuleCat.Sheaf.PullbackStalk
 import Oka.Algebra.Category.ModuleCat.Sheaf.PushforwardContinuous
+import Oka.Algebra.Category.ModuleCat.Sheaf.Quasicoherent
 import Oka.Algebra.Category.ModuleCat.Sheaf.Stalk
 import Oka.Algebra.Category.ModuleCat.Sheaf.Submodule
 import Oka.Algebra.Category.ModuleCat.Stalk
 import Oka.Algebra.MvPolynomial.Taylor
 import Oka.AlgebraicGeometry.GammaSpecAdjunction
+import Oka.AlgebraicGeometry.Modules.Tilde
 import Oka.AlgebraicGeometry.StructureSheaf
 import Oka.Analytic.DividedDifference
 import Oka.Analytic.ParametricCircleIntegral
