@@ -3,6 +3,7 @@ Copyright (c) 2026 Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten. All righ
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
+import Oka.Algebra.Category.ModuleCat.Sheaf.Coherent.Free
 import Oka.AnalyticSpace.Basic
 import Oka.AnalyticSpace.Relations
 
@@ -34,6 +35,10 @@ relations between the `sᵢ`.
 
 - `ComplexAnalytic.AnalyticSpace.isCoherentStructureSheaf`: the structure sheaf of any complex
   analytic space is coherent.
+- `ComplexAnalytic.AnalyticSpace.isCoherent_free`: **a finite free sheaf of modules on a complex
+  analytic space is coherent**, which is Oka's theorem in every finite rank rather than in rank
+  one. It is `SheafOfModules.IsCoherent.free` — an induction on the rank with no analysis in it
+  — fed the theorem above.
 
 ## References
 
@@ -237,5 +242,21 @@ theorem AnalyticSpace.isCoherentStructureSheaf (X : AnalyticSpace.{u}) :
       (fun x : X.toLocallyRingedSpace ↦ (U x).1) (fun x ↦ ⟨x, (U x).2⟩) fun x ↦ ?_)
   exact LocallyRingedSpace.HasLocalRelations.hasLocalRelationsOn _
     (IsLocalModel.hasLocalRelations ⟨n x, k x, V x, i x, f x, (h x).1⟩)
+
+/-- **A finite free sheaf of modules on a complex analytic space is coherent.**
+
+`ComplexAnalytic.AnalyticSpace.isCoherentStructureSheaf` is this at rank one, and
+`SheafOfModules.IsCoherent.free` is the induction on the rank, which has no analysis in it. This
+is the form a *presentation* is pushed through: the target of a presentation is a finite free
+sheaf, and `SheafOfModules.IsCoherent.cokernel` needs its target coherent.
+
+`SheafOfModules.IsCoherentStructureSheaf` is a `def`, so instance search will not unfold it and
+the coherence of `𝒪_X` has to be introduced in its unfolded form — the same step
+`ComplexAnalytic.isCoherent_idealSheaf` documents. -/
+theorem AnalyticSpace.isCoherent_free (X : AnalyticSpace.{u}) (I : Type u) [Finite I] :
+    (SheafOfModules.free (R := X.toLocallyRingedSpace.ringSheaf) I).IsCoherent :=
+  haveI : (SheafOfModules.unit X.toLocallyRingedSpace.ringSheaf).IsCoherent :=
+    X.isCoherentStructureSheaf
+  SheafOfModules.IsCoherent.free I
 
 end ComplexAnalytic

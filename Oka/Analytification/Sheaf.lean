@@ -89,9 +89,12 @@ it breaks that step and nothing else.
 * **The comparison theorem.** GAGA proper also asserts that `Hom` and cohomology agree between
   `X` and `X^an` for coherent sheaves. Exactness of analytification is its local input and is a
   strictly smaller statement.
-* **Coherence of the image.** That the analytification of a coherent sheaf is coherent is a
-  separate statement; `ComplexAnalytic.AnalyticSpace.isCoherentStructureSheaf` gives it for the
-  structure sheaf and nothing here extends that to the image of this functor.
+* **Coherence of the image**, which is next door rather than here.
+  `Oka/Analytification/SheafCoherent.lean` proves that the analytification of a **cokernel of
+  finite free sheaves** is coherent, out of the exactness proved here and Oka's theorem in every
+  finite rank. The statement for a *coherent* sheaf rather than a presented one is a different
+  matter and is not proved anywhere: it would need the dictionary between sheaves of modules on
+  `Spec A` and `A`-modules, which this repository does not have.
 * **Anything analytic.** Every line here is the `Γ`–`Spec` adjunction and category theory. The
   analytic content is upstream.
 
