@@ -22,7 +22,17 @@ of which **two are a bare `import Mathlib`** (`Mathlib/Tactic/Rify.lean` and
 search returns the whole library. The one that bites hardest in practice is
 `Mathlib/Tactic/FunProp.lean`, whose documentation shows
 `import Mathlib.Analysis.Complex.Trigonometric` in an example: `Mathlib.Tactic.FunProp` is in
-almost every closure, and following that phantom edge adds 274 analysis modules to it.
+almost every closure, so an unmasked search silently pulls that module's entire closure — 1238
+Mathlib modules — into almost everything.
+
+**How much of that is new depends on the baseline, so the figure is not a property of the edge.**
+Against the 1669 above it adds **223**; against
+`Mathlib/Algebra/Category/ModuleCat/Sheaf/PushforwardContinuous.lean`'s closure of 1473 it adds
+**271**, which is where this was first noticed. **And they are not analysis modules**: of the 223
+here, **8** are under `Mathlib/Analysis/` and the other **215** are the substrate
+`Mathlib.Analysis.Complex.Trigonometric` is built on — topology 122, order 34, algebra 29, data
+23, and 7 modules of tactic and logic infrastructure. A sentence of the form *"that edge adds N
+analysis modules"* is wrong on both counts and this one used to be.
 
 ## Why this is not in `Oka/Analysis/Complex/CoveringMap.lean`
 
