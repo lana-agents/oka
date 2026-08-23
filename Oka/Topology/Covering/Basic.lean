@@ -6,9 +6,12 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 import Mathlib.Topology.Covering.Basic
 
 /-!
-# A closed local homeomorphism with finite fibres is a covering map
+# Two statements about covering maps: a criterion, and constancy of the fibre
 
-Material for `Mathlib/Topology/Covering/Basic.lean`; see `README.md` on the mirror tree.
+Material for `Mathlib/Topology/Covering/Basic.lean`; see `README.md` on the mirror tree. Two
+independent statements, sharing only their destination.
+
+## A closed local homeomorphism with finite fibres is a covering map
 
 Mathlib proves this for `IsCoveringMapOn` — `IsClosedMap.isCoveringMapOn_of_isLocalHomeomorphOn`,
 which takes a set `s`, finiteness of the fibres over `s`, and a local homeomorphism on `f ⁻¹' s`.
@@ -20,15 +23,49 @@ and is therefore not applicable to a non-compact source such as the punctured li
 The Hausdorff hypothesis on the source is Mathlib's and is used to separate the finitely many
 points of a fibre; it is not removable.
 
+## The fibres of a covering map over a preconnected base
+
+`IsCoveringMap.nonempty_homeomorph_fiber`: over a preconnected base any two fibres of a covering
+map are homeomorphic. This is what connectedness of the base buys — the *number of sheets* — and
+it is the statement that a covering map itself does not give: `IsCoveringMap` says every point has
+an evenly covered neighbourhood, with the fibre over that point as the index type, and says
+nothing at all relating the index types at two different points.
+
+The argument is the usual clopen one and the whole of its content is **local constancy**, which in
+turn rests on one observation Mathlib does not state:
+
+**`IsEvenlyCovered f x I` mentions `x` only through `x ∈ U`.** Unfolded it is a `U`, its openness,
+the openness of `f ⁻¹' U`, a homeomorphism `f ⁻¹' U ≃ₜ U × I` and a compatibility, and none of the
+last four depends on `x`. So the *same witness* serves every point of `U`, which is
+`IsEvenlyCovered.eventually`. Everything below is that fact plus `IsEvenlyCovered.fiberHomeomorph`,
+which is Mathlib's.
+
+Two details of the clopen step are worth stating because each cost a failed attempt:
+
+* **both** halves are the same local-constancy fact. `Sᶜ` is open because `Nonempty (· ≃ₜ ·)` is
+  symmetric and transitive, not by a second argument;
+* `IsClosed S` is the structure constructor applied to openness of the complement,
+  `⟨hclosed⟩`. `isClosed_compl_iff` is about `IsClosed Sᶜ` and is the wrong lemma here.
+
+**`PreconnectedSpace`, not `ConnectedSpace`.** Nonemptiness of the base plays no part, and asking
+for it would make the statement fail on the empty space for no reason.
+
 ## Main results
 
 - `IsClosedMap.isCoveringMap_of_isLocalHomeomorph`: a closed local homeomorphism with finite
   fibres out of a Hausdorff space is a covering map.
+- `IsEvenlyCovered.eventually`: an evenly covered point is evenly covered on a neighbourhood, with
+  the same index type.
+- `IsCoveringMap.eventually_nonempty_homeomorph`: the fibres of a covering map are locally
+  constant up to homeomorphism.
+- `IsCoveringMap.nonempty_homeomorph_fiber`: **over a preconnected base, any two fibres of a
+  covering map are homeomorphic.**
 -/
 
 open Topology
 
 variable {E X : Type*} [TopologicalSpace E] [TopologicalSpace X] {f : E → X}
+  {I : Type*} [TopologicalSpace I]
 
 /-- **A closed local homeomorphism with finite fibres out of a Hausdorff space is a covering
 map.**
@@ -41,3 +78,64 @@ theorem IsClosedMap.isCoveringMap_of_isLocalHomeomorph [T2Space E] (hf : IsClose
   rw [isCoveringMap_iff_isCoveringMapOn_univ]
   exact hf.isCoveringMapOn_of_isLocalHomeomorphOn (fun x _ ↦ hfin x)
     ((isLocalHomeomorph_iff_isLocalHomeomorphOn_univ.mp h).mono (Set.subset_univ _))
+
+/-- **An evenly covered point is evenly covered on a whole neighbourhood, with the same index
+type.**
+
+`IsEvenlyCovered f x I` is a `U` containing `x` together with data over `U` — its openness, the
+openness of `f ⁻¹' U`, a homeomorphism `f ⁻¹' U ≃ₜ U × I` and its compatibility with `f` — and
+**`x` occurs in none of that data except through `x ∈ U`.** So the witness for `x` is verbatim a
+witness for every `y ∈ U`, and the proof destructures it and puts it back together.
+
+Note that the index type is the *same* `I`, which is what makes this usable: applied to
+`IsCoveringMap f` at `x`, whose index type is `f ⁻¹' {x}`, it says every nearby point has fibre
+`f ⁻¹' {x}` — not merely that every nearby point is evenly covered by something.
+
+Mathlib does not have this; it sits with `IsEvenlyCovered.of_fiber_homeomorph`. -/
+theorem IsEvenlyCovered.eventually {x : X} (h : IsEvenlyCovered f x I) :
+    ∀ᶠ y in 𝓝 x, IsEvenlyCovered f y I := by
+  obtain ⟨inst, U, hxU, hU, hfU, H, hH⟩ := h
+  filter_upwards [hU.mem_nhds hxU] with y hyU
+  exact ⟨inst, U, hyU, hU, hfU, H, hH⟩
+
+/-- **The fibres of a covering map are locally constant up to homeomorphism.**
+
+`IsCoveringMap f` is by definition `∀ x, IsEvenlyCovered f x (f ⁻¹' {x})`, so
+`IsEvenlyCovered.eventually` at `x` says that every nearby `y` is evenly covered **with index type
+`f ⁻¹' {x}`**; `IsEvenlyCovered.fiberHomeomorph` then identifies that index type with `f ⁻¹' {y}`.
+
+The conclusion is `Nonempty (… ≃ₜ …)` rather than a homeomorphism, because there is no canonical
+choice: the identification depends on the evenly covered neighbourhood, and a different one gives
+a different homeomorphism. Nothing below needs a canonical one. -/
+theorem IsCoveringMap.eventually_nonempty_homeomorph (hf : IsCoveringMap f) (x : X) :
+    ∀ᶠ y in 𝓝 x, Nonempty ((f ⁻¹' {y}) ≃ₜ (f ⁻¹' {x})) := by
+  filter_upwards [(hf x).eventually] with y hy
+  exact ⟨hy.fiberHomeomorph.symm⟩
+
+/-- **Over a preconnected base, any two fibres of a covering map are homeomorphic.**
+
+This is what connectedness of the base is for, and `IsCoveringMap` on its own does not give it:
+being evenly covered relates the points *near* `x` to `x`, and nothing in the definition relates
+two points that are far apart.
+
+The proof is the clopen argument on `S = {z | Nonempty ((f ⁻¹' {z}) ≃ₜ (f ⁻¹' {x}))}`. Both halves
+are `IsCoveringMap.eventually_nonempty_homeomorph` and nothing else — `Sᶜ` is open because
+`Nonempty (· ≃ₜ ·)` is symmetric and transitive, so a point near a point *not* in `S` cannot be in
+`S` either. `S` is nonempty because `x ∈ S` by `Homeomorph.refl`.
+
+`PreconnectedSpace` and not `ConnectedSpace`: the base being nonempty is never used, and over the
+empty space the statement is vacuous rather than false. -/
+theorem IsCoveringMap.nonempty_homeomorph_fiber [PreconnectedSpace X] (hf : IsCoveringMap f)
+    (x y : X) : Nonempty ((f ⁻¹' {x}) ≃ₜ (f ⁻¹' {y})) := by
+  set S : Set X := {z | Nonempty ((f ⁻¹' {z}) ≃ₜ (f ⁻¹' {x}))} with hS
+  have hopen : IsOpen S := by
+    refine isOpen_iff_mem_nhds.2 fun z hz ↦ ?_
+    filter_upwards [hf.eventually_nonempty_homeomorph z] with w hw
+    exact ⟨hw.some.trans hz.some⟩
+  have hcompl : IsOpen Sᶜ := by
+    refine isOpen_iff_mem_nhds.2 fun z hz ↦ ?_
+    filter_upwards [hf.eventually_nonempty_homeomorph z] with w hw hw'
+    exact hz ⟨hw.some.symm.trans hw'.some⟩
+  have huniv : S = Set.univ :=
+    IsClopen.eq_univ ⟨⟨hcompl⟩, hopen⟩ ⟨x, ⟨Homeomorph.refl _⟩⟩
+  exact ⟨(Set.eq_univ_iff_forall.mp huniv y).some.symm⟩

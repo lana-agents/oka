@@ -475,9 +475,9 @@ info: 'ComplexAnalytic.AnalyticSpace.isIso_stalkMap_okaMap' depends on axioms:
 
 /-! ### The third rung: a finite étale morphism is a covering map
 
-The first of the two is the mirror-tree topological criterion in
-`Oka/Topology/Covering/Basic.lean` and says nothing about analytic spaces; it is guarded here
-rather than apart from its only consumer. -/
+The first two of the five are the mirror-tree topological criteria in
+`Oka/Topology/Covering/Basic.lean` and say nothing about analytic spaces; they are guarded here
+rather than apart from their only consumers. -/
 
 /--
 info: 'IsClosedMap.isCoveringMap_of_isLocalHomeomorph' depends on axioms:
@@ -492,3 +492,43 @@ info: 'ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale' depend
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale
+
+/-! ### The number of sheets, constant over a preconnected base
+
+`IsEvenlyCovered.eventually` and the two `IsCoveringMap` statements are mirror-tree topology, in
+`Oka/Topology/Covering/Basic.lean`; the two `ComplexAnalytic` ones are their application to the
+third rung. -/
+
+/--
+info: 'IsEvenlyCovered.eventually' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms IsEvenlyCovered.eventually
+
+/--
+info: 'IsCoveringMap.eventually_nonempty_homeomorph' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms IsCoveringMap.eventually_nonempty_homeomorph
+
+/--
+info: 'IsCoveringMap.nonempty_homeomorph_fiber' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms IsCoveringMap.nonempty_homeomorph_fiber
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.nonempty_homeomorph_fiber_of_isFiniteEtale' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.nonempty_homeomorph_fiber_of_isFiniteEtale
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale

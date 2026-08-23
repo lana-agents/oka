@@ -44,17 +44,20 @@ conflate. It is not in the definition and it is not proved here; it is
 
 **This paragraph used to say "onto a connected base", and connectedness is not a hypothesis of
 that theorem.** A point outside the range is evenly covered by the empty index type. What
-connectedness gives is that the number of sheets is constant, which is a different statement and
-is in neither file.
+connectedness gives is that the number of sheets is constant — a different statement, and now a
+proved one: `ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale`, in the same file as
+the rung.
 
 ## What is not here
 
 * **The Riemann existence theorem**, and any statement relating covers to field extensions. This
   is the notion RET is *about*; nothing here mentions `ℂ(X)`.
-* **The constancy of the number of sheets of a finite étale morphism over a connected base.** The
-  third rung — that a finite local isomorphism is a covering map — *is* proved, in
-  `Oka/AnalyticSpace/CoveringMap.lean`; what needs connectedness is the degree, and that is not
-  proved anywhere.
+* **The value of the degree of any particular finite étale morphism.** The bullet that used to
+  stand here said the constancy of the number of sheets over a connected base was not proved
+  anywhere; it is, as `ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale` in
+  `Oka/AnalyticSpace/CoveringMap.lean`, beside the third rung it is built from. What is still
+  absent is any computation of that common value — that `z ↦ z²` is two-sheeted, say — which is a
+  statement about roots in `ℂ` rather than about covers.
 * **The analytification of a finite étale morphism** — the other blocker of #551, stateable only
   now that this exists.
 * **Grauert's finite mapping theorem**, which `Oka/AnalyticSpace/Finite.lean` already records as

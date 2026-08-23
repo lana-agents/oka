@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Oka
+import Mathlib.Analysis.Normed.Module.Connected
 import OkaTest.HolomorphicMap
 
 /-!
@@ -92,14 +93,19 @@ derived from — so read it as a test of the rung and not as a fact about the ma
   morphism which is not an isomorphism. **The stalk half of
   `ComplexAnalytic.AnalyticSpace.IsLocalIso` is exercised by it**, and by nothing else: the
   non-example `ComplexAnalytic.axisIncl` fails the topological field alone.
-* **The number of sheets.** `ComplexAnalytic.isCoveringMap_base_sq` says the underlying map of
-  `ComplexAnalytic.sq` is a covering map — the third rung,
-  `ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale`, applied at the witness —
-  but nothing here says it is *two*-sheeted, and the theorem that the number of sheets is constant
-  over a connected base is not proved anywhere in this repository. **The distinction the bullet
-  that used to stand here drew still holds**: `IsCoveringMap` is a condition on a map of
-  topological spaces, so neither that statement nor Mathlib's `isCoveringMap_npow` is about a
-  covering *of analytic spaces*, a notion this repository does not have.
+* **The *value* of the number of sheets.** The bullet that used to stand here said two things:
+  that nothing shows `ComplexAnalytic.sq` two-sheeted, and that the constancy of the number of
+  sheets over a connected base is not proved anywhere. **The second is retired** — it is
+  `ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale`, applied here as
+  `ComplexAnalytic.card_fiber_sq_eq`, which says all fibres of `ComplexAnalytic.sq` have the same
+  cardinality. **The first stands, and it is what makes that a weak test**: the common value is
+  not computed, so nothing here distinguishes the statement from what a one-sheeted map would
+  satisfy. Computing it means exhibiting the fibre over a nonzero `w` as a two-element set, which
+  is a statement about square roots in `ℂ` and has no covering-space content.
+  **The distinction the bullet before that one drew still holds**: `IsCoveringMap` is a condition
+  on a map of topological spaces, so neither `ComplexAnalytic.isCoveringMap_base_sq` nor Mathlib's
+  `isCoveringMap_npow` is about a covering *of analytic spaces*, a notion this repository does not
+  have.
 -/
 
 open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry Topology Filter
@@ -882,6 +888,62 @@ theorem isCoveringMap_base_sq :
       ((AnalyticSpace.complexAffineSpace.{u} 1).restrict punctured.{u} : Type u) → _) :=
   haveI := isFiniteEtale_sq.{u}
   AnalyticSpace.isCoveringMap_base_of_isFiniteEtale ComplexAnalytic.sq.{u}
+
+/-- **The punctured line is preconnected.** `ComplexAnalytic.puncturedHomeo` a third time, after
+`ComplexAnalytic.t2Space_restrict_punctured` and the two halves of finiteness: the statement is
+about `{z : ℂ // z ≠ 0}` and the bridge carries it.
+
+`ℂ ∖ {0}` is connected because `ℂ` has real rank `2 > 1`
+(`isConnected_compl_singleton_of_one_lt_rank`, with `Complex.rank_real_complex`), which is the
+only place in this file where a *dimension* of `ℂ` is used at all — everything else about
+`z ↦ z²` goes through `Oka/Analysis/Complex/CoveringMap.lean` and is stated over an arbitrary
+proper normed field. **That is why the statement is false for the punctured line over `ℝ`** and
+why no attempt is made to state it there.
+
+Declared as an instance for the same reason `ComplexAnalytic.t2Space_restrict_punctured` is: its
+head is a particular restriction of a particular space, both defined in this file, so it cannot
+fire anywhere it is not wanted. `PreconnectedSpace` rather than `ConnectedSpace` because that is
+what `ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale` asks for; the space is of
+course also nonempty, and nothing needs that.
+
+**The transport is `DenseRange.preconnectedSpace` and not a `Homeomorph` lemma**, because the
+`Homeomorph` namespace has no preconnectedness transport to match `Homeomorph.t2Space`, which is
+what `ComplexAnalytic.t2Space_restrict_punctured` just above uses. A homeomorphism is surjective,
+so its range is dense, and that is the shortest route Mathlib offers. (Naming the missing lemma in
+backticks would fail this repository's docstring-name check, which is the check working: a
+declaration that does not exist should not be spelled as though it did.) -/
+instance preconnectedSpace_restrict_punctured :
+    PreconnectedSpace ((AnalyticSpace.complexAffineSpace.{u} 1).restrict punctured.{u} : Type u) :=
+  haveI : ConnectedSpace {z : ℂ // z ≠ 0} := by
+    have h : IsConnected ({(0 : ℂ)}ᶜ : Set ℂ) :=
+      isConnected_compl_singleton_of_one_lt_rank
+        (by rw [Complex.rank_real_complex]; norm_num) 0
+    have he : ({(0 : ℂ)}ᶜ : Set ℂ) = {z : ℂ | z ≠ 0} := by ext z; simp
+    rw [he] at h
+    exact isConnected_iff_connectedSpace.mp h
+  puncturedHomeo.{u}.symm.surjective.denseRange.preconnectedSpace
+    puncturedHomeo.{u}.symm.continuous
+
+/-- **All fibres of `ComplexAnalytic.sq` have the same number of points.**
+
+`ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale` at the witness, and the only place
+that theorem is applied. Its three hypotheses are all supplied in this file:
+`ComplexAnalytic.isFiniteEtale_sq`, `ComplexAnalytic.t2Space_restrict_punctured` and
+`ComplexAnalytic.preconnectedSpace_restrict_punctured`.
+
+**This is a weak statement and the module docstring says why.** The common value is not computed,
+so nothing here rules out its being `1`; what the theorem tests is that the hypotheses of the
+constancy statement are simultaneously satisfiable by something other than an isomorphism, for
+which they are trivially satisfiable. `Nat.card` is not a junk value, because
+`ComplexAnalytic.finite_fiber_base_sq` gives finiteness — see
+`ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale`'s docstring, where that is the
+reason the homeomorphism form is stated alongside. -/
+theorem card_fiber_sq_eq (y₁ y₂ : (AnalyticSpace.complexAffineSpace.{u} 1).restrict
+    punctured.{u}) :
+    Nat.card ((ComplexAnalytic.sq.{u}).toLRSHom.base ⁻¹' {y₁}) =
+      Nat.card ((ComplexAnalytic.sq.{u}).toLRSHom.base ⁻¹' {y₂}) :=
+  haveI := isFiniteEtale_sq.{u}
+  AnalyticSpace.card_fiber_eq_of_isFiniteEtale ComplexAnalytic.sq.{u} y₁ y₂
 
 end
 

@@ -173,9 +173,14 @@ coherence statement for arbitrary complex analytic spaces:
   `IsCoveringMapOn` and which the mirror tree restates globally
   (`Oka/Topology/Covering/Basic.lean`) — and the two conditions are literally the fields of the
   first two rungs. Hausdorffness is a genuine hypothesis: an analytic space is no more assumed
-  separated here than a scheme is. Connectedness of the target is **not** needed, and the earlier
-  statement of this rung wrongly carried it; what connectedness gives is that the number of sheets
-  is constant, which is not proved. `ComplexAnalytic.isCoveringMap_base_sq` applies the rung to the
+  separated here than a scheme is. Connectedness of the target is **not** needed for the rung, and
+  the earlier statement of it wrongly carried the hypothesis; what connectedness gives is that the
+  **number of sheets is constant**, and that is
+  `ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale` — over a *preconnected* target
+  any two fibres of a finite étale morphism have the same cardinality, by the clopen argument in
+  `Oka/Topology/Covering/Basic.lean` off the local constancy of a fibre. **The value of that common
+  cardinality is not computed for any morphism**, so nothing here says `z ↦ z²` is two-sheeted, and
+  there is no `degree` function. `ComplexAnalytic.isCoveringMap_base_sq` applies the rung to the
   squaring map, and is a test of the rung rather than new information about `z ↦ z²`, which
   Mathlib already covers. **There is still no notion of a covering *of analytic spaces***: this is
   a statement about the underlying map, and the stalk field of `…IsLocalIso` plays no part in it.
