@@ -51,10 +51,13 @@ set -uo pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")/.." || exit 1
 
+# Print the whole leading comment block, which is where the "what this is NOT" list lives.
+#
+# **The range must not stop at the first separator.** It did, and `--help` then printed the three
+# probes and none of the disclaimer — while `README.md` said "Its own `--help` lists this too".
+# `self_test` now asserts that the disclaimer is in the output, so the two cannot drift again.
 usage() {
-  sed -n '2,/^# ----/p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
-  echo
-  echo "See the header of scripts/check_file.sh for the full list of what this does NOT check."
+  awk 'NR > 1 { if ($0 !~ /^#/) exit; sub(/^# ?/, ""); print }' "${BASH_SOURCE[0]}"
 }
 
 # Read `[leanOptions]` out of `lakefile.toml` as `-Dkey=value` arguments. Comments are stripped,
@@ -98,14 +101,21 @@ run_check() {
     echo "check weaker than the build. Fix the parser rather than deleting this guard." >&2
     return 1
   fi
-  out="$(lake env lean "${opts[@]}" "$@" 2>&1)"
-  rc=$?
-  [ -n "$out" ] && printf '%s\n' "$out"
-  [ "$rc" -ne 0 ] && return "$rc"
-  if printf '%s' "$out" | grep -qE '(^|[^[:alnum:]_])(warning|error):'; then
-    return 1
-  fi
-  return 0
+  # One file per `lake env lean`: it takes exactly one, and passing two makes it print
+  # `Expected exactly one file name` followed by its own usage dump. The loop is what makes the
+  # `[more files…]` in the usage line true.
+  local status=0
+  for f in "$@"; do
+    out="$(lake env lean "${opts[@]}" "$f" 2>&1)"
+    rc=$?
+    [ -n "$out" ] && printf '%s\n' "$out"
+    if [ "$rc" -ne 0 ]; then
+      status="$rc"
+    elif printf '%s' "$out" | grep -qE '(^|[^[:alnum:]_])(warning|error):'; then
+      status=1
+    fi
+  done
+  return "$status"
 }
 
 # Three fixtures and a positive control. The control is the point: without it a green self-test
@@ -153,6 +163,21 @@ self_test() {
     lake env lean "$dir/long.lean"
   expect 0 "control: bare lake env lean accepts the auto-bound implicit" \
     lake env lean "$dir/auto.lean"
+  # `--help` must carry the disclaimer, because `README.md` says it does. This is a regression
+  # guard: the first version of `usage` stopped at the separator above the disclaimer and printed
+  # none of it.
+  local help
+  help="$(usage)"
+  for needle in "validation.sh" "mk_all" "lint-style" "check_docstring_names.py" "sorry"; do
+    if printf '%s' "$help" | grep -qF -- "$needle"; then
+      echo "ok       --help mentions $needle"
+    else
+      echo "FAILED   --help does not mention $needle"
+      status=1
+    fi
+  done
+  expect 0 "two files at once are both checked" run_check "$dir/clean.lean" "$dir/guard.lean"
+  expect 1 "two files at once fail if either fails" run_check "$dir/clean.lean" "$dir/long.lean"
 
   if [ "$status" -eq 0 ]; then echo "self-test passed."; else echo "self-test FAILED."; fi
   return "$status"
