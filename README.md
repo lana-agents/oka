@@ -200,13 +200,23 @@ coherence statement for arbitrary complex analytic spaces:
   `AlgebraicGeometry.Scheme.Modules.isLocalizedModule_away_sectionsToBasicOpen`: for a
   quasicoherent `M`, restriction from `⊤` to `D(g)` exhibits `Γ(M, D(g))` as the localisation of
   `Γ M` away from `g`, which is the hypothesis `Module.Finite.of_localizationSpan_finite'` wants.
-  **What is between them is one statement and it is the mathematics of the dictionary**: that
-  finitely many sections generating `M` over `D(g)` *as a sheaf* generate `Γ(M, D(g))` *as a
-  module*. An epimorphism of sheaves is not surjective on sections in general; on an affine and
-  for a quasicoherent sheaf it is, and that is not proved here. Both new statements are
-  instantiated in `OkaTest/AffineSections.lean` at `𝒪_{Spec A} ⧸ (x)` — the same witness, read on
-  the algebraic side instead of after analytification, and nonzero with a presenting map that is
-  not an epimorphism.
+  **The mathematics between them is now proved**:
+  `AlgebraicGeometry.Scheme.Modules.surjective_moduleSpecΓFunctor_map`, that an epimorphism of
+  *quasicoherent* sheaves on `Spec R` is surjective on global sections — false for sheaves of
+  modules in general, and the one place the affineness is used.
+  `AlgebraicGeometry.tildeEquiv` is an equivalence, so it carries the epimorphism to a surjection
+  of `R`-modules; **no cohomology and no stalks enter**, because the vanishing that would
+  otherwise be needed is already inside the statement that the counit is an isomorphism. Its
+  corollary `…module_finite_moduleSpecΓFunctor_obj` is that finitely many **global** generating
+  sections make `Γ M` a finite `R`-module.
+  **What is still missing is a change of site**: `D(g)` *is* `Spec (Localization.Away g)`, so the
+  statement over a distinguished open is the same statement at a different affine, and what has to
+  be built is the transport of the module, of its generating sections and of the `IsScalarTower`
+  between the two scalar rings. **How much work that is has not been established**; the module
+  docstring of `Oka/AlgebraicGeometry/Modules/Tilde.lean` says which parts are measured and which
+  are not. All three statements are instantiated in `OkaTest/AffineSections.lean` at
+  `𝒪_{Spec A} ⧸ (x)` — the same witness, read on the algebraic side instead of after
+  analytification, nonzero, with a presenting map that is neither an epimorphism nor zero.
 
 * **Being a complex analytic space is local.** The `local_model` field of
   `ComplexAnalytic.AnalyticSpace` is isolated as a predicate `ComplexAnalytic.HasLocalModels` on
