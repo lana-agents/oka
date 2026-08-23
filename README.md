@@ -137,6 +137,22 @@ coherence statement for arbitrary complex analytic spaces:
   `f_*𝒪_X` is coherent for finite `f`, and that is not proved here**; nor is properness defined,
   nor are there fibre products to base-change along.
 
+* **Local isomorphisms and finite étale morphisms** (`Oka/AnalyticSpace/LocalIso.lean`), the
+  second rung of the Riemann existence theorem's analytic side.
+  `ComplexAnalytic.AnalyticSpace.IsLocalIso` is a local homeomorphism whose stalk maps are
+  isomorphisms, and `…IsFiniteEtale` is that together with finiteness. **The two rungs do not
+  compose the way finiteness's own two fields do**, and the definition says so rather than hiding
+  it: finiteness is purely topological, while a local isomorphism has to see the structure
+  sheaves, since two analytic spaces with the same underlying space and different sheaves are not
+  locally isomorphic. Identities, composites and isomorphisms are local isomorphisms, and
+  `OkaTest/FiniteMorphism.lean` shows the second rung genuinely restricts the first: `z ↦ (z, 0)`
+  is finite and **not** a local isomorphism, because a local homeomorphism is open, its range is
+  also closed, and `ℂ²` is connected. **The only positive witness is the identity** — a finite
+  étale morphism that is not an isomorphism needs a source that is not simply connected and is not
+  built here — and nothing exercises the stalk half of the definition. Neither `IsCoveringMap` nor
+  the theorem that a finite local isomorphism onto a connected base is one appears; that is a
+  third rung.
+
 * **Coherence in every finite rank, and of an analytified presentation.** Oka's theorem says
   `𝒪_X` is coherent; a *presentation* is pushed through the stability results only if `𝒪_X^m` is
   coherent too, and that is an induction on the rank with no analysis in it
