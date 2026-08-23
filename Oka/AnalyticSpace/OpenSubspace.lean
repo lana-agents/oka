@@ -54,6 +54,9 @@ transport of algebra structures along an isomorphism is needed anywhere.
   spaces.
 - `ComplexAnalytic.AnalyticSpace.restrictLE`: the inclusion of a smaller open subspace into a
   larger one, as a morphism of complex analytic spaces.
+- `ComplexAnalytic.AnalyticSpace.liftRestrict`: **a morphism whose image lies in an open subspace
+  factors through it**, as a morphism of complex analytic spaces. This is what builds a morphism
+  whose *target* is an open subspace; `restrictLE` is its special case at an inclusion.
 - `ComplexAnalytic.AnalyticSpace.resΓ`: the restriction of a global section of `𝒪_X` to an open
   subspace.
 
@@ -229,6 +232,40 @@ lemma resΓ_restrictLE (X : AnalyticSpace.{u}) {V W : X.Opens} (h : V ≤ W)
     (congrArg (fun m : X.toLocallyRingedSpace.restrict V.isOpenEmbedding ⟶
         X.toLocallyRingedSpace ↦ (LocallyRingedSpace.Γ.map m.op).hom g)
       (LocallyRingedSpace.restrictLE_fac X.toLocallyRingedSpace h))
+
+/-- **A morphism whose image lies in an open subspace factors through it**, as a morphism of
+complex analytic spaces.
+
+`AlgebraicGeometry.LocallyRingedSpace.liftRestrict` at the underlying morphisms. It is `ℂ`-linear
+for the same reason `ComplexAnalytic.AnalyticSpace.restrictLE` is, and by the same lemma: the
+factorisation makes it a morphism *over* `X`, `φ` is `ℂ`-linear by assumption and
+`ComplexAnalytic.AnalyticSpace.ofRestrict` by construction, so
+`ComplexAnalytic.IsCLinearHom.of_comp` applies. Nothing is transported.
+
+**This is the construction that builds a morphism whose *target* is an open subspace.** Before it,
+everything here produced morphisms *out* of a restriction — `ofRestrict`, `restrictLE`,
+`ComplexAnalytic.localisationProj` — and `restrictLE` was the only one landing in a restriction,
+at the special case where the source is one too and the map is an inclusion. -/
+noncomputable def liftRestrict {Z X : AnalyticSpace.{u}} (φ : Z ⟶ X) (V : X.Opens)
+    (h : Set.range (φ.toLRSHom.base : Z → X) ⊆ (V : Set X)) : Z ⟶ X.restrict V :=
+  ⟨LocallyRingedSpace.liftRestrict φ.toLRSHom V h,
+    IsCLinearHom.of_comp (LocallyRingedSpace.liftRestrict_fac φ.toLRSHom V h)
+      φ.isCLinear (isCLinearHom_ofRestrict X.toLocallyRingedSpace X.algebraMap V)⟩
+
+/-- The underlying morphism of locally ringed spaces of
+`ComplexAnalytic.AnalyticSpace.liftRestrict`. -/
+lemma toLRSHom_liftRestrict {Z X : AnalyticSpace.{u}} (φ : Z ⟶ X) (V : X.Opens)
+    (h : Set.range (φ.toLRSHom.base : Z → X) ⊆ (V : Set X)) :
+    (liftRestrict φ V h).toLRSHom = LocallyRingedSpace.liftRestrict φ.toLRSHom V h :=
+  rfl
+
+/-- **`ComplexAnalytic.AnalyticSpace.liftRestrict` is a factorisation of `φ`.** This, rather than
+the morphism itself, is what a caller consumes — in particular it is how the underlying map of the
+lift is computed, since the lift is opaque and the composite is not. -/
+lemma liftRestrict_fac {Z X : AnalyticSpace.{u}} (φ : Z ⟶ X) (V : X.Opens)
+    (h : Set.range (φ.toLRSHom.base : Z → X) ⊆ (V : Set X)) :
+    liftRestrict φ V h ≫ X.ofRestrict V = φ :=
+  forgetToLocallyRingedSpace.map_injective (LocallyRingedSpace.liftRestrict_fac φ.toLRSHom V h)
 
 end AnalyticSpace
 

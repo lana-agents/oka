@@ -406,3 +406,24 @@ info: 'ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_isIso' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_isIso
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.liftRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.liftRestrict
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.toLRSHom_liftRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.toLRSHom_liftRestrict
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.liftRestrict_fac' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.liftRestrict_fac
