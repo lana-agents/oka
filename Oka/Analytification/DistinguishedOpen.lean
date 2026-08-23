@@ -86,6 +86,29 @@ where `D(z₀)` is the punctured axis that `OkaTest/OpenSubspace.lean` builds by
 - `ComplexAnalytic.localisationOpen_ne_top`: **`D(f)` is a proper open subset** whenever `f` has a
   zero on `X^an`.
 
+## What is not here
+
+**That `ℂ[x, t] ⧸ (g, t·f - 1)` is a localisation of `ℂ[x] ⧸ (g)` is not proved anywhere in this
+repository.** The `localisation…` names below, and the first paragraph's
+`A_f = ℂ[x₁, …, x_n, t] ⧸ (g₁, …, g_k, t·f - 1)`, are the *classical* fact rather than a formal
+one: nothing connects `ComplexAnalytic.PresentedAlgebra (localisationPresentation g f)` to the
+localisation `Localization.Away (Ideal.Quotient.mk (presentationIdeal g) f)` of
+`ComplexAnalytic.PresentedAlgebra g`. `Localization`, `IsLocalization` and `Away` occur nowhere in
+this file outside this section, and in no declaration anywhere in it; what is proved is a
+statement about the analytification of one particular tuple. **A consumer analytifying an actual
+scheme will need the algebraic identification**, and will have to prove it.
+
+It is not out of reach. `Localization.awayEquivAdjoin r : Away r ≃ₐ[R] AdjoinRoot (C r * X - 1)`
+(`Mathlib/RingTheory/Localization/Away/AdjoinRoot.lean`) is the "adjoin an inverse by adjoining a
+variable and an equation" step for a *single* variable over a base ring; what is missing between
+it and `localisationPresentation` is the passage from the multivariate quotient in `n + 1`
+variables to a `Polynomial` — equivalently `AdjoinRoot` — over the quotient in `n`. That is a
+ring-theoretic item with no analysis in it, and nothing in the geometry below depends on it.
+
+**Nothing else about the isomorphism is assumed.** `ComplexAnalytic.localisationIso` and both
+factorisations are statements about `ComplexAnalytic.localisationPresentation` as a tuple of
+polynomials, and neither their statements nor their proofs mention a localisation.
+
 ## References
 
 - [Hans Grauert and Reinhold Remmert, *Coherent analytic sheaves*][grauert-remmert1984], §A
