@@ -67,11 +67,14 @@ itself.
   hypothesis is inhabited away from the zero sheaf, not that the conclusion is sharp. The
   conclusion is sharp only for a sheaf which is *not* globally generated, and this repository
   exhibits none on a `Spec`.
-* **`Γ M` is not shown finitely *presented*.** `Module.Finite nodeA` is proved below, and
-  `Module.FinitePresentation` is a further step — the same argument run again on the relations —
-  which is not in this repository. Nor does anything here produce a **global**
-  `SheafOfModules.Presentation` of a sheaf that is merely of finite type; the witness has one
-  because it was built as a cokernel of finite free sheaves, not because it was derived.
+* **`Γ M` *is* shown finitely presented below, and not from the same hypotheses.**
+  `Module.FinitePresentation` needs a finite **global** `SheafOfModules.Presentation`, which is
+  strictly more than quasicoherent-of-finite-type — see the module docstring of
+  `Oka/AlgebraicGeometry/Modules/Tilde.lean` for why it has to be, since the statement is *false*
+  at the weaker hypotheses. The witness has such a presentation because it was **built** as a
+  cokernel of finite free sheaves, not because one was derived; nothing here produces a global
+  presentation for a sheaf that is merely of finite type, and nothing states the *local* form,
+  `SheafOfModules.IsFinitePresentation`.
 -/
 
 open CategoryTheory Limits AlgebraicGeometry TopologicalSpace Opposite PrimeSpectrum SheafOfModules
@@ -310,5 +313,45 @@ example : Module.Finite nodeA.{u}
   haveI : (cokernel specXHom.{u} : (Spec nodeA.{u}).Modules).IsFiniteType :=
     isFiniteType_cokernel_specXHom.{u}
   Scheme.Modules.module_finite_moduleSpecΓFunctor_obj_of_isFiniteType _
+
+/-! ### Finite presentation
+
+`AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ` asks for strictly more than the two
+instances above — a finite **global** presentation — and that is not a convenience: at
+quasicoherent-plus-finite-type the conclusion is false, for the reason recorded in the module
+docstring of `Oka/AlgebraicGeometry/Modules/Tilde.lean`. So the hypothesis needs its own
+non-vacuity check, and this is it. -/
+
+/-- **The witness has a finite global presentation.**
+
+`SheafOfModules.presentationOfIsCokernelFree` is already how its `IsQuasicoherent` instance is
+built, and both index types are `PUnit`, so the two `IsFiniteType` fields are `Finite PUnit`. They
+are supplied rather than searched for, as everywhere else in this file. -/
+def specXPresentation : (cokernel specXHom.{u}).Presentation :=
+  presentationOfIsCokernelFree specXHom.{u} (cokernel.π specXHom.{u})
+    (cokernel.condition _) (cokernelIsCokernel _)
+
+instance isFinite_specXPresentation : (specXPresentation.{u}).IsFinite where
+  isFiniteType_generators := ⟨inferInstanceAs (Finite PUnit.{u + 1})⟩
+  isFiniteType_relations := ⟨inferInstanceAs (Finite PUnit.{u + 1})⟩
+
+/-- **`Γ M` is a finitely presented `A`-module**, at `M = 𝒪_{Spec A} ⧸ (x)`.
+
+**`A` is noetherian, so the conclusion is not surprising *here*** — over a noetherian ring finite
+and finitely presented coincide, and `Module.Finite nodeA (Γ M)` is already proved above. What
+this checks is that the *hypothesis* is inhabited: that a sheaf on a `Spec` in this repository
+carries a finite global `SheafOfModules.Presentation` at all. Without it
+`AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ` would be a statement with no witness here,
+which is exactly the situation `OkaTest/CoherentPresentation.lean` records for
+`SheafOfModules.IsCoherent`.
+
+The `IsFinite` instance is supplied positionally, and neither `haveI` nor `letI` of exactly
+`(specXPresentation.{u}).IsFinite` in scope is enough — both leave `failed to synthesize
+specXPresentation.IsFinite`. Why is not established here and no explanation should be read into
+this note; both were run. -/
+example : Module.FinitePresentation nodeA.{u}
+    ((moduleSpecΓFunctor (R := nodeA.{u})).obj
+      (cokernel specXHom.{u} : (Spec nodeA.{u}).Modules) : Type u) :=
+  @Scheme.Modules.finitePresentation_Γ _ _ specXPresentation.{u} isFinite_specXPresentation.{u}
 
 end OkaTest.AffineSections
