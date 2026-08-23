@@ -31,23 +31,22 @@ at the weaker hypotheses there **is** a witness, and it is not a degenerate one.
 * **not the zero sheaf** (`OkaTest.AffineSections.not_isZero_cokernel_specXHom`, from
   `OkaTest.CoherentFree.not_isZero_cokernel_specXFamily`, whose content is that `x` vanishes at
   the origin of the node);
-* **a proper quotient of `𝒪_{Spec A}`**: its presenting map, multiplication by `x`, is not an
-  epimorphism — which is what the nonzero cokernel says — so this is a quotient of the structure
-  sheaf by something.
+* **a quotient of `𝒪_{Spec A}` by neither everything nor nothing**: its presenting map,
+  multiplication by `x`, is not an epimorphism — which is what the nonzero cokernel says — and it
+  is also not the zero map (`OkaTest.AffineSections.specXHom_ne_zero`), so the relations half of
+  the presentation is doing something. The two are independent: if the presenting map were zero
+  the cokernel would be `free PUnit`, which is also not zero.
 
-**Two things are not asserted, and both are deliberate.**
+  What is proved is that the *map* is nonzero, not that its image is a nonzero subobject; the
+  latter follows in an abelian category and is not formalised here.
+
+**One thing is not asserted, and deliberately.**
 
 *It is not asserted to be non-free.* `OkaTest/CoherentFree.lean`, which this file imports, says of
 the same sheaf that nothing there shows it is not a free sheaf of modules — that this is true but
 is an annihilator argument it does not make. Nothing here makes it either, and a non-epimorphic
 presenting map does not imply it: a free sheaf can be presented by a map that is not an
 epimorphism.
-
-*Nor is it asserted that the presenting map is nonzero*, which is the statement that the relations
-half of the presentation is doing anything. That is true and easy — it needs `x ≠ 0` in `A` — and
-it is not what the nonzero cokernel gives: if the presenting map were zero the cokernel would be
-`free PUnit`, which is also not zero. The two statements are independent and only one of them is
-here.
 
 So neither statement is about the zero sheaf, and neither is exercised only at the structure sheaf
 itself.
@@ -120,6 +119,59 @@ theorem not_isZero_cokernel_specXHom : ¬ IsZero (cokernel specXHom.{u}) := by
   exact not_isZero_cokernel_specXFamily.{u}
     ((cokernelCompIsIso ((nodeSpec.{u}).sectionsHom specXFamily.{u})
       (SheafOfModules.freePUnitIso (R := (nodeSpec.{u}).ringSheaf)).inv).isZero_iff.1 h)
+
+/-- **`x` is not zero in `A = ℂ[x, y] ⧸ (xy)`.**
+
+If it were, `x` would lie in `(xy)`, so `x = c * x * y` for some `c`; evaluating at the point
+`(1, 0)` of the node — `OkaTest.Analytification.nodePtX`, kept in the development for exactly this
+kind of separation — gives `1 = 0`. -/
+theorem specX_ne_zero : specX.{u} ≠ 0 := by
+  intro h
+  have hmem : MvPolynomial.X (R := ℂ) (ULift.up 0) ∈ presentationIdeal.{u} nodeG.{u} :=
+    (Ideal.Quotient.eq_zero_iff_mem (I := presentationIdeal.{u} nodeG.{u})).1 h
+  rw [presentationIdeal_nodeG.{u}, Ideal.mem_span_singleton] at hmem
+  obtain ⟨c, hc⟩ := hmem
+  have hev := congrArg (MvPolynomial.eval nodePtX.{u}) hc
+  simp [nodePoly] at hev
+
+/-- **The global section `x` of `𝒪_{Spec A}` is nonzero.**
+
+`AlgebraicGeometry.StructureSheaf.globalSectionsIso` says `A → Γ(Spec A, ⊤)` is an isomorphism,
+hence injective, and `specXFamily` is that map applied to `specX`. The `Algebra` instance lives at
+the `Spec.structureSheaf` spelling only, which is why this goes through the iso rather than naming
+the algebra map at the locally ringed space spelling — the same seam `specXFamily`'s own docstring
+records. -/
+theorem specXFamily_ne_zero (i : PUnit.{u + 1}) : specXFamily.{u} i ≠ 0 := by
+  intro h
+  refine specX_ne_zero.{u} ?_
+  have hinj := (ConcreteCategory.bijective_of_isIso
+    (StructureSheaf.globalSectionsIso
+      (CommRingCat.of (MvPolynomial (ULift.{u} (Fin 2)) ℂ ⧸
+        presentationIdeal.{u} nodeG.{u}))).hom).1
+  rw [StructureSheaf.globalSectionsIso_hom] at hinj
+  apply hinj
+  rw [map_zero]
+  exact h
+
+/-- **The presenting map is not the zero map**, so the relations half of the presentation is doing
+something.
+
+This is independent of `not_isZero_cokernel_specXHom`: if the presenting map were zero the cokernel
+would be `free PUnit`, which is also not zero. Composing with the iso `freePUnitIso.inv` is
+harmless, so it reduces to `AlgebraicGeometry.LocallyRingedSpace.sectionsHom specXFamily ≠ 0`, and
+`freeHomEquiv_sectionsHom` pins that morphism down as the section `x` over `⊤`. -/
+theorem specXHom_ne_zero : specXHom.{u} ≠ 0 := by
+  intro h
+  have h0 : (nodeSpec.{u}).sectionsHom specXFamily.{u} = 0 := by
+    have h1 := congrArg (fun φ ↦ φ ≫ (SheafOfModules.freePUnitIso
+      (R := (nodeSpec.{u}).ringSheaf)).hom) h
+    simpa [specXHom] using h1
+  have h2 := (nodeSpec.{u}).freeHomEquiv_sectionsHom specXFamily.{u} PUnit.unit
+  rw [h0] at h2
+  have h3 := congrArg (fun s ↦ PresheafOfModules.sections.eval s
+    (op (⊤ : Opens ↑(nodeSpec.{u}).toPresheafedSpace))) h2
+  simp at h3
+  exact specXFamily_ne_zero.{u} PUnit.unit h3.symm
 
 /-! ### The two statements, at that witness -/
 
