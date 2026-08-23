@@ -44,8 +44,18 @@ the one carrying all of the mathematics.
 
 Note that **finite presentation is not the finite-type argument run again on the relations**: it
 is false at quasicoherent-plus-finite-type, for the reason in the module docstring of
-`Oka/AlgebraicGeometry/Modules/Tilde.lean`. That is why `SheafOfModules.IsFiniteType` does not
-appear anywhere on this route.
+`Oka/AlgebraicGeometry/Modules/Tilde.lean`. That is why the middle step above is
+`AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ_of_isFinitePresentation`, which carries
+`SheafOfModules.IsFinitePresentation` in its hypothesis and in its name, and not
+`SheafOfModules.IsFiniteType`.
+
+**That is a statement about which hypothesis suffices, and not about the class being absent.**
+`SheafOfModules.IsFiniteType` occurs below and is load-bearing: it is a hypothesis of
+`SheafOfModules.IsCoherent.cokernel`, it is supplied by hand inside
+`ComplexAnalytic.isCoherent_analytificationSheaf_cokernel`, and
+`SheafOfModules.GeneratingSections.IsFiniteType` is what makes the two index types of a
+`SheafOfModules.Presentation` finite in the proof of the coherent statement. What it does not do
+is reach `Module.FinitePresentation A (Γ M)`, which is the module-level step.
 
 ## The coherent statement has no witness in this repository, and that is not a defect of it
 
