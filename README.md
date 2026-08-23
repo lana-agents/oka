@@ -623,3 +623,29 @@ Requires the Lean toolchain pinned in `lean-toolchain` (v4.32.0) and depends on 
 lake exe cache get   # fetch prebuilt Mathlib oleans
 lake build
 ```
+
+### Checking
+
+`bash .orchestra/validation.sh` is the check. It builds with `--wfail`, runs Mathlib's
+environment linters and text linters, verifies both root modules against `mk_all`, and checks
+that every backticked dotted name in a comment resolves. **A claim that something compiles means
+this script.**
+
+For the edit loop there is `bash scripts/check_file.sh FILE.lean`, which takes a couple of
+seconds and applies the *same* Lean options the build applies:
+
+```sh
+bash scripts/check_file.sh Oka/Foo/Bar.lean
+bash scripts/check_file.sh --self-test
+```
+
+It exists because **`lake env lean FILE.lean` does not apply `lakefile.toml`'s `[leanOptions]`**,
+so under that command the whole Mathlib linter set and `autoImplicit = false` are silently
+absent — a 101-character line and an undefined type name accidentally auto-bound to an implicit
+both pass it in silence, and both fail the build. *Why* they are not applied is not established
+and the script does not claim it. The script reads the options out of `lakefile.toml` at run time
+rather than hardcoding them.
+
+**It is not a substitute for `validation.sh`.** It does not run `mk_all --check`, `lake lint`,
+`lake exe lint-style`, the docstring-name checker or the `sorry` grep, and it knows nothing about
+files that do not import the one being checked. Its own `--help` lists this too.
