@@ -234,8 +234,13 @@ coherence statement for arbitrary complex analytic spaces:
   `Module.Finite.of_localizationSpan_finite'` into
   `AlgebraicGeometry.Scheme.Modules.module_finite_moduleSpecΓFunctor_obj_of_isFiniteType`: **the
   global sections of a quasicoherent sheaf of finite type on `Spec R` are a finite `R`-module.**
-  **`Module.FinitePresentation` is a further step and is not here**, so neither is a *global*
-  presentation of a sheaf that is merely of finite type. Every statement on this line is
+  **`Module.FinitePresentation` needs more than finite type and it is not "the same argument run
+  again on the relations"** — at quasicoherent-plus-finite-type the statement is *false*, for a
+  non-noetherian `R` and `M = (R ⧸ I)^~` with `I` not finitely generated.
+  `AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ` has it from a finite **global**
+  `SheafOfModules.Presentation` instead, by keeping the map of `R`-modules that Mathlib's
+  `AlgebraicGeometry.isIso_fromTildeΓ_of_presentation` builds and discards; the *local* form,
+  at `SheafOfModules.IsFinitePresentation`, is not here. Every statement on this line is
   instantiated in `OkaTest/AffineSections.lean` at `𝒪_{Spec A} ⧸ (x)` — the same witness, read on
   the algebraic side instead of after analytification, nonzero, with a presenting map that is
   neither an epimorphism nor zero, and with `D(x) ≠ ⊤` checked so the change of site is not

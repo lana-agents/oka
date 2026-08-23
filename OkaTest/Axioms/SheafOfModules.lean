@@ -461,3 +461,33 @@ info: 'AlgebraicGeometry.Scheme.Modules.module_finite_moduleSpecΓFunctor_obj_of
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.Scheme.Modules.module_finite_moduleSpecΓFunctor_obj_of_isFiniteType
+
+/-! ### Finite presentation of the global sections -/
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.finitePresentation_cokernel' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.finitePresentation_cokernel
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.presentationRelMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.presentationRelMap
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.isoTildeCokernel' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.isoTildeCokernel
+
+/--
+info: 'AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.Scheme.Modules.finitePresentation_Γ
