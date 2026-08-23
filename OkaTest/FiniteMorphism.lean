@@ -80,13 +80,17 @@ derived from — so read it as a test of the rung and not as a fact about the ma
   points. Whether it cuts `ℂ` out of `ℂ²` by the second coordinate — the `IsCutOutBy` statement —
   is not proved, and only the topological half is used.
 * **No compactness, and no properness beyond what finiteness gives.** The bullet that used to
-  stand here said neither map was shown proper; both are, now that
-  `ComplexAnalytic.AnalyticSpace.isProperMap_base_of_isFinite` exists —
-  `ComplexAnalytic.isProperMap_base_axisIncl` and `ComplexAnalytic.isProperMap_base_sq`, with
-  `ComplexAnalytic.not_isProperMap_base_proj` on the other side. What is still not here is any
-  properness argument that does not go through finiteness: no source is shown compact, no fibre is
-  shown compact other than by being finite, and there is no `IsProper` class for a morphism of
-  analytic spaces to be an instance of.
+  stand here said neither map was shown proper. It was written when this file's two maps were
+  `ComplexAnalytic.axisIncl` and `ComplexAnalytic.proj`, so name them rather than counting them:
+  **`ComplexAnalytic.axisIncl` and `ComplexAnalytic.sq` are proper** — by
+  `ComplexAnalytic.AnalyticSpace.isProperMap_base_of_isFinite`, as
+  `ComplexAnalytic.isProperMap_base_axisIncl` and `ComplexAnalytic.isProperMap_base_sq` — **and
+  `ComplexAnalytic.proj` is not** (`ComplexAnalytic.not_isProperMap_base_proj`). What is still not
+  here is any properness argument that does not go through finiteness: no source is shown compact,
+  and no fibre is shown compact other than by being finite. The one fibre this file says anything
+  else about is `ComplexAnalytic.proj`'s over the origin, and what it says is that it is **not**
+  compact (`ComplexAnalytic.not_isCompact_fiber_proj`). There is still no `IsProper` class for a
+  morphism of analytic spaces to be an instance of.
 * **No finite étale morphism other than an isomorphism.** `ComplexAnalytic.axisIncl` is finite and
   is *not* a local isomorphism (`ComplexAnalytic.not_isLocalIso_axisIncl`), which is what says the
   second rung restricts the first; but the only positive witness for
@@ -341,14 +345,47 @@ theorem not_isClosedMap_base_proj :
   have hb : (𝓝[≠] (0 : ℂ)) = ⊥ := by rwa [← isOpen_singleton_iff_punctured_nhds]
   exact (inferInstance : (𝓝[≠] (0 : ℂ)).NeBot).ne hb
 
+/-- **The fibre over the origin is not compact either.**
+
+`ComplexAnalytic.infinite_fiber_proj` says that fibre is infinite, and infiniteness by itself
+refutes nothing about properness: `IsProperMap` asks that fibres be *compact*, and an infinite
+set can be compact. This is the sharper statement, and it is what makes the docstring below
+checkable rather than asserted. The fibre is the second axis; the second coordinate maps it
+continuously **onto** `ℂ`, a continuous image of a compact set is compact, and `ℂ` is not. -/
+theorem not_isCompact_fiber_proj : ¬ IsCompact
+    (((proj.{u}).toLRSHom.base : AnalyticSpace.complexAffineSpace.{u} 2 →
+        AnalyticSpace.complexAffineSpace.{u} 1) ⁻¹'
+      {(fun _ ↦ (0 : ℂ) : AnalyticSpace.complexAffineSpace.{u} 1)}) := by
+  intro h
+  have hc : Continuous fun p : AnalyticSpace.complexAffineSpace.{u} 2 ↦
+      (p : ULift.{u} (Fin 2) → ℂ) (ULift.up 1) := continuous_apply _
+  have himg := h.image hc
+  have huniv : (fun p : AnalyticSpace.complexAffineSpace.{u} 2 ↦
+      (p : ULift.{u} (Fin 2) → ℂ) (ULift.up 1)) ''
+        (((proj.{u}).toLRSHom.base : AnalyticSpace.complexAffineSpace.{u} 2 →
+            AnalyticSpace.complexAffineSpace.{u} 1) ⁻¹'
+          {(fun _ ↦ (0 : ℂ) : AnalyticSpace.complexAffineSpace.{u} 1)}) = Set.univ := by
+    refine Set.eq_univ_of_forall fun t ↦
+      ⟨(fun l ↦ if l = ULift.up 1 then t else 0 :
+        AnalyticSpace.complexAffineSpace.{u} 2), ?_, by simp⟩
+    refine Set.mem_preimage.2 (Set.mem_singleton_iff.2 (funext fun l ↦ ?_))
+    rw [show ((proj.{u}).toLRSHom.base _ : ULift.{u} (Fin 1) → ℂ) = _ from base_proj _]
+    simp
+  rw [huniv] at himg
+  exact NoncompactSpace.noncompact_univ (X := ℂ) himg
+
 /-- **And so it is not proper**, since a proper map is closed (`IsProperMap.isClosedMap`).
 
-This is the half of the properness statement that is not free. `ComplexAnalytic.proj` fails
-`ComplexAnalytic.AnalyticSpace.IsFinite` for two independent reasons — an infinite fibre and a
-non-closed underlying map — and it is the *second* that properness sees; the fibre half is
-invisible to `IsProperMap`, which asks only that fibres be compact. So this non-example rests on
-`ComplexAnalytic.not_isClosedMap_base_proj` and not on
-`ComplexAnalytic.infinite_fiber_proj`. -/
+`ComplexAnalytic.proj` fails `ComplexAnalytic.AnalyticSpace.IsFinite` for two independent
+reasons — an infinite fibre and a non-closed underlying map — and **`IsProperMap` sees both**.
+The fibre over the origin is not compact (`ComplexAnalytic.not_isCompact_fiber_proj`) and the
+underlying map is not closed (`ComplexAnalytic.not_isClosedMap_base_proj`), and either failure
+on its own refutes properness.
+
+What is *not* the case is that properness tests the finiteness of a fibre. It asks for
+compactness, so `ComplexAnalytic.infinite_fiber_proj` — a statement about cardinality — does not
+refute it, which is why the fibre route needs the theorem above and not that one. The proof
+shipped here takes the closedness route because it is one line. -/
 theorem not_isProperMap_base_proj :
     ¬ IsProperMap ((proj.{u}).toLRSHom.base : AnalyticSpace.complexAffineSpace.{u} 2 →
       AnalyticSpace.complexAffineSpace.{u} 1) := fun h ↦
