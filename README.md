@@ -234,7 +234,32 @@ coherence statement for arbitrary complex analytic spaces:
   the node along the punctured axis — the smallest cover with a triple of distinct indices, so
   the smallest one that exercises `t'` at all — and checks that the three copies are **distinct**
   points of the gluing over the origin, which is what stops the construction from quietly
-  returning one member. The analytic structure on the gluing is a further step and is not taken.
+  returning one member. The analytic structure on the gluing is a further step, and is the bullet
+  below rather than this one.
+
+* **The analytic structure on a gluing** (`Oka/AnalyticSpace/Glue.lean`).
+  `ComplexAnalytic.AnalyticSpace.ofGlueData` already turned an
+  `AlgebraicGeometry.LocallyRingedSpace.GlueData` of analytic pieces into an analytic space, but
+  its compatibility hypothesis is `TopCat.Presheaf.IsCompatible` on the **glued** space, which is
+  the spelling the sheaf condition consumes and not the one a geometric input arrives in — and
+  the lemma that discharged it,
+  `AlgebraicGeometry.LocallyRingedSpace.OpenCover.isCompatible_restrictAlgMap_comapAlgMap`, needs
+  the structures to be pulled back from an ambient one, which is exactly what a glue data does not
+  have. `AlgebraicGeometry.LocallyRingedSpace.GlueData.isCompatible_restrictAlgMap` closes that
+  gap, and `ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear` is the construction with the
+  hypothesis in geometric form: **on each overlap the two structures it inherits agree**.
+  **The proof computes no section.** An algebra structure on a space is a morphism to `Spec R`
+  (`AlgebraicGeometry.LocallyRingedSpace.toSpecOfAlgMap`, the `Γ`-`Spec` adjunction with the ring
+  map unwrapped); the hypothesis says those morphisms agree on the overlaps, which are the
+  categorical pullbacks by
+  `AlgebraicGeometry.LocallyRingedSpace.GlueData.vIsoPullback`; so they glue by
+  `AlgebraicGeometry.LocallyRingedSpace.OpenCover.existsUnique_glueMorphisms`, and the glued
+  morphism *is* the ambient structure that was missing. `OkaTest/GlueDataAnalytic.lean` takes the
+  node apart along a two-member open cover — the second member neither `⊤` nor `⊥` — and glues it
+  back, checking the result both on each member and globally against the structure it started
+  from. What is **not** done is the same at `ComplexAnalytic.coverGlueData`, and the obstruction
+  is measured and recorded there: that glue data's `f` and `t` are
+  `CategoryTheory.GlueData.ofGlueData'`'s dependent `dite`s.
 
 * **Gluing.** Open covers of a locally ringed space, and the gluing of morphisms out of the
   members of one (`Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean`): a locally ringed space

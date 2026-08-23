@@ -55,6 +55,10 @@ carry the three together, bundle then.
   members carry compatible analytic structures, as a complex analytic space.
 - `ComplexAnalytic.AnalyticSpace.ofGlueData`: the same for the gluing of a glue data, via
   `AlgebraicGeometry.LocallyRingedSpace.GlueData.openCover`.
+- `ComplexAnalytic.GlueDataCLinear`: the transitions of a glue data are `ℂ`-linear for the given
+  structures on its members — the hypothesis in the form a geometric input arrives in.
+- `ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear`: `ComplexAnalytic.AnalyticSpace.ofGlueData`
+  with that hypothesis in place of the sheaf-condition one.
 
 ## Main results
 
@@ -67,6 +71,13 @@ carry the three together, bundle then.
   the construction is the right one rather than merely well-typed.
 - `ComplexAnalytic.AnalyticSpace.algebraMap_ofOpenCover_comapAlgMap`: on a cover of a space that
   already carries a structure, the gluing returns that structure.
+- `ComplexAnalytic.isCompatible_of_glueDataCLinear`: **`ℂ`-linear transitions give
+  a compatible family on the gluing** — the step that stood between a glue data and an analytic
+  structure on it, and the reason `ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear` exists.
+- `ComplexAnalytic.glueDataCLinear_comapAlgMap` and
+  `ComplexAnalytic.AnalyticSpace.algebraMap_ofGlueDataCLinear_comapAlgMap`: the hypothesis is
+  automatic when the structures come from the gluing, and in that case the construction returns
+  the structure it came from.
 
 ## What is not here
 
@@ -77,10 +88,14 @@ carry the three together, bundle then.
   the `f_open` field of an `AlgebraicGeometry.LocallyRingedSpace.GlueData`. Only the
   **distinguished** case is proved, which is the case a cover of a scheme locally of finite type
   needs; the general open immersion is neither proved nor wanted
-  (`Oka/Analytification/DistinguishedOpen.lean` says so). What is left is the glue data itself —
-  the transition isomorphisms from `ℂ`-algebra isomorphisms on the overlaps, `t'`, and the
-  cocycle condition — together with the decision of how a cover arrives at all, since **this
-  repository has no `AlgebraicGeometry.Scheme` objects**.
+  (`Oka/Analytification/DistinguishedOpen.lean` says so). The glue data itself is now built —
+  `ComplexAnalytic.coverGlueData` in `Oka/Analytification/AffineCover.lean` — and so is the
+  passage from a glue data to an analytic space, below. What is left is to put the two together,
+  which is a matter of checking `ComplexAnalytic.GlueDataCLinear` for a glue data whose `f` and
+  `t` are `CategoryTheory.GlueData.ofGlueData'`'s `dite`s; `OkaTest/GlueDataAnalytic.lean`
+  records what that costs. The input is still the cover **as data** rather than a scheme, since
+  this repository constructs no `AlgebraicGeometry.Scheme` beyond Mathlib's `Spec` and has no
+  cover API for one.
 * **A morphism-level statement.** `AlgebraicGeometry.LocallyRingedSpace.OpenCover.glueMorphisms`
   glues morphisms of locally ringed spaces, and a `ℂ`-linear version — a morphism of analytic
   spaces glued from `ℂ`-linear pieces — is not stated, because `ComplexAnalytic.IsCLinearHom` is
@@ -149,6 +164,67 @@ theorem HasLocalModels.of_iso {X Y : LocallyRingedSpace.{u}} (e : Y ≅ X)
       ((isCLinearHom_ofRestrict Y β U').comp he)
       (isCLinearHom_ofRestrict X α U.1)
   exact ⟨⟨U', hyU'⟩, n, k, V, e'.hom ≫ c, f, hcut.comp_iso e', hlin'.comp hlin⟩
+
+/-- **The transitions of a glue data are `ℂ`-linear**, as a condition on the given structures:
+the two structures the overlap `V (i, j)` inherits — from the `i`-th member and, through the
+transition, from the `j`-th — agree.
+
+This is `ComplexAnalytic.IsCLinearHom` of the transition `t i j`, unfolded through
+`AlgebraicGeometry.LocallyRingedSpace.comapAlgMap_comp`, and it is the form in which a geometric
+input arrives: one is given an isomorphism of the two descriptions of an overlap and knows it is
+an isomorphism *of `ℂ`-algebras*. -/
+def GlueDataCLinear (D : LocallyRingedSpace.GlueData.{u})
+    (α : ∀ j, ℂ →+* (D.U j).presheaf.obj (op ⊤)) : Prop :=
+  ∀ i j, LocallyRingedSpace.comapAlgMap (D.f i j) (α i) =
+    LocallyRingedSpace.comapAlgMap (D.t i j ≫ D.f j i) (α j)
+
+/-- **`ComplexAnalytic.GlueDataCLinear` is `ℂ`-linearity of the transitions.** -/
+theorem glueDataCLinear_iff (D : LocallyRingedSpace.GlueData.{u})
+    (α : ∀ j, ℂ →+* (D.U j).presheaf.obj (op ⊤)) :
+    GlueDataCLinear D α ↔ ∀ i j, IsCLinearHom (D.t i j)
+      (LocallyRingedSpace.comapAlgMap (D.f i j) (α i))
+      (LocallyRingedSpace.comapAlgMap (D.f j i) (α j)) := by
+  refine forall_congr' fun i ↦ forall_congr' fun j ↦ ?_
+  rw [LocallyRingedSpace.comapAlgMap_comp]
+  exact ⟨fun h c ↦ congrArg (fun m : ℂ →+* _ ↦ m c) h.symm,
+    fun h ↦ RingHom.ext fun c ↦ (h c).symm⟩
+
+/-- **`ℂ`-linear transitions give a compatible family on the gluing.**
+
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.isCompatible_restrictAlgMap` with `ℂ` lifted into
+the universe of the spaces. The lift is forced and is not a choice: that lemma's proof goes
+through `Spec R`, so `R` has to live where the spaces do, while `ℂ` is in `Type 0` whatever the
+universe of the spaces is. **Nothing is computed by the lift** — `α` composed with
+`ULift.ringEquiv` takes the same values, so the two families of sections are the same terms and
+the two compatibility conditions are the same proposition, which is why the proof ends in
+`exact` and not in a transport. -/
+theorem isCompatible_of_glueDataCLinear (D : LocallyRingedSpace.GlueData.{u})
+    (α : ∀ j, ℂ →+* (D.U j).presheaf.obj (op ⊤)) (hα : GlueDataCLinear D α) (c : ℂ) :
+    TopCat.Presheaf.IsCompatible D.toGlueData.glued.presheaf
+      (fun j ↦ (D.openCover.opensRange j).isOpenEmbedding.isOpenMap.functor.obj ⊤)
+      fun j ↦ D.openCover.restrictAlgMap j (α j) c := by
+  have H := D.isCompatible_restrictAlgMap (R := ULift.{u} ℂ)
+    (fun j ↦ (α j).comp (ULift.ringEquiv : ULift.{u} ℂ ≃+* ℂ).toRingHom)
+    (fun i j ↦ RingHom.ext fun x ↦ congrArg (fun m : ℂ →+* _ ↦ m x.down) (hα i j))
+    (ULift.up c)
+  exact H
+
+/-- **Structures pulled back from the gluing have `ℂ`-linear transitions**, so the hypothesis of
+`ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear` is satisfied whenever there is an ambient
+structure to begin with.
+
+The proof is the glue data's own `glue_condition`, `f i j ≫ ι i = (t i j ≫ f j i) ≫ ι j`, read
+through `AlgebraicGeometry.LocallyRingedSpace.comapAlgMap_comp`. This is the analogue for glue
+data of `AlgebraicGeometry.LocallyRingedSpace.OpenCover.isCompatible_restrictAlgMap_comapAlgMap`,
+and with the round trip below it is what says the construction is not vacuous: the hypothesis is
+not merely satisfiable, it is *automatic* in the case where the answer is already known, and in
+that case the construction returns it. -/
+theorem glueDataCLinear_comapAlgMap (D : LocallyRingedSpace.GlueData.{u})
+    (γ : ℂ →+* D.toGlueData.glued.presheaf.obj (op ⊤)) :
+    GlueDataCLinear D fun j ↦ LocallyRingedSpace.comapAlgMap (D.toGlueData.ι j) γ := by
+  intro i j
+  rw [← LocallyRingedSpace.comapAlgMap_comp, ← LocallyRingedSpace.comapAlgMap_comp,
+    Category.assoc, D.glue_condition i j]
 
 namespace AnalyticSpace
 
@@ -239,6 +315,59 @@ def ofGlueData (D : LocallyRingedSpace.GlueData.{u})
       fun j ↦ D.openCover.restrictAlgMap j (α j) c)
     (h : ∀ j, HasLocalModels (D.U j) (α j)) : AnalyticSpace.{u} :=
   ofOpenCover D.openCover α hα h
+
+/-- **The gluing of a glue data of analytic pieces whose transitions are `ℂ`-linear is a complex
+analytic space.**
+
+`ComplexAnalytic.AnalyticSpace.ofGlueData` asks for `TopCat.Presheaf.IsCompatible` on the
+**glued** space, which is the spelling the sheaf condition consumes and not the one a geometric
+input arrives in; this is the same construction with the hypothesis in the geometric form, and
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.isCompatible_restrictAlgMap` is what converts it.
+
+That conversion is the whole content and it is not bookkeeping: the sheaf-condition form asks for
+agreement of sections over the *images* of the members in the gluing, and nothing pulls those
+back to the overlaps until an ambient structure exists — which is what has to be built. -/
+def ofGlueDataCLinear (D : LocallyRingedSpace.GlueData.{u})
+    (α : ∀ j, ℂ →+* (D.U j).presheaf.obj (op ⊤)) (hα : GlueDataCLinear D α)
+    (h : ∀ j, HasLocalModels (D.U j) (α j)) : AnalyticSpace.{u} :=
+  ofGlueData D α (isCompatible_of_glueDataCLinear D α hα) h
+
+@[simp]
+lemma ofGlueDataCLinear_toLocallyRingedSpace (D : LocallyRingedSpace.GlueData.{u})
+    (α : ∀ j, ℂ →+* (D.U j).presheaf.obj (op ⊤)) (hα : GlueDataCLinear D α)
+    (h : ∀ j, HasLocalModels (D.U j) (α j)) :
+    (ofGlueDataCLinear D α hα h).toLocallyRingedSpace = D.toGlueData.glued :=
+  rfl
+
+/-- **The glued `ℂ`-algebra structure pulls back to the given one on every member**, which is the
+statement that `ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear` is the intended construction
+rather than merely a well-typed one.
+
+`ComplexAnalytic.AnalyticSpace.comapAlgMap_ofOpenCover_algebraMap` at
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.openCover`, whose `map j` is the inclusion
+`ι j` of the `j`-th member into the gluing. -/
+lemma comapAlgMap_ofGlueDataCLinear_algebraMap (D : LocallyRingedSpace.GlueData.{u})
+    (α : ∀ j, ℂ →+* (D.U j).presheaf.obj (op ⊤)) (hα : GlueDataCLinear D α)
+    (h : ∀ j, HasLocalModels (D.U j) (α j)) (j : D.J) :
+    LocallyRingedSpace.comapAlgMap (D.toGlueData.ι j)
+      (ofGlueDataCLinear D α hα h).algebraMap = α j :=
+  comapAlgMap_ofOpenCover_algebraMap D.openCover α _ h j
+
+/-- **On a glue data whose gluing already carries a `ℂ`-algebra structure, the construction
+returns it.**
+
+The round trip, and the form in which `ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear` is
+checkable: the `ℂ`-linearity hypothesis is free
+(`ComplexAnalytic.glueDataCLinear_comapAlgMap`) and the conclusion is
+`ComplexAnalytic.AnalyticSpace.algebraMap_ofOpenCover_comapAlgMap`, whose own docstring says it
+applies verbatim to the gluing of a glue data — this is that application. -/
+theorem algebraMap_ofGlueDataCLinear_comapAlgMap (D : LocallyRingedSpace.GlueData.{u})
+    (γ : ℂ →+* D.toGlueData.glued.presheaf.obj (op ⊤))
+    (h : ∀ j, HasLocalModels (D.U j)
+      (LocallyRingedSpace.comapAlgMap (D.toGlueData.ι j) γ)) :
+    (ofGlueDataCLinear D (fun j ↦ LocallyRingedSpace.comapAlgMap (D.toGlueData.ι j) γ)
+      (glueDataCLinear_comapAlgMap D γ) h).algebraMap = γ :=
+  algebraMap_ofOpenCover_comapAlgMap D.openCover γ h
 
 @[simp]
 lemma ofGlueData_toLocallyRingedSpace (D : LocallyRingedSpace.GlueData.{u})
