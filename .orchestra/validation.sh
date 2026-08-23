@@ -127,7 +127,10 @@ python3 scripts/check_docstring_names.py || exit 1
 # therefore making the claim `README.md` says a mirror path makes without stating it — and this
 # script exited 0 on all seven for four months.
 #
-# It is deliberately the narrow rule: a non-empty body, and nothing about what the body says.
+# It is deliberately the narrow rule: a non-empty body, and nothing about what the body says —
+# except that the block has to be the module docstring and not a `/-! ### … -/` section header,
+# which is a distinction and not a wording rule, and without which the check would pass a file
+# whose module docstring had been deleted outright.
 # `scripts/check_module_docstrings.py` explains why, and has a `--self-test` that plants each
 # defect and confirms it is reported, since a check that has only ever been seen to pass is not
 # evidence of anything.

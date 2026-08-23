@@ -723,12 +723,18 @@ every backticked dotted name in a comment resolves, and checks that every file h
 docstring with a non-empty body. **A claim that something compiles means this script.**
 
 The last of those, `scripts/check_module_docstrings.py`, is the narrow rule and only the narrow
-rule: a `/-! … -/` block whose body is not whitespace. It says nothing about what the body
-contains, and in particular does not require a `# Title` line — a second convention would need
-every file looked at one by one. It exists because nothing else could see an empty one: an empty
-`/-! -/` elaborates, so the build does not fail on it, and the name checker looks *inside* a
-docstring, so on an empty one it finds nothing to check and passes. Seven files under `Oka/`
-carried an empty module docstring from the second commit in the repository until it was added.
+rule: a **module** docstring whose body is not whitespace. It says nothing about what the body
+contains, and in particular does not require a `# Title` line. What it does insist on is that the
+`/-! … -/` block it looks at really is the module docstring — nothing but comments, `module` and
+imports before it, and not a `##`-or-deeper heading itself. Both halves are needed: a section
+header is a `/-!` block too, and 58 of the 175 files here contain one, so a check that takes
+merely the first `/-!` block passes a file whose module docstring has been deleted outright. The
+script's own docstring gives the measurement and its `--self-test` pins both halves.
+
+It exists because nothing else could see an empty one: an empty `/-! -/` elaborates, so the build
+does not fail on it, and the name checker looks *inside* a docstring, so on an empty one it finds
+nothing to check and passes. Seven files under `Oka/` carried an empty module docstring from the
+second commit in the repository until it was added.
 
 For the edit loop there is `bash scripts/check_file.sh FILE.lean`, which takes a couple of
 seconds and applies the *same* Lean options the build applies:

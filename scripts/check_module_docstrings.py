@@ -20,12 +20,32 @@ reads text and nothing else: no build, no oleans, no `lake`.
 
 ## The rule, and deliberately only this rule
 
-A file passes when its first `/-! … -/` block exists and its body is not whitespace.  That is
-all.  In particular this does **not** require a `# Title` first line, does not look at what the
-body says, and does not check that a mirror file states its destination.  A title convention
-would be a second rule, would need thirteen further files looked at one by one, and would turn a
-mechanical check into an argument about wording; the narrower rule is chosen on purpose and this
-paragraph is here so that the narrowness does not read as an oversight.
+A file passes when it has a **module** docstring whose body is not whitespace.  A `/-! … -/`
+block counts as the module docstring when **both**
+
+* nothing precedes it except comments, `module`, `prelude` and `import` lines — it stands where
+  Mathlib puts a module docstring, before any content; and
+* its first non-blank line is not a `##`-or-deeper markdown heading — it is not a section header.
+
+**Both halves are needed and neither alone suffices**, which is worth stating because the obvious
+implementation has only the first half or neither.  `/-! ### … -/` section headers are `/-!`
+blocks too: 58 of this repository's 175 files contain one.  Taking merely "the first `/-! … -/`
+block anywhere" accepts a section header found *after* declarations, which the first condition
+rules out — but it also accepts one standing immediately after the imports, where the first
+condition is satisfied and only the second catches it.  Under either half alone, a file in that
+shape could lose its module docstring entirely and still pass, which is the defect this script
+exists to make impossible.  `self_test` pins both.
+
+In particular this does **not** require a `# Title` first line, does not look at what the
+body says, and does not check that a mirror file states its destination.  **That decision is
+deliberate and it is now worth a measured note**, because the original argument for it — that a
+title convention would need thirteen further files looked at one by one — is no longer true:
+every one of the 178 first blocks under `Oka/` and `OkaTest/` opens with a level-one `# ` heading,
+so requiring one would today cost nothing.  It is still not required, because rejecting a heading
+that is *too deep* is a claim about section headers, whereas requiring a heading at all is a
+convention about titles, and only the first is needed to make the check sound.  The stronger rule
+is one line away if a later maintainer wants it, and the number above is what they should decide
+on.
 
 ## What is skipped, and why
 
@@ -52,10 +72,63 @@ SKIP = {"Oka.lean", "OkaTest.lean"}
 
 DIRS = ("Oka", "OkaTest")
 
-# The first module-docstring block.  Non-greedy, so it stops at the first `-/`; a module docstring
+# The first `/-!` block.  Non-greedy, so it stops at the first `-/`; a module docstring
 # containing a nested `/- -/` would end the match early, which can only make the body *shorter*
 # and therefore cannot turn a non-empty docstring into an empty one.
-MODULE_DOCSTRING = re.compile(r"/-!(.*?)-/", re.DOTALL)
+DOC_BLOCK = re.compile(r"/-!(.*?)-/", re.DOTALL)
+
+# What may stand before a module docstring: `module`, `prelude`, and imports.  Comments are
+# removed before this is applied, so the copyright header does not need a case here.
+PRELUDE = re.compile(r"^(?:module|prelude|(?:public\s+)?import\s+[\w.]+)$")
+
+# A markdown heading of level two or deeper, as the first non-blank line of a `/-!` block: that is
+# a section header, not a module docstring.  Measured on 2026-08-23 over `Oka/` and `OkaTest/`:
+# of the 178 files' *first* `/-!` blocks, 178 open with a level-one `# ` heading and **none** opens
+# with `##` or deeper; of the 254 *later* blocks, 252 open with `##` or deeper and the two that do
+# not are continuation prose under a header in `OkaTest/Factorisation.lean`.  So the two shapes are
+# perfectly separated by this line and the rule costs nothing.
+SECTION_HEADER = re.compile(r"^#{2,}\s")
+
+
+def strip_comments(text: str) -> str:
+    """`text` with comment *contents* removed, newlines kept so line structure survives.
+
+    Block comments nest, and `/-!` and `/--` open one like any other `/-`.  Line comments run to
+    the end of the line.  This is only used on the text *before* a candidate docstring, to decide
+    whether anything but imports stands there.
+    """
+    out: list[str] = []
+    i = 0
+    depth = 0
+    n = len(text)
+    while i < n:
+        if depth == 0 and text.startswith("--", i) and not text.startswith("-/", i):
+            j = text.find("\n", i)
+            i = n if j < 0 else j
+            continue
+        if text.startswith("/-", i):
+            depth += 1
+            i += 2
+            continue
+        if text.startswith("-/", i) and depth > 0:
+            depth -= 1
+            i += 2
+            continue
+        if depth == 0:
+            out.append(text[i])
+        elif text[i] == "\n":
+            out.append("\n")
+        i += 1
+    return "".join(out)
+
+
+def preceded_only_by_imports(head: str) -> str | None:
+    """`None` if `head` is a legal prelude, otherwise the first line that is not."""
+    for line in strip_comments(head).split("\n"):
+        stripped = line.strip()
+        if stripped and not PRELUDE.match(stripped):
+            return stripped
+    return None
 
 
 def lean_files(root: Path) -> list[Path]:
@@ -72,11 +145,24 @@ def lean_files(root: Path) -> list[Path]:
 
 def verdict(text: str) -> str | None:
     """`None` if the file is fine, otherwise a one-line description of what is wrong."""
-    m = MODULE_DOCSTRING.search(text)
+    m = DOC_BLOCK.search(text)
     if m is None:
         return "no module docstring (`/-! … -/`) at all"
-    if not m.group(1).strip():
+    intruder = preceded_only_by_imports(text[: m.start()])
+    if intruder is not None:
+        return (
+            "no module docstring: the first `/-! … -/` block is preceded by "
+            f"`{intruder}`, so it comes after content and is not a module docstring"
+        )
+    body = m.group(1)
+    if not body.strip():
         return "module docstring is empty"
+    first_line = next(line.strip() for line in body.split("\n") if line.strip())
+    if SECTION_HEADER.match(first_line):
+        return (
+            "no module docstring: the first `/-! … -/` block opens with "
+            f"`{first_line}`, which is a section header and not a module docstring"
+        )
     return None
 
 
@@ -107,8 +193,14 @@ def self_test() -> int:
 
     `.orchestra/validation.sh` records the same discipline for its own checks: a check that has
     only ever been seen to pass is not evidence of anything.  Both directions are exercised —
-    a green tree passes, and each of the two defects fails — because a checker that always
-    reports a failure would pass a negative test alone.
+    a green tree passes, and each defect fails — because a checker that always reports a failure
+    would pass a negative test alone.
+
+    The `a section header and no module docstring` case is here because its absence is what let
+    an earlier version of this script accept a file with no module docstring at all.  Five of the
+    original six cases probed the *contents* of a `/-!` block and the sixth probed a file with no
+    `/-!` anywhere; none probed a file whose only `/-!` is not a module docstring, which was the
+    single shape that failed.
     """
     cases: list[tuple[str, str, bool]] = [
         ("a real docstring", "/-!\n# Something\n\nA sentence.\n-/\n", True),
@@ -117,6 +209,27 @@ def self_test() -> int:
         ("a whitespace-only docstring", "/-!\n   \n\t\n-/\n", False),
         ("no docstring at all", "import Mathlib\n\ntheorem t : True := trivial\n", False),
         ("a declaration docstring only", "/-- Not a module docstring. -/\ndef f := 1\n", False),
+        # The case whose absence let a file with no module docstring pass.  A `/-! ### … -/`
+        # section header is a `/-!` block, so a check that takes the first one anywhere accepts
+        # it; 58 of the 175 files covered here contain such a header.
+        (
+            "a section header and no module docstring",
+            "import Mathlib\n\n/-! ### A section header -/\n\ntheorem t : True := trivial\n",
+            False,
+        ),
+        # And the positive control for the same rule: a real module docstring followed by a
+        # section header still passes, so the fix rejects the shape rather than the construct.
+        (
+            "a module docstring and a section header",
+            "import Mathlib\n\n/-!\n# Real\n\nText.\n-/\n\n/-! ### A section -/\ndef f := 1\n",
+            True,
+        ),
+        # A `module`/`prelude` prelude and a copyright header do not disqualify the block.
+        (
+            "a copyright header, `module`, and public imports",
+            "/-\nCopyright.\n-/\nmodule\n\npublic import Mathlib.Tactic\n\n/-!\n# T\n\nText.\n-/\n",
+            True,
+        ),
     ]
     failures = 0
     for name, body, should_pass in cases:
@@ -142,6 +255,21 @@ def self_test() -> int:
         (root / "Oka" / "Bad.lean").write_text("/-!\n-/\n", encoding="utf-8")
         red = check(root)
         print(f"  [{'ok' if red == 1 else 'FAIL'}] a planted empty docstring exits 1 (got {red})")
+        failures += red != 1
+        (root / "Oka" / "Bad.lean").unlink()
+
+        # End to end for the section-header shape as well, because that is the one that used to
+        # pass and a unit case on `verdict` alone would not have caught a `check` that filtered
+        # it out on the way.
+        (root / "Oka" / "Header.lean").write_text(
+            "import Mathlib\n\n/-! ### A section header -/\n\ntheorem t : True := trivial\n",
+            encoding="utf-8",
+        )
+        red = check(root)
+        print(
+            f"  [{'ok' if red == 1 else 'FAIL'}] a planted section-header-only file exits 1 "
+            f"(got {red})"
+        )
         failures += red != 1
 
     print("self-test failed" if failures else "self-test passed")

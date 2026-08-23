@@ -21,13 +21,29 @@ Material for `Mathlib/Algebra/Category/ModuleCat/Sheaf/PushforwardContinuous.lea
 `Mathlib.Algebra.Category.ModuleCat.Sheaf.PullbackContinuous`, and the declarations below need all
 three: biproducts and kernels from the first, `SheafOfModules.free` from the second,
 `SheafOfModules.pushforwardPushforwardEquivalence` from the third. Measured, the three together
-add **75** files to the target's own transitive closure, which is 1747 files. The baseline is the
-target's closure and not this file's, so 75 is the marginal cost of the three named imports and
-not the total cost of upstreaming the content. That is large by this development's standards —
-`README.md` records 96 files as the cost that once forced a declaration into a different mirror
-file — and it is recorded here rather than acted on, because splitting the file by destination is
-a decision about Mathlib's layout and not a documentation change. The three alternative
-destinations are the three files just named.
+add **103** files to the target's own transitive closure, which is **1473** files. The baseline is
+the target's closure and not this file's, so 103 is the marginal cost of the three named imports
+and not the total cost of upstreaming the content. That is **larger than anything else this
+development has priced** — `README.md` records 96 files as the cost that once forced a declaration
+into a different mirror file, and this is past it — and it is recorded here rather than acted on,
+because splitting the file by destination is a decision about Mathlib's layout and not a
+documentation change. The three alternative destinations are the three files just named.
+
+**How the number was taken, because the obvious instrument gets it wrong.** Breadth-first search
+over `^(public )?import` in `.lake/packages/mathlib`, **with comments masked first**. Fourteen
+files of Mathlib carry a line beginning `import …` inside a docstring — 29 such lines, two of them
+a bare `import Mathlib` — and an unmasked search follows them. The one that reaches this closure is
+`Mathlib/Tactic/FunProp.lean`, whose documentation shows
+`import Mathlib.Analysis.Complex.Trigonometric` in an example; that single phantom edge adds 274
+analysis modules to the baseline and, because they land on *both* sides of the subtraction, deflates
+the marginal cost as well. Unmasked, this paragraph read 75 against 1747, and the instrument that
+produced those figures had been validated on the two figures already in the tree — 2 for
+`Mathlib.RingTheory.Localization.Finiteness` into `Mathlib/AlgebraicGeometry/Modules/Tilde.lean` and
+3 for `Mathlib.Algebra.Category.ModuleCat.Sheaf.Generators` into
+`Mathlib/AlgebraicGeometry/Modules/Sheaf.lean` — which **both reproduce on the broken instrument**,
+because neither of those targets reaches a comment-embedded import. Two agreeing deltas in one
+corner of the library are not a test of a closure computation; a fixture whose docstring contains
+`import Mathlib` is.
 
 `SheafOfModules.overFunctor R X` restricts a sheaf of modules to the slice `Over X`. Mathlib
 builds it, as a `SheafOfModules.pushforward` along an identity, and knows it is a left adjoint;
