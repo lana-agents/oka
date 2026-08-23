@@ -185,7 +185,13 @@ coherence statement for arbitrary complex analytic spaces:
   a proper open subset whenever `f` has a zero (`ComplexAnalytic.localisationOpen_ne_top`), which
   is what stops every statement from being satisfied by `D(f) = ⊤` and the identity, and
   `OkaTest/AnalytificationDistinguishedOpen.lean` runs it on the node, where `D(z₀)` **is** the
-  punctured axis that `OkaTest/OpenSubspace.lean` builds by hand. That `ℂ[x, t] ⧸ (g, t·f - 1)`
+  punctured axis that `OkaTest/OpenSubspace.lean` builds by hand.
+  `ComplexAnalytic.analytificationMap_localisationPresHom` then says that the projection
+  `(A_f)^an ⟶ X^an` is the analytification of the structure map `A ⟶ A_f`, so that
+  `ComplexAnalytic.localisationIso_inv_analytificationMap` exhibits the open immersion as a
+  composite of the comparison with a morphism the functor produces from a `ℂ`-algebra map — which
+  is the form a glue data consumes, its transition isomorphisms coming from isomorphisms of
+  `ℂ`-algebras and nothing else. That `ℂ[x, t] ⧸ (g, t·f - 1)`
   really is `A_f` is classical and is *not* formalised — the file says so; the geometry does not
   use it.
 
