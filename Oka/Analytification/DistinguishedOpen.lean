@@ -87,8 +87,8 @@ where `D(z₀)` is the punctured axis that `OkaTest/OpenSubspace.lean` builds by
   zero on `X^an`.
 - `ComplexAnalytic.isOpenImmersion_localisationProj`: **the projection is an open immersion of
   locally ringed spaces** — the `f_open` field of any
-  `AlgebraicGeometry.LocallyRingedSpace.GlueData` built out of an affine cover, and the only thing
-  such a glue data needs from this file that the isomorphism does not already give.
+  `AlgebraicGeometry.LocallyRingedSpace.GlueData` built out of an affine cover, and the second
+  thing such a glue data needs from this file, alongside the isomorphism.
 
 ## What is not here
 
@@ -554,8 +554,9 @@ Two seams are crossed by hand rather than by instance search, and neither is avo
   crosses the seam even though the search does not.
 * `ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace` carries the isomorphism, which is
   where `IsIso` comes from; `ComplexAnalytic.AnalyticSpace.Hom.toLRSHom` of a composite is a
-  composite by `rfl`, since the category instance is defined that way, and there is no lemma
-  stating it. -/
+  composite by `rfl`, since the category instance is defined that way, and no lemma in `Oka/`
+  states it — `toLRSHom_comp`, in `OkaTest/HomToComplex.lean`, does, and the library cannot
+  import the test library. -/
 theorem isOpenImmersion_localisationProj :
     LocallyRingedSpace.IsOpenImmersion (localisationProj.{u} g f).toLRSHom := by
   haveI : LocallyRingedSpace.IsOpenImmersion

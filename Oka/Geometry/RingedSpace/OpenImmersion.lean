@@ -38,8 +38,8 @@ of a complex analytic space is compared with a chart of the ambient space
   beside `ofRestrict` because `lift` does.
 - `AlgebraicGeometry.LocallyRingedSpace.isOpenImmersion_ofRestrict`: **the inclusion of an open
   subspace is an open immersion, with the open as an ordinary argument.** Mathlib has the
-  instance; what this adds is a spelling at which it can be *used* from an analytic space, for
-  the same reason `liftRestrict` exists. Its docstring records the measurement.
+  instance; what this adds is a spelling at which it can be *used* from an analytic space, as
+  `liftRestrict` does for a different seam. Its docstring records the measurement.
 
 ## Main results
 
@@ -193,23 +193,33 @@ lemma hom_ext_restrict (l₁ l₂ : Z ⟶ X.restrict V.isOpenEmbedding)
 /-- **The inclusion of an open subspace is an open immersion**, with the open passed as an
 ordinary argument.
 
-This restates an instance Mathlib already has, and it is **not** redundant. Instance search for
-`LocallyRingedSpace.IsOpenImmersion (X.ofRestrict U.isOpenEmbedding)` fails when `X` is a complex
-analytic space and `U : X.Opens`, because `AnalyticSpace`'s `CoeSort` goes through `X.carrier`
-and so produces `TopologicalSpace.Opens.inclusion' U` at the `↑X.toPresheafedSpace` spelling
-rather than at `X.toTopCat`, which Mathlib's instance is stated for. The two are definitionally
-equal and unification at default transparency crosses the seam; instance search does not.
+This restates an instance Mathlib already has, and it is **not** redundant. What defeats instance
+search at the call site is the **head symbol**, and not the open: for a complex analytic space `X`
+and `U : X.Opens` the morphism a caller holds is `ComplexAnalytic.AnalyticSpace.ofRestrict`, whose
+underlying morphism is headed by `ComplexAnalytic.AnalyticSpace.Hom.toLRSHom`, where Mathlib's
+instance is headed by `AlgebraicGeometry.LocallyRingedSpace.ofRestrict`. The two terms are
+`rfl`-equal and they are **different discrimination-tree keys**, so the instance is never tried.
 
-Measured at `master` = `e252f7a`: `example : LocallyRingedSpace.IsOpenImmersion
-((AnalyticSpace.analytification g).ofRestrict (localisationOpen g f)).toLRSHom := by
-infer_instance` **fails**, and the same statement proved by this lemma succeeds. So the way to
-use it is to state the instance as an ascribed `haveI` at the analytic spelling and close it with
-this — the term crosses even though the search does not.
+Measured at `master` = `e252f7a`, with `g` and `f` as in
+`Oka/Analytification/DistinguishedOpen.lean`:
 
-This is the same remedy as `AlgebraicGeometry.LocallyRingedSpace.liftRestrict` above and for the
-same reason: **wrap the Mathlib fact one level down, where the open is spelled through
-`X.toTopCat`, rather than repairing the instance graph.** No new global instance, no
-`inferInstanceAs`, no extra discrimination-tree key. -/
+* `example : LocallyRingedSpace.IsOpenImmersion ((AnalyticSpace.analytification g).ofRestrict
+  (localisationOpen g f)).toLRSHom := by infer_instance` **fails**, reporting `failed to
+  synthesize instance of type class LocallyRingedSpace.IsOpenImmersion (AnalyticSpace.Hom.toLRSHom
+  ((AnalyticSpace.analytification g).ofRestrict (localisationOpen g f)))`;
+* the same goal spelled `((AnalyticSpace.analytification g).toLocallyRingedSpace.ofRestrict
+  (localisationOpen g f).isOpenEmbedding)` **succeeds** by `infer_instance`, and so does the
+  abstract form for an arbitrary analytic `X` and `U : X.Opens`. So the analytic `Opens` is not
+  the obstruction — search reaches Mathlib's instance through it perfectly well.
+
+So the way to use this lemma is to state the instance as an ascribed `haveI` **at the spelling the
+goal uses** and close it with this: the term crosses the seam even though the search does not.
+`ComplexAnalytic.isOpenImmersion_localisationProj` is the call site it exists for.
+
+The remedy is the one `AlgebraicGeometry.LocallyRingedSpace.liftRestrict` above uses — for a
+different seam, so do not read the two docstrings as one diagnosis: **wrap the Mathlib fact one
+level down and pass the open as an ordinary argument, rather than repairing the instance graph.**
+No new global instance, no `inferInstanceAs`, no extra discrimination-tree key. -/
 theorem isOpenImmersion_ofRestrict (X : LocallyRingedSpace.{u})
     (V : TopologicalSpace.Opens X) : IsOpenImmersion (X.ofRestrict V.isOpenEmbedding) :=
   inferInstance
