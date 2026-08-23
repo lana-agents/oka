@@ -718,3 +718,26 @@ info: 'ComplexAnalytic.isCoherent_analytificationSheaf_cokernel_sectionsHom' dep
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isCoherent_analytificationSheaf_cokernel_sectionsHom
+
+/-! ### The distinguished open, through the functor -/
+
+/--
+info: 'ComplexAnalytic.localisationPresHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.localisationPresHom
+
+/--
+info: 'ComplexAnalytic.analytificationMap_localisationPresHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationMap_localisationPresHom
+
+/--
+info: 'ComplexAnalytic.localisationIso_inv_analytificationMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.localisationIso_inv_analytificationMap
