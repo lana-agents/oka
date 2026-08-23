@@ -969,10 +969,12 @@ coherence gives quasicoherence and `SheafOfModules.IsFinitePresentation`
 presentation. The passage from local to global happens at the level of modules, where
 quasi-compactness of `Spec R` does it, and never at the level of sheaves.
 
-**Nothing in this repository proves a sheaf on a `Spec` coherent**, so this theorem has no witness
-here — `OkaTest/CoherentPresentation.lean` records that, and it is unchanged by this statement.
-What is checkable is the hypothesis one rung down: `SheafOfModules.IsFinitePresentation` *is*
-inhabited on a `Spec` here, at `OkaTest/AffineSections.lean`'s witness. -/
+**The clause here used to say this theorem had no witness**, because nothing in this repository
+proved a sheaf on a `Spec` coherent. `AlgebraicGeometry.isCoherentStructureSheaf_spec` retired
+that, and `OkaTest/CoherentPresentation.lean` instantiates this theorem at
+`OkaTest/AffineSections.lean`'s witness, which
+`OkaTest.AffineSections.isCoherent_cokernel_specXHom` proves coherent. The hypothesis one rung
+down, `SheafOfModules.IsFinitePresentation`, is inhabited at the same sheaf. -/
 theorem exists_isFinite_presentation_of_isCoherent (N : (Spec R).Modules) [N.IsCoherent] :
     ∃ P : N.Presentation, P.IsFinite := by
   haveI := SheafOfModules.IsCoherent.isQuasicoherent N

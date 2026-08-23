@@ -206,8 +206,11 @@ coherence statement for arbitrary complex analytic spaces:
   finite *global* presentation
   (`AlgebraicGeometry.Scheme.Modules.exists_isFinite_presentation_of_isCoherent`), which the
   presented theorem consumes. The local-to-global step in that is algebraic and there is no
-  analytic input to it at all. **The presented form is still the one with a witness**, because
-  nothing here proves a sheaf on a `Spec` coherent. The worked instance is
+  analytic input to it at all. **The coherent form is instantiated too**, in
+  `OkaTest/CoherentPresentation.lean`, since `AlgebraicGeometry.isCoherentStructureSheaf_spec`
+  proves `𝒪_{Spec A} ⧸ (x)` coherent; the clause here that said nothing proved a sheaf on a
+  `Spec` coherent is retired. The presented form remains the weaker hypothesis and the one every
+  analytic witness satisfies. The worked instance is
   `𝒪_{Spec A} ⧸ (x)` for `A = ℂ[x, y] ⧸ (xy)`: a nonzero proper quotient rather than a free
   sheaf, and it is nonzero *because* `x` vanishes at the origin of the node — which is
   `AlgebraicGeometry.StructureSheaf.germ_algebraMap_mem_maximalIdeal_iff`, and the first place
@@ -310,8 +313,10 @@ coherence statement for arbitrary complex analytic spaces:
   corollary** is instantiated in `OkaTest/AffineSections.lean` at `𝒪_{Spec A} ⧸ (x)` — the same
   witness, read on the algebraic side instead of after analytification, nonzero, with a presenting
   map that is neither an epimorphism nor zero, and with `D(x) ≠ ⊤` checked so the change of site
-  is not exercised only at the whole space. The coherent corollary has no witness anywhere here,
-  for the reason the bullet above it gives.
+  is not exercised only at the whole space. **The coherent corollary is instantiated too**, in
+  `OkaTest/CoherentPresentation.lean` at the same sheaf, which
+  `OkaTest.AffineSections.isCoherent_cokernel_specXHom` proves coherent; the clause here that said
+  it had no witness anywhere is retired by `AlgebraicGeometry.isCoherentStructureSheaf_spec`.
 
 * **Being a complex analytic space is local.** The `local_model` field of
   `ComplexAnalytic.AnalyticSpace` is isolated as a predicate `ComplexAnalytic.HasLocalModels` on

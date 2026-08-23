@@ -459,10 +459,20 @@ inhabited, and **it does not check that the theorem produces a presentation that
 there.**
 
 **A non-circular witness would be a quasicoherent sheaf on a `Spec` whose global sections are
-known finitely presented for some reason other than a presentation in hand, and this repository
-has none.** The nearest thing would be a coherent sheaf on a noetherian `Spec`, which is what
-`AlgebraicGeometry.Scheme.Modules.exists_isFinite_presentation_of_isCoherent` consumes and which
-`OkaTest/CoherentPresentation.lean` records is not available here.
+known finitely presented for some reason other than a presentation in hand**, and the clause here
+used to say this repository had none, the nearest thing being a coherent sheaf on a noetherian
+`Spec`, which `OkaTest/CoherentPresentation.lean` recorded as unavailable. **That is retired, and
+by this very sheaf.** `OkaTest.AffineSections.isCoherent_cokernel_specXHom` above proves
+`cokernel specXHom` coherent out of `AlgebraicGeometry.isCoherentStructureSheaf_spec`, without
+using `OkaTest.AffineSections.specXPresentation` or anything downstream of it, and
+`OkaTest/CoherentPresentation.lean` feeds that coherence to
+`AlgebraicGeometry.Scheme.Modules.exists_isFinite_presentation_of_isCoherent`. So a
+non-circular route to a finite global presentation of this sheaf exists.
+
+**The example below is still circular and is still worth reading as such**, because it is stated
+at `SheafOfModules.IsFinitePresentation` and takes that hypothesis from the presentation built by
+hand here, not from coherence. What has changed is that the circularity is now a property of
+*this* instantiation rather than of the repository.
 -/
 
 /-- **The witness has a finite global presentation recovered from its module of sections.**

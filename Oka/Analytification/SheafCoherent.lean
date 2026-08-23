@@ -57,15 +57,20 @@ is false at quasicoherent-plus-finite-type, for the reason in the module docstri
 `SheafOfModules.Presentation` finite in the proof of the coherent statement. What it does not do
 is reach `Module.FinitePresentation A (Γ M)`, which is the module-level step.
 
-## The coherent statement has no witness in this repository, and that is not a defect of it
+## The coherent statement now has a witness, and the presented form is still the one to apply
 
-`OkaTest/CoherentPresentation.lean` records that **no sheaf on a `Spec` is proved coherent here** —
-every coherent sheaf this development exhibits lives on an analytic space. So
-`ComplexAnalytic.isCoherent_analytificationSheaf_of_isCoherent` is stated at a hypothesis that is
-uninhabited in this tree, and the presented form is the one with a witness. **Do not read the
-coherent statement as superseding the presented one**: it is a corollary of it, its hypothesis is
-strictly stronger, and until a sheaf on a `Spec` is proved coherent the presented form is what any
-consumer here can actually apply.
+**This section used to say the coherent statement had no witness in this repository**, because no
+sheaf on a `Spec` was proved coherent and every coherent sheaf this development exhibited lived on
+an analytic space. `AlgebraicGeometry.isCoherentStructureSheaf_spec` retired that:
+`OkaTest.AffineSections.isCoherent_cokernel_specXHom` proves `𝒪_{Spec A} ⧸ (x)` coherent, and
+`OkaTest/CoherentPresentation.lean` applies
+`ComplexAnalytic.isCoherent_analytificationSheaf_of_isCoherent` to it. So the hypothesis is
+inhabited and the theorem is a check rather than only a statement.
+
+**Do not read the coherent statement as superseding the presented one.** It is a corollary of it,
+its hypothesis is strictly stronger, and the presented form is what the three witnesses in
+`OkaTest/CoherentPresentation.lean` and the two in `OkaTest/CoherentFree.lean` satisfy — none of
+those is a coherent sheaf on a `Spec`.
 
 ## The proof, which is three transports and no new mathematics
 
@@ -80,8 +85,8 @@ moves the cokernel across the functor. Nothing is computed.
 - `ComplexAnalytic.isCoherent_analytificationSheaf_cokernel`: **the analytification of the
   cokernel of a morphism of finite free sheaves is coherent.**
 - `ComplexAnalytic.isCoherent_analytificationSheaf_of_isCoherent`: **the analytification of a
-  coherent sheaf is coherent**, which is the previous statement plus the affine dictionary and
-  has no witness here.
+  coherent sheaf is coherent**, which is the previous statement plus the affine dictionary. It is
+  instantiated in `OkaTest/CoherentPresentation.lean`.
 - `ComplexAnalytic.isCoherent_analytificationSheaf_cokernel_sectionsHom`: the same for the
   quotient of `𝒪_{Spec A}` by a finitely generated ideal sheaf, which is the shape a subscheme
   of `Spec (ℂ[x] ⧸ I)` arrives in.
@@ -185,11 +190,12 @@ coherence on `Spec A` into a finite *global* presentation, and
 free sheaves so the presented theorem applies. See the module docstring for why the
 local-to-global step is algebraic.
 
-**This hypothesis is uninhabited in this repository**, and `OkaTest/CoherentPresentation.lean`
-says so: nothing here proves a sheaf on a `Spec` coherent. The theorem is not vacuous as
-mathematics — it is the standard statement — but it is vacuous *as a check*, so
-`ComplexAnalytic.isCoherent_analytificationSheaf_cokernel` remains the form with a witness and the
-form to apply.
+**This hypothesis used to be uninhabited in this repository**, and the paragraph here said so.
+`AlgebraicGeometry.isCoherentStructureSheaf_spec` inhabits it, and
+`OkaTest/CoherentPresentation.lean` applies this theorem at `𝒪_{Spec A} ⧸ (x)` — so it is a check
+and not only a statement. `ComplexAnalytic.isCoherent_analytificationSheaf_cokernel` remains the
+form to apply when only a presentation is in hand, which is the weaker hypothesis and the one
+every other witness in this development satisfies.
 
 **The `set_option` is the `Spec R` versus `Spec (CommRingCat.of ↑R)` seam.** The hypothesis
 arrives as `M.IsCoherent` at the `AlgebraicGeometry.LocallyRingedSpace.ringSheaf` spelling of the

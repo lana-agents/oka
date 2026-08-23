@@ -98,9 +98,10 @@ it breaks that step and nothing else.
   `SheafOfModules.IsCoherent.isFinitePresentation` gives only a local one, which was true, and the
   local-to-global passage is
   `AlgebraicGeometry.Scheme.Modules.exists_isFinite_presentation_of_isCoherent` — algebra on
-  `Spec A`, with no analytic input. **The presented form is still the one with a
-  witness**, since nothing in this repository proves a sheaf on a `Spec` coherent; see
-  `Oka/Analytification/SheafCoherent.lean`.
+  `Spec A`, with no analytic input. **The presented form is still the weaker hypothesis and the
+  one to apply**; the coherent form is no longer uninhabited, since
+  `AlgebraicGeometry.isCoherentStructureSheaf_spec`, and the clause here that said otherwise is
+  retired. See `Oka/Analytification/SheafCoherent.lean`.
 * **Anything analytic.** Every line here is the `Γ`–`Spec` adjunction and category theory. The
   analytic content is upstream.
 
