@@ -356,6 +356,20 @@ info: 'ComplexAnalytic.analytificationIsoOfPresHom' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.analytificationIsoOfPresHom
 
+/--
+info: 'ComplexAnalytic.PresHom.ofRename' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.PresHom.ofRename
+
+/--
+info: 'ComplexAnalytic.PresHom.ofRename_comp_ofRename' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.PresHom.ofRename_comp_ofRename
+
 /-! ### The analytification as a functor -/
 
 /--
@@ -364,6 +378,13 @@ info: 'ComplexAnalytic.analytificationFunctor' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.analytificationFunctor
+
+/--
+info: 'ComplexAnalytic.Presentation.isoOfRename' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.Presentation.isoOfRename
 
 /--
 info: 'ComplexAnalytic.exists_presentation' depends on axioms:
@@ -721,6 +742,13 @@ info: 'ComplexAnalytic.isCoherent_analytificationSheaf_cokernel_sectionsHom' dep
 #print axioms ComplexAnalytic.isCoherent_analytificationSheaf_cokernel_sectionsHom
 
 /-! ### The distinguished open, through the functor -/
+
+/--
+info: 'ComplexAnalytic.rename_localisationIncl_mem' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.rename_localisationIncl_mem
 
 /--
 info: 'ComplexAnalytic.localisationPresHom' depends on axioms:

@@ -98,10 +98,15 @@ subspace, which is a much larger tax than one unused value per index.
   analytic space once it is given the `ℂ`-algebra structure on each piece and their compatibility
   on the gluing, and that compatibility is a sheaf-condition statement about the glued space, not
   about this file's data. It is the next step and it is not taken here.
-* **`ℙ¹`, and any statement that the gluing is not affine.** `OkaTest/AffineCover.lean` glues
-  three copies of one member along one distinguished open, which exercises `t'` and the cocycle
-  at a real `f`; it does not exhibit a space that is not the analytification of a presentation,
-  which is a much stronger claim and needs an invariant nothing here computes.
+* **Any statement that a gluing is not affine.** The two instances of this construction check
+  different things and neither subsumes the other. `OkaTest/AffineCover.lean` glues three copies
+  of the node along the punctured axis and shows that their three copies of the origin are three
+  *distinct* points of the gluing, which is what rules out a construction quietly returning its
+  first member. `OkaTest/ProjectiveLine.lean` glues two copies of the affine line along `D(z)` by
+  `z ↦ 1/z` and shows that **neither member's inclusion is surjective**, so the glued space is
+  equal to no one member; that is the stronger statement and it is proved only there. Neither
+  exhibits a space that is not the analytification of *some* presentation, which is stronger
+  again and needs an invariant nothing here computes.
 * **`Localization.Away`.** Nothing here needs
   `ComplexAnalytic.PresentedAlgebra (localisationPresentation g f)` to *be* a localisation; it
   needs the structure map and its analytification, both of which

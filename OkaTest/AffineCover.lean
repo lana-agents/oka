@@ -40,9 +40,11 @@ presentation — the node with a tripled origin is intuitively not affine, but p
 invariant nothing in this repository computes. Nor is there an analytic structure on the gluing:
 that is `ComplexAnalytic.AnalyticSpace.ofGlueData`, which needs the compatibility of the algebra
 structures on the glued space and is a separate step. And the transition here is the identity, so
-nothing exercises a *non-trivial* algebra isomorphism between the two descriptions of an overlap;
-`ℙ¹` from two copies of `𝔸¹` with `z ↦ 1/z` is the example that would, and it needs that
-isomorphism of presented algebras to be constructed first.
+nothing in *this* file exercises a non-trivial algebra isomorphism between the two descriptions of
+an overlap; `OkaTest/ProjectiveLine.lean` is the example that does, gluing two copies of `𝔸¹`
+along `D(z)` by `z ↦ 1/z`. The two files are complementary and neither replaces the other: with
+two members there is no triple of distinct indices, so `t'` and the cocycle are vacuous there and
+have content only here.
 -/
 
 open CategoryTheory CategoryTheory.Limits TopologicalSpace AlgebraicGeometry

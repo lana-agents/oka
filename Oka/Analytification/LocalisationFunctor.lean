@@ -34,18 +34,19 @@ ring map is `A ⟶ A_f`: the two directions are the same statement read in oppos
 
 ## Nothing here is about localisation
 
-The ring map is induced by `MvPolynomial.rename (localisationIncl n)`, and the only thing to
-check is that it carries `presentationIdeal g` into `presentationIdeal (localisationPresentation
-g f)` — which is `ComplexAnalytic.localisationPresentation_castSucc` and a `Submodule.span`
-induction. **That `PresentedAlgebra (localisationPresentation g f)` is a localisation of
-`PresentedAlgebra g` is not proved here or anywhere**; it is not needed, because a structure map
-is all a `PresHom` wants. See `Oka/Analytification/DistinguishedOpen.lean` on the naming.
+The ring map is induced by `MvPolynomial.rename (localisationIncl n)`, so it is an instance of
+`ComplexAnalytic.PresHom.ofRename`, and the only thing to check is the hypothesis that construction
+asks for: that the old equations, renamed, lie in the new ideal. They *are* new equations, by
+`ComplexAnalytic.localisationPresentation_castSucc`. **That `PresentedAlgebra
+(localisationPresentation g f)` is a localisation of `PresentedAlgebra g` is not proved here or
+anywhere**; it is not needed, because a structure map is all a `PresHom` wants. See
+`Oka/Analytification/DistinguishedOpen.lean` on the naming.
 
 ## Main definitions
 
-- `ComplexAnalytic.localisationRingHom`: the `ℂ`-algebra map `A ⟶ A_f`, as a ring map of
-  presented algebras.
-- `ComplexAnalytic.localisationPresHom`: the same, as a morphism of presentations.
+- `ComplexAnalytic.localisationPresHom`: the `ℂ`-algebra map `A ⟶ A_f`, as a morphism of
+  presentations.
+- `ComplexAnalytic.localisationRingHom`: the same, as a bare ring map of presented algebras.
 
 ## Main results
 
@@ -72,43 +73,30 @@ noncomputable section
 variable {n k : ℕ} (g : Fin k → MvPolynomial (ULift.{u} (Fin n)) ℂ)
   (f : MvPolynomial (ULift.{u} (Fin n)) ℂ)
 
-/-- **The structure map `A ⟶ A_f`**, as a ring map of presented algebras.
+/-- **The old equations, renamed into the bigger polynomial ring, lie in the new ideal** — they
+*are* new equations, by `ComplexAnalytic.localisationPresentation_castSucc`. This is the whole
+obligation of the two definitions below. -/
+theorem rename_localisationIncl_mem (j : Fin k) :
+    MvPolynomial.rename (localisationIncl.{u} n) (g j) ∈
+      presentationIdeal.{u} (localisationPresentation.{u} g f) :=
+  Ideal.subset_span ⟨j.castSucc, localisationPresentation_castSucc.{u} g f j⟩
 
-It is `MvPolynomial.rename (localisationIncl n)` on representatives; the ideal obligation is
-`ComplexAnalytic.localisationPresentation_castSucc`, since the old equations occur among the new
-ones renamed. -/
+/-- **The structure map as a morphism of presentations**, which by the direction convention of
+`ComplexAnalytic.PresHom` points from the localisation to `A`.
+
+It is `ComplexAnalytic.PresHom.ofRename` at `ComplexAnalytic.localisationIncl`: adjoining a
+variable is a renaming of the variables, and the commutation with the structure maps that a
+`PresHom` demands is `MvPolynomial.rename_C`, discharged there once and for all. -/
+def localisationPresHom : PresHom.{u} (localisationPresentation.{u} g f) g :=
+  PresHom.ofRename.{u} (localisationIncl.{u} n) (rename_localisationIncl_mem.{u} g f)
+
+/-- **The structure map `A ⟶ A_f`**, as a ring map of presented algebras: the underlying ring map
+of `ComplexAnalytic.localisationPresHom`, and the spelling every consumer that does not need the
+commutation uses. -/
 def localisationRingHom :
     PresentedAlgebra.{u} n k g →+*
       PresentedAlgebra.{u} (n + 1) (k + 1) (localisationPresentation.{u} g f) :=
-  Ideal.Quotient.lift _
-    ((Ideal.Quotient.mk (presentationIdeal.{u} (localisationPresentation.{u} g f))).comp
-      (MvPolynomial.rename (localisationIncl.{u} n)).toRingHom)
-    fun a ha ↦ by
-      refine Submodule.span_induction (p := fun x _ ↦
-        (Ideal.Quotient.mk (presentationIdeal.{u} (localisationPresentation.{u} g f)))
-          (MvPolynomial.rename (localisationIncl.{u} n) x) = 0) ?_ ?_ ?_ ?_ ha
-      · rintro _ ⟨j, rfl⟩
-        refine Ideal.Quotient.eq_zero_iff_mem.2 (Ideal.subset_span ⟨j.castSucc, ?_⟩)
-        exact localisationPresentation_castSucc.{u} g f j
-      · simp
-      · intro x y _ _ hx hy
-        simp [hx, hy]
-      · intro c x _ hx
-        simp [hx]
-
-/-- **The structure map as a morphism of presentations**, which by the direction convention of
-`ComplexAnalytic.PresHom` points from the localisation to `A`. The commutation with the structure
-maps is `MvPolynomial.rename_C`. -/
-def localisationPresHom : PresHom.{u} (localisationPresentation.{u} g f) g where
-  toRingHom := localisationRingHom.{u} g f
-  commutes := by
-    refine RingHom.ext fun c ↦ ?_
-    change localisationRingHom.{u} g f
-      (Ideal.Quotient.mk (presentationIdeal.{u} g) (MvPolynomial.C c)) = _
-    change (Ideal.Quotient.mk (presentationIdeal.{u} (localisationPresentation.{u} g f)))
-      (MvPolynomial.rename (localisationIncl.{u} n) (MvPolynomial.C c)) = _
-    rw [MvPolynomial.rename_C]
-    rfl
+  (localisationPresHom.{u} g f).toRingHom
 
 /-- **The tuple the morphism of presentations transports** is the tuple of old coordinates of
 `(A_f)^an`, which is exactly the tuple `ComplexAnalytic.localisationProj` was built from. This is
