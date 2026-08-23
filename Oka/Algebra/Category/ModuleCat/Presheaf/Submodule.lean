@@ -52,6 +52,8 @@ def toSubfunctor : Subfunctor (M.presheaf ⋙ CategoryTheory.forget AddCommGrpCa
   obj X := {r : M.obj X | r ∈ N.obj X}
   map := fun {_ _} f _ hr ↦ N.map_mem f hr
 
+/-- Membership in the subfunctor is membership in the submodule. This is `Iff.rfl`; see the
+module docstring for why it is a `simp` lemma. -/
 @[simp]
 lemma mem_toSubfunctor_obj {X : Cᵒᵖ} (r : M.obj X) :
     r ∈ N.toSubfunctor.obj X ↔ r ∈ N.obj X := Iff.rfl
