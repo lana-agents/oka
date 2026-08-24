@@ -60,8 +60,7 @@ and all fourteen were `lemma`s — which is why `lake lint` was silent about the
 `docBlame` linter covers definitions, and `docBlameThm`, which covers theorems, is off by default
 in Batteries and not turned on here. Nothing in `.orchestra/validation.sh` sees a missing lemma
 docstring, so this paragraph is the only record that the gap existed; turning `docBlameThm` on
-repository-wide
-is a separate question, and taxis #928 is where it has been costed.
+repository-wide is a separate question, and taxis #928 is where it has been costed.
 
 ## Main definitions
 
