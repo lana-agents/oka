@@ -165,7 +165,7 @@ theorem isCoherentStructureSheaf_of_hasLocalRelations (h : Y.HasLocalRelations) 
     PresheafOfModules.sections.eval (freeHomEquiv _ φ (e.symm i)) (op (Over.mk (𝟙 X))) with hf
   choose V hVX k g hxV hrel hgen using fun (x : X) ↦ h X m f x.1 x.2
   refine ⟨↥X, fun a ↦ Over.mk (homOfLE (hVX a)),
-    coversTop_over X V hVX (fun x hx ↦ ⟨⟨x, hx⟩, hxV ⟨x, hx⟩⟩), fun a ↦ ?_⟩
+    X.coversTop_over V hVX (fun x hx ↦ ⟨⟨x, hx⟩, hxV ⟨x, hx⟩⟩), fun a ↦ ?_⟩
   set Ya : Over X := Over.mk (homOfLE (hVX a))
   set L := ULift.{u} (Fin (k a))
   have hWV : ∀ W : (Over Ya)ᵒᵖ, W.unop.left.left ≤ V a := fun W ↦ leOfHom W.unop.hom.left
