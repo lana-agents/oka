@@ -79,12 +79,51 @@ lake lint || exit 1
 # Verify Mathlib's text-based style linter is clean. Until now it was enforced by nothing at
 # all, despite being quoted in every pull request description on this project.
 #
-# It checks *less* than its name suggests. As of this Mathlib the whole list is: trailing
-# whitespace, a space before a semicolon, Windows line endings, disallowed unicode and variant
-# selectors, the string "Adaptation note", and module-name casing. Line length and copyright
-# headers are *build* linters, caught by `lake build --wfail` above via
-# `weak.linter.mathlibStandardSet`. Do not read a green `lint-style` as "Mathlib style has been
-# checked"; it is disjoint from, and much narrower than, the environment linters.
+# It checks *less* than its name suggests, and it has more parts than the name of one executable
+# suggests. `lintStyleCli` (`.lake/packages/mathlib/scripts/lint-style.lean:269-272`) sums five
+# terms, and **seven checks actually run over this repository**. Five are per-file, inside
+# `lintModules`: Windows line endings, trailing whitespace, a space before a semicolon,
+# disallowed unicode and variant selectors, and the string "Adaptation note". Two are about
+# module *names*: `UpperCamelCase`, and filenames forbidden on Windows or on Nix (`CON`, `LPT1`,
+# `*`, `?`, `!`, ...). Line length and copyright headers are *build* linters, caught by `lake
+# build --wfail` above via `weak.linter.mathlibStandardSet`. Do not read a green `lint-style` as
+# "Mathlib style has been checked"; it is disjoint from, and much narrower than, the environment
+# linters.
+#
+# **Three further sub-checks are gated off by default, and not one of them can simply be switched
+# on here.** Two are the remaining terms of the five, `linter.checkInitImports` and
+# `linter.allScriptsDocumented`; the third, `linter.pythonStyle`, is nested inside `lintModules`,
+# which is why the sum has five terms while six things in it have a switch. Putting each in
+# `[leanOptions]` in turn, 2026-08-24, gives a crash and not a report:
+#
+#   checkInitImports      uncaught exception, no such file or directory: Mathlib.lean
+#   allScriptsDocumented  uncaught exception, no such file or directory: scripts/README.md
+#   pythonStyle           could not execute external process './scripts/print-style-errors.sh'
+#
+# Each reads a path out of the working directory that only Mathlib's own checkout has. The first
+# is about `Mathlib.Init` and there is nothing here for it to do; the third is `defValue :=
+# false` in Mathlib as well, carrying a TODO that says the Python linters assume they are run
+# from Mathlib's `scripts/`.
+#
+# **The second is about our `scripts/` directory, and the decision is not to write
+# `scripts/README.md`.** With one planted the check reports six undocumented scripts —
+# `docstring-names-ignore.txt` among them, since only Mathlib's own `noshake.json` and
+# `nolints-style.txt` are exempt — and **a file holding those six names in backticks and not one
+# word of prose exits 0**. Measured, and it is the whole enforcement value: the check reads for
+# `` `name` `` and can say nothing about whether a description is present, let alone true.
+# Meanwhile the index it would duplicate exists already, in `README.md`'s `### Checking` section,
+# which says what each script is *for* and why it had to be written. A second copy that no check
+# can keep honest is the defect this repository repairs most often, and buying one to silence a
+# switch that is already off is the wrong trade. If the tripwire is what you want — somebody
+# added a script and documented it nowhere — the honest version points at the section that
+# already exists rather than at a new file, and it is a check to argue for on its own.
+#
+# One trap, and it is upstream's rather than ours: `modulesOSForbidden` is gated on
+# `linter.modulesUpperCamelCase` (`Mathlib/Tactic/Linter/TextBased.lean:602`) and not on the
+# `linter.modulesForbiddenWindows` declared directly above it at `:589`, which is registered and
+# **read nowhere in Mathlib**. Both default `true`, so both module-name checks do run here. But
+# setting `modulesUpperCamelCase = false` to allow one module name would silently switch off the
+# forbidden-filename check too, and setting `modulesForbiddenWindows = false` would do nothing.
 #
 # Both library root modules. `OkaTest` was absent here until 2026-08-20, not by choice but
 # because `lake exe lint-style Oka OkaTest` failed with `no such file OkaTest.lean` — the test
@@ -101,9 +140,9 @@ lake lint || exit 1
 # completely empty — silences the warning and still exits 0; that was measured in both shapes,
 # so this is a decision and not an untried alternative.
 #
-# **The reason not to create it is that there is nothing for it to hold.** Every item on the
-# "checks *less* than its name suggests" list above is a mechanical defect in a file of ours,
-# every one of them is fixable, and there are none. Mathlib's own eleven entries are all
+# **The reason not to create it is that there is nothing for it to hold.** Every one of the
+# seven checks that run, listed above, reports a mechanical defect in a file of ours, every one
+# of them is fixable, and there are none. Mathlib's own eleven entries are all
 # self-references — the linter for the string "Adaptation note" firing inside
 # `Mathlib/Tactic/AdaptationNote.lean` and inside the linter's own implementation — a case this
 # repository cannot have. So an empty file here would exist only to suppress the notice of its
@@ -122,7 +161,7 @@ lake exe lint-style Oka OkaTest || exit 1
 # Verify that every backticked dotted name in a comment or docstring resolves to something.
 #
 # Nothing above looks inside a comment. `lake build --wfail` sees only elaborated terms, `lake
-# lint` checks declaration *names*, `lint-style` checks whitespace and line length, `mk_all
+# lint` checks declaration *names*, `lint-style` checks whitespace and unicode, `mk_all
 # --check` checks imports, and the declaration-name diff that every pull request body runs
 # compares declarations rather than the prose citing them. A backticked name in a `/-- … -/`
 # block that names nothing at all passed every one of them until this line existed, and on

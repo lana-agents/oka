@@ -78,14 +78,20 @@ jobs:
           lake exe mk_all --lib OkaTest --git --check
 
       # Mathlib's text-based style linter, a separate executable from the environment linters
-      # and not covered by `lake lint`. It checks *less* than its name suggests: trailing
-      # whitespace, a space before a semicolon, Windows line endings, disallowed unicode and
-      # variant selectors, the string "Adaptation note", and module-name casing — and nothing
-      # else. Line length and copyright headers are *build* linters, which this project gets
-      # from `weak.linter.mathlibStandardSet` plus `--wfail`, so a green tick here does not mean
-      # "Mathlib style has been checked".
+      # and not covered by `lake lint`. It checks *less* than its name suggests. Seven checks
+      # run: Windows line endings, trailing whitespace, a space before a semicolon, disallowed
+      # unicode and variant selectors, the string "Adaptation note", module-name casing, and
+      # filenames forbidden on Windows or on Nix. Line length and copyright headers are *build*
+      # linters, which this project gets from `weak.linter.mathlibStandardSet` plus `--wfail`,
+      # so a green tick here does not mean "Mathlib style has been checked".
       # `elan` and the build cache are left in place by the step above, so this only has to link
       # the executable.
+      #
+      # Three further sub-checks are gated off by default and none can simply be switched on
+      # here; one of the three is the reason this repository has no `scripts/README.md`. The
+      # measurements and that decision are in the comment on the same command in
+      # `.orchestra/validation.sh`, for the reason given below: the two files must agree about
+      # what is *run*, and duplicating the argument is how they come to disagree about it.
       #
       # Both library root modules. `OkaTest` was absent here until 2026-08-20, not by choice
       # but because `lint-style Oka OkaTest` failed with `no such file OkaTest.lean` — the test
@@ -112,7 +118,7 @@ jobs:
       # Every backticked dotted name in a comment or docstring must resolve to a declaration, a
       # module, a file in the repository, or field notation on one of those. Nothing else in
       # this workflow looks inside a comment: the build sees only elaborated terms, `lake lint`
-      # checks declaration *names*, and the step above checks whitespace and line length. See
+      # checks declaration *names*, and the step above checks whitespace and unicode. See
       # `scripts/check_docstring_names.py` for the rules and for what a green here does not mean.
       #
       # This reads the environment with `lake env lean`, so it needs the build above to have
