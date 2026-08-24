@@ -64,6 +64,7 @@ import Oka.Analytification.FlatnessAtAPoint
 import Oka.Analytification.Functor
 import Oka.Analytification.LocalRing
 import Oka.Analytification.LocalisationFunctor
+import Oka.Analytification.LocalisationIndependence
 import Oka.Analytification.Presentation
 import Oka.Analytification.PresentationFlatness
 import Oka.Analytification.PresentationStalk
@@ -107,6 +108,7 @@ import Oka.RingTheory.Flat.Descent
 import Oka.RingTheory.Flat.Quotient
 import Oka.RingTheory.LocalRing.ResidueField.Basic
 import Oka.RingTheory.Localization.AtPrime.Basic
+import Oka.RingTheory.Localization.Away.Basic
 import Oka.RingTheory.Localization.Module
 import Oka.RingTheory.MvPolynomial.Ideal
 import Oka.RingTheory.MvPolynomial.Localization
