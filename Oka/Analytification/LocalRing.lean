@@ -11,7 +11,7 @@ import Mathlib.RingTheory.MvPowerSeries.Equiv
 import Mathlib.RingTheory.RingHom.Flat
 import Oka.MaximalIdeal
 import Oka.RingTheory.AdicCompletion.Algebra
-import Oka.RingTheory.Localization.Ideal
+import Oka.RingTheory.Localization.AtPrime.Basic
 import Oka.RingTheory.MvPolynomial.Ideal
 import Oka.Weierstrass
 

@@ -100,8 +100,8 @@ on every line that carries a number.
 Only the file's **`Mathlib.` imports**.  Pricing an `Oka.` import here would answer a different
 question: a mirror file's cost is against *its own* Mathlib target, not against this one's, so the
 two numbers are not comparable and adding them means nothing.  **That is the reason, and it is not
-that the other file states its own figure** — of the 16 distinct `Oka.` imports dropped across the
-11 mirror files that have one, **seven** state their own cost and **nine state nothing anywhere**,
+that the other file states its own figure** — of the 15 distinct `Oka.` imports dropped across the
+10 mirror files that have one, **six** state their own cost and **nine state nothing anywhere**,
 including all three in the worked example below.  So the omission is **named in the output**, one
 line per dropped import, rather than left silent: a `cost 0` beside an unmentioned dependency is
 the shape of wrongness this script exists to stop.
@@ -114,7 +114,7 @@ what this script measures and misleading about the decision it informs, so the a
 both and decides.
 
 **Not every dropped import has a Mathlib file at its own mirror path**, and the output says which
-do: 11 of the 41 files under `Oka/` with a Mathlib target import another `Oka` module, and three
+do: 10 of the 40 files under `Oka/` with a Mathlib target import another `Oka` module, and three
 of those imports are mirror-tree files for a Mathlib file that does not exist
 (`Oka/AlgebraicGeometry/Modules/Tilde.lean`, `Oka/RingTheory/MvPolynomial/Ideal.lean` and
 `Oka/RingTheory/RingHom/FaithfullyFlat.lean` each have one).  Those cannot be priced at all, by
@@ -245,7 +245,7 @@ def unknown_modules(ml: Mathlib, modules: list[str]) -> list[str]:
     `Aesop.*` and `Init.*` names that are not Mathlib files — and it is also what makes a typo
     invisible: a module that does not exist contributes no imports and is filtered out of *both*
     sides of the subtraction, so it prices as `cost 0`.  **0 is by far the commonest correct
-    answer here** — of the 41 files under `Oka/` with a Mathlib file at their mirror path, **27**
+    answer here** — of the 40 files under `Oka/` with a Mathlib file at their mirror path, **31**
     cost 0 — so a typo's answer is indistinguishable from a right one.  Callers reject instead of
     reporting.
     """

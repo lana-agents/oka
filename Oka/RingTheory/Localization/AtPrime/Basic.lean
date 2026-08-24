@@ -3,22 +3,25 @@ Copyright (c) 2026 Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten. All righ
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
-import Mathlib.RingTheory.Ideal.Quotient.Nilpotent
 import Mathlib.RingTheory.Localization.AtPrime.Basic
-import Mathlib.RingTheory.Localization.Ideal
 
 /-!
 # Localising at a maximal ideal does not change the quotients by its powers
 
-Material for `Mathlib/RingTheory/Localization/Ideal.lean`; see `README.md` on the mirror tree.
-Upstreaming it adds `Mathlib.RingTheory.Localization.AtPrime.Basic` and
-`Mathlib.RingTheory.Ideal.Quotient.Nilpotent` to a target whose closure is **1114** Mathlib
-modules — **113** new ones, of which `AtPrime.Basic` alone accounts for all 113 and
-`Ideal.Quotient.Nilpotent`'s own 91 is contained in it. Measured with `scripts/import_cost.py`.
-**A cheaper destination exists and this file does not choose it**: priced into
-`Mathlib/RingTheory/Localization/AtPrime/Basic.lean`, whose closure already contains both, these
-declarations cost **0**. Which of the two files a statement about `R ⧸ p ^ k` and `R_p` belongs
-in is taxis #935's question, not this docstring's.
+Material for `Mathlib/RingTheory/Localization/AtPrime/Basic.lean`; see `README.md` on the mirror
+tree. Upstreaming it adds nothing: that file's transitive closure is **1227** Mathlib modules,
+the import above is the target itself, and the cost is **0**, measured with
+`python3 scripts/import_cost.py Oka/RingTheory/Localization/AtPrime/Basic.lean`.
+
+**This file was `Oka/RingTheory/Localization/Ideal.lean` until taxis #935**, proposing
+`Mathlib/RingTheory/Localization/Ideal.lean` at **113** on a closure of 1114 — the price of
+`Mathlib.RingTheory.Localization.AtPrime.Basic`, which accounted for all 113 on its own, with
+`Mathlib.RingTheory.Ideal.Quotient.Nilpotent`'s 91 contained in it as a set. Everything below is
+*about* `Localization.AtPrime p`, which is defined in `AtPrime/Basic.lean` and is not in
+`Localization/Ideal.lean`'s closure, so the old path had to buy the new one in order to state
+anything at all — while the new path already imports both of the old file's imports.
+**A mirror path that cannot state its own declarations is the sharpest case of `README.md`'s
+test that the path has to survive the imports its results need.**
 
 For a **maximal** ideal `p` of `R`, the canonical map
 

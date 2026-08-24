@@ -689,7 +689,7 @@ Mathlib's own namespaces, and is intended for upstreaming; its imports are the c
 Mathlib file plus whatever else it genuinely needs, and nothing from the analytic side of this
 development. For example `Oka/CategoryTheory/Sites/Over.lean` extends
 `Mathlib/CategoryTheory/Sites/Over.lean`, `Oka/Algebra/Category/ModuleCat/Sheaf/` mirrors
-`Mathlib/Algebra/Category/ModuleCat/Sheaf/`, and `Oka/RingTheory/Ideal/Maps.lean` adds one
+`Mathlib/Algebra/Category/ModuleCat/Sheaf/`, and `Oka/RingTheory/Finiteness/Ideal.lean` adds one
 missing lemma next to `Ideal.comap_symm` in `Mathlib/RingTheory/Ideal/Maps.lean`.
 
 **A new lemma with no complex-analytic content belongs in the mirror tree, not in the analytic

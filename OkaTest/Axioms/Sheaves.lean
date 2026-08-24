@@ -362,7 +362,7 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.OpenCover.glueAlgMapRestrict_comapAl
 
 /-! ### The germ of a global section of `𝒪_{Spec R}` at a prime
 
-`Oka/AlgebraicGeometry/StructureSheaf.lean`. Mirror-tree material with nothing analytic in it. -/
+`Oka/AlgebraicGeometry/Spec.lean`. Mirror-tree material with nothing analytic in it. -/
 
 /--
 info: 'AlgebraicGeometry.StructureSheaf.germ_algebraMap_mem_maximalIdeal_iff' depends on axioms:

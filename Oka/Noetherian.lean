@@ -5,7 +5,7 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Oka.ChangeOfCoordinates
 import Oka.OkaLemma
-import Oka.RingTheory.Ideal.Maps
+import Oka.RingTheory.Finiteness.Ideal
 
 /-!
 # The Rückert basis theorem

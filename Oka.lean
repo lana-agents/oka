@@ -1,4 +1,5 @@
 import Oka.Algebra.Category.Grp.EpiMono
+import Oka.Algebra.Category.Grp.Sheaf.LocallySurjective
 import Oka.Algebra.Category.ModuleCat.Presheaf.PullbackStalk
 import Oka.Algebra.Category.ModuleCat.Presheaf.Skyscraper
 import Oka.Algebra.Category.ModuleCat.Presheaf.Submodule
@@ -26,7 +27,7 @@ import Oka.AlgebraicGeometry.GammaSpecAdjunction
 import Oka.AlgebraicGeometry.Modules.Coherent
 import Oka.AlgebraicGeometry.Modules.Sheaf
 import Oka.AlgebraicGeometry.Modules.Tilde
-import Oka.AlgebraicGeometry.StructureSheaf
+import Oka.AlgebraicGeometry.Spec
 import Oka.Analysis.Complex.CoveringMap
 import Oka.Analytic.DividedDifference
 import Oka.Analytic.ParametricCircleIntegral
@@ -74,7 +75,6 @@ import Oka.CategoryTheory.GlueData
 import Oka.CategoryTheory.Limits.Shapes.KernelBiprod
 import Oka.CategoryTheory.Sites.CoversTop.Basic
 import Oka.CategoryTheory.Sites.CoversTop.Over
-import Oka.CategoryTheory.Sites.LocallySurjective
 import Oka.CategoryTheory.Sites.Over
 import Oka.CategoryTheory.Sites.Whiskering
 import Oka.ChangeOfCoordinates
@@ -102,11 +102,11 @@ import Oka.Regular
 import Oka.RingTheory.AdicCompletion.Algebra
 import Oka.RingTheory.Filtration
 import Oka.RingTheory.Finiteness.Basic
+import Oka.RingTheory.Finiteness.Ideal
 import Oka.RingTheory.Flat.Descent
 import Oka.RingTheory.Flat.Quotient
-import Oka.RingTheory.Ideal.Maps
 import Oka.RingTheory.LocalRing.ResidueField.Basic
-import Oka.RingTheory.Localization.Ideal
+import Oka.RingTheory.Localization.AtPrime.Basic
 import Oka.RingTheory.Localization.Module
 import Oka.RingTheory.MvPolynomial.Ideal
 import Oka.RingTheory.RingHom.FaithfullyFlat
