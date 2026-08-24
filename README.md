@@ -804,8 +804,10 @@ python3 scripts/import_cost.py --self-test
 ```
 
 **Use it rather than writing the search again.** The obvious one-line regex over `import` lines
-follows `import` lines that are *inside docstrings*, of which Mathlib has 29 across 14 files —
-two of them a bare `import Mathlib`, at which point the computed closure becomes the whole
+follows `import` lines that are *inside comments*, of which Mathlib has 29 across 14 files: 25 of
+those lines sit in a docstring, and the other 4 in a commented-out block of example code under
+`RingTheory/AdicCompletion/`, with the `import` at the top where a real one would go. **Two of the
+29 are a bare `import Mathlib`**, at which point the computed closure becomes the whole
 library. One such line, in `Mathlib/Tactic/FunProp.lean`'s documentation, pulls the closure of
 `Mathlib.Analysis.Complex.Trigonometric` into almost every closure; **what that costs is a fact
 about the baseline and not about the edge**, so the script's docstring states it against named

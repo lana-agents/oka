@@ -31,7 +31,7 @@ documentation change. The three alternative destinations are the three files jus
 
 **How the number was taken, because the obvious instrument gets it wrong.** Breadth-first search
 over `^(public )?import` in `.lake/packages/mathlib`, **with comments masked first**. Fourteen
-files of Mathlib carry a line beginning `import …` inside a docstring — 29 such lines, two of them
+files of Mathlib carry a line beginning `import …` inside a comment — 29 such lines, two of them
 a bare `import Mathlib` — and an unmasked search follows them. The one that reaches this closure is
 `Mathlib/Tactic/FunProp.lean`, whose documentation shows
 `import Mathlib.Analysis.Complex.Trigonometric` in an example; that single phantom edge takes this
