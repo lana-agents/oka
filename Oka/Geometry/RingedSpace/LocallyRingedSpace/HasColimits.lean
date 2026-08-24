@@ -65,10 +65,9 @@ across `CategoryTheory.Discrete.natIsoFunctor`.
 
 ## What is not here
 
-**No universal property at the level of `Opens`**, and no analogue of
-`AlgebraicGeometry.sigmaMk`: the index map built below is not shown to be part of a
-homeomorphism onto a `Sigma` type, only to exist. That statement is true and would need exactly
-the `TopCat.sigmaIsoSigma` chain described above; nothing in this repository asks for it.
+**No analogue of `AlgebraicGeometry.sigmaMk`**: the index map built below is not shown to be part
+of a homeomorphism onto a `Sigma` type, only to exist. That statement is true and would need
+exactly the `TopCat.sigmaIsoSigma` chain described above; nothing in this repository asks for it.
 
 ## Implementation notes
 
@@ -101,13 +100,20 @@ names above. What had failed was the spelling: those declarations were being cit
 `AlgebraicGeometry.Scheme`, where none of them lives. The name cannot be repeated here to show
 what was wrong with it, because a name that resolves to nothing is what the checker rejects.
 
-**The composite forgetful functor does not preserve these colimits by `infer_instance`.**
-`AlgebraicGeometry.LocallyRingedSpace.forgetToTop` is *by definition* the composite of
-`AlgebraicGeometry.LocallyRingedSpace.forgetToSheafedSpace` with
-`AlgebraicGeometry.SheafedSpace.forget`, and both factors preserve them, but
-`CategoryTheory.Limits.comp_preservesColimitsOfShape` is not an instance, so the composite has to
-be handed over — which is one line, and is the move
-`Mathlib/AlgebraicGeometry/Limits.lean` makes for the `AlgebraicGeometry.Scheme` version.
+**The composite forgetful functor is not found by `infer_instance` at its own spelling, and the
+reason is not that the instance is missing.**
+`AlgebraicGeometry.LocallyRingedSpace.forgetToTop` is *by definition*
+`AlgebraicGeometry.LocallyRingedSpace.forgetToSheafedSpace` followed by
+`AlgebraicGeometry.SheafedSpace.forget`; both factors preserve these colimits, and
+`CategoryTheory.Limits.comp_preservesColimitsOfShape` covers the composite and **is** an instance.
+What blocks it is that `forgetToTop` is a `def` rather than an `abbrev`, so at the reducible
+transparency instance search runs at the goal is never seen as a composite and that instance is
+never tried. Two controls settle it, both against
+`Mathlib.Geometry.RingedSpace.LocallyRingedSpace.HasColimits` alone: `inferInstanceAs` at the
+spelled-out composite succeeds where bare `infer_instance` fails, and an `abbrev` whose body is
+the same composite is found by bare `infer_instance`. Handing the instance over is one line, and
+is the move `Mathlib/AlgebraicGeometry/Limits.lean` makes for the `AlgebraicGeometry.Scheme`
+version, there by `inferInstanceAs` at the unfolded type.
 -/
 
 open CategoryTheory CategoryTheory.Limits
@@ -192,8 +198,11 @@ with a `Sigma` type. -/
 underlying spaces**, in the only form used below: that
 `AlgebraicGeometry.LocallyRingedSpace.forgetToTop` preserves these colimits.
 
-Both factors of it do, but `CategoryTheory.Limits.comp_preservesColimitsOfShape` is not an
-instance and the composite is not found by search. -/
+Both factors of it do, and `CategoryTheory.Limits.comp_preservesColimitsOfShape` is an instance
+that covers the composite — but `AlgebraicGeometry.LocallyRingedSpace.forgetToTop` is a `def`, so
+the goal does not present as a composite at reducible transparency and that instance is never
+tried. Hence the explicit term rather than `inferInstance`; see the implementation notes in the
+header. -/
 noncomputable instance preservesColimitsOfShape_discrete_forgetToTop :
     PreservesColimitsOfShape (Discrete ι) forgetToTop.{u} :=
   Limits.comp_preservesColimitsOfShape _ _
@@ -203,11 +212,20 @@ noncomputable instance preservesColimitsOfShape_discrete_forgetToTop :
 
 This is the whole of the disjointness argument. A cocone under `F ⋙ forgetToTop` factors uniquely
 through the coproduct, so the factorisation is a continuous map assigning an index to every point
-of the coproduct, and two members whose images met would force their indices equal. The topology
-on the index type has to be discrete for the constant maps to separate the indices — every map to
-it is continuous, so `continuous_const` is the whole obligation — and it is supplied by `letI`
-rather than by a `TopologicalSpace` instance, because `TopCat.ofHom` resolves the codomain's
-instance by search and would not see through a definition that fixed it. -/
+of the coproduct, and two members whose images met would force their indices equal.
+
+**Nothing below uses discreteness, and the topology is not forced.** A constant map is continuous
+into any space, so `continuous_const` discharges the whole obligation whatever topology `ι`
+carries, and the argument reads off an equality of *points* of `ι` and never names an open set of
+it: substituting `⊤` for `⊥` here leaves
+`AlgebraicGeometry.LocallyRingedSpace.eq_of_colimit_ι_base_eq` and the disjointness below it
+compiling word for word, and `⊤` is provably not discrete. `⊥` is chosen because it is the
+canonical topology on an index type. Note also that "every map into it is continuous" is the
+property of the *indiscrete* topology, not of this one — into a discrete codomain continuity is
+local constancy, which is a real condition. What *is* forced is that some topology be supplied,
+and that it be supplied by `letI` rather than by a `TopologicalSpace` instance, because
+`TopCat.ofHom` resolves the codomain's instance by search and would not see through a definition
+that fixed it. -/
 noncomputable def indexCocone : Cocone (F ⋙ forgetToTop.{u}) :=
   letI : TopologicalSpace ι := ⊥
   { pt := TopCat.of ι
