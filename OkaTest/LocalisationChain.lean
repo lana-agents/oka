@@ -17,8 +17,12 @@ import Oka
 and calls it a `trans_comp` law. **That is a claim about a diagram, and until this file there was
 no diagram**: nobody had written down an index category and a functor out of it, so *"the shape
 works"* was not yet a statement about anything. Grepping `⥤` over `Oka/Analytification/` and
-`OkaTest/` before this file returns only functors whose *source* is `ComplexAnalytic.Presentation`
-— the analytification and the two comparison functors — and none out of a finite index category.
+`OkaTest/` before this file returns eleven occurrences — eight in a declaration's type, three in a
+docstring — and **not one of them has a finite index category as its source**. Five name a functor
+out of `ComplexAnalytic.Presentation`; two name one out of the opposite category of the
+finite-type `ℂ`-algebras, `ComplexAnalytic.analytificationFGAlg` and
+`ComplexAnalytic.toCommRingCatOp`; the remaining four name one out of a category of sheaves of
+modules.
 
 This file writes one down. The index category is the three-element chain `0 ⟶ 1 ⟶ 2`, which is
 `Fin 3` with its own order, and the functor is
