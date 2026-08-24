@@ -625,3 +625,57 @@ info: 'ComplexAnalytic.AnalyticSpace.glueMorphisms_map_comp' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.glueMorphisms_map_comp
+
+/-! ### The disjoint union of a family of analytic spaces
+
+`Oka/AnalyticSpace/Sigma.lean`. The object, its inclusions, the descent map, and the two
+non-vacuity statements at the two ends of the index type. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.sigma' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.sigma
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.comapAlgMap_sigma' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.comapAlgMap_sigma
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.sigmaι' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.sigmaι
+
+/--
+info: 'ComplexAnalytic.isCLinearHom_sigmaDesc' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isCLinearHom_sigmaDesc
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.sigmaDesc' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.sigmaDesc
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isEmpty_sigma' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isEmpty_sigma
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.not_surjective_sigmaι_base' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.not_surjective_sigmaι_base

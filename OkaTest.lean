@@ -1,5 +1,6 @@
 import OkaTest.AffineCover
 import OkaTest.AffineSections
+import OkaTest.AnalyticSigma
 import OkaTest.AnalyticSpaceGlue
 import OkaTest.AnalyticSpaceLocal
 import OkaTest.Analytification
