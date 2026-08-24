@@ -20,8 +20,12 @@ result is the single localisation at `f₁ * f`.
   single structure map `A ⟶ A_{f₁·f}`. This is the half with content; the isomorphism alone would
   leave the composite unrelated to what it is a composite of.
 * `ComplexAnalytic.localisationPresentationIsoMul` — the same as an isomorphism of objects of
-  `ComplexAnalytic.Presentation`, which is the form a coherence law consumes, and hence an
-  isomorphism of analytic spaces through `ComplexAnalytic.analytificationFunctor`.
+  `ComplexAnalytic.Presentation`, and hence an isomorphism of analytic spaces through
+  `ComplexAnalytic.analytificationFunctor`.
+* `ComplexAnalytic.localisationPresentationIsoMul_hom_comp` — **the coherence triangle**: the
+  composite of the two structure maps and the single one agree once the two members are identified
+  by that isomorphism. This is the `trans_comp` law, at the level of presentations and up to the
+  coherence isomorphism, which is the only level it can hold at.
 
 ## Where this is needed
 
@@ -230,5 +234,25 @@ noncomputable def localisationPresentationIsoMul :
         (MvPolynomial.rename (localisationIncl.{u} n) f₁)⟩ : Presentation.{u}) ≅
       ⟨n + 1, k + 1, localisationPresentation.{u} g (f₁ * f)⟩ :=
   Presentation.isoOfAlgEquiv (localisationPresentedAlgebraEquivMul.{u} g f f₁).symm
+
+/-- **The coherence triangle**: the composite of the two structure maps `A_{f₁·f} ⟶ A_f ⟶ A` and
+the single structure map agree, once the two members are identified by
+`ComplexAnalytic.localisationPresentationIsoMul`.
+
+This is the `trans_comp` law of a locally directed cover, at the level of presentations and up to
+the coherence isomorphism — which is where it has to live, since the composite arrow's witness is
+`f₁ * f` and the composite morphism's target is the doubly localised presentation, and the two are
+not the same object. It is
+`ComplexAnalytic.localisationPresentedAlgebraEquivMul_localisationRingHom` read through
+`ComplexAnalytic.PresHom.ext`, so nothing is proved here beyond the packaging. -/
+theorem localisationPresentationIsoMul_hom_comp :
+    (localisationPresentationIsoMul.{u} g f f₁).hom ≫ localisationHom.{u} g (f₁ * f) =
+      localisationHom.{u} (localisationPresentation.{u} g f)
+          (MvPolynomial.rename (localisationIncl.{u} n) f₁) ≫ localisationHom.{u} g f := by
+  refine PresHom.ext (RingHom.ext fun x ↦ ?_)
+  change (localisationPresentedAlgebraEquivMul.{u} g f f₁).symm
+    (localisationRingHom.{u} g (f₁ * f) x) = _
+  rw [AlgEquiv.symm_apply_eq]
+  exact (localisationPresentedAlgebraEquivMul_localisationRingHom.{u} g f f₁ x).symm
 
 end ComplexAnalytic
