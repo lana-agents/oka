@@ -55,11 +55,19 @@ fi
 #
 # **This check secures exactly one thing and it is worth being explicit about how little that
 # is**: a file under `scripts/` that nobody has written a sentence about. It cannot tell whether
-# the sentence is true, or current, or anything more than the filename repeated. It is the same
-# test as Mathlib's `undocumentedScripts` — a substring search for the name — pointed at the
-# index this repository already has instead of at `scripts/README.md`, the path Mathlib hardcodes
-# and which taxis #964 decided not to create, on the measurement that a file holding six
-# backticked names and no prose satisfies that linter outright.
+# the sentence is true, or current, or anything more than the filename repeated. It asks
+# Mathlib's `undocumentedScripts` question — is this entry named in the index at all? — of the
+# index this repository already has rather than of `scripts/README.md`, the path Mathlib
+# hardcodes and which taxis #964 decided not to create, on the measurement that a file holding
+# six backticked names and no prose satisfies that linter outright.
+#
+# **The test is not Mathlib's**, and until 2026-08-24 this paragraph said it was. Mathlib looks
+# for the name *wrapped in backticks* (`scripts/lint-style.lean:181` in the Mathlib checkout),
+# which is already exact and so has none of the hole fixed below — but which `README.md` fails
+# for three of the six entries: `check_file.sh` is written only as `bash scripts/check_file.sh
+# FILE.lean` inside a fenced block, and `check_module_docstrings.py` and `import_cost.py` are
+# backticked only as part of a longer path or command. That is why the rule below matches a bare
+# filename, and why the match then has to be made exact some other way.
 #
 # Three choices in it, none of them forced:
 #

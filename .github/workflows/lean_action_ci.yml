@@ -42,11 +42,13 @@ jobs:
       # `README.md`'s `### Checking` section is this repository's index of `scripts/`, and until
       # 2026-08-24 three of the six entries there — `check_docstring_names.py`, which
       # `validation.sh` runs, `DumpEnvNames.lean`, which feeds it, and
-      # `docstring-names-ignore.txt` — were named nowhere in it. This is the same test as
+      # `docstring-names-ignore.txt` — were named nowhere in it. This asks the same question as
       # Mathlib's `undocumentedScripts` linter, which `lake exe lint-style` gates off by default
       # and which reads `scripts/README.md`, a file this repository deliberately does not have;
-      # pointing it at the index that exists is what makes it worth running. It secures one thing
-      # only: a file under `scripts/` that nobody has written a sentence about.
+      # pointing it at the index that exists is what makes it worth running. It is not the same
+      # *test*: Mathlib matches the name wrapped in backticks, which three of the six entries
+      # here are not written in. It secures one thing only: a file under `scripts/` that nobody
+      # has written a sentence about.
       # `.orchestra/validation.sh` carries the full reasoning and the three choices in the rule.
       #
       # The match is a whole token, not a substring: `README.md` is split into maximal runs of
