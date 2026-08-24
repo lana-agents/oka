@@ -15,8 +15,41 @@ public import Oka.RingTheory.Finiteness.Basic
 # Restricting a module along an open immersion: generators, presentations, finiteness of sections
 
 Material for `Mathlib/AlgebraicGeometry/Modules/Sheaf.lean`; see `README.md` on the mirror tree.
-That file does not currently import `Mathlib.Algebra.Category.ModuleCat.Sheaf.Generators`, which
-the declarations here need, so upstreaming them adds that import — three files to its closure.
+
+**Upstreaming all of it adds eight modules to that target's closure of 2264**, and the eight are
+attributable to the results that need them. Every figure below is `scripts/import_cost.py` against
+that target; which result needs which import is read off what stops elaborating when the import is
+dropped, rather than off the import list.
+
+* `AlgebraicGeometry.Scheme.Modules.overEquivUnitIso`, `generatingSectionsRestrict` and
+  `finite_I_generatingSectionsRestrict` need
+  `Mathlib.Algebra.Category.ModuleCat.Sheaf.Generators`, which the target does not import: **3**,
+  that module together with `Mathlib.Algebra.Category.ModuleCat.Sheaf.Free` and
+  `Mathlib.CategoryTheory.Limits.Preserves.SigmaConst`.
+* `presentationOverRestrict` and `isFinite_presentationOverRestrict` need
+  `SheafOfModules.Presentation` and `SheafOfModules.Presentation.ofIsIso`, which are Mathlib's own
+  and are declared in `Mathlib.Algebra.Category.ModuleCat.Sheaf.Quasicoherent`: **5**, the three
+  above plus that module and `Mathlib.CategoryTheory.Sites.CoversTop.Over`.
+* `AlgebraicGeometry.Scheme.Modules.finitePresentation_sections_of_restrict` needs
+  `Module.FinitePresentation` itself, from `Mathlib.Algebra.Module.FinitePresentation`: **3**, that
+  module with `Mathlib.RingTheory.Finiteness.Projective` and
+  `Mathlib.RingTheory.TensorProduct.Finite`.
+* `AlgebraicGeometry.Scheme.Modules.module_finite_sections_of_restrict` needs
+  `Module.Finite.of_ringEquiv`, from `Mathlib.RingTheory.Finiteness.Basic`, which is already in
+  that closure: **0**.
+
+**Those four figures do not add up.** `Mathlib.Algebra.Category.ModuleCat.Sheaf.Quasicoherent`
+imports `Mathlib.Algebra.Category.ModuleCat.Sheaf.Generators`, so the 3 sits *inside* the 5 rather
+than beside it, while the 3 for `Mathlib.Algebra.Module.FinitePresentation` is independent of both.
+The total is 8 and not 11, and **3 is the bottom of a range and not the price of the file**.
+
+Two things the 8 does not say. The two `of_ringEquiv` lemmas do not travel upstream with this
+file: each belongs to the mirror target it is stated in, and the 3 and the 0 above are what
+importing those two targets would cost this one. And
+`Oka.Algebra.Category.ModuleCat.Sheaf.Quasicoherent` is imported for Mathlib's file underneath it
+and for none of its own declarations: replacing that import by
+`Mathlib.Algebra.Category.ModuleCat.Sheaf.Quasicoherent` leaves every declaration here elaborating
+unchanged, so nothing from that mirror has to go up with these results.
 
 Facts about `AlgebraicGeometry.Scheme.Modules.restrict`, all of them bookkeeping in the sense that
 none uses anything about the sheaves beyond what Mathlib already proves, and all of them
