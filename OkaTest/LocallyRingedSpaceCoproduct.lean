@@ -26,8 +26,16 @@ readings would make it say less than it appears to, and each is closed below.
   type, its members and its maps to the family's own, by `rfl`.
 
 The members of a coproduct are also pairwise disjoint, which is what makes the index chosen for a
-point unique. **That is not proved and nothing here uses it**: no statement below mentions
-`Disjoint`, and the `## What is not here` section of the file under test says why.
+point unique. That statement has its own way of saying nothing, and it is not the one above:
+`AlgebraicGeometry.LocallyRingedSpace.disjoint_opensRange_sigmaOpenCover` is **vacuously true at a
+one-member family**, which has no distinct pair to be disjoint, and it is *also* true for free at
+any family whose members are empty. `disjoint_two_of_nonempty` closes both at once — two copies of
+a single locally ringed space with a point in it, where each image really does contain a point and
+the two are still disjoint.
+
+`sigmaι_base_eq_iff_of_pair` is the sharper form on the same family: two points of the two copies
+have the same image exactly when they are the same point of the same copy. It is what says that
+the coproduct of a space with itself is not that space.
 -/
 
 open CategoryTheory CategoryTheory.Limits AlgebraicGeometry AlgebraicGeometry.LocallyRingedSpace
@@ -54,5 +62,27 @@ members and their inclusions — so it is the intended cover and not merely a we
 theorem sigmaOpenCover_eq {ι : Type u} (f : ι → LocallyRingedSpace.{u}) :
     (sigmaOpenCover f).J = ι ∧ (sigmaOpenCover f).obj = f ∧ (sigmaOpenCover f).map = Sigma.ι f :=
   ⟨rfl, rfl, rfl⟩
+
+/-- **The two copies of a space in its coproduct with itself have disjoint images**, and each
+image contains a point.
+
+The reading this closes is that disjointness might hold because there is nothing to be disjoint:
+at a one-member family it is vacuous for want of a distinct pair, and at a family of empty spaces
+it holds for want of points. Here the index type has two members and the space has a point, so
+both images are inhabited and the disjointness is a fact about the coproduct. -/
+theorem disjoint_two_of_nonempty (X : LocallyRingedSpace.{u}) (x : X) :
+    Disjoint ((sigmaOpenCover (fun _ : ULift.{u} Bool ↦ X)).opensRange ⟨true⟩)
+        ((sigmaOpenCover (fun _ : ULift.{u} Bool ↦ X)).opensRange ⟨false⟩) ∧
+      ∃ z, z ∈ (sigmaOpenCover (fun _ : ULift.{u} Bool ↦ X)).opensRange ⟨true⟩ :=
+  ⟨disjoint_opensRange_sigmaOpenCover _ (by simp), _, ⟨x, rfl⟩⟩
+
+/-- **The coproduct of a space with itself is not that space**, in the form that carries the
+content: two points of the two copies have the same image only if they are the same point of the
+same copy, so the two copies are not identified. -/
+theorem sigmaι_base_eq_iff_of_pair (X : LocallyRingedSpace.{u}) (i j : ULift.{u} Bool) (x y : X) :
+    (Sigma.ι (fun _ : ULift.{u} Bool ↦ X) i).base x =
+        (Sigma.ι (fun _ : ULift.{u} Bool ↦ X) j).base y ↔
+      (Sigma.mk i x : (_ : ULift.{u} Bool) × X.toTopCat) = Sigma.mk j y :=
+  sigmaι_base_eq_iff (fun _ : ULift.{u} Bool ↦ X) i j x y
 
 end OkaTest.LocallyRingedSpaceCoproduct
