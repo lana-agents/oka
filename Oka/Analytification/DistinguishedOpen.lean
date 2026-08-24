@@ -144,6 +144,11 @@ variable {n k : ℕ}
 def localisationIncl (n : ℕ) : ULift.{u} (Fin n) → ULift.{u} (Fin (n + 1)) :=
   fun i ↦ ULift.up i.down.castSucc
 
+/-- **Adjoining a variable does not identify two old ones**, which is what makes
+`MvPolynomial.rename (ComplexAnalytic.localisationIncl n)` injective. -/
+theorem localisationIncl_injective (n : ℕ) : Function.Injective (localisationIncl.{u} n) :=
+  fun _ _ hab ↦ ULift.ext _ _ (Fin.castSucc_injective _ (congrArg ULift.down hab))
+
 /-- The new variable, the one that becomes `1/f`. -/
 def localisationVar (n : ℕ) : ULift.{u} (Fin (n + 1)) := ULift.up (Fin.last n)
 
