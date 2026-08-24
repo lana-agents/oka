@@ -15,6 +15,10 @@ different one:
 > the two laws want two different diagrams: `trans_comp` wants a **chain** of three, which is this
 > file, and `directed` wants a **cospan** of three, which is not.
 
+**The word in that quotation is wrong** — the diagram it points at is a span, for the reason the
+next section gives — and the sentence is quoted as it stands on `master` rather than repaired
+here.
+
 This file is that other diagram, at `ℙ¹`: the two charts and their overlap, as a functor out of
 `CategoryTheory.Limits.WalkingSpan`, together with its analytification.
 
@@ -67,6 +71,8 @@ The content is therefore entirely in what the objects and the arrows are.
   This is exactly the fact `OkaTest/AffineCover.lean` cannot state about its own transition, whose
   `glue` is `Iso.refl`.
 * **The apex is a third object and not a foot under another name.**
+  `OkaTest.ProjectiveLineSpan.lineSpan_obj_zero_ne_obj_left` says so as a statement about the
+  diagram, separating the objects by the number of variables.
   `ComplexAnalytic.localisationOpen_lineRel_ne_top` says the open `D(z)` that the apex presents is
   not the whole chart, and `ComplexAnalytic.localisationOpen_lineRel_ne_bot` says it is not empty.
   Those two are statements about that **open subset of one chart**, and that is all that is drawn
@@ -155,8 +161,31 @@ theorem lineSpan_obj_left : lineSpan.{u}.obj WalkingSpan.left = ⟨1, 0, lineRel
 which is why the non-vacuity below is about the arrows and not about the objects. -/
 theorem lineSpan_obj_right : lineSpan.{u}.obj WalkingSpan.right = ⟨1, 0, lineRel.{u}⟩ := rfl
 
+/-- **The apex is neither foot**, so the diagram really has three objects to be a span of and not
+two. One statement covers both feet, since
+`OkaTest.ProjectiveLineSpan.lineSpan_obj_left` and `OkaTest.ProjectiveLineSpan.lineSpan_obj_right`
+are the same object.
+
+It separates them by `ComplexAnalytic.Presentation.n`, the number of variables — two for the
+overlap and one for a chart — and that is the **syntactic** half of what the header claims. The
+geometric half is `ComplexAnalytic.localisationOpen_lineRel_ne_top` and
+`ComplexAnalytic.localisationOpen_lineRel_ne_bot`, which say the open subset the apex presents is
+a proper non-empty part of the chart; those are statements about that open subset and are not what
+this proof uses. **Neither half replaces the other**: a presentation on more variables need not
+cut out a smaller space, and a smaller space need not be presented on more variables. -/
+theorem lineSpan_obj_zero_ne_obj_left :
+    lineSpan.{u}.obj WalkingSpan.zero ≠ lineSpan.{u}.obj WalkingSpan.left := by
+  intro h
+  exact absurd (congrArg Presentation.n h) (by decide)
+
 /-- **The analytification of the span**: two copies of the affine line, their overlap, and the two
-open immersions, as a diagram of complex analytic spaces.
+maps between them, as a diagram of complex analytic spaces.
+
+Those two maps are open immersions, but only the first of them is on the record:
+`ComplexAnalytic.isOpenImmersion_analytificationMap_localisationPresHom` is exactly the first leg,
+and the second is that composed with the isomorphism `ComplexAnalytic.lineSwapIso`, a composite
+nothing here states. So the word is used of the first leg and inferred for the second, and no
+statement below is about either.
 
 One line, because `ComplexAnalytic.analytificationFunctor` is a functor on the nose. It is the
 step that makes the exercise about analytic spaces rather than about algebra, which is the same
@@ -182,9 +211,12 @@ theorem lineSpanFst_apply :
 `ComplexAnalytic.lineSwapIso` exchanges the two variables of `ℂ[z, t] ⧸ (t z - 1)`.
 
 The composition of `ComplexAnalytic.PresHom` is contravariant on the underlying ring maps, so
-`(ψ ≫ χ).toRingHom` is `ψ.toRingHom.comp χ.toRingHom` with the factors in that order; `hc` is
-`rfl`, but only as a `have` — a `show` at the same statement does not see through the `Category`
-instance. -/
+`(ψ ≫ χ).toRingHom` is `ψ.toRingHom.comp χ.toRingHom` with the factors in that order. `hc` is
+`rfl`, and what it buys is the **spelling**: the goal presents the composite as `≫`, which `rw`
+cannot match against `RingHom.comp`, so the rewrites need a hypothesis that states it in the
+`RingHom.comp` form. A `show` is not the obstacle — it is a definitional-equality check, it sees
+through the `Category` instance, and the same proof goes through with the `have` replaced by a
+`show` at that form. -/
 theorem lineSpanSnd_apply :
     lineSpanSnd.{u}.toRingHom
         (Ideal.Quotient.mk (presentationIdeal.{u} lineRel.{u}) (X (ULift.up 0))) =
