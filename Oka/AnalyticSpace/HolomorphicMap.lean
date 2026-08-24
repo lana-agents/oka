@@ -37,24 +37,29 @@ For a general `Z` a section of `𝒪_Z` lifts to a holomorphic function only *lo
 and on a neighbourhood of each point (`AlgebraicGeometry.LocallyRingedSpace.exists_localLift`),
 so the construction above produces a morphism only on each member of an open cover of `Z`.
 
-Two things are then missing, and neither is in this repository or in Mathlib:
+**That gap is closed, elsewhere in this tree, by the route this paragraph anticipated.**
+`ComplexAnalytic.AnalyticSpace.exists_hom_complexLine_general` of
+`Oka/AnalyticSpace/HolomorphicMapGeneral.lean` is the general statement above, as the `m = 1`
+case of `ComplexAnalytic.AnalyticSpace.exists_hom_complexAffineSpace_general`; the morphisms on
+the members of the cover are glued by
+`AlgebraicGeometry.LocallyRingedSpace.existsUnique_glueMorphisms_of_opens` of
+`Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean`, which supplies for a locally ringed
+space what `AlgebraicGeometry.Scheme.Cover.glueMorphisms` is for a scheme. **Mathlib still has
+the scheme version and nothing for `LocallyRingedSpace`**, so that half of the obstruction was
+real and is met inside this repository rather than upstream. Neither file is imported here and
+nothing below needs either.
 
-* **Gluing morphisms of locally ringed spaces over an open cover of the source.** Mathlib has
-  `AlgebraicGeometry.Scheme.Cover.glueMorphisms` and nothing for `LocallyRingedSpace`;
-  `Mathlib/Geometry/RingedSpace/PresheafedSpace/Gluing.lean` provides
-  `AlgebraicGeometry.LocallyRingedSpace.GlueData`, which glues *spaces* — mapping out of a glued
-  space is then `Multicoequalizer.desc` — but nothing identifies a locally ringed space with the
-  gluing of its own restrictions to an open cover, which is what turns that into a gluing of
-  morphisms.
-* **Independence of the local construction of the two choices it makes**, the local lift `G` of
-  `g` and the chart. Independence of the lift is what
-  `AnalyticAt.dslope_comp` of `Oka/Analytic/DividedDifference.lean` exists for: two lifts differ
-  by a section of the
-  ideal cutting out the chart, and `h ∘ G - h ∘ G' = (G - G') · dslope h G' G` therefore lies in
-  that ideal too. **That route was not the one taken** — uniqueness on an overlap replaced both
-  independence arguments — so this paragraph records the plan rather than the outcome; the
-  disposition of that lemma is the `## Status` section of `Oka/Analytic/DividedDifference.lean`.
-  That file is deliberately not imported here: nothing below uses it.
+The other thing the general statement was expected to need — **independence of the local
+construction of the two choices it makes**, the local lift `G` of `g` and the chart — was never
+proved and is not needed: uniqueness on an overlap replaces both arguments, once
+`ComplexAnalytic.AnalyticSpace.restrict` makes an overlap an analytic space.
+`AnalyticAt.dslope_comp` of `Oka/Analytic/DividedDifference.lean` was built for the
+independence-of-lift half — two lifts differ by a section of the ideal cutting out the chart,
+and `h ∘ G - h ∘ G' = (G - G') · dslope h G' G` therefore lies in that ideal too — and is
+consequently unused. Its disposition is the `## Status` section of that file, and the fuller
+account of why the independence arguments are unnecessary is in
+`Oka/AnalyticSpace/HolomorphicMapGeneral.lean`. `Oka/Analytic/DividedDifference.lean` is
+deliberately not imported here: nothing below uses it.
 
 ## Main definitions
 
