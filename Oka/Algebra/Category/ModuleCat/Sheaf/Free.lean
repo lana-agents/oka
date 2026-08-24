@@ -32,9 +32,11 @@ this file.
   its coordinates against the images of the generators. That is the form in which a relation
   between sections is checked, and its three consumers are
   `Oka/Algebra/Category/ModuleCat/Sheaf/LocallySurjective.lean` — the only one of the three that
-  imports this file directly, and the only one inside the mirror tree —
-  `Oka/Geometry/RingedSpace/LocallyRingedSpace/Coherent.lean` and
-  `Oka/AnalyticSpace/IdealSheaf.lean`.
+  imports this file directly, and the one that cites the lemma by name in
+  `SheafOfModules.exists_free_app_eq_of_epi`'s own docstring —
+  `Oka/Geometry/RingedSpace/LocallyRingedSpace/Coherent.lean`, which is a mirror file too, and
+  `Oka/AnalyticSpace/IdealSheaf.lean`, the only analytic one. The last two reach the lemma
+  transitively.
 
 Two smaller groups sit beside it. `SheafOfModules.freePUnitIso` and
 `SheafOfModules.isZero_free_of_isEmpty` are the free sheaf on one generator and on none; the first
