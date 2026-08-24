@@ -48,7 +48,8 @@ instances then follow from `CategoryTheory.CoverPreserving.overPost` and
 - `CategoryTheory.coverPreserving_iteratedSliceForward` and
   `CategoryTheory.coverPreserving_iteratedSliceBackward`, and the two
   `CategoryTheory.Functor.IsContinuous` instances for `CategoryTheory.Over.post` that they give.
-  The instances are anonymous, and neither they nor the two lemmas carry docstrings of their own.
+  The two lemmas now carry docstrings; the instances are anonymous, so they have no name to cite
+  and the paragraph above is where they are accounted for.
 -/
 
 @[expose] public section
@@ -61,12 +62,23 @@ open Limits
 
 variable {C : Type u'} [Category.{v'} C] {J : GrothendieckTopology C}
 
+/-- **The forward iterated slice functor preserves covers.** For `Y : Over X`, it carries a
+covering sieve of the twice-sliced topology `(J.over X).over Y` to a covering sieve of
+`J.over Y.left`.
+
+Not proved directly. `CategoryTheory.Adjunction.isCocontinuous_iff_coverPreserving` turns
+cocontinuity of one adjoint into cover preservation of the other, and
+`CategoryTheory.Over.iteratedSliceBackward` is cocontinuous because it is half of an
+equivalence. -/
 lemma coverPreserving_iteratedSliceForward {X : C} (Y : Over X) :
     CoverPreserving ((J.over X).over Y) (J.over Y.left) Y.iteratedSliceForward :=
   (Y.iteratedSliceEquiv.symm.toAdjunction.isCocontinuous_iff_coverPreserving
     (J := J.over Y.left) (K := (J.over X).over Y)).mp
     (inferInstanceAs (Y.iteratedSliceBackward.IsCocontinuous _ _))
 
+/-- **The backward iterated slice functor preserves covers**, in the other direction. The mirror
+image of `CategoryTheory.coverPreserving_iteratedSliceForward` with the two functors of the
+equivalence exchanged; see its docstring for the argument, which is the same one. -/
 lemma coverPreserving_iteratedSliceBackward {X : C} (Y : Over X) :
     CoverPreserving (J.over Y.left) ((J.over X).over Y) Y.iteratedSliceBackward :=
   (Y.iteratedSliceEquiv.toAdjunction.isCocontinuous_iff_coverPreserving

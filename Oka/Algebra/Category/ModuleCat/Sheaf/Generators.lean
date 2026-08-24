@@ -60,10 +60,23 @@ The consumers are `Oka/Algebra/Category/ModuleCat/Sheaf/Coherent/Basic.lean`,
 `Oka/AlgebraicGeometry/Modules/Tilde.lean`, the last of which reduces finiteness of the module of
 global sections on a `Spec` to finiteness over a distinguished open.
 
-**Not every declaration below carries a docstring**: nineteen of the thirty-one do not, of which
-seven are anonymous instances. `lake lint` passes on all of them, because Mathlib's `docBlame`
-linter covers definitions and `docBlameThm`, which covers theorems, is off. That is a separate
-item and not this file's to fix.
+**Every named declaration below now carries a docstring.** Nineteen of the thirty-one did not
+until taxis #906; eleven of those were `lemma`s and have been written. The remaining eight are
+accounted for rather than fixed: **seven are anonymous instances**, left so because #906 asked for
+no code changes, and the eighth is `SheafOfModules.isFiniteType`, which carries
+`@[inherit_doc SheafOfModules.IsFiniteType]` and so **is** documented in the environment even
+though no `/-- … -/` precedes it here.
+
+An anonymous instance *can* carry a docstring — the `/-- … -/` elaborates and the environment
+keeps it — but there is no name to cite it by except the one Lean generates, which is why the
+seven are described here instead. That is the same convention as `Oka/ComplexSpace.lean` and
+`Oka/Algebra/Category/Grp/EpiMono.lean`.
+
+`lake lint` was silent about all nineteen, and for three different reasons: `docBlame` exempts
+**every** instance, named or anonymous, `docBlameThm` covers theorems and is off in Mathlib and
+not turned on here, and the one `abbrev` `docBlame` does reach inherits its docstring. Turning
+`docBlameThm` on repository-wide would fire on every undocumented theorem under `Oka/`; that count
+is taxis #928 and is a separate question.
 
 ## Main results
 
@@ -108,17 +121,25 @@ instance {M N : SheafOfModules.{u} R} (σ : M.LocalGeneratorsData.{w}) (f : M �
       LocalGeneratorsData.IsFiniteType.isFiniteType (p := σ) i
     inferInstanceAs ((σ.generators i).ofEpi (f.over (σ.X i))).IsFiniteType
 
+/-- **Being of finite type passes to the target of a slicewise epimorphism.** This is the
+primitive form of the statement: the hypothesis is that `f.over X` is an epimorphism for every
+`X`, which is what `SheafOfModules.LocalGeneratorsData.ofEpi` consumes on each member of a
+covering family. `SheafOfModules.IsFiniteType.of_epi` is the form to quote when only `Epi f`
+is in hand. -/
 lemma IsFiniteType.of_epi_over {M N : SheafOfModules.{u} R} (f : M ⟶ N)
     [∀ (X : C), Epi (f.over X)] [M.IsFiniteType] : N.IsFiniteType where
   exists_localGeneratorsData := by
     obtain ⟨σ, _⟩ := IsFiniteType.exists_localGeneratorsData M
     exact ⟨σ.ofEpi f, inferInstance⟩
 
+/-- Being of finite type transports along an isomorphism. -/
 lemma IsFiniteType.of_iso {M N : SheafOfModules.{u} R} (e : M ≅ N) [M.IsFiniteType] :
     N.IsFiniteType :=
   haveI (X : C) : Epi (e.hom.over X) := inferInstance
   .of_epi_over e.hom
 
+/-- The same at a morphism that happens to be invertible, so that a consumer holding an
+`IsIso` instance need not build the `Iso` by hand. -/
 lemma isFiniteType_of_isIso {M N : SheafOfModules.{u} R} (f : M ⟶ N) [IsIso f]
     [M.IsFiniteType] : N.IsFiniteType :=
   .of_iso (asIso f)
@@ -135,6 +156,9 @@ abbrev isFiniteType : ObjectProperty (SheafOfModules.{u} R) :=
 instance : (isFiniteType R).IsClosedUnderIsomorphisms where
   of_iso e h := letI := h; .of_iso e
 
+/-- **A quotient of a sheaf of finite type is of finite type.** The usable form of
+`SheafOfModules.IsFiniteType.of_epi_over`: with binary products on the site, `Epi f` already gives
+`Epi (f.over X)` for every `X`, so the slicewise hypothesis is discharged by instance search. -/
 lemma IsFiniteType.of_epi [HasBinaryProducts C] {M N : SheafOfModules.{u} R} (f : M ⟶ N)
     [Epi f] [M.IsFiniteType] : N.IsFiniteType :=
   haveI (X : C) : Epi (f.over X) := inferInstance
@@ -197,6 +221,12 @@ instance (η : (pushforward φ).obj (unit R) ≅ unit S)
     haveI := LocalGeneratorsData.IsFiniteType.isFiniteType (p := P) i.2.1
     ⟨inferInstanceAs (Finite (P.generators i.2.1).I)⟩
 
+/-- **Being of finite type survives a change of site.** Pushing forward along a continuous and
+cocontinuous `G` preserves finite type, given an identification `η` of the pushed-forward unit
+with the unit and the hypothesis `h` that pushforward along the sliced comparison map preserves
+colimits. `SheafOfModules.isFiniteType_pushforward_of_isLeftAdjoint` discharges `h`, at the price
+of four further hypotheses, and is the form to reach for first; `η` stays an explicit argument
+there and every consumer in this file supplies it as an `Iso.refl`. -/
 lemma isFiniteType_pushforward (η : (pushforward φ).obj (unit R) ≅ unit S)
     [∀ (X : D), (Over.post G).IsContinuous (K.over X) (J.over _)]
     (h : ∀ (X : D) (Y : C) (f : G.obj X ⟶ Y),
@@ -209,6 +239,10 @@ lemma isFiniteType_pushforward (η : (pushforward φ).obj (unit R) ≅ unit S)
   exact ⟨(P.pushforward G φ η h).shrink, inferInstance⟩
 
 set_option backward.isDefEq.respectTransparency false in
+/-- **The sharp form of `SheafOfModules.isFiniteType_pushforward`**, and the one every consumer
+here uses. When `G` is itself a left adjoint and `φ` is an isomorphism, the colimit-preservation
+hypothesis of that lemma is not an assumption but a consequence: the sliced comparison map is
+again an isomorphism, so pushforward along it is a left adjoint and preserves every colimit. -/
 lemma isFiniteType_pushforward_of_isLeftAdjoint (η : (pushforward φ).obj (unit R) ≅ unit S)
     [G.IsLeftAdjoint] [IsIso φ]
     [∀ X, Functor.IsContinuous (Over.post (X := X) G) (K.over _) (J.over _)]
@@ -272,6 +306,11 @@ lemma IsFiniteType.of_coversTop {R : Sheaf J RingCat.{u}}
   exact ⟨(LocalGeneratorsData.bind M X hX D).shrink, inferInstance⟩
 
 set_option backward.isDefEq.respectTransparency false in
+/-- **Restriction to a slice preserves finite type**, which is the direction opposite to
+`SheafOfModules.IsFiniteType.of_coversTop`: that one glues finiteness over a covering family into
+finiteness on the whole site, this one restricts finiteness to a single slice. It is
+`SheafOfModules.isFiniteType_pushforward_of_isLeftAdjoint` at `Over.forget X`, where the
+comparison map is the identity. -/
 lemma IsFiniteType.over
     [HasPullbacks C] [HasBinaryProducts C] (M : SheafOfModules.{u} R) (X : C)
     [M.IsFiniteType] : IsFiniteType (M.over X) :=
@@ -376,18 +415,24 @@ section overOver
 variable {C : Type u} [SmallCategory C] [HasPullbacks C] {J : GrothendieckTopology C}
   {R : Sheaf J RingCat.{u}}
 
+/-- Being of finite type is carried across the iterated slice equivalence, from
+`R.over Y.left` to `(R.over X).over Y`. -/
 lemma isFiniteType_overOverEquivalence_functor_obj {X : C} {Y : Over X}
     (M' : SheafOfModules.{u} (R.over Y.left)) [M'.IsFiniteType] :
     IsFiniteType (R := (R.over X).over Y) ((overOverEquivalence X Y).functor.obj M') := by
   exact isFiniteType_pushforward_of_isLeftAdjoint (Over.iteratedSliceEquiv Y).functor (𝟙 _)
     (by exact Iso.refl _)
 
+/-- The same in the other direction, from `(R.over X).over Y` to `R.over Y.left`. -/
 lemma isFiniteType_overOverEquivalence_inverse_obj {X : C} {Y : Over X}
     (N' : SheafOfModules.{u} ((R.over X).over Y)) [N'.IsFiniteType] :
     IsFiniteType (R := R.over Y.left) ((overOverEquivalence X Y).inverse.obj N') := by
   exact isFiniteType_pushforward_of_isLeftAdjoint (Over.iteratedSliceEquiv Y).inverse (𝟙 _)
     (by exact Iso.refl _)
 
+/-- The converse of `SheafOfModules.isFiniteType_overOverEquivalence_functor_obj`: if the image
+is of finite type then so was the sheaf. Proved from the other direction of the equivalence
+together with its unit isomorphism, not by a separate argument. -/
 lemma IsFiniteType.of_overOverEquivalence_functor_obj {X : C} {Y : Over X}
     {M' : SheafOfModules.{u} (R.over Y.left)}
     (h : IsFiniteType (R := (R.over X).over Y) ((overOverEquivalence X Y).functor.obj M')) :
@@ -401,6 +446,8 @@ lemma IsFiniteType.of_overOverEquivalence_functor_obj {X : C} {Y : Over X}
       ((overOverEquivalence (R := R) X Y).functor.obj M'))
     ((overOverEquivalence (R := R) X Y).unitIso.symm.app M')
 
+/-- The converse of `SheafOfModules.isFiniteType_overOverEquivalence_inverse_obj`, by the same
+argument through the counit isomorphism. -/
 lemma IsFiniteType.of_overOverEquivalence_inverse_obj {X : C} {Y : Over X}
     {N' : SheafOfModules.{u} ((R.over X).over Y)}
     (h : IsFiniteType (R := R.over Y.left) ((overOverEquivalence X Y).inverse.obj N')) :
