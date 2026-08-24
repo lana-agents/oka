@@ -69,12 +69,15 @@ image contains a point.
 The reading this closes is that disjointness might hold because there is nothing to be disjoint:
 at a one-member family it is vacuous for want of a distinct pair, and at a family of empty spaces
 it holds for want of points. Here the index type has two members and the space has a point, so
-both images are inhabited and the disjointness is a fact about the coproduct. -/
+both images are inhabited and the disjointness is a fact about the coproduct. Both inhabitations
+are stated rather than one: the second follows from the first because the family is constant, and
+stating it is cheaper than leaving a reader to see that. -/
 theorem disjoint_two_of_nonempty (X : LocallyRingedSpace.{u}) (x : X) :
     Disjoint ((sigmaOpenCover (fun _ : ULift.{u} Bool ↦ X)).opensRange ⟨true⟩)
         ((sigmaOpenCover (fun _ : ULift.{u} Bool ↦ X)).opensRange ⟨false⟩) ∧
-      ∃ z, z ∈ (sigmaOpenCover (fun _ : ULift.{u} Bool ↦ X)).opensRange ⟨true⟩ :=
-  ⟨disjoint_opensRange_sigmaOpenCover _ (by simp), _, ⟨x, rfl⟩⟩
+      (∃ z, z ∈ (sigmaOpenCover (fun _ : ULift.{u} Bool ↦ X)).opensRange ⟨true⟩) ∧
+      ∃ z, z ∈ (sigmaOpenCover (fun _ : ULift.{u} Bool ↦ X)).opensRange ⟨false⟩ :=
+  ⟨disjoint_opensRange_sigmaOpenCover _ (by simp), ⟨_, ⟨x, rfl⟩⟩, _, ⟨x, rfl⟩⟩
 
 /-- **The coproduct of a space with itself is not that space**, in the form that carries the
 content: two points of the two copies have the same image only if they are the same point of the
