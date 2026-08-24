@@ -16,11 +16,11 @@ split by destination.
 stated in terms of `AlgebraicGeometry.LocallyRingedSpace.OpenCover`, and Mathlib has no such
 structure: this repository's is in `Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean`, proposed
 for the Mathlib file of that name, and that file is *not* in the closure of the one below.
-`scripts/import_cost.py` prices it there at **3** modules (`Mathlib.CategoryTheory.GlueData`,
-`Mathlib.Geometry.RingedSpace.PresheafedSpace.Gluing`, `Mathlib.Topology.Gluing`), while the
-dependency in the other direction costs **0** — so upstream the cover sits beside `OpenCover` and
-nothing pays anything. It is in this file rather than in the gluing one only because that file is
-an import of this one.
+`scripts/import_cost.py` prices it at **3** modules against that target
+(`Mathlib.CategoryTheory.GlueData`, `Mathlib.Geometry.RingedSpace.PresheafedSpace.Gluing`,
+`Mathlib.Topology.Gluing`), while the dependency in the other direction costs **0** — so upstream
+the cover sits beside `OpenCover` and nothing pays anything. It is in this file rather than in the
+gluing one only because that file is an import of this one.
 
 **Everything else goes to `Mathlib/Geometry/RingedSpace/LocallyRingedSpace/HasColimits.lean` at
 cost 0**: it is this file's own import, and the `SheafedSpace` results the proofs run through are
@@ -189,10 +189,11 @@ theorem exists_sigma_ι_base_eq (x : (∐ f : LocallyRingedSpace.{u})) :
 
 /-- **The members of a coproduct of locally ringed spaces are an open cover of it.**
 
-The analogue of the `AlgebraicGeometry.Scheme` version in
-`Mathlib/AlgebraicGeometry/Limits.lean`. The index of a point is chosen by
-`Exists.choose` from `AlgebraicGeometry.LocallyRingedSpace.exists_sigma_ι_base_eq`; the members
-are disjoint, so the choice is in fact forced, but nothing below needs that. -/
+The analogue of `AlgebraicGeometry.sigmaOpenCover`, in `Mathlib/AlgebraicGeometry/Limits.lean`.
+The index of a point is chosen by `Exists.choose` from
+`AlgebraicGeometry.LocallyRingedSpace.exists_sigma_ι_base_eq`. That choice is in fact forced,
+because the members are disjoint — `AlgebraicGeometry.LocallyRingedSpace.disjoint_range_sigmaι`,
+in the section below — but nothing in this definition depends on it. -/
 noncomputable def sigmaOpenCover : (∐ f : LocallyRingedSpace.{u}).OpenCover where
   J := ι
   obj := f
@@ -272,8 +273,8 @@ theorem sigmaι_base_injective (i : ι) : Function.Injective (Sigma.ι f i).base
 /-- **Two points of the members of a coproduct have the same image exactly when they are the same
 point of the same member.**
 
-The analogue of the `AlgebraicGeometry.Scheme` statement in `Mathlib/AlgebraicGeometry/Limits.lean`
-— whose proof is no guide, running as it does through a locally directed cover, which does not
+The analogue of `AlgebraicGeometry.sigmaι_eq_iff`, in `Mathlib/AlgebraicGeometry/Limits.lean` —
+whose proof is no guide, running as it does through a locally directed cover, which does not
 exist at this level. Here the two directions are the two lemmas above:
 `AlgebraicGeometry.LocallyRingedSpace.eq_of_sigmaι_base_eq` for the index and
 `AlgebraicGeometry.LocallyRingedSpace.sigmaι_base_injective` for the point. -/

@@ -35,8 +35,8 @@ dropped, rather than off the import list.
   module with `Mathlib.RingTheory.Finiteness.Projective` and
   `Mathlib.RingTheory.TensorProduct.Finite`.
 * `AlgebraicGeometry.Scheme.Modules.module_finite_sections_of_restrict` needs
-  `Module.Finite.of_ringEquiv`, from `Mathlib.RingTheory.Finiteness.Basic`, which is already in
-  that closure: **0**.
+  `Module.Finite.of_ringEquiv`, which this repository states in the mirror of
+  `Mathlib/RingTheory/Finiteness/Basic.lean` — a file already in that closure: **0**.
 
 **Those four figures do not add up.** `Mathlib.Algebra.Category.ModuleCat.Sheaf.Quasicoherent`
 imports `Mathlib.Algebra.Category.ModuleCat.Sheaf.Generators`, so the 3 sits *inside* the 5 rather
