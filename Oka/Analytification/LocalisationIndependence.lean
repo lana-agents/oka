@@ -14,7 +14,7 @@ the polynomial `f` occurs in the *type* of everything built from it: two polynom
 the same distinguished open give two different objects of `ComplexAnalytic.Presentation` and two
 different analytic spaces. This file says they are canonically the same one.
 
-Four statements, and the last two are the ones a consumer uses:
+Four statements, and the last two are the form a coherence law consumes:
 
 * `ComplexAnalytic.localisationPresentationIsoOfDvdPow` — **the presentations of the localisation
   at `f` and at `f'` are isomorphic** whenever the images of `f` and `f'` in `A` each divide a

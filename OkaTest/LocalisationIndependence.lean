@@ -23,13 +23,16 @@ The checks below close that, on `f` and `f ^ 2`:
   `localisationPresentation_ne_sq`. So the isomorphism is between two distinct objects of
   `ComplexAnalytic.Presentation`, and `Iso.refl` does not typecheck at this type — the same
   argument `OkaTest/LocalisationFunctor.lean`'s `presentation_ne` makes for the structure map.
+* **And the triangle it satisfies is not `𝟙 ≫ h = h`** — `isoSq_hom_comp`, an instance of
+  `ComplexAnalytic.localisationPresentationIsoOfDvdPow_hom_comp`. Both sides of that equation are
+  morphisms `⟨n + 1, k + 1, localisationPresentation g f⟩ ⟶ ⟨n, k, g⟩`, with the same source *and*
+  the same target, so nothing about its endpoints makes it non-trivial. What does is that the
+  left-hand side factors through `⟨n + 1, k + 1, localisationPresentation g (f ^ 2)⟩`, which the
+  bullet above separates from the source at the node — so `isoSq.hom` is not an identity there,
+  and the equation relates two presentations rather than restating one.
 
-Together: the isomorphism exists, and what it identifies is not already equal.
-
-* **And the triangle it satisfies is between those two distinct presentations** — `isoSq_hom_comp`,
-  an instance of `ComplexAnalytic.localisationPresentationIsoOfDvdPow_hom_comp`. An equation
-  between morphisms out of a *single* object would be a much weaker statement than it looks; here
-  the source is the same but the two targets are the presentations the bullets above separate.
+Together: the isomorphism exists, what it identifies is not already equal, and the triangle it
+satisfies runs through the object that separates them.
 
 `f` and `f ^ 2` are also the pair showing that these hypotheses are strictly weaker than
 Mathlib's `IsLocalization.Away.of_associated`, which the mirror file
