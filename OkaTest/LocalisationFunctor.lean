@@ -26,13 +26,21 @@ computed.
   `nodeOrigin_notMem_range_base_localisationProj` read
   through the identification, and is the statement that matters: the functor does not send this
   non-isomorphism of algebras to an isomorphism of spaces.
+* **So the structure map is not an isomorphism of `ℂ`-algebras**:
+  `not_isIso_nodeStructureHom`, which is the bullet above read back through the functor. It is
+  the algebra statement and not a categorical shadow of one — a morphism of
+  `ComplexAnalytic.Presentation` is a ring map together with a proposition, so an inverse to it
+  is a ring inverse fixing the constants — and it strengthens the first bullet, where an
+  identity would in particular be an isomorphism.
 * **And it does what it should on points**: `base_analytificationMap_nodeLocPoint` sends
   `(1, 0, 1)` to `axisPoint 0`, again through the identification.
 
-**What is not checked.** Nothing here states the algebra fact — that the structure map
-`A ⟶ A_{z₀}` is not an isomorphism of `ℂ`-algebras. What is checked is the geometric statement,
-which is what the gluing construction will consume. Its target *is* identified as a localisation,
-by `ComplexAnalytic.localisationPresentedAlgebraEquiv`, and nothing here uses that identification.
+**What is not checked.** `ComplexAnalytic.localisationPresentedAlgebraEquiv` identifies the
+target of the structure map as a localisation of its source, and **nothing here uses it**: every
+statement below is about `ComplexAnalytic.localisationPresentation nodePres nodeX` as a tuple of
+polynomials, which is how `Oka/Analytification/LocalisationFunctor.lean` states them too, and only
+an edit to this file can falsify it. The geometric statement stays the one the gluing construction
+will consume; the algebra statement is its corollary and not the other way round.
 -/
 
 open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry ComplexAnalytic
@@ -50,6 +58,14 @@ abbrev nodeObj : Presentation.{u} := ⟨2, 1, nodePres.{u}⟩
 abbrev nodeLocObj : Presentation.{u} :=
   ⟨3, 2, localisationPresentation.{u} nodePres.{u} nodeX.{u}⟩
 
+/-- **The structure map `A ⟶ A_{z₀}`**, as a morphism of the two objects above.
+
+`ComplexAnalytic.localisationPresHom` on its own does not elaborate against `IsIso`: the category
+spells `Hom P Q` as `ComplexAnalytic.PresHom P.g Q.g`, and nothing recovers the two objects from
+the bare term. -/
+abbrev nodeStructureHom : nodeLocObj.{u} ⟶ nodeObj.{u} :=
+  localisationPresHom.{u} nodePres.{u} nodeX.{u}
+
 /-- **The two presentations are different objects**, so the morphism between them is not an
 identity in disguise: adjoining an inverse adds a variable and an equation. -/
 theorem presentation_ne : nodeLocObj.{u} ≠ nodeObj.{u} := by
@@ -65,6 +81,25 @@ theorem nodeOrigin_notMem_range_analytificationMap :
       (analytificationMap.{u} (localisationPresHom.{u} nodePres.{u} nodeX.{u})).toLRSHom.base := by
   rw [analytificationMap_localisationPresHom]
   exact nodeOrigin_notMem_range_base_localisationProj.{u}
+
+/-- **The structure map is not an isomorphism of `ℂ`-algebras.**
+
+`ComplexAnalytic.analytificationFunctor` sends an isomorphism to an isomorphism and an isomorphism
+of locally ringed spaces is a homeomorphism on points, so an inverse would put `nodeOrigin` in the
+range that `nodeOrigin_notMem_range_analytificationMap` keeps it out of. That is the whole proof;
+nothing about localisation enters it.
+
+The statement is the algebraic one because a morphism of `ComplexAnalytic.Presentation` is a ring
+map together with a proposition — `ComplexAnalytic.PresHom.ext` is equality of the ring maps — so
+an inverse to `nodeStructureHom` is a ring inverse fixing the constants. -/
+theorem not_isIso_nodeStructureHom : ¬ IsIso nodeStructureHom.{u} := by
+  intro h
+  have : IsIso (AnalyticSpace.forgetToLocallyRingedSpace.{u}.map
+      (analytificationFunctor.{u}.map nodeStructureHom.{u})) := inferInstance
+  have hsurj := (LocallyRingedSpace.homeoOfIso (asIso
+    (AnalyticSpace.forgetToLocallyRingedSpace.{u}.map
+      (analytificationFunctor.{u}.map nodeStructureHom.{u})))).surjective
+  exact nodeOrigin_notMem_range_analytificationMap.{u} (hsurj nodeOrigin.{u})
 
 /-- **The analytification of the structure map sends `(1, 0, 1)` to `(1, 0)`**, so the morphism
 the functor produces is the projection on points as well as in the abstract. -/
