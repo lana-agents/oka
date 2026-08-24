@@ -20,11 +20,16 @@ comes from `AlgebraicGeometry.LocallyRingedSpace.ringSheaf`, whose site is spell
 **The two spellings do not agree, and which one is passed matters.** These tests record that:
 
 * with `TopCat.of ↑Y.toPresheafedSpace` the lemma applies — this is the first `example`;
-* with `Y.toTopCat` it does not. The statement elaborates and then instance search fails to
-  find `CategoryTheory.Functor.PreservesZeroMorphisms` for the stalk functor, which is the same
+* with `Y.toTopCat` it does not. Elaborating the hypothesis reaches instance search and stops
+  there, with `CategoryTheory.Functor.PreservesZeroMorphisms` for the stalk functor unfound —
+  `failed to synthesize instance of type class
+  (SheafOfModules.stalkFunctorAddCommGrp x).PreservesZeroMorphisms` — which is the same
   discrimination-tree seam `AlgebraicGeometry.LocallyRingedSpace.ringSheaf`'s docstring records
   for `Opens.map`. That failure is recorded here in prose rather than as a `#guard_msgs`,
   because it is a statement that does not elaborate rather than one that produces a message.
+  The error is quoted so that re-running this claim is one substitution and one `lake env lean`,
+  which is what the neighbouring seam notes in `OkaTest/SpecCoherent.lean` and
+  `OkaTest/AnalytificationDistinguishedOpen.lean` do and what this one did not.
 
 The second `example` instantiates at `complexSpace`, so that the applicability
 is on record for the structure sheaf this development actually uses rather than only for a

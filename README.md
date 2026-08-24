@@ -839,6 +839,25 @@ Nothing checks the figures in docstrings against the script, and nothing can: th
 prose, phrased twenty different ways. This is for an author to run before writing one and a
 reviewer to run before believing one.
 
+**The same holds, and more sharply, for the *mechanism* claims — the paragraphs this repository
+calls seams.** *This spelling does not elaborate*, *instance search does not cross this*, *`rw`
+fails here*: nothing in `validation.sh` exercises one, `lake lint` does not read it, and the name
+checker only asks whether the names inside it resolve. A seam note is read as a rule, so a
+misattributed one is worse than none — and two were found misattributed in one week, each with
+the diagnosis reversed. `OkaTest/ProjectiveLineSpan.lean` blamed a `show` where the failure is a
+`rw`; `Oka/AnalyticSpace/Sigma.lean` blamed the spelling of a statement where the cause is one
+elided argument. **On 2026-08-24, at `0b19eb1`, the word occurs 69 times in 33 files, of which 17
+in 10 files are under `OkaTest/` and 7 are section headings.** Of those 17 lines, 1 is
+historical narration and 3 have their content enforced by an `example` the build fails on; the
+remaining 13 carry **10 distinct claims**, several of them cited from more than one line.
+**Seven of the ten are mechanism claims, all seven were re-run, and all seven reproduce.** The
+other three were not run: one count claim, and two `rw` claims given with no goal to run them
+against. The five section headings under `Oka/` are unaudited.
+The measurement is cheap and the method is fixed: copy the file, apply the substitution the
+paragraph describes, and `lake env lean` it, so that a positive and a negative are on the record
+rather than a reading. **Quote the error** — half of these already do, and those are the ones an
+audit costs one command each.
+
 **This section is itself checked, in one narrow way.** `validation.sh` verifies that every file
 under `scripts/` is named somewhere in this README — a literal substring match on the bare
 filename, run before the build because it reads two text files and nothing else. It is the same
