@@ -46,6 +46,7 @@ import OkaTest.HolomorphicMap
 import OkaTest.HolomorphicMapGeneral
 import OkaTest.HolomorphicMapOpen
 import OkaTest.HomToComplex
+import OkaTest.LocalisationComposite
 import OkaTest.LocalisationFunctor
 import OkaTest.LocalisationIndependence
 import OkaTest.Nonvanishing
