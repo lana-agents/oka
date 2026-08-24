@@ -73,6 +73,9 @@ with one `Iso.trans` removed.
   whole space**, with `ι_glueMorphisms` and `hom_ext` as the two halves.
 - `AlgebraicGeometry.LocallyRingedSpace.GlueData.vIsoPullback`: the overlap `V (i, j)` of a glue
   data is the categorical pullback of the two inclusions into the gluing.
+- `AlgebraicGeometry.LocallyRingedSpace.OpenCover.comapAlgMap_ext`: **an algebra structure on a
+  space is determined by its pullbacks to the members of an open cover**, which is what lets a
+  condition on global sections be checked member by member.
 - `AlgebraicGeometry.LocallyRingedSpace.GlueData.isCompatible_restrictAlgMap`: **algebra
   structures on the members of a glue data which agree on the overlaps are compatible on the
   gluing** — the hypothesis a caller can supply, in place of the sheaf-condition form, which for
@@ -476,6 +479,26 @@ theorem glueAlgMapRestrict_comapAlgMap {R : Type*} [CommRing R]
     glueSection_eq ((iSup_isOpenEmbedding_obj_top _).trans 𝒰.iSup_opensRange) _
       (𝒰.isCompatible_restrictAlgMap_comapAlgMap γ c) (γ c)
       fun j ↦ (congrArg (fun m : R →+* _ ↦ m c) (𝒰.restrictAlgMap_comapAlgMap j γ)).symm
+
+/-- **An algebra structure on `X` is determined by its pullbacks to the members of an open cover
+of `X`.**
+
+The separatedness half of the sheaf condition, in the form the cover-indexed API states things
+in, and the reason a condition on the *global* sections of `X` can be checked on the members: a
+member of an `AlgebraicGeometry.LocallyRingedSpace.OpenCover` carries no map back to `X`, so
+there is nothing to transport a structure forward along, and "agreeing on the cover" has to be
+turned into "equal" by a gluing rather than by a computation.
+
+There is no new argument here.
+`AlgebraicGeometry.LocallyRingedSpace.OpenCover.glueAlgMapRestrict_comapAlgMap` says each side is
+what gluing its own family of restrictions returns, and the two families are equal by hypothesis;
+the compatibility proofs the two `glueAlgMapRestrict` calls carry are propositions and need no
+comparison. -/
+theorem comapAlgMap_ext {R : Type*} [CommRing R] {γ γ' : R →+* X.presheaf.obj (op ⊤)}
+    (h : ∀ j, comapAlgMap (𝒰.map j) γ = comapAlgMap (𝒰.map j) γ') : γ = γ' := by
+  rw [← 𝒰.glueAlgMapRestrict_comapAlgMap γ, ← 𝒰.glueAlgMapRestrict_comapAlgMap γ']
+  congr 1
+  exact funext fun j ↦ congrArg (𝒰.restrictAlgMap j) (h j)
 
 end OpenCover
 

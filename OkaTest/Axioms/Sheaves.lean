@@ -360,6 +360,13 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.OpenCover.glueAlgMapRestrict_comapAl
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.OpenCover.glueAlgMapRestrict_comapAlgMap
 
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.OpenCover.comapAlgMap_ext' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.OpenCover.comapAlgMap_ext
+
 /-! ### The germ of a global section of `𝒪_{Spec R}` at a prime
 
 `Oka/AlgebraicGeometry/Spec.lean`. Mirror-tree material with nothing analytic in it. -/
