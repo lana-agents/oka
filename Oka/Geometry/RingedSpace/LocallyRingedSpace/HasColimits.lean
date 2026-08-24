@@ -22,6 +22,17 @@ for the Mathlib file of that name, and that file is *not* in the closure of the 
 the cover sits beside `OpenCover` and nothing pays anything. It is in this file rather than in the
 gluing one only because that file is an import of this one.
 
+**What decides is the statement**, which is `README.md`'s *split by destination, not by subject*:
+a declaration travels with the cover exactly when its own statement mentions `OpenCover`, because
+that is what the gluing import buys. As this file stands two do —
+`AlgebraicGeometry.LocallyRingedSpace.sigmaOpenCover` and
+`AlgebraicGeometry.LocallyRingedSpace.disjoint_opensRange_sigmaOpenCover`, which `## Main results`
+below lists as two separate entries — and both go to the gluing file at that same **3**. The
+disjointness is not *forced* there, and that is worth knowing before the split is read as a cost:
+`AlgebraicGeometry.LocallyRingedSpace.disjoint_range_sigmaι` is the same fact stated with
+`Set.range (Sigma.ι f i).base` and no `OpenCover` in it, and it goes to the cost-0 target with
+everything else.
+
 **Everything else goes to `Mathlib/Geometry/RingedSpace/LocallyRingedSpace/HasColimits.lean` at
 cost 0**: it is this file's own import, and the `SheafedSpace` results the proofs run through are
 already in its closure.
