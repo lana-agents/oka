@@ -44,7 +44,8 @@ asymmetry of the cost:
 
 **Those four figures were 1547, 1494, 31 and 84 until taxis #935, and all four are exactly what a
 breadth-first search that does not mask comments returns** — fourteen files under `Mathlib/` carry
-an `import` line inside a docstring, and following those edges is the defect
+an `import` line inside a comment, twelve of them inside a docstring and two inside a
+commented-out block of example code, and following those edges is the defect
 `scripts/import_cost.py` exists to stop. The four above are that script's.
 
 Two things about that are worth recording rather than only fixing. **The two costs moved *down*,
