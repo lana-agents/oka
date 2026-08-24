@@ -13,7 +13,12 @@ chain of three — and says in terms that the other law of a locally directed co
 different one:
 
 > the two laws want two different diagrams: `trans_comp` wants a **chain** of three, which is this
-> file, and `directed` wants a **cospan** of three, which is not.
+> file, and `directed` wants a **span** of three, which is not.
+
+**That sentence read *cospan* when this file was written.** The section below is the argument that
+the word was wrong, and it is kept for that argument and not because the other file still gets it
+wrong: `OkaTest/ProjectiveLineDirected.lean` carried the correction into it, and the quotation
+above is of the corrected text.
 
 This file is that other diagram, at `ℙ¹`: the two charts and their overlap, as a functor out of
 `CategoryTheory.Limits.WalkingSpan`, together with its analytification.
@@ -70,12 +75,19 @@ The content is therefore entirely in what the objects and the arrows are.
   `ComplexAnalytic.localisationOpen_lineRel_ne_top` says the open `D(z)` that the apex presents is
   not the whole chart, and `ComplexAnalytic.localisationOpen_lineRel_ne_bot` says it is not empty.
   Those two are statements about that **open subset of one chart**, and that is all that is drawn
-  from them here: the apex is a proper, non-empty part of each foot, so the span really has three
-  objects to be a span of, which is what a two-object diagram cannot supply.
+  from them here: the apex is a proper, non-empty part of each foot, so it is a third *thing* and
+  not either foot renamed — which is what the two feet on their own cannot supply. (The word
+  *object* would equivocate here: the two feet are one object, as the bullet above says, and what
+  the apex is distinct from is each of them, not from a third.)
 
   **Neither lemma says that neither chart is a distinguished open of the other.** That is a
-  stronger claim about the two feet's relation to each other, it would need an argument of its
-  own, and nothing in this repository proves it.
+  stronger claim about the two feet's relation to each other and it needs an argument of its own.
+  It has one now, in the form that neither chart's *image in the glued space* contains the
+  other's — `OkaTest.ProjectiveLineDirected.not_range_ι_subset_range_ι`, which is the containment
+  a chart's being a distinguished open of the other would give — and that argument goes through
+  `AlgebraicGeometry.LocallyRingedSpace.GlueData.ι_jointly_surjective` and
+  `ComplexAnalytic.not_surjective_ι_projectiveLineGlueData`, **not** through the two lemmas above.
+  This bullet said nothing proved it until that file was written.
 
 ## What is not here
 
@@ -86,7 +98,12 @@ over exists at this level:
 the pullback of two morphisms one of which is an open immersion, which is all `directed` ever
 sees, and `AlgebraicGeometry.LocallyRingedSpace.GlueData.vIsoPullback` identifies the
 pullback of two inclusions of a glue data with the overlap `V` that datum carries. Stating and
-proving the law is separate work and is not done here.
+proving the law is separate work and is not done here — it is
+`OkaTest/ProjectiveLineDirected.lean`, and `OkaTest.ProjectiveLineDirected.lineDirected` is the
+law at `ℙ¹`. What the proof turns on is not the two `hasPullback` instances but the last clause of
+this paragraph, sharpened: `…GlueData.vIsoPullback` is an **isomorphism** and not merely a
+comparison, so the law follows from a homeomorphism of carriers and never computes with the
+transition.
 
 **No analytic analogue of the `LocallyDirected` class**, and no import of
 `Mathlib/AlgebraicGeometry/Cover/Directed.lean`. `OkaTest/LocalisationChain.lean` declined both
