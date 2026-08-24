@@ -1,12 +1,21 @@
 #!/usr/bin/env python3
 """Compute what upstreaming a mirror file would add to its Mathlib target's transitive imports.
 
-`README.md`'s mirror-tree section asks a mirror file's module docstring to state that number, and
-thirty-odd files under `Oka/` now do.  Before this script every one of those figures was produced
-by a breadth-first search written from scratch in the session that needed it and thrown away
-afterwards, and **on 2026-08-23 that instrument was written wrong twice, by two different agents,
-and both wrong figures passed the project's standard validation.**  This is the same computation
-with a test attached.
+`README.md`'s mirror-tree section does **not** ask a module docstring to state that number.  It
+says the mirror path *"has to survive the imports they need"*, quotes one 96-file precedent, and
+works one example through; stating the figure is a practice grown from those, and **26 of the 123
+files under `Oka/` follow it** — counting a module docstring that says what upstreaming would cost
+its target, whether as a number or as an explicit *nothing*.  A minority, measured at `bd03bee`,
+expected to drift, and not a figure anything here depends on.  Counting the *vocabulary* instead
+gives 44: forty-four module docstrings say `import`, `closure` or `upstream` somewhere, mostly in
+sentences like *"this file is a candidate for upstreaming to Mathlib"* that state no cost at all.
+A number obtained by grepping for a word and reported as a count of measurements is exactly the
+species of error this script exists to stop, so it is worth not making it in this paragraph.
+
+Before this script every such figure was produced by a breadth-first search written from scratch
+in the session that needed it and thrown away afterwards, and **on 2026-08-23 that instrument was
+written wrong twice, by two different agents, and both wrong figures passed the project's standard
+validation.**  This is the same computation with a test attached.
 
 Usage:
 
@@ -82,10 +91,14 @@ on every line that carries a number.
 
 ## What is priced, and what is not
 
-Only the file's **`Mathlib.` imports**.  A file's `Oka.` imports state their own figures in their
-own docstrings, so pricing them here would answer a different question — but the omission is
-**named in the output**, one line per dropped import, rather than left silent: a `cost 0` beside
-an unmentioned dependency is the shape of wrongness this script exists to stop.
+Only the file's **`Mathlib.` imports**.  Pricing an `Oka.` import here would answer a different
+question: a mirror file's cost is against *its own* Mathlib target, not against this one's, so the
+two numbers are not comparable and adding them means nothing.  **That is the reason, and it is not
+that the other file states its own figure** — of the 16 distinct `Oka.` imports dropped across the
+11 mirror files that have one, **seven** state their own cost and **nine state nothing anywhere**,
+including all three in the worked example below.  So the omission is **named in the output**, one
+line per dropped import, rather than left silent: a `cost 0` beside an unmentioned dependency is
+the shape of wrongness this script exists to stop.
 
 `Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean` is the case that shows why.  It has four
 import lines, one of them a `Mathlib.` one already in the target's closure, so the printed cost is
@@ -103,11 +116,12 @@ this script or by hand, and that is worth seeing rather than inferring.
 
 ## Two limitations a reader should not have to discover
 
-`strip_comments` does not know about string literals, so a `/-` inside one opens a comment as far as it is
-concerned.  That cannot bite on this input — imports precede any string literal in a Lean file, so
-a spurious open can only blank text *after* the import block — but it is a real limitation and not
-an oversight.  And the size check in `closure` is a `raise` rather than an `assert` deliberately:
-`python3 -O` strips assertions, and a tripwire that a flag can remove is not one.
+`strip_comments` does not know about string literals, so a `/-` inside one opens a comment as far
+as it is concerned.  That cannot bite on this input — imports precede any string literal in a Lean
+file, so a spurious open can only blank text *after* the import block — but it is a real
+limitation and not an oversight.  And the size check in `closure` is a `raise` rather than an
+`assert` deliberately: `python3 -O` strips assertions, and a tripwire that a flag can remove is
+not one.
 """
 
 from __future__ import annotations
