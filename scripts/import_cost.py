@@ -101,10 +101,10 @@ Only the file's **`Mathlib.` imports**.  Pricing an `Oka.` import here would ans
 question: a mirror file's cost is against *its own* Mathlib target, not against this one's, so the
 two numbers are not comparable and adding them means nothing.  **That is the reason, and it is not
 that the other file states its own figure** — of the 15 distinct `Oka.` imports dropped across the
-10 mirror files that have one, **six** state their own cost and **nine state nothing anywhere**,
-including all three in the worked example below.  So the omission is **named in the output**, one
-line per dropped import, rather than left silent: a `cost 0` beside an unmentioned dependency is
-the shape of wrongness this script exists to stop.
+10 files *with a Mathlib target* that have one, **six** state their own cost and **nine state
+nothing anywhere**, including all three in the worked example below.  So the omission is **named
+in the output**, one line per dropped import, rather than left silent: a `cost 0` beside an
+unmentioned dependency is the shape of wrongness this script exists to stop.
 
 `Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean` is the case that shows why.  It has four
 import lines, one of them a `Mathlib.` one already in the target's closure, so the printed cost is
