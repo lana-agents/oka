@@ -41,6 +41,7 @@ import OkaTest.Factorisation
 import OkaTest.FiniteMorphism
 import OkaTest.GermFlatness
 import OkaTest.GermFlatnessAtAPoint
+import OkaTest.GermQuotientDegreeOne
 import OkaTest.GlueDataAnalytic
 import OkaTest.GlueMorphisms
 import OkaTest.HolomorphicMap
