@@ -42,6 +42,22 @@ of finite type over `ℂ` is covered by affines whose pairwise intersections are
 distinguished in both. `Oka/Analytification/DistinguishedOpen.lean` says in its own docstring
 that the analytification of a general open immersion is neither proved nor wanted.
 
+Mathlib does have a shape that carries what a scheme supplies at an overlap, and it is not the one
+below: a **locally directed** cover, `Mathlib/AlgebraicGeometry/Cover/Directed.lean`. It indexes
+the members by a category, gives a transition morphism for each arrow, and asks only that every
+point of a pairwise overlap be hit by a third member mapping into both — so overlaps are not
+chosen at all, they are covered by other members of the same family.
+`Mathlib/AlgebraicGeometry/Sites/SmallAffineZariski.lean` instantiates it for *every* scheme with
+no hypotheses, indexed by the affine opens with an arrow `U ⟶ V` exactly when `U` is a
+distinguished open of `V`, which is the data `Oka/Analytification/DistinguishedOpen.lean`
+analytifies. Two things come with the shape and are the argument for it: the scheme is the colimit
+of the family, and a morphism out of it glues from morphisms out of the members with compatibility
+along the transition morphisms alone — no triple-overlap condition, where
+`ComplexAnalytic.coverGlueData` below needs `hrange` and `hcocycle`. Adopting it here would
+replace `poly`, `hrange` and `hcocycle` together, and would need the analytified transition
+morphism to be functorial in composition of arrows, which is not in this repository. Nothing
+downstream of this file needs any of it yet.
+
 ## The shape of the construction, and where the content is
 
 The route is `CategoryTheory.GlueData'` — the variant that asks for the overlaps only when
