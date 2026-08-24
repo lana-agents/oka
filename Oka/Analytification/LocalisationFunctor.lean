@@ -38,9 +38,13 @@ The ring map is induced by `MvPolynomial.rename (localisationIncl n)`, so it is 
 `ComplexAnalytic.PresHom.ofRename`, and the only thing to check is the hypothesis that construction
 asks for: that the old equations, renamed, lie in the new ideal. They *are* new equations, by
 `ComplexAnalytic.localisationPresentation_castSucc`. **That `PresentedAlgebra
-(localisationPresentation g f)` is a localisation of `PresentedAlgebra g` is not proved here or
-anywhere**; it is not needed, because a structure map is all a `PresHom` wants. See
-`Oka/Analytification/DistinguishedOpen.lean` on the naming.
+(localisationPresentation g f)` is a localisation of `PresentedAlgebra g` is
+`ComplexAnalytic.localisationPresentedAlgebraEquiv`, in the
+`Oka/Analytification/DistinguishedOpen.lean` this file imports — and nothing below uses it**: a
+structure map is all a `PresHom` wants, so every statement and every proof here is about
+`ComplexAnalytic.localisationPresentation` as a tuple of polynomials. See
+`Oka/Analytification/DistinguishedOpen.lean` on the naming, and its `## What is not here` on why
+the equivalence was proved for a consumer elsewhere.
 
 ## Main definitions
 

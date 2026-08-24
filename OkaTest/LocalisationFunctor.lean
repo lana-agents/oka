@@ -29,10 +29,10 @@ computed.
 * **And it does what it should on points**: `base_analytificationMap_nodeLocPoint` sends
   `(1, 0, 1)` to `axisPoint 0`, again through the identification.
 
-**What is not checked.** Nothing here says the structure map `A ⟶ A_{z₀}` is not an isomorphism
-*of algebras* — that is the same gap `Oka/Analytification/LocalisationFunctor.lean` records, that
-nothing identifies its target as a localisation. What is checked is the geometric consequence,
-which is what the gluing construction will consume.
+**What is not checked.** Nothing here states the algebra fact — that the structure map
+`A ⟶ A_{z₀}` is not an isomorphism of `ℂ`-algebras. What is checked is the geometric statement,
+which is what the gluing construction will consume. Its target *is* identified as a localisation,
+by `ComplexAnalytic.localisationPresentedAlgebraEquiv`, and nothing here uses that identification.
 -/
 
 open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry ComplexAnalytic
