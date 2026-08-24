@@ -10,7 +10,12 @@ import Mathlib.RingTheory.Ideal.Maps
 # Finite generation of an ideal transported along a ring isomorphism
 
 Material for `Mathlib/RingTheory/Ideal/Maps.lean`, whose `Ideal.comap_symm` and `Ideal.map_symm`
-are the neighbouring API; see `README.md` on the mirror tree.
+are the neighbouring API; see `README.md` on the mirror tree. Upstreaming it adds
+`Mathlib.RingTheory.Finiteness.Ideal`, which `Ideal.FG` needs, to a target whose closure is
+**1028** Mathlib modules — **39** new ones, measured with `scripts/import_cost.py`. **A cheaper
+destination exists and this file does not choose it**: priced into
+`Mathlib/RingTheory/Finiteness/Ideal.lean`, which is where `Ideal.FG` lives, the lemma costs
+**0**. Taxis #935 is where that is decided.
 
 Mathlib has `Ideal.FG.map` in the forward direction, and `Submodule.fg_map_iff` for
 `Submodule.map` along an injective *linear* map; `Ideal.map` along a ring homomorphism is a

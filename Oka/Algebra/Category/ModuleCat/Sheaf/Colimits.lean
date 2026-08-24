@@ -19,6 +19,11 @@ nothing about colimits, and in particular nothing about epimorphisms. Faithfulne
 *reflection* of epimorphisms, which is the direction already used in
 `Oka/Algebra/Category/ModuleCat/Sheaf/Coherent/Criterion.lean`.
 
+Upstreaming this file adds `Mathlib.Algebra.Category.ModuleCat.Sheaf.Abelian` to
+`Mathlib/Algebra/Category/ModuleCat/Sheaf/Colimits.lean`, whose closure is **1451** Mathlib
+modules — **4** new ones, measured with `scripts/import_cost.py`. Its two other imports are
+already in that closure.
+
 This file supplies the other direction. It matters because an epimorphism of sheaves of
 abelian groups is locally surjective on sections
 (`CategoryTheory.Sheaf.isLocallySurjective_of_epi_addCommGrp`), whereas an epimorphism of

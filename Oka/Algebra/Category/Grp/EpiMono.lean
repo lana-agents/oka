@@ -35,6 +35,18 @@ There is no analytic content here, so this file is a candidate for upstreaming t
 lives in the `Oka/`-mirror of the Mathlib directory tree for that reason, next to
 `Mathlib/Algebra/Category/Grp/EpiMono.lean`.
 
+**That mirror path costs 544 modules, which is the largest price in this tree**, and the figure
+was unstated here until taxis #935. `Mathlib/Algebra/Category/Grp/EpiMono.lean`'s transitive
+closure is **637** Mathlib modules and `Mathlib.Algebra.Category.Grp.Abelian` is not in it;
+adding it costs **544**, against the **96** `README.md` records as the figure that once made an
+upstreaming judged too expensive. Measured with `scripts/import_cost.py`, not estimated.
+
+**A cheaper destination exists and this file does not choose it.** The same instance priced into
+`Mathlib/Algebra/Category/Grp/Abelian.lean` — which has the strong epi–mono factorisations
+already — costs **2**. Whether a Mathlib reviewer would want an `AddCommGrpCat` epimorphism
+instance in the abelian-structure file is a question about the declaration rather than about the
+price, and it is taxis #935's to answer.
+
 ## Main results
 
 - the forgetful functor `AddCommGrpCat ⥤ Type` preserves epimorphisms. The instance below is
