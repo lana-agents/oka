@@ -151,8 +151,8 @@ info: 'LocalOkaRing.coe_mem_map_iff' depends on axioms:
 /-! ### Quotienting by a degree-one Weierstrass polynomial
 
 `Oka/Regular.lean`. The generalisation of `LocalOkaRing.quotientLastVarEquiv` from the coordinate
-`X_n` to an arbitrary local Weierstrass polynomial of degree one, and its instance at the graph of
-a germ vanishing at the origin. -/
+`X_n` to an arbitrary local Weierstrass polynomial of degree one, its instance at the graph of
+a germ vanishing at the origin, and the ideal inequality that says the generalisation is one. -/
 
 /--
 info: 'LocalOkaRing.exists_eq_mul_fromPolynomial_add_incl' depends on axioms:
@@ -188,3 +188,10 @@ info: 'LocalOkaRing.quotientGraphEquiv' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms LocalOkaRing.quotientGraphEquiv
+
+/--
+info: 'LocalOkaRing.span_fromPolynomial_X_sub_C_ne_span_lastVar' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.span_fromPolynomial_X_sub_C_ne_span_lastVar

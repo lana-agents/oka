@@ -52,9 +52,12 @@ so is a field.
   `LocalOkaRing.exists_eq_mul_fromPolynomial_add_incl` and
   `LocalOkaRing.incl_eq_zero_of_mem_span_fromPolynomial`.
 - `LocalOkaRing.quotientGraphEquiv`: **the germ ring on the graph of an analytic function is the
-  germ ring of its domain**, which is the previous statement at `X_n - c` and is what says it is
-  not the coordinate case in disguise; `LocalOkaRing.isLocalWeierstrassPolynomial_X_sub_C` is the
-  hypothesis it discharges.
+  germ ring of its domain**, which is the previous statement at `X_n - c`;
+  `LocalOkaRing.isLocalWeierstrassPolynomial_X_sub_C` is the hypothesis it discharges.
+- `LocalOkaRing.span_fromPolynomial_X_sub_C_ne_span_lastVar`: **`(X_n - c)` and `(X_n)` are
+  different ideals for `c ≠ 0`**, which is what says the previous statement is not the coordinate
+  case in disguise. The two equivalences have the same source, so the ideals are the only place
+  the difference can live.
 - `LocalOkaRing.ringKrullDim_eq`: **`ringKrullDim (LocalOkaRing (Fin n)) = n`**, and
   `LocalOkaRing.ringKrullDim_eq_natCard` for an arbitrary finite set of variables.
 - `LocalOkaRing.instIsRegularLocalRing`: **the germ ring is a regular local ring.**
@@ -280,6 +283,33 @@ noncomputable def quotientGraphEquiv {c : LocalOkaRing (Fin n)}
     LocalOkaRing (Fin n) ≃+*
       (LocalOkaRing (Fin (n + 1)) ⧸ Ideal.span {fromPolynomial (X - C c)}) :=
   quotientDegreeOneEquiv (isLocalWeierstrassPolynomial_X_sub_C hc) (degree_X_sub_C c)
+
+/-- **The graph of a nonzero germ is not the last coordinate**, as an ideal: for `c ≠ 0` the
+principal ideals `(X_n - c)` and `(X_n)` are different.
+
+This is what makes `LocalOkaRing.quotientGraphEquiv` a generalisation of
+`LocalOkaRing.quotientLastVarEquiv` rather than a respelling of it. The two equivalences have the
+*same source*, so nothing about them separates the two statements; what separates them is that
+their targets are quotients by different ideals, and that is this.
+
+**A statement about `c` alone does not get there.** `c ≠ 0` says the two *polynomials* differ, and
+`LocalOkaRing.fromPolynomial_injective` upgrades that to the two germs differing, but two distinct
+elements can perfectly well generate the same principal ideal — they need only differ by a unit.
+The step that is actually needed is the uniqueness half of Weierstrass division, in the form
+already stated as `LocalOkaRing.incl_eq_zero_of_mem_span_lastVar`: if the ideals agreed then
+`incl c = X_n - (X_n - incl c)` would lie in `(X_n)`, and a germ in the first `n` variables lying
+in `(X_n)` is zero. -/
+theorem span_fromPolynomial_X_sub_C_ne_span_lastVar {c : LocalOkaRing (Fin n)} (hc : c ≠ 0) :
+    Ideal.span {fromPolynomial (X - C c)} ≠
+      Ideal.span {(lastVar : LocalOkaRing (Fin (n + 1)))} := by
+  intro h
+  have hmem : fromPolynomial (X - C c) ∈
+      Ideal.span {(lastVar : LocalOkaRing (Fin (n + 1)))} := by
+    rw [← h]
+    exact Ideal.mem_span_singleton_self _
+  rw [map_sub, fromPolynomial_X, fromPolynomial_C] at hmem
+  exact hc (incl_eq_zero_of_mem_span_lastVar
+    (by simpa using Ideal.sub_mem _ (Ideal.mem_span_singleton_self _) hmem))
 
 /-! ### The Krull dimension -/
 
