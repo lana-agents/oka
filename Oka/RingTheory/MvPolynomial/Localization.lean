@@ -43,7 +43,9 @@ bookkeeping in the statement.
 ## Main results
 
 - `MvPolynomial.isLocalization_away_quotient_awayIdeal`: **the quotient is the localisation.**
-  This is the statement to use; the isomorphism is a corollary of it and of nothing else.
+  This is the statement to use. Mind the direction of the file, which is the opposite of the
+  direction of the mathematics: the two maps are built by hand, `MvPolynomial.awayQuotientEquiv`
+  is assembled from them, and the instance is transported along it.
 
 ## What is not here
 
