@@ -42,12 +42,23 @@ asymmetry of the cost:
 * adding `ResidueField.Basic` to `Filtration` costs **33** files;
 * adding `Filtration` to `ResidueField.Basic` costs **96**.
 
-**Those four figures were 1547, 1494, 31 and 84 until taxis #935**, taken on an instrument this
-repository no longer has; the closure pair was counting `Aesop`, `Batteries`, `Init` and `Lean`
-modules alongside the Mathlib ones, and the two costs were simply wrong. They are now
-`scripts/import_cost.py`'s. **The conclusion does not move** — 33 against 96 picks the same
-destination as 31 against 84 — but `README.md` quotes the **96** as this project's canonical
-too-expensive figure, and it was disagreeing with the file it came from.
+**Those four figures were 1547, 1494, 31 and 84 until taxis #935, and all four are exactly what a
+breadth-first search that does not mask comments returns** — fourteen files under `Mathlib/` carry
+an `import` line inside a docstring, and following those edges is the defect
+`scripts/import_cost.py` exists to stop. The four above are that script's.
+
+Two things about that are worth recording rather than only fixing. **The two costs moved *down*,
+by 2 and by 12.** A phantom edge inflates a closure monotonically, but a marginal cost has the
+phantom modules on *both* sides of a subtraction, so its error has no predictable direction and
+"the closure may be off but the delta is probably fine" is not a safe reading. And **the other
+candidate explanation is ruled out by measurement rather than by argument**: counting `Aesop`,
+`Batteries`, `Init` and `Lean` modules alongside the Mathlib ones — a real discrepancy of about a
+hundred modules, and the one two reviewers have each spent a paragraph attributing — gives 1384
+and 1321 for the two closures and leaves the costs at 33 and 96, so it accounts for neither pair.
+
+**The conclusion does not move** — 33 against 96 picks the same destination as 31 against 84 — but
+`README.md` quotes the **96** as this project's canonical too-expensive figure, and it was
+disagreeing with the file it came from.
 
 Cheaper by a factor of about three, and in the direction Mathlib already prefers: a corollary goes
 with the theorem it follows from rather than with the notion it is about.
