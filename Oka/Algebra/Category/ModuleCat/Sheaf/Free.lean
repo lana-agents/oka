@@ -55,7 +55,7 @@ and all fourteen were `lemma`s — which is why `lake lint` was silent about the
 `docBlame` linter covers definitions, and `docBlameThm`, which covers theorems, is off in Mathlib
 and not turned on here. Nothing in `.orchestra/validation.sh` sees a missing lemma docstring, so
 this paragraph is the only record that the gap existed; turning `docBlameThm` on repository-wide
-is a separate question that nobody has costed.
+is a separate question, and taxis #928 is where it has been costed.
 
 ## Main definitions
 
@@ -118,7 +118,7 @@ lemma val_app_sum {ι : Type*} (s : Finset ι) (φ : ι → (M ⟶ N)) (Z : Cᵒ
   | insert i s hi ih => rw [Finset.sum_insert hi, Finset.sum_insert hi, ← ih]; rfl
 
 omit [HasWeakSheafify J AddCommGrpCat.{u}] [J.WEqualsLocallyBijective AddCommGrpCat.{u}] in
-/-- The morphism `R ⟶ M` corresponding to a section `s` multiplies by `s`: it sends a section
+/-- The morphism `unit R ⟶ M` corresponding to a section `s` multiplies by `s`: it sends a section
 `r` of the sheaf of rings to `r • s`. -/
 lemma unitHomEquiv_symm_val_app (s : M.sections) (Z : Cᵒᵖ) (r : R.obj.obj Z) :
     (M.unitHomEquiv.symm s).val.app Z r = r • PresheafOfModules.sections.eval s Z :=

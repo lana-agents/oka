@@ -60,19 +60,23 @@ The consumers are `Oka/Algebra/Category/ModuleCat/Sheaf/Coherent/Basic.lean`,
 `Oka/AlgebraicGeometry/Modules/Tilde.lean`, the last of which reduces finiteness of the module of
 global sections on a `Spec` to finiteness over a distinguished open.
 
-**Every declaration below that can carry a docstring now does.** Nineteen of the thirty-one did
-not until taxis #906; eleven of those were `lemma`s and have been written. The remaining eight are
-accounted for rather than fixed: **seven are anonymous instances**, which cannot carry a docstring
-in the form `instance : Foo where` at all and would need naming — a code change, not a
-documentation one — and the eighth is `SheafOfModules.isFiniteType`, which carries
+**Every named declaration below now carries a docstring.** Nineteen of the thirty-one did not
+until taxis #906; eleven of those were `lemma`s and have been written. The remaining eight are
+accounted for rather than fixed: **seven are anonymous instances**, left so because #906 asked for
+no code changes, and the eighth is `SheafOfModules.isFiniteType`, which carries
 `@[inherit_doc SheafOfModules.IsFiniteType]` and so **is** documented in the environment even
 though no `/-- … -/` precedes it here.
 
-`lake lint` was silent about all nineteen, and for three different reasons: `docBlame` covers
-definitions but cannot name an anonymous instance, `docBlameThm` covers theorems and is off in
-Mathlib and not turned on here, and the one `abbrev` `docBlame` does reach inherits its docstring.
-Turning `docBlameThm` on repository-wide would fire on every undocumented theorem under `Oka/`,
-which nobody has counted; that is a separate question.
+An anonymous instance *can* carry a docstring — the `/-- … -/` elaborates and the environment
+keeps it — but there is no name to cite it by except the one Lean generates, which is why the
+seven are described here instead. That is the same convention as `Oka/ComplexSpace.lean` and
+`Oka/Algebra/Category/Grp/EpiMono.lean`.
+
+`lake lint` was silent about all nineteen, and for three different reasons: `docBlame` exempts
+**every** instance, named or anonymous, `docBlameThm` covers theorems and is off in Mathlib and
+not turned on here, and the one `abbrev` `docBlame` does reach inherits its docstring. Turning
+`docBlameThm` on repository-wide would fire on every undocumented theorem under `Oka/`; that count
+is taxis #928 and is a separate question.
 
 ## Main results
 
@@ -220,9 +224,9 @@ instance (η : (pushforward φ).obj (unit R) ≅ unit S)
 /-- **Being of finite type survives a change of site.** Pushing forward along a continuous and
 cocontinuous `G` preserves finite type, given an identification `η` of the pushed-forward unit
 with the unit and the hypothesis `h` that pushforward along the sliced comparison map preserves
-colimits. Both hypotheses are discharged automatically in
-`SheafOfModules.isFiniteType_pushforward_of_isLeftAdjoint`, which is the form to reach for
-first. -/
+colimits. `SheafOfModules.isFiniteType_pushforward_of_isLeftAdjoint` discharges `h`, at the price
+of four further hypotheses, and is the form to reach for first; `η` stays an explicit argument
+there and every consumer in this file supplies it as an `Iso.refl`. -/
 lemma isFiniteType_pushforward (η : (pushforward φ).obj (unit R) ≅ unit S)
     [∀ (X : D), (Over.post G).IsContinuous (K.over X) (J.over _)]
     (h : ∀ (X : D) (Y : C) (f : G.obj X ⟶ Y),

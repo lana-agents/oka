@@ -48,8 +48,8 @@ instances then follow from `CategoryTheory.CoverPreserving.overPost` and
 - `CategoryTheory.coverPreserving_iteratedSliceForward` and
   `CategoryTheory.coverPreserving_iteratedSliceBackward`, and the two
   `CategoryTheory.Functor.IsContinuous` instances for `CategoryTheory.Over.post` that they give.
-  The two lemmas now carry docstrings; the instances are anonymous, so they cannot, and the
-  paragraph above is where they are accounted for.
+  The two lemmas now carry docstrings; the instances are anonymous, so they have no name to cite
+  and the paragraph above is where they are accounted for.
 -/
 
 @[expose] public section
