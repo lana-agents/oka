@@ -5,6 +5,7 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Oka.AnalyticSpace.Nonvanishing
 import Oka.Analytification.UniversalProperty
+import Oka.RingTheory.MvPolynomial.Localization
 
 /-!
 # The analytification of a distinguished open is a distinguished open of the analytification
@@ -74,6 +75,8 @@ where `D(z₀)` is the punctured axis that `OkaTest/OpenSubspace.lean` builds by
 - `ComplexAnalytic.localisationProj`: **the projection `(A_f)^an ⟶ X^an`.**
 - `ComplexAnalytic.localisationOpen`: `D(f) ⊆ X^an`, the non-vanishing locus of `f`.
 - `ComplexAnalytic.localisationIso`: **the isomorphism `(A_f)^an ≅ X^an|D(f)`.**
+- `ComplexAnalytic.localisationPresentedAlgebraEquiv`: **the algebra `A_f` presents really is the
+  localisation** `Localization.Away f`.
 
 ## Main results
 
@@ -95,29 +98,30 @@ where `D(z₀)` is the punctured axis that `OkaTest/OpenSubspace.lean` builds by
   `D(f)`** — the equality, where `ComplexAnalytic.range_base_localisationProj_subset` is the
   containment. The side condition of an open-immersion lift is a containment *in* this range, so
   the equality is what lets a statement about `D(f)` discharge it.
+- `ComplexAnalytic.map_presentationIdeal_localisationPresentation`: the reindexing carries the
+  ideal of `ComplexAnalytic.localisationPresentation` to `MvPolynomial.awayIdeal`, which is the
+  whole content of the identification on this side; the ring theory is in the mirror tree.
 
 ## What is not here
 
-**That `ℂ[x, t] ⧸ (g, t·f - 1)` is a localisation of `ℂ[x] ⧸ (g)` is not proved anywhere in this
-repository.** The `localisation…` names below, and the first paragraph's
-`A_f = ℂ[x₁, …, x_n, t] ⧸ (g₁, …, g_k, t·f - 1)`, are the *classical* fact rather than a formal
-one: nothing connects `ComplexAnalytic.PresentedAlgebra (localisationPresentation g f)` to the
-localisation `Localization.Away (Ideal.Quotient.mk (presentationIdeal g) f)` of
-`ComplexAnalytic.PresentedAlgebra g`. `Localization`, `IsLocalization` and `Away` occur nowhere in
-this file outside this section, and in no declaration anywhere in it; what is proved is a
-statement about the analytification of one particular tuple. **A consumer analytifying an actual
-scheme will need the algebraic identification**, and will have to prove it.
+**Nothing in the geometry uses that `ℂ[x, t] ⧸ (g, t·f - 1)` is a localisation of `ℂ[x] ⧸ (g)`,
+and until 2026-08-24 nothing proved it.** Everything from `ComplexAnalytic.localisationProj` down
+is a statement about `ComplexAnalytic.localisationPresentation` as a *tuple of polynomials*, and
+neither the statements nor the proofs mention a localisation; the first paragraph's
+`A_f = ℂ[x₁, …, x_n, t] ⧸ (g₁, …, g_k, t·f - 1)` was the classical fact and not a formal one.
 
-It is not out of reach. `Localization.awayEquivAdjoin r : Away r ≃ₐ[R] AdjoinRoot (C r * X - 1)`
-(`Mathlib/RingTheory/Localization/Away/AdjoinRoot.lean`) is the "adjoin an inverse by adjoining a
-variable and an equation" step for a *single* variable over a base ring; what is missing between
-it and `localisationPresentation` is the passage from the multivariate quotient in `n + 1`
-variables to a `Polynomial` — equivalently `AdjoinRoot` — over the quotient in `n`. That is a
-ring-theoretic item with no analysis in it, and nothing in the geometry below depends on it.
+It is now proved, in the last section of this file, because **a consumer analytifying an actual
+scheme needs it** and cannot get it from the geometry: what a scheme hands you at an overlap is an
+isomorphism of *localisations*, and what
+`Oka/Analytification/AffineCover.lean`'s `glue` field asks for is an isomorphism of the algebras
+these presentations present. The two are `ComplexAnalytic.localisationPresentedAlgebraEquiv` apart.
+The ring theory in it is general and lives in `Oka/RingTheory/MvPolynomial/Localization.lean`; this
+file contributes only the reindexing of `Fin (n + 1)` as `Option (Fin n)` that names the new
+variable, which is the one part of it that is about `ComplexAnalytic.localisationPresentation`.
 
-**Nothing else about the isomorphism is assumed.** `ComplexAnalytic.localisationIso` and both
-factorisations are statements about `ComplexAnalytic.localisationPresentation` as a tuple of
-polynomials, and neither their statements nor their proofs mention a localisation.
+**The geometry is unchanged and still does not assume it.** `ComplexAnalytic.localisationIso`
+and both factorisations are statements about `ComplexAnalytic.localisationPresentation` as a
+tuple of polynomials, and neither their statements nor their proofs mention a localisation.
 
 ## References
 
@@ -636,6 +640,84 @@ theorem range_base_localisationProj :
     hs, Set.image_univ]
   exact (AnalyticSpace.analytification.{u} g).toLocallyRingedSpace.range_ofRestrict
     (localisationOpen.{u} g f)
+
+/-! ### The presented algebra is the localisation
+
+Everything above is about `ComplexAnalytic.localisationPresentation` as a tuple of polynomials.
+This section says what the tuple *presents*: `ℂ[x, t] ⧸ (g, t·f - 1)` is the localisation of
+`ℂ[x] ⧸ (g)` away from the image of `f`. The general statement, for any base ring and any ideal,
+is `MvPolynomial.isLocalization_away_quotient_awayIdeal` in
+`Oka/RingTheory/MvPolynomial/Localization.lean`; it is stated there with the new variable called
+`none`, so all that is left here is the reindexing that identifies `Fin (n + 1)` with
+`Option (Fin n)` in the way `ComplexAnalytic.localisationIncl` and
+`ComplexAnalytic.localisationVar` do.
+-/
+
+/-- **The reindexing that names the new variable `none`**: `Fin (n + 1)` as `Option (Fin n)`,
+sending `ComplexAnalytic.localisationVar` there and `ComplexAnalytic.localisationIncl` to `some`,
+under the `ULift` this development carries on its variable types. -/
+def localisationVarEquiv (n : ℕ) : ULift.{u} (Fin (n + 1)) ≃ Option (ULift.{u} (Fin n)) :=
+  Equiv.ulift.trans (finSuccEquivLast.trans (Equiv.optionCongr Equiv.ulift.symm))
+
+@[simp]
+theorem localisationVarEquiv_localisationVar :
+    localisationVarEquiv.{u} n (localisationVar.{u} n) = none := by
+  simp [localisationVarEquiv, localisationVar]
+
+@[simp]
+theorem localisationVarEquiv_localisationIncl (i : ULift.{u} (Fin n)) :
+    localisationVarEquiv.{u} n (localisationIncl.{u} n i) = some i := by
+  simp [localisationVarEquiv, localisationIncl, Equiv.optionCongr]
+
+/-- Under the reindexing, the equations of `ComplexAnalytic.localisationPresentation` are the
+generators of `MvPolynomial.awayIdeal`: the old ones renamed along `some`, and `t·f - 1`. -/
+theorem rename_comp_localisationPresentation :
+    MvPolynomial.rename (localisationVarEquiv.{u} n) ∘ localisationPresentation.{u} g f =
+      Fin.snoc (MvPolynomial.rename (some (α := ULift.{u} (Fin n))) ∘ g)
+        (MvPolynomial.X none * MvPolynomial.rename some f - 1 :
+          MvPolynomial (Option (ULift.{u} (Fin n))) ℂ) := by
+  funext j
+  refine Fin.lastCases ?_ ?_ j
+  · simp [MvPolynomial.rename_rename, Function.comp_def]
+  · intro i
+    simp [MvPolynomial.rename_rename, Function.comp_def]
+
+/-- **The reindexing carries the ideal of `ComplexAnalytic.localisationPresentation` to
+`MvPolynomial.awayIdeal`.** This is the only thing about the identification that is specific to
+this development; everything else is the general statement in the mirror tree. -/
+theorem map_presentationIdeal_localisationPresentation :
+    (presentationIdeal.{u} (localisationPresentation.{u} g f)).map
+        (MvPolynomial.rename (localisationVarEquiv.{u} n)) =
+      MvPolynomial.awayIdeal (presentationIdeal.{u} g) f := by
+  rw [presentationIdeal, Ideal.map_span, ← Set.range_comp,
+    rename_comp_localisationPresentation, Fin.range_snoc, Ideal.span_insert, Set.range_comp,
+    MvPolynomial.awayIdeal, presentationIdeal, Ideal.map_span, sup_comm]
+
+/-- The reindexing, as an isomorphism of the two quotients. -/
+def localisationRenameEquiv :
+    PresentedAlgebra.{u} (n + 1) (k + 1) (localisationPresentation.{u} g f) ≃ₐ[ℂ]
+      (MvPolynomial (Option (ULift.{u} (Fin n))) ℂ ⧸
+        MvPolynomial.awayIdeal (presentationIdeal.{u} g) f) :=
+  Ideal.quotientEquivAlg _ _ (MvPolynomial.renameEquiv ℂ (localisationVarEquiv.{u} n))
+    (map_presentationIdeal_localisationPresentation.{u} g f).symm
+
+/-- **`ℂ[x, t] ⧸ (g, t·f - 1)` is the localisation of `ℂ[x] ⧸ (g)` away from the image of `f`.**
+
+The identification the file's `## What is not here` used to disclaim. It is what turns an
+isomorphism of localisations — which is what a scheme hands you at an overlap of two affine
+members — into an isomorphism of the algebras two `ComplexAnalytic.localisationPresentation`s
+present, which is what `Oka/Analytification/AffineCover.lean`'s `glue` field asks for.
+
+An isomorphism rather than an `IsLocalization.Away` instance on this type, deliberately: the
+instance is stated in the mirror tree, on the ring with the new variable called `none`, and
+putting a second one here would mean an `Algebra (ComplexAnalytic.PresentedAlgebra n k g)`
+instance on `ComplexAnalytic.PresentedAlgebra (n + 1) (k + 1) …` — an instance keyed on a type
+this development uses everywhere, bought for a universal property that
+`ComplexAnalytic.localisationRenameEquiv` already reaches in one step. -/
+def localisationPresentedAlgebraEquiv :
+    PresentedAlgebra.{u} (n + 1) (k + 1) (localisationPresentation.{u} g f) ≃ₐ[ℂ]
+      Localization.Away (Ideal.Quotient.mk (presentationIdeal.{u} g) f) :=
+  (localisationRenameEquiv.{u} g f).trans (MvPolynomial.awayQuotientEquiv _ _)
 
 end
 
