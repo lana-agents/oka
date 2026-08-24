@@ -19,23 +19,44 @@ descriptions of each overlap, it builds the glue data.
 
 ## The input, and why it is presentations rather than a scheme
 
-**Every `AlgebraicGeometry.Scheme` this repository mentions is a `Spec`, and nothing constructs a
-non-affine one or carries a cover of one.** Measured at `master` = `31f5a2f`: every occurrence of
-`Scheme` outside backticks under `Oka/` and `OkaTest/` is `AlgebraicGeometry.Scheme.Modules` —
-two of them the `namespace` and `end` of `Oka/AlgebraicGeometry/Modules/Tilde.lean`, four of them
-axiom guards for its two declarations — and in all of them the scheme is `Spec R`.
-`Oka/Analytification/Comparison.lean` has a titled section arguing that the absence of a
-*general* scheme here is a result rather than an omission. So "analytify a scheme locally of
-finite type over `ℂ`" cannot be *stated*, and what this file takes is the cover **as data**: an
-index type `J`, a `ComplexAnalytic.Presentation` for each index, a polynomial `poly i j` cutting
-out the part of the `i`-th member that meets the `j`-th, and an isomorphism of the two
-presentations of the overlap.
+**Nothing here turns an `AlgebraicGeometry.Scheme` into the data below, and the obstruction is
+the arity of `poly`.** The `variable` line below declares it as `∀ i : J, J → MvPolynomial …`:
+for each *ordered pair*, one polynomial, hence **one** distinguished open of the `i`-th member.
+A scheme supplies less. `AlgebraicGeometry.exists_basicOpen_le_affine_inter` is stated at a
+*point* of `U ⊓ V` and returns an open distinguished in both that contains it, so the
+intersection of two affine members is a **union** of such opens, and nothing makes one of them
+the whole of it. That is a claim about this file's own input, and **only an edit to this file can
+falsify it** — which is the property the sentence it replaces lacked. That one counted
+occurrences of `Scheme` across the whole tree at `master` = `31f5a2f` and concluded that every
+scheme here is a `Spec`; `Oka/AlgebraicGeometry/Modules/Coherent.lean` carries
+`AlgebraicGeometry.Scheme.isCoherentStructureSheaf`, a theorem about an arbitrary scheme, and has
+falsified it since fourteen and a half hours after this file landed.
 
-Nothing is lost by this beyond the phrase "locally of finite type": `ComplexAnalytic.toFGAlg` is
-an equivalence onto the finitely generated `ℂ`-algebras, so the input above **is** affine-cover
-data, transported. What the general form would add is a comparison theorem — that every scheme
-locally of finite type over `ℂ` arises this way — and a choice among Mathlib's cover APIs, and
-neither is needed by anything downstream.
+**What is missing is the construction, not the sentence**, which that measurement also got wrong:
+the target is sayable, and needs nothing from this repository. With
+`AlgebraicGeometry.Scheme.Over` in scope for the structure morphism, so that `↘` names it, and
+`AlgebraicGeometry.LocallyOfFiniteType` asserted of that morphism, a well-formed target is
+
+    noncomputable def analytificationOfScheme (X : Scheme.{0})
+        [X.Over (Spec (CommRingCat.of ℂ))]
+        [LocallyOfFiniteType (X ↘ Spec (CommRingCat.of ℂ))] :
+        ComplexAnalytic.AnalyticSpace.{0}
+
+— note the universe, which is forced to `0` because `ℂ : Type` makes `Spec (CommRingCat.of ℂ)` a
+`Scheme.{0}`. Everything else on this line is `{u}`-polymorphic and the scheme-level statement
+cannot be.
+
+So what this file takes is the cover **as data**: an index type `J`, a
+`ComplexAnalytic.Presentation` for each index, a polynomial `poly i j` cutting out the part of the
+`i`-th member that meets the `j`-th, and an isomorphism of the two presentations of the overlap.
+The **members** lose nothing by that: `ComplexAnalytic.toFGAlg` is an equivalence onto the
+finitely generated `ℂ`-algebras (`ComplexAnalytic.instIsEquivalenceToFGAlg`), so each of them is
+an affine scheme locally of finite type over `ℂ`, transported. The **overlaps** are where the
+general form differs, by the paragraph above, and what it would add is a comparison theorem —
+that every such scheme arises this way, or that a cover of one can be refined until it does —
+together with a choice among Mathlib's cover APIs. Neither is needed by anything downstream.
+`Oka/Analytification/Comparison.lean` argues separately, in a titled section, that the absence of
+`Scheme` from *its* statements is a result rather than an omission.
 
 Only the **distinguished** case appears, because that is the case a cover needs: a scheme locally
 of finite type over `ℂ` is covered by affines whose pairwise intersections are covered by opens
