@@ -41,6 +41,58 @@ if grep -rnP '(?<![A-Za-z_])sorry(?![A-Za-z_])' --include='*.lean' Oka Oka.lean;
   exit 1
 fi
 
+# Verify that every file under `scripts/` is named somewhere in `README.md`.
+#
+# `README.md`'s `### Checking` section is this repository's index of `scripts/`, and it is a good
+# one: it says what each tool is *for* and why it had to be written, which is more than any
+# mechanical check can verify. What it cannot do on its own is notice a file nobody wrote a
+# sentence about — and it had already stopped noticing. On 2026-08-24, **three of the six entries
+# under `scripts/` were named nowhere in `README.md`, in any form**: `check_docstring_names.py`,
+# which this script runs and whose figures every pull request body on this project quotes;
+# `DumpEnvNames.lean`, which feeds it; and `docstring-names-ignore.txt`, its escape hatch. The
+# first of those is described in that section twice, and never named, so a reader who wanted to
+# run the thing being described had to go and find it.
+#
+# **This check secures exactly one thing and it is worth being explicit about how little that
+# is**: a file under `scripts/` that nobody has written a sentence about. It cannot tell whether
+# the sentence is true, or current, or anything more than the filename repeated. It is the same
+# test as Mathlib's `undocumentedScripts` — a substring search for the name — pointed at the
+# index this repository already has instead of at `scripts/README.md`, the path Mathlib hardcodes
+# and which taxis #964 decided not to create, on the measurement that a file holding six
+# backticked names and no prose satisfies that linter outright.
+#
+# Three choices in it, none of them forced:
+#
+#   * **The bare filename, not the path.** `README.md` writes both forms —
+#     `scripts/check_module_docstrings.py` in one place and `bash scripts/check_file.sh
+#     FILE.lean` in another — so a path-form match would fail today on a file that is documented.
+#   * **Anywhere in `README.md`, not inside `### Checking`.** Scoping is stricter and it makes a
+#     heading load-bearing for a check; a filename in an unrelated paragraph is a worse index and
+#     is still a sentence about the file, which is all this can see.
+#   * **No exemption list.** `docstring-names-ignore.txt` is data rather than a script, and
+#     Mathlib exempts its own two data files; here it is named in `README.md` like everything
+#     else. One clause costs less than a list, and this repository's own exception file went from
+#     "empty, and the intention is that it stays that way" to two entries in under three hours.
+#
+# `grep -F` so that the `.` in a filename is not a wildcard: without it, a `README.md` naming
+# `check_file_sh` would pass for `check_file.sh`.
+#
+# It runs here, before the build, because it reads two text files and nothing else. This mirrors
+# the check in `.github/workflows/lean_action_ci.yml`.
+scripts_undocumented=""
+scripts_checked=0
+for f in scripts/*; do
+  name="$(basename "$f")"
+  scripts_checked=$((scripts_checked + 1))
+  grep -qF -- "$name" README.md || scripts_undocumented="$scripts_undocumented $name"
+done
+if [ -n "$scripts_undocumented" ]; then
+  echo "Not named in README.md:$scripts_undocumented"
+  echo 'Every file under `scripts/` needs a sentence in `README.md`; see its `### Checking`.'
+  exit 1
+fi
+echo "checked $scripts_checked files under scripts/: 0 not named in README.md"
+
 # Fetch build cache. Needed before the two steps below, both of which build Mathlib
 # artifacts.
 lake exe cache get || exit 1

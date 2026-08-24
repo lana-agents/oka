@@ -758,8 +758,9 @@ lake build
 
 `bash .orchestra/validation.sh` is the check. It builds with `--wfail`, runs Mathlib's
 environment linters and text linters, verifies both root modules against `mk_all`, checks that
-every backticked dotted name in a comment resolves, and checks that every file has a module
-docstring with a non-empty body. **A claim that something compiles means this script.**
+every backticked dotted name in a comment resolves, checks that every file under `scripts/` is
+named in this README, and checks that every file has a module docstring with a non-empty body. **A
+claim that something compiles means this script.**
 
 The last of those, `scripts/check_module_docstrings.py`, is the narrow rule and only the narrow
 rule: a **module** docstring whose body is not whitespace. It says nothing about what the body
@@ -775,6 +776,17 @@ It exists because nothing else could see an empty one: an empty `/-! -/` elabora
 does not fail on it, and the name checker looks *inside* a docstring, so on an empty one it finds
 nothing to check and passes. Seven files under `Oka/` carried an empty module docstring from the
 second commit in the repository until it was added.
+
+That name checker is `python3 scripts/check_docstring_names.py`. It resolves a name against the
+*environment* rather than against a list, which is why it runs after the build and not before:
+`scripts/DumpEnvNames.lean` is the helper it invokes to dump every declaration and module name
+Lean knows about, and the check takes about ten seconds, nine of them spent importing. It is
+deliberately permissive — a name resolves if *any* declaration in the environment ends with it,
+or it is a module, or a file in this repository, or field notation — because a checker that cries
+wolf is worse than none on a project whose pull request bodies quote its figures as evidence.
+`scripts/docstring-names-ignore.txt` is the escape hatch, for a name that is correct, cited on
+purpose, and resolves nowhere only because this build does not import the declaration it names;
+its header says what qualifies, and fixing a rule in the checker beats adding an entry.
 
 For the edit loop there is `bash scripts/check_file.sh FILE.lean`, which takes a couple of
 seconds and applies the *same* Lean options the build applies:
@@ -822,6 +834,18 @@ docstring explains why the regression cases alone are not enough.
 Nothing checks the figures in docstrings against the script, and nothing can: they are English
 prose, phrased twenty different ways. This is for an author to run before writing one and a
 reviewer to run before believing one.
+
+**This section is itself checked, in one narrow way.** `validation.sh` verifies that every file
+under `scripts/` is named somewhere in this README — a literal substring match on the bare
+filename, run before the build because it reads two text files and nothing else. It is the same
+test Mathlib's `undocumentedScripts` linter applies to `scripts/README.md`, pointed at the index
+that already exists instead of at a second one; the measurement is in `.orchestra/validation.sh`,
+in the comment above `lake exe lint-style`, and it is that a file holding the six names in
+backticks and no prose satisfies the Mathlib version outright. So a match proves only that
+somebody wrote the name down. **The one thing it catches is a file arriving under `scripts/` with
+no sentence about it anywhere** — which had already happened three times over:
+`check_docstring_names.py`, `DumpEnvNames.lean` and `docstring-names-ignore.txt` were added on
+2026-08-22 and are named here for the first time in the commit that added the check.
 
 ### Declaration docstrings, and why `docBlameThm` is off
 
