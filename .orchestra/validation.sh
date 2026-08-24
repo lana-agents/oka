@@ -133,8 +133,11 @@ lake exe lint-style Oka OkaTest || exit 1
 # deliberately permissive — a name resolves if *any* declaration in the environment ends with
 # it, or it is a module, or a file in the repository, or field notation — because a check that
 # cries wolf is worse than none on a project that quotes a green `validation.sh` as evidence in
-# every pull request body. `scripts/docstring-names-ignore.txt` is the escape hatch and is
-# empty; prefer fixing a rule to growing it.
+# every pull request body. `scripts/docstring-names-ignore.txt` is the escape hatch, and every
+# entry in it is a place this checker has been told to stop looking; prefer fixing a rule to
+# growing it. **Neither this sentence nor that file's own header says how many entries there
+# are**: nothing checks a count, and the two that used to say otherwise were both written in the
+# same commit and both false three hours later. The dates are in the `lint-style` comment above.
 #
 # It runs `lake env lean scripts/DumpEnvNames.lean` to read the environment, so it has to come
 # after the build; given the oleans it takes about ten seconds, nine of them the import. It
