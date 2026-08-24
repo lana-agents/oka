@@ -17,9 +17,22 @@ public import Oka.Algebra.Category.ModuleCat.Sheaf.Generators
 # A module on an affine scheme and its global sections
 
 Material for `Mathlib/AlgebraicGeometry/Modules/Tilde.lean`; see `README.md` on the mirror tree.
-That file does not currently import `Mathlib.RingTheory.Localization.Finiteness` or
-`Mathlib.RingTheory.LocalProperties.FinitePresentation`, which the two change-of-site arguments
-below need, so upstreaming it adds those imports — three files to its closure.
+That file does not currently import `Mathlib.RingTheory.Localization.Finiteness`,
+`Mathlib.RingTheory.LocalProperties.FinitePresentation` or
+`Mathlib.Algebra.Module.FinitePresentation`, which the two change-of-site arguments below need, so
+upstreaming it adds those imports — **six** files to that target's closure of **2290**.
+
+**The three are not independent**, which is why the number is worth stating rather than derived:
+`Mathlib.RingTheory.LocalProperties.FinitePresentation` alone accounts for all six, the other two
+lying inside its closure, so pricing them separately and adding gives 2 + 6 + 3 = eleven and is
+wrong. The six are `Mathlib.Algebra.Module.FinitePresentation`,
+`Mathlib.Algebra.Module.LocalizedModule.Int`, `Mathlib.RingTheory.Finiteness.Projective`,
+`Mathlib.RingTheory.LocalProperties.FinitePresentation`,
+`Mathlib.RingTheory.Localization.Finiteness` and `Mathlib.RingTheory.TensorProduct.Finite`.
+**This sentence used to name two of the three imports and give the cost as three files**; the pair
+it named costs six as well, so the figure was wrong under its own reading too. Take it with
+`python3 scripts/import_cost.py Oka/AlgebraicGeometry/Modules/Tilde.lean`, which is what that
+script is for.
 
 Mathlib proves `AlgebraicGeometry.isQuasicoherent_iff_isIso_fromTildeΓ`: an
 `𝒪_{Spec R}`-module `M` is quasicoherent exactly when the counit

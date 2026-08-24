@@ -28,13 +28,21 @@ in `S`.
 Both imports above — `Mathlib.LinearAlgebra.Finsupp.LinearCombination` and
 `Mathlib.RingTheory.Localization.Integer` — are already in the transitive closure of
 `Mathlib/RingTheory/Localization/Module.lean`, so upstreaming this file adds **0 files** to it.
-Measured by breadth-first search over `(public )?import` in `.lake/packages/mathlib`, against the
-**total** closure of the Mathlib target rather than a marginal baseline: 1460 modules before and
-1460 after. The same instrument reproduces the two figures already recorded elsewhere in this
-tree — `Mathlib.RingTheory.Localization.Finiteness` costs
+That target's closure is **963** modules with a file under `Mathlib/`, before and after.
+
+Take the figure with `python3 scripts/import_cost.py Oka/RingTheory/Localization/Module.lean`
+rather than with a breadth-first search written for the occasion; the two costs this paragraph
+used to cite as its own validation are regression cases in that script's `--self-test` and both
+are still exact — `Mathlib.RingTheory.Localization.Finiteness` costs
 `Mathlib/AlgebraicGeometry/Modules/Tilde.lean` 2, and
 `Mathlib.Algebra.Category.ModuleCat.Sheaf.Generators` costs
 `Mathlib/AlgebraicGeometry/Modules/Sheaf.lean` 3.
+
+**The baseline here used to read 1460**, which reproduces under no counting: 963 masked and
+Mathlib-only, 1053 counting every module name the search reaches, and 1360 if it follows the
+`import` lines inside Mathlib's own docstrings. The **0** was right throughout, and a wrong
+baseline standing beside a right cost is why every line of the script's output that carries a
+number says `(Mathlib files only)`.
 
 ## Main results
 
