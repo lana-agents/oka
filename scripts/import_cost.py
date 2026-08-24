@@ -97,28 +97,70 @@ on every line that carries a number.
 
 ## What is priced, and what is not
 
-Only the file's **`Mathlib.` imports**.  Pricing an `Oka.` import here would answer a different
-question: a mirror file's cost is against *its own* Mathlib target, not against this one's, so the
-two numbers are not comparable and adding them means nothing.  **That is the reason, and it is not
-that the other file states its own figure** — of the 15 distinct `Oka.` imports dropped across the
-10 files *with a Mathlib target* that have one, **six** state their own cost and **nine state
-nothing anywhere**, including all three in the worked example below.  So the omission is **named
-in the output**, one line per dropped import, rather than left silent: a `cost 0` beside an
-unmentioned dependency is the shape of wrongness this script exists to stop.
+The headline cost counts only the file's **`Mathlib.` imports**.  An `Oka.` import cannot go into
+that sum: a mirror file's cost is against *its own* Mathlib target, not against this one's, so the
+two numbers are not comparable and adding them means nothing.
 
-`Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean` is the case that shows why.  It has four
-import lines, one of them a `Mathlib.` one already in the target's closure, so the printed cost is
-**0** — while one of its three `Oka.` imports, `Oka.AlgebraicGeometry.GammaSpecAdjunction`, costs
-that same target **359** on a baseline of 1697 if it goes to its own mirror path.  0 is true of
-what this script measures and misleading about the decision it informs, so the author is given
-both and decides.
+**There is a third number, and it is the one a module docstring actually needs**: what *this*
+target pays if that dependency lands at its own mirror path and has to come along.  It is well
+defined, it is a `cost` call against a target the script has already resolved in order to print
+the `mirrors …` line, and **it is now printed, one figure per dropped import**.
+
+`Oka/Geometry/RingedSpace/LocallyRingedSpace/HasColimits.lean` is why that matters.  It has one
+`Mathlib.` import, already in the target's closure, so the headline cost is **0** — and its module
+docstring said upstreaming would cost that file *nothing*, which was false: the cover it defines
+is stated in terms of `AlgebraicGeometry.LocallyRingedSpace.OpenCover`, whose mirror target costs
+that same target **3**.  Repairing it took taxis #1021 and two pull requests.  The author had run
+this script; **the script had declined to price the import and the docstring read the silence as
+a zero.**  The three modules are now named in the output, which is what that repair had to
+compute by hand.
+
+`Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean` is the same shape at a scale nobody would
+guess: headline cost **0**, while one of its three `Oka.` imports,
+`Oka.AlgebraicGeometry.GammaSpecAdjunction`, costs that same target **359** on a baseline of 1697.
+Both numbers are true of different questions, and the author is now given both without leaving
+the tool.
+
+**It is the number authors were already computing by hand**, which is the argument that it belongs
+here rather than in a reader's head.  `Oka/RingTheory/Filtration.lean` — the placement `README.md`
+works through — states the whole comparison in its own docstring: closures of **1291** and
+**1228**, *"adding `ResidueField.Basic` to `Filtration` costs 33 files; adding `Filtration` to
+`ResidueField.Basic` costs 96"*.  All four reproduce exactly, and the 33 is what this script now
+prints for that file's one dropped import without being asked.  `self_test` pins both directions,
+because 33 on its own decides nothing: the decision was the comparison.
+
+**The dropped figures do not add — not to each other, and not to the headline cost.**  Each is
+computed against the same baseline, so shared ancestors are counted twice by anyone who sums
+them, and the output says so on the line that introduces them.  This is not a caution about
+arithmetic in general: `Oka/AlgebraicGeometry/Modules/Sheaf.lean` is a worked counterexample in
+this tree.  Its headline cost is **3** and its `Oka.Algebra.Category.ModuleCat.Sheaf.Quasicoherent`
+prices at **5**; taking both is **5**, not 8, because the mirror target's closure already contains
+everything the two `Mathlib.` imports add.  `self_test` pins that, and
+`Oka/AlgebraicGeometry/Modules/Tilde.lean` records the same trap for the `Mathlib.` imports alone.
+
+**And the figure is conditional, so it is an upper bound on a decision rather than a property of
+a file.**  It is what the target pays if the declarations needing that import go upstream with it.
+In `HasColimits.lean` the import is needed by the cover, and by what is stated in terms of the
+cover, and by nothing else in the file — which is why the repair there was to split the
+destination rather than to pay the 3.  Nothing textual can see which declarations need what, and
+this script does not pretend to.
 
 **Not every dropped import has a Mathlib file at its own mirror path**, and the output says which
-do: 10 of the 40 files under `Oka/` with a Mathlib target import another `Oka` module, and three
-of those imports are mirror-tree files for a Mathlib file that does not exist
+do: measured at `538e13d`, **11 of the 43** files under `Oka/` with a Mathlib target import
+another `Oka` module, **18** such import lines between them naming 16 distinct modules.  **3** of
+the 18 are mirror files for a Mathlib file that does not exist
 (`Oka/AlgebraicGeometry/Modules/Tilde.lean`, `Oka/RingTheory/MvPolynomial/Ideal.lean` and
 `Oka/RingTheory/RingHom/FaithfullyFlat.lean` each have one).  Those cannot be priced at all, by
-this script or by hand, and that is worth seeing rather than inferring.
+this script or by hand, and the output says so in different words from the ones it uses for a path
+that is not a mirror path at all.
+
+Of the 15 that can be priced, **10 cost 0 and 5 cost something**.  That ratio is why the old
+behaviour survived as long as it did: ten of those fifteen silences were a correct zero, so
+reading one as a zero worked until it did not.
+
+Until this figure was printed the omission had to be argued for, and the argument turned on how
+many dropped imports state their own cost somewhere in their own docstrings.  It no longer has
+to; what stays is the reason the numbers cannot be **added**, which is above and is unchanged.
 
 ## Two limitations a reader should not have to discover
 
@@ -141,6 +183,14 @@ from pathlib import Path
 MATHLIB = "/.lake/packages/mathlib"
 
 IMPORT = re.compile(r"^(?:public\s+)?import\s+([\w.]+)", re.M)
+
+# How many modules to name under a *dropped* import's own figure.  The main report lists up to 30,
+# which is the number a reader is deciding on; a dropped import's figure is secondary and one file
+# can have several of them, so the cap is lower.  10 keeps a whole run readable while still naming
+# every module in the case this exists for — three, in
+# `Oka/Geometry/RingedSpace/LocallyRingedSpace/HasColimits.lean`.  The two caps are deliberately
+# different and neither is load-bearing.
+LIST_SKIPPED_UPTO = 10
 
 
 def strip_comments(text: str) -> str:
@@ -278,16 +328,26 @@ def report(ml: Mathlib, target: str, new: list[str],
     elif added:
         print(f"      ({len(added)} modules, not listed)")
     if skipped:
-        print(f"  not priced: {len(skipped)} non-Mathlib import(s)")
+        print(f"  not in that sum: {len(skipped)} non-Mathlib import(s), priced one at a time "
+              "below,\n  each against the baseline above — so those figures do not add, to each "
+              "other or to the cost")
         for m in skipped:
+            print(f"      {m}")
             own = target_of(m.replace(".", "/") + ".lean")
             if own is None:
-                where = "not a mirror path"
-            elif ml.exists(own):
-                where = f"mirrors {own.replace('.', '/')}.lean"
-            else:
-                where = "mirror path with no Mathlib file — its own figure has no target"
-            print(f"      {m}  ({where})")
+                print("        not a mirror path — there is no target to price it against")
+                continue
+            if not ml.exists(own):
+                print("        mirror path with no Mathlib file — its own figure has no target")
+                continue
+            _, own_delta, own_added = ml.cost(target, [own])
+            print(f"        mirrors {own.replace('.', '/')}.lean, "
+                  f"which costs this target {own_delta}")
+            if 0 < own_delta <= LIST_SKIPPED_UPTO:
+                for x in sorted(own_added):
+                    print(f"            {x}")
+            elif own_delta:
+                print(f"            ({own_delta} modules, not listed)")
 
 
 def self_test(ml: Mathlib) -> int:
@@ -346,6 +406,53 @@ def self_test(ml: Mathlib) -> int:
           target_of("Oka/Algebra/Category/ModuleCat/Sheaf/Free.lean"),
           "Mathlib.Algebra.Category.ModuleCat.Sheaf.Free")
     check("a non-mirror path maps to nothing", target_of("OkaTest/Foo.lean"), None)
+
+    # The figures printed for a *dropped* `Oka.` import.  The first is the case that caused this
+    # part of the script to exist: a module docstring said upstreaming cost its target nothing,
+    # having read `not priced` as a zero.  Its control is the reverse direction, which really is
+    # 0 — so the 3 is an asymmetry between two Mathlib files and not an artefact of the caller.
+    check("PresheafedSpace/Gluing into LocallyRingedSpace/HasColimits.lean",
+          ml.cost("Mathlib.Geometry.RingedSpace.LocallyRingedSpace.HasColimits",
+                  ["Mathlib.Geometry.RingedSpace.PresheafedSpace.Gluing"])[1], 3)
+    check("...and the other direction is free, so the 3 is not symmetric",
+          ml.cost("Mathlib.Geometry.RingedSpace.PresheafedSpace.Gluing",
+                  ["Mathlib.Geometry.RingedSpace.LocallyRingedSpace.HasColimits"])[1], 0)
+
+    # The figure the module docstring quotes for `Oka/Geometry/RingedSpace/PresheafedSpace/
+    # Gluing.lean`, which it stated by hand before the script produced it.
+    check("GammaSpecAdjunction into PresheafedSpace/Gluing.lean",
+          ml.cost("Mathlib.Geometry.RingedSpace.PresheafedSpace.Gluing",
+                  ["Mathlib.AlgebraicGeometry.GammaSpecAdjunction"])[1], 359)
+
+    # The asymmetry `Oka/RingTheory/Filtration.lean` records as the reason for its own placement,
+    # and which `README.md` quotes as this project's worked example.  Both halves, because the
+    # decision is the *comparison* — 33 on its own says nothing about where the file should go.
+    check("ResidueField/Basic.lean into Filtration.lean",
+          ml.cost("Mathlib.RingTheory.Filtration",
+                  ["Mathlib.RingTheory.LocalRing.ResidueField.Basic"])[1], 33)
+    check("...and Filtration.lean into ResidueField/Basic.lean, the direction not taken",
+          ml.cost("Mathlib.RingTheory.LocalRing.ResidueField.Basic",
+                  ["Mathlib.RingTheory.Filtration"])[1], 96)
+
+    # The non-additivity the output warns about, pinned on the tree's own worked counterexample:
+    # 3 + 5 is 8 and the joint cost is 5.  A warning nothing demonstrates is a warning nobody has
+    # a reason to believe, and this one is cheap to demonstrate.
+    sheaf = "Mathlib.AlgebraicGeometry.Modules.Sheaf"
+    quasi = "Mathlib.Algebra.Category.ModuleCat.Sheaf.Quasicoherent"
+    own_mathlib = ["Mathlib.Algebra.Category.ModuleCat.Sheaf.Generators", sheaf]
+    check("Modules/Sheaf.lean: its own Mathlib imports cost 3",
+          ml.cost(sheaf, own_mathlib)[1], 3)
+    check("...its dropped Quasicoherent import costs 5",
+          ml.cost(sheaf, [quasi])[1], 5)
+    check("...and taking both costs 5, not 8 — the two figures overlap",
+          ml.cost(sheaf, own_mathlib + [quasi])[1], 5)
+
+    # The branch that prints no figure, and its control.  Both are facts about the Mathlib pin.
+    check("a dropped import can mirror a Mathlib file that does not exist",
+          ml.exists(target_of(
+              "Oka/Algebra/Category/ModuleCat/Sheaf/Coherent/Presentation.lean") or ""), False)
+    check("...and a dropped import beside it in the same file does exist",
+          ml.exists(target_of("Oka/AlgebraicGeometry/Modules/Sheaf.lean") or ""), True)
 
     print("self-test failed" if failures else "self-test passed")
     return 1 if failures else 0
