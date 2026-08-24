@@ -690,7 +690,7 @@ Mathlib file plus whatever else it genuinely needs, and nothing from the analyti
 development. For example `Oka/CategoryTheory/Sites/Over.lean` extends
 `Mathlib/CategoryTheory/Sites/Over.lean`, `Oka/Algebra/Category/ModuleCat/Sheaf/` mirrors
 `Mathlib/Algebra/Category/ModuleCat/Sheaf/`, and `Oka/RingTheory/Finiteness/Ideal.lean` adds one
-missing lemma next to `Ideal.comap_symm` in `Mathlib/RingTheory/Ideal/Maps.lean`.
+missing lemma next to `Ideal.FG.map` in `Mathlib/RingTheory/Finiteness/Ideal.lean`.
 
 **A new lemma with no complex-analytic content belongs in the mirror tree, not in the analytic
 file that happens to need it.** The two tests are whether the statement mentions anything defined
