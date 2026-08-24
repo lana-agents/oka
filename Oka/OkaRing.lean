@@ -33,7 +33,8 @@ abbrev linOfFun {R : Type*} [CommRing R]
 /-- The value of `linOfFun f` at a tuple `a`, as the sum `∑ i, a i * f i`.
 
 Stated over an arbitrary commutative ring and with no consumer in this repository: it came here
-with `linOfFun`, whose only use is in the statement of Oka's coherence lemma. -/
+with `linOfFun`, whose uses are in the statement of Oka's **bounded degree** lemma
+(`Oka/OkaLemma.lean`), plus one inside a proof in `Oka/Statement.lean`. -/
 lemma linOfFun_apply {A : Type*} [CommRing A] {n : ℕ} (f : Fin n → A) (a : Fin n → A) :
     linOfFun f a = ∑ i, a i * f i := by
   simp [linOfFun, Module.Basis.constr_apply_fintype, mul_comm]

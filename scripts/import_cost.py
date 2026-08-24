@@ -225,7 +225,7 @@ def unknown_modules(ml: Mathlib, modules: list[str]) -> list[str]:
     `Aesop.*` and `Init.*` names that are not Mathlib files — and it is also what makes a typo
     invisible: a module that does not exist contributes no imports and is filtered out of *both*
     sides of the subtraction, so it prices as `cost 0`.  **0 is by far the commonest correct
-    answer here** — of the 41 files under `Oka/` with a Mathlib file at their mirror path, **28**
+    answer here** — of the 41 files under `Oka/` with a Mathlib file at their mirror path, **27**
     cost 0 — so a typo's answer is indistinguishable from a right one.  Callers reject instead of
     reporting.
     """
