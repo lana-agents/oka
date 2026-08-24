@@ -73,9 +73,10 @@ seven are described here instead. That is the same convention as `Oka/ComplexSpa
 `Oka/Algebra/Category/Grp/EpiMono.lean`.
 
 `lake lint` was silent about all nineteen, and for three different reasons: `docBlame` exempts
-**every** instance, named or anonymous, `docBlameThm` covers theorems and is off in Mathlib and
-not turned on here, and the one `abbrev` `docBlame` does reach inherits its docstring. Turning
-`docBlameThm` on repository-wide would fire on every undocumented theorem under `Oka/`; that count
+**every** instance, named or anonymous, `docBlameThm` covers theorems and is off by default in
+Batteries and not turned on here, and the one `abbrev` `docBlame` does reach inherits its
+docstring. Turning `docBlameThm` on repository-wide would fire on every undocumented theorem
+under `Oka/`; that count
 is taxis #928 and is a separate question.
 
 ## Main results

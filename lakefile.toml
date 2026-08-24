@@ -3,11 +3,12 @@ version = "0.1.0"
 keywords = ["math"]
 defaultTargets = ["Oka", "OkaTest"]
 
-# `lake lint` runs Mathlib's environment linters (`docBlame`, `simpNF`, `defsWithUnderscore`
-# and about ten more) over the `Oka` library. Defining it here rather than spelling out
-# `lake exe batteries/runLinter Oka` means `.orchestra/validation.sh` and
-# `.github/workflows/lean_action_ci.yml` cannot drift apart about what "lint" means, and it is
-# what `leanprover/lean-action`'s `lint` input invokes.
+# `lake lint` runs the environment linters over the `Oka` library: fourteen are in the default
+# set here, nine of them Batteries' (`docBlame`, `simpNF`, …) and five Mathlib's
+# (`defsWithUnderscore`, …); `#list_linters` prints the lot, marking the default set. Defining
+# it here rather than spelling out `lake exe batteries/runLinter Oka` means
+# `.orchestra/validation.sh` and `.github/workflows/lean_action_ci.yml` cannot drift apart about
+# what "lint" means, and it is what `leanprover/lean-action`'s `lint` input invokes.
 #
 # The argument is deliberate. `lake exe batteries/runLinter` with no argument auto-detects the
 # default targets and lints `OkaTest.*` as well; pinning `Oka` keeps `lake lint` to exactly the
