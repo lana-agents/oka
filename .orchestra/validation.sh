@@ -80,7 +80,7 @@ lake lint || exit 1
 # all, despite being quoted in every pull request description on this project.
 #
 # It checks *less* than its name suggests, and it has more parts than the name of one executable
-# suggests. `lintStyleCli` (`.lake/packages/mathlib/scripts/lint-style.lean:269-272`) sums five
+# suggests. `lintStyleCli` (`.lake/packages/mathlib/scripts/lint-style.lean:268-271`) sums five
 # terms, and **seven checks actually run over this repository**. Five are per-file, inside
 # `lintModules`: Windows line endings, trailing whitespace, a space before a semicolon,
 # disallowed unicode and variant selectors, and the string "Adaptation note". Two are about
@@ -100,10 +100,11 @@ lake lint || exit 1
 #   allScriptsDocumented  uncaught exception, no such file or directory: scripts/README.md
 #   pythonStyle           could not execute external process './scripts/print-style-errors.sh'
 #
-# Each reads a path out of the working directory that only Mathlib's own checkout has. The first
-# is about `Mathlib.Init` and there is nothing here for it to do; the third is `defValue :=
-# false` in Mathlib as well, carrying a TODO that says the Python linters assume they are run
-# from Mathlib's `scripts/`.
+# Each reads a path out of the working directory that only Mathlib's own checkout has — and
+# Mathlib turns all three on for itself, at `lakefile.lean:32-34`, which is why the paths are
+# there and the crashes are here. The first is about `Mathlib.Init` and there is nothing here
+# for it to do; the third is `defValue := false` where it is registered, and carries a TODO
+# saying the Python linters assume they are run from Mathlib's `scripts/`.
 #
 # **The second is about our `scripts/` directory, and the decision is not to write
 # `scripts/README.md`.** With one planted the check reports six undocumented scripts —
@@ -111,12 +112,15 @@ lake lint || exit 1
 # `nolints-style.txt` are exempt — and **a file holding those six names in backticks and not one
 # word of prose exits 0**. Measured, and it is the whole enforcement value: the check reads for
 # `` `name` `` and can say nothing about whether a description is present, let alone true.
-# Meanwhile the index it would duplicate exists already, in `README.md`'s `### Checking` section,
-# which says what each script is *for* and why it had to be written. A second copy that no check
-# can keep honest is the defect this repository repairs most often, and buying one to silence a
-# switch that is already off is the wrong trade. If the tripwire is what you want — somebody
-# added a script and documented it nowhere — the honest version points at the section that
-# already exists rather than at a new file, and it is a check to argue for on its own.
+# Meanwhile the index it would duplicate is already here, in `README.md`'s `### Checking`
+# section, which says what a tool is *for* and why it had to be written rather than only that it
+# exists. **It was not complete when this was written** — half the entries under `scripts/` were
+# missing from it, including the docstring-name checker it describes twice without ever naming —
+# and the answer is to keep one index honest rather than to write a second. A second copy that no
+# check can keep honest is the defect this repository repairs most often, and buying one to
+# silence a switch that is already off is the wrong trade. If the tripwire is what you want —
+# somebody added a script and documented it nowhere — the honest version points at the section
+# that already exists rather than at a new file, and it is a check to argue for on its own.
 #
 # One trap, and it is upstream's rather than ours: `modulesOSForbidden` is gated on
 # `linter.modulesUpperCamelCase` (`Mathlib/Tactic/Linter/TextBased.lean:602`) and not on the
@@ -176,7 +180,8 @@ lake exe lint-style Oka OkaTest || exit 1
 # entry in it is a place this checker has been told to stop looking; prefer fixing a rule to
 # growing it. **Neither this sentence nor that file's own header says how many entries there
 # are**: nothing checks a count, and the two that used to say otherwise were both written in the
-# same commit and both false three hours later. The dates are in the `lint-style` comment above.
+# same commit and both false two hours fifty-six minutes later. The dates are in the
+# `lint-style` comment above.
 #
 # It runs `lake env lean scripts/DumpEnvNames.lean` to read the environment, so it has to come
 # after the build; given the oleans it takes about ten seconds, nine of them the import. It
