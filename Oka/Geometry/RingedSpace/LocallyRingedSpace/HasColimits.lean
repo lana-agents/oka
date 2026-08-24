@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Mathlib.Geometry.RingedSpace.LocallyRingedSpace.HasColimits
+import Mathlib.Topology.IsLocalHomeomorph
 import Oka.Geometry.RingedSpace.PresheafedSpace.Gluing
 
 /-!
@@ -33,9 +34,20 @@ disjointness is not *forced* there, and that is worth knowing before the split i
 `Set.range (Sigma.ι f i).base` and no `OpenCover` in it, and it goes to the cost-0 target with
 everything else.
 
-**Everything else goes to `Mathlib/Geometry/RingedSpace/LocallyRingedSpace/HasColimits.lean` at
-cost 0**: it is this file's own import, and the `SheafedSpace` results the proofs run through are
-already in its closure.
+**Everything else goes to `Mathlib/Geometry/RingedSpace/LocallyRingedSpace/HasColimits.lean`, and
+all of it but one declaration at cost 0**: it is this file's own import, and the `SheafedSpace`
+results the proofs run through are already in its closure.
+
+**The one exception is `AlgebraicGeometry.LocallyRingedSpace.isLocalHomeomorph_base_sigmaDesc`,
+which costs that target 9.** It is the only statement here that names `IsLocalHomeomorph`, and
+`scripts/import_cost.py --target Mathlib.Geometry.RingedSpace.LocallyRingedSpace.HasColimits
+Mathlib.Topology.IsLocalHomeomorph` prices the edge at **9** on a closure of **1694** — the whole
+of `Mathlib.Topology.OpenPartialHomeomorph.{Basic, Composition, Continuity, Defs, IsImage}`,
+`Mathlib.Topology.PartialHomeomorph.Defs`, `Mathlib.Logic.Equiv.PartialEquiv` and
+`Mathlib.Topology.SeparatedMap`, plus the module itself. It is kept here rather than split out
+because **it goes to the same destination as its four siblings**, which is what `README.md` asks
+the split to be made on; 9 is the price that destination pays for it, and it is stated so that a
+Mathlib reviewer who would rather not pay it can move one declaration knowing what it costs.
 
 Mathlib builds the coproduct of locally ringed spaces in that file and never says that the
 inclusions are open immersions. It says it one level below, for `SheafedSpace` over a category
@@ -64,6 +76,19 @@ fails to synthesise. Everything here is the transport across
   distinct members are disjoint**, so the index of a point of the coproduct is unique.
 - `AlgebraicGeometry.LocallyRingedSpace.sigmaι_base_eq_iff`: the two together — two points of the
   members have the same image exactly when they are the same point of the same member.
+- `AlgebraicGeometry.LocallyRingedSpace.image_base_sigmaDesc`: **the image of a set under a
+  descent map is the union of the images of its traces on the members**, which is the shape every
+  statement in the section below is proved from.
+- `AlgebraicGeometry.LocallyRingedSpace.isClosedMap_base_sigmaDesc`: **a descent map out of a
+  coproduct of finitely many members is closed as soon as each of them is.** Finiteness of the
+  index is used exactly once, to make the union above a finite one.
+- `AlgebraicGeometry.LocallyRingedSpace.fiberSigmaDescEquiv`: **the fibre of a descent map is the
+  disjoint union of the fibres of the pieces**, as an equivalence rather than as a cardinality —
+  so that both finiteness and the count follow from one object.
+- `AlgebraicGeometry.LocallyRingedSpace.isLocalHomeomorph_base_sigmaDesc` and
+  `AlgebraicGeometry.LocallyRingedSpace.isIso_stalkMap_sigmaDesc`: **a descent map is a local
+  homeomorphism, and an isomorphism on stalks, as soon as each of its restrictions is.** Neither
+  needs the index type finite.
 
 ## How the index of a point is recovered, and the route this file does not take
 
@@ -88,6 +113,12 @@ of its factorisations against each other. Nothing is inverted, so nothing has to
 across `CategoryTheory.Discrete.natIsoFunctor`.
 
 ## What is not here
+
+**Nothing about a descent map being *injective*, *surjective* or an open map**, and no statement
+that it is an isomorphism when the pieces are. The section below has exactly the four properties a
+finite étale morphism is built from, because those are what has a consumer; each of the missing
+ones is a separate small argument from
+`AlgebraicGeometry.LocallyRingedSpace.fiberSigmaDescEquiv` or from the cover.
 
 **No analogue of `AlgebraicGeometry.sigmaMk`**: the index map built below is not shown to be part
 of a homeomorphism onto a `Sigma` type, only to exist. That statement is true and would need
@@ -316,5 +347,134 @@ theorem disjoint_opensRange_sigmaOpenCover {i j : ι} (h : i ≠ j) :
   rw [disjoint_iff, ← SetLike.coe_set_eq, TopologicalSpace.Opens.coe_inf,
     TopologicalSpace.Opens.coe_bot, OpenCover.coe_opensRange, OpenCover.coe_opensRange]
   exact Set.disjoint_iff_inter_eq_empty.mp (disjoint_range_sigmaι f h)
+
+
+/-! ### Descent maps out of a coproduct
+
+`CategoryTheory.Limits.Sigma.desc` builds a morphism out of a coproduct from a morphism out of
+each member. Everything below says that a property of the pieces passes to it, and every proof
+runs through the same two facts: every point of the coproduct is in the image of exactly one
+member (`AlgebraicGeometry.LocallyRingedSpace.exists_sigma_ι_base_eq` and
+`AlgebraicGeometry.LocallyRingedSpace.eq_of_sigmaι_base_eq`), and the descent map agrees with the
+`i`-th piece there.
+
+**Only the closedness statement asks the index type to be finite**, and it is worth seeing where:
+the image of a set is a union indexed by `ι`, and a union of closed sets is closed only when it is
+finite. Nothing else here is a statement about all the members at once.
+-/
+
+variable {ι : Type u} (f : ι → LocallyRingedSpace.{u}) {Y : LocallyRingedSpace.{u}}
+  (g : ∀ i, f i ⟶ Y)
+
+/-- **A descent map agrees with the `i`-th piece on the image of the `i`-th member.**
+
+`CategoryTheory.Limits.Sigma.ι_desc` read at a point. It is stated separately because every proof
+below uses it and because the two sides are *not* definitionally equal — the colimit's universal
+property is a theorem, not a computation — so `rfl` does not close it. -/
+theorem base_sigmaι_sigmaDesc (i : ι) (x : f i) :
+    (Sigma.desc g).base ((Sigma.ι f i).base x) = (g i).base x :=
+  congrArg (fun m : f i ⟶ Y ↦ m.base x) (Sigma.ι_desc g i)
+
+/-- **The image of a set under a descent map is the union of the images of its traces on the
+members.**
+
+Both inclusions are the two facts named in the section header: `⊆` needs that the point of the
+coproduct came from some member, and `⊇` needs only that the descent map agrees with the piece
+there. Disjointness of the members is *not* used — the statement is true for any cocone — and
+that is why it is stated for `Set.iUnion` and not as a partition. -/
+theorem image_base_sigmaDesc (C : Set (∐ f : LocallyRingedSpace.{u})) :
+    (Sigma.desc g).base '' C = ⋃ i, (g i).base '' ((Sigma.ι f i).base ⁻¹' C) := by
+  ext z
+  constructor
+  · rintro ⟨x, hx, rfl⟩
+    obtain ⟨i, y, rfl⟩ := exists_sigma_ι_base_eq f x
+    exact Set.mem_iUnion.2 ⟨i, ⟨y, hx, (base_sigmaι_sigmaDesc f g i y).symm⟩⟩
+  · intro hz
+    obtain ⟨i, y, hy, rfl⟩ := Set.mem_iUnion.1 hz
+    exact ⟨(Sigma.ι f i).base y, hy, base_sigmaι_sigmaDesc f g i y⟩
+
+/-- **A descent map out of a coproduct of finitely many members is closed as soon as each of them
+is.**
+
+`AlgebraicGeometry.LocallyRingedSpace.image_base_sigmaDesc`, then `isClosed_iUnion_of_finite`.
+The trace of a closed set on a member is closed because the inclusion is continuous — being an
+open immersion is not needed for this one.
+
+**`[Finite ι]` is used once and cannot be dropped**: a union of closed sets over an infinite index
+need not be closed, and the coproduct of infinitely many copies of a point maps onto a point by a
+map which is closed for a different reason. What fails without it is this proof, not necessarily
+the statement. -/
+theorem isClosedMap_base_sigmaDesc [Finite ι] (h : ∀ i, IsClosedMap (g i).base) :
+    IsClosedMap (Sigma.desc g).base := by
+  intro C hC
+  rw [image_base_sigmaDesc]
+  exact isClosed_iUnion_of_finite fun i ↦ h i _ (hC.preimage (Sigma.ι f i).base.hom.continuous)
+
+/-- **The fibre of a descent map is the disjoint union of the fibres of the pieces.**
+
+Stated as an equivalence rather than as a statement about cardinalities, so that both finiteness
+of the fibre and its size follow from one object; the map is `⟨i, x⟩ ↦ (Sigma.ι f i).base x` and
+its bijectivity is the uniqueness of the index
+(`AlgebraicGeometry.LocallyRingedSpace.eq_of_sigmaι_base_eq`) together with the injectivity of a
+single inclusion (`AlgebraicGeometry.LocallyRingedSpace.sigmaι_base_injective`).
+
+`noncomputable` only because `Equiv.ofBijective` is: the underlying map is explicit and the
+inverse is not needed anywhere. -/
+noncomputable def fiberSigmaDescEquiv (y : Y) :
+    (Σ i : ι, ((g i).base ⁻¹' {y} : Set (f i))) ≃
+      ((Sigma.desc g).base ⁻¹' {y} : Set (∐ f : LocallyRingedSpace.{u})) := by
+  refine Equiv.ofBijective (fun p ↦ ⟨(Sigma.ι f p.1).base p.2.1, ?_⟩) ⟨?_, ?_⟩
+  · change (Sigma.desc g).base _ ∈ ({y} : Set Y)
+    rw [base_sigmaι_sigmaDesc]
+    exact p.2.2
+  · rintro ⟨i, x, hx⟩ ⟨j, z, hz⟩ hij
+    simp only [Subtype.mk.injEq] at hij
+    obtain rfl := eq_of_sigmaι_base_eq f hij
+    obtain rfl := sigmaι_base_injective f i hij
+    rfl
+  · rintro ⟨x, hx⟩
+    obtain ⟨i, z, rfl⟩ := exists_sigma_ι_base_eq f x
+    refine ⟨⟨i, z, ?_⟩, rfl⟩
+    change (g i).base z ∈ ({y} : Set Y)
+    rw [← base_sigmaι_sigmaDesc f g i z]
+    exact hx
+
+/-- **A descent map is a local homeomorphism as soon as each of its restrictions is.**
+
+`IsLocalHomeomorphOn.of_comp_right` at the `i`-th member: the composite with the inclusion *is*
+the `i`-th piece, the inclusion is an open embedding and hence a local homeomorphism, so the
+descent map is a local homeomorphism **on the image of the member** — and every point of the
+coproduct is in one such image.
+
+The index type is not asked to be finite, and `of_comp_right` is the direction that needs the
+inclusion to be a local homeomorphism rather than the descent map: it concludes about `g` on
+`f '' s` from the composite and from `f`, which is exactly the shape here. -/
+theorem isLocalHomeomorph_base_sigmaDesc (h : ∀ i, IsLocalHomeomorph (g i).base) :
+    IsLocalHomeomorph (Sigma.desc g).base := by
+  intro x
+  obtain ⟨i, z, rfl⟩ := exists_sigma_ι_base_eq f x
+  have hcomp : IsLocalHomeomorphOn ((Sigma.desc g).base ∘ (Sigma.ι f i).base) Set.univ := by
+    have he : (Sigma.desc g).base ∘ ((Sigma.ι f i).base : f i → (∐ f : LocallyRingedSpace.{u}))
+        = (g i).base := funext fun y ↦ base_sigmaι_sigmaDesc f g i y
+    rw [he]
+    exact (h i).isLocalHomeomorphOn
+  exact hcomp.of_comp_right
+    (sigmaι_isOpenImmersion f i).base_open.isLocalHomeomorph.isLocalHomeomorphOn _
+      ⟨z, trivial, rfl⟩
+
+/-- **A descent map is an isomorphism on every stalk as soon as each of its restrictions is.**
+
+`AlgebraicGeometry.LocallyRingedSpace.isIso_stalkMap_of_comp` at the factorisation
+`Sigma.ι f i ≫ Sigma.desc g = g i`, whose other hypothesis — that the inclusion is an isomorphism
+on stalks — is `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.stalk_iso` and is found by
+instance search.
+
+The point of the coproduct has to be exhibited as coming from a member before the factorisation
+can be used, and that is the whole of the proof: the statement quantifies over points of `∐ f`,
+where the hypothesis quantifies over points of the members. -/
+theorem isIso_stalkMap_sigmaDesc (h : ∀ i (x : f i), IsIso ((g i).stalkMap x))
+    (x : (∐ f : LocallyRingedSpace.{u})) : IsIso ((Sigma.desc g).stalkMap x) := by
+  obtain ⟨i, z, rfl⟩ := exists_sigma_ι_base_eq f x
+  exact isIso_stalkMap_of_comp (Sigma.ι f i) (Sigma.desc g) (g i) (Sigma.ι_desc g i) z (h i z)
 
 end AlgebraicGeometry.LocallyRingedSpace

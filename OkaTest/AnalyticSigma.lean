@@ -35,9 +35,22 @@ isomorphic to a third, and no invariant is computed anywhere in this repository 
 it. `OkaTest/AffineCover.lean` and `OkaTest/ProjectiveLine.lean` say the same about their own
 gluings.
 
-**Nothing about `ComplexAnalytic.AnalyticSpace.IsFinite`, `…IsLocalIso` or a count of sheets**,
-for the inclusions or for the trivial `n`-sheeted cover `∐_{Fin n} X ⟶ X`. Those are the next
-step and none of them is touched here.
+**Nothing about `ComplexAnalytic.AnalyticSpace.IsFinite` or `…IsLocalIso` for the
+inclusions.** The section on the trivial cover below is about the descent map
+`∐_{i : ι} X ⟶ X` and says nothing about `ComplexAnalytic.AnalyticSpace.sigmaι`; an inclusion is
+an open immersion and is *not* finite unless the other members are empty, since its image is not
+closed in general.
+
+## The trivial cover, and what the count is a test of
+
+`ComplexAnalytic.AnalyticSpace.card_fiber_sigmaFold` computes the number of sheets of
+`∐_{i : ι} X ⟶ X` for every `ι` and every `X`, so an instance of it is not a test of the
+arithmetic — it is a test that the general statement has a **non-vacuous** instance at a space
+this repository can exhibit, which `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` needs, and that
+the `ULift` bookkeeping between `Fin n` and the `Type u` index of
+`ComplexAnalytic.AnalyticSpace.sigma` closes. `n = 0` is instantiated with the others because it
+is the case a definition could reasonably have excluded, and this development does not:
+`Oka/AnalyticSpace/SigmaFiniteEtale.lean` says why.
 -/
 
 open CategoryTheory CategoryTheory.Limits Opposite AlgebraicGeometry ComplexAnalytic
@@ -81,6 +94,66 @@ theorem comapAlgMap_sigma_twoLines (j : pair.{u}) :
     LocallyRingedSpace.comapAlgMap ((AnalyticSpace.sigmaCover.{u} twoLines.{u}).map j)
         (AnalyticSpace.sigma.{u} twoLines.{u}).algebraMap = (twoLines.{u} j).algebraMap :=
   AnalyticSpace.comapAlgMap_sigma.{u} twoLines.{u} j
+
+/-! ### The trivial `n`-sheeted cover of the affine line -/
+
+/-- The affine line, as the analytic space the trivial covers below are taken of. -/
+abbrev line : AnalyticSpace.{u} := AnalyticSpace.analytification.{u} lineRel.{u}
+
+/-- **The trivial `n`-sheeted cover of the affine line is finite étale**, for every `n`.
+
+The instance `ComplexAnalytic.AnalyticSpace.isFiniteEtale_sigmaFold` at `ULift (Fin n)`, whose
+`Finite` hypothesis is found by instance search. Nothing about the affine line is used and nothing
+about `n` is assumed — in particular **not** `0 < n`. -/
+theorem isFiniteEtale_sigmaFold_line (n : ℕ) :
+    AnalyticSpace.IsFiniteEtale (AnalyticSpace.sigmaFold.{u} (ULift.{u} (Fin n)) line.{u}) :=
+  inferInstance
+
+/-- **Every fibre of the trivial `n`-sheeted cover of the affine line has `n` points.**
+
+`ComplexAnalytic.AnalyticSpace.card_fiber_sigmaFold` with the index type's cardinality computed:
+`Nat.card (ULift (Fin n))` is `n`. This is the first witness in this repository at which the
+number of sheets of a finite étale morphism is a value other than `2`, and it is a witness at
+**every** value. -/
+theorem card_fiber_sigmaFold_line (n : ℕ) (x : line.{u}) :
+    Nat.card ((AnalyticSpace.sigmaFold.{u} (ULift.{u} (Fin n)) line.{u}).toLRSHom.base ⁻¹' {x})
+      = n := by
+  rw [AnalyticSpace.card_fiber_sigmaFold, Nat.card_ulift, Nat.card_eq_fintype_card,
+    Fintype.card_fin]
+
+/-- **At `n = 0` the source of the trivial cover is empty**, which is the case the count above
+could have been read as vacuous at.
+
+`ComplexAnalytic.AnalyticSpace.isEmpty_sigma` at the empty index type. Together with
+`OkaTest.AnalyticSigma.card_fiber_sigmaFold_line` at `n = 0` this says the empty analytic space
+is finite étale over the affine line with no sheets, rather than that the statement fails to
+apply. -/
+theorem isEmpty_sigmaFold_line_zero :
+    IsEmpty (AnalyticSpace.sigma.{u} (fun _ : ULift.{u} (Fin 0) ↦ line.{u})) :=
+  AnalyticSpace.isEmpty_sigma.{u} _
+
+/-- **At `n = 1` the fibres are singletons.**
+
+Recorded beside `n = 0` and `n = 2` because it is the case in which the fold map is a bijection on
+points; **it is not stated to be an isomorphism**, which would be a claim about the structure
+sheaves and is not proved anywhere. -/
+theorem card_fiber_sigmaFold_line_one (x : line.{u}) :
+    Nat.card ((AnalyticSpace.sigmaFold.{u} (ULift.{u} (Fin 1)) line.{u}).toLRSHom.base ⁻¹' {x})
+      = 1 :=
+  card_fiber_sigmaFold_line.{u} 1 x
+
+/-- **At `n = 2` the fibres have two points**, which is the value
+`ComplexAnalytic.card_fiber_base_sq` reaches for the squaring map of the punctured line by a
+completely different argument — one about roots in `ℂ`.
+
+The two morphisms are not isomorphic and nothing here says they are: this one has a disconnected
+source and that one does not. What the pair shows is that the value `2` in
+`ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale` is realised twice over, once with
+analysis in the proof and once without. -/
+theorem card_fiber_sigmaFold_line_two (x : line.{u}) :
+    Nat.card ((AnalyticSpace.sigmaFold.{u} (ULift.{u} (Fin 2)) line.{u}).toLRSHom.base ⁻¹' {x})
+      = 2 :=
+  card_fiber_sigmaFold_line.{u} 2 x
 
 end
 

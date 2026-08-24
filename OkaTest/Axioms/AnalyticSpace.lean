@@ -679,3 +679,65 @@ info: 'ComplexAnalytic.AnalyticSpace.not_surjective_sigmaι_base' depends on axi
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.not_surjective_sigmaι_base
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.sigmaι_sigmaDesc' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.sigmaι_sigmaDesc
+
+/-! ### The trivial `n`-sheeted cover, and finiteness of a descent map
+
+`Oka/AnalyticSpace/SigmaFiniteEtale.lean`. That finiteness and being a local isomorphism pass
+from the members of a disjoint union to a descent map out of it, and the trivial `ι`-sheeted
+cover `∐_{i : ι} X ⟶ X` with its count of sheets. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.toLRSHom_sigmaDesc' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.toLRSHom_sigmaDesc
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isFinite_sigmaDesc' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFinite_sigmaDesc
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isLocalIso_sigmaDesc' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isLocalIso_sigmaDesc
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isFiniteEtale_sigmaDesc' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFiniteEtale_sigmaDesc
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.sigmaFold' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.sigmaFold
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isFiniteEtale_sigmaFold' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFiniteEtale_sigmaFold
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.card_fiber_sigmaFold' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.card_fiber_sigmaFold

@@ -54,13 +54,17 @@ the rung.
 
 * **The Riemann existence theorem**, and any statement relating covers to field extensions. This
   is the notion RET is *about*; nothing here mentions `ℂ(X)`.
-* **A `degree` function on morphisms.** The bullet that used to stand here has been retired in two
-  steps. It first said the constancy of the number of sheets over a connected base was not proved
-  anywhere; it is, as `ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale` in
+* **A `degree` function on morphisms.** The bullet that used to stand here has been retired in
+  three steps. It first said the constancy of the number of sheets over a connected base was not
+  proved anywhere; it is, as `ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale` in
   `Oka/AnalyticSpace/CoveringMap.lean`. It then said the common value was computed for no morphism;
-  it is, for one — `ComplexAnalytic.card_fiber_base_sq` puts the fibres of `z ↦ z²` on the punctured
-  line at **2**, by a statement about roots in `ℂ` rather than about covers. What remains absent is
-  the `Nat`-valued invariant itself, and deliberately so.
+  it is, and no longer only for one — `ComplexAnalytic.card_fiber_base_sq` puts the fibres of
+  `z ↦ z²` on the punctured line at **2**, by a statement about roots in `ℂ` rather than about
+  covers, and `ComplexAnalytic.AnalyticSpace.card_fiber_sigmaFold` puts the fibres of the trivial
+  `ι`-sheeted cover at `Nat.card ι`, so every value is realised. What remains absent is the
+  `Nat`-valued invariant itself, and deliberately so: a definition would carry a
+  well-definedness obligation, and two families of theorems about particular morphisms do not
+  amount to one.
 * **The analytification of a finite étale morphism** — the other blocker of #551, stateable only
   now that this exists.
 * **Grauert's finite mapping theorem**, which `Oka/AnalyticSpace/Finite.lean` already records as

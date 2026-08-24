@@ -384,3 +384,61 @@ info: 'AlgebraicGeometry.StructureSheaf.germ_algebraMap_mem_maximalIdeal_iff'' d
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.StructureSheaf.germ_algebraMap_mem_maximalIdeal_iff'
+
+/-! ### Stalk maps along a factorisation, and descent maps out of a coproduct
+
+`Oka/Geometry/RingedSpace/LocallyRingedSpace.lean` and
+`Oka/Geometry/RingedSpace/LocallyRingedSpace/HasColimits.lean`. Two out of three for stalk maps,
+and the four properties of a descent map out of a coproduct that a finite étale morphism is built
+from. **The declarations these sit beside in that second file — `sigmaOpenCover`,
+`exists_sigma_ι_base_eq`, `eq_of_sigmaι_base_eq` and the rest — carry no assertion here**, so
+this heading is not a complete guard of that file and should not be read as one. -/
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.isIso_stalkMap_of_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.isIso_stalkMap_of_comp
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.base_sigmaι_sigmaDesc' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.base_sigmaι_sigmaDesc
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.image_base_sigmaDesc' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.image_base_sigmaDesc
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.isClosedMap_base_sigmaDesc' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.isClosedMap_base_sigmaDesc
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.fiberSigmaDescEquiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.fiberSigmaDescEquiv
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.isLocalHomeomorph_base_sigmaDesc' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.isLocalHomeomorph_base_sigmaDesc
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.isIso_stalkMap_sigmaDesc' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.isIso_stalkMap_sigmaDesc

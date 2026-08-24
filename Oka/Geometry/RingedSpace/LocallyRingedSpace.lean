@@ -108,6 +108,11 @@ here costs their destination no new import at all.
   through it.
 - `AlgebraicGeometry.LocallyRingedSpace.Γ_map_over_ambient`: **pulling a section back along a
   morphism of open subspaces *over* `X` is restricting it.**
+- `AlgebraicGeometry.LocallyRingedSpace.isIso_stalkMap_of_comp`: **two out of three for stalk
+  maps along a factorisation** — if `f ≫ g = h` and both `f` and `h` are isomorphisms on the
+  stalk at `x`, then `g` is one at `f.base x`. The point of stating it is that the two sides
+  live over *different* points of the target until the factorisation is substituted, so a
+  consumer that tries to assemble it in place meets a transport that is not there.
 -/
 
 open CategoryTheory TopologicalSpace Opposite
@@ -886,5 +891,34 @@ lemma exists_localLift_family (hsurj : ∀ x, Function.Surjective (i.stalkMap x)
   exact h1
 
 end LocalModel
+
+/-! ### Stalk maps along a factorisation -/
+
+/-- **Two out of three for stalk maps along a factorisation.** If `f ≫ g = h` and both `f` and
+`h` induce isomorphisms on the stalk at `x`, then `g` induces one at `f.base x`.
+
+`AlgebraicGeometry.LocallyRingedSpace.stalkMap_comp` supplies the factorisation of the stalk
+maps and `CategoryTheory.IsIso.of_isIso_fac_right` cancels; the whole content is that the
+composite is taken in the *opposite* order, `h.stalkMap x = g.stalkMap (f.base x) ≫ f.stalkMap x`,
+because a stalk map runs from the target's stalk to the source's.
+
+**Why the factorisation is an argument rather than something the caller rewrites with.**
+`h.stalkMap x` lives over `h.base x` and `g.stalkMap (f.base x)` over `g.base (f.base x)`. Those
+two points are equal only propositionally — the equality is `congrArg (·.base x)` applied to
+`w` — so the two morphisms have equal but not definitionally equal types, and
+`rw [← w]` on a hypothesis `IsIso (h.stalkMap x)` fails on the motive. Taking `w` as a hypothesis
+with `h` a variable lets `subst` do it, and `subst` is the only tactic here that can: after it,
+both sides are literally about `f ≫ g`. `AlgebraicGeometry.LocallyRingedSpace.stalkMap_congr_hom`
+is the alternative and it produces a `TopCat.Presheaf.stalkSpecializes` that then has to be shown
+invertible, which is more work for the same conclusion.
+
+`hh` is explicit rather than instance-implicit because after `subst` its statement is about
+`f ≫ g`, and instance search runs at reducible transparency and would not connect it to a goal
+stated at `h`. -/
+theorem isIso_stalkMap_of_comp {X Y Z : LocallyRingedSpace.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
+    (h : X ⟶ Z) (w : f ≫ g = h) (x : X) [IsIso (f.stalkMap x)] (hh : IsIso (h.stalkMap x)) :
+    IsIso (g.stalkMap (f.base x)) := by
+  subst w
+  exact IsIso.of_isIso_fac_right (hh := hh) (stalkMap_comp f g x).symm
 
 end AlgebraicGeometry.LocallyRingedSpace
