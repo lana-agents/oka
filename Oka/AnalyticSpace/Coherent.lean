@@ -6,6 +6,7 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 import Oka.Algebra.Category.ModuleCat.Sheaf.Coherent.Free
 import Oka.AnalyticSpace.Basic
 import Oka.AnalyticSpace.Relations
+import Oka.Geometry.RingedSpace.LocallyRingedSpace.Coherent
 
 /-!
 # Coherence of the structure sheaf of a complex analytic space
@@ -16,7 +17,8 @@ complex analytic space is coherent.
 ## Strategy
 
 Coherence is reached through the concrete condition
-`AlgebraicGeometry.LocallyRingedSpace.HasLocalRelations` of `Oka.AnalyticSpace.Relations`,
+`AlgebraicGeometry.LocallyRingedSpace.HasLocalRelations` of
+`Oka.Geometry.RingedSpace.LocallyRingedSpace.Coherent`,
 which implies coherence and, unlike `SheafOfModules.IsCoherent`, mentions only open subsets,
 sections and restriction maps. It is therefore a local condition
 (`hasLocalRelations_of_openCover`), and no transport of sites is needed anywhere.

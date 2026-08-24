@@ -14,7 +14,8 @@
 
 # Real Mathlib declarations that this project does **not** import, so they resolve nowhere in the
 # environment of `Oka` + `OkaTest` and the checker is right to report them. They are cited in
-# prose as the scheme-level analogues of what `Oka/AnalyticSpace/Relations.lean` and
+# prose as the scheme-level analogues of what
+# `Oka/Geometry/RingedSpace/LocallyRingedSpace/Modules.lean` and
 # `Oka/Analytification/Sheaf.lean` build for locally ringed spaces, and naming them is the point
 # of the sentences they appear in. Both live in `Mathlib/AlgebraicGeometry/Modules/`, which is
 # behind `Mathlib/AlgebraicGeometry/AffineScheme.lean` and is not worth importing for a docstring.

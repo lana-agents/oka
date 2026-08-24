@@ -30,7 +30,8 @@ this file.
   packages the two as an equivalence.
 * `SheafOfModules.val_app_eq_sum` evaluates a morphism out of a finite free sheaf as the sum of
   its coordinates against the images of the generators. That is the form in which a relation
-  between sections is checked, and it is what `Oka/AnalyticSpace/Relations.lean` and
+  between sections is checked, and it is what
+  `Oka/Geometry/RingedSpace/LocallyRingedSpace/Coherent.lean` and
   `Oka/AnalyticSpace/IdealSheaf.lean` consume.
 
 Two smaller groups sit beside it. `SheafOfModules.freePUnitIso` and
