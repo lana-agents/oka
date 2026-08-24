@@ -74,17 +74,51 @@ fi
 #     else. One clause costs less than a list, and this repository's own exception file went from
 #     "empty, and the intention is that it stays that way" to two entries in under three hours.
 #
-# `grep -F` so that the `.` in a filename is not a wildcard: without it, a `README.md` naming
-# `check_file_sh` would pass for `check_file.sh`.
+# **The match is a whole token, not a substring, and that is a correction to how this check
+# shipped.** Until 2026-08-24 it was `grep -qF -- "$name" README.md`, and containment means one
+# entry's name can be satisfied by *another* entry's. Planting `scripts/cost.py` beside the
+# documented `import_cost.py` printed `checked 7 files under scripts/: 0 not named in README.md`
+# on the shipped rule, where a `zz_probe.py` planted the same way is reported: the new file was
+# covered by a sentence about a different tool.
+#
+# So `README.md` is split into maximal runs of `[A-Za-z0-9_.-]` and the name has to equal one of
+# them. That set is the filename alphabet, so a token breaks exactly where a filename cannot
+# continue, and every form `README.md` writes still matches: the backticked
+# `scripts/check_module_docstrings.py`, the bare `check_docstring_names.py` in prose, and `bash
+# scripts/check_file.sh FILE.lean` in a fenced block, since a backtick, a `/` and a space all
+# break a token. It keeps what `grep -F` was there for — `check_file_sh` is a different token
+# from `check_file.sh`, so a `README.md` naming the first still fails for the second — and it
+# needs no filename escaped into a regular expression, which is what the obvious `grep -E`
+# word-boundary version would cost.
+#
+# The alternative was to leave the rule alone and fail on a shadowing *pair*. Rejected: that
+# fails a **correct** tree, since `import_cost.py` beside a documented `import_cost_test.py` is
+# a legitimate pair, and a gate that rejects a correct tree is worse than the hole it closes.
+#
+# A name outside the filename alphabet cannot be a token, so it falls back to containment — the
+# rule as it shipped. Nothing under `scripts/` is such a name; the branch is there so that adding
+# one is a weaker check rather than a failure no sentence in `README.md` can clear.
+#
+# The here-string is load-bearing, and the first draft of this got it wrong. `printf '%s\n'
+# "$readme_tokens" | grep -qxF` is the same test, and under the `set -o pipefail` at the top of
+# this file it returns **141**: `grep -q` exits on the first match, `printf` takes a SIGPIPE
+# writing the remaining sixteen thousand tokens, and `pipefail` reports that. So every entry was
+# reported as undocumented — and only here. GitHub Actions runs a `run:` block as `bash -e`, with
+# no `pipefail`, so the CI copy of the pipe form passes: a green CI and a red `validation.sh` for
+# the same loop. `<<<` has no second process and no pipeline status to inherit.
 #
 # It runs here, before the build, because it reads two text files and nothing else. This mirrors
 # the check in `.github/workflows/lean_action_ci.yml`.
 scripts_undocumented=""
 scripts_checked=0
+readme_tokens="$(tr -c 'A-Za-z0-9_.-' '\n' < README.md)"
 for f in scripts/*; do
   name="$(basename "$f")"
   scripts_checked=$((scripts_checked + 1))
-  grep -qF -- "$name" README.md || scripts_undocumented="$scripts_undocumented $name"
+  case "$name" in
+    *[!A-Za-z0-9_.-]*) grep -qF -- "$name" README.md ;;
+    *) grep -qxF -- "$name" <<< "$readme_tokens" ;;
+  esac || scripts_undocumented="$scripts_undocumented $name"
 done
 if [ -n "$scripts_undocumented" ]; then
   echo "Not named in README.md:$scripts_undocumented"
@@ -170,9 +204,12 @@ lake lint || exit 1
 # missing from it, including the docstring-name checker it describes twice without ever naming —
 # and the answer is to keep one index honest rather than to write a second. A second copy that no
 # check can keep honest is the defect this repository repairs most often, and buying one to
-# silence a switch that is already off is the wrong trade. If the tripwire is what you want —
-# somebody added a script and documented it nowhere — the honest version points at the section
-# that already exists rather than at a new file, and it is a check to argue for on its own.
+# silence a switch that is already off is the wrong trade. The tripwire itself — somebody added a
+# script and documented it nowhere — is worth having, and the honest version points at the
+# section that already exists rather than at a new file. **It is now the check near the top of
+# this file**, immediately after the `sorry` grep: argued for on taxis #971 and added on
+# 2026-08-24. Declining `scripts/README.md` is what this paragraph is for, and that part of it
+# stands.
 #
 # One trap, and it is upstream's rather than ours: `modulesOSForbidden` is gated on
 # `linter.modulesUpperCamelCase` (`Mathlib/Tactic/Linter/TextBased.lean:602`) and not on the

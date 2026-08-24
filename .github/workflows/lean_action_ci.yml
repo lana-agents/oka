@@ -49,13 +49,22 @@ jobs:
       # only: a file under `scripts/` that nobody has written a sentence about.
       # `.orchestra/validation.sh` carries the full reasoning and the three choices in the rule.
       #
-      # `grep -F` so the `.` in a filename is not a wildcard.
+      # The match is a whole token, not a substring: `README.md` is split into maximal runs of
+      # `[A-Za-z0-9_.-]` — the filename alphabet — and the name has to equal one of them. As a
+      # substring search, one entry's name could be satisfied by another entry's, so a new
+      # `scripts/cost.py` passed on the strength of the sentence about `import_cost.py`. The
+      # fallback for a name outside that alphabet, and the reason a shadowing-pair check was not
+      # the answer, are in the comment on the same loop in `.orchestra/validation.sh`.
       - name: Check every file under scripts is named in README.md
         run: |
           undocumented=""
+          readme_tokens="$(tr -c 'A-Za-z0-9_.-' '\n' < README.md)"
           for f in scripts/*; do
             name="$(basename "$f")"
-            grep -qF -- "$name" README.md || undocumented="$undocumented $name"
+            case "$name" in
+              *[!A-Za-z0-9_.-]*) grep -qF -- "$name" README.md ;;
+              *) grep -qxF -- "$name" <<< "$readme_tokens" ;;
+            esac || undocumented="$undocumented $name"
           done
           if [ -n "$undocumented" ]; then
             echo "::error::not named in README.md:$undocumented"
