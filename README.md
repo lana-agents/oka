@@ -875,11 +875,15 @@ is not available: **`Mathlib/` mentions `docBlameThm` nowhere at all**, and its 
 mentions are `nolint` attributes, so Mathlib would accept all 428 as they stand. Whatever
 this repository does here is a house convention and has to be argued as one.
 
-**A narrower alternative exists and is recorded rather than proposed.** 94 of the 428 are in the
-11 mirror files that have a Mathlib target — 43 of those in `PresheafedSpace/Gluing.lean` alone —
-and a `scripts/check_*.py` requiring a docstring on every theorem in a *mirror* file would be
-expressible where `lake lint` is not, since that linter selects by package and not by path. It
-would be a bounded job on the files that claim in their own docstrings to be going upstream.
+**A narrower alternative exists and is recorded rather than proposed.** Of the **41** files under
+`Oka/` with a Mathlib file at their mirror path, **11 have at least one finding and 94 between
+them** — 43 of those in `PresheafedSpace/Gluing.lean` alone — and a `scripts/check_*.py`
+requiring a docstring on every theorem in a *mirror* file would be expressible where `lake lint`
+is not, since that linter selects by package and not by path. It would be a bounded job on the
+files that claim in their own docstrings to be going upstream. **Its denominator is the part that
+is not settled**: a mirror file need not have a Mathlib file at its path — the section above says
+so, and names proposed ones — so such a check would cover more than those 41, and which files it
+covers is a decision and not a `test -f`.
 
 **Re-run the two commands rather than adjusting these figures by hand.** They moved from 458 in 58
 files to 428 in 54 within a day, when 28 docstrings landed and a file was split.
