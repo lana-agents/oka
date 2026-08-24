@@ -14,7 +14,7 @@ the polynomial `f` occurs in the *type* of everything built from it: two polynom
 the same distinguished open give two different objects of `ComplexAnalytic.Presentation` and two
 different analytic spaces. This file says they are canonically the same one.
 
-Two statements, and the second is the one with content:
+Four statements, and the last two are the ones a consumer uses:
 
 * `ComplexAnalytic.localisationPresentationIsoOfDvdPow` — **the presentations of the localisation
   at `f` and at `f'` are isomorphic** whenever the images of `f` and `f'` in `A` each divide a
@@ -25,6 +25,14 @@ Two statements, and the second is the one with content:
   first isomorphism canonical rather than merely available, and it is proved without an
   `Algebra (ComplexAnalytic.PresentedAlgebra n k g)` instance on the localised presented algebra:
   see *The shape this settles* below.
+* `ComplexAnalytic.localisationPresentedAlgebraEquivOfDvdPow_localisationRingHom` — **the
+  isomorphism of the first bullet is one of `A`-algebras**: it carries `A ⟶ A_f` to `A ⟶ A_{f'}`.
+  Without this the two structure maps are unrelated and the isomorphism, though canonical, says
+  nothing about the presentations *as distinguished opens of the same member*.
+* `ComplexAnalytic.localisationPresentationIsoOfDvdPow_hom_comp` — **the triangle**: the same
+  statement in `ComplexAnalytic.Presentation`, as an equation between morphisms. This is the form
+  a coherence law consumes, and it is the sense in which a transition morphism built from a
+  witness does not depend on the witness.
 
 ## Where this is needed
 
@@ -146,5 +154,50 @@ noncomputable def localisationPresentationIsoOfDvdPow :
     (⟨n + 1, k + 1, localisationPresentation.{u} g f⟩ : Presentation.{u}) ≅
       ⟨n + 1, k + 1, localisationPresentation.{u} g f'⟩ :=
   Presentation.isoOfAlgEquiv (localisationPresentedAlgebraEquivOfDvdPow.{u} g f f' h h').symm
+
+/-! ### The identification of two witnesses is over `A` -/
+
+include h h' in
+/-- **The witness-independence isomorphism carries one structure map to the other**: the image
+of `A ⟶ A_f` is `A ⟶ A_{f'}`, on the nose.
+
+`ComplexAnalytic.localisationPresentedAlgebraEquivOfDvdPow`'s docstring says it is *the unique
+`A`-algebra map* between the two localisations. This is that fact in the form a consumer can use:
+`IsLocalization.Away.algEquivOfDvdPow` is an `A`-algebra map by construction, and the two outer
+steps are `ComplexAnalytic.localisationPresentedAlgebraEquiv_localisationRingHom`, which is what
+puts the identification with `Localization.Away` over `A` rather than only over `ℂ`.
+
+**Without this the isomorphism is compatible with nothing.** Two presentations of the same
+distinguished open are interesting only as opens *of the member they sit in*, and the member
+enters solely through the structure map. -/
+theorem localisationPresentedAlgebraEquivOfDvdPow_localisationRingHom
+    (x : PresentedAlgebra.{u} n k g) :
+    localisationPresentedAlgebraEquivOfDvdPow.{u} g f f' h h' (localisationRingHom.{u} g f x) =
+      localisationRingHom.{u} g f' x := by
+  rw [localisationPresentedAlgebraEquivOfDvdPow, AlgEquiv.trans_apply,
+    localisationPresentedAlgebraEquiv_localisationRingHom, AlgEquiv.trans_apply,
+    AlgEquiv.restrictScalars_apply, AlgEquiv.commutes,
+    ← localisationPresentedAlgebraEquiv_localisationRingHom, AlgEquiv.symm_apply_apply]
+
+include h h' in
+/-- **The triangle**: the two structure maps agree once the two presentations are identified by
+`ComplexAnalytic.localisationPresentationIsoOfDvdPow`.
+
+This is the sense in which a transition morphism built from a *witness* that one member is a
+distinguished open of another does not depend on the witness: replacing `f` by any `f'` cutting
+out the same open changes the morphism `A_f ⟶ A` only by composition with the coherence
+isomorphism. It is the shape a coherence law consumes, and it is
+`ComplexAnalytic.localisationPresentedAlgebraEquivOfDvdPow_localisationRingHom` read through
+`ComplexAnalytic.PresHom.ext` — the companion of
+`ComplexAnalytic.localisationPresentationIsoMul_hom_comp`, which does the same for the other
+half of the arrow story. -/
+theorem localisationPresentationIsoOfDvdPow_hom_comp :
+    (localisationPresentationIsoOfDvdPow.{u} g f f' h h').hom ≫ localisationHom.{u} g f' =
+      localisationHom.{u} g f := by
+  refine PresHom.ext (RingHom.ext fun x ↦ ?_)
+  change (localisationPresentedAlgebraEquivOfDvdPow.{u} g f f' h h').symm
+    (localisationRingHom.{u} g f' x) = _
+  rw [AlgEquiv.symm_apply_eq]
+  exact (localisationPresentedAlgebraEquivOfDvdPow_localisationRingHom.{u} g f f' h h' x).symm
 
 end ComplexAnalytic

@@ -26,6 +26,11 @@ The checks below close that, on `f` and `f ^ 2`:
 
 Together: the isomorphism exists, and what it identifies is not already equal.
 
+* **And the triangle it satisfies is between those two distinct presentations** — `isoSq_hom_comp`,
+  an instance of `ComplexAnalytic.localisationPresentationIsoOfDvdPow_hom_comp`. An equation
+  between morphisms out of a *single* object would be a much weaker statement than it looks; here
+  the source is the same but the two targets are the presentations the bullets above separate.
+
 `f` and `f ^ 2` are also the pair showing that these hypotheses are strictly weaker than
 Mathlib's `IsLocalization.Away.of_associated`, which the mirror file
 `Oka/RingTheory/Localization/Away/Basic.lean` records: they satisfy the hypotheses at every
@@ -63,6 +68,14 @@ theorem sq_dvd_pow : ∃ M, Ideal.Quotient.mk (presentationIdeal.{u} g) f ∣
 def isoSq : (⟨n + 1, k + 1, localisationPresentation.{u} g f⟩ : Presentation.{u}) ≅
     ⟨n + 1, k + 1, localisationPresentation.{u} g (f ^ 2)⟩ :=
   localisationPresentationIsoOfDvdPow.{u} g f (f ^ 2) (dvd_pow_sq.{u} g f) (sq_dvd_pow.{u} g f)
+
+/-- **The triangle at that instance**: `isoSq` carries the structure map of `A_{f²}` to the
+structure map of `A_f`. With `localisationPresentation_ne_sq` below, this is the triangle holding
+between two presentations that are not the same tuple. -/
+theorem isoSq_hom_comp :
+    (isoSq.{u} g f).hom ≫ localisationHom.{u} g (f ^ 2) = localisationHom.{u} g f :=
+  localisationPresentationIsoOfDvdPow_hom_comp.{u} g f (f ^ 2) (dvd_pow_sq.{u} g f)
+    (sq_dvd_pow.{u} g f)
 
 /-- **The two presentations are different tuples**, so `isoSq` is not an identity in disguise:
 the last equation is `t·f - 1` on one side and `t·f² - 1` on the other, and `f ≠ f²` because
