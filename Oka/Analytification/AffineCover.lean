@@ -58,10 +58,15 @@ together with a choice among Mathlib's cover APIs. Neither is needed by anything
 `Oka/Analytification/Comparison.lean` argues separately, in a titled section, that the absence of
 `Scheme` from *its* statements is a result rather than an omission.
 
-Only the **distinguished** case appears, because that is the case a cover needs: a scheme locally
-of finite type over `ℂ` is covered by affines whose pairwise intersections are covered by opens
-distinguished in both. `Oka/Analytification/DistinguishedOpen.lean` says in its own docstring
-that the analytification of a general open immersion is neither proved nor wanted.
+Only the **distinguished** case appears, and the reason is this repository's machinery rather
+than the shape of a scheme's cover. `Oka/Analytification/DistinguishedOpen.lean` analytifies the
+distinguished open `D(f)` and nothing else, and says in its own docstring that the
+analytification of a general open immersion is neither proved nor wanted; a distinguished open
+is therefore the only overlap this file has anything to build a transition from. That a scheme's
+pairwise intersections are merely *covered by* opens distinguished in both is true, and is what
+makes one open per pair a **restriction** rather than what licenses it — the paragraph above
+says that of `poly`'s arity, and the one below names the Mathlib shape that carries the weaker
+datum.
 
 Mathlib does have a shape that carries what a scheme supplies at an overlap, and it is not the one
 below: a **locally directed** cover, `Mathlib/AlgebraicGeometry/Cover/Directed.lean`. It indexes
