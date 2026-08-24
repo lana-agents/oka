@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Oka.Algebra.Category.ModuleCat.Sheaf.Stalk
-import Oka.AnalyticSpace.Relations
+import Oka.ComplexSpace
+import Oka.Geometry.RingedSpace.LocallyRingedSpace.Modules
 
 /-!
 # `SheafOfModules.exact_of_stalk_exact` applies to the sheaves this development has

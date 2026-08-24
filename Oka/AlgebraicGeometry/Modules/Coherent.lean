@@ -6,7 +6,7 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 import Mathlib.AlgebraicGeometry.Modules.Sheaf
 import Mathlib.AlgebraicGeometry.Noetherian
 import Oka.Algebra.Category.ModuleCat.Sheaf.Coherent.Free
-import Oka.AnalyticSpace.Relations
+import Oka.Geometry.RingedSpace.LocallyRingedSpace.Coherent
 import Oka.RingTheory.Localization.Module
 
 /-!
@@ -62,16 +62,33 @@ statement is proved and `Spec A` is a corollary, rather than the other way round
 instance `IsLocallyNoetherian (Spec A)` for `[IsNoetherianRing A]` is what makes the corollary
 one line.
 
-## This is not a mirror file, and the path says so
+## Where this would go upstream, and why the file moved to say so
 
-`HasLocalRelations` and `IsCoherentStructureSheaf` are defined in this repository
-(`Oka/AnalyticSpace/Relations.lean`), as is `SheafOfModules.IsCoherent`, so by `README.md`'s two
-tests the results here are not upstreamable as they stand and must not sit under a Mathlib path.
-That is why this file is at the root of `Oka/` rather than under `Oka/AlgebraicGeometry/`, which
-is a mirror directory: compare `Oka/StructureSheaf.lean` with
-`Oka/AlgebraicGeometry/StructureSheaf.lean`, which is the same non-mirror/mirror pair. The one
-piece of genuinely general commutative algebra extracted on the way *is* in the mirror tree, at
-`Oka/RingTheory/Localization/Module.lean`.
+**Until taxis #905 this file was `Oka/SchemeCoherent.lean`, at the root of `Oka/`, and a section
+of this docstring explained that it could not sit under a Mathlib path.** The reason was real and
+it was not about this file: `HasLocalRelations` and `IsCoherentStructureSheaf` were defined in
+`Oka/AnalyticSpace/Relations.lean`, so importing them dragged in `Oka.ComplexSpace` and with it
+Oka's theorem, and by `README.md`'s two tests a file that does that is not upstreamable. **The
+scheme-side theorem was being kept out of the mirror tree by where the general machinery it
+quotes happened to live**, which is what #905 was filed to fix.
+
+It is fixed: that machinery is now
+`Oka/Geometry/RingedSpace/LocallyRingedSpace/Coherent.lean` and its two neighbours, and **every
+import of this file is either Mathlib or a mirror file**. The mirror path proposes a new
+`Mathlib/AlgebraicGeometry/Modules/Coherent.lean`, beside the sheaf-of-modules-on-a-scheme
+material it is stated over; being new it costs no existing Mathlib file anything, and the Mathlib
+part of its own transitive closure is **2466** modules. The two alternatives, measured the same
+way — everything this file needs, taking each `Oka` import at its own Mathlib dependencies:
+merging it into `Mathlib/AlgebraicGeometry/Noetherian.lean` would cost that file **112** on a
+closure of 2354, and into `Mathlib/AlgebraicGeometry/Modules/Sheaf.lean` **202** on 2264.
+`README.md` records 96 as the figure that once made an upstreaming judged too expensive, so a new
+file is the right shape on price as well as on subject.
+
+**The honest obstruction is unchanged and it is not this file's**: `SheafOfModules.IsCoherent`
+and `AlgebraicGeometry.LocallyRingedSpace.HasLocalRelations` are themselves in mirror files for
+Mathlib files that do not exist, so this goes upstream after they do. The one piece of genuinely
+general commutative algebra extracted on the way is in the mirror tree already, at
+`Oka/RingTheory/Localization/Module.lean`, and it needed no proposal.
 
 ## Main results
 

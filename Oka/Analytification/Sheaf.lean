@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Oka.AnalyticSpace.PullbackModulesStalk
-import Oka.AnalyticSpace.Relations
+import Oka.Geometry.RingedSpace.LocallyRingedSpace.Modules
 import Oka.Analytification.PresentationFlatness
 import Oka.Analytification.Presentation
 
@@ -36,7 +36,7 @@ The one thing that had to be supplied is
 `AlgebraicGeometry.LocallyRingedSpace.Hom.toRingSheafHom`, the morphism of sheaves of rings
 attached to a morphism of locally ringed spaces. It is Mathlib's
 `AlgebraicGeometry.Scheme.Hom.toRingCatSheafHom` verbatim, four lines. It is in
-`Oka/AnalyticSpace/Relations.lean`, next to
+`Oka/Geometry/RingedSpace/LocallyRingedSpace/Modules.lean`, next to
 `AlgebraicGeometry.LocallyRingedSpace.ringSheaf`, because the two have to agree on how the site
 is spelled.
 

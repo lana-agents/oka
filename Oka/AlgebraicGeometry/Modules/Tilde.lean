@@ -110,8 +110,8 @@ Coherence is used nowhere on this line, so every statement is at
 `OkaTest/AffineSections.lean` can instantiate them. **This sentence used to give a second reason
 — that coherence was not available at all, nothing in this repository proving a sheaf on a `Spec`
 coherent — and that half is retired**: `AlgebraicGeometry.isCoherentStructureSheaf_spec`, in
-`Oka/SchemeCoherent.lean`, proves `𝒪_{Spec A}` coherent for noetherian `A`. The hypotheses here
-are unchanged, because they are the weaker ones and the ones the proofs use.
+`Oka/AlgebraicGeometry/Modules/Coherent.lean`, proves `𝒪_{Spec A}` coherent for noetherian `A`.
+The hypotheses here are unchanged, because they are the weaker ones and the ones the proofs use.
 
 ## Finite presentation, and a correction
 
