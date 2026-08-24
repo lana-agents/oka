@@ -132,3 +132,17 @@ jobs:
       - name: Check module docstrings are non-empty
         if: ${{ !cancelled() }}
         run: python3 scripts/check_module_docstrings.py
+
+      # Every entry under `scripts/` must be named somewhere in `README.md`. Nothing else in this
+      # workflow reads that directory listing — every step above looks at `.lean` files or at
+      # declarations — so a script added here would be documented nowhere and nothing would say
+      # so; on 2026-08-24 `README.md` named three of the six entries then present. The rule is one
+      # substring match per entry and secures very little on purpose; the comment on the same
+      # command in `.orchestra/validation.sh` has the argument, and says why this points at
+      # `README.md` rather than at the `scripts/README.md` Mathlib's own check hardcodes.
+      #
+      # Text only — two files read, no build and no oleans — hence `!cancelled()`, for the same
+      # reason as the step above.
+      - name: Check scripts are documented
+        if: ${{ !cancelled() }}
+        run: python3 scripts/check_scripts_documented.py

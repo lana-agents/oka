@@ -159,8 +159,35 @@ python3 scripts/check_docstring_names.py || exit 1
 # defect and confirms it is reported, since a check that has only ever been seen to pass is not
 # evidence of anything.
 #
-# Text only: no build, no oleans, so it could run anywhere in this script. It is last because it
-# is the cheapest and a failure of it is the least urgent.
+# Text only: no build, no oleans, so it could run anywhere in this script. It is late because it
+# is cheap and a failure of it is not urgent. The same is true of the check below.
 python3 scripts/check_module_docstrings.py || exit 1
+
+# Verify that every entry under `scripts/` is named somewhere in `README.md`.
+#
+# Nothing above reads that directory listing. The build, `lake lint`, `lake exe lint-style`,
+# `mk_all --check` and the two checks above all look at `.lean` files under `Oka/` and
+# `OkaTest/`, or at declarations in the environment, so a script added here is documented nowhere
+# and no check says so. On 2026-08-24 `README.md` named three of the six entries under
+# `scripts/`, and the three it missed included `scripts/check_docstring_names.py` — run by this
+# script, quoted by every pull request body, described twice in `README.md` and never named. Four
+# days, every check green throughout.
+#
+# **It secures very little and the alternative secures the same.** The rule is one substring
+# match per entry: it cannot tell whether a description is present, or true, or still accurate.
+# That is also all Mathlib's own `undocumentedScripts` does, and taxis #964 measured that a
+# `scripts/README.md` holding six backticked names and no prose satisfies it and exits 0 — which
+# is why this points at the index `README.md` already has rather than at a second one at the path
+# Mathlib hardcodes, and why `weak.linter.allScriptsDocumented` stays off. See the comment on
+# `lake exe lint-style` above for that decision.
+#
+# There is no exemption list, deliberately: `scripts/docstring-names-ignore.txt` is a data file
+# rather than a script and Mathlib's check would report it too, and a sentence saying what it is
+# costs less than a mechanism for not saying it. `scripts/check_scripts_documented.py` argues
+# each of the three choices in the rule, and its `--self-test` plants an unnamed script and a
+# name that shadows another and confirms both are reported.
+#
+# Text only: two files read, no build and no oleans.
+python3 scripts/check_scripts_documented.py || exit 1
 
 echo "Validation succeeded."

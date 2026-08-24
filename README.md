@@ -758,10 +758,22 @@ lake build
 
 `bash .orchestra/validation.sh` is the check. It builds with `--wfail`, runs Mathlib's
 environment linters and text linters, verifies both root modules against `mk_all`, checks that
-every backticked dotted name in a comment resolves, and checks that every file has a module
-docstring with a non-empty body. **A claim that something compiles means this script.**
+every backticked dotted name in a comment resolves, checks that every file has a module docstring
+with a non-empty body, and checks that every entry under `scripts/` is named in this file.
+**A claim that something compiles means this script.**
 
-The last of those, `scripts/check_module_docstrings.py`, is the narrow rule and only the narrow
+The name check is `scripts/check_docstring_names.py`, whose figures every pull request body on
+this project quotes. It collects every backticked dotted name in a comment or docstring under
+`Oka/` and `OkaTest/` and asks whether anything in the environment ends with it; a name that
+resolves nowhere is a finding. It is deliberately permissive — a name passes if it is a
+declaration, a module, a file in this repository, or field notation on one of those — because a
+check that cries wolf is worse than none on a project that quotes a green run as evidence in
+every pull request body. It reads the environment through `scripts/DumpEnvNames.lean`, which is
+why it is one of the two checks here that need the build to have happened, and
+`scripts/docstring-names-ignore.txt` is its escape hatch: every entry in it is a place the
+checker has been told to stop looking, and that file's own header says what would justify one.
+
+The next of those, `scripts/check_module_docstrings.py`, is the narrow rule and only the narrow
 rule: a **module** docstring whose body is not whitespace. It says nothing about what the body
 contains, and in particular does not require a `# Title` line. What it does insist on is that the
 `/-! … -/` block it looks at really is the module docstring — nothing but comments, `module` and
@@ -775,6 +787,18 @@ It exists because nothing else could see an empty one: an empty `/-! -/` elabora
 does not fail on it, and the name checker looks *inside* a docstring, so on an empty one it finds
 nothing to check and passes. Seven files under `Oka/` carried an empty module docstring from the
 second commit in the repository until it was added.
+
+The one check here with no Lean in it is `scripts/check_scripts_documented.py`: every entry under
+`scripts/` must be named somewhere in this file. Nothing else reads that directory listing — the
+build, `lake lint`, `lake exe lint-style`, `mk_all --check` and the two checks above all look at
+`.lean` files or at declarations — and on 2026-08-24 this section named **three of the six**
+entries then under `scripts/`. The three it missed included the docstring-name checker above,
+which is described twice here and was never given a filename. **It secures very little, on
+purpose**: a bare substring match, which cannot tell whether a description is present, or true,
+or still accurate. It catches one thing, a file nobody wrote a sentence about, and the script's
+own docstring argues for each of the three choices in that rule against the cheaper-looking
+alternative. Its `--self-test` plants an unnamed script and a name that shadows another and
+confirms both are reported.
 
 For the edit loop there is `bash scripts/check_file.sh FILE.lean`, which takes a couple of
 seconds and applies the *same* Lean options the build applies:
