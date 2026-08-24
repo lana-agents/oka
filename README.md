@@ -825,12 +825,17 @@ reviewer to run before believing one.
 
 ### Declaration docstrings, and why `docBlameThm` is off
 
-`lake lint` runs Mathlib's `docBlame`, which requires a docstring on every `def`, `abbrev`,
-`structure` and `class` — **and on no `instance`**, named or anonymous: its first test returns
-`none` on any instance (`Batteries/Tactic/Lint/Misc.lean:85`). It reports nothing over this
-library and it stays that way. The linter that covers `theorem` and `lemma` is `docBlameThm`; it
-is `@[env_linter disabled]` in Batteries, **this repository leaves it off deliberately, and what
-follows is the measurement behind that** so the next person to notice the silence finds a number
+`lake lint` runs **Batteries'** `docBlame` — the environment linters are a mixture, fourteen in
+the default set here, nine of them Batteries' and five Mathlib's — which requires a docstring on
+every `def`, `abbrev`, `structure` and `class`, the four kinds that occur under `Oka/`, **and on
+no `instance`**, named or anonymous: its first test returns `none` on any instance
+(`Batteries/Tactic/Lint/Misc.lean:85`). It reaches `axiom` and `opaque` too, and any bare
+`inductive` — this library declares none of the three, and a `structure` or `class` is what its
+`inductive` case sees. It also **exempts `Prop`-valued projection functions**, which is why it is
+silent on the seven `Prop` fields in the table below where `docBlameThm` is not. It reports
+nothing over this library and it stays that way. The linter that covers `theorem` and `lemma` is
+`docBlameThm`; it is `@[env_linter disabled]` in Batteries, **this repository leaves it off
+deliberately, and what follows is the measurement behind that** so the next person to notice the silence finds a number
 rather than re-deriving one.
 
 Take it in a file that imports `Oka` and `Batteries.Tactic.Lint`:

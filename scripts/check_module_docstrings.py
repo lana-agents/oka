@@ -2,7 +2,7 @@
 """Check that every `.lean` file under `Oka/` and `OkaTest/` has a non-empty module docstring.
 
 Nothing else in this repository can see an empty one.  `lake build --wfail` sees only elaborated
-terms and a `/-! -/` block elaborates fine; `lake lint` runs Mathlib's environment linters, which
+terms and a `/-! -/` block elaborates fine; `lake lint` runs the environment linters, which
 check declarations and not files; `lake exe lint-style` checks whitespace, line endings, unicode
 and module-name casing; `mk_all --check` checks imports.  `scripts/check_docstring_names.py`
 checks the names *inside* docstrings against the environment, so on an empty docstring it finds

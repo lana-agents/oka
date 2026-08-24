@@ -43,7 +43,7 @@ jobs:
       # that the main theorems depend only on `propext`, `Classical.choice` and `Quot.sound`.
       #
       # `lint: true` makes the action run `lake lint` after the build, which the `lintDriver` in
-      # `lakefile.toml` resolves to Mathlib's environment linters over `Oka`. Without that
+      # `lakefile.toml` resolves to the environment linters over `Oka`. Without that
       # setting the action's default is to skip linting silently, which is worse than not having
       # the step: look for `Linting passed for Oka` in this step's log, not merely for a green
       # tick.

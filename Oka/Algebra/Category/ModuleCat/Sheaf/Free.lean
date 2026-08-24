@@ -56,10 +56,11 @@ docstring says tells a Mathlib reviewer something untrue; this paragraph is the 
 that, and moving the lemma is a separate change.
 
 **All twenty-five declarations below now carry a docstring.** Fourteen did not until taxis #906,
-and all fourteen were `lemma`s — which is why `lake lint` was silent about them: Mathlib's
-`docBlame` linter covers definitions, and `docBlameThm`, which covers theorems, is off in Mathlib
-and not turned on here. Nothing in `.orchestra/validation.sh` sees a missing lemma docstring, so
-this paragraph is the only record that the gap existed; turning `docBlameThm` on repository-wide
+and all fourteen were `lemma`s — which is why `lake lint` was silent about them: Batteries'
+`docBlame` linter covers definitions, and `docBlameThm`, which covers theorems, is off by default
+in Batteries and not turned on here. Nothing in `.orchestra/validation.sh` sees a missing lemma
+docstring, so this paragraph is the only record that the gap existed; turning `docBlameThm` on
+repository-wide
 is a separate question, and taxis #928 is where it has been costed.
 
 ## Main definitions

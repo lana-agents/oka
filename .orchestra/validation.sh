@@ -61,11 +61,12 @@ lake exe mk_all --lib OkaTest --git --check || exit 1
 # Verify everything builds, and that it builds without warnings.
 lake build --wfail || exit 1
 
-# Verify Mathlib's environment linters are clean. These check the whole environment, not one
-# file: missing docstrings on definitions, names that break the naming convention, `@[simp]`
-# lemmas whose left-hand side is not in `simp` normal form, and about ten more. `lake build`
-# sees none of it, which is how the project reached 2026-08-20 with 19 findings nobody had
-# looked at.
+# Verify the environment linters are clean — fourteen are in the default set here, nine of them
+# Batteries' and five Mathlib's; `#list_linters` prints the lot. These check the whole
+# environment, not one file: missing docstrings on definitions, names that break the naming
+# convention, `@[simp]` lemmas whose left-hand side is not in `simp` normal form, and about ten
+# more. `lake build` sees none of it, which is how the project reached 2026-08-20 with 19
+# findings nobody had looked at.
 #
 # The linter and the module it runs on are configured once, as `lintDriver` in `lakefile.toml`,
 # so that this script and the CI workflow cannot disagree about what "lint" means. Note that
