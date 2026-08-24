@@ -184,14 +184,23 @@ coherence statement for arbitrary complex analytic spaces:
   `ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale` — over a *preconnected* target
   any two fibres of a finite étale morphism have the same cardinality, by the clopen argument in
   `Oka/Topology/Covering/Basic.lean` off the local constancy of a fibre. **That common cardinality
-  is computed for one morphism**: `ComplexAnalytic.card_fiber_base_sq` says every fibre of
+  is computed for two families of morphisms, and between them they realise every value**:
+  `ComplexAnalytic.card_fiber_base_sq` says every fibre of
   `z ↦ z²` on the punctured line has exactly **2** points, so the constancy statement has a witness
   at which the constant is not `1`. Its content is
   `IsAlgClosed.card_setOf_pow_eq` (`Oka/FieldTheory/IsAlgClosed/Basic.lean`) — over an algebraically
   closed field `x ^ n = a` has exactly `n` solutions when `(n : F) ≠ 0` and `a ≠ 0` — and not
-  anything about covering maps. The sentence that used to stand here said no such value was computed
-  anywhere; **there is still no `degree` function on morphisms**, and one theorem about one map is
-  not one. `ComplexAnalytic.isCoveringMap_base_sq` applies the rung to the
+  anything about covering maps. The other is the **trivial `ι`-sheeted cover**
+  `∐_{i : ι} X ⟶ X` of `Oka/AnalyticSpace/SigmaFiniteEtale.lean`, which is finite étale for a
+  finite `ι` (`ComplexAnalytic.AnalyticSpace.isFiniteEtale_sigmaFold`) and whose every fibre has
+  `Nat.card ι` points (`ComplexAnalytic.AnalyticSpace.card_fiber_sigmaFold`), at every point of
+  the base and with no connectedness hypothesis — and it is the first finite étale witness here
+  with a **disconnected source**, which is what *evenly covered* looks like locally. Its `n = 0`
+  case is real and is admitted rather than excluded: the empty space over a non-empty one is
+  finite étale under the definitions used here, and the count reads `0 = 0`.
+  The sentence that used to stand here said no such value was computed
+  anywhere, and then that exactly one was; **there is still no `degree` function on morphisms**,
+  and two families of theorems about particular maps are not one. `ComplexAnalytic.isCoveringMap_base_sq` applies the rung to the
   squaring map, and is a test of the rung rather than new information about `z ↦ z²`, which
   Mathlib already covers. **There is still no notion of a covering *of analytic spaces***: this is
   a statement about the underlying map, and the stalk field of `…IsLocalIso` plays no part in it.

@@ -59,12 +59,19 @@ base being nonempty is never used.
 
 ## What is not here
 
-* **The degree of any finite étale morphism other than the one witness.** The bullet that used to
-  stand here said no particular morphism had any particular degree computed. That is retired for
-  `ComplexAnalytic.sq`: `ComplexAnalytic.card_fiber_base_sq` in `OkaTest/FiniteMorphism.lean` puts
-  every fibre of the squaring map of the punctured line at **2** points. It is a statement about
-  roots in `ℂ` and not about covering maps — its content is
-  `IsAlgClosed.card_setOf_pow_eq` — and it is the only morphism here for which the value is known.
+* **The degree of a finite étale morphism that is neither the squaring map nor a trivial cover.**
+  The bullet that used to stand here said no particular morphism had any particular degree
+  computed, and then that exactly one did. Both are retired. The value is known for two things
+  now, and they are known for unrelated reasons:
+  `ComplexAnalytic.card_fiber_base_sq` in `OkaTest/FiniteMorphism.lean` puts every fibre of the
+  squaring map of the punctured line at **2** points — a statement about roots in `ℂ` and not
+  about covering maps, its content being `IsAlgClosed.card_setOf_pow_eq` — and
+  `ComplexAnalytic.AnalyticSpace.card_fiber_sigmaFold` in
+  `Oka/AnalyticSpace/SigmaFiniteEtale.lean` puts every fibre of the trivial `ι`-sheeted cover
+  `∐_{i : ι} X ⟶ X` at `Nat.card ι` points, for **every** `ι` and every `X`, with no analysis in
+  it at all. So the constant is realised at every value and not only at 2; what is still true is
+  that no morphism outside those two descriptions has a computed degree, and in particular
+  **nothing here computes the degree of a cover that is not trivial and not the squaring map.**
 * **A `degree` function on morphisms.** What is stated is one theorem about two points; a
   `Nat`-valued field or definition would carry a well-definedness obligation and nothing consumes
   one.
