@@ -7,8 +7,9 @@ works one example through; stating the figure is a practice grown from those, an
 files under `Oka/` follow it** — counting a module docstring that says what upstreaming would cost
 its target, whether as a number or as an explicit *nothing*.  A minority, measured at `bd03bee`,
 expected to drift, and not a figure anything here depends on.  Counting the *vocabulary* instead
-gives 44: forty-four module docstrings say `import`, `closure` or `upstream` somewhere, mostly in
-sentences like *"this file is a candidate for upstreaming to Mathlib"* that state no cost at all.
+gives 44: forty-four module docstrings say `import`, `closure` or `upstream` somewhere, and **18
+of those say it only** in sentences like *"this file is a candidate for upstreaming to Mathlib"*
+that state no cost at all.
 A number obtained by grepping for a word and reported as a count of measurements is exactly the
 species of error this script exists to stop, so it is worth not making it in this paragraph.
 
@@ -32,9 +33,14 @@ figures live in English prose and nothing can check them mechanically.  See
 ## The defect this exists to stop, which is not hypothetical
 
 The obvious instrument is `re.compile(r"^(?:public\\s+)?import\\s+([\\w.]+)", re.M)` over the raw
-file text.  **That matches `import` lines inside docstrings.**  Under `Mathlib/` there are
+file text.  **That matches `import` lines inside comments.**  Under `Mathlib/` there are
 
-* **14 files** carrying such a line, **29 lines** in all;
+* **14 files** carrying such a line, **29 lines** in all — 18 of the lines inside a `/-!` module
+  docstring and 7 inside a `/--` declaration docstring, so **12 of the 14 files**; the other 4
+  lines, in the two files under `RingTheory/AdicCompletion/`, sit inside a plain `/-` block
+  holding commented-out `variable`s and `example`s, with the `import` at the top where a real one
+  would go.  **Those two are the better example of the defect**, because nobody would call them
+  documentation and the regex matches them anyway;
 * **2 of them a bare `import Mathlib`** — `Mathlib/Tactic/Rify.lean` and
   `Mathlib/Analysis/Normed/Algebra/Exponential.lean`, both inside fenced example blocks — at which
   point the computed closure becomes the entire library;
