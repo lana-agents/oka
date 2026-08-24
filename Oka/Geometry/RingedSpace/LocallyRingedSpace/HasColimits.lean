@@ -9,9 +9,22 @@ import Oka.Geometry.RingedSpace.PresheafedSpace.Gluing
 /-!
 # The coproduct of locally ringed spaces is covered by its inclusions
 
-Material for `Mathlib/Geometry/RingedSpace/LocallyRingedSpace/HasColimits.lean`; see `README.md`
-on the mirror tree. Upstreaming costs that file **nothing**: it is the file's own import, and the
-`SheafedSpace` results the proofs run through are already in its closure.
+Material for two Mathlib files and not one; see `README.md` on the mirror tree, which asks for the
+split by destination.
+
+**The cover goes to `Mathlib/Geometry/RingedSpace/PresheafedSpace/Gluing.lean`**, because it is
+stated in terms of `AlgebraicGeometry.LocallyRingedSpace.OpenCover`, and Mathlib has no such
+structure: this repository's is in `Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean`, proposed
+for the Mathlib file of that name, and that file is *not* in the closure of the one below.
+`scripts/import_cost.py` prices it there at **3** modules (`Mathlib.CategoryTheory.GlueData`,
+`Mathlib.Geometry.RingedSpace.PresheafedSpace.Gluing`, `Mathlib.Topology.Gluing`), while the
+dependency in the other direction costs **0** — so upstream the cover sits beside `OpenCover` and
+nothing pays anything. It is in this file rather than in the gluing one only because that file is
+an import of this one.
+
+**Everything else goes to `Mathlib/Geometry/RingedSpace/LocallyRingedSpace/HasColimits.lean` at
+cost 0**: it is this file's own import, and the `SheafedSpace` results the proofs run through are
+already in its closure.
 
 Mathlib builds the coproduct of locally ringed spaces in that file and never says that the
 inclusions are open immersions. It says it one level below, for `SheafedSpace` over a category
