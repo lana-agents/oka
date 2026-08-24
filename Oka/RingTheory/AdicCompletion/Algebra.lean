@@ -9,7 +9,9 @@ import Mathlib.RingTheory.AdicCompletion.RingHom
 /-!
 # The projections of an adic completion are compatible with each other
 
-Material for `Mathlib/RingTheory/AdicCompletion/Algebra.lean`; see `README.md` on the mirror tree.
+Material for `Mathlib/RingTheory/AdicCompletion/Algebra.lean`; see `README.md` on the mirror
+tree. Upstreaming it adds `Mathlib.RingTheory.AdicCompletion.RingHom` to a target whose closure is
+**1305** Mathlib modules — **one** new one, measured with `scripts/import_cost.py`.
 
 `AdicCompletion.evalₐ I n : AdicCompletion I R →ₐ[R] R ⧸ I ^ n` is the `n`-th projection of the
 `I`-adic completion of a ring. That these projections are compatible — that `R ⧸ I ^ k → R ⧸ I ^ j`

@@ -10,6 +10,11 @@ import Mathlib.AlgebraicGeometry.StructureSheaf
 # A global section of `𝒪_{Spec R}` vanishes at a prime exactly when it lies in it
 
 Material for `Mathlib/AlgebraicGeometry/StructureSheaf.lean`; see `README.md` on the mirror tree.
+Upstreaming it adds `Mathlib.AlgebraicGeometry.Spec`, which the second statement's
+`Spec.locallyRingedSpaceObj` spelling needs, to a target whose closure is **2010** Mathlib
+modules — **19** new ones, measured with `scripts/import_cost.py`. **A cheaper destination
+exists and this file does not choose it**: priced into `Mathlib/AlgebraicGeometry/Spec.lean`,
+which already imports the structure sheaf, both statements cost **0**. Taxis #935.
 
 Mathlib proves the other direction — the germ of `a` at `x` is a unit when `x ∈ basicOpen a` —
 as `isUnit_toStalk` in `Mathlib/AlgebraicGeometry/StructureSheaf.lean`, and **that declaration is

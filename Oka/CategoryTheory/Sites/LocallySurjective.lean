@@ -33,6 +33,15 @@ would be enough for sheaves on a topological space but not for
 `Oka/Algebra/Category/ModuleCat/Sheaf/LocallySurjective.lean`, where the universe of the
 modules is a parameter of its own.
 
+**Upstreaming it costs its target 57 modules**, and the figure was unstated here until taxis
+#935: `Mathlib/CategoryTheory/Sites/LocallySurjective.lean`'s closure is **922** Mathlib modules,
+`Mathlib.CategoryTheory.Sites.Abelian` adds **55** of them and
+`Mathlib.CategoryTheory.Sites.EpiMono` the other **2**. Measured with `scripts/import_cost.py`.
+**A cheaper destination exists and this file does not choose it**: priced into
+`Mathlib/CategoryTheory/Sites/Abelian.lean` the same declarations cost **2**. That is taxis
+#935's question. The `Oka` import below is priced by its own file's docstring, and that one is
+the expensive half of this pair.
+
 There is no analytic content here, so this file is a candidate for upstreaming to Mathlib; it
 lives in the `Oka/`-mirror of the Mathlib directory tree for that reason, next to
 `Mathlib/CategoryTheory/Sites/LocallySurjective.lean`.

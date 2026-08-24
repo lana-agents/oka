@@ -11,6 +11,14 @@ import Mathlib.RingTheory.Localization.Ideal
 # Localising at a maximal ideal does not change the quotients by its powers
 
 Material for `Mathlib/RingTheory/Localization/Ideal.lean`; see `README.md` on the mirror tree.
+Upstreaming it adds `Mathlib.RingTheory.Localization.AtPrime.Basic` and
+`Mathlib.RingTheory.Ideal.Quotient.Nilpotent` to a target whose closure is **1114** Mathlib
+modules — **113** new ones, of which `AtPrime.Basic` alone accounts for all 113 and
+`Ideal.Quotient.Nilpotent`'s own 91 is contained in it. Measured with `scripts/import_cost.py`.
+**A cheaper destination exists and this file does not choose it**: priced into
+`Mathlib/RingTheory/Localization/AtPrime/Basic.lean`, whose closure already contains both, these
+declarations cost **0**. Which of the two files a statement about `R ⧸ p ^ k` and `R_p` belongs
+in is taxis #935's question, not this docstring's.
 
 For a **maximal** ideal `p` of `R`, the canonical map
 

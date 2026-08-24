@@ -10,6 +10,11 @@ import Mathlib.Topology.Category.TopCat.Opens
 # `TopologicalSpace.Opens.map` is a final functor
 
 Material for `Mathlib/Topology/Category/TopCat/Opens.lean`; see `README.md` on the mirror tree.
+Upstreaming it adds `Mathlib.CategoryTheory.Filtered.Final`, which the argument below needs, to a
+target whose closure is **707** Mathlib modules — **117** new ones, measured with
+`scripts/import_cost.py`. **The obvious alternative destination is worse and that is measured
+too**: the same declarations priced into `Mathlib/CategoryTheory/Filtered/Final.lean` cost it
+**205**, so the finality of `Opens.map` belongs on the `Opens` side of the pair.
 
 For a continuous map `f : X ⟶ Y`, taking preimages is a functor `Opens Y ⥤ Opens X`, and it is
 **final**: colimits over `Opens Y` of a diagram pulled back along it agree with colimits over

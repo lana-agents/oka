@@ -35,14 +35,21 @@ These two results cannot: they need `Mathlib.RingTheory.Filtration`, and Mathlib
 that import to `ResidueField/Basic.lean` for two corollaries.
 
 The two Mathlib files are **import-incomparable**: neither transitively imports the other
-(closures of 1547 and 1494 files respectively). So there is no cycle, but there is also no free
-choice — *either* destination has to gain an import. What picks this one is the asymmetry of the
-cost:
+(closures of **1291** and **1228** Mathlib files respectively). So there is no cycle, but there is
+also no free choice — *either* destination has to gain an import. What picks this one is the
+asymmetry of the cost:
 
-* adding `ResidueField.Basic` to `Filtration` costs **31** files;
-* adding `Filtration` to `ResidueField.Basic` costs **84**.
+* adding `ResidueField.Basic` to `Filtration` costs **33** files;
+* adding `Filtration` to `ResidueField.Basic` costs **96**.
 
-Cheaper by a factor of about 2.7, and in the direction Mathlib already prefers: a corollary goes
+**Those four figures were 1547, 1494, 31 and 84 until taxis #935**, taken on an instrument this
+repository no longer has; the closure pair was counting `Aesop`, `Batteries`, `Init` and `Lean`
+modules alongside the Mathlib ones, and the two costs were simply wrong. They are now
+`scripts/import_cost.py`'s. **The conclusion does not move** — 33 against 96 picks the same
+destination as 31 against 84 — but `README.md` quotes the **96** as this project's canonical
+too-expensive figure, and it was disagreeing with the file it came from.
+
+Cheaper by a factor of about three, and in the direction Mathlib already prefers: a corollary goes
 with the theorem it follows from rather than with the notion it is about.
 
 ## Main results

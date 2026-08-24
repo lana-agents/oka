@@ -17,9 +17,13 @@ public import Oka.Algebra.Category.ModuleCat.Sheaf.Generators
 # A module on an affine scheme and its global sections
 
 Material for `Mathlib/AlgebraicGeometry/Modules/Tilde.lean`; see `README.md` on the mirror tree.
-That file does not currently import `Mathlib.RingTheory.Localization.Finiteness` or
-`Mathlib.RingTheory.LocalProperties.FinitePresentation`, which the two change-of-site arguments
-below need, so upstreaming it adds those imports — three files to its closure.
+That file does not currently import `Mathlib.RingTheory.Localization.Finiteness`,
+`Mathlib.RingTheory.LocalProperties.FinitePresentation` or
+`Mathlib.Algebra.Module.FinitePresentation`, which the two change-of-site arguments below need,
+so upstreaming it adds those three imports — **six** files to its closure of 2290, measured with
+`scripts/import_cost.py`. **This sentence used to say "three files" and name only the first two
+imports**; three is the cost of the third one on its own, and the sentence went stale when that
+import was added. The placement conclusion does not move: six is small either way.
 
 Mathlib proves `AlgebraicGeometry.isQuasicoherent_iff_isIso_fromTildeΓ`: an
 `𝒪_{Spec R}`-module `M` is quasicoherent exactly when the counit
