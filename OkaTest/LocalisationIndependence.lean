@@ -26,10 +26,16 @@ The checks below close that, on `f` and `f ^ 2`:
 
 Together: the isomorphism exists, and what it identifies is not already equal.
 
-`f` and `f ^ 2` are also the smallest witness that the hypotheses are strictly weaker than
+`f` and `f ^ 2` are also the pair showing that these hypotheses are strictly weaker than
 Mathlib's `IsLocalization.Away.of_associated`, which the mirror file
-`Oka/RingTheory/Localization/Away/Basic.lean` records: `Associated f (f ^ 2)` fails whenever `f`
-is not a unit, and `z₀` in `ℂ[z₀, z₁] ⧸ (z₀ z₁)` is not.
+`Oka/RingTheory/Localization/Away/Basic.lean` records: they satisfy the hypotheses at every
+presentation, by `dvd_pow_sq` and `sq_dvd_pow` below, and need not be associated — that file's
+witness is `2` and `4` in `ℤ`.
+
+**What is not checked here.** Whether `f` and `f ^ 2` are associated *at the node*. No statement
+below mentions `Associated`: `localisationPresentation_ne_sq` distinguishes the two presentations
+by total degree, which is what the non-vacuity argument needs, and it says nothing about the
+units of the node ring.
 -/
 
 open CategoryTheory MvPolynomial ComplexAnalytic

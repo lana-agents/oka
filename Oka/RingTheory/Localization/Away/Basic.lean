@@ -16,7 +16,8 @@ declarations named below are already in it.
 geometrically, only through the basic open `D(r) ⊆ Spec R`. Mathlib records the special case
 where `r` and `r'` are *associated* (`IsLocalization.Away.of_associated` and
 `IsLocalization.Away.iff_of_associated`), which is strictly stronger than having the same basic
-open: `r` and `r ^ 2` have the same basic open and are associated only when `r` is a unit.
+open: `r` and `r ^ 2` always have the same basic open, and need not be associated — in `ℤ`,
+`2` and `4` are not, the only units there being `1` and `-1`.
 
 The general condition is symmetric divisibility of powers, and it is the condition Mathlib's own
 `IsLocalization.Away.algebraMap_isUnit_iff` is already phrased in: `IsUnit (algebraMap R S r')`
