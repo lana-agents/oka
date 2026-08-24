@@ -15,10 +15,6 @@ different one:
 > the two laws want two different diagrams: `trans_comp` wants a **chain** of three, which is this
 > file, and `directed` wants a **cospan** of three, which is not.
 
-**The word in that quotation is wrong** — the diagram it points at is a span, for the reason the
-next section gives — and the sentence is quoted as it stands on `master` rather than repaired
-here.
-
 This file is that other diagram, at `ℙ¹`: the two charts and their overlap, as a functor out of
 `CategoryTheory.Limits.WalkingSpan`, together with its analytification.
 
@@ -72,7 +68,7 @@ The content is therefore entirely in what the objects and the arrows are.
   `glue` is `Iso.refl`.
 * **The apex is a third object and not a foot under another name.**
   `OkaTest.ProjectiveLineSpan.lineSpan_obj_zero_ne_obj_left` says so as a statement about the
-  diagram, separating the objects by the number of variables.
+  diagram, separating the apex from a foot by the number of variables.
   `ComplexAnalytic.localisationOpen_lineRel_ne_top` says the open `D(z)` that the apex presents is
   not the whole chart, and `ComplexAnalytic.localisationOpen_lineRel_ne_bot` says it is not empty.
   Those two are statements about that **open subset of one chart**, and that is all that is drawn
