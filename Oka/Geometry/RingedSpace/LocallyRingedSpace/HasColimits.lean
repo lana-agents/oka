@@ -9,17 +9,30 @@ import Oka.Geometry.RingedSpace.PresheafedSpace.Gluing
 /-!
 # The coproduct of locally ringed spaces is covered by its inclusions
 
-Material for `Mathlib/Geometry/RingedSpace/LocallyRingedSpace/HasColimits.lean`; see `README.md`
-on the mirror tree. Upstreaming costs that file **nothing**: it is the file's own import, and the
-`SheafedSpace` results the proofs run through are already in its closure.
+Material for `Mathlib/Geometry/RingedSpace/LocallyRingedSpace/HasColimits.lean` and for
+`Mathlib/Geometry/RingedSpace/PresheafedSpace/Gluing.lean` — two destinations and not one; see
+`README.md` on the mirror tree, which asks for the split.
 
-Mathlib builds the coproduct of locally ringed spaces in that file and never says that the
-inclusions are open immersions. It says it one level below, for `SheafedSpace` over a category
-with strict terminal objects
+**Everything except the cover goes to the first at cost 0**: it is this file's own import, and the
+`SheafedSpace` results the proofs run through are already in its closure. **The cover goes to the
+second**, because it is stated in terms of `AlgebraicGeometry.LocallyRingedSpace.OpenCover`, and
+Mathlib has no such structure: this repository's is in
+`Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean`, proposed for the Mathlib file of that name,
+and that file is *not* in the first one's closure. `scripts/import_cost.py` prices it there at
+**3** modules (`Mathlib.CategoryTheory.GlueData`,
+`Mathlib.Geometry.RingedSpace.PresheafedSpace.Gluing`, `Mathlib.Topology.Gluing`), while the
+dependency in the other direction costs **0**. So upstream the cover sits beside `OpenCover` and
+nothing pays anything; it is in this file rather than in the gluing one only because that file is
+an import of this one.
+
+Mathlib builds the coproduct of locally ringed spaces in the first of those files and never says
+that the inclusions are open immersions. It says it one level below, for `SheafedSpace` over a
+category with strict terminal objects
 (`AlgebraicGeometry.SheafedSpace.IsOpenImmersion.sigma_ι_isOpenImmersion`), and one level above,
 for `AlgebraicGeometry.Scheme` — where `Mathlib/AlgebraicGeometry/Limits.lean` has the whole
-sigma API, which this repository does not import and so cannot name here. Only the middle level
-is missing, and
+sigma API: `AlgebraicGeometry.sigmaOpenCover`, `AlgebraicGeometry.sigmaMk`,
+`AlgebraicGeometry.sigmaι_eq_iff` and `AlgebraicGeometry.disjoint_opensRange_sigmaι`, none of
+which has a `Scheme` component in its name. Only the middle level is missing, and
 
     example (i : Discrete ι) : LocallyRingedSpace.IsOpenImmersion (colimit.ι F i) := by
       infer_instance
