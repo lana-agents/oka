@@ -394,6 +394,13 @@ info: 'ComplexAnalytic.exists_presentation' depends on axioms:
 #print axioms ComplexAnalytic.exists_presentation
 
 /--
+info: 'ComplexAnalytic.toFGAlg' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.toFGAlg
+
+/--
 info: 'ComplexAnalytic.toFGAlgFullyFaithful' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
@@ -413,6 +420,13 @@ info: 'ComplexAnalytic.analytificationFGAlgCompIso' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.analytificationFGAlgCompIso
+
+/--
+info: 'ComplexAnalytic.analytificationFGAlgObjIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationFGAlgObjIso
 
 /-! ### The stalk map of `X^an ⟶ Spec (ℂ[x] ⧸ I)`
 
@@ -479,6 +493,20 @@ info: 'ComplexAnalytic.analytificationToSpecNatTrans' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.analytificationToSpecNatTrans
+
+/--
+info: 'ComplexAnalytic.analytificationToSpecNatTrans_app' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationToSpecNatTrans_app
+
+/--
+info: 'ComplexAnalytic.specFunctor' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specFunctor
 
 /--
 info: 'ComplexAnalytic.specFunctor_eq' depends on axioms: [propext, Classical.choice, Quot.sound]

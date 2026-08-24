@@ -66,6 +66,25 @@ four such cycles in a single morning. Issue #558's append-at-the-end convention 
 damage but could not remove it, because two additions at the end of a file still collide.
 Concurrent pull requests that touch *different files* do not. See issue #640.
 
+## What these guards cover, and what they do not
+
+**Nothing here claims to be complete, and the gap is measured rather than guessed.**
+`python3 scripts/guard_coverage.py` counts the declarations this repository's module docstrings
+advertise under a `## Main results` heading and asks which of them some `#print axioms` names. On
+2026-08-24, on the tree this paragraph lands in, that is **502 guarded names against 506
+advertised declarations, of which 179 are named by no guard at all, spread over 63 files** — so
+rather more than a third of what the library announces as its main results carries no axiom
+assertion. Neither list contains the other: **175 guarded names are advertised in no
+`## Main results`**, which is not a defect, since a guard on a lemma no docstring announces is
+worth exactly as much as one on a lemma it does.
+
+**That is a measurement and not a rule, and this file does not turn it into one.** Some of the 179
+should probably stay unguarded — `Oka/Analytic/ParametricCircleIntegral.lean` is general complex
+analysis with a Mathlib destination and contributes 17 of them — so the right number is not zero,
+nobody has decided what it is, and the script is a reporter run by hand rather than a check in
+`.orchestra/validation.sh`. What the paragraph above rules out is only the reading that an
+absent guard means somebody decided against one.
+
 ## Updating an assertion
 
 If a theorem is legitimately restated or renamed, do **not** delete its assertion. Run the

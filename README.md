@@ -844,6 +844,42 @@ already carries — does not catch it either**, because both figures the tree ca
 the broken instrument. The script's `--self-test` has the fixture that does catch it, and its module
 docstring explains why the regression cases alone are not enough.
 
+A third tool, and also a tool and not a gate, is `python3 scripts/guard_coverage.py`, which asks
+how much of what the module docstrings advertise the axiom guards actually reach:
+
+```sh
+python3 scripts/guard_coverage.py
+python3 scripts/guard_coverage.py --by-file
+python3 scripts/guard_coverage.py --self-test
+```
+
+`OkaTest/Axioms.lean` states a **placement** rule — which file, which heading — and no coverage
+rule at all, so a reader is entitled to think the guards are complete. On 2026-08-24, counting the
+fifteen guards added in the commit that wrote this paragraph, they cover **502 names, against 506
+declarations advertised under a `## Main results` heading, 179 of which are named by no guard, in
+63 files**; the reverse direction is 175 guarded names no docstring advertises, which is not a
+defect. **The right number is certainly not zero** — `Oka/Analytic/ParametricCircleIntegral.lean`
+is general complex analysis with a Mathlib destination and contributes 17 — nobody has decided
+what it is, and that is why this is run by hand and why `validation.sh` does not read it. The
+defect it exists to catch is one that already happened: a result added to a `## Main results` list
+without its guard, caught by a reviewer reading both lists by eye.
+
+It needs the environment, so it runs after the build, and `DumpOkaDecls.lean` is the helper it
+invokes: that file asks Lean which module declared each constant rather than testing the name
+for a prefix. A prefix test would be wrong in both directions here, because the mirror tree
+declares into `AlgebraicGeometry`, `CategoryTheory` and `Polynomial` and Mathlib declares into
+nothing beginning with `Oka`. The distinction is worth 15 of these figures: an instrument that
+keeps every backticked token resolving anywhere in the environment counts `Iff`, `rfl`,
+`Classical.choice` and twelve Mathlib declarations among this repository's advertised results.
+
+`guard_coverage.py`'s `--self-test` pins the extraction on fixtures, each half with a control, and
+writing it turned up a live instance of the defect `scripts/import_cost.py`'s docstring is about: **a guard whose
+name does not fit on the line after `#print axioms` is invisible to the obvious grep**. At
+`0b19eb1` the guards were counted as 471 twice — once by the issue that asked for this script and
+once by the script's own first draft — and there were 472. It carries a tripwire for the general
+case, comparing the number of `#print axioms` commands against the number of names it managed to
+read, so that a layout it cannot parse is reported rather than silently dropped.
+
 Nothing checks the figures in docstrings against the script, and nothing can: they are English
 prose, phrased twenty different ways. This is for an author to run before writing one and a
 reviewer to run before believing one.
@@ -853,7 +889,7 @@ under `scripts/` is named somewhere in this README — a literal substring match
 filename, run before the build because it reads two text files and nothing else. It is the same
 test Mathlib's `undocumentedScripts` linter applies to `scripts/README.md`, pointed at the index
 that already exists instead of at a second one; the measurement is in `.orchestra/validation.sh`,
-in the comment above `lake exe lint-style`, and it is that a file holding the six names in
+in the comment above `lake exe lint-style`, and it is that a file holding the eight names in
 backticks and no prose satisfies the Mathlib version outright. So a match proves only that
 somebody wrote the name down. **The one thing it catches is a file arriving under `scripts/` with
 no sentence about it anywhere** — which had already happened three times over:
