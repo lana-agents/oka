@@ -62,7 +62,7 @@ fi
 # six backticked names and no prose satisfies that linter outright.
 #
 # **The test is not Mathlib's**, and until 2026-08-24 this paragraph said it was. Mathlib looks
-# for the name *wrapped in backticks* (`scripts/lint-style.lean:181` in the Mathlib checkout),
+# for the name *wrapped in backticks* (`scripts/lint-style.lean:180` in the Mathlib checkout),
 # which is already exact and so has none of the hole fixed below — but which `README.md` fails
 # for three of the six entries: `check_file.sh` is written only as `bash scripts/check_file.sh
 # FILE.lean` inside a fenced block, and `check_module_docstrings.py` and `import_cost.py` are
