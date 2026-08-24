@@ -363,6 +363,13 @@ info: 'ComplexAnalytic.isCLinearHom_comapAlgMap' depends on axioms:
 #print axioms ComplexAnalytic.isCLinearHom_comapAlgMap
 
 /--
+info: 'ComplexAnalytic.IsCLinearHom.of_openCover' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.IsCLinearHom.of_openCover
+
+/--
 info: 'ComplexAnalytic.HasLocalModels.of_iso' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
