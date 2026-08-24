@@ -835,8 +835,8 @@ no `instance`**, named or anonymous: its first test returns `none` on any instan
 silent on the seven `Prop` fields in the table below where `docBlameThm` is not. It reports
 nothing over this library and it stays that way. The linter that covers `theorem` and `lemma` is
 `docBlameThm`; it is `@[env_linter disabled]` in Batteries, **this repository leaves it off
-deliberately, and what follows is the measurement behind that** so the next person to notice the silence finds a number
-rather than re-deriving one.
+deliberately, and what follows is the measurement behind that** so the next person to notice the
+silence finds a number rather than re-deriving one.
 
 Take it in a file that imports `Oka` and `Batteries.Tactic.Lint`:
 

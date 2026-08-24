@@ -76,8 +76,7 @@ seven are described here instead. That is the same convention as `Oka/ComplexSpa
 **every** instance, named or anonymous, `docBlameThm` covers theorems and is off by default in
 Batteries and not turned on here, and the one `abbrev` `docBlame` does reach inherits its
 docstring. Turning `docBlameThm` on repository-wide would fire on every undocumented theorem
-under `Oka/`; that count
-is taxis #928 and is a separate question.
+under `Oka/`; that count is taxis #928 and is a separate question.
 
 ## Main results
 
