@@ -94,6 +94,18 @@ variable is a renaming of the variables, and the commutation with the structure 
 def localisationPresHom : PresHom.{u} (localisationPresentation.{u} g f) g :=
   PresHom.ofRename.{u} (localisationIncl.{u} n) (rename_localisationIncl_mem.{u} g f)
 
+/-- **The structure map as a morphism of the two objects of `ComplexAnalytic.Presentation`**: the
+same term as `ComplexAnalytic.localisationPresHom`, with its source and target read as objects of
+the category.
+
+Stated because the bare `ComplexAnalytic.PresHom` does not elaborate against `≫`, `Iso` or `IsIso`:
+`Category Presentation` has `Hom P Q := PresHom P.g Q.g`, and the two objects are not recovered
+from the term. `OkaTest/LocalisationFunctor.lean`'s `nodeStructureHom` is this ascription taken at
+the node, and records that the missing one is what costs time. -/
+abbrev localisationHom :
+    (⟨n + 1, k + 1, localisationPresentation.{u} g f⟩ : Presentation.{u}) ⟶ ⟨n, k, g⟩ :=
+  localisationPresHom.{u} g f
+
 /-- **The structure map `A ⟶ A_f`**, as a ring map of presented algebras: the underlying ring map
 of `ComplexAnalytic.localisationPresHom`, and the spelling every consumer that does not need the
 commutation uses. -/

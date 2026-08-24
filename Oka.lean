@@ -63,6 +63,7 @@ import Oka.Analytification.Flatness
 import Oka.Analytification.FlatnessAtAPoint
 import Oka.Analytification.Functor
 import Oka.Analytification.LocalRing
+import Oka.Analytification.LocalisationComposite
 import Oka.Analytification.LocalisationFunctor
 import Oka.Analytification.LocalisationIndependence
 import Oka.Analytification.Presentation
