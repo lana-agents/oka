@@ -43,12 +43,25 @@ so every composite has an identity on one side and `trans_comp` follows from `tr
 members cannot supply unless one of them is below the other.
 
 So the two laws want two different diagrams: `trans_comp` wants a **chain** of three, which is this
-file, and `directed` wants a **cospan** of three, which is not. The cospan is the honest
+file, and `directed` wants a **span** of three, which is not — two arrows out of a common source,
+because `directed` asks for a member *below* both. (This paragraph and the bullet in
+`## What is not here` both said *cospan* until `OkaTest/ProjectiveLineSpan.lean` showed the word
+was wrong; `CategoryTheory.Limits.cospan` is the shape with the two arrows the other way round,
+and the correction is recorded here rather than made silently.) The span is the honest
 re-expression of `ℙ¹`: `OkaTest/ProjectiveLine.lean` proves that the overlap is neither the whole
 member nor empty (`ComplexAnalytic.localisationOpen_lineRel_ne_top` and
-`ComplexAnalytic.localisationOpen_lineRel_ne_bot`), so neither of the two members contains the
-other and the third object has to be the overlap itself. It is a separate test with disjoint
-content.
+`ComplexAnalytic.localisationOpen_lineRel_ne_bot`), so the overlap is a third object and not
+either member under another name. It is a separate test with disjoint content, and it is
+`OkaTest/ProjectiveLineSpan.lean` and `OkaTest/ProjectiveLineDirected.lean`.
+
+**That neither of the two members contains the other is a stronger statement**, it is what forces
+`directed`'s third member to be a genuinely new object rather than one of the two, and the two
+`localisationOpen` lemmas above do **not** prove it: they are about one member's open subset and
+say nothing about the two members' images in the glued space. This paragraph asserted it and
+attributed it to them until `OkaTest/ProjectiveLineDirected.lean` was written;
+`OkaTest.ProjectiveLineDirected.not_range_ι_subset_range_ι` now proves it, from
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.ι_jointly_surjective` and
+`ComplexAnalytic.not_surjective_ι_projectiveLineGlueData`.
 
 ## The choice that makes this a test rather than a tautology
 
@@ -96,11 +109,14 @@ for each ordered pair with an arrow between them, a witness polynomial. That is 
 `ComplexAnalytic.localisationPresentationIsoOfDvdPow` controls — two witnesses each dividing a
 power of the other give canonically isomorphic presentations — and it is not made anywhere yet.
 
-**No `directed` law and no cospan**, for the reason above.
+**No `directed` law and no span**, for the reason above. Both are elsewhere:
+`OkaTest/ProjectiveLineSpan.lean` is the diagram and `OkaTest/ProjectiveLineDirected.lean` is the
+law, at `ℙ¹` in both cases.
 
 **No analytic analogue of the `LocallyDirected` class.** This file is a single diagram, which is
 what tells you whether such a class would have anything to quantify over; defining one is a design
-decision and is not taken here.
+decision and is not taken here. `OkaTest/ProjectiveLineDirected.lean` declines it too, and
+measures what defining it would still be missing now that both laws have an instance.
 
 **`OkaTest.LocalisationChain.ofThree` is not library API.** It is category theory with no analytic
 content, so if it is ever wanted outside a test it belongs in the mirror tree and not in
