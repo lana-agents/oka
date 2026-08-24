@@ -13,7 +13,8 @@ public import Mathlib.CategoryTheory.Sites.Spaces
 
 Material for `Mathlib/CategoryTheory/Sites/CoversTop/Over.lean`; see `README.md` on the mirror
 tree. It imports its target and `Mathlib.CategoryTheory.Sites.Spaces`, the latter only for
-`coversTop_over` below, so upstreaming it adds **15** modules to that file's closure of **997**.
+`TopologicalSpace.Opens.coversTop_over` below, so upstreaming it adds **15** modules to that
+file's closure of **997**.
 
 Mathlib's file of that name has `CategoryTheory.GrothendieckTopology.CoversTop.over`, which is a
 *transitivity* statement: a family covering the top, refined by a family covering the top of each
@@ -33,11 +34,11 @@ covering family.
 
 ## The second lemma, and why it is here rather than beside the topology it mentions
 
-`coversTop_over` is the same phenomenon for the site of open subsets of a topological space: a
-family of opens covering `X` covers the terminal object of the slice site over `X`. It is not a
-special case of `CoversTop.over'` — that one produces the family of *all* objects admitting a
-morphism to a member, and this one keeps the given family, which is what a consumer holding a
-concrete cover has.
+`TopologicalSpace.Opens.coversTop_over` is the same phenomenon for the site of open subsets of a
+topological space: a family of opens covering `X` covers the terminal object of the slice site
+over `X`. It is not a special case of `CoversTop.over'` — that one produces the family of *all*
+objects admitting a morphism to a member, and this one keeps the given family, which is what a
+consumer holding a concrete cover has.
 
 The type it is most specifically about is `Opens.grothendieckTopology`, defined
 in `Mathlib/CategoryTheory/Sites/Spaces.lean`, and that is the placement the subject suggests and
@@ -46,15 +47,29 @@ modules on a closure of 818, against `README.md`'s recorded 96, where the two im
 here cost **15**. `Mathlib/CategoryTheory/Sites/Over.lean` would cost 16 and would do as well;
 this file wins by a point and by sitting beside its sibling.
 
-**It is in the root namespace**, which is not where a Mathlib file would want it. That is
-inherited from where it was declared — `Oka/Coherent.lean`, now deleted — and renaming it is a
-separate change with its own consumers to update; taxis #905, which moved it, asked for no
-renames.
+It was in the root namespace until taxis #933 — inherited from `Oka/Coherent.lean`, now deleted,
+which had no `namespace` at all — and is now `TopologicalSpace.Opens.coversTop_over`, the
+namespace of the type its first explicit argument has, so that a caller holding an open `X`
+writes `X.coversTop_over`. Two other names were weighed and rejected, and the reasons are worth
+keeping because neither is obvious.
+
+*A name in the `CoversTop` namespace*, beside the sibling above, would look like dot notation and
+never be usable as such: `CategoryTheory.GrothendieckTopology.CoversTop.over'` is dot notation on
+a `CoversTop` **hypothesis**, and this lemma takes no `CoversTop` argument at all.
+
+*A name in the namespace where Mathlib keeps the topology itself* would sit the lemma beside
+`Opens.grothendieckTopology` at the price of the dot notation — and that namespace is **not** the
+type's. `Mathlib/CategoryTheory/Sites/Spaces.lean` opens a root-level `namespace Opens`, so the
+topology's full name is `Opens.grothendieckTopology` while the type's is
+`TopologicalSpace.Opens`; no declaration of the topology exists under the latter, which was
+checked in the environment rather than inferred. Following that would copy a Mathlib
+inconsistency rather than the type. This repository already uses `namespace TopologicalSpace.Opens`
+in `Oka/Topology/Category/TopCat/Opens.lean` and `Oka/StructureSheaf.lean`.
 
 ## Main results
 
 - `CategoryTheory.GrothendieckTopology.CoversTop.over'`
-- `coversTop_over`, whose consumer is
+- `TopologicalSpace.Opens.coversTop_over`, whose consumer is
   `Oka/Geometry/RingedSpace/LocallyRingedSpace/Coherent.lean`, where the open cover of a locally
   ringed space on which relations are locally generated has to be read on the slice site.
 -/
@@ -82,7 +97,9 @@ lemma CoversTop.over' {I : Type*} {X : I → C} (hX : J.CoversTop X) (W : C) :
 
 end CategoryTheory.GrothendieckTopology
 
-open CategoryTheory TopologicalSpace
+open CategoryTheory
+
+namespace TopologicalSpace.Opens
 
 /-- A family of open subsets of `X` covering `X` covers the terminal object of the slice site
 over `X`. -/
@@ -100,3 +117,5 @@ lemma coversTop_over {T : Type u'} [TopologicalSpace T] (X : Opens T) {A : Type 
     (GrothendieckTopology.overEquiv_symm_mem_over _ Z S hS)
   rintro W g ⟨a, ha⟩
   exact ⟨a, ⟨Over.homMk (homOfLE ha)⟩⟩
+
+end TopologicalSpace.Opens
