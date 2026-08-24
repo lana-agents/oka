@@ -5,7 +5,6 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 module
 
-public import Mathlib.Algebra.Category.Grp.Abelian
 public import Mathlib.Algebra.Category.Grp.EpiMono
 public import Mathlib.CategoryTheory.ConcreteCategory.EpiMono
 
@@ -24,28 +23,35 @@ forgetful functor preserves monomorphisms and epimorphisms
 (`Mathlib/CategoryTheory/ConcreteCategory/EpiMono.lean:148`). For `AddCommGrpCat` all of those
 hold, but `(forget AddCommGrpCat).PreservesEpimorphisms` is not registered; an epimorphism of
 abelian groups is surjective, which is `AddCommGrpCat.epi_iff_surjective`, and that is all the
-instance below needs. With it, the factorization class is `inferInstance`.
+instance below needs. With it, and in a file that also has `Abelian AddCommGrpCat`, the
+factorization class is `inferInstance`.
 
-`Mathlib.Algebra.Category.Grp.Abelian` is imported for `HasStrongEpiMonoFactorisations`, which
-comes from `AddCommGrpCat` being abelian and is otherwise not in scope — the same trap as
+The strong epi–mono factorisations that class also wants come from `AddCommGrpCat` being
+abelian, which is `Mathlib.Algebra.Category.Grp.Abelian` — the same trap as
 `Balanced (Sheaf J AddCommGrpCat)`, where the missing piece was also `Abelian AddCommGrpCat` and
-the error message named the construction rather than the category.
+the error message named the construction rather than the category. **That import is not here**,
+because the instance below does not use it; it is in
+`Oka/Algebra/Category/Grp/Sheaf/LocallySurjective.lean`, the file that assembles the
+factorization class and is the only thing in this repository that needs it.
 
 There is no analytic content here, so this file is a candidate for upstreaming to Mathlib; it
 lives in the `Oka/`-mirror of the Mathlib directory tree for that reason, next to
 `Mathlib/Algebra/Category/Grp/EpiMono.lean`.
 
-**That mirror path costs 544 modules, which is the largest price in this tree**, and the figure
-was unstated here until taxis #935. `Mathlib/Algebra/Category/Grp/EpiMono.lean`'s transitive
-closure is **637** Mathlib modules and `Mathlib.Algebra.Category.Grp.Abelian` is not in it;
-adding it costs **544**, against the **96** `README.md` records as the figure that once made an
-upstreaming judged too expensive. Measured with `scripts/import_cost.py`, not estimated.
+**Upstreaming it costs that file nothing.** Its transitive closure is **637** Mathlib modules and
+both imports above are already in it, so the cost is **0** — measured with
+`python3 scripts/import_cost.py Oka/Algebra/Category/Grp/EpiMono.lean`, counting modules with a
+file under `Mathlib/`, and not estimated.
 
-**A cheaper destination exists and this file does not choose it.** The same instance priced into
-`Mathlib/Algebra/Category/Grp/Abelian.lean` — which has the strong epi–mono factorisations
-already — costs **2**. Whether a Mathlib reviewer would want an `AddCommGrpCat` epimorphism
-instance in the abelian-structure file is a question about the declaration rather than about the
-price, and it is taxis #935's to answer.
+**This paragraph read 544 until taxis #935, and the 544 was real but was not this declaration's.**
+`Mathlib.Algebra.Category.Grp.Abelian` is not in the target's closure and adding it costs **544**
+— 5.7× the **96** `README.md` records as the figure that once made an upstreaming judged too
+expensive, and the largest price this tree carried. The instance does not need it: with that
+import deleted this file still compiles, and the only thing under `Oka/` that stops compiling is
+`Oka/Algebra/Category/Grp/Sheaf/LocallySurjective.lean`, at the one line where
+`HasStrongEpiMonoFactorisations` is synthesised. **A re-exported import is priced against the
+file that carries it, not against the file that needs it**, so a per-file sweep reads the whole
+544 here; moving one line put it where the dependency is and made this file free.
 
 ## Main results
 

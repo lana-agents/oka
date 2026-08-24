@@ -4,17 +4,24 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Mathlib.AlgebraicGeometry.Spec
-import Mathlib.AlgebraicGeometry.StructureSheaf
 
 /-!
 # A global section of `𝒪_{Spec R}` vanishes at a prime exactly when it lies in it
 
-Material for `Mathlib/AlgebraicGeometry/StructureSheaf.lean`; see `README.md` on the mirror tree.
-Upstreaming it adds `Mathlib.AlgebraicGeometry.Spec`, which the second statement's
-`Spec.locallyRingedSpaceObj` spelling needs, to a target whose closure is **2010** Mathlib
-modules — **19** new ones, measured with `scripts/import_cost.py`. **A cheaper destination
-exists and this file does not choose it**: priced into `Mathlib/AlgebraicGeometry/Spec.lean`,
-which already imports the structure sheaf, both statements cost **0**. Taxis #935.
+Material for `Mathlib/AlgebraicGeometry/Spec.lean`; see `README.md` on the mirror tree.
+Upstreaming it adds nothing: that file's transitive closure is **2029** Mathlib modules, the
+import above is the target itself, and the cost is **0**, measured with
+`python3 scripts/import_cost.py Oka/AlgebraicGeometry/Spec.lean`.
+
+**This file was `Oka/AlgebraicGeometry/StructureSheaf.lean` until taxis #935**, proposing
+`Mathlib/AlgebraicGeometry/StructureSheaf.lean` at **19** on a closure of 2010 — the price of
+`Mathlib.AlgebraicGeometry.Spec`. Both statements below name `Spec.locallyRingedSpaceObj`: the
+second in its statement, and the first in the `haveI` that supplies the stalk's `IsLocalRing`
+instance, which is stated at that spelling and nowhere else. The target imports the structure
+sheaf and not the other way round, so the old path had to buy the import to state either
+theorem, and the new one is free. **The namespace does not move with the file**: both stay
+`AlgebraicGeometry.StructureSheaf`, which is what their subject is, and `README.md`'s rule is
+about destinations rather than about names.
 
 Mathlib proves the other direction — the germ of `a` at `x` is a unit when `x ∈ basicOpen a` —
 as `isUnit_toStalk` in `Mathlib/AlgebraicGeometry/StructureSheaf.lean`, and **that declaration is

@@ -689,8 +689,8 @@ Mathlib's own namespaces, and is intended for upstreaming; its imports are the c
 Mathlib file plus whatever else it genuinely needs, and nothing from the analytic side of this
 development. For example `Oka/CategoryTheory/Sites/Over.lean` extends
 `Mathlib/CategoryTheory/Sites/Over.lean`, `Oka/Algebra/Category/ModuleCat/Sheaf/` mirrors
-`Mathlib/Algebra/Category/ModuleCat/Sheaf/`, and `Oka/RingTheory/Ideal/Maps.lean` adds one
-missing lemma next to `Ideal.comap_symm` in `Mathlib/RingTheory/Ideal/Maps.lean`.
+`Mathlib/Algebra/Category/ModuleCat/Sheaf/`, and `Oka/RingTheory/Finiteness/Ideal.lean` adds one
+missing lemma next to `Ideal.FG.map` in `Mathlib/RingTheory/Finiteness/Ideal.lean`.
 
 **A new lemma with no complex-analytic content belongs in the mirror tree, not in the analytic
 file that happens to need it.** The two tests are whether the statement mentions anything defined
@@ -882,14 +882,14 @@ is not available: **`Mathlib/` mentions `docBlameThm` nowhere at all**, and its 
 mentions are `nolint` attributes, so Mathlib would accept all 428 as they stand. Whatever
 this repository does here is a house convention and has to be argued as one.
 
-**A narrower alternative exists and is recorded rather than proposed.** Of the **41** files under
+**A narrower alternative exists and is recorded rather than proposed.** Of the **40** files under
 `Oka/` with a Mathlib file at their mirror path, **11 have at least one finding and 94 between
 them** — 43 of those in `PresheafedSpace/Gluing.lean` alone — and a `scripts/check_*.py`
 requiring a docstring on every theorem in a *mirror* file would be expressible where `lake lint`
 is not, since that linter selects by package and not by path. It would be a bounded job on the
 files that claim in their own docstrings to be going upstream. **Its denominator is the part that
 is not settled**: a mirror file need not have a Mathlib file at its path — the section above says
-so, and names proposed ones — so such a check would cover more than those 41, and which files it
+so, and names proposed ones — so such a check would cover more than those 40, and which files it
 covers is a decision and not a `test -f`.
 
 **Re-run the two commands rather than adjusting these figures by hand.** They moved from 458 in 58

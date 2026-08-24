@@ -10,7 +10,7 @@ public import Oka.Algebra.Category.ModuleCat.Sheaf.Free
 public import Oka.Algebra.Category.ModuleCat.Sheaf.Generators
 public import Oka.CategoryTheory.Abelian.Basic
 public import Oka.CategoryTheory.Sites.CoversTop.Basic
-public import Oka.CategoryTheory.Sites.LocallySurjective
+public import Oka.Algebra.Category.Grp.Sheaf.LocallySurjective
 
 /-!
 # An epimorphism of sheaves of modules is locally surjective
@@ -26,6 +26,13 @@ The bridge is `Oka/Algebra/Category/ModuleCat/Sheaf/Colimits.lean`: `SheafOfModu
 preserves epimorphisms, so an epimorphism of sheaves of modules becomes an epimorphism of
 sheaves of abelian groups, where
 `CategoryTheory.Sheaf.isLocallySurjective_of_epi_addCommGrp` applies.
+
+**The import block is not in alphabetical order and must not be sorted.**
+`Oka.Algebra.Category.Grp.Sheaf.LocallySurjective` is last deliberately: with it first,
+`SheafOfModules.exists_free_app_eq_of_epi` below fails to elaborate with
+`failed to solve universe constraint max u' v' =?= u`, which names nothing that would lead a
+reader back to the import block. Measured by moving the single line and rebuilding, in both
+directions.
 
 ## The section-level form
 
