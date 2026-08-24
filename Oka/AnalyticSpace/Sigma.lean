@@ -36,8 +36,11 @@ are the same map. There is no analysis and no sheaf argument in it.
 - `ComplexAnalytic.AnalyticSpace.comapAlgMap_sigma`: **the disjoint union's `ℂ`-algebra structure
   pulls back to each member's own**, which is what says the object is the disjoint union and not
   an unrelated space with the right carrier.
-- `ComplexAnalytic.isCLinearHom_sigmaDesc`: **a descent map out of a coproduct is `ℂ`-linear as
-  soon as its restrictions are**, with no agreement-on-overlaps hypothesis.
+- `ComplexAnalytic.isCLinearHom_sigmaDesc`: **a descent map out of a coproduct of locally ringed
+  spaces is `ℂ`-linear as soon as its restrictions are**, with no agreement-on-overlaps
+  hypothesis. Nothing in it is analytic, so it is stated for a family of locally ringed spaces.
+- `ComplexAnalytic.AnalyticSpace.sigmaι_sigmaDesc`: **the descent map restricts to the given
+  morphism on each member**, which is the universal property in the form this file keeps.
 - `ComplexAnalytic.AnalyticSpace.isEmpty_sigma` and
   `ComplexAnalytic.AnalyticSpace.not_surjective_sigmaι_base`: the two non-vacuity statements, at
   the two ends.
@@ -52,16 +55,27 @@ which is exactly why it applies here, where the map arrives from a universal pro
 from `AlgebraicGeometry.LocallyRingedSpace.OpenCover.glueMorphisms` and so carries no such
 hypothesis to hand over.
 
-## Two seams, both recorded because neither is visible from the statements
+## One seam, and it is not the one it looks like
 
-**State the round trip at `(sigmaCover F).map j`, not at `Sigma.ι`.** The two are equal by `rfl`
-but not reducibly so, and `j` is bound at `(sigmaCover F).J` rather than at `ι`.
+**Supply `ComplexAnalytic.AnalyticSpace.comapAlgMap_ofOpenCover_algebraMap`'s cover argument
+explicitly.** With every argument left as `_` the unifier works backwards from the goal into the
+coproduct and does not come back: elaboration fails with a heartbeat timeout that survives
+`maxHeartbeats 2000000`. Nothing about the statement is at fault — `#check` on it is instant.
 
-**Supply `ComplexAnalytic.AnalyticSpace.comapAlgMap_ofOpenCover_algebraMap`'s arguments
-explicitly.** With `_`s the unifier works backwards from the goal into the coproduct and does not
-come back: elaboration fails with a `whnf` timeout that survives `maxHeartbeats 2000000`. Naming
-the cover, the family, the compatibility and the local models makes the same proof elaborate in
-seconds. Nothing about the statement is at fault — `#check` on it is instant.
+**It is the cover and not the rest**, measured in both directions: naming the cover and leaving
+the family, the compatibility and the local models as `_` elaborates in seconds, while naming
+those three and leaving the cover as `_` still times out. The shape to recognise is therefore **a
+projection of an earlier argument in a later argument's type** — the index `j` has type `𝒰.J`, so
+a metavariable cover hands the unifier `?𝒰.J =?= ι`, which it cannot invert and so unfolds. That
+rule is about the projection and not about coproducts, and it reaches past this lemma.
+
+**The spelling of the round trip is not part of it**, which is worth saying because it looks as
+though it should be. `(sigmaCover F).map j` and `Sigma.ι _ j` are equal by `rfl` and **not**
+reducibly — `with_reducible rfl` fails on them — and yet the round trip below proves at either
+spelling with the arguments named, and fails at either spelling with them left as `_`. The
+statement uses `(sigmaCover F).map j` because that is the shape the cover-indexed consumers
+(`ComplexAnalytic.IsCLinearHom.of_openCover` among them) present, not because the other spelling
+costs anything.
 
 ## What is not here
 
@@ -154,8 +168,9 @@ lemma sigma_toLocallyRingedSpace :
 This is the statement that `ComplexAnalytic.AnalyticSpace.sigma` is the disjoint union rather than
 some other analytic space with the right carrier, and it is what makes the inclusions `ℂ`-linear.
 
-**Stated at `(sigmaCover F).map j` and not at `Sigma.ι`**: the two are equal by `rfl` and not
-reducibly, and `j` is bound at `(sigmaCover F).J`. -/
+**Stated at `(sigmaCover F).map j`** because that is the shape the cover-indexed consumers
+present; `Sigma.ι _ j` is the same morphism by `rfl` — though not reducibly — and the statement
+proves at that spelling too. See the header on what the actual seam is. -/
 theorem comapAlgMap_sigma (j : ι) :
     comapAlgMap ((sigmaCover F).map j) (sigma F).algebraMap = (F j).algebraMap :=
   comapAlgMap_ofOpenCover_algebraMap (sigmaCover F) (fun j ↦ (F j).algebraMap)
@@ -186,16 +201,21 @@ agreement-on-overlaps hypothesis to hand over.
 
 The step is stated as a `have … := Sigma.ι_desc …` and used by `▸` rather than by `rw`: `i` is
 bound at `(sigmaOpenCover _).J`, so the goal presents `(sigmaOpenCover _).map i ≫ Sigma.desc g`
-and `rw [Sigma.ι_desc]` reports *"did not find an occurrence"*. -/
-theorem isCLinearHom_sigmaDesc {Y : LocallyRingedSpace.{u}}
-    (g : ∀ i, (F i).toLocallyRingedSpace ⟶ Y)
-    {α : ℂ →+* (∐ fun i ↦ (F i).toLocallyRingedSpace : LocallyRingedSpace.{u}).presheaf.obj (op ⊤)}
+and `rw [Sigma.ι_desc]` reports *"did not find an occurrence"*.
+
+**Stated for a family of locally ringed spaces and not for the family of this file**, because
+nothing in it is analytic: `ComplexAnalytic.IsCLinearHom` is a predicate on a morphism of locally
+ringed spaces and the proof is `of_openCover` at the coproduct's own cover.
+`ComplexAnalytic.AnalyticSpace.sigmaDesc` below is the instance at
+`fun i ↦ (F i).toLocallyRingedSpace`. -/
+theorem isCLinearHom_sigmaDesc {J : Type u} (f : J → LocallyRingedSpace.{u})
+    {Y : LocallyRingedSpace.{u}} (g : ∀ i, f i ⟶ Y)
+    {α : ℂ →+* (∐ f : LocallyRingedSpace.{u}).presheaf.obj (op ⊤)}
     {β : ℂ →+* Y.presheaf.obj (op ⊤)}
-    (h : ∀ i, IsCLinearHom (g i)
-      (comapAlgMap (Sigma.ι (fun i ↦ (F i).toLocallyRingedSpace) i) α) β) :
+    (h : ∀ i, IsCLinearHom (g i) (comapAlgMap (Sigma.ι f i) α) β) :
     IsCLinearHom (Sigma.desc g) α β :=
-  IsCLinearHom.of_openCover (AnalyticSpace.sigmaCover F) fun i ↦ by
-    have e : (AnalyticSpace.sigmaCover F).map i ≫ Sigma.desc g = g i := Sigma.ι_desc g i
+  IsCLinearHom.of_openCover (sigmaOpenCover f) fun i ↦ by
+    have e : (sigmaOpenCover f).map i ≫ Sigma.desc g = g i := Sigma.ι_desc g i
     exact e ▸ h i
 
 namespace AnalyticSpace
@@ -206,7 +226,8 @@ The coproduct's descent map, with its `ℂ`-linearity supplied by
 `ComplexAnalytic.isCLinearHom_sigmaDesc`. -/
 def sigmaDesc {Y : AnalyticSpace.{u}} (g : ∀ i, F i ⟶ Y) : sigma F ⟶ Y where
   toLRSHom' := Sigma.desc fun i ↦ (g i).toLRSHom
-  isCLinear := isCLinearHom_sigmaDesc F (fun i ↦ (g i).toLRSHom) fun i ↦ by
+  isCLinear := isCLinearHom_sigmaDesc (fun i ↦ (F i).toLocallyRingedSpace)
+    (fun i ↦ (g i).toLRSHom) fun i ↦ by
     have e : comapAlgMap (Sigma.ι (fun i ↦ (F i).toLocallyRingedSpace) i)
         (sigma F).algebraMap = (F i).algebraMap := comapAlgMap_sigma F i
     exact e ▸ (g i).isCLinear
@@ -223,8 +244,10 @@ lemma sigmaι_sigmaDesc {Y : AnalyticSpace.{u}} (g : ∀ i, F i ⟶ Y) (j : ι) 
 The reading this closes is at the bottom end: a construction that returned some fixed space for
 every family would satisfy everything above. Every point of a coproduct is in the image of some
 member (`AlgebraicGeometry.LocallyRingedSpace.exists_sigma_ι_base_eq`) and there are no members,
-so the carrier is empty. **This is also the only place in this repository that names the empty
-analytic space**, and it names it as a property rather than as a definition. -/
+so the carrier is empty. **This is the only declaration in the library that names the empty
+analytic space**, and it names it as a property rather than as a definition — `OkaTest/`
+instantiates it, and `Oka/AnalyticSpace/LocalModel.lean` uses the phrase only to say that the node
+is *not* it. -/
 theorem isEmpty_sigma [IsEmpty ι] : IsEmpty (sigma F) := by
   refine ⟨fun x ↦ ?_⟩
   obtain ⟨i, _, _⟩ := exists_sigma_ι_base_eq (fun i ↦ (F i).toLocallyRingedSpace) x
