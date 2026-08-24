@@ -17,9 +17,31 @@ public import Oka.Algebra.Category.ModuleCat.Sheaf.Generators
 # A module on an affine scheme and its global sections
 
 Material for `Mathlib/AlgebraicGeometry/Modules/Tilde.lean`; see `README.md` on the mirror tree.
-That file does not currently import `Mathlib.RingTheory.Localization.Finiteness` or
+That file imports none of this one's other three Mathlib imports —
+`Mathlib.RingTheory.Localization.Finiteness` and
 `Mathlib.RingTheory.LocalProperties.FinitePresentation`, which the two change-of-site arguments
-below need, so upstreaming it adds those imports — three files to its closure.
+below need, and `Mathlib.Algebra.Module.FinitePresentation` — so upstreaming this file adds **6**
+modules to that target's closure of **2290** Mathlib modules. Measured with
+`python3 scripts/import_cost.py Oka/AlgebraicGeometry/Modules/Tilde.lean`, not estimated, and
+counting modules with a file under `Mathlib/` — the convention that script prints on every line
+that carries a number.
+
+The six are `Mathlib.Algebra.Module.FinitePresentation`,
+`Mathlib.Algebra.Module.LocalizedModule.Int`, `Mathlib.RingTheory.Finiteness.Projective`,
+`Mathlib.RingTheory.LocalProperties.FinitePresentation`,
+`Mathlib.RingTheory.Localization.Finiteness` and `Mathlib.RingTheory.TensorProduct.Finite`, and
+**`LocalProperties.FinitePresentation` alone accounts for all six.** The other two cost 2 and 3
+by themselves and both of those sets sit inside its six, so **the three imports are not
+independent and pricing them one at a time and adding gives 11**. The three `Oka.` imports below
+are not priced here at all: two state their own figures in their own docstrings, and
+`Oka/Algebra/Category/ModuleCat/Sheaf/Coherent/Presentation.lean` is a mirror file for a Mathlib
+file that does not exist, so it has no target to be priced against.
+
+**This paragraph said "three files" until taxis #937**, and 3 is exactly the cost of
+`Mathlib.Algebra.Module.FinitePresentation` — the one import of the three that the sentence did
+not name. **The placement conclusion does not move**: 6 is small against the 96 that `README.md`
+records as the figure which once made an upstreaming judged too expensive, and the mirror path
+stands.
 
 Mathlib proves `AlgebraicGeometry.isQuasicoherent_iff_isIso_fromTildeΓ`: an
 `𝒪_{Spec R}`-module `M` is quasicoherent exactly when the counit
