@@ -30,9 +30,11 @@ this file.
   packages the two as an equivalence.
 * `SheafOfModules.val_app_eq_sum` evaluates a morphism out of a finite free sheaf as the sum of
   its coordinates against the images of the generators. That is the form in which a relation
-  between sections is checked, and it is what
+  between sections is checked, and its three consumers are
+  `Oka/Algebra/Category/ModuleCat/Sheaf/LocallySurjective.lean` — the only one of the three that
+  imports this file directly, and the only one inside the mirror tree —
   `Oka/Geometry/RingedSpace/LocallyRingedSpace/Coherent.lean` and
-  `Oka/AnalyticSpace/IdealSheaf.lean` consume.
+  `Oka/AnalyticSpace/IdealSheaf.lean`.
 
 Two smaller groups sit beside it. `SheafOfModules.freePUnitIso` and
 `SheafOfModules.isZero_free_of_isEmpty` are the free sheaf on one generator and on none; the first
