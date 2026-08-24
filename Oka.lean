@@ -109,6 +109,7 @@ import Oka.RingTheory.LocalRing.ResidueField.Basic
 import Oka.RingTheory.Localization.AtPrime.Basic
 import Oka.RingTheory.Localization.Module
 import Oka.RingTheory.MvPolynomial.Ideal
+import Oka.RingTheory.MvPolynomial.Localization
 import Oka.RingTheory.RingHom.FaithfullyFlat
 import Oka.StalkEquiv
 import Oka.Statement

@@ -56,6 +56,9 @@ functor would be a definition nothing can be computed from.
   variables is an isomorphism of presentations**, and so, through the functor, an isomorphism of
   analytifications.
 - `ComplexAnalytic.isFiniteType`: finite type, as a property of an object of `CommAlgCat ℂ`.
+- `ComplexAnalytic.Presentation.isoOfAlgEquiv`: **an isomorphism of the presented algebras is
+  an isomorphism of presentations** — the general companion of
+  `ComplexAnalytic.Presentation.isoOfRename`.
 - `ComplexAnalytic.toFGAlg : Presentation ⥤ (isFiniteType.FullSubcategory)ᵒᵖ`: a presentation,
   read as the finitely generated `ℂ`-algebra it presents.
 - `ComplexAnalytic.analytificationFGAlg`: **the analytification of a finitely generated
@@ -190,6 +193,23 @@ def Presentation.isoOfRename {P Q : Presentation.{u}}
   inv := PresHom.ofRename.{u} τ h'
   hom_inv_id := PresHom.ofRename_comp_ofRename.{u} σ h τ h' hστ
   inv_hom_id := PresHom.ofRename_comp_ofRename.{u} τ h' σ h hτσ
+
+/-- **A `ℂ`-algebra isomorphism of the presented algebras is an isomorphism of presentations.**
+
+The general companion of `ComplexAnalytic.Presentation.isoOfRename`, which is the special case
+where the map comes from a renaming of the variables and costs no commutative algebra. This one
+takes the algebra isomorphism as given, which is the shape it arrives in when it comes from
+outside — from a scheme, say, whose two affine members agree on an overlap.
+
+It is `ComplexAnalytic.toFGAlgFullyFaithful.preimageIso` in content, and is stated directly
+because assembling the isomorphism in the opposite full subcategory that lemma consumes is longer
+than the four lines here. Mind the direction, as in `ComplexAnalytic.Presentation.isoOfRename`:
+the algebra map of `P ⟶ Q` runs `Q.alg → P.alg`. -/
+def Presentation.isoOfAlgEquiv {P Q : Presentation.{u}} (e : Q.alg ≃ₐ[ℂ] P.alg) : P ≅ Q where
+  hom := ⟨e.toRingHom, RingHom.ext fun c ↦ e.commutes c⟩
+  inv := ⟨e.symm.toRingHom, RingHom.ext fun c ↦ e.symm.commutes c⟩
+  hom_inv_id := PresHom.ext (RingHom.ext fun x ↦ e.apply_symm_apply x)
+  inv_hom_id := PresHom.ext (RingHom.ext fun x ↦ e.symm_apply_apply x)
 
 /-! ### Presentations are the finitely generated `ℂ`-algebras -/
 
