@@ -54,6 +54,7 @@ import OkaTest.LocallyRingedSpaceCoproduct
 import OkaTest.Nonvanishing
 import OkaTest.OpenSubspace
 import OkaTest.ProjectiveLine
+import OkaTest.ProjectiveLineSpan
 import OkaTest.PullbackModulesStalk
 import OkaTest.PushforwardFullyFaithful
 import OkaTest.SheafOfModulesStalk
