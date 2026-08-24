@@ -31,8 +31,12 @@ this file.
 * `SheafOfModules.val_app_eq_sum` evaluates a morphism out of a finite free sheaf as the sum of
   its coordinates against the images of the generators. That is the form in which a relation
   between sections is checked, and it is what
+  `Oka/Algebra/Category/ModuleCat/Sheaf/LocallySurjective.lean`,
   `Oka/Geometry/RingedSpace/LocallyRingedSpace/Coherent.lean` and
-  `Oka/AnalyticSpace/IdealSheaf.lean` consume.
+  `Oka/AnalyticSpace/IdealSheaf.lean` consume. The first of the three is the nearest and the only
+  one inside the mirror tree: it is one of just two files that import this one at all, and it
+  cites the lemma by name in `SheafOfModules.exists_free_app_eq_of_epi`'s own docstring. The other
+  two reach it transitively.
 
 Two smaller groups sit beside it. `SheafOfModules.freePUnitIso` and
 `SheafOfModules.isZero_free_of_isEmpty` are the free sheaf on one generator and on none; the first
