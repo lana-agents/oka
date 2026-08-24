@@ -93,7 +93,30 @@ lake lint || exit 1
 # added above is what makes this line possible; the `mk_all --lib OkaTest` check above is what
 # stops it from silently going stale again.
 #
-# The `nolints file could not be read` warning is harmless and always present.
+# The `nolints file could not be read` warning is harmless and always present, and its absence
+# is a choice rather than an omission. `lint-style` reads `scripts/nolints-style.txt` relative
+# to the working directory for a list of findings to suppress, and on failing to open it prints
+# that line to stderr and continues with an empty list
+# (`.lake/packages/mathlib/scripts/lint-style.lean:262-267`). Creating the file — even
+# completely empty — silences the warning and still exits 0; that was measured in both shapes,
+# so this is a decision and not an untried alternative.
+#
+# **The reason not to create it is that there is nothing for it to hold.** Every item on the
+# "checks *less* than its name suggests" list above is a mechanical defect in a file of ours,
+# every one of them is fixable, and there are none. Mathlib's own eleven entries are all
+# self-references — the linter for the string "Adaptation note" firing inside
+# `Mathlib/Tactic/AdaptationNote.lean` and inside the linter's own implementation — a case this
+# repository cannot have. So an empty file here would exist only to suppress the notice of its
+# own absence, while carrying the one capability we should not want: silencing a fixable style
+# finding instead of fixing it.
+#
+# That is not hypothetical. `scripts/docstring-names-ignore.txt` was created on 2026-08-22 at
+# 16:53Z saying "This file is empty, and the intention is that it stays that way", and had two
+# entries by 19:49Z the same day. Those entries are correct and that file earns its keep — its
+# checker has a real class of unfixable false positive. This one does not.
+#
+# If you disagree, the change is `touch scripts/nolints-style.txt` plus a header comment, and it
+# needs an argument about what would ever go in it rather than about the warning.
 lake exe lint-style Oka OkaTest || exit 1
 
 # Verify that every backticked dotted name in a comment or docstring resolves to something.

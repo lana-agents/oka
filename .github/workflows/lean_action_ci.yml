@@ -92,6 +92,15 @@ jobs:
       # library had no root module — so half the tree was text-linted by nothing. `OkaTest.lean`
       # now exists and the step above keeps it in step with the files on disk.
       #
+      # This step's log always carries `warning: nolints file could not be read; treating as
+      # empty: scripts/nolints-style.txt`, and that file is **deliberately absent**. Read the
+      # comment on the same command in `.orchestra/validation.sh` for the argument; the short
+      # version is that every finding this linter can report is a mechanical defect in one of our
+      # files, all of them fixable, so the file has nothing legitimate to hold and creating it
+      # would only add a way to suppress a finding instead of fixing it. The reasoning lives in
+      # one place on purpose — the two files must agree about what is *run*, and duplicating
+      # twenty lines of argument in both is how they come to disagree about what it means.
+      #
       # `!cancelled()` so that a failure of the step above does not hide a style error. Without
       # it GitHub marks this step `skipped`, and since an agent gets one CI run per push that
       # turns two findings into two round trips. It is text-based and does not need the library
