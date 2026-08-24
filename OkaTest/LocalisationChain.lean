@@ -112,8 +112,9 @@ namespace OkaTest.LocalisationChain
 
 /-! ### A functor out of the three-element chain -/
 
-/-- The three objects of a chain `0 ⟶ 1 ⟶ 2`, as a family indexed by `Fin 3`. -/
-def ofThreeObj {C : Type v} [Category.{w} C] (X₀ X₁ X₂ : C) : Fin 3 → C
+/-- The three objects of a chain `0 ⟶ 1 ⟶ 2`, as a family indexed by `Fin 3`. No `Category`
+instance is needed for the objects themselves, and the `unusedArguments` linter says so. -/
+def ofThreeObj {C : Type v} (X₀ X₁ X₂ : C) : Fin 3 → C
   | ⟨0, _⟩ => X₀
   | ⟨1, _⟩ => X₁
   | ⟨2, _⟩ => X₂
