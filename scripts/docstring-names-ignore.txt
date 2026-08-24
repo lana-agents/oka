@@ -10,7 +10,10 @@
 # (`Oka.Weierstrass`), and paths to files in the repository (`README.md`). If you have hit a
 # false positive of a shape not on that list, prefer fixing the rule to growing this file.
 #
-# This file is empty, and the intention is that it stays that way.
+# How many entries there are is deliberately not stated here. Nothing checks such a count, and
+# this header carried a sentence asserting the file was empty from 2026-08-22 16:53Z, when the
+# file was created, until 19:49Z the same day, when the entries below were added and the
+# sentence was not. It is quoted, with its dates, in `.orchestra/validation.sh`.
 
 # Real Mathlib declarations that this project does **not** import, so they resolve nowhere in the
 # environment of `Oka` + `OkaTest` and the checker is right to report them. They are cited in
