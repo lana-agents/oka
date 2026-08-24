@@ -388,9 +388,13 @@ coherence statement for arbitrary complex analytic spaces:
   out the part of each member that meets each other, and an isomorphism of the two presentations
   of every overlap, `ComplexAnalytic.coverGlueData` builds an
   `AlgebraicGeometry.LocallyRingedSpace.GlueData` whose pieces are the analytifications. The
-  input is the cover **as data** rather than a scheme, because every `AlgebraicGeometry.Scheme`
-  this repository mentions is a `Spec` and nothing constructs a non-affine one or carries a cover
-  of one; `ComplexAnalytic.toFGAlg` being an equivalence is what says nothing is lost by that.
+  input is the cover **as data** rather than a scheme, and the obstruction is the arity of `poly`:
+  one polynomial per *ordered pair*, hence a **single** distinguished open of the `i`-th member,
+  where a scheme supplies only opens *covering* the overlap. `ComplexAnalytic.toFGAlg` being an
+  equivalence says the **members** lose nothing by that; the overlaps are where the general form
+  differs, and the file's `## The input, and why it is presentations rather than a scheme` carries
+  the argument and a well-formed scheme-level target. Nothing here constructs a non-affine scheme
+  or carries a cover of one, so the difference costs nothing downstream.
   The construction goes through `CategoryTheory.GlueData'`, which asks
   for the overlaps only when `i ≠ j` and fills the diagonal with `dite`s;
   `Oka/CategoryTheory/GlueData.lean` unfolds those once — Mathlib has no projection lemma for
