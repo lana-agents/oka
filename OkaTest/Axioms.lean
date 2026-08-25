@@ -71,15 +71,21 @@ Concurrent pull requests that touch *different files* do not. See issue #640.
 **Nothing here claims to be complete, and the gap is measured rather than guessed.**
 `python3 scripts/guard_coverage.py` counts the declarations this repository's module docstrings
 advertise under a `## Main results` heading and asks which of them some `#print axioms` names. **At
-`7b6fd39` that was 502 guarded names against 506 advertised declarations, of which 179 were named
-by no guard at all, spread over 63 files; the nineteen guards added since take it to 521 against
-506, 160 unguarded in 61 files** — so still close to a third of what the library announces as its
-main results carries no axiom assertion. Neither list contains the other: **175 guarded names are
-advertised in no `## Main results`**, which is not a defect, since a guard on a lemma no docstring
-announces is worth exactly as much as one on a lemma it does.
+`7b6fd39`, the base this file's tranche was written on, that was 502 guarded names against 506
+advertised declarations, of which 179 were named by no guard at all, spread over 63 files; the
+nineteen guards added below account for nineteen of those 179, leaving 160 unguarded in 61
+files** — so still close to a third of what the library announces as its main results carries no
+axiom assertion. Neither list contains the other: **175 guarded names are advertised in no
+`## Main results`**, which is not a defect, since a guard on a lemma no docstring announces is
+worth exactly as much as one on a lemma it does.
 
 The figures are pinned to a commit rather than to a date, because a paragraph that says *"on the
-tree this lands in"* cannot be re-run without first finding which tree that was.
+tree this lands in"* cannot be re-run without first finding which tree that was. **The two totals
+are what goes stale; the gap is not**, which is why the sentence above reports a base and a delta
+rather than a current total. A pull request that guards the result it advertises moves both
+totals and leaves their difference alone: between `7b6fd39` and `3f185f0` two of them landed, the
+totals went 502 and 506 to 512 and 516, and the gap stayed 179 in 63 files. So a later run that
+reproduces the 160 and the 61 has reproduced this measurement even if neither total matches.
 
 **That is a measurement and not a rule, and this file does not turn it into one.** Some of the 160
 should probably stay unguarded — `Oka/Analytic/ParametricCircleIntegral.lean` is general complex
