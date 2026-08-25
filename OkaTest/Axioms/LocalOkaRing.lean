@@ -195,3 +195,37 @@ info: 'LocalOkaRing.span_fromPolynomial_X_sub_C_ne_span_lastVar' depends on axio
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms LocalOkaRing.span_fromPolynomial_X_sub_C_ne_span_lastVar
+
+/-! ### From a simple zero along the last axis to a degree-one polynomial
+
+`Oka/Regular.lean`. Producing the `c` of the section above from an arbitrary germ: the shape of a
+degree-one Weierstrass polynomial, the degree that `localweierstrass_preparation` does not report,
+the resulting equality of ideals, and the quotient equivalence with no graph in its statement. -/
+
+/--
+info: 'LocalOkaRing.eq_X_sub_C_of_natDegree_eq_one' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.eq_X_sub_C_of_natDegree_eq_one
+
+/--
+info: 'LocalOkaRing.order_partialEval_eq_natDegree' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.order_partialEval_eq_natDegree
+
+/--
+info: 'LocalOkaRing.exists_span_eq_span_X_sub_C' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.exists_span_eq_span_X_sub_C
+
+/--
+info: 'LocalOkaRing.quotientSimpleZeroEquiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.quotientSimpleZeroEquiv
