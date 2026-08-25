@@ -72,7 +72,18 @@ on `MvPolynomial`, so once the identifications are isomorphisms rather than equa
 way to transport a witness along one. A `map_comp` law for a general index type therefore **cannot
 be proved by unfolding**: the witness for `i < j` lives in `(obj j)`'s variables and the one for
 `j < l` in `(obj l)`'s, and relating them would need `obj j` to be literally a localisation of
-`obj l`, which is what `not_isRigid_of_lt_lt` forbids as soon as a third member is below.
+`obj l`.
+
+**`not_isRigid_of_lt_lt` does not forbid that**, and the distinction is the whole of what it says.
+What it forbids is the **conjunction** — every arrow of a chain being a one-step localisation *at
+once*. A single arrow being one is not merely permitted, it is what the canonical chain does:
+`OkaTest.LocalisationRigidity.chainFunctor_obj_one_eq_localisationObj` holds by `rfl`. So the
+reason the identifications have to be isomorphisms is not the arity. It is that
+`ComplexAnalytic.coverGlueData` asks for **one** witness polynomial per ordered pair, which forces
+the composite arrow to be identified with a *single* localisation, and
+`ComplexAnalytic.localisationPresentationIsoMul` is exactly that identification. The `## What is
+not here` section below states the one-witness-per-pair demand; it is the premise, and the arity
+theorem is what makes the identification non-trivial once the demand is granted.
 
 **So the functor laws belong in the input, as fields, and not among the theorems about it.**
 `OkaTest.LocalisationRigidity.ofPreorder` is what remains once they are: a functor out of a
@@ -99,6 +110,18 @@ and it deliberately stops there. Two things a reader should know before attempti
 **No claim that a general construction is impossible.** `not_isRigid_of_lt_lt` rules out one input
 shape, the one an ordered cover invites; it says nothing about the relaxed shape, for which the
 three-member instance below is positive evidence.
+
+**And nothing about the *iterated* rigid reading, which is untried.** Everything here stipulates
+**one** step per arrow, which is where the counting bites: `n` goes up by exactly one along each
+arrow, so two routes round a chain disagree. Let the datum along an arrow be a finite *sequence* of
+witnesses instead and the argument gives nothing — `(obj i).n - (obj j).n` is then a length rather
+than a constant, and asking it to be additive along a chain is a condition one can simply meet.
+The canonical chain already does, on the nose and with no isomorphism anywhere:
+`OkaTest.LocalisationRigidity.chainFunctor_obj_zero_eq_localisationObj_localisationObj`. **This is
+recorded as an alternative the file did not consider, not as a refutation of it** — the reason to
+prefer the relaxed reading is `ComplexAnalytic.coverGlueData`'s one-witness-per-ordered-pair demand
+below, which an iterated reading does not meet either, and nothing here is compiled beyond the two
+equations named. A worker who wants the iterated notion has to define it.
 
 **No new library API.** Nothing outside this file consumes any of it, and
 `OkaTest.LocalisationChain.ofThree` is the precedent: category theory with no analytic content
@@ -189,7 +212,11 @@ canonical chain needs `ComplexAnalytic.localisationPresentationIsoMul` and nothi
 def IsRigidUpToIso : Prop :=
   ∀ ⦃i j : J⦄, i < j → ∃ w, Nonempty (obj i ≅ localisationObj.{u} (obj j) w)
 
-/-- The rigid reading implies the relaxed one, by `CategoryTheory.eqToIso`. -/
+/-- The rigid reading implies the relaxed one, by `CategoryTheory.eqToIso`.
+
+**Nothing below consumes this**, and it is here because the two readings are stated side by side
+and a reader is entitled to see which way the implication runs. Said explicitly because the rest of
+this file justifies each declaration by what reads it. -/
 theorem isRigidUpToIso_of_isRigid (h : IsRigid.{u} obj) : IsRigidUpToIso.{u} obj :=
   fun _ _ hij ↦ (h hij).imp fun _ e ↦ ⟨eqToIso e⟩
 
@@ -198,7 +225,11 @@ by `OkaTest.LocalisationRigidity.ne_localisationObj_self` at the identity arrow.
 
 This is why `OkaTest.LocalisationRigidity.IsRigid` quantifies over `<`. It is also the formal
 version of *"an arrow carries no witness"*: the identity is an arrow, and there is no witness it
-could be carrying. -/
+could be carrying.
+
+**The name mentions `IsRigid` and the statement does not**, because there is no `≤`-quantified
+predicate to name — this is the whole reason there is no such predicate, so defining one in order
+to refute it would be a definition with exactly one use. The hypothesis is written out instead. -/
 theorem not_isRigid_le (i : J)
     (h : ∀ ⦃a b : J⦄, a ≤ b → ∃ w, obj a = localisationObj.{u} (obj b) w) : False := by
   obtain ⟨w, hw⟩ := h (le_refl i)
@@ -212,8 +243,12 @@ order is used beyond `ComplexAnalytic.Presentation.n` and transitivity of `<`.
 
 This is the theorem the design question turns on. The order of a rigid family therefore has **no
 chain of three members at all** — its chains have at most two — which no ordered cover of interest
-satisfies; so the identifications in the input have to be isomorphisms, and everything in the
-header's last two sections follows from that. -/
+satisfies.
+
+**What it does not say**, and the header says why: that no *single* identification can be an
+equation. It rules out having them all at once, one step each. That the identifications must be
+isomorphisms follows from `ComplexAnalytic.coverGlueData` asking for one witness per ordered pair,
+not from this counting. -/
 theorem not_isRigid_of_lt_lt (h : IsRigid.{u} obj) {i j l : J} (hij : i < j) (hjl : j < l) :
     False := by
   obtain ⟨_, e₁⟩ := h hij
@@ -257,10 +292,16 @@ variable {n k : ℕ} (g : Fin k → MvPolynomial (ULift.{u} (Fin n)) ℂ)
 
 Two of the three arrows are rigid — the chain is built out of `ComplexAnalytic.localisationHom`,
 so consecutive members are localisations on the nose and the isomorphism is `Iso.refl`. **The
-composite arrow is the one that needs an isomorphism**, its witness is the product `f₁ * f`, and
-the isomorphism is `ComplexAnalytic.localisationPresentationIsoMul` — the same one that supplies
-that functor's `map_comp`. So the relaxed reading costs exactly one identification and it is
-already on `master`. -/
+composite arrow is the one that needs either a second witness or an isomorphism**; taking the
+isomorphism, its witness is the product `f₁ * f` and the identification is
+`ComplexAnalytic.localisationPresentationIsoMul` — the same one that supplies that functor's
+`map_comp`. So the relaxed reading costs exactly one identification and it is already on `master`.
+
+**The two really are alternatives**, and the other one is an equation:
+`OkaTest.LocalisationRigidity.chainFunctor_obj_zero_eq_localisationObj_localisationObj` says the
+bottom object is the localisation of the top *twice*, on the nose. What picks the isomorphism over
+the second witness is `ComplexAnalytic.coverGlueData`'s demand of one witness per ordered pair, not
+anything about this chain. -/
 theorem isRigidUpToIso_chainFunctor :
     IsRigidUpToIso.{u} (OkaTest.LocalisationChain.chainFunctor.{u} g f f₁).obj := by
   intro i j hij
@@ -275,13 +316,18 @@ theorem isRigidUpToIso_chainFunctor :
   · exact absurd hij (by decide)
   · exact absurd hij (by decide)
 
-/-- **The composite arrow is the one that needs the isomorphism**, and not merely the one whose
-proof happened to use it: the bottom object of the chain is not a one-step localisation of the top
-object at *any* witness, again by arity — `n + 2` against `n + 1`.
+/-- **The composite arrow is a one-step localisation of the top object at no witness at all**, and
+not merely one whose proof happened to use an isomorphism: again by arity, `n + 2` against `n + 1`.
 
 Taken with the two `Iso.refl`s in the proof above, this locates the failure exactly. It is what
 `OkaTest.LocalisationRigidity.not_isRigid_chainFunctor` says globally, at the single arrow
-responsible. -/
+responsible.
+
+**`one-step` is doing work in that sentence and is not a hedge.** The bottom object *is* a
+two-step localisation of the top on the nose —
+`OkaTest.LocalisationRigidity.chainFunctor_obj_zero_eq_localisationObj_localisationObj` — so what
+this refutes is the stipulation `OkaTest.LocalisationRigidity.IsRigid` makes, one step per arrow,
+and not the idea that the composite arrow carries an equation. -/
 theorem chainFunctor_obj_zero_ne_localisationObj
     (w : MvPolynomial (ULift.{u} (Fin ((OkaTest.LocalisationChain.chainFunctor.{u} g f f₁).obj
       2).n)) ℂ) :
@@ -292,6 +338,34 @@ theorem chainFunctor_obj_zero_ne_localisationObj
     simp only [OkaTest.LocalisationChain.chainFunctor, OkaTest.LocalisationChain.ofThree,
       OkaTest.LocalisationChain.ofThreeObj, localisationObj] at hn
     omega
+
+/-- **The middle object of the chain is the localisation of the top one at `f`, on the nose.**
+
+This is the positive half of the header's correction, and it is the reason
+`OkaTest.LocalisationRigidity.isRigidUpToIso_chainFunctor` can discharge that arrow with
+`Iso.refl`. It is stated as a theorem because the file's standard is that a design claim gets one:
+*a single arrow may be an equation* is a claim about what
+`OkaTest.LocalisationRigidity.not_isRigid_of_lt_lt` does **not** forbid, and a sentence asserting
+it would be exactly the species of unchecked prose this repository is auditing itself for. -/
+theorem chainFunctor_obj_one_eq_localisationObj :
+    (OkaTest.LocalisationChain.chainFunctor.{u} g f f₁).obj 1 =
+      localisationObj.{u} ((OkaTest.LocalisationChain.chainFunctor.{u} g f f₁).obj 2) f :=
+  rfl
+
+/-- **The bottom object is the localisation of the top one twice, on the nose**, at `f` and then at
+`f₁` renamed along `ComplexAnalytic.localisationIncl`.
+
+The counterpart of `OkaTest.LocalisationRigidity.chainFunctor_obj_zero_ne_localisationObj`, which
+says the same pair is not a **one-step** localisation at any witness. Together they say that what
+the composite arrow refuses is the stipulation of one step per arrow, and not an equation as such —
+the iterated reading the header's `## What is not here` names is satisfied here with no isomorphism
+at all, which is why that section calls it untried rather than ruled out. -/
+theorem chainFunctor_obj_zero_eq_localisationObj_localisationObj :
+    (OkaTest.LocalisationChain.chainFunctor.{u} g f f₁).obj 0 =
+      localisationObj.{u}
+        (localisationObj.{u} ((OkaTest.LocalisationChain.chainFunctor.{u} g f f₁).obj 2) f)
+        (MvPolynomial.rename (localisationIncl.{u} n) f₁) :=
+  rfl
 
 /-- **The same objects admit no rigid reading**, for every `g`, `f` and `f₁`.
 
