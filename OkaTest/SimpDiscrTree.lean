@@ -95,10 +95,18 @@ section StalkEquiv
 variable {ι : Type} [Fintype ι]
 
 /-- The shape the library actually meets: `okaStalkEquiv_germ` is `@[simp]` and inert, and
-both `rw` and pinning the index type work. -/
+both `rw` and pinning the index type work.
+
+**All three halves are exercised below**, which until 2026-08-25 only two of them were: the
+`fail_if_success` is the inertness, the `have` is `rw`, and the closing `simp only` is the
+pinning. The `rw` half was prose here and prose again in `Oka/StalkEquiv.lean`'s comment above
+`okaStalkEquiv_germ_algebraMap`, which cites this file as the place holding the tripwires — so
+one line makes a claim in two files build-enforced. -/
 example {y : ι → ℂ} {U : Opens (ι → ℂ)} (hy : y ∈ U) (f : OkaRing U) :
     okaStalkEquiv y ((okaCommPresheaf ι).germ U y hy f) = OkaRing.germ hy f := by
   fail_if_success (simp only [okaStalkEquiv_germ]; done)
+  have _rw : okaStalkEquiv y ((okaCommPresheaf ι).germ U y hy f) = OkaRing.germ hy f := by
+    rw [okaStalkEquiv_germ]
   simp only [okaStalkEquiv_germ (ι := ι)]
 
 /-- Mathlib's own germ lemmas are affected in the same way, which is what rules out any
