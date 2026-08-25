@@ -53,9 +53,12 @@ is not, and both halves of *is not* are theorems here rather than remarks:
 `OkaTest.GermQuotientDegreeOne.skewDiagonal_ne_fromPolynomial_X_sub_C` for `X₁ - c` at any `c`,
 and
 `OkaTest.GermQuotientDegreeOne.not_isLocalWeierstrassPolynomial_of_fromPolynomial_eq_skewDiagonal`
-for a local Weierstrass polynomial of any degree. **The first is the one the non-vacuity needs**;
-the second is what rules out the reading that it is a Weierstrass polynomial the file forgot to
-put in Weierstrass form.
+for a local Weierstrass polynomial of any degree. **The first is what widens the hypothesis**; the
+second rules out the reading that it is a Weierstrass polynomial the file forgot to put in
+Weierstrass form. What is *not* wider is the target:
+`OkaTest.GermQuotientDegreeOne.skewDiagonalSpan_eq_diagonalSpan` says the ideal is the diagonal's,
+so the equivalence is a graph case transported, and it is the hypothesis that this file exhibits
+as non-vacuous.
 
 **The informative half is the negative one.**
 `OkaTest.GermQuotientDegreeOne.order_partialEval_parabola` computes the axis order of
@@ -133,14 +136,22 @@ and so not in the maximal ideal. -/
 def skewDiagonal : LocalOkaRing (Fin 2) :=
   fromPolynomial (X - C (LocalOkaRing.coord (0 : Fin 1))) * (1 + lastVar)
 
-/-- **The skew diagonal is not `X₁ - c` for any germ `c`**, so
-`OkaTest.GermQuotientDegreeOne.skewDiagonalEquiv` is not an instance of
-`LocalOkaRing.quotientGraphEquiv` in disguise.
+/-- **The skew diagonal is not `X₁ - c` for any germ `c`**, so the germ that
+`LocalOkaRing.quotientSimpleZeroEquiv` is applied to in
+`OkaTest.GermQuotientDegreeOne.skewDiagonalEquiv` is not a graph **on the nose**, and that
+theorem's hypothesis is strictly wider than *`f` is `X₁ - c`*.
 
-**This is what makes that equivalence a non-vacuity rather than a respelling.** The obvious
-candidate for a germ with a simple zero along the last axis is `X₁ - X₀²`, and it is useless
-here: it is `X₁ - C c` on the nose, so it witnesses nothing that
-`OkaTest.GermQuotientDegreeOne.diagonalEquiv` does not already witness.
+**What is non-vacuous is the hypothesis and not the target.** The equivalence itself is a graph
+case underneath, and `OkaTest.GermQuotientDegreeOne.skewDiagonalSpan_eq_diagonalSpan` says so:
+`1 + X₁` is a unit, so `skewDiagonal` and `X₁ - X₀` generate the same ideal, and
+`LocalOkaRing.quotientSimpleZeroEquiv` is `LocalOkaRing.quotientGraphEquiv` transported across
+exactly such an equality. This file's other non-vacuity runs the other way — there the two germs
+differ and the *ideals* have to be shown to differ too,
+`OkaTest.GermQuotientDegreeOne.diagonalSpan_ne_span_lastVar` — and the module docstring's rule
+covers both: a statement about which equivalence covers which is a statement about ideals.
+
+The obvious candidate for a germ with a simple zero along the last axis is `X₁ - X₀²`, and it is
+useless here: it is `X₁ - C c` on the nose, so it does not even widen the hypothesis.
 
 `LocalOkaRing.fromPolynomial` is an injective `AlgHom` (`LocalOkaRing.fromPolynomial_injective`)
 and `LocalOkaRing.fromPolynomial_X` turns `1 + X₁` into the image of `1 + X`, so both sides are
@@ -205,6 +216,20 @@ theorem not_isLocalWeierstrassPolynomial_of_fromPolynomial_eq_skewDiagonal
     (LocalOkaRing.coord (0 : Fin 1)))) = (0 : ℂ) from LocalOkaRing.constantCoeff_coord 0,
     sub_zero] at h1
   exact one_ne_zero h1
+
+/-- **The skew diagonal and the diagonal generate the same ideal**, because they differ by the
+unit `1 + X₁` (`OkaTest.GermQuotientDegreeOne.isUnit_one_add_lastVar`).
+
+This is the positive half of what the two negatives above leave open, and it is what stops
+`OkaTest.GermQuotientDegreeOne.skewDiagonalEquiv` from being read as a *new* quotient:
+`LocalOkaRing.quotientSimpleZeroEquiv` is `LocalOkaRing.quotientGraphEquiv` transported along an
+equality of ideals, and here that equality is this one. **A unit factor takes a germ out of
+Weierstrass form; it cannot take it out of its own ideal.** -/
+theorem skewDiagonalSpan_eq_diagonalSpan :
+    Ideal.span {skewDiagonal} =
+      Ideal.span {fromPolynomial (X - C (LocalOkaRing.coord (0 : Fin 1)))} := by
+  rw [skewDiagonal]
+  exact Ideal.span_singleton_mul_right_unit isUnit_one_add_lastVar _
 
 /-- **The restriction of the skew diagonal to the last axis has a simple zero.**
 
