@@ -153,4 +153,32 @@ def nodeIsoAnalytification' :
     AnalyticSpace.node.{u} ≅ AnalyticSpace.analytification.{u} nodeTuple'.{u} :=
   analytificationIsoOfPresentationIdealEq.{u} presentationIdeal_nodeTuple_eq.{u}
 
+/-! ### The crossing the universal property rests on, as a check rather than a sentence -/
+
+/-- **A polynomial section crosses `restrictTopIso` definitionally.**
+
+`Oka/Analytification/UniversalProperty.lean`'s `## The two inputs, and the seam between them that
+turned out not to exist` says that the crossing between
+`ComplexAnalytic.AnalyticSpace.complexAffineSpace` and its `restrict ⊤` presentation is free
+because *"a section whose presentation does not mention the open it lives on crosses
+definitionally"*, and
+`ComplexAnalytic.c_app_toAmbient_polySection`'s docstring names the instance of it that the
+factorisation hypothesis needs: `ComplexAnalytic.polySection g j` **is** the pullback of
+`OkaRing.ofMvPolynomial ⊤ (g j)` along `restrictTopIso.hom`. That is what makes
+`AlgebraicGeometry.LocallyRingedSpace.Γ_map_inv_hom_apply` applicable there and is why nothing in
+that file carries a transport.
+
+**It is stated here because the general equation is not definitional and the contrast is the
+content.** `TopologicalSpace.Opens.isOpenEmbedding_obj_top` is a `@[simp]` lemma and not a `rfl` —
+taxis #702 established that, and it holds even at `⊤` and even over `ℂ^n` — so *"this crossing is
+free"* is a claim about the section and not about the opens, and a claim of that shape is worth a
+check that fails if it stops being true. -/
+theorem polySection_eq_Γ_map_restrictTopIso_hom {n k : ℕ}
+    (g : Fin k → MvPolynomial (ULift.{u} (Fin n)) ℂ) (j : Fin k) :
+    polySection.{u} g j =
+      (LocallyRingedSpace.Γ.map
+        (AnalyticSpace.complexAffineSpace.{u} n).restrictTopIso.hom.op).hom
+          (OkaRing.ofMvPolynomial (⊤ : Opens (ULift.{u} (Fin n) → ℂ)) (g j)) :=
+  rfl
+
 end
