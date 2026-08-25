@@ -130,6 +130,14 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.hom_ext_of_isEmpty' depends on axiom
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.hom_ext_of_isEmpty
 
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.hom_ext_restrict_of_isEmpty' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.hom_ext_restrict_of_isEmpty
+
 /-! ### Locality of global sections -/
 
 /--
@@ -138,6 +146,26 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.section_ext_of_cover' depends on axi
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.section_ext_of_cover
+
+/-! ### Functoriality of global sections, read elementwise
+
+`Oka/Geometry/RingedSpace/LocallyRingedSpace.lean`. The two lemmas the `Iso` versions
+below specialise: `AlgebraicGeometry.LocallyRingedSpace.Γ` is contravariant, and these
+say so at an element rather than at the map. -/
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.Γ_map_id_apply' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.Γ_map_id_apply
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.Γ_map_comp_apply' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.Γ_map_comp_apply
 
 /-! ### Crossing an isomorphism on global sections -/
 
@@ -170,6 +198,89 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.Γ_map_over_ambient' depends on axio
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.Γ_map_over_ambient
+
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.germ_res' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.germ_res
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.c_app_res' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.c_app_res
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.Γ_map_ofRestrict_apply' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.Γ_map_ofRestrict_apply
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.Γgerm_Γ_map' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.Γgerm_Γ_map
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.restrictStalkIso_hom_stalkAlgMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.restrictStalkIso_hom_stalkAlgMap
+
+/-! ### The image of an open subspace
+
+`Oka/Geometry/RingedSpace/LocallyRingedSpace.lean`. What the underlying map of
+`AlgebraicGeometry.LocallyRingedSpace.ofRestrict` hits, for one open and for a composite
+of two. -/
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.range_ofRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.range_ofRestrict
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.range_ofRestrict_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.range_ofRestrict_comp
+
+/-! ### Lifting sections and germs along a stalkwise-surjective morphism
+
+`Oka/Geometry/RingedSpace/LocallyRingedSpace.lean`'s `LocalModel` section. A germ in the
+image of a stalk map is the germ of a section on a smaller open, and the family version
+that a finite generating set needs. -/
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.exists_localLift' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.exists_localLift
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.exists_localCombination' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.exists_localCombination
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.exists_localLift_family' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.exists_localLift_family
 
 /-! ### The `Γ`-`Spec` adjunction
 
@@ -346,6 +457,14 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.GlueData.openCover' depends on axiom
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.GlueData.openCover
 
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.OpenCover' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.OpenCover
+
 /--
 info: 'AlgebraicGeometry.LocallyRingedSpace.OpenCover.isCompatible_restrictAlgMap_comapAlgMap' depends on axioms:
   [propext, Classical.choice, Quot.sound]
@@ -385,14 +504,19 @@ info: 'AlgebraicGeometry.StructureSheaf.germ_algebraMap_mem_maximalIdeal_iff'' d
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.StructureSheaf.germ_algebraMap_mem_maximalIdeal_iff'
 
-/-! ### Stalk maps along a factorisation, and descent maps out of a coproduct
+/-! ### Stalk maps along a factorisation, and the coproduct of locally ringed spaces
 
 `Oka/Geometry/RingedSpace/LocallyRingedSpace.lean` and
 `Oka/Geometry/RingedSpace/LocallyRingedSpace/HasColimits.lean`. Two out of three for stalk maps,
-and the four properties of a descent map out of a coproduct that a finite étale morphism is built
-from. **The declarations these sit beside in that second file — `sigmaOpenCover`,
-`exists_sigma_ι_base_eq`, `eq_of_sigmaι_base_eq` and the rest — carry no assertion here**, so
-this heading is not a complete guard of that file and should not be read as one. -/
+the coproduct's cover and the injectivity of its inclusions, and the four properties of a descent
+map out of it that a finite étale morphism is built from.
+
+**Every declaration that second file lists under `## Main results` is asserted here, and that is
+still not a complete guard of it.** The sentence that stood here named `sigmaOpenCover` among the
+unasserted ones and it is asserted below; what remains unasserted is what the file does not
+advertise — `exists_sigma_ι_base_eq`, `eq_of_sigmaι_base_eq`, `sigmaι_base_injective`,
+`disjoint_range_sigmaι` and the rest. `python3 scripts/guard_coverage.py --by-file` is what
+distinguishes the two, and it reports the advertised half only. -/
 
 /--
 info: 'AlgebraicGeometry.LocallyRingedSpace.isIso_stalkMap_of_comp' depends on axioms:
@@ -442,3 +566,39 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.isIso_stalkMap_sigmaDesc' depends on
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.isIso_stalkMap_sigmaDesc
+
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.sigmaOpenCover' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.sigmaOpenCover
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.sigma_ι_isOpenImmersion' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.sigma_ι_isOpenImmersion
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.exists_colimit_ι_base_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.exists_colimit_ι_base_eq
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.sigmaι_base_eq_iff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.sigmaι_base_eq_iff
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.disjoint_opensRange_sigmaOpenCover' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.disjoint_opensRange_sigmaOpenCover
