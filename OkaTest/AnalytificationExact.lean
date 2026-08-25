@@ -32,12 +32,39 @@ categories the functor moves between are not zero categories.
 ## What is checked positively
 
 * `nodePreservesFiniteLimits` — the theorem at the node, with both categories written out, so
-  that the site-spelling seam that has cost this development three separate instances is
-  exercised at a concrete presentation rather than at a variable.
+  that the site-spelling seam is exercised at a concrete presentation rather than at a variable.
+  **That seam has three instance transports and two of them are costs**, measured below rather
+  than remembered.
 * `nodePreservesMonomorphisms` — the concrete content of left exactness, which is what the proof
   actually establishes and everything else is formal around.
 
 **No coherence hypothesis appears anywhere**, here or upstream.
+
+## What the site-spelling seam costs, and how to re-derive the number
+
+The count above used to read *"three separate instances"* with nothing behind it, which is the
+species of claim a merge falsifies without touching the sentence. **The criterion, so that it can
+be re-run**: an `instance` under `Oka/` whose body is `inferInstanceAs` and whose type mentions
+`Opens.grothendieckTopology`, `TopCat.Sheaf` or `stalkFunctor`. On 2026-08-25, at `master` =
+`16c1637`, there are three, and deleting each and re-elaborating separates transport from cost.
+
+* `AlgebraicGeometry.LocallyRingedSpace.hasSheafify_toPresheafedSpace`
+  (`Oka/Geometry/RingedSpace/LocallyRingedSpace/Modules.lean`) — **a cost, and an invisible one.**
+  Delete it and its own file still compiles; `lake build` fails 3900 modules later, in a different
+  subtree, at `Oka/Analytification/SheafCoherent.lean:150` with `failed to synthesize instance of
+  type class (analytificationSheaf g).PreservesZeroMorphisms`.
+* `PreservesFiniteLimits (TopCat.Sheaf.stalkFunctor X x)`
+  (`Oka/Algebra/Category/ModuleCat/Sheaf/Stalk.lean`) — **a cost, and a local one.** Delete it and
+  the declaring file fails: `failed to synthesize instance of type class PreservesFiniteLimits
+  (Sheaf.stalkFunctor X x)`.
+* `(TopCat.Sheaf.stalkFunctor X x).Additive` (the same file) — **a transport and not a cost.**
+  Delete it alone and nothing fails; only when it goes together with the previous one does
+  `failed to synthesize instance of type class (stalkFunctor X x).PreservesZeroMorphisms` appear.
+  Its own docstring says as much and calls it *kept as API*.
+
+**Three transports, two costs.** The first is the one worth carrying: its absence is invisible in
+the file that declares it, so a reader auditing this seam by re-elaborating the file it lives in
+would conclude it is free.
 -/
 
 open CategoryTheory Limits AlgebraicGeometry

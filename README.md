@@ -896,8 +896,16 @@ in 10 files are under `OkaTest/` and 7 are section headings.** Of those 17 lines
 historical narration and 3 have their content enforced by an `example` the build fails on; the
 remaining 13 carry **10 distinct claims**, several of them cited from more than one line.
 **Seven of the ten are mechanism claims, all seven were re-run, and all seven reproduce.** The
-other three were not run: one count claim, and two `rw` claims given with no goal to run them
-against. **One of the seven was repaired even so**, and it is a third failure mode beside the two
+other three have since been run as well, on 2026-08-25 at `16c1637`, and **two of the three needed
+a correction**: the count claim in `OkaTest/AnalytificationExact.lean` is an overcount by one —
+three instance transports cross the site-spelling seam and only two of them are costs, separated
+by deleting each and re-elaborating — and of the two `rw` claims in `OkaTest/Factorisation.lean`,
+the `coordPullback_nodeIncl` one reproduces while the other is **misattributed**: `rw` does fire
+across the `Γ.map` of a composite, and what fails is that the goal is spelled `.c.app (op ⊤)`.
+Those two are now **tripwires** rather than prose, in the idiom `OkaTest/SimpDiscrTree.lean`
+established, so the build checks them.
+
+**One of the seven was repaired even so**, and it is a third failure mode beside the two
 reversed diagnoses above: `OkaTest/SheafOfModulesStalk.lean` said the statement elaborates and
 then instance search fails, four lines above its own sentence saying it does not elaborate, and
 the probe settled it against the first — the reported error falls inside the hypothesis. A

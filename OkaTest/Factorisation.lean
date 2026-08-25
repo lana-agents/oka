@@ -379,8 +379,14 @@ makes obvious: `z₀ z₁ = 0` is symmetric, so `p ↦ (p₁, p₀)` maps the no
 `restrictTopIso` crossing — now the two general lemmas named in the section above, rather than
 anything built here — supplies the bridge from `okaMapHom`'s target `ℂ²` to `IsCutOutBy`'s
 `ℂ²|⊤`. The same three seams apply here as there and are not repeated:
-`rw` will not fire across the `Γ.map` of a composite, `rw [coordPullback_nodeIncl]` will not fire
-on a goal spelled with `Γ.map`, and `(𝟙 X).toLRSHom` needs the ascription `(𝟙 X : X ⟶ X)`.
+`rw` fails where the term-mode step succeeds — **not because of the composite**, see below —
+`rw [coordPullback_nodeIncl]` will not fire on a goal spelled with `Γ.map`, and
+`(𝟙 X).toLRSHom` needs the ascription `(𝟙 X : X ⟶ X)`.
+
+**The first two were re-run on 2026-08-25 and one of them was misattributed.** Both are pinned by
+tripwires after `c_app_swapPhi_nodeSection` below, in the idiom
+`OkaTest/SimpDiscrTree.lean` established: an `example` that asserts the failure is still there,
+with the working spelling beside it.
 -/
 
 /-- The family `(z₁, z₀)` on `ℂ²`: the swap of the two coordinates. -/
@@ -431,6 +437,52 @@ theorem c_app_swapPhi_nodeSection (j : Fin 1) :
   exact ((map_mul ((LocallyRingedSpace.Γ.map nodeIncl.{u}.toLRSHom.op).hom) _ _).trans
     ((congrArg₂ (· * ·) (coordPullback_nodeIncl.{u} (ULift.up 1))
       (coordPullback_nodeIncl.{u} (ULift.up 0))).trans (mul_comm _ _))).trans nodeCoord_mul.{u}
+
+/-! #### The two `rw` seams above, as tripwires
+
+**`rw` does fire across the `Γ.map` of a composite, and the section docstring's first seam is
+misattributed.** What fails is one spelling earlier: the goal
+`c_app_swapPhi_nodeSection` starts from is written with `.c.app (op ⊤)`,
+not with `Γ.map _.op`, so the pattern is absent before any composite question arises —
+
+```
+Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (CommRingCat.Hom.hom (LocallyRingedSpace.Γ.map (?f ≫ ?g).op)) ?a
+in the target expression
+  (CommRingCat.Hom.hom (swapPhi.c.app (op ⊤))) (nodeSection j) = 0
+```
+
+— while on a goal already spelled `Γ.map (f ≫ g).op` the same rewrite fires and closes it. The
+term-mode proof works because `Eq.trans` elaborates up to definitional unfolding and `rw` matches
+syntactically; that is the seam, and it is the `Γ.map`-versus-`c.app` one rather than a composite
+one. Same shape as `OkaTest/ProjectiveLineSpan.lean`'s: right about the failure, wrong about the
+cause.
+
+**The second reproduces exactly as stated**, and its cause is the folded name:
+`ComplexAnalytic.AnalyticSpace.coordPullback` is a semireducible `def` and the goal is its
+unfolding, so `rw` looks for `AnalyticSpace.coordPullback nodeIncl ?j` and finds `Γ.map`. The
+term fires on the same goal, which is what makes it a spelling seam rather than a false lemma.
+
+`fail_if_success` here carries no `done`: a `rw` whose pattern is absent errors outright, so the
+tripwire is sharp without one — unlike `simp only`, which can report progress and needs the
+`done` that `OkaTest/SimpDiscrTree.lean` explains. -/
+
+example (j : Fin 1) : ((swapPhi.{u}).c.app (op ⊤)).hom (nodeSection.{u} j) = 0 := by
+  fail_if_success rw [LocallyRingedSpace.Γ_map_comp_apply]
+  exact c_app_swapPhi_nodeSection.{u} j
+
+example (j : Fin 1) :
+    (LocallyRingedSpace.Γ.map ((okaMapHom swapFamily.{u} ≫
+        (complexAffineSpace.{u} 2).restrictTopIso.inv)).op).hom (nodeSection.{u} j) =
+      (LocallyRingedSpace.Γ.map (okaMapHom swapFamily.{u}).op).hom
+        ((LocallyRingedSpace.Γ.map ((complexAffineSpace.{u} 2).restrictTopIso.inv).op).hom
+          (nodeSection.{u} j)) := by
+  rw [LocallyRingedSpace.Γ_map_comp_apply]
+
+example : (LocallyRingedSpace.Γ.map nodeIncl.{u}.toLRSHom.op).hom (coord (ULift.up 0)) =
+    nodeCoord.{u} (ULift.up 0) := by
+  fail_if_success rw [coordPullback_nodeIncl.{u}]
+  exact coordPullback_nodeIncl.{u} (ULift.up 0)
 
 /-- **The swap factors through the node**, so it is an endomorphism of it. -/
 theorem existsUnique_nodeSwap :
