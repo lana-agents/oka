@@ -27,10 +27,14 @@ variable added. `MvPowerSeries.Represents.rename_castSucc` is that sentence abou
 `OkaRing.germ_eq_of_represents` is what reduces a claim about a germ to a claim about what its
 series represents, and `LocalOkaRing.coe_incl` says the rename is `incl`.
 
-**The eventual equality is not a formality.** `OkaRing.toGlobalFun` is total, extended off the
-domain of its argument, so `s ∘ proj` and `s` agree only over the preimage — which is open and
-contains the point, and is where the `filter_upwards` below lands. A pointwise claim without that
-neighbourhood is false, not merely unproved.
+**Why the equality below is taken on a neighbourhood, which is a fact about the rewrite and not
+about the claim.** `OkaRing.toGlobalFun` is total — it is `Function.extend Subtype.val _ 0` — so
+off the preimage of `W` both sides are `0`, and `Fin.init (w + z) ∈ W` is the same condition on
+either side. The identity therefore holds **globally**; what the neighbourhood buys is the
+membership hypothesis that `OkaRing.toGlobalFun_apply` asks for. Dropping it is possible and
+costs a `by_cases` and two `Function.extend_apply'` rewrites — four lines longer, and four lines
+that say nothing about the geometry. **The obstacle is real and it is the rewrite**: with a
+global `filter_upwards` both rewrites fail, on a hypothesis that says only `w ∈ Set.univ`.
 
 ## Main results
 
@@ -92,8 +96,10 @@ theorem okaMapFun_projCoords (z : Fin (n + 1) → ℂ) :
 variables represents `F ∘ Fin.init` in `n + 1`. The only computation is
 `Fin.init (w + z) = Fin.init w + Fin.init z`, which holds by definition.
 
-The neighbourhood in the `filter_upwards` is the preimage of `W`, translated to the origin: off
-it the two sides are values of `OkaRing.toGlobalFun` outside its domain and need not agree. -/
+The `filter_upwards` takes the preimage of `W` translated to the origin because
+`OkaRing.toGlobalFun_apply` wants a membership hypothesis, **not because the identity fails off
+it**: `OkaRing.toGlobalFun` extends by zero, so both sides vanish there. See the module
+docstring. -/
 theorem germ_okaMapC_projCoords {z : Fin (n + 1) → ℂ} {W : Opens (Fin n → ℂ)}
     (hz : z ∈ (Opens.map (okaMapBase (projCoords n))).obj W) (s : OkaRing W) :
     OkaRing.germ hz (okaMapC (projCoords n) W s)
@@ -118,8 +124,8 @@ theorem germ_okaMapC_projCoords {z : Fin (n + 1) → ℂ} {W : Opens (Fin n → 
 
 This is the previous statement at the spelling a caller holding a stalk rather than a germ needs:
 `PresheafedSpace.stalkMap_germ_apply` turns the stalk map on a germ into the germ of the pullback,
-and `okaStalkEquiv_germ` is the Taylor expansion at either end. Stated on germs because
-`(okaCommPresheaf ι).germ` is jointly surjective onto the stalk, so this determines the stalk map
+and `okaStalkEquiv_germ` is the Taylor expansion at either end. Stated on germs because every
+element of the stalk is one — `TopCat.Presheaf.exists_germ_eq` — so this determines the stalk map
 completely. -/
 theorem okaStalkEquiv_stalkMap_okaMapHom_projCoords {z : Fin (n + 1) → ℂ}
     {W : Opens (Fin n → ℂ)} (hw : okaMapFun (projCoords n) z ∈ W) (s : OkaRing W) :
