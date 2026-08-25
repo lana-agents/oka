@@ -487,6 +487,33 @@ info: 'ComplexAnalytic.AnalyticSpace.isIso_stalkMap_okaMap' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.isIso_stalkMap_okaMap
 
+/-! ### The projection `ℂ^(n+1) → ℂ^n` on germs and stalks
+
+`Oka/AnalyticSpace/ProjectionStalk.lean`. The heading above records when a stalk map is an
+isomorphism; these record what one particular stalk map *is*, which is what a quotient statement
+about `LocalOkaRing` needs before it can be read as a statement about a morphism of spaces. -/
+
+/--
+info: 'ComplexAnalytic.okaMapFun_projCoords' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.okaMapFun_projCoords
+
+/--
+info: 'ComplexAnalytic.germ_okaMapC_projCoords' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.germ_okaMapC_projCoords
+
+/--
+info: 'ComplexAnalytic.okaStalkEquiv_stalkMap_okaMapHom_projCoords' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.okaStalkEquiv_stalkMap_okaMapHom_projCoords
+
 /-! ### The third rung: a finite étale morphism is a covering map
 
 The first of the two is the mirror-tree topological criterion in

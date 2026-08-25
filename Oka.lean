@@ -50,6 +50,7 @@ import Oka.AnalyticSpace.LocalModel
 import Oka.AnalyticSpace.Noetherian
 import Oka.AnalyticSpace.Nonvanishing
 import Oka.AnalyticSpace.OpenSubspace
+import Oka.AnalyticSpace.ProjectionStalk
 import Oka.AnalyticSpace.PullbackModulesStalk
 import Oka.AnalyticSpace.Relations
 import Oka.AnalyticSpace.Restrict
