@@ -49,8 +49,13 @@ partial-derivative operator; that the two conditions agree is a bridge nobody he
 `LocalOkaRing.quotientSimpleZeroEquiv` takes an arbitrary germ `f` with a simple zero along the
 last axis, so the reading that would make *it* say nothing new is that such an `f` is always
 `X_n - c` on the nose. `OkaTest.GermQuotientDegreeOne.skewDiagonal` is `(X₁ - X₀)(1 + X₁)`, which
-is not: it has an `X₁²` term, and it is not a Weierstrass polynomial of any degree because the
-coefficient of `X₁` in it is a unit.
+is not, and both halves of *is not* are theorems here rather than remarks:
+`OkaTest.GermQuotientDegreeOne.skewDiagonal_ne_fromPolynomial_X_sub_C` for `X₁ - c` at any `c`,
+and
+`OkaTest.GermQuotientDegreeOne.not_isLocalWeierstrassPolynomial_of_fromPolynomial_eq_skewDiagonal`
+for a local Weierstrass polynomial of any degree. **The first is the one the non-vacuity needs**;
+the second is what rules out the reading that it is a Weierstrass polynomial the file forgot to
+put in Weierstrass form.
 
 **The informative half is the negative one.**
 `OkaTest.GermQuotientDegreeOne.order_partialEval_parabola` computes the axis order of
@@ -117,11 +122,89 @@ theorem isUnit_one_add_lastVar : IsUnit (1 + (lastVar : LocalOkaRing (Fin 2))) :
 
 /-- **The diagonal times a unit**, `(X₁ - X₀)(1 + X₁)`.
 
-Expanded this is `X₁ + X₁² - X₀ - X₀X₁`. As a polynomial in `X₁` it is monic of degree two with
-the coefficient of `X₁` equal to `1 - X₀`, which is a **unit** and so not in the maximal ideal —
-so it is not a local Weierstrass polynomial at all, let alone one of degree one. -/
+Expanded this is `X₁ + X₁² - X₀ - X₀X₁`: as a polynomial in `X₁` it is monic of degree two with
+the coefficient of `X₁` equal to `1 - X₀`. The two things that expansion is here to make plausible
+are theorems rather than prose —
+`OkaTest.GermQuotientDegreeOne.skewDiagonal_ne_fromPolynomial_X_sub_C` says it is not `X₁ - c` for
+any `c`, and
+`OkaTest.GermQuotientDegreeOne.not_isLocalWeierstrassPolynomial_of_fromPolynomial_eq_skewDiagonal`
+says it is not a local Weierstrass polynomial of any degree, the coefficient `1 - X₀` being a unit
+and so not in the maximal ideal. -/
 def skewDiagonal : LocalOkaRing (Fin 2) :=
   fromPolynomial (X - C (LocalOkaRing.coord (0 : Fin 1))) * (1 + lastVar)
+
+/-- **The skew diagonal is not `X₁ - c` for any germ `c`**, so
+`OkaTest.GermQuotientDegreeOne.skewDiagonalEquiv` is not an instance of
+`LocalOkaRing.quotientGraphEquiv` in disguise.
+
+**This is what makes that equivalence a non-vacuity rather than a respelling.** The obvious
+candidate for a germ with a simple zero along the last axis is `X₁ - X₀²`, and it is useless
+here: it is `X₁ - C c` on the nose, so it witnesses nothing that
+`OkaTest.GermQuotientDegreeOne.diagonalEquiv` does not already witness.
+
+`LocalOkaRing.fromPolynomial` is an injective `AlgHom` (`LocalOkaRing.fromPolynomial_injective`)
+and `LocalOkaRing.fromPolynomial_X` turns `1 + X₁` into the image of `1 + X`, so both sides are
+images of polynomials and an equality between them is an equality of polynomials.
+`Polynomial.natDegree` then separates them: two on the left, one on the right. -/
+theorem skewDiagonal_ne_fromPolynomial_X_sub_C (c : LocalOkaRing (Fin 1)) :
+    skewDiagonal ≠ LocalOkaRing.fromPolynomial (X - C c) := by
+  intro h
+  have hm : (1 + X : (LocalOkaRing (Fin 1))[X]) = X + C 1 := by rw [add_comm, C_1]
+  have hmonic : (1 + X : (LocalOkaRing (Fin 1))[X]).Monic := by rw [hm]; exact monic_X_add_C 1
+  rw [skewDiagonal, show (1 + (lastVar : LocalOkaRing (Fin 2)))
+      = LocalOkaRing.fromPolynomial (1 + X : (LocalOkaRing (Fin 1))[X]) by
+        rw [map_add, map_one, fromPolynomial_X], ← map_mul] at h
+  have hd := congrArg Polynomial.natDegree (LocalOkaRing.fromPolynomial_injective h)
+  rw [natDegree_mul (X_sub_C_ne_zero _) hmonic.ne_zero, natDegree_X_sub_C, hm,
+    natDegree_X_add_C, natDegree_X_sub_C] at hd
+  omega
+
+/-- **The skew diagonal is not a local Weierstrass polynomial of any degree.**
+
+The statement is about the *preimage*, which is the only place it can live: `skewDiagonal` is an
+element of `LocalOkaRing (Fin 2)` and `IsLocalWeierstrassPolynomial` is a predicate on
+polynomials, so what is denied is that any polynomial mapping to it is one. That quantifier is
+harmless because `LocalOkaRing.fromPolynomial` is injective: there is exactly one such
+polynomial, `(X - C X₀)(1 + X)`.
+
+The witness is the coefficient of `X₁`, which is `1 - X₀` and has constant term `1`: a local
+Weierstrass polynomial needs every coefficient below the leading one to vanish at the origin, and
+this one is a unit. **Nothing here is special to degree one** — the degree of the polynomial is
+computed rather than assumed, and it is the Weierstrass condition at the index below the leading
+coefficient that fails. -/
+theorem not_isLocalWeierstrassPolynomial_of_fromPolynomial_eq_skewDiagonal
+    {q : (LocalOkaRing (Fin 1))[X]} (hq : LocalOkaRing.fromPolynomial q = skewDiagonal) :
+    ¬ IsLocalWeierstrassPolynomial
+      (Polynomial.map (Subring.subtype (localOkaSubring (Fin 1)).toSubring) q) := by
+  intro h
+  have hqq : q = (X - C (LocalOkaRing.coord (0 : Fin 1))) * (1 + X) :=
+    LocalOkaRing.fromPolynomial_injective <| by
+      rw [hq, skewDiagonal, map_mul, map_add, map_one, fromPolynomial_X]
+  have hone : (1 + X : (LocalOkaRing (Fin 1))[X]).Monic := by
+    rw [add_comm, ← C_1]; exact monic_X_add_C 1
+  have hmonic : q.Monic := by rw [hqq]; exact (monic_X_sub_C _).mul hone
+  have hdeg : q.natDegree = 2 := by
+    rw [hqq, natDegree_mul (X_sub_C_ne_zero _) hone.ne_zero, natDegree_X_sub_C,
+      add_comm (1 : (LocalOkaRing (Fin 1))[X]) X, ← C_1, natDegree_X_add_C]
+  have hlt : (1 : WithBot ℕ) <
+      (Polynomial.map (Subring.subtype (localOkaSubring (Fin 1)).toSubring) q).degree := by
+    rw [Polynomial.degree_map_eq_of_injective Subtype.val_injective,
+      Polynomial.degree_eq_natDegree hmonic.ne_zero, hdeg]
+    exact_mod_cast Nat.one_lt_two
+  have h1 := h.apply_zero 1 hlt
+  have hc1 : q.coeff 1 = 1 - LocalOkaRing.coord (0 : Fin 1) := by
+    have hexp : ((X - C (LocalOkaRing.coord (0 : Fin 1))) * (1 + X) : (LocalOkaRing (Fin 1))[X])
+        = X ^ 2 + C (1 - LocalOkaRing.coord (0 : Fin 1)) * X
+          - C (LocalOkaRing.coord (0 : Fin 1)) := by
+      rw [map_sub, map_one]; ring
+    rw [hqq, hexp]
+    simp
+  rw [Polynomial.coeff_map, hc1] at h1
+  simp only [map_sub, map_one] at h1
+  rw [show (MvPowerSeries.constantCoeff ((localOkaSubring (Fin 1)).toSubring.subtype
+    (LocalOkaRing.coord (0 : Fin 1)))) = (0 : ℂ) from LocalOkaRing.constantCoeff_coord 0,
+    sub_zero] at h1
+  exact one_ne_zero h1
 
 /-- **The restriction of the skew diagonal to the last axis has a simple zero.**
 
