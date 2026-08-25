@@ -38,9 +38,26 @@ germ; the content is that it is bijective.
 `LocalOkaRing` is `okaStalkEquiv` (`Oka/StalkEquiv.lean`, root namespace) and it is not used
 here — this file is about the germ ring alone.
 
-**Nothing about a general hypersurface.** That a germ `f` with `∂f/∂X_n` a unit generates the same
-ideal as some `X_n - c` is Weierstrass preparation plus a unit factor, and neither step is taken
-anywhere in this repository yet.
+**Nothing about the derivative.** `LocalOkaRing.exists_span_eq_span_X_sub_C` does produce the `c`
+from a general germ, and `OkaTest.GermQuotientDegreeOne.skewDiagonalEquiv` below is an instance of
+it — but its hypothesis is that the restriction to the last axis has a simple zero, not that
+`∂f/∂X_n` is a unit. **The second is not expressible on `LocalOkaRing`**, which has no
+partial-derivative operator; that the two conditions agree is a bridge nobody here has built.
+
+## Non-vacuity of the simple-zero quotient, which is a different question
+
+`LocalOkaRing.quotientSimpleZeroEquiv` takes an arbitrary germ `f` with a simple zero along the
+last axis, so the reading that would make *it* say nothing new is that such an `f` is always
+`X_n - c` on the nose. `OkaTest.GermQuotientDegreeOne.skewDiagonal` is `(X₁ - X₀)(1 + X₁)`, which
+is not: it has an `X₁²` term, and it is not a Weierstrass polynomial of any degree because the
+coefficient of `X₁` in it is a unit.
+
+**The informative half is the negative one.**
+`OkaTest.GermQuotientDegreeOne.order_partialEval_parabola` computes the axis order of
+`X₁² - X₀` as `2`, so `LocalOkaRing.quotientSimpleZeroEquiv` does not apply to the parabola — the
+hypothesis is doing work rather than holding of everything in sight. Nothing here says the germ
+ring of the parabola is *not* one dimension down; the claim is only that this theorem does not say
+it is.
 -/
 
 open IsLocalRing Polynomial LocalOkaRing
@@ -89,6 +106,61 @@ def diagonalEquiv :
       (LocalOkaRing (Fin 2) ⧸
         Ideal.span {fromPolynomial (X - C (LocalOkaRing.coord (0 : Fin 1)))}) :=
   LocalOkaRing.quotientGraphEquiv (coord_mem_maximalIdeal 0)
+
+/-! ### A simple zero that is not a graph on the nose -/
+
+/-- **`1 + X₁` is a unit of the germ ring in two variables**, since its value at the origin is
+`1`. It is the factor that takes the diagonal out of Weierstrass form. -/
+theorem isUnit_one_add_lastVar : IsUnit (1 + (lastVar : LocalOkaRing (Fin 2))) := by
+  rw [LocalOkaRing.isUnit_iff, map_add, map_one, lastVar_eq_coord, constantCoeff_coord]
+  simp
+
+/-- **The diagonal times a unit**, `(X₁ - X₀)(1 + X₁)`.
+
+Expanded this is `X₁ + X₁² - X₀ - X₀X₁`. As a polynomial in `X₁` it is monic of degree two with
+the coefficient of `X₁` equal to `1 - X₀`, which is a **unit** and so not in the maximal ideal —
+so it is not a local Weierstrass polynomial at all, let alone one of degree one. -/
+def skewDiagonal : LocalOkaRing (Fin 2) :=
+  fromPolynomial (X - C (LocalOkaRing.coord (0 : Fin 1))) * (1 + lastVar)
+
+/-- **The restriction of the skew diagonal to the last axis has a simple zero.**
+
+`LocalOkaRing.order_partialEval_eq_natDegree` at the unit `1 + X₁` and the Weierstrass polynomial
+`X - C X₀`, whose degree is one. -/
+theorem order_partialEval_skewDiagonal :
+    PowerSeries.order (MvPowerSeries.partialEval (Fin.last 1)
+      ((skewDiagonal : LocalOkaRing (Fin 2)) : MvPowerSeries (Fin 2) ℂ)) = 1 := by
+  rw [skewDiagonal, LocalOkaRing.order_partialEval_eq_natDegree isUnit_one_add_lastVar
+    (LocalOkaRing.isLocalWeierstrassPolynomial_X_sub_C (coord_mem_maximalIdeal 0)) rfl,
+    natDegree_X_sub_C]
+  rfl
+
+/-- **The germ ring in one variable is the germ ring in two modulo the skew diagonal.**
+
+`LocalOkaRing.quotientSimpleZeroEquiv` at a germ that is not `X₁ - c` for any `c`, which is the
+non-vacuity of that definition:
+`OkaTest.GermQuotientDegreeOne.order_partialEval_skewDiagonal` is the only hypothesis, and the
+`c` whose graph this turns out to be is produced by the theorem rather than supplied. -/
+def skewDiagonalEquiv :
+    LocalOkaRing (Fin 1) ≃+* (LocalOkaRing (Fin 2) ⧸ Ideal.span {skewDiagonal}) :=
+  LocalOkaRing.quotientSimpleZeroEquiv order_partialEval_skewDiagonal
+
+/-- **The parabola `X₁² - X₀` has axis order two, not one**, so
+`LocalOkaRing.quotientSimpleZeroEquiv` does not apply to it.
+
+This is the negative control and it is the informative one: the simple-zero hypothesis is not
+satisfied by every hypersurface through the origin, and `2 ≠ 1` is what says so. The computation
+does not go through `LocalOkaRing.order_partialEval_eq_natDegree` — it is
+`partialEval_coe_fromPolynomial` (`Oka/Weierstrass.lean`, root namespace) directly, since
+evaluating the coefficients of `X² - C X₀` at the origin gives `X²`. -/
+theorem order_partialEval_parabola :
+    PowerSeries.order (MvPowerSeries.partialEval (Fin.last 1)
+      ((fromPolynomial (X ^ 2 - C (LocalOkaRing.coord (0 : Fin 1))) : LocalOkaRing (Fin 2)) :
+        MvPowerSeries (Fin 2) ℂ)) = 2 := by
+  rw [partialEval_coe_fromPolynomial, Polynomial.map_sub, Polynomial.map_pow,
+    Polynomial.map_X, Polynomial.map_C, constantCoeff_coord, map_zero, sub_zero,
+    Polynomial.coe_pow, Polynomial.coe_X, PowerSeries.order_X_pow]
+  rfl
 
 end
 

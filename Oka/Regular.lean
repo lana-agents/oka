@@ -9,6 +9,7 @@ import Mathlib.RingTheory.KrullDimension.Regular
 import Mathlib.RingTheory.RegularLocalRing.Defs
 import Oka.MaximalIdeal
 import Oka.Noetherian
+import Oka.UFD
 
 /-!
 # The germ ring is a regular local ring of dimension `n`
@@ -58,6 +59,13 @@ so is a field.
   different ideals for `c ≠ 0`**, which is what says the previous statement is not the coordinate
   case in disguise. The two equivalences have the same source, so the ideals are the only place
   the difference can live.
+- `LocalOkaRing.exists_span_eq_span_X_sub_C`: **a germ whose restriction to the last axis has a
+  simple zero generates the same ideal as some `X_n - c`**, so it is a graph up to the ideal even
+  when it is not one on the nose. `LocalOkaRing.order_partialEval_eq_natDegree` and
+  `LocalOkaRing.eq_X_sub_C_of_natDegree_eq_one` are its two halves.
+- `LocalOkaRing.quotientSimpleZeroEquiv`: **the germ ring of a hypersurface with a simple zero
+  along the last axis is the germ ring one dimension down** — the previous two together, with no
+  graph left in the statement.
 - `LocalOkaRing.ringKrullDim_eq`: **`ringKrullDim (LocalOkaRing (Fin n)) = n`**, and
   `LocalOkaRing.ringKrullDim_eq_natCard` for an arbitrary finite set of variables.
 - `LocalOkaRing.instIsRegularLocalRing`: **the germ ring is a regular local ring.**
@@ -163,11 +171,18 @@ of *a map with non-vanishing derivative in the last variable is a local isomorph
 which is the shape a standard étale algebra `A[X] ⧸ (f)` presents when `f'` is invertible; see
 `Mathlib/RingTheory/Etale/StandardEtale.lean` for that notion.
 
-**What is deliberately not claimed.** Nothing here says that a general `f` with `∂f/∂X_n ≠ 0` is
-such a polynomial — that is Weierstrass preparation (`localweierstrass_preparation`) together with
-the observation that a unit factor does not change the ideal, and neither step is taken below.
-Nor is anything said about analytic *spaces*: the bridge from a stalk of the structure sheaf of
-`ℂ^ι` to `LocalOkaRing` is `okaStalkEquiv` (`Oka/StalkEquiv.lean`, root namespace), and the bridge
+**Producing the `c` from a general `f` is the section below**, and two things about it are worth
+saying here because the obvious statement of them is wrong. The hypothesis one expects — that the
+last partial derivative is a unit — **is not expressible on `LocalOkaRing`, which carries no
+partial-derivative operator**; the workable form is that the restriction to the last axis has a
+simple zero, which is what `localweierstrass_preparation` computes on its own second line. And
+the route is **three steps and not two**: preparation gives `f = fromPolynomial g * u` with `u` a
+unit but **does not report `g.degree`**, so the degree has to be recovered from the conclusion
+before a unit factor not changing the ideal can finish it.
+
+**What is deliberately not claimed.** Nothing is said about analytic *spaces*: the bridge from a
+stalk of the structure sheaf of `ℂ^ι` to `LocalOkaRing` is `okaStalkEquiv`
+(`Oka/StalkEquiv.lean`, root namespace), and the bridge
 from a cut-out subspace's stalk to a quotient of the ambient one is
 `ComplexAnalytic.IsCutOutBy`'s `surjective_stalkMap` and `ker_stalkMap` fields. Both exist;
 neither is used here. -/
@@ -275,9 +290,8 @@ theorem isLocalWeierstrassPolynomial_X_sub_C {c : LocalOkaRing (Fin n)}
 
 **This is the algebraic half of *a hypersurface with non-vanishing derivative in the last variable
 is locally a graph, and its germ ring is one dimension down*.** What it does not do is produce the
-`c`: for a general germ `f` with `∂f/∂X_n` a unit that is Weierstrass preparation
-(`localweierstrass_preparation`) together with the fact that a unit factor does not change the
-ideal it generates, and neither step is taken here. -/
+`c`; `LocalOkaRing.exists_span_eq_span_X_sub_C` below does, from a germ whose restriction to the
+last axis has a simple zero, and `LocalOkaRing.quotientSimpleZeroEquiv` is the two composed. -/
 noncomputable def quotientGraphEquiv {c : LocalOkaRing (Fin n)}
     (hc : c ∈ IsLocalRing.maximalIdeal (LocalOkaRing (Fin n))) :
     LocalOkaRing (Fin n) ≃+*
@@ -310,6 +324,141 @@ theorem span_fromPolynomial_X_sub_C_ne_span_lastVar {c : LocalOkaRing (Fin n)} (
   rw [map_sub, fromPolynomial_X, fromPolynomial_C] at hmem
   exact hc (incl_eq_zero_of_mem_span_lastVar
     (by simpa using Ideal.sub_mem _ (Ideal.mem_span_singleton_self _) hmem))
+
+/-! ### From a simple zero along the last axis to a degree-one polynomial
+
+The section above quotients by `X_n - c`; this one produces the `c`. A germ `f` in `n + 1`
+variables whose restriction to the last axis has a **simple zero** generates the same ideal as
+some `X_n - c`, so `LocalOkaRing.quotientGraphEquiv` applies to it and
+`LocalOkaRing.quotientSimpleZeroEquiv` is the composite: **the germ ring of a hypersurface with a
+simple zero along the last axis is the germ ring one dimension down**, with no graph left in the
+statement.
+
+**Why the hypothesis is stated with `PowerSeries.order` and not with a derivative.** The
+condition one expects is that `∂f/∂X_n` is a unit at the origin. That is not expressible here:
+this repository has no partial-derivative operator on `LocalOkaRing`, and the one declaration
+under `Oka/` that computes a partial derivative,
+`MvPowerSeries.LocallyConvergent.fderiv_eval_zero`, is about the derivative of the *sum* of a
+convergent series. `PowerSeries.order (MvPowerSeries.partialEval (Fin.last n) f) = 1` is the same
+condition for a germ vanishing at the origin, and it costs nothing because it is what
+`localweierstrass_preparation` already computes internally as its order of generality. Bridging
+the two is a separate piece of work and nothing here attempts it.
+
+**Preparation does not report the degree, and that is the only real content below.**
+`localweierstrass_preparation` concludes `f = fromPolynomial g * u` with `u` a unit and `g` a
+local Weierstrass polynomial, and says nothing about `g.degree`. So the degree has to be recovered
+from the conclusion rather than read off it, which is
+`LocalOkaRing.order_partialEval_eq_natDegree`: `MvPowerSeries.partialEval` is an `AlgHom`, so it
+splits the product; the unit contributes order `0` because a unit has nonzero constant
+coefficient; and the polynomial factor contributes `X ^ g.natDegree` by
+`LocalOkaRing.map_constantCoeff_eq_X_pow`. Only then does *a unit factor does not change the
+ideal* finish it. -/
+
+/-- **A local Weierstrass polynomial of degree one is `X - C c`**, for a germ `c` in the first `n`
+variables vanishing at the origin.
+
+The converse of `LocalOkaRing.isLocalWeierstrassPolynomial_X_sub_C`. Monicity pins every
+coefficient above the constant one, and the Weierstrass condition puts the constant one in the
+maximal ideal. -/
+theorem eq_X_sub_C_of_natDegree_eq_one {g : (LocalOkaRing (Fin n))[X]}
+    (hg : IsLocalWeierstrassPolynomial
+      (Polynomial.map (Subring.subtype (localOkaSubring (Fin n)).toSubring) g))
+    (hdeg : g.natDegree = 1) :
+    ∃ c : LocalOkaRing (Fin n), c ∈ IsLocalRing.maximalIdeal (LocalOkaRing (Fin n)) ∧
+      g = X - C c := by
+  have hmonic : g.Monic := monic_of_isLocalWeierstrass hg
+  refine ⟨-g.coeff 0, ?_, ?_⟩
+  · rw [mem_maximalIdeal_iff]
+    have hi : (0 : WithBot ℕ) <
+        (Polynomial.map (Subring.subtype (localOkaSubring (Fin n)).toSubring) g).degree := by
+      rw [Polynomial.degree_map_eq_of_injective Subtype.val_injective,
+        Polynomial.degree_eq_natDegree hmonic.ne_zero, hdeg]
+      exact_mod_cast Nat.zero_lt_one
+    have h0 := hg.apply_zero 0 hi
+    rw [Polynomial.coeff_map] at h0
+    rw [map_neg, constantCoeff_apply]
+    exact neg_eq_zero.mpr h0
+  · rw [sub_eq_add_neg, map_neg, neg_neg]
+    conv_lhs => rw [hmonic.as_sum]
+    rw [hdeg]
+    simp
+
+/-- **The order of the restriction to the last axis is the degree of the Weierstrass polynomial.**
+
+This is what recovers the degree that `localweierstrass_preparation` does not report.
+`MvPowerSeries.partialEval` is an `AlgHom`, so `PowerSeries.order_mul` splits `f = fromPolynomial
+g * u`; `partialEval_coe_fromPolynomial` (`Oka/Weierstrass.lean`, root namespace) and
+`LocalOkaRing.map_constantCoeff_eq_X_pow` (`Oka/UFD.lean`) turn the first factor into
+`X ^ g.natDegree`; and the unit contributes order `0` because `LocalOkaRing.isUnit_iff` says its
+constant coefficient is nonzero. -/
+theorem order_partialEval_eq_natDegree {f u : LocalOkaRing (Fin (n + 1))}
+    {g : (LocalOkaRing (Fin n))[X]} (hu : IsUnit u)
+    (hg : IsLocalWeierstrassPolynomial
+      (Polynomial.map (Subring.subtype (localOkaSubring (Fin n)).toSubring) g))
+    (hf : f = fromPolynomial g * u) :
+    PowerSeries.order (MvPowerSeries.partialEval (Fin.last n)
+      (f : MvPowerSeries (Fin (n + 1)) ℂ)) = g.natDegree := by
+  have hcoe : (f : MvPowerSeries (Fin (n + 1)) ℂ)
+      = ((fromPolynomial g : LocalOkaRing (Fin (n + 1))) : MvPowerSeries (Fin (n + 1)) ℂ) *
+        ((u : LocalOkaRing (Fin (n + 1))) : MvPowerSeries (Fin (n + 1)) ℂ) := by
+    rw [hf]; rfl
+  rw [hcoe, map_mul, PowerSeries.order_mul, partialEval_coe_fromPolynomial,
+    map_constantCoeff_eq_X_pow hg]
+  have h1 : ((X ^ g.natDegree : ℂ[X]) : PowerSeries ℂ)
+      = (PowerSeries.X : PowerSeries ℂ) ^ g.natDegree := by
+    push_cast
+    rfl
+  rw [h1, PowerSeries.order_X_pow]
+  have h2 : PowerSeries.order (MvPowerSeries.partialEval (Fin.last n)
+      ((u : LocalOkaRing (Fin (n + 1))) : MvPowerSeries (Fin (n + 1)) ℂ)) = 0 := by
+    by_contra hne
+    have hcc := isUnit_iff.mp hu
+    rw [constantCoeff_apply] at hcc
+    exact hcc (by simpa using PowerSeries.order_ne_zero_iff_constCoeff_eq_zero.mp hne)
+  rw [h2, add_zero]
+
+/-- **A germ whose restriction to the last axis has a simple zero generates the same ideal as
+`X_n - c`**, for a germ `c` in the first `n` variables vanishing at the origin.
+
+Weierstrass preparation, the degree recovered by
+`LocalOkaRing.order_partialEval_eq_natDegree`, the shape supplied by
+`LocalOkaRing.eq_X_sub_C_of_natDegree_eq_one`, and `Ideal.span_singleton_mul_right_unit` for the
+unit factor. The hypothesis also supplies `MvPowerSeries.IsGeneralIn`, which unfolds to the
+restriction being nonzero and so cannot hold at order `⊤`. -/
+theorem exists_span_eq_span_X_sub_C {f : LocalOkaRing (Fin (n + 1))}
+    (hf : PowerSeries.order
+      (MvPowerSeries.partialEval (Fin.last n) (f : MvPowerSeries (Fin (n + 1)) ℂ)) = 1) :
+    ∃ c : LocalOkaRing (Fin n), c ∈ IsLocalRing.maximalIdeal (LocalOkaRing (Fin n)) ∧
+      Ideal.span {f} = Ideal.span {fromPolynomial (X - C c)} := by
+  have hgen : (f : MvPowerSeries (Fin (n + 1)) ℂ).IsGeneralIn (Fin.last n) := by
+    intro h
+    rw [h, PowerSeries.order_zero] at hf
+    simp at hf
+  obtain ⟨u, hu, g, hg, hfeq⟩ := localweierstrass_preparation f hgen
+  have hdeg : g.natDegree = 1 := by
+    have hd := order_partialEval_eq_natDegree hu hg hfeq
+    rw [hf] at hd
+    exact_mod_cast hd.symm
+  obtain ⟨c, hc, rfl⟩ := eq_X_sub_C_of_natDegree_eq_one hg hdeg
+  exact ⟨c, hc, by rw [hfeq]; exact Ideal.span_singleton_mul_right_unit hu _⟩
+
+/-- **The germ ring of a hypersurface with a simple zero along the last axis is the germ ring one
+dimension down.**
+
+`LocalOkaRing.quotientGraphEquiv` at the `c` that `LocalOkaRing.exists_span_eq_span_X_sub_C`
+produces, transported along the equality of ideals by `Ideal.quotEquivOfEq`. **No graph appears in
+the statement**: `f` is an arbitrary germ and the hypothesis is a condition on its restriction to
+one axis.
+
+The `c` is chosen and is not part of the data, which is why this is stated as an equivalence with
+the quotient by `(f)` rather than as an equality of ideals with a named `c` — that is
+`LocalOkaRing.exists_span_eq_span_X_sub_C`, one line above. -/
+noncomputable def quotientSimpleZeroEquiv {f : LocalOkaRing (Fin (n + 1))}
+    (hf : PowerSeries.order
+      (MvPowerSeries.partialEval (Fin.last n) (f : MvPowerSeries (Fin (n + 1)) ℂ)) = 1) :
+    LocalOkaRing (Fin n) ≃+* (LocalOkaRing (Fin (n + 1)) ⧸ Ideal.span {f}) :=
+  (quotientGraphEquiv (exists_span_eq_span_X_sub_C hf).choose_spec.1).trans
+    (Ideal.quotEquivOfEq (exists_span_eq_span_X_sub_C hf).choose_spec.2.symm)
 
 /-! ### The Krull dimension -/
 
