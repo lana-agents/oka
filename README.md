@@ -811,7 +811,7 @@ rather than hardcoding them.
 `lake exe lint-style`, the docstring-name checker or the `sorry` grep, and it knows nothing about
 files that do not import the one being checked. Its own `--help` lists this too.
 
-The other tool — also a tool and not a gate — is `python3 scripts/import_cost.py FILE.lean`, which
+A second tool — also a tool and not a gate — is `python3 scripts/import_cost.py FILE.lean`, which
 computes what upstreaming a mirror file would add to its Mathlib target's transitive imports:
 
 ```sh
@@ -852,7 +852,15 @@ historical narration and 3 have their content enforced by an `example` the build
 remaining 13 carry **10 distinct claims**, several of them cited from more than one line.
 **Seven of the ten are mechanism claims, all seven were re-run, and all seven reproduce.** The
 other three were not run: one count claim, and two `rw` claims given with no goal to run them
-against. The five section headings under `Oka/` are unaudited.
+against. **One of the seven was repaired even so**, and it is a third failure mode beside the two
+reversed diagnoses above: `OkaTest/SheafOfModulesStalk.lean` said the statement elaborates and
+then instance search fails, four lines above its own sentence saying it does not elaborate, and
+the probe settled it against the first — the reported error falls inside the hypothesis. A
+misattribution turns up when the claim is re-run; a self-contradiction turns up only when the
+paragraph is read whole. **Four of the five section headings under `Oka/` are unaudited**; the
+fifth, `Oka/AnalyticSpace/Sigma.lean`'s, was re-run in both directions for this clause and
+reproduces — naming the cover and eliding the other three arguments compiles, while eliding the
+cover and naming the other three is a deterministic timeout at `whnf` on 200000 heartbeats.
 The measurement is cheap and the method is fixed: copy the file, apply the substitution the
 paragraph describes, and `lake env lean` it, so that a positive and a negative are on the record
 rather than a reading. **Quote the error** — half of these already do, and those are the ones an
