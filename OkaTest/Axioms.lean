@@ -74,10 +74,16 @@ advertise under a `## Main results` heading and asks which of them some `#print 
 `7b6fd39`, the base this file's tranche was written on, that was 502 guarded names against 506
 advertised declarations, of which 179 were named by no guard at all, spread over 63 files; the
 nineteen guards added below account for nineteen of those 179, leaving 160 unguarded in 61
-files** — so still close to a third of what the library announces as its main results carries no
-axiom assertion. Neither list contains the other: **175 guarded names are advertised in no
-`## Main results`**, which is not a defect, since a guard on a lemma no docstring announces is
-worth exactly as much as one on a lemma it does.
+files.** **A second tranche of twelve was measured against `0ac74d4`, where the gap stood at 162
+in 61 files, and leaves 150 in 60.** Ten of those twelve are the whole of
+`Oka/ChangeOfCoordinates.lean`'s `## Main results`; the other two are the ones lana-agents/oka#201
+put into the gap by *advertising* them, which is the mechanism of the next paragraph running the
+other way and the reason a tranche is a standing job rather than a finite one. So **still close to
+a third** of what the library announces as its main results carries no axiom assertion. Neither
+list contains the other: **175 guarded names are advertised in no `## Main results`**, which is
+not a defect, since a guard on a lemma no docstring announces is worth exactly as much as one on
+a lemma it does — and that figure is unchanged across both tranches, which is what says each was
+drawn from the advertised-and-unguarded pool and not from somewhere else.
 
 The figures are pinned to a commit rather than to a date, because a paragraph that says *"on the
 tree this lands in"* cannot be re-run without first finding which tree that was. **The two totals

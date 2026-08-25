@@ -10,7 +10,9 @@ import Oka
 
 Results about `LocalOkaRing`, the ring of germs at the origin of holomorphic functions: the
 Rückert basis theorem, the maximal ideal and its powers, the easy half of the analytic
-Nullstellensatz, regularity of the germ ring, and its completion.
+Nullstellensatz, regularity of the germ ring, its completion, the quotients by a degree-one
+Weierstrass polynomial, and change of coordinates. **This list is the file's headings and goes
+stale the moment one is added without it** — the headings themselves are the record.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -77,6 +79,20 @@ info: 'LocalOkaRing.vanishingIdeal_bot' depends on axioms:
 #print axioms LocalOkaRing.vanishingIdeal_bot
 
 /-! ### The germ ring is regular of dimension `n` -/
+
+/--
+info: 'LocalOkaRing.exists_eq_mul_lastVar_add_incl' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.exists_eq_mul_lastVar_add_incl
+
+/--
+info: 'LocalOkaRing.incl_eq_zero_of_mem_span_lastVar' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.incl_eq_zero_of_mem_span_lastVar
 
 /--
 info: 'LocalOkaRing.quotientLastVarEquiv' depends on axioms:
@@ -229,3 +245,81 @@ info: 'LocalOkaRing.quotientSimpleZeroEquiv' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms LocalOkaRing.quotientSimpleZeroEquiv
+
+/-! ### Changing coordinates
+
+`Oka/ChangeOfCoordinates.lean`. `LocalOkaRing.congr` transports a germ along a linear change of
+the variables; the first six below are its characterisation and its functoriality, and the last
+three are what it exists for — every finite family of nonzero germs becomes general in the last
+variable after one common change, which is Weierstrass preparation without a genericity
+hypothesis. -/
+
+/--
+info: 'LocalOkaRing.congr_represents' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.congr_represents
+
+/--
+info: 'LocalOkaRing.congr_eq_of_represents' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.congr_eq_of_represents
+
+/--
+info: 'LocalOkaRing.congr_germ' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.congr_germ
+
+/--
+info: 'LocalOkaRing.congr_toLocalOkaRingHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.congr_toLocalOkaRingHom
+
+/--
+info: 'LocalOkaRing.congr_refl' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.congr_refl
+
+/--
+info: 'LocalOkaRing.congr_trans' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.congr_trans
+
+/--
+info: 'LocalOkaRing.congrEquiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.congrEquiv
+
+/--
+info: 'LocalOkaRing.exists_congr_isGeneralIn' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.exists_congr_isGeneralIn
+
+/--
+info: 'LocalOkaRing.exists_congr_isGeneralIn_of_ne_zero' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.exists_congr_isGeneralIn_of_ne_zero
+
+/--
+info: 'LocalOkaRing.exists_congr_localweierstrass_preparation' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.exists_congr_localweierstrass_preparation
