@@ -52,6 +52,7 @@ import OkaTest.LocalisationChain
 import OkaTest.LocalisationComposite
 import OkaTest.LocalisationFunctor
 import OkaTest.LocalisationIndependence
+import OkaTest.LocalisationRigidity
 import OkaTest.LocallyRingedSpaceCoproduct
 import OkaTest.Nonvanishing
 import OkaTest.OpenSubspace
