@@ -30,3 +30,50 @@ info: 'LocalOkaRing.ofMvPolynomial' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms LocalOkaRing.ofMvPolynomial
 
+
+/-! ### The stalk of the structure sheaf at a point
+
+`Oka/StalkEquiv.lean`: the stalk of `𝒪_{ℂ^ι}` at `y` is the ring of convergent power series
+about `y`, the germs vanishing at `y` are its maximal ideal, and so the stalk is local. -/
+
+/--
+info: 'okaStalkEquiv_germ' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms okaStalkEquiv_germ
+
+/--
+info: 'constantCoeff_okaStalkEquiv_germ' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms constantCoeff_okaStalkEquiv_germ
+
+/--
+info: 'mem_maximalIdeal_stalk_iff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms mem_maximalIdeal_stalk_iff
+
+/--
+info: 'germ_mem_maximalIdeal_iff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms germ_mem_maximalIdeal_iff
+
+/--
+info: 'map_okaStalkEquiv_maximalIdeal' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms map_okaStalkEquiv_maximalIdeal
+
+/--
+info: 'isLocalRing_okaStalk' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms isLocalRing_okaStalk

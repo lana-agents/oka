@@ -25,6 +25,47 @@ info: 'IsLocalRing.IsCoefficientField.ringHom_ext' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms IsLocalRing.IsCoefficientField.ringHom_ext
 
+/-! ### Coefficient fields: evaluation, its uniqueness, and transport along a surjection
+
+`Oka/RingTheory/LocalRing/ResidueField/Basic.lean`, which is the API the rigidity statement above
+is stated about: the value of an element, the uniqueness of the constant it is congruent to, and
+the surjection along which a coefficient field is inherited. -/
+
+/--
+info: 'IsLocalRing.IsCoefficientField.evalHom_eq_iff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms IsLocalRing.IsCoefficientField.evalHom_eq_iff
+
+/--
+info: 'IsLocalRing.IsCoefficientField.existsUnique_sub_mem_maximalIdeal' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms IsLocalRing.IsCoefficientField.existsUnique_sub_mem_maximalIdeal
+
+/--
+info: 'IsLocalRing.IsCoefficientField.of_surjective' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms IsLocalRing.IsCoefficientField.of_surjective
+
+/--
+info: 'IsLocalRing.IsCoefficientField.evalHom_map' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms IsLocalRing.IsCoefficientField.evalHom_map
+
+/--
+info: 'IsLocalRing.IsCoefficientField.isLocalHom_comp_evalHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms IsLocalRing.IsCoefficientField.isLocalHom_comp_evalHom
+
 
 /-! ### The projections of an adic completion -/
 
