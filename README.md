@@ -910,10 +910,18 @@ reversed diagnoses above: `OkaTest/SheafOfModulesStalk.lean` said the statement 
 then instance search fails, four lines above its own sentence saying it does not elaborate, and
 the probe settled it against the first — the reported error falls inside the hypothesis. A
 misattribution turns up when the claim is re-run; a self-contradiction turns up only when the
-paragraph is read whole. **Four of the five section headings under `Oka/` are unaudited**; the
-fifth, `Oka/AnalyticSpace/Sigma.lean`'s, was re-run in both directions for this clause and
-reproduces — naming the cover and eliding the other three arguments compiles, while eliding the
-cover and naming the other three is a deterministic timeout at `whnf` on 200000 heartbeats.
+paragraph is read whole. **The four unaudited `Oka/` section headings have now been
+audited, and on 2026-08-25, at `3f185f0`, those four carried thirteen claims between them** — a
+heading is not a claim, and `Oka/Algebra/Category/ModuleCat/Sheaf/Stalk.lean`'s holds six on its
+own. **Twelve were re-run and all twelve reproduce**; the thirteenth is a sheaf-map computation
+with no goal to run it against, and it is named in the pull request that ran the rest. That
+sentence names a commit because the population is whatever the grep returns: a file added later
+with such a heading is outside it, and the count is the wrong thing to carry forward. **The
+fifth `Oka/` heading is not in that thirteen**: `Oka/AnalyticSpace/Sigma.lean`'s is the one
+**corrected** under taxis #1015 above, audited then rather than now, so what reproduces there is
+the corrected claim — naming the cover and eliding the other three arguments compiles, while
+eliding the cover and naming the other three is a deterministic timeout at `whnf` on 200000
+heartbeats.
 The measurement is cheap and the method is fixed: copy the file, apply the substitution the
 paragraph describes, and `lake env lean` it, so that a positive and a negative are on the record
 rather than a reading. **Quote the error** — half of these already do, and those are the ones an
