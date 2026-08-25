@@ -47,6 +47,17 @@ so is a field.
 
 - `LocalOkaRing.quotientLastVarEquiv`: `LocalOkaRing (Fin (n + 1)) ⧸ (X_n) ≃+* LocalOkaRing
   (Fin n)`, by Weierstrass division by the last coordinate.
+- `LocalOkaRing.quotientDegreeOneEquiv`: **the same for an arbitrary local Weierstrass polynomial
+  of degree one**, and not only for the coordinate `X_n`. Its two halves are
+  `LocalOkaRing.exists_eq_mul_fromPolynomial_add_incl` and
+  `LocalOkaRing.incl_eq_zero_of_mem_span_fromPolynomial`.
+- `LocalOkaRing.quotientGraphEquiv`: **the germ ring on the graph of an analytic function is the
+  germ ring of its domain**, which is the previous statement at `X_n - c`;
+  `LocalOkaRing.isLocalWeierstrassPolynomial_X_sub_C` is the hypothesis it discharges.
+- `LocalOkaRing.span_fromPolynomial_X_sub_C_ne_span_lastVar`: **`(X_n - c)` and `(X_n)` are
+  different ideals for `c ≠ 0`**, which is what says the previous statement is not the coordinate
+  case in disguise. The two equivalences have the same source, so the ideals are the only place
+  the difference can live.
 - `LocalOkaRing.ringKrullDim_eq`: **`ringKrullDim (LocalOkaRing (Fin n)) = n`**, and
   `LocalOkaRing.ringKrullDim_eq_natCard` for an arbitrary finite set of variables.
 - `LocalOkaRing.instIsRegularLocalRing`: **the germ ring is a regular local ring.**
@@ -135,6 +146,170 @@ noncomputable def quotientLastVarEquiv : LocalOkaRing (Fin n) ≃+*
         simp only [RingHom.comp_apply, AlgHom.toRingHom_eq_coe, RingHom.coe_coe]
         rw [eq_comm, Ideal.Quotient.mk_eq_mk_iff_sub_mem]
         simpa using Ideal.mul_mem_left _ a (Ideal.mem_span_singleton_self _)⟩
+
+/-! ### Quotienting by a degree-one Weierstrass polynomial
+
+`LocalOkaRing.quotientLastVarEquiv` above is stated for the coordinate `X_n`, which is what the
+Krull-dimension induction needs. **The same argument works for any local Weierstrass polynomial of
+degree one**, and nothing in the proof used `X` beyond its degree: `localweierstrass_division` is
+already stated for a general Weierstrass polynomial `q`, and at `q.degree = 1` its remainder has
+degree `< 1` and is therefore a constant — which is the whole of what makes the quotient the germ
+ring one variable down.
+
+**Why the generality is worth having.** A degree-one local Weierstrass polynomial in `X_n` is
+`X_n - c` for a germ `c` in the first `n` variables, so the statement says that the germ ring on
+the *graph* of an analytic function is the germ ring of its domain. That is the algebraic content
+of *a map with non-vanishing derivative in the last variable is a local isomorphism on stalks*,
+which is the shape a standard étale algebra `A[X] ⧸ (f)` presents when `f'` is invertible; see
+`Mathlib/RingTheory/Etale/StandardEtale.lean` for that notion.
+
+**What is deliberately not claimed.** Nothing here says that a general `f` with `∂f/∂X_n ≠ 0` is
+such a polynomial — that is Weierstrass preparation (`localweierstrass_preparation`) together with
+the observation that a unit factor does not change the ideal, and neither step is taken below.
+Nor is anything said about analytic *spaces*: the bridge from a stalk of the structure sheaf of
+`ℂ^ι` to `LocalOkaRing` is `okaStalkEquiv` (`Oka/StalkEquiv.lean`, root namespace), and the bridge
+from a cut-out subspace's stalk to a quotient of the ambient one is
+`ComplexAnalytic.IsCutOutBy`'s `surjective_stalkMap` and `ker_stalkMap` fields. Both exist;
+neither is used here. -/
+
+/-- **Division by a degree-one local Weierstrass polynomial**: every germ in `n + 1` variables is
+a multiple of `q` plus a germ in the first `n`.
+
+`localweierstrass_division` at `q`, whose remainder has degree `< q.degree = 1` and is therefore a
+constant. `LocalOkaRing.exists_eq_mul_lastVar_add_incl` is this at `q = X`, where
+`LocalOkaRing.fromPolynomial_X` identifies `fromPolynomial X` with `LocalOkaRing.lastVar`. -/
+theorem exists_eq_mul_fromPolynomial_add_incl {q : (LocalOkaRing (Fin n))[X]}
+    (hq : IsLocalWeierstrassPolynomial
+      (Polynomial.map (Subring.subtype (localOkaSubring (Fin n)).toSubring) q))
+    (hdeg : q.degree = 1) (f : LocalOkaRing (Fin (n + 1))) :
+    ∃ (a : LocalOkaRing (Fin (n + 1))) (c : LocalOkaRing (Fin n)),
+      f = a * fromPolynomial q + incl c := by
+  obtain ⟨a, b, hb, hf⟩ := localweierstrass_division q hq f
+  refine ⟨a, b.coeff 0, ?_⟩
+  rw [hdeg] at hb
+  have hb0 : b = C (b.coeff 0) :=
+    eq_C_of_degree_le_zero (Nat.WithBot.lt_one_iff_le_zero.mp hb)
+  rw [hf]
+  conv_lhs => rw [hb0]
+  rw [fromPolynomial_C]
+
+/-- **A germ in the first `n` variables which is divisible by a degree-one local Weierstrass
+polynomial is zero.**
+
+The uniqueness half of Weierstrass division, exactly as in
+`LocalOkaRing.incl_eq_zero_of_mem_span_lastVar`: `incl c` has two divisions by `q`, one with
+quotient `a` and remainder `0`, one with quotient `0` and remainder `C c`, and both remainders
+have degree `< 1`. -/
+theorem incl_eq_zero_of_mem_span_fromPolynomial {q : (LocalOkaRing (Fin n))[X]}
+    (hq : IsLocalWeierstrassPolynomial
+      (Polynomial.map (Subring.subtype (localOkaSubring (Fin n)).toSubring) q))
+    (hdeg : q.degree = 1) {c : LocalOkaRing (Fin n)}
+    (h : incl c ∈ Ideal.span {fromPolynomial q}) : c = 0 := by
+  obtain ⟨a, ha⟩ := Ideal.mem_span_singleton'.mp h
+  have key := localweierstrass_division_unique (q := q) hq (a := a) (a' := 0)
+    (b := (0 : (LocalOkaRing (Fin n))[X])) (b' := C c)
+    (by simp [hdeg])
+    (by rw [hdeg]; exact degree_C_le.trans_lt (by norm_num))
+    (by
+      rw [fromPolynomial_C, map_zero]
+      simpa using ha)
+  simpa using key.2.symm
+
+/-- **Quotienting the germ ring in `n + 1` variables by a degree-one local Weierstrass polynomial
+returns the germ ring in `n` variables.**
+
+`LocalOkaRing.quotientLastVarEquiv` is this at `q = X`. Surjectivity is
+`LocalOkaRing.exists_eq_mul_fromPolynomial_add_incl` and injectivity is
+`LocalOkaRing.incl_eq_zero_of_mem_span_fromPolynomial`; the map itself is `LocalOkaRing.incl`
+followed by the quotient, so it is the inclusion of the germs that do not involve the last
+variable, and the statement is that *every* class has exactly one such representative. -/
+noncomputable def quotientDegreeOneEquiv {q : (LocalOkaRing (Fin n))[X]}
+    (hq : IsLocalWeierstrassPolynomial
+      (Polynomial.map (Subring.subtype (localOkaSubring (Fin n)).toSubring) q))
+    (hdeg : q.degree = 1) :
+    LocalOkaRing (Fin n) ≃+*
+      (LocalOkaRing (Fin (n + 1)) ⧸ Ideal.span {fromPolynomial q}) :=
+  RingEquiv.ofBijective
+    ((Ideal.Quotient.mk _).comp (incl : LocalOkaRing (Fin n) →ₐ[ℂ] _).toRingHom)
+    ⟨(injective_iff_map_eq_zero _).2 fun _ hc ↦
+        incl_eq_zero_of_mem_span_fromPolynomial hq hdeg (Ideal.Quotient.eq_zero_iff_mem.mp hc),
+      by
+        intro x
+        obtain ⟨f, rfl⟩ := Ideal.Quotient.mk_surjective x
+        obtain ⟨a, c, rfl⟩ := exists_eq_mul_fromPolynomial_add_incl hq hdeg f
+        refine ⟨c, ?_⟩
+        simp only [RingHom.comp_apply, AlgHom.toRingHom_eq_coe, RingHom.coe_coe]
+        rw [eq_comm, Ideal.Quotient.mk_eq_mk_iff_sub_mem]
+        simpa using Ideal.mul_mem_left _ a (Ideal.mem_span_singleton_self _)⟩
+
+/-- **`X_n - c` is a local Weierstrass polynomial of degree one**, for any germ `c` in the first
+`n` variables vanishing at the origin.
+
+Monicity is `Polynomial.monic_X_sub_C`; the one coefficient below the leading one is `-c`, and it
+vanishes at the origin exactly when `c` does — `LocalOkaRing.mem_maximalIdeal_iff`, which is where
+the hypothesis is used and the only place it is.
+
+This is what makes `LocalOkaRing.quotientDegreeOneEquiv` say something the coordinate case does
+not: `X_n - c` cuts out the **graph** of `c`, and `X_n` is its special case at `c = 0`. -/
+theorem isLocalWeierstrassPolynomial_X_sub_C {c : LocalOkaRing (Fin n)}
+    (hc : c ∈ IsLocalRing.maximalIdeal (LocalOkaRing (Fin n))) :
+    IsLocalWeierstrassPolynomial
+      (Polynomial.map (Subring.subtype (localOkaSubring (Fin n)).toSubring)
+        (X - C c : (LocalOkaRing (Fin n))[X])) where
+  monic := by
+    rw [Polynomial.map_sub, Polynomial.map_X, Polynomial.map_C]
+    exact monic_X_sub_C _
+  apply_zero i hi := by
+    rw [Polynomial.map_sub, Polynomial.map_X, Polynomial.map_C] at hi ⊢
+    rw [degree_X_sub_C, Nat.cast_lt_one] at hi
+    subst hi
+    rw [coeff_sub, coeff_X_zero, coeff_C_zero, zero_sub, map_neg, neg_eq_zero]
+    exact LocalOkaRing.mem_maximalIdeal_iff.mp hc
+
+/-- **The germ ring on the graph of an analytic function is the germ ring of its domain.**
+
+`LocalOkaRing.quotientDegreeOneEquiv` at `X_n - c`, which
+`LocalOkaRing.isLocalWeierstrassPolynomial_X_sub_C` supplies. At `c = 0` it is
+`LocalOkaRing.quotientLastVarEquiv` up to the identification of `fromPolynomial X` with
+`LocalOkaRing.lastVar`.
+
+**This is the algebraic half of *a hypersurface with non-vanishing derivative in the last variable
+is locally a graph, and its germ ring is one dimension down*.** What it does not do is produce the
+`c`: for a general germ `f` with `∂f/∂X_n` a unit that is Weierstrass preparation
+(`localweierstrass_preparation`) together with the fact that a unit factor does not change the
+ideal it generates, and neither step is taken here. -/
+noncomputable def quotientGraphEquiv {c : LocalOkaRing (Fin n)}
+    (hc : c ∈ IsLocalRing.maximalIdeal (LocalOkaRing (Fin n))) :
+    LocalOkaRing (Fin n) ≃+*
+      (LocalOkaRing (Fin (n + 1)) ⧸ Ideal.span {fromPolynomial (X - C c)}) :=
+  quotientDegreeOneEquiv (isLocalWeierstrassPolynomial_X_sub_C hc) (degree_X_sub_C c)
+
+/-- **The graph of a nonzero germ is not the last coordinate**, as an ideal: for `c ≠ 0` the
+principal ideals `(X_n - c)` and `(X_n)` are different.
+
+This is what makes `LocalOkaRing.quotientGraphEquiv` a generalisation of
+`LocalOkaRing.quotientLastVarEquiv` rather than a respelling of it. The two equivalences have the
+*same source*, so nothing about them separates the two statements; what separates them is that
+their targets are quotients by different ideals, and that is this.
+
+**A statement about `c` alone does not get there.** `c ≠ 0` says the two *polynomials* differ, and
+`LocalOkaRing.fromPolynomial_injective` upgrades that to the two germs differing, but two distinct
+elements can perfectly well generate the same principal ideal — they need only differ by a unit.
+The step that is actually needed is the uniqueness half of Weierstrass division, in the form
+already stated as `LocalOkaRing.incl_eq_zero_of_mem_span_lastVar`: if the ideals agreed then
+`incl c = X_n - (X_n - incl c)` would lie in `(X_n)`, and a germ in the first `n` variables lying
+in `(X_n)` is zero. -/
+theorem span_fromPolynomial_X_sub_C_ne_span_lastVar {c : LocalOkaRing (Fin n)} (hc : c ≠ 0) :
+    Ideal.span {fromPolynomial (X - C c)} ≠
+      Ideal.span {(lastVar : LocalOkaRing (Fin (n + 1)))} := by
+  intro h
+  have hmem : fromPolynomial (X - C c) ∈
+      Ideal.span {(lastVar : LocalOkaRing (Fin (n + 1)))} := by
+    rw [← h]
+    exact Ideal.mem_span_singleton_self _
+  rw [map_sub, fromPolynomial_X, fromPolynomial_C] at hmem
+  exact hc (incl_eq_zero_of_mem_span_lastVar
+    (by simpa using Ideal.sub_mem _ (Ideal.mem_span_singleton_self _) hmem))
 
 /-! ### The Krull dimension -/
 

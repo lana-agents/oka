@@ -147,3 +147,51 @@ info: 'LocalOkaRing.coe_mem_map_iff' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms LocalOkaRing.coe_mem_map_iff
+
+/-! ### Quotienting by a degree-one Weierstrass polynomial
+
+`Oka/Regular.lean`. The generalisation of `LocalOkaRing.quotientLastVarEquiv` from the coordinate
+`X_n` to an arbitrary local Weierstrass polynomial of degree one, its instance at the graph of
+a germ vanishing at the origin, and the ideal inequality that says the generalisation is one. -/
+
+/--
+info: 'LocalOkaRing.exists_eq_mul_fromPolynomial_add_incl' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.exists_eq_mul_fromPolynomial_add_incl
+
+/--
+info: 'LocalOkaRing.incl_eq_zero_of_mem_span_fromPolynomial' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.incl_eq_zero_of_mem_span_fromPolynomial
+
+/--
+info: 'LocalOkaRing.quotientDegreeOneEquiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.quotientDegreeOneEquiv
+
+/--
+info: 'LocalOkaRing.isLocalWeierstrassPolynomial_X_sub_C' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.isLocalWeierstrassPolynomial_X_sub_C
+
+/--
+info: 'LocalOkaRing.quotientGraphEquiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.quotientGraphEquiv
+
+/--
+info: 'LocalOkaRing.span_fromPolynomial_X_sub_C_ne_span_lastVar' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.span_fromPolynomial_X_sub_C_ne_span_lastVar
