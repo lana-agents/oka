@@ -61,10 +61,13 @@ the rung.
   it is, and no longer only for one — `ComplexAnalytic.card_fiber_base_sq` puts the fibres of
   `z ↦ z²` on the punctured line at **2**, by a statement about roots in `ℂ` rather than about
   covers, and `ComplexAnalytic.AnalyticSpace.card_fiber_sigmaFold` puts the fibres of the trivial
-  `ι`-sheeted cover at `Nat.card ι`, so every value is realised. What remains absent is the
-  `Nat`-valued invariant itself, and deliberately so: a definition would carry a
-  well-definedness obligation, and two families of theorems about particular morphisms do not
-  amount to one.
+  `ι`-sheeted cover at `Nat.card ι`, so every value is realised. **The fourth step retires it
+  altogether**: `ComplexAnalytic.AnalyticSpace.degree` in `Oka/AnalyticSpace/Degree.lean` is the
+  `Nat`-valued invariant, the well-definedness obligation this bullet made the condition of
+  having one is `ComplexAnalytic.AnalyticSpace.degree_eq_card_fiber`, and the consumer it asked
+  for is `ComplexAnalytic.AnalyticSpace.isHomeomorph_base_of_degree_eq_one`. The two computations
+  above are now read as degrees, `ComplexAnalytic.degree_sq` and
+  `ComplexAnalytic.AnalyticSpace.degree_sigmaFold`.
 * **The analytification of a finite étale morphism** — the other blocker of #551, stateable only
   now that this exists.
 * **Grauert's finite mapping theorem**, which `Oka/AnalyticSpace/Finite.lean` already records as

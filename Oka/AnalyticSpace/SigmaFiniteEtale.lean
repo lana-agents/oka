@@ -60,12 +60,15 @@ missing hypothesis.
 
 ## What is not here
 
-**No `degree` function on morphisms.** `Oka/AnalyticSpace/LocalIso.lean` declines one
-deliberately — *"a `Nat`-valued field or definition would carry a well-definedness obligation and
-nothing consumes one"* — and this is a theorem about one family of morphisms, not an invariant.
-`ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale` remains the statement that the
-number is well defined over a preconnected base, and it is not used below: the count here is
-computed at every point directly, so no connectedness hypothesis appears.
+**The `degree` function is not here, and it is no longer absent from the development.**
+`ComplexAnalytic.AnalyticSpace.degree` is in `Oka/AnalyticSpace/Degree.lean`, which imports this
+file and reads `ComplexAnalytic.AnalyticSpace.card_fiber_sigmaFold` into
+`ComplexAnalytic.AnalyticSpace.degree_sigmaFold`; the paragraph that used to stand here quoted
+`Oka/AnalyticSpace/LocalIso.lean` declining a degree, and that refusal has been withdrawn there.
+What is true of *this* file is unchanged and is why the direction of the import is that way round:
+the count below is computed at every point directly, so
+`ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale` is not used and no connectedness
+hypothesis appears.
 
 **No claim that the trivial cover is not a non-trivial one.** For `n = 1` the fold map is a
 bijection on points and one would expect it to be an isomorphism; that is a statement about the

@@ -198,9 +198,32 @@ coherence statement for arbitrary complex analytic spaces:
   with a **disconnected source**, which is what *evenly covered* looks like locally. Its `n = 0`
   case is real and is admitted rather than excluded: the empty space over a non-empty one is
   finite étale under the definitions used here, and the count reads `0 = 0`.
-  The sentence that used to stand here said no such value was computed
-  anywhere, and then that exactly one was; **there is still no `degree` function on morphisms**,
-  and two families of theorems about particular maps are not one. `ComplexAnalytic.isCoveringMap_base_sq` applies the rung to the
+  The sentence that used to stand here said no such value was computed anywhere, then that exactly
+  one was, and then that two families of theorems about particular maps are not a `degree`
+  function. **There is one now.** `ComplexAnalytic.AnalyticSpace.degree`
+  (`Oka/AnalyticSpace/Degree.lean`) is the number of sheets as a single natural number, defined for
+  *every* morphism as the supremum over the target of the size of a fibre — an `iSup` and not the
+  value at a chosen point, so that the definition needs no `[Nonempty Y]` and no lemma about it has
+  to carry one it does not use. The two-part objection the earlier refusals made the condition of
+  having a degree is met by two theorems rather than by fiat: `…degree_eq_card_fiber` discharges
+  the **well-definedness obligation** — it is the constancy statement above read at the definition,
+  and it is the only thing in that file that uses any covering-map theory — and
+  `…isHomeomorph_base_of_degree_eq_one` is the **consumer**: a finite étale morphism of degree one
+  has a homeomorphism for its underlying map. That goes through
+  `Function.bijective_iff_forall_card_preimage_eq_one`, a mirror-tree statement
+  (`Oka/SetTheory/Cardinal/Finite.lean`) that a map is bijective exactly when every fibre has one
+  point, which Mathlib has only in the counting direction; no finiteness hypothesis is needed
+  because `Nat.card` of an infinite fibre is `0` and not `1`. Both computations above are now read
+  as degrees — `ComplexAnalytic.degree_sq` is `2` and
+  `ComplexAnalytic.AnalyticSpace.degree_sigmaFold` is `Nat.card ι` — and
+  `ComplexAnalytic.not_bijective_base_sq` is the one application of the equivalence, at the
+  squaring map. **The conclusion is topological, and that is the live limitation**: `…IsLocalIso`
+  carries an isomorphism on every stalk too, and a homeomorphism together with stalkwise
+  isomorphisms ought to give an isomorphism of analytic spaces, but the step from the two to one is
+  a comparison of the structure sheaves across a homeomorphism which is not here. So the degree is
+  at present an invariant of the underlying map: `ComplexAnalytic.not_isIso_sq` is **not** reproved
+  from it, and multiplicativity in a composite is not proved either.
+  `ComplexAnalytic.isCoveringMap_base_sq` applies the rung to the
   squaring map, and is a test of the rung rather than new information about `z ↦ z²`, which
   Mathlib already covers. **There is still no notion of a covering *of analytic spaces***: this is
   a statement about the underlying map, and the stalk field of `…IsLocalIso` plays no part in it.
