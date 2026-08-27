@@ -72,9 +72,15 @@ base being nonempty is never used.
   it at all. So the constant is realised at every value and not only at 2; what is still true is
   that no morphism outside those two descriptions has a computed degree, and in particular
   **nothing here computes the degree of a cover that is not trivial and not the squaring map.**
-* **A `degree` function on morphisms.** What is stated is one theorem about two points; a
-  `Nat`-valued field or definition would carry a well-definedness obligation and nothing consumes
-  one.
+* **A `degree` function on morphisms — this is no longer absent, and it is not in this file.**
+  The bullet that used to stand here said a `Nat`-valued definition would carry a
+  well-definedness obligation and that nothing consumed one. Both halves are answered in
+  `Oka/AnalyticSpace/Degree.lean`: `ComplexAnalytic.AnalyticSpace.degree_eq_card_fiber` is the
+  obligation, and it is `ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale` — the
+  theorem below — read at the definition, so this file is where its content lives; and
+  `ComplexAnalytic.AnalyticSpace.isHomeomorph_base_of_degree_eq_one` is the consumer. What is
+  still absent is multiplicativity of the degree in a composite, and any consequence of the degree
+  that sees the structure sheaves rather than the underlying map.
 * **The converse.** `IsCoveringMap.isLocalHomeomorph` returns the topological field of
   `IsLocalIso`, but no topological hypothesis can return the stalk field, so there is no `↔` and
   none is stated.
