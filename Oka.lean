@@ -105,6 +105,7 @@ import Oka.OkaRing
 import Oka.Polynomial
 import Oka.Polynomial.Germ
 import Oka.Regular
+import Oka.RenameIndex
 import Oka.RingTheory.AdicCompletion.Algebra
 import Oka.RingTheory.Filtration
 import Oka.RingTheory.Finiteness.Basic

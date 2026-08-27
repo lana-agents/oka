@@ -4,15 +4,18 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Oka.AnalyticSpace.HolomorphicMap
+import Oka.RenameIndex
 
 /-!
-# The projection `ℂ^(n+1) → ℂ^n` on germs and stalks
+# Forgetting coordinates, on germs and stalks
 
-The projection forgetting the last coordinate is `ComplexAnalytic.okaMapHom` at the family of the
-first `n` coordinate functions. This file computes what it does to a germ: **through
-`okaStalkEquiv`, it is `LocalOkaRing.incl`**, the inclusion of the power series that do not
-involve the last variable.
+An embedding `e : κ ↪ ι` of index types gives the map `ℂ^ι → ℂ^κ` forgetting the coordinates
+outside its range, and that map is `ComplexAnalytic.okaMapHom` at the family of coordinate
+functions `fun j ↦ coord (e j)`. This file computes what it does to a germ: **through
+`okaStalkEquiv`, it is `LocalOkaRing.renameEmb e`**, the relabelling of the variables.
 
+At `e = Fin.castSuccEmb` that is the projection `ℂ^(n+1) → ℂ^n` and the relabelling is
+`LocalOkaRing.incl`, the inclusion of the power series that do not involve the last variable.
 That identification is what a quotient statement about `LocalOkaRing` needs before it can be read
 as a statement about a morphism of spaces. `LocalOkaRing.quotientDegreeOneEquiv` and
 `LocalOkaRing.quotientSimpleZeroEquiv` (`Oka/Regular.lean`) are both built from
@@ -22,34 +25,53 @@ as a statement about a morphism of spaces. `LocalOkaRing.quotientDegreeOneEquiv`
 
 ## The proof, in one sentence
 
-The Taylor expansion of `s ∘ proj` at `z` is the Taylor expansion of `s` at `proj z` with a dummy
-variable added. `MvPowerSeries.Represents.rename_castSucc` is that sentence about power series,
+The Taylor expansion of `s ∘ (· ∘ e)` at `z` is the Taylor expansion of `s` at `z ∘ e` with the
+variables renamed. `MvPowerSeries.Represents.renameEmb` is that sentence about power series,
 `OkaRing.germ_eq_of_represents` is what reduces a claim about a germ to a claim about what its
-series represents, and `LocalOkaRing.coe_incl` says the rename is `incl`.
+series represents, and `LocalOkaRing.coe_renameEmb` says the rename is `renameEmb`.
 
 **Why the equality below is taken on a neighbourhood, which is a fact about the rewrite and not
 about the claim.** `OkaRing.toGlobalFun` is total — it is `Function.extend Subtype.val _ 0` — so
-off the preimage of `W` both sides are `0`, and `Fin.init (w + z) ∈ W` is the same condition on
+off the preimage of `W` both sides are `0`, and `(w + z) ∘ e ∈ W` is the same condition on
 either side. The identity therefore holds **globally**; what the neighbourhood buys is the
 membership hypothesis that `OkaRing.toGlobalFun_apply` asks for. Dropping it is possible and
 costs a `by_cases` and two `Function.extend_apply'` rewrites — four lines longer, and four lines
 that say nothing about the geometry. **The obstacle is real and it is the rewrite**: with a
 global `filter_upwards` both rewrites fail, on a hypothesis that says only `w ∈ Set.univ`.
 
+## The two indexings, and why the last section is not an isomorphism of spaces
+
+`ComplexAnalytic.AnalyticSpace` indexes the coordinates of `ℂ^n` by `ULift (Fin n)`, so that the
+underlying type lives in an arbitrary universe; `Oka/Weierstrass.lean` and `LocalOkaRing.incl`
+index them by `Fin n`. **The two cannot be compared as spaces**: `complexSpace (Fin n)` is a
+`LocallyRingedSpace.{0}` and `AnalyticSpace.complexAffineSpace.{u} n` is a
+`LocallyRingedSpace.{u}`, and `ComplexAnalytic.okaMapHom` is stated for two index types **in the
+same universe** (`Oka/AnalyticSpace/HolomorphicMap.lean`), so there is no morphism between them
+to ask about. What can be compared is the germ rings, which are rings and not spaces:
+`LocalOkaRing.uliftEquiv` relabels `ULift ι` as `ι`, and `LocalOkaRing.uliftEquiv_renameEmb_incl`
+says the relabelling turns the `ULift`ed `Fin.castSucc` into `incl`. The last section below is
+that bridge crossed once.
+
 ## Main results
 
-- `ComplexAnalytic.okaMapFun_projCoords`: the underlying map of the projection is `Fin.init`.
-- `ComplexAnalytic.germ_okaMapC_projCoords`: the germ of `s ∘ proj` at `z` is the germ of `s` at
-  `proj z`, included as a series not involving the last variable.
-- `ComplexAnalytic.okaStalkEquiv_stalkMap_okaMapHom_projCoords`: **the stalk map of the
-  projection is that inclusion**, transported along the Taylor-expansion isomorphism.
+- `ComplexAnalytic.okaMapFun_coordEmb`: the underlying map of the projection along `e` is
+  `(· ∘ e)`, and `ComplexAnalytic.okaMapFun_projCoords`, its instance at `Fin.castSuccEmb`.
+- `ComplexAnalytic.germ_okaMapC_coordEmb`: the germ of a pullback at `z` is the germ at `z ∘ e`
+  with the variables relabelled, and `ComplexAnalytic.germ_okaMapC_projCoords`.
+- `ComplexAnalytic.okaStalkEquiv_stalkMap_okaMapHom_coordEmb`: **the stalk map of the projection
+  is that relabelling**, transported along the Taylor-expansion isomorphism, and
+  `ComplexAnalytic.okaStalkEquiv_stalkMap_okaMapHom_projCoords`.
+- `ComplexAnalytic.AnalyticSpace.okaStalkEquiv_stalkMap_uliftProj`: **the stalk map of the
+  projection `ℂ^(n+1) ⟶ ℂ^n` of complex analytic spaces is the inclusion of the Weierstrass
+  theorems**, after both germ rings are relabelled from `ULift (Fin _)` to `Fin _`.
 
 ## What is not here
 
-**Neither `LocalOkaRing.incl` nor `okaStalkEquiv` is named in the list above**, though both are
-what the results are stated in terms of and both are named in the paragraphs before it. That is
-deliberate: `scripts/guard_coverage.py` reads a backticked name under a `## Main results` heading
-as a result the file advertises, and neither is a result of this file.
+**Neither `LocalOkaRing.incl` nor `LocalOkaRing.renameEmb` nor `okaStalkEquiv` is named in the
+list above**, though all three are what the results are stated in terms of and all three are
+named in the paragraphs before it. That is deliberate: `scripts/guard_coverage.py` reads a
+backticked name under a `## Main results` heading as a result the file advertises, and none of
+them is a result of this file.
 
 **No `IsIso`.** Assembling this with `ComplexAnalytic.IsCutOutBy`'s `surjective_stalkMap` and
 `ker_stalkMap` into an isomorphism of stalks for a hypersurface with a simple zero is the next
@@ -58,13 +80,13 @@ step and is not taken; `ComplexAnalytic.isIso_stalkMap_okaMapHom`
 repository so far, and its hypothesis is an analytic local inverse rather than a cut-out.
 
 **No general substitution.** The Taylor series of `s ∘ okaMapFun u` for an arbitrary family `u`
-is a composition of power series, which this repository does not have. The projection is exactly
-the case where the operation already exists under another name, `LocalOkaRing.incl`.
+is a composition of power series, which this repository does not have. Forgetting coordinates is
+exactly the case where the operation already exists under another name,
+`LocalOkaRing.renameEmb`.
 
-**Nothing about `ULift`.** `ComplexAnalytic.AnalyticSpace` is built on `ULift (Fin n)` — see
-`ComplexAnalytic.AnalyticSpace.okaMap` — while `LocalOkaRing.incl` and the whole of
-`Oka/Weierstrass.lean` are stated for `Fin n`. The bridge between the two indexings is not built
-here and nothing below needs it.
+**No section of the projection.** A germ in `ι` variables does not restrict to one in `κ`
+variables without choosing values for the coordinates outside the range of `e`, which is again a
+substitution; `Oka/RenameIndex.lean` records the same absence one level down.
 -/
 
 open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry
@@ -73,75 +95,181 @@ noncomputable section
 
 namespace ComplexAnalytic
 
+universe u
+
 variable {n : ℕ}
 
-/-- **The first `n` coordinates of `ℂ^(n+1)`, as global sections of its structure sheaf.**
+/-! ### Forgetting the coordinates outside an embedding -/
 
-`ComplexAnalytic.okaMapHom` at this family is the projection forgetting the last coordinate;
-`ComplexAnalytic.okaMapFun_projCoords` says so. -/
-def projCoords (n : ℕ) : Fin n → OkaRing (⊤ : Opens (Fin (n + 1) → ℂ)) :=
-  fun j ↦ coord j.castSucc
+section CoordEmb
 
-/-- **The map underlying the projection is `Fin.init`.** -/
-theorem okaMapFun_projCoords (z : Fin (n + 1) → ℂ) :
-    okaMapFun (projCoords n) z = Fin.init z := by
+variable {ι κ : Type u} [Fintype ι]
+
+/-- **The coordinates of `ℂ^ι` indexed by an embedded `κ`, as global sections of its structure
+sheaf.**
+
+`ComplexAnalytic.okaMapHom` at this family is the map `ℂ^ι → ℂ^κ` forgetting the coordinates
+outside the range of `e`; `ComplexAnalytic.okaMapFun_coordEmb` says so. -/
+def coordEmb (e : κ ↪ ι) : κ → OkaRing (⊤ : Opens (ι → ℂ)) :=
+  fun j ↦ coord (e j)
+
+/-- **The map underlying the projection along `e` is restriction of coordinates.** -/
+theorem okaMapFun_coordEmb (e : κ ↪ ι) (z : ι → ℂ) :
+    okaMapFun (coordEmb e) z = z ∘ e := by
   funext j
-  rw [okaMapFun_apply, projCoords, evalHom_coord]
+  rw [okaMapFun_apply, coordEmb, evalHom_coord]
   rfl
 
-/-- **The germ of `s ∘ proj` at `z` is `LocalOkaRing.incl` of the germ of `s` at `proj z`.**
+/-- **The germ of `s ∘ (· ∘ e)` at `z` is `LocalOkaRing.renameEmb e` of the germ of `s` at
+`z ∘ e`.**
 
 `OkaRing.germ_eq_of_represents` reduces this to what the two power series represent, and
-`MvPowerSeries.Represents.rename_castSucc` is the statement that a series representing `F` in `n`
-variables represents `F ∘ Fin.init` in `n + 1`. The only computation is
-`Fin.init (w + z) = Fin.init w + Fin.init z`, which holds by definition.
+`LocalOkaRing.renameEmb_represents` is the statement that a series representing `F` in the
+variables `κ` represents `F ∘ (· ∘ e)` in the variables `ι`. The only computation is
+`(w + z) ∘ e = w ∘ e + z ∘ e`, which holds by definition.
 
 The `filter_upwards` takes the preimage of `W` translated to the origin because
 `OkaRing.toGlobalFun_apply` wants a membership hypothesis, **not because the identity fails off
 it**: `OkaRing.toGlobalFun` extends by zero, so both sides vanish there. See the module
 docstring. -/
-theorem germ_okaMapC_projCoords {z : Fin (n + 1) → ℂ} {W : Opens (Fin n → ℂ)}
-    (hz : z ∈ (Opens.map (okaMapBase (projCoords n))).obj W) (s : OkaRing W) :
-    OkaRing.germ hz (okaMapC (projCoords n) W s)
-      = LocalOkaRing.incl (OkaRing.germ (show okaMapFun (projCoords n) z ∈ W from hz) s) := by
+theorem germ_okaMapC_coordEmb [Fintype κ] {e : κ ↪ ι} {z : ι → ℂ} {W : Opens (κ → ℂ)}
+    (hz : z ∈ (Opens.map (okaMapBase (coordEmb e))).obj W) (s : OkaRing W) :
+    OkaRing.germ hz (okaMapC (coordEmb e) W s)
+      = LocalOkaRing.renameEmb e
+          (OkaRing.germ (show okaMapFun (coordEmb e) z ∈ W from hz) s) := by
   refine OkaRing.germ_eq_of_represents _ ?_
-  rw [LocalOkaRing.coe_incl]
-  refine (MvPowerSeries.Represents.rename_castSucc
-    (OkaRing.germ_represents (show okaMapFun (projCoords n) z ∈ W from hz) s)).congr ?_
-  have hset : IsOpen {w : Fin (n + 1) → ℂ |
-      w + z ∈ (Opens.map (okaMapBase (projCoords n))).obj W} :=
-    ((Opens.map (okaMapBase (projCoords n))).obj W).isOpen.preimage (by fun_prop)
+  refine (LocalOkaRing.renameEmb_represents e
+    (OkaRing.germ_represents (show okaMapFun (coordEmb e) z ∈ W from hz) s)).congr ?_
+  have hset : IsOpen {w : ι → ℂ |
+      w + z ∈ (Opens.map (okaMapBase (coordEmb e))).obj W} :=
+    ((Opens.map (okaMapBase (coordEmb e))).obj W).isOpen.preimage (by fun_prop)
   filter_upwards [hset.mem_nhds (by simpa using hz)] with w hw
-  have hkey : Fin.init w + okaMapFun (projCoords n) z = okaMapFun (projCoords n) (w + z) := by
-    rw [okaMapFun_projCoords, okaMapFun_projCoords]
+  have hkey : w ∘ e + okaMapFun (coordEmb e) z = okaMapFun (coordEmb e) (w + z) := by
+    rw [okaMapFun_coordEmb, okaMapFun_coordEmb]
     rfl
-  have hw' : okaMapFun (projCoords n) (w + z) ∈ W := hw
+  have hw' : okaMapFun (coordEmb e) (w + z) ∈ W := hw
   rw [hkey, s.toGlobalFun_apply hw', OkaRing.toGlobalFun_apply _ hw]
   rfl
 
-/-- **Transported along `okaStalkEquiv`, the stalk map of the projection is
-`LocalOkaRing.incl`.**
+/-- **Transported along `okaStalkEquiv`, the stalk map of the projection along `e` is
+`LocalOkaRing.renameEmb e`.**
 
 This is the previous statement at the spelling a caller holding a stalk rather than a germ needs:
 `PresheafedSpace.stalkMap_germ_apply` turns the stalk map on a germ into the germ of the pullback,
 and `okaStalkEquiv_germ` is the Taylor expansion at either end. Stated on germs because every
 element of the stalk is one — `TopCat.Presheaf.exists_germ_eq` — so this determines the stalk map
 completely. -/
+theorem okaStalkEquiv_stalkMap_okaMapHom_coordEmb [Fintype κ] {e : κ ↪ ι} {z : ι → ℂ}
+    {W : Opens (κ → ℂ)} (hw : okaMapFun (coordEmb e) z ∈ W) (s : OkaRing W) :
+    okaStalkEquiv z ((okaMapHom (coordEmb e)).stalkMap z
+        ((okaCommPresheaf κ).germ W _ hw s))
+      = LocalOkaRing.renameEmb e (okaStalkEquiv (okaMapFun (coordEmb e) z)
+          ((okaCommPresheaf κ).germ W _ hw s)) := by
+  have hz : z ∈ (Opens.map (okaMapBase (coordEmb e))).obj W := hw
+  have hmap : ((okaMapPre (coordEmb e)).stalkMap z).hom
+        ((okaCommPresheaf κ).germ W ((okaMapPre (coordEmb e)).base z) hw s) =
+      (okaCommPresheaf ι).germ ((Opens.map (okaMapBase (coordEmb e))).obj W) z hz
+        (okaMapC (coordEmb e) W s) :=
+    PresheafedSpace.stalkMap_germ_apply (okaMapPre (coordEmb e)) W z hw s
+  rw [show (okaMapHom (coordEmb e)).stalkMap z
+      ((okaCommPresheaf κ).germ W _ hw s) = _ from hmap,
+    okaStalkEquiv_germ, okaStalkEquiv_germ, germ_okaMapC_coordEmb]
+
+end CoordEmb
+
+/-! ### The projection `ℂ^(n+1) → ℂ^n` -/
+
+/-- **The first `n` coordinates of `ℂ^(n+1)`, as global sections of its structure sheaf.**
+
+`ComplexAnalytic.okaMapHom` at this family is the projection forgetting the last coordinate;
+`ComplexAnalytic.okaMapFun_projCoords` says so. It is `ComplexAnalytic.coordEmb` at
+`Fin.castSuccEmb`, and `ComplexAnalytic.projCoords_eq_coordEmb` says so by `rfl`. -/
+def projCoords (n : ℕ) : Fin n → OkaRing (⊤ : Opens (Fin (n + 1) → ℂ)) :=
+  coordEmb (Fin.castSuccEmb : Fin n ↪ Fin (n + 1))
+
+/-- The projection is the case `e = Fin.castSuccEmb` of forgetting coordinates. -/
+theorem projCoords_eq_coordEmb (n : ℕ) :
+    projCoords n = coordEmb (Fin.castSuccEmb : Fin n ↪ Fin (n + 1)) :=
+  rfl
+
+/-- **The map underlying the projection is `Fin.init`.** -/
+theorem okaMapFun_projCoords (z : Fin (n + 1) → ℂ) :
+    okaMapFun (projCoords n) z = Fin.init z :=
+  okaMapFun_coordEmb (Fin.castSuccEmb : Fin n ↪ Fin (n + 1)) z
+
+/-- **The germ of `s ∘ proj` at `z` is `LocalOkaRing.incl` of the germ of `s` at `proj z`.**
+
+`ComplexAnalytic.germ_okaMapC_coordEmb` at `Fin.castSuccEmb`, using that
+`LocalOkaRing.incl` is `LocalOkaRing.renameEmb` there (`LocalOkaRing.incl_eq_renameEmb`). -/
+theorem germ_okaMapC_projCoords {z : Fin (n + 1) → ℂ} {W : Opens (Fin n → ℂ)}
+    (hz : z ∈ (Opens.map (okaMapBase (projCoords n))).obj W) (s : OkaRing W) :
+    OkaRing.germ hz (okaMapC (projCoords n) W s)
+      = LocalOkaRing.incl (OkaRing.germ (show okaMapFun (projCoords n) z ∈ W from hz) s) :=
+  germ_okaMapC_coordEmb (e := (Fin.castSuccEmb : Fin n ↪ Fin (n + 1))) hz s
+
+/-- **Transported along `okaStalkEquiv`, the stalk map of the projection is
+`LocalOkaRing.incl`.**
+
+`ComplexAnalytic.okaStalkEquiv_stalkMap_okaMapHom_coordEmb` at `Fin.castSuccEmb`. Stated on germs
+because every element of the stalk is one — `TopCat.Presheaf.exists_germ_eq` — so this determines
+the stalk map completely. -/
 theorem okaStalkEquiv_stalkMap_okaMapHom_projCoords {z : Fin (n + 1) → ℂ}
     {W : Opens (Fin n → ℂ)} (hw : okaMapFun (projCoords n) z ∈ W) (s : OkaRing W) :
     okaStalkEquiv z ((okaMapHom (projCoords n)).stalkMap z
         ((okaCommPresheaf (Fin n)).germ W _ hw s))
       = LocalOkaRing.incl (okaStalkEquiv (okaMapFun (projCoords n) z)
-          ((okaCommPresheaf (Fin n)).germ W _ hw s)) := by
-  have hz : z ∈ (Opens.map (okaMapBase (projCoords n))).obj W := hw
-  have hmap : ((okaMapPre (projCoords n)).stalkMap z).hom
-        ((okaCommPresheaf (Fin n)).germ W ((okaMapPre (projCoords n)).base z) hw s) =
-      (okaCommPresheaf (Fin (n + 1))).germ ((Opens.map (okaMapBase (projCoords n))).obj W) z hz
-        (okaMapC (projCoords n) W s) :=
-    PresheafedSpace.stalkMap_germ_apply (okaMapPre (projCoords n)) W z hw s
-  rw [show (okaMapHom (projCoords n)).stalkMap z
-      ((okaCommPresheaf (Fin n)).germ W _ hw s) = _ from hmap,
-    okaStalkEquiv_germ, okaStalkEquiv_germ, germ_okaMapC_projCoords]
+          ((okaCommPresheaf (Fin n)).germ W _ hw s)) :=
+  okaStalkEquiv_stalkMap_okaMapHom_coordEmb (e := (Fin.castSuccEmb : Fin n ↪ Fin (n + 1))) hw s
+
+/-! ### The same projection between complex analytic spaces
+
+`ComplexAnalytic.AnalyticSpace.complexAffineSpace n` indexes its coordinates by
+`ULift (Fin n)`, so the projection between two of them is `coordEmb` at an embedding of `ULift`ed
+index types and its stalk map is the relabelling along that embedding. Crossing to
+`LocalOkaRing.incl`, which is stated for `Fin`, is `LocalOkaRing.uliftEquiv_renameEmb_incl`. -/
+
+section Ulift
+
+variable {n : ℕ}
+
+/-- **`Fin.castSucc`, relabelled through `ULift`**: the embedding of index types underlying the
+projection `ℂ^(n+1) ⟶ ℂ^n` of complex analytic spaces. -/
+def uliftCastSuccEmb (n : ℕ) : ULift.{u} (Fin n) ↪ ULift.{u} (Fin (n + 1)) where
+  toFun j := ULift.up j.down.castSucc
+  inj' _ _ h := ULift.ext _ _ (Fin.castSucc_injective n (ULift.up.inj h))
+
+/-- **The projection `ℂ^(n+1) ⟶ ℂ^n` forgetting the last coordinate, as a morphism of complex
+analytic spaces.** -/
+def AnalyticSpace.proj (n : ℕ) :
+    AnalyticSpace.complexAffineSpace.{u} (n + 1) ⟶ AnalyticSpace.complexAffineSpace.{u} n :=
+  AnalyticSpace.okaMap (coordEmb (uliftCastSuccEmb.{u} n))
+
+/-- The morphism of locally ringed spaces underlying `ComplexAnalytic.AnalyticSpace.proj`. -/
+theorem AnalyticSpace.toLRSHom_proj (n : ℕ) :
+    (AnalyticSpace.proj.{u} n).toLRSHom = okaMapHom (coordEmb (uliftCastSuccEmb.{u} n)) :=
+  rfl
+
+/-- **The stalk map of the projection `ℂ^(n+1) ⟶ ℂ^n` of complex analytic spaces is
+`LocalOkaRing.incl`**, once both germ rings are relabelled from `ULift (Fin _)` to `Fin _`.
+
+This is `ComplexAnalytic.okaStalkEquiv_stalkMap_okaMapHom_coordEmb` at
+`ComplexAnalytic.uliftCastSuccEmb`, followed by `LocalOkaRing.uliftEquiv_renameEmb_incl` to cross
+from the indexing an analytic space uses to the one the Weierstrass theorems use. The relabelling
+is unavoidable and is not an isomorphism of spaces; see the module docstring. -/
+theorem AnalyticSpace.okaStalkEquiv_stalkMap_uliftProj
+    {z : ULift.{u} (Fin (n + 1)) → ℂ} {W : TopologicalSpace.Opens (ULift.{u} (Fin n) → ℂ)}
+    (hw : okaMapFun (coordEmb (uliftCastSuccEmb.{u} n)) z ∈ W) (s : OkaRing W) :
+    LocalOkaRing.uliftEquiv (Fin (n + 1))
+        (okaStalkEquiv z ((AnalyticSpace.proj.{u} n).toLRSHom.stalkMap z
+          ((okaCommPresheaf (ULift.{u} (Fin n))).germ W _ hw s)))
+      = LocalOkaRing.incl (LocalOkaRing.uliftEquiv (Fin n)
+          (okaStalkEquiv (okaMapFun (coordEmb (uliftCastSuccEmb.{u} n)) z)
+            ((okaCommPresheaf (ULift.{u} (Fin n))).germ W _ hw s))) := by
+  have h := okaStalkEquiv_stalkMap_okaMapHom_coordEmb (e := uliftCastSuccEmb.{u} n) hw s
+  exact (congrArg (fun x ↦ LocalOkaRing.uliftEquiv (Fin (n + 1)) x) h).trans
+    (LocalOkaRing.uliftEquiv_renameEmb_incl (fun _ ↦ rfl) _)
+
+end Ulift
 
 end ComplexAnalytic
 

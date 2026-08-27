@@ -323,3 +323,60 @@ info: 'LocalOkaRing.exists_congr_localweierstrass_preparation' depends on axioms
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms LocalOkaRing.exists_congr_localweierstrass_preparation
+
+/-! ### Relabelling the variables along an embedding of index types
+
+`Oka/RenameIndex.lean`. `LocalOkaRing.incl` and `LocalOkaRing.congrEquiv` are the same
+construction — renaming the variables — at an embedding and at a bijection respectively, and the
+last two say what that buys: relabelling `ULift ι` as `ι` commutes with it, which is how a
+statement about `ComplexAnalytic.AnalyticSpace`, whose coordinates are indexed by
+`ULift (Fin n)`, reaches one about `LocalOkaRing.incl`, whose are indexed by `Fin n`. -/
+
+/--
+info: 'MvPowerSeries.Represents.renameEmb' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms MvPowerSeries.Represents.renameEmb
+
+/--
+info: 'LocalOkaRing.renameEmb_refl' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.renameEmb_refl
+
+/--
+info: 'LocalOkaRing.renameEmb_trans' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.renameEmb_trans
+
+/--
+info: 'LocalOkaRing.incl_eq_renameEmb' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.incl_eq_renameEmb
+
+/--
+info: 'LocalOkaRing.congrEquiv_eq_renameEmb' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.congrEquiv_eq_renameEmb
+
+/--
+info: 'LocalOkaRing.uliftEquiv_renameEmb' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.uliftEquiv_renameEmb
+
+/--
+info: 'LocalOkaRing.uliftEquiv_renameEmb_incl' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.uliftEquiv_renameEmb_incl
