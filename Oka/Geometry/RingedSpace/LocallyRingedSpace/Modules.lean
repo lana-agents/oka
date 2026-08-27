@@ -104,8 +104,19 @@ noncomputable def ringSheaf :
 
 /-- Sheafification is available at the site `AlgebraicGeometry.LocallyRingedSpace.ringSheaf` uses.
 
-Mathlib has this for `Opens.grothendieckTopology ↑Y.toTopCat`; the two spellings are
-definitionally equal and instance search does not cross them, for the reason above. -/
+Mathlib has this for `Opens.grothendieckTopology ↑Y.toTopCat`. **This instance is load-bearing and
+its absence is invisible here**: delete it and this file still elaborates, while `lake build` fails
+**3857 modules later, in a different subtree**, at `Oka/Analytification/SheafCoherent.lean:150`
+with `failed to synthesize instance of type class (analytificationSheaf g).PreservesZeroMorphisms`.
+
+**What makes it load-bearing is not the reason this docstring used to give.** It said instance
+search does not cross the two spellings, *for the reason above* — but the reason above is about
+`Opens.map f.base`'s implicit arguments, and no `Opens.map` occurs here: with this instance
+deleted, `infer_instance` still finds `HasSheafify (Opens.grothendieckTopology ↑Z.toPresheafedSpace)
+AddCommGrpCat` at a direct goal in this very file. So the two spellings *do* cross at that goal,
+and what the declared instance buys is something the deletion test locates and this docstring does
+not: **the cause is unmeasured, the cost is not.** All three measurements are from 2026-08-25 at
+`master` = `d12d334`. -/
 instance hasSheafify_toPresheafedSpace :
     HasSheafify (Opens.grothendieckTopology ↑Y.toPresheafedSpace) AddCommGrpCat.{u} :=
   inferInstanceAs (HasSheafify (Opens.grothendieckTopology ↑Y.toTopCat) AddCommGrpCat.{u})
@@ -162,11 +173,15 @@ Mathlib proves this for a *final* functor between the sites
 `TopologicalSpace.Opens.map f.base`, which is final because `Opens` is filtered —
 `TopologicalSpace.Opens.final_map`.
 
-**The `inferInstanceAs` is load-bearing and the universe annotation on it is too.**
-`Hom.pullbackModulesUnitToUnit` is a plain `def`, so instance search does not unfold it; and
+**The `inferInstanceAs` is load-bearing**: `Hom.pullbackModulesUnitToUnit` is a plain `def`, so
+instance search does not unfold it, and replacing this body by `by infer_instance` fails with
+`failed to synthesize instance of type class IsIso (Hom.pullbackModulesUnitToUnit f)`.
+
+**The universe annotation is not.** This docstring used to say that
 `SheafOfModules.pullbackObjUnitToUnit` written without `.{u}` elaborates with a universe
-metavariable, at which the instance does not fire either. Both were measured, and the second is
-the one that looks like a missing instance and is not. -/
+metavariable at which the instance does not fire; dropping the `.{u}` here compiles. Both
+measured 2026-08-25 at `master` = `d12d334`. The `.{u}` is kept because it is what the rest of
+this file spells, not because anything breaks without it. -/
 instance isIso_pullbackModulesUnitToUnit {X : LocallyRingedSpace.{u}} (f : X ⟶ Y) :
     IsIso (Hom.pullbackModulesUnitToUnit.{u} f) :=
   inferInstanceAs (IsIso (SheafOfModules.pullbackObjUnitToUnit.{u} f.toRingSheafHom))
