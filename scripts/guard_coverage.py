@@ -86,9 +86,10 @@ decides nothing, and the dump is what separates the two.
 * **Without `--cone` it has no opinion about whether a name ought to be guarded**, and the file
   that used to be the example of why — `Oka/Analytic/ParametricCircleIntegral.lean`, general
   complex analysis with a Mathlib destination, 17 of 17 advertised results unguarded — is the
-  example of what `--cone` answers instead: sixteen of the seventeen are in the cone of the
+  example of what `--cone` answers instead: fifteen of the seventeen are in the cone of the
   three `OkaTest/Axioms/Weierstrass.lean` guards, because that file exists to prove the two
-  lemmas `Oka/Weierstrass.lean` consumes.  It needed one guard, not seventeen and not an
+  lemmas `Oka/Weierstrass.lean` consumes, and a sixteenth, `analyticAt_of_shift`, in the cone of
+  the divided-difference guards.  It needed one guard, not seventeen and not an
   exclusion.  With `--cone` the judgement left over is genuinely small; see `OkaTest/Axioms.lean`.
 * **A guard can move a name out of the uncovered column without naming it**, since it brings its
   whole cone with it.  Guarding the 42 of `d12d334` took 41 guards: `MvPolynomial.awayBaseHom`
@@ -497,7 +498,7 @@ def report(decls: dict[str, str], env: set[str] | None, by_file: bool,
               "a layout this script does not parse")
     if cone is not None:
         extra = sorted(axioms - STANDARD_AXIOMS)
-        print(f"axioms reached from every guard     {len(axioms)}"
+        print(f"axioms reached from any guard       {len(axioms)}"
               f"{' — the three standard ones' if not extra else ''}")
         for name in extra:
             print(f"  !! {name}: an axiom no guard's `#guard_msgs` records — see "
@@ -531,7 +532,7 @@ def report(decls: dict[str, str], env: set[str] | None, by_file: bool,
     # not a gap in any sense a regression test cares about, and 41 of the 60 are exactly that.
     if not holes:
         print("No advertised result is outside every guard's cone — the figure that has a right"
-              f" value,\nat it.  The {len(covered)} above have no guard of their own and, while"
+              f" value is\nat it.  The {len(covered)} above have no guard of their own and, while"
               " the proofs that reach\nthem stay as they are, need none.")
         return
     print("reached by no guard (uncovered / in a cone / advertised):")

@@ -29,21 +29,20 @@ info: 'LocalOkaRing.ofMvPolynomial' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms LocalOkaRing.ofMvPolynomial
+
 /--
 info: 'LocalOkaRing.constantCoeff_coe_ofMvPolynomial' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms LocalOkaRing.constantCoeff_coe_ofMvPolynomial
+
 /--
 info: 'MvPowerSeries.fromPolynomial' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms MvPowerSeries.fromPolynomial
-
-
-
 
 /-! ### The stalk of the structure sheaf at a point
 
@@ -70,13 +69,13 @@ info: 'mem_maximalIdeal_stalk_iff' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms mem_maximalIdeal_stalk_iff
+
 /--
 info: 'ComplexAnalytic.stalkCoord_ne_zero' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.stalkCoord_ne_zero
-
 
 /--
 info: 'germ_mem_maximalIdeal_iff' depends on axioms:
@@ -119,10 +118,10 @@ info: 'complexSpace_ringSheaf' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms complexSpace_ringSheaf
+
 /--
 info: 'okaCommSheaf' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms okaCommSheaf
-

@@ -57,13 +57,13 @@ info: 'ComplexAnalytic.mem_zeroLocus_nodeSection_iff' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.mem_zeroLocus_nodeSection_iff
+
 /--
 info: 'ComplexAnalytic.origin_mem_zeroLocus_nodeSection' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.origin_mem_zeroLocus_nodeSection
-
 
 /--
 info: 'ComplexAnalytic.isCoherentStructureSheaf_node' depends on axioms:
@@ -87,13 +87,13 @@ info: 'ComplexAnalytic.AnalyticSpace.evalStalk_eq_zero_iff' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.evalStalk_eq_zero_iff
+
 /--
 info: 'ComplexAnalytic.AnalyticSpace.residueFieldEquiv' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.residueFieldEquiv
-
 
 /--
 info: 'ComplexAnalytic.eval_ofCutOut' depends on axioms:

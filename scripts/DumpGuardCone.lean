@@ -42,10 +42,18 @@ belongs is not consulted anywhere, so a name that drops out of every cone reappe
 `Lean.collectAxioms` computes exactly this reachability and then throws away everything except
 the axioms. There is no version of it that keeps the visited set, so the traversal is written
 out below — and it is written to be *the same traversal*, case for case: an `axiomInfo` is
-recorded and not descended into, a `quotInfo` stops, a constructor and a recursor contribute
+recorded and its type visited, a `quotInfo` stops, a constructor and a recursor contribute
 their type only, an inductive contributes its type and its constructors, and a definition, a
 theorem and an `opaque` contribute type and value. A traversal that differed anywhere would
 answer a question no `#print axioms` asks.
+
+The first of those cases is the one worth checking against `Lean/Util/CollectAxioms.lean` rather
+than against intuition: an axiom is a leaf of the *proof*, not of the traversal, and Lean does
+descend into its type. On this repository the distinction is inert — replacing that case by
+`pure ()` leaves the dump byte-identical, because the types of `propext`, `Classical.choice` and
+`Quot.sound` mention nothing declared here — but it is inert only as a measured fact about this
+tree, and the direction it would fail in is under-visiting, which can only over-report the
+uncovered column.
 
 The `axiom` rows are the check on that: the union of the axioms reached from every guarded name
 must be `propext`, `Classical.choice` and `Quot.sound` and nothing else, because each of those
@@ -71,7 +79,7 @@ partial def collect (env : Environment) (c : Name) : StateM NameSet Unit := do
     modify fun s => s.insert c
     let collectExpr (e : Expr) : StateM NameSet Unit := e.getUsedConstants.forM (collect env)
     match env.find? c with
-    | some (.axiomInfo _)  => pure ()
+    | some (.axiomInfo v)  => collectExpr v.type
     | some (.defnInfo v)   => collectExpr v.type *> collectExpr v.value
     | some (.thmInfo v)    => collectExpr v.type *> collectExpr v.value
     | some (.opaqueInfo v) => collectExpr v.type *> collectExpr v.value

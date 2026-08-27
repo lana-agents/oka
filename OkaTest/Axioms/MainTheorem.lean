@@ -59,7 +59,6 @@ info: 'ComplexAnalytic.AnalyticSpace.isCoherentStructureSheaf' depends on axioms
 #guard_msgs in
 #print axioms oka_lemma_weierstrass
 
-
 /-! ### The coherence of `𝒪_{ℂ^ι}`, at the spellings its consumers hold
 
 `ComplexAnalytic.AnalyticSpace.isCoherentStructureSheaf` above is the statement for a general

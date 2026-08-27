@@ -887,9 +887,10 @@ Both halves are compiled probes rather than arithmetic, and `OkaTest/Axioms.lean
 `sorry` in a covered result turns a guard red, and a `sorry` in the uncovered one leaves a full
 `lake build` green — 3988 jobs, 546 assertions, none of them able to see it.
 **`Oka/Analytic/ParametricCircleIntegral.lean`, which this README used to name as the reason the
-right number is not zero, contributed 1 and not 17**: sixteen of its seventeen sit in the cone of
+right number is not zero, contributed 1 and not 17**: fifteen of its seventeen sit in the cone of
 the Weierstrass guards, which is what a file that exists to prove two lemmas
-`Oka/Weierstrass.lean` consumes should look like.
+`Oka/Weierstrass.lean` consumes should look like, and the sixteenth, `analyticAt_of_shift`, in the
+cone of the three divided-difference guards `OkaTest/Axioms/Analysis.lean` already carried.
 
 A cone membership is weaker than a guard, and deliberately not recorded anywhere: it lasts as
 long as the proof above it goes on mentioning the name, so a refactor can end one in silence. That

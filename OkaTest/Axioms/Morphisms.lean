@@ -178,13 +178,13 @@ info: 'ComplexAnalytic.AnalyticSpace.restrictLE_comp_eq' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.restrictLE_comp_eq
+
 /--
 info: 'ComplexAnalytic.AnalyticSpace.coordPullback_ofRestrict_comp' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.coordPullback_ofRestrict_comp
-
 
 /--
 info: 'ComplexAnalytic.AnalyticSpace.exists_hom_complexLine_of_local' depends on axioms:

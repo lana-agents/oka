@@ -29,21 +29,20 @@ info: 'TopCat.Presheaf.ker_stalkFunctor_map_toQuotientSpan' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms TopCat.Presheaf.ker_stalkFunctor_map_toQuotientSpan
+
 /--
 info: 'TopCat.Presheaf.surjective_toQuotientSpan_app' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms TopCat.Presheaf.surjective_toQuotientSpan_app
+
 /--
 info: 'TopCat.Presheaf.stalkQuotientSpanEquiv_mk' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms TopCat.Presheaf.stalkQuotientSpanEquiv_mk
-
-
-
 
 /-! ### Pushforward along an embedding is fully faithful -/
 
@@ -53,6 +52,7 @@ info: 'TopCat.Presheaf.pushforwardFullyFaithful' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms TopCat.Presheaf.pushforwardFullyFaithful
+
 /--
 info: 'TopCat.Presheaf.pushforwardHomEquiv' depends on axioms:
   [propext, Classical.choice, Quot.sound]
@@ -60,13 +60,13 @@ info: 'TopCat.Presheaf.pushforwardHomEquiv' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms TopCat.Presheaf.pushforwardHomEquiv
 
-
 /--
 info: 'TopCat.Sheaf.pushforwardFullyFaithful' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms TopCat.Sheaf.pushforwardFullyFaithful
+
 /--
 info: 'TopCat.Sheaf.pushforwardHomEquiv' depends on axioms:
   [propext, Classical.choice, Quot.sound]

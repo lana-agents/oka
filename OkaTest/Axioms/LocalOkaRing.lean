@@ -62,6 +62,7 @@ info: 'LocalOkaRing.truncQuotientEquiv' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms LocalOkaRing.truncQuotientEquiv
+
 /--
 info: 'LocalOkaRing.iInf_maximalIdeal_pow_eq_bot' depends on axioms:
   [propext, Classical.choice, Quot.sound]
@@ -84,13 +85,13 @@ info: 'LocalOkaRing.vanishingIdeal_bot' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms LocalOkaRing.vanishingIdeal_bot
+
 /--
 info: 'LocalOkaRing.vanishingIdeal_top' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms LocalOkaRing.vanishingIdeal_top
-
 
 /-! ### The germ ring is regular of dimension `n` -/
 

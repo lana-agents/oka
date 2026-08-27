@@ -119,12 +119,15 @@ that 546 assertions could not see. Both were run at `d12d334`, against a built `
 
 **`Oka/Analytic/ParametricCircleIntegral.lean` is the file this settles, and the answer is neither
 of the two that were argued.** Three sessions left it alone, and this file and `README.md` both
-cited its 17 unguarded results as the reason the right number is not zero. Sixteen of the
+cited its 17 unguarded results as the reason the right number is not zero. Fifteen of the
 seventeen are in the cone of the three Weierstrass guards — the file exists to prove the two
 circle-integral lemmas `Oka/Weierstrass.lean` consumes, and its own module docstring says so —
-and the seventeenth, the analyticity of a function differentiable on an open set, is used by
-nothing guarded. It needed **one** guard, not seventeen, not an exclusion, and no flag in the
-script.
+the sixteenth, `analyticAt_of_shift`, is reached instead by the three divided-difference guards
+already in `OkaTest/Axioms/Analysis.lean`, through `Oka/Analytic/DividedDifference.lean`, and the
+seventeenth, the analyticity of a function differentiable on an open set, is used by nothing
+guarded. It needed **one** guard, not seventeen, not an exclusion, and no flag in the script.
+Run the three Weierstrass roots by themselves and the answer is 15 of the 16 covered ones, not
+16: `analyticAt_of_shift` is covered by a different guard and never was in the gap either way.
 
 **The weakness of a cone membership, since it is real.** A guard on `f` holds whatever else
 changes; `f`'s membership of `g`'s cone lasts exactly as long as `g`'s proof goes on mentioning
