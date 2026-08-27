@@ -849,6 +849,7 @@ how much of what the module docstrings advertise the axiom guards actually reach
 
 ```sh
 python3 scripts/guard_coverage.py
+python3 scripts/guard_coverage.py --cone
 python3 scripts/guard_coverage.py --by-file
 python3 scripts/guard_coverage.py --self-test
 ```
@@ -858,11 +859,43 @@ rule at all, so a reader is entitled to think the guards are complete. On 2026-0
 fifteen guards added in the commit that wrote this paragraph, they cover **502 names, against 506
 declarations advertised under a `## Main results` heading, 179 of which are named by no guard, in
 63 files**; the reverse direction is 175 guarded names no docstring advertises, which is not a
-defect. **The right number is certainly not zero** — `Oka/Analytic/ParametricCircleIntegral.lean`
-is general complex analysis with a Mathlib destination and contributes 17 — nobody has decided
-what it is, and that is why this is run by hand and why `validation.sh` does not read it. The
-defect it exists to catch is one that already happened: a result added to a `## Main results` list
-without its guard, caught by a reviewer reading both lists by eye.
+defect. The defect it exists to catch is one that already happened: a result added to a
+`## Main results` list without its guard, caught by a reviewer reading both lists by eye.
+
+**Two things were wrong with that figure, and `--cone` and a widened heading are what say so.**
+
+The first is the denominator. The script matched the exact string `## Main results`, so the 74
+`## Main definitions` sections under `Oka/` and the one `## Main declarations` were invisible —
+**238 further advertised declarations, 151 of them unguarded.** Mathlib uses at least ten
+spellings of that heading, `## Main statements` and `## Main definitions and results` among them,
+so which one an author reached for is not a fact about whether a declaration is announced. Any
+heading beginning `Main` now counts, and the report prints the spellings it saw so that an
+eleventh is announced rather than swallowed.
+
+The second is that **`#print axioms` is transitive**: a `sorry` below a guarded theorem turns
+*that* theorem's guard red, so an advertised result inside some guard's cone is already covered
+and a second assertion naming it would fail at exactly the same times. **On 2026-08-27, at
+`d12d334`, 301 advertised results in 84 files had no guard of their own — and 259 of them were in
+a cone. 42, in 29 files, were reached by nothing at all**; the commit that wrote this paragraph
+guards those 42 with 41 guards, since a guard brings its cone with it, so the figures are now
+**587 guarded, 759 advertised in 119 files, 260 unguarded in 79 files, 0 uncovered**, with the
+reverse count unmoved at 88 — which is what says all 41 came from the advertised-and-unguarded
+pool. So *unguarded* is the number with no right value, and most of it was never a gap; *reached
+by no guard at all* has an obvious one and is at it.
+
+Both halves are compiled probes rather than arithmetic, and `OkaTest/Axioms.lean` states them: a
+`sorry` in a covered result turns a guard red, and a `sorry` in the uncovered one leaves a full
+`lake build` green — 3988 jobs, 546 assertions, none of them able to see it.
+**`Oka/Analytic/ParametricCircleIntegral.lean`, which this README used to name as the reason the
+right number is not zero, contributed 1 and not 17**: fifteen of its seventeen sit in the cone of
+the Weierstrass guards, which is what a file that exists to prove two lemmas
+`Oka/Weierstrass.lean` consumes should look like, and the sixteenth, `analyticAt_of_shift`, in the
+cone of the three divided-difference guards `OkaTest/Axioms/Analysis.lean` already carried.
+
+A cone membership is weaker than a guard, and deliberately not recorded anywhere: it lasts as
+long as the proof above it goes on mentioning the name, so a refactor can end one in silence. That
+is an argument for re-running the script, not for writing its answer down — which is also why
+`validation.sh` does not read it, and why the figures above are pinned to a commit.
 
 It needs the environment, so it runs after the build, and `DumpOkaDecls.lean` is the helper it
 invokes: that file asks Lean which module declared each constant rather than testing the name
@@ -871,6 +904,13 @@ declares into `AlgebraicGeometry`, `CategoryTheory` and `Polynomial` and Mathlib
 nothing beginning with `Oka`. The distinction is worth 15 of these figures: an instrument that
 keeps every backticked token resolving anywhere in the environment counts `Iff`, `rfl`,
 `Classical.choice` and twelve Mathlib declarations among this repository's advertised results.
+
+`--cone` invokes a second helper, `DumpGuardCone.lean`, which walks the guards' dependencies with
+`Lean.collectAxioms`' own traversal, case for case — there is no version of that function that
+keeps the visited set rather than only the axioms it ends at. The axioms it reaches are printed as
+the check on that: they must be exactly the three every guard's `#guard_msgs` records, and a
+fourth would mean either a regression or a traversal that is not the one `#print axioms`
+performs.
 
 `guard_coverage.py`'s `--self-test` pins the extraction on fixtures, each half with a control, and
 writing it turned up a live instance of the defect `scripts/import_cost.py`'s docstring is about: **a guard whose

@@ -30,6 +30,19 @@ info: 'TopCat.Presheaf.ker_stalkFunctor_map_toQuotientSpan' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms TopCat.Presheaf.ker_stalkFunctor_map_toQuotientSpan
 
+/--
+info: 'TopCat.Presheaf.surjective_toQuotientSpan_app' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TopCat.Presheaf.surjective_toQuotientSpan_app
+
+/--
+info: 'TopCat.Presheaf.stalkQuotientSpanEquiv_mk' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TopCat.Presheaf.stalkQuotientSpanEquiv_mk
 
 /-! ### Pushforward along an embedding is fully faithful -/
 
@@ -41,11 +54,33 @@ info: 'TopCat.Presheaf.pushforwardFullyFaithful' depends on axioms:
 #print axioms TopCat.Presheaf.pushforwardFullyFaithful
 
 /--
+info: 'TopCat.Presheaf.pushforwardHomEquiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TopCat.Presheaf.pushforwardHomEquiv
+
+/--
 info: 'TopCat.Sheaf.pushforwardFullyFaithful' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms TopCat.Sheaf.pushforwardFullyFaithful
+
+/--
+info: 'TopCat.Sheaf.pushforwardHomEquiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TopCat.Sheaf.pushforwardHomEquiv
+
+/--
+info: 'TopCat.Presheaf.pushforward_full' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TopCat.Presheaf.pushforward_full
+
 
 /-! ### Gluing locally ringed spaces along an open cover -/
 
@@ -602,3 +637,24 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.disjoint_opensRange_sigmaOpenCover' 
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.disjoint_opensRange_sigmaOpenCover
+
+/-! ### The over-site: covering the terminal object, and the iterated slice
+
+`CategoryTheory.GrothendieckTopology.CoversTop.over'` transports a family covering the terminal
+object to the site over an object, and `coverPreserving_iteratedSliceBackward` is the
+cover-preservation of the equivalence between a doubly-sliced site and a singly-sliced one.
+Both are mirror-tree material with no analytic content. -/
+
+/--
+info: 'CategoryTheory.GrothendieckTopology.CoversTop.over'' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms CategoryTheory.GrothendieckTopology.CoversTop.over'
+
+/--
+info: 'CategoryTheory.coverPreserving_iteratedSliceBackward' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms CategoryTheory.coverPreserving_iteratedSliceBackward

@@ -10,20 +10,38 @@ this is the measurement.
 Usage:
 
     python3 scripts/guard_coverage.py                 # the report
+    python3 scripts/guard_coverage.py --cone          # ...split by what a guard already reaches
     python3 scripts/guard_coverage.py --by-file       # ...with every gap listed by file
     python3 scripts/guard_coverage.py --self-test
     python3 scripts/guard_coverage.py --dump FILE     # reuse a declaration dump
+    python3 scripts/guard_coverage.py --cone FILE     # ...and a `DumpGuardCone` dump
     python3 scripts/guard_coverage.py --env-dump FILE # ...and reconcile against `DumpEnvNames`
 
-It runs `lake env lean scripts/DumpOkaDecls.lean` unless `--dump` is given, so the build must
-have run first: it reads the oleans, it does not produce them.
+It runs `lake env lean scripts/DumpOkaDecls.lean` unless `--dump` is given, and
+`scripts/DumpGuardCone.lean` when `--cone` is given without a file, so the build must have run
+first: it reads the oleans, it does not produce them.
 
-**This is a reporter and not a gate, and it must not be wired into `.orchestra/validation.sh`.**
-The correct number of unguarded results is not zero, nobody has decided what it should be, and a
-check that fails on the current tree is a check somebody will disable.  `scripts/import_cost.py`
-is the model, and its docstring gives the reason in a sentence: *"the cost itself is output, not a
+## `--cone`, and why the bare figure is the wrong one to act on
+
+**`#print axioms` is transitive.**  A `sorry` anywhere below a guarded theorem turns *that*
+theorem's guard red, so a declaration in the cone of some guard is already covered by the
+regression test and a second `#print axioms` naming it would fail at exactly the same times.
+Without `--cone` this script counts *advertised results with no guard of their own*, which is a
+larger and much less interesting set: at `d12d334` it was **301 in 84 files, of which 259 were in
+some guard's cone and 42, in 29 files, were reached by nothing at all.**
+
+So the bare number has no right value — two tranches and three sessions declined to say what it
+should be — while `reached by no guard at all` has an obvious one, namely zero, because such a
+result is one no regression test touches.  `OkaTest/Axioms.lean` carries the two probes that
+establish the difference is real rather than a property of this script's arithmetic.
+
+**Even so this is a reporter and not a gate, and it must not be wired into
+`.orchestra/validation.sh`.**  The uncovered figure is zero today and the way it stops being zero
+is a pull request that advertises a result — an ordinary and desirable thing to do, which no
+author should meet as a red build in a script they have never run.  `scripts/import_cost.py` is
+the model, and its docstring gives the reason in a sentence: *"the cost itself is output, not a
 verdict, because the figures live in English prose and nothing can check them mechanically."*
-Exit is 0 whatever the coverage is, and non-zero only when an argument is wrong, the dump cannot
+Exit is 0 whatever the coverage is, and non-zero only when an argument is wrong, a dump cannot
 be built, or the self-test fails.
 
 ## The defect this exists to stop
@@ -40,30 +58,52 @@ is a good argument about one declaration and it does not scale.
 ## What is counted, and it is not what a prefix test would count
 
 *Guarded* is a `#print axioms <name>` command under `OkaTest/Axioms/`, with comments masked.
-*Advertised* is a backticked token inside a `## Main results` section of a **module** docstring
-under `Oka/`, kept when it names a declaration this repository owns.
+*Advertised* is a backticked token inside a section of a **module** docstring under `Oka/` whose
+heading begins `Main`, kept when it names a declaration this repository owns.
+
+**Any heading beginning `Main`, and not the exact string `## Main results`** — which is a
+correction to what this script did until 2026-08-27, and it was worth 238 declarations.  This
+repository writes `## Main results` 109 times, `## Main definitions` 74 times and
+`## Main declarations` once; Mathlib uses at least ten spellings, including
+`## Main definitions and results` and `## Main statements`.  Whether an author reached for
+*results* or *definitions* is not a fact about whether a declaration is announced, so a
+denominator that turns on it cannot be quoted.  `report` prints the spellings it saw, with
+counts, so that an eleventh is announced rather than swallowed.
 
 Ownership is read from `scripts/DumpOkaDecls.lean`, which asks Lean which module declared each
 constant.  A prefix test on the name would be wrong in both directions: this repository declares
 into `AlgebraicGeometry`, `CategoryTheory` and `Polynomial` from its mirror tree — those names
-have nothing beginning with `Oka` about them — and a `## Main results` section may cite a Mathlib
+have nothing beginning with `Oka` about them — and a `Main …` section may cite a Mathlib
 declaration in a namespace this repository also declares into.  So `AlgebraicGeometry.…` alone
 decides nothing, and the dump is what separates the two.
 
-## Four things it cannot see, in decreasing order of how much they matter
+## Six things it cannot see, in decreasing order of how much they matter
 
 * **A main result named in prose and not backticked is invisible**, so the *advertised* figure is
   a lower bound on what the docstrings claim.  `Oka/Weierstrass.lean`'s `localweierstrass_division`
   is backticked and guarded and so lands in the overlap; a result described in words is not
   counted at all.
-* **It has no opinion about whether a name ought to be guarded.**
-  `Oka/Analytic/ParametricCircleIntegral.lean` is general complex analysis with a Mathlib
-  destination and guarding all 17 of its advertised results may well be the wrong call.  The
-  number is a measurement and the judgement is a human one; see `OkaTest/Axioms.lean`.
+* **Without `--cone` it has no opinion about whether a name ought to be guarded**, and the file
+  that used to be the example of why — `Oka/Analytic/ParametricCircleIntegral.lean`, general
+  complex analysis with a Mathlib destination, 17 of 17 advertised results unguarded — is the
+  example of what `--cone` answers instead: fifteen of the seventeen are in the cone of the
+  three `OkaTest/Axioms/Weierstrass.lean` guards, because that file exists to prove the two
+  lemmas `Oka/Weierstrass.lean` consumes, and a sixteenth, `analyticAt_of_shift`, in the cone of
+  the divided-difference guards.  It needed one guard, not seventeen and not an
+  exclusion.  With `--cone` the judgement left over is genuinely small; see `OkaTest/Axioms.lean`.
+* **A guard can move a name out of the uncovered column without naming it**, since it brings its
+  whole cone with it.  Guarding the 42 of `d12d334` took 41 guards: `MvPolynomial.awayBaseHom`
+  is in the cone of `MvPolynomial.isLocalization_away_quotient_awayIdeal`, which was itself one
+  of the 42.  Do not read a delta in this figure as a count of guards added.
+* **A cone membership is weaker than a guard and this script cannot see the difference.**  A
+  guard on `f` holds whatever else changes; `f`'s membership of `g`'s cone lasts exactly as long
+  as `g`'s proof mentions `f`, so a refactor of `g` can end it in silence.  What makes that
+  tolerable is that nothing is recorded: re-run this and a name that has dropped out of every
+  cone is back in the uncovered column.
 * **The reverse direction is not a defect.**  A guard on a lemma no docstring advertises is fine
   and there are many; the count is printed because it is the other half of the divergence, not
   because anything should be done about it.
-* **A `## Main results` list can advertise a declaration that lives in another file.**  That is
+* **A `Main …` list can advertise a declaration that lives in another file.**  That is
   legitimate — a file may be the natural place to announce a result it re-exports — and the
   report says how many such entries there are rather than treating them as errors.
 
@@ -95,13 +135,19 @@ import tempfile
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DUMP_SCRIPT = os.path.join("scripts", "DumpOkaDecls.lean")
+CONE_SCRIPT = os.path.join("scripts", "DumpGuardCone.lean")
 LIBRARY_DIR = "Oka"
 GUARD_DIR = os.path.join("OkaTest", "Axioms")
+
+# What every guard in this repository asserts, and so what the cone of all of them must contain
+# and nothing more.  A fourth axiom here is either a regression or, far more likely, a traversal
+# in `DumpGuardCone.lean` that is not the one `#print axioms` performs.
+STANDARD_AXIOMS = {"propext", "Classical.choice", "Quot.sound"}
 
 PRINT_AXIOMS = re.compile(r"^[ \t]*#print axioms(?:[ \t]+|[ \t]*\n[ \t]+)(\S+)[ \t]*$", re.M)
 PRINT_AXIOMS_CMD = re.compile(r"^[ \t]*#print axioms\b", re.M)
 BACKTICKED = re.compile(r"`([^`\s]+)`")
-MAIN_RESULTS = re.compile(r"^#{1,6}\s+Main results\s*$")
+MAIN_HEADING = re.compile(r"^#{1,6}\s+Main\b.*$")
 HEADING = re.compile(r"^#{1,6}\s")
 
 
@@ -189,13 +235,21 @@ def main_results_tokens(text: str) -> list[tuple[str, int]]:
     A section runs from its heading to the next heading of any level or to the end of the
     docstring, so a `## What is not here` list — which on this project cites the names of things
     that are *absent* — cannot leak into the count.
+
+    *Its* heading is anything beginning `Main`, not the exact string `## Main results`.  Under
+    the narrow reading this repository advertised 521 declarations at `d12d334` and the 74
+    `## Main definitions` and one `## Main declarations` sections were invisible, worth 238 more
+    declarations of which 151 had no guard; Mathlib uses at least ten spellings of the heading,
+    `## Main definitions and results` and `## Main statements` among them.  A denominator that
+    depends on which of those an author picked is not a denominator, so `report` prints the
+    spellings it saw — a new one is then announced rather than silently swallowed.
     """
     out: list[tuple[str, int]] = []
     for offset, body in module_docstrings(text):
         pos = 0
         inside = False
         for line in body.splitlines(keepends=True):
-            if MAIN_RESULTS.match(line):
+            if MAIN_HEADING.match(line):
                 inside = True
             elif HEADING.match(line):
                 inside = False
@@ -205,6 +259,12 @@ def main_results_tokens(text: str) -> list[tuple[str, int]]:
                     out.append((m.group(1), text.count("\n", 0, at) + 1))
             pos += len(line)
     return out
+
+
+def main_headings(text: str) -> list[str]:
+    """The `Main …` headings of `text`'s module docstrings, as written."""
+    return [line.strip() for _, body in module_docstrings(text)
+            for line in body.splitlines() if MAIN_HEADING.match(line)]
 
 
 def guarded_names(text: str) -> list[tuple[str, int]]:
@@ -278,12 +338,65 @@ def build_dump() -> str:
     return path
 
 
+def read_cone(dump: str) -> tuple[set[str], set[str], list[str], list[str]]:
+    """`(cone, axioms, missing roots, unreadable rows)`, from `scripts/DumpGuardCone.lean`.
+
+    The fourth component is the tripwire, and it is the same one `guard_count` is: a row this
+    reader does not understand is *reported* rather than dropped, so that a change to the Lean
+    side which this side has not been taught cannot look like a smaller cone.
+    """
+    cone: set[str] = set()
+    axioms: set[str] = set()
+    missing: list[str] = []
+    unread: list[str] = []
+    with open(dump, encoding="utf-8") as f:
+        for line in f:
+            row = line.rstrip("\n")
+            if not row:
+                continue
+            tag, _, name = row.partition("\t")
+            if tag == "cone" and name:
+                cone.add(name)
+            elif tag == "axiom" and name:
+                axioms.add(name)
+            elif tag == "missing" and name:
+                missing.append(name)
+            else:
+                unread.append(row)
+    return cone, axioms, missing, unread
+
+
+def build_cone(roots: list[str]) -> str:
+    """Run `scripts/DumpGuardCone.lean` on `roots` and return the path it wrote."""
+    fd, roots_path = tempfile.mkstemp(prefix="oka-guard-roots-", suffix=".txt")
+    with os.fdopen(fd, "w", encoding="utf-8") as f:
+        f.write("".join(name + "\n" for name in sorted(roots)))
+    fd, path = tempfile.mkstemp(prefix="oka-guard-cone-", suffix=".txt")
+    os.close(fd)
+    proc = subprocess.run(
+        ["lake", "env", "lean", CONE_SCRIPT], cwd=REPO,
+        env=dict(os.environ, OKA_CONE_ROOTS=roots_path, OKA_CONE_OUT=path),
+        capture_output=True, text=True,
+    )
+    os.unlink(roots_path)
+    if proc.returncode != 0 or not os.path.getsize(path):
+        sys.stderr.write(proc.stdout + proc.stderr)
+        sys.stderr.write(
+            "\nFailed to dump the axiom cone of the guards. `lake build` must have run first:\n"
+            "this reads the oleans, it does not produce them.\n"
+        )
+        os.unlink(path)
+        sys.exit(2)
+    return path
+
+
 def module_of(path: str) -> str:
     """`Oka/Foo/Bar.lean` -> `Oka.Foo.Bar`."""
     return path[:-len(".lean")].replace(os.sep, ".")
 
 
-def report(decls: dict[str, str], env: set[str] | None, by_file: bool) -> None:
+def report(decls: dict[str, str], env: set[str] | None, by_file: bool,
+           cone_arg: str | None = None) -> None:
     guarded: dict[str, str] = {}
     unread: list[tuple[str, int, int]] = []
     for path in lean_files(GUARD_DIR):
@@ -295,14 +408,29 @@ def report(decls: dict[str, str], env: set[str] | None, by_file: bool) -> None:
         if len(found) != guard_count(text):
             unread.append((path, guard_count(text), len(found)))
 
+    cone: set[str] | None = None
+    axioms: set[str] = set()
+    cone_missing: list[str] = []
+    cone_unread: list[str] = []
+    if cone_arg is not None:
+        cone_dump = cone_arg or build_cone(sorted(guarded))
+        try:
+            cone, axioms, cone_missing, cone_unread = read_cone(cone_dump)
+        finally:
+            if not cone_arg:
+                os.unlink(cone_dump)
+
     advertised: dict[str, set[str]] = {}
     foreign: dict[str, int] = {"module": 0, "Mathlib": 0, "other": 0}
     unresolved: list[tuple[str, str, int]] = []
     unresolved_all: list[tuple[str, str, int]] = []
     modules = {module_of(p) for p in lean_files(LIBRARY_DIR, "OkaTest")} | {"Oka", "OkaTest"}
+    spellings: dict[str, int] = {}
     for path in lean_files(LIBRARY_DIR) + ["Oka.lean"]:
         with open(os.path.join(REPO, path), encoding="utf-8") as f:
             text = f.read()
+        for heading in main_headings(text):
+            spellings[heading] = spellings.get(heading, 0) + 1
         for token, line in main_results_tokens(text):
             if token in decls:
                 advertised.setdefault(path, set()).add(token)
@@ -318,17 +446,27 @@ def report(decls: dict[str, str], env: set[str] | None, by_file: bool) -> None:
 
     names = {n for ns in advertised.values() for n in ns}
     unguarded = names - set(guarded)
+    covered = {n for n in unguarded if n in cone} if cone is not None else set()
+    uncovered = unguarded - covered
     gaps = {path: sorted(ns - set(guarded)) for path, ns in advertised.items()}
     gaps = {path: ns for path, ns in gaps.items() if ns}
+    holes = {path: [n for n in ns if n in uncovered] for path, ns in gaps.items()}
+    holes = {path: ns for path, ns in holes.items() if ns}
     elsewhere = sum(1 for path, ns in advertised.items() for n in ns
                     if decls[n] != module_of(path))
 
     print(f"guards under {GUARD_DIR}/            {len(guarded)} distinct names, "
           f"{len(lean_files(GUARD_DIR))} files")
-    print(f"advertised in a `## Main results`   {len(names)} distinct declarations of this "
+    print(f"advertised under a `Main …` heading {len(names)} distinct declarations of this "
           f"repository, in {len(advertised)} files")
+    for heading, count in sorted(spellings.items(), key=lambda kv: (-kv[1], kv[0])):
+        print(f"    {count:3d}  {heading}")
     print(f"  of those, unguarded               {len(unguarded)}"
           f" ({100 * len(unguarded) // max(len(names), 1)}%), in {len(gaps)} files")
+    if cone is not None:
+        print(f"    already in a guard's cone       {len(covered)}"
+              "  (`#print axioms` is transitive)")
+        print(f"    reached by no guard at all      {len(uncovered)}, in {len(holes)} files")
     print(f"  in both lists                     {len(names) - len(unguarded)}")
     print(f"guarded and advertised nowhere      {len(set(guarded) - names)}"
           "  (not a defect — see this script's docstring)")
@@ -358,6 +496,18 @@ def report(decls: dict[str, str], env: set[str] | None, by_file: bool) -> None:
     for path, commands, read in unread:
         print(f"  !! {path}: {commands} `#print axioms` command(s), {read} name(s) read — "
               "a layout this script does not parse")
+    if cone is not None:
+        extra = sorted(axioms - STANDARD_AXIOMS)
+        print(f"axioms reached from any guard       {len(axioms)}"
+              f"{' — the three standard ones' if not extra else ''}")
+        for name in extra:
+            print(f"  !! {name}: an axiom no guard's `#guard_msgs` records — see "
+                  f"{CONE_SCRIPT}")
+        for name in cone_missing:
+            print(f"  !! {name}: guarded, and not a declaration in this environment")
+        for row in cone_unread:
+            print(f"  !! a row of the cone dump this script cannot read: {row!r}")
+
     guards_outside = sorted(set(guarded) - set(decls))
     if guards_outside:
         print(f"guards on declarations this repository does not own: {len(guards_outside)}")
@@ -365,15 +515,42 @@ def report(decls: dict[str, str], env: set[str] | None, by_file: bool) -> None:
             print(f"      {name}  ({guarded[name]})")
 
     print()
-    print("largest gaps (unguarded / advertised):")
-    order = sorted(gaps, key=lambda p: (-len(gaps[p]), p))
+    if cone is None:
+        print("largest gaps (unguarded / advertised):")
+        order = sorted(gaps, key=lambda p: (-len(gaps[p]), p))
+        for path in order if by_file else order[:12]:
+            print(f"  {len(gaps[path]):3d} / {len(advertised[path]):-3d}  {path}")
+            if by_file:
+                for name in gaps[path]:
+                    print(f"           {name}")
+        if not by_file and len(order) > 12:
+            print(f"  ({len(order) - 12} more files with a gap; --by-file lists every one)")
+        return
+
+    # With a cone in hand the interesting order is by what nothing reaches, not by what has no
+    # guard of its own: a file all of whose advertised results sit under a guard downstream is
+    # not a gap in any sense a regression test cares about, and 41 of the 60 are exactly that.
+    if not holes:
+        print("No advertised result is outside every guard's cone — the figure that has a right"
+              f" value is\nat it.  The {len(covered)} above have no guard of their own and, while"
+              " the proofs that reach\nthem stay as they are, need none.")
+        return
+    print("reached by no guard (uncovered / in a cone / advertised):")
+    order = sorted(holes, key=lambda p: (-len(holes[p]), p))
     for path in order if by_file else order[:12]:
-        print(f"  {len(gaps[path]):3d} / {len(advertised[path]):-3d}  {path}")
+        print(f"  {len(holes[path]):3d} / {len(gaps[path]) - len(holes[path]):-3d} /"
+              f" {len(advertised[path]):-3d}  {path}")
         if by_file:
             for name in gaps[path]:
-                print(f"           {name}")
+                print(f"      {'!!' if name in uncovered else '  '}     {name}")
     if not by_file and len(order) > 12:
-        print(f"  ({len(order) - 12} more files with a gap; --by-file lists every one)")
+        print(f"  ({len(order) - 12} more files with an uncovered result; --by-file lists all)")
+    silent = sorted(p for p in gaps if p not in holes)
+    print(f"  ({len(silent)} further files have an unguarded advertised result and no uncovered"
+          " one)")
+    if by_file:
+        for path in silent:
+            print(f"    {len(gaps[path]):3d} in a cone  {path}")
 
 
 def self_test() -> int:
@@ -411,6 +588,24 @@ def self_test() -> int:
           [t for t, _ in main_results_tokens(
               "/-!\n## Main results\n\n- `Oka.AlsoNotOne.thm`\n-/\n")],
           ["Oka.AlsoNotOne.thm"])
+
+    # The heading is anything beginning `Main`.  Until 2026-08-27 it was the exact string
+    # `## Main results`, which missed 74 `## Main definitions` sections in this repository and
+    # would miss `## Main definitions and results`, a spelling Mathlib uses twelve times.
+    for heading in ["## Main results", "## Main definitions", "## Main declarations",
+                    "## Main definitions and results", "### Main statements", "## Main Results"]:
+        check(f"`{heading}` opens a section",
+              [t for t, _ in main_results_tokens(f"/-!\n{heading}\n\n- `Oka.In.thm`\n-/")],
+              ["Oka.In.thm"])
+    # ...and the control, since a prefix test rather than a word boundary would swallow these.
+    check("a heading that merely starts with the letters of `Main` does not",
+          ([t for t, _ in main_results_tokens("/-!\n## Maintenance\n\n- `Oka.Out.thm`\n-/")],
+           [t for t, _ in main_results_tokens("/-!\n## Mainly plumbing\n\n- `Oka.Out.thm`\n-/")],
+           [t for t, _ in main_results_tokens("/-!\n## Main\n\n- `Oka.In.thm`\n-/")]),
+          ([], [], ["Oka.In.thm"]))
+    check("the spellings are reported as written, so an unseen one is announced",
+          main_headings("/-!\n## Main results\n\n- `a`\n\n## Other\n\n## Main definitions\n-/"),
+          ["## Main results", "## Main definitions"])
 
     # A heading of a different level closes the section too; `Oka/` uses `##` throughout today,
     # and a file that used `###` for its subsections would otherwise leak them into the count.
@@ -455,6 +650,32 @@ def self_test() -> int:
     check("...and the two agree on a layout it can read",
           (guard_count(wrapped), len(guarded_names(wrapped))), (1, 1))
 
+    # The cone reader.  Written to a file rather than parsed from a string because that is what
+    # it reads, and a reader tested on a different input than it consumes is not tested.
+    fd, cone_path = tempfile.mkstemp(prefix="oka-guard-cone-fixture-", suffix=".txt")
+    with os.fdopen(fd, "w", encoding="utf-8") as f:
+        f.write("cone\tOka.Guarded.thm\naxiom\tpropext\nmissing\tOka.Vanished.thm\n"
+                "cone\tOka.Unguarded.thm\n\nbadtag\tOka.Confusing.thm\ncone\n")
+    try:
+        got_cone, got_axioms, got_missing, got_unread = read_cone(cone_path)
+    finally:
+        os.unlink(cone_path)
+    check("the cone dump's three row kinds are read into three buckets",
+          (sorted(got_cone), sorted(got_axioms), got_missing),
+          (["Oka.Guarded.thm", "Oka.Unguarded.thm"], ["propext"], ["Oka.Vanished.thm"]))
+    check("a row kind this reader does not know is reported, not dropped",
+          got_unread, ["badtag\tOka.Confusing.thm", "cone"])
+    # The control on the classification itself.  `covered` and `uncovered` are a set difference
+    # in `report`, so what is worth pinning is that a name absent from the dump lands in the
+    # second bucket rather than nowhere — the failure that would make every gap look closed.
+    unguarded_fixture = {"Oka.Unguarded.thm", "Oka.NotInAnyCone.thm"}
+    check("an advertised name absent from the cone is uncovered, not silently dropped",
+          (sorted(n for n in unguarded_fixture if n in got_cone),
+           sorted(n for n in unguarded_fixture if n not in got_cone)),
+          (["Oka.Unguarded.thm"], ["Oka.NotInAnyCone.thm"]))
+    check("an axiom outside the three every guard records is reported",
+          sorted({"propext", "sorryAx"} - STANDARD_AXIOMS), ["sorryAx"])
+
     print("self-test FAILED" if failures else "self-test passed")
     return 1 if failures else 0
 
@@ -468,13 +689,18 @@ def main() -> int:
                     help="a `scripts/DumpEnvNames.lean` dump, to tell a Mathlib name from a typo")
     ap.add_argument("--by-file", action="store_true",
                     help="list every file with a gap, and every unguarded name in it")
+    ap.add_argument("--cone", metavar="FILE", nargs="?", const="", default=None,
+                    help="split the unguarded names by whether some guard's `#print axioms` "
+                         "already reaches them; runs `scripts/DumpGuardCone.lean` unless a dump "
+                         "of its output is given")
     ap.add_argument("--self-test", action="store_true", help="check the extraction on fixtures")
     args = ap.parse_args()
     if args.self_test:
         return self_test()
     dump = args.dump or build_dump()
     try:
-        report(read_decls(dump), read_env(args.env_dump) if args.env_dump else None, args.by_file)
+        report(read_decls(dump), read_env(args.env_dump) if args.env_dump else None, args.by_file,
+               args.cone)
     finally:
         if not args.dump:
             os.unlink(dump)

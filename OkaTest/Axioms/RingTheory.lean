@@ -170,3 +170,59 @@ info: 'IsAlgClosed.card_setOf_pow_eq' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms IsAlgClosed.card_setOf_pow_eq
+
+/-! ### Localising away from an element that divides a power of another
+
+`IsLocalization.Away.of_dvd_pow` and its `iff` form say that inverting `f` inverts every `g`
+dividing a power of it, and `algEquivOfDvdPow` is the resulting identification of the two
+localisations.  This is the step that lets an overlap of two distinguished opens be presented
+in either member's variables. -/
+
+/--
+info: 'IsLocalization.Away.of_dvd_pow' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms IsLocalization.Away.of_dvd_pow
+
+/--
+info: 'IsLocalization.Away.iff_of_dvd_pow' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms IsLocalization.Away.iff_of_dvd_pow
+
+/--
+info: 'IsLocalization.Away.algEquivOfDvdPow' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms IsLocalization.Away.algEquivOfDvdPow
+
+/-! ### The away localisation of a quotient of a polynomial ring, as a quotient
+
+`MvPolynomial.awayIdeal` is the ideal, `awayQuotientEquiv` the identification and
+`isLocalization_away_quotient_awayIdeal` the statement that it is a localisation: together they
+are `ℂ[x, t] ⧸ (I, t·f − 1) ≃ (ℂ[x] ⧸ I)_f`, which is what makes a distinguished open of an
+affine scheme a presentation again. -/
+
+/--
+info: 'MvPolynomial.awayIdeal' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms MvPolynomial.awayIdeal
+
+/--
+info: 'MvPolynomial.awayQuotientEquiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms MvPolynomial.awayQuotientEquiv
+
+/--
+info: 'MvPolynomial.isLocalization_away_quotient_awayIdeal' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms MvPolynomial.isLocalization_away_quotient_awayIdeal

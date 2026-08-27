@@ -55,6 +55,13 @@ info: 'SheafOfModules.exists_forall_app_eq_of_epi' depends on axioms:
 #print axioms SheafOfModules.exists_forall_app_eq_of_epi
 
 /--
+info: 'SheafOfModules.exists_app_eq_of_epi' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.exists_app_eq_of_epi
+
+/--
 info: 'SheafOfModules.exists_free_app_eq_of_epi' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
@@ -669,3 +676,31 @@ info: 'AlgebraicGeometry.Scheme.Modules.exists_isFinite_presentation_of_isCohere
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.Scheme.Modules.exists_isFinite_presentation_of_isCoherent
+
+/-! ### Submodules of a presheaf and of a sheaf of modules
+
+The sub-object these files are built on, and the two maps out of it that
+`Oka/Algebra/Category/ModuleCat/Sheaf/Submodule.lean` and its presheaf-level sibling advertise.
+They are advertised under `## Main definitions` rather than `## Main results`, which is why no
+tranche before the third saw them at all. -/
+
+/--
+info: 'PresheafOfModules.Submodule.toSubfunctor' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms PresheafOfModules.Submodule.toSubfunctor
+
+/--
+info: 'SheafOfModules.Submodule' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.Submodule
+
+/--
+info: 'SheafOfModules.Submodule.toSheafOfModules' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms SheafOfModules.Submodule.toSheafOfModules
