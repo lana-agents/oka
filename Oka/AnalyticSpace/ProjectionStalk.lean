@@ -43,11 +43,26 @@ global `filter_upwards` both rewrites fail, on a hypothesis that says only `w �
 
 `ComplexAnalytic.AnalyticSpace` indexes the coordinates of `ℂ^n` by `ULift (Fin n)`, so that the
 underlying type lives in an arbitrary universe; `Oka/Weierstrass.lean` and `LocalOkaRing.incl`
-index them by `Fin n`. **The two cannot be compared as spaces**: `complexSpace (Fin n)` is a
-`LocallyRingedSpace.{0}` and `AnalyticSpace.complexAffineSpace.{u} n` is a
-`LocallyRingedSpace.{u}`, and `ComplexAnalytic.okaMapHom` is stated for two index types **in the
-same universe** (`Oka/AnalyticSpace/HolomorphicMap.lean`), so there is no morphism between them
-to ask about. What can be compared is the germ rings, which are rings and not spaces:
+index them by `Fin n`. **What does not exist is a comparison of the two as spaces that survives
+into an arbitrary universe**, and that is the only kind `AnalyticSpace` has a use for: the
+`ULift` is carried for no other reason than to keep `complexAffineSpace` polymorphic, as
+`Oka/ComplexSpace.lean` says where it is defined. For `u > 0` there is not even a type to write
+down: `complexSpace (Fin n)` is a `LocallyRingedSpace.{0}` while the space underlying
+`AnalyticSpace.complexAffineSpace.{u} n` is a `LocallyRingedSpace.{u}`, so the two are objects of
+two different categories and the arrow between them does not elaborate.
+
+**At `u = 0` it does, and morphisms exist in both directions**, out of this file's own API:
+`ComplexAnalytic.coordEmb` at the embedding underlying `Equiv.ulift` and at the one underlying
+`Equiv.ulift.symm`, each fed to `ComplexAnalytic.okaMapHom`, whose two underlying maps
+`ComplexAnalytic.okaMapFun_coordEmb` makes mutually inverse in three lines. Nothing below uses
+that, **because it does not generalise**: `ComplexAnalytic.okaMapHom`
+(`Oka/AnalyticSpace/HolomorphicMap.lean`) binds its two index types to one universe, and
+`ULift (Fin n)` shares a universe with `Fin n` at `u = 0` and nowhere else.
+So a reader who goes looking for an isomorphism between the two spellings of `ℂ^n` should read
+this as the answer — not that the question cannot be asked, but that the only place it can be
+answered is `Type 0`, which is the one place `AnalyticSpace` was built not to be confined to.
+
+What can be compared in every universe is the germ rings, which are rings and not spaces:
 `LocalOkaRing.uliftEquiv` relabels `ULift ι` as `ι`, and `LocalOkaRing.uliftEquiv_renameEmb_incl`
 says the relabelling turns the `ULift`ed `Fin.castSucc` into `incl`. The last section below is
 that bridge crossed once.
