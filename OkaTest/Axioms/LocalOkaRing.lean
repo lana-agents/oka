@@ -380,3 +380,17 @@ info: 'LocalOkaRing.uliftEquiv_renameEmb_incl' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms LocalOkaRing.uliftEquiv_renameEmb_incl
+
+/--
+info: 'LocalOkaRing.renameEmb' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.renameEmb
+
+/--
+info: 'LocalOkaRing.uliftEquiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.uliftEquiv

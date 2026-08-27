@@ -52,6 +52,15 @@ to ask about. What can be compared is the germ rings, which are rings and not sp
 says the relabelling turns the `ULift`ed `Fin.castSucc` into `incl`. The last section below is
 that bridge crossed once.
 
+## Main definitions
+
+- `ComplexAnalytic.coordEmb`: the coordinates of `ℂ^ι` indexed by an embedded `κ`, whose
+  `ComplexAnalytic.okaMapHom` is the map forgetting the rest, and `ComplexAnalytic.projCoords`,
+  its instance at `Fin.castSuccEmb`.
+- `ComplexAnalytic.uliftCastSuccEmb`: `Fin.castSucc` relabelled through `ULift`, and
+  `ComplexAnalytic.AnalyticSpace.proj`, the projection `ℂ^(n+1) ⟶ ℂ^n` of complex analytic
+  spaces it gives.
+
 ## Main results
 
 - `ComplexAnalytic.okaMapFun_coordEmb`: the underlying map of the projection along `e` is

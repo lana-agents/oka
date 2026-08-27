@@ -547,6 +547,35 @@ info: 'ComplexAnalytic.AnalyticSpace.okaStalkEquiv_stalkMap_uliftProj' depends o
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.okaStalkEquiv_stalkMap_uliftProj
 
+/--
+info: 'ComplexAnalytic.coordEmb' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coordEmb
+
+/--
+info: 'ComplexAnalytic.projCoords' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.projCoords
+
+-- The only assertion in this tree that is *not* `[propext, Classical.choice, Quot.sound]`, and
+-- the direction it differs in is the safe one: relabelling `Fin.castSucc` through `ULift` is
+-- structural, so nothing analytic and no choice reaches it. `OkaTest/Axioms.lean`'s rule is that
+-- an assertion must never name a *further* axiom; naming fewer is a fact about the declaration.
+/-- info: 'ComplexAnalytic.uliftCastSuccEmb' does not depend on any axioms -/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.uliftCastSuccEmb
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.proj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.proj
+
 /-! ### The third rung: a finite étale morphism is a covering map
 
 The first of the two is the mirror-tree topological criterion in
