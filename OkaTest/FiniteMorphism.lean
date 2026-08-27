@@ -105,10 +105,10 @@ derived from — so read it as a test of the rung and not as a fact about the ma
   morphism which is not an isomorphism. **The stalk half of
   `ComplexAnalytic.AnalyticSpace.IsLocalIso` is exercised by it**, and by nothing else: the
   non-example `ComplexAnalytic.axisIncl` fails the topological field alone.
-* **A `degree` function on morphisms**, and nothing else about the number of sheets. The bullet
-  that used to stand here said two things, and **both are now retired**: that the constancy of the
-  number of sheets over a connected base was not proved anywhere — it is,
-  `ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale`, applied here as
+* **A `degree` function on morphisms — this is no longer absent, and this file is where it is
+  checked.** The bullet that used to stand here said two things, and **both are now retired**:
+  that the constancy of the number of sheets over a connected base was not proved anywhere — it
+  is, `ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale`, applied here as
   `ComplexAnalytic.card_fiber_sq_eq` — and that nothing showed `ComplexAnalytic.sq` two-sheeted,
   which `ComplexAnalytic.card_fiber_base_sq` now does. So the constancy statement has a witness
   whose common value is **2** rather than something a one-sheeted map would also satisfy, and the

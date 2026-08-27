@@ -54,9 +54,10 @@ the rung.
 
 * **The Riemann existence theorem**, and any statement relating covers to field extensions. This
   is the notion RET is *about*; nothing here mentions `ℂ(X)`.
-* **A `degree` function on morphisms.** The bullet that used to stand here has been retired in
-  three steps. It first said the constancy of the number of sheets over a connected base was not
-  proved anywhere; it is, as `ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale` in
+* **A `degree` function on morphisms — this is no longer absent, and it is not in this file.**
+  The bullet that used to stand here has been retired in four steps. It first said the constancy
+  of the number of sheets over a connected base was not proved anywhere; it is, as
+  `ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale` in
   `Oka/AnalyticSpace/CoveringMap.lean`. It then said the common value was computed for no morphism;
   it is, and no longer only for one — `ComplexAnalytic.card_fiber_base_sq` puts the fibres of
   `z ↦ z²` on the punctured line at **2**, by a statement about roots in `ℂ` rather than about

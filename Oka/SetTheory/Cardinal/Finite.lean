@@ -11,12 +11,17 @@ import Mathlib.SetTheory.Cardinal.Finite
 Material for `Mathlib/SetTheory/Cardinal/Finite.lean`; see `README.md` on the mirror tree. There
 is no complex-analytic content here.
 
-Mathlib relates `Nat.card` to `Function.Bijective` in the *counting* direction — a map between
-types of equal finite cardinality is bijective as soon as it is injective
-(`Nat.bijective_iff_injective_and_card`) — and it has nothing that reads bijectivity off the
-fibres one at a time. That is the form a covering-space argument produces: the number of sheets
-is a statement about `f ⁻¹' {b}` for each `b` separately, and `1` is the value at which the
-covering is trivial.
+**Mathlib already reads bijectivity off the fibres one at a time**, as
+`Function.bijective_iff_existsUnique` — `Bijective f ↔ ∀ b, ∃! a, f a = b`. What it does not have
+is that statement in the `Nat.card` spelling, and it relates `Nat.card` to `Function.Bijective`
+only in the *counting* direction: a map between types of equal finite cardinality is bijective as
+soon as it is injective (`Nat.bijective_iff_injective_and_card`). So the gap is a translation and
+not a theorem, which is why the proof below is a `simp only` between the two spellings followed by
+a transposition of `∃!` against `Subsingleton`-and-inhabited.
+
+The `Nat.card` spelling is the one a covering-space argument produces: the number of sheets is
+`Nat.card (f ⁻¹' {b})` for each `b` separately, and `1` is the value at which the covering is
+trivial.
 
 **The `1` on the right is doing both halves of the work at once.** `Nat.card_eq_one_iff_unique`
 splits it as `Subsingleton` and `Nonempty`, and those are exactly injectivity and surjectivity at
@@ -27,27 +32,20 @@ why this is an honest `↔` and not the usual junk-value trap.
 
 /-- **A map is bijective exactly when every fibre has exactly one point.**
 
-Both directions go through `Nat.card_eq_one_iff_unique`, which turns `Nat.card α = 1` into
-`Subsingleton α ∧ Nonempty α`; the first conjunct at `f ⁻¹' {b}` is injectivity of `f` on that
-fibre and the second is `b` being in the range.
+The `Nat.card` spelling of `Function.bijective_iff_existsUnique`, which is what the proof reduces
+to: `Nat.card_eq_one_iff_unique` turns `Nat.card (f ⁻¹' {b}) = 1` into `Subsingleton` and
+`Nonempty` of the fibre, `Set.subsingleton_coe` and `Set.preimage_singleton_nonempty` read those
+as `(f ⁻¹' {b}).Subsingleton` and `b ∈ Set.range f` — injectivity of `f` on that fibre and `b`
+being in the range — and what is left is `∃!` against those two.
 
 No finiteness hypothesis is needed on either type, and none is hidden in `Nat.card`: an infinite
 fibre has `Nat.card` equal to `0`, not to `1`. -/
 theorem Function.bijective_iff_forall_card_preimage_eq_one {α β : Type*} (f : α → β) :
     Function.Bijective f ↔ ∀ b, Nat.card (f ⁻¹' {b}) = 1 := by
-  constructor
-  · intro hf b
-    rw [Nat.card_eq_one_iff_unique]
-    refine ⟨⟨fun x y ↦ Subtype.ext (hf.injective ?_)⟩, ?_⟩
-    · have hx : f x.1 = b := x.2
-      have hy : f y.1 = b := y.2
-      rw [hx, hy]
-    · obtain ⟨a, ha⟩ := hf.surjective b
-      exact ⟨⟨a, ha⟩⟩
-  · intro h
-    refine ⟨fun x y hxy ↦ ?_, fun b ↦ ?_⟩
-    · have hsub : Subsingleton (f ⁻¹' {f y}) := (Nat.card_eq_one_iff_unique.mp (h (f y))).1
-      exact congrArg Subtype.val
-        (hsub.elim (⟨x, show f x = f y from hxy⟩) (⟨y, show f y = f y from rfl⟩))
-    · obtain ⟨⟨a, ha⟩⟩ := (Nat.card_eq_one_iff_unique.mp (h b)).2
-      exact ⟨a, ha⟩
+  simp only [Function.bijective_iff_existsUnique, Nat.card_eq_one_iff_unique,
+    Set.subsingleton_coe, Set.nonempty_coe_sort, Set.preimage_singleton_nonempty]
+  refine forall_congr' fun b ↦ ⟨fun h ↦ ?_, fun h ↦ ?_⟩
+  · obtain ⟨a, ha, hu⟩ := h
+    exact ⟨fun x hx y hy ↦ (hu x hx).trans (hu y hy).symm, a, ha⟩
+  · obtain ⟨hs, a, ha⟩ := h
+    exact ⟨a, ha, fun y hy ↦ hs hy ha⟩

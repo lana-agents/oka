@@ -212,7 +212,9 @@ coherence statement for arbitrary complex analytic spaces:
   has a homeomorphism for its underlying map. That goes through
   `Function.bijective_iff_forall_card_preimage_eq_one`, a mirror-tree statement
   (`Oka/SetTheory/Cardinal/Finite.lean`) that a map is bijective exactly when every fibre has one
-  point, which Mathlib has only in the counting direction; no finiteness hypothesis is needed
+  point. Mathlib has that fibrewise reading in the `∃!` spelling
+  (`Function.bijective_iff_existsUnique`) and not in the `Nat.card` one, and relates `Nat.card` to
+  bijectivity only in the counting direction; no finiteness hypothesis is needed
   because `Nat.card` of an infinite fibre is `0` and not `1`. Both computations above are now read
   as degrees — `ComplexAnalytic.degree_sq` is `2` and
   `ComplexAnalytic.AnalyticSpace.degree_sigmaFold` is `Nat.card ι` — and

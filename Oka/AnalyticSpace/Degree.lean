@@ -57,9 +57,12 @@ here, and the degree of a morphism is at present a topological invariant of it.
 Multiplicativity in a composite is not proved either. It is true, and the proof is a fibrewise
 count over the intermediate space that has nothing to do with the material below.
 
-## Main definitions and results
+## Main definitions
 
 - `ComplexAnalytic.AnalyticSpace.degree`: **the number of sheets**, as a natural number.
+
+## Main results
+
 - `ComplexAnalytic.AnalyticSpace.degree_eq_card_fiber`: it is the size of the fibre over any
   point, for a finite étale morphism over a preconnected base — the well-definedness statement.
 - `ComplexAnalytic.AnalyticSpace.degree_id` and
