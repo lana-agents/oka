@@ -44,10 +44,16 @@ is spelled.
 
 `ringSheaf`'s site used to be `Opens.grothendieckTopology ↑Y`, and
 `TopologicalSpace.Opens.map f.base` produces `Opens.grothendieckTopology ↑Y.toPresheafedSpace`.
-The two are definitionally equal and **instance search does not cross them**: Mathlib's
-continuity instance for `Opens.map` is not found, and declaring it oneself in the other spelling
-does not help, because the discrimination-tree key is built from the elaborated implicit
-arguments. With the first spelling `toRingSheafHom` cannot be *stated*.
+The two are definitionally equal and **instance search does not cross them**: with the site
+spelled `↑Y`, Mathlib's continuity instance for `Opens.map f.base` is not found, because the
+discrimination-tree key is built from the elaborated implicit arguments. So with that spelling
+`toRingSheafHom` cannot be stated **as things stand** — but this is a cost and not an
+impossibility, and `AlgebraicGeometry.LocallyRingedSpace.ringSheaf`'s own docstring is where that
+correction lives: the missing instance transports by `inferInstanceAs` from the
+`↑Y.toPresheafedSpace` spelling, and with it stated `toRingSheafHom` elaborates at the `↑Y` site.
+Re-measured 2026-08-25 at `master` = `d12d334`, positive and negative; this paragraph previously
+said that declaring the instance oneself does not help and that `toRingSheafHom` cannot be stated
+at all, both of which are false.
 
 Re-spelling `ringSheaf` costs four sites and no proof changes; `ringSheaf`'s own docstring records
 why it must stay that way.

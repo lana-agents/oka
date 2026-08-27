@@ -113,9 +113,13 @@ variable {ι : Type u} (F : ι → AnalyticSpace.{u}) {Y : AnalyticSpace.{u}} (g
 /-- **The underlying morphism of a descent map is the coproduct's descent map.**
 
 `ComplexAnalytic.AnalyticSpace.sigmaDesc` is built with `CategoryTheory.Limits.Sigma.desc` as its
-`toLRSHom'` field, so this is `rfl`; it is named because every statement below is an application
-of a locally-ringed-space lemma to it, and the two spellings are different discrimination-tree
-keys. -/
+`toLRSHom'` field, so this is `rfl`. **It is stated for a reader and for a consumer that does not
+exist yet, not because anything below needs it**: the statements below reach the
+locally-ringed-space lemmas by definitional unfolding, since the field really is `Sigma.desc`, and
+this file compiles with the lemma deleted. Its `@[simp]` cannot fire here either, there being no
+`simp` call in the file. Measured 2026-08-25 at `master` = `d12d334`; an earlier version of this
+docstring said the two spellings are different discrimination-tree keys and that every statement
+below applies a locally-ringed-space lemma *to this lemma*, which is not what the proofs do. -/
 @[simp]
 lemma toLRSHom_sigmaDesc : (sigmaDesc F g).toLRSHom = Sigma.desc fun i ↦ (g i).toLRSHom := rfl
 

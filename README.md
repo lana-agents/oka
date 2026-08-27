@@ -950,6 +950,42 @@ paragraph describes, and `lake env lean` it, so that a positive and a negative a
 rather than a reading. **Quote the error** — half of these already do, and those are the ones an
 audit costs one command each.
 
+**The word `seam` is a leaky marker, and the unmarked half is where the failures are.** A clean
+sweep of a marked population says nothing about an unmarked one, so the vocabulary of the species
+itself was counted — *instance search does not*, *does not cross*, *will not fire*, *does not
+elaborate*, *fail(s|ed) to synthesize*, *discrimination(-| )tree*. **On 2026-08-25, at `d12d334`,
+that is 61 occurrences in 32 files, of which 13 files — 21 occurrences carrying 18 distinct
+claims — never use the word `seam`.** Two cautions travel with that figure and neither is
+optional. It counts **phrases, not claims**: three of those thirteen files state one claim in two
+phrases, and `scripts/import_cost.py`'s docstring puts the rule the right way round — a number
+obtained by grepping for a word and reported as a count of measurements is the species of error
+that script exists to stop. And it **undercounts in two directions**: a claim phrased in none of
+the listed ways is invisible, with no bound; and the grep must be case-**in**sensitive, since
+every sentence-initial occurrence is missed by the obvious command —
+`Oka/Algebra/Category/ModuleCat/Sheaf/Quasicoherent.lean:57` is one, and the marker being leaky
+does not stop the grep for the marker being leaky too.
+
+**Sixteen of those eighteen are mechanism claims; all sixteen were re-run, and four do not
+reproduce.** That is the number this whole exercise existed to get, and it points the opposite way
+from the marked population's nineteen-for-nineteen: **the claims nobody thought to mark are the
+ones that fail.** Every one of the four is the standard shape — a real difficulty with the wrong
+cause attached — and all four are corrected rather than deleted, in the files that carry them:
+`Oka/AnalyticSpace/SigmaFiniteEtale.lean` justified a lemma by a need no proof below it has;
+`Oka/Analytification/Sheaf.lean` still said an obstacle is impossible after
+`Oka/Geometry/RingedSpace/LocallyRingedSpace/Modules.lean` had recorded that it is a cost — a
+correction that did not reach the file quoting it; that same file's universe annotation is kept
+for consistency and not, as it claimed, because dropping it breaks anything; and its
+`hasSheafify_toPresheafedSpace` **is** load-bearing, but not for the reason given, and the way to
+see the cost is a full build rather than the file it lives in. The other twelve reproduce with a
+positive and a negative in the same run, three of them quoting their error verbatim.
+
+**Two claims were true and unenforced, and one line fixed both.** `OkaTest/SimpDiscrTree.lean`
+promised that *both* `rw` and pinning the index type work, and exercised only the pinning;
+`Oka/StalkEquiv.lean` said *`rw` is unaffected* and delegated to that file for the tripwires. The
+`rw` is now in the example, so the build checks it. **That is the cheapest kind of finding here
+and the one an audit should look for first**: not a claim that is wrong, but a claim that is
+right, is already cited from elsewhere as enforced, and is not.
+
 **This section is itself checked, in one narrow way.** `validation.sh` verifies that every file
 under `scripts/` is named somewhere in this README — a literal substring match on the bare
 filename, run before the build because it reads two text files and nothing else. It is the same
