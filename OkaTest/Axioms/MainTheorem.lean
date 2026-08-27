@@ -59,3 +59,39 @@ info: 'ComplexAnalytic.AnalyticSpace.isCoherentStructureSheaf' depends on axioms
 #guard_msgs in
 #print axioms oka_lemma_weierstrass
 
+
+/-! ### The coherence of `𝒪_{ℂ^ι}`, at the spellings its consumers hold
+
+`ComplexAnalytic.AnalyticSpace.isCoherentStructureSheaf` above is the statement for a general
+analytic space.  These four are `ℂ^ι` itself, at the four spellings of its structure sheaf that
+`Oka/AnalyticSpace/Relations.lean` advertises, and none of them was reached by any guard before
+this tranche: the general theorem's proof does not go through them, so a `sorry` in one would
+have turned nothing red. -/
+
+/--
+info: 'isCoherentStructureSheaf_complexSpace' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms isCoherentStructureSheaf_complexSpace
+
+/--
+info: 'isCoherent_unit_okaSheaf' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms isCoherent_unit_okaSheaf
+
+/--
+info: 'isCoherent_unit_okaSheaf_fin' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms isCoherent_unit_okaSheaf_fin
+
+/--
+info: 'isCoherentStructureSheaf_complexAffineSpace' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms isCoherentStructureSheaf_complexAffineSpace

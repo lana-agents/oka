@@ -283,6 +283,13 @@ info: 'MvPolynomial.map_taylorEquiv_primeCompl' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms MvPolynomial.map_taylorEquiv_primeCompl
+/--
+info: 'MvPolynomial.comap_taylorAlgHom_idealOfVars' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms MvPolynomial.comap_taylorAlgHom_idealOfVars
+
 
 /--
 info: 'LocalOkaRing.ofMvPolynomial_taylorAlgHom' depends on axioms:
@@ -385,6 +392,13 @@ info: 'ComplexAnalytic.Presentation.isoOfRename' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.Presentation.isoOfRename
+/--
+info: 'ComplexAnalytic.Presentation.isoOfAlgEquiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.Presentation.isoOfAlgEquiv
+
 
 /--
 info: 'ComplexAnalytic.exists_presentation' depends on axioms:
@@ -546,6 +560,13 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.Hom.pullbackModules' depends on axio
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.Hom.pullbackModules
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.Hom.freeFunctorCompPullbackModulesIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.Hom.freeFunctorCompPullbackModulesIso
+
 
 /--
 info: 'ComplexAnalytic.analytificationSheaf' depends on axioms:
@@ -743,6 +764,20 @@ info: 'ComplexAnalytic.localisationOpen_ne_top' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.localisationOpen_ne_top
+/--
+info: 'ComplexAnalytic.map_presentationIdeal_localisationPresentation' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.map_presentationIdeal_localisationPresentation
+/--
+info: 'ComplexAnalytic.localisationPresentedAlgebraEquiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.localisationPresentedAlgebraEquiv
+
+
 
 /-! ### The analytification of a coherent sheaf is coherent
 
@@ -811,6 +846,13 @@ info: 'ComplexAnalytic.localisationIso_inv_analytificationMap' depends on axioms
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.localisationIso_inv_analytificationMap
+/--
+info: 'ComplexAnalytic.analytificationFunctor_map_localisationPresHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationFunctor_map_localisationPresHom
+
 
 /-! ### The projection is an open immersion -/
 
@@ -892,3 +934,10 @@ info: 'ComplexAnalytic.glueDataCLinear_coverGlueData' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.glueDataCLinear_coverGlueData
+/--
+info: 'ComplexAnalytic.coverGlueData_ι_isOpenImmersion' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverGlueData_ι_isOpenImmersion
+

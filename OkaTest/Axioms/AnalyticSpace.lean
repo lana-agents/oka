@@ -57,6 +57,13 @@ info: 'ComplexAnalytic.mem_zeroLocus_nodeSection_iff' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.mem_zeroLocus_nodeSection_iff
+/--
+info: 'ComplexAnalytic.origin_mem_zeroLocus_nodeSection' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.origin_mem_zeroLocus_nodeSection
+
 
 /--
 info: 'ComplexAnalytic.isCoherentStructureSheaf_node' depends on axioms:
@@ -80,6 +87,13 @@ info: 'ComplexAnalytic.AnalyticSpace.evalStalk_eq_zero_iff' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.evalStalk_eq_zero_iff
+/--
+info: 'ComplexAnalytic.AnalyticSpace.residueFieldEquiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.residueFieldEquiv
+
 
 /--
 info: 'ComplexAnalytic.eval_ofCutOut' depends on axioms:
@@ -741,3 +755,16 @@ info: 'ComplexAnalytic.AnalyticSpace.card_fiber_sigmaFold' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.card_fiber_sigmaFold
+
+/-! ### The constants of a complex analytic space
+
+`Oka/AnalyticSpace/Basic.lean` advertises this under `## Main definitions`: the algebra map from
+the constants agrees with the restriction map, which is what lets a section be compared with a
+scalar at all. -/
+
+/--
+info: 'ComplexAnalytic.constantsAlgMap_eq_resAlgMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.constantsAlgMap_eq_resAlgMap
