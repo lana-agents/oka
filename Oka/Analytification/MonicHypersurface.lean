@@ -120,12 +120,20 @@ construction rather than by a compatibility lemma.
   over the cylinder above an open `V ⊆ ℂ^n`. **It is not by itself what `Y·G - 1` asks for**, and
   the difference is which space is cut down. `G` is a polynomial in all `n + 1` variables, so
   inverting it removes a closed set from the *source*, and `G ≠ 0` describes a cylinder over an
-  open subset of `ℂ^n` only when `G` does not involve the last variable. Nor does cutting the
-  source down on its own keep the conclusion: the projection of `X² = x` with `X ≠ 0` to the
-  `x`-line has image the punctured line, which is not closed, so finiteness is genuinely lost and
-  not merely unproved. What the Riemann-existence line still has to settle is which base `V` makes
-  the inverted `G` a cylinder over it, and neither this file nor
-  `Oka/AnalyticSpace/OpenBaseProjection.lean` settles that.
+  open subset of `ℂ^n` only when `G` does not involve the last variable. Nor is cutting the source
+  down harmless: the projection of `X² = x` with `X ≠ 0` to the `x`-line has image the punctured
+  line, which is not closed, so over the whole base the conclusion is **false** and not merely
+  unproved.
+
+  What is true is that the inversion becomes **vacuous over an open subset of the base**, and that
+  is the shape of the remaining work rather than a lemma anyone has. The theorem below makes the
+  projection of the hypersurface a closed map, so the image of the closed set where `F` and `G`
+  both vanish is closed; above its complement `V` no point of the hypersurface has `G = 0`, so
+  there the source of the localised algebra *is* the hypersurface over the cylinder, which is what
+  `ComplexAnalytic.isFinite_comp_projRestrict_of_range_eq` takes, with the same family `q`
+  restricted to `V`. Nothing in this repository states that, and it is what makes the base
+  restriction the relevant one after all — not because it handles the inverted `G`, but because it
+  is where there is nothing left to invert.
 
 * **No `IsFiniteEtale`, and no bound on the fibres.** Both are `Oka/AnalyticSpace/`'s and neither
   gains anything here; see that file's `## What is not here`, which is unchanged by this one.
