@@ -704,3 +704,48 @@ info: 'ComplexAnalytic.isIso_stalkMap_comp_uliftProj' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isIso_stalkMap_comp_uliftProj
+
+/-! ### The projection of a monic hypersurface to its base is finite
+
+`Oka/AnalyticSpace/MonicProjection.lean`, together with the general criterion it consumes from
+`Oka/AnalyticSpace/Finite.lean`. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isFinite_comp_of_isClosedEmbedding' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFinite_comp_of_isClosedEmbedding
+
+/--
+info: 'ComplexAnalytic.uliftSnocHomeo' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.uliftSnocHomeo
+
+/--
+info: 'ComplexAnalytic.base_proj_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.base_proj_eq
+
+/--
+info: 'ComplexAnalytic.range_base_eq_of_isCutOutBy' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.range_base_eq_of_isCutOutBy
+
+/--
+info: 'ComplexAnalytic.isFinite_comp_proj_of_range_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isFinite_comp_proj_of_range_eq
+
+/--
+info: 'ComplexAnalytic.isFinite_comp_proj_of_isCutOutBy' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isFinite_comp_proj_of_isCutOutBy

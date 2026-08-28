@@ -85,6 +85,9 @@ stated here rather than left to be discovered.
   `ComplexAnalytic.AnalyticSpace.isFinite_of_isCutOutBy`: **a closed embedding is finite, and
   hence so is every morphism cutting its source out of its target by global sections** — which is
   every local model this development builds.
+- `ComplexAnalytic.AnalyticSpace.isFinite_comp_of_isClosedEmbedding`: **a closed embedding
+  followed by a map that is closed and has finite fibres *over the image of that embedding* is
+  finite**, even when the second factor is not.
 - `ComplexAnalytic.AnalyticSpace.not_isFinite_of_infinite_fiber`: the criterion a non-example is
   exhibited by.
 - `ComplexAnalytic.AnalyticSpace.isProperMap_base_of_isFinite`: **a finite morphism is proper**,
@@ -180,6 +183,48 @@ embedding exhibited directly instead. -/
 theorem isFinite_of_isCutOutBy {X Y : AnalyticSpace.{u}} (f : X ⟶ Y) {k : ℕ}
     {s : Fin k → Y.presheaf.obj (op ⊤)} (h : IsCutOutBy f.toLRSHom s) : IsFinite f :=
   isFinite_of_isClosedEmbedding f h.isClosedEmbedding
+
+/-- **A closed embedding followed by a map that is closed and has finite fibres over the image of
+that embedding is finite.**
+
+This is the shape every finite morphism onto a *non-closed* image in this development has, and
+`ComplexAnalytic.AnalyticSpace.isFinite_comp` does not cover it: there `p` itself has to be
+finite, and the projection `ℂ^(n+1) ⟶ ℂ^n` is not — `ComplexAnalytic.not_isFinite_proj` in
+`OkaTest/FiniteMorphism.lean` is that non-example. What is asked here instead is that `p` be
+closed and finite-fibred **only along `Set.range i.base`**, which for a hypersurface is a
+statement about the roots of one family of polynomials and is exactly what
+`Polynomial.isClosed_fst_image_of_monic` and `Polynomial.finite_inter_fst_preimage_of_monic`
+supply. `Oka/AnalyticSpace/MonicProjection.lean` is the consumer.
+
+Both hypotheses are stated for **sets** rather than for the restriction of `p` to a subtype. The
+closedness one is then literally what `IsClosedMap` gives after the embedding has been applied,
+so no subtype topology has to be reconciled with anything, and the fibre one is a `Set.Finite`
+rather than a `Finite` instance for the same reason.
+
+Nothing is asked of `i` beyond its underlying map being a closed embedding; in particular this
+does not go through `ComplexAnalytic.IsCutOutBy`, which is how it applies to a morphism built by
+hand. -/
+theorem isFinite_comp_of_isClosedEmbedding {X Y S : AnalyticSpace.{u}} (i : X ⟶ Y) (p : Y ⟶ S)
+    (hi : IsClosedEmbedding (i.toLRSHom.base : X → Y))
+    (hclosed : ∀ t : Set Y, IsClosed t → t ⊆ Set.range (i.toLRSHom.base : X → Y) →
+      IsClosed ((p.toLRSHom.base : Y → S) '' t))
+    (hfin : ∀ s : S, (Set.range (i.toLRSHom.base : X → Y) ∩
+      (p.toLRSHom.base : Y → S) ⁻¹' {s}).Finite) :
+    IsFinite (i ≫ p) where
+  isClosedMap t ht := by
+    have h : ((i ≫ p).toLRSHom.base : X → S) '' t =
+        (p.toLRSHom.base : Y → S) '' ((i.toLRSHom.base : X → Y) '' t) := by
+      rw [Set.image_image]
+      rfl
+    rw [h]
+    exact hclosed _ (hi.isClosedMap t ht) (Set.image_subset_range _ _)
+  finite_fiber s := by
+    refine Set.Finite.to_subtype (Set.Finite.of_finite_image (f := (i.toLRSHom.base : X → Y))
+      ?_ hi.injective.injOn)
+    refine (hfin s).subset ?_
+    rintro _ ⟨x, hx, rfl⟩
+    simp only [Set.mem_preimage, Set.mem_singleton_iff] at hx
+    exact ⟨⟨x, rfl⟩, hx⟩
 
 /-- **A morphism with an infinite fibre is not finite**, which is how a non-example is exhibited:
 the fibre condition is the one that fails for a projection, and it fails for a reason one can

@@ -48,6 +48,7 @@ import Oka.AnalyticSpace.IdealSheaf
 import Oka.AnalyticSpace.Local
 import Oka.AnalyticSpace.LocalIso
 import Oka.AnalyticSpace.LocalModel
+import Oka.AnalyticSpace.MonicProjection
 import Oka.AnalyticSpace.Noetherian
 import Oka.AnalyticSpace.Nonvanishing
 import Oka.AnalyticSpace.OpenSubspace
