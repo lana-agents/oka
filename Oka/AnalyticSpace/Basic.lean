@@ -60,6 +60,13 @@ assumed by most classical treatments should be added as a mixin where needed.
   with respect to `ℂ`-algebra structures on its source and target.
 - `ComplexAnalytic.IsCLinearHom.of_comp`: a morphism over a common target is `ℂ`-linear for the
   algebra structures pulled back from that target.
+- `ComplexAnalytic.IsCLinearHom.eq` and `ComplexAnalytic.isCLinearHom_comapAlgMap`: the pullback
+  of a structure along a morphism is `ℂ`-linear over it, and is the only structure that is — so
+  `ℂ`-linearity over a fixed target structure *determines* the source structure.
+- `ComplexAnalytic.isCLinearHom_ofRestrict`: the inclusion of an open subspace is `ℂ`-linear for
+  the restricted structure — the previous item in the spelling open subspaces are written in.
+  `ComplexAnalytic.isCLinearHom_ofRestrict_constants` in `Oka/AnalyticSpace/LocalModel.lean` is
+  the same statement at `constantsAlgMap`.
 - `ComplexAnalytic.AnalyticSpace`: a complex analytic space.
 - `ComplexAnalytic.AnalyticSpace.complexAffineSpace`: `ℂ^n` as a complex analytic space.
 
@@ -306,6 +313,39 @@ lemma IsCLinearHom.of_comp {P Q A : LocallyRingedSpace.{u}} {g : P ⟶ Q} {q : Q
     IsCLinearHom g αP αQ := fun c ↦ by
   rw [← hq c, ← LocallyRingedSpace.Γ_map_comp_apply, hfac]
   exact hp c
+
+/-- **Two `ℂ`-algebra structures on the source of a morphism which are `ℂ`-linear over one and
+the same structure on its target are equal.**
+
+`IsCLinearHom i α β` says that `α` *is* `β` pulled back along `i`, so it determines `α`. This is
+the uniqueness that makes `ComplexAnalytic.AnalyticSpace.ofOpenCover`'s output identifiable: a
+structure recognised as `ℂ`-linear over the ambient one is the restriction of the ambient one,
+whatever route produced it. -/
+lemma IsCLinearHom.eq {i : X ⟶ Y} {α α' : ℂ →+* X.presheaf.obj (op ⊤)}
+    {β : ℂ →+* Y.presheaf.obj (op ⊤)}
+    (h : IsCLinearHom i α β) (h' : IsCLinearHom i α' β) : α = α' :=
+  RingHom.ext fun c ↦ (h c).symm.trans (h' c)
+
+/-- **A pulled-back `ℂ`-algebra structure is `ℂ`-linear**, by definition of
+`AlgebraicGeometry.LocallyRingedSpace.comapAlgMap`: both sides of `IsCLinearHom` are the same
+term.
+
+Together with `ComplexAnalytic.IsCLinearHom.eq` this says that `IsCLinearHom i · β` has exactly
+one witness, so a structure recognised as `ℂ`-linear over `β` *is* the pullback of `β` and not
+merely comparable to it. -/
+lemma isCLinearHom_comapAlgMap (i : X ⟶ Y) (β : ℂ →+* Y.presheaf.obj (op ⊤)) :
+    IsCLinearHom i (LocallyRingedSpace.comapAlgMap i β) β :=
+  fun _ ↦ rfl
+
+/-- **The inclusion of an open subspace is `ℂ`-linear** for the `ℂ`-algebra structure obtained
+by restricting sections, essentially by definition: both sides are the restriction map
+`𝒪_X(⊤) ⟶ 𝒪_X(U)`, and `Opens X` is a preorder category, so there is only one such map. -/
+theorem isCLinearHom_ofRestrict (X : LocallyRingedSpace.{u}) (α : ℂ →+* X.presheaf.obj (op ⊤))
+    (U : Opens X) : IsCLinearHom (X.ofRestrict U.isOpenEmbedding) (X.resAlgMap α U) α := by
+  intro c
+  change ((X.ofRestrict U.isOpenEmbedding).c.app (op ⊤)).hom (α c) = _
+  change (X.presheaf.map _).hom (α c) = (X.presheaf.map _).hom (α c)
+  congr 2
 
 /-- **A `ℂ`-linear morphism is `ℂ`-linear on stalks**: the map on stalks carries the germ of the
 constant `c` upstairs to the germ of the constant `c` downstairs.

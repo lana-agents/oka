@@ -59,10 +59,10 @@ restriction are the stalks of the ambient space
 
 ## Main results
 
-- `ComplexAnalytic.isCLinearHom_ofRestrict`: the inclusion of an open subspace is `ℂ`-linear
-  for the restricted `ℂ`-algebra structure, and
-  `ComplexAnalytic.isCLinearHom_ofRestrict_constants`, the same statement spelled with
-  `constantsAlgMap` so that callers needing that spelling do not have to rewrite.
+- `ComplexAnalytic.isCLinearHom_ofRestrict_constants`: the inclusion of an open subset of `ℂ^n`
+  is `ℂ`-linear for `constantsAlgMap` — `ComplexAnalytic.isCLinearHom_ofRestrict`, which is in
+  `Oka/AnalyticSpace/Basic.lean`, spelled so that callers needing that spelling do not have to
+  rewrite.
 - `ComplexAnalytic.isCLinearHom_restrictTopIso_inv`: the inverse of `restrictTopIso` is
   `ℂ`-linear, for *any* locally ringed space and any `ℂ`-algebra structure on its global
   sections, and `ComplexAnalytic.isCLinearHom_restrictTopIso_inv_constants`, the same statement
@@ -133,16 +133,6 @@ end AlgebraicGeometry.LocallyRingedSpace
 namespace ComplexAnalytic
 
 section CLinear
-
-/-- **The inclusion of an open subspace is `ℂ`-linear** for the `ℂ`-algebra structure obtained
-by restricting sections, essentially by definition: both sides are the restriction map
-`𝒪_X(⊤) ⟶ 𝒪_X(U)`, and `Opens X` is a preorder category, so there is only one such map. -/
-theorem isCLinearHom_ofRestrict (X : LocallyRingedSpace.{u}) (α : ℂ →+* X.presheaf.obj (op ⊤))
-    (U : Opens X) : IsCLinearHom (X.ofRestrict U.isOpenEmbedding) (X.resAlgMap α U) α := by
-  intro c
-  change ((X.ofRestrict U.isOpenEmbedding).c.app (op ⊤)).hom (α c) = _
-  change (X.presheaf.map _).hom (α c) = (X.presheaf.map _).hom (α c)
-  congr 2
 
 /-- **The inclusion of an open subset of `ℂ^n` is `ℂ`-linear for `constantsAlgMap`.**
 
