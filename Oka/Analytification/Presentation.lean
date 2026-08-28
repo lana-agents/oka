@@ -83,11 +83,13 @@ flatness is still open.
 
 ## Main results
 
-- `ComplexAnalytic.range_base_analytificationIncl` and
-  `ComplexAnalytic.isClosedEmbedding_base_analytificationIncl`: the same statement for the
-  inclusion into `ℂ^n` itself, and that that inclusion is a closed embedding.
 - `ComplexAnalytic.mem_zeroLocus_polySection_iff`: **the points of `X^an` are the common zeros
   of the `gⱼ`.** This is `ComplexAnalytic.mem_zeroLocus_nodeSection_iff` for an arbitrary tuple.
+- `ComplexAnalytic.range_base_analytificationIncl`: **the image of `X^an` in `ℂ^n` is that same
+  common zero locus** — the previous statement read through the inclusion whose target is `ℂ^n`
+  rather than through the one whose target is `ℂ^n` presented as an open subspace of itself —
+  and `ComplexAnalytic.isClosedEmbedding_base_analytificationIncl`, that that inclusion is a
+  closed embedding.
 - `ComplexAnalytic.AnalyticSpace.mem_toΓSpec_base_asIdeal_iff`: for **any** complex analytic
   space `Z`, the prime of `Spec Γ(Z, 𝒪_Z)` underneath `z` is the ideal of global sections
   vanishing at `z`. This mentions no polynomials and belongs beside the evaluation API of
