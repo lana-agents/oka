@@ -115,6 +115,75 @@ def sheetIsoLine (b : ULift.{u} Bool) :
           (isOpenEmbedding_sheet.{u} b)).isOpenEmbedding :=
   LocallyRingedSpace.sheetIso _ _ _ (isOpenEmbedding_sheet.{u} b)
 
+/-! ### The `ℂ`-algebra structures
+
+`ComplexAnalytic.isCLinearHom_sheetHom` says the comparison respects the `ℂ`-algebra structures
+the two sides inherit from the base. The base here is `ℂ¹` with its constants, and the two
+statements below are that theorem and its inverse at that input — so neither is vacuous, and the
+open the target is restricted to is the whole line. -/
+
+/-- **The `ℂ`-algebra structure on the line**: the constants, as
+`ComplexAnalytic.AnalyticSpace.complexAffineSpace` carries them. Named only to keep the
+statements below readable. -/
+def lineAlgMap : ℂ →+* (complexAffineSpace.{u} 1).presheaf.obj (op ⊤) :=
+  (ComplexAnalytic.AnalyticSpace.complexAffineSpace.{u} 1).algebraMap
+
+/-- The sheet's own structure: `OkaTest.InverseImageSheet.lineAlgMap` pulled back along the map
+to the line. -/
+abbrev sheetAlgMap (b : ULift.{u} Bool) :
+    ℂ →+* (((complexAffineSpace.{u} 1).inverseImage proj.{u}).restrict
+      (sheet.{u} b).isOpenEmbedding).presheaf.obj (op ⊤) :=
+  LocallyRingedSpace.comapAlgMap
+    (LocallyRingedSpace.sheetToBase (complexAffineSpace.{u} 1) proj.{u} (sheet.{u} b))
+    lineAlgMap.{u}
+
+/-- The structure on the open of the line the sheet lies over: `lineAlgMap` restricted. -/
+abbrev baseAlgMap (b : ULift.{u} Bool) :
+    ℂ →+* ((complexAffineSpace.{u} 1).restrict
+      (LocallyRingedSpace.sheetImage (complexAffineSpace.{u} 1) proj.{u} (sheet.{u} b)
+        (isOpenEmbedding_sheet.{u} b)).isOpenEmbedding).presheaf.obj (op ⊤) :=
+  (complexAffineSpace.{u} 1).resAlgMap lineAlgMap.{u}
+    (LocallyRingedSpace.sheetImage (complexAffineSpace.{u} 1) proj.{u} (sheet.{u} b)
+      (isOpenEmbedding_sheet.{u} b))
+
+/-- **The sheet lies over the whole line as an *open***, not merely as a set.
+
+`OkaTest.InverseImageSheet.coe_sheetImage_eq_univ` is the statement about the underlying set;
+this is the same fact about the open itself, which is the argument
+`OkaTest.InverseImageSheet.baseAlgMap` restricts to. -/
+theorem sheetImage_eq_top (b : ULift.{u} Bool) :
+    LocallyRingedSpace.sheetImage (complexAffineSpace.{u} 1) proj.{u} (sheet.{u} b)
+      (isOpenEmbedding_sheet.{u} b) = ⊤ :=
+  TopologicalSpace.Opens.ext (coe_sheetImage_eq_univ.{u} b)
+
+/-- **The comparison at either sheet is `ℂ`-linear** for the structure `ℂ¹` carries. -/
+theorem isCLinearHom_sheetHom_line (b : ULift.{u} Bool) :
+    ComplexAnalytic.IsCLinearHom
+      (LocallyRingedSpace.sheetHom (complexAffineSpace.{u} 1) proj.{u} (sheet.{u} b)
+        (isOpenEmbedding_sheet.{u} b))
+      (sheetAlgMap.{u} b) (baseAlgMap.{u} b) :=
+  ComplexAnalytic.isCLinearHom_sheetHom _ _ _ _ _
+
+/-- **And so is its inverse**, so `OkaTest.InverseImageSheet.sheetIsoLine` identifies the two
+`ℂ`-algebra structures and not only the two spaces. -/
+theorem isCLinearHom_sheetIsoLine_inv (b : ULift.{u} Bool) :
+    ComplexAnalytic.IsCLinearHom (sheetIsoLine.{u} b).inv (baseAlgMap.{u} b)
+      (sheetAlgMap.{u} b) :=
+  ComplexAnalytic.isCLinearHom_sheetIso_inv _ _ _ _ _
+
+/-- **The structure the sheet inherits from `p⁻¹ℂ¹` is the one the comparison pulls back**, which
+is `ComplexAnalytic.comapAlgMap_sheetHom` here: the two routes to a `ℂ`-algebra structure on a
+sheet — restrict the one on the whole inverse image, or pull the base's back along the
+comparison — give the same ring homomorphism. -/
+theorem comapAlgMap_sheetHom_line (b : ULift.{u} Bool) :
+    LocallyRingedSpace.comapAlgMap
+        (LocallyRingedSpace.sheetHom (complexAffineSpace.{u} 1) proj.{u} (sheet.{u} b)
+          (isOpenEmbedding_sheet.{u} b)) (baseAlgMap.{u} b) =
+      ((complexAffineSpace.{u} 1).inverseImage proj.{u}).resAlgMap
+        (LocallyRingedSpace.comapAlgMap
+          ((complexAffineSpace.{u} 1).inverseImageHom proj.{u}) lineAlgMap.{u}) (sheet.{u} b) :=
+  ComplexAnalytic.comapAlgMap_sheetHom _ _ _ _ _
+
 end OkaTest.InverseImageSheet
 
 end

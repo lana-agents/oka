@@ -45,6 +45,7 @@ import Oka.AnalyticSpace.HolomorphicMapGeneral
 import Oka.AnalyticSpace.HolomorphicMapOpen
 import Oka.AnalyticSpace.HomToComplex
 import Oka.AnalyticSpace.IdealSheaf
+import Oka.AnalyticSpace.InverseImageSheet
 import Oka.AnalyticSpace.Local
 import Oka.AnalyticSpace.LocalIso
 import Oka.AnalyticSpace.LocalModel
