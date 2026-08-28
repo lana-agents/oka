@@ -682,8 +682,9 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.stalkMap_inverseImageHom' depends on
 
 `Oka/Topology/IsLocalHomeomorph.lean`. The family of opens on which a map is an open embedding,
 and that for a local homeomorphism it covers. Pure topology; the guards sit here rather than in
-`OkaTest/Axioms/Morphisms.lean` because the file below is the only consumer and the two are one
-change. -/
+`OkaTest/Axioms/Morphisms.lean` because the sheet material below was the first consumer and the
+two were one change. **It is no longer the only one**: `Oka/AnalyticSpace/CoveringSpace.lean`
+takes its cover over `sheetOpens` too, and its guards are in `OkaTest/Axioms/Morphisms.lean`. -/
 
 /--
 info: 'sheetOpens' depends on axioms:

@@ -28,8 +28,15 @@ points of a fibre; it is not removable.
 The converse of the criterion above, and the direction Mathlib does not have in any form: across
 `Mathlib/Topology/Covering/`, `isClosedMap` occurs only inside proofs. `IsCoveringMap.isClosedMap`
 below is what makes a finite covering space *finite* in the sense a morphism of complex analytic
-spaces is asked to be, and it is the only topological input that construction needs beyond
-Mathlib's.
+spaces is asked to be: it supplies the closed base map that
+`ComplexAnalytic.AnalyticSpace.IsFinite` asks for and that finite fibres do not give.
+
+**That half is what it is the only input for, and not the construction.**
+`Oka/AnalyticSpace/CoveringSpace.lean` takes its cover from `IsLocalHomeomorph.sSup_sheetOpens` in
+`Oka/Topology/IsLocalHomeomorph.lean`, which Mathlib also does not have, and more of this mirror
+tree reaches it through the inverse image sheaf — `TopCat.Presheaf.stalkPushforward_naturality` in
+`Oka/Topology/Sheaves/Stalks.lean` is used to prove the stalk isomorphism that construction's local
+isomorphism rests on. No number is given here because it is not one this file could keep true.
 
 The proof reads the evenly covered neighbourhood as what the definition literally is — an open
 `U ∋ x`, and a homeomorphism `H : f ⁻¹' U ≃ₜ U × I` over `U` — and pushes the closed set across

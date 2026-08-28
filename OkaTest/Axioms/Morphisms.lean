@@ -880,7 +880,10 @@ info: 'ComplexAnalytic.isIso_stalkMap_comp_projRestrict' depends on axioms:
 `Oka/AnalyticSpace/CoveringSpace.lean`. The converse of *the third rung* above, at the level of
 the spaces and not only of the maps: a local homeomorphism into an analytic space makes its source
 one, and a covering map with finite fibres makes it finite étale. `IsCoveringMap.isClosedMap`,
-guarded under that heading, is the only topological input it needs beyond Mathlib's. -/
+guarded under that heading, is what supplies the second half — the closed base map that finite
+fibres do not give. It is not the only mirror-tree topology the construction consumes: the cover
+by sheets the first half is checked on is `IsLocalHomeomorph.sSup_sheetOpens`, guarded in
+`OkaTest/Axioms/Sheaves.lean`. -/
 
 /--
 info: 'ComplexAnalytic.inverseImageAlgMap' depends on axioms:
