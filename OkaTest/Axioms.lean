@@ -46,16 +46,35 @@ happened to open.**
 | --- | --- |
 | Oka's theorem and the coherence of `𝒪_X` | `OkaTest/Axioms/MainTheorem.lean` |
 | Weierstrass division and preparation | `OkaTest/Axioms/Weierstrass.lean` |
-| complex analysis in one and several variables | `OkaTest/Axioms/Analysis.lean` |
+| complex analysis, and the topology of polynomial zero loci | `OkaTest/Axioms/Analysis.lean` |
 | `LocalOkaRing`: Rückert, maximal ideal, regularity | `OkaTest/Axioms/LocalOkaRing.lean` |
 | `OkaRing` and the structure sheaf of `ℂ^ι` | `OkaTest/Axioms/ComplexSpace.lean` |
-| the comparison morphism to `Spec` | `OkaTest/Axioms/Analytification.lean` |
-| general presheaf and sheaf theory | `OkaTest/Axioms/Sheaves.lean` |
+| analytification, and the comparison morphisms to `Spec` | `OkaTest/Axioms/Analytification.lean` |
+| general presheaf and sheaf theory, and ringed spaces | `OkaTest/Axioms/Sheaves.lean` |
 | sheaves of modules and coherence | `OkaTest/Axioms/SheafOfModules.lean` |
 | zero loci and closed immersions | `OkaTest/Axioms/CutOut.lean` |
 | analytic spaces, local models, the node | `OkaTest/Axioms/AnalyticSpace.lean` |
 | morphisms of analytic spaces | `OkaTest/Axioms/Morphisms.lean` |
 | general commutative ring theory | `OkaTest/Axioms/RingTheory.lean` |
+
+**Every row above has been measured against the guards it routes to, and here is how to
+re-measure one.** For each row, resolve every `#print axioms` name in its file to the module the
+declaration lives in, and ask whether the row's phrase covers what comes back. In a built
+checkout, with the dump taken **after** `lake build` and on the branch being measured — `lake env
+lean` reads the oleans, so a dump taken across a branch switch is the other branch's:
+
+    OKA_DECL_DUMP=/tmp/d.txt lake env lean scripts/DumpOkaDecls.lean
+    perl -0777 -ne 'while(/^[ \t]*#print axioms(?:[ \t]+|[ \t]*\n[ \t]+)(\S+)[ \t]*$/mg)
+        { print "$1\n" }' OkaTest/Axioms/<File>.lean | sort -u |
+      while read -r n; do awk -F'\t' -v n="$n" '$2==n {print $1; exit}' /tmp/d.txt; done |
+      sort | uniq -c | sort -rn
+
+**The `perl` is not decoration.** The obvious `grep -oP '(?<=#print axioms ).*'` misses a guard
+whose name is wrapped onto the next line, and there is one such guard today, in
+`OkaTest/Axioms/SheafOfModules.lean`; a census taken that way comes out one short of
+`scripts/guard_coverage.py`'s, which is where the regular expression above is from. A row is
+wrong when some module's guards are covered by no row at all — that is the failure this table
+exists to prevent — and not merely when its phrase is shorter than the file.
 
 That rule is the whole point of the split, and it is not a matter of taste. Until 2026-08-20
 every assertion lived in this one file and every pull request appended to its end, so git
