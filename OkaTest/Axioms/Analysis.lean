@@ -25,8 +25,11 @@ the other half of the same repair — the routing table and the file's own descr
 apart in opposite directions.
 
 **A list is affordable here because three modules is the whole file.**
-`OkaTest/Axioms/Sheaves.lean` and `OkaTest/Axioms/LocalOkaRing.lean` decline to enumerate and give
-their reasons; at twelve guards there is nothing to be gained by refusing.
+`OkaTest/Axioms/Sheaves.lean` declines to enumerate in terms — *"That is a description and not a
+list"* — and `OkaTest/Axioms/LocalOkaRing.lean` enumerates but refuses to let the list be the
+record, saying the headings are. At three modules neither move buys anything: a list this short
+is the description, and it goes stale only if a fourth module appears, which is exactly when this
+paragraph should be re-read.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/

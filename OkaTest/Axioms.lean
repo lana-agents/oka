@@ -112,20 +112,29 @@ At `27c185a` that tail is **18 guards in six modules**, against 645 in all: seve
 `Oka/Topology/IsLocalHomeomorph.lean` (in `OkaTest/Axioms/Sheaves.lean`), and one each from
 `Oka/CategoryTheory/Limits/Shapes/KernelBiprod.lean` (in `OkaTest/Axioms/SheafOfModules.lean`),
 `Oka/Topology/Category/TopCat/Opens.lean` (in `OkaTest/Axioms/Analytification.lean`) and
-`Oka/FieldTheory/IsAlgClosed/Basic.lean` (in `OkaTest/Axioms/RingTheory.lean`). **Four of the six
-already sit in a file that holds some of their consumer's guards** — the rule above is being
-written down rather than imposed. The two that do not are these.
-**`Oka/Topology/IsLocalHomeomorph.lean`**'s only user is
-`Oka/AnalyticSpace/CoveringSpace.lean`, guarded in `OkaTest/Axioms/Morphisms.lean`;
-it was placed beside the file it was *written for*, which **deliberately does not import it** for
-the import-cost reason that file gives, and `OkaTest/Axioms/Sheaves.lean`'s heading for it says
-so. **`Oka/FieldTheory/IsAlgClosed/Basic.lean`** has **no user under `Oka/` at all**:
-`Oka/AnalyticSpace/CoveringMap.lean` names its one theorem in a docstring and does not import it,
-and the only use in the repository is inside `OkaTest/FiniteMorphism.lean`, which this repository
-does not guard — so there is no analytic result to place it beside, and the general-algebra file
-is where it goes. **Read a consumer off the imports, not off a name grep**: both of these were
-got wrong that way before they were measured. Moving either is a tidy-up nobody has done and not
-a defect in the table.
+`Oka/FieldTheory/IsAlgClosed/Basic.lean` (in `OkaTest/Axioms/RingTheory.lean`). **The rule above
+is being written down for the first time and the tail does not yet follow it**: three of the six
+modules sit in a file holding some of their consumer's guards and three do not, and by guards the
+minority is the larger — **7 of the 18 conform and 11 do not.** The three that do not:
+
+* **`Oka/CategoryTheory/GlueData.lean`**, the largest member at seven. Its only importer is
+  `Oka/Analytification/AffineCover.lean`, whose seven guards are all in
+  `OkaTest/Axioms/Analytification.lean`; and its guards sit under a heading of their own rather
+  than under an analytic result's, so it fails both halves of the rule.
+* **`Oka/Topology/IsLocalHomeomorph.lean`**, whose only user is
+  `Oka/AnalyticSpace/CoveringSpace.lean`, guarded in `OkaTest/Axioms/Morphisms.lean`. It was
+  placed beside the file it was *written for*, which **deliberately does not import it** for the
+  import-cost reason that file gives, and `OkaTest/Axioms/Sheaves.lean`'s heading for it says so.
+* **`Oka/FieldTheory/IsAlgClosed/Basic.lean`**, which has **no user under `Oka/` at all**:
+  `Oka/AnalyticSpace/CoveringMap.lean` names its one theorem in a docstring and does not import
+  it, and the only use in the repository is inside `OkaTest/FiniteMorphism.lean`, which this
+  repository does not guard. There is no analytic result to place it beside.
+
+**Read a consumer off the imports, not off a name grep.** All three were got wrong that way
+before they were measured, and the first was got wrong in the draft of this very paragraph:
+`ofGlueData'` is Mathlib's name and several files mention it, only one imports the module that
+proves things about it. Moving any of them is a tidy-up nobody has done and not a defect in the
+table.
 **The figure is here so that a later sweep can tell growth from noise**: a tail that stays near
 this size is the expected one, and a tail that doubles means a row really is missing.
 
