@@ -23,8 +23,11 @@ This file produces one, in the case the Riemann-existence line needs: `q` comes 
 **polynomial** `G` which is monic in the last variable, and its coefficients are polynomial
 functions of the first `n`. With it, `ComplexAnalytic.isFinite_comp_proj_of_range_eq` applies to
 the analytification of `ℂ[x₁, …, x_n, X] ⧸ (G)` with no hypothesis left over, which is
-`ComplexAnalytic.isFinite_analytification_comp_proj` — the first statement in this development
-that a specific analytic space is finite over `ℂ^n` and is not built by hand.
+`ComplexAnalytic.isFinite_analytification_comp_proj`. Every `AnalyticSpace.IsFinite` statement
+about a named morphism that preceded it — `ComplexAnalytic.isFinite_axisIncl_comp_proj`,
+`ComplexAnalytic.isFinite_sq`, `ComplexAnalytic.isFinite_parabolaIncl_comp_proj` — is about a
+morphism assembled by hand in `OkaTest/`; this one is about
+`ComplexAnalytic.AnalyticSpace.analytification`, which this development constructs.
 
 ## The spelling of "monic in the last variable", and why it is not the obvious one
 
