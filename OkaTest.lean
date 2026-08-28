@@ -44,6 +44,7 @@ import OkaTest.GermFlatnessAtAPoint
 import OkaTest.GermQuotientDegreeOne
 import OkaTest.GlueDataAnalytic
 import OkaTest.GlueMorphisms
+import OkaTest.GlueShape
 import OkaTest.HolomorphicMap
 import OkaTest.HolomorphicMapGeneral
 import OkaTest.HolomorphicMapOpen

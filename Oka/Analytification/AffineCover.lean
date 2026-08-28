@@ -112,10 +112,13 @@ argues for.
 
 `poly` and `glue` are asked for at **every** pair, including `i = i`, but `hrange` and `hcocycle`
 are required only at triples of *distinct* indices, which is all `CategoryTheory.GlueData'`
-consumes. So the diagonal data is unconstrained and unused; `poly i i = 1` and
-`glue i i = Iso.refl` is the natural choice and nothing checks it. Making `poly` partial instead
-would push a `i ≠ j` argument through every definition below and into the type of every open
-subspace, which is a much larger tax than one unused value per index.
+consumes. So the diagonal data is unused. It is not unconstrained: `hsymm` is quantified over
+every pair and at `i = i` it says `glue i i = (glue i i).symm`, which a caller has to prove even
+though nothing below reads it. That is weaker than `glue i i = Iso.refl` — it says only that the
+transition is its own inverse — and `poly i i = 1` with `glue i i = Iso.refl` is the natural
+choice, satisfies it, and is checked by nothing. Making `poly` partial instead would push a
+`i ≠ j` argument through every definition below and into the type of every open subspace, which is
+a much larger tax than one unused value per index.
 
 ## Main definitions
 
