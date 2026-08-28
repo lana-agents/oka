@@ -130,7 +130,8 @@ theorem order_partialEval_germ_sq :
 
 /-! ### The `ULift (Fin _)`-indexed hyperplane
 
-`ComplexAnalytic.complexAffineSpace` indexes its coordinates by `ULift (Fin n)`, and
+`complexAffineSpace` (root namespace, `Oka/ComplexSpace.lean`) indexes its coordinates by
+`ULift (Fin n)`, and
 `ComplexAnalytic.isIso_stalkMap_comp_uliftProj`'s hypothesis is therefore about
 `LocalOkaRing.uliftEquiv` of the germ. Relabelling sends a coordinate to a coordinate, which is
 the only extra step. -/
@@ -143,7 +144,7 @@ theorem uliftEquiv_coord {ι : Type*} [Fintype ι] (j : ULift.{u} ι) :
     LocalOkaRing.coe_coord, MvPowerSeries.rename_X]
   rfl
 
-/-- The last coordinate of `ComplexAnalytic.complexAffineSpace (n+1)`. -/
+/-- The last coordinate of `complexAffineSpace (n+1)`. -/
 abbrev uliftHyperplaneSection : OkaRing (⊤ : Opens (ULift.{u} (Fin (n + 1)) → ℂ)) :=
   ComplexAnalytic.coord (ULift.up.{u} (Fin.last n))
 

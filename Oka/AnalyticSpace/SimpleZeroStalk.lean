@@ -50,7 +50,8 @@ the two instances differ only in which pair of isomorphisms is supplied:
 * `ComplexAnalytic.bijective_stalkMap_comp_projCoords`, for `complexSpace (Fin (n+1))` and
   `ComplexAnalytic.projCoords`, where the identification is `okaStalkEquiv` alone;
 * `ComplexAnalytic.bijective_stalkMap_comp_uliftProj`, for `complexAffineSpace (n+1)` — which is
-  `complexSpace (ULift (Fin (n+1)))` — and `ComplexAnalytic.uliftCastSuccEmb`, where it is
+  `complexSpace (ULift (Fin (n+1)))`, both in the root namespace — and
+  `ComplexAnalytic.uliftCastSuccEmb`, where it is
   `okaStalkEquiv` followed by `LocalOkaRing.uliftEquiv`.
 
 The second is the one the Riemann-existence line consumes, since
@@ -84,7 +85,8 @@ centred at `i.base x` and not at the origin; `okaStalkEquiv` absorbs the transla
   simple zero is an isomorphism on stalks**, for the `Fin`-indexed `ℂ^(n+1)`.
 - `ComplexAnalytic.bijective_stalkMap_comp_uliftProj` and
   `ComplexAnalytic.isIso_stalkMap_comp_uliftProj`: the same for
-  `ComplexAnalytic.complexAffineSpace`, the `ULift (Fin _)`-indexed one.
+  `complexAffineSpace` (root namespace, `Oka/ComplexSpace.lean`), the `ULift (Fin _)`-indexed
+  one.
 
 ## What is not here
 
@@ -257,8 +259,8 @@ section ULift
 variable {X : LocallyRingedSpace.{u}} {i : X ⟶ complexAffineSpace.{u} (n + 1)}
   {F : OkaRing (⊤ : Opens (ULift.{u} (Fin (n + 1)) → ℂ))}
 
-/-- **The same for `ComplexAnalytic.complexAffineSpace`**, whose coordinates are indexed by
-`ULift (Fin (n+1))`.
+/-- **The same for `complexAffineSpace`** — the root-namespace one, `Oka/ComplexSpace.lean`,
+whose coordinates are indexed by `ULift (Fin (n+1))`.
 
 The germ ring is relabelled by `LocalOkaRing.uliftEquiv` at both ends, which is why the
 hypothesis is about `LocalOkaRing.uliftEquiv` of the germ rather than about the germ. That

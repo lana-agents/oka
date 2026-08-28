@@ -254,8 +254,8 @@ theorem okaStalkEquiv_stalkMap_okaMapHom_projCoords {z : Fin (n + 1) → ℂ}
 
 The germ form determines the stalk map, since every element of the stalk is a germ; this is that
 sentence carried out, and it is what a consumer holding an opaque element of the stalk — anything
-produced by surjectivity of another stalk map, say — actually needs. `Oka/AnalyticSpace/`'s
-`SimpleZeroStalk.lean` is the first such consumer. -/
+produced by surjectivity of another stalk map, say — actually needs.
+`Oka/AnalyticSpace/SimpleZeroStalk.lean` is the first such consumer. -/
 theorem okaStalkEquiv_stalkMap_okaMapHom_projCoords_apply {z : Fin (n + 1) → ℂ}
     (t : (okaCommPresheaf (Fin n)).stalk (okaMapFun (projCoords n) z)) :
     okaStalkEquiv z ((okaMapHom (projCoords n)).stalkMap z t) =
