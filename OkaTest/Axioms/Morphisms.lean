@@ -10,7 +10,8 @@ import Oka
 
 The morphisms of analytic spaces built from holomorphic maps, the first morphism out of a
 space which is not `ℂ^n`, and the classes of morphisms — finite, local isomorphism, finite étale —
-together with the topological criteria they are proved from.
+together with the topological criteria they are proved from and the constructions that feed
+them a family of monic polynomials.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -865,3 +866,76 @@ info: 'ComplexAnalytic.isIso_stalkMap_comp_projRestrict' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isIso_stalkMap_comp_projRestrict
+
+/-! ### The family of a monic polynomial with holomorphic coefficients
+
+`Oka/AnalyticSpace/HolomorphicFamily.lean`. The heading above transports the projection of a
+monic hypersurface across a restriction of the base and takes the family as a hypothesis; this
+one produces the family, from a polynomial whose coefficients are holomorphic functions on the
+base rather than polynomial functions on `ℂ^n`. -/
+
+/--
+info: 'ComplexAnalytic.uliftInitCLM' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.uliftInitCLM
+
+/--
+info: 'ComplexAnalytic.pullbackCylinder' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.pullbackCylinder
+
+/--
+info: 'ComplexAnalytic.lastCoord' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.lastCoord
+
+/--
+info: 'ComplexAnalytic.cylinderSection' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.cylinderSection
+
+/--
+info: 'ComplexAnalytic.okaFamily' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.okaFamily
+
+/--
+info: 'ComplexAnalytic.evalHom_cylinderSection' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.evalHom_cylinderSection
+
+/--
+info: 'ComplexAnalytic.monic_okaFamily' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.monic_okaFamily
+
+/--
+info: 'ComplexAnalytic.natDegree_okaFamily' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.natDegree_okaFamily
+
+/--
+info: 'ComplexAnalytic.continuous_coeff_okaFamily' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.continuous_coeff_okaFamily
+
+/--
+info: 'ComplexAnalytic.isFinite_comp_projRestrict_of_monic' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isFinite_comp_projRestrict_of_monic
