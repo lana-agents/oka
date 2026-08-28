@@ -57,6 +57,15 @@ happened to open.**
 | morphisms of analytic spaces | `OkaTest/Axioms/Morphisms.lean` |
 | general commutative ring theory | `OkaTest/Axioms/RingTheory.lean` |
 
+That rule is the whole point of the split, and it is not a matter of taste. Until 2026-08-20
+every assertion lived in this one file and every pull request appended to its end, so git
+reported a conflict between *any* two concurrent pull requests: only one could merge per rebase
+round, and each of the others needed a rebase, a force-push, a re-`attach_pr` and a fresh
+review of a tree whose library files were byte-identical to the one already approved. That cost
+four such cycles in a single morning. Issue #558's append-at-the-end convention reduced the
+damage but could not remove it, because two additions at the end of a file still collide.
+Concurrent pull requests that touch *different files* do not. See issue #640.
+
 **Every row above has been measured against the guards it routes to, and here is how to
 re-measure one.** For each row, resolve every `#print axioms` name in its file to the module the
 declaration lives in, and ask whether the row's phrase covers what comes back. In a built
@@ -76,14 +85,58 @@ whose name is wrapped onto the next line, and there is one such guard today, in
 wrong when some module's guards are covered by no row at all — that is the failure this table
 exists to prevent — and not merely when its phrase is shorter than the file.
 
-That rule is the whole point of the split, and it is not a matter of taste. Until 2026-08-20
-every assertion lived in this one file and every pull request appended to its end, so git
-reported a conflict between *any* two concurrent pull requests: only one could merge per rebase
-round, and each of the others needed a rebase, a force-push, a re-`attach_pr` and a fresh
-review of a tree whose library files were byte-identical to the one already approved. That cost
-four such cycles in a single morning. Issue #558's append-at-the-end convention reduced the
-damage but could not remove it, because two additions at the end of a file still collide.
-Concurrent pull requests that touch *different files* do not. See issue #640.
+**Most mirror-tree material is routed by a row, and a small tail of it is deliberately routed by
+none.** `README.md`'s *Layout: the Mathlib mirror tree* defines a mirror-tree file by its path — a
+file under `Oka/` mirroring a path under `Mathlib/`, holding no complex-analytic mathematics and
+staged for upstreaming. **That is 221 of the 645 guards at `27c185a`**, and two rows exist to
+route almost nothing else: `OkaTest/Axioms/Sheaves.lean` is **87 of 87** mirror-tree, mostly
+`Oka/Geometry/RingedSpace/`, and `OkaTest/Axioms/RingTheory.lean` is **19 of 19**. So being
+mirror-tree is not what decides whether a row names a module, and the criterion above applies to
+mirror-tree modules exactly as to any other.
+
+**What gets no row is a mirror-tree module whose subject no existing row names.** Such a module
+has no subject *in this development*, so the only row that could name it would name a source
+directory rather than a topic, and the table routes by topic. **Guard one in the file of the
+analytic result that motivated it**, under that result's heading — which is what
+`OkaTest/Axioms/Morphisms.lean` already says of `Oka/Topology/Covering/Basic.lean`: *"mirror-tree
+topological criteria … say nothing about analytic spaces; they are guarded here rather than apart
+from their consumers."* `OkaTest/Axioms/AnalyticSpace.lean` reaches the same placement for a
+module the sheaves row *does* route — *"general locally-ringed-space material with **no row of its
+own** in the topic table … it sits here because the only thing that uses it is the rigidity
+statement below"* — so this paragraph records a practice with two independent precedents rather
+than inventing one.
+
+At `27c185a` that tail is **18 guards in six modules**, against 645 in all: seven from
+`Oka/CategoryTheory/GlueData.lean` (in `OkaTest/Axioms/AnalyticSpace.lean`), five from
+`Oka/Topology/Covering/Basic.lean` (in `OkaTest/Axioms/Morphisms.lean`), three from
+`Oka/Topology/IsLocalHomeomorph.lean` (in `OkaTest/Axioms/Sheaves.lean`), and one each from
+`Oka/CategoryTheory/Limits/Shapes/KernelBiprod.lean` (in `OkaTest/Axioms/SheafOfModules.lean`),
+`Oka/Topology/Category/TopCat/Opens.lean` (in `OkaTest/Axioms/Analytification.lean`) and
+`Oka/FieldTheory/IsAlgClosed/Basic.lean` (in `OkaTest/Axioms/RingTheory.lean`). **The rule above
+is being written down for the first time and the tail does not yet follow it**: three of the six
+modules sit in a file holding some of their consumer's guards and three do not, and by guards the
+minority is the larger — **7 of the 18 conform and 11 do not.** The three that do not:
+
+* **`Oka/CategoryTheory/GlueData.lean`**, the largest member at seven. Its only importer is
+  `Oka/Analytification/AffineCover.lean`, whose seven guards are all in
+  `OkaTest/Axioms/Analytification.lean`; and its guards sit under a heading of their own rather
+  than under an analytic result's, so it fails both halves of the rule.
+* **`Oka/Topology/IsLocalHomeomorph.lean`**, whose only user is
+  `Oka/AnalyticSpace/CoveringSpace.lean`, guarded in `OkaTest/Axioms/Morphisms.lean`. It was
+  placed beside the file it was *written for*, which **deliberately does not import it** for the
+  import-cost reason that file gives, and `OkaTest/Axioms/Sheaves.lean`'s heading for it says so.
+* **`Oka/FieldTheory/IsAlgClosed/Basic.lean`**, which has **no user under `Oka/` at all**:
+  `Oka/AnalyticSpace/CoveringMap.lean` names its one theorem in a docstring and does not import
+  it, and the only use in the repository is inside `OkaTest/FiniteMorphism.lean`, which this
+  repository does not guard. There is no analytic result to place it beside.
+
+**Read a consumer off the imports, not off a name grep.** All three were got wrong that way
+before they were measured, and the first was got wrong in the draft of this very paragraph:
+`ofGlueData'` is Mathlib's name and several files mention it, only one imports the module that
+proves things about it. Moving any of them is a tidy-up nobody has done and not a defect in the
+table.
+**The figure is here so that a later sweep can tell growth from noise**: a tail that stays near
+this size is the expected one, and a tail that doubles means a row really is missing.
 
 ## What these guards cover, and what they do not
 
