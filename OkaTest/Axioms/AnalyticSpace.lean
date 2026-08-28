@@ -363,6 +363,13 @@ info: 'ComplexAnalytic.isCLinearHom_comapAlgMap' depends on axioms:
 #print axioms ComplexAnalytic.isCLinearHom_comapAlgMap
 
 /--
+info: 'ComplexAnalytic.isCLinearHom_ofRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isCLinearHom_ofRestrict
+
+/--
 info: 'ComplexAnalytic.IsCLinearHom.of_openCover' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
@@ -741,3 +748,39 @@ info: 'ComplexAnalytic.AnalyticSpace.card_fiber_sigmaFold' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.card_fiber_sigmaFold
+
+
+/-! ### The sheet comparison is `ℂ`-linear
+
+`Oka/AnalyticSpace/InverseImageSheet.lean`. The `ℂ`-algebra half of
+`AlgebraicGeometry.LocallyRingedSpace.sheetIso`, whose locally-ringed-space half is guarded in
+`OkaTest/Axioms/Sheaves.lean`: the two structures the comparison relates, and that it and its
+inverse respect them. -/
+
+/--
+info: 'ComplexAnalytic.comapAlgMap_sheetToBase' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.comapAlgMap_sheetToBase
+
+/--
+info: 'ComplexAnalytic.isCLinearHom_sheetHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isCLinearHom_sheetHom
+
+/--
+info: 'ComplexAnalytic.isCLinearHom_sheetIso_inv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isCLinearHom_sheetIso_inv
+
+/--
+info: 'ComplexAnalytic.comapAlgMap_sheetHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.comapAlgMap_sheetHom

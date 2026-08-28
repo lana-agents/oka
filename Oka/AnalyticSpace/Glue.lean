@@ -68,8 +68,6 @@ carry the three together, bundle then.
 
 - `ComplexAnalytic.HasLocalModels.of_iso`: **having local models transports along a `ℂ`-linear
   isomorphism.**
-- `ComplexAnalytic.IsCLinearHom.eq`: two algebra structures on the source of a morphism which are
-  `ℂ`-linear over the same structure on its target are equal.
 - `ComplexAnalytic.AnalyticSpace.comapAlgMap_ofOpenCover_algebraMap`: **the glued `ℂ`-algebra
   structure pulls back to the given one on every member of the cover** — the statement that says
   the construction is the right one rather than merely well-typed.
@@ -120,26 +118,6 @@ universe u
 noncomputable section
 
 namespace ComplexAnalytic
-
-/-- **Two `ℂ`-algebra structures on the source of a morphism which are `ℂ`-linear over one and
-the same structure on its target are equal.**
-
-`IsCLinearHom i α β` says that `α` *is* `β` pulled back along `i`, so it determines `α`. This is
-the uniqueness that makes `ComplexAnalytic.AnalyticSpace.ofOpenCover`'s output identifiable: a
-structure recognised as `ℂ`-linear over the ambient one is the restriction of the ambient one,
-whatever route produced it. -/
-lemma IsCLinearHom.eq {X Y : LocallyRingedSpace.{u}} {i : X ⟶ Y}
-    {α α' : ℂ →+* X.presheaf.obj (op ⊤)} {β : ℂ →+* Y.presheaf.obj (op ⊤)}
-    (h : IsCLinearHom i α β) (h' : IsCLinearHom i α' β) : α = α' :=
-  RingHom.ext fun c ↦ (h c).symm.trans (h' c)
-
-/-- **A pulled-back `ℂ`-algebra structure is `ℂ`-linear**, by definition of
-`AlgebraicGeometry.LocallyRingedSpace.comapAlgMap`: both sides of `IsCLinearHom` are the same
-term. -/
-lemma isCLinearHom_comapAlgMap {X Y : LocallyRingedSpace.{u}} (i : X ⟶ Y)
-    (β : ℂ →+* Y.presheaf.obj (op ⊤)) :
-    IsCLinearHom i (LocallyRingedSpace.comapAlgMap i β) β :=
-  fun _ ↦ rfl
 
 /-- **`ℂ`-linearity is local on the source**: a morphism out of a space with an open cover is
 `ℂ`-linear as soon as each of its restrictions to a member is, for the structure that member
