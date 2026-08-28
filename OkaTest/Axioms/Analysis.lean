@@ -54,8 +54,8 @@ info: 'finite_fiber_npow' depends on axioms:
 
 /-! ### The zero locus of a continuous family of monic polynomials
 
-The six results of `Oka/Topology/Algebra/Polynomial.lean`: the root bound, the joint continuity of
-evaluation, the closed-image statement that carries the content, and the three forms of the
+The seven results of `Oka/Topology/Algebra/Polynomial.lean`: the root bound, the joint continuity
+of evaluation, the two set-level statements that carry the content, and the three forms of the
 conclusion.
 -/
 
@@ -79,6 +79,13 @@ info: 'Polynomial.isClosed_fst_image_of_monic' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms Polynomial.isClosed_fst_image_of_monic
+
+/--
+info: 'Polynomial.finite_inter_fst_preimage_of_monic' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms Polynomial.finite_inter_fst_preimage_of_monic
 
 /--
 info: 'Polynomial.isClosedMap_fst_zeroLocus' depends on axioms:

@@ -83,6 +83,8 @@ It is weaker than Cauchy's bound and it is deduced from it; nothing here needs i
   jointly continuous** in the parameter and the point.
 - `Polynomial.isClosed_fst_image_of_monic`: **the parameters over which a closed set of roots sits
   form a closed set** — the content of properness, before any packaging.
+- `Polynomial.finite_inter_fst_preimage_of_monic`: **a set of roots meets each fibre of the
+  projection in a finite set** — the other half, in the same set-level form.
 - `Polynomial.isProperMap_fst_zeroLocus`: **the zero locus of a continuous family of monic
   polynomials of fixed degree is proper over the parameters**, together with its two halves
   `Polynomial.isClosedMap_fst_zeroLocus` and `Polynomial.finite_preimage_fst_zeroLocus`.
@@ -95,8 +97,11 @@ It is weaker than Cauchy's bound and it is deduced from it; nothing here needs i
   stated and no declaration in this file mentions `ComplexAnalytic`; the only other occurrences of
   the namespace are the citations in the two bullets below.
 * **No `ComplexAnalytic.AnalyticSpace.IsFinite`.** Turning the two halves below into finiteness of
-  a morphism of analytic spaces is the second half of taxis #1109 and needs the analytic structure
-  on the zero locus, which is not the subject of this file. The worked model for that assembly is
+  a morphism of analytic spaces needs the analytic structure on the zero locus, which is not the
+  subject of this file; it is done in `Oka/AnalyticSpace/MonicProjection.lean`, which is the only
+  consumer of anything here and quotes exactly the two set-level statements
+  `Polynomial.isClosed_fst_image_of_monic` and `Polynomial.finite_inter_fst_preimage_of_monic`
+  across a carrier homeomorphism. The worked model for that assembly is
   `ComplexAnalytic.isFinite_sq` in `OkaTest/FiniteMorphism.lean`: it builds `IsFinite` for `z ↦ z²`
   out of a purely topological closedness statement and a purely topological fibre statement,
   each transported across a carrier bridge — and the two it transports are `isClosedMap_npow` and
@@ -246,6 +251,30 @@ theorem finite_preimage_fst_zeroLocus (hm : ∀ x, (p x).Monic) (x₀ : X) :
     simpa [IsRoot.def, hq] using q.2
   · rintro ⟨⟨a, z⟩, ha⟩ hha ⟨⟨b, w⟩, hb⟩ hhb h
     simp only [Set.mem_preimage, Set.mem_singleton_iff] at hha hhb
+    simp_all
+
+omit [TopologicalSpace X] in
+/-- **A set of roots of a family of monic polynomials meets each fibre of the projection in a
+finite set.**
+
+The companion of `Polynomial.isClosed_fst_image_of_monic`: both are about an arbitrary set of
+roots rather than about the whole zero locus, so that a consumer holding a subset — the image of
+a closed embedding, say — can quote them without first cutting it out.
+`Polynomial.finite_preimage_fst_zeroLocus` is the case where the set is the whole zero locus,
+read on the subtype.
+
+Like that theorem this needs no degree hypothesis and no topology on `X`, monicity entering only
+through `Polynomial.Monic.ne_zero`; the fibre injects into the root set of the single polynomial
+`p x₀`, by `Prod.snd`, which is injective on a fibre because the first coordinate is fixed. -/
+theorem finite_inter_fst_preimage_of_monic (hm : ∀ x, (p x).Monic) (x₀ : X) {s : Set (X × K)}
+    (hsub : ∀ q ∈ s, (p q.1).eval q.2 = 0) : (s ∩ Prod.fst ⁻¹' {x₀}).Finite := by
+  refine Set.Finite.of_finite_image (f := Prod.snd) ?_ ?_
+  · refine (finite_setOf_isRoot (hm x₀).ne_zero).subset ?_
+    rintro _ ⟨q, ⟨hq, hq'⟩, rfl⟩
+    simp only [Set.mem_preimage, Set.mem_singleton_iff] at hq'
+    simpa [IsRoot.def, ← hq'] using hsub q hq
+  · rintro ⟨a, z⟩ ⟨-, ha⟩ ⟨b, w⟩ ⟨-, hb⟩ h
+    simp only [Set.mem_preimage, Set.mem_singleton_iff] at ha hb
     simp_all
 
 /-- **The zero locus of a continuous family of monic polynomials of one fixed degree is proper
