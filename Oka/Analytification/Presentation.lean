@@ -85,6 +85,11 @@ flatness is still open.
 
 - `ComplexAnalytic.mem_zeroLocus_polySection_iff`: **the points of `X^an` are the common zeros
   of the `gⱼ`.** This is `ComplexAnalytic.mem_zeroLocus_nodeSection_iff` for an arbitrary tuple.
+- `ComplexAnalytic.range_base_analytificationIncl`: **the image of `X^an` in `ℂ^n` is that same
+  common zero locus** — the previous statement read through the inclusion whose target is `ℂ^n`
+  rather than through the one whose target is `ℂ^n` presented as an open subspace of itself —
+  and `ComplexAnalytic.isClosedEmbedding_base_analytificationIncl`, that that inclusion is a
+  closed embedding.
 - `ComplexAnalytic.AnalyticSpace.mem_toΓSpec_base_asIdeal_iff`: for **any** complex analytic
   space `Z`, the prime of `Spec Γ(Z, 𝒪_Z)` underneath `z` is the ideal of global sections
   vanishing at `z`. This mentions no polynomials and belongs beside the evaluation API of
@@ -226,6 +231,42 @@ abbrev analytificationIncl :
       complexSpace (ULift.{u} (Fin n)) :=
   analytificationι g ≫ (complexAffineSpace.{u} n).ofRestrict
     (⊤ : Opens (complexAffineSpace.{u} n)).isOpenEmbedding
+
+/-- **The inclusion of `X^an` into `ℂ^n` is a closed embedding.**
+
+`ComplexAnalytic.analytificationι` is one by
+`AlgebraicGeometry.LocallyRingedSpace.isCutOutBy_zeroLocusSubspaceι`, and
+`ComplexAnalytic.analytificationIncl` composes it with
+`AlgebraicGeometry.LocallyRingedSpace.restrictTopIso`, whose underlying map is a
+homeomorphism. -/
+theorem isClosedEmbedding_base_analytificationIncl :
+    IsClosedEmbedding ⇑(analytificationIncl.{u} g).base :=
+  (LocallyRingedSpace.homeoOfIso
+      (complexAffineSpace.{u} n).restrictTopIso).isClosedEmbedding.comp
+    ((complexAffineSpaceTop.{u} n).isCutOutBy_zeroLocusSubspaceι
+      (polySection.{u} g)).isClosedEmbedding
+
+/-- **The image of `X^an` in `ℂ^n` is the common zero locus of the `gⱼ`.**
+
+`ComplexAnalytic.mem_zeroLocus_polySection_iff` says this for
+`ComplexAnalytic.analytificationι`, whose target is `ℂ^n` presented as an open subspace of
+itself; this is the same statement for `ComplexAnalytic.analytificationIncl`, whose target is
+`ℂ^n`, and it is the form a statement about a set of points of `ℂ^n` needs.
+
+The proof is `Subtype.property` in one direction and the pair `⟨⟨z, trivial⟩, _⟩` in the other:
+`AnalyticSpace.analytification g` is a subtype of the points of `ℂ^n` presented as an open
+subspace of itself, so both directions are the membership of that subtype and no image of a
+range has to be computed. -/
+theorem range_base_analytificationIncl :
+    Set.range ⇑(analytificationIncl.{u} g).base =
+      {z : complexAffineSpace.{u} n |
+        ∀ j, MvPolynomial.eval (z : ULift.{u} (Fin n) → ℂ) (g j) = 0} := by
+  ext z
+  constructor
+  · rintro ⟨y, rfl⟩
+    exact (mem_zeroLocus_polySection_iff.{u} g _).1 y.2
+  · intro hz
+    exact ⟨⟨⟨z, trivial⟩, (mem_zeroLocus_polySection_iff.{u} g _).2 hz⟩, rfl⟩
 
 /-- A polynomial, read as a global section of `𝒪_{X^an}`: the holomorphic function it defines
 on `ℂ^n`, restricted to the analytification. -/

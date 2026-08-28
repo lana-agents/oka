@@ -22,6 +22,7 @@ import Oka.Algebra.Category.ModuleCat.Sheaf.Stalk
 import Oka.Algebra.Category.ModuleCat.Sheaf.Submodule
 import Oka.Algebra.Category.ModuleCat.Stalk
 import Oka.Algebra.Module.FinitePresentation
+import Oka.Algebra.MvPolynomial.Equiv
 import Oka.Algebra.MvPolynomial.Taylor
 import Oka.AlgebraicGeometry.GammaSpecAdjunction
 import Oka.AlgebraicGeometry.Modules.Coherent
@@ -74,6 +75,7 @@ import Oka.Analytification.LocalRing
 import Oka.Analytification.LocalisationComposite
 import Oka.Analytification.LocalisationFunctor
 import Oka.Analytification.LocalisationIndependence
+import Oka.Analytification.MonicHypersurface
 import Oka.Analytification.Presentation
 import Oka.Analytification.PresentationFlatness
 import Oka.Analytification.PresentationStalk
