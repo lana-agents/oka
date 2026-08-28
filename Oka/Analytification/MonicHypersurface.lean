@@ -36,9 +36,11 @@ hypothesis with a morphism assembled by hand, and this one discharges it with
 builds.** It is not. `ComplexAnalytic.AnalyticSpace.isFinite_sigmaDesc` is one, and
 `OkaTest.AnalyticSigma.isFiniteEtale_sigmaFold_line` is a finiteness statement —
 `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` carries
-`ComplexAnalytic.AnalyticSpace.IsFinite` as a field — about a morphism whose source is an
-`ComplexAnalytic.AnalyticSpace.analytification`. What is new here is the *target*, `ℂ^n`, which
-is what makes `ComplexAnalytic.isFinite_comp_proj_of_range_eq` the theorem that applies.
+`ComplexAnalytic.AnalyticSpace.IsFinite` as a field — about the fold map of the trivial cover of
+an `ComplexAnalytic.AnalyticSpace.analytification`, whose **target** is that analytification and
+whose source is a `ComplexAnalytic.AnalyticSpace.sigma` of copies of it. What is new here is that
+the target is `ℂ^n`, which is what makes `ComplexAnalytic.isFinite_comp_proj_of_range_eq` the
+theorem that applies.
 
 ## The spelling of "monic in the last variable", and why it is not the obvious one
 
@@ -103,14 +105,27 @@ construction rather than by a compatibility lemma.
   everything here is at `ULift (Fin n)` and at `⊤`. Bridging those is `Oka/RenameIndex.lean`'s
   kind of work and is a separate issue, not a corollary of this one.
 
-* **No open subset of the base**, exactly as in `Oka/AnalyticSpace/MonicProjection.lean` and
-  `Oka/AnalyticSpace/SimpleZeroStalk.lean`. `ComplexAnalytic.isFinite_analytification_comp_proj`
-  is about the analytification of a quotient by **one** relation in `n + 1` variables, and a
-  standard étale algebra is not of that shape: `ComplexAnalytic.etalePresentation` has **two**
-  more variables and two more relations, `Y·G - 1` and `F`. The extra `Y` is not cut out by a
-  monic polynomial at all — `Y·G - 1` has leading coefficient `G`, not `1` — so the composite
-  the Riemann-existence line wants is not an instance of the theorem below and needs the
-  inverted `G` handled as an open subspace first.
+* **No open subset of the base in this file**, as in `Oka/AnalyticSpace/MonicProjection.lean` and
+  `Oka/AnalyticSpace/SimpleZeroStalk.lean`, where the same restriction is absent.
+  `ComplexAnalytic.isFinite_analytification_comp_proj` is about the analytification of a quotient
+  by **one** relation in `n + 1` variables, and a standard étale algebra is not of that shape:
+  `ComplexAnalytic.etalePresentation` has **two** more variables and two more relations,
+  `Y·G - 1` and `F`. The extra `Y` is not cut out by a monic polynomial at all — `Y·G - 1` has
+  leading coefficient `G`, not `1` — so the composite the Riemann-existence line wants is not an
+  instance of the theorem below.
+
+  Restricting the base is no longer absent from the repository, only from this file:
+  `ComplexAnalytic.isFinite_comp_projRestrict_of_range_eq` in
+  `Oka/AnalyticSpace/OpenBaseProjection.lean` is `ComplexAnalytic.isFinite_comp_proj_of_range_eq`
+  over the cylinder above an open `V ⊆ ℂ^n`. **It is not by itself what `Y·G - 1` asks for**, and
+  the difference is which space is cut down. `G` is a polynomial in all `n + 1` variables, so
+  inverting it removes a closed set from the *source*, and `G ≠ 0` describes a cylinder over an
+  open subset of `ℂ^n` only when `G` does not involve the last variable. Nor does cutting the
+  source down on its own keep the conclusion: the projection of `X² = x` with `X ≠ 0` to the
+  `x`-line has image the punctured line, which is not closed, so finiteness is genuinely lost and
+  not merely unproved. What the Riemann-existence line still has to settle is which base `V` makes
+  the inverted `G` a cylinder over it, and neither this file nor
+  `Oka/AnalyticSpace/OpenBaseProjection.lean` settles that.
 
 * **No `IsFiniteEtale`, and no bound on the fibres.** Both are `Oka/AnalyticSpace/`'s and neither
   gains anything here; see that file's `## What is not here`, which is unchanged by this one.
