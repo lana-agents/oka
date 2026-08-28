@@ -8,13 +8,16 @@ import Oka
 /-!
 # Axiom regression tests: Complex analytic spaces
 
-The spaces themselves, as opposed to the morphisms between them, which are
-`OkaTest/Axioms/Morphisms.lean`'s: local models and the node; the residue field, the continuity
-and naturality of the value of a section, and the rigidity of germs; open subspaces and the
-non-vanishing locus; that being a complex analytic space is a local condition; **gluing** — a
-cover by abstract spaces, the analytic structure on the gluing, the fields of
-`CategoryTheory.GlueData.ofGlueData'` and gluing a morphism; and the **coproduct** — the disjoint
-union of a family, the trivial `n`-sheeted cover, and the sheet comparison.
+Complex analytic spaces as objects, and the constructions that build one: local models and the
+node; the residue field, the continuity and naturality of the value of a section, and the
+rigidity of germs; open subspaces and the non-vanishing locus; that being a complex analytic
+space is a local condition; **gluing** — a cover by abstract spaces, the analytic structure on
+the gluing, the fields of `CategoryTheory.GlueData.ofGlueData'`, and gluing a morphism; and the
+**coproduct** — the disjoint union of a family, the trivial `n`-sheeted cover, and the sheet
+comparison. **Two of the sixteen headings below are about morphisms after all** — gluing one, and
+that a morphism to `ℂ^n` is determined by the pullbacks of the coordinates — because each is a
+statement about the space the construction produces; the *classes* of morphisms are
+`OkaTest/Axioms/Morphisms.lean`'s.
 
 **That is a description and not a list, and the sixteen headings below are the record**: each
 names the statement its assertions defend, and the recipe beside `OkaTest/Axioms.lean`'s routing
