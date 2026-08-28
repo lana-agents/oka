@@ -132,11 +132,13 @@ def lastVarPolyEquiv (n : ℕ) :
   (MvPolynomial.renameEquiv ℂ (localisationVarEquiv.{u} n)).trans
     (MvPolynomial.optionEquivLeft ℂ (ULift.{u} (Fin n)))
 
+/-- The last variable is the polynomial variable. -/
 @[simp]
 theorem lastVarPolyEquiv_X_localisationVar :
     lastVarPolyEquiv.{u} n (MvPolynomial.X (localisationVar.{u} n)) = Polynomial.X := by
   simp [lastVarPolyEquiv]
 
+/-- Each of the first `n` variables is a constant, namely itself. -/
 @[simp]
 theorem lastVarPolyEquiv_X_localisationIncl (i : ULift.{u} (Fin n)) :
     lastVarPolyEquiv.{u} n (MvPolynomial.X (localisationIncl.{u} n i)) =
