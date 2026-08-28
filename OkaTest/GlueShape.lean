@@ -31,8 +31,14 @@ the last of those is a theorem here and not a prediction.
 `OkaTest.GlueShape.incl i j : ovl i j ⟶ mem i` and
 `OkaTest.GlueShape.swap i j : ovl i j ⟶ ovl j i`, and one relation,
 `OkaTest.GlueShape.swap_swap`. It is the free category on that quiver modulo that relation:
-`CategoryTheory.Paths` and `CategoryTheory.Quotient`, which cost **two** Mathlib modules over the
-closure this file already had.
+`CategoryTheory.Paths` and `CategoryTheory.Quotient`. Those are two `import` lines and **zero
+Mathlib modules**: both are already in the transitive closure of `Oka`, which
+`OkaTest/LocalisationChain.lean` imports whole, so the closure of this file is
+`OkaTest/LocalisationRigidity.lean`'s plus this module and nothing else — measured by
+breadth-first search over comment-masked `import` lines, 3577 modules to 3578, Mathlib count
+unchanged at 3443. (`scripts/import_cost.py` prices them at 2 against
+`Mathlib/CategoryTheory/GlueData.lean`'s closure, which is the mirror-tree question and a
+different baseline.)
 
 **Going through the path category is what keeps `CategoryTheory.eqToHom` out of the file, and
 that was the predicted expense.** Writing the hom-types by hand instead runs into the diagonal:
