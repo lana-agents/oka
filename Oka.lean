@@ -55,6 +55,7 @@ import Oka.AnalyticSpace.ProjectionStalk
 import Oka.AnalyticSpace.PullbackModulesStalk
 import Oka.AnalyticSpace.Relations
 import Oka.AnalyticSpace.Restrict
+import Oka.AnalyticSpace.SimpleZeroStalk
 import Oka.AnalyticSpace.Sigma
 import Oka.AnalyticSpace.SigmaFiniteEtale
 import Oka.AnalyticSpace.StalkLocalInverse

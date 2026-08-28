@@ -493,10 +493,12 @@ info: 'ComplexAnalytic.AnalyticSpace.isIso_stalkMap_okaMap' depends on axioms:
 isomorphism; these record what one particular stalk map *is*, which is what a quotient statement
 about `LocalOkaRing` needs before it can be read as a statement about a morphism of spaces. The
 `coordEmb` three are the general statement, for the map `ℂ^ι → ℂ^κ` forgetting the coordinates
-outside an embedding `κ ↪ ι`; the `projCoords` three are its instance at `Fin.castSuccEmb`, and
-the last is the same projection between complex analytic spaces, where the coordinates are
-indexed by `ULift (Fin n)` and the germ rings have to be relabelled to reach
-`LocalOkaRing.incl`. -/
+outside an embedding `κ ↪ ι`; the `projCoords` group is its instance at `Fin.castSuccEmb`, and
+the `uliftProj` pair is the same projection between complex analytic spaces, where the
+coordinates are indexed by `ULift (Fin n)` and the germ rings have to be relabelled to reach
+`LocalOkaRing.incl`. The two `…_apply` guards are the germ statements read at an arbitrary
+element of the stalk, which is the form `Oka/AnalyticSpace/SimpleZeroStalk.lean` consumes. The
+last two are the definitions the whole group is about. -/
 
 /--
 info: 'ComplexAnalytic.okaMapFun_projCoords' depends on axioms:
@@ -518,6 +520,13 @@ info: 'ComplexAnalytic.okaStalkEquiv_stalkMap_okaMapHom_projCoords' depends on a
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.okaStalkEquiv_stalkMap_okaMapHom_projCoords
+
+/--
+info: 'ComplexAnalytic.okaStalkEquiv_stalkMap_okaMapHom_projCoords_apply' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.okaStalkEquiv_stalkMap_okaMapHom_projCoords_apply
 
 /--
 info: 'ComplexAnalytic.okaMapFun_coordEmb' depends on axioms:
@@ -546,6 +555,13 @@ info: 'ComplexAnalytic.AnalyticSpace.okaStalkEquiv_stalkMap_uliftProj' depends o
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.okaStalkEquiv_stalkMap_uliftProj
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.okaStalkEquiv_stalkMap_uliftProj_apply' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.okaStalkEquiv_stalkMap_uliftProj_apply
 
 /--
 info: 'ComplexAnalytic.coordEmb' depends on axioms:
@@ -635,3 +651,54 @@ info: 'ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale' depends on 
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale
+
+/-! ### A hypersurface with a simple zero projects isomorphically on stalks
+
+`Oka/AnalyticSpace/SimpleZeroStalk.lean`. The stalk half of *the analytification of a standard
+étale morphism is a local isomorphism*: the two headings above supply what a stalk map of a
+projection *is* and when a stalk map is an isomorphism, and these join them to
+`LocalOkaRing.quotientSimpleZeroEquiv`. The first is the kernel of a one-section cut-out, the
+second is the whole proof with both identifications taken as arguments, and the four after it are
+its two instances — `Fin` and `ULift (Fin _)` — each as a bijection and as an `IsIso`. -/
+
+/--
+info: 'ComplexAnalytic.IsCutOutBy.mem_ker_stalkMap_iff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.IsCutOutBy.mem_ker_stalkMap_iff
+
+/--
+info: 'ComplexAnalytic.bijective_stalkMap_comp_of_incl' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.bijective_stalkMap_comp_of_incl
+
+/--
+info: 'ComplexAnalytic.bijective_stalkMap_comp_projCoords' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.bijective_stalkMap_comp_projCoords
+
+/--
+info: 'ComplexAnalytic.isIso_stalkMap_comp_projCoords' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isIso_stalkMap_comp_projCoords
+
+/--
+info: 'ComplexAnalytic.bijective_stalkMap_comp_uliftProj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.bijective_stalkMap_comp_uliftProj
+
+/--
+info: 'ComplexAnalytic.isIso_stalkMap_comp_uliftProj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isIso_stalkMap_comp_uliftProj
