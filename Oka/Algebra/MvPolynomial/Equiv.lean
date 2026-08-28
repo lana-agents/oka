@@ -19,6 +19,12 @@ the resulting one-variable polynomial at its value on `none`.
 (`MvPolynomial.eval_eq_eval_mv_eval'`) and not for the `Option` equivalence it is built from, so
 a caller whose splitting of the variables is not `Fin.cons` cannot use it. The proof here is the
 proof of that lemma with `Fin.cases` replaced by `Option.rec`.
+
+## Main results
+
+- `MvPolynomial.eval_eq_eval_optionEquivLeft`: **evaluating at a point of `Option σ → R` is
+  evaluating the coefficients along `some` and the resulting one-variable polynomial at the
+  value on `none`.**
 -/
 
 namespace MvPolynomial
