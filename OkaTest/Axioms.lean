@@ -88,7 +88,7 @@ exists to prevent — and not merely when its phrase is shorter than the file.
 **Most mirror-tree material is routed by a row, and a small tail of it is deliberately routed by
 none.** `README.md`'s *Layout: the Mathlib mirror tree* defines a mirror-tree file by its path — a
 file under `Oka/` mirroring a path under `Mathlib/`, holding no complex-analytic mathematics and
-staged for upstreaming. **That is 221 of the 645 guards at `4025f01`**, and two rows exist to
+staged for upstreaming. **That is 221 of the 645 guards at `27c185a`**, and two rows exist to
 route almost nothing else: `OkaTest/Axioms/Sheaves.lean` is **87 of 87** mirror-tree, mostly
 `Oka/Geometry/RingedSpace/`, and `OkaTest/Axioms/RingTheory.lean` is **19 of 19**. So being
 mirror-tree is not what decides whether a row names a module, and the criterion above applies to
@@ -106,7 +106,7 @@ own** in the topic table … it sits here because the only thing that uses it is
 statement below"* — so this paragraph records a practice with two independent precedents rather
 than inventing one.
 
-At `4025f01` that tail is **18 guards in six modules**, against 645 in all: seven from
+At `27c185a` that tail is **18 guards in six modules**, against 645 in all: seven from
 `Oka/CategoryTheory/GlueData.lean` (in `OkaTest/Axioms/AnalyticSpace.lean`), five from
 `Oka/Topology/Covering/Basic.lean` (in `OkaTest/Axioms/Morphisms.lean`), three from
 `Oka/Topology/IsLocalHomeomorph.lean` (in `OkaTest/Axioms/Sheaves.lean`), and one each from
