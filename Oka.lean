@@ -124,6 +124,7 @@ import Oka.SetTheory.Cardinal.Finite
 import Oka.StalkEquiv
 import Oka.Statement
 import Oka.StructureSheaf
+import Oka.Topology.Algebra.Polynomial
 import Oka.Topology.Category.TopCat.Opens
 import Oka.Topology.Covering.Basic
 import Oka.Topology.Sheaves.Functors

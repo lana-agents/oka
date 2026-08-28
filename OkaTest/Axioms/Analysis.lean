@@ -51,3 +51,52 @@ info: 'finite_fiber_npow' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms finite_fiber_npow
+
+/-! ### The zero locus of a continuous family of monic polynomials
+
+The six results of `Oka/Topology/Algebra/Polynomial.lean`: the root bound, the joint continuity of
+evaluation, the closed-image statement that carries the content, and the three forms of the
+conclusion.
+-/
+
+/--
+info: 'Polynomial.IsRoot.norm_le_monicRootBound' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms Polynomial.IsRoot.norm_le_monicRootBound
+
+/--
+info: 'Polynomial.continuous_eval_of_continuous_coeff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms Polynomial.continuous_eval_of_continuous_coeff
+
+/--
+info: 'Polynomial.isClosed_fst_image_of_monic' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms Polynomial.isClosed_fst_image_of_monic
+
+/--
+info: 'Polynomial.isClosedMap_fst_zeroLocus' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms Polynomial.isClosedMap_fst_zeroLocus
+
+/--
+info: 'Polynomial.finite_preimage_fst_zeroLocus' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms Polynomial.finite_preimage_fst_zeroLocus
+
+/--
+info: 'Polynomial.isProperMap_fst_zeroLocus' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms Polynomial.isProperMap_fst_zeroLocus
