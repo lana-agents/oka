@@ -1,0 +1,271 @@
+/-
+Copyright (c) 2026 Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
+-/
+import Oka.Algebra.MvPolynomial.Equiv
+import Oka.AnalyticSpace.MonicProjection
+import Oka.Analytification.DistinguishedOpen
+import Oka.Analytification.UniversalProperty
+import Mathlib.Topology.Algebra.MvPolynomial
+
+/-!
+# The hypersurface of a polynomial monic in the last variable, and its projection
+
+`Oka/AnalyticSpace/MonicProjection.lean` proves that a hypersurface of `ℂ^(n+1)` cut out by a
+continuous family `q` of monic polynomials of one fixed degree is finite over `ℂ^n`, and its
+`## What is not here` says plainly that it produces no such family:
+
+> **No Weierstrass polynomial.** Nothing here produces the family `q` from a germ … the family
+> is a hypothesis.
+
+This file produces one, in the case the Riemann-existence line needs: `q` comes from a
+**polynomial** `G` which is monic in the last variable, and its coefficients are polynomial
+functions of the first `n`. With it, `ComplexAnalytic.isFinite_comp_proj_of_range_eq` applies to
+the analytification of `ℂ[x₁, …, x_n, X] ⧸ (G)` with no hypothesis left over, which is
+`ComplexAnalytic.isFinite_analytification_comp_proj` — the first statement in this development
+that a specific analytic space is finite over `ℂ^n` and is not built by hand.
+
+## The spelling of "monic in the last variable", and why it is not the obvious one
+
+A polynomial in `n + 1` variables is a `MvPolynomial (ULift (Fin (n + 1))) ℂ`, and that type has
+no `Monic` and no `natDegree`: monic *in the last variable* is not a property of it but of its
+image in `Polynomial (MvPolynomial (ULift (Fin n)) ℂ)`. So the input here is an honest
+`G : Polynomial (MvPolynomial (ULift (Fin n)) ℂ)` with `G.Monic`, and
+`ComplexAnalytic.lastVarPolyEquiv` is the translation back.
+
+**That is also the spelling the presentation machinery uses on the far side.**
+`ComplexAnalytic.polyPresentedAlgebraEquiv` in `Oka/Analytification/StandardEtale.lean` lands in
+`Polynomial (ComplexAnalytic.PresentedAlgebra n k g)`, and `Mathlib`'s `StandardEtalePair.f` is
+an element of `R[X]`; what `ComplexAnalytic.etalePresentation` takes is a **lift** of that to
+`MvPolynomial (ULift (Fin (n + 1))) ℂ`. `lastVarPolyEquiv` is built out of the same two pieces
+that equivalence is — `ComplexAnalytic.localisationVarEquiv` and
+`MvPolynomial.optionEquivLeft` — so the two agree on which variable is the polynomial one, by
+construction rather than by a compatibility lemma.
+
+## What each hypothesis of the projection theorem costs
+
+* `hm`, `hd` — `Polynomial.Monic.map` and `Polynomial.Monic.natDegree_map`. The degree is
+  `G.natDegree`, *fixed*, which is the hypothesis `Oka/Topology/Algebra/Polynomial.lean` needs and
+  cannot weaken to a bound.
+* `hc` — one `Polynomial.coeff_map` and `MvPolynomial.continuous_eval`. The coefficient of
+  `q w` in degree `j` **is** `MvPolynomial.eval w (G.coeff j)`, a polynomial function of `w`.
+  This is the hypothesis the projection theorem calls the only analytic input, and in the
+  polynomial case it is not analytic at all.
+* `hrange` — `ComplexAnalytic.range_base_analytificationIncl`, which is where the analytic space
+  enters. `ComplexAnalytic.eval_lastVarPolyEquiv_symm` is the identity that turns the zero locus
+  of `G` read in `n + 1` variables into the zero locus of the family read through
+  `ComplexAnalytic.uliftSnocHomeo`.
+
+## Main definitions
+
+- `ComplexAnalytic.lastVarPolyEquiv`: **a polynomial in `n + 1` variables, read as a polynomial
+  in the last one over the first `n`.**
+- `ComplexAnalytic.polyFamily`: **the family of one-variable polynomials of `G`**, its
+  coefficients evaluated at a point of the base.
+- `ComplexAnalytic.lastVarSection`: the entire function on `ℂ^(n+1)` that `G` defines.
+
+## Main results
+
+- `ComplexAnalytic.eval_eq_eval_lastVarPolyEquiv`: **evaluating a polynomial in `n + 1`
+  variables is evaluating its family at the first `n` coordinates and then at the last.**
+- `ComplexAnalytic.monic_polyFamily`, `ComplexAnalytic.natDegree_polyFamily` and
+  `ComplexAnalytic.continuous_coeff_polyFamily`: **the family of a monic `G` satisfies the three
+  hypotheses `ComplexAnalytic.isFinite_comp_proj_of_range_eq` asks of a family.**
+- `ComplexAnalytic.evalHom_lastVarSection`: the fourth hypothesis, relating the section to the
+  family, for the form of that theorem that takes a cut-out datum.
+- `ComplexAnalytic.isFinite_comp_proj_of_monic`: **a hypersurface cut out by `G` monic is finite
+  over `ℂ^n`**, with the hypersurface presented as a cut-out by one global section.
+- `ComplexAnalytic.isFinite_analytification_comp_proj`: **the analytification of
+  `ℂ[x₁, …, x_n, X] ⧸ (G)` is finite over `ℂ^n`.**
+
+## What is not here
+
+* **Nothing from a germ.** The Weierstrass case — the family of the Weierstrass polynomial of a
+  holomorphic germ — is not three lines away from this and is not attempted. Its coefficients are
+  elements of `OkaRing U` for a neighbourhood `U` rather than polynomials, so it needs a pullback
+  of holomorphic functions along the projection: `OkaRing.pullbackInit` in `Oka/Weierstrass.lean`
+  is that map, but it is stated at index type `Fin n` and for the cylinder `U.extend'`, while
+  everything here is at `ULift (Fin n)` and at `⊤`. Bridging those is `Oka/RenameIndex.lean`'s
+  kind of work and is a separate issue, not a corollary of this one.
+
+* **No open subset of the base**, exactly as in `Oka/AnalyticSpace/MonicProjection.lean` and
+  `Oka/AnalyticSpace/SimpleZeroStalk.lean`. `ComplexAnalytic.isFinite_analytification_comp_proj`
+  is about the analytification of a quotient by **one** relation in `n + 1` variables, and a
+  standard étale algebra is not of that shape: `ComplexAnalytic.etalePresentation` has **two**
+  more variables and two more relations, `Y·G - 1` and `F`. The extra `Y` is not cut out by a
+  monic polynomial at all — `Y·G - 1` has leading coefficient `G`, not `1` — so the composite
+  the Riemann-existence line wants is not an instance of the theorem below and needs the
+  inverted `G` handled as an open subspace first.
+
+* **No `IsFiniteEtale`, and no bound on the fibres.** Both are `Oka/AnalyticSpace/`'s and neither
+  gains anything here; see that file's `## What is not here`, which is unchanged by this one.
+-/
+
+open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry Topology
+
+universe u
+
+noncomputable section
+
+namespace ComplexAnalytic
+
+variable {n : ℕ}
+
+/-! ### Reading the last variable as the polynomial variable -/
+
+/-- **A polynomial in `n + 1` variables, read as a polynomial in the last one over the first
+`n`.**
+
+`MvPolynomial.finSuccEquiv` is Mathlib's version of this and makes the variable `0` the
+polynomial one; the variable that has to be split off here is the **last**, because that is the
+one `ComplexAnalytic.AnalyticSpace.proj` forgets and the one
+`ComplexAnalytic.localisationPresentation` adjoins. So this is built from
+`ComplexAnalytic.localisationVarEquiv`, the same reindexing
+`ComplexAnalytic.polyPresentedAlgebraEquiv` uses, and not from `finSuccEquiv`. -/
+def lastVarPolyEquiv (n : ℕ) :
+    MvPolynomial (ULift.{u} (Fin (n + 1))) ℂ ≃ₐ[ℂ]
+      Polynomial (MvPolynomial (ULift.{u} (Fin n)) ℂ) :=
+  (MvPolynomial.renameEquiv ℂ (localisationVarEquiv.{u} n)).trans
+    (MvPolynomial.optionEquivLeft ℂ (ULift.{u} (Fin n)))
+
+@[simp]
+theorem lastVarPolyEquiv_X_localisationVar :
+    lastVarPolyEquiv.{u} n (MvPolynomial.X (localisationVar.{u} n)) = Polynomial.X := by
+  simp [lastVarPolyEquiv]
+
+@[simp]
+theorem lastVarPolyEquiv_X_localisationIncl (i : ULift.{u} (Fin n)) :
+    lastVarPolyEquiv.{u} n (MvPolynomial.X (localisationIncl.{u} n i)) =
+      Polynomial.C (MvPolynomial.X i) := by
+  simp [lastVarPolyEquiv]
+
+/-- **A point of `ℂ^(n+1)` is its first `n` coordinates together with its last**, in the form
+`MvPolynomial.eval_rename` consumes: reading the point through
+`ComplexAnalytic.localisationVarEquiv` and splitting it at `none` recovers it. -/
+theorem localisationVarEquiv_comp_eq (z : ULift.{u} (Fin (n + 1)) → ℂ) :
+    (fun o : Option (ULift.{u} (Fin n)) ↦
+        o.elim (z (localisationVar.{u} n)) fun i ↦ z (localisationIncl.{u} n i)) ∘
+      localisationVarEquiv.{u} n = z := by
+  funext i
+  obtain ⟨i⟩ := i
+  refine Fin.lastCases ?_ ?_ i
+  · change (localisationVarEquiv.{u} n (localisationVar.{u} n)).elim _ _ = _
+    rw [localisationVarEquiv_localisationVar]
+    rfl
+  · intro j
+    change (localisationVarEquiv.{u} n (localisationIncl.{u} n (ULift.up j))).elim _ _ = _
+    rw [localisationVarEquiv_localisationIncl]
+    rfl
+
+/-- **Evaluating a polynomial in `n + 1` variables is evaluating its coefficients at the first
+`n` coordinates and the result at the last.**
+
+`MvPolynomial.eval_eq_eval_optionEquivLeft` is the general statement, in the mirror tree; the
+only thing added here is the reindexing. -/
+theorem eval_eq_eval_lastVarPolyEquiv (z : ULift.{u} (Fin (n + 1)) → ℂ)
+    (p : MvPolynomial (ULift.{u} (Fin (n + 1))) ℂ) :
+    MvPolynomial.eval z p =
+      Polynomial.eval (z (localisationVar.{u} n))
+        (Polynomial.map (MvPolynomial.eval fun i ↦ z (localisationIncl.{u} n i))
+          (lastVarPolyEquiv.{u} n p)) := by
+  conv_lhs => rw [← localisationVarEquiv_comp_eq z]
+  rw [← MvPolynomial.eval_rename, MvPolynomial.eval_eq_eval_optionEquivLeft]
+  rfl
+
+/-! ### The family of a polynomial -/
+
+variable (G : Polynomial (MvPolynomial (ULift.{u} (Fin n)) ℂ))
+
+/-- **The family of one-variable polynomials of `G`**: the coefficients of `G`, which are
+polynomials in the first `n` variables, evaluated at a point of `ℂ^n`. -/
+def polyFamily (w : ULift.{u} (Fin n) → ℂ) : Polynomial ℂ :=
+  G.map (MvPolynomial.eval w)
+
+/-- **Every member of the family of a monic `G` is monic.** -/
+theorem monic_polyFamily (hG : G.Monic) (w : ULift.{u} (Fin n) → ℂ) :
+    (polyFamily.{u} G w).Monic :=
+  hG.map _
+
+/-- **Every member has the same degree**, which is the hypothesis
+`ComplexAnalytic.isFinite_comp_proj_of_range_eq` cannot weaken to a bound. -/
+theorem natDegree_polyFamily (hG : G.Monic) (w : ULift.{u} (Fin n) → ℂ) :
+    (polyFamily.{u} G w).natDegree = G.natDegree :=
+  hG.natDegree_map _
+
+/-- **The coefficients vary continuously**, because each of them is a polynomial function of the
+base point: `(polyFamily G w).coeff j` is `MvPolynomial.eval w (G.coeff j)`. No monicity is
+needed and no holomorphy is used. -/
+theorem continuous_coeff_polyFamily (j : ℕ) :
+    Continuous fun w : ULift.{u} (Fin n) → ℂ ↦ (polyFamily.{u} G w).coeff j := by
+  simp only [polyFamily, Polynomial.coeff_map]
+  exact MvPolynomial.continuous_eval _
+
+/-- **The value of `G` at a point of `ℂ^(n+1)` is the value of its family at the first `n`
+coordinates, evaluated at the last.**
+
+This is `ComplexAnalytic.eval_eq_eval_lastVarPolyEquiv` with the two spellings of the splitting
+identified: `(uliftSnocHomeo n z).1` is `z ∘ localisationIncl n` and `(uliftSnocHomeo n z).2` is
+`z (localisationVar n)`, both definitionally. -/
+theorem eval_lastVarPolyEquiv_symm (z : ULift.{u} (Fin (n + 1)) → ℂ) :
+    MvPolynomial.eval z ((lastVarPolyEquiv.{u} n).symm G) =
+      (polyFamily.{u} G (uliftSnocHomeo.{u} n z).1).eval (uliftSnocHomeo.{u} n z).2 := by
+  rw [eval_eq_eval_lastVarPolyEquiv, AlgEquiv.apply_symm_apply]
+  rfl
+
+/-! ### The global section of a polynomial -/
+
+/-- **The entire function on `ℂ^(n+1)` that `G` defines**: `G` read back as a polynomial in
+`n + 1` variables, then as a holomorphic function by `OkaRing.ofMvPolynomial`. -/
+def lastVarSection : OkaRing (⊤ : Opens (ULift.{u} (Fin (n + 1)) → ℂ)) :=
+  OkaRing.ofMvPolynomial ⊤ ((lastVarPolyEquiv.{u} n).symm G)
+
+/-- **Its value at a point is the value of the family**, which is the hypothesis `hF` of
+`ComplexAnalytic.isFinite_comp_proj_of_isCutOutBy`. -/
+theorem evalHom_lastVarSection (z : ULift.{u} (Fin (n + 1)) → ℂ) :
+    OkaRing.evalHom (U := ⊤) (x := z) trivial (lastVarSection.{u} G) =
+      (polyFamily.{u} G (uliftSnocHomeo.{u} n z).1).eval (uliftSnocHomeo.{u} n z).2 := by
+  rw [lastVarSection, OkaRing.evalHom_ofMvPolynomial]
+  exact eval_lastVarPolyEquiv_symm.{u} G z
+
+/-! ### Finiteness of the projection -/
+
+variable {W : AnalyticSpace.{u}}
+
+/-- **A hypersurface of `ℂ^(n+1)` cut out by a polynomial monic in the last variable is finite
+over `ℂ^n`.**
+
+The first consumer of `ComplexAnalytic.isFinite_comp_proj_of_isCutOutBy`: every one of its four
+hypotheses on the family is supplied above, and the caller is left with the cut-out datum, which
+is what says that `W` is that hypersurface. -/
+theorem isFinite_comp_proj_of_monic (i : W ⟶ AnalyticSpace.complexAffineSpace.{u} (n + 1))
+    (hcut : IsCutOutBy i.toLRSHom ![lastVarSection.{u} G]) (hG : G.Monic) :
+    AnalyticSpace.IsFinite (i ≫ AnalyticSpace.proj.{u} n) :=
+  isFinite_comp_proj_of_isCutOutBy i hcut (monic_polyFamily.{u} G hG)
+    (natDegree_polyFamily.{u} G hG) (continuous_coeff_polyFamily.{u} G)
+    (evalHom_lastVarSection.{u} G)
+
+/-- **The analytification of `ℂ[x₁, …, x_n, X] ⧸ (G)`, for `G` monic in `X`, is finite over
+`ℂ^n`.**
+
+No cut-out datum is a hypothesis here: the analytification comes with its own inclusion, whose
+image `ComplexAnalytic.range_base_analytificationIncl` computes and whose closed-embedding
+property `ComplexAnalytic.isClosedEmbedding_base_analytificationIncl` supplies. So this goes
+through `ComplexAnalytic.isFinite_comp_proj_of_range_eq` rather than through the
+`ComplexAnalytic.IsCutOutBy` form above, and it has no hypothesis but the monicity of `G`. -/
+theorem isFinite_analytification_comp_proj (hG : G.Monic) :
+    AnalyticSpace.IsFinite
+      (analytificationInclHom.{u} ![(lastVarPolyEquiv.{u} n).symm G] ≫
+        AnalyticSpace.proj.{u} n) := by
+  refine isFinite_comp_proj_of_range_eq _
+    (isClosedEmbedding_base_analytificationIncl.{u} _) (monic_polyFamily.{u} G hG)
+    (natDegree_polyFamily.{u} G hG) (continuous_coeff_polyFamily.{u} G) ?_
+  refine Eq.trans (range_base_analytificationIncl.{u} _) ?_
+  ext z
+  simp only [Set.mem_setOf_eq, Fin.forall_fin_one, Matrix.cons_val_zero]
+  rw [eval_lastVarPolyEquiv_symm.{u} G]
+  exact Iff.rfl
+
+end ComplexAnalytic
+
+end
