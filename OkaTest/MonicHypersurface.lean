@@ -49,7 +49,13 @@ out at `G = X² - x₀`, the parabola `OkaTest/MonicProjection.lean` already bui
   `OkaTest/MonicProjection.lean`; the family here has constant degree by construction because
   `G` is monic.
 * **Nothing standard étale.** `G` is one relation in two variables, and
-  `ComplexAnalytic.etalePresentation` is two relations in `n + 2`; see
+  `ComplexAnalytic.etalePresentation` is `k + 2` relations in `n + 2` — read the arity off its
+  type, `Fin (k + 2) → MvPolynomial (ULift (Fin (n + 2))) ℂ`, and not off the *"two more variables
+  and two more relations"* of its docstring, which is right but counts **relative to**
+  `ComplexAnalytic.polyPresentation` applied twice, whose `k` relations it keeps. Those `k` are
+  the presentation `g` of the base algebra `ComplexAnalytic.PresentedAlgebra`, and they are why
+  the base of a standard étale morphism is that algebra's analytification rather than `ℂ^n`; the
+  two new relations are `Y·G - 1` and `F`. See
   `Oka/Analytification/MonicHypersurface.lean`'s `## What is not here` for why the second is not
   an instance of the theorem tested here.
 -/
