@@ -50,6 +50,7 @@ import OkaTest.HolomorphicMapGeneral
 import OkaTest.HolomorphicMapOpen
 import OkaTest.HomToComplex
 import OkaTest.InverseImage
+import OkaTest.InverseImageSheet
 import OkaTest.LocalisationChain
 import OkaTest.LocalisationComposite
 import OkaTest.LocalisationFunctor

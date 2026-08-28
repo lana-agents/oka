@@ -96,6 +96,7 @@ import Oka.Geometry.RingedSpace.LocallyRingedSpace
 import Oka.Geometry.RingedSpace.LocallyRingedSpace.Coherent
 import Oka.Geometry.RingedSpace.LocallyRingedSpace.HasColimits
 import Oka.Geometry.RingedSpace.LocallyRingedSpace.InverseImage
+import Oka.Geometry.RingedSpace.LocallyRingedSpace.InverseImageSheet
 import Oka.Geometry.RingedSpace.LocallyRingedSpace.Modules
 import Oka.Geometry.RingedSpace.OpenImmersion
 import Oka.Geometry.RingedSpace.PresheafedSpace.Gluing
@@ -130,6 +131,7 @@ import Oka.StructureSheaf
 import Oka.Topology.Algebra.Polynomial
 import Oka.Topology.Category.TopCat.Opens
 import Oka.Topology.Covering.Basic
+import Oka.Topology.IsLocalHomeomorph
 import Oka.Topology.Sheaves.Functors
 import Oka.Topology.Sheaves.Presheaf
 import Oka.Topology.Sheaves.QuotientPresheaf
