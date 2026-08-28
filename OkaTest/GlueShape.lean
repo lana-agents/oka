@@ -481,7 +481,11 @@ def ctGlue (i j : Fin 3) :
     coverOverlap.{0} ctObj ctPoly i j ≅ coverOverlap.{0} ctObj ctPoly j i :=
   eqToIso (ctOverlap_eq i j)
 
-set_option maxHeartbeats 1000000 in
+set_option maxHeartbeats 400000 in
+-- Twice the default. `eqToHom` between two `ComplexAnalytic.Presentation`s is what costs it: the
+-- `CategoryTheory.Category` instance spells a morphism as `ComplexAnalytic.PresHom P.g Q.g`, so
+-- the elaborator unfolds both presentations to check the transport typechecks. The two other
+-- declarations below were raised for the same reason and turned out not to need it; this one does.
 /-- The shape's law holds, so these data really are a diagram of the shape. -/
 theorem ctHglue (i j : Fin 3) :
     (ctGlue i j).hom ≫ (ctGlue j i).hom = 𝟙 (coverOverlap.{0} ctObj ctPoly i j) := by
@@ -495,7 +499,6 @@ def ctPt : coverSpace.{0} ctObj 0 :=
   ⟨⟨(fun _ ↦ 0 : ULift.{0} (Fin 0) → ℂ), trivial⟩,
     (mem_zeroLocus_polySection_iff.{0} (ctObj 0).g _).2 (fun j ↦ j.elim0)⟩
 
-set_option maxHeartbeats 1000000 in
 /-- That point lies in the triple overlap of the zeroth member, because both witnesses there
 are `1`. -/
 theorem ctPt_mem : ctPt ∈ coverOpen.{0} ctObj ctPoly 0 1 ⊓ coverOpen.{0} ctObj ctPoly 0 2 :=
@@ -504,7 +507,6 @@ theorem ctPt_mem : ctPt ∈ coverOpen.{0} ctObj ctPoly 0 1 ⊓ coverOpen.{0} ctO
     (mem_localisationOpen_iff.{0} (ctObj 0).g (ctPoly 0 2)).2
       (by rw [ctPoly_of_zero, map_one]; exact one_ne_zero)⟩
 
-set_option maxHeartbeats 1000000 in
 /-- **The range hypothesis is not a consequence of the diagram.**
 
 `OkaTest.GlueShape.ctObj`, `OkaTest.GlueShape.ctPoly` and `OkaTest.GlueShape.ctGlue` are a
