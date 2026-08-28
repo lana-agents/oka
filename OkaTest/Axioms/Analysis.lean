@@ -6,10 +6,30 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 import Oka
 
 /-!
-# Axiom regression tests: Complex analysis
+# Axiom regression tests: Complex analysis, and the topology of polynomial zero loci
 
-Results in one and several complex variables that mention nothing sheaf-theoretic — the material
-of `Oka/Analytic/`.
+Results that mention nothing sheaf-theoretic, from three modules:
+
+* `Oka/Analytic/DividedDifference.lean`, the divided difference of a holomorphic function;
+* `Oka/Analysis/Complex/CoveringMap.lean`, the map `x ↦ xⁿ` on the nonzero elements of a proper
+  normed field;
+* `Oka/Topology/Algebra/Polynomial.lean`, the zero locus of a continuous family of monic
+  polynomials over an arbitrary topological parameter space.
+
+**The third is the bulk of the file and it is not complex analysis.** The sentence this replaces
+said *"the material of `Oka/Analytic/`"*, which at `27c185a` covered three of the twelve guards
+below; seven are the third module's, whose parameter space is any topological space and whose
+statements never mention `ℂ`. `OkaTest/Axioms.lean`'s row for this file was widened to *"complex
+analysis, and the topology of polynomial zero loci"* on that measurement, and this paragraph is
+the other half of the same repair — the routing table and the file's own description had drifted
+apart in opposite directions.
+
+**A list is affordable here because three modules is the whole file.**
+`OkaTest/Axioms/Sheaves.lean` declines to enumerate in terms — *"That is a description and not a
+list"* — and `OkaTest/Axioms/LocalOkaRing.lean` enumerates but refuses to let the list be the
+record, saying the headings are. At three modules neither move buys anything: a list this short
+is the description, and it goes stale only if a fourth module appears, which is exactly when this
+paragraph should be re-read.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/

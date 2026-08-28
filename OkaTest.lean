@@ -32,6 +32,7 @@ import OkaTest.CoherentCokernel
 import OkaTest.CoherentFree
 import OkaTest.CoherentPresentation
 import OkaTest.Completion
+import OkaTest.CoveringSpace
 import OkaTest.CutOutQuotient
 import OkaTest.CutOutRestrict
 import OkaTest.DividedDifference
@@ -58,6 +59,7 @@ import OkaTest.LocalisationFunctor
 import OkaTest.LocalisationIndependence
 import OkaTest.LocalisationRigidity
 import OkaTest.LocallyRingedSpaceCoproduct
+import OkaTest.MonicHypersurface
 import OkaTest.MonicProjection
 import OkaTest.Nonvanishing
 import OkaTest.OpenBaseProjection
