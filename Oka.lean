@@ -75,6 +75,7 @@ import Oka.Analytification.PresentationFlatness
 import Oka.Analytification.PresentationStalk
 import Oka.Analytification.Sheaf
 import Oka.Analytification.SheafCoherent
+import Oka.Analytification.StandardEtale
 import Oka.Analytification.UniversalProperty
 import Oka.CategoryTheory.Abelian.Basic
 import Oka.CategoryTheory.GlueData
