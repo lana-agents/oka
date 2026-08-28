@@ -602,3 +602,37 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.disjoint_opensRange_sigmaOpenCover' 
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.disjoint_opensRange_sigmaOpenCover
+
+/-! ### The inverse image of a locally ringed space along a continuous map
+
+`Oka/Geometry/RingedSpace/LocallyRingedSpace/InverseImage.lean`. The two definitions — the space
+and the morphism to the base — and the two results, which are the same isomorphism read as a
+statement about the stalks and as a statement about the morphism. -/
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.inverseImage' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.inverseImage
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.stalkInverseImageIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.stalkInverseImageIso
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.inverseImageHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.inverseImageHom
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.stalkMap_inverseImageHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.stalkMap_inverseImageHom
