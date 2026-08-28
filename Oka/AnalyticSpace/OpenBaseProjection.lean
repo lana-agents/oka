@@ -155,10 +155,14 @@ gives — and they are what make the simple-zero hypothesis and the cut-out hypo
 * **Nothing about a section of the cylinder that does not extend.** The two `resΓ` lemmas above
   read a cutting section that is the restriction of an entire function. A section of
   `𝒪_{ℂ^(n+1)}` over the cylinder that extends to no larger open set is allowed by every
-  statement below and computed by none of them —
-  `ComplexAnalytic.cylinderSection` in `Oka/AnalyticSpace/HolomorphicFamily.lean` computes one,
-  and pays for it by taking its hypersurface as a range condition rather than as a
-  `ComplexAnalytic.IsCutOutBy` datum, for the reason this bullet gives.
+  statement below and computed by none of them. **What
+  `ComplexAnalytic.cylinderSection` in `Oka/AnalyticSpace/HolomorphicFamily.lean` adds is the
+  construction and not the example**: it builds a section of the cylinder out of a
+  `Polynomial (OkaRing V)`, whose coefficients live on `V` and are required to extend nowhere,
+  and it pays for that by taking its hypersurface as a range condition rather than as a
+  `ComplexAnalytic.IsCutOutBy` datum, for the reason this bullet gives. **Whether any output of
+  it fails to extend is settled nowhere**: the coefficients of the one such polynomial this
+  repository writes down are entire, which `OkaTest/HolomorphicFamily.lean` records.
 * **No second restriction.** `V` is an open subset of `ℂ^n` and the source of `i` is any analytic
   space; there is no statement about restricting `V` further, which would be
   `ComplexAnalytic.restrictHom` again and is not needed by anything.
