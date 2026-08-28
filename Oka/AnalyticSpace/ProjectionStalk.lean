@@ -88,6 +88,9 @@ that bridge crossed once.
 - `ComplexAnalytic.AnalyticSpace.okaStalkEquiv_stalkMap_uliftProj`: **the stalk map of the
   projection `ℂ^(n+1) ⟶ ℂ^n` of complex analytic spaces is the inclusion of the Weierstrass
   theorems**, after both germ rings are relabelled from `ULift (Fin _)` to `Fin _`.
+- `ComplexAnalytic.okaStalkEquiv_stalkMap_okaMapHom_projCoords_apply` and
+  `ComplexAnalytic.AnalyticSpace.okaStalkEquiv_stalkMap_uliftProj_apply`: the last two at an
+  arbitrary element of the stalk rather than at a germ.
 
 ## What is not here
 
@@ -98,10 +101,16 @@ backticked name under a `## Main results` heading as a result the file advertise
 them is a result of this file.
 
 **No `IsIso`.** Assembling this with `ComplexAnalytic.IsCutOutBy`'s `surjective_stalkMap` and
-`ker_stalkMap` into an isomorphism of stalks for a hypersurface with a simple zero is the next
-step and is not taken; `ComplexAnalytic.isIso_stalkMap_okaMapHom`
-(`Oka/AnalyticSpace/StalkLocalInverse.lean`) is the only statement of that shape in the
-repository so far, and its hypothesis is an analytic local inverse rather than a cut-out.
+`ker_stalkMap` into an isomorphism of stalks for a hypersurface with a simple zero is
+`Oka/AnalyticSpace/SimpleZeroStalk.lean` and not here. That file is *about* the projection — it is
+in its title and in four of the six declarations it advertises — and what it takes from this one
+is of two kinds: the two `…_apply` results, which are the only **theorems** of this file its
+proofs use, and three **definitions**, `ComplexAnalytic.projCoords`, `ComplexAnalytic.coordEmb`
+and `ComplexAnalytic.uliftCastSuccEmb`, which its two headline theorems are stated at and could
+not be stated without. The other statement of that shape in the repository is
+`ComplexAnalytic.isIso_stalkMap_okaMapHom`
+(`Oka/AnalyticSpace/StalkLocalInverse.lean`), whose hypothesis is an analytic local inverse
+rather than a cut-out.
 
 **No general substitution.** The Taylor series of `s ∘ okaMapFun u` for an arbitrary family `u`
 is a composition of power series, which this repository does not have. Forgetting coordinates is
@@ -245,6 +254,19 @@ theorem okaStalkEquiv_stalkMap_okaMapHom_projCoords {z : Fin (n + 1) → ℂ}
           ((okaCommPresheaf (Fin n)).germ W _ hw s)) :=
   okaStalkEquiv_stalkMap_okaMapHom_coordEmb (e := (Fin.castSuccEmb : Fin n ↪ Fin (n + 1))) hw s
 
+/-- **The previous statement at an arbitrary element of the stalk** rather than at a germ.
+
+The germ form determines the stalk map, since every element of the stalk is a germ; this is that
+sentence carried out, and it is what a consumer holding an opaque element of the stalk — anything
+produced by surjectivity of another stalk map, say — actually needs.
+`Oka/AnalyticSpace/SimpleZeroStalk.lean` is the first such consumer. -/
+theorem okaStalkEquiv_stalkMap_okaMapHom_projCoords_apply {z : Fin (n + 1) → ℂ}
+    (t : (okaCommPresheaf (Fin n)).stalk (okaMapFun (projCoords n) z)) :
+    okaStalkEquiv z ((okaMapHom (projCoords n)).stalkMap z t) =
+      LocalOkaRing.incl (okaStalkEquiv (okaMapFun (projCoords n) z) t) := by
+  obtain ⟨W, hw, s, rfl⟩ := (okaCommPresheaf (Fin n)).exists_germ_eq t
+  exact okaStalkEquiv_stalkMap_okaMapHom_projCoords hw s
+
 /-! ### The same projection between complex analytic spaces
 
 `ComplexAnalytic.AnalyticSpace.complexAffineSpace n` indexes its coordinates by
@@ -292,6 +314,23 @@ theorem AnalyticSpace.okaStalkEquiv_stalkMap_uliftProj
   have h := okaStalkEquiv_stalkMap_okaMapHom_coordEmb (e := uliftCastSuccEmb.{u} n) hw s
   exact (congrArg (fun x ↦ LocalOkaRing.uliftEquiv (Fin (n + 1)) x) h).trans
     (LocalOkaRing.uliftEquiv_renameEmb_incl (fun _ ↦ rfl) _)
+
+/-- **The previous statement at an arbitrary element of the stalk** rather than at a germ, as
+`ComplexAnalytic.okaStalkEquiv_stalkMap_okaMapHom_projCoords_apply` is for the `Fin` indexing.
+
+Stated on `ComplexAnalytic.okaMapHom` rather than on
+`ComplexAnalytic.AnalyticSpace.proj`, which is `ComplexAnalytic.AnalyticSpace.toLRSHom_proj`
+away, because the consumer holds a morphism of locally ringed spaces. -/
+theorem AnalyticSpace.okaStalkEquiv_stalkMap_uliftProj_apply
+    {z : ULift.{u} (Fin (n + 1)) → ℂ}
+    (t : (okaCommPresheaf (ULift.{u} (Fin n))).stalk
+      (okaMapFun (coordEmb (uliftCastSuccEmb.{u} n)) z)) :
+    LocalOkaRing.uliftEquiv (Fin (n + 1)) (okaStalkEquiv z
+        ((okaMapHom (coordEmb (uliftCastSuccEmb.{u} n))).stalkMap z t)) =
+      LocalOkaRing.incl (LocalOkaRing.uliftEquiv (Fin n)
+        (okaStalkEquiv (okaMapFun (coordEmb (uliftCastSuccEmb.{u} n)) z) t)) := by
+  obtain ⟨W, hw, s, rfl⟩ := (okaCommPresheaf (ULift.{u} (Fin n))).exists_germ_eq t
+  exact AnalyticSpace.okaStalkEquiv_stalkMap_uliftProj hw s
 
 end Ulift
 
