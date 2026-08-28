@@ -636,3 +636,81 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.stalkMap_inverseImageHom' depends on
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.stalkMap_inverseImageHom
+
+/-! ### The sheets of a map
+
+`Oka/Topology/IsLocalHomeomorph.lean`. The family of opens on which a map is an open embedding,
+and that for a local homeomorphism it covers. Pure topology; the guards sit here rather than in
+`OkaTest/Axioms/Morphisms.lean` because the file below is the only consumer and the two are one
+change. -/
+
+/--
+info: 'sheetOpens' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms sheetOpens
+
+/--
+info: 'IsLocalHomeomorph.exists_mem_sheetOpens' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms IsLocalHomeomorph.exists_mem_sheetOpens
+
+/--
+info: 'IsLocalHomeomorph.sSup_sheetOpens' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms IsLocalHomeomorph.sSup_sheetOpens
+
+
+/-! ### Over a sheet, the inverse image is the base
+
+`Oka/Geometry/RingedSpace/LocallyRingedSpace/InverseImageSheet.lean`, which builds on the
+inverse-image group directly above. The three definitions — the sheet mapped to the base, the
+open it lies over, and the comparison between them — and the three results, of which
+`AlgebraicGeometry.LocallyRingedSpace.coe_sheetImage` is what pins the open to `p '' V`. -/
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.sheetToBase' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.sheetToBase
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.sheetImage' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.sheetImage
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.sheetHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.sheetHom
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.coe_sheetImage' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.coe_sheetImage
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.isIso_sheetHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.isIso_sheetHom
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.sheetIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.sheetIso
