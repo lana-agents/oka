@@ -244,16 +244,24 @@ embedding and a map well behaved along its image, while this one takes a finite 
 Nor of `ComplexAnalytic.AnalyticSpace.isFinite_comp`, which needs both factors finite; here the
 second factor need not be finite at all, only injective.
 
-**Injectivity is asked for and nothing more, and it is used in exactly one of the two fields.**
-The fibre half is free: `f.toLRSHom.base ⁻¹' {y}` is contained in `(f ≫ i).toLRSHom.base ⁻¹' {i y}`
-for any `i` whatever, so finiteness transfers with no hypothesis — injectivity only upgrades the
-containment to an equality, which is not needed. The closed half is where it is used, and it is
-used with the continuity of `i` rather than with any closedness of it: for `C` closed,
-`f.toLRSHom.base '' C` is the **preimage** under `i.toLRSHom.base` of `(f ≫ i).toLRSHom.base '' C`,
-which is closed by hypothesis. So `IsClosedEmbedding` would be the wrong hypothesis — it asks for
-closedness that is never consumed — and this file's style is to ask for no more than is used, as
+**Injectivity is asked for and nothing more, and the proof below consumes it in exactly one of
+the two fields.** The fibre half is free: `f.toLRSHom.base ⁻¹' {y}` is contained in
+`(f ≫ i).toLRSHom.base ⁻¹' {i y}` for any `i` whatever, so finiteness transfers with no hypothesis
+at all — injectivity would upgrade that containment to an equality, and the proof deliberately
+stays with the containment so that the one place the hypothesis is used is visible. The closed
+half is that place, and it uses the continuity of `i` rather than any closedness of it: for `C`
+closed, `f.toLRSHom.base '' C` is the **preimage** under `i.toLRSHom.base` of
+`(f ≫ i).toLRSHom.base '' C`, which is closed by hypothesis. So `IsClosedEmbedding` would be the
+wrong hypothesis — it asks for closedness that is never consumed — and this file's style is to ask
+for no more than is used, as
 `ComplexAnalytic.AnalyticSpace.isFinite_of_isClosedEmbedding`'s docstring says of the structure
-sheaves. -/
+sheaves.
+
+**Whether injectivity can be dropped is not settled here, and the shape a counterexample must
+have is.** Since the fibre half consumes nothing, a `f` that is not finite while `f ≫ i` is must
+have finite fibres and a base map that is not closed; so the `i` beside it has to identify a limit
+point of some image `f.toLRSHom.base '' C` with a point of that image. No morphism below is asked
+whether it is of that shape. -/
 theorem isFinite_of_isFinite_comp {X Y S : AnalyticSpace.{u}} (f : X ⟶ Y) (i : Y ⟶ S)
     (hi : Function.Injective (i.toLRSHom.base : Y → S)) (h : IsFinite (f ≫ i)) :
     IsFinite f where
@@ -269,13 +277,13 @@ theorem isFinite_of_isFinite_comp {X Y S : AnalyticSpace.{u}} (f : X ⟶ Y) (i :
     rw [himg]
     exact (h.isClosedMap C hC).preimage i.toLRSHom.base.hom.continuous
   finite_fiber y := by
-    have hfib : (f.toLRSHom.base : X → Y) ⁻¹' {y} =
+    have hsub : (f.toLRSHom.base : X → Y) ⁻¹' {y} ⊆
         ((f ≫ i).toLRSHom.base : X → S) ⁻¹' {(i.toLRSHom.base : Y → S) y} := by
-      ext x
-      simp only [Set.mem_preimage, Set.mem_singleton_iff]
-      exact ⟨fun hx ↦ congrArg _ hx, fun hx ↦ hi hx⟩
-    rw [hfib]
-    exact h.finite_fiber _
+      intro x hx
+      simp only [Set.mem_preimage, Set.mem_singleton_iff] at hx ⊢
+      exact congrArg _ hx
+    haveI := h.finite_fiber ((i.toLRSHom.base : Y → S) y)
+    exact Finite.Set.subset _ hsub
 
 /-- **A morphism with an infinite fibre is not finite**, which is how a non-example is exhibited:
 the fibre condition is the one that fails for a projection, and it fails for a reason one can
