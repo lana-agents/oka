@@ -102,9 +102,13 @@ them is a result of this file.
 
 **No `IsIso`.** Assembling this with `ComplexAnalytic.IsCutOutBy`'s `surjective_stalkMap` and
 `ker_stalkMap` into an isomorphism of stalks for a hypersurface with a simple zero is
-`Oka/AnalyticSpace/SimpleZeroStalk.lean` and not here; what that file needs from this one is the
-two `…_apply` results, and nothing else in it mentions a projection. The other statement of that
-shape in the repository is `ComplexAnalytic.isIso_stalkMap_okaMapHom`
+`Oka/AnalyticSpace/SimpleZeroStalk.lean` and not here. That file is *about* the projection — it is
+in its title and in four of the six declarations it advertises — and what it takes from this one
+is of two kinds: the two `…_apply` results, which are the only **theorems** of this file its
+proofs use, and three **definitions**, `ComplexAnalytic.projCoords`, `ComplexAnalytic.coordEmb`
+and `ComplexAnalytic.uliftCastSuccEmb`, which its two headline theorems are stated at and could
+not be stated without. The other statement of that shape in the repository is
+`ComplexAnalytic.isIso_stalkMap_okaMapHom`
 (`Oka/AnalyticSpace/StalkLocalInverse.lean`), whose hypothesis is an analytic local inverse
 rather than a cut-out.
 

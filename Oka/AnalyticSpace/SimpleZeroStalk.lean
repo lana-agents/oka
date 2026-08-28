@@ -18,8 +18,12 @@ dimension down, and the isomorphism is the one the projection induces.
 
 This is the stalk half of *the analytification of a standard étale morphism is a local
 isomorphism*. It is the algebra of `Oka/Regular.lean` read as a statement about a morphism of
-spaces, and everything it needs was already here — the file is the assembly and one general
-lemma about kernels.
+spaces, and everything it needs was already here **in substance** — the file is the assembly and
+one general lemma about kernels. Not literally: the two pointwise forms of the projection's stalk
+map that the assembly consumes,
+`ComplexAnalytic.okaStalkEquiv_stalkMap_okaMapHom_projCoords_apply` and
+`ComplexAnalytic.AnalyticSpace.okaStalkEquiv_stalkMap_uliftProj_apply`, are added to
+`Oka/AnalyticSpace/ProjectionStalk.lean` by the same change as this file.
 
 ## The four inputs
 
@@ -109,9 +113,11 @@ restriction needs the stalks of an open subspace identified with the ambient one
 `AlgebraicGeometry.LocallyRingedSpace.restrictStalkIso` and is not done here.
 
 **No derivative hypothesis**, and **no packaged `LocalOkaRing (Fin n) ≃+* X.presheaf.stalk x`**:
-the isomorphism is available as `CategoryTheory.asIso` of the results below composed with
-`okaStalkEquiv`, and naming that composite would fix a direction this file has no consumer for
-yet.
+the isomorphism is available from the results below — `CategoryTheory.asIso` turns one of them
+into an isomorphism in `CommRingCat`, and `okaStalkEquiv` identifies its source with
+`LocalOkaRing (Fin n)` — and naming that composite would fix a direction this file has no consumer
+for yet. The two are an isomorphism of `CommRingCat` and a `RingEquiv`, so "composite" is what a
+reader would have to build and not something a coercion supplies.
 
 **No statement about more than one cutting section.** `ComplexAnalytic.IsCutOutBy` allows a family
 of any length; `ComplexAnalytic.IsCutOutBy.mem_ker_stalkMap_iff` and everything after it are for

@@ -498,7 +498,9 @@ the `uliftProj` pair is the same projection between complex analytic spaces, whe
 coordinates are indexed by `ULift (Fin n)` and the germ rings have to be relabelled to reach
 `LocalOkaRing.incl`. The two `…_apply` guards are the germ statements read at an arbitrary
 element of the stalk, which is the form `Oka/AnalyticSpace/SimpleZeroStalk.lean` consumes. The
-last two are the definitions the whole group is about. -/
+last **four** are the definitions the whole group is about, in file order:
+`ComplexAnalytic.coordEmb`, `ComplexAnalytic.projCoords`, `ComplexAnalytic.uliftCastSuccEmb` and
+`ComplexAnalytic.AnalyticSpace.proj`. -/
 
 /--
 info: 'ComplexAnalytic.okaMapFun_projCoords' depends on axioms:
