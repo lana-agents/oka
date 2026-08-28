@@ -23,11 +23,22 @@ This file produces one, in the case the Riemann-existence line needs: `q` comes 
 **polynomial** `G` which is monic in the last variable, and its coefficients are polynomial
 functions of the first `n`. With it, `ComplexAnalytic.isFinite_comp_proj_of_range_eq` applies to
 the analytification of `ℂ[x₁, …, x_n, X] ⧸ (G)` with no hypothesis left over, which is
-`ComplexAnalytic.isFinite_analytification_comp_proj`. Every `AnalyticSpace.IsFinite` statement
-about a named morphism that preceded it — `ComplexAnalytic.isFinite_axisIncl_comp_proj`,
-`ComplexAnalytic.isFinite_sq`, `ComplexAnalytic.isFinite_parabolaIncl_comp_proj` — is about a
-morphism assembled by hand in `OkaTest/`; this one is about
+`ComplexAnalytic.isFinite_analytification_comp_proj`. Outside
+`Oka/AnalyticSpace/MonicProjection.lean`, where it is proved and where
+`ComplexAnalytic.isFinite_comp_proj_of_isCutOutBy` is derived from it,
+`ComplexAnalytic.isFinite_comp_proj_of_range_eq` has three consumers, and this is the only one
+that is not in `OkaTest/`: the other two — `ComplexAnalytic.isFinite_parabolaIncl_comp_proj` and
+`ComplexAnalytic.isFinite_parabolaIncl_comp_proj_of_polyFamily` — discharge its closed-embedding
+hypothesis with a morphism assembled by hand, and this one discharges it with
 `ComplexAnalytic.AnalyticSpace.analytification`, which this development constructs.
+
+**Not claimed: that this is the first finiteness statement about a morphism this development
+builds.** It is not. `ComplexAnalytic.AnalyticSpace.isFinite_sigmaDesc` is one, and
+`OkaTest.AnalyticSigma.isFiniteEtale_sigmaFold_line` is a finiteness statement —
+`ComplexAnalytic.AnalyticSpace.IsFiniteEtale` carries
+`ComplexAnalytic.AnalyticSpace.IsFinite` as a field — about a morphism whose source is an
+`ComplexAnalytic.AnalyticSpace.analytification`. What is new here is the *target*, `ℂ^n`, which
+is what makes `ComplexAnalytic.isFinite_comp_proj_of_range_eq` the theorem that applies.
 
 ## The spelling of "monic in the last variable", and why it is not the obvious one
 
@@ -257,7 +268,12 @@ No cut-out datum is a hypothesis here: the analytification comes with its own in
 image `ComplexAnalytic.range_base_analytificationIncl` computes and whose closed-embedding
 property `ComplexAnalytic.isClosedEmbedding_base_analytificationIncl` supplies. So this goes
 through `ComplexAnalytic.isFinite_comp_proj_of_range_eq` rather than through the
-`ComplexAnalytic.IsCutOutBy` form above, and it has no hypothesis but the monicity of `G`. -/
+`ComplexAnalytic.IsCutOutBy` form above, and it has no hypothesis but the monicity of `G`.
+
+Both of those are stated for `ComplexAnalytic.analytificationIncl` and this is about
+`ComplexAnalytic.analytificationInclHom`, which is `⟨ComplexAnalytic.analytificationIncl g, _⟩`;
+they apply definitionally and no bridge lemma is needed. A reader grepping the proof for
+`analytificationIncl` will not find it spelled that way. -/
 theorem isFinite_analytification_comp_proj (hG : G.Monic) :
     AnalyticSpace.IsFinite
       (analytificationInclHom.{u} ![(lastVarPolyEquiv.{u} n).symm G] ≫

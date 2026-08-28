@@ -25,12 +25,16 @@ out at `G = X² - x₀`, the parabola `OkaTest/MonicProjection.lean` already bui
   `ComplexAnalytic.isFinite_parabolaIncl_comp_proj_of_polyFamily` runs the second one.
 * **The section could be the wrong function.**
   `ComplexAnalytic.evalHom_lastVarSection_parabolaG` evaluates it: `z₁² - z₀`.
-* **The analytification statement could be about the empty space.**
-  `ComplexAnalytic.range_base_analytificationIncl_parabolaG` says its points are the parabola, so
-  `ComplexAnalytic.isFinite_analytification_parabolaG` is not vacuous — and the composite it is
-  about is not injective (`ComplexAnalytic.not_injective_base_parabolaIncl_comp_proj`, over in
-  `OkaTest/MonicProjection.lean`, for the isomorphic hand-built copy), so finiteness there is not
-  an instance of `ComplexAnalytic.AnalyticSpace.isFinite_of_isClosedEmbedding`.
+* **The analytification statement could be about the empty space, or true for the trivial
+  reason.** `ComplexAnalytic.range_base_analytificationIncl_parabolaG` says its points are the
+  parabola, so `ComplexAnalytic.isFinite_analytification_parabolaG` is not vacuous; and
+  `ComplexAnalytic.not_injective_base_analytification_parabolaG_comp_proj` says the composite it
+  is about is not injective, so finiteness there is not an instance of
+  `ComplexAnalytic.AnalyticSpace.isFinite_of_isClosedEmbedding`. That second one is proved here
+  **for the analytification's own composite**, from two points of the analytification itself,
+  rather than borrowed from `ComplexAnalytic.not_injective_base_parabolaIncl_comp_proj` over in
+  `OkaTest/MonicProjection.lean`: that theorem is about `ComplexAnalytic.parabolaIncl`, and
+  nothing below relates the two composites — see `## What is not checked here`.
 
 ## What is not checked here
 
@@ -131,6 +135,69 @@ theorem isFinite_analytification_parabolaG :
       (analytificationInclHom.{u} ![(lastVarPolyEquiv.{u} 1).symm parabolaG.{u}] ≫
         AnalyticSpace.proj.{u} 1) :=
   isFinite_analytification_comp_proj.{u} parabolaG.{u} monic_parabolaG.{u}
+
+/-- **The composite's underlying map reads off the first coordinate of the ambient point.**
+
+`ComplexAnalytic.base_proj_eq` at `n = 1`, with `ComplexAnalytic.analytificationInclHom` unfolded
+to `ComplexAnalytic.analytificationIncl` definitionally. -/
+theorem base_analytification_parabolaG_comp_proj
+    (p : AnalyticSpace.analytification.{u} ![(lastVarPolyEquiv.{u} 1).symm parabolaG.{u}]) :
+    (((analytificationInclHom.{u} ![(lastVarPolyEquiv.{u} 1).symm parabolaG.{u}] ≫
+        AnalyticSpace.proj.{u} 1).toLRSHom.base p) : ULift.{u} (Fin 1) → ℂ) =
+      fun _ ↦ (((analytificationIncl.{u}
+        ![(lastVarPolyEquiv.{u} 1).symm parabolaG.{u}]).base p) :
+          ULift.{u} (Fin 2) → ℂ) (ULift.up 0) := by
+  refine funext fun l ↦ ?_
+  have hl : l.down = (0 : Fin 1) := Subsingleton.elim _ _
+  rw [show (((analytificationInclHom.{u} ![(lastVarPolyEquiv.{u} 1).symm parabolaG.{u}] ≫
+      AnalyticSpace.proj.{u} 1).toLRSHom.base p) : ULift.{u} (Fin 1) → ℂ) = _ from
+    congrFun (base_proj_eq.{u} 1) _]
+  change (((analytificationIncl.{u} ![(lastVarPolyEquiv.{u} 1).symm parabolaG.{u}]).base p) :
+    ULift.{u} (Fin 2) → ℂ) (ULift.up l.down.castSucc) = _
+  rw [hl]
+  rfl
+
+/-- **And the composite it is about is not injective**, so
+`ComplexAnalytic.AnalyticSpace.isFinite_of_isClosedEmbedding` cannot produce
+`ComplexAnalytic.isFinite_analytification_parabolaG` either, and the finiteness there is doing
+work no closed-embedding argument reaches.
+
+Proved for the analytification's own composite rather than transported from
+`ComplexAnalytic.not_injective_base_parabolaIncl_comp_proj`, which is about
+`ComplexAnalytic.parabolaIncl`: this file does not claim the two spaces are the same, so there is
+nothing to transport along.
+
+The two ambient points `(1, 1)` and `(1, -1)` are in the image by
+`ComplexAnalytic.range_base_analytificationIncl_parabolaG`, and both project to `1` by
+`ComplexAnalytic.base_analytification_parabolaG_comp_proj`, so an injective composite would
+identify their two preimages — and then their *images* would be equal too, which they are not.
+**The closed-embedding property of the inclusion is not used here**: the contradiction is read
+off the images, so `ComplexAnalytic.range_base_analytificationIncl_parabolaG` is the only thing
+about the inclusion this needs. -/
+theorem not_injective_base_analytification_parabolaG_comp_proj :
+    ¬ Function.Injective
+      ((analytificationInclHom.{u} ![(lastVarPolyEquiv.{u} 1).symm parabolaG.{u}] ≫
+          AnalyticSpace.proj.{u} 1).toLRSHom.base :
+        AnalyticSpace.analytification.{u} ![(lastVarPolyEquiv.{u} 1).symm parabolaG.{u}] →
+          AnalyticSpace.complexAffineSpace.{u} 1) := by
+  intro hinj
+  have hmem : ∀ c : ℂ, c ^ 2 = 1 →
+      ((fun j ↦ ![(1 : ℂ), c] j.down) : AnalyticSpace.complexAffineSpace.{u} 2) ∈
+        Set.range ⇑(analytificationIncl.{u}
+          ![(lastVarPolyEquiv.{u} 1).symm parabolaG.{u}]).base := by
+    intro c hc
+    rw [range_base_analytificationIncl_parabolaG.{u}]
+    exact hc
+  obtain ⟨p, hp⟩ := hmem 1 (by norm_num)
+  obtain ⟨q, hq⟩ := hmem (-1) (by norm_num)
+  have hpq : p = q := by
+    refine hinj (funext fun l ↦ ?_)
+    rw [congrFun (base_analytification_parabolaG_comp_proj.{u} p) l,
+      congrFun (base_analytification_parabolaG_comp_proj.{u} q) l, hp, hq]
+    norm_num
+  rw [hpq, hq] at hp
+  have h := congrFun hp (ULift.up 1)
+  norm_num at h
 
 end ComplexAnalytic
 
