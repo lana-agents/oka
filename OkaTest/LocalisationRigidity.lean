@@ -53,8 +53,9 @@ negative:
 **The witness that makes the relaxed reading work on the composite arrow is `f₁ * f`, and the
 isomorphism is `ComplexAnalytic.localisationPresentationIsoMul`** — the same lemma that supplies
 `OkaTest.LocalisationChain.chainFunctor`'s `map_comp`. So the identification a cover has to
-tolerate is one this repository already has, and it is needed for exactly the arrow that the arity
-argument rules out: the other two arrows of that chain are rigid on the nose, and
+tolerate is one this repository already has, and the arrow it is needed for is exactly the one the
+arity argument rules out being a one-step localisation on the nose: the other two arrows of that
+chain are rigid on the nose, and
 `OkaTest.LocalisationRigidity.chainFunctor_obj_zero_ne_localisationObj` says the composite one is
 not, at any witness.
 
@@ -102,7 +103,11 @@ and it deliberately stops there. Two things a reader should know before attempti
 * a glue data's own diagram has **two levels of object** — members `U i` and overlaps `V (i, j)` —
   and its law is a cocycle on triple overlaps expressed with pullbacks. That is a different law on
   a different index shape from the `trans_comp` a chain exercises, so choosing witnesses does not
-  turn one into the other and `hcocycle` should be expected **not** to follow;
+  turn one into the other and `hcocycle` should be expected **not** to follow.
+  `OkaTest/GlueShape.lean` builds that shape and settles the five inputs one at a time; the
+  expectation is right and the failure is one hypothesis earlier than predicted — `hsymm` follows,
+  `hrange` provably does not (`OkaTest.GlueShape.not_ctHRange`), and `hcocycle` cannot be stated
+  without `hrange`;
 * `ComplexAnalytic.coverGlueData` wants `poly i j` for **every** ordered pair, comparable or not,
   whereas everything here is indexed by arrows. Two indices with no arrow between them still have
   an overlap, and nothing in an ordered shape produces its witness.
@@ -208,7 +213,10 @@ def IsRigid : Prop :=
 
 This is the shape a real cover has, and the isomorphism is not decoration — see
 `OkaTest.LocalisationRigidity.isRigidUpToIso_chainFunctor`, where the composite arrow of the
-canonical chain needs `ComplexAnalytic.localisationPresentationIsoMul` and nothing weaker. -/
+canonical chain needs `ComplexAnalytic.localisationPresentationIsoMul` and nothing weaker. **At a
+single witness**, which is what this definition stipulates: a *pair* of witnesses identifies the
+same two objects on the nose, by
+`OkaTest.LocalisationRigidity.chainFunctor_obj_zero_eq_localisationObj_localisationObj`. -/
 def IsRigidUpToIso : Prop :=
   ∀ ⦃i j : J⦄, i < j → ∃ w, Nonempty (obj i ≅ localisationObj.{u} (obj j) w)
 
@@ -316,8 +324,9 @@ theorem isRigidUpToIso_chainFunctor :
   · exact absurd hij (by decide)
   · exact absurd hij (by decide)
 
-/-- **The composite arrow is a one-step localisation of the top object at no witness at all**, and
-not merely one whose proof happened to use an isomorphism: again by arity, `n + 2` against `n + 1`.
+/-- **The bottom object of the canonical chain is a one-step localisation of the top at no witness
+at all.** The relaxed reading does hold there, at `f₁ * f`, so what fails is the *equality* and not
+the identification: again by arity, `n + 2` against `n + 1`.
 
 Taken with the two `Iso.refl`s in the proof above, this locates the failure exactly. It is what
 `OkaTest.LocalisationRigidity.not_isRigid_chainFunctor` says globally, at the single arrow
