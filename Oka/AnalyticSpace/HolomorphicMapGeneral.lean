@@ -348,7 +348,10 @@ theorem exists_chartLift (Z : AnalyticSpace.{u}) {m : ℕ}
   refine ⟨U₀.1.isOpenEmbedding.isOpenMap.functor.obj B',
     ⟨⟨z, U₀.2⟩, hxB', rfl⟩, n, A,
     ⟨LocallyRingedSpace.IsOpenImmersion.lift _ _ hrange ≫
-      restrictHom (i ≫ (_root_.complexAffineSpace.{u} n).ofRestrict V.isOpenEmbedding) A, ?_⟩,
+      -- Qualified: inside `namespace AnalyticSpace` the bare name resolves to
+      -- `ComplexAnalytic.AnalyticSpace.restrictHom`, which is the analytic-space one.
+      ComplexAnalytic.restrictHom
+        (i ≫ (_root_.complexAffineSpace.{u} n).ofRestrict V.isOpenEmbedding) A, ?_⟩,
     fun j ↦ (_root_.complexAffineSpace.{u} n).toRestrictΓ A (u j.down), ?_⟩
   · exact IsCLinearHom.of_comp (LocallyRingedSpace.IsOpenImmersion.lift_fac _ _ hrange)
       (isCLinearHom_ofRestrict Z.toLocallyRingedSpace Z.algebraMap _)

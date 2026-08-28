@@ -59,6 +59,7 @@ import OkaTest.LocalisationRigidity
 import OkaTest.LocallyRingedSpaceCoproduct
 import OkaTest.MonicProjection
 import OkaTest.Nonvanishing
+import OkaTest.OpenBaseProjection
 import OkaTest.OpenSubspace
 import OkaTest.ProjectiveLine
 import OkaTest.ProjectiveLineDirected

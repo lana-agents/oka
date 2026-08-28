@@ -57,6 +57,10 @@ transport of algebra structures along an isomorphism is needed anywhere.
 - `ComplexAnalytic.AnalyticSpace.liftRestrict`: **a morphism whose image lies in an open subspace
   factors through it**, as a morphism of complex analytic spaces. This is what builds a morphism
   whose *target* is an open subspace; `restrictLE` is its special case at an inclusion.
+- `ComplexAnalytic.AnalyticSpace.restrictHom`: **a morphism restricted to the preimage of an open
+  subset of the target**, as a morphism of complex analytic spaces. This is the other way to land
+  in an open subspace, and it asks nothing of the image: `liftRestrict` keeps the source and needs
+  the image to lie in `V`, this shrinks the source to the preimage of `V` instead.
 - `ComplexAnalytic.AnalyticSpace.resΓ`: the restriction of a global section of `𝒪_X` to an open
   subspace.
 
@@ -223,6 +227,42 @@ morphism itself, is what every use of it consumes. -/
 lemma restrictLE_fac (X : AnalyticSpace.{u}) {V W : X.Opens} (h : V ≤ W) :
     X.restrictLE h ≫ X.ofRestrict W = X.ofRestrict V :=
   forgetToLocallyRingedSpace.map_injective (LocallyRingedSpace.restrictLE_fac _ h)
+
+/-- **The restriction of a morphism to the preimage of an open subset of the target**, as a
+morphism of complex analytic spaces.
+
+`ComplexAnalytic.restrictHom` at the underlying morphisms, which is where every fact about it
+lives — `ComplexAnalytic.base_restrictHom` for the underlying map,
+`ComplexAnalytic.stalkMap_restrictHom_eq'` for the stalk map,
+`ComplexAnalytic.isClosedEmbedding_base_restrictHom` and
+`ComplexAnalytic.IsCutOutBy.restrictOpen` for what a chart keeps. It is `ℂ`-linear by
+`ComplexAnalytic.isCLinearHom_restrictHom`, whose two algebra structures are the two
+`ComplexAnalytic.AnalyticSpace.restrict` puts on the two open subspaces, so nothing is
+transported.
+
+Unlike `ComplexAnalytic.AnalyticSpace.liftRestrict` this does not ask the image of `A` to lie in
+`V`: it shrinks the *source* to the preimage instead. Neither is a special case of the other.
+
+**The name shadows `ComplexAnalytic.restrictHom` inside `namespace AnalyticSpace`**, which is
+where most of this development is written. A use of the bare name there now means this one; the
+locally-ringed-space one has to be written `ComplexAnalytic.restrictHom`, as it is at
+`Oka/AnalyticSpace/HolomorphicMapGeneral.lean:351`. That is the price of the name matching the
+one it wraps, and the mismatch is a type error rather than a silent change of meaning: the two
+have different sources and targets. -/
+def restrictHom {A B : AnalyticSpace.{u}} (f : A ⟶ B) (V : B.Opens) :
+    A.restrict ((Opens.map f.toLRSHom.base).obj V) ⟶ B.restrict V :=
+  ⟨ComplexAnalytic.restrictHom f.toLRSHom V, isCLinearHom_restrictHom f.isCLinear V⟩
+
+/-- The underlying morphism of locally ringed spaces of
+`ComplexAnalytic.AnalyticSpace.restrictHom`. -/
+lemma toLRSHom_restrictHom {A B : AnalyticSpace.{u}} (f : A ⟶ B) (V : B.Opens) :
+    (restrictHom f V).toLRSHom = ComplexAnalytic.restrictHom f.toLRSHom V :=
+  rfl
+
+/-- **`ComplexAnalytic.AnalyticSpace.restrictHom` is a morphism over `f`.** -/
+lemma restrictHom_fac {A B : AnalyticSpace.{u}} (f : A ⟶ B) (V : B.Opens) :
+    restrictHom f V ≫ B.ofRestrict V = A.ofRestrict ((Opens.map f.toLRSHom.base).obj V) ≫ f :=
+  forgetToLocallyRingedSpace.map_injective (ComplexAnalytic.restrictHom_fac f.toLRSHom V)
 
 /-- **The restriction of a global section of `𝒪_X` to an open subspace**, as a global section of
 `𝒪_{X|U}`.
