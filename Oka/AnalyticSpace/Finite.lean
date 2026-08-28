@@ -88,6 +88,14 @@ stated here rather than left to be discovered.
 - `ComplexAnalytic.AnalyticSpace.isFinite_comp_of_isClosedEmbedding`: **a closed embedding
   followed by a map that is closed and has finite fibres *over the image of that embedding* is
   finite**, even when the second factor is not.
+- `ComplexAnalytic.AnalyticSpace.isFinite_of_isFinite_comp`: **finiteness cancels along an
+  injective second factor** — if `f ≫ i` is finite and the underlying map of `i` is injective,
+  then `f` is finite. This is what carries a finiteness statement proved over an ambient `ℂ^n`
+  back to one over a closed analytic subspace of it, which is the shape the standard-étale line
+  needs: `Oka/Analytification/MonicHypersurface.lean` proves the projection of a hypersurface to
+  `ℂ^n` finite, while the theorem wanted is finiteness over the analytification of the base
+  algebra, which sits inside `ℂ^n` by
+  `ComplexAnalytic.isClosedEmbedding_base_analytificationIncl`.
 - `ComplexAnalytic.AnalyticSpace.not_isFinite_of_infinite_fiber`: the criterion a non-example is
   exhibited by.
 - `ComplexAnalytic.AnalyticSpace.isProperMap_base_of_isFinite`: **a finite morphism is proper**,
@@ -225,6 +233,49 @@ theorem isFinite_comp_of_isClosedEmbedding {X Y S : AnalyticSpace.{u}} (i : X �
     rintro _ ⟨x, hx, rfl⟩
     simp only [Set.mem_preimage, Set.mem_singleton_iff] at hx
     exact ⟨⟨x, rfl⟩, hx⟩
+
+/-- **Finiteness cancels along an injective second factor**: if `f ≫ i` is finite and the
+underlying map of `i` is injective, then `f` is finite.
+
+**Do not read this as a converse of
+`ComplexAnalytic.AnalyticSpace.isFinite_comp_of_isClosedEmbedding`**, whose name is one word away
+and whose statement is the other direction — that one *builds* a finite composite out of a closed
+embedding and a map well behaved along its image, while this one takes a finite composite apart.
+Nor of `ComplexAnalytic.AnalyticSpace.isFinite_comp`, which needs both factors finite; here the
+second factor need not be finite at all, only injective.
+
+**Injectivity is asked for and nothing more, and it is used in exactly one of the two fields.**
+The fibre half is free: `f.toLRSHom.base ⁻¹' {y}` is contained in `(f ≫ i).toLRSHom.base ⁻¹' {i y}`
+for any `i` whatever, so finiteness transfers with no hypothesis — injectivity only upgrades the
+containment to an equality, which is not needed. The closed half is where it is used, and it is
+used with the continuity of `i` rather than with any closedness of it: for `C` closed,
+`f.toLRSHom.base '' C` is the **preimage** under `i.toLRSHom.base` of `(f ≫ i).toLRSHom.base '' C`,
+which is closed by hypothesis. So `IsClosedEmbedding` would be the wrong hypothesis — it asks for
+closedness that is never consumed — and this file's style is to ask for no more than is used, as
+`ComplexAnalytic.AnalyticSpace.isFinite_of_isClosedEmbedding`'s docstring says of the structure
+sheaves. -/
+theorem isFinite_of_isFinite_comp {X Y S : AnalyticSpace.{u}} (f : X ⟶ Y) (i : Y ⟶ S)
+    (hi : Function.Injective (i.toLRSHom.base : Y → S)) (h : IsFinite (f ≫ i)) :
+    IsFinite f where
+  isClosedMap C hC := by
+    have himg : (f.toLRSHom.base : X → Y) '' C =
+        (i.toLRSHom.base : Y → S) ⁻¹' (((f ≫ i).toLRSHom.base : X → S) '' C) := by
+      ext y
+      refine ⟨?_, ?_⟩
+      · rintro ⟨x, hx, rfl⟩
+        exact ⟨x, hx, rfl⟩
+      · rintro ⟨x, hx, hxy⟩
+        exact ⟨x, hx, hi hxy⟩
+    rw [himg]
+    exact (h.isClosedMap C hC).preimage i.toLRSHom.base.hom.continuous
+  finite_fiber y := by
+    have hfib : (f.toLRSHom.base : X → Y) ⁻¹' {y} =
+        ((f ≫ i).toLRSHom.base : X → S) ⁻¹' {(i.toLRSHom.base : Y → S) y} := by
+      ext x
+      simp only [Set.mem_preimage, Set.mem_singleton_iff]
+      exact ⟨fun hx ↦ congrArg _ hx, fun hx ↦ hi hx⟩
+    rw [hfib]
+    exact h.finite_fiber _
 
 /-- **A morphism with an infinite fibre is not finite**, which is how a non-example is exhibited:
 the fibre condition is the one that fails for a projection, and it fails for a reason one can

@@ -940,3 +940,18 @@ info: 'ComplexAnalytic.AnalyticSpace.isFiniteEtale_coveringSpaceHom' depends on 
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.isFiniteEtale_coveringSpaceHom
+
+/-! ### Finiteness cancels along an injective second factor
+
+`Oka/AnalyticSpace/Finite.lean`. The one stability property of
+`ComplexAnalytic.AnalyticSpace.IsFinite` that takes a composite apart rather than building one,
+and the only declaration in that file with no consumer inside the library yet: it exists for the
+standard-étale line, which proves finiteness over `ℂ^n` and wants it over a closed analytic
+subspace of `ℂ^n`. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isFinite_of_isFinite_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFinite_of_isFinite_comp
