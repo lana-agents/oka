@@ -749,3 +749,119 @@ info: 'ComplexAnalytic.isFinite_comp_proj_of_isCutOutBy' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isFinite_comp_proj_of_isCutOutBy
+
+/-! ### Over an open subset of the base: the projection of a cylinder
+
+`Oka/AnalyticSpace/OpenBaseProjection.lean`, together with
+`ComplexAnalytic.AnalyticSpace.restrictHom` from `Oka/AnalyticSpace/OpenSubspace.lean`, which is
+what makes the projection over `V` a restricted morphism. The two headings above are the same two
+halves over the whole of `ℂ^(n+1)`; these carry both across the restriction, which is what a
+standard étale algebra — inverting a polynomial as well as cutting one out — needs. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.restrictHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.restrictHom
+
+/--
+info: 'ComplexAnalytic.cylinder' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.cylinder
+
+/--
+info: 'ComplexAnalytic.mem_cylinder' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.mem_cylinder
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.projRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.projRestrict
+
+/--
+info: 'ComplexAnalytic.cylinderHomeo' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.cylinderHomeo
+
+/--
+info: 'ComplexAnalytic.base_projRestrict_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.base_projRestrict_eq
+
+/--
+info: 'ComplexAnalytic.range_base_eq_of_isCutOutBy_resΓ' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.range_base_eq_of_isCutOutBy_resΓ
+
+/--
+info: 'ComplexAnalytic.isFinite_comp_projRestrict_of_range_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isFinite_comp_projRestrict_of_range_eq
+
+/--
+info: 'ComplexAnalytic.isFinite_comp_projRestrict_of_isCutOutBy' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isFinite_comp_projRestrict_of_isCutOutBy
+
+/--
+info: 'ComplexAnalytic.cylinderStalkEquiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.cylinderStalkEquiv
+
+/--
+info: 'ComplexAnalytic.baseStalkEquiv' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.baseStalkEquiv
+
+/--
+info: 'ComplexAnalytic.cylinderStalkEquiv_stalkMap_ofRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.cylinderStalkEquiv_stalkMap_ofRestrict
+
+/--
+info: 'ComplexAnalytic.cylinderStalkEquiv_stalkMap_projRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.cylinderStalkEquiv_stalkMap_projRestrict
+
+/--
+info: 'ComplexAnalytic.cylinderStalkEquiv_Γgerm_resΓ' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.cylinderStalkEquiv_Γgerm_resΓ
+
+/--
+info: 'ComplexAnalytic.bijective_stalkMap_comp_projRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.bijective_stalkMap_comp_projRestrict
+
+/--
+info: 'ComplexAnalytic.isIso_stalkMap_comp_projRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isIso_stalkMap_comp_projRestrict
