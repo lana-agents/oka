@@ -11,7 +11,12 @@ import Mathlib.RingTheory.Etale.StandardEtale
 # A standard étale algebra over a presented `ℂ`-algebra is presented
 
 Mathlib's `StandardEtalePair R` is a pair `f g : R[X]` with `f` monic and `f'` invertible in
-`R[X][1/g]`, and `StandardEtalePair.Ring` is the algebra `R[X][Y] ⧸ (f, Y·g - 1)` it names. This
+`R[X][1/g] ⧸ (f)`, and `StandardEtalePair.Ring` is the algebra `R[X][Y] ⧸ (f, Y·g - 1)` it names.
+**The `⧸ (f)` is not decoration.** The field is `cond : ∃ p₁ p₂ n, f' * p₁ + f * p₂ = g ^ n`, and
+over `ℤ` the pair `f = X² - 1`, `g = 2` satisfies it at `p₁ = X`, `p₂ = -2`, `n = 1` while
+`f' = 2X`, of degree one over a reduced ring, is not a unit of `ℤ[1/2][X]`. Mathlib's own
+structure docstring has the `/f` and the bullet for it under that file's `## Main definitions`
+drops it, so the two disagree upstream; the field is what to read. This
 file says that when `R` is a `ComplexAnalytic.PresentedAlgebra` — the `ℂ`-algebra
 `ℂ[x₁, …, x_n] ⧸ (g₁, …, g_k)` this development analytifies — that algebra is a presented
 `ℂ`-algebra too, on two more variables and two more relations, and exhibits the presentation.
@@ -42,7 +47,7 @@ quotient of a bare polynomial ring and no localisation appears. Going through
 a `Localization.Away` along an algebra equivalence and matching the two structure maps. Taking the
 definition instead costs one chain of quotient isomorphisms and no commutative algebra:
 
-    ℂ[x, X, Y] ⧸ (g, Y·G - 1, F)   →   (A[X][Y]) ⧸ (Y·C g - 1, C f)   =   P.Ring
+    ℂ[x, X, Y] ⧸ (g, Y·G - 1, F)   →   (A[X][Y]) ⧸ (C f, Y·C g - 1)   =   P.Ring
 
 with the middle step `ComplexAnalytic.biPolyPresentedAlgebraEquiv`, two applications of the
 adjoin-a-variable operation.
@@ -53,7 +58,7 @@ adjoin-a-variable operation.
 with `Classical.choose`, `ComplexAnalytic.etalePresentedAlgebraEquiv` takes them as arguments
 together with the two equations saying they *are* lifts, and
 `ComplexAnalytic.exists_presentation_standardEtale` supplies them where only existence is wanted.
-That keeps the isomorphism computable from the data a caller already has: a scheme-side standard
+That keeps the isomorphism explicit in the data a caller already has: a scheme-side standard
 étale pair arrives with polynomial representatives, and forcing it through a choice would discard
 them.
 
@@ -72,7 +77,9 @@ them.
 - `ComplexAnalytic.polyPresentedAlgebraEquiv`: **adjoining a variable presents the polynomial
   ring** `A[X]`.
 - `ComplexAnalytic.etalePresentedAlgebraEquiv`: **the algebra the étale presentation above
-  presents is `StandardEtalePair.Ring`.**
+  presents is `StandardEtalePair.Ring`**, written as the quotient it definitionally is.
+- `ComplexAnalytic.etalePresentedAlgebraEquivRing`: the same equivalence with `P.Ring` for its
+  target, which is the form a consumer states things in.
 - `ComplexAnalytic.exists_presentation_standardEtale`: the same, with the lifts existentially
   quantified.
 
@@ -335,24 +342,24 @@ theorem presentationIdeal_etalePresentation :
   rw [Set.pair_comm, Ideal.span_insert]
   exact sup_comm _ _
 
-/-- The image of a pair of generators. -/
-theorem map_span_pair {A B F : Type*} [CommRing A] [CommRing B] [FunLike F A B]
-    [RingHomClass F A B] (f : F) (a b : A) :
-    (Ideal.span {a, b}).map f = Ideal.span {f a, f b} := by
-  rw [Ideal.map_span, Set.image_pair]
-
-/-- Instance search finds `CommRing (Polynomial (ComplexAnalytic.PresentedAlgebra n k g))` and
-**not** the same one `Polynomial` level up.
-
-Raising `synthInstance.maxSize` to 1000 and `synthInstance.maxHeartbeats` to 400000 does **not**
-help, and naming the coefficient ring does; both measured. `ℂ` in place of the presented algebra
-is found at either level, so it is the `abbrev` unfolding to a quotient that search will not carry
-through twice. -/
-local instance instCommRingBiPoly :
-    CommRing (Polynomial (Polynomial (PresentedAlgebra.{u} n k g))) :=
-  Polynomial.commRing (R := Polynomial (PresentedAlgebra.{u} n k g))
-
 variable (P : StandardEtalePair (PresentedAlgebra.{u} n k g))
+
+/-- **`ℂ` acts on the standard étale algebra**, through the presented algebra it is built over.
+
+`StandardEtalePair.Ring` derives `Algebra R P.Ring` at its own base ring, and Mathlib has no
+transitive `Algebra`, so without this line the type `… ≃ₐ[ℂ] P.Ring` does not elaborate at all in
+a file importing this one — which is the form the consumers of
+`ComplexAnalytic.etalePresentedAlgebraEquivRing` below want. There is no diamond: the structure
+map factors through `A` by `rfl`, which is what
+`ComplexAnalytic.standardEtalePairRingIsScalarTower` records. -/
+instance standardEtalePairRingAlgebra : Algebra ℂ P.Ring :=
+  inferInstanceAs (Algebra ℂ (Polynomial (Polynomial (PresentedAlgebra.{u} n k g)) ⧸
+    Ideal.span {Polynomial.C P.f, Polynomial.X * Polynomial.C P.g - 1}))
+
+/-- **The two actions on `StandardEtalePair.Ring` agree**, by `rfl` on the structure maps. -/
+instance standardEtalePairRingIsScalarTower :
+    IsScalarTower ℂ (PresentedAlgebra.{u} n k g) P.Ring :=
+  IsScalarTower.of_algebraMap_eq' rfl
 
 /-- **Mathlib's standard étale algebra is definitionally this quotient**, which is what lets the
 isomorphism below land on a bare polynomial ring and never mention a localisation. It is the same
@@ -393,9 +400,23 @@ def etalePresentedAlgebraEquiv
             (Ideal.Quotient.mk _ (MvPolynomial.rename (localisationIncl.{u} (n + 1)) F)) =
             Polynomial.C P.f := by
           rw [biPolyPresentedAlgebraEquiv_mk_rename.{u} g F, hF]
-        rw [map_span_pair, Ideal.map_span, Set.image_pair]
+        rw [Ideal.map_span, Set.image_pair, Ideal.map_span, Set.image_pair]
         simp only [RingHom.coe_coe, Ideal.Quotient.mkₐ_eq_mk]
         rw [e1, e2, Set.pair_comm])))
+
+/-- **The algebra `ComplexAnalytic.etalePresentation` presents is `StandardEtalePair.Ring`**,
+spelled with Mathlib's name for it.
+
+`ComplexAnalytic.etalePresentedAlgebraEquiv` with its target read through
+`ComplexAnalytic.standardEtalePair_ring_eq`, so this carries **no** transport: it is the same term,
+and the two types are the same type. The reason it is a separate declaration is that
+`≃ₐ[ℂ] P.Ring` needs the `Algebra ℂ P.Ring` above to elaborate, while the spelled-out quotient is
+what the proof of the equivalence has to see. -/
+def etalePresentedAlgebraEquivRing
+    (hF : polyPresentedAlgebraEquiv.{u} g (Ideal.Quotient.mk _ F) = P.f)
+    (hG : polyPresentedAlgebraEquiv.{u} g (Ideal.Quotient.mk _ G) = P.g) :
+    PresentedAlgebra.{u} (n + 2) (k + 2) (etalePresentation.{u} g F G) ≃ₐ[ℂ] P.Ring :=
+  etalePresentedAlgebraEquiv.{u} g F G P hF hG
 
 /-- **Every element of `A[X]` has a polynomial lift**, since
 `ComplexAnalytic.polyPresentedAlgebraEquiv` is an equivalence and `Ideal.Quotient.mk` is
@@ -416,11 +437,10 @@ than under an existential. -/
 theorem exists_presentation_standardEtale :
     ∃ F G : MvPolynomial (ULift.{u} (Fin (n + 1))) ℂ,
       Nonempty (PresentedAlgebra.{u} (n + 2) (k + 2) (etalePresentation.{u} g F G) ≃ₐ[ℂ]
-        (Polynomial (Polynomial (PresentedAlgebra.{u} n k g)) ⧸
-          Ideal.span {Polynomial.C P.f, Polynomial.X * Polynomial.C P.g - 1})) := by
+        P.Ring) := by
   obtain ⟨F, hF⟩ := exists_lift_polyPresentedAlgebraEquiv.{u} g P.f
   obtain ⟨G, hG⟩ := exists_lift_polyPresentedAlgebraEquiv.{u} g P.g
-  exact ⟨F, G, ⟨etalePresentedAlgebraEquiv.{u} g F G P hF hG⟩⟩
+  exact ⟨F, G, ⟨etalePresentedAlgebraEquivRing.{u} g F G P hF hG⟩⟩
 
 /-- **The structure map `A ⟶ A_ét`, as a morphism of presentations.**
 

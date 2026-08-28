@@ -895,10 +895,10 @@ info: 'ComplexAnalytic.glueDataCLinear_coverGlueData' depends on axioms:
 
 /-! ### A standard étale algebra over a presented `ℂ`-algebra is presented
 
-The four advertised results of `Oka/Analytification/StandardEtale.lean`. The two operations —
-adjoin a variable, add a relation — and the two forms of the identification with
-`StandardEtalePair.Ring`, one taking the polynomial lifts of `f` and `g` as arguments and one
-quantifying them away.
+The five advertised results of `Oka/Analytification/StandardEtale.lean`. The two operations —
+adjoin a variable, add a relation — and the three forms of the identification with
+`StandardEtalePair.Ring`: the one that names the quotient, the one that names `P.Ring`, and the
+one that quantifies the polynomial lifts of `f` and `g` away.
 -/
 
 /--
@@ -921,6 +921,13 @@ info: 'ComplexAnalytic.etalePresentedAlgebraEquiv' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.etalePresentedAlgebraEquiv
+
+/--
+info: 'ComplexAnalytic.etalePresentedAlgebraEquivRing' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.etalePresentedAlgebraEquivRing
 
 /--
 info: 'ComplexAnalytic.exists_presentation_standardEtale' depends on axioms:
