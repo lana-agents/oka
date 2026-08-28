@@ -487,11 +487,16 @@ info: 'ComplexAnalytic.AnalyticSpace.isIso_stalkMap_okaMap' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.isIso_stalkMap_okaMap
 
-/-! ### The projection `ℂ^(n+1) → ℂ^n` on germs and stalks
+/-! ### Forgetting coordinates, on germs and stalks
 
 `Oka/AnalyticSpace/ProjectionStalk.lean`. The heading above records when a stalk map is an
 isomorphism; these record what one particular stalk map *is*, which is what a quotient statement
-about `LocalOkaRing` needs before it can be read as a statement about a morphism of spaces. -/
+about `LocalOkaRing` needs before it can be read as a statement about a morphism of spaces. The
+`coordEmb` three are the general statement, for the map `ℂ^ι → ℂ^κ` forgetting the coordinates
+outside an embedding `κ ↪ ι`; the `projCoords` three are its instance at `Fin.castSuccEmb`, and
+the last is the same projection between complex analytic spaces, where the coordinates are
+indexed by `ULift (Fin n)` and the germ rings have to be relabelled to reach
+`LocalOkaRing.incl`. -/
 
 /--
 info: 'ComplexAnalytic.okaMapFun_projCoords' depends on axioms:
@@ -513,6 +518,63 @@ info: 'ComplexAnalytic.okaStalkEquiv_stalkMap_okaMapHom_projCoords' depends on a
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.okaStalkEquiv_stalkMap_okaMapHom_projCoords
+
+/--
+info: 'ComplexAnalytic.okaMapFun_coordEmb' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.okaMapFun_coordEmb
+
+/--
+info: 'ComplexAnalytic.germ_okaMapC_coordEmb' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.germ_okaMapC_coordEmb
+
+/--
+info: 'ComplexAnalytic.okaStalkEquiv_stalkMap_okaMapHom_coordEmb' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.okaStalkEquiv_stalkMap_okaMapHom_coordEmb
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.okaStalkEquiv_stalkMap_uliftProj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.okaStalkEquiv_stalkMap_uliftProj
+
+/--
+info: 'ComplexAnalytic.coordEmb' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coordEmb
+
+/--
+info: 'ComplexAnalytic.projCoords' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.projCoords
+
+-- The only assertion in this tree that is *not* `[propext, Classical.choice, Quot.sound]`, and
+-- the direction it differs in is the safe one: relabelling `Fin.castSucc` through `ULift` is
+-- structural, so nothing analytic and no choice reaches it. `OkaTest/Axioms.lean`'s rule is that
+-- an assertion must never name a *further* axiom; naming fewer is a fact about the declaration.
+/-- info: 'ComplexAnalytic.uliftCastSuccEmb' does not depend on any axioms -/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.uliftCastSuccEmb
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.proj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.proj
 
 /-! ### The third rung: a finite étale morphism is a covering map
 

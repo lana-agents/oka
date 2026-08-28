@@ -105,17 +105,22 @@ derived from — so read it as a test of the rung and not as a fact about the ma
   morphism which is not an isomorphism. **The stalk half of
   `ComplexAnalytic.AnalyticSpace.IsLocalIso` is exercised by it**, and by nothing else: the
   non-example `ComplexAnalytic.axisIncl` fails the topological field alone.
-* **A `degree` function on morphisms**, and nothing else about the number of sheets. The bullet
-  that used to stand here said two things, and **both are now retired**: that the constancy of the
-  number of sheets over a connected base was not proved anywhere — it is,
-  `ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale`, applied here as
+* **A `degree` function on morphisms — this is no longer absent, and this file is where it is
+  checked.** The bullet that used to stand here said two things, and **both are now retired**:
+  that the constancy of the number of sheets over a connected base was not proved anywhere — it
+  is, `ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale`, applied here as
   `ComplexAnalytic.card_fiber_sq_eq` — and that nothing showed `ComplexAnalytic.sq` two-sheeted,
   which `ComplexAnalytic.card_fiber_base_sq` now does. So the constancy statement has a witness
   whose common value is **2** rather than something a one-sheeted map would also satisfy, and the
   bullet's complaint that it was a weak test is answered.
-  What is **not** here, and is not wanted, is a `Nat`-valued `degree` function on morphisms: one
-  theorem about one map is not an invariant, and a definition would carry a well-definedness
-  obligation nothing consumes.
+  **The `Nat`-valued `degree` function this bullet said was not wanted now exists** and is
+  exercised here: `ComplexAnalytic.degree_sq` reads `ComplexAnalytic.card_fiber_base_sq` as
+  `ComplexAnalytic.AnalyticSpace.degree ComplexAnalytic.sq = 2`, and
+  `ComplexAnalytic.not_bijective_base_sq` is the one application of
+  `ComplexAnalytic.AnalyticSpace.bijective_base_iff_degree_eq_one`. What answered the objection was
+  not the computation but the pair of statements in `Oka/AnalyticSpace/Degree.lean` — the
+  well-definedness theorem and a consumer of the number — and the computation here is what stops
+  that pair from being exercised at nothing.
   **The distinction the bullet before that one drew still holds**: `IsCoveringMap` is a condition
   on a map of topological spaces, so neither `ComplexAnalytic.isCoveringMap_base_sq` nor Mathlib's
   `isCoveringMap_npow` is about a covering *of analytic spaces*, a notion this repository does not
@@ -1059,10 +1064,13 @@ not an import. Masked, it is not reachable; and the compiler agrees, since witho
 `IsAlgClosed ℂ` fails to synthesize with `failed to synthesize instance of type class
 IsAlgClosed ℂ`. See `Oka/FieldTheory/IsAlgClosed/Basic.lean` for the measurement.
 
-**This does not retire the `degree` clauses.** All four places that record the absence of a
-`Nat`-valued degree function on morphisms still record it, and correctly: one theorem about one map
-is not an invariant, and a `degree` definition would carry a well-definedness obligation that
-nothing here consumes. -/
+**This did not retire the `degree` clauses, and something else has.** The sentence that used to
+stand here said all four places recording the absence of a `Nat`-valued degree function still
+recorded it, and that was right at the time: one theorem about one map is not an invariant. What
+retired them is `Oka/AnalyticSpace/Degree.lean`, which supplies the well-definedness theorem
+`ComplexAnalytic.AnalyticSpace.degree_eq_card_fiber` and a consumer,
+`ComplexAnalytic.AnalyticSpace.isHomeomorph_base_of_degree_eq_one`; this theorem is what
+`ComplexAnalytic.degree_sq` reads, and it is unchanged by that. -/
 theorem card_fiber_base_sq (y : ((AnalyticSpace.complexAffineSpace.{u} 1).restrict
     punctured.{u} : Type u)) :
     Nat.card (((ComplexAnalytic.sq.{u}).toLRSHom.base :
@@ -1083,6 +1091,62 @@ theorem card_fiber_base_sq (y : ((AnalyticSpace.complexAffineSpace.{u} 1).restri
       (fun _ ↦ rfl) (fun _ ↦ rfl)
   rw [← key]
   exact Nat.card_congr (Equiv.subtypeEquiv puncturedHomeo.{u}.toEquiv fun _ ↦ Iff.rfl)
+
+/-- **The punctured line is not empty.**
+
+Declared as an instance for the same reason `ComplexAnalytic.t2Space_restrict_punctured` and
+`ComplexAnalytic.preconnectedSpace_restrict_punctured` are: the head is a particular restriction
+of a particular space, both defined in this file, so it cannot fire anywhere it is not wanted.
+
+Nothing needed it until `ComplexAnalytic.AnalyticSpace.degree` did, and the reason it needs it is
+worth stating: the degree is an `iSup` over the target, so over an empty target it is `0` whatever
+the fibres are. The paragraph above
+`ComplexAnalytic.preconnectedSpace_restrict_punctured` says the space "is of course also nonempty,
+and nothing needs that"; something does now.
+
+The witness is `1`, carried back across `ComplexAnalytic.puncturedHomeo`. -/
+instance nonempty_restrict_punctured :
+    Nonempty ((AnalyticSpace.complexAffineSpace.{u} 1).restrict punctured.{u} : Type u) :=
+  ⟨puncturedHomeo.{u}.symm ⟨1, one_ne_zero⟩⟩
+
+/-- **The squaring map of the punctured line has degree two.**
+
+`ComplexAnalytic.AnalyticSpace.degree_eq_of_forall_card_fiber_eq` at
+`ComplexAnalytic.card_fiber_base_sq`, so the only thing this adds to that theorem is the passage
+from "every fibre has two points" to a number attached to the morphism — and the only hypothesis
+it costs is `ComplexAnalytic.nonempty_restrict_punctured`. In particular no covering-space theory
+is used here, exactly as none is used in `ComplexAnalytic.card_fiber_base_sq`.
+
+**This is the witness the trivial covers cannot supply.**
+`ComplexAnalytic.AnalyticSpace.degree_sigmaFold` realises every value too, but always with a
+disconnected source; here the source is the punctured line, which is connected
+(`ComplexAnalytic.preconnectedSpace_restrict_punctured` transports its connectedness), so this is
+the only morphism in this repository with a computed degree greater than one and a connected
+source. -/
+theorem degree_sq : AnalyticSpace.degree ComplexAnalytic.sq.{u} = 2 :=
+  AnalyticSpace.degree_eq_of_forall_card_fiber_eq _ card_fiber_base_sq.{u}
+
+/-- **The underlying map of the squaring map is not bijective**, because its degree is not one.
+
+`ComplexAnalytic.AnalyticSpace.bijective_base_iff_degree_eq_one` at
+`ComplexAnalytic.degree_sq`, and it is the one place that equivalence is applied. Its four
+instance hypotheses are all in this file: `ComplexAnalytic.isFiniteEtale_sq`,
+`ComplexAnalytic.t2Space_restrict_punctured`,
+`ComplexAnalytic.preconnectedSpace_restrict_punctured` and
+`ComplexAnalytic.nonempty_restrict_punctured`.
+
+**This is weaker than `ComplexAnalytic.not_isIso_sq` and is proved by a different route.** That
+theorem rules out an isomorphism of analytic spaces and its proof is the failure of injectivity at
+a pair of points; this one reads the same failure off a *number*, and is the statement
+`ComplexAnalytic.AnalyticSpace.isHomeomorph_base_of_degree_eq_one` is the converse half of. It is
+here because a degree function whose only consumer is a theorem about a general morphism has not
+been exercised at anything. -/
+theorem not_bijective_base_sq :
+    ¬ Function.Bijective ((ComplexAnalytic.sq.{u}).toLRSHom.base :
+      ((AnalyticSpace.complexAffineSpace.{u} 1).restrict punctured.{u} : Type u) → _) := by
+  haveI := isFiniteEtale_sq.{u}
+  rw [AnalyticSpace.bijective_base_iff_degree_eq_one, degree_sq]
+  norm_num
 
 end
 

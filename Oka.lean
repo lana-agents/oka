@@ -35,6 +35,7 @@ import Oka.AnalyticSpace.Basic
 import Oka.AnalyticSpace.Coherent
 import Oka.AnalyticSpace.Continuity
 import Oka.AnalyticSpace.CoveringMap
+import Oka.AnalyticSpace.Degree
 import Oka.AnalyticSpace.Evaluation
 import Oka.AnalyticSpace.Factorisation
 import Oka.AnalyticSpace.Finite
@@ -105,6 +106,7 @@ import Oka.OkaRing
 import Oka.Polynomial
 import Oka.Polynomial.Germ
 import Oka.Regular
+import Oka.RenameIndex
 import Oka.RingTheory.AdicCompletion.Algebra
 import Oka.RingTheory.Filtration
 import Oka.RingTheory.Finiteness.Basic
@@ -118,6 +120,7 @@ import Oka.RingTheory.Localization.Module
 import Oka.RingTheory.MvPolynomial.Ideal
 import Oka.RingTheory.MvPolynomial.Localization
 import Oka.RingTheory.RingHom.FaithfullyFlat
+import Oka.SetTheory.Cardinal.Finite
 import Oka.StalkEquiv
 import Oka.Statement
 import Oka.StructureSheaf
