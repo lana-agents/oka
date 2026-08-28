@@ -40,8 +40,12 @@ unchanged at 3443. (`scripts/import_cost.py` prices them at 2 against
 `Mathlib/CategoryTheory/GlueData.lean`'s closure, which is the mirror-tree question and a
 different baseline.)
 
-**Going through the path category is what keeps `CategoryTheory.eqToHom` out of the file, and
-that was the predicted expense.** Writing the hom-types by hand instead runs into the diagonal:
+**Going through the path category is what keeps `CategoryTheory.eqToHom` out of the shape and its
+`lift` API, and that was the predicted expense.** Everything from `OkaTest.GlueShape.Obj` to
+`OkaTest.GlueShape.symm_eq_of_hom_comp_hom` is free of `eqToHom`, `CategoryTheory.eqToIso`, `▸`
+and `cast`; the counterexample at the end of the file transports, at `OkaTest.GlueShape.ctGlue`,
+and there is nothing wrong with that. Writing the hom-types by hand instead runs into the
+diagonal:
 `ovl i i ⟶ mem i` has to have two elements, `incl i i` and `swap i i ≫ incl i i`, and the obvious
 hand-written hom-type — a sum of two propositions saying `l = i` and `l = j` — has two elements
 when `i ≠ j` and *also* two when `i = j`, but a functor out of it then has to produce a morphism
@@ -67,13 +71,17 @@ Against the diagram:
 | `hrange` | **does not follow**, `OkaTest.GlueShape.not_ctHRange` |
 | `hcocycle` | not stateable without `hrange`; see below |
 
-`hsymm` is the one that changes the interface. `ComplexAnalytic.coverGlueData` asks for
-`glue j i = (glue i j).symm`, an equation of *isomorphisms*; the shape asks only that the two
-transitions compose to the identity, which is what functoriality of any diagram gives
-(`OkaTest.GlueShape.map_swap_comp`). Those are the same condition — a right inverse of an
-isomorphism is its inverse — so a glue data of a cover takes one hypothesis
-fewer than `ComplexAnalytic.coverGlueData` asks for, and
-`OkaTest.GlueShape.coverGlueDataOfDiagram` is that reading of it.
+`hsymm` is the one that changes the interface, and it is a change of **form and not of count**:
+`OkaTest.GlueShape.coverGlueDataOfDiagram` and `ComplexAnalytic.coverGlueData` take the same six
+explicit arguments, with `hglue` in the place of `hsymm` rather than in addition to nothing.
+`coverGlueData` asks for `glue j i = (glue i j).symm`, an equation of *isomorphisms*; the shape
+asks only that the two transitions compose to the identity, an equation of *morphisms*. Those are
+the same condition — a right inverse of an isomorphism is its inverse,
+`OkaTest.GlueShape.symm_eq_of_hom_comp_hom` — but only the second is the form functoriality hands
+you (`OkaTest.GlueShape.map_swap_comp`). Anyone who already has a functor out of
+`OkaTest.GlueShape.Shape` has `hglue` for free; nobody has `hsymm` for free. It would become a
+change of count if `OkaTest.GlueShape.coverGlueDataOfDiagram` took the functor rather than its
+four components, which is not done here.
 
 `hcocycle` is a different case from `hrange` and the difference is worth stating precisely: it is
 not that it fails to follow, it is that **it cannot be written down without `hrange`**. Its
@@ -95,9 +103,12 @@ not empty and the containment fails.
 Three is also the smallest index type that can see it, in both hypotheses:
 `OkaTest.GlueShape.hRange_of_no_three` and `OkaTest.GlueShape.hCocycle_of_no_three` say that both
 are automatic on any index type with no three pairwise distinct elements.
-`OkaTest/ProjectiveLine.lean` records the two-member vacuity for `hcocycle`; **it holds for
-`hrange` as well**, which is the same observation one hypothesis earlier and is not recorded
-anywhere else.
+`OkaTest/ProjectiveLine.lean` records the two-member vacuity for **both** — at
+`ComplexAnalytic.hrange_lineCover` and `ComplexAnalytic.hcocycle_lineCover`, each proved from
+`ComplexAnalytic.pair_no_distinct_triple`, whose own docstring says `ℙ¹` needs *"neither a range
+condition nor a cocycle"*. What the two theorems here add is the form that quantifies over the
+index type rather than over one gluing, so that "test at three" is a statement about the index
+type and not about that one cover.
 
 ## Main definitions
 
@@ -412,10 +423,13 @@ abbrev HCocycle : Prop :=
 include hglue in
 /-- **The glue data of a cover, out of its diagram and the two triple-overlap hypotheses.**
 
-`ComplexAnalytic.coverGlueData` with one hypothesis fewer, and that is the whole benefit the shape
-buys at this stage: `obj`, `poly` and `glue` are the diagram's own data, `hsymm` is
-`OkaTest.GlueShape.hsymm_of_hglue`, and what is left over is exactly the two conditions that are
-about triple overlaps in `AlgebraicGeometry.LocallyRingedSpace` rather than about the diagram. -/
+`ComplexAnalytic.coverGlueData` with `hglue` in the place of `hsymm` — the same six explicit
+arguments, and what the shape buys at this stage is the *form* of that one: `hglue` is an equation
+of morphisms, which functoriality gives (`OkaTest.GlueShape.map_swap_comp`), where `hsymm` is an
+equation of isomorphisms, which it does not. `obj`, `poly` and `glue` are the diagram's own data,
+`hsymm` is `OkaTest.GlueShape.hsymm_of_hglue`, and what is left over is exactly the two conditions
+that are about triple overlaps in `AlgebraicGeometry.LocallyRingedSpace` rather than about the
+diagram. -/
 def coverGlueDataOfDiagram (hcocycle : HCocycle.{u} obj poly glue hrange) :
     AlgebraicGeometry.LocallyRingedSpace.GlueData.{u} :=
   coverGlueData.{u} obj poly glue hrange (hsymm_of_hglue obj poly glue hglue) hcocycle
@@ -423,10 +437,13 @@ def coverGlueDataOfDiagram (hcocycle : HCocycle.{u} obj poly glue hrange) :
 /-- **Fewer than three members cannot test the range hypothesis**: on an index type with no three
 pairwise distinct elements it is automatic.
 
-`OkaTest/ProjectiveLine.lean` records this for the cocycle hypothesis, where it is the reason a
-two-member gluing proves nothing about it. It holds one hypothesis earlier as well, for the same
-reason and by the same proof, and that does not seem to be recorded anywhere — so a two-member
-instance is not evidence about either. -/
+The `OkaTest/ProjectiveLine.lean` observation for the range hypothesis, in the form that
+quantifies over the index type rather than over one gluing — the same relation
+`OkaTest.GlueShape.hCocycle_of_no_three` bears to the cocycle one. That file proves both there,
+at `ComplexAnalytic.hrange_lineCover` and `ComplexAnalytic.hcocycle_lineCover`, from
+`ComplexAnalytic.pair_no_distinct_triple`; what is added here is that it is a statement about the
+index type, so a two-member instance is not evidence about `hrange` any more than about
+`hcocycle`. -/
 theorem hRange_of_no_three (h3 : ∀ i j k : J, i = j ∨ i = k ∨ j = k) :
     HRange.{u} obj poly glue := by
   intro i j k hij hik hjk
@@ -487,11 +504,6 @@ def ctGlue (i j : Fin 3) :
     coverOverlap.{0} ctObj ctPoly i j ≅ coverOverlap.{0} ctObj ctPoly j i :=
   eqToIso (ctOverlap_eq i j)
 
-set_option maxHeartbeats 400000 in
--- Twice the default. `eqToHom` between two `ComplexAnalytic.Presentation`s is what costs it: the
--- `CategoryTheory.Category` instance spells a morphism as `ComplexAnalytic.PresHom P.g Q.g`, so
--- the elaborator unfolds both presentations to check the transport typechecks. The two other
--- declarations below were raised for the same reason and turned out not to need it; this one does.
 /-- The shape's law holds, so these data really are a diagram of the shape. -/
 theorem ctHglue (i j : Fin 3) :
     (ctGlue i j).hom ≫ (ctGlue j i).hom = 𝟙 (coverOverlap.{0} ctObj ctPoly i j) := by
