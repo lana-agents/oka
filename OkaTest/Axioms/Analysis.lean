@@ -17,7 +17,7 @@ Results that mention nothing sheaf-theoretic, from three modules:
   polynomials over an arbitrary topological parameter space.
 
 **The third is the bulk of the file and it is not complex analysis.** The sentence this replaces
-said *"the material of `Oka/Analytic/`"*, which at `94984d4` covered three of the twelve guards
+said *"the material of `Oka/Analytic/`"*, which at `4025f01` covered three of the twelve guards
 below; seven are the third module's, whose parameter space is any topological space and whose
 statements never mention `ℂ`. `OkaTest/Axioms.lean`'s row for this file was widened to *"complex
 analysis, and the topology of polynomial zero loci"* on that measurement, and this paragraph is

@@ -23,7 +23,7 @@ table resolves them to modules. The stance is `OkaTest/Axioms/Sheaves.lean`'s an
 modules is past the size at which a list stays true.
 
 **The sentence this replaces named local models, the node and the value of a section**, which at
-`94984d4` is at most 19 of those 102 guards and four of the sixteen headings. Gluing alone is 42
+`4025f01` is at most 19 of those 102 guards and four of the sixteen headings. Gluing alone is 42
 and the coproduct 19, and neither appeared in it. **Six of the eighteen modules are not
 `Oka/AnalyticSpace/`'s**, and contribute 21 guards: `Oka/CategoryTheory/GlueData.lean` seven,
 four modules of `Oka/Geometry/RingedSpace/` ten, and

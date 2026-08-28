@@ -94,23 +94,28 @@ into an index of source directories. **Guard one in the file of the analytic res
 motivated it**, under that result's heading — which is what `OkaTest/Axioms/Morphisms.lean`
 already says in terms of `Oka/Topology/Covering/Basic.lean`: *"the mirror-tree topological
 criterion … says nothing about analytic spaces; it is guarded here rather than apart from its
-only consumer."*
+only consumer."* `OkaTest/Axioms/AnalyticSpace.lean` states the same reasoning for a lemma that
+is not even mirror-tree — *"general locally-ringed-space material with **no row of its own** in
+the topic table … it sits here because the only thing that uses it is the rigidity statement
+below"* — so this paragraph records a practice with two independent precedents rather than
+inventing one.
 
-At `94984d4` that tail is **17 guards in six modules**, against 636 in all: seven from
-`Oka/CategoryTheory/GlueData.lean` (in `OkaTest/Axioms/AnalyticSpace.lean`), four from
+At `4025f01` that tail is **18 guards in six modules**, against 645 in all: seven from
+`Oka/CategoryTheory/GlueData.lean` (in `OkaTest/Axioms/AnalyticSpace.lean`), five from
 `Oka/Topology/Covering/Basic.lean` (in `OkaTest/Axioms/Morphisms.lean`), three from
 `Oka/Topology/IsLocalHomeomorph.lean` (in `OkaTest/Axioms/Sheaves.lean`), and one each from
 `Oka/CategoryTheory/Limits/Shapes/KernelBiprod.lean` (in `OkaTest/Axioms/SheafOfModules.lean`),
 `Oka/Topology/Category/TopCat/Opens.lean` (in `OkaTest/Axioms/Analytification.lean`) and
-`Oka/FieldTheory/IsAlgClosed/Basic.lean` (in `OkaTest/Axioms/RingTheory.lean`). **Five of the six
+`Oka/FieldTheory/IsAlgClosed/Basic.lean` (in `OkaTest/Axioms/RingTheory.lean`). **Four of the six
 already sit in a file that holds some of their consumer's guards** — the rule above is being
-written down rather than imposed. The exception is `Oka/FieldTheory/IsAlgClosed/Basic.lean`,
-whose one theorem is used by `Oka/AnalyticSpace/CoveringMap.lean`, guarded in
-`OkaTest/Axioms/Morphisms.lean`; and `Oka/Topology/IsLocalHomeomorph.lean` is the awkward case,
-with no user in the library at that commit — it
-sits beside `Oka/Geometry/RingedSpace/LocallyRingedSpace/InverseImageSheet.lean`'s guards, which
-is the file it was written for and which **deliberately does not import it**, for the import-cost
-reason that file gives. Moving either is a tidy-up nobody has done and not a defect in the table.
+written down rather than imposed. The two that do not are
+`Oka/FieldTheory/IsAlgClosed/Basic.lean`, whose one theorem is used by
+`Oka/AnalyticSpace/CoveringMap.lean`, and `Oka/Topology/IsLocalHomeomorph.lean`, whose only user
+is `Oka/AnalyticSpace/CoveringSpace.lean`; both those users are guarded in
+`OkaTest/Axioms/Morphisms.lean`. The second was placed beside the file it was *written for*,
+which **deliberately does not import it** for the import-cost reason that file gives, and
+`OkaTest/Axioms/Sheaves.lean`'s heading for it says so. Moving either is a tidy-up nobody has
+done and not a defect in the table.
 **The figure is here so that a later sweep can tell growth from noise**: a tail that stays near
 this size is the expected one, and a tail that doubles means a row really is missing.
 
