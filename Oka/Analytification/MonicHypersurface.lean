@@ -127,9 +127,16 @@ construction rather than by a compatibility lemma.
 
   What is true is that the inversion becomes **vacuous over an open subset of the base**, and that
   is the shape of the remaining work rather than a lemma anyone has. The theorem below makes the
-  projection of the hypersurface a closed map, so the image of the closed set where `F` and `G`
-  both vanish is closed; above its complement `V` no point of the hypersurface has `G = 0`, so
-  there the source of the localised algebra *is* the hypersurface over the cylinder, which is what
+  projection of the hypersurface a closed map — **and it asks that hypersurface to be cut out by a
+  polynomial monic in the last variable, which here is `F`, so a monic lift has to be chosen.**
+  `StandardEtalePair.monic_f` gives monicity of `StandardEtalePair.f` in `A[X]` over
+  `A = ComplexAnalytic.PresentedAlgebra n k g`, which is a different statement from monicity in
+  the last variable over `ℂ[x₁, …, x_n]`, and `ComplexAnalytic.etalePresentedAlgebraEquiv` takes
+  *any* lift `F` of `StandardEtalePair.f` as a hypothesis rather than choosing one. A monic lift
+  exists — the leading coefficient `1` lifts to `1` — so this is a choice to record and not an
+  obstruction. Closedness in hand, the image of the closed set where `F` and `G` both vanish is
+  closed; above its complement `V` no point of the hypersurface has `G = 0`, so there the source
+  of the localised algebra *is* the hypersurface over the cylinder, which is what
   `ComplexAnalytic.isFinite_comp_projRestrict_of_range_eq` takes, with the same family `q`
   restricted to `V`. Nothing in this repository states that, and it is what makes the base
   restriction the relevant one after all — not because it handles the inverted `G`, but because it
