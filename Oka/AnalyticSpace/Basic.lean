@@ -60,15 +60,22 @@ assumed by most classical treatments should be added as a mixin where needed.
   with respect to `ℂ`-algebra structures on its source and target.
 - `ComplexAnalytic.IsCLinearHom.of_comp`: a morphism over a common target is `ℂ`-linear for the
   algebra structures pulled back from that target.
-- `ComplexAnalytic.IsCLinearHom.eq` and `ComplexAnalytic.isCLinearHom_comapAlgMap`: the pullback
-  of a structure along a morphism is `ℂ`-linear over it, and is the only structure that is — so
-  `ℂ`-linearity over a fixed target structure *determines* the source structure.
-- `ComplexAnalytic.isCLinearHom_ofRestrict`: the inclusion of an open subspace is `ℂ`-linear for
-  the restricted structure — the previous item in the spelling open subspaces are written in.
-  `ComplexAnalytic.isCLinearHom_ofRestrict_constants` in `Oka/AnalyticSpace/LocalModel.lean` is
-  the same statement at `constantsAlgMap`.
 - `ComplexAnalytic.AnalyticSpace`: a complex analytic space.
 - `ComplexAnalytic.AnalyticSpace.complexAffineSpace`: `ℂ^n` as a complex analytic space.
+
+## Main results
+
+The `ℂ`-linearity API, which is used throughout `Oka/AnalyticSpace/` and lived in three
+different files until it was collected here.
+
+- `ComplexAnalytic.isCLinearHom_comapAlgMap` and `ComplexAnalytic.IsCLinearHom.eq`: the pullback
+  of a structure along a morphism is `ℂ`-linear over it, and **is the only structure that is** —
+  so `ℂ`-linearity over a fixed target structure *determines* the source structure, which is
+  what makes a structure obtained by any route identifiable.
+- `ComplexAnalytic.isCLinearHom_ofRestrict`: **the inclusion of an open subspace is `ℂ`-linear**
+  for the restricted structure — the previous item in the spelling open subspaces are written
+  in. `Oka/AnalyticSpace/LocalModel.lean` restates it for an open subset of `ℂ^n` and the
+  constants there, which is a different spelling of the same fact and not a second result.
 
 ## References
 
