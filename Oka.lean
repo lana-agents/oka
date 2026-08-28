@@ -35,6 +35,7 @@ import Oka.AnalyticSpace.Basic
 import Oka.AnalyticSpace.Coherent
 import Oka.AnalyticSpace.Continuity
 import Oka.AnalyticSpace.CoveringMap
+import Oka.AnalyticSpace.CoveringSpace
 import Oka.AnalyticSpace.Degree
 import Oka.AnalyticSpace.Evaluation
 import Oka.AnalyticSpace.Factorisation

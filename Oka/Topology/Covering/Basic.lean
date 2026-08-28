@@ -6,9 +6,9 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 import Mathlib.Topology.Covering.Basic
 
 /-!
-# Two statements about covering maps: a criterion, and constancy of the fibre
+# Three statements about covering maps: two criteria, and constancy of the fibre
 
-Material for `Mathlib/Topology/Covering/Basic.lean`; see `README.md` on the mirror tree. Two
+Material for `Mathlib/Topology/Covering/Basic.lean`; see `README.md` on the mirror tree. Three
 independent statements, sharing only their destination.
 
 ## A closed local homeomorphism with finite fibres is a covering map
@@ -22,6 +22,28 @@ and is therefore not applicable to a non-compact source such as the punctured li
 
 The Hausdorff hypothesis on the source is Mathlib's and is used to separate the finitely many
 points of a fibre; it is not removable.
+
+## A covering map with finite fibres is a closed map
+
+The converse of the criterion above, and the direction Mathlib does not have in any form: across
+`Mathlib/Topology/Covering/`, `isClosedMap` occurs only inside proofs. `IsCoveringMap.isClosedMap`
+below is what makes a finite covering space *finite* in the sense a morphism of complex analytic
+spaces is asked to be, and it is the only topological input that construction needs beyond
+Mathlib's.
+
+The proof reads the evenly covered neighbourhood as what the definition literally is — an open
+`U ∋ x`, and a homeomorphism `H : f ⁻¹' U ≃ₜ U × I` over `U` — and pushes the closed set across
+it. Given `C` closed and `x ∉ f '' C`, the image `H '' C` is closed in `U × I`, and it misses the
+slice `{x} × I` because a point of that slice lies over `x`. So each of the finitely many `i : I`
+gives an open set of `U` around `x` avoiding the `i`-th sheet of `C`, and their intersection is
+the neighbourhood wanted.
+
+**Finiteness of the fibre is used once, for that intersection to be open**, and it is used at the
+index type `I = f ⁻¹' {x}`, which is why the hypothesis is about fibres and not about `E`. **No
+separation axiom is used at all** — unlike the criterion above, whose `T2Space E` is Mathlib's and
+is not removable. And **the empty fibre is not a special case**: the intersection over an empty
+index type is `U` itself, which is the right answer, since `f ⁻¹' U` is then empty and `U` misses
+`f '' C` outright.
 
 ## The fibres of a covering map over a preconnected base
 
@@ -54,6 +76,8 @@ for it would make the statement fail on the empty space for no reason.
 
 - `IsClosedMap.isCoveringMap_of_isLocalHomeomorph`: a closed local homeomorphism with finite
   fibres out of a Hausdorff space is a covering map.
+- `IsCoveringMap.isClosedMap`: **a covering map with finite fibres is closed**, which is the
+  converse of the previous item with the Hausdorff hypothesis dropped.
 - `IsEvenlyCovered.eventually`: an evenly covered point is evenly covered on a neighbourhood, with
   the same index type.
 - `IsCoveringMap.eventually_nonempty_homeomorph`: the fibres of a covering map are locally
@@ -78,6 +102,47 @@ theorem IsClosedMap.isCoveringMap_of_isLocalHomeomorph [T2Space E] (hf : IsClose
   rw [isCoveringMap_iff_isCoveringMapOn_univ]
   exact hf.isCoveringMapOn_of_isLocalHomeomorphOn (fun x _ ↦ hfin x)
     ((isLocalHomeomorph_iff_isLocalHomeomorphOn_univ.mp h).mono (Set.subset_univ _))
+
+/-- **A covering map with finite fibres is a closed map.**
+
+The converse of `IsClosedMap.isCoveringMap_of_isLocalHomeomorph`, with the Hausdorff hypothesis
+dropped: nothing below separates two points of a fibre, it only counts them.
+
+Given a closed `C` and a point `x` outside `f '' C`, the evenly covered neighbourhood of `x` is an
+open `U` and a homeomorphism `H : f ⁻¹' U ≃ₜ U × (f ⁻¹' {x})` over `U`. The image of `C` under `H`
+is closed, and misses every point of the slice over `x`, because such a point is a preimage of `x`
+and `x ∉ f '' C`. Intersecting the finitely many slices of the complement gives the neighbourhood.
+
+**Finiteness of the fibre is used exactly once**, for that intersection to be open; the empty
+fibre is not a special case, since the empty intersection is `U`, which is then disjoint from
+`f '' C` because `f ⁻¹' U` is empty. -/
+theorem IsCoveringMap.isClosedMap (hf : IsCoveringMap f) (hfin : ∀ x, (f ⁻¹' {x}).Finite) :
+    IsClosedMap f := by
+  intro C hC
+  rw [← isOpen_compl_iff, isOpen_iff_mem_nhds]
+  intro x hx
+  obtain ⟨_, U, hxU, hU, hfU, H, hH⟩ := hf x
+  have : Finite (f ⁻¹' {x}) := (hfin x).to_subtype
+  -- The image of `C` in the trivialisation, a closed subset of `U × (f ⁻¹' {x})`.
+  set D : Set (U × (f ⁻¹' {x})) := H '' (Subtype.val ⁻¹' C) with hD
+  have hDclosed : IsClosed D := H.isClosedMap _ (hC.preimage continuous_subtype_val)
+  -- The points of `U` no sheet of which meets `C`.
+  set W : Set U := ⋂ i : (f ⁻¹' {x}), (fun u ↦ (u, i)) ⁻¹' Dᶜ with hW
+  have hWopen : IsOpen W :=
+    isOpen_iInter_of_finite fun i ↦ hDclosed.isOpen_compl.preimage (by fun_prop)
+  have hxW : (⟨x, hxU⟩ : U) ∈ W := by
+    refine Set.mem_iInter.2 fun i hmem ↦ ?_
+    obtain ⟨e, heC, hey⟩ := hmem
+    refine hx ⟨(e : E), heC, ?_⟩
+    have := hH e
+    rw [hey] at this
+    exact this.symm
+  refine Filter.mem_of_superset (hU.isOpenMap_subtype_val W hWopen |>.mem_nhds
+    ⟨⟨x, hxU⟩, hxW, rfl⟩) ?_
+  rintro _ ⟨u, huW, rfl⟩ ⟨c, hcC, hfc⟩
+  have hcU : c ∈ f ⁻¹' U := by rw [Set.mem_preimage, hfc]; exact u.2
+  have hfst : (H ⟨c, hcU⟩).1 = u := Subtype.ext ((hH ⟨c, hcU⟩).trans hfc)
+  exact (Set.mem_iInter.1 huW (H ⟨c, hcU⟩).2) ⟨⟨c, hcU⟩, hcC, by rw [← hfst]⟩
 
 /-- **An evenly covered point is evenly covered on a whole neighbourhood, with the same index
 type.**

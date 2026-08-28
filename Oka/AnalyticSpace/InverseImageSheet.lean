@@ -59,16 +59,22 @@ structure on the whole of `p⁻¹Y` restricted to `V`.
 
 ## What is not here
 
-* **No analytic space.** `Y` is an arbitrary locally ringed space with a `ℂ`-algebra structure on
-  its global sections; nothing asks it to have local models. Transporting
-  `ComplexAnalytic.HasLocalModels` across `sheetIso` is what a covering space of an analytic space
-  needs, and it belongs with that construction rather than here — the tool for it is
-  `ComplexAnalytic.HasLocalModels.of_iso`, which already exists and already takes the `ℂ`-linearity
-  proved below as its hypothesis.
-* **Nothing about a cover.** One sheet at a time, as in the file this builds on. Assembling the
-  sheets of a local homeomorphism into a structure on the whole of `p⁻¹Y` needs
+* **No analytic space, and this is still true of this file.** `Y` is an arbitrary locally ringed
+  space with a `ℂ`-algebra structure on its global sections; nothing here asks it to have local
+  models. The transport of `ComplexAnalytic.HasLocalModels` across `sheetIso` that a covering
+  space of an analytic space needs is `Oka/AnalyticSpace/CoveringSpace.lean`, and it is
+  `ComplexAnalytic.HasLocalModels.of_iso` taking `ComplexAnalytic.isCLinearHom_sheetHom` below as
+  its hypothesis, exactly as this bullet predicted.
+* **Nothing about a cover — and the assembly does not need what this bullet used to say it
+  would.** One sheet at a time, as in the file this builds on. What was written here was that
+  assembling the sheets of a local homeomorphism into a structure on the whole of `p⁻¹Y` needs
   `AlgebraicGeometry.LocallyRingedSpace.glueAlgMap` and the agreement of the sheets on their
-  overlaps, and neither is here.
+  overlaps. **It needs neither**, and `Oka/AnalyticSpace/CoveringSpace.lean` is the measurement:
+  `AlgebraicGeometry.LocallyRingedSpace.inverseImageHom` is defined on the whole of `p⁻¹Y`, so the
+  structure pulled back along it is already global and the sheets are used for the *property* of
+  having local models and for nothing else. `ComplexAnalytic.comapAlgMap_sheetHom` below is what
+  makes that work: it says the sheet's structure is the global one restricted, so no two sheets are
+  ever compared and the overlap identity this bullet reached for is never formed.
 -/
 
 open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry TopCat Topology
