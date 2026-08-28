@@ -114,14 +114,18 @@ At `4025f01` that tail is **18 guards in six modules**, against 645 in all: seve
 `Oka/Topology/Category/TopCat/Opens.lean` (in `OkaTest/Axioms/Analytification.lean`) and
 `Oka/FieldTheory/IsAlgClosed/Basic.lean` (in `OkaTest/Axioms/RingTheory.lean`). **Four of the six
 already sit in a file that holds some of their consumer's guards** — the rule above is being
-written down rather than imposed. The two that do not are
-`Oka/FieldTheory/IsAlgClosed/Basic.lean`, whose one theorem is used by
-`Oka/AnalyticSpace/CoveringMap.lean`, and `Oka/Topology/IsLocalHomeomorph.lean`, whose only user
-is `Oka/AnalyticSpace/CoveringSpace.lean`; both those users are guarded in
-`OkaTest/Axioms/Morphisms.lean`. The second was placed beside the file it was *written for*,
-which **deliberately does not import it** for the import-cost reason that file gives, and
-`OkaTest/Axioms/Sheaves.lean`'s heading for it says so. Moving either is a tidy-up nobody has
-done and not a defect in the table.
+written down rather than imposed. The two that do not are these.
+**`Oka/Topology/IsLocalHomeomorph.lean`**'s only user is
+`Oka/AnalyticSpace/CoveringSpace.lean`, guarded in `OkaTest/Axioms/Morphisms.lean`;
+it was placed beside the file it was *written for*, which **deliberately does not import it** for
+the import-cost reason that file gives, and `OkaTest/Axioms/Sheaves.lean`'s heading for it says
+so. **`Oka/FieldTheory/IsAlgClosed/Basic.lean`** has **no user under `Oka/` at all**:
+`Oka/AnalyticSpace/CoveringMap.lean` names its one theorem in a docstring and does not import it,
+and the only use in the repository is inside `OkaTest/FiniteMorphism.lean`, which this repository
+does not guard — so there is no analytic result to place it beside, and the general-algebra file
+is where it goes. **Read a consumer off the imports, not off a name grep**: both of these were
+got wrong that way before they were measured. Moving either is a tidy-up nobody has done and not
+a defect in the table.
 **The figure is here so that a later sweep can tell growth from noise**: a tail that stays near
 this size is the expected one, and a tail that doubles means a row really is missing.
 
