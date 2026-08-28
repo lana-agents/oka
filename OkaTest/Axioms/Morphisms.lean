@@ -10,7 +10,9 @@ import Oka
 
 The morphisms of analytic spaces built from holomorphic maps, the first morphism out of a
 space which is not `ℂ^n`, and the classes of morphisms — finite, local isomorphism, finite étale —
-together with the topological criteria they are proved from.
+together with the topological criteria they are proved from, in both directions: the criteria that
+read a class off the underlying map, and the construction that produces a morphism in a class from
+a covering map.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -596,9 +598,10 @@ info: 'ComplexAnalytic.AnalyticSpace.proj' depends on axioms:
 
 /-! ### The third rung: a finite étale morphism is a covering map
 
-The first of the two is the mirror-tree topological criterion in
-`Oka/Topology/Covering/Basic.lean` and says nothing about analytic spaces; it is guarded here
-rather than apart from its only consumer. -/
+The first two are mirror-tree topological criteria in `Oka/Topology/Covering/Basic.lean` and say
+nothing about analytic spaces; they are guarded here rather than apart from their consumers. They
+are converse to one another, and only the second is used by the heading at the foot of this
+file. -/
 
 /--
 info: 'IsClosedMap.isCoveringMap_of_isLocalHomeomorph' depends on axioms:
@@ -606,6 +609,12 @@ info: 'IsClosedMap.isCoveringMap_of_isLocalHomeomorph' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms IsClosedMap.isCoveringMap_of_isLocalHomeomorph
+
+/--
+info: 'IsCoveringMap.isClosedMap' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms IsCoveringMap.isClosedMap
 
 /--
 info: 'ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale' depends on axioms:
@@ -865,3 +874,69 @@ info: 'ComplexAnalytic.isIso_stalkMap_comp_projRestrict' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isIso_stalkMap_comp_projRestrict
+
+/-! ### A covering space of a complex analytic space is a complex analytic space
+
+`Oka/AnalyticSpace/CoveringSpace.lean`. The converse of *the third rung* above, at the level of
+the spaces and not only of the maps: a local homeomorphism into an analytic space makes its source
+one, and a covering map with finite fibres makes it finite étale. `IsCoveringMap.isClosedMap`,
+guarded under that heading, is what supplies the second half — the closed base map that finite
+fibres do not give. It is not the only mirror-tree topology the construction consumes: the cover
+by sheets the first half is checked on is `IsLocalHomeomorph.sSup_sheetOpens`, guarded in
+`OkaTest/Axioms/Sheaves.lean`. -/
+
+/--
+info: 'ComplexAnalytic.inverseImageAlgMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.inverseImageAlgMap
+
+/--
+info: 'ComplexAnalytic.hasLocalModels_inverseImage' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.hasLocalModels_inverseImage
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.coveringSpace' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.coveringSpace
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.coveringSpaceHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.coveringSpaceHom
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.base_coveringSpaceHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.base_coveringSpaceHom
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isLocalIso_coveringSpaceHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isLocalIso_coveringSpaceHom
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isFinite_coveringSpaceHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFinite_coveringSpaceHom
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isFiniteEtale_coveringSpaceHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFiniteEtale_coveringSpaceHom

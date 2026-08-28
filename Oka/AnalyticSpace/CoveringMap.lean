@@ -81,9 +81,15 @@ base being nonempty is never used.
   `ComplexAnalytic.AnalyticSpace.isHomeomorph_base_of_degree_eq_one` is the consumer. What is
   still absent is multiplicativity of the degree in a composite, and any consequence of the degree
   that sees the structure sheaves rather than the underlying map.
-* **The converse.** `IsCoveringMap.isLocalHomeomorph` returns the topological field of
-  `IsLocalIso`, but no topological hypothesis can return the stalk field, so there is no `↔` and
-  none is stated.
+* **The converse for a *given* morphism.** `IsCoveringMap.isLocalHomeomorph` returns the
+  topological field of `IsLocalIso`, but no topological hypothesis can return the stalk field of a
+  morphism whose structure sheaves are already fixed, so there is no `↔` and none is stated.
+  **What a topological hypothesis does give is a morphism**, once the source is allowed a
+  structure sheaf of its own: `Oka/AnalyticSpace/CoveringSpace.lean` puts the inverse image of
+  `𝒪_Y` on the source of a covering map with finite fibres and gets `IsFiniteEtale`, with the
+  stalk field free because every stalk map of an inverse image is an isomorphism. That is a
+  construction and not a converse, and the two are not comparable until the uniqueness of the
+  structure is proved, which nothing yet does.
 * **The Riemann existence theorem**, and any statement relating covers to field extensions.
 * **The analytification of a finite étale morphism**, and **Grauert's finite mapping theorem** —
   the two absences `Oka/AnalyticSpace/LocalIso.lean` and `Oka/AnalyticSpace/Finite.lean` record.
