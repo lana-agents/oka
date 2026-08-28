@@ -133,9 +133,11 @@ theorem isCLinearHom_sheetIso_inv :
       𝟙 _ := by
     have hid := (LocallyRingedSpace.sheetIso Y p V hV).inv_hom_id
     rwa [LocallyRingedSpace.sheetIso_hom] at hid
-  rw [← LocallyRingedSpace.liftRestrict_fac (LocallyRingedSpace.sheetToBase Y p V)
-      (LocallyRingedSpace.sheetImage Y p V hV) subset_rfl,
-    ← LocallyRingedSpace.sheetHom, ← Category.assoc, h, Category.id_comp]
+  have hfac : LocallyRingedSpace.sheetHom Y p V hV ≫
+      Y.ofRestrict (LocallyRingedSpace.sheetImage Y p V hV).isOpenEmbedding =
+      LocallyRingedSpace.sheetToBase Y p V :=
+    LocallyRingedSpace.liftRestrict_fac _ _ _
+  rw [← hfac, ← Category.assoc, h, Category.id_comp]
 
 /-- **The structure `p⁻¹Y` inherits restricts, over a sheet, to the structure on `p '' V`
 transported across the comparison.**
@@ -144,7 +146,12 @@ This is `ComplexAnalytic.isCLinearHom_sheetHom` and
 `ComplexAnalytic.isCLinearHom_sheetIso_inv` in the form that says the transport is an equality of
 structures rather than a pair of inequalities — `ComplexAnalytic.IsCLinearHom.eq` applied to the
 two witnesses of `ℂ`-linearity over `β` on the source. It is the form in which a consumer that
-already has a structure on `p⁻¹Y` recognises it. -/
+already has a structure on `p⁻¹Y` recognises it.
+
+**The `▸` is the only one in this file and it moves no data.** It substitutes along
+`ComplexAnalytic.comapAlgMap_sheetToBase`, an equality of ring homomorphisms, inside a goal which
+is itself an equality of ring homomorphisms — a `Prop`. There is no `CategoryTheory.eqToHom` and
+no `cast` here or anywhere below. -/
 theorem comapAlgMap_sheetHom :
     LocallyRingedSpace.comapAlgMap (LocallyRingedSpace.sheetHom Y p V hV)
         (Y.resAlgMap β (LocallyRingedSpace.sheetImage Y p V hV)) =
