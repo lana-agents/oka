@@ -8,8 +8,28 @@ import Oka
 /-!
 # Axiom regression tests: Complex analytic spaces
 
-Local models, the node as a complex analytic space that is not a manifold, and the value of a
-section of the structure sheaf at a point.
+The spaces themselves, as opposed to the morphisms between them, which are
+`OkaTest/Axioms/Morphisms.lean`'s: local models and the node; the residue field, the continuity
+and naturality of the value of a section, and the rigidity of germs; open subspaces and the
+non-vanishing locus; that being a complex analytic space is a local condition; **gluing** — a
+cover by abstract spaces, the analytic structure on the gluing, the fields of
+`CategoryTheory.GlueData.ofGlueData'` and gluing a morphism; and the **coproduct** — the disjoint
+union of a family, the trivial `n`-sheeted cover, and the sheet comparison.
+
+**That is a description and not a list, and the sixteen headings below are the record**: each
+names the statement its assertions defend, and the recipe beside `OkaTest/Axioms.lean`'s routing
+table resolves them to modules. The stance is `OkaTest/Axioms/Sheaves.lean`'s and
+`OkaTest/Axioms/LocalOkaRing.lean`'s, and it is taken here because 102 guards over eighteen
+modules is past the size at which a list stays true.
+
+**The sentence this replaces named local models, the node and the value of a section**, which at
+`94984d4` is at most 19 of those 102 guards and four of the sixteen headings. Gluing alone is 42
+and the coproduct 19, and neither appeared in it. **Six of the eighteen modules are not
+`Oka/AnalyticSpace/`'s**, and contribute 21 guards: `Oka/CategoryTheory/GlueData.lean` seven,
+four modules of `Oka/Geometry/RingedSpace/` ten, and
+`Oka/AlgebraicGeometry/GammaSpecAdjunction.lean` four — most of them under the gluing headings,
+beside the analytic statements they serve. See `OkaTest/Axioms.lean` on why a mirror-tree module
+such as the first has no row of its own.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/

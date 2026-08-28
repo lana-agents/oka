@@ -57,6 +57,15 @@ happened to open.**
 | morphisms of analytic spaces | `OkaTest/Axioms/Morphisms.lean` |
 | general commutative ring theory | `OkaTest/Axioms/RingTheory.lean` |
 
+That rule is the whole point of the split, and it is not a matter of taste. Until 2026-08-20
+every assertion lived in this one file and every pull request appended to its end, so git
+reported a conflict between *any* two concurrent pull requests: only one could merge per rebase
+round, and each of the others needed a rebase, a force-push, a re-`attach_pr` and a fresh
+review of a tree whose library files were byte-identical to the one already approved. That cost
+four such cycles in a single morning. Issue #558's append-at-the-end convention reduced the
+damage but could not remove it, because two additions at the end of a file still collide.
+Concurrent pull requests that touch *different files* do not. See issue #640.
+
 **Every row above has been measured against the guards it routes to, and here is how to
 re-measure one.** For each row, resolve every `#print axioms` name in its file to the module the
 declaration lives in, and ask whether the row's phrase covers what comes back. In a built
@@ -73,17 +82,37 @@ lean` reads the oleans, so a dump taken across a branch switch is the other bran
 whose name is wrapped onto the next line, and there is one such guard today, in
 `OkaTest/Axioms/SheafOfModules.lean`; a census taken that way comes out one short of
 `scripts/guard_coverage.py`'s, which is where the regular expression above is from. A row is
-wrong when some module's guards are covered by no row at all — that is the failure this table
-exists to prevent — and not merely when its phrase is shorter than the file.
+wrong when the guards of some module **of the analytic development** are covered by no row at
+all — that is the failure this table exists to prevent — and not merely when its phrase is
+shorter than the file.
 
-That rule is the whole point of the split, and it is not a matter of taste. Until 2026-08-20
-every assertion lived in this one file and every pull request appended to its end, so git
-reported a conflict between *any* two concurrent pull requests: only one could merge per rebase
-round, and each of the others needed a rebase, a force-push, a re-`attach_pr` and a fresh
-review of a tree whose library files were byte-identical to the one already approved. That cost
-four such cycles in a single morning. Issue #558's append-at-the-end convention reduced the
-damage but could not remove it, because two additions at the end of a file still collide.
-Concurrent pull requests that touch *different files* do not. See issue #640.
+**A mirror-tree module has no row, and that is deliberate.** `README.md`'s *Layout: the Mathlib
+mirror tree* defines one by its path: a file under `Oka/` mirroring a path under `Mathlib/` holds
+no complex-analytic mathematics and is staged for upstreaming. Such a module has no subject *in
+this development* for a row to name, and giving it one would turn a table that routes by subject
+into an index of source directories. **Guard one in the file of the analytic result that
+motivated it**, under that result's heading — which is what `OkaTest/Axioms/Morphisms.lean`
+already says in terms of `Oka/Topology/Covering/Basic.lean`: *"the mirror-tree topological
+criterion … says nothing about analytic spaces; it is guarded here rather than apart from its
+only consumer."*
+
+At `94984d4` that tail is **17 guards in six modules**, against 636 in all: seven from
+`Oka/CategoryTheory/GlueData.lean` (in `OkaTest/Axioms/AnalyticSpace.lean`), four from
+`Oka/Topology/Covering/Basic.lean` (in `OkaTest/Axioms/Morphisms.lean`), three from
+`Oka/Topology/IsLocalHomeomorph.lean` (in `OkaTest/Axioms/Sheaves.lean`), and one each from
+`Oka/CategoryTheory/Limits/Shapes/KernelBiprod.lean` (in `OkaTest/Axioms/SheafOfModules.lean`),
+`Oka/Topology/Category/TopCat/Opens.lean` (in `OkaTest/Axioms/Analytification.lean`) and
+`Oka/FieldTheory/IsAlgClosed/Basic.lean` (in `OkaTest/Axioms/RingTheory.lean`). **Five of the six
+already sit in a file that holds some of their consumer's guards** — the rule above is being
+written down rather than imposed. The exception is `Oka/FieldTheory/IsAlgClosed/Basic.lean`,
+whose one theorem is used by `Oka/AnalyticSpace/CoveringMap.lean`, guarded in
+`OkaTest/Axioms/Morphisms.lean`; and `Oka/Topology/IsLocalHomeomorph.lean` is the awkward case,
+with no user in the library at that commit — it
+sits beside `Oka/Geometry/RingedSpace/LocallyRingedSpace/InverseImageSheet.lean`'s guards, which
+is the file it was written for and which **deliberately does not import it**, for the import-cost
+reason that file gives. Moving either is a tidy-up nobody has done and not a defect in the table.
+**The figure is here so that a later sweep can tell growth from noise**: a tail that stays near
+this size is the expected one, and a tail that doubles means a row really is missing.
 
 ## What these guards cover, and what they do not
 
