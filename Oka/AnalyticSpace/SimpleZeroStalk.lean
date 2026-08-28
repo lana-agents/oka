@@ -84,11 +84,16 @@ centred at `i.base x` and not at the origin; `okaStalkEquiv` absorbs the transla
   `ComplexAnalytic.isIso_stalkMap_comp_projCoords`: **the projection of a hypersurface with a
   simple zero is an isomorphism on stalks**, for the `Fin`-indexed `ℂ^(n+1)`.
 - `ComplexAnalytic.bijective_stalkMap_comp_uliftProj` and
-  `ComplexAnalytic.isIso_stalkMap_comp_uliftProj`: the same for
-  `complexAffineSpace` (root namespace, `Oka/ComplexSpace.lean`), the `ULift (Fin _)`-indexed
-  one.
+  `ComplexAnalytic.isIso_stalkMap_comp_uliftProj`: the same for the `ULift (Fin _)`-indexed
+  affine space named in §*The shape* above.
 
 ## What is not here
+
+**Nothing the results above are stated *in terms of* is named in that list** — not
+`LocalOkaRing.incl`, not `okaStalkEquiv`, not `complexAffineSpace`, though all three are named in
+the paragraphs before it. `scripts/guard_coverage.py` reads every backticked repository name
+under a `## Main results` heading as a result the file advertises, and none of those is a result
+of this file.
 
 **No finiteness, and so no `IsLocalIso` and no `IsFiniteEtale`.**
 `ComplexAnalytic.AnalyticSpace.IsLocalIso` asks for a topological condition beside the stalk one,
