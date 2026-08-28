@@ -50,11 +50,16 @@ inputs compose with nothing left over:
 
 * `AlgebraicGeometry.LocallyRingedSpace.sheetIso` identifies `(p⁻¹X)|V` with `X|(p '' V)` as
   locally ringed spaces;
-* `ComplexAnalytic.isCLinearHom_sheetHom` makes that identification `ℂ`-linear, which is what
-  `ComplexAnalytic.HasLocalModels.of_iso` asks for — an isomorphism of locally ringed spaces
-  between analytic spaces can be antiholomorphic, so this half is not decoration;
+* `ComplexAnalytic.isCLinearHom_sheetHom` makes that identification `ℂ`-linear — an isomorphism
+  of locally ringed spaces between analytic spaces can be antiholomorphic, so this half is not
+  decoration. It is not, however, what `ComplexAnalytic.HasLocalModels.of_iso` is handed below:
+  after `AlgebraicGeometry.LocallyRingedSpace.sheetIso_hom` that obligation is the by-definition
+  `ComplexAnalytic.isCLinearHom_comapAlgMap`, and the sheet linearity reaches the assembly one
+  level down, through the next bullet;
 * `ComplexAnalytic.comapAlgMap_sheetHom` says the structure the sheet inherits *is* the ambient
-  one restricted, which is the side of the seam `of_iSup_eq_top` states its hypothesis on.
+  one restricted, which is the side of the seam `of_iSup_eq_top` states its hypothesis on. **This
+  is the lemma `ComplexAnalytic.isCLinearHom_sheetHom` is consumed by**: the sheet linearity is
+  what makes that equality of structures true.
 
 So the member obligation is `ComplexAnalytic.HasLocalModels.restrict` on `X` and two rewrites.
 
@@ -107,10 +112,21 @@ needs no separation axiom**, and none is assumed below.
   puts a structure on its source; whether that structure is `sigma`'s own is exactly the
   uniqueness question above and is **not** answered here. `OkaTest/CoveringSpace.lean` says so
   again where a reader would look for it.
-* **Nothing about the number of sheets.** That is
-  `ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale` over a preconnected base, in
-  `Oka/AnalyticSpace/CoveringMap.lean`, and it applies to the morphism below with no new work; it
-  is not restated.
+* **Nothing about the number of sheets.**
+  `ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale` in
+  `Oka/AnalyticSpace/CoveringMap.lean` is that statement, over a preconnected base — but it is
+  **not** free for the morphism below, and two things stand in the way. It asks `[T2Space]` of the
+  *source*, which is Mathlib's hypothesis, used to separate the finitely many points of a fibre,
+  and is exactly the separation axiom this direction otherwise does without; `E` is arbitrary
+  here, so there is nothing to synthesise. And
+  `ComplexAnalytic.AnalyticSpace.isFiniteEtale_coveringSpaceHom` is a theorem rather than an
+  instance, so it has to be supplied by hand. A caller holding `[T2Space E]` gets the statement by
+  carrying that instance across the carrier seam with `inferInstanceAs` and supplying the
+  finite-étale one; a caller without one does not get it at all. The same barrier stands one file
+  further on: `ComplexAnalytic.AnalyticSpace.degree_eq_card_fiber` in
+  `Oka/AnalyticSpace/Degree.lean`, which is where a reader looking for the number of sheets *as a
+  number* will land, asks `[T2Space]` of the source for the same reason and through the same
+  lemma. Nothing below states either.
 * **No sections of `p⁻¹𝒪_X`.** No formula is proved for the sections over an open set, here or in
   either file below — over a sheet the *space* is identified with the base and that is strictly
   weaker than a formula, which is all a chart needs.
@@ -152,9 +168,12 @@ models.**
 `IsLocalHomeomorph.sSup_sheetOpens`. On one sheet the chart is `X`'s own chart on the image open
 `p '' V`, carried back by `ComplexAnalytic.HasLocalModels.of_iso` along
 `AlgebraicGeometry.LocallyRingedSpace.sheetIso`, whose `ℂ`-linearity is
-`ComplexAnalytic.isCLinearHom_sheetHom`; `ComplexAnalytic.comapAlgMap_sheetHom` is what turns the
-structure that produces into the restriction of `ComplexAnalytic.inverseImageAlgMap`, which is the
-spelling the hypothesis of `of_iSup_eq_top` is written in.
+`ComplexAnalytic.isCLinearHom_comapAlgMap` — true by definition once
+`AlgebraicGeometry.LocallyRingedSpace.sheetIso_hom` has rewritten the goal.
+`ComplexAnalytic.comapAlgMap_sheetHom` is what turns the structure that produces into the
+restriction of `ComplexAnalytic.inverseImageAlgMap`, which is the spelling the hypothesis of
+`of_iSup_eq_top` is written in, and it is the step that consumes
+`ComplexAnalytic.isCLinearHom_sheetHom`.
 
 Only a local homeomorphism is needed — not a covering map, and no finiteness. -/
 theorem hasLocalModels_inverseImage (hp : IsLocalHomeomorph ⇑p) :
@@ -162,7 +181,9 @@ theorem hasLocalModels_inverseImage (hp : IsLocalHomeomorph ⇑p) :
   refine HasLocalModels.of_iSup_eq_top
     (U := fun V : ↥(sheetOpens ⇑p) ↦ (V : Opens E)) ?_ ?_
   · -- The carrier of `p⁻¹X` is `E` on the nose, but the two spellings of `Opens` are not
-    -- syntactically equal, so the supremum is taken at the `E` one and `show` crosses the seam.
+    -- syntactically equal, so the supremum is taken at the `E` one and `change` crosses the seam.
+    -- `change` and not `show`: `linter.style.show` together with `--wfail` makes `show` a build
+    -- error whenever it moves the goal, which is the whole job here.
     change (⨆ V : ↥(sheetOpens ⇑p), (V : Opens E)) = ⊤
     rw [← sSup_eq_iSup']
     exact hp.sSup_sheetOpens

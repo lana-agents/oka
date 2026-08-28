@@ -63,8 +63,12 @@ structure on the whole of `p⁻¹Y` restricted to `V`.
   space with a `ℂ`-algebra structure on its global sections; nothing here asks it to have local
   models. The transport of `ComplexAnalytic.HasLocalModels` across `sheetIso` that a covering
   space of an analytic space needs is `Oka/AnalyticSpace/CoveringSpace.lean`, and it is
-  `ComplexAnalytic.HasLocalModels.of_iso` taking `ComplexAnalytic.isCLinearHom_sheetHom` below as
-  its hypothesis, exactly as this bullet predicted.
+  `ComplexAnalytic.HasLocalModels.of_iso` along
+  `AlgebraicGeometry.LocallyRingedSpace.sheetIso`. It consumes the `ℂ`-linearity proved below,
+  exactly as this bullet predicted, but one step further off than that: `of_iso`'s own hypothesis
+  there is discharged by the by-definition `ComplexAnalytic.isCLinearHom_comapAlgMap`, and
+  `ComplexAnalytic.isCLinearHom_sheetHom` enters through
+  `ComplexAnalytic.comapAlgMap_sheetHom`, which is proved from it.
 * **Nothing about a cover — and the assembly does not need what this bullet used to say it
   would.** One sheet at a time, as in the file this builds on. What was written here was that
   assembling the sheets of a local homeomorphism into a structure on the whole of `p⁻¹Y` needs
