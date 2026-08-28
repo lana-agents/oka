@@ -21,10 +21,17 @@ and there the projection is closed for the reason `isClosedMap_fst_of_compactSpa
 
 Material for `Mathlib/Topology/Algebra/Polynomial.lean`, which is where
 `Polynomial.isProperMap_eval` and `Polynomial.isClosedMap_eval` live — the same statements for the
-map `z ↦ p.eval z` of a
-*single* polynomial, which is this one with `X` a point and the roles of the two variables
-exchanged; see `README.md` on the mirror tree. Nothing here mentions anything defined in this
-repository.
+map `z ↦ q.eval z` of a *single* polynomial. `Polynomial.isProperMap_eval` is a **special case**
+of the results below, and that is the argument for the destination: for `q` monic of positive
+degree, properness of `z ↦ q.eval z` is `Polynomial.isProperMap_fst_zeroLocus` at `X = K` and the
+family `x ↦ q - C x`, transported along the graph homeomorphism `z ↦ (q.eval z, z)` onto the zero
+locus of that family — and dropping monicity costs one further step, composing with
+multiplication by `q.leadingCoeff`, a homeomorphism of `K`. (`Polynomial.isClosedMap_eval` is
+that together with the constant case, which is `isClosedMap_const` and is not below.) Both
+derivations were compiled against this file and neither is kept, because each belongs beside the
+theorem it recovers rather than here. Taking `X` to be a point recovers nothing instead: the
+projection is then a map into `PUnit`, and no second variable is left to exchange. See
+`README.md` on the mirror tree; no statement below mentions anything defined in this repository.
 
 ## Why that destination and not the one the proof reads from
 
@@ -42,17 +49,26 @@ is about.
 
 `Oka/Analysis/Complex/CoveringMap.lean` proves exactly this pair — closed, with finite fibres —
 for `x ↦ xⁿ` on the nonzero elements of a proper normed field (`isClosedMap_npow`,
-`finite_fiber_npow`). That is the case `d = n` of a **constant** family, in the disguise where the
-zero locus has been solved for and presented as the source of a map rather than as a subset of a
-product; neither statement below specialises to it and it is not used here. Its closedness comes
-from `isClosedMap_pow`, which is the properness of a single polynomial map, and no root bound
-appears — which is the difference: a family cannot be handled by a statement about one polynomial,
-and the bound is what replaces it.
+`finite_fiber_npow`). The family behind those two is `X ^ n - C w` over the punctured base,
+parametrised by the *target* point `w`; it is the family `finite_fiber_npow`'s own proof writes
+down, and it is **not** a constant one — a constant family `p ≡ Xⁿ` has zero locus `X × {0}` and
+gives nothing. **Both statements do follow from the two halves below.** They are stated in the
+disguise where the zero locus has been solved for and presented as the source of a map rather
+than as a subset of a product, and undoing that disguise is again a graph homeomorphism,
+`x ↦ (xⁿ, x)`; both derivations across it were compiled against this file. The two theorems are
+kept where they are because a covering-map file is where they are wanted and their proofs are
+self-contained, and nothing below uses them.
+
+What does not transfer is their *proof*. Closedness there comes from `isClosedMap_pow`, which is
+the properness of a single polynomial map, and no root bound appears anywhere in that file —
+which is the difference: a family cannot be handled by a statement about one polynomial, and the
+bound is what replaces it.
 
 ## Why the bound below rather than `Polynomial.cauchyBound`
 
-`Polynomial.cauchyBound q` is `(⨆ i < q.natDegree, ‖q.coeff i‖) / ‖q.leadingCoeff‖ + 1`, a
-supremum in `ℝ≥0` divided by a norm. What the argument needs is a bound that is visibly
+`Polynomial.cauchyBound q` is
+`Finset.sup (Finset.range q.natDegree) (‖q.coeff ·‖₊) / ‖q.leadingCoeff‖₊ + 1`, a `Finset.sup` in
+`ℝ≥0` divided by a norm. What the argument needs is a bound that is visibly
 *continuous in the family*, and a `Finset.sup` in `ℝ≥0` of continuous `ℝ`-valued functions is one
 step of `NNReal` bookkeeping away from being that. `Polynomial.monicRootBound` replaces the
 supremum by the sum and the division by nothing — the leading coefficient is `1` — so it is a
@@ -76,10 +92,15 @@ It is weaker than Cauchy's bound and it is deduced from it; nothing here needs i
 * **Nothing complex-analytic.** `K` is any normed field, proper where properness of the ball is
   used; `X` is any topological space. The intended instance is `K = ℂ` and `X` an open subset of
   `ℂ^n`, with `p` the Weierstrass polynomial of a hypersurface, but no holomorphy is used or
-  stated and the file does not mention `ComplexAnalytic`.
+  stated and no declaration in this file mentions `ComplexAnalytic`; the only other occurrences of
+  the namespace are the citations in the two bullets below.
 * **No `ComplexAnalytic.AnalyticSpace.IsFinite`.** Turning the two halves below into finiteness of
   a morphism of analytic spaces is the second half of taxis #1109 and needs the analytic structure
-  on the zero locus, which is not the subject of this file.
+  on the zero locus, which is not the subject of this file. The worked model for that assembly is
+  `ComplexAnalytic.isFinite_sq` in `OkaTest/FiniteMorphism.lean`: it builds `IsFinite` for `z ↦ z²`
+  out of a purely topological closedness statement and a purely topological fibre statement,
+  each transported across a carrier bridge — and the two it transports are `isClosedMap_npow` and
+  `finite_fiber_npow`, the pair of the section above.
 * **No statement about the fibre cardinality.** A fibre is finite, and it has at most `d` points
   because it is the root set of a polynomial of degree `d`; only the finiteness is proved, because
   only the finiteness is what `ComplexAnalytic.AnalyticSpace.IsFinite` asks for. The counting
