@@ -130,8 +130,9 @@ a much larger tax than one unused value per index.
 - `ComplexAnalytic.coverTriple`: the transition on triple overlaps,
   `X_i|(D(f_ij) ⊓ D(f_ik)) ⟶ X_j|(D(f_jk) ⊓ D(f_ji))`, which is what `t'` is built from.
 - `ComplexAnalytic.coverGlueData'` and `ComplexAnalytic.coverGlueData`: **the glue data.**
-- `ComplexAnalytic.coverAnalytification`: **the analytic space the cover glues to** — `X^an` for
-  a scheme presented by an affine cover with distinguished overlaps.
+- `ComplexAnalytic.coverAnalytification`: **the analytic space the cover glues to** — the
+  gluing of the members' analytifications, and the first declaration in this file that is an
+  `ComplexAnalytic.AnalyticSpace` rather than a locally ringed space.
 - `ComplexAnalytic.coverIota`: the `i`-th member's analytification, as a morphism of analytic
   spaces into it.
 
@@ -193,11 +194,17 @@ variable {J : Type u} (obj : J → Presentation.{u})
 
 /-- **The `i`-th member of the cover**, `A_i^an`, as a locally ringed space.
 
-Everything in this file is spelled at the locally-ringed-space level, and deliberately:
-`ComplexAnalytic.AnalyticSpace`'s `Category` instance defines composition through `toLRSHom`, so
-unifying two composites of analytic morphisms forces it open and is expensive enough to exhaust
-the heartbeat budget on a three-term `Iso.trans`. A glue data is a locally-ringed-space object
-anyway. -/
+Everything in this file up to `ComplexAnalytic.coverAnalytification` is spelled at the
+locally-ringed-space level, and deliberately: `ComplexAnalytic.AnalyticSpace`'s `Category`
+instance defines composition through `toLRSHom`, so unifying two composites of analytic morphisms
+forces it open and is expensive enough to exhaust the heartbeat budget on a three-term
+`Iso.trans`. A glue data is a locally-ringed-space object anyway.
+
+**The last section is the exception and cannot be anything else**, its whole point being to
+produce an analytic space and a morphism of them. It costs nothing here because it composes
+nothing: `ComplexAnalytic.toLRSHom_coverIota` puts `ComplexAnalytic.coverIota` back at the level
+the rest of the file works at, and that is how `ComplexAnalytic.isOpenImmersion_coverIota` is a
+statement the glue data's own `ι` lemma proves. -/
 abbrev coverSpace (i : J) : LocallyRingedSpace.{u} :=
   (AnalyticSpace.analytification.{u} (obj i).g).toLocallyRingedSpace
 
@@ -544,13 +551,18 @@ each member. The first and third are the analytification's own — `coverSpace o
 costs nothing at this level, and the content is in the two statements after it.
 -/
 
-/-- **The analytification of a scheme presented by an affine cover with distinguished
-overlaps.**
+/-- **The analytic space an affine cover with distinguished overlaps glues to.**
 
 `ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear` at `ComplexAnalytic.coverGlueData`, with the
 members' own `ℂ`-algebra structures and local models. Every hypothesis is discharged by a
 declaration above or by the analytification itself; nothing new is proved by this definition, and
-the two theorems below are what make it usable. -/
+the two theorems below are what make it usable.
+
+**Not "the analytification of a scheme", and the module docstring's titled section is why.**
+Nothing here says the input presents one, and a scheme's cover does not supply this input in
+general: `poly` asks for one distinguished open of the `i`-th member per *ordered pair*, while
+`AlgebraicGeometry.exists_basicOpen_le_affine_inter` gives only a union of such at each point of
+an intersection. -/
 def coverAnalytification : AnalyticSpace.{u} :=
   AnalyticSpace.ofGlueDataCLinear
     (coverGlueData.{u} obj poly glue hrange hsymm hcocycle)
