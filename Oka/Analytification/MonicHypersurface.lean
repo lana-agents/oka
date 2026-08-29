@@ -158,12 +158,35 @@ construction rather than by a compatibility lemma.
   `(ComplexAnalytic.AnalyticSpace.complexAffineSpace n).restrict V` while
   `ComplexAnalytic.analytificationInclHom` lands in `ℂ^n`, and **composing back up with
   `ComplexAnalytic.AnalyticSpace.ofRestrict` is not the repair it looks like**: a finite morphism
-  has closed image, and the composite's image lies inside the open `V`, so the composite is finite
-  only if that image happens to be closed in `ℂ^n`. **Whether it is, is not settled here or
-  anywhere** — the image is `V` exactly when the projection is onto, and no statement in this
-  repository says a monic hypersurface surjects onto its base. (Note that `ofRestrict` at `V = ⊤`
+  has closed image — `ComplexAnalytic.AnalyticSpace.IsFinite` carries `IsClosedMap` as a field —
+  and the composite's image lies inside the open `V`, so the composite is finite only if that
+  image is closed in `ℂ^n`. **It is not, and the route is closed rather than open.** The image is
+  `V` exactly when the projection is onto, and the projection *is* onto: the fibre over `v` is the
+  root set of `q v`, which is monic of degree `d` in the family
+  `ComplexAnalytic.isFinite_comp_projRestrict_of_range_eq` takes, and a monic polynomial of
+  positive degree over `ℂ` has a root. So the image is the open `V`, and an open set closed in the
+  connected `ℂ^n` is `∅` or `⊤` — **so for every proper non-empty `V`, which is every case this
+  plan is for, the composite is not finite.** That is the same shape as
+  `ComplexAnalytic.not_isFinite_proj_comp_axisIncl` in `OkaTest/FiniteMorphism.lean`, which is a
+  composite shown non-finite by reading this file's own cancellation lemma contrapositively.
+
+  Two degenerate cases sit outside that, and neither rescues the route. `ofRestrict` at `V = ⊤`
   *is* a closed map, being an isomorphism, so this is a statement about the plan's proper `V` and
-  not about open immersions in general.) What does repair it is restricting the inclusion too,
+  not about open immersions in general. And `Polynomial.Monic` does not give positive degree:
+  `StandardEtalePair` asks only `StandardEtalePair.monic_f`, so `d = 0` is permitted by the
+  types — but then `q v = 1`, the hypersurface is empty, and the composite is finite for the
+  reason that there is nothing to map. The plan is not for that case either, since
+  `StandardEtalePair.Ring` is the zero ring when `f` is a unit.
+
+  **What this repository does not have is the surjectivity statement**, and that is worth
+  recording — but as the missing *citation* for a settled conclusion, not as an open question.
+  `grep -rn 'surjective.*projRestrict\|range_base_projRestrict' Oka/ OkaTest/` is empty, and the
+  `range_base_*` family in `Oka/AnalyticSpace/MonicProjection.lean` and
+  `Oka/AnalyticSpace/OpenBaseProjection.lean` is about the image of the hypersurface **in the
+  cylinder**, not the image of its projection in the base. A reader who proves surjectivity will
+  have closed this route, not opened it.
+
+  What does repair it is restricting the inclusion too,
   with `ComplexAnalytic.AnalyticSpace.restrictHom`, whose base map is a restriction of
   `ComplexAnalytic.analytificationInclHom`'s and is therefore injective — and, by
   `ComplexAnalytic.isClosedEmbedding_base_restrictHom` in `Oka/AnalyticSpace/Restrict.lean`, a
