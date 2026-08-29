@@ -77,14 +77,19 @@ stalks with `LocalOkaRing`s. Those identifications are the content:
 
 * `ComplexAnalytic.cylinderStalkEquiv` is the stalk of `𝒪_{ℂ^(n+1)}` at the point below, reached
   through the inverse of the stalk map of the inclusion of the open subspace, which is an
-  isomorphism by `ComplexAnalytic.AnalyticSpace.isIso_stalkMap_ofRestrict`. That instance is the
-  same isomorphism `Oka/AnalyticSpace/SimpleZeroStalk.lean` names as missing under its Mathlib
-  name `AlgebraicGeometry.LocallyRingedSpace.restrictStalkIso`, at the spelling a caller of
-  `ofRestrict` holds; the named `Iso` is never built here because `asIso` of the instance is what
-  `RingEquiv` needs;
+  isomorphism by `ComplexAnalytic.AnalyticSpace.isIso_stalkMap_ofRestrict`. That instance and
+  `AlgebraicGeometry.LocallyRingedSpace.restrictStalkIso` are the same isomorphism at two
+  spellings, and the one used here is the one a caller of `ofRestrict` already holds; the named
+  `Iso` is never built, because what the `RingEquiv` needs is `asIso` of the instance;
 * `ComplexAnalytic.baseStalkEquiv` is the same for the base, through
   `ComplexAnalytic.restrictStalkEquiv`, which `Oka/AnalyticSpace/Restrict.lean` already built for
   exactly this factorisation.
+
+**Both bullets name declarations rather than another file's prose, and that is deliberate.** The
+first used to say that `Oka/AnalyticSpace/SimpleZeroStalk.lean` *names* this isomorphism *as
+missing*; that file now says the opposite in terms, and the clause went stale on the day its
+paragraph was rewritten. A cross-reference that quotes another file's stance goes stale every
+time that stance moves; one that names a declaration does not.
 
 `ComplexAnalytic.cylinderStalkEquiv_stalkMap_projRestrict` is then the `hP` hypothesis of the
 abstract step and is where `ComplexAnalytic.AnalyticSpace.okaStalkEquiv_stalkMap_uliftProj_apply`

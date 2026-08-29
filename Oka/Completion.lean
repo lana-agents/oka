@@ -67,8 +67,19 @@ of formal power series, which converges.
   the induced map of completions is. This was searched for in Mathlib and not found; that is a
   negative claim about Mathlib and should be re-checked rather than believed.
 
-`Oka/Analytification/AffineSpace.lean` names flatness as an outstanding item and **still should**:
-this file does not discharge it.
+**That statement is missing from this file and from this route, and not from the repository.**
+`ComplexAnalytic.faithfullyFlat_stalkMap_complexSpaceToSpec` in
+`Oka/Analytification/FlatnessAtAPoint.lean` is exactly it, at every point of `ℂ^ι` and in the
+spelling a GAGA argument consumes, proved through the germ ring rather than through completions.
+So the two items above are gaps in *this* route and not obstacles to the theorem, and nothing
+below discharges either of them.
+
+This paragraph used to say instead that `Oka/Analytification/AffineSpace.lean` *names flatness as
+an outstanding item and still should*. That file now records it as no longer missing, so the
+sentence described a stance that had moved. **A cross-reference that quotes another file's stance
+goes stale every time that stance moves; one that names a declaration does not** — which is the
+same rule, read for stances rather than for numbers, as the one that a figure in a docstring
+should either carry the command that reproduces it or not be there.
 
 ## Main definitions
 
