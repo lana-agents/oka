@@ -26,10 +26,17 @@ some module's guards are covered by no row. All twelve resolve to `Oka.Weierstra
 this row already covered.
 
 `exists_analyticAt_implicit` is the one where topic and module pull apart, and it stays here too.
-It is the analytic implicit function theorem, so `OkaTest/Axioms/Analysis.lean` is arguable — but
-that file guards only mirror-tree modules (`Oka.Analysis.*`, `Oka.Analytic.*`, `Oka.Topology.*`),
-this theorem is not mirror-tree material, and its own docstring states it *"in the form needed for
-the Weierstrass preparation theorem"*.
+It is the analytic implicit function theorem, so `OkaTest/Axioms/Analysis.lean` is arguable on
+topic — that row reads *"complex analysis, and the topology of polynomial zero loci"*. **The module
+rule above is what settles it**: the theorem is declared in `Oka/Weierstrass.lean`, and its own
+docstring states it *"in the form needed for the Weierstrass preparation theorem"*.
+
+An earlier draft of this paragraph settled it the same way for a different and false reason: that
+`OkaTest/Axioms/Analysis.lean` guards only mirror-tree modules. Three of that file's twelve guards
+are `Oka.Analytic.DividedDifference`'s, and `README.md` puts that directory **outside** the mirror
+tree — its worked example of a general file with no single Mathlib counterpart is
+`Oka/Analytic/ParametricCircleIntegral.lean`, the neighbour in the same directory, and Mathlib has
+no Analytic directory for either to mirror. Only the argument changed; no guard moved.
 -/
 
 /-! ### Weierstrass theory -/
