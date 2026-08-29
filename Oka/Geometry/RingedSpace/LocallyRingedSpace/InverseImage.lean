@@ -353,7 +353,6 @@ theorem toInverseImageAux_comp :
     exact ((TopCat.Presheaf.pullbackPushforwardAdjunction CommRingCat.{u} q.base).homEquiv
       Y.presheaf Z.presheaf).apply_symm_apply q.toHom.c)
 
-set_option backward.isDefEq.respectTransparency false in
 /-- **The comparison morphism `Z ⟶ q.base⁻¹Y` of locally ringed spaces.**
 
 Its stalk maps are local because
