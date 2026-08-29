@@ -32,6 +32,17 @@ file exists to make it meaningful.
   sharing no lemma, which is what pins the extension-by-zero convention of
   `ComplexAnalytic.okaMapOpenFun`; `base_invHom` alone cannot, since it is `rfl`.
 
+**`punctured` here and `ComplexAnalytic.punctured` are the same open set**, and that is now
+stated: `ComplexAnalytic.punctured_eq_punctured` in `OkaTest/FiniteMorphism.lean`, which imports
+this file. The two were written independently — this one carries its openness proof by hand and
+its membership lemma is `Iff.rfl`, the other is
+`ComplexAnalytic.AnalyticSpace.nonvanishing (coord (ULift.up 0))` — and neither is retired,
+because each is the convenient one somewhere. That file's module docstring prices the import and
+says why the edge runs from it to here and not the other way. **The practical effect is that
+`not_restrict_eq_invCoord` and `invCoord` are reachable from everything downstream of
+`OkaTest/FiniteMorphism.lean`**, which they were not before: this file's only importer was
+`OkaTest.lean`.
+
 **What this does not check.** That the construction is ever applied to a `V` which is not an
 open subset of `ℂ^n` — that is taxis #654's general `Z`, which needs the chart step and a
 gluing theorem and is not done. See the module docstring of the library file.

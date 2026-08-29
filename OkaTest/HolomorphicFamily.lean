@@ -67,7 +67,13 @@ and only the family is.
   `MvPolynomial`. A coefficient holomorphic on `V` and defined
   nowhere else — `1/z` is the obvious one — would need a parametrisation built by
   `ComplexAnalytic.AnalyticSpace.okaMapOpen` rather than by restricting a global map, and is not
-  built here.
+  built here. **The coefficient itself is no longer the missing part.** `invCoord` and
+  `not_restrict_eq_invCoord` of `OkaTest/HolomorphicMapOpen.lean` — *no entire function on `ℂ`
+  restricts to `1/z₀`* — are in scope here, on the same open set, since
+  `ComplexAnalytic.punctured_eq_punctured` identifies that file's `punctured` with this one's.
+  What is missing is the parametrisation above and, with it, an argument that
+  `ComplexAnalytic.cylinderSection` inherits its coefficient's non-extension; neither is
+  bookkeeping and neither is here.
 * **Nothing about stalks, so nothing here is finite étale**, exactly as in
   `OkaTest/OpenBaseProjection.lean` and for the same reason: no germ's
   `PowerSeries.order (MvPowerSeries.partialEval …)` is computed anywhere in this repository.

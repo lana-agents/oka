@@ -7,6 +7,7 @@ import Oka
 import Mathlib.Analysis.Normed.Module.Connected
 import Mathlib.Analysis.Complex.Polynomial.Basic
 import OkaTest.HolomorphicMap
+import OkaTest.HolomorphicMapOpen
 
 /-!
 # Non-vacuity of finiteness for morphisms of complex analytic spaces
@@ -71,6 +72,58 @@ only place it is applied, and the only place at which its hypotheses are shown t
 by anything other than an isomorphism. **It proves nothing new about `z ↦ z²`** — Mathlib's
 `isCoveringMap_npow` already covers that, and is what the local-homeomorphism field above is
 derived from — so read it as a test of the rung and not as a fact about the map.
+
+## Why this file imports `OkaTest/HolomorphicMapOpen.lean`
+
+`OkaTest/` wrote the punctured `z`-line **twice**: `ComplexAnalytic.punctured` below, as
+`ComplexAnalytic.AnalyticSpace.nonvanishing` of the coordinate, and `punctured` in
+`OkaTest/HolomorphicMapOpen.lean`, as `{z | z (ULift.up 0) ≠ 0}` with its openness proved by
+hand. **They are not a name clash** — the full names differ, so both can be in scope at once —
+but they are one open set written twice, and until this import nothing in the tree said so.
+`ComplexAnalytic.punctured_eq_punctured` below is that statement; it is `Opens.ext` and `Set.ext`
+over the two `mem_punctured_iff`s and nothing else.
+
+**The edge runs in this direction because the two closures are one-sided.** Transitive closure of
+each file's import list, counting modules under `Oka/`, `OkaTest/` and `Mathlib/`, read off
+`(← getEnv).header.moduleNames` in a `lake env lean` scratch whose imports are that list:
+
+* **this file, 3690 → 3691**, and the one is `OkaTest.HolomorphicMapOpen` itself: `import Oka` is
+  that file's entire import list and this file already has it, so the edge adds no third-party
+  module at all;
+* **`OkaTest/HolomorphicMapOpen.lean`, 3639 → 3691** for the reverse edge, since it would acquire
+  `OkaTest.FiniteMorphism` itself together with `OkaTest.HolomorphicMap`,
+  `Mathlib.Analysis.Normed.Module.Connected`, `Mathlib.Analysis.Complex.Polynomial.Basic` and
+  their closures. **It is the one figure of the four that a build of this branch cannot produce**:
+  measured there it reads 3692, because this file's olean now carries the edge and
+  `OkaTest.HolomorphicMapOpen` joins its own closure. It was taken on `master`'s oleans, before
+  the edge existed.
+
+**One against fifty-two.** Neither figure is a *build* cost: `lakefile.toml`'s
+`globs = ["OkaTest", "OkaTest.+"]` builds every module under `OkaTest/` already — the second
+entry does that on its own, and the first is there so that the root module is built too, for the
+reason the comment above it gives — so `lake build` runs the same 4041 jobs on both sides and the
+edge buys ordering rather than work. **What it does cost is incremental rebuilds**: this file is
+now behind `OkaTest/HolomorphicMapOpen.lean` in the order, and an edit to that file invalidates
+this one.
+
+**Two alternatives were priced and lost.** A third file importing both would cost one new module
+and one line in `OkaTest.lean`, and would put the equality where neither consumer is; and
+*retiring* one definition is not reachable in the cheap direction, since
+`OkaTest/HolomorphicMapOpen.lean` would have to take the fifty-two-module edge to use
+`ComplexAnalytic.punctured`. Retiring `ComplexAnalytic.punctured` instead *is* reachable once the
+edge above exists, and it is a rename across four files. **What decides against it is the test a
+retirement has to pass**, not its size: the surviving definition must discharge every use of the
+one that goes, and both definitions have a use the other does not. Both therefore stand, and both
+earn their keep: this one composes with
+`ComplexAnalytic.AnalyticSpace.mem_nonvanishing_iff` and
+`ComplexAnalytic.AnalyticSpace.liftRestrict`, and the other's `mem_punctured_iff` is `Iff.rfl`,
+which `punctured_ne_top` uses definitionally.
+
+**What the edge is for.** `OkaTest/HolomorphicFamily.lean` reaches this file through
+`OkaTest/OpenBaseProjection.lean`, so it now sees `invCoord` and `not_restrict_eq_invCoord` —
+*no entire function restricts to `1/z₀`* — with no import of its own, and with the two
+`punctured`s reconciled. That file's `## What is not checked here` says what is still missing
+around them, which is a parametrisation and a lemma and not bookkeeping.
 
 ## What is not checked here
 
@@ -548,6 +601,15 @@ theorem mem_punctured_iff (p : AnalyticSpace.complexAffineSpace.{u} 1) :
     p ∈ punctured.{u} ↔ (p : ULift.{u} (Fin 1) → ℂ) (ULift.up 0) ≠ 0 := by
   rw [punctured, AnalyticSpace.mem_nonvanishing_iff]
   rw [eval_complexAffineSpace, evalHom_coord]
+
+/-- **The two `punctured`s of `OkaTest/` are the same open set.** `punctured` of
+`OkaTest/HolomorphicMapOpen.lean` is `{z | z (ULift.up 0) ≠ 0}` with its openness proved by hand;
+`ComplexAnalytic.punctured` above is the non-vanishing locus of the coordinate. Nothing before
+this said they agree, and the two files did not see each other; see the module docstring for what
+the import cost and for why neither definition is retired. -/
+theorem punctured_eq_punctured : punctured.{u} = _root_.punctured.{u} :=
+  TopologicalSpace.Opens.ext (Set.ext fun p ↦
+    (mem_punctured_iff.{u} p).trans (_root_.mem_punctured_iff.{u} p).symm)
 
 /-- **The square of a nonzero number is nonzero**, in the form
 `ComplexAnalytic.AnalyticSpace.liftRestrict` asks for. -/
