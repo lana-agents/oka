@@ -73,3 +73,4 @@ import OkaTest.SheafOfModulesStalk
 import OkaTest.SimpDiscrTree
 import OkaTest.SimpleZeroStalk
 import OkaTest.SpecCoherent
+import OkaTest.UliftCoord
