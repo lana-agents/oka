@@ -3,6 +3,7 @@ Copyright (c) 2026 Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten. All righ
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
+import Oka.AnalyticSpace.LocalIso
 import Oka.AnalyticSpace.LocalModel
 import Oka.AnalyticSpace.Restrict
 import Oka.Geometry.RingedSpace.OpenImmersion
@@ -72,6 +73,72 @@ transport of algebra structures along an isomorphism is needed anywhere.
   is an isomorphism on stalks**, at the spelling a caller of `ofRestrict` holds. Mathlib has the
   statement; what this adds is a discrimination-tree key, exactly as
   `AlgebraicGeometry.LocallyRingedSpace.isOpenImmersion_ofRestrict` does one field further in.
+- `ComplexAnalytic.AnalyticSpace.isLocalIso_ofRestrict`: **the inclusion of an open subspace is a
+  local isomorphism.**
+
+## Why `Oka/AnalyticSpace/LocalIso.lean` is imported here, when no import was forced
+
+`ComplexAnalytic.AnalyticSpace.isLocalIso_ofRestrict` needs `ofRestrict`, defined here, and
+`ComplexAnalytic.AnalyticSpace.IsLocalIso`, defined there. **That does not mean one of the two
+files had to import the other, and an earlier draft of this paragraph said it did.** Three files
+already reach both: `Oka/AnalyticSpace/CoveringSpace.lean`, `Oka/AnalyticSpace/Degree.lean` and
+`Oka/AnalyticSpace/SigmaFiniteEtale.lean`. Any of them would have cost **nothing**, so this import
+is a placement decision and can be undone by moving one instance. **None of the three is where the
+instance is used**, and that draft said the first of them was: the only consumer of
+`ComplexAnalytic.AnalyticSpace.isLocalIso_ofRestrict` anywhere is `OkaTest/CoveringSpace.lean`,
+which imports `Oka` wholesale and so finds it wherever it sits. That is what makes the placement
+free rather than merely cheap.
+
+**It is here because both of its ingredients are.** The first field is
+`Topology.IsOpenEmbedding.isLocalHomeomorph` at `U.isOpenEmbedding`; the second is
+`ComplexAnalytic.AnalyticSpace.isIso_stalkMap_ofRestrict` three declarations above, found by
+`inferInstance` — a lemma that exists *only* to put Mathlib's statement at the
+discrimination-tree key a caller of `ofRestrict` holds. Putting its one consumer in another file
+is how such a lemma comes to look unused. The statement is also about open subspaces and not about
+covering spaces: a `## Main results` bullet in `Oka/AnalyticSpace/CoveringSpace.lean` reading *the
+inclusion of an open subspace is a local isomorphism* would be a claim in the wrong file.
+
+**What the edge costs, and what the reverse would have.** Transitive closure of each file's import
+list, expanding and counting **only modules under `Oka/` and `Mathlib/`** — other packages are
+leaves and are dropped, which is the convention `scripts/import_cost.py` states as *"Mathlib
+modules only"*, widened to this repository:
+
+* this file, **3095 → 3100**, and the five are named: `Oka.AnalyticSpace.LocalIso`,
+  `Oka.AnalyticSpace.Finite`, `Mathlib.Topology.IsLocalHomeomorph`,
+  `Mathlib.Topology.OpenPartialHomeomorph.Composition`, `Mathlib.Topology.SeparatedMap`;
+* `Oka/AnalyticSpace/LocalIso.lean`, **2160 → 3100**, since this file reaches
+  `Oka.AnalyticSpace.Coherent` and the whole local-model apparatus.
+
+**Five against 940 is the comparison, and it is what decided the direction.**
+
+**Read the closures off Lean's own environment rather than off a parser over the header lines.**
+The figures above are `lake env lean` on a scratch file whose imports are the list being measured,
+with
+
+```
+open Lean in
+#eval show CoreM Unit from do
+  let ms := (← getEnv).header.moduleNames
+  IO.println (ms.filter fun m => (`Oka).isPrefixOf m || (`Mathlib).isPrefixOf m).size
+```
+
+That is not fussiness. An earlier draft of this section gave 3075 and 2141 from a parser of its
+own, and three hand-written parsers — that one and two reviewers' — disagreed with each other and
+with Lean before the environment settled it. Three traps account for the spread and none of them
+announces itself: matching the word *import* outside the header picks it up inside a docstring
+code block and pulls in the whole of Mathlib; **seventy** Mathlib header lines carry a trailing
+*shake* comment — `grep -rlE '^module[ \t]+--' .lake/packages/mathlib/Mathlib/`, in five
+spellings — so a parser comparing the stripped line against the module keyword stops at each of
+them, and one of the seventy is `Mathlib/Tactic/Common.lean`, which by itself takes the tactic
+modules with it; and this Mathlib writes both *public meta import* and *import all*, which a
+pattern anchored on the bare keyword misses.
+`scripts/import_cost.py` cannot be used instead — it resolves only under `Mathlib/`, and neither
+of these two files is a mirror file.
+
+**All four figures are counterfactual, so recomputing them here needs the import above removed
+first** — left in place the first reads `3100 → 3100`, and the second `3101`, one more, because
+the union then contains `Oka.AnalyticSpace.LocalIso` itself. The five-module delta is what the
+decision rests on and it is convention-invariant; the baselines are not.
 -/
 
 open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry Topology
@@ -200,6 +267,23 @@ instance isIso_stalkMap_ofRestrict (X : AnalyticSpace.{u}) (U : X.Opens) (x : X.
     IsIso ((X.ofRestrict U).toLRSHom.stalkMap x) :=
   inferInstanceAs (IsIso
     ((X.toLocallyRingedSpace.ofRestrict U.isOpenEmbedding).stalkMap x))
+
+/-- **The inclusion of an open subspace is a local isomorphism.**
+
+Both fields are already here and neither needs a hypothesis. The underlying map is the inclusion
+of an open set, so `Topology.IsOpenEmbedding.isLocalHomeomorph` gives the first; the second is
+`ComplexAnalytic.AnalyticSpace.isIso_stalkMap_ofRestrict` above, found by instance search — which
+is what that lemma exists for, Mathlib's own statement being at a different
+discrimination-tree key.
+
+It is **not** finite étale in general, and nothing here says otherwise: the inclusion of the
+punctured line into the line is an open subspace whose inclusion is not a closed map, which
+`OkaTest/CoveringSpace.lean` exhibits as
+`ComplexAnalytic.not_isFinite_puncturedInclCoveringSpaceHom`. -/
+instance isLocalIso_ofRestrict (X : AnalyticSpace.{u}) (U : X.Opens) :
+    AnalyticSpace.IsLocalIso (X.ofRestrict U) where
+  isLocalHomeomorph := U.isOpenEmbedding.isLocalHomeomorph
+  isIso_stalkMap _ := inferInstance
 
 /-- **The inclusion of a smaller open subspace into a larger one**, as a morphism of complex
 analytic spaces.

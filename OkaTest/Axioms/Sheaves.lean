@@ -716,6 +716,13 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.isIso_stalkMap_toInverseImage' depen
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.isIso_stalkMap_toInverseImage
 
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.isIso_toInverseImage' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.isIso_toInverseImage
+
 /-! ### The sheets of a map
 
 `Oka/Topology/IsLocalHomeomorph.lean`. The family of opens on which a map is an open embedding,

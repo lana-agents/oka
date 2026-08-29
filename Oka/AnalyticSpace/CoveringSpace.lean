@@ -79,6 +79,43 @@ in this line and it is topology, not analysis.
 needs `[T2Space]`, because Mathlib's criterion separates the points of a fibre. **This direction
 needs no separation axiom**, and none is assumed below.
 
+## Uniqueness, and the reading of it that carries no transport
+
+**A local isomorphism over `X` is this construction, at its own base map.** For `q : E' ⟶ X`
+*any* morphism of complex analytic spaces with `ComplexAnalytic.AnalyticSpace.IsLocalIso q`, its
+source is isomorphic **over `X`** to the space built below on `q`'s own base map. That is the
+reading of *"the structure is unique"* delivered here, and it is a choice among several.
+
+That shape is also what makes the statement cheap. The literal reading — *given an analytic
+structure on the topological space `E`, and a morphism whose base map is equal to `p`* — needs an
+equality of `TopCat` objects and an equality of morphisms across it, and every statement about it
+then carries a transport. `ComplexAnalytic.AnalyticSpace.coveringSpace` takes the local
+homeomorphism as an argument, so the comparison space is built out of `q`'s own base map: `p` and
+the hypothesis on it are then not hypotheses of the uniqueness statement at all, being read off
+`q`. It is also *stronger* than the literal reading, because it pins the morphism and not only the
+space.
+
+**The `ℂ`-linearity of the inverse is where the work is, and it is not decoration.**
+`AlgebraicGeometry.LocallyRingedSpace.isIso_toInverseImage` gives an isomorphism of *locally
+ringed* spaces out of the stalk field of `ComplexAnalytic.AnalyticSpace.IsLocalIso` and nothing
+else. That is **not** an isomorphism of analytic spaces: `ComplexAnalytic.AnalyticSpace` is a
+**non-full** subcategory of `AlgebraicGeometry.LocallyRingedSpace` — a
+`ComplexAnalytic.AnalyticSpace.Hom` is a `AlgebraicGeometry.LocallyRingedSpace.Hom` *plus* a proof
+of `ComplexAnalytic.IsCLinearHom` — so an isomorphism downstairs hands back an inverse about whose
+`ℂ`-linearity nothing has been said, and complex conjugation is a ring automorphism of the sheaf
+of holomorphic functions. That is the same fact `Oka/AnalyticSpace/InverseImageSheet.lean` states
+for a sheet. `ComplexAnalytic.IsCLinearHom.of_comp` read at `CategoryTheory.IsIso.inv_hom_id` is
+the one line that closes it, and `ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace` being
+faithful is what closes the two triangle identities.
+
+**Agreement on stalks alone would not have been this statement**, which is worth saying because it
+is the cheap thing a reader may expect to find here.
+`AlgebraicGeometry.LocallyRingedSpace.stalkInverseImageIso` makes the stalk of `p⁻¹X` at `e` the
+stalk of `X` at `p e`, and `IsLocalIso q` makes `q`'s stalk map an isomorphism, so *both* stalks
+are canonically `X`'s stalk at the image point and any stalkwise agreement between them is
+`IsLocalIso`'s own content restated. It says nothing whatever about the structure sheaves away
+from a point, which is the entire question.
+
 ## Main definitions
 
 - `ComplexAnalytic.inverseImageAlgMap`: the `ℂ`-algebra structure on `p⁻¹X`, pulled back from `X`
@@ -87,6 +124,11 @@ needs no separation axiom**, and none is assumed below.
   local homeomorphism into a complex analytic space.**
 - `ComplexAnalytic.AnalyticSpace.coveringSpaceHom`: the morphism of complex analytic spaces it
   carries, whose underlying map is `p`.
+- `ComplexAnalytic.AnalyticSpace.toCoveringSpace`: **the comparison morphism** from the source of
+  a local isomorphism `q` to the covering space built on `q`'s own base map. It is the identity on
+  carriers.
+- `ComplexAnalytic.AnalyticSpace.coveringSpaceIso`: the isomorphism of complex analytic spaces
+  that comparison morphism is.
 
 ## Main results
 
@@ -98,20 +140,34 @@ needs no separation axiom**, and none is assumed below.
 - `ComplexAnalytic.AnalyticSpace.isFinite_coveringSpaceHom` and
   `ComplexAnalytic.AnalyticSpace.isFiniteEtale_coveringSpaceHom`: **a covering map with finite
   fibres is finite étale** for this structure.
+- `ComplexAnalytic.AnalyticSpace.toCoveringSpace_comp`: the comparison morphism is a morphism
+  over `X`.
+- `ComplexAnalytic.AnalyticSpace.isIso_toCoveringSpace`: **it is an isomorphism of complex
+  analytic spaces**, its inverse's `ℂ`-linearity included.
+- `ComplexAnalytic.AnalyticSpace.exists_iso_coveringSpace`: **uniqueness** — every local
+  isomorphism of complex analytic spaces over `X` is this construction at its own base map, and
+  compatibly with the two maps to `X`.
 
 ## What is not here
 
-* **No uniqueness.** Nothing below says this is the *only* analytic structure on `E` making `p` a
-  local isomorphism, and that statement needs deciding before it can be proved: an isomorphism of
-  locally ringed spaces between analytic spaces is not on its own an identification of analytic
-  spaces, for the antiholomorphy reason `Oka/AnalyticSpace/InverseImageSheet.lean` gives. It is a
-  separate issue and the reason this file's results are stated as a *construction* rather than as
-  an equivalence.
-* **No comparison with `ComplexAnalytic.AnalyticSpace.sigma`.** The trivial `ι`-sheeted cover
-  `ComplexAnalytic.AnalyticSpace.sigmaFold` is a covering map with finite fibres, so this file
-  puts a structure on its source; whether that structure is `sigma`'s own is exactly the
-  uniqueness question above and is **not** answered here. `OkaTest/CoveringSpace.lean` says so
-  again where a reader would look for it.
+* **No uniqueness of the comparison morphism, and none of the isomorphism.**
+  `ComplexAnalytic.AnalyticSpace.exists_iso_coveringSpace` says an isomorphism over `X` exists and
+  exhibits one; nothing below says it is the *only* morphism over `X` whose base map is the
+  identity. `CategoryTheory.sheafifyLift_unique` is where that would come from, and
+  `Oka/Geometry/RingedSpace/LocallyRingedSpace/InverseImage.lean`'s own `## What is not here` says
+  so at the rung the argument would be run on. Naturality in `q` is missing for the same reason
+  and is not stated either.
+* **No statement for a `q` whose base map is *equal to* a given `p`.** The uniqueness above is
+  read at `q`'s own base map, which is exactly what frees it of transport — see the module
+  docstring. A consumer who arrives holding `p`, a proof that `q`'s base map equals it, and a
+  structure on the carrier has to cross that equality, and nothing here does it for them.
+* **The comparison with `ComplexAnalytic.AnalyticSpace.sigma` is no longer absent, and it is not
+  in this file.** The trivial `ι`-sheeted cover `ComplexAnalytic.AnalyticSpace.sigmaFold` is
+  finite étale, hence a local isomorphism, so
+  `ComplexAnalytic.AnalyticSpace.exists_iso_coveringSpace` applies to it and says that `sigma`'s
+  own structure **is** the one this file puts on its source, over `X`. That instance is
+  `ComplexAnalytic.exists_iso_sigmaFoldCoveringSpace` in `OkaTest/CoveringSpace.lean`, beside the
+  same statement for the squaring map and for an open subspace.
 * **Nothing about the number of sheets.**
   `ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale` in
   `Oka/AnalyticSpace/CoveringMap.lean` is that statement, over a preconnected base — but it is
@@ -130,9 +186,14 @@ needs no separation axiom**, and none is assumed below.
 * **No sections of `p⁻¹𝒪_X`.** No formula is proved for the sections over an open set, here or in
   either file below — over a sheet the *space* is identified with the base and that is strictly
   weaker than a formula, which is all a chart needs.
-* **No converse.** A morphism of analytic spaces that is finite étale has a covering map for its
-  underlying map (`Oka/AnalyticSpace/CoveringMap.lean`), but the structure it carries is not
-  compared with the one built here — again the uniqueness question.
+* **The converse is no longer absent either, and the same bullet says what still is.** A morphism
+  of analytic spaces that is finite étale has a covering map for its underlying map
+  (`Oka/AnalyticSpace/CoveringMap.lean`, which needs `[T2Space]`), and the structure its source
+  carries is now identified with the one built here by
+  `ComplexAnalytic.AnalyticSpace.exists_iso_coveringSpace` — which needs no separation axiom,
+  since it reads only `ComplexAnalytic.AnalyticSpace.IsLocalIso`. What is **not** here is the
+  round trip as an equivalence: no functor either way, no naturality, and nothing about morphisms
+  of covers.
 
 ## References
 
@@ -272,6 +333,117 @@ theorem AnalyticSpace.isFiniteEtale_coveringSpaceHom (hcov : IsCoveringMap ⇑p)
     IsFiniteEtale (AnalyticSpace.coveringSpaceHom X p hcov.isLocalHomeomorph) where
   isFinite := AnalyticSpace.isFinite_coveringSpaceHom X p hcov hfin
   isLocalIso := inferInstance
+
+/-! ### Uniqueness: a local isomorphism is this construction at its own base map -/
+
+section Uniqueness
+
+variable {X E' : AnalyticSpace.{u}} (q : E' ⟶ X) [hq : AnalyticSpace.IsLocalIso q]
+
+/-- **The comparison morphism** from the source of a local isomorphism `q` to the covering space
+built on `q`'s own base map.
+
+It is `AlgebraicGeometry.LocallyRingedSpace.toInverseImage` together with a proof of
+`ComplexAnalytic.IsCLinearHom`, and that proof is `ComplexAnalytic.IsCLinearHom.of_comp` at the
+factorisation `AlgebraicGeometry.LocallyRingedSpace.toInverseImage_comp`: the structure on the
+target is the pullback of `X`'s along `ComplexAnalytic.AnalyticSpace.coveringSpaceHom`, so the two
+inputs are `q`'s own linearity and `ComplexAnalytic.isCLinearHom_comapAlgMap`, which holds by
+definition.
+
+Nothing here is transported. The target's underlying locally ringed space is
+`X.toLocallyRingedSpace.inverseImage q.toLRSHom.base` by `rfl`
+(`ComplexAnalytic.AnalyticSpace.coveringSpace_toLocallyRingedSpace`), so the field is literally a
+morphism into it. -/
+def AnalyticSpace.toCoveringSpace :
+    E' ⟶ AnalyticSpace.coveringSpace X q.toLRSHom.base hq.isLocalHomeomorph :=
+  ⟨LocallyRingedSpace.toInverseImage q.toLRSHom,
+    IsCLinearHom.of_comp (LocallyRingedSpace.toInverseImage_comp q.toLRSHom) q.isCLinear
+      (isCLinearHom_comapAlgMap _ _)⟩
+
+/-- **The underlying morphism of locally ringed spaces of the comparison morphism** is
+`AlgebraicGeometry.LocallyRingedSpace.toInverseImage`, on the nose. -/
+@[simp]
+theorem AnalyticSpace.toLRSHom_toCoveringSpace :
+    (AnalyticSpace.toCoveringSpace q).toLRSHom = LocallyRingedSpace.toInverseImage q.toLRSHom :=
+  rfl
+
+/-- **The underlying map of the comparison morphism is the identity**, on the nose — which is what
+makes the uniqueness statement below an identification of `E'` itself and not of a homeomorphic
+copy of it. -/
+@[simp]
+theorem AnalyticSpace.base_toCoveringSpace :
+    (AnalyticSpace.toCoveringSpace q).toLRSHom.base = 𝟙 E'.toLocallyRingedSpace.toTopCat :=
+  rfl
+
+/-- **The comparison morphism is a morphism over `X`.**
+
+`AlgebraicGeometry.LocallyRingedSpace.toInverseImage_comp` verbatim, pushed across the faithful
+`ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace`: an equation between morphisms of
+analytic spaces is an equation between their underlying morphisms, and the `ℂ`-linearity fields
+are proofs. -/
+theorem AnalyticSpace.toCoveringSpace_comp :
+    AnalyticSpace.toCoveringSpace q ≫
+        AnalyticSpace.coveringSpaceHom X q.toLRSHom.base hq.isLocalHomeomorph = q :=
+  AnalyticSpace.forgetToLocallyRingedSpace.map_injective
+    (LocallyRingedSpace.toInverseImage_comp q.toLRSHom)
+
+set_option backward.isDefEq.respectTransparency false in
+/-- **The comparison morphism is an isomorphism of complex analytic spaces.**
+
+`AlgebraicGeometry.LocallyRingedSpace.isIso_toInverseImage` is the locally-ringed-space half and
+consumes only the stalk field of `ComplexAnalytic.AnalyticSpace.IsLocalIso`; the topological field
+is not used here at all, being spent instead on naming the target — see the module docstring.
+
+**The inverse's `ℂ`-linearity is a separate obligation and is the content of this instance.** The
+subcategory is not full, so the inverse handed back downstairs is a morphism of locally ringed
+spaces and nothing more; `ComplexAnalytic.IsCLinearHom.of_comp` applied at
+`CategoryTheory.IsIso.inv_hom_id` supplies it, with
+`ComplexAnalytic.IsCLinearHom.id` for the composite. The two triangle identities are then their
+locally-ringed-space counterparts, by faithfulness.
+
+**The `set_option` is load-bearing and was tested by deletion.** Without it the `inv` in the term
+below fails to find its `IsIso` instance: the expected type spells the source as
+`(ComplexAnalytic.AnalyticSpace.coveringSpace …).toLocallyRingedSpace` while the hypothesis spells
+it as `AlgebraicGeometry.LocallyRingedSpace.inverseImage …`, and
+`ComplexAnalytic.AnalyticSpace.coveringSpace_toLocallyRingedSpace` bridging them is `rfl` at
+default transparency only, where instance search runs at reducible.
+`AlgebraicGeometry.LocallyRingedSpace.isIso_toInverseImage` itself needs no such option, because
+no term in it crosses that seam. -/
+instance AnalyticSpace.isIso_toCoveringSpace : IsIso (AnalyticSpace.toCoveringSpace q) := by
+  haveI : IsIso (LocallyRingedSpace.toInverseImage q.toLRSHom) :=
+    LocallyRingedSpace.isIso_toInverseImage q.toLRSHom fun z ↦
+      AnalyticSpace.IsLocalIso.isIso_stalkMap z
+  refine ⟨⟨CategoryTheory.inv (LocallyRingedSpace.toInverseImage q.toLRSHom), ?_⟩, ?_, ?_⟩
+  · exact IsCLinearHom.of_comp (CategoryTheory.IsIso.inv_hom_id _) (IsCLinearHom.id _)
+      (AnalyticSpace.toCoveringSpace q).isCLinear
+  · exact AnalyticSpace.forgetToLocallyRingedSpace.map_injective
+      (CategoryTheory.IsIso.hom_inv_id (LocallyRingedSpace.toInverseImage q.toLRSHom))
+  · exact AnalyticSpace.forgetToLocallyRingedSpace.map_injective
+      (CategoryTheory.IsIso.inv_hom_id (LocallyRingedSpace.toInverseImage q.toLRSHom))
+
+/-- **The isomorphism the comparison morphism is**, as a `CategoryTheory.Iso`.
+
+`CategoryTheory.asIso` of the instance above, so its `hom` field is
+`ComplexAnalytic.AnalyticSpace.toCoveringSpace` by definition and
+`ComplexAnalytic.AnalyticSpace.toCoveringSpace_comp` applies to it unchanged. -/
+def AnalyticSpace.coveringSpaceIso :
+    E' ≅ AnalyticSpace.coveringSpace X q.toLRSHom.base hq.isLocalHomeomorph :=
+  asIso (AnalyticSpace.toCoveringSpace q)
+
+/-- **Uniqueness of the analytic structure on a covering space**: a morphism of complex analytic
+spaces which is a local isomorphism is *this file's construction*, at its own base map, over its
+own target.
+
+Neither `p` nor a hypothesis on it appears: both are read off `q`, which is what removes the
+transport a statement quantified over structures on a fixed carrier would carry. The second
+component is what makes it a statement over `X` and not merely about the two spaces; without it
+the isomorphism would say nothing about the maps. -/
+theorem AnalyticSpace.exists_iso_coveringSpace :
+    ∃ e : E' ≅ AnalyticSpace.coveringSpace X q.toLRSHom.base hq.isLocalHomeomorph,
+      e.hom ≫ AnalyticSpace.coveringSpaceHom X q.toLRSHom.base hq.isLocalHomeomorph = q :=
+  ⟨AnalyticSpace.coveringSpaceIso q, AnalyticSpace.toCoveringSpace_comp q⟩
+
+end Uniqueness
 
 end ComplexAnalytic
 
