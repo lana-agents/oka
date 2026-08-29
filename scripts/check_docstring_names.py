@@ -315,6 +315,24 @@ def report(repo: str, found: dict[str, list[tuple[str, int]]]) -> str:
     return f"{repo}: {total} backticked names ({len(found)} distinct)"
 
 
+def check_tree(path: str, what: str) -> str:
+    """Resolve a `--tree` / `--diff` argument, failing loudly rather than on a missing file.
+
+    Without this a mistyped path reaches `candidates`, which walks a directory that is not there
+    — `os.walk` on a missing directory yields nothing rather than raising — and then dies on
+    `Oka.lean` with a bare `FileNotFoundError`.  A worktree that has not been created yet is the
+    common case and it deserves a sentence.
+    """
+    real = os.path.realpath(path)
+    if not all(os.path.exists(os.path.join(real, f + ".lean")) for f in ROOTS):
+        sys.stderr.write(
+            f"{what} {path!r} is not a checkout of this repository: expected "
+            + " and ".join(f"{f}.lean" for f in ROOTS) + f" under {real}.\n"
+            "Create the base with `git worktree add /tmp/<dir> <sha>`.\n")
+        sys.exit(2)
+    return real
+
+
 def diff_trees(base: str, tree: str) -> int:
     """Print the added and removed *distinct* candidate names between two checkouts.
 
@@ -420,6 +438,15 @@ def self_test() -> int:
               proc.returncode == 0 and "Only.inB" in proc.stdout,
               proc.stdout.strip().replace("\n", " | ") or proc.stderr.strip())
 
+        bad = subprocess.run(
+            [sys.executable, os.path.abspath(__file__), "--diff",
+             os.path.join(tmp, "does-not-exist")],
+            capture_output=True, text=True, env=dict(os.environ, PYTHONDONTWRITEBYTECODE="1"))
+        check("a path that is not a checkout is reported, not a traceback",
+              bad.returncode == 2 and "Traceback" not in bad.stderr
+              and "is not a checkout" in bad.stderr,
+              bad.stderr.strip().replace("\n", " | ") or f"rc={bad.returncode}")
+
     if failures:
         print(f"\n{len(failures)} check(s) failed: " + ", ".join(failures))
         return 2
@@ -444,9 +471,9 @@ def main() -> int:
     if args.self_test:
         return self_test()
 
-    repo = os.path.realpath(args.tree)
+    repo = check_tree(args.tree, "--tree")
     if args.diff:
-        return diff_trees(os.path.realpath(args.diff), repo)
+        return diff_trees(check_tree(args.diff, "--diff"), repo)
 
     found = candidates(repo)
     # Every proper prefix of every candidate is a possible head for the field-notation rule, and
