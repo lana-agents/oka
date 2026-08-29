@@ -70,14 +70,30 @@ standard étale pair.
 * **Nothing reads `StandardEtalePair.cond`, and the simple-zero lemma is not here.** The step a
   local-isomorphism statement needs is that at a point where `F` vanishes and `G` does not, the
   germ of `F` has `PowerSeries.order (MvPowerSeries.partialEval (Fin.last n) …) = 1` — the
-  hypothesis `ComplexAnalytic.bijective_stalkMap_comp_uliftProj` takes. Two things are missing and
-  the second is the larger: `Oka/` has **no partial-derivative operator at all** — the only
-  computation of `PowerSeries.order (MvPowerSeries.partialEval …)` in this repository is
-  `order_partialEval_eq_natDegree` in `Oka/Regular.lean`, which reads the order off a Weierstrass
-  *degree* and not off a derivative — and `Oka/AnalyticSpace/SimpleZeroStalk.lean` says in terms
-  that bridging *"`∂F/∂X_n` is a unit at the point"* to the order condition is separate work it
-  does not attempt. So `cond`'s `derivative f * p₁ + f * p₂ = g ^ n` cannot be carried to that
-  hypothesis by anything on hand, and no declaration below pretends otherwise.
+  hypothesis `ComplexAnalytic.bijective_stalkMap_comp_uliftProj` takes. **What is missing is the
+  derivative and not the order.** That order is computed four times already, and none of the four
+  reads a derivative: `order_partialEval_germ`, `order_partialEval_germ_sq` and
+  `order_partialEval_germ_ulift` in `OkaTest/SimpleZeroStalk.lean` compute it *at a coordinate*,
+  by `MvPowerSeries.partialEval_X_self` and `PowerSeries.order_X_pow`, the third in exactly the
+  `LocalOkaRing.uliftEquiv` shape the hypothesis above asks for; and
+  `order_partialEval_skewDiagonal` in `OkaTest/GermQuotientDegreeOne.lean` computes it off a
+  **Weierstrass degree**, through `LocalOkaRing.order_partialEval_eq_natDegree`
+  (`Oka/Regular.lean`), which is the only such computation under `Oka/`. What no route reaches is
+  a germ presented by *"its first derivative is nonzero"*: `Oka/` has **no partial-derivative
+  operator at all**, and `Oka/AnalyticSpace/SimpleZeroStalk.lean` says in terms that bridging
+  *"`∂F/∂X_n` is a unit at the point"* to the order condition is separate work it does not
+  attempt. So `cond`'s `derivative f * p₁ + f * p₂ = g ^ n` — an existential, `∃ p₁ p₂ n`, and not
+  a field — cannot be carried to that hypothesis by anything on hand, and no declaration below
+  pretends otherwise.
+* **No witness that the open is ever non-empty.** The statements below are hypothesis-free in `F`
+  and `G`, so none of them can be vacuously satisfied; what is unchecked is whether the objects
+  are degenerate — nothing here says `ComplexAnalytic.localisationOpen (hypersurfacePresentation g
+  F) G` is non-empty for any `F` and `G`, so for all this file says the isomorphism could be one
+  of empty spaces. Supplying one is `ComplexAnalytic.mem_localisationOpen_iff` and a point of the
+  hypersurface's analytification at which `G` does not vanish, in the shape
+  `localisationOpen_nodePres_ne_bot` (`OkaTest/AnalytificationDistinguishedOpen.lean`) and
+  `ComplexAnalytic.localisationOpen_lineRel_ne_bot` (`OkaTest/ProjectiveLine.lean`) already have
+  for their own data; it is a construction rather than a quotation and it is not here.
 * **No `IsLocalIso` and no `IsFiniteEtale`.** Beside the missing lemma above,
   `Oka/AnalyticSpace/SimpleZeroStalk.lean` records that its stalk statement says **nothing about
   the underlying map** — *"not even that it is open"* — so the topological field of
