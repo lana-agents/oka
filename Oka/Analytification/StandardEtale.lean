@@ -86,8 +86,11 @@ them.
 ## What is not here
 
 * **The analytification.** Nothing below mentions an analytic space; this is the algebraic half
-  alone. Applying `ComplexAnalytic.analytificationFunctor` to
-  `ComplexAnalytic.etalePresentation` is the next step and is a different issue.
+  alone. The next step is `Oka/Analytification/StandardEtaleAnalytification.lean`, which imports
+  this file: `ComplexAnalytic.etaleAnalytificationIso` identifies the analytification of
+  `ComplexAnalytic.etalePresentation` with the distinguished open `D(G)` inside the analytification
+  of `ComplexAnalytic.hypersurfacePresentation`, and
+  `ComplexAnalytic.etaleAnalytificationIso_hom_comp` says the identification is one over the base.
 * **That the étale algebra is étale.** `Algebra.Etale R P.Ring` is Mathlib's, and nothing here
   reproves or uses it; the monicity of `f` and the invertibility of `f'` are carried by `P` and
   are not read.
