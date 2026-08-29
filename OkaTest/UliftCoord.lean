@@ -64,26 +64,40 @@ theorem exists_ne_zero_localOkaRing : ∃ f : LocalOkaRing (Fin (n + 1)), f ≠ 
   ⟨1, one_ne_zero⟩
 
 /-- **From a nonzero germ to a family satisfying all three hypotheses of the projection theorem
-over an open base.**
+over an open base — for the polynomial that realizes that germ, and not for some other one.**
 
-`LocalOkaRing.exists_congr_monic_realize_of_ne_zero` produces the monic `P` at
-`ULift (Fin n)`, and `ComplexAnalytic.monic_okaFamily`, `ComplexAnalytic.natDegree_okaFamily` and
+`LocalOkaRing.exists_congr_monic_realize_of_ne_zero` produces the monic `P` at `ULift (Fin n)`,
+and `ComplexAnalytic.monic_okaFamily`, `ComplexAnalytic.natDegree_okaFamily` and
 `ComplexAnalytic.continuous_coeff_okaFamily` read off the three hypotheses
 `ComplexAnalytic.isFinite_comp_projRestrict_of_range_eq` asks of a family. **There is no
-relabelling, coercion or transport between the two halves**, and that is the statement: the
-`Fin`-indexed side of `Oka/Weierstrass.lean` and the `ULift`-indexed side of
-`ComplexAnalytic.AnalyticSpace` now compose.
+relabelling, coercion or transport between the two halves**: the `P` the `Fin`-indexed side of
+`Oka/Weierstrass.lean` produces is handed to the `ULift`-indexed side of
+`ComplexAnalytic.AnalyticSpace` unchanged.
 
-What this does *not* say is anything about which germ, or about the hypersurface — see this
+**The realization is a conjunct of the conclusion and not merely of the proof, and that is
+deliberate.** Without it the statement is `∃ W P, (three hypotheses)`, in which `f` does not
+appear at all — and that is provable from `W := ⊤` and `P := X` in five lines, so the check would
+pass with the bridge deleted. Carrying `LocalOkaRing.congr φ f = …` across ties `P` to `f`, which
+is what makes this a test of the composition rather than of `ComplexAnalytic.okaFamily` alone.
+The price is that the whole of the bridge's conclusion is restated here; that is the price.
+
+What this does *not* say is anything about *which* germ, or about the hypersurface — see this
 file's `## What is not checked here`. -/
 theorem exists_okaFamily_of_ne_zero {f : LocalOkaRing (Fin (n + 1))} (hf : f ≠ 0) :
-    ∃ (W : Opens (ULift.{u} (Fin n) → ℂ)) (P : Polynomial (OkaRing W)),
+    ∃ (φ : (Fin (n + 1) → ℂ) ≃L[ℂ] (Fin (n + 1) → ℂ)) (u : LocalOkaRing (Fin (n + 1)))
+      (_ : IsUnit u) (W : Opens (ULift.{u} (Fin n) → ℂ))
+      (h0 : (0 : ULift.{u} (Fin n) → ℂ) ∈ W) (P : Polynomial (OkaRing W)),
+      LocalOkaRing.congr φ f =
+          LocalOkaRing.fromPolynomial
+            (Polynomial.map (LocalOkaRing.uliftEquiv.{u} (Fin n)).toRingHom
+              (Polynomial.map (OkaRing.germ h0).toRingHom P)) * u ∧
       (∀ w : ↥W, (okaFamily.{u} W P w).Monic) ∧
       (∀ w : ↥W, (okaFamily.{u} W P w).natDegree = P.natDegree) ∧
       (∀ j : ℕ, Continuous fun w : ↥W ↦ (okaFamily.{u} W P w).coeff j) := by
-  obtain ⟨_, _, _, W, _, P, hP, _⟩ := LocalOkaRing.exists_congr_monic_realize_of_ne_zero.{u} hf
-  exact ⟨W, P, monic_okaFamily.{u} W P hP, natDegree_okaFamily.{u} W P hP,
-    continuous_coeff_okaFamily.{u} W P⟩
+  obtain ⟨φ, u, hu, W, h0, P, hP, hfeq⟩ :=
+    LocalOkaRing.exists_congr_monic_realize_of_ne_zero.{u} hf
+  exact ⟨φ, u, hu, W, h0, P, hfeq, monic_okaFamily.{u} W P hP,
+    natDegree_okaFamily.{u} W P hP, continuous_coeff_okaFamily.{u} W P⟩
 
 end ComplexAnalytic
 

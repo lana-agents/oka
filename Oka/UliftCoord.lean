@@ -73,6 +73,12 @@ one a caller wants.
 * **No uniqueness.** The Weierstrass polynomial of a germ is unique, and that is not proved here
   or anywhere in this repository; two applications of the results below may produce unrelated
   `P`s.
+* **No `IsWeierstrassPolynomial` at `κ`, and it is a missing statement rather than a missing
+  proof.** The predicate is declared at index type `Fin n` and nowhere else, so the results below
+  keep only its `monic` field — which is all
+  `ComplexAnalytic.isFinite_comp_projRestrict_of_monic` asks — and there is no way to state that
+  the transported `P` satisfies the vanishing condition. Generalising the predicate the way
+  `OkaRing.congr` is already general is what would be needed, and nothing here needs it.
 -/
 
 open TopologicalSpace
@@ -134,9 +140,14 @@ commutes with it, and `Polynomial.Monic.map` carries monicity — which is the *
 `IsWeierstrassPolynomial` and is all that
 `ComplexAnalytic.isFinite_comp_projRestrict_of_monic` asks of its polynomial.
 
-**The vanishing condition of `IsWeierstrassPolynomial` is dropped and not transported.** It says
-the lower coefficients vanish at the origin, and no statement downstream of here consumes it; a
-caller who needs it should transport it too rather than reprove this. -/
+**The vanishing condition of `IsWeierstrassPolynomial` is dropped, and it could not have been
+carried even if something wanted it.** It says the lower coefficients vanish at the origin, and no
+statement downstream of here consumes it — but **the predicate does not typecheck at `κ` at all**:
+`IsWeierstrassPolynomial` is declared under `variable {n : ℕ} (U : Opens (Fin n → ℂ))` in
+`Oka/Weierstrass.lean`, so it exists only at index type `Fin n`. The mathematics transports for
+free — `φ` is linear, so `φ 0 = 0`, and `LocalOkaRing.congr_germ` does the rest — and what is
+missing is the *statement*: the predicate would first have to be generalised in its index type
+the way `OkaRing.congr` already is. See this file's `## What is not here`. -/
 theorem exists_monic_realize_congr (φ : (Fin n → ℂ) ≃L[ℂ] (κ → ℂ))
     {g : Polynomial (LocalOkaRing (Fin n))}
     (hg : IsLocalWeierstrassPolynomial
