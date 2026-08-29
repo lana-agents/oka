@@ -91,20 +91,30 @@ each file's import list, counting modules under `Oka/`, `OkaTest/` and `Mathlib/
   that file's entire import list and this file already has it, so the edge adds no third-party
   module at all;
 * **`OkaTest/HolomorphicMapOpen.lean`, 3639 → 3691** for the reverse edge, since it would acquire
-  `OkaTest.HolomorphicMap`, `Mathlib.Analysis.Normed.Module.Connected`,
-  `Mathlib.Analysis.Complex.Polynomial.Basic` and their closures.
+  `OkaTest.FiniteMorphism` itself together with `OkaTest.HolomorphicMap`,
+  `Mathlib.Analysis.Normed.Module.Connected`, `Mathlib.Analysis.Complex.Polynomial.Basic` and
+  their closures. **It is the one figure of the four that a build of this branch cannot produce**:
+  measured there it reads 3692, because this file's olean now carries the edge and
+  `OkaTest.HolomorphicMapOpen` joins its own closure. It was taken on `master`'s oleans, before
+  the edge existed.
 
 **One against fifty-two.** Neither figure is a *build* cost: `lakefile.toml`'s
-`globs = ["OkaTest.+"]` builds every module under `OkaTest/` already, so `lake build` runs the
-same 4041 jobs on both sides and the edge buys ordering rather than work.
+`globs = ["OkaTest", "OkaTest.+"]` builds every module under `OkaTest/` already — the second
+entry does that on its own, and the first is there so that the root module is built too, for the
+reason the comment above it gives — so `lake build` runs the same 4041 jobs on both sides and the
+edge buys ordering rather than work. **What it does cost is incremental rebuilds**: this file is
+now behind `OkaTest/HolomorphicMapOpen.lean` in the order, and an edit to that file invalidates
+this one.
 
 **Two alternatives were priced and lost.** A third file importing both would cost one new module
 and one line in `OkaTest.lean`, and would put the equality where neither consumer is; and
 *retiring* one definition is not reachable in the cheap direction, since
 `OkaTest/HolomorphicMapOpen.lean` would have to take the fifty-two-module edge to use
-`ComplexAnalytic.punctured`. Retiring `ComplexAnalytic.punctured` instead is reachable but is a
-rename across four files, which taxis #1160 puts out of scope. Both definitions therefore stand,
-and both earn their keep: this one composes with
+`ComplexAnalytic.punctured`. Retiring `ComplexAnalytic.punctured` instead *is* reachable once the
+edge above exists, and it is a rename across four files. **What decides against it is the test a
+retirement has to pass**, not its size: the surviving definition must discharge every use of the
+one that goes, and both definitions have a use the other does not. Both therefore stand, and both
+earn their keep: this one composes with
 `ComplexAnalytic.AnalyticSpace.mem_nonvanishing_iff` and
 `ComplexAnalytic.AnalyticSpace.liftRestrict`, and the other's `mem_punctured_iff` is `Iff.rfl`,
 which `punctured_ne_top` uses definitionally.
