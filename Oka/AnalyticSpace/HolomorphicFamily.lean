@@ -81,10 +81,15 @@ the pullback with nothing to prove.
 
 ## What is not here
 
-* **Nothing from a germ, and no preparation theorem.** `P` is a hypothesis. Turning a holomorphic
-  germ into one is `Oka/Weierstrass.lean`'s business, and its statement is at `Fin n` and at
-  `LocalOkaRing`, so quoting it here needs the index bridge of `Oka/RenameIndex.lean` as well as
-  the choice of a neighbourhood on which the preparation holds. Nothing below chooses one.
+* **Nothing from a germ in this file.** `P` is a hypothesis below and nothing here chooses the
+  neighbourhood it lives on. **The extraction is no longer absent from the repository**:
+  `LocalOkaRing.exists_monic_realize_ulift` in `Oka/UliftCoord.lean` produces a monic
+  `P : Polynomial (OkaRing W)` with `W : Opens (ULift (Fin n) → ℂ)` from a germ Weierstrass
+  polynomial, and `LocalOkaRing.exists_congr_monic_realize_of_ne_zero` chains it with the
+  preparation theorem to start from an arbitrary nonzero germ. What that file does **not**
+  produce is a hypersurface or its image, which is what
+  `ComplexAnalytic.isFinite_comp_projRestrict_of_monic` still asks a caller for; see the next
+  bullet for why it is a range condition.
 * **No `ComplexAnalytic.IsCutOutBy` form.** The cut-out form of the projection theorem,
   `ComplexAnalytic.isFinite_comp_projRestrict_of_isCutOutBy`, takes the cutting section as the
   restriction of an **entire** function, and

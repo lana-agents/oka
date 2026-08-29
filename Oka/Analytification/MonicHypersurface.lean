@@ -104,12 +104,16 @@ construction rather than by a compatibility lemma.
   `ComplexAnalytic.pullbackCylinder` in `Oka/AnalyticSpace/HolomorphicFamily.lean` is one at
   `ULift (Fin n)`, built beside `OkaRing.pullbackInit` in `Oka/Weierstrass.lean` rather than by
   relabelling it, since that one is stated at index type `Fin n` and for the cylinder `U.extend'`
-  while everything here is at `ULift (Fin n)`. What is still absent is the step before it: a
-  Weierstrass polynomial extracted from a germ. Its source,
-  `LocalOkaRing.exists_isWeierstrassPolynomial_realize`, is at `Fin n` and at `LocalOkaRing`, so
-  quoting it needs `Oka/RenameIndex.lean`'s kind of work **and** a choice of the neighbourhood the
-  preparation holds on. That is a separate issue, not a corollary of this one, and
-  `Oka/AnalyticSpace/HolomorphicFamily.lean` records the same absence from its own side.
+  while everything here is at `ULift (Fin n)`. **Nor is the step before it absent any longer**:
+  `LocalOkaRing.exists_monic_realize_ulift` in `Oka/UliftCoord.lean` extracts a monic polynomial
+  over `OkaRing W` from a germ Weierstrass polynomial and chooses the neighbourhood `W`, at
+  `ULift (Fin n)`; and the index bridge that costs is **not**
+  `Oka/RenameIndex.lean`'s kind of work, because `OkaRing.congr` in `Oka/StructureSheaf.lean` was
+  already stated for an arbitrary `φ : ℂ^ι ≃L[ℂ] ℂ^κ` with `ι` and `κ` independent. What is still
+  absent is the image: `ComplexAnalytic.isFinite_comp_projRestrict_of_monic` takes its
+  hypersurface as a range condition and no statement produces one from a germ. That is a separate
+  issue, not a corollary of this one, and `Oka/AnalyticSpace/HolomorphicFamily.lean` records the
+  same residue from its own side.
 
 * **No open subset of the base in this file**, as in `Oka/AnalyticSpace/MonicProjection.lean` and
   `Oka/AnalyticSpace/SimpleZeroStalk.lean`, where the same restriction is absent.
