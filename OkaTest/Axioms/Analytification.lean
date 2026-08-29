@@ -938,6 +938,36 @@ info: 'ComplexAnalytic.exists_presentation_standardEtale' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.exists_presentation_standardEtale
 
+/-! ### The étale presentation analytifies to a distinguished open
+
+The three advertised results of `Oka/Analytification/StandardEtaleAnalytification.lean`: the ideal
+identity that lets the two presentations be compared at all, the isomorphism read against the open
+immersion, and the statement that it is an isomorphism **over the base**. The last is the one that
+makes the first two say something about the projection of the étale cover rather than about two
+spaces that happen to be isomorphic.
+-/
+
+/--
+info: 'ComplexAnalytic.presentationIdeal_etalePresentation_eq_localisation' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.presentationIdeal_etalePresentation_eq_localisation
+
+/--
+info: 'ComplexAnalytic.etaleAnalytificationIso_hom_ofRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.etaleAnalytificationIso_hom_ofRestrict
+
+/--
+info: 'ComplexAnalytic.etaleAnalytificationIso_hom_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.etaleAnalytificationIso_hom_comp
+
 /-! ### The image of the analytification in `ℂ^n` -/
 
 /--
