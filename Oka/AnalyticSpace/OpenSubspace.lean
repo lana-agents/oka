@@ -76,21 +76,42 @@ transport of algebra structures along an isomorphism is needed anywhere.
 - `ComplexAnalytic.AnalyticSpace.isLocalIso_ofRestrict`: **the inclusion of an open subspace is a
   local isomorphism.**
 
-## Why `Oka/AnalyticSpace/LocalIso.lean` is imported here and not the other way round
+## Why `Oka/AnalyticSpace/LocalIso.lean` is imported here, when no import was forced
 
-`ComplexAnalytic.AnalyticSpace.isLocalIso_ofRestrict` needs both `ofRestrict`, which is defined
-here, and `ComplexAnalytic.AnalyticSpace.IsLocalIso`, which is defined there, so one of the two
-files has to import the other. The edge runs this way because the two costs are not comparable:
-this file's transitive closure goes from **3171 modules to 3176** — `Oka.AnalyticSpace.LocalIso`,
-`Oka.AnalyticSpace.Finite` and three Mathlib modules under `Mathlib/Topology/` — while
-`Oka/AnalyticSpace/LocalIso.lean`'s would go from **2236 to 3176**, since this file reaches
-`Oka.AnalyticSpace.Coherent` and the whole local-model apparatus.
+`ComplexAnalytic.AnalyticSpace.isLocalIso_ofRestrict` needs `ofRestrict`, defined here, and
+`ComplexAnalytic.AnalyticSpace.IsLocalIso`, defined there. **That does not mean one of the two
+files had to import the other, and an earlier draft of this paragraph said it did.** Three files
+already reach both: `Oka/AnalyticSpace/CoveringSpace.lean`, which is where the instance's only
+consumer is, `Oka/AnalyticSpace/Degree.lean` and `Oka/AnalyticSpace/SigmaFiniteEtale.lean`. Any of
+them would have cost **nothing**, so this import is a placement decision and can be undone by
+moving one instance.
 
-Both figures are transitive closures of the two files' import lists, and **both are counterfactual,
-so recomputing them on this tree needs the import above removed first.** Left in place, the first
-reads `3176 → 3176` and the second reads `2236 → 3177` — one more, because the union then contains
-`Oka.AnalyticSpace.LocalIso` itself. The comparison the decision rests on is 5 against 940 either
-way.
+**It is here because both of its ingredients are.** The first field is
+`Topology.IsOpenEmbedding.isLocalHomeomorph` at `U.isOpenEmbedding`; the second is
+`ComplexAnalytic.AnalyticSpace.isIso_stalkMap_ofRestrict` three declarations above, found by
+`inferInstance` — a lemma that exists *only* to put Mathlib's statement at the
+discrimination-tree key a caller of `ofRestrict` holds. Putting its one consumer in another file
+is how such a lemma comes to look unused. The statement is also about open subspaces and not about
+covering spaces: a `## Main results` bullet in `Oka/AnalyticSpace/CoveringSpace.lean` reading *the
+inclusion of an open subspace is a local isomorphism* would be a claim in the wrong file.
+
+**What the edge costs, and what the reverse would have.** Transitive closure of each file's import
+list, expanding and counting **only modules under `Oka/` and `Mathlib/`** — other packages are
+leaves and are dropped, which is the convention `scripts/import_cost.py` states as *"Mathlib
+modules only"*, widened to this repository:
+
+* this file, **3075 → 3080**, and the five are named: `Oka.AnalyticSpace.LocalIso`,
+  `Oka.AnalyticSpace.Finite`, `Mathlib.Topology.IsLocalHomeomorph`,
+  `Mathlib.Topology.OpenPartialHomeomorph.Composition`, `Mathlib.Topology.SeparatedMap`;
+* `Oka/AnalyticSpace/LocalIso.lean`, **2141 → 3080**, since this file reaches
+  `Oka.AnalyticSpace.Coherent` and the whole local-model apparatus.
+
+**Both are counterfactual, so recomputing them here needs the import above removed first** — left
+in place the first reads `3080 → 3080` and the second reads `2141 → 3081`, one more because the
+union then contains `Oka.AnalyticSpace.LocalIso` itself. The five-module delta is what the decision
+rests on and it is convention-invariant; the baselines are not, and `scripts/import_cost.py`
+itself cannot produce them, since it resolves only under `Mathlib/` and neither of these two files
+is a mirror file.
 -/
 
 open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry Topology

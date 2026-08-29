@@ -305,7 +305,9 @@ satisfies the first and fails the second while the identification still holds.
 The covering space is spelled at the inclusion's own base map rather than at
 `ComplexAnalytic.puncturedIncl`; `ComplexAnalytic.base_ofRestrict_punctured` is that they are the
 same map, and stating it that way is what keeps the elaboration cheap — asking Lean to unify the
-two spellings inside the statement of the existential runs it into a `whnf` timeout. -/
+two spellings inside the statement of the existential runs it into a deterministic heartbeat
+timeout — reported at `whnf` or at `isDefEq` depending on how the unification is phrased, and
+measured in both shapes rather than feared. -/
 theorem exists_iso_puncturedInclCoveringSpace :
     ∃ e : puncturedLine.{u} ≅
         AnalyticSpace.coveringSpace (AnalyticSpace.complexAffineSpace.{u} 1)
