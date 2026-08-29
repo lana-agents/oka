@@ -3,6 +3,7 @@ Copyright (c) 2026 Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten. All righ
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
+import Oka.AnalyticSpace.LocalIso
 import Oka.AnalyticSpace.LocalModel
 import Oka.AnalyticSpace.Restrict
 import Oka.Geometry.RingedSpace.OpenImmersion
@@ -72,6 +73,19 @@ transport of algebra structures along an isomorphism is needed anywhere.
   is an isomorphism on stalks**, at the spelling a caller of `ofRestrict` holds. Mathlib has the
   statement; what this adds is a discrimination-tree key, exactly as
   `AlgebraicGeometry.LocallyRingedSpace.isOpenImmersion_ofRestrict` does one field further in.
+- `ComplexAnalytic.AnalyticSpace.isLocalIso_ofRestrict`: **the inclusion of an open subspace is a
+  local isomorphism.**
+
+## Why `Oka/AnalyticSpace/LocalIso.lean` is imported here and not the other way round
+
+`ComplexAnalytic.AnalyticSpace.isLocalIso_ofRestrict` needs both `ofRestrict`, which is defined
+here, and `ComplexAnalytic.AnalyticSpace.IsLocalIso`, which is defined there, so one of the two
+files has to import the other. The edge runs this way because the two costs are not comparable:
+this file's transitive closure goes from **3171 modules to 3176** — `Oka.AnalyticSpace.LocalIso`,
+`Oka.AnalyticSpace.Finite` and three Mathlib modules under `Mathlib/Topology/` — while
+`Oka/AnalyticSpace/LocalIso.lean`'s would go from **2236 to 3176**, since this file reaches
+`Oka.AnalyticSpace.Coherent` and the whole local-model apparatus. Both figures are transitive
+closures of the two files' import lists, measured on the branch that added this instance.
 -/
 
 open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry Topology
@@ -200,6 +214,23 @@ instance isIso_stalkMap_ofRestrict (X : AnalyticSpace.{u}) (U : X.Opens) (x : X.
     IsIso ((X.ofRestrict U).toLRSHom.stalkMap x) :=
   inferInstanceAs (IsIso
     ((X.toLocallyRingedSpace.ofRestrict U.isOpenEmbedding).stalkMap x))
+
+/-- **The inclusion of an open subspace is a local isomorphism.**
+
+Both fields are already here and neither needs a hypothesis. The underlying map is the inclusion
+of an open set, so `Topology.IsOpenEmbedding.isLocalHomeomorph` gives the first; the second is
+`ComplexAnalytic.AnalyticSpace.isIso_stalkMap_ofRestrict` above, found by instance search — which
+is what that lemma exists for, Mathlib's own statement being at a different
+discrimination-tree key.
+
+It is **not** finite étale in general, and nothing here says otherwise: the inclusion of the
+punctured line into the line is an open subspace whose inclusion is not a closed map, which
+`OkaTest/CoveringSpace.lean` exhibits as
+`ComplexAnalytic.not_isFinite_puncturedInclCoveringSpaceHom`. -/
+instance isLocalIso_ofRestrict (X : AnalyticSpace.{u}) (U : X.Opens) :
+    AnalyticSpace.IsLocalIso (X.ofRestrict U) where
+  isLocalHomeomorph := U.isOpenEmbedding.isLocalHomeomorph
+  isIso_stalkMap _ := inferInstance
 
 /-- **The inclusion of a smaller open subspace into a larger one**, as a morphism of complex
 analytic spaces.

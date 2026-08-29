@@ -36,23 +36,34 @@ measures both.
   `ComplexAnalytic.AnalyticSpace.isFinite_coveringSpaceHom` could be redundant and nothing would
   say so.
 
-## What is not checked here, and it is one question asked three ways
+## One question that used to be asked three ways, and is now answered three ways
 
-**Nothing below compares the constructed structure with a structure `E` already had.** All three
-of these are the same question and none is answered:
+This section used to say that **nothing below compares the constructed structure with a structure
+the source already had**, and listed three instances of that one question. All three are now
+answered, by `ComplexAnalytic.AnalyticSpace.exists_iso_coveringSpace` and one hypothesis each:
 
-* whether `ComplexAnalytic.AnalyticSpace.coveringSpaceHom` at the squaring map *is*
-  `ComplexAnalytic.sq` — the carrier and the underlying map agree by construction, and the
-  structure sheaves are not compared;
-* whether the structure this puts on the source of
-  `ComplexAnalytic.AnalyticSpace.sigmaFold` is `ComplexAnalytic.AnalyticSpace.sigma`'s own;
-* whether the structure on `ℂ ∖ {0}` in the third section is the open subspace's own.
+* **the squaring map** — `ComplexAnalytic.exists_iso_sqCoveringSpace`, on
+  `ComplexAnalytic.isLocalIso_sq` from `OkaTest/FiniteMorphism.lean`. The punctured line's own
+  structure *is* `ComplexAnalytic.sqCoveringSpace`, over the punctured line;
+* **the trivial `ι`-sheeted cover** — `ComplexAnalytic.exists_iso_sigmaFoldCoveringSpace`, on the
+  instance `ComplexAnalytic.AnalyticSpace.isFiniteEtale_sigmaFold`, so
+  `ComplexAnalytic.AnalyticSpace.sigma`'s own structure is the constructed one;
+* **the open subspace** — `ComplexAnalytic.exists_iso_puncturedInclCoveringSpace`, on
+  `ComplexAnalytic.AnalyticSpace.isLocalIso_ofRestrict`. The structure the third section puts on
+  `ℂ ∖ {0}` is the open subspace's own.
 
-That is the **uniqueness** statement, which `Oka/AnalyticSpace/CoveringSpace.lean` records under
-its own `## What is not here` as a separate issue: an isomorphism of locally ringed spaces between
-analytic spaces need not be an identification of analytic spaces, so the comparison is not a
-formality. Until it is done, the results below are about a *constructed* space and say nothing
-about a given one.
+**These are non-vacuity checks and not three theorems.** Each is one application of a statement
+proved in `Oka/AnalyticSpace/CoveringSpace.lean`; what they establish is that its hypothesis
+holds somewhere, and in particular at a morphism that is not an isomorphism — without which a
+uniqueness theorem is indistinguishable from one whose hypotheses cannot be met. The first is the
+sharp one: the squaring map is two-to-one, by `ComplexAnalytic.card_fiber_sqCoveringSpaceHom`
+above, so the isomorphism there is not a repackaging of a bijection.
+
+**What is still not compared is a structure arriving from outside `IsLocalIso`.** Every witness
+above hands the uniqueness statement a morphism that is *already* a local isomorphism of analytic
+spaces. A consumer holding only a topological covering map, a structure on its source and a
+proof that the *base maps* agree still has an equality of carriers to cross, and
+`Oka/AnalyticSpace/CoveringSpace.lean`'s `## What is not here` records that gap on its own side.
 
 **No second finite étale example.** The squaring map is the only covering map with finite fibres
 in this repository that is not a disjoint union, so there is one non-trivial witness and not two.
@@ -92,8 +103,9 @@ The underlying topological space is the punctured line's, and the structure shea
 image of the punctured line's along `z ↦ z²`. It is the source of the morphism the rest of this
 section is about, by definition and not by a lemma: the arguments are the same three.
 
-It is **not** claimed to be the punctured line's own analytic structure; see the module
-docstring. -/
+That it **is** the punctured line's own analytic structure, over the punctured line, is
+`ComplexAnalytic.exists_iso_sqCoveringSpace` at the end of this file — a statement about this
+`def` and not part of it. -/
 def sqCoveringSpace : AnalyticSpace.{u} :=
   AnalyticSpace.coveringSpace puncturedLine.{u} (ComplexAnalytic.sq.{u}).toLRSHom.base
     isCoveringMap_base_sq.{u}.isLocalHomeomorph
@@ -235,6 +247,77 @@ about the map rather than about the morphism: a covering map with finite fibres 
 (`IsCoveringMap.isClosedMap`) and this one is not. -/
 theorem not_isCoveringMap_puncturedIncl : ¬ IsCoveringMap ⇑puncturedIncl.{u} := fun h ↦
   not_isClosedMap_puncturedIncl.{u} (h.isClosedMap finite_fiber_puncturedIncl.{u})
+
+/-! ### Non-vacuity of uniqueness: three structures that were already there -/
+
+/-- **The punctured line's own structure is the one the construction puts on the source of the
+squaring map**, and compatibly with the two maps to the punctured line.
+
+`ComplexAnalytic.isLocalIso_sq` in `OkaTest/FiniteMorphism.lean` is the only input;
+`ComplexAnalytic.AnalyticSpace.exists_iso_coveringSpace` is the whole proof. This is the sharp
+witness of the three, because `ComplexAnalytic.card_fiber_sqCoveringSpaceHom` above puts every
+fibre at **2**: the isomorphism produced here is not a bijection dressed up as a cover.
+
+Note which space is on the left. `ComplexAnalytic.sqCoveringSpace` is the *constructed* space and
+`ComplexAnalytic.puncturedLine` is the source of `ComplexAnalytic.sq`; that they are isomorphic
+over the punctured line is exactly what the module docstring used to record as unchecked. -/
+theorem exists_iso_sqCoveringSpace :
+    ∃ e : puncturedLine.{u} ≅ sqCoveringSpace.{u},
+      e.hom ≫ AnalyticSpace.coveringSpaceHom puncturedLine.{u} (sq.{u}).toLRSHom.base
+        isCoveringMap_base_sq.{u}.isLocalHomeomorph = sq.{u} :=
+  haveI := isLocalIso_sq.{u}
+  AnalyticSpace.exists_iso_coveringSpace sq.{u}
+
+/-- **The structure the construction puts on the source of the trivial `ι`-sheeted cover is
+`ComplexAnalytic.AnalyticSpace.sigma`'s own**, over `X`.
+
+The hypothesis is found by instance search from
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_sigmaFold`, whose `isLocalIso` field carries
+`attribute [instance]`. It holds for every base and every finite index type, so — unlike the
+squaring map — this witness is a family and not a point, and at `ι` empty it is the empty cover
+of the second section read through uniqueness. -/
+theorem exists_iso_sigmaFoldCoveringSpace (ι : Type u) [Finite ι] (X : AnalyticSpace.{u}) :
+    ∃ e : AnalyticSpace.sigma (fun _ : ι ↦ X) ≅
+        AnalyticSpace.coveringSpace X (AnalyticSpace.sigmaFold ι X).toLRSHom.base
+          (AnalyticSpace.IsLocalIso.isLocalHomeomorph (f := AnalyticSpace.sigmaFold ι X)),
+      e.hom ≫ AnalyticSpace.coveringSpaceHom X (AnalyticSpace.sigmaFold ι X).toLRSHom.base
+          (AnalyticSpace.IsLocalIso.isLocalHomeomorph (f := AnalyticSpace.sigmaFold ι X)) =
+        AnalyticSpace.sigmaFold ι X :=
+  AnalyticSpace.exists_iso_coveringSpace _
+
+/-- **The underlying map of the open-subspace inclusion is
+`ComplexAnalytic.puncturedIncl`**, on the nose — which is what makes the statement below about
+the same map as the sharpness section above it. -/
+theorem base_ofRestrict_punctured :
+    ((AnalyticSpace.complexAffineSpace.{u} 1).ofRestrict punctured.{u}).toLRSHom.base =
+      puncturedIncl.{u} :=
+  rfl
+
+/-- **The structure the construction puts on `ℂ ∖ {0}` over `ℂ` is the open subspace's own**, over
+the line.
+
+The hypothesis is `ComplexAnalytic.AnalyticSpace.isLocalIso_ofRestrict`, found by instance search.
+Together with `ComplexAnalytic.not_isFinite_puncturedInclCoveringSpaceHom` above this says
+something the other two witnesses cannot: the uniqueness statement asks
+`ComplexAnalytic.AnalyticSpace.IsLocalIso` and **not** finiteness, and here is a morphism that
+satisfies the first and fails the second while the identification still holds.
+
+The covering space is spelled at the inclusion's own base map rather than at
+`ComplexAnalytic.puncturedIncl`; `ComplexAnalytic.base_ofRestrict_punctured` is that they are the
+same map, and stating it that way is what keeps the elaboration cheap — asking Lean to unify the
+two spellings inside the statement of the existential runs it into a `whnf` timeout. -/
+theorem exists_iso_puncturedInclCoveringSpace :
+    ∃ e : puncturedLine.{u} ≅
+        AnalyticSpace.coveringSpace (AnalyticSpace.complexAffineSpace.{u} 1)
+          ((AnalyticSpace.complexAffineSpace.{u} 1).ofRestrict punctured.{u}).toLRSHom.base
+          (AnalyticSpace.IsLocalIso.isLocalHomeomorph
+            (f := (AnalyticSpace.complexAffineSpace.{u} 1).ofRestrict punctured.{u})),
+      e.hom ≫ AnalyticSpace.coveringSpaceHom (AnalyticSpace.complexAffineSpace.{u} 1)
+          ((AnalyticSpace.complexAffineSpace.{u} 1).ofRestrict punctured.{u}).toLRSHom.base
+          (AnalyticSpace.IsLocalIso.isLocalHomeomorph
+            (f := (AnalyticSpace.complexAffineSpace.{u} 1).ofRestrict punctured.{u})) =
+        (AnalyticSpace.complexAffineSpace.{u} 1).ofRestrict punctured.{u} :=
+  AnalyticSpace.exists_iso_coveringSpace _
 
 end ComplexAnalytic
 

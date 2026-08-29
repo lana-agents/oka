@@ -470,6 +470,13 @@ info: 'ComplexAnalytic.AnalyticSpace.isIso_stalkMap_ofRestrict' depends on axiom
 #print axioms ComplexAnalytic.AnalyticSpace.isIso_stalkMap_ofRestrict
 
 /--
+info: 'ComplexAnalytic.AnalyticSpace.isLocalIso_ofRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isLocalIso_ofRestrict
+
+/--
 info: 'ComplexAnalytic.injective_stalkMap_okaMapHom' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
@@ -948,6 +955,55 @@ info: 'ComplexAnalytic.AnalyticSpace.isFiniteEtale_coveringSpaceHom' depends on 
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.isFiniteEtale_coveringSpaceHom
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.toCoveringSpace' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.toCoveringSpace
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.toLRSHom_toCoveringSpace' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.toLRSHom_toCoveringSpace
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.base_toCoveringSpace' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.base_toCoveringSpace
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.toCoveringSpace_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.toCoveringSpace_comp
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isIso_toCoveringSpace' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isIso_toCoveringSpace
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.coveringSpaceIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.coveringSpaceIso
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.exists_iso_coveringSpace' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.exists_iso_coveringSpace
 
 /-! ### The family of a monic polynomial with holomorphic coefficients
 
