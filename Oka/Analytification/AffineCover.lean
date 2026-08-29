@@ -130,6 +130,10 @@ a much larger tax than one unused value per index.
 - `ComplexAnalytic.coverTriple`: the transition on triple overlaps,
   `X_i|(D(f_ij) ⊓ D(f_ik)) ⟶ X_j|(D(f_jk) ⊓ D(f_ji))`, which is what `t'` is built from.
 - `ComplexAnalytic.coverGlueData'` and `ComplexAnalytic.coverGlueData`: **the glue data.**
+- `ComplexAnalytic.coverAnalytification`: **the analytic space the cover glues to** — `X^an` for
+  a scheme presented by an affine cover with distinguished overlaps.
+- `ComplexAnalytic.coverIota`: the `i`-th member's analytification, as a morphism of analytic
+  spaces into it.
 
 ## Main results
 
@@ -143,14 +147,21 @@ a much larger tax than one unused value per index.
   `ComplexAnalytic.comapAlgMap_coverOverlapIso`, `ComplexAnalytic.comapAlgMap_coverGlueIso` and
   `ComplexAnalytic.comapAlgMap_coverIncl_eq` — say where each factor of the transition gets its
   `ℂ`-linearity from.
+- `ComplexAnalytic.coverAnalytification_toLocallyRingedSpace`: **the analytic space is the glue
+  data's gluing**, with no transport — which is what lets every statement about
+  `ComplexAnalytic.coverGlueData`'s gluing be read as a statement about `X^an`.
+- `ComplexAnalytic.isOpenImmersion_coverIota`: **the members are open subspaces of `X^an`**,
+  which with `AlgebraicGeometry.LocallyRingedSpace.GlueData.ι_jointly_surjective` is the
+  statement that they cover it.
 
 ## What is not here
 
-* **The analytic space itself.** `ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear` turns this
-  glue data into an analytic space, and `ComplexAnalytic.glueDataCLinear_coverGlueData` below
-  supplies the half of its input that is about the gluing; what is still needed at a call site is
-  that each member has local models, which is a statement about the member and not about this
-  file's data. `OkaTest/AffineCover.lean` and `OkaTest/ProjectiveLine.lean` take that step.
+* **No non-vacuity, and no scheme.** The analytic space is now here —
+  `ComplexAnalytic.coverAnalytification` — but nothing below exhibits an input for it: the two
+  instances are `OkaTest/AffineCover.lean`'s three-member node cover and
+  `OkaTest/ProjectiveLine.lean`'s two-member `ℙ¹`, and both build their own space rather than
+  quoting this one. Nor is any of this related to a *scheme*: the input is presentations and
+  isomorphisms, and no statement here says they present one.
 * **Any statement that a gluing is not affine.** The two instances of this construction check
   different things and neither subsumes the other. `OkaTest/AffineCover.lean` glues three copies
   of the node along the punctured axis and shows that their three copies of the origin are three
@@ -522,6 +533,78 @@ theorem glueDataCLinear_coverGlueData :
       ((congrArg (LocallyRingedSpace.comapAlgMap (eqToHom (dif_neg h)))
         (comapAlgMap_coverIncl_eq.{u} obj poly glue i j)).trans
           (LocallyRingedSpace.comapAlgMap_comp _ _ _).symm)
+
+/-! ### The analytic space, and its members
+
+`ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear` needs three things beyond the glue data: the
+`ℂ`-algebra structure on each member, the `ℂ`-linearity of the transitions, and local models on
+each member. The first and third are the analytification's own — `coverSpace obj i` **is**
+`(analytification (obj i).g).toLocallyRingedSpace`, by `rfl`, so `local_model` applies verbatim
+— and the second is `ComplexAnalytic.glueDataCLinear_coverGlueData` above. So the construction
+costs nothing at this level, and the content is in the two statements after it.
+-/
+
+/-- **The analytification of a scheme presented by an affine cover with distinguished
+overlaps.**
+
+`ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear` at `ComplexAnalytic.coverGlueData`, with the
+members' own `ℂ`-algebra structures and local models. Every hypothesis is discharged by a
+declaration above or by the analytification itself; nothing new is proved by this definition, and
+the two theorems below are what make it usable. -/
+def coverAnalytification : AnalyticSpace.{u} :=
+  AnalyticSpace.ofGlueDataCLinear
+    (coverGlueData.{u} obj poly glue hrange hsymm hcocycle)
+    (fun i ↦ (AnalyticSpace.analytification.{u} (obj i).g).algebraMap)
+    (glueDataCLinear_coverGlueData.{u} obj poly glue hrange hsymm hcocycle)
+    (fun i ↦ (AnalyticSpace.analytification.{u} (obj i).g).local_model)
+
+/-- **The underlying locally ringed space is the glue data's gluing**, with no transport.
+
+`ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear_toLocallyRingedSpace`, and the reason it is
+worth stating separately is that everything already proved about
+`ComplexAnalytic.coverGlueData`'s gluing — `ι_isOpenImmersion`, `ι_jointly_surjective`, and the
+non-surjectivity statements the test files prove — is a statement about `X^an` only through
+this. -/
+theorem coverAnalytification_toLocallyRingedSpace :
+    (coverAnalytification.{u} obj poly glue hrange hsymm hcocycle).toLocallyRingedSpace =
+      (coverGlueData.{u} obj poly glue hrange hsymm hcocycle).toGlueData.glued :=
+  AnalyticSpace.ofGlueDataCLinear_toLocallyRingedSpace _ _ _ _
+
+/-- **The `i`-th member's analytification, as a morphism of analytic spaces into `X^an`.**
+
+Its underlying morphism is the glue data's `ι i` — that is `ComplexAnalytic.toLRSHom_coverIota`,
+by `rfl` — and its `ℂ`-linearity is
+`ComplexAnalytic.AnalyticSpace.comapAlgMap_ofGlueDataCLinear_algebraMap`, which says the glued
+structure pulls back along `ι i` to the member's own, read through
+`ComplexAnalytic.isCLinearHom_comapAlgMap`. -/
+def coverIota (i : J) :
+    AnalyticSpace.analytification.{u} (obj i).g ⟶
+      coverAnalytification.{u} obj poly glue hrange hsymm hcocycle :=
+  ⟨(coverGlueData.{u} obj poly glue hrange hsymm hcocycle).toGlueData.ι i, by
+    have h := AnalyticSpace.comapAlgMap_ofGlueDataCLinear_algebraMap
+      (coverGlueData.{u} obj poly glue hrange hsymm hcocycle)
+      (fun i ↦ (AnalyticSpace.analytification.{u} (obj i).g).algebraMap)
+      (glueDataCLinear_coverGlueData.{u} obj poly glue hrange hsymm hcocycle)
+      (fun i ↦ (AnalyticSpace.analytification.{u} (obj i).g).local_model) i
+    exact h ▸ isCLinearHom_comapAlgMap _ _⟩
+
+/-- The underlying morphism of `ComplexAnalytic.coverIota` is the glue data's `ι`. -/
+@[simp]
+theorem toLRSHom_coverIota (i : J) :
+    (coverIota.{u} obj poly glue hrange hsymm hcocycle i).toLRSHom =
+      (coverGlueData.{u} obj poly glue hrange hsymm hcocycle).toGlueData.ι i :=
+  rfl
+
+/-- **The members are open subspaces of `X^an`.**
+
+`ComplexAnalytic.coverGlueData_ι_isOpenImmersion` read through
+`ComplexAnalytic.toLRSHom_coverIota`. Together with
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.ι_jointly_surjective` this says the
+analytifications one started from are an open cover of the space built from them. -/
+theorem isOpenImmersion_coverIota (i : J) :
+    LocallyRingedSpace.IsOpenImmersion
+      (coverIota.{u} obj poly glue hrange hsymm hcocycle i).toLRSHom :=
+  coverGlueData_ι_isOpenImmersion.{u} obj poly glue hrange hsymm hcocycle i
 
 end
 
