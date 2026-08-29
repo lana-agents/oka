@@ -157,13 +157,20 @@ construction rather than by a compatibility lemma.
   both maps have to land in one space; the plan above ends over
   `(ComplexAnalytic.AnalyticSpace.complexAffineSpace n).restrict V` while
   `ComplexAnalytic.analytificationInclHom` lands in `ℂ^n`, and **composing back up with
-  `ComplexAnalytic.AnalyticSpace.ofRestrict` does not repair that**, since an open immersion is
-  not closed and the composite is then not finite. What does repair it is restricting the
-  inclusion too, with `ComplexAnalytic.AnalyticSpace.restrictHom` — **and that costs nothing
-  precisely because the cancellation lemma asks `Function.Injective` and not `IsClosedEmbedding`**,
-  a restriction of an injective map being injective. What comes out is finiteness over the part of
-  the analytification lying above `V`, and **nothing relates that back to the whole of it**: `V` is
-  open in `ℂ^n` and the analytification is closed in `ℂ^n`, so neither contains the other.
+  `ComplexAnalytic.AnalyticSpace.ofRestrict` is not the repair it looks like**: a finite morphism
+  has closed image, and the composite's image lies inside the open `V`, so the composite is finite
+  only if that image happens to be closed in `ℂ^n`. **Whether it is, is not settled here or
+  anywhere** — the image is `V` exactly when the projection is onto, and no statement in this
+  repository says a monic hypersurface surjects onto its base. (Note that `ofRestrict` at `V = ⊤`
+  *is* a closed map, being an isomorphism, so this is a statement about the plan's proper `V` and
+  not about open immersions in general.) What does repair it is restricting the inclusion too,
+  with `ComplexAnalytic.AnalyticSpace.restrictHom`, whose base map is a restriction of
+  `ComplexAnalytic.analytificationInclHom`'s and is therefore injective — and, by
+  `ComplexAnalytic.isClosedEmbedding_base_restrictHom` in `Oka/AnalyticSpace/Restrict.lean`, a
+  closed embedding as well, so the route would have been open to a cancellation lemma stated at
+  either hypothesis. What comes out is finiteness over the part of the analytification lying above
+  `V`, and **nothing relates that back to the whole of it**: `V` is open in `ℂ^n` and the
+  analytification is closed in `ℂ^n`, so neither contains the other.
 
 * **No `IsFiniteEtale`, and no bound on the fibres.** Both are `Oka/AnalyticSpace/`'s and neither
   gains anything here; see that file's `## What is not here`, which is unchanged by this one.
