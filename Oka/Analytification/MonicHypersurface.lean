@@ -190,10 +190,9 @@ construction rather than by a compatibility lemma.
   it**, and the one hit is the sentence saying so. **A pattern quoted inside the tree it searches
   is a member of its own corpus** — and the repair is to say which hits are the quotation, not to
   delete the command, since naming the instrument is what makes the claim checkable at all. The
-  same mechanism one level down is an *import* line sitting inside a Mathlib docstring, which has
-  taken more than one hand-written import-closure parser on this project into the whole library;
-  that one is written down beside the figures it damaged, in
-  `Oka/AnalyticSpace/OpenSubspace.lean`.
+  same mechanism one level down is an *import* line sitting inside a Mathlib docstring, which
+  pulls a hand-written import-closure parser into the whole of Mathlib; that one is written down
+  beside the figures it damaged, in `Oka/AnalyticSpace/OpenSubspace.lean`.
 
   The `range_base_*` family in `Oka/AnalyticSpace/MonicProjection.lean` and
   `Oka/AnalyticSpace/OpenBaseProjection.lean` is about the image of the hypersurface **in the
