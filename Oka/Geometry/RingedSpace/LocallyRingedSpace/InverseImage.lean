@@ -448,9 +448,11 @@ it directly. Instance search does solve a `∀` goal, so a caller who has the pe
 loses nothing by this choice.
 
 **No `set_option backward.isDefEq.respectTransparency false` is needed here**, and that is worth
-recording because the analytic-space statement above it cannot do without one: the seam that makes
-it necessary is `ComplexAnalytic.AnalyticSpace.coveringSpace_toLocallyRingedSpace`, which is `rfl`
-and not reducible, and no term in this statement crosses it. -/
+recording because the analytic-space statement named above —
+`ComplexAnalytic.AnalyticSpace.isIso_toCoveringSpace`, in `Oka/AnalyticSpace/CoveringSpace.lean`,
+downstream of this file and not in it — cannot do without one: the seam that makes it necessary is
+`ComplexAnalytic.AnalyticSpace.coveringSpace_toLocallyRingedSpace`, which is `rfl` and not
+reducible, and no term in this statement crosses it. -/
 theorem isIso_toInverseImage (h : ∀ z, IsIso (q.stalkMap z)) : IsIso (toInverseImage q) := by
   haveI := h
   haveI : IsOpenImmersion (toInverseImage q) :=

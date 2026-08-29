@@ -81,10 +81,13 @@ transport of algebra structures along an isomorphism is needed anywhere.
 `ComplexAnalytic.AnalyticSpace.isLocalIso_ofRestrict` needs `ofRestrict`, defined here, and
 `ComplexAnalytic.AnalyticSpace.IsLocalIso`, defined there. **That does not mean one of the two
 files had to import the other, and an earlier draft of this paragraph said it did.** Three files
-already reach both: `Oka/AnalyticSpace/CoveringSpace.lean`, which is where the instance's only
-consumer is, `Oka/AnalyticSpace/Degree.lean` and `Oka/AnalyticSpace/SigmaFiniteEtale.lean`. Any of
-them would have cost **nothing**, so this import is a placement decision and can be undone by
-moving one instance.
+already reach both: `Oka/AnalyticSpace/CoveringSpace.lean`, `Oka/AnalyticSpace/Degree.lean` and
+`Oka/AnalyticSpace/SigmaFiniteEtale.lean`. Any of them would have cost **nothing**, so this import
+is a placement decision and can be undone by moving one instance. **None of the three is where the
+instance is used**, and that draft said the first of them was: the only consumer of
+`ComplexAnalytic.AnalyticSpace.isLocalIso_ofRestrict` anywhere is `OkaTest/CoveringSpace.lean`,
+which imports `Oka` wholesale and so finds it wherever it sits. That is what makes the placement
+free rather than merely cheap.
 
 **It is here because both of its ingredients are.** The first field is
 `Topology.IsOpenEmbedding.isLocalHomeomorph` at `U.isOpenEmbedding`; the second is
@@ -100,18 +103,40 @@ list, expanding and counting **only modules under `Oka/` and `Mathlib/`** — ot
 leaves and are dropped, which is the convention `scripts/import_cost.py` states as *"Mathlib
 modules only"*, widened to this repository:
 
-* this file, **3075 → 3080**, and the five are named: `Oka.AnalyticSpace.LocalIso`,
+* this file, **3095 → 3100**, and the five are named: `Oka.AnalyticSpace.LocalIso`,
   `Oka.AnalyticSpace.Finite`, `Mathlib.Topology.IsLocalHomeomorph`,
   `Mathlib.Topology.OpenPartialHomeomorph.Composition`, `Mathlib.Topology.SeparatedMap`;
-* `Oka/AnalyticSpace/LocalIso.lean`, **2141 → 3080**, since this file reaches
+* `Oka/AnalyticSpace/LocalIso.lean`, **2160 → 3100**, since this file reaches
   `Oka.AnalyticSpace.Coherent` and the whole local-model apparatus.
 
-**Both are counterfactual, so recomputing them here needs the import above removed first** — left
-in place the first reads `3080 → 3080` and the second reads `2141 → 3081`, one more because the
-union then contains `Oka.AnalyticSpace.LocalIso` itself. The five-module delta is what the decision
-rests on and it is convention-invariant; the baselines are not, and `scripts/import_cost.py`
-itself cannot produce them, since it resolves only under `Mathlib/` and neither of these two files
-is a mirror file.
+**Five against 940 is the comparison, and it is what decided the direction.**
+
+**Read the closures off Lean's own environment rather than off a parser over the header lines.**
+The figures above are `lake env lean` on a scratch file whose imports are the list being measured,
+with
+
+```
+open Lean in
+#eval show CoreM Unit from do
+  let ms := (← getEnv).header.moduleNames
+  IO.println (ms.filter fun m => (`Oka).isPrefixOf m || (`Mathlib).isPrefixOf m).size
+```
+
+That is not fussiness. An earlier draft of this section gave 3075 and 2141 from a parser of its
+own, and three hand-written parsers — that one and two reviewers' — disagreed with each other and
+with Lean before the environment settled it. Three traps account for the spread and none of them
+announces itself: matching the word *import* outside the header picks it up inside a docstring
+code block and pulls in the whole of Mathlib; one Mathlib header line carries a trailing *shake*
+comment, so a parser comparing the stripped line against the module keyword stops there and
+silently drops the tactic modules; and this Mathlib writes both *public meta import* and
+*import all*, which a pattern anchored on the bare keyword misses.
+`scripts/import_cost.py` cannot be used instead — it resolves only under `Mathlib/`, and neither
+of these two files is a mirror file.
+
+**All four figures are counterfactual, so recomputing them here needs the import above removed
+first** — left in place the first reads `3100 → 3100`, and the second `3101`, one more, because
+the union then contains `Oka.AnalyticSpace.LocalIso` itself. The five-module delta is what the
+decision rests on and it is convention-invariant; the baselines are not.
 -/
 
 open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry Topology
