@@ -75,8 +75,20 @@ and only the family is.
   `ComplexAnalytic.cylinderSection` inherits its coefficient's non-extension; neither is
   bookkeeping and neither is here.
 * **Nothing about stalks, so nothing here is finite étale**, exactly as in
-  `OkaTest/OpenBaseProjection.lean` and for the same reason: no germ's
-  `PowerSeries.order (MvPowerSeries.partialEval …)` is computed anywhere in this repository.
+  `OkaTest/OpenBaseProjection.lean` and for the same reason — stated here at that file's width,
+  which is what makes it true. The hypothesis of
+  `ComplexAnalytic.isIso_stalkMap_comp_projRestrict` is
+  `PowerSeries.order (MvPowerSeries.partialEval …) = 1` on the germ of the **cutting section**,
+  here `ComplexAnalytic.cylinderSection` at `ComplexAnalytic.curvePoly`, and computing that order
+  **for this germ** is a Weierstrass computation nothing in this repository does. Until taxis
+  #1191 this bullet said instead that the order was computed on no germ *anywhere in this
+  repository*, and that was false when it was written: `OkaTest/SimpleZeroStalk.lean` and
+  `OkaTest/GermQuotientDegreeOne.lean` both compute it, and both are ancestors of the commit that
+  wrote the sentence — the second by four days and the first by a day and a half. What is true is
+  that every one of those computations is on a germ **written down as a polynomial** — a
+  coordinate, its square, or a `LocalOkaRing.fromPolynomial` — and this germ is the one shape they
+  cannot be, since `ComplexAnalytic.zExp2` is not a polynomial and that is the whole point of the
+  file.
 * **Nothing about `ComplexAnalytic.IsCutOutBy`.** The image is computed from the parametrisation,
   so the range form of the projection theorem is what is applied. Cut-out data for a morphism of
   *analytic* spaces is never produced in this repository, only assumed.
