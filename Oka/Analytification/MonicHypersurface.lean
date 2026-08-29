@@ -152,6 +152,26 @@ construction rather than by a compatibility lemma.
   restriction the relevant one after all — not because it handles the inverted `G`, but because it
   is where there is nothing left to invert.
 
+  **And over `V` the step back to the base algebra is not the one the theorem below takes.**
+  `ComplexAnalytic.AnalyticSpace.isFinite_of_isFinite_comp` cancels an injective second factor, so
+  both maps have to land in one space; the plan above ends over
+  `(ComplexAnalytic.AnalyticSpace.complexAffineSpace n).restrict V` while
+  `ComplexAnalytic.analytificationInclHom` lands in `ℂ^n`, and **composing back up with
+  `ComplexAnalytic.AnalyticSpace.ofRestrict` is not the repair it looks like**: a finite morphism
+  has closed image, and the composite's image lies inside the open `V`, so the composite is finite
+  only if that image happens to be closed in `ℂ^n`. **Whether it is, is not settled here or
+  anywhere** — the image is `V` exactly when the projection is onto, and no statement in this
+  repository says a monic hypersurface surjects onto its base. (Note that `ofRestrict` at `V = ⊤`
+  *is* a closed map, being an isomorphism, so this is a statement about the plan's proper `V` and
+  not about open immersions in general.) What does repair it is restricting the inclusion too,
+  with `ComplexAnalytic.AnalyticSpace.restrictHom`, whose base map is a restriction of
+  `ComplexAnalytic.analytificationInclHom`'s and is therefore injective — and, by
+  `ComplexAnalytic.isClosedEmbedding_base_restrictHom` in `Oka/AnalyticSpace/Restrict.lean`, a
+  closed embedding as well, so the route would have been open to a cancellation lemma stated at
+  either hypothesis. What comes out is finiteness over the part of the analytification lying above
+  `V`, and **nothing relates that back to the whole of it**: `V` is open in `ℂ^n` and the
+  analytification is closed in `ℂ^n`, so neither contains the other.
+
 * **No `IsFiniteEtale`, and no bound on the fibres.** Both are `Oka/AnalyticSpace/`'s and neither
   gains anything here; see that file's `## What is not here`, which is unchanged by this one.
 -/
@@ -313,7 +333,19 @@ through `ComplexAnalytic.isFinite_comp_proj_of_range_eq` rather than through the
 Both of those are stated for `ComplexAnalytic.analytificationIncl` and this is about
 `ComplexAnalytic.analytificationInclHom`, which is `⟨ComplexAnalytic.analytificationIncl g, _⟩`;
 they apply definitionally and no bridge lemma is needed. A reader grepping the proof for
-`analytificationIncl` will not find it spelled that way. -/
+`analytificationIncl` will not find it spelled that way.
+
+**The target is `ℂ^n`, and the Riemann-existence line wants the analytification of a base
+algebra.** That analytification sits inside `ℂ^n` as a closed subspace, and the arrow between the
+two statements is `ComplexAnalytic.AnalyticSpace.isFinite_of_isFinite_comp`: it cancels an
+**injective second factor**, so applying it here means cancelling
+`ComplexAnalytic.analytificationInclHom` for the base algebra, whose base map is injective by
+`ComplexAnalytic.isClosedEmbedding_base_analytificationIncl`. **What is missing is not the arrow
+but its hypothesis**: the cancellation needs the composite above to *be* the composite through the
+base algebra's analytification, and no statement in this repository factors it that way. That
+factorisation is a compatibility of `ComplexAnalytic.AnalyticSpace.analytification` with the two
+ring maps and is not proved anywhere. `Oka/AnalyticSpace/Finite.lean`'s `## Main results` names
+this file from the other side. -/
 theorem isFinite_analytification_comp_proj (hG : G.Monic) :
     AnalyticSpace.IsFinite
       (analytificationInclHom.{u} ![(lastVarPolyEquiv.{u} n).symm G] ≫
