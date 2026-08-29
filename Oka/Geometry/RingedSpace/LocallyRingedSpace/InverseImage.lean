@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Mathlib.Geometry.RingedSpace.LocallyRingedSpace
+import Mathlib.Geometry.RingedSpace.OpenImmersion
 import Mathlib.Topology.Sheaves.Functors
 import Mathlib.Topology.Sheaves.Sheafify
 import Oka.Topology.Sheaves.Stalks
@@ -19,6 +20,12 @@ its stalk maps is an isomorphism**.
 There is no analytic content here, so this file is a candidate for upstreaming; it lives in the
 `Oka/Geometry/` mirror of the Mathlib directory tree for that reason. Mathlib has the sheaf-level
 construction — `TopCat.Sheaf.pullback` — and none of the locally-ringed-space consequences.
+
+`Mathlib/Geometry/RingedSpace/OpenImmersion.lean` is imported for
+`AlgebraicGeometry.LocallyRingedSpace.isIso_toInverseImage` and for nothing else, and it costs
+**one module**: its transitive closure exceeds that of
+`Mathlib/Geometry/RingedSpace/LocallyRingedSpace.lean`, which this file already imports, by itself
+alone — 1688 to 1689, measured with `scripts/import_cost.py`.
 
 ## Why the stalks come out right, and why that is the whole file
 
@@ -97,6 +104,9 @@ literally a map `p⁻¹𝒪_Y ⟶ 𝒪_Z`.
   preceded by the isomorphism above**.
 - `AlgebraicGeometry.LocallyRingedSpace.isIso_stalkMap_toInverseImage`: the consequence a consumer
   wants — **the comparison morphism is a stalkwise isomorphism wherever `q` is**.
+- `AlgebraicGeometry.LocallyRingedSpace.isIso_toInverseImage`: **and it is an isomorphism outright
+  when every stalk map of `q` is one**, by
+  `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.of_stalk_iso` at the identity base map.
 
 ## What is not here
 
@@ -416,6 +426,42 @@ instance isIso_stalkMap_toInverseImage (z : Z.toTopCat) [IsIso (q.stalkMap z)] :
     IsIso ((toInverseImage q).stalkMap z) := by
   rw [stalkMap_toInverseImage]
   infer_instance
+
+/-- **The comparison morphism is an isomorphism when every stalk map of `q` is one.**
+
+So a morphism which is a stalkwise isomorphism *is* the inverse image of its target along its own
+base map, over that target — which is the uniqueness statement
+`Oka/AnalyticSpace/CoveringSpace.lean` proves for analytic spaces, minus the `ℂ`-linearity that
+file has to add.
+
+Two steps, and neither hypothesis of either is about `q`'s topology.
+`AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.of_stalk_iso` asks for an open embedding and
+a stalkwise isomorphism: the first is `Topology.IsOpenEmbedding.id`, because
+`AlgebraicGeometry.LocallyRingedSpace.toInverseImage_base` is the identity **on the nose**, and
+the second is `AlgebraicGeometry.LocallyRingedSpace.isIso_stalkMap_toInverseImage` above, found by
+instance search from the hypothesis. `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.to_iso`
+then closes it, its `Epi` obligation being the identity's.
+
+**The hypothesis is a plain `∀` and not an instance argument**, so that a caller holding it as a
+field of a structure — `ComplexAnalytic.AnalyticSpace.IsLocalIso.isIso_stalkMap` is one — can pass
+it directly. Instance search does solve a `∀` goal, so a caller who has the per-point instance
+loses nothing by this choice.
+
+**No `set_option backward.isDefEq.respectTransparency false` is needed here**, and that is worth
+recording because the analytic-space statement named above —
+`ComplexAnalytic.AnalyticSpace.isIso_toCoveringSpace`, in `Oka/AnalyticSpace/CoveringSpace.lean`,
+downstream of this file and not in it — cannot do without one: the seam that makes it necessary is
+`ComplexAnalytic.AnalyticSpace.coveringSpace_toLocallyRingedSpace`, which is `rfl` and not
+reducible, and no term in this statement crosses it. -/
+theorem isIso_toInverseImage (h : ∀ z, IsIso (q.stalkMap z)) : IsIso (toInverseImage q) := by
+  haveI := h
+  haveI : IsOpenImmersion (toInverseImage q) :=
+    IsOpenImmersion.of_stalk_iso _
+      (by rw [toInverseImage_base]; exact Topology.IsOpenEmbedding.id)
+  haveI : IsIso (toInverseImage q).base := by
+    rw [toInverseImage_base]; exact ⟨𝟙 _, rfl, rfl⟩
+  haveI : Epi (toInverseImage q).base := inferInstance
+  exact IsOpenImmersion.to_iso _
 
 end
 

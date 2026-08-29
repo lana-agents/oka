@@ -88,8 +88,12 @@ base being nonempty is never used.
   structure sheaf of its own: `Oka/AnalyticSpace/CoveringSpace.lean` puts the inverse image of
   `𝒪_Y` on the source of a covering map with finite fibres and gets `IsFiniteEtale`, with the
   stalk field free because every stalk map of an inverse image is an isomorphism. That is a
-  construction and not a converse, and the two are not comparable until the uniqueness of the
-  structure is proved, which nothing yet does.
+  construction and not a converse. **The two are now comparable, and that still does not close
+  this bullet**: `ComplexAnalytic.AnalyticSpace.exists_iso_coveringSpace` in that file identifies
+  the source of any morphism satisfying `ComplexAnalytic.AnalyticSpace.IsLocalIso` with the space
+  built on that morphism's own base map, compatibly with the two maps to the base — but it reads
+  `IsLocalIso` as a *hypothesis* rather than producing it, so what a topological hypothesis would
+  have to supply is exactly what it assumes. The comparison is available; the implication is not.
 * **The Riemann existence theorem**, and any statement relating covers to field extensions.
 * **The analytification of a finite étale morphism**, and **Grauert's finite mapping theorem** —
   the two absences `Oka/AnalyticSpace/LocalIso.lean` and `Oka/AnalyticSpace/Finite.lean` record.
