@@ -442,6 +442,22 @@ example : AnalyticSpace.IsFinite (axisIncl.{u} ≫ 𝟙 (AnalyticSpace.complexAf
   haveI := isFinite_axisIncl.{u}
   inferInstance
 
+/-- **And the composite in the other order is not finite**, which is
+`ComplexAnalytic.AnalyticSpace.isFinite_of_isFinite_comp` read contrapositively at a second
+factor that is injective and is not the identity.
+
+The pair is `ComplexAnalytic.proj`, which `ComplexAnalytic.not_isFinite_proj` says is not finite,
+and `ComplexAnalytic.axisIncl`, which `ComplexAnalytic.isClosedEmbedding_base_axisIncl` makes
+injective — so the cancellation lemma forbids the composite from being finite. **Together with
+`ComplexAnalytic.isFinite_axisIncl_comp_proj` this pins down which order matters**: the same two
+morphisms compose to a finite map one way round and to a non-finite one the other, and the
+difference is exactly that `ComplexAnalytic.proj` is the *first* factor here and the second one
+there. Nothing about the fibres or the topology is computed below; the whole proof is the lemma. -/
+theorem not_isFinite_proj_comp_axisIncl :
+    ¬ AnalyticSpace.IsFinite (proj.{u} ≫ axisIncl.{u}) := fun h ↦
+  not_isFinite_proj.{u} (AnalyticSpace.isFinite_of_isFinite_comp proj.{u} axisIncl.{u}
+    isClosedEmbedding_base_axisIncl.{u}.injective h)
+
 /-! ### Finite is not finite étale
 
 `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` is `IsFinite` together with

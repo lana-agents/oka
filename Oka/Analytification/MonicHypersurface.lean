@@ -100,10 +100,16 @@ construction rather than by a compatibility lemma.
 * **Nothing from a germ.** The Weierstrass case — the family of the Weierstrass polynomial of a
   holomorphic germ — is not three lines away from this and is not attempted. Its coefficients are
   elements of `OkaRing U` for a neighbourhood `U` rather than polynomials, so it needs a pullback
-  of holomorphic functions along the projection: `OkaRing.pullbackInit` in `Oka/Weierstrass.lean`
-  is that map, but it is stated at index type `Fin n` and for the cylinder `U.extend'`, while
-  everything here is at `ULift (Fin n)` and at `⊤`. Bridging those is `Oka/RenameIndex.lean`'s
-  kind of work and is a separate issue, not a corollary of this one.
+  of holomorphic functions along the projection. **That pullback is no longer missing**:
+  `ComplexAnalytic.pullbackCylinder` in `Oka/AnalyticSpace/HolomorphicFamily.lean` is one at
+  `ULift (Fin n)`, built beside `OkaRing.pullbackInit` in `Oka/Weierstrass.lean` rather than by
+  relabelling it, since that one is stated at index type `Fin n` and for the cylinder `U.extend'`
+  while everything here is at `ULift (Fin n)`. What is still absent is the step before it: a
+  Weierstrass polynomial extracted from a germ. Its source,
+  `LocalOkaRing.exists_isWeierstrassPolynomial_realize`, is at `Fin n` and at `LocalOkaRing`, so
+  quoting it needs `Oka/RenameIndex.lean`'s kind of work **and** a choice of the neighbourhood the
+  preparation holds on. That is a separate issue, not a corollary of this one, and
+  `Oka/AnalyticSpace/HolomorphicFamily.lean` records the same absence from its own side.
 
 * **No open subset of the base in this file**, as in `Oka/AnalyticSpace/MonicProjection.lean` and
   `Oka/AnalyticSpace/SimpleZeroStalk.lean`, where the same restriction is absent.
