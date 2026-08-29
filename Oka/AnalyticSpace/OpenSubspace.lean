@@ -84,8 +84,13 @@ files has to import the other. The edge runs this way because the two costs are 
 this file's transitive closure goes from **3171 modules to 3176** — `Oka.AnalyticSpace.LocalIso`,
 `Oka.AnalyticSpace.Finite` and three Mathlib modules under `Mathlib/Topology/` — while
 `Oka/AnalyticSpace/LocalIso.lean`'s would go from **2236 to 3176**, since this file reaches
-`Oka.AnalyticSpace.Coherent` and the whole local-model apparatus. Both figures are transitive
-closures of the two files' import lists, measured on the branch that added this instance.
+`Oka.AnalyticSpace.Coherent` and the whole local-model apparatus.
+
+Both figures are transitive closures of the two files' import lists, and **both are counterfactual,
+so recomputing them on this tree needs the import above removed first.** Left in place, the first
+reads `3176 → 3176` and the second reads `2236 → 3177` — one more, because the union then contains
+`Oka.AnalyticSpace.LocalIso` itself. The comparison the decision rests on is 5 against 940 either
+way.
 -/
 
 open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry Topology
