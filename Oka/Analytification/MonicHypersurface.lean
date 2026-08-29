@@ -168,7 +168,9 @@ construction rather than by a compatibility lemma.
   connected `ℂ^n` is `∅` or `⊤` — **so for every proper non-empty `V`, which is every case this
   plan is for, the composite is not finite.** That is the same shape as
   `ComplexAnalytic.not_isFinite_proj_comp_axisIncl` in `OkaTest/FiniteMorphism.lean`, which is a
-  composite shown non-finite by reading this file's own cancellation lemma contrapositively.
+  composite shown non-finite by reading the same cancellation lemma contrapositively:
+  `ComplexAnalytic.AnalyticSpace.isFinite_of_isFinite_comp`, which lives in
+  `Oka/AnalyticSpace/Finite.lean` and not in either file this sentence names.
 
   Two degenerate cases sit outside that, and neither rescues the route. `ofRestrict` at `V = ⊤`
   *is* a closed map, being an isomorphism, so this is a statement about the plan's proper `V` and
@@ -180,8 +182,20 @@ construction rather than by a compatibility lemma.
 
   **What this repository does not have is the surjectivity statement**, and that is worth
   recording — but as the missing *citation* for a settled conclusion, not as an open question.
-  `grep -rn 'surjective.*projRestrict\|range_base_projRestrict' Oka/ OkaTest/` is empty, and the
-  `range_base_*` family in `Oka/AnalyticSpace/MonicProjection.lean` and
+  `grep -rn 'surjective.*projRestrict\|range_base_projRestrict' Oka/ OkaTest/` returns **exactly
+  one hit, and it is the line that prints the pattern**: the first alternative is a regular
+  expression, and both of its halves stand in that order on the line quoting it — and the second
+  alternative is a bare literal that the same line contains outright, so anchoring only the first
+  would not help. The command was empty until that line was written, **no declaration matches
+  it**, and the one hit is the sentence saying so. **A pattern quoted inside the tree it searches
+  is a member of its own corpus** — and the repair is to say which hits are the quotation, not to
+  delete the command, since naming the instrument is what makes the claim checkable at all. The
+  same mechanism one level down is an *import* line sitting inside a Mathlib docstring, which has
+  taken more than one hand-written import-closure parser on this project into the whole library;
+  that one is written down beside the figures it damaged, in
+  `Oka/AnalyticSpace/OpenSubspace.lean`.
+
+  The `range_base_*` family in `Oka/AnalyticSpace/MonicProjection.lean` and
   `Oka/AnalyticSpace/OpenBaseProjection.lean` is about the image of the hypersurface **in the
   cylinder**, not the image of its projection in the base. A reader who proves surjectivity will
   have closed this route, not opened it.
