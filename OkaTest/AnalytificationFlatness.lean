@@ -18,19 +18,26 @@ secretly about `ℂ^n ⟶ 𝔸^n` proves nothing new. This file rules that out a
 
 ## What is checked, and why it is the right thing
 
-`OkaTest/AnalytificationStalk.lean` says explicitly what it could not test:
+**The statement this file adds is about the *target* stalk `𝒪_{X^an, y}`**: that the germs of
+`x` and `y` at the *origin* are both nonzero, so the node's stalk there is not a domain. Reaching
+it needs that stalk's identification with the germ ring modulo `I`, which is
+`ComplexAnalytic.germQuotEquivStalk`, in `Oka/Analytification/PresentationFlatness.lean`, whose
+main result this file is the non-vacuity check for. That is why the statement is here rather than
+with the tests that run through `ComplexAnalytic.quotientToGerm` in
+`OkaTest/AnalytificationStalk.lean`: it belongs beside the result it keeps honest.
 
-> the germs of `x` and `y` at the *origin* are both nonzero — so that the node's stalk there is
-> not a domain. That is a statement about the target stalk `𝒪_{X^an, y}` and needs its
-> identification with the germ ring modulo `I`, which is the outstanding half.
-
-That identification is `ComplexAnalytic.germQuotEquivStalk`, and this file is that test:
+**The reason is placement and not scope**, which is worth stating because the opposite is easy to
+assume: `OkaTest/AnalytificationStalk.lean` imports `OkaTest/Analytification.lean`, whose import
+list is the root module `Oka` and nothing else, so every module under `Oka/` — the one declaring
+`ComplexAnalytic.germQuotEquivStalk` included — is already in its closure. Nothing stopped the
+statement being made there; it is here because `Oka/Analytification/PresentationFlatness.lean` is
+what it tests.
 
 * `ComplexAnalytic.not_noZeroDivisors_stalk_analytification_nodeG` — **the stalk of the node's
   structure sheaf at the origin has zero divisors.** The germs of `x` and `y` are both nonzero
   there and their product vanishes. On `ℂ²` the corresponding stalk is an integral domain, so
   this is a statement the ambient case cannot make, and it is about the *target* end of the
-  stalk map rather than the source — the end that the earlier test file could not reach.
+  stalk map rather than the source.
 * `ComplexAnalytic.analytificationGermIdeal_nodeG_origin_ne_bot` — the ideal being quotiented by
   is not zero, which is the same degeneracy stated about the ideal rather than about the ring.
 
