@@ -125,9 +125,20 @@ variable {n k : ℕ} (g : Fin k → MvPolynomial (ULift.{u} (Fin n)) ℂ)
 /-- **The relations of `g` in one more variable, with `F` appended**: the `n + 1`-variable
 presentation of `A[X] ⧸ (F)`.
 
-It is `ComplexAnalytic.etalePresentation`'s inner half — that one is this, localised at `G` — and
-it is what `ComplexAnalytic.isFinite_comp_proj_of_monic` and the stalk statements are stated for.
-Named rather than written out because it occurs four times in the comparison below. -/
+**It is not `ComplexAnalytic.etalePresentation` with a variable dropped**, and the difference is
+what the comparison below is a theorem about. Unfolded, `etalePresentation g F G` lists the old
+relations, then `X · G - 1`, then `F`; localising *this* tuple at `G` lists the old relations,
+then `F`, then `X · G - 1`. **The same three blocks with the last two swapped** — which is why
+that comparison is a statement about ideals and not a `rfl`, and why its proof is a `Fin.snoc`
+reassociation. (The two are not even over the same number of variables until the localisation is
+taken: `etalePresentation`'s own `Fin.snoc`-init is over `n + 2` and this is over `n + 1`.)
+
+**Nothing in the repository is stated for this tuple yet**, which is an argument for naming it
+rather than against: `ComplexAnalytic.isFinite_comp_proj_of_monic` and
+`ComplexAnalytic.bijective_stalkMap_comp_uliftProj` both take an arbitrary morphism carrying an
+`ComplexAnalytic.IsCutOutBy` datum, not a presentation, so a statement about the hypersurface *of
+a presented algebra* has nothing to quote. Named rather than written out because it occurs four
+times in the comparison below. -/
 def hypersurfacePresentation : Fin (k + 1) → MvPolynomial (ULift.{u} (Fin (n + 1))) ℂ :=
   Fin.snoc (polyPresentation.{u} g) F
 
