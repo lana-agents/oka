@@ -394,3 +394,44 @@ info: 'LocalOkaRing.uliftEquiv' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms LocalOkaRing.uliftEquiv
+
+/-! ### Realizing a germ Weierstrass polynomial at other coordinates
+
+`Oka/UliftCoord.lean`. The heading above relabels the variables of a *germ*; this one moves the
+realization of a germ Weierstrass polynomial by an honest polynomial over `OkaRing` across a
+linear change of the coordinate space, which is what carries `Oka/Weierstrass.lean`'s output to
+the `ULift`-indexed convention `ComplexAnalytic.AnalyticSpace` is stated at. -/
+
+/--
+info: 'LocalOkaRing.uliftCoord' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.uliftCoord
+
+/--
+info: 'LocalOkaRing.congr_uliftCoord' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.congr_uliftCoord
+
+/--
+info: 'LocalOkaRing.exists_monic_realize_congr' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.exists_monic_realize_congr
+
+/--
+info: 'LocalOkaRing.exists_monic_realize_ulift' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.exists_monic_realize_ulift
+
+/--
+info: 'LocalOkaRing.exists_congr_monic_realize_of_ne_zero' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.exists_congr_monic_realize_of_ne_zero

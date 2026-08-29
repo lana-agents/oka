@@ -52,9 +52,13 @@ and only the family is.
 ## What is not checked here
 
 * **Nothing from a germ.** `ComplexAnalytic.curvePoly` is written down, not produced by the
-  Weierstrass preparation theorem. That the two coincide for some germ is the statement
-  `Oka/AnalyticSpace/HolomorphicFamily.lean` records as absent, and it needs the index bridge that
-  file's `## What is not here` describes.
+  Weierstrass preparation theorem, and no statement here says that some germ has it for its
+  Weierstrass polynomial. **The obstacle is no longer the index bridge**, which
+  `Oka/UliftCoord.lean` now supplies: `LocalOkaRing.exists_congr_monic_realize_of_ne_zero`
+  produces a monic polynomial over `OkaRing W` from any nonzero germ, but the `W` it produces is
+  whatever the preparation theorem gives, and identifying it with
+  `ComplexAnalytic.punctured` and its polynomial with `ComplexAnalytic.curvePoly` would be a
+  statement about *this* curve rather than about the bridge.
 * **No coefficient that fails to extend.** `ComplexAnalytic.zExp2` is the restriction to the
   punctured line of an entire function, so the cutting section is a restriction of an entire one
   and the cut-out form of the projection theorem could in principle have been used had it been
