@@ -895,6 +895,20 @@ info: 'ComplexAnalytic.glueDataCLinear_coverGlueData' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.glueDataCLinear_coverGlueData
 
+/--
+info: 'ComplexAnalytic.coverAnalytification_toLocallyRingedSpace' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverAnalytification_toLocallyRingedSpace
+
+/--
+info: 'ComplexAnalytic.isOpenImmersion_coverIota' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isOpenImmersion_coverIota
+
 /-! ### A standard étale algebra over a presented `ℂ`-algebra is presented
 
 The five advertised results of `Oka/Analytification/StandardEtale.lean`. The two operations —
