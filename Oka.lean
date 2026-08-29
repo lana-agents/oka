@@ -144,4 +144,5 @@ import Oka.Topology.Sheaves.Presheaf
 import Oka.Topology.Sheaves.QuotientPresheaf
 import Oka.Topology.Sheaves.Stalks
 import Oka.UFD
+import Oka.UliftCoord
 import Oka.Weierstrass
