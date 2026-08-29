@@ -49,9 +49,10 @@ A product definition would have bought the second reading and lost all three.
 the two — `Oka/AnalyticSpace/ProjectionStalk.lean`'s module docstring records that there is no
 morphism of spaces between the two spellings of `ℂ^n` above `Type 0`, which is why
 `ComplexAnalytic.uliftCastSuccEmb` exists beside `ComplexAnalytic.projCoords` rather than being
-derived from it. `extend'`'s only consumer is `Oka/Weierstrass.lean`, which is `Fin`-indexed
-throughout. So this is the second cylinder for the same reason there are two projections, and the
-duplication is the `ULift` one and not a fresh one.
+derived from it. `extend'` is consumed by `Oka/Weierstrass.lean` and `Oka/Statement.lean`, both
+`Fin`-indexed throughout, and by nothing on the `AnalyticSpace` side. So this is the second
+cylinder for the same reason there are two projections, and the duplication is the `ULift` one
+and not a fresh one.
 
 ## The finiteness half
 
@@ -430,7 +431,9 @@ def baseStalkEquiv (y : (AnalyticSpace.complexAffineSpace.{u} (n + 1)).restrict 
     ((okaStalkEquiv _).trans (LocalOkaRing.uliftEquiv (Fin n)))
 
 /-- **`ComplexAnalytic.cylinderStalkEquiv` undoes the stalk map of the inclusion**: on a germ that
-comes from the ambient space it is `okaStalkEquiv` and nothing else. -/
+comes from the ambient space it is `okaStalkEquiv` followed by the index relabelling, with the
+inverse stalk map gone. Two of the equivalence's three steps survive, not one — the relabelling is
+what puts the answer in the index type the Weierstrass side uses. -/
 theorem cylinderStalkEquiv_stalkMap_ofRestrict
     (y : (AnalyticSpace.complexAffineSpace.{u} (n + 1)).restrict (cylinder V))
     (v : (AnalyticSpace.complexAffineSpace.{u} (n + 1)).presheaf.stalk

@@ -274,12 +274,21 @@ transported.
 Unlike `ComplexAnalytic.AnalyticSpace.liftRestrict` this does not ask the image of `A` to lie in
 `V`: it shrinks the *source* to the preimage instead. Neither is a special case of the other.
 
-**The name shadows `ComplexAnalytic.restrictHom` inside `namespace AnalyticSpace`**, which is
-where most of this development is written. A use of the bare name there now means this one; the
-locally-ringed-space one has to be written `ComplexAnalytic.restrictHom`, as it is at
-`Oka/AnalyticSpace/HolomorphicMapGeneral.lean:351`. That is the price of the name matching the
-one it wraps, and the mismatch is a type error rather than a silent change of meaning: the two
-have different sources and targets. -/
+**The name shadows `ComplexAnalytic.restrictHom` inside `namespace AnalyticSpace`** — sixteen
+files, and not the bulk of the development, which is written one namespace up in
+`ComplexAnalytic`, where the bare name still resolves to the locally-ringed-space one. That is why
+exactly one existing call site needed qualifying rather than dozens. A use of the bare name inside
+`AnalyticSpace` now means this one; the locally-ringed-space one has to be written
+`ComplexAnalytic.restrictHom`, as it is in `Oka/AnalyticSpace/HolomorphicMapGeneral.lean`. That is
+the price of the name matching the one it wraps, and the mismatch is a type error rather than a
+silent change of meaning: the two have different sources and targets.
+
+**Count the sixteen with `grep -rlE '^namespace (ComplexAnalytic\.)?AnalyticSpace'`.** Nine of
+them open `namespace AnalyticSpace` and seven open `namespace ComplexAnalytic.AnalyticSpace`
+directly; the bare name is shadowed in both, and a grep for the first form alone answers nine and
+is the natural thing to reach for. **No denominator is given, on purpose**: the file count moves
+with every module added, and this figure is here to say the hazard is confined rather than to
+give a ratio. -/
 def restrictHom {A B : AnalyticSpace.{u}} (f : A ⟶ B) (V : B.Opens) :
     A.restrict ((Opens.map f.toLRSHom.base).obj V) ⟶ B.restrict V :=
   ⟨ComplexAnalytic.restrictHom f.toLRSHom V, isCLinearHom_restrictHom f.isCLinear V⟩
