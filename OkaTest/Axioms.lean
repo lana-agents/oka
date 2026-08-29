@@ -46,11 +46,11 @@ happened to open.**
 | --- | --- |
 | Oka's theorem and the coherence of `𝒪_X` | `OkaTest/Axioms/MainTheorem.lean` |
 | Weierstrass division and preparation | `OkaTest/Axioms/Weierstrass.lean` |
-| complex analysis in one and several variables | `OkaTest/Axioms/Analysis.lean` |
+| complex analysis, and the topology of polynomial zero loci | `OkaTest/Axioms/Analysis.lean` |
 | `LocalOkaRing`: Rückert, maximal ideal, regularity | `OkaTest/Axioms/LocalOkaRing.lean` |
 | `OkaRing` and the structure sheaf of `ℂ^ι` | `OkaTest/Axioms/ComplexSpace.lean` |
-| the comparison morphism to `Spec` | `OkaTest/Axioms/Analytification.lean` |
-| general presheaf and sheaf theory | `OkaTest/Axioms/Sheaves.lean` |
+| analytification, and the comparison morphisms to `Spec` | `OkaTest/Axioms/Analytification.lean` |
+| general presheaf and sheaf theory, and ringed spaces | `OkaTest/Axioms/Sheaves.lean` |
 | sheaves of modules and coherence | `OkaTest/Axioms/SheafOfModules.lean` |
 | zero loci and closed immersions | `OkaTest/Axioms/CutOut.lean` |
 | analytic spaces, local models, the node | `OkaTest/Axioms/AnalyticSpace.lean` |
@@ -65,6 +65,78 @@ review of a tree whose library files were byte-identical to the one already appr
 four such cycles in a single morning. Issue #558's append-at-the-end convention reduced the
 damage but could not remove it, because two additions at the end of a file still collide.
 Concurrent pull requests that touch *different files* do not. See issue #640.
+
+**Every row above has been measured against the guards it routes to, and here is how to
+re-measure one.** For each row, resolve every `#print axioms` name in its file to the module the
+declaration lives in, and ask whether the row's phrase covers what comes back. In a built
+checkout, with the dump taken **after** `lake build` and on the branch being measured — `lake env
+lean` reads the oleans, so a dump taken across a branch switch is the other branch's:
+
+    OKA_DECL_DUMP=/tmp/d.txt lake env lean scripts/DumpOkaDecls.lean
+    perl -0777 -ne 'while(/^[ \t]*#print axioms(?:[ \t]+|[ \t]*\n[ \t]+)(\S+)[ \t]*$/mg)
+        { print "$1\n" }' OkaTest/Axioms/<File>.lean | sort -u |
+      while read -r n; do awk -F'\t' -v n="$n" '$2==n {print $1; exit}' /tmp/d.txt; done |
+      sort | uniq -c | sort -rn
+
+**The `perl` is not decoration.** The obvious `grep -oP '(?<=#print axioms ).*'` misses a guard
+whose name is wrapped onto the next line, and there is one such guard today, in
+`OkaTest/Axioms/SheafOfModules.lean`; a census taken that way comes out one short of
+`scripts/guard_coverage.py`'s, which is where the regular expression above is from. A row is
+wrong when some module's guards are covered by no row at all — that is the failure this table
+exists to prevent — and not merely when its phrase is shorter than the file.
+
+**Most mirror-tree material is routed by a row, and a small tail of it is deliberately routed by
+none.** `README.md`'s *Layout: the Mathlib mirror tree* defines a mirror-tree file by its path — a
+file under `Oka/` mirroring a path under `Mathlib/`, holding no complex-analytic mathematics and
+staged for upstreaming. **That is 221 of the 645 guards at `27c185a`**, and two rows exist to
+route almost nothing else: `OkaTest/Axioms/Sheaves.lean` is **87 of 87** mirror-tree, mostly
+`Oka/Geometry/RingedSpace/`, and `OkaTest/Axioms/RingTheory.lean` is **19 of 19**. So being
+mirror-tree is not what decides whether a row names a module, and the criterion above applies to
+mirror-tree modules exactly as to any other.
+
+**What gets no row is a mirror-tree module whose subject no existing row names.** Such a module
+has no subject *in this development*, so the only row that could name it would name a source
+directory rather than a topic, and the table routes by topic. **Guard one in the file of the
+analytic result that motivated it**, under that result's heading — which is what
+`OkaTest/Axioms/Morphisms.lean` already says of `Oka/Topology/Covering/Basic.lean`: *"mirror-tree
+topological criteria … say nothing about analytic spaces; they are guarded here rather than apart
+from their consumers."* `OkaTest/Axioms/AnalyticSpace.lean` reaches the same placement for a
+module the sheaves row *does* route — *"general locally-ringed-space material with **no row of its
+own** in the topic table … it sits here because the only thing that uses it is the rigidity
+statement below"* — so this paragraph records a practice with two independent precedents rather
+than inventing one.
+
+At `27c185a` that tail is **18 guards in six modules**, against 645 in all: seven from
+`Oka/CategoryTheory/GlueData.lean` (in `OkaTest/Axioms/AnalyticSpace.lean`), five from
+`Oka/Topology/Covering/Basic.lean` (in `OkaTest/Axioms/Morphisms.lean`), three from
+`Oka/Topology/IsLocalHomeomorph.lean` (in `OkaTest/Axioms/Sheaves.lean`), and one each from
+`Oka/CategoryTheory/Limits/Shapes/KernelBiprod.lean` (in `OkaTest/Axioms/SheafOfModules.lean`),
+`Oka/Topology/Category/TopCat/Opens.lean` (in `OkaTest/Axioms/Analytification.lean`) and
+`Oka/FieldTheory/IsAlgClosed/Basic.lean` (in `OkaTest/Axioms/RingTheory.lean`). **The rule above
+is being written down for the first time and the tail does not yet follow it**: three of the six
+modules sit in a file holding some of their consumer's guards and three do not, and by guards the
+minority is the larger — **7 of the 18 conform and 11 do not.** The three that do not:
+
+* **`Oka/CategoryTheory/GlueData.lean`**, the largest member at seven. Its only importer is
+  `Oka/Analytification/AffineCover.lean`, whose seven guards are all in
+  `OkaTest/Axioms/Analytification.lean`; and its guards sit under a heading of their own rather
+  than under an analytic result's, so it fails both halves of the rule.
+* **`Oka/Topology/IsLocalHomeomorph.lean`**, whose only user is
+  `Oka/AnalyticSpace/CoveringSpace.lean`, guarded in `OkaTest/Axioms/Morphisms.lean`. It was
+  placed beside the file it was *written for*, which **deliberately does not import it** for the
+  import-cost reason that file gives, and `OkaTest/Axioms/Sheaves.lean`'s heading for it says so.
+* **`Oka/FieldTheory/IsAlgClosed/Basic.lean`**, which has **no user under `Oka/` at all**:
+  `Oka/AnalyticSpace/CoveringMap.lean` names its one theorem in a docstring and does not import
+  it, and the only use in the repository is inside `OkaTest/FiniteMorphism.lean`, which this
+  repository does not guard. There is no analytic result to place it beside.
+
+**Read a consumer off the imports, not off a name grep.** All three were got wrong that way
+before they were measured, and the first was got wrong in the draft of this very paragraph:
+`ofGlueData'` is Mathlib's name and several files mention it, only one imports the module that
+proves things about it. Moving any of them is a tidy-up nobody has done and not a defect in the
+table.
+**The figure is here so that a later sweep can tell growth from noise**: a tail that stays near
+this size is the expected one, and a tail that doubles means a row really is missing.
 
 ## What these guards cover, and what they do not
 

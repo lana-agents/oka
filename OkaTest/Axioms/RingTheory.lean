@@ -10,8 +10,9 @@ import Oka
 
 The mirror-tree results about local rings with a coefficient field, about adic completions, about
 localising at a maximal ideal, about descent and quotient base change of flatness, about relations
-between elements of a ring localising, and about counting the `n`-th roots of an element of an
-algebraically closed field. Nothing here mentions anything complex-analytic.
+between elements of a ring localising, about counting the `n`-th roots of an element of an
+algebraically closed field, and about evaluating a multivariate polynomial through the
+equivalence that splits off one variable. Nothing here mentions anything complex-analytic.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -170,3 +171,12 @@ info: 'IsAlgClosed.card_setOf_pow_eq' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms IsAlgClosed.card_setOf_pow_eq
+
+/-! ### Evaluation through `MvPolynomial.optionEquivLeft` -/
+
+/--
+info: 'MvPolynomial.eval_eq_eval_optionEquivLeft' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms MvPolynomial.eval_eq_eval_optionEquivLeft

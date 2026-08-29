@@ -74,10 +74,12 @@ anything below uses. Split by destination, not by subject.
 
 ## What is not here
 
-* **No local homeomorphism.** The hypothesis is one open embedding, on one open. That the sheets
-  of a local homeomorphism cover is `IsLocalHomeomorph.sSup_sheetOpens` in
-  `Oka/Topology/IsLocalHomeomorph.lean`, which this file does not import; assembling the two into
-  a statement about the whole of `E` is the next step and is not taken here.
+* **No local homeomorphism, and that is still the hypothesis this file has.** It is one open
+  embedding, on one open. That the sheets of a local homeomorphism cover is
+  `IsLocalHomeomorph.sSup_sheetOpens` in `Oka/Topology/IsLocalHomeomorph.lean`, which this file
+  does not import. **Assembling the two into a statement about the whole of `E` is no longer
+  absent**: it is `Oka/AnalyticSpace/CoveringSpace.lean`, which is under `Oka/AnalyticSpace/` and
+  not here because what it assembles the sheets into is a complex analytic structure.
 * **Nothing about sections.** No formula for `𝒪_{p⁻¹Y}(W)` is proved even over a sheet; what is
   proved is that the *space* over a sheet is the base over its image, which is strictly weaker
   than a formula and is all a chart needs.

@@ -49,9 +49,12 @@ obtained from the family bound; the two share no lemma, and the puncture is what
 ## What is not checked here
 
 * **Nothing about `ComplexAnalytic.IsCutOutBy`.** The morphism is built by hand and its image is
-  computed directly, so `ComplexAnalytic.isFinite_comp_proj_of_range_eq` is what is applied and
-  `ComplexAnalytic.isFinite_comp_proj_of_isCutOutBy` is not exercised anywhere. The reason is the
-  one `OkaTest/FiniteMorphism.lean` gives for `ComplexAnalytic.axisIncl`: cut-out data for a
+  computed directly, so `ComplexAnalytic.isFinite_comp_proj_of_range_eq` is what is applied here
+  and `ComplexAnalytic.isFinite_comp_proj_of_isCutOutBy` is not. Its one consumer anywhere is
+  `ComplexAnalytic.isFinite_comp_proj_of_monic` in `Oka/Analytification/MonicHypersurface.lean`,
+  which still takes the cut-out datum as a *hypothesis* — so what is not exhibited, here or there,
+  is a concrete morphism of analytic spaces carrying one. The reason is the one
+  `OkaTest/FiniteMorphism.lean` gives for `ComplexAnalytic.axisIncl`: cut-out data for a
   morphism of *analytic* spaces is never produced in this repository, only assumed.
 * **Nothing about stalks**, so nothing here is a finite étale morphism.
   `Oka/AnalyticSpace/SimpleZeroStalk.lean` is the other half and the germ of `X² - C z` at a point

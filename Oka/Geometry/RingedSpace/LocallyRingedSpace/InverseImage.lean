@@ -53,12 +53,36 @@ tidier definition and it is built by `CategoryTheory.Adjunction.leftAdjointUniq`
 restriction of a composite adjunction, so relating it to the presheaf unit is a computation this
 file does not need to do.
 
+## The comparison morphism, and which adjunction it is built from
+
+A morphism `q : Z ⟶ Y` factors through `q.base⁻¹Y`, by a morphism that is the identity on
+carriers. **The input is the *presheaf* adjunction `TopCat.Presheaf.pullbackPushforwardAdjunction`
+together with the universal property of sheafification, and not
+`TopCat.Sheaf.pullbackPushforwardAdjunction`**, for the same reason the previous paragraph gives:
+`AlgebraicGeometry.LocallyRingedSpace.inverseImageHom` is built from the presheaf unit, so an
+adjunct taken on the same side of the sheafification makes
+`AlgebraicGeometry.LocallyRingedSpace.toInverseImage_comp` one application of
+`Equiv.apply_symm_apply`, and relating the two units is again a computation this file does not
+need to do.
+
+**The sheafification is not opened.** `CategoryTheory.sheafifyLift` is used through
+`CategoryTheory.toSheafify_sheafifyLift` and nothing else, so the absence recorded below — that
+no formula for the sections of `p⁻¹𝒪_Y` is stated here — costs nothing.
+
+**No transport appears anywhere in the construction**, which is worth saying because a comparison
+morphism into a space built by transporting structure usually carries one. The carrier of
+`q.base⁻¹Y` is `Z`'s on the nose, and `(TopCat.Presheaf.pushforward CommRingCat (𝟙 _)).obj
+Z.presheaf` is `Z.presheaf` on the nose, so the `c` field of a morphism with identity base is
+literally a map `p⁻¹𝒪_Y ⟶ 𝒪_Z`.
+
 ## Main definitions
 
 - `AlgebraicGeometry.LocallyRingedSpace.inverseImage`: the locally ringed space `p⁻¹Y`, whose
   underlying topological space is `E` on the nose.
 - `AlgebraicGeometry.LocallyRingedSpace.inverseImageHom`: the morphism `p⁻¹Y ⟶ Y`, whose
   underlying map is `p` on the nose.
+- `AlgebraicGeometry.LocallyRingedSpace.toInverseImage`: **the comparison morphism `Z ⟶ q.base⁻¹Y`
+  attached to a morphism `q : Z ⟶ Y`**, whose underlying map is the identity on the nose.
 
 ## Main results
 
@@ -67,6 +91,12 @@ file does not need to do.
 - `AlgebraicGeometry.LocallyRingedSpace.stalkMap_inverseImageHom`: **the stalk map of the morphism
   is that isomorphism**, so in particular it is one — which is what makes the morphism a morphism
   of *locally* ringed spaces at all, and is the form a consumer wants.
+- `AlgebraicGeometry.LocallyRingedSpace.toInverseImage_comp`: **the comparison morphism factors
+  `q` through `q.base⁻¹Y`**, which is what makes it a morphism over `Y`.
+- `AlgebraicGeometry.LocallyRingedSpace.stalkMap_toInverseImage`: **its stalk map is `q`'s,
+  preceded by the isomorphism above**.
+- `AlgebraicGeometry.LocallyRingedSpace.isIso_stalkMap_toInverseImage`: the consequence a consumer
+  wants — **the comparison morphism is a stalkwise isomorphism wherever `q` is**.
 
 ## What is not here
 
@@ -79,9 +109,15 @@ file does not need to do.
   sheaf condition asks for a pair of sections and the presheaf offers one. So the sheafification
   is doing real work and no formula for it is stated. Identifying the restriction of `p⁻¹𝒪_Y` to
   a sheet with `𝒪_Y` on its image is the next step and is a different issue.
-* **No universal property.** `TopCat.Sheaf.pullbackPushforwardAdjunction` is Mathlib's and is
-  where a universal property would come from; `AlgebraicGeometry.LocallyRingedSpace.inverseImage`
-  is not shown here to be a left adjoint to anything, and nothing below needs it.
+* **No universal property, though its existence half is now here.**
+  `AlgebraicGeometry.LocallyRingedSpace.toInverseImage` produces the factorisation of a morphism
+  `q : Z ⟶ Y` through `q.base⁻¹Y` that a universal property would produce, and
+  `AlgebraicGeometry.LocallyRingedSpace.toInverseImage_comp` is that it is a factorisation.
+  **Uniqueness is not stated**: nothing below says that it is the only morphism over `Y` with
+  identity base, although `CategoryTheory.sheafifyLift_unique` is what would prove it. Neither is
+  naturality in `q`, and `AlgebraicGeometry.LocallyRingedSpace.inverseImage` is still not shown to
+  be a left adjoint to anything — for which `TopCat.Sheaf.pullbackPushforwardAdjunction`, and not
+  the presheaf adjunction used above, is where one would start.
 * **No comparison with `AlgebraicGeometry.LocallyRingedSpace.restrict`.** For `p` the inclusion of
   an open subset both constructions are available and they should agree; that is not proved.
 -/
@@ -234,6 +270,152 @@ theorem stalkMap_inverseImageHom (e : E) :
 /-- **The projection is an isomorphism on every stalk.** -/
 instance isIso_stalkMap_inverseImageHom (e : E) : IsIso ((inverseImageHom Y p).stalkMap e) :=
   isIso_stalkMap_inverseImageHomAux Y p e
+
+end
+
+noncomputable section
+
+variable {Y Z : LocallyRingedSpace.{u}} (q : Z ⟶ Y)
+
+/-- **The adjunct of the comparison map of a morphism**, at the level of presheaves: `q.c` is a
+map `𝒪_Y ⟶ q_* 𝒪_Z`, and this is the map `q.base⁻¹𝒪_Y ⟶ 𝒪_Z` it corresponds to under
+`TopCat.Presheaf.pullbackPushforwardAdjunction`.
+
+**The presheaf adjunction and not `TopCat.Sheaf.pullbackPushforwardAdjunction`**, for the reason
+the module docstring gives for `AlgebraicGeometry.LocallyRingedSpace.inverseImageHom`: that
+morphism is built from the *presheaf* unit, so an adjunct taken on the same side of the
+sheafification makes `AlgebraicGeometry.LocallyRingedSpace.toInverseImage_comp` one application
+of `Equiv.apply_symm_apply` and needs no comparison between the two units. -/
+def inverseImageAdjunct :
+    (TopCat.Presheaf.pullback CommRingCat.{u} q.base).obj Y.presheaf ⟶ Z.presheaf :=
+  ((TopCat.Presheaf.pullbackPushforwardAdjunction CommRingCat.{u} q.base).homEquiv
+    Y.presheaf Z.presheaf).symm q.toHom.c
+
+/-- **The comparison map on structure sheaves**, `p⁻¹𝒪_Y ⟶ 𝒪_Z` for `p = q.base`: the presheaf
+adjunct `AlgebraicGeometry.LocallyRingedSpace.inverseImageAdjunct`, extended over the
+sheafification because `𝒪_Z` is a sheaf.
+
+**The sheafification is used through its universal property and is not opened.** The module
+docstring records that no formula for the sections of `p⁻¹𝒪_Y` is stated here; nothing below
+needs one, because `CategoryTheory.sheafifyLift` is characterised by
+`CategoryTheory.toSheafify_sheafifyLift` alone. -/
+def inverseImageDesc : (inverseImageSheaf Y q.base).presheaf ⟶ Z.presheaf :=
+  (TopCat.Sheaf.forget CommRingCat.{u} _).map
+      ((TopCat.Sheaf.pullbackIso CommRingCat.{u} q.base).app Y.toSheafedSpace.sheaf).hom ≫
+    CategoryTheory.sheafifyLift _ (inverseImageAdjunct q) Z.IsSheaf
+
+set_option backward.isDefEq.respectTransparency false in
+/-- **The comparison map extends the presheaf adjunct**, which is the defining property of
+`AlgebraicGeometry.LocallyRingedSpace.inverseImageDesc` and the only thing used about it below.
+
+`AlgebraicGeometry.LocallyRingedSpace.toInverseImageSheaf` is the sheafification map followed by
+the inverse of `TopCat.Sheaf.pullbackIso`, so composing it with the `hom` of that isomorphism
+leaves `CategoryTheory.toSheafify_sheafifyLift`. -/
+theorem toInverseImageSheaf_inverseImageDesc :
+    toInverseImageSheaf Y q.base ≫ inverseImageDesc q = inverseImageAdjunct q := by
+  rw [inverseImageDesc, toInverseImageSheaf, ← CategoryTheory.Functor.mapIso_inv,
+    ← CategoryTheory.Functor.mapIso_hom, Category.assoc, Iso.inv_hom_id_assoc,
+    CategoryTheory.toSheafify_sheafifyLift]
+
+/-- The comparison morphism `Z ⟶ q.base⁻¹Y` of *presheafed* spaces: the identity downstairs, and
+`AlgebraicGeometry.LocallyRingedSpace.inverseImageDesc` upstairs.
+
+**No transport appears in the type.** The carrier of `q.base⁻¹Y` is that of `Z` on the nose, and
+`(TopCat.Presheaf.pushforward CommRingCat (𝟙 _)).obj Z.presheaf` is `Z.presheaf` on the nose, so
+the field `c` of a morphism with identity base is literally a map `p⁻¹𝒪_Y ⟶ 𝒪_Z`. -/
+def toInverseImageAux : Z.toPresheafedSpace.Hom (inverseImage Y q.base).toPresheafedSpace where
+  base := 𝟙 Z.toTopCat
+  c := inverseImageDesc q
+
+@[simp]
+theorem toInverseImageAux_base : (toInverseImageAux q).base = 𝟙 Z.toTopCat := rfl
+
+@[simp]
+theorem toInverseImageAux_c : (toInverseImageAux q).c = inverseImageDesc q := rfl
+
+set_option backward.isDefEq.respectTransparency false in
+/-- **The comparison morphism of presheafed spaces is a factorisation of `q` through `q.base⁻¹Y`.**
+
+Downstairs this is `Category.id_comp`. Upstairs, the composite's `c` is
+`unit ≫ q.base_* (toInverseImageSheaf ≫ inverseImageDesc)`, which is
+`unit ≫ q.base_* inverseImageAdjunct` by
+`AlgebraicGeometry.LocallyRingedSpace.toInverseImageSheaf_inverseImageDesc` — and that is the
+image of `inverseImageAdjunct` under the adjunction's `homEquiv`, hence `q.c`. -/
+theorem toInverseImageAux_comp :
+    (toInverseImageAux q ≫ inverseImageHomAux Y q.base :
+      Z.toPresheafedSpace ⟶ Y.toPresheafedSpace) = q.toHom :=
+  PresheafedSpace.ext _ _ (Category.id_comp _) (by
+    simp only [eqToHom_refl, Functor.whiskerRight_id']
+    change (inverseImageHomAux Y q.base).c ≫
+      (TopCat.Presheaf.pushforward CommRingCat.{u} q.base).map (inverseImageDesc q) = _
+    rw [inverseImageHomAux_c, Category.assoc, ← Functor.map_comp,
+      toInverseImageSheaf_inverseImageDesc, inverseImageAdjunct]
+    exact ((TopCat.Presheaf.pullbackPushforwardAdjunction CommRingCat.{u} q.base).homEquiv
+      Y.presheaf Z.presheaf).apply_symm_apply q.toHom.c)
+
+/-- **The comparison morphism `Z ⟶ q.base⁻¹Y` of locally ringed spaces.**
+
+Its stalk maps are local because
+`AlgebraicGeometry.LocallyRingedSpace.stalkMap_toInverseImage` writes each of them as `q`'s stalk
+map preceded by an isomorphism. -/
+def toInverseImage : Z ⟶ inverseImage Y q.base where
+  toHom := toInverseImageAux q
+  prop z := by
+    have h : (toInverseImageAux q).stalkMap z =
+        CategoryTheory.inv ((inverseImageHomAux Y q.base).stalkMap
+          ((toInverseImageAux q).base z)) ≫
+        PresheafedSpace.Hom.stalkMap
+          (toInverseImageAux q ≫ inverseImageHomAux Y q.base :
+            Z.toPresheafedSpace ⟶ Y.toPresheafedSpace) z := by
+      rw [PresheafedSpace.stalkMap.comp, IsIso.inv_hom_id_assoc]
+    rw [h, PresheafedSpace.stalkMap.congr_hom _ _ (toInverseImageAux_comp q) z]
+    haveI : IsLocalHom (q.toHom.stalkMap z).hom := q.prop z
+    repeat' apply +allowSynthFailures RingHom.isLocalHom_comp
+    all_goals first
+      | assumption
+      | exact isLocalHom_of_isIso _
+
+/-- **The underlying map of the comparison morphism is the identity**, on the nose. -/
+@[simp]
+theorem toInverseImage_base : (toInverseImage q).base = 𝟙 Z.toTopCat := rfl
+
+/-- **The comparison morphism is a factorisation of `q` through `q.base⁻¹Y`**, which is what makes
+it a morphism over `Y`. -/
+theorem toInverseImage_comp : toInverseImage q ≫ inverseImageHom Y q.base = q :=
+  Hom.ext' (toInverseImageAux_comp q)
+
+set_option backward.isDefEq.respectTransparency false in
+/-- **The stalk map of the comparison morphism is that of `q`, preceded by the identification of
+the stalks of `q.base⁻¹Y` with those of `Y`.**
+
+`AlgebraicGeometry.LocallyRingedSpace.isIso_stalkMap_inverseImageHom` is what makes the inverse
+available; the content is
+`AlgebraicGeometry.LocallyRingedSpace.toInverseImage_comp` read on stalks. -/
+theorem stalkMap_toInverseImage (z : Z.toTopCat) :
+    (toInverseImage q).stalkMap z =
+      CategoryTheory.inv ((inverseImageHom Y q.base).stalkMap z) ≫ q.stalkMap z := by
+  have h : q.stalkMap z =
+      (inverseImageHom Y q.base).stalkMap z ≫ (toInverseImage q).stalkMap z := by
+    have h0 := PresheafedSpace.stalkMap.congr_hom _ _ (toInverseImageAux_comp q) z
+    rw [PresheafedSpace.stalkMap.comp] at h0
+    simp only [eqToHom_refl, Category.id_comp] at h0
+    exact h0.symm
+  rw [h, IsIso.inv_hom_id_assoc]
+
+set_option backward.isDefEq.respectTransparency false in
+/-- **The comparison morphism is an isomorphism on a stalk wherever `q` is.**
+
+This is the form taxis #1142 consumes: `q.base⁻¹Y ⟶ Y` is an isomorphism on *every* stalk, so the
+stalk hypothesis of `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.of_stalk_iso` for the
+comparison morphism is a condition on `q` alone — and that hypothesis is an instance argument,
+which is why this is one too.
+
+The converse is the same equation read the other way and is not stated, because nothing needs
+it. -/
+instance isIso_stalkMap_toInverseImage (z : Z.toTopCat) [IsIso (q.stalkMap z)] :
+    IsIso ((toInverseImage q).stalkMap z) := by
+  rw [stalkMap_toInverseImage]
+  infer_instance
 
 end
 

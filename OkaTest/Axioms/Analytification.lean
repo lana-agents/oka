@@ -15,8 +15,10 @@ at an arbitrary point — where it becomes a statement about the stalk map itsel
 analytification as a functor on finitely generated `ℂ`-algebras, the stalk map of the
 comparison morphism of a presented algebra, the naturality of the comparison morphism, the
 faithful flatness of that stalk map, the analytification of a sheaf, the identification of
-the analytification of `A_f` with the non-vanishing locus of `f`, and the glue data of an affine
-cover with distinguished overlaps.
+the analytification of `A_f` with the non-vanishing locus of `f`, the glue data of an affine
+cover with distinguished overlaps, the image of the analytification in `ℂ^n`, and the family of
+monic polynomials of a polynomial monic in the last variable, with the finiteness over `ℂ^n`
+that it supplies.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -935,3 +937,91 @@ info: 'ComplexAnalytic.exists_presentation_standardEtale' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.exists_presentation_standardEtale
+
+/-! ### The image of the analytification in `ℂ^n` -/
+
+/--
+info: 'ComplexAnalytic.isClosedEmbedding_base_analytificationIncl' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isClosedEmbedding_base_analytificationIncl
+
+/--
+info: 'ComplexAnalytic.range_base_analytificationIncl' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.range_base_analytificationIncl
+
+/-! ### The monic-hypersurface family of a polynomial -/
+
+/--
+info: 'ComplexAnalytic.lastVarPolyEquiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.lastVarPolyEquiv
+
+/--
+info: 'ComplexAnalytic.eval_eq_eval_lastVarPolyEquiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.eval_eq_eval_lastVarPolyEquiv
+
+/--
+info: 'ComplexAnalytic.polyFamily' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.polyFamily
+
+/--
+info: 'ComplexAnalytic.monic_polyFamily' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.monic_polyFamily
+
+/--
+info: 'ComplexAnalytic.natDegree_polyFamily' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.natDegree_polyFamily
+
+/--
+info: 'ComplexAnalytic.continuous_coeff_polyFamily' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.continuous_coeff_polyFamily
+
+/--
+info: 'ComplexAnalytic.lastVarSection' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.lastVarSection
+
+/--
+info: 'ComplexAnalytic.evalHom_lastVarSection' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.evalHom_lastVarSection
+
+/--
+info: 'ComplexAnalytic.isFinite_comp_proj_of_monic' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isFinite_comp_proj_of_monic
+
+/--
+info: 'ComplexAnalytic.isFinite_analytification_comp_proj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isFinite_analytification_comp_proj

@@ -145,13 +145,25 @@ gives — and they are what make the simple-zero hypothesis and the cut-out hypo
   third thing neither half supplies — that the underlying map of the composite is a local
   homeomorphism. As on the whole of `ℂ^(n+1)`, a monic family with repeated roots gives a
   composite that is not one, so this is not a gap that closes by an argument of the same kind.
-* **No Weierstrass polynomial.** The family `q` is a hypothesis here exactly as it is in
-  `Oka/AnalyticSpace/MonicProjection.lean`; nothing extracts it from a holomorphic function, and
-  no holomorphy of its coefficients is used or asked for.
+* **No Weierstrass polynomial, and the family is still a hypothesis in this file.** It is one
+  here exactly as it is in `Oka/AnalyticSpace/MonicProjection.lean`, and no holomorphy of its
+  coefficients is used or asked for below — continuity is all the proofs consume.
+  **What is no longer absent from the repository is the extraction**:
+  `ComplexAnalytic.okaFamily` in `Oka/AnalyticSpace/HolomorphicFamily.lean`, which imports this
+  file, produces a family satisfying all three hypotheses from a monic
+  `P : Polynomial (OkaRing V)`. What is still missing there and here is the step before that, a
+  `P` obtained from a *germ* by the Weierstrass preparation theorem.
 * **Nothing about a section of the cylinder that does not extend.** The two `resΓ` lemmas above
   read a cutting section that is the restriction of an entire function. A section of
   `𝒪_{ℂ^(n+1)}` over the cylinder that extends to no larger open set is allowed by every
-  statement below and computed by none of them.
+  statement below and computed by none of them. **What
+  `ComplexAnalytic.cylinderSection` in `Oka/AnalyticSpace/HolomorphicFamily.lean` adds is the
+  construction and not the example**: it builds a section of the cylinder out of a
+  `Polynomial (OkaRing V)`, whose coefficients live on `V` and are required to extend nowhere,
+  and it pays for that by taking its hypersurface as a range condition rather than as a
+  `ComplexAnalytic.IsCutOutBy` datum, for the reason this bullet gives. **Whether any output of
+  it fails to extend is settled nowhere**: the coefficients of the one such polynomial this
+  repository writes down are entire, which `OkaTest/HolomorphicFamily.lean` records.
 * **No second restriction.** `V` is an open subset of `ℂ^n` and the source of `i` is any analytic
   space; there is no statement about restricting `V` further, which would be
   `ComplexAnalytic.restrictHom` again and is not needed by anything.

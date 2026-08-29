@@ -6,15 +6,39 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 import Oka
 
 /-!
-# Axiom regression tests: General sheaf theory
+# Axiom regression tests: General sheaf theory and ringed spaces
 
-Results about presheaves and sheaves that mention nothing analytic — the mirror-tree material
-of `Oka/Topology/Sheaves/` and `Oka/CategoryTheory/`.
+Results that mention nothing analytic: presheaves and sheaves on a topological space, and the
+presheaved, ringed and locally ringed spaces built out of them — gluing, open immersions, global
+sections and germs, algebra structures over a cover, stalk maps and colimits, inverse images and
+sheets, and the `Γ`-`Spec` adjunction. Almost all of it is the mirror-tree material of
+`Oka/Geometry/RingedSpace/`; the remainder is from `Oka/Topology/` and `Oka/AlgebraicGeometry/`.
+
+**That is a description and not a list, and the headings below are the record**: every one of
+them names the module, or all the modules, that its assertions defend, so that mapping lives
+next to the assertions and not in this paragraph. The stance is
+`OkaTest/Axioms/LocalOkaRing.lean`'s, and it is taken here because the mix moves — the sentence
+this replaces named `Oka/Topology/Sheaves/`, which on 2026-08-28 accounted for four of the
+eighty-seven guards below, and `Oka/CategoryTheory/`, which accounted for none of them.
+
+**One file and not two, and the reason is not inertia.** Locally-ringed-space material is the
+bulk of what is here, which is what the heading above says. The obvious cut — sheaves off from
+ringed spaces — is clean at the section boundary and would put three sections against sixteen,
+leaving the side that actually grows undivided; it therefore buys none of the
+concurrent-pull-request relief that `OkaTest/Axioms.lean` gives as the whole point of splitting.
+The cut that would buy it is by module *within* `Oka/Geometry/RingedSpace/`, and that is a
+larger proposal than a wrong docstring: it moves every `#guard_msgs` block in the file at once
+and conflicts with every branch in flight. **If this file's size ever starts costing rebases,
+split it that way and not the obvious way.** Note also that `OkaTest/Axioms.lean`'s routing
+table names only "general presheaf and sheaf theory" for this file: a ringed-space assertion
+belongs here too.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
 
-/-! ### Quotients of presheaves of rings -/
+/-! ### Quotients of presheaves of rings
+
+`Oka/Topology/Sheaves/QuotientPresheaf.lean`. -/
 
 /--
 info: 'TopCat.Presheaf.surjective_stalkFunctor_map_toQuotientSpan' depends on axioms:
@@ -31,7 +55,9 @@ info: 'TopCat.Presheaf.ker_stalkFunctor_map_toQuotientSpan' depends on axioms:
 #print axioms TopCat.Presheaf.ker_stalkFunctor_map_toQuotientSpan
 
 
-/-! ### Pushforward along an embedding is fully faithful -/
+/-! ### Pushforward along an embedding is fully faithful
+
+`Oka/Topology/Sheaves/Functors.lean`, for presheaves and for sheaves. -/
 
 /--
 info: 'TopCat.Presheaf.pushforwardFullyFaithful' depends on axioms:
@@ -47,7 +73,9 @@ info: 'TopCat.Sheaf.pushforwardFullyFaithful' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms TopCat.Sheaf.pushforwardFullyFaithful
 
-/-! ### Gluing locally ringed spaces along an open cover -/
+/-! ### Gluing locally ringed spaces along an open cover
+
+`Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean`. -/
 
 /--
 info: 'AlgebraicGeometry.LocallyRingedSpace.GlueData.ι_eq_iff' depends on axioms:
@@ -91,7 +119,9 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.openCoverOfOpens' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.openCoverOfOpens
 
-/-! ### Two open immersions of locally ringed spaces with the same image -/
+/-! ### Two open immersions of locally ringed spaces with the same image
+
+`Oka/Geometry/RingedSpace/OpenImmersion.lean`. -/
 
 /--
 info: 'AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.isoOfRangeEq' depends on axioms:
@@ -100,7 +130,12 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.isoOfRangeEq' depend
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.isoOfRangeEq
 
-/-! ### Gluing morphisms over a cover by open subsets -/
+/-! ### Gluing morphisms over a cover by open subsets
+
+`Oka/Geometry/RingedSpace/OpenImmersion.lean`,
+`Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean` and
+`Oka/Geometry/RingedSpace/LocallyRingedSpace.lean` — the range of a pullback and `restrictLE`,
+the gluing itself, and the two empty-cover extensionality lemmas. -/
 
 /--
 info: 'AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.range_pullback_to_base_of_left' depends on axioms:
@@ -138,7 +173,9 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.hom_ext_restrict_of_isEmpty' depends
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.hom_ext_restrict_of_isEmpty
 
-/-! ### Locality of global sections -/
+/-! ### Locality of global sections
+
+`Oka/Geometry/RingedSpace/LocallyRingedSpace.lean`. -/
 
 /--
 info: 'AlgebraicGeometry.LocallyRingedSpace.section_ext_of_cover' depends on axioms:
@@ -167,7 +204,9 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.Γ_map_comp_apply' depends on axioms
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.Γ_map_comp_apply
 
-/-! ### Crossing an isomorphism on global sections -/
+/-! ### Crossing an isomorphism on global sections
+
+`Oka/Geometry/RingedSpace/LocallyRingedSpace.lean`. -/
 
 /--
 info: 'AlgebraicGeometry.LocallyRingedSpace.Γ_map_inv_hom_apply' depends on axioms:
@@ -183,7 +222,9 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.Γ_map_hom_inv_apply' depends on axi
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.Γ_map_hom_inv_apply
 
-/-! ### Sections and germs on an open subspace -/
+/-! ### Sections and germs on an open subspace
+
+`Oka/Geometry/RingedSpace/LocallyRingedSpace.lean`. -/
 
 /--
 info: 'AlgebraicGeometry.LocallyRingedSpace.germ_eq_stalkMap_ofRestrict' depends on axioms:
@@ -605,9 +646,12 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.disjoint_opensRange_sigmaOpenCover' 
 
 /-! ### The inverse image of a locally ringed space along a continuous map
 
-`Oka/Geometry/RingedSpace/LocallyRingedSpace/InverseImage.lean`. The two definitions — the space
-and the morphism to the base — and the two results, which are the same isomorphism read as a
-statement about the stalks and as a statement about the morphism. -/
+`Oka/Geometry/RingedSpace/LocallyRingedSpace/InverseImage.lean`. The three definitions — the
+space, the morphism to the base, and the comparison morphism a morphism into the base factors
+through — and the results about each: for the morphism to the base, the same isomorphism read as
+a statement about the stalks and as a statement about the morphism; for the comparison morphism,
+that its base map is the identity, that it is a factorisation, and the two readings of its stalk
+map. -/
 
 /--
 info: 'AlgebraicGeometry.LocallyRingedSpace.inverseImage' depends on axioms:
@@ -637,12 +681,51 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.stalkMap_inverseImageHom' depends on
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.stalkMap_inverseImageHom
 
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.toInverseImage' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.toInverseImage
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.toInverseImage_base' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.toInverseImage_base
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.toInverseImage_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.toInverseImage_comp
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.stalkMap_toInverseImage' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.stalkMap_toInverseImage
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.isIso_stalkMap_toInverseImage' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.isIso_stalkMap_toInverseImage
+
 /-! ### The sheets of a map
 
 `Oka/Topology/IsLocalHomeomorph.lean`. The family of opens on which a map is an open embedding,
-and that for a local homeomorphism it covers. Pure topology; the guards sit here rather than in
-`OkaTest/Axioms/Morphisms.lean` because the file below is the only consumer and the two are one
-change. -/
+and that for a local homeomorphism it covers. Pure topology; the guards sit here, beside what
+these lemmas were *written for* — that file's own docstring says so, and names
+`AlgebraicGeometry.LocallyRingedSpace.sheetIso`, guarded under the next heading — and **not**
+beside a consumer, because until now there was none: the sheet material below **deliberately does
+not import** `Oka/Topology/IsLocalHomeomorph.lean`, to keep the `OpenPartialHomeomorph` chain out
+of its closure, and says so in terms. `Oka/AnalyticSpace/CoveringSpace.lean` is the first module
+of the library to import it at all, and **its** guards are in `OkaTest/Axioms/Morphisms.lean`. -/
 
 /--
 info: 'sheetOpens' depends on axioms:
