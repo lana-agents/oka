@@ -84,11 +84,18 @@ and only the family is.
   #1191 this bullet said instead that the order was computed on no germ *anywhere in this
   repository*, and that was false when it was written: `OkaTest/SimpleZeroStalk.lean` and
   `OkaTest/GermQuotientDegreeOne.lean` both compute it, and both are ancestors of the commit that
-  wrote the sentence — the second by four days and the first by a day and a half. What is true is
-  that every one of those computations is on a germ **written down as a polynomial** — a
-  coordinate, its square, or a `LocalOkaRing.fromPolynomial` — and this germ is the one shape they
-  cannot be, since `ComplexAnalytic.zExp2` is not a polynomial and that is the whole point of the
-  file.
+  wrote the sentence — the second by four days and the first by a day and a half. **What separates
+  those from this germ is not its shape**, which is the same one: `ComplexAnalytic.cylinderSection`
+  and `LocalOkaRing.fromPolynomial` are the same construction at two levels — evaluate a
+  polynomial at the last variable with its coefficients pulled back from the base — so
+  `ComplexAnalytic.curvePoly` gives a polynomial in the last variable exactly as
+  `OkaTest.GermQuotientDegreeOne.order_partialEval_parabola`'s germ does. **It is the
+  coefficients.** Each of those computations is on a polynomial in the last variable, up to a
+  unit, whose coefficients are coordinates or constants of the germ ring, and that is what lets
+  `MvPowerSeries.partialEval_X_self` or `partialEval_coe_fromPolynomial` finish it: the parabola
+  closes because `LocalOkaRing.constantCoeff_coord` is `0` and leaves `X ^ 2`. Here the
+  coefficient is `ComplexAnalytic.zExp2`, nothing of that sort is available, and that is the same
+  gap the bullet above states in its own terms — *the coefficient is not a polynomial*.
 * **Nothing about `ComplexAnalytic.IsCutOutBy`.** The image is computed from the parametrisation,
   so the range form of the projection theorem is what is applied. Cut-out data for a morphism of
   *analytic* spaces is never produced in this repository, only assumed.
