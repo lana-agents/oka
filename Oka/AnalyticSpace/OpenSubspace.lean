@@ -126,10 +126,12 @@ That is not fussiness. An earlier draft of this section gave 3075 and 2141 from 
 own, and three hand-written parsers — that one and two reviewers' — disagreed with each other and
 with Lean before the environment settled it. Three traps account for the spread and none of them
 announces itself: matching the word *import* outside the header picks it up inside a docstring
-code block and pulls in the whole of Mathlib; one Mathlib header line carries a trailing *shake*
-comment, so a parser comparing the stripped line against the module keyword stops there and
-silently drops the tactic modules; and this Mathlib writes both *public meta import* and
-*import all*, which a pattern anchored on the bare keyword misses.
+code block and pulls in the whole of Mathlib; **seventy** Mathlib header lines carry a trailing
+*shake* comment — `grep -rlE '^module[ \t]+--' .lake/packages/mathlib/Mathlib/`, in five
+spellings — so a parser comparing the stripped line against the module keyword stops at each of
+them, and one of the seventy is `Mathlib/Tactic/Common.lean`, which by itself takes the tactic
+modules with it; and this Mathlib writes both *public meta import* and *import all*, which a
+pattern anchored on the bare keyword misses.
 `scripts/import_cost.py` cannot be used instead — it resolves only under `Mathlib/`, and neither
 of these two files is a mirror file.
 
