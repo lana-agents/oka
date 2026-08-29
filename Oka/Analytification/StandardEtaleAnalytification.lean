@@ -71,20 +71,21 @@ standard étale pair.
   local-isomorphism statement needs is that at a point where `F` vanishes and `G` does not, the
   germ of `F` has `PowerSeries.order (MvPowerSeries.partialEval (Fin.last n) …) = 1` — the
   hypothesis `ComplexAnalytic.bijective_stalkMap_comp_uliftProj` takes. **What is missing is the
-  derivative and not the order.** That order is computed four times already, and none of the four
-  reads a derivative: `order_partialEval_germ`, `order_partialEval_germ_sq` and
-  `order_partialEval_germ_ulift` in `OkaTest/SimpleZeroStalk.lean` compute it *at a coordinate*,
-  by `MvPowerSeries.partialEval_X_self` and `PowerSeries.order_X_pow`, the third in exactly the
-  `LocalOkaRing.uliftEquiv` shape the hypothesis above asks for; and
-  `order_partialEval_skewDiagonal` in `OkaTest/GermQuotientDegreeOne.lean` computes it off a
-  **Weierstrass degree**, through `LocalOkaRing.order_partialEval_eq_natDegree`
-  (`Oka/Regular.lean`), which is the only such computation under `Oka/`. What no route reaches is
-  a germ presented by *"its first derivative is nonzero"*: `Oka/` has **no partial-derivative
-  operator at all**, and `Oka/AnalyticSpace/SimpleZeroStalk.lean` says in terms that bridging
-  *"`∂F/∂X_n` is a unit at the point"* to the order condition is separate work it does not
-  attempt. So `cond`'s `derivative f * p₁ + f * p₂ = g ^ n` — an existential, `∃ p₁ p₂ n`, and not
-  a field — cannot be carried to that hypothesis by anything on hand, and no declaration below
-  pretends otherwise.
+  derivative and not the order**, which is computed here already and by three different routes,
+  none of them a derivative: `order_partialEval_germ`, `order_partialEval_germ_sq` and
+  `order_partialEval_germ_ulift` (`OkaTest/SimpleZeroStalk.lean`) read it *at a coordinate*, by
+  `MvPowerSeries.partialEval_X_self` and `PowerSeries.order_X_pow`, the last in exactly the
+  `LocalOkaRing.uliftEquiv` shape the hypothesis above asks for; `order_partialEval_skewDiagonal`
+  (`OkaTest/GermQuotientDegreeOne.lean`) reads it off a **Weierstrass degree**, through
+  `LocalOkaRing.order_partialEval_eq_natDegree` (`Oka/Regular.lean`), which is the only such
+  computation under `Oka/`; and `order_partialEval_parabola`, in that same test file, reads it off
+  `X ^ 2` through `partialEval_coe_fromPolynomial` directly. What no route reaches is a germ
+  presented by *"its first derivative is nonzero"*: `Oka/` has **no partial-derivative operator at
+  all**, and `Oka/AnalyticSpace/SimpleZeroStalk.lean` says in terms that bridging *"`∂F/∂X_n` is a
+  unit at the point"* to the order condition is separate work it does not attempt. So the equation
+  `derivative f * p₁ + f * p₂ = g ^ n` — which is the *type* of the field `StandardEtalePair.cond`
+  and reaches a proof only through an `obtain` on its `∃ p₁ p₂ n` — cannot be carried to that
+  hypothesis by anything on hand, and no declaration below pretends otherwise.
 * **No witness that the open is ever non-empty.** The statements below are hypothesis-free in `F`
   and `G`, so none of them can be vacuously satisfied; what is unchecked is whether the objects
   are degenerate — nothing here says `ComplexAnalytic.localisationOpen (hypersurfacePresentation g
@@ -137,8 +138,10 @@ taken: `etalePresentation`'s own `Fin.snoc`-init is over `n + 2` and this is ove
 rather than against: `ComplexAnalytic.isFinite_comp_proj_of_monic` and
 `ComplexAnalytic.bijective_stalkMap_comp_uliftProj` both take an arbitrary morphism carrying an
 `ComplexAnalytic.IsCutOutBy` datum, not a presentation, so a statement about the hypersurface *of
-a presented algebra* has nothing to quote. Named rather than written out because it occurs four
-times in the comparison below. -/
+a presented algebra* has nothing to quote. The nearest thing in the tree is
+`ComplexAnalytic.localisationPresentation_eq_snoc`, which is `rfl` and is this shape at the one
+`F` of the form `X · f - 1`. Named rather than written out because it occurs four times in the
+comparison below. -/
 def hypersurfacePresentation : Fin (k + 1) → MvPolynomial (ULift.{u} (Fin (n + 1))) ℂ :=
   Fin.snoc (polyPresentation.{u} g) F
 
