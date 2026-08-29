@@ -81,12 +81,19 @@ continuity is all the mathematics needs, and it is all that is asked for.
   underlying map is a local homeomorphism — is neither here nor there. Nothing below says the
   composite is open, and for a monic family with repeated roots it is not a local
   homeomorphism at all, so this is not a gap that closes by an argument of the same kind.
-* **No open subset of the base.** `i` lands in the whole of `ℂ^(n+1)`, as it does in
-  `Oka/AnalyticSpace/SimpleZeroStalk.lean` and for the same reason: a standard étale algebra
-  inverts a polynomial as well as cutting one out, so its analytification lives in an open
-  subspace, and carrying the argument across a restriction is separate work. The mirror-tree
-  theorems are already general enough — `X` there is any topological space — so what is missing
-  is the bridge and not the mathematics.
+* **No open subset of the base — this is no longer absent, and it is not in this file.** `i`
+  lands in the whole of `ℂ^(n+1)` below, and that has not changed; what has is that the transport
+  exists. `ComplexAnalytic.isFinite_comp_projRestrict_of_range_eq` in
+  `Oka/AnalyticSpace/OpenBaseProjection.lean`, which imports this file, is the theorem below with
+  `ComplexAnalytic.uliftSnocHomeo` replaced by its restriction `ComplexAnalytic.cylinderHomeo` to
+  the cylinder over an open `V`. The standard étale line wants it because such an algebra inverts
+  a polynomial as well as cutting one out, so its analytification lives in an open subspace, as
+  it does in `Oka/AnalyticSpace/SimpleZeroStalk.lean` and for the same reason. The paragraph that
+  used to stand here predicted that **what is missing is the bridge and not the mathematics**,
+  because the mirror-tree theorems take an arbitrary topological parameter space; that came out
+  right — `Polynomial.isClosed_fst_image_of_monic` and
+  `Polynomial.finite_inter_fst_preimage_of_monic` are instantiated at `V` there, and
+  `Oka/Topology/Algebra/Polynomial.lean` gained nothing.
 * **No Weierstrass polynomial.** Nothing here produces the family `q` from a germ, which is what
   `Oka/Weierstrass.lean`'s preparation theorem is for; the family is a hypothesis. In particular
   the degree is *fixed*, not merely bounded — a family whose leading coefficient degenerates has

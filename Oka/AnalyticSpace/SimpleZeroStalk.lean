@@ -105,12 +105,24 @@ and finiteness of the projection of a monic hypersurface to its base — that th
 is a separate and much larger piece of work. Nothing below says anything about the underlying
 map of `i ≫ p`, not even that it is open.
 
-**No hypersurface inside an open subset.** `Y` is the whole of `ℂ^(n+1)` here, so `F` is entire.
-A standard étale algebra inverts a polynomial as well as cutting one out, and its analytification
+**No hypersurface inside an open subset — this is no longer absent, and it is not in this
+file.** `Y` is the whole of `ℂ^(n+1)` below, so `F` is entire, and that has not changed. A
+standard étale algebra inverts a polynomial as well as cutting one out, and its analytification
 lives in an open subspace; `ComplexAnalytic.IsLocalModel` is stated for
-`(complexAffineSpace n).restrict U` for exactly that reason. Carrying the argument across the
-restriction needs the stalks of an open subspace identified with the ambient ones, which is
-`AlgebraicGeometry.LocallyRingedSpace.restrictStalkIso` and is not done here.
+`(complexAffineSpace n).restrict U` for exactly that reason. The transport is
+`ComplexAnalytic.bijective_stalkMap_comp_projRestrict` and
+`ComplexAnalytic.isIso_stalkMap_comp_projRestrict` in
+`Oka/AnalyticSpace/OpenBaseProjection.lean`, which imports this file.
+
+**And it does not go through `AlgebraicGeometry.LocallyRingedSpace.restrictStalkIso`**, which is
+what the paragraph that used to stand here predicted it would need. That `Iso` is never
+constructed there. `ComplexAnalytic.cylinderStalkEquiv` inverts the stalk map of the inclusion of
+the open subspace using the instance `ComplexAnalytic.AnalyticSpace.isIso_stalkMap_ofRestrict` —
+the same isomorphism, at the spelling a caller of `ofRestrict` already holds — and
+`ComplexAnalytic.baseStalkEquiv` goes through `ComplexAnalytic.restrictStalkEquiv`, which
+`Oka/AnalyticSpace/Restrict.lean` had already built for exactly this factorisation. Recorded
+because a reader who took the old sentence at face value would go and build a Mathlib bridge that
+the working proof does not use.
 
 **No derivative hypothesis**, and **no packaged `LocalOkaRing (Fin n) ≃+* X.presheaf.stalk x`**:
 the isomorphism is available from the results below — `CategoryTheory.asIso` turns one of them
