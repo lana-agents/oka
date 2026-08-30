@@ -55,9 +55,12 @@ a pullback of two immersions neither of which is the identity.
 
 * **This is not the interesting instantiation, and it is not the only one.**
   `ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear` is applied to a glue datum built by
-  `ComplexAnalytic.coverGlueData` in `OkaTest/AffineCover.lean`
-  (`ComplexAnalytic.nodeTripleSpace`), which is a gluing of three spaces rather than a space taken
-  apart and put back. What that one needs and this one does not is
+  `ComplexAnalytic.coverGlueData` inside `ComplexAnalytic.coverAnalytification`, which
+  `OkaTest/AffineCover.lean` quotes as `ComplexAnalytic.nodeTripleSpace` — a gluing of three
+  spaces rather than a space taken apart and put back. (That application moved into
+  `Oka/Analytification/AffineCover.lean` when the general construction landed; the test file
+  keeps an `example` recording that the two spellings agree.) What that one needs and this one
+  does not is
   `Oka/CategoryTheory/GlueData.lean`'s unfolding lemmas, since
   `ComplexAnalytic.GlueDataCLinear` reads `D.f` and `D.t` and `CategoryTheory.GlueData.ofGlueData'`
   supplies them as `dite`s.

@@ -34,12 +34,22 @@ triples of distinct indices and both are vacuous.
   is covered by three copies of the node and is not any one of them. **This is the check that
   stops `coverGlueData` from being satisfied by a construction that quietly returns its first
   member.**
+* **And they are distinct as points of the analytic space**, which is a different statement and
+  is the one `Oka/Analytification/AffineCover.lean` needs.
+  `ComplexAnalytic.base_nodeIota_nodeOrigin_ne` says it of `ComplexAnalytic.nodeTripleSpace` and
+  `ComplexAnalytic.nodeIota`; `ComplexAnalytic.isOpenImmersion_nodeIota` says each copy is an
+  open subspace of it. **This file is the non-vacuity of
+  `ComplexAnalytic.coverAnalytification`**, and it is the three-member one, so unlike
+  `OkaTest/ProjectiveLine.lean`'s it exercises both triple-overlap hypotheses — which
+  `ComplexAnalytic.GlueShape.hRange_of_no_three` and
+  `ComplexAnalytic.GlueShape.hCocycle_of_no_three` make vacuous below three members.
 
 **What is not checked here.** Nothing says the glued space is not the analytification of *some*
 presentation — the node with a tripled origin is intuitively not affine, but proving it needs an
 invariant nothing in this repository computes — and `ComplexAnalytic.nodeTripleSpace` below does
 not change that: an analytic structure is a statement about the sheaves and says nothing about
-affineness. And the transition here is the identity, so
+affineness. **Nor does anything here relate the input to a scheme.** And the transition here is
+the identity, so
 nothing in *this* file exercises a non-trivial algebra isomorphism between the two descriptions of
 an overlap; `OkaTest/ProjectiveLine.lean` is the example that does, gluing two copies of `𝔸¹`
 along `D(z)` by `z ↦ 1/z`. The two files are complementary and neither replaces the other: with
@@ -275,12 +285,57 @@ members cover it.
 analytification of *some* presentation is a much stronger claim needing an invariant nothing here
 computes, and `Oka/Analytification/AffineCover.lean` records the same about it. -/
 def nodeTripleSpace : AnalyticSpace.{u} :=
-  AnalyticSpace.ofGlueDataCLinear.{u} nodeTripleGlueData.{u} nodeAlg.{u}
-    glueDataCLinear_nodeTripleGlueData.{u} hasLocalModels_nodeTripleGlueData.{u}
+  coverAnalytification.{u} nodeCoverObj.{u} nodeCoverPoly.{u} nodeCoverGlue.{u}
+    hrange_nodeCover.{u} hsymm_nodeCover.{u} hcocycle_nodeCover.{u}
+
+/-- **The general construction and the `ofGlueDataCLinear` call this file used to make are the
+same space**, on the nose.
+
+Kept as an `example` rather than dropped: it is the whole content of quoting
+`ComplexAnalytic.coverAnalytification` here instead of rebuilding, and if the two ever stop
+agreeing this is what says so. -/
+example : nodeTripleSpace.{u} =
+    AnalyticSpace.ofGlueDataCLinear.{u} nodeTripleGlueData.{u} nodeAlg.{u}
+      glueDataCLinear_nodeTripleGlueData.{u} hasLocalModels_nodeTripleGlueData.{u} := rfl
 
 /-- Its underlying locally ringed space is the gluing, on the nose. -/
 example : (nodeTripleSpace.{u}).toLocallyRingedSpace =
     nodeTripleGlueData.{u}.toGlueData.glued := rfl
+
+/-- **The `i`-th copy of the node, as a morphism of analytic spaces into the glued space.**
+
+`ComplexAnalytic.coverIota` at this cover. Named so that the two statements below are about
+`ComplexAnalytic.nodeTripleSpace` and morphisms into it, rather than about a glue datum. -/
+def nodeIota (i : triple.{u}) :
+    AnalyticSpace.analytification.{u} (nodeCoverObj.{u} i).g ⟶ nodeTripleSpace.{u} :=
+  coverIota.{u} nodeCoverObj.{u} nodeCoverPoly.{u} nodeCoverGlue.{u} hrange_nodeCover.{u}
+    hsymm_nodeCover.{u} hcocycle_nodeCover.{u} i
+
+/-- **The three copies of the origin are three distinct points of the analytic space.**
+
+`ComplexAnalytic.ι_nodeOrigin_ne` says this of the glue datum's gluing;
+`ComplexAnalytic.toLRSHom_coverIota` is what carries it to `ComplexAnalytic.nodeTripleSpace` and
+`ComplexAnalytic.nodeIota`. **Its content is that bridge and no new geometry** — the two statements
+are equal after unfolding, and the reason to have both is that everything proved about the gluing
+reaches `X^an` only through `ComplexAnalytic.coverAnalytification_toLocallyRingedSpace` and this
+lemma.
+
+It is what makes a three-member instance of `ComplexAnalytic.coverAnalytification` evidence rather
+than a type-check: at two members `ComplexAnalytic.GlueShape.hRange_of_no_three` and
+`ComplexAnalytic.GlueShape.hCocycle_of_no_three` make both triple-overlap hypotheses vacuous, so
+`OkaTest/ProjectiveLine.lean`'s instance exercises neither. -/
+theorem base_nodeIota_nodeOrigin_ne (i j : triple.{u}) (hij : i ≠ j) :
+    (nodeIota.{u} i).toLRSHom.base nodeOrigin.{u} ≠
+      (nodeIota.{u} j).toLRSHom.base nodeOrigin.{u} := by
+  rw [nodeIota, nodeIota, toLRSHom_coverIota, toLRSHom_coverIota]
+  exact ι_nodeOrigin_ne.{u} i j hij
+
+/-- **Each copy is an open subspace of the analytic space**, by
+`ComplexAnalytic.isOpenImmersion_coverIota`. -/
+theorem isOpenImmersion_nodeIota (i : triple.{u}) :
+    LocallyRingedSpace.IsOpenImmersion (nodeIota.{u} i).toLRSHom :=
+  isOpenImmersion_coverIota.{u} nodeCoverObj.{u} nodeCoverPoly.{u} nodeCoverGlue.{u}
+    hrange_nodeCover.{u} hsymm_nodeCover.{u} hcocycle_nodeCover.{u} i
 
 /-- **The glued `ℂ`-algebra structure restricts on each member to the one that member was
 given** — the check that the construction is the intended one rather than merely well-typed. -/
