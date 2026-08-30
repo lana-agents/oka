@@ -16,8 +16,9 @@ filling the diagonal with `dite`s. **Mathlib has no projection lemmas for it at 
 finds `ofGlueData'` only in its own defining file — so a caller that has to *use* `f` or `t` of
 the result has to unfold a `dite` by hand.
 
-This file supplies seven: two for `CategoryTheory.GlueData'.f'`, two for each of
-`CategoryTheory.GlueData.ofGlueData'`'s `f` and `t`, and the composite `t i j ≫ f j i`.
+This file supplies nine: two for `CategoryTheory.GlueData'.f'`, two for each of
+`CategoryTheory.GlueData.ofGlueData'`'s `f` and `t`, the composite `t i j ≫ f j i`, and the two
+directions of the compatibility condition a family of morphisms out of the members satisfies.
 
 ## Why they are not one `simp` call at the call site
 
@@ -59,6 +60,24 @@ of `simp` lemmas would have — and why `rw [Category.assoc]` *succeeds* on that
 guessed from the error message, which points at `Category.assoc` and says nothing about
 transparency.
 
+## The compatibility condition, and why its two directions are not one `iff`
+
+Anything that maps *out* of a gluing — `AlgebraicGeometry.LocallyRingedSpace.GlueData.glueMorphisms`
+is this repository's instance — asks that a family `fY i : U i ⟶ Y` satisfy
+`f i j ≫ fY i = t i j ≫ f j i ≫ fY j` at **every** pair, because that is the form the glue datum's
+own `glue_condition` has. A caller can only supply it **off the diagonal**: `V (i, i)` is not a
+chosen overlap and `t i i` is not a chosen transition, so there is nothing there to check and no
+hypothesis to state about it.
+
+`CategoryTheory.GlueData.ofGlueData'_comm` is that asymmetry — hypothesis at `i ≠ j`, conclusion at
+every pair — and `CategoryTheory.GlueData.comm_of_ofGlueData'_comm` is the converse, which recovers
+the caller's form from the glue datum's. **They are deliberately not packaged as an `iff`**: the
+statements are not literally converse, since one quantifies over `i ≠ j` and the other over all
+pairs, and each direction is used at a different place. The forward one turns a caller's
+compatibility into `glueMorphisms`' hypothesis; the backward one reads a glue datum's own
+`CategoryTheory.GlueData.glue_condition` back into the caller's vocabulary, which is what says the
+inclusions `ι i` are themselves such a family and hence that gluing them returns the identity.
+
 ## Main results
 
 - `CategoryTheory.GlueData'.f'_self` and `CategoryTheory.GlueData'.f'_of_ne`
@@ -67,6 +86,8 @@ transparency.
 - `CategoryTheory.GlueData.ofGlueData'_t_self` and
   `CategoryTheory.GlueData.ofGlueData'_t_of_ne`
 - `CategoryTheory.GlueData.ofGlueData'_t_comp_f_of_ne`
+- `CategoryTheory.GlueData.ofGlueData'_comm` and
+  `CategoryTheory.GlueData.comm_of_ofGlueData'_comm`
 -/
 
 universe v u
@@ -150,5 +171,54 @@ theorem GlueData.ofGlueData'_t_comp_f_of_ne {i j : D.J} (h : i ≠ j) :
   rw [GlueData.ofGlueData'_t_of_ne D h, GlueData.ofGlueData'_f_of_ne D (Ne.symm h)]
   dsimp only [GlueData.ofGlueData']
   simp
+
+open scoped Classical in
+/-- **Morphisms out of the members which agree over the given overlaps agree over
+`CategoryTheory.GlueData.ofGlueData'`'s.**
+
+The hypothesis is at `i ≠ j` and the conclusion at every pair, and that asymmetry is the point: a
+caller has nothing to say about the diagonal, where `V (i, i)` is not a chosen overlap and `t i i`
+is not a chosen transition, while `CategoryTheory.GlueData.glue_condition` and everything that
+consumes it quantify over all pairs. The diagonal is discharged by
+`CategoryTheory.GlueData.ofGlueData'_f_self` and `…ofGlueData'_t_self`, both of which are
+`eqToHom`s.
+
+The `dsimp only [GlueData.ofGlueData']` between the rewrites is load-bearing for the reason the
+module docstring gives, and this proof is where it bites again: without it `rw [Category.assoc]`
+reports *did not find an occurrence of the pattern `(?f ≫ ?g) ≫ ?h`* against a goal of visibly
+that shape. -/
+theorem GlueData.ofGlueData'_comm {Y : C} (fY : ∀ i, D.U i ⟶ Y)
+    (h : ∀ i j, ∀ hij : i ≠ j, D.f i j hij ≫ fY i = D.t i j hij ≫ D.f j i hij.symm ≫ fY j)
+    (i j : D.J) :
+    (GlueData.ofGlueData' D).f i j ≫ fY i =
+      (GlueData.ofGlueData' D).t i j ≫ (GlueData.ofGlueData' D).f j i ≫ fY j := by
+  rcases eq_or_ne i j with rfl | hij
+  · rw [GlueData.ofGlueData'_f_self, GlueData.ofGlueData'_t_self]
+    simp
+  · rw [← Category.assoc, GlueData.ofGlueData'_t_comp_f_of_ne D hij,
+      GlueData.ofGlueData'_f_of_ne D hij]
+    dsimp only [GlueData.ofGlueData']
+    rw [Category.assoc, Category.assoc, cancel_epi, Category.assoc]
+    exact h i j hij
+
+open scoped Classical in
+/-- **The converse**: a family which agrees over `CategoryTheory.GlueData.ofGlueData'`'s overlaps
+agrees over the given ones.
+
+The same three rewrites, applied to the hypothesis rather than to the goal. What it is for is
+reading a glue datum's own `CategoryTheory.GlueData.glue_condition` — which is stated at
+`ofGlueData'`'s `f` and `t` — back into the vocabulary a caller built the datum in, and hence
+saying that the inclusions of the members are one of these families. -/
+theorem GlueData.comm_of_ofGlueData'_comm {Y : C} (fY : ∀ i, D.U i ⟶ Y)
+    (h : ∀ i j, (GlueData.ofGlueData' D).f i j ≫ fY i =
+      (GlueData.ofGlueData' D).t i j ≫ (GlueData.ofGlueData' D).f j i ≫ fY j)
+    {i j : D.J} (hij : i ≠ j) :
+    D.f i j hij ≫ fY i = D.t i j hij ≫ D.f j i hij.symm ≫ fY j := by
+  have hij' := h i j
+  rw [← Category.assoc, GlueData.ofGlueData'_t_comp_f_of_ne D hij,
+    GlueData.ofGlueData'_f_of_ne D hij] at hij'
+  dsimp only [GlueData.ofGlueData'] at hij'
+  rw [Category.assoc, Category.assoc, cancel_epi, Category.assoc] at hij'
+  exact hij'
 
 end CategoryTheory

@@ -50,6 +50,8 @@ with one `Iso.trans` removed.
 - `AlgebraicGeometry.LocallyRingedSpace.OpenCover.fromGlued`: the canonical morphism from the
   gluing of a cover of `X` to `X`, an isomorphism.
 - `AlgebraicGeometry.LocallyRingedSpace.OpenCover.glueMorphisms`: the glued morphism.
+- `AlgebraicGeometry.LocallyRingedSpace.GlueData.glueMorphisms`: the same, out of a gluing, with
+  the compatibility asked for over the glue data's own overlaps.
 - `AlgebraicGeometry.LocallyRingedSpace.openCoverOfOpens`: the open cover attached to a family of
   open subsets covering the space.
 - `AlgebraicGeometry.LocallyRingedSpace.OpenCover.opensRange`: the image of a member of a cover,
@@ -72,7 +74,14 @@ with one `Iso.trans` removed.
   the members of an open cover which agree on the overlaps glue to a unique morphism out of the
   whole space**, with `ι_glueMorphisms` and `hom_ext` as the two halves.
 - `AlgebraicGeometry.LocallyRingedSpace.GlueData.vIsoPullback`: the overlap `V (i, j)` of a glue
-  data is the categorical pullback of the two inclusions into the gluing.
+  data is the categorical pullback of the two inclusions into the gluing, and
+  `AlgebraicGeometry.LocallyRingedSpace.GlueData.pullback_condition_of_comm` is what that buys: a
+  family of morphisms out of the members which agrees over the *chosen* overlaps satisfies the
+  *pullback* condition `OpenCover.glueMorphisms` asks for.
+- `AlgebraicGeometry.LocallyRingedSpace.GlueData.ι_glueMorphisms` and
+  `AlgebraicGeometry.LocallyRingedSpace.GlueData.hom_ext`: **the morphism glued out of a gluing
+  restricts to the given one on each member, and it is the only one that does** — the universal
+  property in the two halves a caller uses.
 - `AlgebraicGeometry.LocallyRingedSpace.OpenCover.comapAlgMap_ext`: **an algebra structure on a
   space is determined by its pullbacks to the members of an open cover**, which is what lets a
   condition on global sections be checked member by member.
@@ -636,6 +645,75 @@ theorem vIsoPullback_hom_fst (i j : D.J) :
 theorem vIsoPullback_hom_snd (i j : D.J) :
     (D.vIsoPullback i j).hom ≫ Limits.pullback.snd _ _ = D.t i j ≫ D.f j i :=
   Limits.IsLimit.conePointUniqueUpToIso_hom_comp _ _ Limits.WalkingCospan.right
+
+/-! ### Gluing a morphism out of a gluing
+
+`AlgebraicGeometry.LocallyRingedSpace.OpenCover.glueMorphisms` asks for agreement over the
+*categorical pullback* of two members' inclusions. **A glue datum contains no such object**: what
+it carries is the chosen overlap `V (i, j)` with its inclusion `f i j` and its transition `t i j`,
+and a caller who built the datum states compatibility in those terms and in no other. So the cover
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.openCover` produces cannot be fed a morphism
+without this transport, and until it existed there was no morphism out of a gluing in this
+repository — not even the identity.
+
+`…GlueData.vIsoPullback` is the whole of the argument, and it was already here: it identifies
+`V (i, j)` with the pullback, and its two factorisation lemmas say the comparison carries the
+pullback's projections to `f i j` and to `t i j ≫ f j i`. So cancelling the isomorphism turns the
+pullback condition into the glue datum's own.
+
+The four rewrites below are the ones `…GlueData.isCompatible_restrictAlgMap` already performs
+inline, in its `have hpb`, for a family of morphisms to `Spec R`. **That `have` is left alone
+deliberately**: it is stated at `toSpecOfAlgMap` of the members and its `h` hypothesis is an
+equation between `comapAlgMap`s rather than between composites, so calling the lemma would need
+the algebra hypothesis converted first and would replace four rewrites with a conversion of the
+same length. The duplication is one line; the coupling would not be.
+-/
+
+/-- **A family of morphisms out of the members which agrees over the glue data's own overlaps
+satisfies the pullback condition `AlgebraicGeometry.LocallyRingedSpace.OpenCover.glueMorphisms`
+asks for.**
+
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.vIsoPullback` and its two factorisations, with the
+isomorphism cancelled.
+
+**Stated with `D.toGlueData.ι`, not with `D.openCover.map`.** The two are the same term —
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.openCover`'s `map` field *is* `ι` — but an index
+written `i : D.J` will not elaborate against `D.openCover.obj i`, which wants a `D.openCover.J`,
+and the resulting error is an application type mismatch several layers in. The consumer applies
+this at the cover anyway, where the two spellings are definitionally equal. -/
+theorem pullback_condition_of_comm {Y : LocallyRingedSpace.{u}} (f : ∀ j, D.U j ⟶ Y)
+    (h : ∀ i j, D.f i j ≫ f i = D.t i j ≫ D.f j i ≫ f j) (i j : D.J) :
+    Limits.pullback.fst (D.toGlueData.ι i) (D.toGlueData.ι j) ≫ f i =
+      Limits.pullback.snd (D.toGlueData.ι i) (D.toGlueData.ι j) ≫ f j := by
+  rw [← cancel_epi (D.vIsoPullback i j).hom, ← Category.assoc, ← Category.assoc,
+    vIsoPullback_hom_fst, vIsoPullback_hom_snd, Category.assoc, h i j]
+
+/-- **A morphism out of a gluing, glued from morphisms out of the members.**
+
+`AlgebraicGeometry.LocallyRingedSpace.OpenCover.glueMorphisms` at
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.openCover`, with its hypothesis supplied by
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.pullback_condition_of_comm`. The content is the
+hypothesis and not the definition: this is the form in which a caller who built a glue datum can
+actually map out of it. -/
+noncomputable def glueMorphisms {Y : LocallyRingedSpace.{u}} (f : ∀ j, D.U j ⟶ Y)
+    (h : ∀ i j, D.f i j ≫ f i = D.t i j ≫ D.f j i ≫ f j) :
+    D.toGlueData.glued ⟶ Y :=
+  D.openCover.glueMorphisms f (pullback_condition_of_comm D f h)
+
+/-- **It restricts to the given morphism on each member.** -/
+@[reassoc (attr := simp)]
+theorem ι_glueMorphisms {Y : LocallyRingedSpace.{u}} (f : ∀ j, D.U j ⟶ Y)
+    (h : ∀ i j, D.f i j ≫ f i = D.t i j ≫ D.f j i ≫ f j) (j : D.J) :
+    D.toGlueData.ι j ≫ glueMorphisms D f h = f j :=
+  D.openCover.ι_glueMorphisms f _ j
+
+/-- **And it is the only one that does**, which with
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.ι_glueMorphisms` is the universal property in the
+form a caller uses it. `AlgebraicGeometry.LocallyRingedSpace.OpenCover.hom_ext` at the glue data's
+cover; the two together are `…OpenCover.existsUnique_glueMorphisms` unbundled. -/
+theorem hom_ext {Y : LocallyRingedSpace.{u}} (f g : D.toGlueData.glued ⟶ Y)
+    (h : ∀ j, D.toGlueData.ι j ≫ f = D.toGlueData.ι j ≫ g) : f = g :=
+  D.openCover.hom_ext f g h
 
 /-- **Algebra structures on the members of a glue data which agree on the overlaps are compatible
 on the gluing.**

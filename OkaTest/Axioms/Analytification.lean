@@ -16,7 +16,8 @@ analytification as a functor on finitely generated `ℂ`-algebras, the stalk map
 comparison morphism of a presented algebra, the naturality of the comparison morphism, the
 faithful flatness of that stalk map, the analytification of a sheaf, the identification of
 the analytification of `A_f` with the non-vanishing locus of `f`, the glue data of an affine
-cover with distinguished overlaps, the image of the analytification in `ℂ^n`, and the family of
+cover with distinguished overlaps together with the morphisms out of the space it glues to, the
+image of the analytification in `ℂ^n`, and the family of
 monic polynomials of a polynomial monic in the last variable, with the finiteness over `ℂ^n`
 that it supplies.
 
@@ -928,6 +929,64 @@ info: 'ComplexAnalytic.coverAnalytificationOpenCover_map' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.coverAnalytificationOpenCover_map
+
+/-! #### Morphisms out of `X^an`
+
+`ComplexAnalytic.coverGlueMorphisms` and the four statements that make it usable, plus the round
+trip. They belong with the block above rather than in one of their own: the cover is what
+`ComplexAnalytic.AnalyticSpace.glueMorphisms` consumes and these are what supply its hypothesis,
+so `ComplexAnalytic.coverAnalytificationOpenCover_obj` and `…_map` directly above are the same
+line of statements one step earlier.
+-/
+
+/--
+info: 'ComplexAnalytic.comm_coverGlueData' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.comm_coverGlueData
+
+/--
+info: 'ComplexAnalytic.coverGlueMorphisms' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverGlueMorphisms
+
+/--
+info: 'ComplexAnalytic.toLRSHom_coverGlueMorphisms' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.toLRSHom_coverGlueMorphisms
+
+/--
+info: 'ComplexAnalytic.coverIota_comp_coverGlueMorphisms' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverIota_comp_coverGlueMorphisms
+
+/--
+info: 'ComplexAnalytic.coverAnalytification_hom_ext' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverAnalytification_hom_ext
+
+/--
+info: 'ComplexAnalytic.coverIncl_comp_coverIota' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverIncl_comp_coverIota
+
+/--
+info: 'ComplexAnalytic.coverGlueMorphisms_coverIota' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverGlueMorphisms_coverIota
 
 /-! ### The two-level index category of a glue data
 

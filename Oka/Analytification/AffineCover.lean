@@ -137,6 +137,8 @@ a much larger tax than one unused value per index.
   spaces into it.
 - `ComplexAnalytic.coverAnalytificationOpenCover`: **`X^an` as an open cover by them**, which is
   the form `ComplexAnalytic.AnalyticSpace.glueMorphisms` consumes.
+- `ComplexAnalytic.coverGlueMorphisms`: **a morphism out of `X^an`**, glued from morphisms out of
+  the members which agree over the overlaps.
 
 ## Main results
 
@@ -161,6 +163,21 @@ a much larger tax than one unused value per index.
   analytifications and its maps are `ComplexAnalytic.coverIota`**, both by `rfl`. Without them
   the cover is opaque and a consumer would be reading the glue data rather than `X^an`.
   (Naming `ComplexAnalytic.coverIota` here advertises it, so it is guarded below alongside them.)
+- `ComplexAnalytic.comm_coverGlueData`: **agreement over the overlaps is the glue datum's
+  compatibility condition**, which is what makes `ComplexAnalytic.coverGlueMorphisms` statable —
+  `ComplexAnalytic.AnalyticSpace.glueMorphisms` asks for agreement over a categorical pullback
+  and a glue datum has no such object in it. Its hypothesis is at `i ≠ j`, since a caller has
+  nothing to say about the diagonal.
+- `ComplexAnalytic.coverIota_comp_coverGlueMorphisms` and
+  `ComplexAnalytic.coverAnalytification_hom_ext`: **the glued morphism restricts to the given one
+  on each member, and it is the only one that does** — the universal property in the form a
+  caller uses it. `ComplexAnalytic.toLRSHom_coverGlueMorphisms` puts the first at the
+  locally-ringed-space level.
+- `ComplexAnalytic.coverIncl_comp_coverIota`: **the members' own inclusions agree over the
+  overlaps**, the glue datum's `glue_condition` read back into this file's vocabulary, and
+- `ComplexAnalytic.coverGlueMorphisms_coverIota`: **gluing them returns the identity.** That is
+  the statement which says `ComplexAnalytic.coverGlueMorphisms` is not degenerate: a definition
+  that ignored its family would satisfy everything above it.
 
 ## What is not here
 
@@ -684,6 +701,155 @@ theorem coverAnalytificationOpenCover_map (i : J) :
     (coverAnalytificationOpenCover.{u} obj poly glue hrange hsymm hcocycle).map i =
       (coverIota.{u} obj poly glue hrange hsymm hcocycle i).toLRSHom :=
   rfl
+
+/-! ### Morphisms out of `X^an`
+
+`ComplexAnalytic.coverAnalytificationOpenCover` makes
+`ComplexAnalytic.AnalyticSpace.glueMorphisms` *applicable* to `X^an`; it does not make it usable.
+Its hypothesis is agreement over the **categorical pullback** of two members' inclusions, and
+nothing in this file produces one: what a caller holds is a family of morphisms out of the
+`A_i^an` together with a statement about `ComplexAnalytic.coverIncl` and
+`ComplexAnalytic.coverTransition`, which are the only overlap data the input carries.
+
+Two transports close the gap and neither is this file's own.
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.pullback_condition_of_comm` turns agreement over a
+glue datum's chosen overlaps into the pullback condition; `CategoryTheory.GlueData.ofGlueData'_comm`
+turns agreement over *these* overlaps into agreement over the glue datum's, which is not the same
+statement because `ComplexAnalytic.coverGlueData` goes through
+`CategoryTheory.GlueData.ofGlueData'` and that fills the diagonal with `dite`s. The composite is
+`ComplexAnalytic.comm_coverGlueData` below, and the hypothesis it asks for is at `i ≠ j` — a
+caller has nothing to say about `coverTransition i i`, which is whatever `glue i i` is.
+
+**`ComplexAnalytic.comm_coverGlueData` is stated at a locally ringed space target and not at an
+analytic one**, deliberately: the comparison morphism `X^an ⟶ X` maps to a scheme, which is a
+locally ringed space and not an analytic space, so a version tied to
+`ComplexAnalytic.AnalyticSpace` would serve one consumer of this file and not the other.
+
+**`ComplexAnalytic.coverGlueMorphisms_coverIota` is what says the construction is not
+degenerate.** Every other statement here is satisfied by a definition that ignores its input;
+that one is not.
+-/
+
+/-- **A family of morphisms out of the members which agrees over the overlaps satisfies the glue
+datum's compatibility condition.**
+
+`CategoryTheory.GlueData.ofGlueData'_comm` at `ComplexAnalytic.coverGlueData'`. The hypothesis is
+at `i ≠ j` and the conclusion at every pair: `ComplexAnalytic.coverGlueData`'s diagonal is
+`CategoryTheory.GlueData.ofGlueData'`'s `eqToHom`s and not `ComplexAnalytic.coverTransition i i`,
+so there is nothing there for a caller to check.
+
+The target is a `AlgebraicGeometry.LocallyRingedSpace`, so that this serves both the analytic
+morphism below and the comparison morphism to the scheme, whose target is not an analytic
+space. -/
+theorem comm_coverGlueData {Y : LocallyRingedSpace.{u}} (f : ∀ i, coverSpace.{u} obj i ⟶ Y)
+    (h : ∀ i j : J, i ≠ j → coverIncl.{u} obj poly i j ≫ f i =
+      (coverTransition.{u} obj poly glue i j).hom ≫ coverIncl.{u} obj poly j i ≫ f j) (i j : J) :
+    (coverGlueData.{u} obj poly glue hrange hsymm hcocycle).f i j ≫ f i =
+      (coverGlueData.{u} obj poly glue hrange hsymm hcocycle).t i j ≫
+        (coverGlueData.{u} obj poly glue hrange hsymm hcocycle).f j i ≫ f j :=
+  CategoryTheory.GlueData.ofGlueData'_comm
+    (coverGlueData'.{u} obj poly glue hrange hsymm hcocycle) f (fun i j hij ↦ h i j hij) i j
+
+/-- **A morphism of analytic spaces out of `X^an`, glued from morphisms out of the members.**
+
+`ComplexAnalytic.AnalyticSpace.glueMorphisms` at
+`ComplexAnalytic.coverAnalytificationOpenCover`, with the pullback hypothesis supplied by
+`ComplexAnalytic.comm_coverGlueData` through
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.pullback_condition_of_comm`, and the `ℂ`-linearity
+of each piece by that of `f i` itself: `ComplexAnalytic.AnalyticSpace`'s structure on the `i`-th
+member of the cover is the analytification's own, which is
+`ComplexAnalytic.AnalyticSpace.comapAlgMap_ofGlueDataCLinear_algebraMap` and is the same rewrite
+`ComplexAnalytic.coverIota` makes. -/
+def coverGlueMorphisms {Y : AnalyticSpace.{u}}
+    (f : ∀ i, AnalyticSpace.analytification.{u} (obj i).g ⟶ Y)
+    (h : ∀ i j : J, i ≠ j → coverIncl.{u} obj poly i j ≫ (f i).toLRSHom =
+      (coverTransition.{u} obj poly glue i j).hom ≫
+        coverIncl.{u} obj poly j i ≫ (f j).toLRSHom) :
+    coverAnalytification.{u} obj poly glue hrange hsymm hcocycle ⟶ Y :=
+  AnalyticSpace.glueMorphisms
+    (coverAnalytificationOpenCover.{u} obj poly glue hrange hsymm hcocycle)
+    (fun i ↦ (f i).toLRSHom)
+    (LocallyRingedSpace.GlueData.pullback_condition_of_comm _ _
+      (comm_coverGlueData.{u} obj poly glue hrange hsymm hcocycle _ h))
+    (fun i ↦ by
+      have hc := AnalyticSpace.comapAlgMap_ofGlueDataCLinear_algebraMap
+        (coverGlueData.{u} obj poly glue hrange hsymm hcocycle)
+        (fun i ↦ (AnalyticSpace.analytification.{u} (obj i).g).algebraMap)
+        (glueDataCLinear_coverGlueData.{u} obj poly glue hrange hsymm hcocycle)
+        (fun i ↦ (AnalyticSpace.analytification.{u} (obj i).g).local_model) i
+      exact hc ▸ (f i).isCLinear)
+
+/-- **Its underlying morphism is the glue datum's**, by `rfl` — the same three `rfl`s that make
+`ComplexAnalytic.coverAnalytificationOpenCover` a cover of `X^an` on the nose. -/
+@[simp]
+theorem toLRSHom_coverGlueMorphisms {Y : AnalyticSpace.{u}}
+    (f : ∀ i, AnalyticSpace.analytification.{u} (obj i).g ⟶ Y)
+    (h : ∀ i j : J, i ≠ j → coverIncl.{u} obj poly i j ≫ (f i).toLRSHom =
+      (coverTransition.{u} obj poly glue i j).hom ≫
+        coverIncl.{u} obj poly j i ≫ (f j).toLRSHom) :
+    (coverGlueMorphisms.{u} obj poly glue hrange hsymm hcocycle f h).toLRSHom =
+      (coverGlueData.{u} obj poly glue hrange hsymm hcocycle).glueMorphisms
+        (fun i ↦ (f i).toLRSHom)
+        (comm_coverGlueData.{u} obj poly glue hrange hsymm hcocycle _ h) :=
+  rfl
+
+/-- **It restricts to the given morphism on each member**, which is what a caller consumes. -/
+@[reassoc (attr := simp)]
+theorem coverIota_comp_coverGlueMorphisms {Y : AnalyticSpace.{u}}
+    (f : ∀ i, AnalyticSpace.analytification.{u} (obj i).g ⟶ Y)
+    (h : ∀ i j : J, i ≠ j → coverIncl.{u} obj poly i j ≫ (f i).toLRSHom =
+      (coverTransition.{u} obj poly glue i j).hom ≫
+        coverIncl.{u} obj poly j i ≫ (f j).toLRSHom) (i : J) :
+    coverIota.{u} obj poly glue hrange hsymm hcocycle i ≫
+        coverGlueMorphisms.{u} obj poly glue hrange hsymm hcocycle f h = f i :=
+  AnalyticSpace.forgetToLocallyRingedSpace.{u}.map_injective <| by
+    change (coverIota.{u} obj poly glue hrange hsymm hcocycle i).toLRSHom ≫
+      (coverGlueMorphisms.{u} obj poly glue hrange hsymm hcocycle f h).toLRSHom = (f i).toLRSHom
+    exact LocallyRingedSpace.GlueData.ι_glueMorphisms
+      (coverGlueData.{u} obj poly glue hrange hsymm hcocycle) (fun i ↦ (f i).toLRSHom)
+      (comm_coverGlueData.{u} obj poly glue hrange hsymm hcocycle _ h) i
+
+/-- **And it is the only morphism that does.**
+
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.hom_ext` through the faithfulness of
+`ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace`, which is why no `ℂ`-linear version of
+the uniqueness statement is needed. -/
+theorem coverAnalytification_hom_ext {Y : AnalyticSpace.{u}}
+    (φ ψ : coverAnalytification.{u} obj poly glue hrange hsymm hcocycle ⟶ Y)
+    (h : ∀ i, coverIota.{u} obj poly glue hrange hsymm hcocycle i ≫ φ =
+      coverIota.{u} obj poly glue hrange hsymm hcocycle i ≫ ψ) : φ = ψ :=
+  AnalyticSpace.forgetToLocallyRingedSpace.{u}.map_injective <|
+    LocallyRingedSpace.GlueData.hom_ext _ _ _ fun i ↦
+      congrArg AnalyticSpace.forgetToLocallyRingedSpace.{u}.map (h i)
+
+/-- **The members' inclusions into `X^an` agree over the overlaps**, in this file's own
+vocabulary: the transition from the `i`-th member to the `j`-th commutes with the two inclusions.
+
+`CategoryTheory.GlueData.comm_of_ofGlueData'_comm` at
+`CategoryTheory.GlueData.glue_condition`, which is the same statement about
+`ComplexAnalytic.coverGlueData`'s `f` and `t` and so is not directly usable. -/
+theorem coverIncl_comp_coverIota (i j : J) (hij : i ≠ j) :
+    coverIncl.{u} obj poly i j ≫
+        (coverIota.{u} obj poly glue hrange hsymm hcocycle i).toLRSHom =
+      (coverTransition.{u} obj poly glue i j).hom ≫ coverIncl.{u} obj poly j i ≫
+        (coverIota.{u} obj poly glue hrange hsymm hcocycle j).toLRSHom :=
+  CategoryTheory.GlueData.comm_of_ofGlueData'_comm
+    (coverGlueData'.{u} obj poly glue hrange hsymm hcocycle)
+    (fun i ↦ (coverGlueData.{u} obj poly glue hrange hsymm hcocycle).toGlueData.ι i)
+    (fun i j ↦ ((coverGlueData.{u} obj poly glue hrange hsymm hcocycle).toGlueData.glue_condition
+      i j).symm) hij
+
+/-- **Gluing the members' own inclusions returns the identity of `X^an`.**
+
+The round trip, and the statement that says `ComplexAnalytic.coverGlueMorphisms` is the intended
+construction rather than a well-typed one: a definition that ignored its family and returned a
+fixed morphism would satisfy every other statement in this section. -/
+theorem coverGlueMorphisms_coverIota :
+    coverGlueMorphisms.{u} obj poly glue hrange hsymm hcocycle
+        (coverIota.{u} obj poly glue hrange hsymm hcocycle)
+        (coverIncl_comp_coverIota.{u} obj poly glue hrange hsymm hcocycle) = 𝟙 _ :=
+  coverAnalytification_hom_ext.{u} obj poly glue hrange hsymm hcocycle _ _ fun i ↦ by
+    rw [coverIota_comp_coverGlueMorphisms, Category.comp_id]
 
 end
 
