@@ -916,6 +916,13 @@ info: 'ComplexAnalytic.localisationOpen_mul' depends on axioms:
 #print axioms ComplexAnalytic.localisationOpen_mul
 
 /--
+info: 'ComplexAnalytic.localisationOpen_rename' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.localisationOpen_rename
+
+/--
 info: 'ComplexAnalytic.range_base_localisationProj' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
