@@ -54,10 +54,19 @@ knowing:
   `ComplexAnalytic.coverGlueIso_symm` pushes through two functors and closes with a `rfl` that
   reconciles the two `Functor.mapIso_symm`s; one functor needs one.
 
-Two declarations here have no counterpart at all: `ComplexAnalytic.range_specTransitionHom_subset`
-and `ComplexAnalytic.range_comp_specTransitionHom_subset`, which were written on this side first
-and had no analytic mirror when this file merged. taxis #1239 is the issue that mirrors them, and
-the section below says what they are for.
+**"That has a counterpart" is a real qualification and not a hedge**, and the two declarations it
+excludes are the *last* two a reader would guess. `ComplexAnalytic.specGlued` and
+`ComplexAnalytic.specIota` are a `AlgebraicGeometry.LocallyRingedSpace.GlueData`'s `glued` and
+`ι` taken directly, where `ComplexAnalytic.coverAnalytification` and `ComplexAnalytic.coverIota`
+go through `ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear` and carry a `ℂ`-linearity proof.
+Those two are counterparts in *purpose* and are not renames of each other, which is the whole of
+why this file is shorter than the one it mirrors.
+
+`ComplexAnalytic.range_specTransitionHom_subset` and
+`ComplexAnalytic.range_comp_specTransitionHom_subset` were written on this side first and had no
+analytic mirror when this file merged. They have one now — taxis #1239 added
+`ComplexAnalytic.range_coverTransitionHom_subset` and its composite — and the section below says
+what they are for.
 
 **`ComplexAnalytic.specGlueData'`'s six fields are identical to
 `ComplexAnalytic.coverGlueData'`'s, proofs included** — `t_fac`'s rewrite chain, `t_inv`'s
@@ -79,9 +88,10 @@ The `hrange` hypothesis below asks that the transition from `i` to `j` carries t
 for it. Only the surviving conjunct, that the overlap with `k` goes to the overlap with `k`, is a
 condition on the input, and it is what `hcocycle` is about.
 
-**Both sides were weakened in one branch, and the symmetry is the reason.** taxis #1105 will hold
-*both* glue data over one input and check its family against both; two hypotheses of the same
-shape are one thing for a caller to discharge twice, and two of different shapes are two things.
+**Both sides were weakened together, by taxis #1239, and the symmetry is the reason.**
+`Oka/Analytification/CoverComparison.lean` holds *both* glue data over one input and checks its
+family against both; two hypotheses of the same shape are one thing for a caller to discharge
+twice, and two of different shapes are two things.
 The redundancy was identical on the analytic side, where `ComplexAnalytic.coverTransitionHom`
 factors through `ComplexAnalytic.coverIncl` by the same definition, so weakening one without the
 other would have made the pair *less* symmetric and not more.
