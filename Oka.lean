@@ -71,6 +71,7 @@ import Oka.Analytification.ChangeOfVariables
 import Oka.Analytification.Comparison
 import Oka.Analytification.CoverComparison
 import Oka.Analytification.CoverFunctoriality
+import Oka.Analytification.CoverIndependence
 import Oka.Analytification.DistinguishedOpen
 import Oka.Analytification.Flatness
 import Oka.Analytification.FlatnessAtAPoint
