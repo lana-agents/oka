@@ -33,22 +33,22 @@ and an object `ComplexAnalytic.GlueShape.ovl i j` for each **ordered** pair, gen
 `ComplexAnalytic.GlueShape.swap_swap`. It is the free category on that quiver modulo that relation:
 `CategoryTheory.Paths` and `CategoryTheory.Quotient`, two `import` lines.
 
-**The move under `Oka/` made this file cheaper, not dearer, and the figure is the argument for the
-import it now carries.** While it lived at `OkaTest/GlueShape.lean` it imported
+**The move under `Oka/` made this file cheaper rather than dearer, and the figure is the argument
+for the import it now carries.** At `OkaTest/GlueShape.lean` it imported
 `OkaTest/LocalisationRigidity.lean`, which reaches `Oka` whole through
 `OkaTest/LocalisationChain.lean`; it now imports `Oka/Analytification/AffineCover.lean`, which is
-all it ever used. Transitive closure of the import list, `env.header.moduleNames` under `lake env
-lean` and not a source parser: **3642 → 3381** counting `Oka` + `OkaTest` + `Mathlib`, of which
-`Oka` **150 → 78**, `OkaTest` **2 → 0** and `Mathlib` **3490 → 3303**; all modules including
-`Lean`, `Batteries` and the rest, 5392 → 5131. The two `CategoryTheory` imports are free against
-that baseline and were free against the old one.
+all it ever used. Transitive closure of the import list, from `env.header.moduleNames` under `lake
+env lean` and not from a source parser: **3642 → 3381** counting `Oka` + `OkaTest` + `Mathlib`, of
+which `Oka` **150 → 78**, `OkaTest` **2 → 0** and `Mathlib` **3490 → 3303**; all modules including
+`Lean` and `Batteries`, 5392 → 5131. The two `CategoryTheory` imports are free against that
+baseline and were free against the old one.
 
-Their cost is not zero everywhere, and the other number is the one a `Oka/CategoryTheory/` home
-would be priced at: `scripts/import_cost.py --target Mathlib.CategoryTheory.GlueData` puts them at
-**2** against `Mathlib/CategoryTheory/GlueData.lean`'s closure of 540. **That script cannot price
-this file where it now sits** — it answers the mirror-tree question, and `Oka/Analytification/`
-has no `Mathlib/Analytification/` to be a mirror of, so it reports the path as one that *"does not
-exist in Mathlib"* rather than a cost. See `## What is not here`.
+Their cost is not zero everywhere, and the other figure is what a `Oka/CategoryTheory/` home would
+be priced at: `scripts/import_cost.py --target Mathlib.CategoryTheory.GlueData` puts them at **2**
+against `Mathlib/CategoryTheory/GlueData.lean`'s closure of 540. **That script cannot price this
+file where it now sits** — it answers the mirror-tree question, and `Oka/Analytification/` has no
+`Mathlib/Analytification/` to be a mirror of, so it reports the path as one that *"does not exist
+in Mathlib"* rather than a cost. See `## What is not here`.
 
 **Going through the path category is what keeps `CategoryTheory.eqToHom` out of the shape and its
 `lift` API, and that was the predicted expense.** Everything from `ComplexAnalytic.GlueShape.Obj` to
@@ -122,23 +122,26 @@ not about that one cover.
 
 ## Main definitions
 
-- `ComplexAnalytic.GlueShape.Shape`: the two-level index category of a glue data. -
-`ComplexAnalytic.GlueShape.lift`: a functor out of it, from members, overlaps, inclusions and
-transitions with the one law. - `ComplexAnalytic.GlueShape.coverDiagram`: the diagram of a cover
-with distinguished overlaps, as a functor to `ComplexAnalytic.Presentation`. -
-`ComplexAnalytic.GlueShape.HRange` and `ComplexAnalytic.GlueShape.HCocycle`: the two triple-overlap
-hypotheses of `ComplexAnalytic.coverGlueData`, named so that they can be talked about. -
-`ComplexAnalytic.GlueShape.coverGlueDataOfDiagram`: the glue data of a cover, out of its diagram and
-those two hypotheses and nothing else.
+- `ComplexAnalytic.GlueShape.Shape`: the two-level index category of a glue data.
+- `ComplexAnalytic.GlueShape.lift`: a functor out of it, from members, overlaps, inclusions and
+  transitions with the one law.
+- `ComplexAnalytic.GlueShape.coverDiagram`: the diagram of a cover with distinguished overlaps, as a
+  functor to `ComplexAnalytic.Presentation`.
+- `ComplexAnalytic.GlueShape.HRange` and `ComplexAnalytic.GlueShape.HCocycle`: the two
+  triple-overlap hypotheses of `ComplexAnalytic.coverGlueData`, named so that they can be talked
+  about.
+- `ComplexAnalytic.GlueShape.coverGlueDataOfDiagram`: the glue data of a cover, out of its diagram
+  and those two hypotheses and nothing else.
 
 ## Main results
 
 - `ComplexAnalytic.GlueShape.lift_uniq`: **every functor out of the shape is the one its own data
-  produces**, so the shape has no morphisms beyond those a glue-data diagram accounts for. -
-  `ComplexAnalytic.GlueShape.hsymm_of_hglue`: **the symmetry hypothesis is a consequence of the
-  shape's law** and not an independent input. - `ComplexAnalytic.GlueShape.not_ctHRange`: **the
-  range hypothesis is not a consequence of the diagram.** -
-  `ComplexAnalytic.GlueShape.hRange_of_no_three` and
+  produces**, so the shape has no morphisms beyond those a glue-data diagram accounts for.
+- `ComplexAnalytic.GlueShape.hsymm_of_hglue`: **the symmetry hypothesis is a consequence of the
+  shape's law** and not an independent input.
+- `ComplexAnalytic.GlueShape.not_ctHRange`: **the range hypothesis is not a consequence of the
+  diagram.**
+- `ComplexAnalytic.GlueShape.hRange_of_no_three` and
   `ComplexAnalytic.GlueShape.hCocycle_of_no_three`: neither triple-overlap hypothesis has content
   below three members.
 
@@ -168,20 +171,26 @@ glued space is anything, and no non-vacuity: `OkaTest/AffineCover.lean` and
 **No split between the shape and the cover, and the case for one is measured rather than
 dismissed.** This file has two halves. Everything from `ComplexAnalytic.GlueShape.Obj` to
 `ComplexAnalytic.GlueShape.symm_eq_of_hom_comp_hom` is category theory in an arbitrary `C` and
-mentions nothing analytic; its imports alone close at **356** Mathlib modules, and it is the half
-that would be a mirror-tree candidate beside `Oka/CategoryTheory/GlueData.lean`, where
+mentions nothing analytic; its two imports alone close at **356** Mathlib modules, and it is the
+half that would be a mirror-tree candidate beside `Oka/CategoryTheory/GlueData.lean`, where
 `scripts/import_cost.py` prices it at 2. Everything from `ComplexAnalytic.GlueShape.coverDiagram`
 onwards needs `ComplexAnalytic.Presentation`, `ComplexAnalytic.coverSpace` and
-`ComplexAnalytic.coverOpen`, so it cannot go there at all: an
-`Oka.Analytification.AffineCover` import inside `Oka/CategoryTheory/` inverts the hierarchy.
-**So the destination question is not a choice between two homes; it is whether this is one file.**
-It is left as one because splitting it is a design change and this arrival was a move — see the
-pull request that made it. Nothing below depends on the answer.
+`ComplexAnalytic.coverOpen`, so it cannot go there at all: an `Oka.Analytification.AffineCover`
+import inside `Oka/CategoryTheory/` inverts the hierarchy. **So the destination question is not a
+choice between two homes; it is whether this is one file.** It is left as one because splitting it
+is a design change and this arrival was a move; nothing below depends on the answer.
 
 **Nothing here is a mirror file.** `README.md`'s mirror-tree rule is about a path under `Oka/`
-that names a Mathlib target; this file's path does not, so no upstreaming cost is stated and
-`scripts/import_cost.py` has nothing to say about it. The figure above is a transitive closure
-inside this repository, which is a different question with a different baseline.
+that names a Mathlib target, and this path does not, so no upstreaming cost is stated and
+`scripts/import_cost.py` has nothing to say about it. The figure in `## The shape` is a transitive
+closure inside this repository, which is a different question with a different baseline.
+
+**No claim that this file is still where it started, and the convention that put it under
+`OkaTest/` is spent rather than restated.** `OkaTest/LocalisationRigidity.lean` states it —
+category theory with no analytic content stays in a test file until something consumes it, and
+`Oka/Analytification/` is its home when something does. `ComplexAnalytic.coverAnalytification` is
+what consumes `ComplexAnalytic.coverGlueData`, so the condition is met and this file moved; the
+bullet that used to stand here promised the move and is gone rather than left promising it.
 -/
 
 universe v w u
