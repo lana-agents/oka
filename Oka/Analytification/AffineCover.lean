@@ -562,8 +562,8 @@ the two theorems below are what make it usable.
 Nothing here says the input presents one, and a scheme's cover does not supply this input in
 general: `poly` asks for **one** distinguished open of the `i`-th member per *ordered pair*, while
 `AlgebraicGeometry.exists_basicOpen_le_affine_inter` is stated at a *point* of an intersection and
-gives one such open there — so the intersection of two affine members is a **union** of them, and
-nothing makes one of them the whole of it. -/
+gives one such open there — so the intersection of two affine members is a **union of such
+opens**, and nothing makes one of them the whole of it. -/
 def coverAnalytification : AnalyticSpace.{u} :=
   AnalyticSpace.ofGlueDataCLinear
     (coverGlueData.{u} obj poly glue hrange hsymm hcocycle)
