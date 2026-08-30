@@ -837,8 +837,9 @@ about the output says it measured nothing, and it shipped in two verdicts before
 disagreed with it. Use the option instead, on a `git worktree` of the base:
 
 ```sh
-git worktree add /tmp/base <base-sha>
-python3 scripts/check_docstring_names.py --diff /tmp/base
+git worktree add /tmp/<slot>-base <base-sha>
+python3 scripts/check_docstring_names.py --diff /tmp/<slot>-base
+python3 scripts/check_docstring_names.py --diff /tmp/<slot>-base --sites
 python3 scripts/check_docstring_names.py --self-test
 ```
 
@@ -848,6 +849,15 @@ in a pull request body should come from. `--tree DIR` points the check itself at
 checkout. The self-test is a **positive** control — two planted trees that differ, asserted to
 diff to non-empty, and one check that `os.chdir` is inert — because "two identical trees diff to
 empty" is the test the broken driver passes.
+
+**`--sites` is for the branch that moves neither figure.** A commit that swaps words *between*
+backticked names that already exist adds no name and no occurrence, so `added`, `removed` and both
+counts come out identical on the two trees — which is byte-for-byte what the broken driver prints,
+and it is what a docs branch normally looks like here. `--sites` compares the `file:line` of every
+occurrence instead, and reports what moved, grouped by file with the delta: on the branch it was
+built for, `9 moved sites across 8 names, all in one file, all +1`. **Pick the report by what the
+branch can move** — a new declaration moves the distinct count, rewording moves occurrences, a word
+swapped between two existing names moves only sites.
 
 For the edit loop there is `bash scripts/check_file.sh FILE.lean`, which takes a couple of
 seconds and applies the *same* Lean options the build applies:

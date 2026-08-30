@@ -18,12 +18,14 @@ Usage:
     python3 scripts/check_docstring_names.py --dump F    # reuse a dump written earlier
     python3 scripts/check_docstring_names.py --tree DIR  # ...against another checkout
     python3 scripts/check_docstring_names.py --diff BASE # the name diff, no build needed
+    python3 scripts/check_docstring_names.py --diff BASE --sites   # ...per occurrence
     python3 scripts/check_docstring_names.py --self-test
 
 Exits 0 when every candidate resolves, 1 when some do not, and 2 when the tool itself cannot
 answer: the environment dump fails, `--tree` or `--diff` names something that is not a checkout of
-this repository, or the self-test does not pass.  `lake build` must have run first: this reads the
-oleans, it does not produce them.  `--diff` is the exception and reads no environment at all.
+this repository, `--sites` is given without `--diff`, or the self-test does not pass.  `lake build`
+must have run first: this reads the oleans, it does not produce them.  `--diff` is the exception
+and reads no environment at all.
 
 ## The name diff, and the no-op that used to drive it
 
@@ -51,6 +53,17 @@ non-empty.  "Two identical trees diff to empty" is the test the broken driver pa
 deliberate and it is what isolates a change in the *prose* from a change in the *rules*: a branch
 that edits `is_name_shaped` or `comment_regions` will not show up in `--diff` at all.  Run the
 check itself, not the diff, to see the effect of a rule change.
+
+**`--diff` alone is silent on a branch that only rewords, and `--sites` is what is not.**  A
+docstring commit that swaps words *between* backticked names that already exist adds no name and
+no occurrence, so `added`, `removed` and both figures are identical on the two trees — which is
+byte-for-byte the output of a driver that read one tree twice.  That happened on
+lana-agents/oka#246, whose delivery note had to say in terms that none of its figures was
+evidence.  `--sites` compares the `file:line` of every occurrence instead of the name set: on that
+branch it reports **9 moved sites across 8 names, all in the edited file, every delta `+1`**, and
+an empty site diff is what a same-tree comparison returns by construction.  Pick the report by
+what the branch can move — declarations move the distinct count, rewording moves occurrences, a
+word swapped between two existing names moves only sites.
 
 **The two figures `--diff` prints are the headline's own**, and there is no second definition of
 either: the `N backticked names (M distinct)` line at the end of a normal run is
@@ -334,13 +347,106 @@ def check_tree(path: str, what: str) -> str:
     return real
 
 
-def diff_trees(base: str, tree: str) -> int:
+def site_map(found: dict[str, list[tuple[str, int]]]) -> dict[str, dict[str, list[int]]]:
+    """`name -> file -> sorted lines`, which is `candidates()` regrouped and nothing more."""
+    out: dict[str, dict[str, list[int]]] = {}
+    for name, sites in found.items():
+        per = out.setdefault(name, {})
+        for path, line in sites:
+            per.setdefault(path, []).append(line)
+    for per in out.values():
+        for lines in per.values():
+            lines.sort()
+    return out
+
+
+def site_changes(base_found: dict[str, list[tuple[str, int]]],
+                 tree_found: dict[str, list[tuple[str, int]]]
+                 ) -> tuple[dict[str, list[tuple[str, int, int]]],
+                            dict[str, list[tuple[str, int]]],
+                            dict[str, list[tuple[str, int]]]]:
+    """Where every occurrence sits, compared per name **and per file**.
+
+    Returns `(moved, added, removed)`, each keyed by file.  A name keeps its count in a file, so
+    its lines pair up in order and each changed pair is a *move* — that is the common case, since
+    inserting a line shifts every citation below it by the same amount.  When the count in that
+    file changes, the lines are reported as added and removed instead and no pairing is guessed:
+    a name that gains an occurrence *and* shifts in the same file shows up as several additions
+    and removals rather than as one gain plus some moves, and saying so is cheaper than a
+    heuristic that would be wrong somewhere.  Keying by file keeps a gain in one file from
+    disturbing the pairing in another.
+    """
+    before, after = site_map(base_found), site_map(tree_found)
+    moved: dict[str, list[tuple[str, int, int]]] = {}
+    added: dict[str, list[tuple[str, int]]] = {}
+    removed: dict[str, list[tuple[str, int]]] = {}
+    for name in sorted(set(before) | set(after)):
+        per_before, per_after = before.get(name, {}), after.get(name, {})
+        for path in sorted(set(per_before) | set(per_after)):
+            was, now = per_before.get(path, []), per_after.get(path, [])
+            if was == now:
+                continue
+            if len(was) == len(now):
+                for old_line, new_line in zip(was, now):
+                    if old_line != new_line:
+                        moved.setdefault(path, []).append((name, old_line, new_line))
+            else:
+                for line in sorted(set(was) - set(now)):
+                    removed.setdefault(path, []).append((name, line))
+                for line in sorted(set(now) - set(was)):
+                    added.setdefault(path, []).append((name, line))
+    return moved, added, removed
+
+
+def print_sites(moved: dict[str, list[tuple[str, int, int]]],
+                added: dict[str, list[tuple[str, int]]],
+                removed: dict[str, list[tuple[str, int]]]) -> None:
+    """The `--sites` half of the report: every occurrence that is not where it was.
+
+    Grouped by file, with each file's line named once, because a one-line insertion moves every
+    citation below it and the interesting thing is then the *shape* — one file, one delta — and
+    not the list.  The list is printed anyway and nothing is truncated: a report that silently
+    caps reads as "that was all of it".
+    """
+    files = sorted(set(moved) | set(added) | set(removed))
+    total_moved = sum(len(v) for v in moved.values())
+    total_added = sum(len(v) for v in added.values())
+    total_removed = sum(len(v) for v in removed.values())
+    print(f"sites {total_moved} moved, {total_added} added, {total_removed} removed, "
+          f"in {len(files)} file(s)")
+    if not files:
+        print("  (none)")
+    for path in files:
+        deltas = {new - old for _, old, new in moved.get(path, [])}
+        shape = f"{len(moved.get(path, []))} moved"
+        if len(deltas) == 1:
+            shape += f", all {next(iter(deltas)):+d}"
+        elif deltas:
+            shape += f", deltas {min(deltas):+d}..{max(deltas):+d}"
+        for label, count in (("added", len(added.get(path, []))),
+                             ("removed", len(removed.get(path, [])))):
+            if count:
+                shape += f", {count} {label}"
+        print(f"  {path} \u2014 {shape}")
+        for name, old_line, new_line in sorted(moved.get(path, []), key=lambda s: s[1]):
+            print(f"    ~ {old_line} \u2192 {new_line} ({new_line - old_line:+d})\t{name}")
+        for name, line in sorted(added.get(path, []), key=lambda s: s[1]):
+            print(f"    + {line}\t{name}")
+        for name, line in sorted(removed.get(path, []), key=lambda s: s[1]):
+            print(f"    - {line}\t{name}")
+
+
+def diff_trees(base: str, tree: str, sites: bool = False) -> int:
     """Print the added and removed *distinct* candidate names between two checkouts.
 
     Both trees are scanned by this file's rules; see the module docstring for why, and for what
     that hides.  This is a reporter and not a gate — `scripts/guard_coverage.py` is the model —
     so it exits 0 whatever the diff is.  A removal is not by itself a defect: a name leaves the
     set when the last docstring citing it is reworded, which is what most prose commits do.
+
+    With `sites`, the per-occurrence report follows; see the module docstring for the branch that
+    needs it.  The summary above it is unchanged, so a body that quotes the two figures reads the
+    same with the flag and without.
     """
     base_found = candidates(base)
     tree_found = candidates(tree)
@@ -358,6 +464,8 @@ def diff_trees(base: str, tree: str) -> int:
             path, line = where[name][0]
             extra = f" (+{len(where[name]) - 1} more)" if len(where[name]) > 1 else ""
             print(f"  {name}\t{path}:{line}{extra}")
+    if sites:
+        print_sites(*site_changes(base_found, tree_found))
     return 0
 
 
@@ -367,7 +475,7 @@ def self_test() -> int:
     **The test that matters is the positive one.**  "Two identical trees diff to empty" is what
     the `os.chdir` driver this option replaced printed on every branch it was ever run on, so a
     self-test built only from that would have passed while measuring nothing.  **Every check below
-    carries a `positive:` or `negative:` label and there are seven and three** — a count is stated
+    carries a `positive:` or `negative:` label and there are eight and three** — a count is stated
     here rather than left to be inferred because a reader who trusts the labels has to be able to
     see that none is missing.
     """
@@ -427,6 +535,24 @@ def self_test() -> int:
               str(ca.get("Shared.one")))
         check("positive: `Shared.two` is one occurrence", len(ca.get("Shared.two", [])) == 1)
 
+        # The case `--sites` exists for, and the one every other check here is blind to: a tree
+        # with a line inserted above a citation.  Identical name sets, identical occurrence
+        # counts, one moved site.  A same-tree comparison returns nothing, which is what makes
+        # this a positive control rather than a restatement of "two trees differ".
+        d = plant(os.path.join(tmp, "d"), "/-! spacer -/\n" + shared
+                  + "/-- `Only.inA` -/\ndef f := 1\n")
+        cd = candidates(d)
+        moved, gained, lost = site_changes(ca, cd)
+        same = site_changes(ca, ca)
+        check("positive: a line inserted above a citation moves its site and nothing else",
+              set(ca) == set(cd)
+              and sum(len(v) for v in ca.values()) == sum(len(v) for v in cd.values())
+              and not gained and not lost
+              and {n - o for sites in moved.values() for _, o, n in sites} == {1}
+              and same == ({}, {}, {}),
+              f"{sum(len(v) for v in moved.values())} moved, "
+              f"{len(gained)} added, {len(lost)} removed; same-tree {same}")
+
         # Candidacy is a property of comment regions, so code is not scanned.
         c = plant(os.path.join(tmp, "c"), "/-! nothing here -/\ndef g := `NotA.candidate\n")
         check("negative: a backtick outside a comment is not a candidate",
@@ -467,6 +593,9 @@ def main() -> int:
     ap.add_argument("--diff", metavar="BASE_DIR",
                     help="report the distinct-name diff from BASE_DIR to --tree, and stop; "
                          "reads no environment, so no build is needed")
+    ap.add_argument("--sites", action="store_true",
+                    help="with --diff, also report every occurrence that moved, by file:line; "
+                         "this is the only report a branch that only rewords can move")
     ap.add_argument("--self-test", action="store_true",
                     help="plant two fixture trees that differ and assert the diff sees it")
     args = ap.parse_args()
@@ -476,7 +605,11 @@ def main() -> int:
 
     repo = check_tree(args.tree, "--tree")
     if args.diff:
-        return diff_trees(check_tree(args.diff, "--diff"), repo)
+        return diff_trees(check_tree(args.diff, "--diff"), repo, sites=args.sites)
+    if args.sites:
+        sys.stderr.write("--sites reports where occurrences moved between two trees, so it needs "
+                         "--diff BASE_DIR to have a second tree to move them from.\n")
+        sys.exit(2)
 
     found = candidates(repo)
     # Every proper prefix of every candidate is a possible head for the field-notation rule, and
