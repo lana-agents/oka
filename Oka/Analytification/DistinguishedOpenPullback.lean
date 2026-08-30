@@ -77,8 +77,10 @@ statement specialises to the one that was proved by hand.
 - `ComplexAnalytic.exists_localisationOpen_eq_comap_analytificationMap`: the same with the
   representative produced rather than supplied — **every distinguished open pulls back to one.**
 - `ComplexAnalytic.exists_comap_analytificationMap_eq_comap_localisationProj`: **out of a
-  localisation, that preimage comes from a distinguished open of the base**, this file composed
-  with `ComplexAnalytic.exists_localisationOpen_eq_comap`.
+  localisation, that preimage comes from a distinguished open of the base** — the bullet above
+  composed with the previous file's converse, that every distinguished open of a localisation is
+  the preimage of one downstairs. `## What it is for` above names that one, in the spelling that
+  produces the polynomial rather than the open.
 
 ## What is not here
 
