@@ -1366,6 +1366,38 @@ info: 'ComplexAnalytic.analytificationToSpecGlued_unique' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.analytificationToSpecGlued_unique
 
+/-! ### Two presentations of each member give the same `X^an`
+
+The definition and two results of `Oka/Analytification/CoverIndependence.lean`, the first
+instalment of taxis #1107. It is a heading of its own rather than a `####` under
+`### A morphism of covered schemes analytifies`, whose `ComplexAnalytic.coverMap` it is built
+from, because its subject is two data for *one* gluing where that block's is a morphism between
+two gluings — and it is placed after the blocks it consumes for the same reason that one gives,
+**named by heading and not by position**.
+-/
+
+/--
+info: 'ComplexAnalytic.coverMap_hom_inv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverMap_hom_inv
+
+/--
+info: 'ComplexAnalytic.coverMap_inv_hom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverMap_inv_hom
+
+/--
+info: 'ComplexAnalytic.coverAnalytificationIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverAnalytificationIso
+
+
 /-! ### The two-level index category of a glue data
 
 The five advertised results of `Oka/Analytification/GlueShape.lean`, which arrived under `Oka/`
