@@ -193,9 +193,10 @@ a much larger tax than one unused value per index.
   locally-ringed-space level.
 - `ComplexAnalytic.coverIncl_comp_coverIota`: **the members' own inclusions agree over the
   overlaps**, the glue datum's `glue_condition` read back into this file's vocabulary, and
-- `ComplexAnalytic.coverGlueMorphisms_coverIota`: **gluing them returns the identity.** That is
-  the statement which says `ComplexAnalytic.coverGlueMorphisms` is not degenerate: a definition
-  that ignored its family would satisfy everything above it.
+- `ComplexAnalytic.coverGlueMorphisms_coverIota`: **gluing them returns the identity.** The
+  readable instance of `ComplexAnalytic.coverIota_comp_coverGlueMorphisms` at the members' own
+  inclusions, and a corollary of it in one rewrite — which is worth saying, because the statement
+  that rules out a definition ignoring its family is that one and not this one.
 
 ## What is not here
 
@@ -209,11 +210,13 @@ a much larger tax than one unused value per index.
   below three members, so `OkaTest/ProjectiveLine.lean`'s two-member `ℙ¹` exercises neither. What
   `ℙ¹` adds is a **non-identity transition**, which the node cover does not have. Nor is any of
   this related to a *scheme*: the input is presentations and isomorphisms, and no statement here
-  says they present one. **This bullet's heading said "no non-vacuity in this file" until
-  `ComplexAnalytic.coverGlueMorphisms_coverIota` arrived**, which rules out a
-  `ComplexAnalytic.coverGlueMorphisms` that ignores its family and so reads to a grep as this
-  bullet's contradiction. The two senses are different and both hold: nothing here exhibits an
-  *input*, and one statement here rules out a degenerate *output*.
+  says they present one. **This bullet's heading said "no non-vacuity in this file" until the
+  statements about `ComplexAnalytic.coverGlueMorphisms` arrived** — chiefly
+  `ComplexAnalytic.coverIota_comp_coverGlueMorphisms`, which rules out a
+  `ComplexAnalytic.coverGlueMorphisms` that ignores its family, and its instance
+  `ComplexAnalytic.coverGlueMorphisms_coverIota` — and so reads to a grep as this bullet's
+  contradiction. The two senses are different and both hold: nothing here exhibits an *input*, and
+  statements here rule out a degenerate *output*.
 * **Any statement that a gluing is not affine.** The two instances of this construction check
   different things and neither subsumes the other. `OkaTest/AffineCover.lean` glues three copies
   of the node along the punctured axis and shows that their three copies of the origin are three
@@ -792,9 +795,26 @@ analytic one**, deliberately: the comparison morphism `X^an ⟶ X` maps to a sch
 locally ringed space and not an analytic space, so a version tied to
 `ComplexAnalytic.AnalyticSpace` would serve one consumer of this file and not the other.
 
-**`ComplexAnalytic.coverGlueMorphisms_coverIota` is what says the construction is not
-degenerate.** Every other statement here is satisfied by a definition that ignores its input;
-that one is not.
+**`ComplexAnalytic.coverIota_comp_coverGlueMorphisms` is what says the construction is not
+degenerate**, and `ComplexAnalytic.coverGlueMorphisms_coverIota` is its instance at the members'
+own inclusions rather than a second control — it constrains `ComplexAnalytic.coverGlueMorphisms`
+at one family where the general lemma constrains it at every family.
+
+**The criterion is "is about `ComplexAnalytic.coverGlueMorphisms` and mentions `f`", and exactly
+two statements here meet it**: that one and `ComplexAnalytic.toLRSHom_coverGlueMorphisms`. Having
+`f` on the right-hand side is not the criterion and would give three —
+`ComplexAnalytic.comm_coverGlueData` does too, and a `coverGlueMorphisms` ignoring its family
+would satisfy it perfectly well, because that theorem is about the glue datum and an arbitrary
+family and never mentions this construction at all. **The two come apart on exactly that
+statement**, which is why the criterion is worth stating rather than leaving to be read off the
+right-hand sides.
+
+**Nothing else here constrains the definition at all**, and that is a statement about the
+statements rather than about hypothetical definitions:
+`ComplexAnalytic.coverAnalytification_hom_ext`, `ComplexAnalytic.comm_coverGlueData` and
+`ComplexAnalytic.coverIncl_comp_coverIota` do not mention `ComplexAnalytic.coverGlueMorphisms`, so
+their truth is independent of how it is defined; and the round trip, being an instantiation,
+constrains it only where the family is `ComplexAnalytic.coverIota`.
 -/
 
 /-- **A family of morphisms out of the members which agrees over the overlaps satisfies the glue
@@ -908,9 +928,13 @@ theorem coverIncl_comp_coverIota (i j : J) (hij : i ≠ j) :
 
 /-- **Gluing the members' own inclusions returns the identity of `X^an`.**
 
-The round trip, and the statement that says `ComplexAnalytic.coverGlueMorphisms` is the intended
-construction rather than a well-typed one: a definition that ignored its family and returned a
-fixed morphism would satisfy every other statement in this section. -/
+The round trip, and the readable form of `ComplexAnalytic.coverIota_comp_coverGlueMorphisms`: the
+proof below is that lemma and `Category.comp_id`, so this is its instance at
+`f = ComplexAnalytic.coverIota` and not an independent statement. **The statement that rules out a
+definition ignoring its family is therefore that one**; a corollary in one rewrite cannot carry
+content its premise lacks, and this docstring claimed it did until 2026-08-30. What this adds is
+that the general lemma's instance at the members' own inclusions is the *identity* — which is a
+fact about `ComplexAnalytic.coverIota` and worth a name. -/
 theorem coverGlueMorphisms_coverIota :
     coverGlueMorphisms.{u} obj poly glue hrange hsymm hcocycle
         (coverIota.{u} obj poly glue hrange hsymm hcocycle)
