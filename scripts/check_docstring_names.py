@@ -151,6 +151,7 @@ rule in particular accepts `Foo.bar` whenever any namespace at all has a `bar` i
 from __future__ import annotations
 
 import argparse
+import collections
 import os
 import re
 import subprocess
@@ -375,6 +376,13 @@ def site_changes(base_found: dict[str, list[tuple[str, int]]],
     and removals rather than as one gain plus some moves, and saying so is cheaper than a
     heuristic that would be wrong somewhere.  Keying by file keeps a gain in one file from
     disturbing the pairing in another.
+
+    **That difference is a multiset difference and not a set one**, because `candidates()`
+    returns one entry per *occurrence*: a name backticked twice on one line is two entries with
+    the same line number, so under `set` a line that loses one of a pair cancels against itself
+    and the whole report comes out empty — the same-tree output, on trees that differ.  Five
+    lines on `master` carry a name twice, so it is not hypothetical.  `Counter` is what keeps the
+    promise the paragraph above makes.
     """
     before, after = site_map(base_found), site_map(tree_found)
     moved: dict[str, list[tuple[str, int, int]]] = {}
@@ -391,9 +399,10 @@ def site_changes(base_found: dict[str, list[tuple[str, int]]],
                     if old_line != new_line:
                         moved.setdefault(path, []).append((name, old_line, new_line))
             else:
-                for line in sorted(set(was) - set(now)):
+                was_at, now_at = collections.Counter(was), collections.Counter(now)
+                for line in sorted((was_at - now_at).elements()):
                     removed.setdefault(path, []).append((name, line))
-                for line in sorted(set(now) - set(was)):
+                for line in sorted((now_at - was_at).elements()):
                     added.setdefault(path, []).append((name, line))
     return moved, added, removed
 
@@ -475,7 +484,7 @@ def self_test() -> int:
     **The test that matters is the positive one.**  "Two identical trees diff to empty" is what
     the `os.chdir` driver this option replaced printed on every branch it was ever run on, so a
     self-test built only from that would have passed while measuring nothing.  **Every check below
-    carries a `positive:` or `negative:` label and there are eight and three** — a count is stated
+    carries a `positive:` or `negative:` label and there are nine and three** — a count is stated
     here rather than left to be inferred because a reader who trusts the labels has to be able to
     see that none is missing.
     """
@@ -552,6 +561,23 @@ def self_test() -> int:
               and same == ({}, {}, {}),
               f"{sum(len(v) for v in moved.values())} moved, "
               f"{len(gained)} added, {len(lost)} removed; same-tree {same}")
+
+        # The other way a site report can go silent, and it is the one `set` made it go silent
+        # *by construction*: two citations of one name on one line are two entries with the same
+        # line number, so dropping one of them cancels under a set difference.  Here the name
+        # sets are identical, the occurrence totals differ by one, and the honest answer is one
+        # removed site — which the pairing branch never sees, because the counts are unequal.
+        e = plant(os.path.join(tmp, "e"), "/-! `Dup.name` and `Dup.name` again. -/\n")
+        g = plant(os.path.join(tmp, "g"), "/-! `Dup.name` once. -/\n")
+        ce, cg = candidates(e), candidates(g)
+        dropped = site_changes(ce, cg)
+        check("positive: dropping one of two citations of a name on one line is a removed site",
+              set(ce) == set(cg)
+              and sum(len(v) for v in ce.values()) - sum(len(v) for v in cg.values()) == 1
+              and dropped == ({}, {}, {"Oka/Fixture.lean": [("Dup.name", 1)]})
+              and site_changes(ce, ce) == ({}, {}, {}),
+              f"{sum(len(v) for v in ce.values())} → "
+              f"{sum(len(v) for v in cg.values())} occurrences; {dropped[2]}")
 
         # Candidacy is a property of comment regions, so code is not scanned.
         c = plant(os.path.join(tmp, "c"), "/-! nothing here -/\ndef g := `NotA.candidate\n")
