@@ -29,8 +29,10 @@ convention (*"from the localisation to `A`"*) is already the one `ComplexAnalyti
 data, and a refinement supplies only the members. What has to be built is the polynomial cutting
 each overlap out, the isomorphism of the two descriptions of it, and the three laws. **This file
 builds all of it**, and then the space the refined datum glues to and the morphism from it down to
-the fixed member — which is the first `ComplexAnalytic.coverAnalytification` in this repository
-whose input nobody handed over.
+the fixed member — the first `ComplexAnalytic.coverAnalytification` in this repository that is a
+*construction* rather than an instance. The two others, in `OkaTest/ProjectiveLine.lean` and
+`OkaTest/AffineCover.lean`, write their cover data out at particular members and particular
+polynomials; this one is uniform in `g` and `fam`.
 
 **It is a morphism and not an identification.** `ComplexAnalytic.not_isIso_refineToBase` below
 says so, at the smallest data that shows it: a refinement by no opens at all.
@@ -147,8 +149,9 @@ overlaps sitting over three different members with no common target to cancel ag
   are read off.
 - `ComplexAnalytic.refineHrange` and `ComplexAnalytic.refineHcocycle`: **the two geometric laws**,
   in the form a cover datum asks for them, with
-  `ComplexAnalytic.refineTriple_localisationProj` the intermediate step of the second. Neither
-  uses its distinctness hypotheses.
+  `ComplexAnalytic.refineTriple_localisationProj` the intermediate step of the second. The first
+  does not use its distinctness hypotheses; the second cannot be stated without them, since the
+  triple transition it composes takes them as arguments.
 - `ComplexAnalytic.coverIota_comp_refineToBase`: **the morphism restricts to the `a`-th
   projection on the `a`-th member**, which is what says it is the intended one.
 - `ComplexAnalytic.isEmpty_refineAnalytification` and
@@ -351,10 +354,14 @@ every transition is a morphism over it.** `ComplexAnalytic.refineTransitionHom_l
 is that sentence, `ComplexAnalytic.localisationOpen_rename` is what turns it into a statement
 about the refined opens, and the two laws are corollaries of the pair.
 
-Neither law uses its distinctness hypotheses, and they are named `_hab`, `_hac`, `_hbc` for that
-reason: `ComplexAnalytic.coverGlueData` asks for the laws at distinct indices only, and this data
-satisfies them everywhere. Keeping the hypotheses is what makes the statements the ones a caller
-of `ComplexAnalytic.coverAnalytification` can pass without an adapter.
+**The two laws stand differently to their distinctness hypotheses and the difference is not
+cosmetic.** `ComplexAnalytic.refineHrange` does not use them at all — they are named `_hab`,
+`_hac`, `_hbc` for that reason, and its containment holds at every triple, repeated indices
+included. `ComplexAnalytic.refineHcocycle` **cannot be stated without them**:
+`ComplexAnalytic.coverTriple` takes the three proofs as arguments, so they occur in the statement
+three times over and there is no such thing as the cocycle law at a repeated index. Its *proof*
+uses them for nothing else. Both keep the hypotheses in the shape
+`ComplexAnalytic.coverGlueData` asks for, which is what lets a caller pass them with no adapter.
 -/
 
 /-- **The transition is a morphism over the fixed member**: going from the `a`-th refined member

@@ -157,8 +157,10 @@ followed into the member is `ComplexAnalytic.localisationProj` — was declared 
 `Oka/Analytification/AffineCover.lean`, unchanged and under the same name. It is a statement in
 that file's vocabulary with no `Spec` in it, and it acquired a second consumer in
 `Oka/Analytification/CoverRefinement.lean`, which cannot import this file: the `Spec` side is
-four `Oka` modules a refinement of an analytic cover has no reason to carry. Both appearances
-below are the same rewrite they always were.
+four `Oka` modules a refinement of an analytic cover has no reason to carry. Its one use below is
+unchanged — the `congrArg` in the `calc` of
+`ComplexAnalytic.coverIncl_comp_analytificationToSpec`, which is not a rewrite and never was; the
+other mention below is a citation in a docstring.
 -/
 
 variable {J : Type u} (obj : J → Presentation.{u})

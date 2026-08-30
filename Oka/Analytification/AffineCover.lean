@@ -330,7 +330,9 @@ def coverOverlapIso (i j : J) :
 `ComplexAnalytic.coverOverlapIso` is `ComplexAnalytic.localisationIso` pushed through the
 forgetful functor and `ComplexAnalytic.coverIncl` is the inclusion of the open subspace, so their
 composite is `ComplexAnalytic.localisationProj`. It holds definitionally and is stated because
-every consumer needs it in this spelling, inside a rewrite.
+its consumers need it in this spelling: inside a `rw` in
+`Oka/Analytification/CoverRefinement.lean`, and as the argument of a `congrArg` in a `calc` in
+`Oka/Analytification/CoverComparison.lean`.
 
 **It is the only route from `ComplexAnalytic.coverTransition` to a statement about the ambient
 members**, whose two outer factors are this isomorphism at the two ends. A caller who knows what
