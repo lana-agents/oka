@@ -16,9 +16,9 @@ analytification as a functor on finitely generated `ℂ`-algebras, the stalk map
 comparison morphism of a presented algebra, the naturality of the comparison morphism, the
 faithful flatness of that stalk map, the analytification of a sheaf, the identification of
 the analytification of `A_f` with the non-vanishing locus of `f` and the same open on the `Spec`
-side, the glue data of an affine cover with distinguished overlaps together with the morphisms
-out of the space it glues to, the
-image of the analytification in `ℂ^n`, and the family of
+side, the glue data of an affine cover with distinguished
+overlaps together with the morphisms out of the space it glues to and the same glue data on the
+`Spec` side, the image of the analytification in `ℂ^n`, and the family of
 monic polynomials of a polynomial monic in the last variable, with the finiteness over `ℂ^n`
 that it supplies.
 
@@ -1062,6 +1062,118 @@ info: 'ComplexAnalytic.coverGlueMorphisms_coverIota' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.coverGlueMorphisms_coverIota
+
+/-! ### The glue data of the members' `Spec`s
+
+`Oka/Analytification/SpecAffineCover.lean`, the mirror of the block above with
+`ComplexAnalytic.specFunctor` in place of the analytification. It is a heading of its own rather
+than part of that block because the two constructions share an *input* and nothing else: neither
+file's declarations appear in the other's statements, and the file that will relate them —
+taxis #1105's comparison morphism `X^an ⟶ X` — does not exist yet.
+
+`ComplexAnalytic.range_specTransitionHom_subset` and its composite are guarded although nothing
+consumes them: they are the evidence for the file's claim that half of the `hrange` hypothesis is
+free, and a claim in a module docstring whose proof is unguarded is the gap this file exists to
+close.
+-/
+
+/--
+info: 'ComplexAnalytic.specOverlapIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specOverlapIso
+
+/--
+info: 'ComplexAnalytic.specTransition' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specTransition
+
+/--
+info: 'ComplexAnalytic.specGlueIso_symm' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specGlueIso_symm
+
+/--
+info: 'ComplexAnalytic.range_specTransitionHom_subset' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.range_specTransitionHom_subset
+
+/--
+info: 'ComplexAnalytic.range_comp_specTransitionHom_subset' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.range_comp_specTransitionHom_subset
+
+/--
+info: 'ComplexAnalytic.specTriple' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specTriple
+
+/--
+info: 'ComplexAnalytic.specTriple_fac' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specTriple_fac
+
+/--
+info: 'ComplexAnalytic.specGlueData'' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specGlueData'
+
+/--
+info: 'ComplexAnalytic.specGlueData' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specGlueData
+
+/--
+info: 'ComplexAnalytic.specGlueData_U' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specGlueData_U
+
+/--
+info: 'ComplexAnalytic.specGlued' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specGlued
+
+/--
+info: 'ComplexAnalytic.specIota' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specIota
+
+/--
+info: 'ComplexAnalytic.isOpenImmersion_specIota' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isOpenImmersion_specIota
+
+/--
+info: 'ComplexAnalytic.specIncl_comp_specIota' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specIncl_comp_specIota
 
 /-! ### The two-level index category of a glue data
 
