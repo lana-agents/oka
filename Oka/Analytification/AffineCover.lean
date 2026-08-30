@@ -135,6 +135,8 @@ a much larger tax than one unused value per index.
   `ComplexAnalytic.AnalyticSpace` rather than a locally ringed space.
 - `ComplexAnalytic.coverIota`: the `i`-th member's analytification, as a morphism of analytic
   spaces into it.
+- `ComplexAnalytic.coverAnalytificationOpenCover`: **`X^an` as an open cover by them**, which is
+  the form `ComplexAnalytic.AnalyticSpace.glueMorphisms` consumes.
 
 ## Main results
 
@@ -154,6 +156,11 @@ a much larger tax than one unused value per index.
 - `ComplexAnalytic.isOpenImmersion_coverIota`: **the members are open subspaces of `X^an`**,
   which with `AlgebraicGeometry.LocallyRingedSpace.GlueData.ι_jointly_surjective` is the
   statement that they cover it.
+- `ComplexAnalytic.coverAnalytificationOpenCover_obj` and
+  `ComplexAnalytic.coverAnalytificationOpenCover_map`: **the cover's members are the
+  analytifications and its maps are `ComplexAnalytic.coverIota`**, both by `rfl`. Without them
+  the cover is opaque and a consumer would be reading the glue data rather than `X^an`.
+  (Naming `ComplexAnalytic.coverIota` here advertises it, so it is guarded below alongside them.)
 
 ## What is not here
 
@@ -623,6 +630,60 @@ theorem isOpenImmersion_coverIota (i : J) :
     LocallyRingedSpace.IsOpenImmersion
       (coverIota.{u} obj poly glue hrange hsymm hcocycle i).toLRSHom :=
   coverGlueData_ι_isOpenImmersion.{u} obj poly glue hrange hsymm hcocycle i
+
+/-- **`X^an` as covered by the members' analytifications**, in the form anything that consumes a
+cover asks for.
+
+`ComplexAnalytic.AnalyticSpace.glueMorphisms` glues a morphism *out of* an analytic space `X` from
+morphisms out of the members of an `AlgebraicGeometry.LocallyRingedSpace.OpenCover` of its
+underlying locally ringed space, and until this there was no such cover of
+`ComplexAnalytic.coverAnalytification` — so the space this file builds could not be the source of
+a glued morphism.
+
+**The transport is free and that is worth recording, because it need not have been.** This is
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.openCover` at
+`ComplexAnalytic.coverGlueData`, applied with no rewrite, no `▸` and no `eqToIso`: the cover it
+produces is one of `(coverGlueData …).toGlueData.glued`, and that is *the same term* as
+`(coverAnalytification …).toLocallyRingedSpace` because
+`ComplexAnalytic.coverAnalytification_toLocallyRingedSpace` is
+`ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear_toLocallyRingedSpace`, which is `rfl`. The same
+three `rfl`s make the two lemmas below `rfl` as well: `ComplexAnalytic.coverGlueData_U` for the
+members and `ComplexAnalytic.toLRSHom_coverIota` for the maps.
+
+**Those two lemmas are not decoration.** Without them this is a cover whose members and maps are
+spelled in the glue data's vocabulary — a cover of a gluing wearing an analytic space's name —
+and a consumer would have to unfold `ComplexAnalytic.coverGlueData` to say what it covers `X^an`
+by. With them it is a cover by the analytifications one started from, mapped by
+`ComplexAnalytic.coverIota`.
+
+Noncomputable and non-canonical for the reason
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.openCover` is: the index of a point is *chosen*,
+and nothing downstream depends on which. -/
+noncomputable def coverAnalytificationOpenCover :
+    LocallyRingedSpace.OpenCover.{u}
+      (coverAnalytification.{u} obj poly glue hrange hsymm hcocycle).toLocallyRingedSpace :=
+  (coverGlueData.{u} obj poly glue hrange hsymm hcocycle).openCover
+
+/-- **The `i`-th member of the cover is the `i`-th member's analytification**, by `rfl` —
+`ComplexAnalytic.coverGlueData_U` at the glue data. -/
+@[simp]
+theorem coverAnalytificationOpenCover_obj (i : J) :
+    (coverAnalytificationOpenCover.{u} obj poly glue hrange hsymm hcocycle).obj i =
+      (AnalyticSpace.analytification.{u} (obj i).g).toLocallyRingedSpace :=
+  rfl
+
+/-- **The `i`-th map of the cover is `ComplexAnalytic.coverIota`**, by `rfl` —
+`ComplexAnalytic.toLRSHom_coverIota` at the glue data.
+
+Stated against `ComplexAnalytic.coverIota` rather than against
+`(coverGlueData …).toGlueData.ι`, because a consumer of this cover is working with morphisms of
+analytic spaces and the glue data's `ι` is not one; `ComplexAnalytic.isOpenImmersion_coverIota` is
+the same choice made for the open-immersion statement. -/
+@[simp]
+theorem coverAnalytificationOpenCover_map (i : J) :
+    (coverAnalytificationOpenCover.{u} obj poly glue hrange hsymm hcocycle).map i =
+      (coverIota.{u} obj poly glue hrange hsymm hcocycle i).toLRSHom :=
+  rfl
 
 end
 

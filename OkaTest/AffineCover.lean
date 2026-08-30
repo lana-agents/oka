@@ -337,6 +337,32 @@ theorem isOpenImmersion_nodeIota (i : triple.{u}) :
   isOpenImmersion_coverIota.{u} nodeCoverObj.{u} nodeCoverPoly.{u} nodeCoverGlue.{u}
     hrange_nodeCover.{u} hsymm_nodeCover.{u} hcocycle_nodeCover.{u} i
 
+/-- **The three copies, as an open cover of the space they glue to.**
+
+`ComplexAnalytic.coverAnalytificationOpenCover` at this cover, named for the same reason
+`ComplexAnalytic.nodeIota` is: so that the two `example`s below are about
+`ComplexAnalytic.nodeTripleSpace` and not about a glue datum.
+
+This is the non-vacuity of that definition, and it is the **three**-member instance deliberately:
+`ComplexAnalytic.GlueShape.hRange_of_no_three` and
+`ComplexAnalytic.GlueShape.hCocycle_of_no_three` make both triple-overlap hypotheses vacuous below
+three members, so `OkaTest/ProjectiveLine.lean`'s two-member cover would exercise neither. -/
+noncomputable def nodeTripleOpenCover :
+    LocallyRingedSpace.OpenCover.{u} (nodeTripleSpace.{u}).toLocallyRingedSpace :=
+  coverAnalytificationOpenCover.{u} nodeCoverObj.{u} nodeCoverPoly.{u} nodeCoverGlue.{u}
+    hrange_nodeCover.{u} hsymm_nodeCover.{u} hcocycle_nodeCover.{u}
+
+/-- **Its maps are `ComplexAnalytic.nodeIota`**, on the nose — which is the check that the cover
+is by the three copies of the node and not by three objects of the glue datum that happen to be
+them. -/
+example (i : triple.{u}) :
+    (nodeTripleOpenCover.{u}).map i = (nodeIota.{u} i).toLRSHom := rfl
+
+/-- **And its members are their analytifications**, on the nose. -/
+example (i : triple.{u}) :
+    (nodeTripleOpenCover.{u}).obj i =
+      (AnalyticSpace.analytification.{u} (nodeCoverObj.{u} i).g).toLocallyRingedSpace := rfl
+
 /-- **The glued `ℂ`-algebra structure restricts on each member to the one that member was
 given** — the check that the construction is the intended one rather than merely well-typed. -/
 example (j : triple.{u}) :
