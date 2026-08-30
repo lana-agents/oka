@@ -761,7 +761,15 @@ kills the correction term and the power of `f` is non-zero by
 `ComplexAnalytic.eval_rename_localisationIncl_ne_zero`, so `q` and the renamed `Q` vanish at
 exactly the same points. **`D` disappears from the statement** because a non-vanishing locus does
 not see a non-vanishing factor; it is the exponent that made the algebra work and it is not part
-of the geometry. -/
+of the geometry.
+
+**This is the geometric half of what that equation says, and the algebraic half is elsewhere.**
+Read modulo the ideal rather than at a point, the same equation says `q` and the renamed `Q` are
+*associates* — `ComplexAnalytic.exists_mk_rename_eq`, in
+`Oka/Analytification/LocalisationIndependence.lean`, which keeps the unit this statement drops. A
+consumer that needs to identify the two *presentations* rather than the two opens needs that one:
+a divisibility does not follow from an equality of non-vanishing loci over a general presented
+`ℂ`-algebra. -/
 theorem exists_localisationOpen_eq_rename (q : MvPolynomial (ULift.{u} (Fin (n + 1))) ℂ) :
     ∃ Q : MvPolynomial (ULift.{u} (Fin n)) ℂ,
       localisationOpen.{u} (localisationPresentation.{u} g f) q =

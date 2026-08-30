@@ -14,7 +14,9 @@ the polynomial `f` occurs in the *type* of everything built from it: two polynom
 the same distinguished open give two different objects of `ComplexAnalytic.Presentation` and two
 different analytic spaces. This file says they are canonically the same one.
 
-Four statements, and the last two are the form a coherence law consumes:
+Eight statements. The first four identify the two presentations and put the identification over
+the member; the last four are about the case where the two polynomials differ by a **unit**, and
+about where such a pair comes from:
 
 * `ComplexAnalytic.localisationPresentationIsoOfDvdPow` — **the presentations of the localisation
   at `f` and at `f'` are isomorphic** whenever the images of `f` and `f'` in `A` each divide a
@@ -33,6 +35,18 @@ Four statements, and the last two are the form a coherence law consumes:
   statement in `ComplexAnalytic.Presentation`, as an equation between morphisms. This is the form
   a coherence law consumes, and it is the sense in which a transition morphism built from a
   witness does not depend on the witness.
+* `ComplexAnalytic.localisationPresentationIsoOfUnitMul` and
+  `ComplexAnalytic.localisationPresentationIsoOfUnitMul_hom_comp` — **the same two at a unit
+  multiple**, which is the pair of divisibilities at exponent one and is the form the statement
+  below produces.
+* `ComplexAnalytic.isUnit_mk_rename_localisationIncl` — **the polynomial that was inverted is a
+  unit upstairs**, which is the last equation of `ComplexAnalytic.localisationPresentation` read
+  as an invertibility.
+* `ComplexAnalytic.exists_mk_rename_eq` — **every polynomial of a localisation is a unit multiple
+  of a renamed polynomial of the base.** This is the algebraic form of
+  `ComplexAnalytic.exists_localisationOpen_eq_rename`, whose geometric conclusion discards the
+  unit; the unit is what the isomorphism above needs and what an equality of non-vanishing loci
+  does not give.
 
 ## Where this is needed
 
@@ -199,5 +213,107 @@ theorem localisationPresentationIsoOfDvdPow_hom_comp :
     (localisationRingHom.{u} g f' x) = _
   rw [AlgEquiv.symm_apply_eq]
   exact (localisationPresentedAlgebraEquivOfDvdPow_localisationRingHom.{u} g f f' h h' x).symm
+
+/-! ### Associates, and the polynomials of a localisation up to one
+
+The hypotheses of `ComplexAnalytic.localisationPresentationIsoOfDvdPow` are two divisibilities of
+*powers*, which is the weakest form that still gives the isomorphism. The two statements below are
+about the case where one polynomial is a **unit multiple** of the other — both divisibilities at
+exponent one — and about where such a pair comes from.
+
+**Where it comes from is the point.** `ComplexAnalytic.exists_pow_mul_eq_rename`
+(`Oka/Analytification/DistinguishedOpen.lean`) proves an equation in the polynomial ring, and
+`ComplexAnalytic.exists_localisationOpen_eq_rename` reads off the geometric half of it: two
+polynomials cut out the same open. **That discards the algebra**, and the algebra is what a
+transition morphism needs — an equality of non-vanishing loci does not give a divisibility over a
+general presented `ℂ`-algebra, which would be a Nullstellensatz statement and is proved nowhere
+here. Read modulo the ideal, the same equation says the two polynomials are *associates*, and that
+is what `ComplexAnalytic.exists_mk_rename_eq` records.
+-/
+
+/-- **A unit multiple gives the isomorphism**, at exponent one in both directions.
+
+`ComplexAnalytic.localisationPresentationIsoOfDvdPow` asks for `∃ N, q' ∣ q ^ N` and its mirror;
+a unit multiple gives both with `N = M = 1`, since `q = q' * u⁻¹` and `q' = q * u`. Stated as a
+`def` rather than as an existence, because a consumer building a transition morphism needs the
+isomorphism and not the knowledge that one exists — the same reason
+`ComplexAnalytic.localisationPresentationIsoOfDvdPow` is a `def` taking its hypotheses. -/
+noncomputable def localisationPresentationIsoOfUnitMul (q q' : MvPolynomial (ULift.{u} (Fin n)) ℂ)
+    (u : (PresentedAlgebra.{u} n k g)ˣ)
+    (hu : Ideal.Quotient.mk (presentationIdeal.{u} g) q' =
+      (u : PresentedAlgebra.{u} n k g) * Ideal.Quotient.mk (presentationIdeal.{u} g) q) :
+    (⟨n + 1, k + 1, localisationPresentation.{u} g q⟩ : Presentation.{u}) ≅
+      ⟨n + 1, k + 1, localisationPresentation.{u} g q'⟩ :=
+  localisationPresentationIsoOfDvdPow.{u} g q q'
+    ⟨1, ((u⁻¹ : (PresentedAlgebra.{u} n k g)ˣ) : PresentedAlgebra.{u} n k g), by
+      rw [pow_one, hu, mul_comm (u : PresentedAlgebra.{u} n k g), mul_assoc, ← Units.val_mul,
+        mul_inv_cancel, Units.val_one, mul_one]⟩
+    ⟨1, (u : PresentedAlgebra.{u} n k g), by rw [pow_one, hu, mul_comm]⟩
+
+/-- **The triangle**, for the isomorphism above: it is one over the member the two opens sit in.
+
+`ComplexAnalytic.localisationPresentationIsoOfDvdPow_hom_comp` at the two divisibilities the
+definition supplies, and it is stated rather than left to a consumer to unfold: an isomorphism
+that is not over the base identifies two objects and relates nothing, which is the distinction
+`ComplexAnalytic.localisationPresentedAlgebraEquivOfDvdPow_localisationRingHom` above exists to
+make. -/
+theorem localisationPresentationIsoOfUnitMul_hom_comp (q q' : MvPolynomial (ULift.{u} (Fin n)) ℂ)
+    (u : (PresentedAlgebra.{u} n k g)ˣ)
+    (hu : Ideal.Quotient.mk (presentationIdeal.{u} g) q' =
+      (u : PresentedAlgebra.{u} n k g) * Ideal.Quotient.mk (presentationIdeal.{u} g) q) :
+    (localisationPresentationIsoOfUnitMul.{u} g q q' u hu).hom ≫ localisationHom.{u} g q' =
+      localisationHom.{u} g q :=
+  localisationPresentationIsoOfDvdPow_hom_comp.{u} g q q' _ _
+
+/-- **The polynomial that was inverted is a unit upstairs**, which is the whole content of the
+last equation of `ComplexAnalytic.localisationPresentation`: `t · f = 1` in the presented algebra,
+read as an invertibility rather than as a relation.
+
+Everything below is this fact and `ComplexAnalytic.exists_pow_mul_eq_rename`. -/
+theorem isUnit_mk_rename_localisationIncl :
+    IsUnit (Ideal.Quotient.mk (presentationIdeal.{u} (localisationPresentation.{u} g f))
+      (MvPolynomial.rename (localisationIncl.{u} n) f)) := by
+  have key : (Ideal.Quotient.mk (presentationIdeal.{u} (localisationPresentation.{u} g f))
+      (MvPolynomial.rename (localisationIncl.{u} n) f)) *
+        Ideal.Quotient.mk _ (MvPolynomial.X (localisationVar.{u} n)) = 1 := by
+    rw [← map_mul, ← sub_eq_zero, ← map_one (Ideal.Quotient.mk _), ← map_sub,
+      Ideal.Quotient.eq_zero_iff_mem]
+    refine Ideal.subset_span ⟨Fin.last k, ?_⟩
+    rw [localisationPresentation_last]
+    ring
+  exact isUnit_iff_exists.2 ⟨_, key, by rw [mul_comm]; exact key⟩
+
+/-- **Every polynomial of a localisation is a unit multiple of a renamed one**, in the presented
+algebra — the algebraic form of `ComplexAnalytic.exists_localisationOpen_eq_rename`.
+
+`ComplexAnalytic.exists_pow_mul_eq_rename` is the equation in the polynomial ring; modulo the
+ideal its correction term dies, and what is left is `mk (rename Q) = uᴰ · mk q` with
+`u = mk (rename f)` the unit above. **`D` survives here where the geometric form drops it**: a
+non-vanishing locus does not see a non-vanishing factor, but a divisibility does, and the unit is
+what a consumer feeds to `ComplexAnalytic.localisationPresentationIsoOfUnitMul`.
+
+The two statements are not interchangeable, and the direction that fails is worth naming: this
+one gives the equality of opens (a unit does not vanish), and the equality of opens does **not**
+give this one — over a general presented `ℂ`-algebra that implication is a Nullstellensatz
+statement and nothing in this repository proves it. -/
+theorem exists_mk_rename_eq (q : MvPolynomial (ULift.{u} (Fin (n + 1))) ℂ) :
+    ∃ (Q : MvPolynomial (ULift.{u} (Fin n)) ℂ) (u : (PresentedAlgebra.{u} (n + 1) (k + 1)
+        (localisationPresentation.{u} g f))ˣ),
+      Ideal.Quotient.mk (presentationIdeal.{u} (localisationPresentation.{u} g f))
+          (MvPolynomial.rename (localisationIncl.{u} n) Q) =
+        (u : PresentedAlgebra.{u} (n + 1) (k + 1) (localisationPresentation.{u} g f)) *
+          Ideal.Quotient.mk (presentationIdeal.{u} (localisationPresentation.{u} g f)) q := by
+  obtain ⟨D, Q, r, h⟩ := exists_pow_mul_eq_rename.{u} f q
+  obtain ⟨u, hu⟩ := isUnit_mk_rename_localisationIncl.{u} g f
+  refine ⟨Q, u ^ D, ?_⟩
+  have hrel : Ideal.Quotient.mk (presentationIdeal.{u} (localisationPresentation.{u} g f))
+      (MvPolynomial.X (localisationVar.{u} n) *
+        MvPolynomial.rename (localisationIncl.{u} n) f - 1) = 0 :=
+    (Ideal.Quotient.eq_zero_iff_mem).2 (Ideal.subset_span
+      ⟨Fin.last k, localisationPresentation_last.{u} g f⟩)
+  have hq := congrArg (Ideal.Quotient.mk
+    (presentationIdeal.{u} (localisationPresentation.{u} g f))) h
+  rw [map_mul, map_pow, map_add, map_mul, hrel, zero_mul, add_zero, ← hu] at hq
+  rw [← hq, Units.val_pow_eq_pow_val]
 
 end ComplexAnalytic
