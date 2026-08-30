@@ -43,6 +43,13 @@ which `Oka` **150 → 78**, `OkaTest` **2 → 0** and `Mathlib` **3490 → 3303*
 `Lean` and `Batteries`, 5392 → 5131. The two `CategoryTheory` imports are free against that
 baseline and were free against the old one.
 
+**The before-column is the tree this file left, and re-measuring it here gives one more.** The old
+import list reaches `Oka` whole — that is the point of the paragraph — so once `Oka.lean` names
+this module, measuring the *old* list on *this* tree closes over the moved file itself and returns
+`Oka` 151, sum 3643, all 5393. The figures above are the ones a reader wants, which is what the
+move cost, and they are checkable without a build: the `Oka.*` count is `Oka.lean`'s import lines
+plus one for `Oka` itself, 149 + 1 there against 150 + 1 here.
+
 Their cost is not zero everywhere, and the other figure is what a `Oka/CategoryTheory/` home would
 be priced at: `scripts/import_cost.py --target Mathlib.CategoryTheory.GlueData` puts them at **2**
 against `Mathlib/CategoryTheory/GlueData.lean`'s closure of 540. **That script cannot price this
