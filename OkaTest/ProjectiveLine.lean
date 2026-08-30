@@ -294,10 +294,8 @@ theorem pair_no_distinct_triple {i j k : pair.{u}} (hij : i ≠ j) (hik : i ≠ 
 theorem hrange_lineCover (i j k : pair.{u}) (hij : i ≠ j) (hik : i ≠ k) (hjk : j ≠ k) :
     Set.range (coverTripleIncl.{u} lineCoverObj.{u} lineCoverPoly.{u} i j k ≫
         coverTransitionHom.{u} lineCoverObj.{u} lineCoverPoly.{u} lineSwapIso.{u} i j).base ⊆
-      ((coverOpen.{u} lineCoverObj.{u} lineCoverPoly.{u} j k ⊓
-          coverOpen.{u} lineCoverObj.{u} lineCoverPoly.{u} j i :
-        Opens (coverSpace.{u} lineCoverObj.{u} j)) :
-          Set (coverSpace.{u} lineCoverObj.{u} j)) :=
+      (coverOpen.{u} lineCoverObj.{u} lineCoverPoly.{u} j k :
+        Set (coverSpace.{u} lineCoverObj.{u} j)) :=
   (pair_no_distinct_triple.{u} hij hik hjk).elim
 
 theorem hcocycle_lineCover (i j k : pair.{u}) (hij : i ≠ j) (hik : i ≠ k) (hjk : j ≠ k) :

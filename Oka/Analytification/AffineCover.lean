@@ -108,6 +108,17 @@ about morphisms of *open subspaces of the members*, which is the spelling a geom
 arrives in and the one `Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean`'s module docstring
 argues for.
 
+**And `hrange` asks for its content and no more.** The natural statement of it is a containment in
+`D(f_jk) ⊓ D(f_ji)` — that is the open `ComplexAnalytic.coverTriplePart` restricts to, and it is
+what `AlgebraicGeometry.LocallyRingedSpace.liftRestrict` consumes — but the `D(f_ji)` half of that
+is a theorem. `ComplexAnalytic.coverTransitionHom` is *defined* as a composite ending in
+`ComplexAnalytic.coverIncl`, whose range is exactly `D(f_ji)`, so nothing can land outside it
+whatever the input is: `ComplexAnalytic.range_comp_coverTransitionHom_subset` proves it and
+`ComplexAnalytic.coverTriple` supplies it with `Set.subset_inter`, leaving a caller the other half
+alone. `Oka/Analytification/SpecAffineCover.lean`'s hypothesis of the same name is weakened in the
+same branch and for the same reason: taxis #1105 holds both glue data over one input, and two
+hypotheses of the same shape are one obligation discharged twice where two shapes are two.
+
 ## The diagonal
 
 `poly` and `glue` are asked for at **every** pair, including `i = i`, but `hrange` and `hcocycle`
@@ -163,6 +174,13 @@ a much larger tax than one unused value per index.
   analytifications and its maps are `ComplexAnalytic.coverIota`**, both by `rfl`. Without them
   the cover is opaque and a consumer would be reading the glue data rather than `X^an`.
   (Naming `ComplexAnalytic.coverIota` here advertises it, so it is guarded below alongside them.)
+- `ComplexAnalytic.range_coverTransitionHom_subset` and
+  `ComplexAnalytic.range_comp_coverTransitionHom_subset`: **the transition into the ambient member
+  cannot leave `D(f_ji)`**, whatever the input is. This is the half of the range condition that is
+  a theorem rather than a hypothesis, and `ComplexAnalytic.coverTriple` is what consumes the
+  second of the two. The mirrors on the `Spec` side are
+  `ComplexAnalytic.range_specTransitionHom_subset` and
+  `ComplexAnalytic.range_comp_specTransitionHom_subset`.
 - `ComplexAnalytic.comm_coverGlueData`: **agreement over the overlaps is the glue datum's
   compatibility condition**, which is what makes `ComplexAnalytic.coverGlueMorphisms` statable —
   `ComplexAnalytic.AnalyticSpace.glueMorphisms` asks for agreement over a categorical pullback
@@ -324,6 +342,20 @@ theorem coverGlueIso_symm (hsymm : ∀ i j : J, glue j i = (glue i j).symm) (i j
   rw [coverGlueIso, coverGlueIso, hsymm i j, Functor.mapIso_symm, Functor.mapIso_symm]
   rfl
 
+/-! ### The range hypothesis, half of which is free -/
+
+/-- **The transition into the ambient member lands in `D(f_ji)`**, whatever the input is.
+
+`ComplexAnalytic.coverTransitionHom` is a composite ending in `ComplexAnalytic.coverIncl`, whose
+range is that open by `AlgebraicGeometry.LocallyRingedSpace.range_ofRestrict`. Nothing about the
+input enters. The mirror of `ComplexAnalytic.range_specTransitionHom_subset`. -/
+theorem range_coverTransitionHom_subset (i j : J) :
+    Set.range (coverTransitionHom.{u} obj poly glue i j).base ⊆
+      (coverOpen.{u} obj poly j i : Set (coverSpace.{u} obj j)) := by
+  rw [coverTransitionHom, LocallyRingedSpace.comp_base, TopCat.coe_comp, Set.range_comp]
+  refine subset_trans (Set.image_subset_range _ _) ?_
+  exact ((coverSpace.{u} obj j).range_ofRestrict (coverOpen.{u} obj poly j i)).le
+
 /-! ### Triple overlaps -/
 
 /-- **The triple overlap `D(f_ij) ⊓ D(f_ik)` inside the `i`-th member**, as a space.
@@ -341,23 +373,37 @@ abbrev coverTripleIncl (i j k : J) :
   (coverSpace.{u} obj i).restrictLE (inf_le_left :
     coverOpen.{u} obj poly i j ⊓ coverOpen.{u} obj poly i k ≤ coverOpen.{u} obj poly i j)
 
+/-- **The `D(f_ji)` half of the range hypothesis is free**, at the composite the hypothesis is
+actually stated at: `ComplexAnalytic.range_coverTransitionHom_subset` precomposed. So the content
+of `hrange` is the *other* half alone, and that is the form the hypothesis below takes. -/
+theorem range_comp_coverTransitionHom_subset (i j k : J) :
+    Set.range (coverTripleIncl.{u} obj poly i j k ≫
+        coverTransitionHom.{u} obj poly glue i j).base ⊆
+      (coverOpen.{u} obj poly j i : Set (coverSpace.{u} obj j)) := by
+  rw [LocallyRingedSpace.comp_base, TopCat.coe_comp, Set.range_comp]
+  exact subset_trans (Set.image_subset_range _ _)
+    (range_coverTransitionHom_subset.{u} obj poly glue i j)
+
 variable (hrange : ∀ i j k : J, i ≠ j → i ≠ k → j ≠ k →
   Set.range (coverTripleIncl.{u} obj poly i j k ≫ coverTransitionHom.{u} obj poly glue i j).base ⊆
-    ((coverOpen.{u} obj poly j k ⊓ coverOpen.{u} obj poly j i : Opens (coverSpace.{u} obj j)) :
-      Set (coverSpace.{u} obj j)))
+    (coverOpen.{u} obj poly j k : Set (coverSpace.{u} obj j)))
 
 /-- **The transition on triple overlaps**, `X_i|(D(f_ij) ⊓ D(f_ik)) ⟶ X_j|(D(f_jk) ⊓ D(f_ji))`.
 
-This is `t'` before it is conjugated into the pullbacks, and the hypothesis `hrange` is exactly
-what says the classical statement — that the transition from `i` to `j` carries the part of the
-overlap that also meets `k` into the part of `D(f_ji)` that meets `k` — holds. It is not implied
-by anything: two members can be glued along an open without their glueings agreeing on triple
-overlaps, and that is what `hrange` and `hcocycle` rule out. -/
+This is `t'` before it is conjugated into the pullbacks.
+`AlgebraicGeometry.LocallyRingedSpace.liftRestrict` wants the image inside `D(f_jk) ⊓ D(f_ji)`;
+`hrange` is the `D(f_jk)` half — the classical statement that the transition from `i` to `j`
+carries the part of the overlap that also meets `k` into the part that meets `k` — and
+`ComplexAnalytic.range_comp_coverTransitionHom_subset` is the other, which holds whatever the
+input is. Only the first is not implied by anything: two members can be glued along an open
+without their glueings agreeing on triple overlaps, and that is what `hrange` and `hcocycle` rule
+out. -/
 def coverTriple (i j k : J) (hij : i ≠ j) (hik : i ≠ k) (hjk : j ≠ k) :
     coverTriplePart.{u} obj poly i j k ⟶ coverTriplePart.{u} obj poly j k i :=
   LocallyRingedSpace.liftRestrict
     (coverTripleIncl.{u} obj poly i j k ≫ coverTransitionHom.{u} obj poly glue i j) _
-    (hrange i j k hij hik hjk)
+    (Set.subset_inter (hrange i j k hij hik hjk)
+      (range_comp_coverTransitionHom_subset.{u} obj poly glue i j k))
 
 /-- **`coverTriple` is a morphism over the ambient member**, which is the only property of it
 anything consumes. -/

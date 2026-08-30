@@ -114,17 +114,16 @@ theorem coverTripleIncl_comp_nodeCover (i j k : triple.{u}) :
   rw [coverTransitionHom, coverTransition_hom_nodeCover, Category.id_comp]
   exact LocallyRingedSpace.restrictLE_fac _ _
 
-/-- The range hypothesis, with equality rather than containment: the transition carries the triple
-overlap onto the triple overlap. -/
+/-- The range hypothesis. The transition carries the triple overlap onto the triple overlap
+`D(f_jk) ⊓ D(f_ji)` — with equality, not merely containment — and the hypothesis asks only for the
+`D(f_jk)` half of that, so the proof is the equality followed by `inf_le_left`. -/
 theorem hrange_nodeCover (i j k : triple.{u}) (_hij : i ≠ j) (_hik : i ≠ k) (_hjk : j ≠ k) :
     Set.range (coverTripleIncl.{u} nodeCoverObj.{u} nodeCoverPoly.{u} i j k ≫
         coverTransitionHom.{u} nodeCoverObj.{u} nodeCoverPoly.{u} nodeCoverGlue.{u} i j).base ⊆
-      ((coverOpen.{u} nodeCoverObj.{u} nodeCoverPoly.{u} j k ⊓
-          coverOpen.{u} nodeCoverObj.{u} nodeCoverPoly.{u} j i :
-        Opens (coverSpace.{u} nodeCoverObj.{u} j)) :
-          Set (coverSpace.{u} nodeCoverObj.{u} j)) := by
+      (coverOpen.{u} nodeCoverObj.{u} nodeCoverPoly.{u} j k :
+        Set (coverSpace.{u} nodeCoverObj.{u} j)) := by
   rw [coverTripleIncl_comp_nodeCover]
-  exact le_of_eq (LocallyRingedSpace.range_ofRestrict _ _)
+  exact (le_of_eq (LocallyRingedSpace.range_ofRestrict _ _)).trans inf_le_left
 
 /-- **The transition on triple overlaps is the identity**, by the uniqueness of a factorisation
 through an open subspace. -/

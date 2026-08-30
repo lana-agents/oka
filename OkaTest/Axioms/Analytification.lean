@@ -930,6 +930,27 @@ info: 'ComplexAnalytic.coverTransition' depends on axioms:
 #print axioms ComplexAnalytic.coverTransition
 
 /--
+info: 'ComplexAnalytic.coverTriple' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverTriple
+
+/--
+info: 'ComplexAnalytic.range_coverTransitionHom_subset' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.range_coverTransitionHom_subset
+
+/--
+info: 'ComplexAnalytic.range_comp_coverTransitionHom_subset' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.range_comp_coverTransitionHom_subset
+
+/--
 info: 'ComplexAnalytic.coverGlueData' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
@@ -1071,10 +1092,12 @@ than part of that block because the two constructions share an *input* and nothi
 file's declarations appear in the other's statements, and the file that will relate them —
 taxis #1105's comparison morphism `X^an ⟶ X` — does not exist yet.
 
-`ComplexAnalytic.range_specTransitionHom_subset` and its composite are guarded although nothing
-consumes them: they are the evidence for the file's claim that half of the `hrange` hypothesis is
-free, and a claim in a module docstring whose proof is unguarded is the gap this file exists to
-close.
+`ComplexAnalytic.range_specTransitionHom_subset` and its composite are guarded because
+`ComplexAnalytic.specTriple` consumes the second of them: it supplies the `D(f_ji)` half of
+`AlgebraicGeometry.LocallyRingedSpace.liftRestrict`'s obligation so that `hrange` does not have to
+ask for it. **They were guarded before anything consumed them** — as the evidence for the file's
+claim that half of that hypothesis is free — and the analytic mirrors added alongside them in the
+block above stand in the same relation to `ComplexAnalytic.coverTriple`.
 -/
 
 /--

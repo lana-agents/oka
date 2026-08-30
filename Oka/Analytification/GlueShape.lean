@@ -441,14 +441,17 @@ theorem hsymm_of_hglue (i j : J) : glue j i = (glue i j).symm :=
 
 It has to be named to be talked about: `ComplexAnalytic.GlueShape.not_ctHRange` is a statement
 *about* it and `ComplexAnalytic.GlueShape.HCocycle` cannot be written without it. Its content is
-that the transition from `i` to `j` carries the part of the overlap that also meets `k` into the
-part of `D(f_ji)` that meets `k`. -/
+that the transition from `i` to `j` carries the part of the overlap that also meets `k` into
+`D(f_jk)`. That the image also lies in `D(f_ji)` was part of this hypothesis until it was measured
+to be free: `ComplexAnalytic.coverTransitionHom` ends in `ComplexAnalytic.coverIncl`, so
+`ComplexAnalytic.range_comp_coverTransitionHom_subset` proves it for every input, and the row of
+the table above that says this hypothesis does not follow from the diagram is about what is left.
+-/
 abbrev HRange : Prop :=
   ∀ i j k : J, i ≠ j → i ≠ k → j ≠ k →
     Set.range (coverTripleIncl.{u} obj poly i j k ≫
         coverTransitionHom.{u} obj poly glue i j).base ⊆
-      ((coverOpen.{u} obj poly j k ⊓ coverOpen.{u} obj poly j i :
-          TopologicalSpace.Opens (coverSpace.{u} obj j)) : Set (coverSpace.{u} obj j))
+      (coverOpen.{u} obj poly j k : Set (coverSpace.{u} obj j))
 
 variable (hrange : HRange.{u} obj poly glue)
 
@@ -588,7 +591,7 @@ theorem not_ctHRange : ¬ HRange.{0} ctObj ctPoly ctGlue := by
   intro h
   have hx := h 0 1 2 (by decide) (by decide) (by decide)
     ⟨(⟨ctPt, ctPt_mem⟩ : coverTriplePart.{0} ctObj ctPoly 0 1 2), rfl⟩
-  have h3 := (mem_localisationOpen_iff.{0} (ctObj 1).g (ctPoly 1 2)).1 hx.1
+  have h3 := (mem_localisationOpen_iff.{0} (ctObj 1).g (ctPoly 1 2)).1 hx
   rw [ctPoly_one_two, map_zero] at h3
   exact h3 rfl
 
