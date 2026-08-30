@@ -306,19 +306,21 @@ lake exe lint-style Oka OkaTest || exit 1
 # and `.github/workflows/lean_action_ci.yml` did. It could therefore run earlier
 # than this; it is here so that the instrument and the check it verifies stay one comment block
 # apart rather than two places to keep in step. **Order 2s, and a small multiple of that on a
-# loaded machine** — measured 2026-08-30 at 1.85–1.92s over three runs on a warm checkout, against
-# 1.76–1.79s for the same command on the commit before it, on the same machine. Essentially all
-# of it is still the `os.chdir` negative control, which walks the real tree four times at about
-# 0.45s a walk; every other check runs on a planted fixture of a line or two, and the four that
-# check the field-notation rule plant an *environment* as a `--dump` file rather than reading the
-# real one, so the count of real-tree readers above is unchanged.
+# loaded machine** — measured 2026-08-30 at 1.94–1.97s over three runs on a warm checkout, against
+# 1.85–1.92s before the two `GENERATED_COMPONENT` checks were added and 1.76–1.79s before the four
+# field-notation ones. Essentially all of it is still the `os.chdir` negative control, which walks
+# the real tree four times at about 0.45s a walk; every other check runs on a planted fixture of a
+# line or two, and the six that check the field-notation rule plant an *environment* as a `--dump`
+# file rather than reading the real one, so the count of real-tree readers above is unchanged.
 #
-# **This line read a bare `1.8s` until 2026-08-30**, which was the true cost before those four
+# **This line read a bare `1.8s` until 2026-08-30**, which was the true cost before those
 # checks existed. It is stated as an order and a spread because a single number measured on one
 # machine is what let the `check_module_docstrings.py` pin below go three times stale before
-# anybody noticed. The four re-enter this script as a subprocess in order to exercise `main()`
-# rather than an internal function — six of the checks now do — and an interpreter start that
-# imports it costs 0.029s against 0.009s for a bare one.
+# anybody noticed — and it has now absorbed two additions on the same day without moving off
+# `order 2s`, which is the property it was rewritten for. The field-notation checks re-enter this
+# script as a subprocess in order to exercise `main()` rather than an internal function — eight of
+# the checks now do — and an interpreter start that imports it costs 0.029s against 0.009s for a
+# bare one.
 # Against a whole-script time in minutes, and it buys the only evidence that the line below is
 # an instrument rather than a `pass` statement.
 python3 scripts/check_docstring_names.py --self-test || exit 1
