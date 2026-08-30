@@ -1726,10 +1726,19 @@ info: 'ComplexAnalytic.GlueShape.hCocycle_of_no_three' depends on axioms:
 
 /-! ### A standard étale algebra over a presented `ℂ`-algebra is presented
 
-The five advertised results of `Oka/Analytification/StandardEtale.lean`. The two operations —
-adjoin a variable, add a relation — and the three forms of the identification with
-`StandardEtalePair.Ring`: the one that names the quotient, the one that names `P.Ring`, and the
-one that quantifies the polynomial lifts of `f` and `g` away.
+The six advertised results of `Oka/Analytification/StandardEtale.lean`. The two operations —
+adjoin a variable, add a relation — the three forms of the identification with
+`StandardEtalePair.Ring` (the one that names the quotient, the one that names `P.Ring`, and the
+one that quantifies the polynomial lifts of `f` and `g` away), and the bridge from
+`Polynomial.derivative` to `MvPolynomial.pderiv` that a consumer of `StandardEtalePair.cond` has
+to come through.
+
+**The bridge is one declaration and it needed no helpers**, which is worth recording because the
+obvious proof needs two: a crossing lemma for `MvPolynomial.optionEquivLeft` that Mathlib has
+only for `MvPolynomial.sumRingEquiv`, and a reindexing lemma for
+`ComplexAnalytic.localisationVarEquiv`. Both are avoided by inducting on the polynomial instead
+of opening the equivalence up, which also plants no equation lemma; the proof's own docstring
+has the measurement.
 -/
 
 /--
@@ -1766,6 +1775,13 @@ info: 'ComplexAnalytic.exists_presentation_standardEtale' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.exists_presentation_standardEtale
+
+/--
+info: 'ComplexAnalytic.polyPresentedAlgebraEquiv_mk_pderiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.polyPresentedAlgebraEquiv_mk_pderiv
 
 /-! ### The étale presentation analytifies to a distinguished open
 
