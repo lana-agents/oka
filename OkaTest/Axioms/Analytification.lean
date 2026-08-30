@@ -909,6 +909,26 @@ info: 'ComplexAnalytic.isOpenImmersion_coverIota' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isOpenImmersion_coverIota
 
+/--
+info: 'ComplexAnalytic.coverIota' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverIota
+
+/--
+info: 'ComplexAnalytic.coverAnalytificationOpenCover_obj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverAnalytificationOpenCover_obj
+
+/--
+info: 'ComplexAnalytic.coverAnalytificationOpenCover_map' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverAnalytificationOpenCover_map
+
 /-! ### The two-level index category of a glue data
 
 The five advertised results of `Oka/Analytification/GlueShape.lean`, which arrived under `Oka/`
