@@ -84,6 +84,7 @@ import Oka.Analytification.PresentationFlatness
 import Oka.Analytification.PresentationStalk
 import Oka.Analytification.Sheaf
 import Oka.Analytification.SheafCoherent
+import Oka.Analytification.SpecAffineCover
 import Oka.Analytification.SpecDistinguishedOpen
 import Oka.Analytification.StandardEtale
 import Oka.Analytification.StandardEtaleAnalytification
