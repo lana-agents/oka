@@ -23,6 +23,7 @@ import Oka.Algebra.Category.ModuleCat.Sheaf.Submodule
 import Oka.Algebra.Category.ModuleCat.Stalk
 import Oka.Algebra.Module.FinitePresentation
 import Oka.Algebra.MvPolynomial.Equiv
+import Oka.Algebra.MvPolynomial.PDeriv
 import Oka.Algebra.MvPolynomial.Taylor
 import Oka.AlgebraicGeometry.GammaSpecAdjunction
 import Oka.AlgebraicGeometry.Modules.Coherent
@@ -63,6 +64,7 @@ import Oka.AnalyticSpace.Relations
 import Oka.AnalyticSpace.Restrict
 import Oka.AnalyticSpace.Sigma
 import Oka.AnalyticSpace.SigmaFiniteEtale
+import Oka.AnalyticSpace.SimpleZeroPolynomial
 import Oka.AnalyticSpace.SimpleZeroStalk
 import Oka.AnalyticSpace.StalkLocalInverse
 import Oka.Analytification.AffineCover

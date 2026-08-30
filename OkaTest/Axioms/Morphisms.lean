@@ -764,6 +764,42 @@ info: 'ComplexAnalytic.isIso_stalkMap_comp_uliftProj_of_coeff' depends on axioms
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isIso_stalkMap_comp_uliftProj_of_coeff
 
+/-! ### The same hypothesis as a partial derivative, for a polynomial cutting section
+
+`Oka/AnalyticSpace/SimpleZeroPolynomial.lean`. The four above take one Taylor coefficient of the
+germ of the cutting section; these four take `MvPolynomial.pderiv` of the polynomial the section
+comes from, evaluated at the point, which is the form a standard étale presentation supplies.
+They are guarded under this heading rather than the one above because they are results of a
+different file, and beside it because each is one rewrite away from its neighbour there. -/
+
+/--
+info: 'ComplexAnalytic.bijective_stalkMap_comp_projCoords_of_pderiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.bijective_stalkMap_comp_projCoords_of_pderiv
+
+/--
+info: 'ComplexAnalytic.isIso_stalkMap_comp_projCoords_of_pderiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isIso_stalkMap_comp_projCoords_of_pderiv
+
+/--
+info: 'ComplexAnalytic.bijective_stalkMap_comp_uliftProj_of_pderiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.bijective_stalkMap_comp_uliftProj_of_pderiv
+
+/--
+info: 'ComplexAnalytic.isIso_stalkMap_comp_uliftProj_of_pderiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isIso_stalkMap_comp_uliftProj_of_pderiv
+
 /-! ### The projection of a monic hypersurface to its base is finite
 
 `Oka/AnalyticSpace/MonicProjection.lean`, together with the general criterion it consumes from

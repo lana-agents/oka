@@ -79,7 +79,16 @@ coefficient conditions — no constant term, and a nonzero coefficient at
 needed to supply them: a consumer that has one may use it, and a consumer that computes a Taylor
 coefficient directly need not acquire one. What that leaves open is the *identification* of that
 coefficient with `∂F/∂X_n` at the point, which is a statement about one named coefficient rather
-than about the order of a power series, and is still not here.
+than about the order of a power series.
+
+**For a cutting section that comes from a polynomial, that identification now exists**, and it is
+`Oka/AnalyticSpace/SimpleZeroPolynomial.lean`: when `F` is `OkaRing.ofMvPolynomial ⊤ P` the
+coefficient is `MvPolynomial.pderiv` of `P` in the last variable, evaluated at the point
+(`LocalOkaRing.coeff_single_one_ofMvPolynomial`). **It is still not here and it is still not a
+derivative on `LocalOkaRing`**: the derivative there is Mathlib's, on polynomials, and it reaches
+the germ by translating the polynomial to the point rather than by differentiating a germ. For a
+general holomorphic `F` there is nothing to identify the coefficient with, and that is the half
+this paragraph still leaves open.
 
 **And only one of the two is a hypothesis, because the other is free.** The first says through
 `OkaRing.constantCoeff_germ` that `F` vanishes at the point, and
@@ -152,8 +161,9 @@ the same isomorphism, at the spelling a caller of `ofRestrict` already holds —
 because a reader who took the old sentence at face value would go and build a Mathlib bridge that
 the working proof does not use.
 
-**No derivative hypothesis** — see §*Why the hypothesis is a coefficient condition* for what
-replaced the need for one and what it does not settle — and **no packaged
+**No derivative hypothesis, and none for a general `F` anywhere** — see §*Why the hypothesis is
+a coefficient condition* for what replaced the need for one, and for the polynomial case, which
+is `Oka/AnalyticSpace/SimpleZeroPolynomial.lean` and not this file — and **no packaged
 `LocalOkaRing (Fin n) ≃+* X.presheaf.stalk x`**:
 the isomorphism is available from the results below — `CategoryTheory.asIso` turns one of them
 into an isomorphism in `CommRingCat`, and `okaStalkEquiv` identifies its source with

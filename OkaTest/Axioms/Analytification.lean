@@ -295,6 +295,52 @@ info: 'LocalOkaRing.ofMvPolynomial_taylorAlgHom' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms LocalOkaRing.ofMvPolynomial_taylorAlgHom
 
+/-! ### The Taylor coefficients of a shifted polynomial, and of a germ
+
+`Oka/Algebra/MvPolynomial/Taylor.lean`, `Oka/Algebra/MvPolynomial/PDeriv.lean` and
+`Oka/Polynomial/Germ.lean`. The two mirror-tree statements read the constant and the linear
+coefficient of `p(x + z)` — the second as a partial derivative — and the two after them are what
+carries that to a germ: at the origin the germ of a polynomial *is* the polynomial, and so the
+linear coefficient of the germ at any point is a partial derivative there. They are guarded under
+this heading rather than in `OkaTest/Axioms/RingTheory.lean` for the reason
+`MvPolynomial.map_taylorEquiv_primeCompl` above is: their consumer is the germ of a polynomial,
+which is what this file's routing row covers. -/
+
+/--
+info: 'MvPolynomial.constantCoeff_taylorAlgHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms MvPolynomial.constantCoeff_taylorAlgHom
+
+/--
+info: 'MvPolynomial.coeff_single_one_taylorAlgHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms MvPolynomial.coeff_single_one_taylorAlgHom
+
+/--
+info: 'LocalOkaRing.ofMvPolynomial_zero_X' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.ofMvPolynomial_zero_X
+
+/--
+info: 'LocalOkaRing.coe_ofMvPolynomial_zero' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.coe_ofMvPolynomial_zero
+
+/--
+info: 'LocalOkaRing.coeff_single_one_ofMvPolynomial' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.coeff_single_one_ofMvPolynomial
+
 /--
 info: 'ComplexAnalytic.polyLocalToGermAt' depends on axioms:
   [propext, Classical.choice, Quot.sound]
