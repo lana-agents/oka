@@ -1271,6 +1271,87 @@ info: 'ComplexAnalytic.coverMap_comp' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.coverMap_comp
 
+/-! ### The comparison morphism `X^an ⟶ X`
+
+The three definitions and five results of `Oka/Analytification/CoverComparison.lean`, the
+morphism from the gluing `### The glue data of an affine cover with distinguished overlaps`
+builds to the gluing `### The glue data of the members' `Spec`s` builds. It is a heading of its
+own rather than a `####` under either because it is about neither cover on its own: its input is
+one datum and its content is that the affine comparison morphism is natural enough to descend to
+it. Placed after both blocks it consumes, and named by heading rather than by position, since two
+of the three blocks here now say "the block above" and cannot both be right.
+-/
+
+/--
+info: 'ComplexAnalytic.toLRSHom_localisationProj_comp_analytificationToSpec' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.toLRSHom_localisationProj_comp_analytificationToSpec
+
+/--
+info: 'ComplexAnalytic.coverOverlapIso_hom_coverIncl' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverOverlapIso_hom_coverIncl
+
+/--
+info: 'ComplexAnalytic.comparisonPart' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.comparisonPart
+
+/--
+info: 'ComplexAnalytic.coverIncl_comp_analytificationToSpec' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverIncl_comp_analytificationToSpec
+
+/--
+info: 'ComplexAnalytic.comparisonPart_comp_specTransition' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.comparisonPart_comp_specTransition
+
+/--
+info: 'ComplexAnalytic.comparisonPartIota' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.comparisonPartIota
+
+/--
+info: 'ComplexAnalytic.comm_comparisonPartIota' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.comm_comparisonPartIota
+
+/--
+info: 'ComplexAnalytic.analytificationToSpecGlued' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationToSpecGlued
+
+/--
+info: 'ComplexAnalytic.toLRSHom_coverIota_comp_analytificationToSpecGlued' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.toLRSHom_coverIota_comp_analytificationToSpecGlued
+
+/--
+info: 'ComplexAnalytic.analytificationToSpecGlued_unique' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationToSpecGlued_unique
+
 /-! ### The two-level index category of a glue data
 
 The five advertised results of `Oka/Analytification/GlueShape.lean`, which arrived under `Oka/`

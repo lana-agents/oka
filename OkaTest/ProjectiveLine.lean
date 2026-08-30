@@ -67,6 +67,15 @@ and `hcocycle` are quantified over triples of **pairwise distinct** indices, bec
   `ComplexAnalytic.GlueShape.hCocycle_of_no_three`, so it is not by itself evidence that the
   general construction is right; `OkaTest/AffineCover.lean`'s three members are. What it adds is
   the non-identity transition.
+* **It has a comparison morphism to a gluing of spectra**
+  (`ComplexAnalytic.projectiveLineComparison`), which restricts on each chart to the affine
+  comparison morphism of `𝔸¹` — the `example` below, and the statement that says the morphism is
+  the intended one. What this instance measures is **what the second glue datum costs a caller**:
+  `Oka/Analytification/CoverComparison.lean` asks for a `Spec`-side `hrange` and `hcocycle`
+  beyond the analytic pair, because neither transports along
+  `ComplexAnalytic.analytificationToSpec`, and here **both are free** for the same reason the
+  analytic pair is — two members, no pairwise distinct triple. At three members it is a real
+  second obligation and nothing in this repository discharges one yet.
 
 ## What is not proved here, and is not claimed anywhere below
 
@@ -509,6 +518,69 @@ example (j : pair.{u}) :
     (glueDataCLinear_coverGlueData.{u} lineCoverObj.{u} lineCoverPoly.{u} lineSwapIso.{u}
       hrange_lineCover.{u} hsymm_lineCover.{u} hcocycle_lineCover.{u})
     hasLocalModels_projectiveLineGlueData.{u} j
+
+/-! ### The comparison morphism `X^an ⟶ X`
+
+`Oka/Analytification/CoverComparison.lean` at this cover. The two `Spec`-side hypotheses it asks
+for beyond the analytic ones cost nothing here, and for exactly the reason the analytic pair cost
+nothing: they are quantified over pairwise distinct triples and `ComplexAnalytic.pair` has two
+members, so both are `ComplexAnalytic.pair_no_distinct_triple`. **That is the whole answer to
+"what does the second glue datum cost a caller" at two members, and it is zero.** At three or
+more it is a real second obligation, and `OkaTest/AffineCover.lean` does not discharge it —
+nothing in this repository yet builds the `Spec`-side gluing of the node.
+-/
+
+/-- **The `Spec`-side range hypothesis, vacuous at two members**, exactly as
+`ComplexAnalytic.hrange_lineCover` is. It does not transport from that one: the two sides carry
+different topologies and `ComplexAnalytic.analytificationToSpec` is not a homeomorphism, which is
+why `Oka/Analytification/CoverComparison.lean` asks for both. -/
+theorem specHrange_lineCover (i j k : pair.{u}) (hij : i ≠ j) (hik : i ≠ k) (hjk : j ≠ k) :
+    Set.range (specTripleIncl.{u} lineCoverObj.{u} lineCoverPoly.{u} i j k ≫
+        specTransitionHom.{u} lineCoverObj.{u} lineCoverPoly.{u} lineSwapIso.{u} i j).base ⊆
+      ((specOpen.{u} lineCoverObj.{u} lineCoverPoly.{u} j k ⊓
+          specOpen.{u} lineCoverObj.{u} lineCoverPoly.{u} j i :
+        Opens (specSpace.{u} lineCoverObj.{u} j)) :
+          Set (specSpace.{u} lineCoverObj.{u} j)) :=
+  (pair_no_distinct_triple.{u} hij hik hjk).elim
+
+/-- **The `Spec`-side cocycle hypothesis, vacuous at two members.** -/
+theorem specHcocycle_lineCover (i j k : pair.{u}) (hij : i ≠ j) (hik : i ≠ k) (hjk : j ≠ k) :
+    specTriple.{u} lineCoverObj.{u} lineCoverPoly.{u} lineSwapIso.{u} specHrange_lineCover.{u}
+        i j k hij hik hjk ≫
+      specTriple.{u} lineCoverObj.{u} lineCoverPoly.{u} lineSwapIso.{u} specHrange_lineCover.{u}
+        j k i hjk hij.symm hik.symm ≫
+      specTriple.{u} lineCoverObj.{u} lineCoverPoly.{u} lineSwapIso.{u} specHrange_lineCover.{u}
+        k i j hik.symm hjk.symm hij = 𝟙 _ :=
+  (pair_no_distinct_triple.{u} hij hik hjk).elim
+
+/-- **`X`: the two spectra glued along `D(z)` by the same `z ↦ 1/z`.**
+
+`ComplexAnalytic.specGlued` at the *same* input as `ComplexAnalytic.projectiveLineSpace` — the
+same presentations, the same polynomial and the same `ComplexAnalytic.lineSwapIso`. Nothing here
+says it is the scheme `ℙ¹`, for the same reasons this file's module docstring gives about the
+analytic side. -/
+def projectiveLineSpecGlued : LocallyRingedSpace.{u} :=
+  specGlued.{u} lineCoverObj.{u} lineCoverPoly.{u} lineSwapIso.{u} specHrange_lineCover.{u}
+    hsymm_lineCover.{u} specHcocycle_lineCover.{u}
+
+/-- **The comparison morphism of `ℙ¹`**, `ComplexAnalytic.projectiveLineSpace` to the gluing of
+the two spectra. -/
+def projectiveLineComparison :
+    (projectiveLineSpace.{u}).toLocallyRingedSpace ⟶ projectiveLineSpecGlued.{u} :=
+  analytificationToSpecGlued.{u} lineCoverObj.{u} lineCoverPoly.{u} lineSwapIso.{u}
+    hrange_lineCover.{u} hsymm_lineCover.{u} hcocycle_lineCover.{u} specHrange_lineCover.{u}
+    specHcocycle_lineCover.{u}
+
+/-- **It restricts on each chart to the affine comparison morphism of `𝔸¹`**, which is the
+statement that says it is the intended morphism and not merely one of the right type. -/
+example (i : pair.{u}) :
+    (lineIota.{u} i).toLRSHom ≫ projectiveLineComparison.{u} =
+      analytificationToSpec.{u} lineRel.{u} ≫
+        specIota.{u} lineCoverObj.{u} lineCoverPoly.{u} lineSwapIso.{u} specHrange_lineCover.{u}
+          hsymm_lineCover.{u} specHcocycle_lineCover.{u} i :=
+  toLRSHom_coverIota_comp_analytificationToSpecGlued.{u} lineCoverObj.{u} lineCoverPoly.{u}
+    lineSwapIso.{u} hrange_lineCover.{u} hsymm_lineCover.{u} hcocycle_lineCover.{u}
+    specHrange_lineCover.{u} specHcocycle_lineCover.{u} i
 
 end
 
