@@ -1366,14 +1366,21 @@ info: 'ComplexAnalytic.analytificationToSpecGlued_unique' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.analytificationToSpecGlued_unique
 
-/-! ### Two presentations of each member give the same `X^an`
+/-! ### Two cover data with isomorphic members give the same `X^an`
 
-The definition and two results of `Oka/Analytification/CoverIndependence.lean`, the first
-instalment of taxis #1107. It is a heading of its own rather than a `####` under
+The three definitions and four results of `Oka/Analytification/CoverIndependence.lean`, the first
+two instalments of taxis #1107. It is a heading of its own rather than a `####` under
 `### A morphism of covered schemes analytifies`, whose `ComplexAnalytic.coverMap` it is built
 from, because its subject is two data for *one* gluing where that block's is a morphism between
 two gluings — and it is placed after the blocks it consumes for the same reason that one gives,
 **named by heading and not by position**.
+
+**The same-index pair is guarded on its own account even though it is an instance of the
+reindexed pair**, which that file measures and says: `ComplexAnalytic.coverMap_hom_inv` is
+`ComplexAnalytic.coverMap_reindex_hom_inv` at `Equiv.refl` with no coercion at all. A guard on an
+advertised name is a statement about that name, and the census
+`scripts/guard_coverage.py` reports counts advertised names rather than distinct facts, so
+dropping either pair here would open a gap without removing a claim.
 -/
 
 /--
@@ -1396,6 +1403,33 @@ info: 'ComplexAnalytic.coverAnalytificationIso' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.coverAnalytificationIso
+
+/--
+info: 'ComplexAnalytic.coverReindexInv' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverReindexInv
+
+/--
+info: 'ComplexAnalytic.coverMap_reindex_hom_inv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverMap_reindex_hom_inv
+
+/--
+info: 'ComplexAnalytic.coverMap_reindex_inv_hom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverMap_reindex_inv_hom
+
+/--
+info: 'ComplexAnalytic.coverAnalytificationReindexIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverAnalytificationReindexIso
 
 /-! ### A morphism of covered schemes on the `Spec` side
 
