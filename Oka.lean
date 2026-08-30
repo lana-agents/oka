@@ -69,6 +69,7 @@ import Oka.Analytification.AffineCover
 import Oka.Analytification.AffineSpace
 import Oka.Analytification.ChangeOfVariables
 import Oka.Analytification.Comparison
+import Oka.Analytification.CoverComparison
 import Oka.Analytification.CoverFunctoriality
 import Oka.Analytification.DistinguishedOpen
 import Oka.Analytification.Flatness

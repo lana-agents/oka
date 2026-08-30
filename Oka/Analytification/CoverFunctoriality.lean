@@ -92,8 +92,10 @@ it costs one attribute.
   locally ringed spaces; deriving it from a compatibility of the `ψ i` with the two glue data would
   need the overlaps of `X` to map into the overlaps of `Y`, which is a refinement condition on the
   input and belongs with cover independence.
-* **No comparison with `Spec`.** That the square against the comparison morphism `X^an ⟶ X`
-  commutes is a statement about a morphism this repository does not yet have.
+* **No comparison with `Spec`.** `Oka/Analytification/CoverComparison.lean` builds the comparison
+  morphism `X^an ⟶ X`; that the square against it commutes is stated neither there nor here, and
+  it is the one statement that would need this file's `ComplexAnalytic.coverMap` and that file's
+  morphism at once. **This bullet said the morphism did not exist until that file arrived.**
 -/
 
 open CategoryTheory TopologicalSpace AlgebraicGeometry

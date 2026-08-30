@@ -1089,8 +1089,18 @@ info: 'ComplexAnalytic.coverGlueMorphisms_coverIota' depends on axioms:
 `Oka/Analytification/SpecAffineCover.lean`, the mirror of the block above with
 `ComplexAnalytic.specFunctor` in place of the analytification. It is a heading of its own rather
 than part of that block because the two constructions share an *input* and nothing else: neither
-file's declarations appear in the other's statements, and the file that will relate them —
-taxis #1105's comparison morphism `X^an ⟶ X` — does not exist yet.
+file's declarations appear in the other's statements — and that is still true now that the file
+which relates them exists. It is `Oka/Analytification/CoverComparison.lean`, guarded below under a
+heading of its own: it names declarations from both of these blocks, neither of these blocks names
+anything of the other's, and so it takes a third heading rather than pulling either of these two
+under the other.
+
+**This paragraph has now been wrong twice, in the two ways this file goes wrong.** It read "the
+file that will relate them … does not exist yet" until that file arrived, which is an absence a
+heading was justified by and the next branch retired; and its replacement said that file was "the
+last block below", which was a *position* and was false on the day it was written. The heading is
+named and not pointed at for that reason, and the paragraph under that heading says the same thing
+from the other side.
 
 `ComplexAnalytic.range_specTransitionHom_subset` and its composite are guarded because
 `ComplexAnalytic.specTriple` consumes the second of them: it supplies the `D(f_ji)` half of
@@ -1270,6 +1280,91 @@ info: 'ComplexAnalytic.coverMap_comp' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.coverMap_comp
+
+/-! ### The comparison morphism `X^an ⟶ X`
+
+The three definitions and five results of `Oka/Analytification/CoverComparison.lean`, the
+morphism from the gluing `### The glue data of an affine cover with distinguished overlaps`
+builds to the gluing `### The glue data of the members' `Spec`s` builds. It is a heading of its
+own rather than a `####` under either because it is about neither cover on its own: its input is
+one datum and its content is that the affine comparison morphism is natural enough to descend to
+it. Placed after both blocks it consumes, and **named by heading rather than by position**, which
+is what the blocks above cannot be revised into cheaply: `"the block above"` occurs three times up
+there, twice in the `Spec` block and once in `#### Morphisms out of \`X^an\``, and **all three are
+true** — each of the two blocks really does sit under the one it means. That is the hazard, not a
+contradiction: a pointer is true only relative to a position, so every one of them constrains what
+may be inserted where, and a name constrains nothing.
+-/
+
+/--
+info: 'ComplexAnalytic.toLRSHom_localisationProj_comp_analytificationToSpec' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.toLRSHom_localisationProj_comp_analytificationToSpec
+
+/--
+info: 'ComplexAnalytic.coverOverlapIso_hom_coverIncl' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverOverlapIso_hom_coverIncl
+
+/--
+info: 'ComplexAnalytic.comparisonPart' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.comparisonPart
+
+/--
+info: 'ComplexAnalytic.coverIncl_comp_analytificationToSpec' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverIncl_comp_analytificationToSpec
+
+/--
+info: 'ComplexAnalytic.comparisonPart_comp_specTransition' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.comparisonPart_comp_specTransition
+
+/--
+info: 'ComplexAnalytic.comparisonPartIota' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.comparisonPartIota
+
+/--
+info: 'ComplexAnalytic.comm_comparisonPartIota' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.comm_comparisonPartIota
+
+/--
+info: 'ComplexAnalytic.analytificationToSpecGlued' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationToSpecGlued
+
+/--
+info: 'ComplexAnalytic.toLRSHom_coverIota_comp_analytificationToSpecGlued' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.toLRSHom_coverIota_comp_analytificationToSpecGlued
+
+/--
+info: 'ComplexAnalytic.analytificationToSpecGlued_unique' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationToSpecGlued_unique
 
 /-! ### The two-level index category of a glue data
 
