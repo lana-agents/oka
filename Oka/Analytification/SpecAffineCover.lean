@@ -54,23 +54,24 @@ them: they are statements about `AlgebraicGeometry.LocallyRingedSpace.restrict` 
 ## Half of `hrange` is a theorem and not a hypothesis, on **both** sides
 
 The `hrange` hypothesis below asks that the transition from `i` to `j` carries the part of the
-`i`-`j` overlap that also meets `k` into `D(f_jk) ⊓ D(f_ji)`, and
+`i`-`j` overlap that also meets `k` into `D(f_jk)`, and
 `Oka/Analytification/AffineCover.lean`'s hypothesis of the same name has the same shape.
-**The second conjunct is free.**
+
+**It asked for `D(f_jk) ⊓ D(f_ji)` when this file was written, and the second conjunct was free.**
 `ComplexAnalytic.specTransitionHom` is defined as the transition followed by
 `ComplexAnalytic.specIncl`, whose range *is* that open, so no composite ending in it can leave it
-— that is `ComplexAnalytic.range_comp_specTransitionHom_subset` below, and it is proved rather
-than asserted. Only the first conjunct, that the overlap with `k` goes to the overlap with `k`, is
-a condition on the input, and it is what `hcocycle` is about.
+— that is `ComplexAnalytic.range_comp_specTransitionHom_subset` below, and
+`ComplexAnalytic.specTriple` now supplies it with `Set.subset_inter` rather than asking a caller
+for it. Only the surviving conjunct, that the overlap with `k` goes to the overlap with `k`, is a
+condition on the input, and it is what `hcocycle` is about.
 
-**The hypothesis is nevertheless stated in the same shape as the analytic side's, and that is a
-deliberate choice rather than an oversight.** taxis #1105 will hold *both* glue data over one
-input and check its family against both; two hypotheses of the same shape are one thing for a
-caller to discharge twice, and two of different shapes are two things. The redundancy is the same
-on the analytic side, where `ComplexAnalytic.coverTransitionHom` factors through
-`ComplexAnalytic.coverIncl` by the same definition, so weakening one without the other would make
-the pair *less* symmetric and not more. Weakening both together is a real improvement and is its
-own issue; this file records the measurement and leaves the shape alone.
+**Both sides were weakened in one branch, and the symmetry is the reason.** taxis #1105 will hold
+*both* glue data over one input and check its family against both; two hypotheses of the same
+shape are one thing for a caller to discharge twice, and two of different shapes are two things.
+The redundancy was identical on the analytic side, where `ComplexAnalytic.coverTransitionHom`
+factors through `ComplexAnalytic.coverIncl` by the same definition, so weakening one without the
+other would have made the pair *less* symmetric and not more.
+`Oka/Analytification/AffineCover.lean` carries the mirror of each theorem below.
 
 ## Main definitions
 
@@ -92,8 +93,9 @@ own issue; this file records the measurement and leaves the shape alone.
 - `ComplexAnalytic.specTriple_fac`: `ComplexAnalytic.specTriple` is a morphism over the ambient
   member, which is the only property of it anything consumes.
 - `ComplexAnalytic.range_specTransitionHom_subset` and
-  `ComplexAnalytic.range_comp_specTransitionHom_subset`: **the second conjunct of `hrange` is
-  free**, which is the measurement the section above is about.
+  `ComplexAnalytic.range_comp_specTransitionHom_subset`: **the transition into the ambient member
+  cannot leave `D(f_ji)`**, whatever the input is — the half of the range condition that is a
+  theorem, and `ComplexAnalytic.specTriple` is what consumes the second of the two.
 - `ComplexAnalytic.specGlueData_U`: the members of the glue datum are the `Spec`s one put in.
 - `ComplexAnalytic.isOpenImmersion_specIota`: **each member is an open subspace of `X`**, which
   together with `AlgebraicGeometry.LocallyRingedSpace.GlueData.ι_jointly_surjective` is the
@@ -265,8 +267,7 @@ theorem range_comp_specTransitionHom_subset (i j k : J) :
 
 variable (hrange : ∀ i j k : J, i ≠ j → i ≠ k → j ≠ k →
   Set.range (specTripleIncl.{u} obj poly i j k ≫ specTransitionHom.{u} obj poly glue i j).base ⊆
-    ((specOpen.{u} obj poly j k ⊓ specOpen.{u} obj poly j i : Opens (specSpace.{u} obj j)) :
-      Set (specSpace.{u} obj j)))
+    (specOpen.{u} obj poly j k : Set (specSpace.{u} obj j)))
 
 /-- **The transition on triple overlaps**, `Spec A_i|(D(f_ij) ⊓ D(f_ik)) ⟶
 Spec A_j|(D(f_jk) ⊓ D(f_ji))`.
@@ -278,7 +279,8 @@ def specTriple (i j k : J) (hij : i ≠ j) (hik : i ≠ k) (hjk : j ≠ k) :
     specTriplePart.{u} obj poly i j k ⟶ specTriplePart.{u} obj poly j k i :=
   LocallyRingedSpace.liftRestrict
     (specTripleIncl.{u} obj poly i j k ≫ specTransitionHom.{u} obj poly glue i j) _
-    (hrange i j k hij hik hjk)
+    (Set.subset_inter (hrange i j k hij hik hjk)
+      (range_comp_specTransitionHom_subset.{u} obj poly glue i j k))
 
 /-- **`ComplexAnalytic.specTriple` is a morphism over the ambient member**, which is the only
 property of it anything consumes. -/
