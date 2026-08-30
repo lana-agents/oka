@@ -63,8 +63,8 @@ and `hcocycle` are quantified over triples of **pairwise distinct** indices, bec
   `ComplexAnalytic.lineIota` — and each chart is an open subspace of it,
   `ComplexAnalytic.isOpenImmersion_lineIota`. **This instance exercises neither triple-overlap
   hypothesis**, both being vacuous at two members by
-  `OkaTest.GlueShape.hRange_of_no_three` and
-  `OkaTest.GlueShape.hCocycle_of_no_three`, so it is not by itself evidence that the
+  `ComplexAnalytic.GlueShape.hRange_of_no_three` and
+  `ComplexAnalytic.GlueShape.hCocycle_of_no_three`, so it is not by itself evidence that the
   general construction is right; `OkaTest/AffineCover.lean`'s three members are. What it adds is
   the non-identity transition.
 
@@ -486,7 +486,7 @@ geometry**; what it buys is that the statement is about `ComplexAnalytic.project
 analytic space, rather than about `CategoryTheory.GlueData.glued` of the datum below it.
 
 **This instance exercises neither triple-overlap hypothesis** — `pair` has two members and
-`OkaTest.GlueShape.hRange_of_no_three` and `OkaTest.GlueShape.hCocycle_of_no_three`
+`ComplexAnalytic.GlueShape.hRange_of_no_three` and `ComplexAnalytic.GlueShape.hCocycle_of_no_three`
 make both vacuous below three — so it is not by itself evidence that
 `ComplexAnalytic.coverAnalytification` is right. `OkaTest/AffineCover.lean`'s three-member
 `ComplexAnalytic.base_nodeIota_nodeOrigin_ne` is the one that is. What this adds is a

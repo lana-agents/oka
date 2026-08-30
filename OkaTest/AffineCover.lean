@@ -41,8 +41,8 @@ triples of distinct indices and both are vacuous.
   open subspace of it. **This file is the non-vacuity of
   `ComplexAnalytic.coverAnalytification`**, and it is the three-member one, so unlike
   `OkaTest/ProjectiveLine.lean`'s it exercises both triple-overlap hypotheses — which
-  `OkaTest.GlueShape.hRange_of_no_three` and
-  `OkaTest.GlueShape.hCocycle_of_no_three` make vacuous below three members.
+  `ComplexAnalytic.GlueShape.hRange_of_no_three` and
+  `ComplexAnalytic.GlueShape.hCocycle_of_no_three` make vacuous below three members.
 
 **What is not checked here.** Nothing says the glued space is not the analytification of *some*
 presentation — the node with a tripled origin is intuitively not affine, but proving it needs an
@@ -321,8 +321,8 @@ reaches `X^an` only through `ComplexAnalytic.coverAnalytification_toLocallyRinge
 lemma.
 
 It is what makes a three-member instance of `ComplexAnalytic.coverAnalytification` evidence rather
-than a type-check: at two members `OkaTest.GlueShape.hRange_of_no_three` and
-`OkaTest.GlueShape.hCocycle_of_no_three` make both triple-overlap hypotheses vacuous, so
+than a type-check: at two members `ComplexAnalytic.GlueShape.hRange_of_no_three` and
+`ComplexAnalytic.GlueShape.hCocycle_of_no_three` make both triple-overlap hypotheses vacuous, so
 `OkaTest/ProjectiveLine.lean`'s instance exercises neither. -/
 theorem base_nodeIota_nodeOrigin_ne (i j : triple.{u}) (hij : i ≠ j) :
     (nodeIota.{u} i).toLRSHom.base nodeOrigin.{u} ≠

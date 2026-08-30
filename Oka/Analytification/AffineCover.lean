@@ -162,8 +162,8 @@ a much larger tax than one unused value per index.
   this construction rather than rebuilding it. `OkaTest/AffineCover.lean`'s three-member node
   cover is the one that is evidence — `ComplexAnalytic.base_nodeIota_nodeOrigin_ne` says its
   three copies of the origin are three distinct points of the analytic space — since
-  `OkaTest.GlueShape.hRange_of_no_three` and
-  `OkaTest.GlueShape.hCocycle_of_no_three` make both triple-overlap hypotheses vacuous
+  `ComplexAnalytic.GlueShape.hRange_of_no_three` and
+  `ComplexAnalytic.GlueShape.hCocycle_of_no_three` make both triple-overlap hypotheses vacuous
   below three members, so `OkaTest/ProjectiveLine.lean`'s two-member `ℙ¹` exercises neither. What
   `ℙ¹` adds is a **non-identity transition**, which the node cover does not have. Nor is any of
   this related to a *scheme*: the input is presentations and isomorphisms, and no statement here

@@ -47,7 +47,7 @@ baseline and were free against the old one.
 import list reaches `Oka` whole — that is the point of the paragraph — so once `Oka.lean` names
 this module, measuring the *old* list on *this* tree closes over the moved file itself and returns
 `Oka` 151, sum 3643, all 5393. The figures above are the ones a reader wants, which is what the
-move cost, and they are checkable without a build: the `Oka.*` count is `Oka.lean`'s import lines
+move cost, and they are checkable without a build: the `Oka` count is `Oka.lean`'s import lines
 plus one for `Oka` itself, 149 + 1 there against 150 + 1 here.
 
 **The `Oka` bucket includes the root module `Oka`, and the `all` figure does too.** Saying so is
