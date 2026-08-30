@@ -545,9 +545,12 @@ def self_test() -> int:
         check("positive: `Shared.two` is one occurrence", len(ca.get("Shared.two", [])) == 1)
 
         # The case `--sites` exists for, and the one every other check here is blind to: a tree
-        # with a line inserted above a citation.  Identical name sets, identical occurrence
-        # counts, one moved site.  A same-tree comparison returns nothing, which is what makes
-        # this a positive control rather than a restatement of "two trees differ".
+        # with a line inserted above the citations.  Identical name sets, identical occurrence
+        # counts, every moved site at the same delta.  The assertion is on the *set* of deltas
+        # and not on a number of moves: `shared` carries three citations, so the number here is
+        # four, and a number written down would go stale the next time a fixture gains a name.
+        # A same-tree comparison returns nothing, which is what makes this a positive control
+        # rather than a restatement of "two trees differ".
         d = plant(os.path.join(tmp, "d"), "/-! spacer -/\n" + shared
                   + "/-- `Only.inA` -/\ndef f := 1\n")
         cd = candidates(d)
