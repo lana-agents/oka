@@ -70,8 +70,9 @@ it costs one attribute.
 ## Main results
 
 - `ComplexAnalytic.coverIota_comp_coverMap`: **it restricts to the analytified member morphism on
-  each member**, which is the statement that says the construction is the intended one; a
-  definition ignoring its input would satisfy everything else here.
+  each member**, which is the statement that says the construction is the intended one; every
+  other statement here *about* `ComplexAnalytic.coverMap` rests on it, and
+  `ComplexAnalytic.comm_coverMapPart_id`, which does not, is not about it.
 - `ComplexAnalytic.coverMap_unique`: **and it is the only morphism that does.**
 - `ComplexAnalytic.comm_coverMapPart_id` and `ComplexAnalytic.comm_coverMapPart_comp`: the
   compatibility hypothesis, discharged for the identity data and for a composite.
@@ -83,10 +84,10 @@ it costs one attribute.
   of*: the input is a cover as data, and two covers of the same scheme are different inputs with
   no morphism between them until cover independence exists. The two laws below are the content a
   functor instance would carry, stated where they can be stated.
-* **No non-identity instance.** Nothing below exhibits a `σ` and a `ψ` other than the identity,
-  so the identity law is the only control this file has on the definition.
-  `OkaTest/ProjectiveLine.lean`
-  and `OkaTest/AffineCover.lean` are the two covers on `master` that could carry one, and neither
+* **No non-identity instance.** Nothing below exhibits a `σ` and a `ψ` other than the identity, so
+  the identity law is the only control this file has on the definition.
+  `OkaTest/ProjectiveLine.lean` and `OkaTest/AffineCover.lean` hold the only two instantiations of
+  `ComplexAnalytic.coverAnalytification` in this repository — measured, not assumed — and neither
   has a map to the other.
 * **Nothing algebraic about the compatibility.** The hypothesis is an equation of morphisms of
   locally ringed spaces; deriving it from a compatibility of the `ψ i` with the two glue data would
@@ -168,11 +169,25 @@ def coverMap :
 `ComplexAnalytic.coverIota_comp_coverGlueMorphisms`, and **the statement that says this
 construction is the intended one rather than a well-typed one**.
 
-It is the only statement in this file with independent content, and the claim is meant literally:
-`ComplexAnalytic.coverMap_unique` is this lemma plus
-`ComplexAnalytic.coverAnalytification_hom_ext`, and both laws are that. So a reader who wants to
-know that `ComplexAnalytic.coverMap` is built out of `ψ` at all has to read this one and need read
-no other. It is not free either — `by first | rfl | simp` leaves the goal open, because
+**Every statement in this file about `ComplexAnalytic.coverMap` rests on this one**:
+`ComplexAnalytic.coverMap_unique` rewrites by it, both laws are corollaries of that, and
+`ComplexAnalytic.comm_coverMapPart_comp` needs it as well. So a reader who wants to know that
+`ComplexAnalytic.coverMap` is built out of `ψ` has to read this one and need read no other.
+
+**`ComplexAnalytic.comm_coverMapPart_id` is the exception, and it is one worth naming rather than
+qualifying around**: it is not about `ComplexAnalytic.coverMap` at all. It says that the identity
+data meets the compatibility, its proof is `ComplexAnalytic.coverIncl_comp_coverIota`, and it
+would hold if the morphism below did not exist. **This docstring claimed it was the only statement
+here with independent content, and added that the claim was meant literally, until 2026-08-30.**
+
+**Two probes measure different things and only one of them is cheap.** Dropping `(attr := simp)`
+from this lemma breaks exactly `ComplexAnalytic.comm_coverMapPart_comp` and
+`ComplexAnalytic.coverMap_comp` — that is `simp` dependence, and it does **not** see
+`ComplexAnalytic.coverMap_unique`, whose proof names the lemma in a `rw`. Logical dependence is
+the list in the first paragraph and is longer; a sentence that reports the erasure count as if it
+were that list is measuring the wrong thing.
+
+It is not free either — `by first | rfl | simp` leaves the goal open, because
 `ComplexAnalytic.coverMap` is a `ComplexAnalytic.coverGlueMorphisms`, whose own defining property
 is stated at the glue datum's `ι` and not at `ComplexAnalytic.coverIota`. -/
 @[reassoc (attr := simp)]
