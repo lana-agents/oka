@@ -196,9 +196,11 @@ definition. Nothing would break if it did — `scripts/check_docstring_names.py`
 generated components since lana-agents/oka#261, which is the branch that stopped an `rw` on a
 definition in one file from turning off the field-notation rule for that definition's field
 citations in every other — but the two spellings are definitionally equal, so the equation lemma
-buys nothing, and one `show` avoids leaving the tree a name it did not ask for. Measured: with
-the `rw`, the environment carries `ComplexAnalytic.specOverlapIso.eq_1` and this branch adds 18
-declarations; without it, 17. -/
+buys nothing, and one `show` avoids leaving the tree a name it did not ask for. Measured when
+this file was written: with the `rw` the environment carries
+`ComplexAnalytic.specOverlapIso.eq_1` and the file adds one declaration more than it does without
+it — eighteen against seventeen at the time, and it is the *difference* that is the point, since
+the level moves whenever anything else in the file does. -/
 theorem coverIncl_comp_analytificationToSpec (i j : J) :
     coverIncl.{u} obj poly i j ≫ analytificationToSpec.{u} (obj i).g =
       comparisonPart.{u} obj poly i j ≫ specIncl.{u} obj poly i j := by

@@ -115,9 +115,10 @@ is a theorem. `ComplexAnalytic.coverTransitionHom` is *defined* as a composite e
 `ComplexAnalytic.coverIncl`, whose range is exactly `D(f_ji)`, so nothing can land outside it
 whatever the input is: `ComplexAnalytic.range_comp_coverTransitionHom_subset` proves it and
 `ComplexAnalytic.coverTriple` supplies it with `Set.subset_inter`, leaving a caller the other half
-alone. `Oka/Analytification/SpecAffineCover.lean`'s hypothesis of the same name is weakened in the
-same branch and for the same reason: taxis #1105 holds both glue data over one input, and two
-hypotheses of the same shape are one obligation discharged twice where two shapes are two.
+alone. `Oka/Analytification/SpecAffineCover.lean`'s hypothesis of the same name was weakened
+**together with this one, by taxis #1239**, and for the same reason:
+`Oka/Analytification/CoverComparison.lean` holds both glue data over one input, and two hypotheses
+of the same shape are one obligation discharged twice where two shapes are two.
 
 ## The diagonal
 
