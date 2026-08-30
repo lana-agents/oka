@@ -40,19 +40,36 @@ single localisation and the glue isomorphism is that description taken at both e
 the same-member case needs the original cover's own `glue`**, which is what makes it separable
 from the cross-member case rather than merely smaller than it.
 
-It is not vacuous: the refined data is a genuine cover datum shape over any index type `K` and any
-family of polynomials, and `ComplexAnalytic.refineGlue_comp` below is a statement with content —
-it is the `trans_comp` coherence, and it is the reason the glue isomorphism is the *right* one
-rather than merely one of the right type.
+**It is not vacuous, and the two halves of that claim are different claims.** The construction is
+hypothesis-free — the refined data is a cover-datum shape over any index type `K` and any family
+of polynomials, so nothing below can be vacuously *satisfied*. That says nothing about whether the
+**objects** are degenerate, and they can be: `K` may be empty, and for `fam` constantly `0` every
+`D(f_a)` is empty and every law below holds of nothing. `OkaTest/CoverRefinement.lean` is the
+witness that they need not be — an empty base in one variable with `fam = (z₀, z₀ - 1)`, where
+every refined overlap is inhabited and the `(0, 1)` overlap is a **proper** open of the refined
+member, so `ComplexAnalytic.refineGlue` there is an isomorphism of non-empty spaces and the glue
+is along something smaller than the whole member.
+
+`ComplexAnalytic.refineGlue_comp` below is in any case a statement with content — it is the
+`trans_comp` coherence, and it is the reason the glue isomorphism is the *right* one rather than
+merely one of the right type.
 
 ## The shape of the two proofs
 
 Both laws below go through the single localisation and not through the double one.
 `ComplexAnalytic.refineMulIso` is `ComplexAnalytic.localisationPresentationIsoMul` with its source
-recognised as `ComplexAnalytic.coverOverlap` of the refined data — which is `rfl`, and is why
-`ComplexAnalytic.refineObj` and `ComplexAnalytic.refinePoly` are `abbrev` and not `def`. As `def`s
-the unfolding is not available at `instances` transparency and the coherence proof below fails
-with an application type mismatch on a goal that displays correctly.
+recognised as `ComplexAnalytic.coverOverlap` of the refined data, which is `rfl`.
+
+**`ComplexAnalytic.refineObj` and `ComplexAnalytic.refinePoly` are `abbrev` and not `def` for
+`ComplexAnalytic.refineGlue_comp`, and not for that `rfl`.** The sentence that stood here said
+`ComplexAnalytic.refineMulIso`, and that is false: re-declaring the three definitions as `def`s
+and rebuilding the chain, the isomorphism elaborates with no complaint, because elaboration
+unfolds a `def` at default transparency and the source really does reduce. What needs the
+`abbrev` is *rewriting*, which works at `instances` transparency — with `def`s the coherence proof
+fails at its **first** `rw`, reporting a pattern it cannot find in a goal that displays as
+containing it, with an application type mismatch between
+`⟨n + 1, k + 1, localisationPresentation g (fam b)⟩` and the same object spelled through
+`refineObj`'s projections.
 
 `ComplexAnalytic.refineGlue_symm` is where the `Iso`s are compared, and `congr 1` is not the way:
 it forces the `Category Presentation` instance open on a three-term `Iso.trans` and exhausts the
@@ -69,6 +86,12 @@ with `congrArg` and simplify the *hypothesis*, which is well-typed by constructi
 the goal with `exact` so that the ascriptions `analytificationFunctor.obj ⟨n, k, g⟩` and
 `AnalyticSpace.analytification g` are unified at default transparency. `simpa … using` does **not**
 close it, and the difference between the two is the whole of that step.
+
+Both proofs rewrite at a definition — `ComplexAnalytic.refineMul` in one and
+`ComplexAnalytic.refineGlue` in the other — so the environment gains an auto-generated equation
+lemma for each. Nothing below depends on them, but a generated `eq_1` makes its own definition a
+**namespace**, which switches off `scripts/check_docstring_names.py`'s field-notation rule for
+that name; taxis #1229 and #1243 record that effect biting in a different file and at a distance.
 
 ## Main definitions
 
@@ -100,16 +123,20 @@ close it, and the difference between the two is the whole of that step.
   triple overlaps — and `ComplexAnalytic.refineGlue_analytification_comp` is the input they need
   rather than the statement they are.
 
-  **The obstruction is measured and it is one missing lemma, not a general difficulty.** Both laws
-  need the refined overlap to be the *preimage* of the refining open along the projection:
-  `ComplexAnalytic.localisationOpen (ComplexAnalytic.localisationPresentation g f) (rename …  f')`
-  should be the pullback of `ComplexAnalytic.localisationOpen g f'` along
-  `ComplexAnalytic.localisationProj g f`. **No such statement exists.**
-  `Oka/Analytification/DistinguishedOpen.lean` carries
-  `ComplexAnalytic.mem_localisationOpen_iff`, `ComplexAnalytic.localisationOpen_ne_top` and
-  `ComplexAnalytic.localisationOpen_mul`, and nothing relating a `localisationOpen` to a preimage
-  along anything — checked, not assumed. That lemma is the next thing to build and it belongs in
-  that file, not this one.
+  **The obstruction was one missing lemma and not a general difficulty, and that lemma now
+  exists.** Both laws need the refined overlap to be the *preimage* of the refining open along the
+  projection, and `ComplexAnalytic.localisationOpen_rename`
+  (`Oka/Analytification/DistinguishedOpen.lean`) is exactly that statement: the open that a
+  renamed `f'` cuts out of `(A_f)^an` is the pullback of the open `f'` cuts out of `A^an` along
+  `ComplexAnalytic.localisationProj`. It was not in the repository when this file was written —
+  that is why the two laws are absent here rather than merely unattempted — and it arrived
+  immediately afterwards, in the file it belongs in.
+
+  **What is not settled is whether it is enough.** Its left-hand side is *syntactically*
+  `ComplexAnalytic.coverOpen` of the refined data below, so it applies with no bridge, and that
+  has been checked by elaboration; but nobody has proved `hrange` or `hcocycle` from it, and the
+  shape matching is a claim about the shape and not that the rest is easy. Both laws remain
+  geometric statements that this file does not make.
 * **No cross-member refinement.** `σ` is constant here, so no overlap of the refined data ever
   meets two different members of the original. The cross-member case has to transport the original
   `glue` through two localisations, it is the only part that uses the original data's own glue
@@ -141,10 +168,12 @@ variable {K : Type u} {n k : ℕ} (g : Fin k → MvPolynomial (ULift.{u} (Fin n)
 /-- **The `a`-th refined member**: the distinguished open `D(fam a)` of the fixed member, presented
 by `ComplexAnalytic.localisationPresentation`.
 
-An `abbrev` rather than a `def` on purpose. `ComplexAnalytic.coverOverlap` of the refined data has
-to reduce to a double localisation for `ComplexAnalytic.refineMulIso` to typecheck, and that
-reduction has to be available at `instances` transparency — as a `def` the coherence proof below
-fails with an application type mismatch against a goal that displays correctly. -/
+An `abbrev` rather than a `def` on purpose, and what needs it is
+`ComplexAnalytic.refineGlue_comp` rather than `ComplexAnalytic.refineMulIso`. That isomorphism
+typechecks against `def`s too, since elaboration unfolds a `def` at default transparency; what
+needs the reduction of `ComplexAnalytic.coverOverlap` to a double localisation to be available at
+`instances` transparency is the *rewriting* in the coherence proof below, which as a `def` fails
+at its first `rw` with an application type mismatch against a goal that displays correctly. -/
 abbrev refineObj (a : K) : Presentation.{u} :=
   ⟨n + 1, k + 1, localisationPresentation.{u} g (fam a)⟩
 
