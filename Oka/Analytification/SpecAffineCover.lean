@@ -16,9 +16,18 @@ along distinguished opens into `X^an`. This file glues their **`Spec`s** along t
 It exists because `X` did not. `ComplexAnalytic.comm_coverGlueData` and
 `AlgebraicGeometry.LocallyRingedSpace.GlueData.glueMorphisms` already produce a morphism out of
 `X^an` into **any** locally ringed space, so the comparison morphism `X^an ⟶ X` was never blocked
-on the gluing — it was blocked on there being a target at all. A `git grep` for glue data over
-`Oka/` and `OkaTest/` finds ten constructions and every one of them is on the analytic side or
-generic in the space.
+on the gluing — it was blocked on there being a target at all. **On `dab084a`, the commit before
+this file, the census below counted thirteen declarations, and every one of them was on the
+analytic side or generic in the space:**
+
+    grep -rnE "^(noncomputable )?(def|abbrev) [^ ]*([Gg]lue[Dd]ata|gluedCover)" Oka OkaTest
+
+**This file's two are the fourteenth and fifteenth and are neither**, which is why the sentence is
+pinned to a revision and written in the past: a present-tense census in the file that changes it
+is false from the moment it merges, and `Oka/Analytification/AffineCover.lean`'s policy paragraph
+has been repaired twice for the same reason. The filter is on *names* rather than result types, so
+it counts more than the glue data a cover produces — which is the point: under no reading of it
+did anything glue `Spec`s.
 
 ## The input is the analytic side's input, unchanged, and that is the point
 
@@ -31,8 +40,8 @@ which is discussed in its own section below and is the one place the two sides g
 
 ## What this file is, measured rather than described
 
-Every declaration here is `Oka/Analytification/AffineCover.lean`'s corresponding declaration with
-`ComplexAnalytic.specFunctor` where that file has
+Every declaration here that has a counterpart in `Oka/Analytification/AffineCover.lean` is that
+counterpart with `ComplexAnalytic.specFunctor` where that file has
 `ComplexAnalytic.analytificationFunctor ⋙ ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace`.
 The two places that is *not* a literal substitution are both simplifications and both worth
 knowing:
@@ -44,6 +53,20 @@ knowing:
 * **`ComplexAnalytic.specGlueIso_symm` is one rewrite shorter and needs no `rfl`.**
   `ComplexAnalytic.coverGlueIso_symm` pushes through two functors and closes with a `rfl` that
   reconciles the two `Functor.mapIso_symm`s; one functor needs one.
+
+**"That has a counterpart" is a real qualification and not a hedge**, and the two declarations it
+excludes are the *last* two a reader would guess. `ComplexAnalytic.specGlued` and
+`ComplexAnalytic.specIota` are a `AlgebraicGeometry.LocallyRingedSpace.GlueData`'s `glued` and
+`ι` taken directly, where `ComplexAnalytic.coverAnalytification` and `ComplexAnalytic.coverIota`
+go through `ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear` and carry a `ℂ`-linearity proof.
+Those two are counterparts in *purpose* and are not renames of each other, which is the whole of
+why this file is shorter than the one it mirrors.
+
+`ComplexAnalytic.range_specTransitionHom_subset` and
+`ComplexAnalytic.range_comp_specTransitionHom_subset` were written on this side first and had no
+analytic mirror when this file merged. They have one now — taxis #1239 added
+`ComplexAnalytic.range_coverTransitionHom_subset` and its composite — and the section below says
+what they are for.
 
 **`ComplexAnalytic.specGlueData'`'s six fields are identical to
 `ComplexAnalytic.coverGlueData'`'s, proofs included** — `t_fac`'s rewrite chain, `t_inv`'s
@@ -65,9 +88,10 @@ The `hrange` hypothesis below asks that the transition from `i` to `j` carries t
 for it. Only the surviving conjunct, that the overlap with `k` goes to the overlap with `k`, is a
 condition on the input, and it is what `hcocycle` is about.
 
-**Both sides were weakened in one branch, and the symmetry is the reason.** taxis #1105 will hold
-*both* glue data over one input and check its family against both; two hypotheses of the same
-shape are one thing for a caller to discharge twice, and two of different shapes are two things.
+**Both sides were weakened together, by taxis #1239, and the symmetry is the reason.**
+`Oka/Analytification/CoverComparison.lean` holds *both* glue data over one input and checks its
+family against both; two hypotheses of the same shape are one thing for a caller to discharge
+twice, and two of different shapes are two things.
 The redundancy was identical on the analytic side, where `ComplexAnalytic.coverTransitionHom`
 factors through `ComplexAnalytic.coverIncl` by the same definition, so weakening one without the
 other would have made the pair *less* symmetric and not more.
@@ -123,8 +147,8 @@ other would have made the pair *less* symmetric and not more.
   consumer has asked for it.
 * **No input exhibited, and so no non-vacuity of the *input*.** As in
   `Oka/Analytification/AffineCover.lean`, nothing here builds a family; the two instances that do
-  — the node cover and `ℙ¹` — are on the analytic side and are not re-run here. What *is* ruled
-  out is a degenerate *output*: `ComplexAnalytic.specIncl_comp_specIota` is false of a
+  — the node cover and `ℙ¹` — are exhibited under `OkaTest/` and are not re-run here. What *is*
+  ruled out is a degenerate *output*: `ComplexAnalytic.specIncl_comp_specIota` is false of a
   construction that ignores the transitions.
 * **Any comparison between `ComplexAnalytic.specOpen` and `ComplexAnalytic.coverOpen`.** One is a
   basic open of a spectrum and the other a non-vanishing locus in an analytic space; that the
@@ -302,9 +326,12 @@ theorem specTriple_fac (i j k : J) (hij : i ≠ j) (hik : i ≠ k) (hjk : j ≠ 
 
 Every field is `ComplexAnalytic.coverGlueData'`'s, with the same proof: `t_fac`'s rewrite chain,
 `t_inv`'s `simp only` list and `cocycle`'s `reassoc_of%` say nothing analytic and are statements
-about `AlgebraicGeometry.LocallyRingedSpace.restrict` and `Oka/CategoryTheory/GlueData.lean`. See
-that file's docstring for why `t'` is conjugated by
-`AlgebraicGeometry.LocallyRingedSpace.restrictInfIsoPullback` at each end. -/
+about `AlgebraicGeometry.LocallyRingedSpace.restrict` and `Oka/CategoryTheory/GlueData.lean`. Why
+`t'` is conjugated by `AlgebraicGeometry.LocallyRingedSpace.restrictInfIsoPullback` at each end is
+in `Oka/Analytification/AffineCover.lean`'s **module** docstring — *"it identifies
+`pullback (f i j) (f i k)` with the open subspace `X_i|(D(f_ij) ⊓ D(f_ik))`, an object one can
+name and restrict"*, and the two bullets after it — and **not** in
+`Oka/CategoryTheory/GlueData.lean`'s, which never mentions that identification. -/
 def specGlueData' (hsymm : ∀ i j : J, glue j i = (glue i j).symm)
     (hcocycle : ∀ i j k : J, ∀ hij : i ≠ j, ∀ hik : i ≠ k, ∀ hjk : j ≠ k,
       specTriple.{u} obj poly glue hrange i j k hij hik hjk ≫
