@@ -361,6 +361,13 @@ info: 'ComplexAnalytic.AnalyticSpace.mem_nonvanishing_iff' depends on axioms:
 #print axioms ComplexAnalytic.AnalyticSpace.mem_nonvanishing_iff
 
 /--
+info: 'ComplexAnalytic.AnalyticSpace.nonvanishing_pullbackΓ' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.nonvanishing_pullbackΓ
+
+/--
 info: 'ComplexAnalytic.AnalyticSpace.isUnit_resΓ_of_le_nonvanishing' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/

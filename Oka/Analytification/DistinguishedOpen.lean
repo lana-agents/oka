@@ -637,12 +637,19 @@ distinguished in both. Between two members of a cover **already in that shape** 
 costs nothing, and this section is the half of that which was missing: every distinguished open of
 a localisation is cut out by a renamed polynomial of the member it sits in.
 
-**The other half is not in this repository, and the sentence above does not assert it.** That the
-overlap of two refined members *is* a distinguished open of the localisation needs a distinguished
-open to pull back along a `ComplexAnalytic.PresHom` to a distinguished open — bookkeeping about
-`ComplexAnalytic.polyToGlobal` and `ComplexAnalytic.AnalyticSpace.mem_nonvanishing_iff` rather
-than geometry, but nowhere below. Nothing here builds such a refinement: taxis #1287 is where that
-question lives and names the missing step as its item (a). Nothing here is about a scheme.
+**The other half is not below and the sentence above does not assert it**, but it is no longer
+absent from the repository: that the overlap of two refined members *is* a distinguished open of
+the localisation needs a distinguished open to pull back along a `ComplexAnalytic.PresHom` to a
+distinguished open, and that is `Oka/Analytification/DistinguishedOpenPullback.lean`, which
+imports this file. It is bookkeeping about `ComplexAnalytic.polyToGlobal` and
+`ComplexAnalytic.AnalyticSpace.mem_nonvanishing_iff` rather than geometry, as this paragraph
+predicted when it was still missing, and it is stated there rather than here because it needs
+`Oka/Analytification/ChangeOfVariables.lean`, which this file does not import.
+
+**Nothing there builds a refinement either**, and the two remaining pieces — transporting the
+original cover's own glue isomorphism through two localisations, and the two geometric laws
+across members — are still nowhere. Taxis #1287 is where that question lives. Nothing here is
+about a scheme.
 -/
 
 /-- **A variable of the larger polynomial ring is either the new one or an old one.**

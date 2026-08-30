@@ -36,6 +36,7 @@ import OkaTest.CoverRefinement
 import OkaTest.CoveringSpace
 import OkaTest.CutOutQuotient
 import OkaTest.CutOutRestrict
+import OkaTest.DistinguishedOpenPullback
 import OkaTest.DividedDifference
 import OkaTest.EpiIsLocallySurjective
 import OkaTest.EvalContinuous
