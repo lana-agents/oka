@@ -634,10 +634,15 @@ overlaps out of a localisation, and `Oka/Analytification/AffineCover.lean`'s `po
 **one polynomial per ordered pair** — its module docstring says in terms that this arity is a
 restriction, because a general scheme's pairwise intersections are only *covered* by opens
 distinguished in both. Between two members of a cover **already in that shape** the restriction
-costs nothing, and this section is why: the overlap of two refined members is a distinguished open
-of a localisation, and every one of those is cut out by a renamed polynomial of the member it sits
-in. Nothing here builds such a refinement — taxis #1287 is where that question lives — and nothing
-here is about a scheme.
+costs nothing, and this section is the half of that which was missing: every distinguished open of
+a localisation is cut out by a renamed polynomial of the member it sits in.
+
+**The other half is not in this repository, and the sentence above does not assert it.** That the
+overlap of two refined members *is* a distinguished open of the localisation needs a distinguished
+open to pull back along a `ComplexAnalytic.PresHom` to a distinguished open — bookkeeping about
+`ComplexAnalytic.polyToGlobal` and `ComplexAnalytic.AnalyticSpace.mem_nonvanishing_iff` rather
+than geometry, but nowhere below. Nothing here builds such a refinement: taxis #1287 is where that
+question lives and names the missing step as its item (a). Nothing here is about a scheme.
 -/
 
 /-- **A variable of the larger polynomial ring is either the new one or an old one.**
