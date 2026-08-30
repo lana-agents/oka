@@ -1198,6 +1198,79 @@ info: 'ComplexAnalytic.specIncl_comp_specIota' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.specIncl_comp_specIota
 
+/-! ### A morphism of covered schemes analytifies
+
+The two definitions and six results of `Oka/Analytification/CoverFunctoriality.lean`, which is the
+morphism *between* two gluings of the kind `### The glue data of an affine cover with distinguished
+overlaps` builds. A heading of its own rather than a `####` under that one, because its subject is
+a morphism of two covers where everything there is one cover; under this file's topic heading at
+all, because `ComplexAnalytic.coverGlueMorphisms` is what it is built from and
+`OkaTest/Axioms.lean`'s routing rule puts a file's guards under the heading its topic belongs to.
+
+**Named by heading and not by position**, which is not a stylistic preference: this block and the
+`Spec`-side glue-data block above it were written against the same anchor by two branches that did
+not know about each other, so whichever landed second would have carried a false "the block above"
+had it pointed rather than named. That block does point, and it is still right — it sits directly
+under the block it names, and nothing may be inserted between them without repairing its first
+sentence.
+-/
+
+/--
+info: 'ComplexAnalytic.coverMapPart' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverMapPart
+
+/--
+info: 'ComplexAnalytic.coverMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverMap
+
+/--
+info: 'ComplexAnalytic.coverIota_comp_coverMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverIota_comp_coverMap
+
+/--
+info: 'ComplexAnalytic.coverMap_unique' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverMap_unique
+
+/--
+info: 'ComplexAnalytic.comm_coverMapPart_id' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.comm_coverMapPart_id
+
+/--
+info: 'ComplexAnalytic.coverMap_id' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverMap_id
+
+/--
+info: 'ComplexAnalytic.comm_coverMapPart_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.comm_coverMapPart_comp
+
+/--
+info: 'ComplexAnalytic.coverMap_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverMap_comp
+
 /-! ### The two-level index category of a glue data
 
 The five advertised results of `Oka/Analytification/GlueShape.lean`, which arrived under `Oka/`
