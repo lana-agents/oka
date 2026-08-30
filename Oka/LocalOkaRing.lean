@@ -46,6 +46,8 @@ holomorphic functions on `ℂ^ι`.
   constant term is nonzero; hence `LocalOkaRing ι` is a local ring.
 - `LocalOkaRing.exists_okaRing`: every locally convergent power series is the Taylor series of
   a holomorphic function on some open neighbourhood of the origin.
+- `MvPowerSeries.order_partialEval_eq_one_iff`: **a simple zero along the `i`-th axis is the pair
+  of coefficient conditions** `constantCoeff P = 0` and `coeff (Finsupp.single i 1) P ≠ 0`.
 
 ## The analytic dictionary
 
@@ -1242,6 +1244,26 @@ lemma constantCoeff_partialEval (P : MvPowerSeries σ R) :
     PowerSeries.constantCoeff (partialEval i P) = constantCoeff P := by
   rw [← PowerSeries.coeff_zero_eq_constantCoeff_apply, coeff_partialEval,
     ← coeff_zero_eq_constantCoeff_apply, Finsupp.single_zero]
+
+/-- **A simple zero along the `i`-th axis is two coefficients**: `P` restricted to that axis
+vanishes to order exactly one if and only if `P` has no constant term and its `i`-linear
+coefficient is nonzero.
+
+`MvPowerSeries.partialEval` reads the `k`-th coefficient of the restriction off the exponent
+`Finsupp.single i k` (`MvPowerSeries.coeff_partialEval`), so `order = 1` unfolds through
+`PowerSeries.order_eq_nat` into the two exponents `0` and `Finsupp.single i 1` and no others.
+**No derivative appears**, and that is the point: the linear coefficient *is* the first
+derivative along the axis up to nothing at all, so a consumer that has a derivative may use it
+and a consumer that does not need not acquire one. -/
+lemma order_partialEval_eq_one_iff (P : MvPowerSeries σ R) :
+    PowerSeries.order (partialEval i P) = 1 ↔
+      constantCoeff P = 0 ∧ coeff (Finsupp.single i 1) P ≠ 0 := by
+  rw [show (1 : ℕ∞) = ((1 : ℕ) : ℕ∞) from rfl, PowerSeries.order_eq_nat]
+  simp only [coeff_partialEval]
+  refine ⟨fun ⟨h1, h0⟩ ↦ ⟨by simpa using h0 0 (by norm_num), h1⟩, fun ⟨h0, h1⟩ ↦ ⟨h1, ?_⟩⟩
+  intro j hj
+  interval_cases j
+  simpa using h0
 
 /-- Restricting `MvPowerSeries.fromPolynomial i Q` to the `i`-th axis amounts to evaluating the
 coefficients of `Q` at the origin. -/

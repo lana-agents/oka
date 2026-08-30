@@ -233,6 +233,13 @@ info: 'LocalOkaRing.order_partialEval_eq_natDegree' depends on axioms:
 #print axioms LocalOkaRing.order_partialEval_eq_natDegree
 
 /--
+info: 'MvPowerSeries.order_partialEval_eq_one_iff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms MvPowerSeries.order_partialEval_eq_one_iff
+
+/--
 info: 'LocalOkaRing.exists_span_eq_span_X_sub_C' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
@@ -380,6 +387,20 @@ info: 'LocalOkaRing.uliftEquiv_renameEmb_incl' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms LocalOkaRing.uliftEquiv_renameEmb_incl
+
+/--
+info: 'LocalOkaRing.coeff_uliftEquiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.coeff_uliftEquiv
+
+/--
+info: 'LocalOkaRing.constantCoeff_uliftEquiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms LocalOkaRing.constantCoeff_uliftEquiv
 
 /--
 info: 'LocalOkaRing.renameEmb' depends on axioms:

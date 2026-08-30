@@ -729,6 +729,41 @@ info: 'ComplexAnalytic.isIso_stalkMap_comp_uliftProj' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isIso_stalkMap_comp_uliftProj
 
+/--
+info: 'ComplexAnalytic.IsCutOutBy.evalHom_eq_zero' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.IsCutOutBy.evalHom_eq_zero
+
+/--
+info: 'ComplexAnalytic.bijective_stalkMap_comp_projCoords_of_coeff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.bijective_stalkMap_comp_projCoords_of_coeff
+
+/--
+info: 'ComplexAnalytic.isIso_stalkMap_comp_projCoords_of_coeff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isIso_stalkMap_comp_projCoords_of_coeff
+
+/--
+info: 'ComplexAnalytic.bijective_stalkMap_comp_uliftProj_of_coeff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.bijective_stalkMap_comp_uliftProj_of_coeff
+
+/--
+info: 'ComplexAnalytic.isIso_stalkMap_comp_uliftProj_of_coeff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isIso_stalkMap_comp_uliftProj_of_coeff
+
 /-! ### The projection of a monic hypersurface to its base is finite
 
 `Oka/AnalyticSpace/MonicProjection.lean`, together with the general criterion it consumes from
