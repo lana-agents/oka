@@ -483,7 +483,7 @@ def lineIota (i : pair.{u}) :
 `ComplexAnalytic.not_surjective_ι_projectiveLineGlueData` says this of the glue datum's gluing and
 `ComplexAnalytic.toLRSHom_coverIota` carries it here. **The content is that bridge and no new
 geometry**; what it buys is that the statement is about `ComplexAnalytic.projectiveLineSpace`, an
-analytic space, rather than about `AlgebraicGeometry.LocallyRingedSpace.GlueData.glued`.
+analytic space, rather than about `CategoryTheory.GlueData.glued` of the datum below it.
 
 **This instance exercises neither triple-overlap hypothesis** — `pair` has two members and
 `OkaTest.GlueShape.hRange_of_no_three` and `OkaTest.GlueShape.hCocycle_of_no_three`
