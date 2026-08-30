@@ -15,8 +15,9 @@ at an arbitrary point — where it becomes a statement about the stalk map itsel
 analytification as a functor on finitely generated `ℂ`-algebras, the stalk map of the
 comparison morphism of a presented algebra, the naturality of the comparison morphism, the
 faithful flatness of that stalk map, the analytification of a sheaf, the identification of
-the analytification of `A_f` with the non-vanishing locus of `f`, the glue data of an affine
-cover with distinguished overlaps together with the morphisms out of the space it glues to, the
+the analytification of `A_f` with the non-vanishing locus of `f` and the same open on the `Spec`
+side, the glue data of an affine cover with distinguished overlaps together with the morphisms
+out of the space it glues to, the
 image of the analytification in `ℂ^n`, and the family of
 monic polynomials of a polynomial monic in the last variable, with the finiteness over `ℂ^n`
 that it supplies.
@@ -830,6 +831,41 @@ info: 'ComplexAnalytic.isOpenImmersion_analytificationMap_localisationPresHom' d
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isOpenImmersion_analytificationMap_localisationPresHom
+
+/-! ### The same distinguished open on the `Spec` side
+
+`Oka/Analytification/SpecDistinguishedOpen.lean`, the mirror of the two above. The triangle is
+guarded beside the two open-immersion statements because it is the only thing either of them
+uses, and the isomorphism is guarded because a triangle over an identification nobody can name
+is inert. -/
+
+/--
+info: 'ComplexAnalytic.specLocalisationRingIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specLocalisationRingIso
+
+/--
+info: 'ComplexAnalytic.localisationRingHom_comp_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.localisationRingHom_comp_eq
+
+/--
+info: 'ComplexAnalytic.isOpenImmersion_Spec_map_localisationRingHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isOpenImmersion_Spec_map_localisationRingHom
+
+/--
+info: 'ComplexAnalytic.isOpenImmersion_specFunctor_map_localisationHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isOpenImmersion_specFunctor_map_localisationHom
 
 /-! ### The glue data of an affine cover with distinguished overlaps -/
 
