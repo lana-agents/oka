@@ -20,9 +20,10 @@ Usage:
     python3 scripts/check_docstring_names.py --diff BASE # the name diff, no build needed
     python3 scripts/check_docstring_names.py --self-test
 
-Exits 0 when every candidate resolves, 1 when some do not, 2 when the environment dump fails or
-the self-test does.  `lake build` must have run first: this reads the oleans, it does not produce
-them.  `--diff` is the exception and reads no environment at all.
+Exits 0 when every candidate resolves, 1 when some do not, and 2 when the tool itself cannot
+answer: the environment dump fails, `--tree` or `--diff` names something that is not a checkout of
+this repository, or the self-test does not pass.  `lake build` must have run first: this reads the
+oleans, it does not produce them.  `--diff` is the exception and reads no environment at all.
 
 ## The name diff, and the no-op that used to drive it
 
@@ -365,8 +366,10 @@ def self_test() -> int:
 
     **The test that matters is the positive one.**  "Two identical trees diff to empty" is what
     the `os.chdir` driver this option replaced printed on every branch it was ever run on, so a
-    self-test built only from that would have passed while measuring nothing.  Each check below
-    says which of the two it is.
+    self-test built only from that would have passed while measuring nothing.  **Every check below
+    carries a `positive:` or `negative:` label and there are seven and three** — a count is stated
+    here rather than left to be inferred because a reader who trusts the labels has to be able to
+    see that none is missing.
     """
     def plant(root: str, body: str) -> str:
         os.makedirs(os.path.join(root, "Oka"), exist_ok=True)
@@ -420,9 +423,9 @@ def self_test() -> int:
             os.chdir(cwd)
 
         # Occurrences are counted per site, distinct names once.  The headline's two figures.
-        check("occurrences count every site", len(ca.get("Shared.one", [])) == 2,
+        check("positive: occurrences count every site", len(ca.get("Shared.one", [])) == 2,
               str(ca.get("Shared.one")))
-        check("`Shared.two` is one occurrence", len(ca.get("Shared.two", [])) == 1)
+        check("positive: `Shared.two` is one occurrence", len(ca.get("Shared.two", [])) == 1)
 
         # Candidacy is a property of comment regions, so code is not scanned.
         c = plant(os.path.join(tmp, "c"), "/-! nothing here -/\ndef g := `NotA.candidate\n")
@@ -434,7 +437,7 @@ def self_test() -> int:
         proc = subprocess.run(
             [sys.executable, os.path.abspath(__file__), "--diff", a, "--tree", b],
             capture_output=True, text=True, env=dict(os.environ, PYTHONDONTWRITEBYTECODE="1"))
-        check("the CLI runs `--diff` with no build and reports the added name",
+        check("positive: the CLI runs `--diff` with no build and reports the added name",
               proc.returncode == 0 and "Only.inB" in proc.stdout,
               proc.stdout.strip().replace("\n", " | ") or proc.stderr.strip())
 
@@ -442,7 +445,7 @@ def self_test() -> int:
             [sys.executable, os.path.abspath(__file__), "--diff",
              os.path.join(tmp, "does-not-exist")],
             capture_output=True, text=True, env=dict(os.environ, PYTHONDONTWRITEBYTECODE="1"))
-        check("a path that is not a checkout is reported, not a traceback",
+        check("positive: a path that is not a checkout is reported, not a traceback",
               bad.returncode == 2 and "Traceback" not in bad.stderr
               and "is not a checkout" in bad.stderr,
               bad.stderr.strip().replace("\n", " | ") or f"rc={bad.returncode}")
