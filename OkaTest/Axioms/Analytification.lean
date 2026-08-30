@@ -1090,13 +1090,17 @@ info: 'ComplexAnalytic.coverGlueMorphisms_coverIota' depends on axioms:
 `ComplexAnalytic.specFunctor` in place of the analytification. It is a heading of its own rather
 than part of that block because the two constructions share an *input* and nothing else: neither
 file's declarations appear in the other's statements — and that is still true now that the file
-which relates them exists. `Oka/Analytification/CoverComparison.lean`, the last block below, is
-where the comparison morphism `X^an ⟶ X` lives; it names declarations from both of these blocks,
-neither of these blocks names anything of the other's, and so it takes a **third** heading rather
-than pulling either of these two under the other. **This sentence read "the file that will relate
-them … does not exist yet" until that file arrived**, which is the thing a block appended to this
-file has to check for: the absence a heading is justified by is exactly what the next branch
-retires.
+which relates them exists. It is `Oka/Analytification/CoverComparison.lean`, guarded below under a
+heading of its own: it names declarations from both of these blocks, neither of these blocks names
+anything of the other's, and so it takes a third heading rather than pulling either of these two
+under the other.
+
+**This paragraph has now been wrong twice, in the two ways this file goes wrong.** It read "the
+file that will relate them … does not exist yet" until that file arrived, which is an absence a
+heading was justified by and the next branch retired; and its replacement said that file was "the
+last block below", which was a *position* and was false on the day it was written. The heading is
+named and not pointed at for that reason, and the paragraph under that heading says the same thing
+from the other side.
 
 `ComplexAnalytic.range_specTransitionHom_subset` and its composite are guarded because
 `ComplexAnalytic.specTriple` consumes the second of them: it supplies the `D(f_ji)` half of
@@ -1284,8 +1288,12 @@ morphism from the gluing `### The glue data of an affine cover with distinguishe
 builds to the gluing `### The glue data of the members' `Spec`s` builds. It is a heading of its
 own rather than a `####` under either because it is about neither cover on its own: its input is
 one datum and its content is that the affine comparison morphism is natural enough to descend to
-it. Placed after both blocks it consumes, and named by heading rather than by position, since two
-of the three blocks here now say "the block above" and cannot both be right.
+it. Placed after both blocks it consumes, and **named by heading rather than by position**, which
+is what the blocks above cannot be revised into cheaply: `"the block above"` occurs three times up
+there, twice in the `Spec` block and once in `#### Morphisms out of \`X^an\``, and **all three are
+true** — each of the two blocks really does sit under the one it means. That is the hazard, not a
+contradiction: a pointer is true only relative to a position, so every one of them constrains what
+may be inserted where, and a name constrains nothing.
 -/
 
 /--

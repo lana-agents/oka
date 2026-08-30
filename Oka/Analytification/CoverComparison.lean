@@ -111,8 +111,9 @@ about different objects and do not compose.
 * **No statement that the comparison is an isomorphism, or flat, or anything else.** Those are
   theorems about `ComplexAnalytic.analytificationToSpec` and belong wherever that is studied;
   this file glues, and gluing preserves nothing on its own.
-* **No functoriality.** taxis #1106 — a morphism of covered schemes — is a different construction
-  and does not pass through here.
+* **No functoriality.** `Oka/Analytification/CoverFunctoriality.lean` — a morphism of covered
+  schemes analytified — is a different construction and does not pass through here. That the
+  square between the two commutes is stated in neither file.
 -/
 
 open CategoryTheory TopologicalSpace AlgebraicGeometry
