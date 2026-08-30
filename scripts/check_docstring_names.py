@@ -124,10 +124,12 @@ positives.  A candidate resolves if any of the following holds.
   a namespace, and every `` `thatDef.someField` `` citation *in every other file* would start
   being reported, at a distance, with a message about the environment having nothing in it when
   what happened is that the environment gained something.  Measured on `master` = `7b6faa9`, with
-  no branch involved: `AlgebraicGeometry.AffineScheme.Γ` has exactly one child in the whole
-  environment, `AlgebraicGeometry.AffineScheme.Γ.eq_1`, and before this condition existed
+  no branch involved and against a **planted** citation, this tree containing none of that shape:
+  `AlgebraicGeometry.AffineScheme.Γ` has exactly one child in the whole environment,
+  `AlgebraicGeometry.AffineScheme.Γ.eq_1`, so before this condition existed a fixture citing
   `` `AlgebraicGeometry.AffineScheme.Γ.someField` `` was reported while the structurally identical
-  `` `AlgebraicGeometry.identityToΓSpec.naturality` `` — whose head has no children at all — was
+  `` `AlgebraicGeometry.identityToΓSpec.naturality` `` — a citation this tree really makes, at
+  `Oka/AlgebraicGeometry/GammaSpecAdjunction.lean:61`, whose head has no children at all — was
   accepted.
 
   `GENERATED_COMPONENT` is deliberately narrow: the components generated for a *`def`*, and not
@@ -136,19 +138,29 @@ positives.  A candidate resolves if any of the following holds.
   namespace exclusion is right about it.  **How the list going stale would be noticed**: not by
   maintaining it against Lean's, but by the finding message, which names the head, says it does
   resolve, and names the declaration that made it a namespace — so a suffix this list is missing
-  costs one line rather than the session the first instance cost.  On `master` the whole list
-  changes the classification of exactly one head, `AlgebraicGeometry.AffineScheme.Γ`, out of the
-  236 that both resolve and are namespaces.
+  costs one line rather than the session the first instance cost.  Over the heads this tree's own
+  citations produce, the whole list changes the classification of exactly one — and it is not the
+  planted head above, which no citation here has.  It is `Γ`, which resolves by the suffix rule
+  and was a namespace only because of `AlgebraicGeometry.AffineScheme.Γ.eq_1`, the one name in the
+  whole environment with `Γ` as an interior component: on `dab084a`, 237 heads both resolve and
+  are namespaces without this condition and 236 with it.  **No citation's verdict moves.**
+  `Γ.map`, `Γ.obj`, `Γ.rightOp` and `Γ.map_comp`, 13 sites between them, are taken by the
+  short-head rule below, which is tried first, on both sides of the change.  What this buys is
+  monotonicity, not a repair to anything this tree currently says.
 
   The hole this leaves, stated so that nobody has to rediscover it: a *misspelled* declaration in
   a namespace that contains no other declaration — or none other than generated ones — is read as
   field notation and accepted.  The common structural failure — a whole file's worth of names in
   the wrong namespace — is not of that shape, because the namespace either exists with
-  declarations in it or does not resolve at all.
+  declarations in it or does not resolve at all.  How wide the widening is, since the "exactly
+  one" above is a fact about today's citations rather than about the rule: **8893 runs in this
+  environment have children and only generated ones**, 8889 of them declarations, and every one is
+  a head some future citation could be read as field notation on where before it would have been
+  reported.
 
 * **Short-head rule.**  The head component is at most two characters *and is not a root
-  namespace* — no constant begins with it.  `i.stalkMap`, `Γ.map`, `φ.symm`, `U.extend'`, `w.2`
-  are field notation on a local binder.
+  namespace* — no constant begins with it and continues with a component an author wrote.
+  `i.stalkMap`, `Γ.map`, `φ.symm`, `U.extend'`, `w.2` are field notation on a local binder.
 
   The second condition is not decoration.  An earlier version of this rule said that no namespace
   on this project or in Mathlib is that short; that is **false** — `Eq`, `Or`, `Ne` and `Id` are,
@@ -156,11 +168,24 @@ positives.  A candidate resolves if any of the following holds.
   misspelled `Eq.symmm` is accepted silently.
 
   *Root* namespace rather than namespace-anywhere, and the difference is the whole live
-  population of this rule.  `Γ`, `M`, `V`, `X` and `w` all occur as interior components of some
-  constant (`…Γ.map`, `…M.foo`), so the namespace-anywhere test rejects every one of the seven
-  short heads actually used in this tree and reports twelve false positives.  None of them occurs
-  at the root, and `Eq`, `Or`, `Ne`, `Id` all do.  Measured, not assumed — the first version of
-  this rule assumed and was wrong in both directions on the same day.
+  population of this rule.  `M`, `V` and `X` all occur as interior components of real constants —
+  `Lean.Meta.Grind.EMatch.M.run`, `Std.Time.Modifier.V.elim`, `Std.Time.Modifier.X.noConfusion` —
+  so the namespace-anywhere test rejects ten of the twelve short heads this tree's citations use
+  and reports 33 names at 46 sites, every one of them a citation this rule exists to accept.  None
+  of the twelve occurs at the root and all four of `Eq`, `Or`, `Ne` and `Id` do.  Measured, not
+  assumed — the first version of this rule assumed and was wrong in both directions on the same
+  day.
+
+  A *used* head here means one where nothing else would accept the citation: not resolving, not
+  ignored, not a file, not field notation, so this rule is what stands between it and a finding.
+  **The `seven` heads and `twelve` false positives this paragraph claimed until 2026-08-30 do not
+  reproduce under that definition or any other tried** — on `dab084a` it gives twelve heads and 33
+  names, and thirteen and 37 with the condition above removed — and they are left recorded rather
+  than quietly replaced,
+  because a figure nobody can reproduce is worth knowing about.  The move between those two is one
+  head: `Γ` was in this population until the generated-name condition above, and its four
+  citations are now field notation as well, so they no longer need this rule.  That is the only
+  interaction between the two rules and it changed no verdict.
 
 Anything left over is a finding unless `scripts/docstring-names-ignore.txt` lists it.
 
@@ -304,8 +329,13 @@ def scan(dump: str, wanted: set[str],
     field-notation rule for citations of that definition in unrelated files.
 
     Returns `(resolved, namespaces, root_namespaces, namespace_cause, lines)`, the fourth being
-    one witness per namespace: the shortest name in the dump that put it there, which is what
-    the finding message needs in order to say why field notation was not tried.
+    one witness per namespace: the **first** run this pass meets that put it there, which is what
+    the finding message needs in order to say why field notation was not tried.  It is the head
+    plus the one component after it, so it need not be a name in the dump — against a dump whose
+    only `Planted` entry is `Planted.Sub.child` the witness is `Planted.Sub` — and where a head
+    has several children it is the one the dump happens to list first, not the shortest.  Neither
+    weakens what the message is for: when a head's children are *all* generated, every candidate
+    witness is one of them, so a suffix `GENERATED_COMPONENT` is missing always gets named.
     """
     resolved: set[str] = set()
     namespaces: set[str] = set()
