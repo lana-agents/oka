@@ -240,8 +240,7 @@ theorem comparisonPart_comp_specTransition (i j : J) :
 variable (hrange : ∀ i j k : J, i ≠ j → i ≠ k → j ≠ k →
     Set.range (coverTripleIncl.{u} obj poly i j k ≫
         coverTransitionHom.{u} obj poly glue i j).base ⊆
-      ((coverOpen.{u} obj poly j k ⊓ coverOpen.{u} obj poly j i :
-        Opens (coverSpace.{u} obj j)) : Set (coverSpace.{u} obj j)))
+      (coverOpen.{u} obj poly j k : Set (coverSpace.{u} obj j)))
   (hsymm : ∀ i j : J, glue j i = (glue i j).symm)
   (hcocycle : ∀ i j k : J, ∀ hij : i ≠ j, ∀ hik : i ≠ k, ∀ hjk : j ≠ k,
     coverTriple.{u} obj poly glue hrange i j k hij hik hjk ≫
@@ -250,8 +249,7 @@ variable (hrange : ∀ i j k : J, i ≠ j → i ≠ k → j ≠ k →
   (hrangeSpec : ∀ i j k : J, i ≠ j → i ≠ k → j ≠ k →
     Set.range (specTripleIncl.{u} obj poly i j k ≫
         specTransitionHom.{u} obj poly glue i j).base ⊆
-      ((specOpen.{u} obj poly j k ⊓ specOpen.{u} obj poly j i :
-        Opens (specSpace.{u} obj j)) : Set (specSpace.{u} obj j)))
+      (specOpen.{u} obj poly j k : Set (specSpace.{u} obj j)))
   (hcocycleSpec : ∀ i j k : J, ∀ hij : i ≠ j, ∀ hik : i ≠ k, ∀ hjk : j ≠ k,
     specTriple.{u} obj poly glue hrangeSpec i j k hij hik hjk ≫
       specTriple.{u} obj poly glue hrangeSpec j k i hjk hij.symm hik.symm ≫
@@ -347,9 +345,20 @@ true of a morphism that ignores the family it is glued from.
 
 **It is `@[reassoc]` and deliberately not `@[simp]`**, which is a consequence of that choice of
 spelling rather than an oversight: `ComplexAnalytic.toLRSHom_coverIota` is itself a `simp` lemma,
-so this left-hand side rewrites to the glue datum's `ι` and is not in simp-normal form —
-`lake exe lint-style`'s `simpNF` linter says so, in those words. A proof that wants the normal
-form has it from that lemma for nothing; a *reader* wants this one. -/
+so this left-hand side rewrites to the glue datum's `ι` and is not in simp-normal form. **Measured
+rather than asserted** — with `@[simp]` planted here and nothing else changed, `lake lint` reports
+it and names the lemma that does the rewriting:
+
+    error: @ComplexAnalytic.toLRSHom_coverIota_comp_analytificationToSpecGlued
+      Left-hand side simplifies from … to … using
+        simp +contextual only [*, @ComplexAnalytic.toLRSHom_coverIota]
+
+`simpNF` is one of the fourteen **environment** linters `lake lint` runs. **`lake exe lint-style`
+exits 0 on the same planted attribute with nothing to say**, because it is the seven *text* checks
+and cannot see an attribute; `.orchestra/validation.sh` warns in terms against reading a green
+there as a green from the environment linters, and this docstring said `lint-style` until
+2026-08-30. A proof that wants the normal form has it from `ComplexAnalytic.toLRSHom_coverIota`
+for nothing; a *reader* wants this one. -/
 @[reassoc]
 theorem toLRSHom_coverIota_comp_analytificationToSpecGlued (i : J) :
     (coverIota.{u} obj poly glue hrange hsymm hcocycle i).toLRSHom ≫

@@ -537,10 +537,8 @@ why `Oka/Analytification/CoverComparison.lean` asks for both. -/
 theorem specHrange_lineCover (i j k : pair.{u}) (hij : i ≠ j) (hik : i ≠ k) (hjk : j ≠ k) :
     Set.range (specTripleIncl.{u} lineCoverObj.{u} lineCoverPoly.{u} i j k ≫
         specTransitionHom.{u} lineCoverObj.{u} lineCoverPoly.{u} lineSwapIso.{u} i j).base ⊆
-      ((specOpen.{u} lineCoverObj.{u} lineCoverPoly.{u} j k ⊓
-          specOpen.{u} lineCoverObj.{u} lineCoverPoly.{u} j i :
-        Opens (specSpace.{u} lineCoverObj.{u} j)) :
-          Set (specSpace.{u} lineCoverObj.{u} j)) :=
+      (specOpen.{u} lineCoverObj.{u} lineCoverPoly.{u} j k :
+        Set (specSpace.{u} lineCoverObj.{u} j)) :=
   (pair_no_distinct_triple.{u} hij hik hjk).elim
 
 /-- **The `Spec`-side cocycle hypothesis, vacuous at two members.** -/

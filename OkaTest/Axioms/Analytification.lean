@@ -1089,8 +1089,14 @@ info: 'ComplexAnalytic.coverGlueMorphisms_coverIota' depends on axioms:
 `Oka/Analytification/SpecAffineCover.lean`, the mirror of the block above with
 `ComplexAnalytic.specFunctor` in place of the analytification. It is a heading of its own rather
 than part of that block because the two constructions share an *input* and nothing else: neither
-file's declarations appear in the other's statements, and the file that will relate them —
-taxis #1105's comparison morphism `X^an ⟶ X` — does not exist yet.
+file's declarations appear in the other's statements — and that is still true now that the file
+which relates them exists. `Oka/Analytification/CoverComparison.lean`, the last block below, is
+where the comparison morphism `X^an ⟶ X` lives; it names declarations from both of these blocks,
+neither of these blocks names anything of the other's, and so it takes a **third** heading rather
+than pulling either of these two under the other. **This sentence read "the file that will relate
+them … does not exist yet" until that file arrived**, which is the thing a block appended to this
+file has to check for: the absence a heading is justified by is exactly what the next branch
+retires.
 
 `ComplexAnalytic.range_specTransitionHom_subset` and its composite are guarded because
 `ComplexAnalytic.specTriple` consumes the second of them: it supplies the `D(f_ji)` half of

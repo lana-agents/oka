@@ -107,11 +107,14 @@ other would have made the pair *less* symmetric and not more.
 
 ## What is not here
 
-* **The comparison morphism `X^an ⟶ X`.** taxis #1105. Everything it needs is above:
+* **The comparison morphism `X^an ⟶ X`.** It is in
+  `Oka/Analytification/CoverComparison.lean`, which imports this file, and it is built out of
+  exactly what this bullet predicted before that file existed:
   `ComplexAnalytic.comm_coverGlueData` at the family
   `fun i ↦ analytificationToSpec (obj i).g ≫ specIota i`, whose overlap hypothesis is
   `ComplexAnalytic.specIncl_comp_specIota` composed with the naturality of
-  `ComplexAnalytic.analytificationToSpecNatTrans`.
+  `ComplexAnalytic.analytificationToSpecNatTrans`. It is not here because that file needs both
+  gluings and this one is only half of the input.
 * **Any statement that `X` is a scheme.** `ComplexAnalytic.specFunctor` lands in
   `AlgebraicGeometry.LocallyRingedSpace`, and `Oka/Analytification/Comparison.lean` argues in a
   titled section that the absence of `AlgebraicGeometry.Scheme` from its statements is a *result*
