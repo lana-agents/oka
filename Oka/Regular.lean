@@ -349,14 +349,30 @@ simple zero along the last axis is the germ ring one dimension down**, with no g
 statement.
 
 **Why the hypothesis is stated with `PowerSeries.order` and not with a derivative.** The
-condition one expects is that `∂f/∂X_n` is a unit at the origin. That is not expressible here:
-this repository has no partial-derivative operator on `LocalOkaRing`, and the one declaration
-under `Oka/` that computes a partial derivative,
-`MvPowerSeries.LocallyConvergent.fderiv_eval_zero`, is about the derivative of the *sum* of a
-convergent series. `PowerSeries.order (MvPowerSeries.partialEval (Fin.last n) f) = 1` is the same
-condition for a germ vanishing at the origin, and it costs nothing because it is what
+condition one expects is that `∂f/∂X_n` is a unit at the origin, and **what makes that
+inexpressible here is the missing operator and not any missing generality.** This repository has
+no partial-derivative operator `LocalOkaRing ι → LocalOkaRing ι`, and *"is a unit"* is a predicate
+on a ring element: there is no element for it to be a predicate about.
+
+**Three declarations under `Oka/` do compute a partial derivative and all three produce a number
+at a point rather than a germ**, which is the distinction that matters and not
+general-versus-special. `MvPowerSeries.LocallyConvergent.fderiv_eval_zero` gives the derivative of
+the *sum* at the origin, and it applies to **every** germ — `LocalOkaRing ι` is by definition the
+locally convergent series, so its hypothesis is `LocalOkaRing.locallyConvergent` and nothing more;
+`MvPolynomial.coeff_single_one_taylorAlgHom` and `LocalOkaRing.coeff_single_one_ofMvPolynomial`
+give `MvPolynomial.eval y (MvPolynomial.pderiv i p)`, for a polynomial and for the germ of one.
+Each identifies a *linear coefficient* with a derivative, and none of the three produces an
+element of `LocalOkaRing` that `IsUnit` could be applied to. (A further four, in
+`Oka/AnalyticSpace/SimpleZeroPolynomial.lean`, and the implicit-function result of
+`Oka/Weierstrass.lean`, *hypothesise* a partial derivative rather than computing one; the
+statement-versus-proof-step distinction is what this census turns on and it is worth re-running
+rather than quoting.)
+
+So `PowerSeries.order (MvPowerSeries.partialEval (Fin.last n) f) = 1` is the spelling to use: it
+is the same condition for a germ vanishing at the origin, and it costs nothing because it is what
 `localweierstrass_preparation` already computes internally as its order of generality. Bridging
-the two is a separate piece of work and nothing here attempts it.
+the two is a separate piece of work and nothing here attempts it — and nothing here says how close
+the linear coefficient of `f` is to that order condition either.
 
 **Preparation does not report the degree, and that is the only real content below.**
 `localweierstrass_preparation` concludes `f = fromPolynomial g * u` with `u` a unit and `g` a

@@ -53,7 +53,8 @@ coefficient replaced by `MvPolynomial.pderiv`.
   a partial derivative of `p` at `y`.** It is what turns the simple-zero hypothesis of the stalk
   isomorphism of a hypersurface — one Taylor coefficient of a germ — into the derivative
   condition a caller holding a polynomial actually has; which statement that is, and where, is in
-  the paragraph below rather than here, since it is not a result of this file.
+  the paragraph above and in this declaration's own docstring rather than here, since it is not a
+  result of this file.
 - `LocalOkaRing.ofMvPolynomial_taylorAlgHom`: **the germ at `y` is the germ at the origin of the
   shifted polynomial** `p(x + y)`. Since `LocalOkaRing ι` is the germ ring at the origin by
   construction, this is what lets a statement about germs at `y` be transported to one about
