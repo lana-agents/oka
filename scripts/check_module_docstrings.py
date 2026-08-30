@@ -203,6 +203,12 @@ def self_test() -> int:
     a green tree passes, and each defect fails — because a checker that always reports a failure
     would pass a negative test alone.
 
+    Three of the checks run this file as a *subprocess* rather than calling `check` directly.
+    `main()` — resolving the repository root, and returning `check`'s exit code — is what
+    `.orchestra/validation.sh` and `.github/workflows/lean_action_ci.yml` invoke and is the one
+    part of this script that calling `check` cannot exercise; the comment beside those three
+    records the mutation that survived every other check here until 2026-08-30.
+
     The `a section header and no module docstring` case is here because its absence is what let
     an earlier version of this script accept a file with no module docstring at all.  Five of the
     original six cases probed the *contents* of a `/-!` block and the sixth probed a file with no
@@ -279,6 +285,73 @@ def self_test() -> int:
             f"(got {red})"
         )
         failures += red != 1
+
+
+    # The three above stop at `check`, which is not this script's entry point.  `main()` is: it
+    # resolves the repository root with `git rev-parse --show-toplevel` and returns `check`'s exit
+    # code, and until 2026-08-30 nothing here executed either step.  Substituting `return 0` for
+    # `return check(root)` left all twelve lines above green, `.orchestra/validation.sh` at exit 0,
+    # and the `checked N files` line simply absent from a run nobody reads when it passes.
+    #
+    # These three therefore run the file as a subprocess with no arguments, which is exactly how
+    # `.orchestra/validation.sh` and `.github/workflows/lean_action_ci.yml` run it, and they assert
+    # on the exit code *and* on a line of the output: an exit code alone cannot tell a check that
+    # found nothing wrong from a check that looked at nothing.  `check_docstring_names.py` uses the
+    # same `subprocess.run([sys.executable, __file__, ...])` idiom for its two CLI checks; this is
+    # that idiom in this file's `[ok]`/`[FAIL]` style.
+    #
+    # The planted tree is a real `git init` because `git rev-parse --show-toplevel` is the thing
+    # under test, and the last of the three runs from a subdirectory of it: the root has to come
+    # from the repository *containing* the cwd and not from the cwd.  `check_docstring_names.py`
+    # carries the same negative control -- `os.chdir` does not move the walk -- because that
+    # script shipped with exactly this defect and its own self-test could not see it either.
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp).resolve()
+        subprocess.run(["git", "init", "-q", str(root)], capture_output=True, check=True)
+        (root / "Oka").mkdir()
+        (root / "OkaTest").mkdir()
+        (root / "Oka" / "Good.lean").write_text("/-!\n# Good\n\nText.\n-/\n", encoding="utf-8")
+        (root / "OkaTest" / "Good.lean").write_text("/-!\n# G\n\nText.\n-/\n", encoding="utf-8")
+
+        def cli(cwd: Path) -> subprocess.CompletedProcess[str]:
+            """This script, run the way the two gates run it: no arguments, from `cwd`."""
+            return subprocess.run(
+                [sys.executable, str(Path(__file__).resolve())],
+                cwd=cwd,
+                capture_output=True,
+                text=True,
+            )
+
+        got = cli(root)
+        counted = "checked 2 files: 0 without a non-empty module docstring" in got.stdout
+        ok = got.returncode == 0 and counted
+        print(
+            f"  [{'ok' if ok else 'FAIL'}] the CLI on a green tree exits 0 and says what it "
+            f"checked (got {got.returncode}, count line {'present' if counted else 'absent'})"
+        )
+        failures += not ok
+
+        (root / "Oka" / "Bad.lean").write_text("/-!\n-/\n", encoding="utf-8")
+        got = cli(root)
+        named = "Oka/Bad.lean: module docstring is empty" in got.stdout
+        ok = got.returncode == 1 and named
+        print(
+            f"  [{'ok' if ok else 'FAIL'}] the CLI exits 1 on a planted defect and names it "
+            f"(got {got.returncode}, defect line {'present' if named else 'absent'})"
+        )
+        failures += not ok
+
+        nested = root / "Oka" / "Nested"
+        nested.mkdir()
+        got = cli(nested)
+        named = "Oka/Bad.lean: module docstring is empty" in got.stdout
+        ok = got.returncode == 1 and named
+        print(
+            f"  [{'ok' if ok else 'FAIL'}] the root is the repository and not the cwd: run from "
+            f"Oka/Nested it still reports Oka/Bad.lean (got {got.returncode}, defect line "
+            f"{'present' if named else 'absent'})"
+        )
+        failures += not ok
 
     print("self-test failed" if failures else "self-test passed")
     return 1 if failures else 0
