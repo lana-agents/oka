@@ -123,7 +123,7 @@ positives.  A candidate resolves if any of the following holds.
   first time any tactic anywhere unfolds it.  So `rw [thatDef]` in one file would make `thatDef`
   a namespace, and every `` `thatDef.someField` `` citation *in every other file* would start
   being reported, at a distance, with a message about the environment having nothing in it when
-  what happened is that the environment gained something.  Measured on `master` = `7b6faa9`, with
+  what happened is that the environment gained something.  Measured on `master` = `af2991d`, with
   no branch involved and against a **planted** citation, this tree containing none of that shape:
   `AlgebraicGeometry.AffineScheme.Γ` has exactly one child in the whole environment,
   `AlgebraicGeometry.AffineScheme.Γ.eq_1`, so before this condition existed a fixture citing
@@ -132,31 +132,65 @@ positives.  A candidate resolves if any of the following holds.
   `Oka/AlgebraicGeometry/GammaSpecAdjunction.lean:61`, whose head has no children at all — was
   accepted.
 
-  `GENERATED_COMPONENT` is deliberately narrow: the components generated for a *`def`*, and not
-  the ones generated for an inductive or a structure (`rec`, `casesOn`, `mk`, `injEq`,
-  `noConfusion`, `sizeOf_spec`, `ctorIdx`).  A head that carries *those* really is a type, and the
-  namespace exclusion is right about it.  **How the list going stale would be noticed**: not by
-  maintaining it against Lean's, but by the finding message, which names the head, says it does
-  resolve, and names the declaration that made it a namespace — so a suffix this list is missing
-  costs one line rather than the session the first instance cost.  Over the heads this tree's own
-  citations produce, the whole list changes the classification of exactly one — and it is not the
-  planted head above, which no citation here has.  It is `Γ`, which resolves by the suffix rule
-  and was a namespace only because of `AlgebraicGeometry.AffineScheme.Γ.eq_1`, the one name in the
-  whole environment with `Γ` as an interior component: on `dab084a`, 237 heads both resolve and
-  are namespaces without this condition and 236 with it.  **No citation's verdict moves.**
-  `Γ.map`, `Γ.obj`, `Γ.rightOp` and `Γ.map_comp`, 13 sites between them, are taken by the
-  short-head rule below, which is tried first, on both sides of the change.  What this buys is
-  monotonicity, not a repair to anything this tree currently says.
+  **The membership test is not "Lean generated it".**  It is: does Lean generate it *on demand,
+  after the declaration, because of something in another file*?  Only that makes the
+  classification non-monotone, and only that is what this list repairs.  So the components
+  generated for an inductive or a structure (`rec`, `casesOn`, `mk`, `injEq`, `noConfusion`,
+  `sizeOf_spec`, `ctorIdx`) are absent — a head that carries those really is a type — and so are
+  the ones `deriving` writes (`beq`, `repr`, `hash`, `decEq`, `ord`, `toJson`, `fromJson`): they
+  arrive *with* the declaration, so a head that has one had it from the start and no other file
+  can add it.
+
+  **How the list going stale would be noticed**: not by maintaining it against Lean's, but by the
+  finding message, which names the head, says it does resolve, and names the declaration that made
+  it a namespace — so a suffix this list is missing costs one line rather than the session the
+  first instance cost.  **That is how `congr_simp` was found**, three days after the list was
+  written, when a new definition acquired one.
+
+  **And how the list is audited, which is cheaper than reading Lean's source**: iterate the dump,
+  group every name by its head, and list the components that are the *sole* child of a head not
+  already matched here — a component that is some head's only non-matched child is a candidate for
+  being generated, because a head with a real declaration under it has one.  Sorted by frequency
+  on `af2991d`, with the components already listed removed, the top of that list is
+
+      2182  congr_simp          748  default        605  noConfusion      213  toJson
+       207  beq                 197  repr           191  fromJson          92  go
+        85  induct_unfolding     81  hash            59  decEq             44  loop
+
+  and everything in it is decided by the paragraph above: `congr_simp`, `induct_unfolding`,
+  `fun_cases_unfolding` (25), `hcongr_N` (7 at the top arity) and the nested `match_N_M` (10) are
+  planted on demand and are in the list; `noConfusion` is a structure component; `beq`, `repr`,
+  `toJson`, `fromJson`, `hash`, `decEq` and `ord` are `deriving`'s; and `default`, `go`, `loop`,
+  `run`, `aux` and `elim` are names authors write.  **`congr` is the trap and is deliberately
+  out**: seven heads have it as their only non-matched child and it looks exactly like
+  `congr_simp`, but `EventuallyMeasurableSet.congr` and `LinearMap.Nondegenerate.congr` are
+  Mathlib lemmas somebody wrote.  A suffix goes in this list only when every occurrence of it in
+  the dump is generated, and `congr` fails that.
+
+  Over the heads this tree's own citations produce, the whole list changes the classification of
+  exactly one — and it is not the planted head above, which no citation here has.  It is `Γ`,
+  which resolves by the suffix rule and was a namespace only because of
+  `AlgebraicGeometry.AffineScheme.Γ.eq_1`, the one name in the whole environment with `Γ` as an
+  interior component: on `af2991d`, 237 heads both resolve and are namespaces without this
+  condition and 236 with it, and **236 with `congr_simp` and the four beside it added — the same
+  236, not merely as many**.  **No citation's verdict moves**, on either change.  `Γ.map`,
+  `Γ.obj`, `Γ.rightOp` and `Γ.map_comp`, 13 sites between them, are taken by the short-head rule
+  below, which is tried first, on both sides of the change.  What this buys is monotonicity, not a
+  repair to anything this tree currently says.
 
   The hole this leaves, stated so that nobody has to rediscover it: a *misspelled* declaration in
   a namespace that contains no other declaration — or none other than generated ones — is read as
   field notation and accepted.  The common structural failure — a whole file's worth of names in
   the wrong namespace — is not of that shape, because the namespace either exists with
   declarations in it or does not resolve at all.  How wide the widening is, since the "exactly
-  one" above is a fact about today's citations rather than about the rule: **8893 runs in this
-  environment have children and only generated ones**, 8889 of them declarations, and every one is
-  a head some future citation could be read as field notation on where before it would have been
-  reported.
+  one" above is a fact about today's citations rather than about the rule: on `af2991d` **11267
+  runs in this environment have children and only generated ones**, 11263 of them declarations,
+  and every one is a head some future citation could be read as field notation on where before it
+  would have been reported.  **That figure was 8896 (8892 declarations) before `congr_simp` and
+  the four beside it went in**, so this list is where the widening lives and it is worth saying
+  what each addition costs.  2371 runs stop being namespaces: 2182 because of `congr_simp` and
+  nothing else, 85 `induct_unfolding`, 31 `hcongr_N`, 25 `fun_cases_unfolding`, 12 `match_N_M`,
+  and 36 heads that carry two of them.
 
 * **Short-head rule.**  The head component is at most two characters *and is not a root
   namespace* — no constant begins with it and continues with a component an author wrote.
@@ -181,11 +215,10 @@ positives.  A candidate resolves if any of the following holds.
   **The `seven` heads and `twelve` false positives this paragraph claimed until 2026-08-30 do not
   reproduce under that definition or any other tried** — on `dab084a` it gives twelve heads and 33
   names, and thirteen and 37 with the condition above removed — and they are left recorded rather
-  than quietly replaced,
-  because a figure nobody can reproduce is worth knowing about.  The move between those two is one
-  head: `Γ` was in this population until the generated-name condition above, and its four
-  citations are now field notation as well, so they no longer need this rule.  That is the only
-  interaction between the two rules and it changed no verdict.
+  than quietly replaced, because a figure nobody can reproduce is worth knowing about.  The move
+  between those two is one head: `Γ` was in this population until the generated-name condition
+  above, and its four citations are now field notation as well, so they no longer need this rule.
+  That is the only interaction between the two rules and it changed no verdict.
 
 Anything left over is a finding unless `scripts/docstring-names-ignore.txt` lists it.
 
@@ -217,14 +250,17 @@ MAX_LOCAL_HEAD = 2
 
 # A name component the elaborator generates for the declaration it hangs off, rather than one an
 # author wrote.  Such a component must not make its parent a namespace: see the field-notation
-# rule in the module docstring above for why, and for the measurement that says this list is
-# narrow on purpose.  Everything here is generated *for a `def`* and appears without warning the
-# first time a tactic unfolds one; the components generated for an *inductive* or a *structure* —
-# `rec`, `casesOn`, `mk`, `injEq`, `noConfusion`, `ctorIdx`, `sizeOf_spec` — are deliberately
-# absent, because a head that has those really is a type and the namespace exclusion is right
-# about it.
+# rule in the module docstring above for why, and for the audit that says what is in this list
+# and what is deliberately not.  **The membership test is not "Lean generated it" but "Lean
+# generates it on demand, after the declaration, because of something in another file"** — that
+# is what makes the namespace classification non-monotone and is the only thing this list exists
+# to repair.  So the components generated for an *inductive* or a *structure* (`rec`, `casesOn`,
+# `mk`, `injEq`, `noConfusion`, `ctorIdx`, `sizeOf_spec`) and the ones `deriving` writes at the
+# declaration (`beq`, `repr`, `hash`, `decEq`, `ord`, `toJson`, `fromJson`) are absent: they
+# arrive with the declaration, so a head that carries them carried them from the start.
 GENERATED_COMPONENT = re.compile(
-    r"_.*|eq_\d+|eq_def|eq_unfold|match_\d+|proof_\d+|induct|fun_cases")
+    r"_.*|eq_\d+|eq_def|eq_unfold|match_\d+(_\d+)*|proof_\d+"
+    r"|induct(_unfolding)?|fun_cases(_unfolding)?|congr_simp|hcongr_\d+")
 
 
 def comment_regions(text: str) -> list[tuple[int, int]]:
@@ -559,14 +595,14 @@ def self_test() -> int:
     **The test that matters is the positive one.**  "Two identical trees diff to empty" is what
     the `os.chdir` driver this option replaced printed on every branch it was ever run on, so a
     self-test built only from that would have passed while measuring nothing.  **Every check below
-    carries a `positive:` or `negative:` label and there are twelve and four** — a count is stated
-    here rather than left to be inferred because a reader who trusts the labels has to be able to
-    see that none is missing.
+    carries a `positive:` or `negative:` label and there are thirteen and five** — a count is
+    stated here rather than left to be inferred because a reader who trusts the labels has to be
+    able to see that none is missing.
 
-    The last four are about the *rules* rather than about the walk, and they reach them by
-    planting an environment as a `--dump` file instead of building one.  That is the only way to
-    hold everything fixed but the environment, which is the variable the field-notation rule turns
-    on, and it keeps the whole self-test free of `lake`.
+    The last six are about the *rules* rather than about the walk, and they reach them by planting
+    an environment as a `--dump` file instead of building one.  That is the only way to hold
+    everything fixed but the environment, which is the variable the field-notation rule turns on,
+    and it keeps the whole self-test free of `lake`.
     """
     def plant(root: str, body: str) -> str:
         os.makedirs(os.path.join(root, "Oka"), exist_ok=True)
@@ -718,6 +754,30 @@ def self_test() -> int:
         check("positive: a generated equation lemma does not make its definition a namespace",
               eqn.returncode == 0 and "names nothing" not in eqn.stdout,
               eqn.stdout.strip().replace("\n", " | ") or "rc=0, nothing reported")
+
+        # The same defect one suffix over, and the reason this check exists as well as the one
+        # above: `eq_1` was the first instance and not the class.  Each name here is planted by a
+        # tactic in some *other* file — a congruence lemma for `simp` or `grind`, the companions
+        # of `fun_induction` and `fun_cases`, a nested `match` auxiliary — so each of them turns
+        # the field-notation rule off at a distance exactly as `eq_1` did.  **This check fails on
+        # a script whose `GENERATED_COMPONENT` is missing any one of the five**, which is what
+        # makes it an assertion about the list rather than about `congr_simp`.
+        gen = run_on(env("env-gen.txt", "Planted", "Planted.congr_simp", "Planted.hcongr_3",
+                         "Planted.match_1_1", "Planted.induct_unfolding",
+                         "Planted.fun_cases_unfolding", "Unrelated.decl"))
+        check("positive: the on-demand generated components do not make a definition a namespace",
+              gen.returncode == 0 and "names nothing" not in gen.stdout,
+              gen.stdout.strip().replace("\n", " | ") or "rc=0, nothing reported")
+
+        # And the boundary, which is the half of the audit that is a judgement: `congr` is *not*
+        # in the list.  It is the sole non-generated child of seven heads in this environment and
+        # so looks exactly like `congr_simp` to the audit, but `EventuallyMeasurableSet.congr`
+        # and `LinearMap.Nondegenerate.congr` are Mathlib lemmas somebody wrote.  A script that
+        # added it by pattern-matching on the suffix would pass every other check here.
+        near = run_on(env("env-congr.txt", "Planted", "Planted.congr", "Unrelated.decl"))
+        check("negative: `congr` is not a generated component and still blocks field notation",
+              near.returncode == 1 and "`Planted.someField` names nothing" in near.stdout,
+              near.stdout.strip().replace("\n", " | ") or f"rc={near.returncode}")
 
         # The half of the rule that must survive the fix, and would not survive deleting the
         # namespace condition: an author-written declaration under the head still means the head
