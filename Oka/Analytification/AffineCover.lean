@@ -194,7 +194,7 @@ variable {J : Type u} (obj : J → Presentation.{u})
 
 /-- **The `i`-th member of the cover**, `A_i^an`, as a locally ringed space.
 
-Everything in this file up to `ComplexAnalytic.coverAnalytification` is spelled at the
+Everything in this file before `ComplexAnalytic.coverAnalytification` is spelled at the
 locally-ringed-space level, and deliberately: `ComplexAnalytic.AnalyticSpace`'s `Category`
 instance defines composition through `toLRSHom`, so unifying two composites of analytic morphisms
 forces it open and is expensive enough to exhaust the heartbeat budget on a three-term
@@ -560,9 +560,10 @@ the two theorems below are what make it usable.
 
 **Not "the analytification of a scheme", and the module docstring's titled section is why.**
 Nothing here says the input presents one, and a scheme's cover does not supply this input in
-general: `poly` asks for one distinguished open of the `i`-th member per *ordered pair*, while
-`AlgebraicGeometry.exists_basicOpen_le_affine_inter` gives only a union of such at each point of
-an intersection. -/
+general: `poly` asks for **one** distinguished open of the `i`-th member per *ordered pair*, while
+`AlgebraicGeometry.exists_basicOpen_le_affine_inter` is stated at a *point* of an intersection and
+gives one such open there — so the intersection of two affine members is a **union of such
+opens**, and nothing makes one of them the whole of it. -/
 def coverAnalytification : AnalyticSpace.{u} :=
   AnalyticSpace.ofGlueDataCLinear
     (coverGlueData.{u} obj poly glue hrange hsymm hcocycle)
