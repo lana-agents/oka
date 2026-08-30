@@ -397,7 +397,15 @@ theorem refineTransitionHom_localisationProj (a b : K) :
 `ComplexAnalytic.refineTransitionHom_localisationProj` and
 `AlgebraicGeometry.LocallyRingedSpace.restrictLE_fac`, which says that including a smaller open
 subspace into a larger one and then into the ambient space is including it directly. Both laws
-below are read off this one. -/
+below are read off this one.
+
+**The `rw` does not name `ComplexAnalytic.coverTripleIncl`, and that is deliberate.** It is an
+`abbrev`, so the rewrite finds `restrictLE` underneath it at `instances` transparency without
+being told to unfold it — and `rw [coverTripleIncl]` would plant an auto-generated equation
+lemma on **another file's** definition, which is the effect
+`Oka/Analytification/CoverComparison.lean` declines by the same manoeuvre and which taxis #1229
+and #1243 record biting at a distance. Nothing this file proves generates an equation lemma
+outside it. -/
 theorem refineTripleIncl_localisationProj (a b c : K) :
     coverTripleIncl.{u} (refineObj.{u} g fam) (refinePoly.{u} g fam) a b c ≫
         coverTransitionHom.{u} (refineObj.{u} g fam) (refinePoly.{u} g fam)
@@ -406,8 +414,7 @@ theorem refineTripleIncl_localisationProj (a b c : K) :
           (coverOpen.{u} (refineObj.{u} g fam) (refinePoly.{u} g fam) a b ⊓
             coverOpen.{u} (refineObj.{u} g fam) (refinePoly.{u} g fam) a c).isOpenEmbedding ≫
         (localisationProj.{u} g (fam a)).toLRSHom := by
-  rw [refineTransitionHom_localisationProj, ← Category.assoc, coverTripleIncl,
-    LocallyRingedSpace.restrictLE_fac]
+  rw [refineTransitionHom_localisationProj, ← Category.assoc, LocallyRingedSpace.restrictLE_fac]
 
 /-- **`hrange` for a same-member refinement**: the transition carries the part of the `a`-`b`
 overlap that also meets `c` into the part of the `b`-th member that meets `c`.
