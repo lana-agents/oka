@@ -976,6 +976,13 @@ info: 'ComplexAnalytic.range_base_localisationProj' depends on axioms:
 #print axioms ComplexAnalytic.range_base_localisationProj
 
 /--
+info: 'ComplexAnalytic.coverOverlapIso_hom_coverIncl' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverOverlapIso_hom_coverIncl
+
+/--
 info: 'ComplexAnalytic.coverTransition' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
@@ -1355,13 +1362,6 @@ info: 'ComplexAnalytic.toLRSHom_localisationProj_comp_analytificationToSpec' dep
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.toLRSHom_localisationProj_comp_analytificationToSpec
-
-/--
-info: 'ComplexAnalytic.coverOverlapIso_hom_coverIncl' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms ComplexAnalytic.coverOverlapIso_hom_coverIncl
 
 /--
 info: 'ComplexAnalytic.comparisonPart' depends on axioms:
@@ -1809,8 +1809,16 @@ info: 'ComplexAnalytic.isFinite_analytification_comp_proj' depends on axioms:
 
 `Oka/Analytification/CoverRefinement.lean`. The refined members, the polynomials cutting their
 overlaps out, the glue isomorphism built from `ComplexAnalytic.localisationPresentationIsoMul`,
-and the two laws that are algebraic. **The two geometric laws are not here because they are not
-proved**; that file's `## What is not here` names the one missing lemma they need.
+the two laws that are algebraic, **the two that are geometric**, and the space the refined datum
+glues to with its morphism down to the fixed member. The geometric pair was absent here until
+`ComplexAnalytic.localisationOpen_rename` — guarded under
+`### The glue data of an affine cover with distinguished overlaps` above — gave them the one
+statement they were waiting for.
+
+`ComplexAnalytic.not_isIso_refineToBase` is guarded like the rest and is a **negative**: the
+morphism is not an isomorphism, at an empty family. A guard on it says only that its proof uses
+no axiom beyond the three, which is worth as much here as anywhere — the theorem is what says
+this construction produces a morphism and not an identification.
 
 `ComplexAnalytic.refineObj`, `ComplexAnalytic.refinePoly` and `ComplexAnalytic.refineMul` are
 `abbrev`s and carry no guard of their own: an `abbrev` is definitionally its body, so a guard on
@@ -1867,3 +1875,73 @@ info: 'ComplexAnalytic.refineGlue_analytification_comp' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.refineGlue_analytification_comp
+
+/--
+info: 'ComplexAnalytic.refineTransitionHom_localisationProj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineTransitionHom_localisationProj
+
+/--
+info: 'ComplexAnalytic.refineTripleIncl_localisationProj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineTripleIncl_localisationProj
+
+/--
+info: 'ComplexAnalytic.refineHrange' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineHrange
+
+/--
+info: 'ComplexAnalytic.refineTriple_localisationProj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineTriple_localisationProj
+
+/--
+info: 'ComplexAnalytic.refineHcocycle' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineHcocycle
+
+/--
+info: 'ComplexAnalytic.refineAnalytification' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineAnalytification
+
+/--
+info: 'ComplexAnalytic.refineToBase' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineToBase
+
+/--
+info: 'ComplexAnalytic.coverIota_comp_refineToBase' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverIota_comp_refineToBase
+
+/--
+info: 'ComplexAnalytic.isEmpty_refineAnalytification' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isEmpty_refineAnalytification
+
+/--
+info: 'ComplexAnalytic.not_isIso_refineToBase' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.not_isIso_refineToBase
