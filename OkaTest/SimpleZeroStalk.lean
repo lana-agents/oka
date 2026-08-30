@@ -41,10 +41,11 @@ argument produces is the zero function; see `## What this does not test`.
 restriction: without it the statement would have to hold for every hypersurface through the
 point, and `z_n ^ 2` is one.
 
-`OkaTest.SimpleZeroStalk.coeff_germ_hyperplaneSectionSq` is the sharper half of the same control:
-in the coefficient spelling the *first* hypothesis still holds for `z_n ^ 2` — it does vanish at
-the origin — so the two hypotheses are independent, and it is the linear coefficient alone that
-rules the double zero out.
+`OkaTest.SimpleZeroStalk.coeff_germ_hyperplaneSectionSq` is the sharper half of the same control.
+`ComplexAnalytic.IsCutOutBy.evalHom_eq_zero` makes the vanishing half of the order condition
+automatic for *every* cutting section, so it can carry no information at all; **the linear
+coefficient is where all of the content is**, and that computation is what shows it excluding
+something.
 
 The control stops at the order and does **not** claim that the stalk map fails to be an
 isomorphism for `z_n ^ 2`. That is true — the germ ring of `ℂ^(n+1) ⧸ (z_n²)` is not reduced and
@@ -139,19 +140,13 @@ theorem order_partialEval_germ_sq :
 /-! ### The coefficient form of the hypothesis, at both indexings
 
 `ComplexAnalytic.bijective_stalkMap_comp_projCoords_of_coeff` and its three siblings take the
-germ condition as two coefficients rather than as an order. This section witnesses that form on
-the same hyperplane, so the two spellings are exercised at the same pair. -/
+germ condition as one coefficient rather than as an order — the vanishing half being free from
+the `ComplexAnalytic.IsCutOutBy` they already hold. This section witnesses that form on the same
+hyperplane, so the two spellings are exercised at the same pair. -/
 
-/-- **The last coordinate vanishes at the origin**, which is the first hypothesis of
-`ComplexAnalytic.isIso_stalkMap_comp_projCoords_of_coeff`. -/
-theorem evalHom_hyperplaneSection :
-    OkaRing.evalHom
-      (show (0 : Fin (n + 1) → ℂ) ∈ (⊤ : Opens (Fin (n + 1) → ℂ)) from trivial)
-      (hyperplaneSection n) = 0 :=
-  (ComplexAnalytic.evalHom_coord _).trans rfl
-
-/-- **Its linear coefficient along the last axis is `1`**, which is the second hypothesis. The
-germ is `LocalOkaRing.coord (Fin.last n)`, so the underlying series is `MvPowerSeries.X` and the
+/-- **Its linear coefficient along the last axis is `1`**, which is the whole hypothesis of
+`ComplexAnalytic.isIso_stalkMap_comp_projCoords_of_coeff`. The germ is
+`LocalOkaRing.coord (Fin.last n)`, so the underlying series is `MvPowerSeries.X` and the
 coefficient is read off `MvPowerSeries.coeff_X`. -/
 theorem coeff_germ_hyperplaneSection :
     MvPowerSeries.coeff (Finsupp.single (Fin.last n) 1)
@@ -161,11 +156,13 @@ theorem coeff_germ_hyperplaneSection :
   rw [germ_hyperplaneSection, LocalOkaRing.coe_coord, MvPowerSeries.coeff_X, if_pos rfl]
 
 /-- **The control, in the coefficient spelling**: at `z_n ^ 2` the same coefficient is `0`, so the
-second hypothesis fails exactly where the order hypothesis did.
+hypothesis fails exactly where the order hypothesis did.
 
-This is the sharper half of `OkaTest.SimpleZeroStalk.order_partialEval_germ_sq`: the *first*
-hypothesis still holds for `z_n ^ 2` — it vanishes at the origin — so the two hypotheses are
-independent and it is the linear coefficient alone that rules the double zero out. -/
+This is the sharper half of `OkaTest.SimpleZeroStalk.order_partialEval_germ_sq`, and what makes it
+sharper is what `ComplexAnalytic.IsCutOutBy.evalHom_eq_zero` says: the *vanishing* half of the
+order condition holds for `z_n ^ 2` and for every other cutting section, automatically, so it can
+carry no information. **The linear coefficient is where all of the content is**, and this is the
+computation that shows it excluding something. -/
 theorem coeff_germ_hyperplaneSectionSq :
     MvPowerSeries.coeff (Finsupp.single (Fin.last n) 1)
       ((OkaRing.germ (show (0 : Fin (n + 1) → ℂ) ∈ (⊤ : Opens (Fin (n + 1) → ℂ)) from trivial)
@@ -184,8 +181,7 @@ theorem isIso_stalkMap_hyperplane_of_coeff :
       okaMapHom (projCoords n)).stalkMap (origin n)) :=
   isIso_stalkMap_comp_projCoords_of_coeff
     ((complexSpace (Fin (n + 1))).isCutOutBy_zeroLocusSubspaceι ![hyperplaneSection n])
-    (origin n) (evalHom_hyperplaneSection n)
-    (fun h ↦ one_ne_zero ((coeff_germ_hyperplaneSection n).symm.trans h))
+    (origin n) (fun h ↦ one_ne_zero ((coeff_germ_hyperplaneSection n).symm.trans h))
 
 /-! ### The `ULift (Fin _)`-indexed hyperplane
 
@@ -268,13 +264,6 @@ theorem germ_uliftHyperplaneSection :
   rw [uliftHyperplaneSection, ComplexAnalytic.coord_def, OkaRing.germ_ofMvPolynomial_X]
   simp
 
-/-- **The last coordinate vanishes at the origin**, at this indexing. -/
-theorem evalHom_uliftHyperplaneSection :
-    OkaRing.evalHom (show (0 : ULift.{u} (Fin (n + 1)) → ℂ) ∈
-        (⊤ : Opens (ULift.{u} (Fin (n + 1)) → ℂ)) from trivial)
-      (uliftHyperplaneSection.{u} n) = 0 :=
-  (ComplexAnalytic.evalHom_coord _).trans rfl
-
 /-- **Its linear coefficient along the last axis is `1`** — read at the exponent
 `Finsupp.single (ULift.up (Fin.last n)) 1` on the space itself, with no relabelling. -/
 theorem coeff_germ_uliftHyperplaneSection :
@@ -295,7 +284,7 @@ theorem isIso_stalkMap_uliftHyperplane_of_coeff :
   isIso_stalkMap_comp_uliftProj_of_coeff
     ((complexAffineSpace.{u} (n + 1)).isCutOutBy_zeroLocusSubspaceι
       ![uliftHyperplaneSection.{u} n])
-    (uliftOrigin.{u} n) (evalHom_uliftHyperplaneSection.{u} n)
+    (uliftOrigin.{u} n)
     (fun h ↦ one_ne_zero ((coeff_germ_uliftHyperplaneSection.{u} n).symm.trans h))
 
 end OkaTest.SimpleZeroStalk

@@ -86,12 +86,14 @@ standard étale pair.
   conclusion drawn from it, that the hypothesis cannot be reached by anything on hand, does not
   follow and is no longer the case. `MvPowerSeries.order_partialEval_eq_one_iff`
   (`Oka/LocalOkaRing.lean`) says the order condition **is** two coefficient conditions, and
-  `ComplexAnalytic.isIso_stalkMap_comp_uliftProj_of_coeff` takes them directly: `F` vanishes at the
-  point, and the coefficient of the last variable in its Taylor expansion there is nonzero.
-  **Neither needs a derivative operator to state or to supply.** What is still missing — and it is
-  a smaller thing than a derivative calculus — is the identification of that one coefficient with
-  `Polynomial.derivative` of `F` read in the last variable and evaluated at the point, which is
-  what would carry `derivative f * p₁ + f * p₂ = g ^ n`, the *type* of the field
+  `ComplexAnalytic.isIso_stalkMap_comp_uliftProj_of_coeff` takes them directly — and asks for only
+  one of the two, since `ComplexAnalytic.IsCutOutBy.evalHom_eq_zero` makes the vanishing half
+  free: what is left is that the coefficient of the last variable in the Taylor expansion of `F`
+  at the point is nonzero. **It needs no derivative operator to state or to supply.** What is
+  still missing — and it is a smaller thing than a derivative calculus — is the identification of
+  that one coefficient with `Polynomial.derivative` of `F` read in the last variable and
+  evaluated at the point, which is what would carry `derivative f * p₁ + f * p₂ = g ^ n`, the
+  *type* of the field
   `StandardEtalePair.cond` (reached only through an `obtain` on its `∃ p₁ p₂ n`), into the
   hypothesis. No declaration below attempts it.
 * **No witness in this file that the open is ever non-empty, and the witness is elsewhere.** The

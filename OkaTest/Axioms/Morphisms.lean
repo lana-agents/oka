@@ -730,6 +730,13 @@ info: 'ComplexAnalytic.isIso_stalkMap_comp_uliftProj' depends on axioms:
 #print axioms ComplexAnalytic.isIso_stalkMap_comp_uliftProj
 
 /--
+info: 'ComplexAnalytic.IsCutOutBy.evalHom_eq_zero' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.IsCutOutBy.evalHom_eq_zero
+
+/--
 info: 'ComplexAnalytic.bijective_stalkMap_comp_projCoords_of_coeff' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/

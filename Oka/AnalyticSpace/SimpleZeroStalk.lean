@@ -75,17 +75,22 @@ so *"`∂F/∂X_n` is a unit at the point"* is not expressible.
 **That is still true, and it is no longer a reason to leave the hypothesis in the order
 spelling.** `MvPowerSeries.order_partialEval_eq_one_iff` says the order condition **is** two
 coefficient conditions — no constant term, and a nonzero coefficient at
-`Finsupp.single (Fin.last n) 1` — so the four `…_of_coeff` results below take exactly those.
-Neither mentions a derivative, and no derivative operator is needed to supply them: a consumer
-that has one may use it, and a consumer that computes a Taylor coefficient directly need not
-acquire one. What that leaves open is the *identification* of that coefficient with `∂F/∂X_n` at
-the point, which is a statement about one named coefficient rather than about the order of a
-power series, and is still not here.
+`Finsupp.single (Fin.last n) 1`. Neither mentions a derivative, and no derivative operator is
+needed to supply them: a consumer that has one may use it, and a consumer that computes a Taylor
+coefficient directly need not acquire one. What that leaves open is the *identification* of that
+coefficient with `∂F/∂X_n` at the point, which is a statement about one named coefficient rather
+than about the order of a power series, and is still not here.
 
-Both hypotheses are then in a form a consumer holds. The first is `OkaRing.evalHom` — `F`
-vanishes at the point — through `OkaRing.constantCoeff_germ`, which is the defining property of a
-point of the hypersurface; and at the `ULift (Fin _)` indexing the second is read off the germ on
-the space one actually has, with no `LocalOkaRing.uliftEquiv` in the statement.
+**And only one of the two is a hypothesis, because the other is free.** The first says through
+`OkaRing.constantCoeff_germ` that `F` vanishes at the point, and
+`ComplexAnalytic.IsCutOutBy.evalHom_eq_zero` derives exactly that from `hcut`: a point of the
+subspace is one where every cutting section vanishes, which is what `range_base` says. So the four
+`…_of_coeff` results below ask for the **linear coefficient alone**. The same argument reads
+backwards on the four results above: given their `hcut`, their order hypothesis is *equivalent* to
+that one coefficient being nonzero, so nothing was lost in the trade.
+
+At the `ULift (Fin _)` indexing the surviving hypothesis is read off the germ on the space one
+actually has, with no `LocalOkaRing.uliftEquiv` in the statement.
 
 Note that the germ is taken **at the point**, so the condition is on the Taylor expansion of `F`
 centred at `i.base x` and not at the origin; `okaStalkEquiv` absorbs the translation.
@@ -104,11 +109,13 @@ centred at `i.base x` and not at the origin; `okaStalkEquiv` absorbs the transla
 - `ComplexAnalytic.bijective_stalkMap_comp_uliftProj` and
   `ComplexAnalytic.isIso_stalkMap_comp_uliftProj`: the same for the `ULift (Fin _)`-indexed
   affine space named in §*The shape* above.
+- `ComplexAnalytic.IsCutOutBy.evalHom_eq_zero`: **every cutting section vanishes at every point
+  of the subspace it cuts out**, which is what makes the vanishing half of the hypothesis below
+  free rather than asked for.
 - `ComplexAnalytic.bijective_stalkMap_comp_projCoords_of_coeff` and
-  `ComplexAnalytic.isIso_stalkMap_comp_projCoords_of_coeff`: **the same hypothesis as two
-  coefficients** — `F` vanishes at the point, and the coefficient of the last variable in its
-  Taylor expansion there is nonzero — with
-  `ComplexAnalytic.bijective_stalkMap_comp_uliftProj_of_coeff` and
+  `ComplexAnalytic.isIso_stalkMap_comp_projCoords_of_coeff`: **the same hypothesis as one
+  coefficient** — the coefficient of the last variable in the Taylor expansion of `F` at the point
+  is nonzero — with `ComplexAnalytic.bijective_stalkMap_comp_uliftProj_of_coeff` and
   `ComplexAnalytic.isIso_stalkMap_comp_uliftProj_of_coeff` the `ULift (Fin _)`-indexed forms,
   **stated with no relabelling in sight**.
 
@@ -173,6 +180,31 @@ noncomputable section
 namespace ComplexAnalytic
 
 variable {n : ℕ}
+
+/-! ### A cutting section vanishes on the subspace it cuts out -/
+
+/-- **Every section cutting out `X` evaluates to zero at every point of `X`.**
+
+`ComplexAnalytic.IsCutOutBy`'s `range_base` field states the image as the set where every germ of
+every `f j` is a non-unit, and on `ℂ^ι` a germ is a non-unit exactly when the function vanishes,
+which is `germ_mem_maximalIdeal_iff`. Applied at `i.base x`, which is in the image by
+construction.
+
+**It makes the vanishing hypothesis of the `…_of_coeff` results below unstatable rather than
+optional**: a caller who has a point of the hypersurface already has this, so asking for it would
+be asking for something the other hypothesis carries. The set form of the same fact, at one
+section and for `ComplexAnalytic.AnalyticSpace`, is
+`ComplexAnalytic.range_base_eq_of_isCutOutBy` in `Oka/AnalyticSpace/MonicProjection.lean`; this is
+the pointwise form, at a family of any length, and it is stated here because the results below are
+where it is consumed. -/
+theorem IsCutOutBy.evalHom_eq_zero {ι : Type u} [Fintype ι] {X : LocallyRingedSpace.{u}}
+    {i : X ⟶ complexSpace ι} {k : ℕ} {f : Fin k → OkaRing (⊤ : Opens (ι → ℂ))}
+    (hcut : IsCutOutBy i f) (x : X) (j : Fin k) :
+    OkaRing.evalHom (show i.base x ∈ (⊤ : Opens (ι → ℂ)) from trivial) (f j) = 0 := by
+  have hmem : i.base x ∈ Set.range i.base := ⟨x, rfl⟩
+  rw [hcut.range_base] at hmem
+  exact (germ_mem_maximalIdeal_iff
+    (show i.base x ∈ (⊤ : Opens (ι → ℂ)) from trivial) (f j)).1 (hmem j)
 
 /-! ### The kernel of the stalk map of a cut-out by one section -/
 
@@ -298,17 +330,15 @@ theorem isIso_stalkMap_comp_projCoords (hcut : IsCutOutBy i ![F]) (x : X)
     IsIso ((i ≫ okaMapHom (projCoords n)).stalkMap x) :=
   (ConcreteCategory.isIso_iff_bijective _).2 (bijective_stalkMap_comp_projCoords hcut x hf)
 
-/-- **The same, from the two coefficients rather than from the order**: `F` vanishes at the point
-and the coefficient of the last variable in its Taylor expansion there is nonzero.
+/-- **The same, from one coefficient rather than from the order**: the coefficient of the last
+variable in the Taylor expansion of `F` at the point is nonzero.
 
-`MvPowerSeries.order_partialEval_eq_one_iff` is the whole of the proof, with
-`OkaRing.constantCoeff_germ` turning the constant term of the germ into the *value* of `F` at the
-point — which is the form a consumer has, since a point of a hypersurface is one where the
-cutting section vanishes. The second hypothesis is a single Taylor coefficient and **not** a
-derivative; see this file's `## Why the hypothesis is a coefficient condition`. -/
+`MvPowerSeries.order_partialEval_eq_one_iff` splits the order hypothesis into two coefficient
+conditions, and **the first of them is free**: it says through `OkaRing.constantCoeff_germ` that
+`F` vanishes at the point, and `ComplexAnalytic.IsCutOutBy.evalHom_eq_zero` derives that from
+`hcut` alone. So what is left is one coefficient, and it is a single Taylor coefficient and
+**not** a derivative; see this file's `## Why the hypothesis is a coefficient condition`. -/
 theorem bijective_stalkMap_comp_projCoords_of_coeff (hcut : IsCutOutBy i ![F]) (x : X)
-    (hval : OkaRing.evalHom
-      (show i.base x ∈ (⊤ : Opens (Fin (n + 1) → ℂ)) from trivial) F = 0)
     (hlin : MvPowerSeries.coeff (Finsupp.single (Fin.last n) 1)
       ((OkaRing.germ (show i.base x ∈ (⊤ : Opens (Fin (n + 1) → ℂ)) from trivial) F :
         LocalOkaRing (Fin (n + 1))) : MvPowerSeries (Fin (n + 1)) ℂ) ≠ 0) :
@@ -317,18 +347,16 @@ theorem bijective_stalkMap_comp_projCoords_of_coeff (hcut : IsCutOutBy i ![F]) (
   rw [MvPowerSeries.order_partialEval_eq_one_iff]
   refine ⟨?_, hlin⟩
   rw [← LocalOkaRing.constantCoeff_apply, OkaRing.constantCoeff_germ]
-  exact hval
+  simpa using hcut.evalHom_eq_zero x 0
 
-/-- **The same as an isomorphism**, from the two coefficients. -/
+/-- **The same as an isomorphism**, from the one coefficient. -/
 theorem isIso_stalkMap_comp_projCoords_of_coeff (hcut : IsCutOutBy i ![F]) (x : X)
-    (hval : OkaRing.evalHom
-      (show i.base x ∈ (⊤ : Opens (Fin (n + 1) → ℂ)) from trivial) F = 0)
     (hlin : MvPowerSeries.coeff (Finsupp.single (Fin.last n) 1)
       ((OkaRing.germ (show i.base x ∈ (⊤ : Opens (Fin (n + 1) → ℂ)) from trivial) F :
         LocalOkaRing (Fin (n + 1))) : MvPowerSeries (Fin (n + 1)) ℂ) ≠ 0) :
     IsIso ((i ≫ okaMapHom (projCoords n)).stalkMap x) :=
   (ConcreteCategory.isIso_iff_bijective _).2
-    (bijective_stalkMap_comp_projCoords_of_coeff hcut x hval hlin)
+    (bijective_stalkMap_comp_projCoords_of_coeff hcut x hlin)
 
 end Fin
 
@@ -371,19 +399,17 @@ theorem isIso_stalkMap_comp_uliftProj (hcut : IsCutOutBy i ![F]) (x : X)
     IsIso ((i ≫ okaMapHom (coordEmb (uliftCastSuccEmb.{u} n))).stalkMap x) :=
   (ConcreteCategory.isIso_iff_bijective _).2 (bijective_stalkMap_comp_uliftProj hcut x hf)
 
-/-- **The same, from the two coefficients rather than from the order** — and, unlike the
-hypothesis it replaces, **stated entirely at the `ULift (Fin _)` indexing**, so a caller who
-holds `F` on `ComplexAnalytic.complexAffineSpace (n + 1)` never meets
-`LocalOkaRing.uliftEquiv` at all.
+/-- **The same, from one coefficient rather than from the order** — and, unlike the hypothesis it
+replaces, **stated entirely at the `ULift (Fin _)` indexing**, so a caller who holds `F` on
+`ComplexAnalytic.complexAffineSpace (n + 1)` never meets `LocalOkaRing.uliftEquiv` at all.
 
 That is what `LocalOkaRing.coeff_uliftEquiv` buys: the relabelling moves the coefficient at
 `Finsupp.single (ULift.up (Fin.last n)) 1` to the one at `Finsupp.single (Fin.last n) 1` and does
-nothing else, so the condition may be read off the germ on the space one actually has. The first
-hypothesis passes through `LocalOkaRing.constantCoeff_uliftEquiv` and `OkaRing.constantCoeff_germ`
-and says that `F` vanishes at the point. -/
+nothing else, so the condition may be read off the germ on the space one actually has. The
+vanishing half of the order hypothesis is discharged from `hcut` by
+`ComplexAnalytic.IsCutOutBy.evalHom_eq_zero`, through
+`LocalOkaRing.constantCoeff_uliftEquiv` and `OkaRing.constantCoeff_germ`. -/
 theorem bijective_stalkMap_comp_uliftProj_of_coeff (hcut : IsCutOutBy i ![F]) (x : X)
-    (hval : OkaRing.evalHom
-      (show i.base x ∈ (⊤ : Opens (ULift.{u} (Fin (n + 1)) → ℂ)) from trivial) F = 0)
     (hlin : MvPowerSeries.coeff (Finsupp.single (ULift.up.{u} (Fin.last n)) 1)
       ((OkaRing.germ (show i.base x ∈ (⊤ : Opens (ULift.{u} (Fin (n + 1)) → ℂ)) from trivial) F :
         LocalOkaRing (ULift.{u} (Fin (n + 1)))) :
@@ -395,7 +421,7 @@ theorem bijective_stalkMap_comp_uliftProj_of_coeff (hcut : IsCutOutBy i ![F]) (x
   refine ⟨?_, ?_⟩
   · rw [← LocalOkaRing.constantCoeff_apply, LocalOkaRing.constantCoeff_uliftEquiv,
       OkaRing.constantCoeff_germ]
-    exact hval
+    simpa using hcut.evalHom_eq_zero x 0
   · rw [show (Finsupp.single (Fin.last n) 1 : Fin (n + 1) →₀ ℕ) =
         Finsupp.embDomain (Equiv.ulift (α := Fin (n + 1))).toEmbedding
           (Finsupp.single (ULift.up.{u} (Fin.last n)) 1) by
@@ -403,19 +429,17 @@ theorem bijective_stalkMap_comp_uliftProj_of_coeff (hcut : IsCutOutBy i ![F]) (x
     LocalOkaRing.coeff_uliftEquiv]
     exact hlin
 
-/-- **The same as an isomorphism**, from the two coefficients. This is the form the
+/-- **The same as an isomorphism**, from the one coefficient. This is the form the
 Riemann-existence line consumes, since `ComplexAnalytic.AnalyticSpace` indexes its coordinates by
 `ULift (Fin _)`. -/
 theorem isIso_stalkMap_comp_uliftProj_of_coeff (hcut : IsCutOutBy i ![F]) (x : X)
-    (hval : OkaRing.evalHom
-      (show i.base x ∈ (⊤ : Opens (ULift.{u} (Fin (n + 1)) → ℂ)) from trivial) F = 0)
     (hlin : MvPowerSeries.coeff (Finsupp.single (ULift.up.{u} (Fin.last n)) 1)
       ((OkaRing.germ (show i.base x ∈ (⊤ : Opens (ULift.{u} (Fin (n + 1)) → ℂ)) from trivial) F :
         LocalOkaRing (ULift.{u} (Fin (n + 1)))) :
           MvPowerSeries (ULift.{u} (Fin (n + 1))) ℂ) ≠ 0) :
     IsIso ((i ≫ okaMapHom (coordEmb (uliftCastSuccEmb.{u} n))).stalkMap x) :=
   (ConcreteCategory.isIso_iff_bijective _).2
-    (bijective_stalkMap_comp_uliftProj_of_coeff hcut x hval hlin)
+    (bijective_stalkMap_comp_uliftProj_of_coeff hcut x hlin)
 
 end ULift
 
