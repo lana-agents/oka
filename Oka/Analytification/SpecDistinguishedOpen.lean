@@ -81,9 +81,10 @@ and costs three lines.
 - `ComplexAnalytic.isOpenImmersion_specFunctor_map_localisationHom`: the same for
   `ComplexAnalytic.specFunctor`'s value on the structure map — the spelling a glue data on the
   `Spec` side will hold, and the mirror of
-  `ComplexAnalytic.isOpenImmersion_analytificationMap_localisationPresHom`. The morphism of
-  presentations it is taken at is named in the declaration's own docstring rather than here:
-  it is a definition, and `## Main results` is a list of results.
+  `ComplexAnalytic.isOpenImmersion_analytificationMap_localisationPresHom`. **This one is an
+  `instance`** and the one above is not, because this is the spelling a glue datum presents to
+  instance search; its docstring says so. The morphism of presentations it is taken at is named
+  there rather than here: it is a definition, and `## Main results` is a list of results.
 - `ComplexAnalytic.range_base_specFunctor_map_localisationHom`: **its image is exactly `D(f)`** —
   the equality, since the side condition of an open-immersion lift is a containment *in* a range,
   and what a `Spec`-side glue data's `hrange` obligation will be checked against.
@@ -170,6 +171,14 @@ theorem isOpenImmersion_Spec_map_localisationRingHom :
 /-- **The functor's value on the structure map is an open immersion**, which is the form a glue
 data on the `Spec` side of an affine cover holds its morphisms in.
 
+**An `instance`, and stated at the `ComplexAnalytic.specFunctor` spelling rather than at
+`AlgebraicGeometry.Spec.map`, because that is the one a glue datum presents to instance search.**
+Two declarations below take it as one: `ComplexAnalytic.specLocalisationIso`, through
+`AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.isoOfRangeEq`, and the section stated with
+`AlgebraicGeometry.Scheme.Hom.opensRange`. An instance at the other spelling would be found for a
+goal about this one only up to the reducible unfolding the theorem above records, and **instance
+search does not cross that identity** — measured in this file's module docstring.
+
 Taken at `ComplexAnalytic.localisationHom`, which is the structure map read as a morphism of
 *objects* of `ComplexAnalytic.Presentation` — `ComplexAnalytic.localisationPresHom` does not
 elaborate against `Functor.map`, for the reason its own docstring gives.
@@ -178,27 +187,13 @@ The mirror of `ComplexAnalytic.isOpenImmersion_analytificationMap_localisationPr
 proof is the theorem above **with no transport**: `ComplexAnalytic.specFunctor.map` is
 `AlgebraicGeometry.Spec.locallyRingedSpaceMap` of the underlying ring map, which is
 `(AlgebraicGeometry.Spec.map _).toLRSHom`, and `AlgebraicGeometry.IsOpenImmersion` of a scheme
-morphism is `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion` of that. Instance search does
-not cross the identity — see this file's module docstring, where it is measured — so the
-declaration is what makes the scheme-level API reachable from a locally-ringed-space glue data. -/
-theorem isOpenImmersion_specFunctor_map_localisationHom :
+morphism is `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion` of that, so the declaration is
+what makes the scheme-level API reachable from a locally-ringed-space glue data. -/
+instance isOpenImmersion_specFunctor_map_localisationHom :
     LocallyRingedSpace.IsOpenImmersion (specFunctor.{u}.map (localisationHom.{u} g f)) :=
   isOpenImmersion_Spec_map_localisationRingHom.{u} g f
 
 /-! ### The image of the morphism -/
-
-/-- **The open immersion as an instance**, which is the decision this file deferred while it had
-no consumer and now has two: `AlgebraicGeometry.Scheme.Hom.opensRange` and
-`AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.isoOfRangeEq` are both declared in sections
-that take it as one, and the two results below are exactly those.
-
-It is stated at the `ComplexAnalytic.specFunctor` spelling rather than at
-`AlgebraicGeometry.Spec.map`, because that is the one a glue datum will present to instance search;
-the two are the same term, so an instance on either is found for a goal about the other only up to
-the reducible unfolding the theorem above records. -/
-instance isOpenImmersion_specFunctor_map_localisationHom' :
-    LocallyRingedSpace.IsOpenImmersion (specFunctor.{u}.map (localisationHom.{u} g f)) :=
-  isOpenImmersion_specFunctor_map_localisationHom.{u} g f
 
 /-- **`D(f) ⊆ Spec A`**, the basic open at the class of `f`, as an open subset of
 `ComplexAnalytic.specFunctor`'s value.
