@@ -237,11 +237,16 @@ The equality and not the containment, for the reason
 `ComplexAnalytic.range_base_localisationProj` gives on the analytic side: the side condition of an
 open-immersion lift is a containment *in* this range, so an equality is what lets a statement about
 `D(f)` discharge it. It is what a `Spec`-side glue data's `hrange` obligation will be checked
-against — **still a prediction**, and one nothing has been able to test:
-`Oka/Analytification/SpecAffineCover.lean` exists now, but the only two `hrange` obligations in the
-tree are vacuous at two members, and its own `ComplexAnalytic.range_specTransitionHom_subset` goes
-through `AlgebraicGeometry.LocallyRingedSpace.range_ofRestrict` instead. A three-member `Spec`-side
-cover is what would settle it.
+against — **still a prediction, and the reason nothing has tested it is not the one to reach for
+first.** The tree has three `hrange` obligations: `ComplexAnalytic.hrange_lineCover` and
+`ComplexAnalytic.specHrange_lineCover` are vacuous at two members, but
+`ComplexAnalytic.hrange_nodeCover` is at three and its proof is real. **All three are discharged
+without this theorem**, and the non-vacuous one goes through
+`AlgebraicGeometry.LocallyRingedSpace.range_ofRestrict` as
+`ComplexAnalytic.range_specTransitionHom_subset` does. So what is untested is not the containment
+but **the equality** — nothing has yet needed the range of a distinguished open's inclusion to be
+*exactly* `D(f)` rather than contained in it, which is what a three-member `Spec`-side cover would
+be the first thing to ask for.
 
 The triangle over `A` again: the isomorphism's half is surjective, and
 `PrimeSpectrum.localization_away_comap_range` supplies the algebra map's half. -/
