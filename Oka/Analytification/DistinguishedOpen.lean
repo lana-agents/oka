@@ -68,6 +68,15 @@ statement here is satisfied by `D(f) = ⊤` and the identity. What rules that re
 a **proper** open subset. `OkaTest/AnalytificationDistinguishedOpen.lean` runs it at the node,
 where `D(z₀)` is the punctured axis that `OkaTest/OpenSubspace.lean` builds by hand.
 
+The three existential statements added later, under
+`### Every distinguished open upstairs comes from one downstairs`, split the same way and it is
+worth saying which is which. `ComplexAnalytic.exists_pow_mul_eq_rename` is an equation in the
+polynomial ring with no point in it, so nothing can make it degenerate. The two about opens are
+equalities of subsets of `(A_f)^an`, and if that space were empty they would hold of nothing.
+`OkaTest.CoverRefinement.exists_over` produces a point of such a space, at the empty base in one
+variable — obtained from `ComplexAnalytic.range_base_localisationProj` rather than by writing a
+coordinate down, which is why it was affordable there.
+
 ## Main definitions
 
 - `ComplexAnalytic.localisationPresentation`: **the presentation of `A_f`** — the `gⱼ` in one more
@@ -94,6 +103,17 @@ where `D(z₀)` is the punctured axis that `OkaTest/OpenSubspace.lean` builds by
   is the preimage of the one it cuts out downstairs.** Where the lemma above relates two opens of
   one space, this relates opens of two, which is what a refinement of a cover needs in order to
   say where a point of an overlap lies.
+- `ComplexAnalytic.exists_localisationOpen_eq_rename` and
+  `ComplexAnalytic.exists_localisationOpen_eq_comap`: **the converse of the lemma above, for all
+  distinguished opens at once** — every distinguished open of `(A_f)^an` is cut out by a renamed
+  polynomial of the base, equivalently is the preimage of a distinguished open of `X^an`. The
+  first form produces the *polynomial*, which is what a caller obliged to supply one needs; the
+  second is the same fact about opens.
+- `ComplexAnalytic.exists_pow_mul_eq_rename`: **clearing the denominator**, the algebra underneath
+  those two and a statement about the polynomial ring alone — the equations `gⱼ` are not used and
+  no point is mentioned.
+- `ComplexAnalytic.eval_rename_localisationIncl_ne_zero`: **`f` vanishes nowhere on `(A_f)^an`**,
+  the last equation of the presentation read at a point.
 - `ComplexAnalytic.isOpenImmersion_localisationProj`: **the projection is an open immersion of
   locally ringed spaces** — the `f_open` field of any
   `AlgebraicGeometry.LocallyRingedSpace.GlueData` built out of an affine cover, and the second
@@ -593,6 +613,181 @@ theorem localisationOpen_rename (f' : MvPolynomial (ULift.{u} (Fin n)) ℂ) :
       (MvPolynomial.rename (localisationIncl.{u} n) f') ↔
     (localisationProj.{u} g f).toLRSHom.base w ∈ localisationOpen.{u} g f'
   rw [mem_localisationOpen_iff, mem_localisationOpen_iff, eval_localisationProj]
+
+/-! ### Every distinguished open upstairs comes from one downstairs
+
+`ComplexAnalytic.localisationOpen_rename` above says that a polynomial of the base, read in the
+extra variable, cuts out of `(A_f)^an` exactly what lies over what it cuts out of `X^an`. This
+section is the **converse**, and it is a statement about all distinguished opens rather than about
+one: *every* distinguished open of `(A_f)^an` arises that way. Nothing upstairs is new.
+
+The reason is one line of algebra. A point of `(A_f)^an` is a point `x` of `D(f)` together with the
+value `1/f(x)` in the extra coordinate, so a polynomial `q` in `n + 1` variables takes the value
+`Σ_d c_d(x) · f(x)^(-d)` there, and multiplying by `f(x)^D` for `D` large clears every denominator
+and leaves a polynomial in `x` alone. `ComplexAnalytic.exists_pow_mul_eq_rename` is that
+computation, done on polynomials modulo the relation `t·f - 1` rather than on values, and
+`ComplexAnalytic.exists_localisationOpen_eq_rename` is the geometric consequence — the multiplier
+is invertible at every point of `(A_f)^an`, so it does not move a non-vanishing locus.
+
+**What this is for.** A refinement of an affine cover that refines *across* members has to cut its
+overlaps out of a localisation, and `Oka/Analytification/AffineCover.lean`'s `poly` field asks for
+**one polynomial per ordered pair** — its module docstring says in terms that this arity is a
+restriction, because a general scheme's pairwise intersections are only *covered* by opens
+distinguished in both. Between two members of a cover **already in that shape** the restriction
+costs nothing, and this section is the half of that which was missing: every distinguished open of
+a localisation is cut out by a renamed polynomial of the member it sits in.
+
+**The other half is not in this repository, and the sentence above does not assert it.** That the
+overlap of two refined members *is* a distinguished open of the localisation needs a distinguished
+open to pull back along a `ComplexAnalytic.PresHom` to a distinguished open — bookkeeping about
+`ComplexAnalytic.polyToGlobal` and `ComplexAnalytic.AnalyticSpace.mem_nonvanishing_iff` rather
+than geometry, but nowhere below. Nothing here builds such a refinement: taxis #1287 is where that
+question lives and names the missing step as its item (a). Nothing here is about a scheme.
+-/
+
+/-- **A variable of the larger polynomial ring is either the new one or an old one.**
+
+`Fin.lastCases` through the `ULift`. It is stated because the induction below cases on a variable,
+and `ComplexAnalytic.localisationIncl` is a function rather than a pattern a tactic can see
+through. -/
+theorem eq_localisationVar_or_exists_localisationIncl (i : ULift.{u} (Fin (n + 1))) :
+    i = localisationVar.{u} n ∨ ∃ j, i = localisationIncl.{u} n j := by
+  obtain ⟨m⟩ := i
+  induction m using Fin.lastCases with
+  | last => exact Or.inl rfl
+  | cast j => exact Or.inr ⟨ULift.up j, rfl⟩
+
+/-- **Clearing the denominator.** A polynomial `q` in the extra variable, multiplied by a high
+enough power of `f`, is a renamed polynomial of the base — modulo the relation `t·f - 1`, which is
+the correction term `r` in the statement.
+
+**The name elides that correction term and the statement carries it.** There is no equation of
+polynomials here: `t` is a free variable and `q = t` is already not renamed from anything. What is
+true is the equation in `ℂ[x, t] ⧸ (t·f - 1)`, and the third existential is the witness that it
+holds there.
+
+The proof is `MvPolynomial.induction_on` and the three cases are the whole content:
+
+* a constant, and an old variable, need no power of `f` at all;
+* the **new** variable is where the relation is used, and it is used once — `t · f = 1` modulo the
+  relation, so multiplying by one more `f` turns a trailing `t` into nothing and the exponent goes
+  up by one;
+* a sum takes the sum of the exponents rather than their maximum, which is what makes the
+  bookkeeping `ring` rather than a case split on which of the two is larger.
+
+**`gⱼ` plays no part** — the statement mentions only `f`, and the equations of the base are never
+used. That is the reason it is stated before any point of `(A_f)^an` is mentioned: it is a fact
+about the polynomial ring with one variable inverted, not about the analytic space. -/
+theorem exists_pow_mul_eq_rename (q : MvPolynomial (ULift.{u} (Fin (n + 1))) ℂ) :
+    ∃ (D : ℕ) (Q : MvPolynomial (ULift.{u} (Fin n)) ℂ)
+      (r : MvPolynomial (ULift.{u} (Fin (n + 1))) ℂ),
+      MvPolynomial.rename (localisationIncl.{u} n) f ^ D * q =
+        MvPolynomial.rename (localisationIncl.{u} n) Q +
+          (MvPolynomial.X (localisationVar.{u} n) *
+            MvPolynomial.rename (localisationIncl.{u} n) f - 1) * r := by
+  induction q using MvPolynomial.induction_on with
+  | C c => exact ⟨0, MvPolynomial.C c, 0, by simp⟩
+  | add p q hp hq =>
+      obtain ⟨D₁, Q₁, r₁, h₁⟩ := hp
+      obtain ⟨D₂, Q₂, r₂, h₂⟩ := hq
+      refine ⟨D₁ + D₂, f ^ D₂ * Q₁ + f ^ D₁ * Q₂,
+        MvPolynomial.rename (localisationIncl.{u} n) f ^ D₂ * r₁ +
+          MvPolynomial.rename (localisationIncl.{u} n) f ^ D₁ * r₂, ?_⟩
+      have e₁ : MvPolynomial.rename (localisationIncl.{u} n) f ^ (D₁ + D₂) * p =
+          MvPolynomial.rename (localisationIncl.{u} n) f ^ D₂ *
+            (MvPolynomial.rename (localisationIncl.{u} n) f ^ D₁ * p) := by ring
+      have e₂ : MvPolynomial.rename (localisationIncl.{u} n) f ^ (D₁ + D₂) * q =
+          MvPolynomial.rename (localisationIncl.{u} n) f ^ D₁ *
+            (MvPolynomial.rename (localisationIncl.{u} n) f ^ D₂ * q) := by ring
+      rw [mul_add, e₁, e₂, h₁, h₂]
+      simp only [map_add, map_mul, map_pow]
+      ring
+  | mul_X p i hp =>
+      obtain ⟨D, Q, r, h⟩ := hp
+      rcases eq_localisationVar_or_exists_localisationIncl.{u} i with rfl | ⟨j, rfl⟩
+      · refine ⟨D + 1, Q,
+          r + MvPolynomial.rename (localisationIncl.{u} n) Q +
+            (MvPolynomial.X (localisationVar.{u} n) *
+              MvPolynomial.rename (localisationIncl.{u} n) f - 1) * r, ?_⟩
+        have e : MvPolynomial.rename (localisationIncl.{u} n) f ^ (D + 1) *
+            (p * MvPolynomial.X (localisationVar.{u} n)) =
+            (MvPolynomial.rename (localisationIncl.{u} n) f ^ D * p) *
+              ((MvPolynomial.X (localisationVar.{u} n) *
+                MvPolynomial.rename (localisationIncl.{u} n) f - 1) + 1) := by ring
+        rw [e, h]; ring
+      · refine ⟨D, Q * MvPolynomial.X j, r * MvPolynomial.X (localisationIncl.{u} n j), ?_⟩
+        have e : MvPolynomial.rename (localisationIncl.{u} n) f ^ D *
+            (p * MvPolynomial.X (localisationIncl.{u} n j)) =
+            (MvPolynomial.rename (localisationIncl.{u} n) f ^ D * p) *
+              MvPolynomial.X (localisationIncl.{u} n j) := by ring
+        rw [e, h]
+        simp only [map_mul, MvPolynomial.rename_X]
+        ring
+
+/-- **`f` vanishes nowhere on `(A_f)^an`**, which is what the last equation of
+`ComplexAnalytic.localisationPresentation` says at a point.
+
+`ComplexAnalytic.range_base_localisationProj` is the same fact read downstairs — the image of the
+projection is `D(f)` — and this is it read upstairs, where it is what says the multiplier of
+`ComplexAnalytic.exists_pow_mul_eq_rename` cannot be zero. -/
+theorem eval_rename_localisationIncl_ne_zero
+    (w : AnalyticSpace.analytification.{u} (localisationPresentation.{u} g f)) :
+    MvPolynomial.eval (w.1.1 : ULift.{u} (Fin (n + 1)) → ℂ)
+      (MvPolynomial.rename (localisationIncl.{u} n) f) ≠ 0 := by
+  have hrel := (mem_zeroLocus_polySection_iff.{u} (localisationPresentation.{u} g f) w.1).1 w.2
+    (Fin.last k)
+  rw [localisationPresentation_last] at hrel
+  simp only [MvPolynomial.eval_sub, MvPolynomial.eval_mul, MvPolynomial.eval_X, map_one,
+    sub_eq_zero] at hrel
+  intro hcon
+  rw [hcon, mul_zero] at hrel
+  exact zero_ne_one hrel
+
+/-- **Every distinguished open of `(A_f)^an` is cut out by a renamed polynomial of the base.**
+
+The converse of `ComplexAnalytic.localisationOpen_rename`, and the sharper of the two forms: it
+produces the polynomial rather than an open, so a caller that has to *supply* a polynomial — the
+`poly` field of `Oka/Analytification/AffineCover.lean`'s cover datum — can take this one.
+
+`ComplexAnalytic.exists_pow_mul_eq_rename` and nothing else. At a point of `(A_f)^an` the relation
+kills the correction term and the power of `f` is non-zero by
+`ComplexAnalytic.eval_rename_localisationIncl_ne_zero`, so `q` and the renamed `Q` vanish at
+exactly the same points. **`D` disappears from the statement** because a non-vanishing locus does
+not see a non-vanishing factor; it is the exponent that made the algebra work and it is not part
+of the geometry. -/
+theorem exists_localisationOpen_eq_rename (q : MvPolynomial (ULift.{u} (Fin (n + 1))) ℂ) :
+    ∃ Q : MvPolynomial (ULift.{u} (Fin n)) ℂ,
+      localisationOpen.{u} (localisationPresentation.{u} g f) q =
+        localisationOpen.{u} (localisationPresentation.{u} g f)
+          (MvPolynomial.rename (localisationIncl.{u} n) Q) := by
+  obtain ⟨D, Q, r, h⟩ := exists_pow_mul_eq_rename.{u} f q
+  refine ⟨Q, Opens.ext (Set.ext fun w ↦ ?_)⟩
+  change w ∈ localisationOpen.{u} (localisationPresentation.{u} g f) q ↔
+    w ∈ localisationOpen.{u} (localisationPresentation.{u} g f)
+      (MvPolynomial.rename (localisationIncl.{u} n) Q)
+  rw [mem_localisationOpen_iff, mem_localisationOpen_iff]
+  have hrel := (mem_zeroLocus_polySection_iff.{u} (localisationPresentation.{u} g f) w.1).1 w.2
+    (Fin.last k)
+  rw [localisationPresentation_last] at hrel
+  have hev := congrArg (MvPolynomial.eval (w.1.1 : ULift.{u} (Fin (n + 1)) → ℂ)) h
+  simp only [MvPolynomial.eval_mul, MvPolynomial.eval_pow, MvPolynomial.eval_add, hrel, zero_mul,
+    add_zero] at hev
+  rw [← hev, mul_ne_zero_iff]
+  exact ⟨fun hne ↦ ⟨pow_ne_zero D (eval_rename_localisationIncl_ne_zero.{u} g f w), hne⟩, And.right⟩
+
+/-- **Every distinguished open of `(A_f)^an` is the preimage of a distinguished open of `X^an`**,
+which is the geometric reading of the lemma above and the exact converse of
+`ComplexAnalytic.localisationOpen_rename`.
+
+Together the two say that the distinguished opens of `(A_f)^an` and the distinguished opens of
+`X^an` correspond under the projection — not bijectively, since `D(Q)` and `D(Q · f)` have the same
+preimage, but surjectively in this direction, which is the half a construction needs. -/
+theorem exists_localisationOpen_eq_comap (q : MvPolynomial (ULift.{u} (Fin (n + 1))) ℂ) :
+    ∃ Q : MvPolynomial (ULift.{u} (Fin n)) ℂ,
+      localisationOpen.{u} (localisationPresentation.{u} g f) q =
+        (Opens.map (localisationProj.{u} g f).toLRSHom.base).obj (localisationOpen.{u} g Q) := by
+  obtain ⟨Q, hQ⟩ := exists_localisationOpen_eq_rename.{u} g f q
+  exact ⟨Q, hQ.trans (localisationOpen_rename.{u} g f Q)⟩
 
 /-! ### The projection is an open immersion -/
 

@@ -952,7 +952,17 @@ info: 'ComplexAnalytic.specLocalisationIso_inv_specFunctor_map' depends on
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.specLocalisationIso_inv_specFunctor_map
 
-/-! ### The glue data of an affine cover with distinguished overlaps -/
+/-! ### The glue data of an affine cover with distinguished overlaps
+
+The `ComplexAnalytic.localisationOpen` lemmas are guarded under this heading rather than under
+`### The analytification of a distinguished open` because this heading is what they are for.
+`ComplexAnalytic.localisationOpen_mul` is the triple overlap;
+`ComplexAnalytic.localisationOpen_rename` is the overlap of a refined member read upstairs; and
+`ComplexAnalytic.exists_localisationOpen_eq_rename`, the converse of that one for every
+distinguished open at once, is what says an overlap cut out of a *localisation* still needs only
+one polynomial — the arity a cover datum asks for. Its three auxiliaries and its `Opens.map` form
+are guarded beside it.
+-/
 
 /--
 info: 'ComplexAnalytic.localisationOpen_mul' depends on axioms:
@@ -967,6 +977,41 @@ info: 'ComplexAnalytic.localisationOpen_rename' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.localisationOpen_rename
+
+/--
+info: 'ComplexAnalytic.eq_localisationVar_or_exists_localisationIncl' depends on axioms:
+  [propext, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.eq_localisationVar_or_exists_localisationIncl
+
+/--
+info: 'ComplexAnalytic.exists_pow_mul_eq_rename' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.exists_pow_mul_eq_rename
+
+/--
+info: 'ComplexAnalytic.eval_rename_localisationIncl_ne_zero' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.eval_rename_localisationIncl_ne_zero
+
+/--
+info: 'ComplexAnalytic.exists_localisationOpen_eq_rename' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.exists_localisationOpen_eq_rename
+
+/--
+info: 'ComplexAnalytic.exists_localisationOpen_eq_comap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.exists_localisationOpen_eq_comap
 
 /--
 info: 'ComplexAnalytic.range_base_localisationProj' depends on axioms:
