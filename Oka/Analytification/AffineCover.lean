@@ -157,12 +157,17 @@ a much larger tax than one unused value per index.
 
 ## What is not here
 
-* **No non-vacuity, and no scheme.** The analytic space is now here —
-  `ComplexAnalytic.coverAnalytification` — but nothing below exhibits an input for it: the two
-  instances are `OkaTest/AffineCover.lean`'s three-member node cover and
-  `OkaTest/ProjectiveLine.lean`'s two-member `ℙ¹`, and both build their own space rather than
-  quoting this one. Nor is any of this related to a *scheme*: the input is presentations and
-  isomorphisms, and no statement here says they present one.
+* **No non-vacuity in this file, and no scheme.** Nothing below exhibits an input for
+  `ComplexAnalytic.coverAnalytification`; the two instances are elsewhere and both now **quote**
+  this construction rather than rebuilding it. `OkaTest/AffineCover.lean`'s three-member node
+  cover is the one that is evidence — `ComplexAnalytic.base_nodeIota_nodeOrigin_ne` says its
+  three copies of the origin are three distinct points of the analytic space — since
+  `ComplexAnalytic.GlueShape.hRange_of_no_three` and
+  `ComplexAnalytic.GlueShape.hCocycle_of_no_three` make both triple-overlap hypotheses vacuous
+  below three members, so `OkaTest/ProjectiveLine.lean`'s two-member `ℙ¹` exercises neither. What
+  `ℙ¹` adds is a **non-identity transition**, which the node cover does not have. Nor is any of
+  this related to a *scheme*: the input is presentations and isomorphisms, and no statement here
+  says they present one.
 * **Any statement that a gluing is not affine.** The two instances of this construction check
   different things and neither subsumes the other. `OkaTest/AffineCover.lean` glues three copies
   of the node along the punctured axis and shows that their three copies of the origin are three

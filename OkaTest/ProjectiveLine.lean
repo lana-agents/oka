@@ -51,11 +51,22 @@ and `hcocycle` are quantified over triples of **pairwise distinct** indices, bec
   of this one's. With `AlgebraicGeometry.LocallyRingedSpace.GlueData.ι_jointly_surjective` and
   `ComplexAnalytic.coverGlueData_ι_isOpenImmersion` that says the glued space is covered by two
   copies of `𝔸¹` and is neither of them.
-* **It is a complex analytic space** (`ComplexAnalytic.projectiveLineSpace`), by
-  `ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear`, whose `ℂ`-linearity hypothesis is discharged
-  for every glue datum an affine cover produces by `ComplexAnalytic.glueDataCLinear_coverGlueData`
-  — so the transition being non-trivial costs nothing here, which is the point of applying it at
-  this file rather than only at `OkaTest/AffineCover.lean`'s identity.
+* **It is a complex analytic space** (`ComplexAnalytic.projectiveLineSpace`), and it is
+  `ComplexAnalytic.coverAnalytification` at this cover rather than a second
+  `ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear` call — the `example` below records that the
+  two agree on the nose. The `ℂ`-linearity hypothesis is discharged for every glue datum an
+  affine cover produces by `ComplexAnalytic.glueDataCLinear_coverGlueData`, so the transition
+  being non-trivial costs nothing here, which is the point of applying it at this file rather
+  than only at `OkaTest/AffineCover.lean`'s identity.
+* **Neither chart is the whole analytic space** — `ComplexAnalytic.not_surjective_base_lineIota`,
+  the bullet above carried to `ComplexAnalytic.projectiveLineSpace` through
+  `ComplexAnalytic.lineIota` — and each chart is an open subspace of it,
+  `ComplexAnalytic.isOpenImmersion_lineIota`. **This instance exercises neither triple-overlap
+  hypothesis**, both being vacuous at two members by
+  `ComplexAnalytic.GlueShape.hRange_of_no_three` and
+  `ComplexAnalytic.GlueShape.hCocycle_of_no_three`, so it is not by itself evidence that the
+  general construction is right; `OkaTest/AffineCover.lean`'s three members are. What it adds is
+  the non-identity transition.
 
 ## What is not proved here, and is not claimed anywhere below
 
@@ -442,14 +453,55 @@ docstring, whose `## What is not proved here` section covers the analytic struct
 particular it is not proved compact, and it is not proved to differ from the analytification of
 some presentation. -/
 def projectiveLineSpace : AnalyticSpace.{u} :=
-  AnalyticSpace.ofGlueDataCLinear.{u} projectiveLineGlueData.{u} lineAlg.{u}
-    (glueDataCLinear_coverGlueData.{u} lineCoverObj.{u} lineCoverPoly.{u} lineSwapIso.{u}
-      hrange_lineCover.{u} hsymm_lineCover.{u} hcocycle_lineCover.{u})
-    hasLocalModels_projectiveLineGlueData.{u}
+  coverAnalytification.{u} lineCoverObj.{u} lineCoverPoly.{u} lineSwapIso.{u}
+    hrange_lineCover.{u} hsymm_lineCover.{u} hcocycle_lineCover.{u}
+
+/-- **The general construction and the `ofGlueDataCLinear` call this file used to make are the
+same space**, on the nose. Kept as an `example` because it is the whole content of quoting
+`ComplexAnalytic.coverAnalytification` here instead of rebuilding. -/
+example : projectiveLineSpace.{u} =
+    AnalyticSpace.ofGlueDataCLinear.{u} projectiveLineGlueData.{u} lineAlg.{u}
+      (glueDataCLinear_coverGlueData.{u} lineCoverObj.{u} lineCoverPoly.{u} lineSwapIso.{u}
+        hrange_lineCover.{u} hsymm_lineCover.{u} hcocycle_lineCover.{u})
+      hasLocalModels_projectiveLineGlueData.{u} := rfl
 
 /-- Its underlying locally ringed space is the gluing, on the nose. -/
 example : (projectiveLineSpace.{u}).toLocallyRingedSpace =
     projectiveLineGlueData.{u}.toGlueData.glued := rfl
+
+/-- **The `i`-th chart, as a morphism of analytic spaces into the glued space.**
+
+`ComplexAnalytic.coverIota` at this cover, named so that the statement below is about
+`ComplexAnalytic.projectiveLineSpace` rather than about a glue datum. -/
+def lineIota (i : pair.{u}) :
+    AnalyticSpace.analytification.{u} (lineCoverObj.{u} i).g ⟶ projectiveLineSpace.{u} :=
+  coverIota.{u} lineCoverObj.{u} lineCoverPoly.{u} lineSwapIso.{u} hrange_lineCover.{u}
+    hsymm_lineCover.{u} hcocycle_lineCover.{u} i
+
+/-- **Neither chart is the whole analytic space.**
+
+`ComplexAnalytic.not_surjective_ι_projectiveLineGlueData` says this of the glue datum's gluing and
+`ComplexAnalytic.toLRSHom_coverIota` carries it here. **The content is that bridge and no new
+geometry**; what it buys is that the statement is about `ComplexAnalytic.projectiveLineSpace`, an
+analytic space, rather than about `AlgebraicGeometry.LocallyRingedSpace.GlueData.glued`.
+
+**This instance exercises neither triple-overlap hypothesis** — `pair` has two members and
+`ComplexAnalytic.GlueShape.hRange_of_no_three` and `ComplexAnalytic.GlueShape.hCocycle_of_no_three`
+make both vacuous below three — so it is not by itself evidence that
+`ComplexAnalytic.coverAnalytification` is right. `OkaTest/AffineCover.lean`'s three-member
+`ComplexAnalytic.base_nodeIota_nodeOrigin_ne` is the one that is. What this adds is a
+**non-identity transition**, which that file's cover does not have. -/
+theorem not_surjective_base_lineIota (i : pair.{u}) :
+    ¬ Function.Surjective (lineIota.{u} i).toLRSHom.base := by
+  rw [lineIota, toLRSHom_coverIota]
+  exact not_surjective_ι_projectiveLineGlueData.{u} i
+
+/-- **Each chart is an open subspace of the analytic space**, by
+`ComplexAnalytic.isOpenImmersion_coverIota`. -/
+theorem isOpenImmersion_lineIota (i : pair.{u}) :
+    LocallyRingedSpace.IsOpenImmersion (lineIota.{u} i).toLRSHom :=
+  isOpenImmersion_coverIota.{u} lineCoverObj.{u} lineCoverPoly.{u} lineSwapIso.{u}
+    hrange_lineCover.{u} hsymm_lineCover.{u} hcocycle_lineCover.{u} i
 
 /-- **The glued `ℂ`-algebra structure restricts on each chart to the one that chart was given.** -/
 example (j : pair.{u}) :
