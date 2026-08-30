@@ -86,15 +86,18 @@ standard étale pair.
   `derivative f * p₁ + f * p₂ = g ^ n` — which is the *type* of the field `StandardEtalePair.cond`
   and reaches a proof only through an `obtain` on its `∃ p₁ p₂ n` — cannot be carried to that
   hypothesis by anything on hand, and no declaration below pretends otherwise.
-* **No witness that the open is ever non-empty.** The statements below are hypothesis-free in `F`
-  and `G`, so none of them can be vacuously satisfied; what is unchecked is whether the objects
-  are degenerate — nothing here says `ComplexAnalytic.localisationOpen (hypersurfacePresentation g
-  F) G` is non-empty for any `F` and `G`, so for all this file says the isomorphism could be one
-  of empty spaces. Supplying one is `ComplexAnalytic.mem_localisationOpen_iff` and a point of the
-  hypersurface's analytification at which `G` does not vanish, in the shape
-  `localisationOpen_nodePres_ne_bot` (`OkaTest/AnalytificationDistinguishedOpen.lean`) and
-  `ComplexAnalytic.localisationOpen_lineRel_ne_bot` (`OkaTest/ProjectiveLine.lean`) already have
-  for their own data; it is a construction rather than a quotation and it is not here.
+* **No witness in this file that the open is ever non-empty, and the witness is elsewhere.** The
+  statements below are hypothesis-free in `F` and `G`, so none of them can be vacuously
+  satisfied — but that says nothing about whether the *objects* are degenerate, and for `F = 1`
+  or `G = 0` both sides of `ComplexAnalytic.etaleAnalytificationIso` really are empty.
+  `OkaTest/StandardEtaleAnalytification.lean` supplies one pair at which they are not: the line
+  `z₁ = 0` in `ℂ²` with `z₀` inverted, where
+  `ComplexAnalytic.localisationOpen_hyperLinePres_ne_bot` and
+  `ComplexAnalytic.localisationOpen_hyperLinePres_ne_top` make `D(G)` a proper non-empty open and
+  `ComplexAnalytic.nonempty_analytification_etalePresentation_hyperLine` carries a point back
+  along the isomorphism. **It is a construction rather than a quotation**, and in particular not a
+  quotation of taxis #1112's `Pex`, which witnesses a non-closed *image* and says nothing about an
+  inhabited `D(G)`.
 * **No `IsLocalIso` and no `IsFiniteEtale`.** Beside the missing lemma above,
   `Oka/AnalyticSpace/SimpleZeroStalk.lean` records that its stalk statement says **nothing about
   the underlying map** — *"not even that it is open"* — so the topological field of
