@@ -55,12 +55,20 @@ built: **a point of the analytification is an evaluation that kills every relati
 misses `1` and the quotient is not the zero ring. Nothing about the localisation is used beyond
 its being presented, which is why the proof is four lines and not a computation in `ℂ[x, y, t]`.
 
-**What is not checked, and one of the two is a real question.** That the `Q` the existential
-produces can never be `q` itself — that is, that the unit is doing work — is **not** established
-here and would need the identification of this localisation with `ℂ[z₀, z₀⁻¹]`, since the obvious
-separators do not separate: `t` and any renamed polynomial agree at every point of the
-analytification, the fibre of `ComplexAnalytic.localisationProj` being a single point. And
-whether `f` and `f ^ 2` are associated at the node is untouched, as before: no statement below
+**What is not checked, and the first of the two is a real question with a known route.** That
+the `Q` the existential produces can never be `q` itself — that is, that the unit is doing work —
+is **not** established here, and the reason is that nobody has written the argument, not that the
+argument is out of reach. **Evaluation does separate**, at the family of points rather than at
+one: a point of this analytification is a common zero of `z₀z₁` and `t·z₀ - 1`, so it is
+`(x, 0, 1/x)` for any `x ≠ 0`, of which the point above is the member at `x = 1`. On it `t` takes
+the value `1/x` and a renamed `Q` takes `Q(x, 0)`, so `mk (rename Q) = mk (X_t)` would force
+`x · Q(x, 0) = 1` for **every** non-zero `x`, and a polynomial with infinitely many roots is zero.
+What that costs is the family — one parameterised point, where this file has one point — and the
+polynomial-identity step; **it does not need the identification of this localisation with
+`ℂ[z₀, z₀⁻¹]`**, which an earlier version of this paragraph claimed and which is a much larger
+statement.
+
+And whether `f` and `f ^ 2` are associated at the node is untouched, as before: no statement below
 mentions `Associated`, and `localisationPresentation_ne_sq` distinguishes the two presentations by
 total degree without saying anything about units.
 -/
