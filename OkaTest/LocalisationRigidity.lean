@@ -104,10 +104,13 @@ and it deliberately stops there. Two things a reader should know before attempti
   and its law is a cocycle on triple overlaps expressed with pullbacks. That is a different law on
   a different index shape from the `trans_comp` a chain exercises, so choosing witnesses does not
   turn one into the other and `hcocycle` should be expected **not** to follow.
-  `OkaTest/GlueShape.lean` builds that shape and settles the five inputs one at a time; the
-  expectation is right and the failure is one hypothesis earlier than predicted — `hsymm` follows,
-  `hrange` provably does not (`OkaTest.GlueShape.not_ctHRange`), and `hcocycle` cannot be stated
-  without `hrange`;
+  `Oka/Analytification/GlueShape.lean` builds that shape and settles the five inputs one at a
+  time; the expectation is right and the failure is one hypothesis earlier than predicted —
+  `hsymm` follows, `hrange` provably does not (`ComplexAnalytic.GlueShape.not_ctHRange`), and
+  `hcocycle` cannot be stated without `hrange`. It was under `OkaTest/` and imported this file
+  when that sentence was written; it is library material now, because
+  `ComplexAnalytic.coverAnalytification` consumes `ComplexAnalytic.coverGlueData`, which is the
+  condition the convention below names;
 * `ComplexAnalytic.coverGlueData` wants `poly i j` for **every** ordered pair, comparable or not,
   whereas everything here is indexed by arrows. Two indices with no arrow between them still have
   an overlap, and nothing in an ordered shape produces its witness.

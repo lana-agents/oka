@@ -909,6 +909,55 @@ info: 'ComplexAnalytic.isOpenImmersion_coverIota' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isOpenImmersion_coverIota
 
+/-! ### The two-level index category of a glue data
+
+The five advertised results of `Oka/Analytification/GlueShape.lean`, which arrived under `Oka/`
+when `ComplexAnalytic.coverAnalytification` gave the shape a consumer. They sit here rather than
+in a file of their own because the module is `Oka.Analytification.GlueShape` and
+`OkaTest/Axioms.lean`'s table routes `Oka/Analytification/` here — the same row that carries
+`ComplexAnalytic.coverGlueData` directly above, which is what the shape's diagram produces.
+
+The first says the shape has no morphisms a glue-data diagram does not account for; the second
+that `hsymm` is a consequence of its one law; the third that `hrange` is **not** a consequence of
+the diagram, which is the file's negative result; the last two that neither triple-overlap
+hypothesis has content below three members.
+-/
+
+/--
+info: 'ComplexAnalytic.GlueShape.lift_uniq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.GlueShape.lift_uniq
+
+/--
+info: 'ComplexAnalytic.GlueShape.hsymm_of_hglue' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.GlueShape.hsymm_of_hglue
+
+/--
+info: 'ComplexAnalytic.GlueShape.not_ctHRange' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.GlueShape.not_ctHRange
+
+/--
+info: 'ComplexAnalytic.GlueShape.hRange_of_no_three' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.GlueShape.hRange_of_no_three
+
+/--
+info: 'ComplexAnalytic.GlueShape.hCocycle_of_no_three' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.GlueShape.hCocycle_of_no_three
+
 /-! ### A standard étale algebra over a presented `ℂ`-algebra is presented
 
 The five advertised results of `Oka/Analytification/StandardEtale.lean`. The two operations —
