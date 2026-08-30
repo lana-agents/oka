@@ -1751,3 +1751,66 @@ info: 'ComplexAnalytic.isFinite_analytification_comp_proj' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isFinite_analytification_comp_proj
+
+/-! ### Refining one member of a cover by distinguished opens
+
+`Oka/Analytification/CoverRefinement.lean`. The refined members, the polynomials cutting their
+overlaps out, the glue isomorphism built from `ComplexAnalytic.localisationPresentationIsoMul`,
+and the two laws that are algebraic. **The two geometric laws are not here because they are not
+proved**; that file's `## What is not here` names the one missing lemma they need.
+
+`ComplexAnalytic.refineObj`, `ComplexAnalytic.refinePoly` and `ComplexAnalytic.refineMul` are
+`abbrev`s and carry no guard of their own: an `abbrev` is definitionally its body, so a guard on
+one would assert the axioms of `ComplexAnalytic.localisationPresentation`, which is guarded where
+it is defined.
+-/
+
+/--
+info: 'ComplexAnalytic.refineMulIso' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineMulIso
+
+/--
+info: 'ComplexAnalytic.refineMul_comm' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineMul_comm
+
+/--
+info: 'ComplexAnalytic.refineGlue' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineGlue
+
+/--
+info: 'ComplexAnalytic.eqToIso_symm'' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.eqToIso_symm'
+
+/--
+info: 'ComplexAnalytic.refineGlue_symm' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineGlue_symm
+
+/--
+info: 'ComplexAnalytic.eqToHom_localisationHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.eqToHom_localisationHom
+
+/--
+info: 'ComplexAnalytic.refineGlue_comp' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineGlue_comp
+
+/--
+info: 'ComplexAnalytic.refineGlue_analytification_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineGlue_analytification_comp
