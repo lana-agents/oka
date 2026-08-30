@@ -90,6 +90,10 @@ where `D(z₀)` is the punctured axis that `OkaTest/OpenSubspace.lean` builds by
   zero on `X^an`.
 - `ComplexAnalytic.localisationOpen_mul`: **`D(f · f') = D(f) ⊓ D(f')`** — the triple overlap of
   an affine cover, as one of the opens this file is about rather than an intersection of two.
+- `ComplexAnalytic.localisationOpen_rename`: **the open cut out upstairs by a renamed polynomial
+  is the preimage of the one it cuts out downstairs.** Where the lemma above relates two opens of
+  one space, this relates opens of two, which is what a refinement of a cover needs in order to
+  say where a point of an overlap lies.
 - `ComplexAnalytic.isOpenImmersion_localisationProj`: **the projection is an open immersion of
   locally ringed spaces** — the `f_open` field of any
   `AlgebraicGeometry.LocallyRingedSpace.GlueData` built out of an affine cover, and the second
@@ -561,6 +565,34 @@ theorem localisationOpen_mul (f' : MvPolynomial (ULift.{u} (Fin n)) ℂ) :
     localisationOpen.{u} g (f * f') =
       localisationOpen.{u} g f ⊓ localisationOpen.{u} g f' := by
   rw [localisationOpen, map_mul, AnalyticSpace.nonvanishing_mul]
+
+/-- **`D(f')` upstairs is the preimage of `D(f')` downstairs**, along the projection.
+
+Read `f'` in the extra variable — which is `MvPolynomial.rename` along
+`ComplexAnalytic.localisationIncl`, the same renaming
+`ComplexAnalytic.localisationPresentation` applies to the old equations — and the open it cuts out
+of `(A_f)^an` is exactly what lies over `D(f')`. Nothing here is about `f`: the projection sends
+the old coordinates to the old coordinates, and that is the whole content.
+
+**This is not `ComplexAnalytic.localisationOpen_mul` and the two are easy to confuse.** That one
+says `D(f · f') = D(f) ⊓ D(f')` **inside a single space** and is how a triple overlap becomes one
+of this file's opens. This one relates opens of **two** spaces across the projection, and it is
+what a statement about a distinguished open of `X^an` needs in order to say anything about
+`(A_f)^an`.
+
+`ComplexAnalytic.eval_localisationProj` is the whole proof: it says evaluating `p` at the image
+point is evaluating the renamed `p` at the point, and
+`ComplexAnalytic.mem_localisationOpen_iff` turns each membership into such an evaluation. -/
+theorem localisationOpen_rename (f' : MvPolynomial (ULift.{u} (Fin n)) ℂ) :
+    localisationOpen.{u} (localisationPresentation.{u} g f)
+        (MvPolynomial.rename (localisationIncl.{u} n) f') =
+      (Opens.map (localisationProj.{u} g f).toLRSHom.base).obj
+        (localisationOpen.{u} g f') := by
+  refine Opens.ext (Set.ext fun w ↦ ?_)
+  change w ∈ localisationOpen.{u} (localisationPresentation.{u} g f)
+      (MvPolynomial.rename (localisationIncl.{u} n) f') ↔
+    (localisationProj.{u} g f).toLRSHom.base w ∈ localisationOpen.{u} g f'
+  rw [mem_localisationOpen_iff, mem_localisationOpen_iff, eval_localisationProj]
 
 /-! ### The projection is an open immersion -/
 
