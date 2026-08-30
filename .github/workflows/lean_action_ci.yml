@@ -149,8 +149,10 @@ jobs:
         if: ${{ !cancelled() }}
         run: lake exe lint-style Oka OkaTest
 
-      # The step below, pointed at planted defects instead of at the tree: it plants each defect
-      # the name checker exists to find and confirms the checker still finds it.
+      # The `Check names in docstrings` step below, pointed at planted defects instead of at the
+      # tree: this step plants each defect the name checker exists to find and confirms the
+      # checker still finds it. Both referring expressions in this block name the step they mean,
+      # because "the step below" was used here for two different steps.
       #
       # **This step and the next report different things.** A red cross here says the
       # *instrument* is broken, and a green cross below it would then mean nothing; a red cross
@@ -167,9 +169,12 @@ jobs:
       # hand — a convention, kept by four of them, and the thing a workflow file exists to stop
       # being a convention.
       #
-      # `!cancelled()`, which the step below cannot take: this is text-only — fixtures in a
-      # `TemporaryDirectory`, one real-tree walk, no `lake env lean` — so a build failure must
-      # not hide it, for this file's standing reason that an agent gets one CI run per push.
+      # `!cancelled()`, which the `Check names in docstrings` step cannot take: this is text-only
+      # — fixtures in a `TemporaryDirectory`, exactly one check that reads the real tree, no
+      # `lake env lean` — so a build failure must not hide it, for this file's standing reason
+      # that an agent gets one CI run per push. How many times that one check walks the tree, and
+      # what the walks cost, are stated once, beside the same command in
+      # `.orchestra/validation.sh`.
       - name: Self-test the docstring-name checker
         if: ${{ !cancelled() }}
         run: python3 scripts/check_docstring_names.py --self-test
@@ -191,6 +196,12 @@ jobs:
       # reported, so a red cross here means the checker below has stopped checking. It is the
       # older of the two self-tests — 2026-08-23, the commit that added the checker — and nothing
       # ran it for the seven days between.
+      #
+      # Three of its checks also run the script as a *subprocess* in a planted `git init` tree, to
+      # exercise the repository-root resolution that `main()` does and a direct call does not.
+      # Those three are the only part of either self-test with a failure mode specific to a
+      # runner: they need `git` on `PATH` and a `git init` that succeeds. The cost they add is
+      # measured beside the same command in `.orchestra/validation.sh`.
       - name: Self-test the module-docstring checker
         if: ${{ !cancelled() }}
         run: python3 scripts/check_module_docstrings.py --self-test

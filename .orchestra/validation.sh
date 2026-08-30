@@ -300,7 +300,10 @@ lake exe lint-style Oka OkaTest || exit 1
 # a `|| exit 1` exists to stop being a convention.
 #
 # Unlike the check, the self-test needs no build and no oleans: it plants its fixtures in a
-# `TemporaryDirectory` and its one real-tree read is a text walk. It could therefore run earlier
+# `TemporaryDirectory`, and exactly one of its checks reads the real tree at all — what it does
+# there is a text walk, not a build. That one check is worth more than one walk, and the count is
+# below with what the walks cost; a reader who takes "one" for a walk count gets it wrong by four
+# and `.github/workflows/lean_action_ci.yml` did. It could therefore run earlier
 # than this; it is here so that the instrument and the check it verifies stay one comment block
 # apart rather than two places to keep in step. **Order 2s, and a small multiple of that on a
 # loaded machine** — measured 2026-08-30 at 1.85–1.92s over three runs on a warm checkout, against
@@ -343,8 +346,16 @@ python3 scripts/check_docstring_names.py || exit 1
 #
 # Same division as above: the self-test failing means the *instrument* is broken and nothing the
 # line after it prints can be trusted; the check failing means a `.lean` file is missing a
-# module docstring. Measured 2026-08-30: **0.04s** for the self-test, which plants its fixtures
-# in a `TemporaryDirectory` and never reads the real tree.
+# module docstring. It plants its fixtures in a `TemporaryDirectory` and never reads the real
+# tree, so its cost is interpreter starts and not I/O: three of its checks run the checker as a
+# subprocess in a planted `git init` tree, which is the only way to exercise the repository-root
+# resolution `main()` does and a direct call to `check` skips.
+# **Order 0.1s, and a small multiple of that on a loaded machine** — measured 2026-08-30
+# at 0.120–0.123s over three runs on a warm sixteen-core checkout under moderate load, and at
+# 0.27–0.45s the same day, on the same code, by the session that wrote those three checks.
+# The figure is stated as an order and a spread on purpose: this line previously read **0.04s**,
+# which was the true cost before the three subprocesses existed, and a single number measured on
+# one machine is what let it go three times stale without anybody noticing.
 #
 # Text only: no build, no oleans, so both could run anywhere in this script. They are last
 # because they are the cheapest and a failure of the check is the least urgent.
