@@ -350,13 +350,22 @@ statement.
 
 **Why the hypothesis is stated with `PowerSeries.order` and not with a derivative.** The
 condition one expects is that `∂f/∂X_n` is a unit at the origin. That is not expressible here:
-this repository has no partial-derivative operator on `LocalOkaRing`, and the one declaration
-under `Oka/` that computes a partial derivative,
-`MvPowerSeries.LocallyConvergent.fderiv_eval_zero`, is about the derivative of the *sum* of a
-convergent series. `PowerSeries.order (MvPowerSeries.partialEval (Fin.last n) f) = 1` is the same
-condition for a germ vanishing at the origin, and it costs nothing because it is what
-`localweierstrass_preparation` already computes internally as its order of generality. Bridging
-the two is a separate piece of work and nothing here attempts it.
+this repository has no partial-derivative operator on `LocalOkaRing`, and **none of the
+declarations under `Oka/` that do compute a partial derivative computes one of a general germ.**
+There are three of them and each identifies a *linear coefficient* with a derivative of something
+that is not an arbitrary element of `LocalOkaRing`:
+`MvPowerSeries.LocallyConvergent.fderiv_eval_zero` for the sum of a locally convergent series,
+and `MvPolynomial.coeff_single_one_taylorAlgHom` and
+`LocalOkaRing.coeff_single_one_ofMvPolynomial` for a polynomial and for the germ of one. (A
+further four, in `Oka/AnalyticSpace/SimpleZeroPolynomial.lean`, and the implicit-function
+theorem of `Oka/Weierstrass.lean`, *hypothesise* a partial derivative rather than computing one;
+that distinction is what this census turns on and it is worth re-running rather than quoting.)
+
+**The `f` below is an arbitrary germ**, which is exactly what none of the three covers, so
+`PowerSeries.order (MvPowerSeries.partialEval (Fin.last n) f) = 1` is still the spelling to use:
+it is the same condition for a germ vanishing at the origin, and it costs nothing because it is
+what `localweierstrass_preparation` already computes internally as its order of generality.
+Bridging the two is a separate piece of work and nothing here attempts it.
 
 **Preparation does not report the degree, and that is the only real content below.**
 `localweierstrass_preparation` concludes `f = fromPolynomial g * u` with `u` a unit and `g` a
