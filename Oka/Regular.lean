@@ -354,19 +354,29 @@ inexpressible here is the missing operator and not any missing generality.** Thi
 no partial-derivative operator `LocalOkaRing ι → LocalOkaRing ι`, and *"is a unit"* is a predicate
 on a ring element: there is no element for it to be a predicate about.
 
-**Three declarations under `Oka/` do compute a partial derivative and all three produce a number
-at a point rather than a germ**, which is the distinction that matters and not
-general-versus-special. `MvPowerSeries.LocallyConvergent.fderiv_eval_zero` gives the derivative of
-the *sum* at the origin, and it applies to **every** germ — `LocalOkaRing ι` is by definition the
-locally convergent series, so its hypothesis is `LocalOkaRing.locallyConvergent` and nothing more;
+**Nothing under `Oka/` produces a partial derivative *as a germ*, and that is the same fact as the
+missing operator rather than a second one** — it is why `IsUnit` has nothing to be applied to.
+What the tree has instead is a **number at a point**:
+`MvPowerSeries.LocallyConvergent.fderiv_eval_zero` gives the derivative of the *sum* at the
+origin, and it applies to **every** germ — `LocalOkaRing ι` is by definition the locally convergent
+series, so its hypothesis is `LocalOkaRing.locallyConvergent` and nothing more;
 `MvPolynomial.coeff_single_one_taylorAlgHom` and `LocalOkaRing.coeff_single_one_ofMvPolynomial`
 give `MvPolynomial.eval y (MvPolynomial.pderiv i p)`, for a polynomial and for the germ of one.
-Each identifies a *linear coefficient* with a derivative, and none of the three produces an
-element of `LocalOkaRing` that `IsUnit` could be applied to. (A further four, in
-`Oka/AnalyticSpace/SimpleZeroPolynomial.lean`, and the implicit-function result of
-`Oka/Weierstrass.lean`, *hypothesise* a partial derivative rather than computing one; the
-statement-versus-proof-step distinction is what this census turns on and it is worth re-running
-rather than quoting.)
+Each of those identifies a *linear coefficient* with a derivative. A derivative of a *polynomial*
+may also stay in a polynomial ring — `ComplexAnalytic.polyPresentedAlgebraEquiv_mk_pderiv` says
+`MvPolynomial.pderiv` of a lift is a lift of a `Polynomial.derivative` — which is a third thing
+again and still not a germ. Other statements only *hypothesise* such a derivative, those of
+`Oka/AnalyticSpace/SimpleZeroPolynomial.lean` and the implicit-function result of
+`Oka/Weierstrass.lean` among them.
+
+**The tally that used to stand here is deliberately gone.** This paragraph has carried a
+tree-wide count twice — *"the one declaration under `Oka/` that computes a partial derivative"*,
+and then *"three declarations … and all three produce a number at a point"* — and each was
+falsified within a day, the second by the theorem cited above. A count is falsified by any
+addition anywhere in the tree; the claim in bold is falsified only by something that produces a
+germ derivative, which is the operator whose absence this paragraph is about, so it cannot go
+stale without the paragraph needing rewriting anyway. The names above are examples and not an
+enumeration — and nothing checks either, since no check in this repository reads prose.
 
 So `PowerSeries.order (MvPowerSeries.partialEval (Fin.last n) f) = 1` is the spelling to use: it
 is the same condition for a germ vanishing at the origin, and it costs nothing because it is what
