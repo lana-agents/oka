@@ -3,7 +3,7 @@ Copyright (c) 2026 Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten. All righ
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
-import OkaTest.LocalisationRigidity
+import Oka.Analytification.AffineCover
 import Mathlib.CategoryTheory.PathCategory.Basic
 import Mathlib.CategoryTheory.Quotient
 
@@ -26,31 +26,41 @@ the last of those is a theorem here and not a prediction.
 
 ## The shape
 
-`OkaTest.GlueShape.Shape J` has an object `OkaTest.GlueShape.mem i` for each member and an object
-`OkaTest.GlueShape.ovl i j` for each **ordered** pair, generating arrows
-`OkaTest.GlueShape.incl i j : ovl i j ⟶ mem i` and
-`OkaTest.GlueShape.swap i j : ovl i j ⟶ ovl j i`, and one relation,
-`OkaTest.GlueShape.swap_swap`. It is the free category on that quiver modulo that relation:
-`CategoryTheory.Paths` and `CategoryTheory.Quotient`. Those are two `import` lines and **zero
-Mathlib modules**: both are already in the transitive closure of `Oka`, which
-`OkaTest/LocalisationChain.lean` imports whole, so the closure of this file is
-`OkaTest/LocalisationRigidity.lean`'s plus this module and nothing else — measured by
-breadth-first search over comment-masked `import` lines, 3577 modules to 3578, Mathlib count
-unchanged at 3443. (`scripts/import_cost.py` prices them at 2 against
-`Mathlib/CategoryTheory/GlueData.lean`'s closure, which is the mirror-tree question and a
-different baseline.)
+`ComplexAnalytic.GlueShape.Shape J` has an object `ComplexAnalytic.GlueShape.mem i` for each member
+and an object `ComplexAnalytic.GlueShape.ovl i j` for each **ordered** pair, generating arrows
+`ComplexAnalytic.GlueShape.incl i j : ovl i j ⟶ mem i` and
+`ComplexAnalytic.GlueShape.swap i j : ovl i j ⟶ ovl j i`, and one relation,
+`ComplexAnalytic.GlueShape.swap_swap`. It is the free category on that quiver modulo that relation:
+`CategoryTheory.Paths` and `CategoryTheory.Quotient`, two `import` lines.
+
+**The move under `Oka/` made this file cheaper, not dearer, and the figure is the argument for the
+import it now carries.** While it lived at `OkaTest/GlueShape.lean` it imported
+`OkaTest/LocalisationRigidity.lean`, which reaches `Oka` whole through
+`OkaTest/LocalisationChain.lean`; it now imports `Oka/Analytification/AffineCover.lean`, which is
+all it ever used. Transitive closure of the import list, `env.header.moduleNames` under `lake env
+lean` and not a source parser: **3642 → 3381** counting `Oka` + `OkaTest` + `Mathlib`, of which
+`Oka` **150 → 78**, `OkaTest` **2 → 0** and `Mathlib` **3490 → 3303**; all modules including
+`Lean`, `Batteries` and the rest, 5392 → 5131. The two `CategoryTheory` imports are free against
+that baseline and were free against the old one.
+
+Their cost is not zero everywhere, and the other number is the one a `Oka/CategoryTheory/` home
+would be priced at: `scripts/import_cost.py --target Mathlib.CategoryTheory.GlueData` puts them at
+**2** against `Mathlib/CategoryTheory/GlueData.lean`'s closure of 540. **That script cannot price
+this file where it now sits** — it answers the mirror-tree question, and `Oka/Analytification/`
+has no `Mathlib/Analytification/` to be a mirror of, so it reports the path as one that *"does not
+exist in Mathlib"* rather than a cost. See `## What is not here`.
 
 **Going through the path category is what keeps `CategoryTheory.eqToHom` out of the shape and its
-`lift` API, and that was the predicted expense.** Everything from `OkaTest.GlueShape.Obj` to
-`OkaTest.GlueShape.symm_eq_of_hom_comp_hom` is free of `eqToHom`, `CategoryTheory.eqToIso`, `▸`
-and `cast`; the counterexample at the end of the file transports, at `OkaTest.GlueShape.ctGlue`,
-and there is nothing wrong with that. Writing the hom-types by hand instead runs into the
-diagonal:
-`ovl i i ⟶ mem i` has to have two elements, `incl i i` and `swap i i ≫ incl i i`, and the obvious
-hand-written hom-type — a sum of two propositions saying `l = i` and `l = j` — has two elements
-when `i ≠ j` and *also* two when `i = j`, but a functor out of it then has to produce a morphism
-from a proof of `l = i ∨ l = j`, which is data from a `Prop`. The quotient of the path category
-has neither problem and the whole construction is under a hundred lines.
+`lift` API, and that was the predicted expense.** Everything from `ComplexAnalytic.GlueShape.Obj` to
+`ComplexAnalytic.GlueShape.symm_eq_of_hom_comp_hom` is free of `eqToHom`, `CategoryTheory.eqToIso`,
+`▸` and `cast`; the counterexample at the end of the file transports, at
+`ComplexAnalytic.GlueShape.ctGlue`, and there is nothing wrong with that. Writing the hom-types by
+hand instead runs into the diagonal: `ovl i i ⟶ mem i` has to have two elements, `incl i i` and
+`swap i i ≫ incl i i`, and the obvious hand-written hom-type — a sum of two propositions saying
+`l = i` and `l = j` — has two elements when `i ≠ j` and *also* two when `i = j`, but a functor out
+of it then has to produce a morphism from a proof of `l = i ∨ l = j`, which is data from a `Prop`.
+The quotient of the path category has neither problem and the whole construction is under a hundred
+lines.
 
 **The shape is deliberately not thin.** `swap i i` is not forced to be the identity: the only
 relation is that the two transitions of an overlap are inverse. Imposing `swap i i = 𝟙` would
@@ -64,24 +74,24 @@ Against the diagram:
 
 | input | where it comes from |
 |---|---|
-| `obj` | the diagram at the members, `OkaTest.GlueShape.coverDiagram_obj_mem` |
-| `poly` | the diagram at the overlaps, `OkaTest.GlueShape.coverDiagram_obj_ovl` |
-| `glue` | the diagram at the transitions, `OkaTest.GlueShape.coverDiagram_map_swap` |
-| `hsymm` | **follows**, `OkaTest.GlueShape.hsymm_of_hglue` |
-| `hrange` | **does not follow**, `OkaTest.GlueShape.not_ctHRange` |
+| `obj` | the diagram at the members, `ComplexAnalytic.GlueShape.coverDiagram_obj_mem` |
+| `poly` | the diagram at the overlaps, `ComplexAnalytic.GlueShape.coverDiagram_obj_ovl` |
+| `glue` | the diagram at the transitions, `ComplexAnalytic.GlueShape.coverDiagram_map_swap` |
+| `hsymm` | **follows**, `ComplexAnalytic.GlueShape.hsymm_of_hglue` |
+| `hrange` | **does not follow**, `ComplexAnalytic.GlueShape.not_ctHRange` |
 | `hcocycle` | not stateable without `hrange`; see below |
 
 `hsymm` is the one that changes the interface, and it is a change of **form and not of count**:
-`OkaTest.GlueShape.coverGlueDataOfDiagram` and `ComplexAnalytic.coverGlueData` take the same six
-explicit arguments, with `hglue` in the place of `hsymm` rather than in addition to nothing.
-`coverGlueData` asks for `glue j i = (glue i j).symm`, an equation of *isomorphisms*; the shape
-asks only that the two transitions compose to the identity, an equation of *morphisms*. Those are
-the same condition — a right inverse of an isomorphism is its inverse,
-`OkaTest.GlueShape.symm_eq_of_hom_comp_hom` — but only the second is the form functoriality hands
-you (`OkaTest.GlueShape.map_swap_comp`). Anyone who already has a functor out of
-`OkaTest.GlueShape.Shape` has `hglue` for free; nobody has `hsymm` for free. It would become a
-change of count if `OkaTest.GlueShape.coverGlueDataOfDiagram` took the functor rather than its
-four components, which is not done here.
+`ComplexAnalytic.GlueShape.coverGlueDataOfDiagram` and `ComplexAnalytic.coverGlueData` take the same
+six explicit arguments, with `hglue` in the place of `hsymm` rather than in addition to nothing.
+`coverGlueData` asks for `glue j i = (glue i j).symm`, an equation of *isomorphisms*; the shape asks
+only that the two transitions compose to the identity, an equation of *morphisms*. Those are the
+same condition — a right inverse of an isomorphism is its inverse,
+`ComplexAnalytic.GlueShape.symm_eq_of_hom_comp_hom` — but only the second is the form functoriality
+hands you (`ComplexAnalytic.GlueShape.map_swap_comp`). Anyone who already has a functor out of
+`ComplexAnalytic.GlueShape.Shape` has `hglue` for free; nobody has `hsymm` for free. It would become
+a change of count if `ComplexAnalytic.GlueShape.coverGlueDataOfDiagram` took the functor rather than
+its four components, which is not done here.
 
 `hcocycle` is a different case from `hrange` and the difference is worth stating precisely: it is
 not that it fails to follow, it is that **it cannot be written down without `hrange`**. Its
@@ -92,45 +102,45 @@ one `OkaTest/LocalisationRigidity.lean` predicted.
 
 ## `hrange` really does not follow, and three members is where it is visible
 
-`OkaTest.GlueShape.not_ctHRange` exhibits a three-member cover — every member the presentation of
-a point, `ULift (Fin 0)` variables and no relations — with a witness polynomial for every ordered
-pair and an isomorphism for every pair satisfying the shape's law, whose range hypothesis is
-**false**. The configuration is `poly i j = 1` unless neither index is `0`, where it is `0`; then
-`D(1) = ⊤` makes the triple overlap inside the zeroth member the whole space, and `D(0) = ⊥`
-makes the open it is required to land in empty. The zeroth member has a point, so the range is
-not empty and the containment fails.
+`ComplexAnalytic.GlueShape.not_ctHRange` exhibits a three-member cover — every member the
+presentation of a point, `ULift (Fin 0)` variables and no relations — with a witness polynomial for
+every ordered pair and an isomorphism for every pair satisfying the shape's law, whose range
+hypothesis is **false**. The configuration is `poly i j = 1` unless neither index is `0`, where it
+is `0`; then `D(1) = ⊤` makes the triple overlap inside the zeroth member the whole space, and
+`D(0) = ⊥` makes the open it is required to land in empty. The zeroth member has a point, so the
+range is not empty and the containment fails.
 
 Three is also the smallest index type that can see it, in both hypotheses:
-`OkaTest.GlueShape.hRange_of_no_three` and `OkaTest.GlueShape.hCocycle_of_no_three` say that both
-are automatic on any index type with no three pairwise distinct elements.
+`ComplexAnalytic.GlueShape.hRange_of_no_three` and `ComplexAnalytic.GlueShape.hCocycle_of_no_three`
+say that both are automatic on any index type with no three pairwise distinct elements.
 `OkaTest/ProjectiveLine.lean` records the two-member vacuity for **both** — at
 `ComplexAnalytic.hrange_lineCover` and `ComplexAnalytic.hcocycle_lineCover`, each proved from
 `ComplexAnalytic.pair_no_distinct_triple`, whose own docstring says `ℙ¹` needs *"neither a range
-condition nor a cocycle"*. What the two theorems here add is the form that quantifies over the
-index type rather than over one gluing, so that "test at three" is a statement about the index
-type and not about that one cover.
+condition nor a cocycle"*. What the two theorems here add is the form that quantifies over the index
+type rather than over one gluing, so that "test at three" is a statement about the index type and
+not about that one cover.
 
 ## Main definitions
 
-- `OkaTest.GlueShape.Shape`: the two-level index category of a glue data.
-- `OkaTest.GlueShape.lift`: a functor out of it, from members, overlaps, inclusions and
-  transitions with the one law.
-- `OkaTest.GlueShape.coverDiagram`: the diagram of a cover with distinguished overlaps, as a
-  functor to `ComplexAnalytic.Presentation`.
-- `OkaTest.GlueShape.HRange` and `OkaTest.GlueShape.HCocycle`: the two triple-overlap hypotheses
-  of `ComplexAnalytic.coverGlueData`, named so that they can be talked about.
-- `OkaTest.GlueShape.coverGlueDataOfDiagram`: the glue data of a cover, out of its diagram and
-  those two hypotheses and nothing else.
+- `ComplexAnalytic.GlueShape.Shape`: the two-level index category of a glue data. -
+`ComplexAnalytic.GlueShape.lift`: a functor out of it, from members, overlaps, inclusions and
+transitions with the one law. - `ComplexAnalytic.GlueShape.coverDiagram`: the diagram of a cover
+with distinguished overlaps, as a functor to `ComplexAnalytic.Presentation`. -
+`ComplexAnalytic.GlueShape.HRange` and `ComplexAnalytic.GlueShape.HCocycle`: the two triple-overlap
+hypotheses of `ComplexAnalytic.coverGlueData`, named so that they can be talked about. -
+`ComplexAnalytic.GlueShape.coverGlueDataOfDiagram`: the glue data of a cover, out of its diagram and
+those two hypotheses and nothing else.
 
 ## Main results
 
-- `OkaTest.GlueShape.lift_uniq`: **every functor out of the shape is the one its own data
-  produces**, so the shape has no morphisms beyond those a glue-data diagram accounts for.
-- `OkaTest.GlueShape.hsymm_of_hglue`: **the symmetry hypothesis is a consequence of the shape's
-  law** and not an independent input.
-- `OkaTest.GlueShape.not_ctHRange`: **the range hypothesis is not a consequence of the diagram.**
-- `OkaTest.GlueShape.hRange_of_no_three` and `OkaTest.GlueShape.hCocycle_of_no_three`: neither
-  triple-overlap hypothesis has content below three members.
+- `ComplexAnalytic.GlueShape.lift_uniq`: **every functor out of the shape is the one its own data
+  produces**, so the shape has no morphisms beyond those a glue-data diagram accounts for. -
+  `ComplexAnalytic.GlueShape.hsymm_of_hglue`: **the symmetry hypothesis is a consequence of the
+  shape's law** and not an independent input. - `ComplexAnalytic.GlueShape.not_ctHRange`: **the
+  range hypothesis is not a consequence of the diagram.** -
+  `ComplexAnalytic.GlueShape.hRange_of_no_three` and
+  `ComplexAnalytic.GlueShape.hCocycle_of_no_three`: neither triple-overlap hypothesis has content
+  below three members.
 
 ## What is not here
 
@@ -145,28 +155,40 @@ untouched.
 𝟙` and `CategoryTheory.GlueData'` does not have `V (i, i)` at all;
 `CategoryTheory.GlueData.ofGlueData'` is the bridge, and it fills the diagonal with `U i` behind a
 `dif` on `i = j`. The shape here has the diagonal and does not collapse it, which is what makes
-`OkaTest.GlueShape.coverDiagram` accept exactly the input `ComplexAnalytic.coverGlueData` accepts.
-A variant shape with `swap i i = 𝟙` imposed would be a different category and is not built.
+`ComplexAnalytic.GlueShape.coverDiagram` accept exactly the input `ComplexAnalytic.coverGlueData`
+accepts. A variant shape with `swap i i = 𝟙` imposed would be a different category and is not built.
 
 **Nothing about `AlgebraicGeometry.LocallyRingedSpace`.** The diagram lands in
 `ComplexAnalytic.Presentation`; every statement about the glued space is
 `ComplexAnalytic.coverGlueData`'s and is reached only through
-`OkaTest.GlueShape.coverGlueDataOfDiagram`. In particular there is no claim here that the glued
-space is anything, and no non-vacuity: `OkaTest/AffineCover.lean` and
+`ComplexAnalytic.GlueShape.coverGlueDataOfDiagram`. In particular there is no claim here that the
+glued space is anything, and no non-vacuity: `OkaTest/AffineCover.lean` and
 `OkaTest/ProjectiveLine.lean` remain the two instances that check that.
 
-**No new library API.** This is `OkaTest/LocalisationRigidity.lean`'s convention and its reason:
-category theory with no analytic content stays in the test file until something consumes it, and
-`Oka/Analytification/` is its home when something does. The successor issue — assembling `X^an`
-for a non-affine scheme — is what would consume it, and moving a self-contained file is that
-issue's business.
+**No split between the shape and the cover, and the case for one is measured rather than
+dismissed.** This file has two halves. Everything from `ComplexAnalytic.GlueShape.Obj` to
+`ComplexAnalytic.GlueShape.symm_eq_of_hom_comp_hom` is category theory in an arbitrary `C` and
+mentions nothing analytic; its imports alone close at **356** Mathlib modules, and it is the half
+that would be a mirror-tree candidate beside `Oka/CategoryTheory/GlueData.lean`, where
+`scripts/import_cost.py` prices it at 2. Everything from `ComplexAnalytic.GlueShape.coverDiagram`
+onwards needs `ComplexAnalytic.Presentation`, `ComplexAnalytic.coverSpace` and
+`ComplexAnalytic.coverOpen`, so it cannot go there at all: an
+`Oka.Analytification.AffineCover` import inside `Oka/CategoryTheory/` inverts the hierarchy.
+**So the destination question is not a choice between two homes; it is whether this is one file.**
+It is left as one because splitting it is a design change and this arrival was a move — see the
+pull request that made it. Nothing below depends on the answer.
+
+**Nothing here is a mirror file.** `README.md`'s mirror-tree rule is about a path under `Oka/`
+that names a Mathlib target; this file's path does not, so no upstreaming cost is stated and
+`scripts/import_cost.py` has nothing to say about it. The figure above is a transitive closure
+inside this repository, which is a different question with a different baseline.
 -/
 
 universe v w u
 
 open CategoryTheory MvPolynomial ComplexAnalytic
 
-namespace OkaTest.GlueShape
+namespace ComplexAnalytic.GlueShape
 
 /-- **The objects of the two-level shape**: one for each member of the cover, and one for each
 **ordered** pair of members.
@@ -203,7 +225,7 @@ instance quiver : Quiver.{u} (Obj J) := ⟨Gen J⟩
 /-- **The one relation**: exchanging the two readings of an overlap twice is the identity.
 
 `ComplexAnalytic.coverGlueData`'s `hsymm` is this relation, and
-`OkaTest.GlueShape.hsymm_of_hglue` is the proof that it is not weaker. Nothing says
+`ComplexAnalytic.GlueShape.hsymm_of_hglue` is the proof that it is not weaker. Nothing says
 `swap i i = 𝟙`; see the module docstring for why imposing it would exclude the inputs
 `ComplexAnalytic.coverGlueData` accepts. -/
 inductive Rel : HomRel (Paths (Obj J))
@@ -213,7 +235,7 @@ inductive Rel : HomRel (Paths (Obj J))
         Quiver.Path.nil
 
 /-- **The two-level index category of a glue data**: the free category on
-`OkaTest.GlueShape.Gen` modulo `OkaTest.GlueShape.Rel`.
+`ComplexAnalytic.GlueShape.Gen` modulo `ComplexAnalytic.GlueShape.Rel`.
 
 An `abbrev` rather than a `def` deliberately: `CategoryTheory.Quotient.lift_unique` and
 `CategoryTheory.Quotient.functor` are stated about `CategoryTheory.Quotient` and a semireducible
@@ -275,7 +297,7 @@ law.
 This is the two-level analogue of `OkaTest.LocalisationRigidity.ofPreorder`, and the comparison is
 the point: there the laws had to be arguments because an arrow of a preorder carries no data, and
 here there is exactly one law because the free category on two families of generators has exactly
-one relation to impose. `OkaTest.GlueShape.lift_uniq` says nothing is lost. -/
+one relation to impose. `ComplexAnalytic.GlueShape.lift_uniq` says nothing is lost. -/
 def lift (U : J → C) (V : J → J → C) (f : ∀ i j, V i j ⟶ U i)
     (t : ∀ i j, V i j ⟶ V j i) (ht : ∀ i j, t i j ≫ t j i = 𝟙 (V i j)) :
     Shape J ⥤ C :=
@@ -300,8 +322,9 @@ variable (U : J → C) (V : J → J → C) (f : ∀ i j, V i j ⟶ U i) (t : ∀
 
 /-- **The transitions of any functor out of the shape are inverse**, by functoriality alone.
 
-This is the hypothesis `OkaTest.GlueShape.lift` asks for, read back off an arbitrary diagram, and
-it is what makes `ComplexAnalytic.coverGlueData`'s `hsymm` a consequence rather than an input. -/
+This is the hypothesis `ComplexAnalytic.GlueShape.lift` asks for, read back off an arbitrary
+diagram, and it is what makes `ComplexAnalytic.coverGlueData`'s `hsymm` a consequence rather than an
+input. -/
 @[reassoc]
 theorem map_swap_comp (D : Shape J ⥤ C) (i j : J) :
     D.map (swap J i j) ≫ D.map (swap J j i) = 𝟙 (D.obj (ovl J i j)) := by
@@ -309,14 +332,14 @@ theorem map_swap_comp (D : Shape J ⥤ C) (i j : J) :
 
 /-- **Every functor out of the shape is the one its own data produces.**
 
-Together with the four computation lemmas above this says the shape is exactly right: a functor
-out of it is *precisely* a family of members, a family of overlaps, an inclusion and a transition
-for each ordered pair, and the one law — no more and no less. Without it `OkaTest.GlueShape.lift`
-would only be a way of building some functors, and the claim that the shape is the index category
-of a glue data would be a description rather than a theorem.
+Together with the four computation lemmas above this says the shape is exactly right: a functor out
+of it is *precisely* a family of members, a family of overlaps, an inclusion and a transition for
+each ordered pair, and the one law — no more and no less. Without it
+`ComplexAnalytic.GlueShape.lift` would only be a way of building some functors, and the claim that
+the shape is the index category of a glue data would be a description rather than a theorem.
 
 `CategoryTheory.Quotient.lift_unique` and `CategoryTheory.Paths.lift_unique` do the work; the two
-remaining goals are `rfl` because `OkaTest.GlueShape.preLift` matches on the generators. -/
+remaining goals are `rfl` because `ComplexAnalytic.GlueShape.preLift` matches on the generators. -/
 theorem lift_uniq (D : Shape J ⥤ C) :
     lift (fun i ↦ D.obj (mem J i)) (fun i j ↦ D.obj (ovl J i j))
       (fun i j ↦ D.map (incl J i j)) (fun i j ↦ D.map (swap J i j))
@@ -353,11 +376,11 @@ variable {J : Type u} (obj : J → Presentation.{u})
 /-- **The diagram of a cover with distinguished overlaps**, as a functor to
 `ComplexAnalytic.Presentation`.
 
-The overlap at `(i, j)` is `ComplexAnalytic.coverOverlap`, the presentation of `D(f_ij)` inside
-the `i`-th member, and the inclusion is `ComplexAnalytic.localisationHom`, its structure map. So
-the *rigid* reading — every overlap literally a one-step localisation of its member — is what this
-diagram records, and it is consistent here for the reason `OkaTest.GlueShape.Gen`'s docstring
-gives. -/
+The overlap at `(i, j)` is `ComplexAnalytic.coverOverlap`, the presentation of `D(f_ij)` inside the
+`i`-th member, and the inclusion is `ComplexAnalytic.localisationHom`, its structure map. So the
+*rigid* reading — every overlap literally a one-step localisation of its member — is what this
+diagram records, and it is consistent here for the reason `ComplexAnalytic.GlueShape.Gen`'s
+docstring gives. -/
 def coverDiagram : Shape J ⥤ Presentation.{u} :=
   lift obj (coverOverlap.{u} obj poly) (fun i j ↦ localisationHom.{u} (obj i).g (poly i j))
     (fun i j ↦ (glue i j).hom) hglue
@@ -388,16 +411,16 @@ follows from the one law of the shape.
 This is the first of the five inputs to be settled, and it is the one that goes the good way. What
 a diagram supplies is that the two transitions of an overlap compose to the identity; what
 `ComplexAnalytic.coverGlueData` asks for is that each is the other's inverse as an isomorphism,
-and `OkaTest.GlueShape.symm_eq_of_hom_comp_hom` is the whole distance between them. -/
+and `ComplexAnalytic.GlueShape.symm_eq_of_hom_comp_hom` is the whole distance between them. -/
 theorem hsymm_of_hglue (i j : J) : glue j i = (glue i j).symm :=
   symm_eq_of_hom_comp_hom _ _ (hglue i j)
 
 /-- **`ComplexAnalytic.coverGlueData`'s range hypothesis**, named.
 
-It has to be named to be talked about: `OkaTest.GlueShape.not_ctHRange` is a statement *about* it
-and `OkaTest.GlueShape.HCocycle` cannot be written without it. Its content is that the transition
-from `i` to `j` carries the part of the overlap that also meets `k` into the part of `D(f_ji)`
-that meets `k`. -/
+It has to be named to be talked about: `ComplexAnalytic.GlueShape.not_ctHRange` is a statement
+*about* it and `ComplexAnalytic.GlueShape.HCocycle` cannot be written without it. Its content is
+that the transition from `i` to `j` carries the part of the overlap that also meets `k` into the
+part of `D(f_ji)` that meets `k`. -/
 abbrev HRange : Prop :=
   ∀ i j k : J, i ≠ j → i ≠ k → j ≠ k →
     Set.range (coverTripleIncl.{u} obj poly i j k ≫
@@ -425,11 +448,11 @@ include hglue in
 
 `ComplexAnalytic.coverGlueData` with `hglue` in the place of `hsymm` — the same six explicit
 arguments, and what the shape buys at this stage is the *form* of that one: `hglue` is an equation
-of morphisms, which functoriality gives (`OkaTest.GlueShape.map_swap_comp`), where `hsymm` is an
-equation of isomorphisms, which it does not. `obj`, `poly` and `glue` are the diagram's own data,
-`hsymm` is `OkaTest.GlueShape.hsymm_of_hglue`, and what is left over is exactly the two conditions
-that are about triple overlaps in `AlgebraicGeometry.LocallyRingedSpace` rather than about the
-diagram. -/
+of morphisms, which functoriality gives (`ComplexAnalytic.GlueShape.map_swap_comp`), where `hsymm`
+is an equation of isomorphisms, which it does not. `obj`, `poly` and `glue` are the diagram's own
+data, `hsymm` is `ComplexAnalytic.GlueShape.hsymm_of_hglue`, and what is left over is exactly the
+two conditions that are about triple overlaps in `AlgebraicGeometry.LocallyRingedSpace` rather than
+about the diagram. -/
 def coverGlueDataOfDiagram (hcocycle : HCocycle.{u} obj poly glue hrange) :
     AlgebraicGeometry.LocallyRingedSpace.GlueData.{u} :=
   coverGlueData.{u} obj poly glue hrange (hsymm_of_hglue obj poly glue hglue) hcocycle
@@ -437,13 +460,13 @@ def coverGlueDataOfDiagram (hcocycle : HCocycle.{u} obj poly glue hrange) :
 /-- **Fewer than three members cannot test the range hypothesis**: on an index type with no three
 pairwise distinct elements it is automatic.
 
-The `OkaTest/ProjectiveLine.lean` observation for the range hypothesis, in the form that
-quantifies over the index type rather than over one gluing — the same relation
-`OkaTest.GlueShape.hCocycle_of_no_three` bears to the cocycle one. That file proves both there,
-at `ComplexAnalytic.hrange_lineCover` and `ComplexAnalytic.hcocycle_lineCover`, from
+The `OkaTest/ProjectiveLine.lean` observation for the range hypothesis, in the form that quantifies
+over the index type rather than over one gluing — the same relation
+`ComplexAnalytic.GlueShape.hCocycle_of_no_three` bears to the cocycle one. That file proves both
+there, at `ComplexAnalytic.hrange_lineCover` and `ComplexAnalytic.hcocycle_lineCover`, from
 `ComplexAnalytic.pair_no_distinct_triple`; what is added here is that it is a statement about the
-index type, so a two-member instance is not evidence about `hrange` any more than about
-`hcocycle`. -/
+index type, so a two-member instance is not evidence about `hrange` any more than about `hcocycle`.
+-/
 theorem hRange_of_no_three (h3 : ∀ i j k : J, i = j ∨ i = k ∨ j = k) :
     HRange.{u} obj poly glue := by
   intro i j k hij hik hjk
@@ -499,7 +522,7 @@ theorem ctOverlap_eq (i j : Fin 3) :
   simp only [coverOverlap, ctPoly_symm]
   rfl
 
-/-- The transition isomorphisms, as transports along `OkaTest.GlueShape.ctOverlap_eq`. -/
+/-- The transition isomorphisms, as transports along `ComplexAnalytic.GlueShape.ctOverlap_eq`. -/
 def ctGlue (i j : Fin 3) :
     coverOverlap.{0} ctObj ctPoly i j ≅ coverOverlap.{0} ctObj ctPoly j i :=
   eqToIso (ctOverlap_eq i j)
@@ -527,17 +550,18 @@ theorem ctPt_mem : ctPt ∈ coverOpen.{0} ctObj ctPoly 0 1 ⊓ coverOpen.{0} ctO
 
 /-- **The range hypothesis is not a consequence of the diagram.**
 
-`OkaTest.GlueShape.ctObj`, `OkaTest.GlueShape.ctPoly` and `OkaTest.GlueShape.ctGlue` are a
-three-member cover with a witness for every ordered pair and an isomorphism for every pair
-satisfying the shape's one law — `OkaTest.GlueShape.ctHglue` — and the range hypothesis fails at
-the triple `(0, 1, 2)`. Both witnesses out of the zeroth member are `1`, so the triple overlap
-there is the whole space and `OkaTest.GlueShape.ctPt` is a point of it; the witness from the first
-member to the second is `0`, so the open the image is required to lie in is empty.
+`ComplexAnalytic.GlueShape.ctObj`, `ComplexAnalytic.GlueShape.ctPoly` and
+`ComplexAnalytic.GlueShape.ctGlue` are a three-member cover with a witness for every ordered pair
+and an isomorphism for every pair satisfying the shape's one law —
+`ComplexAnalytic.GlueShape.ctHglue` — and the range hypothesis fails at the triple `(0, 1, 2)`. Both
+witnesses out of the zeroth member are `1`, so the triple overlap there is the whole space and
+`ComplexAnalytic.GlueShape.ctPt` is a point of it; the witness from the first member to the second
+is `0`, so the open the image is required to lie in is empty.
 
 This is what `OkaTest/LocalisationRigidity.lean` predicted for the cocycle condition, established
 one hypothesis earlier and as a theorem rather than an expectation. It also fixes the smallest
 index type at which the failure is visible: three, by
-`OkaTest.GlueShape.hRange_of_no_three`. -/
+`ComplexAnalytic.GlueShape.hRange_of_no_three`. -/
 theorem not_ctHRange : ¬ HRange.{0} ctObj ctPoly ctGlue := by
   intro h
   have hx := h 0 1 2 (by decide) (by decide) (by decide)
@@ -548,4 +572,4 @@ theorem not_ctHRange : ¬ HRange.{0} ctObj ctPoly ctGlue := by
 
 end Counterexample
 
-end OkaTest.GlueShape
+end ComplexAnalytic.GlueShape

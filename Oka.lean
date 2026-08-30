@@ -73,6 +73,7 @@ import Oka.Analytification.DistinguishedOpen
 import Oka.Analytification.Flatness
 import Oka.Analytification.FlatnessAtAPoint
 import Oka.Analytification.Functor
+import Oka.Analytification.GlueShape
 import Oka.Analytification.LocalRing
 import Oka.Analytification.LocalisationComposite
 import Oka.Analytification.LocalisationFunctor
