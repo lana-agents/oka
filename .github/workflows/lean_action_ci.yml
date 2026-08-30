@@ -149,21 +149,55 @@ jobs:
         if: ${{ !cancelled() }}
         run: lake exe lint-style Oka OkaTest
 
+      # The step below, pointed at planted defects instead of at the tree: it plants each defect
+      # the name checker exists to find and confirms the checker still finds it.
+      #
+      # **This step and the next report different things.** A red cross here says the
+      # *instrument* is broken, and a green cross below it would then mean nothing; a red cross
+      # below says a `.lean` file cites a name that resolves to nothing. That is why it is a step
+      # of its own rather than a second `run:` line in the next one — two findings should be two
+      # crosses in the checks list, not one. `.orchestra/validation.sh` draws the same
+      # distinction in prose beside the same two commands.
+      #
+      # Before 2026-08-30 neither this workflow nor `.orchestra/validation.sh` ran a self-test at
+      # all: `grep -n 'self-test'` returned nothing here, and there it returned one *comment*
+      # arguing for one, six lines above the invocation that did not run it. Every labelled check
+      # in this file's two checkers, their positive controls and the mutation-kill figures quoted
+      # in the pull requests that built them were verified by sessions running the command by
+      # hand — a convention, kept by four of them, and the thing a workflow file exists to stop
+      # being a convention.
+      #
+      # `!cancelled()`, which the step below cannot take: this is text-only — fixtures in a
+      # `TemporaryDirectory`, one real-tree walk, no `lake env lean` — so a build failure must
+      # not hide it, for this file's standing reason that an agent gets one CI run per push.
+      - name: Self-test the docstring-name checker
+        if: ${{ !cancelled() }}
+        run: python3 scripts/check_docstring_names.py --self-test
+
       # Every backticked dotted name in a comment or docstring must resolve to a declaration, a
       # module, a file in the repository, or field notation on one of those. Nothing else in
       # this workflow looks inside a comment: the build sees only elaborated terms, `lake lint`
-      # checks declaration *names*, and the step above checks whitespace and unicode. See
+      # checks declaration *names*, and the style step above checks whitespace and unicode. See
       # `scripts/check_docstring_names.py` for the rules and for what a green here does not mean.
       #
       # This reads the environment with `lake env lean`, so it needs the build above to have
-      # produced the oleans — hence no `!cancelled()` here, unlike the two steps above, which
-      # are text-based and do not.
+      # produced the oleans — hence no `!cancelled()` here, unlike the style steps above and the
+      # self-test immediately above, all of which are text-based and do not.
       - name: Check names in docstrings
         run: python3 scripts/check_docstring_names.py
 
+      # The same division for the other checker: this step plants an empty docstring, a missing
+      # one and a section-header-only file in a `TemporaryDirectory` and confirms each is
+      # reported, so a red cross here means the checker below has stopped checking. It is the
+      # older of the two self-tests — 2026-08-23, the commit that added the checker — and nothing
+      # ran it for the seven days between.
+      - name: Self-test the module-docstring checker
+        if: ${{ !cancelled() }}
+        run: python3 scripts/check_module_docstrings.py --self-test
+
       # Every `.lean` file under `Oka/` and `OkaTest/` must have a module docstring with a
-      # non-empty body. The step above checks the names *inside* a docstring, so on an empty one
-      # it finds nothing to check and passes, and an empty `/-! -/` elaborates, so the build does
+      # non-empty body. The name check above looks *inside* a docstring, so on an empty one it
+      # finds nothing to check and passes, and an empty `/-! -/` elaborates, so the build does
       # not see it either. Seven files under `Oka/` carried one from the second commit in the
       # repository until 2026-08-23 and every check in this workflow was green on all seven.
       #

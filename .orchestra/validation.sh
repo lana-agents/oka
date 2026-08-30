@@ -283,6 +283,31 @@ lake exe lint-style Oka OkaTest || exit 1
 # It runs `lake env lean scripts/DumpEnvNames.lean` to read the environment, so it has to come
 # after the build; given the oleans it takes about ten seconds, nine of them the import. It
 # needs `python3`, which is the only thing in this script that does.
+#
+# **The self-test first, and a failure of it means something different from a failure of the
+# line below it.** The check reports that the *tree* is wrong — a backticked name that resolves
+# to nothing — and the fix is in a `.lean` file. The self-test reports that the *instrument* is
+# wrong, and until it is fixed a green line below is not evidence of anything: it plants each
+# defect the checker exists to find and confirms the checker still finds it, so a check whose
+# assertion has silently gone vacuous fails here rather than passing everywhere. That is the
+# more urgent of the two and it is why it runs before rather than after.
+#
+# This option arrived the same day it was wired in (2026-08-30, #242), so unlike the one below
+# it was never green-by-omission for long. The one below it was: `check_module_docstrings.py`
+# has had a `--self-test` since 2026-08-23 and neither this script nor CI ran it once in the
+# seven days between. Both were verified only by sessions running the command by hand and
+# quoting the output in a pull request body — a convention, kept by four of them, and the thing
+# a `|| exit 1` exists to stop being a convention.
+#
+# Unlike the check, the self-test needs no build and no oleans: it plants its fixtures in a
+# `TemporaryDirectory` and its one real-tree read is a text walk. It could therefore run earlier
+# than this; it is here so that the instrument and the check it verifies stay one comment block
+# apart rather than two places to keep in step. Measured 2026-08-30 on a warm checkout: **1.8s**,
+# and essentially all of it is the `os.chdir` negative control, which walks the real tree four
+# times at about 0.45s a walk — every other check runs on a planted fixture of a line or two.
+# Against a whole-script time in minutes, and it buys the only evidence that the line below is
+# an instrument rather than a `pass` statement.
+python3 scripts/check_docstring_names.py --self-test || exit 1
 python3 scripts/check_docstring_names.py || exit 1
 
 # Verify that every `.lean` file under `Oka/` and `OkaTest/` has a module docstring with a
@@ -300,11 +325,19 @@ python3 scripts/check_docstring_names.py || exit 1
 # which is a distinction and not a wording rule, and without which the check would pass a file
 # whose module docstring had been deleted outright.
 # `scripts/check_module_docstrings.py` explains why, and has a `--self-test` that plants each
-# defect and confirms it is reported, since a check that has only ever been seen to pass is not
-# evidence of anything.
+# defect and confirms it is reported — **which is the first of the two lines below**, since a
+# check that has only ever been seen to pass is not evidence of anything. That sentence was here
+# from 2026-08-23 and named a capability the script offered while this file ran neither it nor
+# the other one; it now describes what runs, which is what it always read as.
 #
-# Text only: no build, no oleans, so it could run anywhere in this script. It is last because it
-# is the cheapest and a failure of it is the least urgent.
+# Same division as above: the self-test failing means the *instrument* is broken and nothing the
+# line after it prints can be trusted; the check failing means a `.lean` file is missing a
+# module docstring. Measured 2026-08-30: **0.04s** for the self-test, which plants its fixtures
+# in a `TemporaryDirectory` and never reads the real tree.
+#
+# Text only: no build, no oleans, so both could run anywhere in this script. They are last
+# because they are the cheapest and a failure of the check is the least urgent.
+python3 scripts/check_module_docstrings.py --self-test || exit 1
 python3 scripts/check_module_docstrings.py || exit 1
 
 echo "Validation succeeded."
