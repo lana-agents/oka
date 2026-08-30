@@ -101,11 +101,24 @@ and costs three lines.
   spelling: the `Opens → Set` coercion then lands in the type the range already lives in, and the
   unification the scheme-level spelling asks for — between `↥(Spec (CommRingCat.of
   (PresentedAlgebra n k g)))` and `PrimeSpectrum ↑(CommRingCat.of (PresentedAlgebra n k g))`,
-  definitionally equal and not unified through that coercion — never arises. Which of the two a
-  `Spec`-side glue data wants is a question for the file that builds one.
-* **The `Spec`-side glue data, and the comparison morphism `X^an ⟶ X`.** This is `f_open` and
-  nothing else. The `hrange` hypothesis that construction also needs is a statement about ranges
-  of maps on points, and unlike the cocycle equation it does not transport along a functor.
+  definitionally equal and not unified through that coercion — never arises. **Which of the two a
+  `Spec`-side glue data wants is answered**: `Oka/Analytification/SpecAffineCover.lean`'s
+  `ComplexAnalytic.specOpen` — the `V` of its glue datum — is `ComplexAnalytic.specLocalisationOpen`
+  and nothing else, so it wants the `ComplexAnalytic.specFunctor.obj` spelling, which is the one
+  this file has.
+* **The `Spec`-side glue data, and the comparison morphism `X^an ⟶ X`.** They are
+  `Oka/Analytification/SpecAffineCover.lean` and `Oka/Analytification/CoverComparison.lean` now,
+  and **what they took from this file is the *open* and the *isomorphism*, not `f_open`**:
+  `ComplexAnalytic.specLocalisationOpen` is that file's `ComplexAnalytic.specOpen` and
+  `ComplexAnalytic.specLocalisationIso` is its `ComplexAnalytic.specOverlapIso`, while the glue
+  datum's `f_open` field comes from
+  `AlgebraicGeometry.LocallyRingedSpace.isOpenImmersion_ofRestrict` through
+  `AlgebraicGeometry.LocallyRingedSpace.isOpenImmersion_f'`, which is the same choice the analytic
+  side makes. **This bullet predicted "`f_open` and nothing else" and the delivered construction
+  inverted it**, which is what a forward reference costs when the file it points at is written by
+  somebody else. The `hrange` hypothesis that construction also needs is a statement about ranges
+  of maps on points, and unlike the cocycle equation it does not transport along a functor — that
+  half of the prediction held.
 * **Anything analytic.** No morphism of analytic spaces appears below, and nothing in
   `Oka/Analytification/AffineCover.lean` changes.
 -/
@@ -224,7 +237,11 @@ The equality and not the containment, for the reason
 `ComplexAnalytic.range_base_localisationProj` gives on the analytic side: the side condition of an
 open-immersion lift is a containment *in* this range, so an equality is what lets a statement about
 `D(f)` discharge it. It is what a `Spec`-side glue data's `hrange` obligation will be checked
-against.
+against — **still a prediction**, and one nothing has been able to test:
+`Oka/Analytification/SpecAffineCover.lean` exists now, but the only two `hrange` obligations in the
+tree are vacuous at two members, and its own `ComplexAnalytic.range_specTransitionHom_subset` goes
+through `AlgebraicGeometry.LocallyRingedSpace.range_ofRestrict` instead. A three-member `Spec`-side
+cover is what would settle it.
 
 The triangle over `A` again: the isomorphism's half is surjective, and
 `PrimeSpectrum.localization_away_comap_range` supplies the algebra map's half. -/
