@@ -22,14 +22,14 @@ statement about the space the construction produces; the *classes* of morphisms 
 **That is a description and not a list, and the sixteen headings below are the record**: each
 names the statement its assertions defend, and the recipe beside `OkaTest/Axioms.lean`'s routing
 table resolves them to modules. The stance is `OkaTest/Axioms/Sheaves.lean`'s and
-`OkaTest/Axioms/LocalOkaRing.lean`'s, and it is taken here because 102 guards over eighteen
+`OkaTest/Axioms/LocalOkaRing.lean`'s, and it is taken here because 108 guards over eighteen
 modules is past the size at which a list stays true.
 
 **The sentence this replaces named local models, the node and the value of a section**, which at
-`27c185a` is at most 19 of those 102 guards and four of the sixteen headings. Gluing alone is 42
-and the coproduct 19, and neither appeared in it. **Six of the eighteen modules are not
-`Oka/AnalyticSpace/`'s**, and contribute 21 guards: `Oka/CategoryTheory/GlueData.lean` seven,
-four modules of `Oka/Geometry/RingedSpace/` ten, and
+`27c185a` is at most 19 of those 102 guards and four of the sixteen headings. Gluing alone is 48
+of the 108 here and the coproduct 19, and neither appeared in it. **Six of the eighteen modules
+are not `Oka/AnalyticSpace/`'s**, and contribute 27 guards: `Oka/CategoryTheory/GlueData.lean`
+nine, four modules of `Oka/Geometry/RingedSpace/` fourteen, and
 `Oka/AlgebraicGeometry/GammaSpecAdjunction.lean` four — most of them under the gluing headings,
 beside the analytic statements they serve. See `OkaTest/Axioms.lean` on why a mirror-tree module
 such as the first has no row of its own.
@@ -606,13 +606,36 @@ info: 'CategoryTheory.GlueData.ofGlueData'_t_comp_f_of_ne' depends on axioms:
 #print axioms CategoryTheory.GlueData.ofGlueData'_t_comp_f_of_ne
 
 /--
+info: 'CategoryTheory.GlueData.ofGlueData'_comm' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms CategoryTheory.GlueData.ofGlueData'_comm
+
+/--
+info: 'CategoryTheory.GlueData.comm_of_ofGlueData'_comm' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms CategoryTheory.GlueData.comm_of_ofGlueData'_comm
+
+/--
 info: 'ComplexAnalytic.AnalyticSpace.comapAlgMap_toLRSHom' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.comapAlgMap_toLRSHom
 
-/-! ### Gluing a morphism -/
+/-! ### Gluing a morphism
+
+Two levels, and the second is not a special case of the first.
+`ComplexAnalytic.AnalyticSpace.glueMorphisms` glues out of an **open cover** and asks for
+agreement over a categorical pullback;
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.glueMorphisms` glues out of a **gluing** and asks
+for agreement over the glue datum's own overlaps, which is the only form a caller who built the
+datum can state. `…GlueData.pullback_condition_of_comm` is the transport between them, through
+`…GlueData.vIsoPullback` under the heading above.
+-/
 
 /--
 info: 'ComplexAnalytic.AnalyticSpace.isCLinearHom_glueMorphisms' depends on axioms:
@@ -655,6 +678,34 @@ info: 'ComplexAnalytic.AnalyticSpace.glueMorphisms_map_comp' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.glueMorphisms_map_comp
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.GlueData.pullback_condition_of_comm' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.GlueData.pullback_condition_of_comm
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.GlueData.glueMorphisms' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.GlueData.glueMorphisms
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.GlueData.ι_glueMorphisms' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.GlueData.ι_glueMorphisms
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.GlueData.hom_ext' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.GlueData.hom_ext
 
 /-! ### The disjoint union of a family of analytic spaces
 
