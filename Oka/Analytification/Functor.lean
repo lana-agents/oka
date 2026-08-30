@@ -166,6 +166,22 @@ def analytificationFunctor : Presentation.{u} ⥤ AnalyticSpace.{u} where
   map_id _ := analytificationMap_id.{u}
   map_comp ψ χ := analytificationMap_comp.{u} ψ χ
 
+/-- **The functor's value is the analytification**, by `rfl`.
+
+Stated because it is not `rfl` to `simp`: `Category.id_comp` will not fire on
+`𝟙 (analytificationFunctor.obj P) ≫ f` when `f`'s domain is spelled
+`ComplexAnalytic.AnalyticSpace.analytification P.g`, which is how every consumer of the functor
+spells it.
+
+Three proofs in `Oka/Analytification/CoverFunctoriality.lean` need it, and erasing the attribute
+there leaves exactly those three failing and nothing else:
+`ComplexAnalytic.comm_coverMapPart_id`, `ComplexAnalytic.comm_coverMapPart_comp` and
+`ComplexAnalytic.coverMap_comp`. `ComplexAnalytic.coverMap_id` is not among them — it needs this
+only through the first. -/
+@[simp]
+theorem analytificationFunctor_obj (P : Presentation.{u}) :
+    analytificationFunctor.{u}.obj P = AnalyticSpace.analytification.{u} P.g := rfl
+
 /-- **A pair of mutually inverse renamings of the variables, each carrying the other
 presentation's relations into this one's ideal, is an isomorphism of presentations.**
 
