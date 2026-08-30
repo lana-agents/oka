@@ -962,6 +962,13 @@ The `ComplexAnalytic.localisationOpen` lemmas are guarded under this heading rat
 distinguished open at once, is what says an overlap cut out of a *localisation* still needs only
 one polynomial — the arity a cover datum asks for. Its three auxiliaries and its `Opens.map` form
 are guarded beside it.
+
+The four after those are `Oka/Analytification/DistinguishedOpenPullback.lean`, and they belong
+under this heading for the same reason: a distinguished open pulls back along
+`ComplexAnalytic.analytificationMap` to a distinguished open, which is what says the overlap an
+overlap is *transported* to is still one of the opens a cover datum can name.
+`ComplexAnalytic.exists_comap_analytificationMap_eq_comap_localisationProj` is that composed with
+`ComplexAnalytic.exists_localisationOpen_eq_comap`, and is the pair's conclusion.
 -/
 
 /--
@@ -1012,6 +1019,34 @@ info: 'ComplexAnalytic.exists_localisationOpen_eq_comap' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.exists_localisationOpen_eq_comap
+
+/--
+info: 'ComplexAnalytic.pullbackΓ_analytificationMap_polyToGlobal' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.pullbackΓ_analytificationMap_polyToGlobal
+
+/--
+info: 'ComplexAnalytic.localisationOpen_eq_comap_analytificationMap' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.localisationOpen_eq_comap_analytificationMap
+
+/--
+info: 'ComplexAnalytic.exists_localisationOpen_eq_comap_analytificationMap' depends
+  on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.exists_localisationOpen_eq_comap_analytificationMap
+
+/--
+info: 'ComplexAnalytic.exists_comap_analytificationMap_eq_comap_localisationProj'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.exists_comap_analytificationMap_eq_comap_localisationProj
 
 /--
 info: 'ComplexAnalytic.range_base_localisationProj' depends on axioms:

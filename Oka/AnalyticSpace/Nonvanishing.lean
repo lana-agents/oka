@@ -51,6 +51,9 @@ same three-line argument `ComplexAnalytic.AnalyticSpace.restrictLE` is built fro
 
 - `ComplexAnalytic.AnalyticSpace.mem_nonvanishing_iff`: **a point lies in the non-vanishing locus
   of `a` exactly when the value of `a` there is nonzero.**
+- `ComplexAnalytic.AnalyticSpace.nonvanishing_pullbackΓ`: **the non-vanishing locus of a
+  pulled-back section is the preimage of the non-vanishing locus** — the only statement here
+  about two spaces, and what lets a distinguished open be pulled back along a morphism.
 - `ComplexAnalytic.AnalyticSpace.isUnit_resΓ_of_le_nonvanishing`: **a section is invertible on
   every open subspace contained in its non-vanishing locus.** The hypothesis is `≤` rather than
   equality because a consumer holds an open subset it obtained elsewhere and a proof that the
@@ -146,6 +149,28 @@ It is what makes the non-vanishing locus useful on a space with zero divisors: o
 two coordinate functions multiply to zero, so their non-vanishing loci are disjoint. -/
 lemma nonvanishing_mul : X.nonvanishing (a * b) = X.nonvanishing a ⊓ X.nonvanishing b :=
   RingedSpace.basicOpen_mul X.toRingedSpace a b
+
+/-- **The non-vanishing locus of a pulled-back section is the preimage of the non-vanishing
+locus.**
+
+Every other statement in this section is about one space; this one is what a morphism is for. The
+proof is `ComplexAnalytic.AnalyticSpace.mem_nonvanishing_iff` at each end and
+`ComplexAnalytic.AnalyticSpace.eval_c_app` in between — the value at `z` of the pullback of `a` is
+the value of `a` at the image of `z`, so the two memberships are the same condition. Nothing in it
+is particular to either space, and the section is a *global* one at both ends.
+
+The last step is `Iff.rfl` rather than the `rfl` a `rw` attempts on its own:
+`ComplexAnalytic.AnalyticSpace.Hom.pullbackΓ` is spelled with `AlgebraicGeometry.
+LocallyRingedSpace.Γ` and `ComplexAnalytic.AnalyticSpace.eval_c_app` with `c.app`, which are
+definitionally equal and are not equal at the transparency `rw` closes a goal with. -/
+theorem nonvanishing_pullbackΓ {Z W : AnalyticSpace.{u}} (φ : Z ⟶ W)
+    (a : W.presheaf.obj (op ⊤)) :
+    Z.nonvanishing (φ.pullbackΓ a) = (Opens.map φ.toLRSHom.base).obj (W.nonvanishing a) := by
+  refine Opens.ext (Set.ext fun z ↦ ?_)
+  change z ∈ Z.nonvanishing (φ.pullbackΓ a) ↔ φ.toLRSHom.base z ∈ W.nonvanishing a
+  rw [mem_nonvanishing_iff, mem_nonvanishing_iff,
+    ← eval_c_app φ.toLRSHom φ.isCLinear (U := ⊤) z trivial a]
+  exact Iff.rfl
 
 /-- **A section is invertible on every open subspace contained in its non-vanishing locus.**
 

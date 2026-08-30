@@ -77,6 +77,7 @@ import Oka.Analytification.CoverFunctoriality
 import Oka.Analytification.CoverIndependence
 import Oka.Analytification.CoverRefinement
 import Oka.Analytification.DistinguishedOpen
+import Oka.Analytification.DistinguishedOpenPullback
 import Oka.Analytification.Flatness
 import Oka.Analytification.FlatnessAtAPoint
 import Oka.Analytification.Functor
