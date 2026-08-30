@@ -117,11 +117,34 @@ positives.  A candidate resolves if any of the following holds.
   resolve, so without the namespace condition it would be accepted; with it the head is a
   namespace with twenty declarations in it and the candidate is still reported.
 
+  **A generated name does not count as making its parent a namespace**, and this is not a
+  refinement: without it the rule is *non-monotone*, which no other rule here is.  Lean plants an
+  equation lemma under a definition's own name — `thatDef.eq_1`, and `_proof_1` beside it — the
+  first time any tactic anywhere unfolds it.  So `rw [thatDef]` in one file would make `thatDef`
+  a namespace, and every `` `thatDef.someField` `` citation *in every other file* would start
+  being reported, at a distance, with a message about the environment having nothing in it when
+  what happened is that the environment gained something.  Measured on `master` = `7b6faa9`, with
+  no branch involved: `AlgebraicGeometry.AffineScheme.Γ` has exactly one child in the whole
+  environment, `AlgebraicGeometry.AffineScheme.Γ.eq_1`, and before this condition existed
+  `` `AlgebraicGeometry.AffineScheme.Γ.someField` `` was reported while the structurally identical
+  `` `AlgebraicGeometry.identityToΓSpec.naturality` `` — whose head has no children at all — was
+  accepted.
+
+  `GENERATED_COMPONENT` is deliberately narrow: the components generated for a *`def`*, and not
+  the ones generated for an inductive or a structure (`rec`, `casesOn`, `mk`, `injEq`,
+  `noConfusion`, `sizeOf_spec`, `ctorIdx`).  A head that carries *those* really is a type, and the
+  namespace exclusion is right about it.  **How the list going stale would be noticed**: not by
+  maintaining it against Lean's, but by the finding message, which names the head, says it does
+  resolve, and names the declaration that made it a namespace — so a suffix this list is missing
+  costs one line rather than the session the first instance cost.  On `master` the whole list
+  changes the classification of exactly one head, `AlgebraicGeometry.AffineScheme.Γ`, out of the
+  236 that both resolve and are namespaces.
+
   The hole this leaves, stated so that nobody has to rediscover it: a *misspelled* declaration in
-  a namespace that contains no other declaration is read as field notation and accepted.  The
-  common structural failure — a whole file's worth of names in the wrong namespace — is not of
-  that shape, because the namespace either exists with declarations in it or does not resolve
-  at all.
+  a namespace that contains no other declaration — or none other than generated ones — is read as
+  field notation and accepted.  The common structural failure — a whole file's worth of names in
+  the wrong namespace — is not of that shape, because the namespace either exists with
+  declarations in it or does not resolve at all.
 
 * **Short-head rule.**  The head component is at most two characters *and is not a root
   namespace* — no constant begins with it.  `i.stalkMap`, `Γ.map`, `φ.symm`, `U.extend'`, `w.2`
@@ -166,6 +189,17 @@ ROOTS = ("Oka", "OkaTest")
 # A candidate whose head component is at most this long, and is not a root namespace, is field
 # notation on a local binder rather than a declaration reference.
 MAX_LOCAL_HEAD = 2
+
+# A name component the elaborator generates for the declaration it hangs off, rather than one an
+# author wrote.  Such a component must not make its parent a namespace: see the field-notation
+# rule in the module docstring above for why, and for the measurement that says this list is
+# narrow on purpose.  Everything here is generated *for a `def`* and appears without warning the
+# first time a tactic unfolds one; the components generated for an *inductive* or a *structure* —
+# `rec`, `casesOn`, `mk`, `injEq`, `noConfusion`, `ctorIdx`, `sizeOf_spec` — are deliberately
+# absent, because a head that has those really is a type and the namespace exclusion is right
+# about it.
+GENERATED_COMPONENT = re.compile(
+    r"_.*|eq_\d+|eq_def|eq_unfold|match_\d+|proof_\d+|induct|fun_cases")
 
 
 def comment_regions(text: str) -> list[tuple[int, int]]:
@@ -253,20 +287,30 @@ def candidates(repo: str | None = None) -> dict[str, list[tuple[str, int]]]:
 
 
 def scan(dump: str, wanted: set[str],
-         heads: set[str]) -> tuple[set[str], set[str], set[str], int]:
+         heads: set[str]) -> tuple[set[str], set[str], set[str], dict[str, str], int]:
     """One pass over the dump, classifying `wanted` and `heads` against every name in it.
 
     A *suffix* is a run of whole components reaching the end of the name; a *namespace* is a run
-    of whole components with at least one component after it; a *root namespace* is a namespace
-    run that also starts at the first component.  Iterating over the dump and testing its runs
-    against the two small sets, rather than indexing every run of every name, keeps this linear
-    in the dump with nothing but those sets held in memory.
+    of whole components with at least one component after it, **where that next component is one
+    an author wrote**; a *root namespace* is a namespace run that also starts at the first
+    component.  Iterating over the dump and testing its runs against the two small sets, rather
+    than indexing every run of every name, keeps this linear in the dump with nothing but those
+    sets held in memory.
 
-    Returns `(resolved, namespaces, root_namespaces, lines)`.
+    The `GENERATED_COMPONENT` condition is the one thing here that is not the obvious reading of
+    "namespace".  Without it a `def` becomes a namespace the moment any tactic anywhere unfolds
+    it, because that plants an equation lemma under its own name — so the classification would
+    depend on which files happen to contain a `rw [thatDef]`, and it would turn *off* the
+    field-notation rule for citations of that definition in unrelated files.
+
+    Returns `(resolved, namespaces, root_namespaces, namespace_cause, lines)`, the fourth being
+    one witness per namespace: the shortest name in the dump that put it there, which is what
+    the finding message needs in order to say why field notation was not tried.
     """
     resolved: set[str] = set()
     namespaces: set[str] = set()
     root_namespaces: set[str] = set()
+    namespace_cause: dict[str, str] = {}
     lines = 0
     with open(dump, encoding="utf-8") as f:
         for line in f:
@@ -284,11 +328,12 @@ def scan(dump: str, wanted: set[str],
                     if j == last:
                         if run in wanted:
                             resolved.add(run)
-                    elif run in heads:
+                    elif run in heads and not GENERATED_COMPONENT.fullmatch(parts[j + 1]):
                         namespaces.add(run)
+                        namespace_cause.setdefault(run, ".".join(parts[:j + 2]))
                         if i == 0:
                             root_namespaces.add(run)
-    return resolved, namespaces, root_namespaces, lines
+    return resolved, namespaces, root_namespaces, namespace_cause, lines
 
 
 def read_ignore(repo: str | None = None) -> set[str]:
@@ -484,9 +529,14 @@ def self_test() -> int:
     **The test that matters is the positive one.**  "Two identical trees diff to empty" is what
     the `os.chdir` driver this option replaced printed on every branch it was ever run on, so a
     self-test built only from that would have passed while measuring nothing.  **Every check below
-    carries a `positive:` or `negative:` label and there are nine and three** — a count is stated
+    carries a `positive:` or `negative:` label and there are twelve and four** — a count is stated
     here rather than left to be inferred because a reader who trusts the labels has to be able to
     see that none is missing.
+
+    The last four are about the *rules* rather than about the walk, and they reach them by
+    planting an environment as a `--dump` file instead of building one.  That is the only way to
+    hold everything fixed but the environment, which is the variable the field-notation rule turns
+    on, and it keeps the whole self-test free of `lake`.
     """
     def plant(root: str, body: str) -> str:
         os.makedirs(os.path.join(root, "Oka"), exist_ok=True)
@@ -605,6 +655,57 @@ def self_test() -> int:
               and "is not a checkout" in bad.stderr,
               bad.stderr.strip().replace("\n", " | ") or f"rc={bad.returncode}")
 
+        # The field-notation rule, against a *planted environment* rather than the real one.
+        # `--dump` is what makes this possible without a build: the four runs below differ only
+        # in which names the environment contains, which is exactly the variable under test.
+        h = plant(os.path.join(tmp, "h"), "/-! `Planted.someField` -/\n")
+
+        def env(name: str, *names: str) -> str:
+            path = os.path.join(tmp, name)
+            with open(path, "w", encoding="utf-8") as f:
+                f.write("".join(n + "\n" for n in names))
+            return path
+
+        def run_on(dump: str) -> subprocess.CompletedProcess:
+            return subprocess.run(
+                [sys.executable, os.path.abspath(__file__), "--tree", h, "--dump", dump],
+                capture_output=True, text=True,
+                env=dict(os.environ, PYTHONDONTWRITEBYTECODE="1"))
+
+        # The control: `Planted` resolves and has nothing under it, so `Planted.someField` is
+        # field notation on a definition and is accepted.  Without this the two checks after it
+        # could both pass on a script that accepts everything.
+        bare = run_on(env("env-bare.txt", "Planted", "Unrelated.decl"))
+        check("positive: field notation on a definition with no children is accepted",
+              bare.returncode == 0 and "names nothing" not in bare.stdout,
+              bare.stdout.strip().replace("\n", " | "))
+
+        # **The defect.**  A tactic in some other file unfolds `Planted`, Lean plants its equation
+        # lemma, and the citation above — untouched, in a file nobody edited — starts failing.
+        # This is the check that fails on the un-fixed script, where it exits 1.
+        eqn = run_on(env("env-eq.txt", "Planted", "Planted.eq_1", "Planted._proof_1",
+                         "Unrelated.decl"))
+        check("positive: a generated equation lemma does not make its definition a namespace",
+              eqn.returncode == 0 and "names nothing" not in eqn.stdout,
+              eqn.stdout.strip().replace("\n", " | ") or "rc=0, nothing reported")
+
+        # The half of the rule that must survive the fix, and would not survive deleting the
+        # namespace condition: an author-written declaration under the head still means the head
+        # is a namespace and `Planted.someField` is a misspelling rather than field notation.
+        real = run_on(env("env-real.txt", "Planted", "Planted.realChild", "Unrelated.decl"))
+        check("negative: a declaration an author wrote still blocks field notation",
+              real.returncode == 1 and "`Planted.someField` names nothing" in real.stdout,
+              real.stdout.strip().replace("\n", " | ") or f"rc={real.returncode}")
+
+        # And the message says *why*, naming both the head and the declaration that made it a
+        # namespace — the two facts whose absence made the first instance of this defect take a
+        # session to diagnose, and the reason a suffix missing from `GENERATED_COMPONENT` is a
+        # one-line fix rather than another one.
+        check("positive: the message names the head that resolves and what made it a namespace",
+              "`Planted` does resolve" in real.stdout
+              and "`Planted.realChild` makes it a namespace" in real.stdout,
+              real.stdout.strip().replace("\n", " | "))
+
     if failures:
         print(f"\n{len(failures)} check(s) failed: " + ", ".join(failures))
         return 2
@@ -652,7 +753,7 @@ def main() -> int:
     wanted |= heads
 
     dump = args.dump or build_dump(repo)
-    resolved, namespaces, root_namespaces, dumped = scan(dump, wanted, heads)
+    resolved, namespaces, root_namespaces, namespace_cause, dumped = scan(dump, wanted, heads)
     if not args.dump:
         os.unlink(dump)
 
@@ -663,6 +764,20 @@ def main() -> int:
             if head in resolved and head not in namespaces:
                 return True
         return False
+
+    def blocked_head(name: str) -> tuple[str, str] | None:
+        """The head that resolves but is a namespace, so field notation was not tried on it.
+
+        The one thing a reader of a finding cannot see from the message alone.  A head that
+        resolves is a head the prose is probably right about, and *why* the rule declined it is
+        a fact about some other declaration entirely — see `scan`.
+        """
+        parts = name.split(".")
+        for k in range(len(parts) - 1, 0, -1):
+            head = ".".join(parts[:k])
+            if head in resolved and head in namespaces:
+                return head, namespace_cause.get(head, "another declaration under it")
+        return None
 
     def is_local_binder(name: str) -> bool:
         head = name.split(".")[0]
@@ -681,6 +796,12 @@ def main() -> int:
     for name in findings:
         for (path, line) in found[name]:
             print(f"{path}:{line}: `{name}` names nothing in the environment")
+        blocked = blocked_head(name)
+        if blocked:
+            head, cause = blocked
+            print(f"    `{head}` does resolve, so this would be read as field notation, but "
+                  f"`{cause}` makes it a namespace and the field-notation rule does not apply "
+                  f"to namespaces")
 
     total = sum(len(v) for v in found.values())
     print(f"checked {total} backticked names ({len(found)} distinct) against {dumped} "

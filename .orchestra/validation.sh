@@ -302,9 +302,20 @@ lake exe lint-style Oka OkaTest || exit 1
 # Unlike the check, the self-test needs no build and no oleans: it plants its fixtures in a
 # `TemporaryDirectory` and its one real-tree read is a text walk. It could therefore run earlier
 # than this; it is here so that the instrument and the check it verifies stay one comment block
-# apart rather than two places to keep in step. Measured 2026-08-30 on a warm checkout: **1.8s**,
-# and essentially all of it is the `os.chdir` negative control, which walks the real tree four
-# times at about 0.45s a walk — every other check runs on a planted fixture of a line or two.
+# apart rather than two places to keep in step. **Order 2s, and a small multiple of that on a
+# loaded machine** — measured 2026-08-30 at 1.85–1.92s over three runs on a warm checkout, against
+# 1.76–1.79s for the same command on the commit before it, on the same machine. Essentially all
+# of it is still the `os.chdir` negative control, which walks the real tree four times at about
+# 0.45s a walk; every other check runs on a planted fixture of a line or two, and the four that
+# check the field-notation rule plant an *environment* as a `--dump` file rather than reading the
+# real one, so the count of real-tree readers above is unchanged.
+#
+# **This line read a bare `1.8s` until 2026-08-30**, which was the true cost before those four
+# checks existed. It is stated as an order and a spread because a single number measured on one
+# machine is what let the `check_module_docstrings.py` pin below go three times stale before
+# anybody noticed. The four re-enter this script as a subprocess in order to exercise `main()`
+# rather than an internal function — six of the checks now do — and an interpreter start that
+# imports it costs 0.029s against 0.009s for a bare one.
 # Against a whole-script time in minutes, and it buys the only evidence that the line below is
 # an instrument rather than a `pass` statement.
 python3 scripts/check_docstring_names.py --self-test || exit 1
