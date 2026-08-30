@@ -132,11 +132,19 @@ docstring predicts that every consumer of the functor spells its object the othe
   allows one cover to have more members than the other, or a member of one to be covered by
   several of the other. **Both increments here take `σ` and `ψ` from the caller**, which is the
   difference. That is taxis #1107's third increment, and
-  `Oka/Analytification/CoverRefinement.lean` is its first instalment: for members refined by
-  distinguished opens of **one** fixed member it builds the refined members, the polynomials
-  cutting the overlaps out, the glue isomorphism and its coherence triangle. Still absent there,
-  and so still absent everywhere: the cross-member case, the two geometric laws, and therefore any
-  `ComplexAnalytic.coverMap` out of a refinement at all.
+  `Oka/Analytification/CoverRefinement.lean` is where it is done: for members refined by
+  distinguished opens of **one** fixed member it now builds the whole cover datum — the members,
+  the polynomials, the glue isomorphism, its coherence triangle and both geometric laws — and
+  with it `ComplexAnalytic.refineAnalytification` and the morphism
+  `ComplexAnalytic.refineToBase` down to the fixed member. **That morphism is not an
+  isomorphism**, which is proved there rather than left open, so a refinement is not an instance
+  of what this file does.
+
+  Still absent there, and so still absent everywhere: the **cross-member** case, where `σ` is not
+  constant and the original cover's own `glue` has to be transported; and a literal
+  `ComplexAnalytic.coverMap` out of a refinement, which needs `A^an` presented as a one-member
+  cover datum and that gluing identified with `A^an` — an identification nothing in this
+  repository states.
 
   **This bullet also said refinement is where `σ` and `ψ` "have to be built", with the implication
   that building them is the work; the second half is false and was measured so on 2026-08-30.**

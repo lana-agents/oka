@@ -150,24 +150,19 @@ theorem toLRSHom_localisationProj_comp_analytificationToSpec :
     analytificationFunctor_map_localisationPresHom] at h
   exact h
 
-/-! ### The comparison at an overlap -/
+/-! ### The comparison at an overlap
+
+`ComplexAnalytic.coverOverlapIso_hom_coverIncl` — that the overlap's comparison isomorphism
+followed into the member is `ComplexAnalytic.localisationProj` — was declared here and is now in
+`Oka/Analytification/AffineCover.lean`, unchanged and under the same name. It is a statement in
+that file's vocabulary with no `Spec` in it, and it acquired a second consumer in
+`Oka/Analytification/CoverRefinement.lean`, which cannot import this file: the `Spec` side is
+four `Oka` modules a refinement of an analytic cover has no reason to carry. Both appearances
+below are the same rewrite they always were.
+-/
 
 variable {J : Type u} (obj : J → Presentation.{u})
   (poly : ∀ i : J, J → MvPolynomial (ULift.{u} (Fin (obj i).n)) ℂ)
-
-/-- **The `i`-th member's overlap with the `j`-th, included into the member, is the projection to
-a distinguished open.**
-
-`ComplexAnalytic.toLRSHom_localisationProj` in the vocabulary of
-`Oka/Analytification/AffineCover.lean`: `ComplexAnalytic.coverOverlapIso` is
-`ComplexAnalytic.localisationIso` pushed through the forgetful functor, and
-`ComplexAnalytic.coverIncl` is the inclusion of the open subspace, so their composite is
-`ComplexAnalytic.localisationProj`. It holds definitionally and is stated because both
-appearances below are inside a rewrite that needs it in this spelling. -/
-theorem coverOverlapIso_hom_coverIncl (i j : J) :
-    (coverOverlapIso.{u} obj poly i j).hom ≫ coverIncl.{u} obj poly i j =
-      (localisationProj.{u} (obj i).g (poly i j)).toLRSHom :=
-  (toLRSHom_localisationProj.{u} (obj i).g (poly i j)).symm
 
 /-- **The comparison morphism at an overlap**, from the analytic overlap as an open subspace of
 `A_i^an` to the `Spec`-side overlap as an open subspace of `Spec A_i`.

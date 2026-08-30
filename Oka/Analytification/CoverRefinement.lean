@@ -27,9 +27,13 @@ convention (*"from the localisation to `A`"*) is already the one `ComplexAnalyti
 
 **The work is the refined cover *datum*.** `ComplexAnalytic.coverMap` takes both sides as complete
 data, and a refinement supplies only the members. What has to be built is the polynomial cutting
-each overlap out, the isomorphism of the two descriptions of it, and the three laws. This file
-builds the first two and one law; the other two are geometric and are not here, for a reason
-measured below rather than asserted.
+each overlap out, the isomorphism of the two descriptions of it, and the three laws. **This file
+builds all of it**, and then the space the refined datum glues to and the morphism from it down to
+the fixed member — which is the first `ComplexAnalytic.coverAnalytification` in this repository
+whose input nobody handed over.
+
+**It is a morphism and not an identification.** `ComplexAnalytic.not_isIso_refineToBase` below
+says so, at the smallest data that shows it: a refinement by no opens at all.
 
 ## Why one fixed member is the right first case, and it is not a vacuous one
 
@@ -93,6 +97,26 @@ lemma for each. Nothing below depends on them, but a generated `eq_1` makes its 
 **namespace**, which switches off `scripts/check_docstring_names.py`'s field-notation rule for
 that name; taxis #1229 and #1243 record that effect biting in a different file and at a distance.
 
+## The shape of the geometric proofs, which is one sentence used three times
+
+**Every refined member lies over the fixed member and every transition is a morphism over it.**
+That is `ComplexAnalytic.refineTransitionHom_localisationProj`, which is
+`ComplexAnalytic.refineGlue_analytification_comp` moved from the overlaps' own presentations to
+the open subspaces a cover datum is stated at;
+`ComplexAnalytic.coverOverlapIso_hom_coverIncl` in `Oka/Analytification/AffineCover.lean` is what
+crosses between the two descriptions at each end.
+
+Both laws are then read off it. `hrange` asks where a point goes, and
+`ComplexAnalytic.localisationOpen_rename` turns "the image point is in `D(f_bc)`" into "the point
+it lies over is in `D(fam c)`", where it already was. `hcocycle` asks for an equality of
+morphisms, and the two cancellations that reduce it to nothing are
+`AlgebraicGeometry.LocallyRingedSpace.hom_ext_restrict` and the fact that
+`ComplexAnalytic.localisationProj` is a monomorphism, being an open immersion.
+
+**Neither proof is an argument about refinements in general**, and the mono is where that shows:
+it is the projection of the *one* fixed member, and the cross-member case has three triple
+overlaps sitting over three different members with no common target to cancel against.
+
 ## Main definitions
 
 - `ComplexAnalytic.refineObj`: **the refined member**, the distinguished open `D(f_a)` of the fixed
@@ -103,6 +127,9 @@ that name; taxis #1229 and #1243 record that effect biting in a different file a
   overlap reduce to.
 - `ComplexAnalytic.refineMulIso` and `ComplexAnalytic.refineGlue`: **the overlap's two descriptions
   identified**, and the glue isomorphism of the refined data built out of it.
+- `ComplexAnalytic.refineAnalytification`: **the analytic space the refinement glues to.**
+- `ComplexAnalytic.refineToBase`: **the morphism from it down to the fixed member's
+  analytification**, glued from the members' own projections.
 
 ## Main results
 
@@ -113,40 +140,54 @@ that name; taxis #1229 and #1243 record that effect biting in a different file a
 - `ComplexAnalytic.refineGlue_comp`: **the coherence triangle** — the glue isomorphism commutes
   with the two structure maps down to the fixed member. This is the content of the file.
 - `ComplexAnalytic.refineGlue_analytification_comp`: the same, analytified, which is the form the
-  two geometric laws would consume.
+  two geometric laws consume.
+- `ComplexAnalytic.refineTransitionHom_localisationProj` and
+  `ComplexAnalytic.refineTripleIncl_localisationProj`: **the transition is a morphism over the
+  fixed member**, on a double overlap and on a triple one. The single sentence both laws below
+  are read off.
+- `ComplexAnalytic.refineHrange` and `ComplexAnalytic.refineHcocycle`: **the two geometric laws**,
+  in the form a cover datum asks for them, with
+  `ComplexAnalytic.refineTriple_localisationProj` the intermediate step of the second. Neither
+  uses its distinctness hypotheses.
+- `ComplexAnalytic.coverIota_comp_refineToBase`: **the morphism restricts to the `a`-th
+  projection on the `a`-th member**, which is what says it is the intended one.
+- `ComplexAnalytic.isEmpty_refineAnalytification` and
+  `ComplexAnalytic.not_isIso_refineToBase`: **a refinement by no opens glues to a space with no
+  points, so the morphism is not an isomorphism in general.**
 
 ## What is not here
 
-* **No `hrange` and no `hcocycle`, so no cover datum and no
-  `ComplexAnalytic.coverAnalytification` of the refinement, and therefore no
-  `ComplexAnalytic.coverMap`.** The two laws left are geometric — statements about images of
-  triple overlaps — and `ComplexAnalytic.refineGlue_analytification_comp` is the input they need
-  rather than the statement they are.
+* **No `ComplexAnalytic.coverMap` out of the refinement**, and the missing half is not a proof.
+  `coverMap` runs between two cover *data*, and what a refinement maps to is a single
+  presentation; the morphism below goes to `A^an` itself, built with
+  `ComplexAnalytic.coverGlueMorphisms`. Presenting `A^an` as a one-member cover datum costs
+  nothing — the index type is a `Subsingleton`, so both geometric laws are vacuous — but the
+  space that datum glues to is a `ComplexAnalytic.coverAnalytification`, and **nothing in this
+  repository identifies a one-member gluing with its member**, so a `coverMap` into it would land
+  somewhere only known to be `A^an` up to work nobody has done. That identification, not the
+  refinement, is what stands between this file and a literal `coverMap`.
 
-  **The obstruction was one missing lemma and not a general difficulty, and that lemma now
-  exists.** Both laws need the refined overlap to be the *preimage* of the refining open along the
-  projection, and `ComplexAnalytic.localisationOpen_rename`
-  (`Oka/Analytification/DistinguishedOpen.lean`) is exactly that statement: the open that a
-  renamed `f'` cuts out of `(A_f)^an` is the pullback of the open `f'` cuts out of `A^an` along
-  `ComplexAnalytic.localisationProj`. It was not in the repository when this file was written —
-  that is why the two laws are absent here rather than merely unattempted — and it arrived
-  immediately afterwards, in the file it belongs in.
-
-  **What is not settled is whether it is enough.** Its left-hand side is *syntactically*
-  `ComplexAnalytic.coverOpen` of the refined data below, so it applies with no bridge, and that
-  has been checked by elaboration; but nobody has proved `hrange` or `hcocycle` from it, and the
-  shape matching is a claim about the shape and not that the rest is easy. Both laws remain
-  geometric statements that this file does not make.
+  **The two geometric laws are here and the obstruction that kept them out is retired.** They
+  needed the refined overlap to be the *preimage* of the refining open along the projection;
+  `ComplexAnalytic.localisationOpen_rename` (`Oka/Analytification/DistinguishedOpen.lean`) is
+  that statement, it was written after this file and it is what
+  `ComplexAnalytic.refineHrange` runs on. **The estimate that it was the whole obstruction was
+  right**: nothing else had to be built, and both laws are corollaries of it and of the
+  transition being a morphism over the fixed member.
 * **No cross-member refinement.** `σ` is constant here, so no overlap of the refined data ever
   meets two different members of the original. The cross-member case has to transport the original
   `glue` through two localisations, it is the only part that uses the original data's own glue
   isomorphism at all, and **nothing in this file is evidence about its size** — the whole reason
   the same-member case closes cheaply is that `Oka/Analytification/LocalisationComposite.lean`
   had already been written for exactly this configuration.
-* **No claim that the induced morphism is an isomorphism.** A refinement gives a morphism in one
-  direction; both increments in `Oka/Analytification/CoverIndependence.lean` had both directions
-  handed to them by the caller, so neither is evidence here. Nothing below asserts either
-  direction, since there is no `ComplexAnalytic.coverMap` yet to assert it of.
+* **No hypothesis under which the morphism *is* an isomorphism, and no morphism back.** The
+  answer to whether it is one is **no** and it is proved rather than argued:
+  `ComplexAnalytic.not_isIso_refineToBase`, at an empty family, where the refinement refines
+  nothing and glues to a space with no points. What is *not* here is the positive half — the
+  expected condition is that the `D(fam a)` cover `A^an`, and neither that condition nor any
+  consequence of it is stated anywhere below. A refinement gives a morphism in one direction;
+  both increments in `Oka/Analytification/CoverIndependence.lean` had both directions handed to
+  them by the caller, so neither is evidence about the other one here.
 * **No scheme, and no `admissible`.** As in the two files this one sits beside, and for the same
   reason: there is no `AlgebraicGeometry.Scheme` in this line of files, and `admissible` is a
   notion this repository does not have.
@@ -300,6 +341,241 @@ theorem refineGlue_analytification_comp (a b : K) :
   have h := congrArg (analytificationFunctor.{u}.map) (refineGlue_comp.{u} g fam a b)
   simp only [Functor.map_comp, analytificationFunctor_map_localisationPresHom] at h
   exact h
+
+/-! ### The two laws that are geometric
+
+Everything above is algebra: an isomorphism of presentations, its symmetry, and two equations
+between morphisms. The two remaining fields of a cover datum are about *where points go*, and one
+sentence makes both of them cheap here — **every refined member lies over the fixed member, and
+every transition is a morphism over it.** `ComplexAnalytic.refineTransitionHom_localisationProj`
+is that sentence, `ComplexAnalytic.localisationOpen_rename` is what turns it into a statement
+about the refined opens, and the two laws are corollaries of the pair.
+
+Neither law uses its distinctness hypotheses, and they are named `_hab`, `_hac`, `_hbc` for that
+reason: `ComplexAnalytic.coverGlueData` asks for the laws at distinct indices only, and this data
+satisfies them everywhere. Keeping the hypotheses is what makes the statements the ones a caller
+of `ComplexAnalytic.coverAnalytification` can pass without an adapter.
+-/
+
+/-- **The transition is a morphism over the fixed member**: going from the `a`-th refined member
+to the `b`-th and then down to `A^an` is going down directly.
+
+This is the geometric content of `ComplexAnalytic.refineGlue_analytification_comp`, moved from the
+overlaps' own presentations to the open subspaces the cover datum uses.
+`ComplexAnalytic.coverOverlapIso_hom_coverIncl` is what crosses between the two descriptions at
+each end, and once both ends are crossed the middle is that theorem carried down by
+`ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace`.
+
+**The functor has to be applied to the equation rather than the equation rewritten under it.**
+`exact congrArg AnalyticSpace.Hom.toLRSHom …` on the goal as stated exhausts the heartbeat budget
+in `whnf`; building the mapped equation as a hypothesis, normalising it with
+`CategoryTheory.Functor.map_comp` and discharging with `exact` does not. That is the same shape as
+`ComplexAnalytic.refineGlue_analytification_comp`'s own proof one level down, and for the same
+reason: the hypothesis is well-typed by construction and the goal is what the unifier struggles
+with. -/
+theorem refineTransitionHom_localisationProj (a b : K) :
+    coverTransitionHom.{u} (refineObj.{u} g fam) (refinePoly.{u} g fam)
+          (refineGlue.{u} g fam) a b ≫ (localisationProj.{u} g (fam b)).toLRSHom =
+      coverIncl.{u} (refineObj.{u} g fam) (refinePoly.{u} g fam) a b ≫
+        (localisationProj.{u} g (fam a)).toLRSHom := by
+  rw [coverTransitionHom, coverTransition, Iso.trans_hom, Iso.trans_hom, Iso.symm_hom,
+    Category.assoc, Category.assoc, Category.assoc,
+    reassoc_of%
+      (coverOverlapIso_hom_coverIncl.{u} (refineObj.{u} g fam) (refinePoly.{u} g fam) b a),
+    Iso.inv_comp_eq,
+    reassoc_of%
+      (coverOverlapIso_hom_coverIncl.{u} (refineObj.{u} g fam) (refinePoly.{u} g fam) a b),
+    coverGlueIso, Functor.mapIso_hom, Functor.mapIso_hom]
+  have h := congrArg (AnalyticSpace.forgetToLocallyRingedSpace.{u}.map)
+    (refineGlue_analytification_comp.{u} g fam a b)
+  simp only [Functor.map_comp] at h
+  exact h
+
+/-- **The same, restricted to a triple overlap**: the triple overlap of `a`, `b` and `c` maps into
+`A^an` the same way whether it is followed into the `b`-th member or included into the `a`-th.
+
+`ComplexAnalytic.refineTransitionHom_localisationProj` and
+`AlgebraicGeometry.LocallyRingedSpace.restrictLE_fac`, which says that including a smaller open
+subspace into a larger one and then into the ambient space is including it directly. Both laws
+below are read off this one. -/
+theorem refineTripleIncl_localisationProj (a b c : K) :
+    coverTripleIncl.{u} (refineObj.{u} g fam) (refinePoly.{u} g fam) a b c ≫
+        coverTransitionHom.{u} (refineObj.{u} g fam) (refinePoly.{u} g fam)
+          (refineGlue.{u} g fam) a b ≫ (localisationProj.{u} g (fam b)).toLRSHom =
+      (coverSpace.{u} (refineObj.{u} g fam) a).ofRestrict
+          (coverOpen.{u} (refineObj.{u} g fam) (refinePoly.{u} g fam) a b ⊓
+            coverOpen.{u} (refineObj.{u} g fam) (refinePoly.{u} g fam) a c).isOpenEmbedding ≫
+        (localisationProj.{u} g (fam a)).toLRSHom := by
+  rw [refineTransitionHom_localisationProj, ← Category.assoc, coverTripleIncl,
+    LocallyRingedSpace.restrictLE_fac]
+
+/-- **`hrange` for a same-member refinement**: the transition carries the part of the `a`-`b`
+overlap that also meets `c` into the part of the `b`-th member that meets `c`.
+
+**The proof is one sentence about points and both halves of it are lemmas.**
+`ComplexAnalytic.localisationOpen_rename` says that the refined open `D(f_bc)` is the *preimage*
+of `D(fam c)` along `ComplexAnalytic.localisationProj`, at both ends; so the assertion is that
+the image point lies over `D(fam c)`, and by
+`ComplexAnalytic.refineTripleIncl_localisationProj` the point it lies over is the one the
+starting point already lay over — which is in `D(fam c)` because the starting point is in the
+triple overlap.
+
+**Nothing in it is about `fam b` or about the double localisation.** The refined overlaps are two
+descriptions of the same open of `A^an`, and the whole law is that the transition does not move a
+point of `A^an`; that is why the cross-member case, where the two members are different spaces
+over nothing in common, is not this argument with more indices. -/
+theorem refineHrange (a b c : K) (_hab : a ≠ b) (_hac : a ≠ c) (_hbc : b ≠ c) :
+    Set.range (coverTripleIncl.{u} (refineObj.{u} g fam) (refinePoly.{u} g fam) a b c ≫
+        coverTransitionHom.{u} (refineObj.{u} g fam) (refinePoly.{u} g fam)
+          (refineGlue.{u} g fam) a b).base ⊆
+      (coverOpen.{u} (refineObj.{u} g fam) (refinePoly.{u} g fam) b c :
+        Set (coverSpace.{u} (refineObj.{u} g fam) b)) := by
+  rintro _ ⟨x, rfl⟩
+  refine (SetLike.ext_iff.1 (localisationOpen_rename.{u} g (fam b) (fam c)) _).2 ?_
+  have hx := congrArg (fun m : _ ⟶ _ ↦ (ConcreteCategory.hom m.base) x)
+    (refineTripleIncl_localisationProj.{u} g fam a b c)
+  simp only [LocallyRingedSpace.comp_base, TopCat.hom_comp, ContinuousMap.comp_apply] at hx
+  change (ConcreteCategory.hom (localisationProj.{u} g (fam b)).toLRSHom.base)
+    ((ConcreteCategory.hom (coverTripleIncl.{u} (refineObj.{u} g fam) (refinePoly.{u} g fam) a b c ≫
+      coverTransitionHom.{u} (refineObj.{u} g fam) (refinePoly.{u} g fam)
+        (refineGlue.{u} g fam) a b).base) x) ∈ localisationOpen.{u} g (fam c)
+  simp only [LocallyRingedSpace.comp_base, TopCat.hom_comp, ContinuousMap.comp_apply]
+  rw [hx]
+  exact (SetLike.ext_iff.1 (localisationOpen_rename.{u} g (fam a) (fam c)) _).1 x.2.2
+
+/-- **`ComplexAnalytic.coverTriple` is a morphism over the fixed member**, which is
+`ComplexAnalytic.refineTripleIncl_localisationProj` read through
+`ComplexAnalytic.coverTriple_fac`.
+
+That lemma says the triple transition followed into the ambient `b`-th member is the double one
+precomposed with the inclusion; composing both sides with the projection to `A^an` and rewriting
+the right-hand side is the whole proof. This is the form the cocycle law consumes, and it is
+where the three transitions of that law each lose their index. -/
+theorem refineTriple_localisationProj (a b c : K) (hab : a ≠ b) (hac : a ≠ c) (hbc : b ≠ c) :
+    coverTriple.{u} (refineObj.{u} g fam) (refinePoly.{u} g fam) (refineGlue.{u} g fam)
+        (refineHrange.{u} g fam) a b c hab hac hbc ≫
+      ((coverSpace.{u} (refineObj.{u} g fam) b).ofRestrict
+          (coverOpen.{u} (refineObj.{u} g fam) (refinePoly.{u} g fam) b c ⊓
+            coverOpen.{u} (refineObj.{u} g fam) (refinePoly.{u} g fam) b a).isOpenEmbedding ≫
+        (localisationProj.{u} g (fam b)).toLRSHom) =
+      (coverSpace.{u} (refineObj.{u} g fam) a).ofRestrict
+          (coverOpen.{u} (refineObj.{u} g fam) (refinePoly.{u} g fam) a b ⊓
+            coverOpen.{u} (refineObj.{u} g fam) (refinePoly.{u} g fam) a c).isOpenEmbedding ≫
+        (localisationProj.{u} g (fam a)).toLRSHom := by
+  rw [← Category.assoc, coverTriple_fac, Category.assoc, refineTripleIncl_localisationProj]
+
+/-- **`hcocycle` for a same-member refinement**: going round `a`, `b`, `c` on triple overlaps is
+the identity.
+
+**Two cancellations and no computation.** A morphism into an open subspace is determined by its
+composite with the inclusion (`AlgebraicGeometry.LocallyRingedSpace.hom_ext_restrict`), and a
+morphism into the `a`-th refined member is determined by its composite with
+`ComplexAnalytic.localisationProj` — because that projection is an open immersion
+(`ComplexAnalytic.isOpenImmersion_localisationProj`) and so a monomorphism. After both
+cancellations the goal is an equation between two morphisms into `A^an`, and
+`ComplexAnalytic.refineTriple_localisationProj` applied three times walks the composite down to
+the inclusion it started from.
+
+**This is the step that would not survive the cross-member case unchanged**: the mono it cancels
+against is the projection of *one* fixed member, and with `σ` non-constant the three triples sit
+over three different members with no common target to cancel against. -/
+theorem refineHcocycle (a b c : K) (hab : a ≠ b) (hac : a ≠ c) (hbc : b ≠ c) :
+    coverTriple.{u} (refineObj.{u} g fam) (refinePoly.{u} g fam) (refineGlue.{u} g fam)
+        (refineHrange.{u} g fam) a b c hab hac hbc ≫
+      coverTriple.{u} (refineObj.{u} g fam) (refinePoly.{u} g fam) (refineGlue.{u} g fam)
+        (refineHrange.{u} g fam) b c a hbc hab.symm hac.symm ≫
+      coverTriple.{u} (refineObj.{u} g fam) (refinePoly.{u} g fam) (refineGlue.{u} g fam)
+        (refineHrange.{u} g fam) c a b hac.symm hbc.symm hab = 𝟙 _ := by
+  haveI := isOpenImmersion_localisationProj.{u} g (fam a)
+  refine LocallyRingedSpace.hom_ext_restrict _ _ _ ?_
+  rw [← cancel_mono ((localisationProj.{u} g (fam a)).toLRSHom)]
+  simp only [Category.assoc, Category.id_comp]
+  rw [refineTriple_localisationProj, refineTriple_localisationProj, refineTriple_localisationProj]
+
+/-! ### The refined cover, and the morphism down to the fixed member -/
+
+/-- **The analytic space the refinement glues to.**
+
+`ComplexAnalytic.coverAnalytification` at the refined data, and the first object in this line of
+files built from a cover datum nobody handed over: `σ`, `ψ`, the polynomials, the glue and all
+three laws are constructed above out of `g` and `fam` alone.
+
+It is a space and not an identification: **nothing here says it is `A^an`**, and
+`ComplexAnalytic.not_isIso_refineToBase` below says it is not, in general. -/
+def refineAnalytification : AnalyticSpace.{u} :=
+  coverAnalytification.{u} (refineObj.{u} g fam) (refinePoly.{u} g fam) (refineGlue.{u} g fam)
+    (refineHrange.{u} g fam) (refineGlue_symm.{u} g fam) (refineHcocycle.{u} g fam)
+
+/-- **The morphism down to the fixed member**, glued from the members' own projections.
+
+`ComplexAnalytic.coverGlueMorphisms` at the family `a ↦ localisationProj g (fam a)`, whose
+compatibility hypothesis is `ComplexAnalytic.refineTransitionHom_localisationProj` and nothing
+else — the hypothesis is *literally* that theorem, once
+`ComplexAnalytic.coverTransitionHom` is folded back up out of its definition.
+
+**This is the morphism `ComplexAnalytic.coverMap` would produce and it is not built with it**, for
+a reason worth stating: `coverMap` goes between two *cover data*, and the target here is a single
+presentation. Presenting `A^an` as a one-member cover is possible — the index type is a
+`Subsingleton`, so `hrange` and `hcocycle` are vacuous — but the space it glues to is
+`ComplexAnalytic.coverAnalytification` of that datum, and **nothing in this repository identifies
+a one-member gluing with its member**, so the resulting morphism would land in a space that is
+only known to be `A^an` up to work nobody has done. Gluing the projections lands in `A^an` on the
+nose. -/
+def refineToBase :
+    refineAnalytification.{u} g fam ⟶ AnalyticSpace.analytification.{u} g :=
+  coverGlueMorphisms.{u} (refineObj.{u} g fam) (refinePoly.{u} g fam) (refineGlue.{u} g fam)
+    (refineHrange.{u} g fam) (refineGlue_symm.{u} g fam) (refineHcocycle.{u} g fam)
+    (fun a ↦ localisationProj.{u} g (fam a))
+    (fun a b _ ↦ by
+      rw [← Category.assoc, ← coverTransitionHom, refineTransitionHom_localisationProj])
+
+/-- **It restricts to the `a`-th projection on the `a`-th member**, which is the statement that
+says the morphism is the intended one rather than a well-typed one.
+
+`ComplexAnalytic.coverIota_comp_coverGlueMorphisms`, and by
+`ComplexAnalytic.coverAnalytification_hom_ext` it is the only morphism that does. -/
+theorem coverIota_comp_refineToBase (a : K) :
+    coverIota.{u} (refineObj.{u} g fam) (refinePoly.{u} g fam) (refineGlue.{u} g fam)
+        (refineHrange.{u} g fam) (refineGlue_symm.{u} g fam) (refineHcocycle.{u} g fam) a ≫
+      refineToBase.{u} g fam = localisationProj.{u} g (fam a) :=
+  coverIota_comp_coverGlueMorphisms.{u} _ _ _ _ _ _ _ _ a
+
+/-- **A refinement with no members glues to a space with no points.**
+
+`ComplexAnalytic.coverAnalytificationOpenCover` chooses, for each point of the gluing, an index
+whose member contains it; with no indices there are no points. Stated at the analytic space rather
+than at the glue datum's gluing because the cover is one of the analytic space **on the nose** —
+`ComplexAnalytic.coverAnalytification_toLocallyRingedSpace` is `rfl` — so no transport is
+involved.
+
+This is the degeneracy of the construction, and it is what
+`ComplexAnalytic.not_isIso_refineToBase` turns into an answer about the morphism. -/
+theorem isEmpty_refineAnalytification [IsEmpty K] : IsEmpty (refineAnalytification.{u} g fam) :=
+  ⟨fun x ↦ isEmptyElim (α := K) ((coverAnalytificationOpenCover.{u} (refineObj.{u} g fam)
+    (refinePoly.{u} g fam) (refineGlue.{u} g fam) (refineHrange.{u} g fam)
+    (refineGlue_symm.{u} g fam) (refineHcocycle.{u} g fam)).idx x)⟩
+
+/-- **The morphism is not an isomorphism in general**, and this is the smallest reason: a
+refinement by an empty family of distinguished opens refines nothing, and its glued space cannot
+be a member with a point in it.
+
+An isomorphism has an inverse, and the inverse applied to a point of `A^an` is a point of a space
+that `ComplexAnalytic.isEmpty_refineAnalytification` says has none. The hypothesis is a point of
+`A^an` and not an inhabitedness instance, because `A^an` may itself be empty — for `g` containing
+a unit it is — and then there is nothing to contradict.
+
+**What would make it an isomorphism is not proved anywhere and this is not a conjecture about
+it.** The expected hypothesis is that the `D(fam a)` cover `A^an` — every point of `A^an` lies in
+one of them — which is exactly what fails above and is a condition on `fam` that nothing in this
+file states, let alone consumes. The honest reading of this theorem is that a *refinement is not
+an identification*: it produces a morphism in one direction, and the two increments in
+`Oka/Analytification/CoverIndependence.lean` produce isomorphisms only because their callers hand
+over both directions. -/
+theorem not_isIso_refineToBase [IsEmpty K] (y : AnalyticSpace.analytification.{u} g) :
+    ¬ IsIso (refineToBase.{u} g fam) := by
+  intro h
+  exact (isEmpty_refineAnalytification.{u} g fam).elim
+    ((inv (refineToBase.{u} g fam)).toLRSHom.base y)
 
 end
 

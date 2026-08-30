@@ -175,6 +175,14 @@ a much larger tax than one unused value per index.
   analytifications and its maps are `ComplexAnalytic.coverIota`**, both by `rfl`. Without them
   the cover is opaque and a consumer would be reading the glue data rather than `X^an`.
   (Naming `ComplexAnalytic.coverIota` here advertises it, so it is guarded below alongside them.)
+- `ComplexAnalytic.coverOverlapIso_hom_coverIncl`: **the overlap's comparison isomorphism is one
+  over the ambient member** — followed by the inclusion of `D(f_ij)` it is the projection of
+  `Oka/Analytification/DistinguishedOpen.lean`. This is what lets a computation with
+  `ComplexAnalytic.coverTransition` be pushed down to the member it sits over: it is what a
+  refinement of a cover needs, it is why the declaration moved here from
+  `Oka/Analytification/CoverComparison.lean`, and nothing in this file consumes it. (Named
+  without citing the projection: `scripts/guard_coverage.py` reads every backticked repository
+  name under this heading as a result *this* file advertises, and that one is another file's.)
 - `ComplexAnalytic.range_coverTransitionHom_subset` and
   `ComplexAnalytic.range_comp_coverTransitionHom_subset`: **the transition into the ambient member
   cannot leave `D(f_ji)`**, whatever the input is. This is the half of the range condition that is
@@ -314,6 +322,32 @@ declared type is what runs the heartbeat budget out. Naming the two factors fixe
 def coverOverlapIso (i j : J) :
     coverOverlapSpace.{u} obj poly i j ≅ coverPart.{u} obj poly i j :=
   AnalyticSpace.forgetToLocallyRingedSpace.{u}.mapIso (localisationIso.{u} (obj i).g (poly i j))
+
+/-- **The comparison isomorphism is one over the ambient member**: followed by the inclusion of
+`D(f_ij)` into `A_i^an` it is the projection `(A_i)_{f_ij}^an ⟶ A_i^an`.
+
+`ComplexAnalytic.toLRSHom_localisationProj` in this file's vocabulary:
+`ComplexAnalytic.coverOverlapIso` is `ComplexAnalytic.localisationIso` pushed through the
+forgetful functor and `ComplexAnalytic.coverIncl` is the inclusion of the open subspace, so their
+composite is `ComplexAnalytic.localisationProj`. It holds definitionally and is stated because
+every consumer needs it in this spelling, inside a rewrite.
+
+**It is the only route from `ComplexAnalytic.coverTransition` to a statement about the ambient
+members**, whose two outer factors are this isomorphism at the two ends. A caller who knows what
+the *algebraic* glue does over a common base can conclude what the transition does over it, and
+that is what discharges `hrange` and `hcocycle` for a cover whose members all lie over one space
+— `Oka/Analytification/CoverRefinement.lean`.
+
+It stood in `Oka/Analytification/CoverComparison.lean` until it acquired that second consumer,
+which cannot reach it there: that file imports the whole `Spec` side, and a refinement of an
+analytic cover has nothing to do with schemes. Here it costs nothing —
+`ComplexAnalytic.toLRSHom_localisationProj` is in this file's import closure already — where the
+other direction would have cost `Oka/Analytification/CoverRefinement.lean` four `Oka` modules to
+say something about `ComplexAnalytic.coverIncl`. Nothing in this file consumes it. -/
+theorem coverOverlapIso_hom_coverIncl (i j : J) :
+    (coverOverlapIso.{u} obj poly i j).hom ≫ coverIncl.{u} obj poly i j =
+      (localisationProj.{u} (obj i).g (poly i j)).toLRSHom :=
+  (toLRSHom_localisationProj.{u} (obj i).g (poly i j)).symm
 
 variable (glue : ∀ i j : J, coverOverlap.{u} obj poly i j ≅ coverOverlap.{u} obj poly j i)
 
