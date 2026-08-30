@@ -130,9 +130,19 @@ docstring predicts that every consumer of the functor spells its object the othe
 
 * **No refinement.** An equivalence of index types matches the members one to one; nothing here
   allows one cover to have more members than the other, or a member of one to be covered by
-  several of the other. That is taxis #1107's third increment and it is where
-  `ComplexAnalytic.coverMap`'s `σ` and `ψ` stop being given and have to be built — here both are
-  supplied by the caller, in both increments.
+  several of the other. **Both increments here take `σ` and `ψ` from the caller**, which is the
+  difference. That is taxis #1107's third increment, and
+  `Oka/Analytification/CoverRefinement.lean` is its first instalment: for members refined by
+  distinguished opens of **one** fixed member it builds the refined members, the polynomials
+  cutting the overlaps out, the glue isomorphism and its coherence triangle. Still absent there,
+  and so still absent everywhere: the cross-member case, the two geometric laws, and therefore any
+  `ComplexAnalytic.coverMap` out of a refinement at all.
+
+  **This bullet also said refinement is where `σ` and `ψ` "have to be built", with the implication
+  that building them is the work; the second half is false and was measured so on 2026-08-30.**
+  `ψ` is `ComplexAnalytic.localisationHom`, whose direction convention is already the one
+  `ComplexAnalytic.coverMap` wants, and `σ` is constant in the case that file treats — neither
+  costs a line. The work is the refined cover *datum*, which is what that file is mostly about.
 * **No scheme.** Nothing here says the two data describe the same scheme —
   there is no scheme in this line of files at all, and
   `Oka/Analytification/CoverFunctoriality.lean` and `Oka/Analytification/AffineCover.lean` each
