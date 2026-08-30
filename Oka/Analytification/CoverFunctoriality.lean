@@ -173,15 +173,24 @@ def coverMap :
 construction is the intended one rather than a well-typed one**.
 
 **Every statement in this file about `ComplexAnalytic.coverMap` rests on this one**:
-`ComplexAnalytic.coverMap_unique` rewrites by it, both laws are corollaries of that, and
-`ComplexAnalytic.comm_coverMapPart_comp` needs it as well. So a reader who wants to know that
-`ComplexAnalytic.coverMap` is built out of `ψ` has to read this one and need read no other.
+`ComplexAnalytic.coverMap_unique` rewrites by it, and both laws are corollaries of that. So a
+reader who wants to know that `ComplexAnalytic.coverMap` is built out of `ψ` has to read this one
+and need read no other.
 
-**`ComplexAnalytic.comm_coverMapPart_id` is the exception, and it is one worth naming rather than
-qualifying around**: it is not about `ComplexAnalytic.coverMap` at all. It says that the identity
-data meets the compatibility, its proof is `ComplexAnalytic.coverIncl_comp_coverIota`, and it
-would hold if the morphism below did not exist. **This docstring claimed it was the only statement
-here with independent content, and added that the claim was meant literally, until 2026-08-30.**
+**The declarations that depend on it are a larger set than that**, and the difference is what the
+next paragraph turns on. `ComplexAnalytic.comm_coverMapPart_comp` needs this lemma too, and its
+statement mentions `ComplexAnalytic.coverMapPart` and not `ComplexAnalytic.coverMap` — so
+*aboutness* and *dependence* are two criteria here and not one, and only the second separates the
+two `ComplexAnalytic.comm_coverMapPart_*` lemmas.
+
+**`ComplexAnalytic.comm_coverMapPart_id` is the exception — the one statement in this file that
+does not rest on this lemma — and it is worth naming rather than qualifying around.** It is not
+about `ComplexAnalytic.coverMap` either: it says that the identity data meets the compatibility,
+its proof is `ComplexAnalytic.coverIncl_comp_coverIota`, and it would hold if that morphism had
+never been defined. **Until 2026-08-30 this docstring claimed that
+`ComplexAnalytic.coverIota_comp_coverMap` was the only statement here with independent content,
+and added that the claim was meant literally — which denied
+`ComplexAnalytic.comm_coverMapPart_id` exactly the independence recorded here.**
 
 **Two probes measure different things and only one of them is cheap.** Dropping `(attr := simp)`
 from this lemma breaks exactly `ComplexAnalytic.comm_coverMapPart_comp` and
