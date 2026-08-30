@@ -113,7 +113,10 @@ about different objects and do not compose.
   this file glues, and gluing preserves nothing on its own.
 * **No functoriality.** `Oka/Analytification/CoverFunctoriality.lean` — a morphism of covered
   schemes analytified — is a different construction and does not pass through here. That the
-  square between the two commutes is stated in neither file.
+  square between the two commutes is `Oka/Analytification/ComparisonSquare.lean`, which imports
+  both and is where it belongs for that reason. **This bullet said the square was stated in
+  neither file until that one arrived**, which is the honest form of the same sentence: the file
+  it names still does not state it.
 -/
 
 open CategoryTheory TopologicalSpace AlgebraicGeometry

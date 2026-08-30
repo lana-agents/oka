@@ -1397,6 +1397,110 @@ info: 'ComplexAnalytic.coverAnalytificationIso' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.coverAnalytificationIso
 
+/-! ### A morphism of covered schemes on the `Spec` side
+
+The two definitions and seven results of `Oka/Analytification/SpecFunctoriality.lean`, which is to
+`### The glue data of the members' `Spec`s` what `### A morphism of covered schemes analytifies` is
+to `### The glue data of an affine cover with distinguished overlaps`. A heading of its own for the
+reason that block gives about itself: its subject is a morphism of two covers where the glue-data
+blocks are each about one.
+
+`ComplexAnalytic.comm_specGlueData` is guarded here and not with the `Spec`-side glue data,
+because that is where it is declared — its analytic mirror sits under
+`### Morphisms out of `X^an``, which is a `####` inside the analytic glue-data block, and the
+`Spec` side has no such section: nothing needed a family out of the members until this file.
+-/
+
+/--
+info: 'ComplexAnalytic.comm_specGlueData' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.comm_specGlueData
+
+/--
+info: 'ComplexAnalytic.specMapPart' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specMapPart
+
+/--
+info: 'ComplexAnalytic.specMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specMap
+
+/--
+info: 'ComplexAnalytic.specIota_comp_specMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specIota_comp_specMap
+
+/--
+info: 'ComplexAnalytic.specMap_unique' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specMap_unique
+
+/--
+info: 'ComplexAnalytic.comm_specMapPart_id' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.comm_specMapPart_id
+
+/--
+info: 'ComplexAnalytic.specMap_id' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specMap_id
+
+/--
+info: 'ComplexAnalytic.comm_specMapPart_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.comm_specMapPart_comp
+
+/--
+info: 'ComplexAnalytic.specMap_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specMap_comp
+
+/-! ### The comparison morphism commutes with a morphism of covered schemes
+
+The two results of `Oka/Analytification/ComparisonSquare.lean`, the only statement in the tree
+that needs `### The comparison morphism `X^an ⟶ X``, `### A morphism of covered schemes
+analytifies` and `### A morphism of covered schemes on the `Spec` side` at once — which is why it
+is a fourth heading rather than an addition to any of the three, and why it is placed after all of
+them.
+
+`ComplexAnalytic.toLRSHom_map_comp_analytificationToSpec` is the naturality square at the member
+morphism, and it is guarded although the file states it only to use it: it is the whole content of
+the square below, so a proof of the square whose axioms differed from its would mean the square
+was proved some other way.
+-/
+
+/--
+info: 'ComplexAnalytic.toLRSHom_map_comp_analytificationToSpec' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.toLRSHom_map_comp_analytificationToSpec
+
+/--
+info: 'ComplexAnalytic.toLRSHom_coverMap_comp_analytificationToSpecGlued' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.toLRSHom_coverMap_comp_analytificationToSpecGlued
 
 /-! ### The two-level index category of a glue data
 
@@ -1404,7 +1508,13 @@ The five advertised results of `Oka/Analytification/GlueShape.lean`, which arriv
 when `ComplexAnalytic.coverAnalytification` gave the shape a consumer. They sit here rather than
 in a file of their own because the module is `Oka.Analytification.GlueShape` and
 `OkaTest/Axioms.lean`'s table routes `Oka/Analytification/` here — the same row that carries
-`ComplexAnalytic.coverGlueData` directly above, which is what the shape's diagram produces.
+`ComplexAnalytic.coverGlueData`, under `### The glue data of an affine cover with distinguished
+overlaps`, which is what the shape's diagram produces. **That clause read "directly above" until
+2026-08-30**, by which time several blocks had been appended between the two — and it is named
+rather than pointed at for the reason `### The comparison morphism `X^an ⟶ X`` and
+`### Two presentations of each member give the same `X^an`` both give. **The count of blocks
+between them is deliberately not stated**: it was four when this was repaired and more by the end
+of the same afternoon, which is the whole argument for naming.
 
 The first says the shape has no morphisms a glue-data diagram does not account for; the second
 that `hsymm` is a consequence of its one law; the third that `hrange` is **not** a consequence of

@@ -69,6 +69,7 @@ import Oka.Analytification.AffineCover
 import Oka.Analytification.AffineSpace
 import Oka.Analytification.ChangeOfVariables
 import Oka.Analytification.Comparison
+import Oka.Analytification.ComparisonSquare
 import Oka.Analytification.CoverComparison
 import Oka.Analytification.CoverFunctoriality
 import Oka.Analytification.CoverIndependence
@@ -89,6 +90,7 @@ import Oka.Analytification.Sheaf
 import Oka.Analytification.SheafCoherent
 import Oka.Analytification.SpecAffineCover
 import Oka.Analytification.SpecDistinguishedOpen
+import Oka.Analytification.SpecFunctoriality
 import Oka.Analytification.StandardEtale
 import Oka.Analytification.StandardEtaleAnalytification
 import Oka.Analytification.UniversalProperty

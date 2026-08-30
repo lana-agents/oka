@@ -93,9 +93,12 @@ it costs one attribute.
   need the overlaps of `X` to map into the overlaps of `Y`, which is a refinement condition on the
   input and belongs with cover independence.
 * **No comparison with `Spec`.** `Oka/Analytification/CoverComparison.lean` builds the comparison
-  morphism `X^an ⟶ X`; that the square against it commutes is stated neither there nor here, and
-  it is the one statement that would need this file's `ComplexAnalytic.coverMap` and that file's
-  morphism at once. **This bullet said the morphism did not exist until that file arrived.**
+  morphism `X^an ⟶ X`; that the square against it commutes needs this file's
+  `ComplexAnalytic.coverMap` and that file's morphism at once, so it is in neither and is
+  `Oka/Analytification/ComparisonSquare.lean`, which imports both. **This bullet has twice
+  recorded an absence a later file retired**: it said the morphism did not exist until
+  `CoverComparison.lean` arrived, and that the square was stated nowhere until
+  `ComparisonSquare.lean` did.
 -/
 
 open CategoryTheory TopologicalSpace AlgebraicGeometry
