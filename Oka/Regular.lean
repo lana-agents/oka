@@ -357,8 +357,8 @@ that is not an arbitrary element of `LocalOkaRing`:
 `MvPowerSeries.LocallyConvergent.fderiv_eval_zero` for the sum of a locally convergent series,
 and `MvPolynomial.coeff_single_one_taylorAlgHom` and
 `LocalOkaRing.coeff_single_one_ofMvPolynomial` for a polynomial and for the germ of one. (A
-further four, in `Oka/AnalyticSpace/SimpleZeroPolynomial.lean`, and the implicit-function
-theorem of `Oka/Weierstrass.lean`, *hypothesise* a partial derivative rather than computing one;
+further four, in `Oka/AnalyticSpace/SimpleZeroPolynomial.lean`, and the implicit-function result
+of `Oka/Weierstrass.lean`, *hypothesise* a partial derivative rather than computing one;
 that distinction is what this census turns on and it is worth re-running rather than quoting.)
 
 **The `f` below is an arbitrary germ**, which is exactly what none of the three covers, so
