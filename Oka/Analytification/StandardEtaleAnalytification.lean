@@ -74,7 +74,9 @@ standard étale pair.
   derivative and not the order**, which is computed here already and by three different routes,
   none of them a derivative: `order_partialEval_germ`, `order_partialEval_germ_sq` and
   `order_partialEval_germ_ulift` (`OkaTest/SimpleZeroStalk.lean`) read it *at a coordinate*, by
-  `MvPowerSeries.partialEval_X_self` and `PowerSeries.order_X_pow`, the last in exactly the
+  `MvPowerSeries.partialEval_X_self` and then `PowerSeries.order_X` —
+  `PowerSeries.order_X_pow` in `order_partialEval_germ_sq`, which is the control of that file
+  and gets `2`, not `1` — with `order_partialEval_germ_ulift` in exactly the
   `LocalOkaRing.uliftEquiv` shape the hypothesis above asks for; `order_partialEval_skewDiagonal`
   (`OkaTest/GermQuotientDegreeOne.lean`) reads it off a **Weierstrass degree**, through
   `LocalOkaRing.order_partialEval_eq_natDegree` (`Oka/Regular.lean`), which is the only such
