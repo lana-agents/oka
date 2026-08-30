@@ -14,11 +14,53 @@ checker cannot miss.
 
 Usage:
 
-    python3 scripts/check_docstring_names.py            # dump the environment, then check
-    python3 scripts/check_docstring_names.py --dump F   # reuse a dump written earlier
+    python3 scripts/check_docstring_names.py             # dump the environment, then check
+    python3 scripts/check_docstring_names.py --dump F    # reuse a dump written earlier
+    python3 scripts/check_docstring_names.py --tree DIR  # ...against another checkout
+    python3 scripts/check_docstring_names.py --diff BASE # the name diff, no build needed
+    python3 scripts/check_docstring_names.py --self-test
 
-Exits 0 when every candidate resolves, 1 when some do not, 2 when the environment dump fails.
-`lake build` must have run first: this reads the oleans, it does not produce them.
+Exits 0 when every candidate resolves, 1 when some do not, and 2 when the tool itself cannot
+answer: the environment dump fails, `--tree` or `--diff` names something that is not a checkout of
+this repository, or the self-test does not pass.  `lake build` must have run first: this reads the
+oleans, it does not produce them.  `--diff` is the exception and reads no environment at all.
+
+## The name diff, and the no-op that used to drive it
+
+Every pull request body on this project reports how the *distinct* candidate count moved between
+the base and the branch, and until 2026-08-29 this script offered no way to compute one, so each
+session wrote its own driver.  The obvious driver is wrong:
+
+    spec = importlib.util.spec_from_file_location("chk", "scripts/check_docstring_names.py")
+    m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+    def names(tree):
+        os.chdir(tree); return set(m.candidates())     # the chdir is inert
+
+`REPO` below is bound **at import time from this file's own path**, and `os.chdir` does not move
+it, so that driver scans one tree twice and prints `added: [] removed: []` with equal counts
+whatever the branch did.  **Its failure mode is the answer the reader is hoping for**: a
+docs-only branch is supposed to move the count by zero, so the no-op's output is what a clean
+branch produces — no error, no traceback, no suspicious figure.  It shipped in two verdicts
+before anything noticed, and what noticed was a delivery note whose figure disagreed with it.
+
+So `--diff BASE` is here, it needs no build because candidacy is a text property, and
+`--self-test` is a **positive** control: two fixture trees that differ, asserted to diff to
+non-empty.  "Two identical trees diff to empty" is the test the broken driver passes.
+
+**One implementation scans both trees** — this file's, whichever tree it lives in.  That is
+deliberate and it is what isolates a change in the *prose* from a change in the *rules*: a branch
+that edits `is_name_shaped` or `comment_regions` will not show up in `--diff` at all.  Run the
+check itself, not the diff, to see the effect of a rule change.
+
+**The two figures `--diff` prints are the headline's own**, and there is no second definition of
+either: the `N backticked names (M distinct)` line at the end of a normal run is
+`sum(len(v) for v in candidates().values())` and `len(candidates())`, which is exactly what
+`report` below computes.  So `--diff BASE --tree BASE` reproduces the base's own headline, and a
+pull request body can quote both figures from one command.  Measured 2026-08-29: `f6a5fa9` gives
+`6112 backticked names (2159 distinct)` and `70580e1` gives `6115 (2159)`, each agreeing with
+that tree's own copy of this script loaded by path.  A note on taxis #1192 reported the
+occurrence count as running "one or two below" the headline; it does not, and what was being
+compared was two different trees.
 
 ## What counts as a candidate
 
@@ -169,16 +211,22 @@ def is_name_shaped(s: str) -> bool:
     return True
 
 
-def candidates() -> dict[str, list[tuple[str, int]]]:
-    """Every candidate name in the tree, as a map from the name to the places it occurs."""
+def candidates(repo: str | None = None) -> dict[str, list[tuple[str, int]]]:
+    """Every candidate name in the tree, as a map from the name to the places it occurs.
+
+    `repo` is the checkout to walk, defaulting to the one this file lives in.  It is a parameter
+    and not the module-level `REPO` so that two trees can be scanned in one process, which is
+    what `--diff` needs and what the `os.chdir` driver this replaced could not do.
+    """
+    repo = REPO if repo is None else repo
     paths = []
     for root in ROOTS:
-        for dirpath, _, filenames in os.walk(os.path.join(REPO, root)):
+        for dirpath, _, filenames in os.walk(os.path.join(repo, root)):
             paths += [os.path.join(dirpath, f) for f in filenames if f.endswith(".lean")]
-        paths.append(os.path.join(REPO, root + ".lean"))
+        paths.append(os.path.join(repo, root + ".lean"))
     found: dict[str, list[tuple[str, int]]] = {}
     for path in sorted(paths):
-        rel = os.path.relpath(path, REPO)
+        rel = os.path.relpath(path, repo)
         with open(path, encoding="utf-8") as f:
             text = f.read()
         for (a, b) in comment_regions(text):
@@ -229,8 +277,8 @@ def scan(dump: str, wanted: set[str],
     return resolved, namespaces, root_namespaces, lines
 
 
-def read_ignore() -> set[str]:
-    path = os.path.join(REPO, IGNORE_FILE)
+def read_ignore(repo: str | None = None) -> set[str]:
+    path = os.path.join(REPO if repo is None else repo, IGNORE_FILE)
     if not os.path.exists(path):
         return set()
     out = set()
@@ -242,12 +290,13 @@ def read_ignore() -> set[str]:
     return out
 
 
-def build_dump() -> str:
-    """Run `scripts/DumpEnvNames.lean` and return the path it wrote."""
+def build_dump(repo: str | None = None) -> str:
+    """Run `scripts/DumpEnvNames.lean` in `repo` and return the path it wrote."""
+    repo = REPO if repo is None else repo
     fd, path = tempfile.mkstemp(prefix="oka-env-names-", suffix=".txt")
     os.close(fd)
     proc = subprocess.run(
-        ["lake", "env", "lean", DUMP_SCRIPT], cwd=REPO,
+        ["lake", "env", "lean", DUMP_SCRIPT], cwd=repo,
         env=dict(os.environ, OKA_ENV_NAME_DUMP=path), capture_output=True, text=True,
     )
     if proc.returncode != 0 or not os.path.getsize(path):
@@ -261,14 +310,175 @@ def build_dump() -> str:
     return path
 
 
+def report(repo: str, found: dict[str, list[tuple[str, int]]]) -> str:
+    """The one line that names a tree and its two figures, in the headline's own wording."""
+    total = sum(len(v) for v in found.values())
+    return f"{repo}: {total} backticked names ({len(found)} distinct)"
+
+
+def check_tree(path: str, what: str) -> str:
+    """Resolve a `--tree` / `--diff` argument, failing loudly rather than on a missing file.
+
+    Without this a mistyped path reaches `candidates`, which walks a directory that is not there
+    — `os.walk` on a missing directory yields nothing rather than raising — and then dies on
+    `Oka.lean` with a bare `FileNotFoundError`.  A worktree that has not been created yet is the
+    common case and it deserves a sentence.
+    """
+    real = os.path.realpath(path)
+    if not all(os.path.exists(os.path.join(real, f + ".lean")) for f in ROOTS):
+        sys.stderr.write(
+            f"{what} {path!r} is not a checkout of this repository: expected "
+            + " and ".join(f"{f}.lean" for f in ROOTS) + f" under {real}.\n"
+            "Create the base with `git worktree add /tmp/<dir> <sha>`.\n")
+        sys.exit(2)
+    return real
+
+
+def diff_trees(base: str, tree: str) -> int:
+    """Print the added and removed *distinct* candidate names between two checkouts.
+
+    Both trees are scanned by this file's rules; see the module docstring for why, and for what
+    that hides.  This is a reporter and not a gate — `scripts/guard_coverage.py` is the model —
+    so it exits 0 whatever the diff is.  A removal is not by itself a defect: a name leaves the
+    set when the last docstring citing it is reworded, which is what most prose commits do.
+    """
+    base_found = candidates(base)
+    tree_found = candidates(tree)
+    added = sorted(set(tree_found) - set(base_found))
+    removed = sorted(set(base_found) - set(tree_found))
+    print("base   " + report(base, base_found))
+    print("branch " + report(tree, tree_found))
+    print(f"distinct {len(base_found)} \u2192 {len(tree_found)}: "
+          f"{len(added)} added, {len(removed)} removed")
+    for label, names, where in (("added", added, tree_found), ("removed", removed, base_found)):
+        print(f"{label}:")
+        if not names:
+            print("  (none)")
+        for name in names:
+            path, line = where[name][0]
+            extra = f" (+{len(where[name]) - 1} more)" if len(where[name]) > 1 else ""
+            print(f"  {name}\t{path}:{line}{extra}")
+    return 0
+
+
+def self_test() -> int:
+    """Plant two fixture trees that differ and assert the diff names the difference.
+
+    **The test that matters is the positive one.**  "Two identical trees diff to empty" is what
+    the `os.chdir` driver this option replaced printed on every branch it was ever run on, so a
+    self-test built only from that would have passed while measuring nothing.  **Every check below
+    carries a `positive:` or `negative:` label and there are seven and three** — a count is stated
+    here rather than left to be inferred because a reader who trusts the labels has to be able to
+    see that none is missing.
+    """
+    def plant(root: str, body: str) -> str:
+        os.makedirs(os.path.join(root, "Oka"), exist_ok=True)
+        os.makedirs(os.path.join(root, "OkaTest"), exist_ok=True)
+        for f in ("Oka.lean", "OkaTest.lean"):
+            with open(os.path.join(root, f), "w", encoding="utf-8") as h:
+                h.write("import Oka.Fixture\n")
+        with open(os.path.join(root, "Oka", "Fixture.lean"), "w", encoding="utf-8") as h:
+            h.write(body)
+        return root
+
+    failures: list[str] = []
+
+    def check(label: str, ok: bool, detail: str = "") -> None:
+        print(f"{'ok  ' if ok else 'FAIL'} {label}" + (f" \u2014 {detail}" if detail else ""))
+        if not ok:
+            failures.append(label)
+
+    with tempfile.TemporaryDirectory(prefix="oka-docstring-names-selftest-") as tmp:
+        shared = "/-! `Shared.one` and `Shared.one` again, plus `Shared.two`. -/\n"
+        a = plant(os.path.join(tmp, "a"), shared + "/-- `Only.inA` -/\ndef f := 1\n")
+        b = plant(os.path.join(tmp, "b"), shared + "/-- `Only.inB` -/\ndef f := 1\n")
+
+        ca, cb = candidates(a), candidates(b)
+
+        # POSITIVE control, and the only one the broken driver fails.  Both trees are scanned in
+        # one process, which is exactly what `os.chdir` could not make happen.
+        # Note the two counts are *equal* here, on purpose: a driver that compares only the
+        # `M distinct` figures passes a pair of trees whose name sets differ.
+        check("positive: two trees scanned in one process differ", set(ca) != set(cb),
+              f"{len(ca)} vs {len(cb)} distinct, and the sets differ")
+        check("positive: the added name is the one planted",
+              sorted(set(cb) - set(ca)) == ["Only.inB"], str(sorted(set(cb) - set(ca))))
+        check("positive: the removed name is the one planted",
+              sorted(set(ca) - set(cb)) == ["Only.inA"], str(sorted(set(ca) - set(cb))))
+
+        # Negative control.  Stated as such: the driver this replaced passed this one too.
+        check("negative: a tree against itself diffs to empty",
+              set(ca) == set(candidates(a)))
+
+        # The defect itself, asserted rather than described: `os.chdir` does not move the walk,
+        # because `REPO` is bound at import from `__file__`.  This is the one check that scans
+        # the real tree, and it is why the parameter above had to exist.
+        cwd = os.getcwd()
+        try:
+            os.chdir(a)
+            check("negative: `os.chdir` does not move the walk (the defect this option fixes)",
+                  set(candidates()) != set(ca) and set(candidates()) == set(candidates(REPO)),
+                  f"{len(candidates())} distinct from {REPO} while cwd is the fixture")
+        finally:
+            os.chdir(cwd)
+
+        # Occurrences are counted per site, distinct names once.  The headline's two figures.
+        check("positive: occurrences count every site", len(ca.get("Shared.one", [])) == 2,
+              str(ca.get("Shared.one")))
+        check("positive: `Shared.two` is one occurrence", len(ca.get("Shared.two", [])) == 1)
+
+        # Candidacy is a property of comment regions, so code is not scanned.
+        c = plant(os.path.join(tmp, "c"), "/-! nothing here -/\ndef g := `NotA.candidate\n")
+        check("negative: a backtick outside a comment is not a candidate",
+              "NotA.candidate" not in candidates(c), str(sorted(candidates(c))))
+
+        # The CLI itself, end to end, because a recipe that is quoted has to be executable as
+        # printed.  `--diff` must not need a build.
+        proc = subprocess.run(
+            [sys.executable, os.path.abspath(__file__), "--diff", a, "--tree", b],
+            capture_output=True, text=True, env=dict(os.environ, PYTHONDONTWRITEBYTECODE="1"))
+        check("positive: the CLI runs `--diff` with no build and reports the added name",
+              proc.returncode == 0 and "Only.inB" in proc.stdout,
+              proc.stdout.strip().replace("\n", " | ") or proc.stderr.strip())
+
+        bad = subprocess.run(
+            [sys.executable, os.path.abspath(__file__), "--diff",
+             os.path.join(tmp, "does-not-exist")],
+            capture_output=True, text=True, env=dict(os.environ, PYTHONDONTWRITEBYTECODE="1"))
+        check("positive: a path that is not a checkout is reported, not a traceback",
+              bad.returncode == 2 and "Traceback" not in bad.stderr
+              and "is not a checkout" in bad.stderr,
+              bad.stderr.strip().replace("\n", " | ") or f"rc={bad.returncode}")
+
+    if failures:
+        print(f"\n{len(failures)} check(s) failed: " + ", ".join(failures))
+        return 2
+    print("\nself-test passed.")
+    return 0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(
         description="Check that backticked dotted names in comments resolve.")
     ap.add_argument("--dump", metavar="FILE",
                     help="reuse a name dump written earlier instead of building one")
+    ap.add_argument("--tree", metavar="DIR", default=REPO,
+                    help="the checkout to read, defaulting to the one this script lives in")
+    ap.add_argument("--diff", metavar="BASE_DIR",
+                    help="report the distinct-name diff from BASE_DIR to --tree, and stop; "
+                         "reads no environment, so no build is needed")
+    ap.add_argument("--self-test", action="store_true",
+                    help="plant two fixture trees that differ and assert the diff sees it")
     args = ap.parse_args()
 
-    found = candidates()
+    if args.self_test:
+        return self_test()
+
+    repo = check_tree(args.tree, "--tree")
+    if args.diff:
+        return diff_trees(check_tree(args.diff, "--diff"), repo)
+
+    found = candidates(repo)
     # Every proper prefix of every candidate is a possible head for the field-notation rule, and
     # has to be classified as resolving-or-not and as a namespace-or-not just as candidates do.
     wanted = set(found)
@@ -279,7 +489,7 @@ def main() -> int:
             heads.add(".".join(parts[:k]))
     wanted |= heads
 
-    dump = args.dump or build_dump()
+    dump = args.dump or build_dump(repo)
     resolved, namespaces, root_namespaces, dumped = scan(dump, wanted, heads)
     if not args.dump:
         os.unlink(dump)
@@ -296,13 +506,13 @@ def main() -> int:
         head = name.split(".")[0]
         return len(head) <= MAX_LOCAL_HEAD and head not in root_namespaces
 
-    ignored = read_ignore()
+    ignored = read_ignore(repo)
     findings = [
         name for name in sorted(found)
         if name not in resolved
         and name not in ignored
         and not is_local_binder(name)
-        and not os.path.exists(os.path.join(REPO, name))
+        and not os.path.exists(os.path.join(repo, name))
         and not is_field_notation(name)
     ]
 

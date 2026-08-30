@@ -826,6 +826,29 @@ wolf is worse than none on a project whose pull request bodies quote its figures
 purpose, and resolves nowhere only because this build does not import the declaration it names;
 its header says what qualifies, and fixing a rule in the checker beats adding an entry.
 
+**The figures a pull request body quotes come from the same script, and there is one command for
+them.** Every description on this project reports how the *distinct* candidate count moved
+between the base and the branch, and until 2026-08-29 the script had no way to be pointed at a
+tree other than its own, so each session wrote a driver by hand. The obvious one — import the
+module once, `os.chdir` between checkouts — is a **silent no-op**: the walk root is bound at
+import time from the script's own path, so it scans one tree twice and prints an empty diff with
+equal counts whatever the branch did. That is the answer a docs-only branch expects, so nothing
+about the output says it measured nothing, and it shipped in two verdicts before a delivery note
+disagreed with it. Use the option instead, on a `git worktree` of the base:
+
+```sh
+git worktree add /tmp/base <base-sha>
+python3 scripts/check_docstring_names.py --diff /tmp/base
+python3 scripts/check_docstring_names.py --self-test
+```
+
+`--diff` reads no environment, so it needs no build; it prints both figures for each tree, and
+`--diff DIR --tree DIR` reproduces that tree's own headline line, which is where the two numbers
+in a pull request body should come from. `--tree DIR` points the check itself at another
+checkout. The self-test is a **positive** control — two planted trees that differ, asserted to
+diff to non-empty, and one check that `os.chdir` is inert — because "two identical trees diff to
+empty" is the test the broken driver passes.
+
 For the edit loop there is `bash scripts/check_file.sh FILE.lean`, which takes a couple of
 seconds and applies the *same* Lean options the build applies:
 
