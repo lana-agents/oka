@@ -50,10 +50,13 @@ Mathlib already knows `algebraMap R R̂` is a local hom.
 * `ComplexAnalytic.coe_polyLocalToGerm`: the triangle — the germ of such a function, read as a
   formal power series, is its Taylor expansion. This is what makes `ℂ[x]_{(x)} → ℂ{x} → ℂ⟦x⟧` a
   scalar tower, which is what the descent consumes.
-* `ComplexAnalytic.coe_ofMvPolynomial_zero`: at the origin the germ of a polynomial is the
-  polynomial. It is stated here rather than beside `LocalOkaRing.ofMvPolynomial` in
-  `Oka/Polynomial/Germ.lean` only because the proof names `LocalOkaRing.coord`, which lives in
-  `Oka/MaximalIdeal.lean` and is not in that file's import closure.
+* **Not** `LocalOkaRing.coe_ofMvPolynomial_zero`, *"at the origin the germ of a polynomial is
+  the polynomial"*, which the scalar tower below runs on. It stood here until it acquired a
+  second consumer, with a paragraph saying it did so *"only because the proof names
+  `LocalOkaRing.coord`, which lives in `Oka/MaximalIdeal.lean` and is not in that file's import
+  closure"*. That was accurate and the obstacle it named costs one `Oka` module and no Mathlib
+  module, so the declaration is now beside `LocalOkaRing.ofMvPolynomial` in
+  `Oka/Polynomial/Germ.lean`, which this file already imported and still does.
 
 ## What is *not* here
 
@@ -87,33 +90,6 @@ namespace ComplexAnalytic
 
 variable {ι : Type u} [Fintype ι]
 
-/-! ### At the origin, the germ of a polynomial is the polynomial -/
-
-/-- The germ at the origin of the `i`-th coordinate function is the `i`-th coordinate. -/
-theorem ofMvPolynomial_zero_X (i : ι) :
-    LocalOkaRing.ofMvPolynomial (0 : ι → ℂ) (MvPolynomial.X i) = LocalOkaRing.coord i := by
-  refine OkaRing.germ_eq_of_represents (U := ⊤) (y := 0) trivial ?_
-  rw [LocalOkaRing.coe_coord]
-  refine (MvPowerSeries.represents_X i).congr (Filter.Eventually.of_forall fun z ↦ ?_)
-  change z i = (OkaRing.ofMvPolynomial ⊤ (MvPolynomial.X i)).toGlobalFun ⊤ (z + 0)
-  rw [OkaRing.toGlobalFun_ofMvPolynomial (U := ⊤) trivial]
-  simp
-
-/-- **At the origin, the germ of a polynomial is the polynomial**, read as a power series.
-
-Both sides are `ℂ`-algebra maps out of `MvPolynomial`, so this is `MvPolynomial.algHom_ext` and
-the value at a variable. It is what makes the local ring of `𝔸^ι` at the origin, the germ ring
-and the formal power series comparable: all three agree on polynomials. -/
-theorem coe_ofMvPolynomial_zero (p : MvPolynomial ι ℂ) :
-    ((LocalOkaRing.ofMvPolynomial (0 : ι → ℂ) p : LocalOkaRing ι) : MvPowerSeries ι ℂ) =
-      (p : MvPowerSeries ι ℂ) := by
-  have h : (localOkaSubring ι).val.comp (LocalOkaRing.ofMvPolynomial (0 : ι → ℂ)) =
-      MvPolynomial.coeToMvPowerSeries.algHom ℂ := by
-    refine MvPolynomial.algHom_ext fun i ↦ ?_
-    rw [AlgHom.comp_apply, ofMvPolynomial_zero_X, Subalgebra.val_apply, LocalOkaRing.coe_coord]
-    simp
-  exact congrArg (fun f : MvPolynomial ι ℂ →ₐ[ℂ] MvPowerSeries ι ℂ ↦ f p) h
-
 /-! ### The local ring of affine space maps to the germs -/
 
 /-- **A rational function regular at the origin has a germ**: the local ring of `𝔸^ι` at the
@@ -143,7 +119,7 @@ theorem val_comp_polyLocalToGerm :
   refine RingHom.ext fun q ↦ ?_
   change ((polyLocalToGerm (algebraMap (MvPolynomial ι ℂ) (polyLocal ι) q) :
     LocalOkaRing ι) : MvPowerSeries ι ℂ) = _
-  rw [polyLocalToGerm_algebraMap, coe_ofMvPolynomial_zero]
+  rw [polyLocalToGerm_algebraMap, LocalOkaRing.coe_ofMvPolynomial_zero]
   exact (polyLocalToMvPowerSeries_algebraMap q).symm
 
 /-- **The triangle**: the germ of a rational function regular at the origin is, as a formal

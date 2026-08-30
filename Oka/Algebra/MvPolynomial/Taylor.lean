@@ -26,6 +26,17 @@ at `z`.
 - `MvPolynomial.eval_taylorAlgHom`: `p(x + z)` evaluated at `w` is `p` evaluated at `w + z`.
   This is the reason to have the definition: it is what turns a statement at a general point
   into the corresponding statement at the origin.
+- `MvPolynomial.constantCoeff_taylorAlgHom`: the constant term of `p(x + z)` is the value of `p`
+  at `z` — the zeroth of the Taylor coefficients the first paragraph promises, and the only one
+  expressible in this file.
+
+## What is not here
+
+**No Taylor coefficient beyond the constant one.** Every other one is a derivative, and
+`MvPolynomial.pderiv` is not in this file's import closure: adding
+`Mathlib.Algebra.MvPolynomial.PDeriv` would add 118 Mathlib modules to it, by
+`scripts/import_cost.py`. The degree-one case is in the mirror file for that Mathlib module,
+where the same import costs nothing.
 -/
 
 noncomputable section
@@ -73,6 +84,18 @@ theorem eval_taylorAlgHom (z w : σ → R) (p : MvPolynomial σ R) :
   | C a => simp
   | add p q hp hq => simp [hp, hq]
   | mul_X p i hp => simp [hp]
+
+/-- **The constant term of `p(x + z)` is the value of `p` at `z`.**
+
+This is the degree-zero Taylor coefficient, and it is the only one that can be stated in this
+file: every higher one is a derivative, and `MvPolynomial.pderiv` is not in this file's import
+closure. See `MvPolynomial.coeff_single_one_taylorAlgHom` for the degree-one case.
+
+The proof is `MvPolynomial.eval_taylorAlgHom` at `w = 0`, since the constant term *is* the value
+at the origin (`MvPolynomial.eval_zero`); no induction is needed. -/
+theorem constantCoeff_taylorAlgHom (z : σ → R) (p : MvPolynomial σ R) :
+    constantCoeff (taylorAlgHom z p) = eval z p := by
+  rw [← eval_zero, eval_taylorAlgHom, zero_add]
 
 end CommSemiring
 

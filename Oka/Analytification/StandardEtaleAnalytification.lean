@@ -89,13 +89,18 @@ standard étale pair.
   `ComplexAnalytic.isIso_stalkMap_comp_uliftProj_of_coeff` takes them directly — and asks for only
   one of the two, since `ComplexAnalytic.IsCutOutBy.evalHom_eq_zero` makes the vanishing half
   free: what is left is that the coefficient of the last variable in the Taylor expansion of `F`
-  at the point is nonzero. **It needs no derivative operator to state or to supply.** What is
-  still missing — and it is a smaller thing than a derivative calculus — is the identification of
-  that one coefficient with `Polynomial.derivative` of `F` read in the last variable and
-  evaluated at the point, which is what would carry `derivative f * p₁ + f * p₂ = g ^ n`, the
-  *type* of the field
-  `StandardEtalePair.cond` (reached only through an `obtain` on its `∃ p₁ p₂ n`), into the
-  hypothesis. No declaration below attempts it.
+  at the point is nonzero. **It needs no derivative operator to state or to supply**, and for a
+  cutting section that comes from a polynomial it is now a derivative outright:
+  `ComplexAnalytic.isIso_stalkMap_comp_uliftProj_of_pderiv`
+  (`Oka/AnalyticSpace/SimpleZeroPolynomial.lean`) asks that `MvPolynomial.pderiv` of that
+  polynomial in the last variable be nonzero at the point, which `F` above is and which is the
+  shape a presentation supplies. What is still missing is one step further back, and it is a
+  bridge between two *polynomial* rings rather than anything about germs: `StandardEtalePair.cond`
+  gives `derivative f * p₁ + f * p₂ = g ^ n` in `R[X]`, one variable over
+  `R = MvPolynomial (ULift (Fin n)) ℂ` and with `Polynomial.derivative`, and nothing identifies
+  the image of that derivative in `MvPolynomial (ULift (Fin (n+1))) ℂ` with `MvPolynomial.pderiv`
+  of the image. Until it does, the `∃ p₁ p₂ n` behind `cond` cannot be turned into the hypothesis
+  of the theorem above. **No declaration below attempts either half.**
 * **No witness in this file that the open is ever non-empty, and the witness is elsewhere.** The
   statements below are hypothesis-free in `F` and `G`, so none of them can be vacuously
   satisfied — but that says nothing about whether the *objects* are degenerate, and for `F = 1`

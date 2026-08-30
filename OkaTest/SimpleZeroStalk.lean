@@ -13,10 +13,14 @@ simple zero along the last axis is an isomorphism on stalks. Its hypotheses are 
 `ComplexAnalytic.IsCutOutBy` and a condition on a germ, and nothing in that file exhibits a
 single pair satisfying both. This file does, twice — once for each of the two indexings — and
 then shows the germ condition is a real restriction rather than something every hypersurface
-satisfies. Each of the two indexings is witnessed **twice**, once through the order hypothesis
-and once through the pair of coefficients that
-`ComplexAnalytic.isIso_stalkMap_comp_uliftProj_of_coeff` takes instead; at the `ULift (Fin _)`
-indexing the second route mentions no relabelling at all, which is the point of having it.
+satisfies. Each of the two indexings is witnessed **three times**, at the three spellings the
+hypothesis has: the order of a restricted power series, the coefficients that
+`ComplexAnalytic.isIso_stalkMap_comp_uliftProj_of_coeff` takes instead, and the partial
+derivative that `ComplexAnalytic.isIso_stalkMap_comp_uliftProj_of_pderiv`
+(`Oka/AnalyticSpace/SimpleZeroPolynomial.lean`) takes when the cutting section comes from a
+polynomial. At the `ULift (Fin _)` indexing the last two mention no relabelling at all, which is
+the point of having them; **all three are about one space, one point and one section**, so the
+three spellings are compared rather than merely each exhibited.
 
 ## The instance
 
@@ -46,6 +50,12 @@ point, and `z_n ^ 2` is one.
 automatic for *every* cutting section, so it can carry no information at all; **the linear
 coefficient is where all of the content is**, and that computation is what shows it excluding
 something.
+
+`OkaTest.SimpleZeroStalk.eval_pderiv_hyperplanePolySq` is that same control in the derivative
+spelling, and `OkaTest.SimpleZeroStalk.hyperplaneSectionSq_eq` is what makes it a control on the
+same section rather than on a different one: `z_n ^ 2` is the polynomial `X_n ^ 2` read as a
+holomorphic function, so the derivative the third spelling asks about is the derivative of the
+polynomial the first two are about.
 
 The control stops at the order and does **not** claim that the stalk map fails to be an
 isomorphism for `z_n ^ 2`. That is true — the germ ring of `ℂ^(n+1) ⧸ (z_n²)` is not reduced and
@@ -286,6 +296,79 @@ theorem isIso_stalkMap_uliftHyperplane_of_coeff :
       ![uliftHyperplaneSection.{u} n])
     (uliftOrigin.{u} n)
     (fun h ↦ one_ne_zero ((coeff_germ_uliftHyperplaneSection.{u} n).symm.trans h))
+
+/-! ### The derivative form, at both indexings
+
+`Oka/AnalyticSpace/SimpleZeroPolynomial.lean` restates the four results witnessed above for a
+cutting section that comes from a **polynomial**, replacing the Taylor coefficient by
+`MvPolynomial.pderiv` of that polynomial at the point. The hyperplane is such a section on the
+nose — `ComplexAnalytic.coord_def` says `ComplexAnalytic.coord j` *is*
+`OkaRing.ofMvPolynomial ⊤ (MvPolynomial.X j)`, definitionally — so the same instance witnesses
+that form as well, at both indexings and with no new space to build.
+
+**The control is the point of this section.** In the derivative spelling the hypothesis of the
+double zero is `∂(z_n²)/∂z_n = 2·z_n` evaluated at the origin, which is `0`; and the section it
+is the derivative of is `OkaTest.SimpleZeroStalk.hyperplaneSectionSq`, the same one the order and
+coefficient controls above are about. So all three controls are about one pair, and the
+derivative form excludes exactly what they exclude. -/
+
+/-- **The last partial derivative of the hyperplane's equation is `1` at the origin**, which is
+the whole hypothesis of `ComplexAnalytic.isIso_stalkMap_comp_projCoords_of_pderiv`. -/
+theorem eval_pderiv_hyperplanePoly :
+    MvPolynomial.eval (0 : Fin (n + 1) → ℂ) (MvPolynomial.pderiv (Fin.last n)
+      (MvPolynomial.X (Fin.last n) : MvPolynomial (Fin (n + 1)) ℂ)) = 1 := by
+  simp
+
+/-- **The derivative form reaches the same conclusion** as
+`OkaTest.SimpleZeroStalk.isIso_stalkMap_hyperplane`, from a derivative of a polynomial instead of
+a coefficient of a germ. The `ComplexAnalytic.IsCutOutBy` is the very same term: nothing here
+converts between `ComplexAnalytic.coord` and `OkaRing.ofMvPolynomial`, because there is nothing to
+convert. -/
+theorem isIso_stalkMap_hyperplane_of_pderiv :
+    IsIso ((((complexSpace (Fin (n + 1))).zeroLocusSubspaceι ![hyperplaneSection n]) ≫
+      okaMapHom (projCoords n)).stalkMap (origin n)) :=
+  isIso_stalkMap_comp_projCoords_of_pderiv
+    ((complexSpace (Fin (n + 1))).isCutOutBy_zeroLocusSubspaceι ![hyperplaneSection n])
+    (origin n) (fun h ↦ one_ne_zero ((eval_pderiv_hyperplanePoly n).symm.trans h))
+
+/-- **The double zero is the polynomial one**, so the control below is about the section the two
+controls above are about and not about a different one. `OkaRing.ofMvPolynomial` is a `ℂ`-algebra
+map, so this is `map_pow`. -/
+theorem hyperplaneSectionSq_eq :
+    hyperplaneSectionSq n = OkaRing.ofMvPolynomial ⊤
+      ((MvPolynomial.X (Fin.last n) : MvPolynomial (Fin (n + 1)) ℂ) ^ 2) :=
+  (map_pow (OkaRing.ofMvPolynomial ⊤) (MvPolynomial.X (Fin.last n)) 2).symm
+
+/-- **The hypothesis is a restriction, in the derivative spelling**: `∂(z_n²)/∂z_n` is `2·z_n`,
+which vanishes at the origin, so
+`ComplexAnalytic.isIso_stalkMap_comp_projCoords_of_pderiv` does not apply to the section
+`OkaTest.SimpleZeroStalk.hyperplaneSectionSq` names. -/
+theorem eval_pderiv_hyperplanePolySq :
+    MvPolynomial.eval (0 : Fin (n + 1) → ℂ) (MvPolynomial.pderiv (Fin.last n)
+      ((MvPolynomial.X (Fin.last n) : MvPolynomial (Fin (n + 1)) ℂ) ^ 2)) = 0 := by
+  simp
+
+/-- **The last partial derivative is `1` at the origin at the `ULift (Fin _)` indexing too**, read
+at `ULift.up (Fin.last n)`, which is the index the space itself carries. -/
+theorem eval_pderiv_uliftHyperplanePoly :
+    MvPolynomial.eval (0 : ULift.{u} (Fin (n + 1)) → ℂ)
+      (MvPolynomial.pderiv (ULift.up.{u} (Fin.last n))
+        (MvPolynomial.X (ULift.up.{u} (Fin.last n)) :
+          MvPolynomial (ULift.{u} (Fin (n + 1))) ℂ)) = 1 := by
+  simp
+
+/-- **The hypotheses of `ComplexAnalytic.isIso_stalkMap_comp_uliftProj_of_pderiv` are
+satisfiable**, at the indexing `ComplexAnalytic.AnalyticSpace` uses and so the one a standard
+étale presentation — which is given by polynomials — will meet. -/
+theorem isIso_stalkMap_uliftHyperplane_of_pderiv :
+    IsIso ((((complexAffineSpace.{u} (n + 1)).zeroLocusSubspaceι
+        ![uliftHyperplaneSection.{u} n]) ≫
+      okaMapHom (coordEmb (uliftCastSuccEmb.{u} n))).stalkMap (uliftOrigin.{u} n)) :=
+  isIso_stalkMap_comp_uliftProj_of_pderiv
+    ((complexAffineSpace.{u} (n + 1)).isCutOutBy_zeroLocusSubspaceι
+      ![uliftHyperplaneSection.{u} n])
+    (uliftOrigin.{u} n)
+    (fun h ↦ one_ne_zero ((eval_pderiv_uliftHyperplanePoly.{u} n).symm.trans h))
 
 end OkaTest.SimpleZeroStalk
 
