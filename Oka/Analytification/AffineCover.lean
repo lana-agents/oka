@@ -181,7 +181,7 @@ a much larger tax than one unused value per index.
 
 ## What is not here
 
-* **No non-vacuity in this file, and no scheme.** Nothing below exhibits an input for
+* **No input exhibited in this file, and no scheme.** Nothing below exhibits an input for
   `ComplexAnalytic.coverAnalytification`; the two instances are elsewhere and both now **quote**
   this construction rather than rebuilding it. `OkaTest/AffineCover.lean`'s three-member node
   cover is the one that is evidence — `ComplexAnalytic.base_nodeIota_nodeOrigin_ne` says its
@@ -191,7 +191,11 @@ a much larger tax than one unused value per index.
   below three members, so `OkaTest/ProjectiveLine.lean`'s two-member `ℙ¹` exercises neither. What
   `ℙ¹` adds is a **non-identity transition**, which the node cover does not have. Nor is any of
   this related to a *scheme*: the input is presentations and isomorphisms, and no statement here
-  says they present one.
+  says they present one. **This bullet's heading said "no non-vacuity in this file" until
+  `ComplexAnalytic.coverGlueMorphisms_coverIota` arrived**, which rules out a
+  `ComplexAnalytic.coverGlueMorphisms` that ignores its family and so reads to a grep as this
+  bullet's contradiction. The two senses are different and both hold: nothing here exhibits an
+  *input*, and one statement here rules out a degenerate *output*.
 * **Any statement that a gluing is not affine.** The two instances of this construction check
   different things and neither subsumes the other. `OkaTest/AffineCover.lean` glues three copies
   of the node along the punctured axis and shows that their three copies of the origin are three
@@ -229,11 +233,28 @@ instance defines composition through `toLRSHom`, so unifying two composites of a
 forces it open and is expensive enough to exhaust the heartbeat budget on a three-term
 `Iso.trans`. A glue data is a locally-ringed-space object anyway.
 
-**The last section is the exception and cannot be anything else**, its whole point being to
-produce an analytic space and a morphism of them. It costs nothing here because it composes
-nothing: `ComplexAnalytic.toLRSHom_coverIota` puts `ComplexAnalytic.coverIota` back at the level
-the rest of the file works at, and that is how `ComplexAnalytic.isOpenImmersion_coverIota` is a
-statement the glue data's own `ι` lemma proves. -/
+**The last two sections are the exceptions and cannot be anything else**, their whole point being
+to produce an analytic space and then a morphism out of it: `### The analytic space, and its
+members` and `### Morphisms out of X^an`. They are named rather than called "the last", because
+this paragraph has now gone stale twice — once as each of them arrived — and both times the
+pointer broke before any claim did.
+
+**What keeps the policy in force there is that each exception carries its own way back down.**
+`ComplexAnalytic.toLRSHom_coverIota` puts `ComplexAnalytic.coverIota` at the level the rest of the
+file works at, which is how `ComplexAnalytic.isOpenImmersion_coverIota` is a statement the glue
+data's own `ι` lemma proves, and `ComplexAnalytic.toLRSHom_coverGlueMorphisms` is the same `rfl`
+for `ComplexAnalytic.coverGlueMorphisms`.
+
+**Two statements in `### Morphisms out of X^an` do compose in the
+`ComplexAnalytic.AnalyticSpace` category** — `ComplexAnalytic.coverIota_comp_coverGlueMorphisms`
+and `ComplexAnalytic.coverAnalytification_hom_ext`, and the `reassoc` on the first generates a
+three-term composite as well. So "it composes nothing", which was arithmetic about this file until
+that section arrived, is no longer why the exception is cheap. **The reason now is that every one
+of those proofs goes back down before it unifies anything**, through
+`ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace.map_injective` — under a `change` in the
+first and a `congrArg` in the second — so the `Category` instance is never forced open on a
+composite. Stating a composite in that category is affordable; asking a proof to unify two of them
+is what this paragraph is about, and there is still no such proof in this file. -/
 abbrev coverSpace (i : J) : LocallyRingedSpace.{u} :=
   (AnalyticSpace.analytification.{u} (obj i).g).toLocallyRingedSpace
 
