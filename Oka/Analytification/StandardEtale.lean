@@ -82,6 +82,12 @@ them.
   target, which is the form a consumer states things in.
 - `ComplexAnalytic.exists_presentation_standardEtale`: the same, with the lifts existentially
   quantified.
+- `ComplexAnalytic.polyPresentedAlgebraEquiv_mk_pderiv`: **`MvPolynomial.pderiv` of a lift is a
+  lift of the `Polynomial.derivative`** — the bridge between the two derivative notions, and the
+  statement a consumer of `StandardEtalePair.cond` has to come through. (The theorem its
+  hypothesis feeds is another file's declaration and is named in the proof's docstring rather
+  than here, since `scripts/guard_coverage.py` reads every backticked repository name under this
+  heading as a result this file advertises.)
 
 ## What is not here
 
@@ -430,6 +436,69 @@ theorem exists_lift_polyPresentedAlgebraEquiv (a : Polynomial (PresentedAlgebra.
   obtain ⟨x, hx⟩ := (polyPresentedAlgebraEquiv.{u} g).surjective a
   obtain ⟨F, rfl⟩ := Ideal.Quotient.mk_surjective x
   exact ⟨F, hx⟩
+
+/-- **`pderiv` of a lift is a lift of the derivative.**
+
+`ComplexAnalytic.exists_lift_polyPresentedAlgebraEquiv` produces the `F` that
+`ComplexAnalytic.etalePresentation` cuts its hypersurface out with, as a *lift* of an element of
+`A[X]` and not as the image of one along a named map — so the statement that turns
+`Polynomial.derivative` into `MvPolynomial.pderiv` has to be about lifts, and this is it: whatever
+`F` lifts, `pderiv (localisationVar n) F` lifts its derivative.
+
+**This is the bridge `Oka/Analytification/StandardEtaleAnalytification.lean` was written naming
+as missing**, and which a consumer of `StandardEtalePair.cond` needs: that field's equation
+`derivative f * p₁ + f * p₂ = g ^ n` lives in `A[X]`, and applying this to a lift of each side
+turns it into an equation in the presented algebra whose value at a point is the hypothesis of
+`ComplexAnalytic.isIso_stalkMap_comp_uliftProj_of_pderiv`. A caller who has
+`hF : polyPresentedAlgebraEquiv g (Ideal.Quotient.mk _ F) = a` rewrites by this and then by `hF`;
+no separate `_of_lift` form is stated because that is two rewrites and no content.
+
+**No derivative descends to a quotient here and none needs to.** The statement quantifies over a
+representative `F` rather than over a class, so nothing has to be shown well defined —
+`MvPolynomial.pderiv (localisationVar n)` does happen to map `presentationIdeal (polyPresentation
+g)` into itself, since the relations are renamed from the old variables and Leibniz does the
+rest, but that is a *consequence* and it is not used below and not stated.
+
+**The proof does not open `ComplexAnalytic.polyPresentedAlgebraEquiv` up.** The obvious route is
+to take its three steps in order — `Ideal.quotientEquivAlg` computes on a representative,
+`MvPolynomial.pderiv` moves through the reindexing, `MvPolynomial.optionEquivLeft` crosses to
+`Polynomial.derivative`, `Polynomial.derivative_map` commutes the last quotient past it — and it
+works, in one `simp only`. It costs **two new lemmas** (the crossing is not in Mathlib for the
+`Option` splitting, only for `MvPolynomial.sumRingEquiv`) and it plants **three auto-generated
+equation lemmas**, on `ComplexAnalytic.polyRenameEquiv`, `polyOptionEquiv` and `polyCoeffEquiv`,
+because a `simp only` at a definition is what generates one.
+
+What is here instead is `MvPolynomial.induction_on` on `F`, which needs neither: the two
+computation lemmas above — `ComplexAnalytic.polyPresentedAlgebraEquiv_mk_rename` and
+`polyPresentedAlgebraEquiv_mk_X_var` — are exactly the two cases the multiplication step splits
+into, by `ComplexAnalytic.eq_localisationVar_or_exists_localisationIncl`. **The old variables
+become constants and constants have zero derivative; the new variable becomes `Polynomial.X` and
+`Derivation.leibniz` matches `Polynomial.derivative_mul` term for term.** One declaration, no
+equation lemma anywhere, and the same `change`-rather-than-unfold discipline the two computation
+lemmas themselves are proved with. -/
+theorem polyPresentedAlgebraEquiv_mk_pderiv (F : MvPolynomial (ULift.{u} (Fin (n + 1))) ℂ) :
+    polyPresentedAlgebraEquiv.{u} g
+        (Ideal.Quotient.mk _ (MvPolynomial.pderiv (localisationVar.{u} n) F)) =
+      Polynomial.derivative (polyPresentedAlgebraEquiv.{u} g (Ideal.Quotient.mk _ F)) := by
+  induction F using MvPolynomial.induction_on with
+  | C a =>
+      rw [MvPolynomial.pderiv_C, ← MvPolynomial.rename_C (localisationIncl.{u} n) a,
+        polyPresentedAlgebraEquiv_mk_rename]
+      simp
+  | add p q hp hq => simp [hp, hq]
+  | mul_X p i hp =>
+      simp only [Derivation.leibniz, smul_eq_mul, map_add, map_mul, Polynomial.derivative_mul]
+      rcases eq_localisationVar_or_exists_localisationIncl.{u} i with rfl | ⟨j, rfl⟩
+      · rw [MvPolynomial.pderiv_X_self, polyPresentedAlgebraEquiv_mk_X_var]
+        simp only [map_one, mul_one, Polynomial.derivative_X, hp]
+        ring
+      · rw [MvPolynomial.pderiv_X_of_ne (by
+          simp only [ne_eq, localisationIncl, localisationVar, ULift.up.injEq]
+          exact (Fin.castSucc_lt_last j.down).ne),
+          ← MvPolynomial.rename_X (localisationIncl.{u} n) j,
+          polyPresentedAlgebraEquiv_mk_rename]
+        simp only [map_zero, mul_zero, add_zero, Polynomial.derivative_C, hp]
+        ring
 
 /-- **A standard étale algebra over a presented `ℂ`-algebra is presented**, on two more variables
 and two more relations.

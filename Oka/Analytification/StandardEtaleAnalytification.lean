@@ -94,13 +94,23 @@ standard étale pair.
   `ComplexAnalytic.isIso_stalkMap_comp_uliftProj_of_pderiv`
   (`Oka/AnalyticSpace/SimpleZeroPolynomial.lean`) asks that `MvPolynomial.pderiv` of that
   polynomial in the last variable be nonzero at the point, which `F` above is and which is the
-  shape a presentation supplies. What is still missing is one step further back, and it is a
-  bridge between two *polynomial* rings rather than anything about germs: `StandardEtalePair.cond`
-  gives `derivative f * p₁ + f * p₂ = g ^ n` in `R[X]`, one variable over
-  `R = MvPolynomial (ULift (Fin n)) ℂ` and with `Polynomial.derivative`, and nothing identifies
-  the image of that derivative in `MvPolynomial (ULift (Fin (n+1))) ℂ` with `MvPolynomial.pderiv`
-  of the image. Until it does, the `∃ p₁ p₂ n` behind `cond` cannot be turned into the hypothesis
-  of the theorem above. **No declaration below attempts either half.**
+  shape a presentation supplies. **The bridge between the two derivative notions now exists** and is
+  `ComplexAnalytic.polyPresentedAlgebraEquiv_mk_pderiv` (`Oka/Analytification/StandardEtale.lean`):
+  `MvPolynomial.pderiv` of a lift is a lift of the `Polynomial.derivative`, which is the form the
+  question takes here because `ComplexAnalytic.exists_lift_polyPresentedAlgebraEquiv` produces
+  `F` as a lift and not as the image of anything. So `StandardEtalePair.cond`'s equation
+  `derivative f * p₁ + f * p₂ = g ^ n` in `R[X]`, one variable over
+  `R = MvPolynomial (ULift (Fin n)) ℂ`, can be read as an equation about
+  `MvPolynomial.pderiv (localisationVar n) F`.
+
+  **Two steps of that chain are still missing and neither is the identification.** First, nothing
+  turns the `∃ p₁ p₂ n` behind `cond` into a *non-vanishing* derivative at a point — that is an
+  evaluation argument at a point where `F` vanishes and `G` does not, and no declaration below
+  attempts it. Second, the theorem above is about the hypersurface in `ℂ^(n+1)` and the étale
+  presentation is that hypersurface met with `D(G)` in `ℂ^(n+2)`;
+  `Oka/AnalyticSpace/SimpleZeroPolynomial.lean` says the transport to an open base is
+  `Oka/AnalyticSpace/OpenBaseProjection.lean` and is stated for the germ hypothesis rather than
+  for the derivative one. **No declaration below attempts either.**
 * **No witness in this file that the open is ever non-empty, and the witness is elsewhere.** The
   statements below are hypothesis-free in `F` and `G`, so none of them can be vacuously
   satisfied — but that says nothing about whether the *objects* are degenerate, and for `F = 1`
