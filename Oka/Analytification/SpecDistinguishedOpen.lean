@@ -173,11 +173,14 @@ data on the `Spec` side of an affine cover holds its morphisms in.
 
 **An `instance`, and stated at the `ComplexAnalytic.specFunctor` spelling rather than at
 `AlgebraicGeometry.Spec.map`, because that is the one a glue datum presents to instance search.**
-Two declarations below take it as one: `ComplexAnalytic.specLocalisationIso`, through
-`AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.isoOfRangeEq`, and the section stated with
-`AlgebraicGeometry.Scheme.Hom.opensRange`. An instance at the other spelling would be found for a
-goal about this one only up to the reducible unfolding the theorem above records, and **instance
-search does not cross that identity** — measured in this file's module docstring.
+Two declarations below take it as one, both through
+`AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.isoOfRangeEq`:
+`ComplexAnalytic.specLocalisationIso`, and `ComplexAnalytic.specLocalisationIso_hom_ofRestrict`
+through that lemma's `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.isoOfRangeEq_hom_fac`.
+Demoting this declaration back to a `theorem` leaves exactly those two failing and nothing else,
+which is how the pair was found rather than guessed. An instance at the other spelling would be
+found for a goal about this one only up to the reducible unfolding the theorem above records, and
+**instance search does not cross that identity** — measured in this file's module docstring.
 
 Taken at `ComplexAnalytic.localisationHom`, which is the structure map read as a morphism of
 *objects* of `ComplexAnalytic.Presentation` — `ComplexAnalytic.localisationPresHom` does not
