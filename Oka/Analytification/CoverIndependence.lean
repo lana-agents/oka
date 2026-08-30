@@ -6,38 +6,73 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 import Oka.Analytification.CoverFunctoriality
 
 /-!
-# Two presentations of each member give the same `X^an`
+# Two cover data with isomorphic members give the same `X^an`
 
 `Oka/Analytification/AffineCover.lean` builds `X^an` from a cover as *data* — an index type, a
 presentation for each index, a polynomial cutting out each overlap, and an isomorphism of the two
 descriptions of each overlap — and the construction depends on all of it. **Nothing so far says
-that two data describing the same geometry give the same space.** This file is the first
-instalment of that, and it is the smallest one: the two data share an index type and their
-members are isomorphic *as presentations*.
+that two data describing the same geometry give the same space.** This file is the first two
+instalments of that.
 
-## What is varied, and it is less than the name "cover independence" suggests
+## The two increments, and what each varies
 
-The two inputs here have the **same index type**, so the members correspond one to one and there
-is no reindexing; the overlaps sit at the same pairs; and both `hrange` and `hcocycle` are asked
-for on each side separately. What varies is only the **presentation of each member** — an
-isomorphism `ψ i : obj i ≅ obj' i` in `ComplexAnalytic.Presentation` — and, with it, everything
-downstream of a presentation: the polynomials cutting out the overlaps, the identifications of
-the overlaps, and the two triple-overlap hypotheses.
+* **Member-wise presentation independence**, the smaller one. The two data share an **index
+  type**, so the members correspond one to one and the overlaps sit at the same pairs. What varies
+  is the *presentation* of each member — an isomorphism `ψ i : obj i ≅ obj' i` in
+  `ComplexAnalytic.Presentation` — and, with it, everything downstream of a presentation: the
+  polynomials cutting out the overlaps, the identifications of the overlaps, and the two
+  triple-overlap hypotheses.
+* **Reindexing.** The index types differ by an equivalence `e : J ≃ K` and the members are
+  isomorphic *along it*, `χ i : obj i ≅ objK (e i)`.
 
-**The honest name for this is member-wise presentation independence.** taxis #1107 lists what is
-still missing: reindexing along an equivalence of index types, refinement, a definition of
-*admissible*, and the functor.
+In both, `hrange` and `hcocycle` are asked for on each side separately.
 
-## The caller supplies two compatibility hypotheses and they do not reduce to one
+## The first increment is literally the second at `Equiv.refl`, and that is measured
 
-`ComplexAnalytic.coverMap` asks for agreement over the overlaps, and this file asks for it twice —
-once for `ψ.hom` and once for `ψ.inv`. **That is not redundancy and it is worth saying why, since
-it is the first question a reader has.** The two hypotheses are equations over *different spaces*:
-the first is about `ComplexAnalytic.coverPart obj poly i j` and the second about
-`ComplexAnalytic.coverPart obj' poly' i j`. Those are open subspaces cut out by `poly i j` and
-`poly' i j`, which do not even live in the same type — `poly i j` is a polynomial in
-`(obj i).n` variables and `poly' i j` in `(obj' i).n` — so neither hypothesis is a statement the
-other could imply.
+`ComplexAnalytic.coverMap_hom_inv`'s statement is `ComplexAnalytic.coverMap_reindex_hom_inv`'s at
+`e = Equiv.refl J`, **and the proof term typechecks as it stands** — no coercion, no
+`CategoryTheory.eqToHom`, no congruence step. What makes that work is that
+`ComplexAnalytic.coverReindexInv` at `Equiv.refl` reduces to `fun i ↦ (ψ i).inv` *definitionally*,
+which was not obvious in advance: it is `CategoryTheory.eqToHom rfl ≫ (ψ i).inv`, and the
+reduction needs `𝟙 ≫ f` to be `f` by `rfl` in this category rather than by `Category.id_comp`.
+
+**The same-index statements are kept anyway.** That is the choice
+`Oka/Analytification/AffineCover.lean` and `Oka/Analytification/CoverFunctoriality.lean` both
+settled on for a readable instance of a general statement: a caller with one index type should not
+have to supply an `Equiv` and read past a transport to find the statement they want. What the
+general one adds is not content at that instance — it is the two index types.
+
+## What the reindexing costs, and it is one transport in each direction
+
+`ComplexAnalytic.coverReindexInv` — the family the backward morphism is glued from — cannot be
+written without a `CategoryTheory.eqToHom`: `χ` is indexed by `J` and the family by `K`, so its
+inverse at `e.symm k` has source `objK (e (e.symm k))` where `objK k` is wanted. **That single
+`eqToHom` is the whole difference between the two increments**, and it is why reindexing is not a
+corollary of member-wise independence in the other direction.
+
+It surfaces twice, asymmetrically, and the asymmetry is worth naming because it looks like an
+accident and is not. The **backward** round trip meets `χ` at one index and the isomorphism
+cancels before anything has to move, so only `ComplexAnalytic.coverIota`'s index is transported.
+The **forward** one meets `χ` at `i` and at `e.symm (e i)`, so both `coverIota` and `χ` are.
+
+**`CategoryTheory.dcongr_arg` does both**, and no lemma had to be written for either. It is
+Mathlib's transport for a family `α : ∀ i, F i ⟶ G i` along `h : i = j`, and its content is the
+`subst` that the proofs themselves cannot do — there the index is `e.symm (e i)`, which is not a
+variable, which is why `simp [Equiv.symm_apply_apply]`, `rw [e.symm_apply_apply i]`, `obtain` and
+`cases` on the equivalence all leave the goal open. **That was measured as this increment's
+obstruction before the file was written, and the obstruction turned out to be already bridged.**
+
+## Each increment takes two compatibility hypotheses and they do not reduce to one
+
+`ComplexAnalytic.coverMap` asks for agreement over the overlaps, and each increment here asks for
+it twice — once for the forward family and once for the backward one. **That is not redundancy and
+it is worth saying why, since it is the first question a reader has.** The two hypotheses are
+equations over *different spaces*: the first is about `ComplexAnalytic.coverPart obj poly i j` and
+the second about `ComplexAnalytic.coverPart obj' poly' i j`. Those are open subspaces cut out by
+`poly i j` and `poly' i j`, which do not even live in the same type — `poly i j` is a polynomial
+in `(obj i).n` variables and `poly' i j` in `(obj' i).n` — so neither hypothesis is a statement
+the other could imply. In the reindexed increment the second is indexed by `K` rather than by `J`,
+which is the same argument one step further along.
 
 ## The proof, and it does not touch a glue datum
 
@@ -58,6 +93,16 @@ projections — and it is the fifth file on this line of work to hit it.
 `CategoryTheory.Iso.hom_inv_id_assoc` at `ComplexAnalytic.analytificationFunctor.mapIso` names the
 fact instead of asking `simp` to find it, and that is what the proofs below use.
 
+**The same pathology reaches `Category.assoc` itself in the reindexed backward round trip**, and
+there it is the sixth instance rather than the fifth. Unfolding
+`ComplexAnalytic.coverReindexInv` puts a composite in the *first* factor, so the goal acquires the
+shape `(f ≫ g) ≫ h ≫ k` — and `rw [Category.assoc]` and `simp only [Category.assoc]` both decline
+it, the first reporting *"did not find an occurrence of the pattern"* with a note that the target
+is not type-correct at `instances` transparency. `(Category.assoc _ _ _).trans` as a **term**
+never consults the unifier and closes it in one line; the congruence after it is written as
+`congrArg (_ ≫ ·)` for the same reason. The forward round trip needs neither, because there the
+composite is unfolded in the second factor and the chain is already right-nested.
+
 **And they normalise with `simp only` and an explicit list rather than with `simp`**, which is not
 a style preference: `lake build --wfail` runs the `flexible` linter, and a bare `simp` followed by
 an `exact` that modifies the same goal is a **build failure** on this project rather than a
@@ -67,22 +112,28 @@ docstring predicts that every consumer of the functor spells its object the othe
 
 ## Main definitions
 
-- `ComplexAnalytic.coverAnalytificationIso`: **the isomorphism `X^an ≅ X'^an`.**
+- `ComplexAnalytic.coverAnalytificationIso`: **the isomorphism `X^an ≅ X'^an`**, at one index type.
+- `ComplexAnalytic.coverReindexInv`: the backward family when the index types differ, and the one
+  `CategoryTheory.eqToHom` the difference costs.
+- `ComplexAnalytic.coverAnalytificationReindexIso`: **the isomorphism when the index types differ
+  by an equivalence.**
 
 ## Main results
 
 - `ComplexAnalytic.coverMap_hom_inv` and `ComplexAnalytic.coverMap_inv_hom`: the two round trips,
   stated as theorems beside the isomorphism rather than inlined into its fields, so that a caller
   who wants one of them need not project.
+- `ComplexAnalytic.coverMap_reindex_hom_inv` and `ComplexAnalytic.coverMap_reindex_inv_hom`: the
+  same two when the index types differ, and the pair the two above are an instance of.
 
 ## What is not here
 
-* **No reindexing.** The two index types are the same type, not equivalent types. Allowing an
-  `Equiv` is taxis #1107's second increment and is **not** a corollary of this one: the round trip
-  then leaves a transport over `e.symm (e i)` inside `ComplexAnalytic.coverIota`'s index, where
-  `obj (e.symm (e i))` and `obj i` are propositionally and not definitionally equal, and four
-  standard tactics leave it open. That was measured before this file was written.
-* **No refinement, and no scheme.** Nothing here says the two data describe the same scheme —
+* **No refinement.** An equivalence of index types matches the members one to one; nothing here
+  allows one cover to have more members than the other, or a member of one to be covered by
+  several of the other. That is taxis #1107's third increment and it is where
+  `ComplexAnalytic.coverMap`'s `σ` and `ψ` stop being given and have to be built — here both are
+  supplied by the caller, in both increments.
+* **No scheme.** Nothing here says the two data describe the same scheme —
   there is no scheme in this line of files at all, and
   `Oka/Analytification/CoverFunctoriality.lean` and `Oka/Analytification/AffineCover.lean` each
   argue in a titled section why. taxis #1107's headline speaks of two *admissible covers of a
@@ -188,6 +239,108 @@ def coverAnalytificationIso :
     hrange' hsymm' hcocycle' ψ hcomm hcomm'
   inv_hom_id := coverMap_inv_hom.{u} obj poly glue hrange hsymm hcocycle obj' poly' glue'
     hrange' hsymm' hcocycle' ψ hcomm hcomm'
+
+/-! ### Reindexing along an equivalence of index types -/
+
+variable {K : Type u} (objK : K → Presentation.{u})
+  (polyK : ∀ i : K, K → MvPolynomial (ULift.{u} (Fin (objK i).n)) ℂ)
+  (glueK : ∀ i j : K, coverOverlap.{u} objK polyK i j ≅ coverOverlap.{u} objK polyK j i)
+  (hrangeK : ∀ i j k : K, i ≠ j → i ≠ k → j ≠ k →
+    Set.range (coverTripleIncl.{u} objK polyK i j k ≫
+        coverTransitionHom.{u} objK polyK glueK i j).base ⊆
+      (coverOpen.{u} objK polyK j k : Set (coverSpace.{u} objK j)))
+  (hsymmK : ∀ i j : K, glueK j i = (glueK i j).symm)
+  (hcocycleK : ∀ i j k : K, ∀ hij : i ≠ j, ∀ hik : i ≠ k, ∀ hjk : j ≠ k,
+    coverTriple.{u} objK polyK glueK hrangeK i j k hij hik hjk ≫
+      coverTriple.{u} objK polyK glueK hrangeK j k i hjk hij.symm hik.symm ≫
+      coverTriple.{u} objK polyK glueK hrangeK k i j hik.symm hjk.symm hij = 𝟙 _)
+  (e : J ≃ K) (χ : ∀ i : J, obj i ≅ objK (e i))
+
+/-- **The backward family**, `A'_k ⟶ A_{e⁻¹ k}` as a morphism of presentations.
+
+`χ` runs `obj i ≅ objK (e i)`, so its inverse at `e.symm k` runs
+`objK (e (e.symm k)) ⟶ obj (e.symm k)` and the source is the wrong spelling of `objK k` by one
+application of `Equiv.apply_symm_apply`. **The `CategoryTheory.eqToHom` in front is that spelling
+and is the whole cost of allowing the index types to differ**; there is no way to state the
+backward family without it, since `χ` is indexed by `J` and this family by `K`. -/
+def coverReindexInv (k : K) : objK k ⟶ obj (e.symm k) :=
+  eqToHom (congrArg objK (e.apply_symm_apply k)).symm ≫ (χ (e.symm k)).inv
+
+variable (hcommK : ∀ i j : J, i ≠ j →
+  coverIncl.{u} obj poly i j ≫
+      (coverMapPart.{u} obj objK polyK glueK hrangeK hsymmK hcocycleK e
+        (fun i ↦ (χ i).hom) i).toLRSHom =
+    (coverTransition.{u} obj poly glue i j).hom ≫ coverIncl.{u} obj poly j i ≫
+      (coverMapPart.{u} obj objK polyK glueK hrangeK hsymmK hcocycleK e
+        (fun i ↦ (χ i).hom) j).toLRSHom)
+  (hcommK' : ∀ i j : K, i ≠ j →
+    coverIncl.{u} objK polyK i j ≫
+        (coverMapPart.{u} objK obj poly glue hrange hsymm hcocycle e.symm
+          (coverReindexInv.{u} obj objK e χ) i).toLRSHom =
+      (coverTransition.{u} objK polyK glueK i j).hom ≫ coverIncl.{u} objK polyK j i ≫
+        (coverMapPart.{u} objK obj poly glue hrange hsymm hcocycle e.symm
+          (coverReindexInv.{u} obj objK e χ) j).toLRSHom)
+
+/-- **The two induced morphisms compose to the identity of `X^an`**, when the index types differ
+by an equivalence.
+
+`ComplexAnalytic.coverAnalytification_hom_ext` and `ComplexAnalytic.coverIota_comp_coverMap`, as
+in the same-index case above, and then **two transports rather than none**:
+`ComplexAnalytic.coverIota` is left at the index `e.symm (e i)` and `χ` at the same index, and
+`CategoryTheory.dcongr_arg` moves both to `i`. -/
+theorem coverMap_reindex_hom_inv :
+    coverMap.{u} obj poly glue hrange hsymm hcocycle objK polyK glueK hrangeK hsymmK hcocycleK
+        e (fun i ↦ (χ i).hom) hcommK ≫
+      coverMap.{u} objK polyK glueK hrangeK hsymmK hcocycleK obj poly glue hrange hsymm hcocycle
+        e.symm (coverReindexInv.{u} obj objK e χ) hcommK' = 𝟙 _ :=
+  coverAnalytification_hom_ext.{u} obj poly glue hrange hsymm hcocycle _ _ fun i ↦ by
+    simp only [coverIota_comp_coverMap_assoc, analytificationFunctor_obj, Category.assoc,
+      coverIota_comp_coverMap, Category.comp_id]
+    rw [dcongr_arg (coverIota.{u} obj poly glue hrange hsymm hcocycle) (e.symm_apply_apply i),
+      coverReindexInv, dcongr_arg (fun i ↦ (χ i).inv) (e.symm_apply_apply i)]
+    simp only [Functor.map_comp, eqToHom_map, Category.assoc, Category.id_comp,
+      analytificationFunctor_obj, eqToHom_trans_assoc, eqToHom_refl]
+    exact (analytificationFunctor.{u}.mapIso (χ i)).hom_inv_id_assoc _
+
+/-- **And the other way round**, on `Y^an`.
+
+**One transport, not two.** The composite restricts on the `k`-th member to the round trip of `χ`
+at the single index `e.symm k`, so the isomorphism cancels before any index has to be moved and
+only `ComplexAnalytic.coverIota`'s is left. That asymmetry is not a defect of the proof: the
+backward family is the one carrying the `CategoryTheory.eqToHom`, so it is the forward round trip
+that meets `χ` at two different indices. -/
+theorem coverMap_reindex_inv_hom :
+    coverMap.{u} objK polyK glueK hrangeK hsymmK hcocycleK obj poly glue hrange hsymm hcocycle
+        e.symm (coverReindexInv.{u} obj objK e χ) hcommK' ≫
+      coverMap.{u} obj poly glue hrange hsymm hcocycle objK polyK glueK hrangeK hsymmK hcocycleK
+        e (fun i ↦ (χ i).hom) hcommK = 𝟙 _ :=
+  coverAnalytification_hom_ext.{u} objK polyK glueK hrangeK hsymmK hcocycleK _ _ fun k ↦ by
+    simp only [coverIota_comp_coverMap_assoc, analytificationFunctor_obj, Category.assoc,
+      coverIota_comp_coverMap, Category.comp_id]
+    rw [dcongr_arg (coverIota.{u} objK polyK glueK hrangeK hsymmK hcocycleK)
+        (e.apply_symm_apply k).symm, coverReindexInv]
+    simp only [Functor.map_comp, eqToHom_map]
+    refine (Category.assoc _ _ _).trans ?_
+    exact congrArg (_ ≫ ·) ((analytificationFunctor.{u}.mapIso (χ (e.symm k))).inv_hom_id_assoc _)
+
+/-- **Two cover data whose index types differ by an equivalence, and whose members are isomorphic
+as presentations along it, give canonically isomorphic analytifications.**
+
+Both morphisms are `ComplexAnalytic.coverMap`, so the isomorphism restricts on the `i`-th member
+of `X` to the analytified `χ i` followed by the inclusion of the `e i`-th member of `Y` — which is
+`ComplexAnalytic.coverIota_comp_coverMap` and is what says it is the intended isomorphism rather
+than one of the right type. -/
+def coverAnalytificationReindexIso :
+    coverAnalytification.{u} obj poly glue hrange hsymm hcocycle ≅
+      coverAnalytification.{u} objK polyK glueK hrangeK hsymmK hcocycleK where
+  hom := coverMap.{u} obj poly glue hrange hsymm hcocycle objK polyK glueK hrangeK hsymmK
+    hcocycleK e (fun i ↦ (χ i).hom) hcommK
+  inv := coverMap.{u} objK polyK glueK hrangeK hsymmK hcocycleK obj poly glue hrange hsymm
+    hcocycle e.symm (coverReindexInv.{u} obj objK e χ) hcommK'
+  hom_inv_id := coverMap_reindex_hom_inv.{u} obj poly glue hrange hsymm hcocycle objK polyK
+    glueK hrangeK hsymmK hcocycleK e χ hcommK hcommK'
+  inv_hom_id := coverMap_reindex_inv_hom.{u} obj poly glue hrange hsymm hcocycle objK polyK
+    glueK hrangeK hsymmK hcocycleK e χ hcommK hcommK'
 
 end
 
