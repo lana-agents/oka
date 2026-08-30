@@ -118,7 +118,7 @@ modules sit in a file holding some of their consumer's guards and three do not, 
 minority is the larger — **7 of the 18 conform and 11 do not.** The three that do not:
 
 * **`Oka/CategoryTheory/GlueData.lean`**, the largest member at seven. Its only importer is
-  `Oka/Analytification/AffineCover.lean`, whose seven guards are all in
+  `Oka/Analytification/AffineCover.lean`, whose guards are all in
   `OkaTest/Axioms/Analytification.lean`; and its guards sit under a heading of their own rather
   than under an analytic result's, so it fails both halves of the rule.
 * **`Oka/Topology/IsLocalHomeomorph.lean`**, whose only user is

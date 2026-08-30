@@ -101,8 +101,10 @@ carry the three together, bundle then.
   needs; the general open immersion is neither proved nor wanted
   (`Oka/Analytification/DistinguishedOpen.lean` says so). The glue data itself is now built —
   `ComplexAnalytic.coverGlueData` in `Oka/Analytification/AffineCover.lean` — and so is the
-  passage from a glue data to an analytic space, below, and the two are put together in
-  `OkaTest/AffineCover.lean` and `OkaTest/ProjectiveLine.lean`. The input is still the cover **as
+  passage from a glue data to an analytic space, below, and the two are put together **for a
+  general cover** in that same file, by `ComplexAnalytic.coverAnalytification`, whose members are
+  open subspaces of it by `ComplexAnalytic.isOpenImmersion_coverIota`; `OkaTest/AffineCover.lean`
+  and `OkaTest/ProjectiveLine.lean` do it at concrete data. The input is still the cover **as
   data** rather than a scheme, since this repository constructs no `AlgebraicGeometry.Scheme`
   beyond Mathlib's `Spec` and has no cover API for one.
 * **The analytification of a *morphism* of non-affine spaces.**
