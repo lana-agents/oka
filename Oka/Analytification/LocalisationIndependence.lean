@@ -234,10 +234,28 @@ is what `ComplexAnalytic.exists_mk_rename_eq` records.
 /-- **A unit multiple gives the isomorphism**, at exponent one in both directions.
 
 `ComplexAnalytic.localisationPresentationIsoOfDvdPow` asks for `∃ N, q' ∣ q ^ N` and its mirror;
-a unit multiple gives both with `N = M = 1`, since `q = q' * u⁻¹` and `q' = q * u`. Stated as a
-`def` rather than as an existence, because a consumer building a transition morphism needs the
-isomorphism and not the knowledge that one exists — the same reason
-`ComplexAnalytic.localisationPresentationIsoOfDvdPow` is a `def` taking its hypotheses. -/
+a unit multiple gives both with `N = M = 1`, since `q = q' * u⁻¹` and `q' = q * u`.
+
+**Why this is a `def` taking `u` and `hu`, and not `∃ Q, Nonempty (_ ≅ _)`.** The existence form
+is the one a spike writes, because it is one statement; it is the wrong one here, and the reason
+is what the arguments buy rather than a preference for data over propositions:
+
+* **A glue is built out of the isomorphism, not out of its existence.** A cover datum's `glue`
+  field is an `Iso`, and `ComplexAnalytic.coverTransition` transports it; `Nonempty` gives a
+  consumer nothing to transport, and `Classical.choice` on it would produce an isomorphism no
+  second consumer could recognise as the same one.
+* **The witness is what makes two calls agree.** Two consumers holding the same `Q`, `u` and `hu`
+  get the *same* isomorphism here, so a coherence law between them is statable; an existential
+  re-chosen at each call site is not, and coherence between two transitions is the whole content
+  of the laws such a datum has to satisfy.
+* **The triangle needs the same arguments.**
+  `ComplexAnalytic.localisationPresentationIsoOfUnitMul_hom_comp` below is about *this*
+  isomorphism at *these* arguments, and it is what says it is one over the member the two opens
+  sit in.
+
+`ComplexAnalytic.exists_mk_rename_eq` is where the three arguments come from, and the split
+between the two is exactly `ComplexAnalytic.localisationPresentationIsoOfDvdPow`'s own: a `def`
+taking hypotheses, and a separate existence producing them. -/
 noncomputable def localisationPresentationIsoOfUnitMul (q q' : MvPolynomial (ULift.{u} (Fin n)) ℂ)
     (u : (PresentedAlgebra.{u} n k g)ˣ)
     (hu : Ideal.Quotient.mk (presentationIdeal.{u} g) q' =
