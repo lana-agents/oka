@@ -837,7 +837,11 @@ info: 'ComplexAnalytic.isOpenImmersion_analytificationMap_localisationPresHom' d
 `Oka/Analytification/SpecDistinguishedOpen.lean`, the mirror of the two above. The triangle is
 guarded beside the two open-immersion statements because it is the only thing either of them
 uses, and the isomorphism is guarded because a triangle over an identification nobody can name
-is inert. -/
+is inert.
+
+The range and the isomorphism with the open subspace are under the same heading rather than one
+of their own: they are the same distinguished open, and the open immersion is what makes both of
+them statable. -/
 
 /--
 info: 'ComplexAnalytic.specLocalisationRingIso' depends on axioms:
@@ -866,6 +870,41 @@ info: 'ComplexAnalytic.isOpenImmersion_specFunctor_map_localisationHom' depends 
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isOpenImmersion_specFunctor_map_localisationHom
+
+/--
+info: 'ComplexAnalytic.specLocalisationOpen' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specLocalisationOpen
+
+/--
+info: 'ComplexAnalytic.range_base_specFunctor_map_localisationHom' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.range_base_specFunctor_map_localisationHom
+
+/--
+info: 'ComplexAnalytic.specLocalisationIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specLocalisationIso
+
+/--
+info: 'ComplexAnalytic.specLocalisationIso_hom_ofRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specLocalisationIso_hom_ofRestrict
+
+/--
+info: 'ComplexAnalytic.specLocalisationIso_inv_specFunctor_map' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specLocalisationIso_inv_specFunctor_map
 
 /-! ### The glue data of an affine cover with distinguished overlaps -/
 

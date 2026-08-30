@@ -68,6 +68,8 @@ and costs three lines.
 
 - `ComplexAnalytic.specLocalisationRingIso`: `ComplexAnalytic.localisationPresentedAlgebraEquiv`,
   as an isomorphism in `CommRingCat` — the form `AlgebraicGeometry.Spec.map` consumes.
+- `ComplexAnalytic.specLocalisationOpen`: `D(f) ⊆ Spec A`, as an open subset.
+- `ComplexAnalytic.specLocalisationIso`: **the isomorphism `Spec (A_f) ≅ Spec A|D(f)`.**
 
 ## Main results
 
@@ -82,19 +84,25 @@ and costs three lines.
   `ComplexAnalytic.isOpenImmersion_analytificationMap_localisationPresHom`. The morphism of
   presentations it is taken at is named in the declaration's own docstring rather than here:
   it is a definition, and `## Main results` is a list of results.
+- `ComplexAnalytic.range_base_specFunctor_map_localisationHom`: **its image is exactly `D(f)`** —
+  the equality, since the side condition of an open-immersion lift is a containment *in* a range,
+  and what a `Spec`-side glue data's `hrange` obligation will be checked against.
+- `ComplexAnalytic.specLocalisationIso_hom_ofRestrict` and
+  `ComplexAnalytic.specLocalisationIso_inv_specFunctor_map`: **the isomorphism is one over
+  `Spec A`.**
 
 ## What is not here
 
-* **The range of the morphism**, in either spelling, so nothing here says *which* open subset it
-  is. That is the next thing the `Spec`-side glue data needs and it is not one line:
-  `Set.range (Spec.map …).base = ↑(PrimeSpectrum.basicOpen (mk f))` does not elaborate as stated,
-  because the ambient types `↥(Spec (CommRingCat.of (PresentedAlgebra n k g)))` and
-  `PrimeSpectrum ↑(CommRingCat.of (PresentedAlgebra n k g))` are definitionally equal but the
-  `Opens → Set` coercion does not unify them; and Mathlib's idiomatic
-  `AlgebraicGeometry.Scheme.Hom.opensRange`, whose `Scheme.Hom.opensRange_localizationAway` is
-  exactly the statement wanted, is declared in a section with `[IsOpenImmersion f]` and therefore
-  needs the result below as an *instance*, which is a decision about instance shape that a file
-  with one consumer should not make on its own.
+* **`AlgebraicGeometry.Scheme.Hom.opensRange`**, and with it
+  `AlgebraicGeometry.Scheme.Hom.opensRange_localizationAway`, which is Mathlib's idiomatic form of
+  the range statement. `ComplexAnalytic.range_base_specFunctor_map_localisationHom` says the same
+  thing at `Set.range … .base`, and it is stated that way because
+  `ComplexAnalytic.specLocalisationOpen` is declared at the `ComplexAnalytic.specFunctor.obj`
+  spelling: the `Opens → Set` coercion then lands in the type the range already lives in, and the
+  unification the scheme-level spelling asks for — between `↥(Spec (CommRingCat.of
+  (PresentedAlgebra n k g)))` and `PrimeSpectrum ↑(CommRingCat.of (PresentedAlgebra n k g))`,
+  definitionally equal and not unified through that coercion — never arises. Which of the two a
+  `Spec`-side glue data wants is a question for the file that builds one.
 * **The `Spec`-side glue data, and the comparison morphism `X^an ⟶ X`.** This is `f_open` and
   nothing else. The `hrange` hypothesis that construction also needs is a statement about ranges
   of maps on points, and unlike the cocycle equation it does not transport along a functor.
@@ -176,6 +184,110 @@ declaration is what makes the scheme-level API reachable from a locally-ringed-s
 theorem isOpenImmersion_specFunctor_map_localisationHom :
     LocallyRingedSpace.IsOpenImmersion (specFunctor.{u}.map (localisationHom.{u} g f)) :=
   isOpenImmersion_Spec_map_localisationRingHom.{u} g f
+
+/-! ### The image of the morphism -/
+
+/-- **The open immersion as an instance**, which is the decision this file deferred while it had
+no consumer and now has two: `AlgebraicGeometry.Scheme.Hom.opensRange` and
+`AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.isoOfRangeEq` are both declared in sections
+that take it as one, and the two results below are exactly those.
+
+It is stated at the `ComplexAnalytic.specFunctor` spelling rather than at
+`AlgebraicGeometry.Spec.map`, because that is the one a glue datum will present to instance search;
+the two are the same term, so an instance on either is found for a goal about the other only up to
+the reducible unfolding the theorem above records. -/
+instance isOpenImmersion_specFunctor_map_localisationHom' :
+    LocallyRingedSpace.IsOpenImmersion (specFunctor.{u}.map (localisationHom.{u} g f)) :=
+  isOpenImmersion_specFunctor_map_localisationHom.{u} g f
+
+/-- **`D(f) ⊆ Spec A`**, the basic open at the class of `f`, as an open subset of
+`ComplexAnalytic.specFunctor`'s value.
+
+The counterpart of `ComplexAnalytic.localisationOpen`, and the two are deliberately not related
+here: one is a non-vanishing locus in an analytic space and the other a basic open of a spectrum,
+and the statement that the comparison morphism carries the second to the first is about a cover
+and belongs wherever that cover is built.
+
+**Naming it is what makes the range statable**, and that is the whole of the difficulty this
+file's `## What is not here` used to record: a bare
+`Set.range … = ↑(PrimeSpectrum.basicOpen (mk f))` asks the `Opens → Set` coercion to unify
+`↥(specFunctor.obj ⟨n, k, g⟩)` with `PrimeSpectrum ↑(CommRingCat.of (PresentedAlgebra n k g))`,
+which are definitionally equal and do not unify through it. An `Opens` declared **at the
+`specFunctor.obj` spelling** never poses that question, because its coercion is to a set of the
+type the range already lives in. -/
+def specLocalisationOpen : TopologicalSpace.Opens (specFunctor.{u}.obj ⟨n, k, g⟩) :=
+  PrimeSpectrum.basicOpen (Ideal.Quotient.mk (presentationIdeal.{u} g) f)
+
+/-- **The image of the morphism is exactly `D(f)`.**
+
+The equality and not the containment, for the reason
+`ComplexAnalytic.range_base_localisationProj` gives on the analytic side: the side condition of an
+open-immersion lift is a containment *in* this range, so an equality is what lets a statement about
+`D(f)` discharge it. It is what a `Spec`-side glue data's `hrange` obligation will be checked
+against.
+
+The triangle over `A` again: the isomorphism's half is surjective, and
+`PrimeSpectrum.localization_away_comap_range` supplies the algebra map's half. -/
+theorem range_base_specFunctor_map_localisationHom :
+    Set.range (specFunctor.{u}.map (localisationHom.{u} g f)).base =
+      (specLocalisationOpen.{u} g f : Set (specFunctor.{u}.obj ⟨n, k, g⟩)) := by
+  have h : CommRingCat.ofHom (localisationRingHom.{u} g f) =
+      CommRingCat.ofHom (algebraMap (PresentedAlgebra.{u} n k g)
+        (Localization.Away (Ideal.Quotient.mk (presentationIdeal.{u} g) f))) ≫
+        (specLocalisationRingIso.{u} g f).inv := by
+    rw [← localisationRingHom_comp_eq, Category.assoc, Iso.hom_inv_id, Category.comp_id]
+  change Set.range (Spec.locallyRingedSpaceMap
+    (CommRingCat.ofHom (localisationRingHom.{u} g f))).base = _
+  rw [h, Spec.locallyRingedSpaceMap_comp, LocallyRingedSpace.comp_base, TopCat.coe_comp,
+    Set.range_comp]
+  have hiso : IsIso (Spec.locallyRingedSpaceMap (specLocalisationRingIso.{u} g f).inv) :=
+    ⟨Spec.locallyRingedSpaceMap (specLocalisationRingIso.{u} g f).hom, by
+      rw [← Spec.locallyRingedSpaceMap_comp, Iso.hom_inv_id, Spec.locallyRingedSpaceMap_id], by
+      rw [← Spec.locallyRingedSpaceMap_comp, Iso.inv_hom_id, Spec.locallyRingedSpaceMap_id]⟩
+  have hs : Set.range (Spec.locallyRingedSpaceMap (specLocalisationRingIso.{u} g f).inv).base =
+      Set.univ :=
+    Set.range_eq_univ.2 (LocallyRingedSpace.homeoOfIso (asIso (Spec.locallyRingedSpaceMap
+      (specLocalisationRingIso.{u} g f).inv))).surjective
+  rw [hs, Set.image_univ]
+  exact PrimeSpectrum.localization_away_comap_range _ _
+
+/-! ### The isomorphism with the open subspace -/
+
+/-- **`Spec (A_f) ≅ Spec A|D(f)`**, the counterpart of `ComplexAnalytic.localisationIso`.
+
+Where the analytic side builds its isomorphism by hand out of two morphisms and two round trips,
+this one is `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.isoOfRangeEq` at the morphism and
+the inclusion of the open subspace: both are open immersions and
+`ComplexAnalytic.range_base_specFunctor_map_localisationHom` says they have the same image. That is
+what the instance above is for. -/
+def specLocalisationIso :
+    specFunctor.{u}.obj ⟨n + 1, k + 1, localisationPresentation.{u} g f⟩ ≅
+      (specFunctor.{u}.obj ⟨n, k, g⟩).restrict
+        (specLocalisationOpen.{u} g f).isOpenEmbedding :=
+  LocallyRingedSpace.IsOpenImmersion.isoOfRangeEq
+    (specFunctor.{u}.map (localisationHom.{u} g f))
+    ((specFunctor.{u}.obj ⟨n, k, g⟩).ofRestrict (specLocalisationOpen.{u} g f).isOpenEmbedding)
+    ((range_base_specFunctor_map_localisationHom.{u} g f).trans
+      ((specFunctor.{u}.obj ⟨n, k, g⟩).range_ofRestrict (specLocalisationOpen.{u} g f)).symm)
+
+/-- **The isomorphism is one over `Spec A`**: followed by the inclusion of the open subspace it is
+the morphism. -/
+@[reassoc (attr := simp)]
+theorem specLocalisationIso_hom_ofRestrict :
+    (specLocalisationIso.{u} g f).hom ≫
+        (specFunctor.{u}.obj ⟨n, k, g⟩).ofRestrict
+          (specLocalisationOpen.{u} g f).isOpenEmbedding =
+      specFunctor.{u}.map (localisationHom.{u} g f) :=
+  LocallyRingedSpace.IsOpenImmersion.isoOfRangeEq_hom_fac _ _ _
+
+/-- **The inverse is a morphism over `Spec A` too**: followed by the morphism it is the inclusion
+of the open subspace. -/
+@[reassoc (attr := simp)]
+theorem specLocalisationIso_inv_specFunctor_map :
+    (specLocalisationIso.{u} g f).inv ≫ specFunctor.{u}.map (localisationHom.{u} g f) =
+      (specFunctor.{u}.obj ⟨n, k, g⟩).ofRestrict
+        (specLocalisationOpen.{u} g f).isOpenEmbedding := by
+  rw [← specLocalisationIso_hom_ofRestrict.{u} g f, Iso.inv_hom_id_assoc]
 
 end
 
