@@ -797,10 +797,24 @@ locally ringed space and not an analytic space, so a version tied to
 
 **`ComplexAnalytic.coverIota_comp_coverGlueMorphisms` is what says the construction is not
 degenerate**, and `ComplexAnalytic.coverGlueMorphisms_coverIota` is its instance at the members'
-own inclusions rather than a second control. Two statements in this section have the family `f` on
-their right-hand sides — that one and `ComplexAnalytic.toLRSHom_coverGlueMorphisms` — and a
-definition ignoring `f` fails both. What a definition ignoring `f` *would* satisfy is
-`ComplexAnalytic.coverAnalytification_hom_ext`, which does not mention it.
+own inclusions rather than a second control — it constrains `ComplexAnalytic.coverGlueMorphisms`
+at one family where the general lemma constrains it at every family.
+
+**The criterion is "is about `ComplexAnalytic.coverGlueMorphisms` and mentions `f`", and exactly
+two statements here meet it**: that one and `ComplexAnalytic.toLRSHom_coverGlueMorphisms`. Having
+`f` on the right-hand side is not the criterion and would give three —
+`ComplexAnalytic.comm_coverGlueData` does too, and a `coverGlueMorphisms` ignoring its family
+would satisfy it perfectly well, because that theorem is about the glue datum and an arbitrary
+family and never mentions this construction at all. **The two come apart on exactly that
+statement**, which is why the criterion is worth stating rather than leaving to be read off the
+right-hand sides.
+
+**Nothing else here constrains the definition at all**, and that is a statement about the
+statements rather than about hypothetical definitions:
+`ComplexAnalytic.coverAnalytification_hom_ext`, `ComplexAnalytic.comm_coverGlueData` and
+`ComplexAnalytic.coverIncl_comp_coverIota` do not mention `ComplexAnalytic.coverGlueMorphisms`, so
+their truth is independent of how it is defined; and the round trip, being an instantiation,
+constrains it only where the family is `ComplexAnalytic.coverIota`.
 -/
 
 /-- **A family of morphisms out of the members which agrees over the overlaps satisfies the glue
