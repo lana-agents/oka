@@ -50,6 +50,12 @@ this module, measuring the *old* list on *this* tree closes over the moved file 
 move cost, and they are checkable without a build: the `Oka.*` count is `Oka.lean`'s import lines
 plus one for `Oka` itself, 149 + 1 there against 150 + 1 here.
 
+**The `Oka` bucket includes the root module `Oka`, and the `all` figure does too.** Saying so is
+not pedantry: a counter written as `m.toString.startsWith "Oka."` drops it and returns one less,
+while `all` keeps it, so the two figures then disagree by exactly one and the row reads as two
+trees spliced together. Use `` (`Oka).isPrefixOf ``, which compares whole components and matches
+the root module.
+
 Their cost is not zero everywhere, and the other figure is what a `Oka/CategoryTheory/` home would
 be priced at: `scripts/import_cost.py --target Mathlib.CategoryTheory.GlueData` puts them at **2**
 against `Mathlib/CategoryTheory/GlueData.lean`'s closure of 540. **That script cannot price this
