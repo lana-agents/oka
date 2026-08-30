@@ -445,8 +445,8 @@ theorem exists_lift_polyPresentedAlgebraEquiv (a : Polynomial (PresentedAlgebra.
 `Polynomial.derivative` into `MvPolynomial.pderiv` has to be about lifts, and this is it: whatever
 `F` lifts, `pderiv (localisationVar n) F` lifts its derivative.
 
-**This is the bridge `Oka/Analytification/StandardEtaleAnalytification.lean` names as missing**,
-which a consumer of `StandardEtalePair.cond` needs: that field's equation
+**This is the bridge `Oka/Analytification/StandardEtaleAnalytification.lean` was written naming
+as missing**, and which a consumer of `StandardEtalePair.cond` needs: that field's equation
 `derivative f * p₁ + f * p₂ = g ^ n` lives in `A[X]`, and applying this to a lift of each side
 turns it into an equation in the presented algebra whose value at a point is the hypothesis of
 `ComplexAnalytic.isIso_stalkMap_comp_uliftProj_of_pderiv`. A caller who has
