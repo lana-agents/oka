@@ -64,14 +64,28 @@ since nothing in it is bookkeeping. Neither is a corollary of the other: there i
 spaces between the two spellings of `ℂ^n` above `Type 0`, for the reason
 `Oka/AnalyticSpace/ProjectionStalk.lean`'s module docstring gives.
 
-## Why the hypothesis is `PowerSeries.order … = 1`
+## Why the hypothesis is a coefficient condition
 
-Because that is what `LocalOkaRing.quotientSimpleZeroEquiv` asks for, and its own docstring says
-why: **this repository has no partial-derivative operator on `LocalOkaRing`**, so *"`∂F/∂X_n` is
-a unit at the point"* is not expressible. `PowerSeries.order (MvPowerSeries.partialEval
-(Fin.last n) f) = 1` is the same condition on a germ vanishing at the point, and it is what
-`localweierstrass_preparation` computes internally. Bridging the two is separate work and nothing
-here attempts it.
+The primitive form is `PowerSeries.order (MvPowerSeries.partialEval (Fin.last n) f) = 1`, because
+that is what `LocalOkaRing.quotientSimpleZeroEquiv` asks for and what
+`localweierstrass_preparation` computes internally. Its own docstring gives the reason it is not
+stated as a derivative: **this repository has no partial-derivative operator on `LocalOkaRing`**,
+so *"`∂F/∂X_n` is a unit at the point"* is not expressible.
+
+**That is still true, and it is no longer a reason to leave the hypothesis in the order
+spelling.** `MvPowerSeries.order_partialEval_eq_one_iff` says the order condition **is** two
+coefficient conditions — no constant term, and a nonzero coefficient at
+`Finsupp.single (Fin.last n) 1` — so the four `…_of_coeff` results below take exactly those.
+Neither mentions a derivative, and no derivative operator is needed to supply them: a consumer
+that has one may use it, and a consumer that computes a Taylor coefficient directly need not
+acquire one. What that leaves open is the *identification* of that coefficient with `∂F/∂X_n` at
+the point, which is a statement about one named coefficient rather than about the order of a
+power series, and is still not here.
+
+Both hypotheses are then in a form a consumer holds. The first is `OkaRing.evalHom` — `F`
+vanishes at the point — through `OkaRing.constantCoeff_germ`, which is the defining property of a
+point of the hypersurface; and at the `ULift (Fin _)` indexing the second is read off the germ on
+the space one actually has, with no `LocalOkaRing.uliftEquiv` in the statement.
 
 Note that the germ is taken **at the point**, so the condition is on the Taylor expansion of `F`
 centred at `i.base x` and not at the origin; `okaStalkEquiv` absorbs the translation.
@@ -90,6 +104,13 @@ centred at `i.base x` and not at the origin; `okaStalkEquiv` absorbs the transla
 - `ComplexAnalytic.bijective_stalkMap_comp_uliftProj` and
   `ComplexAnalytic.isIso_stalkMap_comp_uliftProj`: the same for the `ULift (Fin _)`-indexed
   affine space named in §*The shape* above.
+- `ComplexAnalytic.bijective_stalkMap_comp_projCoords_of_coeff` and
+  `ComplexAnalytic.isIso_stalkMap_comp_projCoords_of_coeff`: **the same hypothesis as two
+  coefficients** — `F` vanishes at the point, and the coefficient of the last variable in its
+  Taylor expansion there is nonzero — with
+  `ComplexAnalytic.bijective_stalkMap_comp_uliftProj_of_coeff` and
+  `ComplexAnalytic.isIso_stalkMap_comp_uliftProj_of_coeff` the `ULift (Fin _)`-indexed forms,
+  **stated with no relabelling in sight**.
 
 ## What is not here
 
@@ -124,7 +145,9 @@ the same isomorphism, at the spelling a caller of `ofRestrict` already holds —
 because a reader who took the old sentence at face value would go and build a Mathlib bridge that
 the working proof does not use.
 
-**No derivative hypothesis**, and **no packaged `LocalOkaRing (Fin n) ≃+* X.presheaf.stalk x`**:
+**No derivative hypothesis** — see §*Why the hypothesis is a coefficient condition* for what
+replaced the need for one and what it does not settle — and **no packaged
+`LocalOkaRing (Fin n) ≃+* X.presheaf.stalk x`**:
 the isomorphism is available from the results below — `CategoryTheory.asIso` turns one of them
 into an isomorphism in `CommRingCat`, and `okaStalkEquiv` identifies its source with
 `LocalOkaRing (Fin n)` — and naming that composite would fix a direction this file has no consumer
@@ -275,6 +298,38 @@ theorem isIso_stalkMap_comp_projCoords (hcut : IsCutOutBy i ![F]) (x : X)
     IsIso ((i ≫ okaMapHom (projCoords n)).stalkMap x) :=
   (ConcreteCategory.isIso_iff_bijective _).2 (bijective_stalkMap_comp_projCoords hcut x hf)
 
+/-- **The same, from the two coefficients rather than from the order**: `F` vanishes at the point
+and the coefficient of the last variable in its Taylor expansion there is nonzero.
+
+`MvPowerSeries.order_partialEval_eq_one_iff` is the whole of the proof, with
+`OkaRing.constantCoeff_germ` turning the constant term of the germ into the *value* of `F` at the
+point — which is the form a consumer has, since a point of a hypersurface is one where the
+cutting section vanishes. The second hypothesis is a single Taylor coefficient and **not** a
+derivative; see this file's `## Why the hypothesis is a coefficient condition`. -/
+theorem bijective_stalkMap_comp_projCoords_of_coeff (hcut : IsCutOutBy i ![F]) (x : X)
+    (hval : OkaRing.evalHom
+      (show i.base x ∈ (⊤ : Opens (Fin (n + 1) → ℂ)) from trivial) F = 0)
+    (hlin : MvPowerSeries.coeff (Finsupp.single (Fin.last n) 1)
+      ((OkaRing.germ (show i.base x ∈ (⊤ : Opens (Fin (n + 1) → ℂ)) from trivial) F :
+        LocalOkaRing (Fin (n + 1))) : MvPowerSeries (Fin (n + 1)) ℂ) ≠ 0) :
+    Function.Bijective ((i ≫ okaMapHom (projCoords n)).stalkMap x).hom := by
+  refine bijective_stalkMap_comp_projCoords hcut x ?_
+  rw [MvPowerSeries.order_partialEval_eq_one_iff]
+  refine ⟨?_, hlin⟩
+  rw [← LocalOkaRing.constantCoeff_apply, OkaRing.constantCoeff_germ]
+  exact hval
+
+/-- **The same as an isomorphism**, from the two coefficients. -/
+theorem isIso_stalkMap_comp_projCoords_of_coeff (hcut : IsCutOutBy i ![F]) (x : X)
+    (hval : OkaRing.evalHom
+      (show i.base x ∈ (⊤ : Opens (Fin (n + 1) → ℂ)) from trivial) F = 0)
+    (hlin : MvPowerSeries.coeff (Finsupp.single (Fin.last n) 1)
+      ((OkaRing.germ (show i.base x ∈ (⊤ : Opens (Fin (n + 1) → ℂ)) from trivial) F :
+        LocalOkaRing (Fin (n + 1))) : MvPowerSeries (Fin (n + 1)) ℂ) ≠ 0) :
+    IsIso ((i ≫ okaMapHom (projCoords n)).stalkMap x) :=
+  (ConcreteCategory.isIso_iff_bijective _).2
+    (bijective_stalkMap_comp_projCoords_of_coeff hcut x hval hlin)
+
 end Fin
 
 section ULift
@@ -315,6 +370,52 @@ theorem isIso_stalkMap_comp_uliftProj (hcut : IsCutOutBy i ![F]) (x : X)
           LocalOkaRing (Fin (n + 1))) : MvPowerSeries (Fin (n + 1)) ℂ)) = 1) :
     IsIso ((i ≫ okaMapHom (coordEmb (uliftCastSuccEmb.{u} n))).stalkMap x) :=
   (ConcreteCategory.isIso_iff_bijective _).2 (bijective_stalkMap_comp_uliftProj hcut x hf)
+
+/-- **The same, from the two coefficients rather than from the order** — and, unlike the
+hypothesis it replaces, **stated entirely at the `ULift (Fin _)` indexing**, so a caller who
+holds `F` on `ComplexAnalytic.complexAffineSpace (n + 1)` never meets
+`LocalOkaRing.uliftEquiv` at all.
+
+That is what `LocalOkaRing.coeff_uliftEquiv` buys: the relabelling moves the coefficient at
+`Finsupp.single (ULift.up (Fin.last n)) 1` to the one at `Finsupp.single (Fin.last n) 1` and does
+nothing else, so the condition may be read off the germ on the space one actually has. The first
+hypothesis passes through `LocalOkaRing.constantCoeff_uliftEquiv` and `OkaRing.constantCoeff_germ`
+and says that `F` vanishes at the point. -/
+theorem bijective_stalkMap_comp_uliftProj_of_coeff (hcut : IsCutOutBy i ![F]) (x : X)
+    (hval : OkaRing.evalHom
+      (show i.base x ∈ (⊤ : Opens (ULift.{u} (Fin (n + 1)) → ℂ)) from trivial) F = 0)
+    (hlin : MvPowerSeries.coeff (Finsupp.single (ULift.up.{u} (Fin.last n)) 1)
+      ((OkaRing.germ (show i.base x ∈ (⊤ : Opens (ULift.{u} (Fin (n + 1)) → ℂ)) from trivial) F :
+        LocalOkaRing (ULift.{u} (Fin (n + 1)))) :
+          MvPowerSeries (ULift.{u} (Fin (n + 1))) ℂ) ≠ 0) :
+    Function.Bijective
+      ((i ≫ okaMapHom (coordEmb (uliftCastSuccEmb.{u} n))).stalkMap x).hom := by
+  refine bijective_stalkMap_comp_uliftProj hcut x ?_
+  rw [MvPowerSeries.order_partialEval_eq_one_iff]
+  refine ⟨?_, ?_⟩
+  · rw [← LocalOkaRing.constantCoeff_apply, LocalOkaRing.constantCoeff_uliftEquiv,
+      OkaRing.constantCoeff_germ]
+    exact hval
+  · rw [show (Finsupp.single (Fin.last n) 1 : Fin (n + 1) →₀ ℕ) =
+        Finsupp.embDomain (Equiv.ulift (α := Fin (n + 1))).toEmbedding
+          (Finsupp.single (ULift.up.{u} (Fin.last n)) 1) by
+      rw [Finsupp.embDomain_single]; rfl,
+    LocalOkaRing.coeff_uliftEquiv]
+    exact hlin
+
+/-- **The same as an isomorphism**, from the two coefficients. This is the form the
+Riemann-existence line consumes, since `ComplexAnalytic.AnalyticSpace` indexes its coordinates by
+`ULift (Fin _)`. -/
+theorem isIso_stalkMap_comp_uliftProj_of_coeff (hcut : IsCutOutBy i ![F]) (x : X)
+    (hval : OkaRing.evalHom
+      (show i.base x ∈ (⊤ : Opens (ULift.{u} (Fin (n + 1)) → ℂ)) from trivial) F = 0)
+    (hlin : MvPowerSeries.coeff (Finsupp.single (ULift.up.{u} (Fin.last n)) 1)
+      ((OkaRing.germ (show i.base x ∈ (⊤ : Opens (ULift.{u} (Fin (n + 1)) → ℂ)) from trivial) F :
+        LocalOkaRing (ULift.{u} (Fin (n + 1)))) :
+          MvPowerSeries (ULift.{u} (Fin (n + 1))) ℂ) ≠ 0) :
+    IsIso ((i ≫ okaMapHom (coordEmb (uliftCastSuccEmb.{u} n))).stalkMap x) :=
+  (ConcreteCategory.isIso_iff_bijective _).2
+    (bijective_stalkMap_comp_uliftProj_of_coeff hcut x hval hlin)
 
 end ULift
 

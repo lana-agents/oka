@@ -55,6 +55,8 @@ about the definitions makes them equal, and the proof is the identity theorem: b
 - `LocalOkaRing.uliftEquiv_renameEmb`: relabelling `ULift` commutes with renaming along an
   embedding, and `LocalOkaRing.uliftEquiv_renameEmb_incl`, its instance producing the inclusion
   of the Weierstrass theorems.
+- `LocalOkaRing.coeff_uliftEquiv` and `LocalOkaRing.constantCoeff_uliftEquiv`: **relabelling
+  `ULift` moves each coefficient to the relabelled exponent**, and fixes the constant term.
 
 ## What is not here
 
@@ -228,6 +230,32 @@ theorem uliftEquiv_renameEmb [Fintype κ] {e : ι ↪ κ} {E : ULift.{v} ι ↪ 
     uliftEquiv κ (renameEmb E P) = renameEmb e (uliftEquiv ι P) := by
   rw [uliftEquiv_eq_renameEmb, uliftEquiv_eq_renameEmb, renameEmb_trans, renameEmb_trans]
   exact renameEmb_congr hE P
+
+/-- **Relabelling `ULift` moves a coefficient to the relabelled exponent**, and nothing else
+happens to it.
+
+`LocalOkaRing.uliftEquiv` is a relabelling, so the underlying series is
+`MvPowerSeries.rename` of the old one and `MvPowerSeries.coeff_embDomain_rename` applies
+verbatim. Stated at a general exponent rather than at `Finsupp.single` because the two consumers
+below want `0` and `Finsupp.single i 1`, and `Finsupp.embDomain_single` specialises it. -/
+lemma coeff_uliftEquiv (P : LocalOkaRing (ULift.{v} ι)) (d : ULift.{v} ι →₀ ℕ) :
+    MvPowerSeries.coeff (Finsupp.embDomain (Equiv.ulift (α := ι)).toEmbedding d)
+        ((uliftEquiv ι P : LocalOkaRing ι) : MvPowerSeries ι ℂ) =
+      MvPowerSeries.coeff d (P : MvPowerSeries (ULift.{v} ι) ℂ) := by
+  rw [uliftEquiv_eq_renameEmb, coe_renameEmb, MvPowerSeries.coeff_embDomain_rename]
+
+-- Not `@[simp]`: `LocalOkaRing.constantCoeff_apply` is `@[simp]` and rewrites both sides to
+-- `MvPowerSeries.constantCoeff` of the coercion, so the attribute here would never fire. This is
+-- the same reason `LocalOkaRing.constantCoeff_algebraMap` carries in `Oka/LocalOkaRing.lean`.
+/-- **Relabelling `ULift` does not move the constant term.** The exponent `0` relabels to `0`,
+which is the case `d = 0` of `LocalOkaRing.coeff_uliftEquiv`. -/
+lemma constantCoeff_uliftEquiv (P : LocalOkaRing (ULift.{v} ι)) :
+    constantCoeff (uliftEquiv ι P) = constantCoeff P := by
+  rw [constantCoeff_apply, constantCoeff_apply,
+    ← MvPowerSeries.coeff_zero_eq_constantCoeff_apply,
+    ← MvPowerSeries.coeff_zero_eq_constantCoeff_apply,
+    show (0 : ι →₀ ℕ) = Finsupp.embDomain (Equiv.ulift (α := ι)).toEmbedding 0 by simp]
+  exact coeff_uliftEquiv P 0
 
 /-- **The instance of the square that produces `LocalOkaRing.incl`**: an embedding of
 `ULift (Fin n)` into `ULift (Fin (n + 1))` lying over `Fin.castSucc` becomes, after relabelling

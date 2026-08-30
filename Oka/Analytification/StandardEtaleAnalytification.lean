@@ -81,13 +81,19 @@ standard étale pair.
   (`OkaTest/GermQuotientDegreeOne.lean`) reads it off a **Weierstrass degree**, through
   `LocalOkaRing.order_partialEval_eq_natDegree` (`Oka/Regular.lean`), which is the only such
   computation under `Oka/`; and `order_partialEval_parabola`, in that same test file, reads it off
-  `X ^ 2` through `partialEval_coe_fromPolynomial` directly. What no route reaches is a germ
-  presented by *"its first derivative is nonzero"*: `Oka/` has **no partial-derivative operator at
-  all**, and `Oka/AnalyticSpace/SimpleZeroStalk.lean` says in terms that bridging *"`∂F/∂X_n` is a
-  unit at the point"* to the order condition is separate work it does not attempt. So the equation
-  `derivative f * p₁ + f * p₂ = g ^ n` — which is the *type* of the field `StandardEtalePair.cond`
-  and reaches a proof only through an `obtain` on its `∃ p₁ p₂ n` — cannot be carried to that
-  hypothesis by anything on hand, and no declaration below pretends otherwise.
+  `X ^ 2` through `partialEval_coe_fromPolynomial` directly. **`Oka/` still has no
+  partial-derivative operator at all**, and that much of what stood here is true — but the
+  conclusion drawn from it, that the hypothesis cannot be reached by anything on hand, does not
+  follow and is no longer the case. `MvPowerSeries.order_partialEval_eq_one_iff`
+  (`Oka/LocalOkaRing.lean`) says the order condition **is** two coefficient conditions, and
+  `ComplexAnalytic.isIso_stalkMap_comp_uliftProj_of_coeff` takes them directly: `F` vanishes at the
+  point, and the coefficient of the last variable in its Taylor expansion there is nonzero.
+  **Neither needs a derivative operator to state or to supply.** What is still missing — and it is
+  a smaller thing than a derivative calculus — is the identification of that one coefficient with
+  `Polynomial.derivative` of `F` read in the last variable and evaluated at the point, which is
+  what would carry `derivative f * p₁ + f * p₂ = g ^ n`, the *type* of the field
+  `StandardEtalePair.cond` (reached only through an `obtain` on its `∃ p₁ p₂ n`), into the
+  hypothesis. No declaration below attempts it.
 * **No witness in this file that the open is ever non-empty, and the witness is elsewhere.** The
   statements below are hypothesis-free in `F` and `G`, so none of them can be vacuously
   satisfied — but that says nothing about whether the *objects* are degenerate, and for `F = 1`
