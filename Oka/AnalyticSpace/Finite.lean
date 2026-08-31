@@ -55,6 +55,30 @@ There is deliberately no `IsProper` class. `IsProperMap` on `f.toLRSHom.base` al
 statement; a class would have to carry its own identity, composition and non-vacuity API to earn
 its place, and nothing here or downstream consumes one.
 
+## Cancellation, and the one half of it that is missing
+
+The two fields cancel differently, and saying which is which is what keeps the finite étale rung's
+gap legible. **The fibre half cancels outright**:
+`ComplexAnalytic.AnalyticSpace.finite_fiber_of_comp` deduces finite fibres for `f` from finite
+fibres for `f ≫ g`, and asks nothing whatever of `g` — not finiteness, not closedness, not
+injectivity — because the fibre of `f` over `y` sits inside the fibre of `f ≫ g` over `g y`.
+
+**The closed half does not**, and it does not even given that `g` is finite. Take the real line
+with two origins over the real line, with `f` the inclusion of one of the two branches: then
+`f ≫ g` is the identity, hence closed with finite fibres, and `g` is closed with fibres of at most
+two points, while the complement of the image of `f` is the other origin alone, which is not open
+— so `f` is not closed. **That is a statement about topological spaces, it is compiled nowhere
+below, and it is recorded as a reason not to expect a hypothesis-free cancellation rather than as
+a theorem.**
+It does not collide with `ComplexAnalytic.AnalyticSpace.isFinite_of_isFinite_comp`, which is this
+file's cancellation lemma and asks the second factor to be injective: the `g` above is exactly not
+that, at the two origins.
+
+The classical repair is to factor `f` through its graph and ask `Y` to be separated over the base,
+and neither ingredient exists here — there is no separatedness notion for
+`ComplexAnalytic.AnalyticSpace` and no fibre products, which is the absence the base-change
+paragraph below records.
+
 ## What is not here, and it is the whole of the subject
 
 **Grauert's finite mapping theorem** — that `f_*𝒪_X` is a coherent `𝒪_Y`-module for finite `f` —
@@ -96,6 +120,10 @@ stated here rather than left to be discovered.
   `ℂ^n` finite, while the theorem wanted is finiteness over the analytification of the base
   algebra, which sits inside `ℂ^n` by
   `ComplexAnalytic.isClosedEmbedding_base_analytificationIncl`.
+- `ComplexAnalytic.AnalyticSpace.finite_fiber_of_comp`: **the fibre half of finiteness cancels
+  with no hypothesis at all** — if `f ≫ g` has finite fibres then so does `f`, and the second
+  factor is not asked to be finite, closed or injective. The closed half does not cancel with it;
+  see the section above.
 - `ComplexAnalytic.AnalyticSpace.not_isFinite_of_infinite_fiber`: the criterion a non-example is
   exhibited by.
 - `ComplexAnalytic.AnalyticSpace.isProperMap_base_of_isFinite`: **a finite morphism is proper**,
@@ -234,6 +262,34 @@ theorem isFinite_comp_of_isClosedEmbedding {X Y S : AnalyticSpace.{u}} (i : X �
     simp only [Set.mem_preimage, Set.mem_singleton_iff] at hx
     exact ⟨⟨x, rfl⟩, hx⟩
 
+/-- **The fibre half of finiteness cancels, with no hypothesis at all**: if `f ≫ g` has finite
+fibres then so does `f`, whatever `g` is.
+
+The fibre of `f` over `y` is contained in the fibre of `f ≫ g` over `g y`, and a subset of a finite
+set is finite. **There is no hypothesis on `g` at all** — no `[IsFinite g]`, no injectivity — and
+`g` is in the binders only because the composite mentions it.
+
+**This is one of the two halves of a cancellation statement for
+`ComplexAnalytic.AnalyticSpace.IsFinite`, and the other one is missing**; the module docstring says
+which and gives the shape of a counterexample. It is also the fibre half of
+`ComplexAnalytic.AnalyticSpace.isFinite_of_isFinite_comp` below, which is where this containment
+used to be written out inline: that lemma's injectivity hypothesis is consumed entirely in its
+closed half, and factoring this out is what makes that visible in the statements rather than only
+in the prose.
+
+**A `theorem` and not an `instance`**, for the reason
+`ComplexAnalytic.AnalyticSpace.isLocalIso_of_comp` gives in `Oka/AnalyticSpace/LocalIso.lean`:
+instance search would have to invent `Z` and `g`, which the goal determines in no way. -/
+theorem finite_fiber_of_comp {X Y Z : AnalyticSpace.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
+    [IsFinite (f ≫ g)] (y : Y) : Finite (f.toLRSHom.base ⁻¹' {y}) := by
+  have hsub : (f.toLRSHom.base : X → Y) ⁻¹' {y} ⊆
+      ((f ≫ g).toLRSHom.base : X → Z) ⁻¹' {(g.toLRSHom.base : Y → Z) y} := by
+    intro x hx
+    simp only [Set.mem_preimage, Set.mem_singleton_iff] at hx ⊢
+    exact congrArg _ hx
+  haveI := IsFinite.finite_fiber (f := f ≫ g) ((g.toLRSHom.base : Y → Z) y)
+  exact Finite.Set.subset _ hsub
+
 /-- **Finiteness cancels along an injective second factor**: if `f ≫ i` is finite and the
 underlying map of `i` is injective, then `f` is finite.
 
@@ -245,12 +301,12 @@ Nor of `ComplexAnalytic.AnalyticSpace.isFinite_comp`, which needs both factors f
 second factor need not be finite at all, only injective.
 
 **Injectivity is asked for and nothing more, and the proof below consumes it in exactly one of
-the two fields.** The fibre half is free: `f.toLRSHom.base ⁻¹' {y}` is contained in
-`(f ≫ i).toLRSHom.base ⁻¹' {i y}` for any `i` whatever, so finiteness transfers with no hypothesis
-at all — injectivity would upgrade that containment to an equality, and the proof deliberately
-stays with the containment so that the one place the hypothesis is used is visible. The closed
-half is that place, and it uses the continuity of `i` rather than any closedness of it: for `C`
-closed, `f.toLRSHom.base '' C` is the **preimage** under `i.toLRSHom.base` of
+the two fields.** The fibre half is free, and it is now a theorem of its own that says so:
+`ComplexAnalytic.AnalyticSpace.finite_fiber_of_comp`, directly above, asks nothing at all of the
+second factor. Injectivity would upgrade its containment to an equality; staying with the
+containment is what keeps the one place the hypothesis is used visible. The closed half is that
+place, and it uses the continuity of `i` rather than any closedness of it: for `C` closed,
+`f.toLRSHom.base '' C` is the **preimage** under `i.toLRSHom.base` of
 `(f ≫ i).toLRSHom.base '' C`, which is closed by hypothesis. So `IsClosedEmbedding` would be the
 wrong hypothesis — it asks for closedness that is never consumed — and this file's style is to ask
 for no more than is used, as
@@ -276,14 +332,7 @@ theorem isFinite_of_isFinite_comp {X Y S : AnalyticSpace.{u}} (f : X ⟶ Y) (i :
         exact ⟨x, hx, hi hxy⟩
     rw [himg]
     exact (h.isClosedMap C hC).preimage i.toLRSHom.base.hom.continuous
-  finite_fiber y := by
-    have hsub : (f.toLRSHom.base : X → Y) ⁻¹' {y} ⊆
-        ((f ≫ i).toLRSHom.base : X → S) ⁻¹' {(i.toLRSHom.base : Y → S) y} := by
-      intro x hx
-      simp only [Set.mem_preimage, Set.mem_singleton_iff] at hx ⊢
-      exact congrArg _ hx
-    haveI := h.finite_fiber ((i.toLRSHom.base : Y → S) y)
-    exact Finite.Set.subset _ hsub
+  finite_fiber y := haveI := h; finite_fiber_of_comp f i y
 
 /-- **A morphism with an infinite fibre is not finite**, which is how a non-example is exhibited:
 the fibre condition is the one that fails for a projection, and it fails for a reason one can

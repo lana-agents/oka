@@ -42,6 +42,22 @@ the second factor is not.** So the finite morphisms are *not* closed under right
 statements above would only say that the class is somewhere between empty and everything; this
 says the composition lemma has the strength it claims and no more.
 
+## The composite is the identity *morphism*, and that is what makes cancellation testable here
+
+**`ComplexAnalytic.axisIncl_comp_proj`.** `ComplexAnalytic.base_axisIncl_comp_proj` says the
+composite's base map is `id`, which is all the finiteness statements above need; a morphism of
+analytic spaces is more than its base map, and the upgrade is
+`ComplexAnalytic.AnalyticSpace.hom_ext_complexAffineSpace` plus three pullback computations. With
+it the composite satisfies every hypothesis of a cancellation lemma for free, and the two halves
+of finite étale cancellation that hold — `ComplexAnalytic.AnalyticSpace.isLocalIso_of_comp` and
+`ComplexAnalytic.AnalyticSpace.finite_fiber_of_comp` — can be run against a second factor that is
+this file's non-example.
+
+**The one new fact it produces is `ComplexAnalytic.not_isLocalIso_proj`**, and it is the third
+thing the projection is shown to fail. Unlike the other two it is not proved from a set one can
+name: it is the cancellation lemma read contrapositively, and it doubles as the check that that
+lemma's hypothesis on its second factor cannot be dropped.
+
 ## The stalk half of `IsLocalIso`, which is the other reason this file exists
 
 **`ComplexAnalytic.isIso_stalkMap_sq`: every stalk map of the squaring map of `ℂ ∖ {0}` is an
@@ -560,6 +576,94 @@ other redundant**: this one says the class is nonempty at zero cost, and that on
 larger than the isomorphisms. -/
 example : AnalyticSpace.IsFiniteEtale (𝟙 (AnalyticSpace.complexAffineSpace.{u} 1)) :=
   inferInstance
+
+/-! ### Cancellation at this pair, and what it says about the projection
+
+`ComplexAnalytic.AnalyticSpace.isLocalIso_of_comp` and
+`ComplexAnalytic.AnalyticSpace.finite_fiber_of_comp` are the two halves of a cancellation
+statement for the finite étale rung that do hold, and the pair `ComplexAnalytic.axisIncl`,
+`ComplexAnalytic.proj` is where this file can see them. It composes to the **identity** — not
+merely to a morphism with the identity as its base map, which is
+`ComplexAnalytic.base_axisIncl_comp_proj` and is all the finiteness statements above needed — so
+the composite satisfies every hypothesis at zero cost, and each of the two lemmas can be run
+against a second factor that is as badly behaved as this file's non-example is. -/
+
+/-- **The identity's coordinate pullbacks are the coordinates.**
+
+The companion of `ComplexAnalytic.AnalyticSpace.coordPullback_comp` at the identity, and the only
+step of `ComplexAnalytic.axisIncl_comp_proj` below that is about neither of the two morphisms.
+`AnalyticSpace.Hom.toLRSHom (𝟙 _)` is the identity of the underlying locally ringed space by `rfl`,
+after which this is functoriality of global sections.
+
+**This is a general statement and its home would be `Oka/AnalyticSpace/HomToComplex.lean`**, beside
+the composition lemma it is the companion of. It is here because this file is its only consumer;
+a second one is what should move it. -/
+theorem coordPullback_id {n : ℕ} (j : ULift.{u} (Fin n)) :
+    AnalyticSpace.coordPullback (𝟙 (AnalyticSpace.complexAffineSpace.{u} n)) j = coord j := by
+  have h : AnalyticSpace.Hom.toLRSHom (𝟙 (AnalyticSpace.complexAffineSpace.{u} n)) =
+      𝟙 (AnalyticSpace.complexAffineSpace.{u} n).toLocallyRingedSpace := rfl
+  change (LocallyRingedSpace.Γ.map (AnalyticSpace.Hom.toLRSHom
+    (𝟙 (AnalyticSpace.complexAffineSpace.{u} n))).op).hom (coord j) = _
+  rw [h, op_id, LocallyRingedSpace.Γ.map_id]
+  rfl
+
+/-- **The composite `ℂ ⟶ ℂ² ⟶ ℂ` is the identity morphism**, and not only the identity on points.
+
+`ComplexAnalytic.base_axisIncl_comp_proj` is the statement about base maps and is what the
+finiteness results above consume; it does not give this, because a morphism of analytic spaces is
+its base map together with a map of structure sheaves. The upgrade is
+`ComplexAnalytic.AnalyticSpace.hom_ext_complexAffineSpace` — a morphism into `ℂ^m` is determined by
+the pullbacks of the coordinates — and then three computations of a pullback:
+`ComplexAnalytic.AnalyticSpace.coordPullback_comp` for the composite, `Γ_map_okaMapHom_coord`
+twice for the two factors, which are both `ComplexAnalytic.AnalyticSpace.okaMap` of an explicit
+family, and `ComplexAnalytic.coordPullback_id` for the identity. The last rewrite is
+`Subsingleton.elim` on `ULift (Fin 1)`, which is where "the first coordinate" and "the coordinate"
+are identified. -/
+theorem axisIncl_comp_proj :
+    axisIncl.{u} ≫ proj.{u} = 𝟙 (AnalyticSpace.complexAffineSpace.{u} 1) := by
+  refine AnalyticSpace.hom_ext_complexAffineSpace _ _ fun j ↦ ?_
+  change AnalyticSpace.coordPullback (axisIncl.{u} ≫ proj.{u}) j =
+    AnalyticSpace.coordPullback (𝟙 (AnalyticSpace.complexAffineSpace.{u} 1)) j
+  rw [AnalyticSpace.coordPullback_comp,
+    show AnalyticSpace.coordPullback proj.{u} j = coord (ULift.up 0) from
+      Γ_map_okaMapHom_coord projFamily.{u} j]
+  change AnalyticSpace.coordPullback axisIncl.{u} (ULift.up 0) = _
+  rw [show AnalyticSpace.coordPullback axisIncl.{u} (ULift.up 0) = axisFamily.{u} (ULift.up 0) from
+      Γ_map_okaMapHom_coord axisFamily.{u} _,
+    coordPullback_id, axisFamily, if_pos rfl,
+    Subsingleton.elim (ULift.up 0 : ULift.{u} (Fin 1)) j]
+
+/-- **The projection is not a local isomorphism**, and no property of it is computed to say so.
+
+The whole proof is `ComplexAnalytic.AnalyticSpace.isLocalIso_of_comp` read contrapositively at
+`ComplexAnalytic.axisIncl_comp_proj`: the composite is the identity, hence a local isomorphism, so
+if `ComplexAnalytic.proj` were one then `ComplexAnalytic.axisIncl` would be one too — and
+`ComplexAnalytic.not_isLocalIso_axisIncl` says it is not.
+
+**So this pair is also the check that the hypothesis on the second factor is not removable.** Drop
+`[IsLocalIso g]` from that lemma and it proves `ComplexAnalytic.axisIncl` is a local isomorphism,
+which is false here. Together with `ComplexAnalytic.not_isFinite_proj` and
+`ComplexAnalytic.not_isClosedMap_base_proj` this is the third thing the projection fails, and the
+only one of the three obtained from a general lemma rather than from a set one can name. -/
+theorem not_isLocalIso_proj : ¬ AnalyticSpace.IsLocalIso proj.{u} := by
+  intro h
+  haveI : AnalyticSpace.IsLocalIso (axisIncl.{u} ≫ proj.{u}) := by
+    rw [axisIncl_comp_proj]
+    infer_instance
+  exact not_isLocalIso_axisIncl.{u} (AnalyticSpace.isLocalIso_of_comp axisIncl.{u} proj.{u})
+
+/-- **And the fibre half cancels against a second factor that is not finite at all.**
+
+`ComplexAnalytic.AnalyticSpace.finite_fiber_of_comp` asks nothing of `g`, and this is the check
+that the sentence means what it says: `ComplexAnalytic.proj` is the standard non-finite morphism of
+this file (`ComplexAnalytic.not_isFinite_proj`), and the fibres of
+`ComplexAnalytic.axisIncl` come out finite from `ComplexAnalytic.isFinite_axisIncl_comp_proj`
+alone. The conclusion is not new — `ComplexAnalytic.isFinite_axisIncl` has it, with more — so this
+is a statement about the lemma's hypotheses and is kept as an `example`. -/
+example (y : AnalyticSpace.complexAffineSpace.{u} 2) :
+    Finite ((axisIncl.{u}).toLRSHom.base ⁻¹' {y}) :=
+  haveI := isFinite_axisIncl_comp_proj.{u}
+  AnalyticSpace.finite_fiber_of_comp axisIncl.{u} proj.{u} y
 
 /-! ### The squaring map of the punctured line, and its stalk maps
 
