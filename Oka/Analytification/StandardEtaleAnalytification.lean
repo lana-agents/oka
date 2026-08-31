@@ -114,11 +114,19 @@ standard étale pair.
   `ComplexAnalytic.eval_pderiv_ne_zero_of_mem` below, on top of
   `ComplexAnalytic.eval_pderiv_ne_zero` (`Oka/Analytification/StandardEtale.lean`): an evaluation
   argument at a point where `F` vanishes and `G` does not, with no analysis and no geometry in
-  it. The second is untouched. The theorem above is about the hypersurface in `ℂ^(n+1)` and the
-  étale presentation is that hypersurface met with `D(G)` in `ℂ^(n+2)`;
-  `Oka/AnalyticSpace/SimpleZeroPolynomial.lean` says the transport to an open base is
-  `Oka/AnalyticSpace/OpenBaseProjection.lean` and is stated for the germ hypothesis rather than
-  for the derivative one, and **nobody has measured what restating it costs**. A third absence
+  it. **The second has been priced and is half-answered, and the half that is left is not the one
+  this bullet used to name.** The theorem above is about the hypersurface in `ℂ^(n+1)` and the
+  étale presentation is that hypersurface met with `D(G)` in `ℂ^(n+2)`. Restating the transport at
+  the derivative hypothesis — the part that was unmeasured — is
+  `Oka/AnalyticSpace/OpenBaseProjectionPolynomial.lean` and it is two rewrites, because the
+  restriction is absorbed once in the coefficient form
+  `ComplexAnalytic.bijective_stalkMap_comp_projRestrict_of_coeff`. **What that does not do is
+  reach `D(G)`**, and the reason is a difference of shape rather than of cost:
+  `ComplexAnalytic.cylinder` is a preimage from the base, a cylinder `V × ℂ`, while `G` involves
+  the fibre variable — `Y·G − 1` is a relation of `ComplexAnalytic.etalePresentation` — so
+  `{G ≠ 0}` cuts the *source*. A cylinder it is only when `G` does not involve the last variable.
+  **Nothing below produces a `V` from a `G`, and no statement anywhere in this repository
+  transports the stalk half across a restriction of the source.** A third absence
   was not named here before and is not the same one: all four stalk theorems take an
   `ComplexAnalytic.IsCutOutBy` datum for **one** cutting section, and
   `ComplexAnalytic.hypersurfacePresentation` has `k + 1` relations. **No declaration below

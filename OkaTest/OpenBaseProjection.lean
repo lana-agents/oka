@@ -43,23 +43,42 @@ prove; and the family is `ComplexAnalytic.parabolaPoly` read on the subtype.
   square roots of `1` survive the puncture, which is why this example still works after the base
   has been cut down.
 * `ComplexAnalytic.isFinite_parabolaPunctured_comp_projRestrict` — the theorem itself.
+* `ComplexAnalytic.isIso_stalkMap_parabolaCyl_comp_projRestrict` — **the stalk half, at the same
+  curve over the same base.** The hypothesis of
+  `ComplexAnalytic.isIso_stalkMap_comp_projRestrict_of_pderiv` is a derivative of a polynomial at
+  a point, so it is `ComplexAnalytic.eval_pderiv_parabolaMvPoly_one` — `∂(z₁² − z₀)/∂z₁ = 2·z₁`,
+  which is `2` at `(1, 1)` — and not a computation about a power series.
+  `ComplexAnalytic.parabolaCylPoint` is the point, and it is where
+  `ComplexAnalytic.Γgerm_resΓ_mem_maximalIdeal_iff` is read **backwards**: nothing before this
+  put a point *into* a hypersurface of the cylinder.
 
 ## What is not checked here
 
-* **Nothing about stalks, so nothing here is finite étale.** The parabola over the *punctured*
-  line is exactly where the germ of `X² - C z` does have a simple zero along the last axis — that
-  is the point of the puncture, and it is why the punctured base is the right one to test —
-  but the hypothesis of `ComplexAnalytic.isIso_stalkMap_comp_projRestrict` is
-  `PowerSeries.order (MvPowerSeries.partialEval …) = 1` on a germ, and computing that order for
-  this germ is a Weierstrass computation nothing in this repository does. So the two halves are
-  still not exhibited at one morphism, here or in `OkaTest/MonicProjection.lean`.
-* **Nothing about `ComplexAnalytic.IsCutOutBy`.** The morphism is built by restricting a
-  hand-built one and its image is computed from `ComplexAnalytic.range_base_parabolaIncl`, so
+* **The two halves are still not exhibited at one morphism**, and the obstruction is not the one
+  this bullet used to record. It said the stalk hypothesis was an order condition on a germ whose
+  computation is a Weierstrass argument nothing here does; that is no longer why, since
+  `ComplexAnalytic.isIso_stalkMap_comp_projRestrict_of_pderiv` asks for a derivative instead and
+  the stalk half is checked above. What is left is that the two checks are at **different
+  sources**: the finiteness half is at `ComplexAnalytic.parabolaPunctured`, a hand-built morphism
+  restricted, and the stalk half is at the zero-locus subspace
+  `ComplexAnalytic.parabolaCyl`, because
+  `ComplexAnalytic.isFinite_comp_projRestrict_of_isCutOutBy` asks its source to be an
+  `ComplexAnalytic.AnalyticSpace` while the stalk theorems take any locally ringed space, and
+  **nothing in this repository makes a zero-locus subspace of a restricted affine space an
+  analytic space**. Nothing here measures what closing that costs.
+* **And joining them would still not be `IsLocalIso`.** The third field is topological, and
+  `Oka/AnalyticSpace/SimpleZeroStalk.lean` records that no statement anywhere says the underlying
+  map of `i ≫ p` is even open.
+* **Nothing about `ComplexAnalytic.IsCutOutBy` on the finiteness side.** The finite morphism is
+  built by restricting a hand-built one and its image is computed from
+  `ComplexAnalytic.range_base_parabolaIncl`, so
   `ComplexAnalytic.isFinite_comp_projRestrict_of_range_eq` is what is applied and
   `ComplexAnalytic.isFinite_comp_projRestrict_of_isCutOutBy` and
   `ComplexAnalytic.range_base_eq_of_isCutOutBy_resΓ` are exercised nowhere. The reason is the one
   `OkaTest/FiniteMorphism.lean` gives: cut-out data for a morphism of *analytic* spaces is never
-  produced in this repository, only assumed.
+  produced in this repository, only assumed — and the stalk half above escapes that because
+  `AlgebraicGeometry.LocallyRingedSpace.isCutOutBy_zeroLocusSubspaceι` supplies the datum for a
+  locally ringed space, which is all those theorems ask.
 * **No second example.** One instance is what makes the hypotheses jointly satisfiable over a
   proper open base; nothing here says the theorem is sharp in any hypothesis, and in particular
   nothing degenerates the degree.
@@ -209,6 +228,82 @@ theorem not_injective_base_parabolaPunctured_comp_projRestrict :
   norm_num
 
 end NotInjective
+
+/-! ### The stalk half, at a polynomial hypersurface over the punctured line -/
+
+section Stalk
+
+/-- **The parabola as a polynomial in the two coordinates of `ℂ²`**, `z₁² - z₀`, at the
+`ULift (Fin 2)` indexing the affine space carries. -/
+def parabolaMvPoly : MvPolynomial (ULift.{u} (Fin 2)) ℂ :=
+  MvPolynomial.X (ULift.up.{u} (Fin.last 1)) ^ 2 - MvPolynomial.X (ULift.up.{u} 0)
+
+/-- **It vanishes at `(1, 1)`.** -/
+theorem eval_parabolaMvPoly_one :
+    MvPolynomial.eval (fun _ ↦ (1 : ℂ) : ULift.{u} (Fin 2) → ℂ) parabolaMvPoly.{u} = 0 := by
+  simp [parabolaMvPoly]
+
+/-- **Its last partial derivative is `2` there**, which is what the hypothesis of
+`ComplexAnalytic.isIso_stalkMap_comp_projRestrict_of_pderiv` asks about. -/
+theorem eval_pderiv_parabolaMvPoly_one :
+    MvPolynomial.eval (fun _ ↦ (1 : ℂ) : ULift.{u} (Fin 2) → ℂ)
+      (MvPolynomial.pderiv (ULift.up.{u} (Fin.last 1)) parabolaMvPoly.{u}) = 2 := by
+  simp [parabolaMvPoly]
+
+/-- **The cutting section**: the parabola's polynomial, as an entire function restricted to the
+cylinder over the punctured line. -/
+def parabolaCylSection : ((AnalyticSpace.complexAffineSpace.{u} 2).restrict
+    (cylinder punctured.{u})).presheaf.obj (op ⊤) :=
+  (AnalyticSpace.complexAffineSpace.{u} 2).resΓ (cylinder punctured.{u})
+    (OkaRing.ofMvPolynomial ⊤ parabolaMvPoly.{u})
+
+/-- **The point `(1, 1)` of the cylinder**: its first coordinate is `1`, which is nonzero, so it
+lies over the punctured line. -/
+def onePoint : (AnalyticSpace.complexAffineSpace.{u} 2).restrict (cylinder punctured.{u}) :=
+  ⟨fun _ ↦ 1, mem_cylinder.2 ((mem_punctured_iff.{u} _).2 (by
+    rw [uliftSnocHomeo_fst, okaMapFun_coordEmb]
+    exact one_ne_zero))⟩
+
+/-- **The parabola over the punctured line, as the zero locus of that one section.**
+
+Unlike `ComplexAnalytic.parabolaPunctured`, which is a hand-built morphism restricted, this one
+comes with a `ComplexAnalytic.IsCutOutBy` datum for free —
+`AlgebraicGeometry.LocallyRingedSpace.isCutOutBy_zeroLocusSubspaceι` — which is what the stalk
+theorems ask for and what `OkaTest/FiniteMorphism.lean` records is otherwise never produced. -/
+def parabolaCyl : LocallyRingedSpace.{u} :=
+  ((AnalyticSpace.complexAffineSpace.{u} 2).restrict
+    (cylinder punctured.{u})).toLocallyRingedSpace.zeroLocusSubspace ![parabolaCylSection.{u}]
+
+/-- **`(1, 1)` is a point of it**, by `ComplexAnalytic.Γgerm_resΓ_mem_maximalIdeal_iff` read
+backwards: the germ of the restricted section lies in the maximal ideal because the polynomial
+vanishes there. This is the direction of that lemma nothing consumed before. -/
+def parabolaCylPoint : parabolaCyl.{u} :=
+  ⟨onePoint.{u}, (LocallyRingedSpace.mem_zeroLocus_iff _ _).2 fun j ↦ by
+    fin_cases j
+    exact (Γgerm_resΓ_mem_maximalIdeal_iff onePoint.{u} _).2
+      ((OkaRing.evalHom_ofMvPolynomial _ _ _).trans eval_parabolaMvPoly_one.{u})⟩
+
+/-- **The projection of the parabola to the punctured line is an isomorphism on stalks at
+`(1, 1)`** — the hypotheses of
+`ComplexAnalytic.isIso_stalkMap_comp_projRestrict_of_pderiv` all hold at once, over a base that is
+not the whole of `ℂ`.
+
+This is what `OkaTest/OpenBaseProjection.lean` could not exhibit while the only forms of the
+hypothesis were an order and a Taylor coefficient: the derivative of `z₁² - z₀` in `z₁` is `2·z₁`,
+which is `2` at this point, and no Weierstrass computation is needed to see it. -/
+theorem isIso_stalkMap_parabolaCyl_comp_projRestrict :
+    IsIso ((((AnalyticSpace.complexAffineSpace.{u} 2).restrict
+        (cylinder punctured.{u})).toLocallyRingedSpace.zeroLocusSubspaceι
+          ![parabolaCylSection.{u}] ≫
+      (AnalyticSpace.projRestrict punctured.{u}).toLRSHom).stalkMap parabolaCylPoint.{u}) :=
+  isIso_stalkMap_comp_projRestrict_of_pderiv punctured.{u}
+    (((AnalyticSpace.complexAffineSpace.{u} 2).restrict
+      (cylinder punctured.{u})).toLocallyRingedSpace.isCutOutBy_zeroLocusSubspaceι
+        ![parabolaCylSection.{u}])
+    parabolaCylPoint.{u}
+    (fun h ↦ two_ne_zero (eval_pderiv_parabolaMvPoly_one.{u}.symm.trans h))
+
+end Stalk
 
 end ComplexAnalytic
 
