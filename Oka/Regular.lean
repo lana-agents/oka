@@ -361,8 +361,11 @@ What the tree has instead is a **number at a point**:
 origin, and it applies to **every** germ — `LocalOkaRing ι` is by definition the locally convergent
 series, so its hypothesis is `LocalOkaRing.locallyConvergent` and nothing more;
 `MvPolynomial.coeff_single_one_taylorAlgHom` and `LocalOkaRing.coeff_single_one_ofMvPolynomial`
-give `MvPolynomial.eval y (MvPolynomial.pderiv i p)`, for a polynomial and for the germ of one.
-Each of those identifies a *linear coefficient* with a derivative. A derivative of a *polynomial*
+give `MvPolynomial.eval y (MvPolynomial.pderiv i p)`, for a polynomial and for the germ of one;
+and `OkaRing.coeff_single_one_germ` gives `fderiv ℂ (f.toGlobalFun U) y (Pi.single j 1)`, the
+derivative of a holomorphic *function* at an arbitrary point of its domain, which is the first
+of these that needs neither a polynomial nor the origin. Each of them identifies a *linear
+coefficient* with a derivative. A derivative of a *polynomial*
 may also stay in a polynomial ring — `ComplexAnalytic.polyPresentedAlgebraEquiv_mk_pderiv` says
 `MvPolynomial.pderiv` of a lift is a lift of a `Polynomial.derivative` — which is a third thing
 again and still not a germ. Other statements only *hypothesise* such a derivative, those of

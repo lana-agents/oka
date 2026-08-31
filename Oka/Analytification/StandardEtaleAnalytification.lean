@@ -143,11 +143,19 @@ standard étale pair.
   along the isomorphism. **It is a construction rather than a quotation**, and in particular not a
   quotation of taxis #1112's `Pex`, which witnesses a non-closed *image* and says nothing about an
   inhabited `D(G)`.
-* **No `IsLocalIso` and no `IsFiniteEtale`.** Beside the missing lemma above,
-  `Oka/AnalyticSpace/SimpleZeroStalk.lean` records that its stalk statement says **nothing about
-  the underlying map** — *"not even that it is open"* — so the topological field of
-  `ComplexAnalytic.AnalyticSpace.IsLocalIso` is a separate absence and not a base-restriction
-  question.
+* **No `IsLocalIso` and no `IsFiniteEtale`, and the reason has changed.** The topological field
+  of `ComplexAnalytic.AnalyticSpace.IsLocalIso` is no longer an absence in general:
+  `ComplexAnalytic.isLocalHomeomorph_base_comp_uliftProj_of_pderiv`
+  (`Oka/AnalyticSpace/SimpleZeroTopology.lean`) makes the projection of a polynomial hypersurface
+  in `ℂ^(n+1)` a local homeomorphism from exactly the derivative hypothesis
+  `ComplexAnalytic.eval_pderiv_ne_zero_of_mem` produces. **What is missing is the same thing that
+  is missing on the stalk side, and it is a restriction of the *source*.** That theorem is about
+  the hypersurface in `ℂ^(n+1)`, and the étale presentation is that hypersurface met with `D(G)`
+  in `ℂ^(n+2)`; `D(G)` is not a cylinder, because `G` involves the fibre variable, so
+  `Oka/AnalyticSpace/OpenBaseProjection.lean` — which restricts the **base** and pulls back — is
+  not a missing counterpart but a statement about a different restriction. The bullet above says
+  that of the stalk half; it is equally true of the topological one, and **no statement anywhere
+  in this repository transports either half across a restriction of the source.**
 * **No finiteness.** `IsFiniteEtale` of the unrestricted morphism is **false**: a standard étale
   algebra inverts `g`, and `Spec` of `(ℂ[X][x] ⧸ (x² - X))[1/x]` over `ℂ` has the punctured line
   for image, which is not closed. `Oka/Analytification/MonicHypersurface.lean`'s `## What is not
