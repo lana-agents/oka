@@ -91,6 +91,14 @@ missing*; that file now says the opposite in terms, and the clause went stale on
 paragraph was rewritten. A cross-reference that quotes another file's stance goes stale every
 time that stance moves; one that names a declaration does not.
 
+**The two coefficient forms are the same trade as on the whole of `ℂ^(n+1)`**, and they are here
+rather than one file up because the order form is what the abstract step delivers:
+`MvPowerSeries.order_partialEval_eq_one_iff` splits the order into a vanishing condition and one
+coefficient, and the vanishing is free — it says the cutting function vanishes at the point, which
+`ComplexAnalytic.evalHom_eq_zero_of_isCutOutBy_resΓ` derives from `hcut`. They ask their cutting
+section to be a restriction, which the order form does not, because that is what
+`ComplexAnalytic.cylinderStalkEquiv_Γgerm_resΓ` needs in order to compute the germ at all.
+
 `ComplexAnalytic.cylinderStalkEquiv_stalkMap_projRestrict` is then the `hP` hypothesis of the
 abstract step and is where `ComplexAnalytic.AnalyticSpace.okaStalkEquiv_stalkMap_uliftProj_apply`
 enters; the two cut-out hypotheses go through unchanged, since
@@ -126,8 +134,14 @@ gives — and they are what make the simple-zero hypothesis and the cut-out hypo
   `ComplexAnalytic.uliftSnocHomeo`.
 - `ComplexAnalytic.base_projRestrict_eq`: **the projection over `V` is `Prod.fst`** through
   `ComplexAnalytic.cylinderHomeo`.
+- `ComplexAnalytic.Γgerm_resΓ_mem_maximalIdeal_iff`: **the germ of a restricted entire function
+  lies in the maximal ideal exactly where the function vanishes** — the pointwise statement both
+  of the two below are read off, in both directions.
 - `ComplexAnalytic.range_base_eq_of_isCutOutBy_resΓ`: a hypersurface of the cylinder cut out by
   the restriction of an entire function has that function's zero set for its image.
+- `ComplexAnalytic.evalHom_eq_zero_of_isCutOutBy_resΓ`: **that function vanishes at every point of
+  the hypersurface it cuts out**, which is what makes the vanishing half of the simple-zero
+  hypothesis free rather than asked for.
 - `ComplexAnalytic.isFinite_comp_projRestrict_of_range_eq`: **the projection of a monic
   hypersurface of the cylinder to `V` is finite.**
 - `ComplexAnalytic.isFinite_comp_projRestrict_of_isCutOutBy`: the same with the hypersurface
@@ -142,9 +156,20 @@ gives — and they are what make the simple-zero hypothesis and the cut-out hypo
 - `ComplexAnalytic.bijective_stalkMap_comp_projRestrict` and
   `ComplexAnalytic.isIso_stalkMap_comp_projRestrict`: **the projection of a hypersurface of the
   cylinder with a simple zero is an isomorphism on stalks.**
+- `ComplexAnalytic.bijective_stalkMap_comp_projRestrict_of_coeff` and
+  `ComplexAnalytic.isIso_stalkMap_comp_projRestrict_of_coeff`: **the same hypothesis as one
+  coefficient** — the coefficient of the last variable in the Taylor expansion at the point of the
+  entire function the hypersurface is cut out by — which is the form
+  `Oka/AnalyticSpace/OpenBaseProjectionPolynomial.lean` reads as a derivative.
 
 ## What is not here
 
+* **No derivative hypothesis, and it is not absent from the repository.** The two coefficient
+  forms below are as far as this file goes; reading that coefficient as
+  `MvPolynomial.pderiv` at the point needs `Oka/Polynomial/Germ.lean`, which this file does not
+  import, and the four-line rewrite is
+  `Oka/AnalyticSpace/OpenBaseProjectionPolynomial.lean`. The same split, for the same reason, as
+  `Oka/AnalyticSpace/SimpleZeroStalk.lean` against `Oka/AnalyticSpace/SimpleZeroPolynomial.lean`.
 * **No `IsFiniteEtale`, and no `IsLocalIso`.** The two halves are transported separately and
   nothing below joins them; that is the assembly the Riemann-existence line does, and it needs a
   third thing neither half supplies — that the underlying map of the composite is a local
@@ -169,9 +194,14 @@ gives — and they are what make the simple-zero hypothesis and the cut-out hypo
   `ComplexAnalytic.IsCutOutBy` datum, for the reason this bullet gives. **Whether any output of
   it fails to extend is settled nowhere**: the coefficients of the one such polynomial this
   repository writes down are entire, which `OkaTest/HolomorphicFamily.lean` records.
-* **No second restriction.** `V` is an open subset of `ℂ^n` and the source of `i` is any analytic
-  space; there is no statement about restricting `V` further, which would be
-  `ComplexAnalytic.restrictHom` again and is not needed by anything.
+* **No second restriction, and in particular nothing about a restriction of the *source*.** `V` is
+  an open subset of `ℂ^n` and `ComplexAnalytic.cylinder V` is its preimage, so every statement
+  below restricts the base and pulls back. There is no statement about restricting `V` further,
+  which would be `ComplexAnalytic.restrictHom` again and is not needed by anything — **and none
+  about an open subset of `ℂ^(n+1)` that is not a preimage**, which is the shape the standard
+  étale line actually presents: `D(G)` for a `G` involving the fibre variable is not a cylinder
+  over anything. Reading the paragraph at the top of this file as covering that case is the trap
+  taxis #1112's description names, and nothing below closes it.
 
 ## References
 
@@ -275,19 +305,63 @@ variable {W : AnalyticSpace.{u}}
 
 /-! ### Finiteness of the projection over `V` -/
 
-/-- **A hypersurface of the cylinder cut out by the restriction of an entire function has that
-function's zero set for its image.**
+/-- **The germ of a restricted entire function lies in the maximal ideal of the stalk of the
+cylinder subspace exactly where the function vanishes.**
 
-The analogue of `ComplexAnalytic.range_base_eq_of_isCutOutBy`, and it needs one step more: the
-germ of the restricted section is the image of the ambient germ under the stalk map of the
-inclusion of the open subspace, which is an isomorphism and therefore reflects the maximal ideal
-(`ComplexAnalytic.mem_maximalIdeal_stalkMap_iff`); `germ_mem_maximalIdeal_iff` then reads the
-ambient germ as a value.
+`germ_mem_maximalIdeal_iff` is the same statement on the ambient `ℂ^(n+1)`, and
+the step between them is that the germ of the *restricted* section is the image of the ambient
+germ under the stalk map of the inclusion of the open subspace, which is an isomorphism and so
+reflects the maximal ideal (`ComplexAnalytic.mem_maximalIdeal_stalkMap_iff`).
+
+**It is stated as an `Iff` and at a point rather than inside the range computation below**, which
+is where it used to live as a `have`. Both directions are consumed: the forward one is what makes
+the vanishing half of the simple-zero hypothesis free — see
+`ComplexAnalytic.evalHom_eq_zero_of_isCutOutBy_resΓ` — and the backward one is what puts a point
+*into* a hypersurface of the cylinder, which is what `OkaTest/OpenBaseProjection.lean` needs to
+exhibit the stalk hypothesis at all.
 
 **The cutting section is `G` restricted and not an arbitrary section of the cylinder.** That is
 not a convenience: the global sections of the cylinder subspace are not `OkaRing (cylinder V)` on
 the nose, so `germ_mem_maximalIdeal_iff` does not apply to a section that is not a restriction.
 See the module docstring. -/
+theorem Γgerm_resΓ_mem_maximalIdeal_iff
+    {V : TopologicalSpace.Opens (ULift.{u} (Fin n) → ℂ)}
+    (z : (AnalyticSpace.complexAffineSpace.{u} (n + 1)).restrict (cylinder V))
+    (G : OkaRing (⊤ : TopologicalSpace.Opens (ULift.{u} (Fin (n + 1)) → ℂ))) :
+    ((AnalyticSpace.complexAffineSpace.{u} (n + 1)).restrict (cylinder V)).presheaf.Γgerm z
+        ((AnalyticSpace.complexAffineSpace.{u} (n + 1)).resΓ (cylinder V) G) ∈
+      IsLocalRing.maximalIdeal
+        (((AnalyticSpace.complexAffineSpace.{u} (n + 1)).restrict
+          (cylinder V)).presheaf.stalk z) ↔
+      OkaRing.evalHom (U := ⊤)
+        (x := ((AnalyticSpace.complexAffineSpace.{u} (n + 1)).ofRestrict
+          (cylinder V)).toLRSHom.base z) trivial G = 0 := by
+  have hgerm : ((AnalyticSpace.complexAffineSpace.{u} (n + 1)).restrict
+      (cylinder V)).presheaf.Γgerm z
+        ((AnalyticSpace.complexAffineSpace.{u} (n + 1)).resΓ (cylinder V) G) =
+      ((((AnalyticSpace.complexAffineSpace.{u} (n + 1)).ofRestrict
+        (cylinder V)).toLRSHom.stalkMap z).hom
+        ((AnalyticSpace.complexAffineSpace.{u} (n + 1)).presheaf.Γgerm
+          (((AnalyticSpace.complexAffineSpace.{u} (n + 1)).ofRestrict
+            (cylinder V)).toLRSHom.base z) G)) :=
+    (LocallyRingedSpace.stalkMap_germ_apply
+      ((AnalyticSpace.complexAffineSpace.{u} (n + 1)).ofRestrict (cylinder V)).toLRSHom ⊤ z
+      trivial G).symm
+  rw [hgerm, mem_maximalIdeal_stalkMap_iff]
+  exact germ_mem_maximalIdeal_iff (U := ⊤) trivial G
+
+/-- **A hypersurface of the cylinder cut out by the restriction of an entire function has that
+function's zero set for its image.**
+
+The analogue of `ComplexAnalytic.range_base_eq_of_isCutOutBy`, and after
+`ComplexAnalytic.Γgerm_resΓ_mem_maximalIdeal_iff` it is that lemma at every point, with the
+one-element family unfolded. The step that lemma carries — the germ of the restricted section is
+the image of the ambient germ under an isomorphism of stalks — used to stand here as a `have`,
+and it is now a named declaration because a point has to be put *into* a hypersurface of the
+cylinder as well as read off one.
+
+Both the restriction of `G` and the restriction to a one-element family are the shape of the
+statement and not a convenience; see that lemma. -/
 theorem range_base_eq_of_isCutOutBy_resΓ
     {V : TopologicalSpace.Opens (ULift.{u} (Fin n) → ℂ)}
     (i : W ⟶ (AnalyticSpace.complexAffineSpace.{u} (n + 1)).restrict (cylinder V))
@@ -299,37 +373,14 @@ theorem range_base_eq_of_isCutOutBy_resΓ
         (x := ((AnalyticSpace.complexAffineSpace.{u} (n + 1)).ofRestrict
           (cylinder V)).toLRSHom.base z) trivial G = 0} := by
   rw [hcut.range_base]
-  have hiff : ∀ z : ((AnalyticSpace.complexAffineSpace.{u} (n + 1)).restrict (cylinder V)),
-      ((AnalyticSpace.complexAffineSpace.{u} (n + 1)).restrict (cylinder V)).presheaf.Γgerm z
-          ((AnalyticSpace.complexAffineSpace.{u} (n + 1)).resΓ (cylinder V) G) ∈
-        IsLocalRing.maximalIdeal
-          (((AnalyticSpace.complexAffineSpace.{u} (n + 1)).restrict
-            (cylinder V)).presheaf.stalk z) ↔
-      OkaRing.evalHom (U := ⊤)
-        (x := ((AnalyticSpace.complexAffineSpace.{u} (n + 1)).ofRestrict
-          (cylinder V)).toLRSHom.base z) trivial G = 0 := by
-    intro z
-    have hgerm : ((AnalyticSpace.complexAffineSpace.{u} (n + 1)).restrict
-        (cylinder V)).presheaf.Γgerm z
-          ((AnalyticSpace.complexAffineSpace.{u} (n + 1)).resΓ (cylinder V) G) =
-        ((((AnalyticSpace.complexAffineSpace.{u} (n + 1)).ofRestrict
-          (cylinder V)).toLRSHom.stalkMap z).hom
-          ((AnalyticSpace.complexAffineSpace.{u} (n + 1)).presheaf.Γgerm
-            (((AnalyticSpace.complexAffineSpace.{u} (n + 1)).ofRestrict
-              (cylinder V)).toLRSHom.base z) G)) :=
-      (LocallyRingedSpace.stalkMap_germ_apply
-        ((AnalyticSpace.complexAffineSpace.{u} (n + 1)).ofRestrict (cylinder V)).toLRSHom ⊤ z
-        trivial G).symm
-    rw [hgerm, mem_maximalIdeal_stalkMap_iff]
-    exact germ_mem_maximalIdeal_iff (U := ⊤) trivial G
   refine Set.ext fun z ↦ ?_
   simp only [Set.mem_setOf_eq]
   constructor
   · intro h
-    exact (hiff z).1 (h 0)
+    exact (Γgerm_resΓ_mem_maximalIdeal_iff z G).1 (h 0)
   · intro h j
     fin_cases j
-    exact (hiff z).2 h
+    exact (Γgerm_resΓ_mem_maximalIdeal_iff z G).2 h
 
 variable {d : ℕ}
 
@@ -545,6 +596,81 @@ theorem isIso_stalkMap_comp_projRestrict (hcut : IsCutOutBy i ![F]) (x : X)
             LocalOkaRing (Fin (n + 1))) : MvPowerSeries (Fin (n + 1)) ℂ)) = 1) :
     IsIso ((i ≫ (AnalyticSpace.projRestrict V).toLRSHom).stalkMap x) :=
   (ConcreteCategory.isIso_iff_bijective _).2 (bijective_stalkMap_comp_projRestrict V hcut x hf)
+
+variable {G : OkaRing (⊤ : TopologicalSpace.Opens (ULift.{u} (Fin (n + 1)) → ℂ))}
+
+/-- **The entire function a hypersurface of the cylinder is cut out by vanishes at every point of
+that hypersurface.**
+
+`ComplexAnalytic.IsCutOutBy.evalHom_eq_zero` over an open subset of the base — and it is not that
+theorem instantiated, because that one asks its ambient space to be `complexSpace` on the nose and
+the ambient space here is an open subspace of one. What replaces the missing
+instance is `ComplexAnalytic.Γgerm_resΓ_mem_maximalIdeal_iff`, applied at `i.base x`, which is in
+the image by construction.
+
+As on the whole of `ℂ^(n+1)`, this is what makes the vanishing half of the simple-zero hypothesis
+**unstatable rather than optional** in the two results below. -/
+theorem evalHom_eq_zero_of_isCutOutBy_resΓ
+    (hcut : IsCutOutBy i ![(AnalyticSpace.complexAffineSpace.{u} (n + 1)).resΓ (cylinder V) G])
+    (x : X) :
+    OkaRing.evalHom (U := ⊤)
+      (x := ((AnalyticSpace.complexAffineSpace.{u} (n + 1)).ofRestrict
+        (cylinder V)).toLRSHom.base (i.base x)) trivial G = 0 := by
+  have hmem : i.base x ∈ Set.range (i.base) := ⟨x, rfl⟩
+  rw [hcut.range_base] at hmem
+  exact (Γgerm_resΓ_mem_maximalIdeal_iff (i.base x) G).1 (hmem 0)
+
+/-- **The same, from one coefficient rather than from the order**: the coefficient of the last
+variable in the Taylor expansion at the point of the entire function the cylinder's hypersurface
+is cut out by.
+
+`ComplexAnalytic.bijective_stalkMap_comp_uliftProj_of_coeff` over an open subset of the base, and
+the three steps are the three that theorem takes:
+`MvPowerSeries.order_partialEval_eq_one_iff` splits the order into two coefficient conditions,
+the constant one is free — here from `ComplexAnalytic.evalHom_eq_zero_of_isCutOutBy_resΓ` rather
+than from `ComplexAnalytic.IsCutOutBy.evalHom_eq_zero` — and `LocalOkaRing.coeff_uliftEquiv` moves
+the surviving one to the index type the space actually carries.
+
+**The cutting section is `G` restricted**, which is what
+`ComplexAnalytic.cylinderStalkEquiv_Γgerm_resΓ` asks in order to compute the germ at all; the
+order form above takes an arbitrary section of the cylinder and pays for it by stating its
+hypothesis about an element of an abstract stalk. -/
+theorem bijective_stalkMap_comp_projRestrict_of_coeff
+    (hcut : IsCutOutBy i ![(AnalyticSpace.complexAffineSpace.{u} (n + 1)).resΓ (cylinder V) G])
+    (x : X)
+    (hlin : MvPowerSeries.coeff (Finsupp.single (ULift.up.{u} (Fin.last n)) 1)
+      ((OkaRing.germ (U := ⊤)
+        (y := ((AnalyticSpace.complexAffineSpace.{u} (n + 1)).ofRestrict
+          (cylinder V)).toLRSHom.base (i.base x)) trivial G :
+            LocalOkaRing (ULift.{u} (Fin (n + 1)))) :
+          MvPowerSeries (ULift.{u} (Fin (n + 1))) ℂ) ≠ 0) :
+    Function.Bijective ((i ≫ (AnalyticSpace.projRestrict V).toLRSHom).stalkMap x).hom := by
+  refine bijective_stalkMap_comp_projRestrict V hcut x ?_
+  rw [cylinderStalkEquiv_Γgerm_resΓ, MvPowerSeries.order_partialEval_eq_one_iff]
+  refine ⟨?_, ?_⟩
+  · rw [← LocalOkaRing.constantCoeff_apply, LocalOkaRing.constantCoeff_uliftEquiv,
+      OkaRing.constantCoeff_germ]
+    exact evalHom_eq_zero_of_isCutOutBy_resΓ V hcut x
+  · rw [show (Finsupp.single (Fin.last n) 1 : Fin (n + 1) →₀ ℕ) =
+        Finsupp.embDomain (Equiv.ulift (α := Fin (n + 1))).toEmbedding
+          (Finsupp.single (ULift.up.{u} (Fin.last n)) 1) by
+      rw [Finsupp.embDomain_single]; rfl,
+    LocalOkaRing.coeff_uliftEquiv]
+    exact hlin
+
+/-- **The same as an isomorphism**, from the one coefficient. -/
+theorem isIso_stalkMap_comp_projRestrict_of_coeff
+    (hcut : IsCutOutBy i ![(AnalyticSpace.complexAffineSpace.{u} (n + 1)).resΓ (cylinder V) G])
+    (x : X)
+    (hlin : MvPowerSeries.coeff (Finsupp.single (ULift.up.{u} (Fin.last n)) 1)
+      ((OkaRing.germ (U := ⊤)
+        (y := ((AnalyticSpace.complexAffineSpace.{u} (n + 1)).ofRestrict
+          (cylinder V)).toLRSHom.base (i.base x)) trivial G :
+            LocalOkaRing (ULift.{u} (Fin (n + 1)))) :
+          MvPowerSeries (ULift.{u} (Fin (n + 1))) ℂ) ≠ 0) :
+    IsIso ((i ≫ (AnalyticSpace.projRestrict V).toLRSHom).stalkMap x) :=
+  (ConcreteCategory.isIso_iff_bijective _).2
+    (bijective_stalkMap_comp_projRestrict_of_coeff V hcut x hlin)
 
 end Stalk
 
