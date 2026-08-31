@@ -41,6 +41,7 @@ import OkaTest.DividedDifference
 import OkaTest.EpiIsLocallySurjective
 import OkaTest.EvalContinuous
 import OkaTest.Factorisation
+import OkaTest.FiniteEtaleOver
 import OkaTest.FiniteMorphism
 import OkaTest.GermFlatness
 import OkaTest.GermFlatnessAtAPoint

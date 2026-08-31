@@ -13,7 +13,7 @@ space which is not `ℂ^n`, and the classes of morphisms — finite, local isomo
 together with the topological criteria they are proved from, in both directions — the criteria
 that read a class off the underlying map, and the construction that produces a morphism in a
 class from a covering map — and the constructions that feed those criteria a family of monic
-polynomials.
+polynomials, together with the category the finite étale ones form over a fixed base.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -1148,3 +1148,56 @@ info: 'ComplexAnalytic.isFinite_comp_projRestrict_of_monic' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isFinite_comp_projRestrict_of_monic
+
+/-! ### The finite étale covers of a fixed base, as a category
+
+`Oka/AnalyticSpace/FiniteEtaleOver.lean`. Finite étale read as a
+`CategoryTheory.MorphismProperty`, the category it cuts out of `CategoryTheory.Over X`, two
+objects of that category, and the lemma that separates an object from the base over itself.
+
+The four `CategoryTheory.MorphismProperty` instances of that file are anonymous and are not
+guarded here; each is a quotation of one of the three instances guarded above, whose guards cover
+the axioms they are built from.
+-/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isFiniteEtale' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFiniteEtale
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isFiniteEtale_iff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFiniteEtale_iff
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.id' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.id
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.trivial' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.trivial
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isIso_hom_of_iso_id' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isIso_hom_of_iso_id
