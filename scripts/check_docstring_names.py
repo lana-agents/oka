@@ -51,8 +51,12 @@ non-empty.  "Two identical trees diff to empty" is the test the broken driver pa
 
 **One implementation scans both trees** — this file's, whichever tree it lives in.  That is
 deliberate and it is what isolates a change in the *prose* from a change in the *rules*: a branch
-that edits `is_name_shaped` or `comment_regions` will not show up in `--diff` at all.  Run the
-check itself, not the diff, to see the effect of a rule change.
+that edits `is_name_shaped`, `comment_regions` or **the walk** — `ROOTS` and `PROSE_DIRS` — will
+not show up in `--diff` at all.  Run the check itself, not the diff, to see the effect of such a
+change.  The walk is named here because it is the only member of that class this repository has
+actually exercised: the widening of 2026-08-31 had to take its own headline delta as two runs,
+one for the walk and one for the prose, and it is also the only member that falsifies the
+base-figure agreement recorded below.
 
 **`--diff` alone is silent on a branch that only rewords, and `--sites` is what is not.**  A
 docstring commit that swaps words *between* backticked names that already exist adds no name and
@@ -68,12 +72,25 @@ word swapped between two existing names moves only sites.
 **The two figures `--diff` prints are the headline's own**, and there is no second definition of
 either: the `N backticked names (M distinct)` line at the end of a normal run is
 `sum(len(v) for v in candidates().values())` and `len(candidates())`, which is exactly what
-`report` below computes.  So `--diff BASE --tree BASE` reproduces the base's own headline, and a
-pull request body can quote both figures from one command.  Measured 2026-08-29: `f6a5fa9` gives
-`6112 backticked names (2159 distinct)` and `70580e1` gives `6115 (2159)`, each agreeing with
-that tree's own copy of this script loaded by path.  A note on taxis #1192 reported the
-occurrence count as running "one or two below" the headline; it does not, and what was being
-compared was two different trees.
+`report` below computes.  So `--diff BASE --tree BASE` reproduces the base's own headline — **when
+the base's copy of this script walks the same directories** — and a pull request body can quote
+both figures from one command.
+
+**That qualification is not decorative, and the walk widening of 2026-08-31 is what added it.**
+Measured 2026-08-29, before `scripts/` was walked: `f6a5fa9` gave `6112 backticked names (2159
+distinct)` and `70580e1` gave `6115 (2159)`, each agreeing with that tree's own copy of this
+script loaded by path.  Re-measured 2026-08-31 with *this* copy, on worktrees of the same two
+commits: **`6120 (2161)` and `6123 (2161)`**, `+8 / +2` on each, which is those trees' own
+`scripts/` prose newly read.  Both readings are correct and they answer different questions —
+this script's is the one a Δ needs, because a Δ has to scan both trees by one rule, and the base's
+own is the figure that base's CI printed.  **So quoting a base figure from here as "what the base
+reported" is wrong for any base cut before 2026-08-31, and nothing flags it**: `--diff` prints
+both numbers from one implementation and neither is marked.  Re-date this paragraph rather than
+extend it the next time the walk moves, and note that this file is a `.py` and so is checked by
+nothing — the only thing keeping the figures above honest is that they were re-run.
+
+A note on taxis #1192 reported the occurrence count as running "one or two below" the headline;
+it does not, and what was being compared was two different trees.
 
 ## What counts as a candidate
 
@@ -90,7 +107,9 @@ check — the only Lean prose in the repository that it did not read.  taxis #13
 measurement; what found it is that a reviewer who knows this script well predicted, on a
 one-paragraph edit to `scripts/DumpOkaDecls.lean`, that the headline figure would move, and it
 could not.  Three of the eight dotted candidates under `scripts/` were findings, and two of those
-three are in the paragraph above this one in `scripts/DumpEnvNames.lean`.
+three share one paragraph of `scripts/DumpEnvNames.lean` — the one under its "The format, and why
+the two kinds are told apart" heading, which states this field-notation rule and then exhibits a
+citation it rejects.
 
 `scripts/` is walked for its `.lean` files only, like the other two.  **The `.py` files there —
 this one included — are still read by nothing**, and they carry the same prose in the same
@@ -920,8 +939,9 @@ def self_test() -> int:
         # **The walk, and the boundary it stops at.**  Until 2026-08-31 `scripts/` was outside it,
         # so the two Lean helpers that describe this checker were checked by nothing; taxis #1337
         # has the measurement.  The failure mode is the one this whole file is built against — a
-        # green run that measured less than the reader thinks — so it gets a positive control and
-        # two negatives that between them say the walk widened by exactly one directory.
+        # green run that measured less than the reader thinks — so it gets one positive and three
+        # controls, which between them say the walk widened by exactly one directory and one
+        # extension and that nothing else in the tree moved.
         #
         # Every other fixture here has no `scripts/` at all, which is why they still work: a
         # `PROSE_DIRS` entry missing from a tree costs a silent zero rather than a traceback.
@@ -950,8 +970,13 @@ def self_test() -> int:
               "Unwalked.zzzPy" not in walked.stdout)
         check("negative: a `.lean` file outside the three walked directories is not read",
               "Unwalked.zzzDir" not in walked.stdout)
+        # Absence from stdout is also what a run that never read `Oka/Fixture.lean` would print,
+        # so the headline is asserted too: exactly two candidates were read — the planted one and
+        # the bogus one under `scripts/` — and exactly one of them failed.
         check("positive: `Planted.someField` in the same tree still resolves",
-              "Planted.someField" not in walked.stdout,
+              "Planted.someField" not in walked.stdout
+              and "2 backticked names (2 distinct)" in walked.stdout
+              and "1 unresolved" in walked.stdout,
               "the run above reports one name and it is the planted one")
 
     if failures:
