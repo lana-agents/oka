@@ -244,12 +244,23 @@ which is what happens here, `#check` on the name failing afterwards.
 `theorem AnalyticSpace.foo (h : F = F) : True := trivial` is the whole reproduction, and writing
 `TopologicalSpace.Opens` in that binder removes it.
 
-**`lake build --wfail` catches both forms and this is not invisible to CI.** The dropped form
-leaves the unused-variable warnings for the hypotheses of the theorem that is now absent, the
-recovered form leaves the `sorryAx` warning, and `.orchestra/validation.sh` runs
-`lake build --wfail || exit 1`, which turns either into `error: build failed`. What misleads is
-the *message*: it names an unused variable rather than a missing theorem, so a reader who takes
-`--wfail` output for noise loses it. -/
+**The recovered form is caught by CI every time; the dropped form is caught only by accident.**
+`.orchestra/validation.sh` runs `lake build --wfail || exit 1`, and the recovered form leaves
+`sorryAx` in its own statement and warns about it, so that one is always `error: build failed`.
+**The drop reports nothing of its own.** What `--wfail` escalates there is a side effect — the
+unused-variable linter firing on a binder of the theorem that has just vanished — so a
+declaration with no binder to flag goes silently. Appended to this section,
+
+```lean
+theorem AnalyticSpace.zzz_nohyp : F = F := rfl
+```
+
+elaborates with no output and exit 0, `lake build --wfail` on this module is green, and a
+`#check` on the name afterwards fails: it was never added. Where the drop *is* caught, what
+misleads is the *message*, which names an unused variable rather than a missing theorem, so a
+reader who takes `--wfail` output for noise loses it. **What catches every form is a count of
+the declarations**: `scripts/DumpOkaDecls.lean` for an unguarded name, and for a guarded one
+the guard itself, since `#print axioms` on a name the environment does not have is an error. -/
 theorem isLocalIso_comp_proj_of_coeff (hcut : IsCutOutBy i'.toLRSHom ![F])
     (hlin : ∀ x : W, MvPowerSeries.coeff (Finsupp.single (ULift.up.{u} (Fin.last n)) 1)
       ((OkaRing.germ (show i'.toLRSHom.base x ∈
