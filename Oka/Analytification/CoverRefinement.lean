@@ -195,10 +195,14 @@ overlaps sitting over three different members with no common target to cancel ag
   (`Oka/Analytification/CrossMemberGlue.lean`) is the glue of a cross-member overlap, with the
   coherence triangle it satisfies, and `ComplexAnalytic.refineGlue` above is an instance by `rfl`
   of the re-association it is built from. What is still absent is a refined *datum* whose members
-  cross: its `poly` field needs one formula per ordered pair and the two cases are different
-  formulas, its `hsymm` is a constraint on choices nothing here makes, and the two geometric laws
-  have no analogue for the reason the paragraph above gives. That file's `## What is not here`
-  states all three.
+  cross, and its `poly` field is no longer part of that: `ComplexAnalytic.refineDatumPoly`
+  (`Oka/Analytification/CrossMemberDatum.lean`) is one formula per ordered pair, and
+  `ComplexAnalytic.refineDatumPoly_const` says `ComplexAnalytic.refinePoly` above is it at
+  constant `σ`. What is left is that its `hsymm` is a constraint on choices nothing here makes,
+  the two geometric laws have no analogue for the reason the paragraph above gives, and its
+  `glue` needs a transport between two objects of `ComplexAnalytic.Presentation` — the equal case
+  of a general `σ`, which this file's fixed member makes vacuous. Those two files' `## What is not
+  here` state all of it.
 * **No hypothesis under which the morphism *is* an isomorphism, and no morphism back.** The
   answer to whether it is one is **no** and it is proved rather than argued:
   `ComplexAnalytic.not_isIso_refineToBase`, at an empty family, where the refinement refines

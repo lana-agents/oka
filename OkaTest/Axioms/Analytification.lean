@@ -2279,3 +2279,94 @@ info: 'ComplexAnalytic.refineCrossGlue_hom_comp' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.refineCrossGlue_hom_comp
+
+/-! ### The `poly` field of a refined cover datum
+
+`Oka/Analytification/CrossMemberDatum.lean`. The refined member for a general `σ`, the datum's
+`poly` with its diagonal normalised, the extra factor carrying the transport, and the field the
+two multiply to — with the two cases read back off it and the constant-`σ` reductions to
+`Oka/Analytification/CoverRefinement.lean`'s member and polynomial.
+
+They are guarded together and after the glue above because the point of the file is which of the
+two the case split lands in: `ComplexAnalytic.refineDatumPoly`'s *type* carries neither a `dite`
+nor a `▸`, and `ComplexAnalytic.refineDatumFactor`'s carries the `▸` between two values of one
+type. The pair `ComplexAnalytic.refineDatumPoly_of_eq` and `ComplexAnalytic.refineDatumPoly_of_ne`
+is what makes that a relocation and not a loss.
+-/
+
+/--
+info: 'ComplexAnalytic.refineDatumObj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumObj
+
+/--
+info: 'ComplexAnalytic.refineDatumObj_const' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumObj_const
+
+/--
+info: 'ComplexAnalytic.polyDiagOne' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.polyDiagOne
+
+/--
+info: 'ComplexAnalytic.polyDiagOne_of_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.polyDiagOne_of_eq
+
+/--
+info: 'ComplexAnalytic.polyDiagOne_of_ne' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.polyDiagOne_of_ne
+
+/--
+info: 'ComplexAnalytic.refineDatumFactor' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumFactor
+
+/--
+info: 'ComplexAnalytic.refineDatumPoly' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumPoly
+
+/--
+info: 'ComplexAnalytic.refineDatumPoly_of_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumPoly_of_eq
+
+/--
+info: 'ComplexAnalytic.refineDatumPoly_of_ne' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumPoly_of_ne
+
+/--
+info: 'ComplexAnalytic.refineDatumPoly_const' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumPoly_const
+
+/--
+info: 'ComplexAnalytic.coverOverlap_refineDatumPoly_const' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverOverlap_refineDatumPoly_const

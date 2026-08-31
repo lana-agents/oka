@@ -123,15 +123,25 @@ harder to read, which is a reason to state and not a reason to hide.
 
 ## What is not here
 
-* **No refined cover datum, and the missing piece is the shape of its `poly` field and not this
-  glue.** A datum needs one polynomial per ordered pair of refined members, uniformly in the pair;
-  the two cases are different formulas and neither degenerates to the other — for `σ a = σ b` the
-  overlap is cut out by the other refining polynomial alone (`ComplexAnalytic.refineGlue`'s
-  configuration) and for `σ a ≠ σ b` by `f · q` above, and a cover datum's `poly i i` is
-  unconstrained so the second cannot be used at the first. **Read off the types rather than
-  compiled: in the equal case the branch is handed `fam b`, which is a polynomial over the member
-  `σ b`, where it must produce one over the member `σ a`** — so the case split needs a transport
-  of data along `σ a = σ b` and not only a case split in a proof.
+* **No refined cover datum, and its `poly` field is the one part that now exists.** A datum needs
+  one polynomial per ordered pair of refined members, uniformly in the pair, and the two cases are
+  different formulas — for `σ a = σ b` the overlap is cut out by the other refining polynomial
+  alone (`ComplexAnalytic.refineGlue`'s configuration) and for `σ a ≠ σ b` by `f · q` above.
+  `ComplexAnalytic.refineDatumPoly` (`Oka/Analytification/CrossMemberDatum.lean`) is that field
+  and it is **one product**, with `ComplexAnalytic.refineDatumPoly_of_eq` and
+  `ComplexAnalytic.refineDatumPoly_of_ne` reading the two cases back off it.
+
+  **What that file corrects here is the sentence that a cover datum's `poly i i` being
+  unconstrained stops the second formula serving at the first.** It does, and normalising the
+  diagonal removes the obstruction, because `CategoryTheory.GlueData.ofGlueData'` discards `V i i`
+  — so `ComplexAnalytic.polyDiagOne` changes no glued space that anything below reads. **What is
+  still exactly right is the transport**: *"in the equal case the branch is handed `fam b`, which
+  is a polynomial over the member `σ b`, where it must produce one over the member `σ a`"*. It has
+  not gone anywhere; it sits inside `ComplexAnalytic.refineDatumFactor`, between two values of one
+  type, instead of in the shape of the refined overlap where every construction below would meet
+  it. The remaining fields — `glue`, `hrange`, `hsymm`, `hcocycle` — are untouched, and the glue
+  is where the equal case's *second* transport, between two objects of
+  `ComplexAnalytic.Presentation`, has to be paid.
 * **Nothing here produces `q`.** The extra factor and the unit are arguments, and where they come
   from is `ComplexAnalytic.exists_localisationOpen_eq_rename` with
   `ComplexAnalytic.exists_mk_rename_eq` for the algebra and
