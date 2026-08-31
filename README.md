@@ -822,6 +822,10 @@ Lean knows about, and the check takes about ten seconds, nine of them spent impo
 deliberately permissive — a name resolves if *any* declaration in the environment ends with it,
 or it is a module, or a file in this repository, or field notation — because a checker that cries
 wolf is worse than none on a project whose pull request bodies quote its figures as evidence.
+**It reads the `.lean` files under `Oka/`, `OkaTest/` and `scripts/`** — the last of those since
+2026-08-31 and taxis #1337, which found that the two Lean helpers describing this check were the
+only Lean prose here it did not read; the `.py` files under `scripts/`, this checker's own
+docstring included, are still read by nothing.
 **Field notation is on a declaration and not on a module**, which is why `DumpEnvNames.lean` tags
 each line `module` or `decl`: a module is not a term and has no fields, so a citation shaped like
 `OkaTest.SomeFile.someDecl` is not field notation on anything. Until 2026-08-31 the two kinds

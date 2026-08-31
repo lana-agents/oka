@@ -19,18 +19,18 @@ That file answers *"is this backticked token a name at all?"* and so dumps the w
 Mathlib included, and says of each name only whether it is a declaration or a module. This one
 answers *"which declarations does this repository own, and where does each one live?"*, which
 needs the **declaring module** and needs Mathlib excluded. Both questions have a consumer and
-**neither dump can be derived from the other**: `DumpEnvNames.lean`'s output attaches no
+**neither dump can be derived from the other**: `scripts/DumpEnvNames.lean`'s output attaches no
 declaring module, so this one cannot be read out of it, and it contains all of Mathlib, which
 this one must not.
 
 **That is the whole of the argument, and it used to have a second half that is now false.** Until
-2026-08-31 this paragraph added that giving `DumpEnvNames.lean`'s output a column *"would change
-every line of a file `scripts/check_docstring_names.py` reads as one name per line"*, and offered
-that cost as a reason not to merge the two. taxis #1326 then gave it one — every line is now
-`<kind>` TAB `<name>` — and the price turned out to be two `partition("\t")` calls, one in that
-checker and one in `scripts/guard_coverage.py`. **A cost argument against an untried change is
-worth exactly what it cost when somebody tried it**, and the reason above needs no help from this
-one.
+2026-08-31 this paragraph added that giving `scripts/DumpEnvNames.lean`'s output a column *"would
+change every line of a file `scripts/check_docstring_names.py` reads as one name per line"*, and
+offered that cost as a reason not to merge the two. taxis #1326 then gave it one — every line is
+now `<kind>` TAB `<name>` — and the price turned out to be two `partition("\t")` calls, one in
+that checker and one in `scripts/guard_coverage.py`. **A cost argument against an untried change
+is worth exactly what it cost when somebody tried it**, and the reason above needs no help from
+this one.
 
 The declaring module is read from `env.header.moduleData`, which is the module's own list of the
 constants it adds, rather than from a name prefix. A prefix test would be wrong in both
