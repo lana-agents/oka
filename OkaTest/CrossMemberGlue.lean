@@ -37,6 +37,15 @@ refined overlaps are the two localisations `nodeLocPresIso` identifies.
   identity in disguise and `Iso.refl` does not typecheck at that type. The same separator
   `localisationPresentation_node_ne` uses one level down: the variable counts differ.
 
+## Every unfolding here is a local `have` and not a `simp [theDefinition]`
+
+`crossPoint`, `crossU` and — worse, because it is another file's — `nodeTuple3` all acquired an
+auto-generated `eq_1` on the first head of this file, from being named in a `simp` set or a `rw`.
+Each is now a `have … := rfl` in the proof that needs it, or a `change`, so the environment gains
+nothing: `comm -13` on `scripts/DumpOkaDecls.lean`'s output is this file's own three declarations.
+**The build reported none of it**, which is the reason to take the dump and not the build as the
+instrument.
+
 ## What this does not witness
 
 **The extra factor on the first side is `1`.** `q = 1` there, so that side's refined overlap is
@@ -156,13 +165,16 @@ def crossPoint : ULift.{u} (Fin (3 + 1)) → ℂ :=
 theorem eval_crossPoint_localisationPresentation (j : Fin (2 + 1)) :
     MvPolynomial.eval crossPoint.{u}
       (localisationPresentation.{u} nodeTuple3.{u} (MvPolynomial.X (ULift.up 0)) j) = 0 := by
+  have hpt : ∀ i, crossPoint.{u} i = ![2, 0, 0, 1 / 2] i.down := fun _ ↦ rfl
+  have hnt : ∀ j, nodeTuple3.{u} j =
+      ![MvPolynomial.X (ULift.up 0) * MvPolynomial.X (ULift.up 1),
+        MvPolynomial.X (ULift.up 2)] j := fun _ ↦ rfl
   refine Fin.lastCases ?_ ?_ j
   · rw [localisationPresentation_last]
-    simp [crossPoint, localisationVar, localisationIncl]
+    simp [hpt, localisationVar, localisationIncl]
   · intro j
     rw [localisationPresentation_castSucc]
-    fin_cases j <;>
-      simp [nodeTuple3, crossPoint, localisationIncl]
+    fin_cases j <;> simp [hnt, hpt, localisationIncl]
 
 /-- **The unit is not `1`**, so `crossHu` is an instance of the hypothesis with content and not of
 `x = 1 * x`.
@@ -174,6 +186,7 @@ theorem crossU_ne_one :
     (crossU.{u} : PresentedAlgebra.{u} (3 + 1) (2 + 1)
       (localisationPresentation.{u} nodeTuple3.{u} (MvPolynomial.X (ULift.up 0)))) ≠ 1 := by
   intro hcon
+  have hpt : ∀ i, crossPoint.{u} i = ![2, 0, 0, 1 / 2] i.down := fun _ ↦ rfl
   have hle : presentationIdeal.{u}
       (localisationPresentation.{u} nodeTuple3.{u} (MvPolynomial.X (ULift.up 0))) ≤
       RingHom.ker (MvPolynomial.eval crossPoint.{u}) := by
@@ -183,11 +196,13 @@ theorem crossU_ne_one :
   have hmk : Ideal.Quotient.mk (presentationIdeal.{u}
       (localisationPresentation.{u} nodeTuple3.{u} (MvPolynomial.X (ULift.up 0))))
       (MvPolynomial.rename (localisationIncl.{u} 3) (MvPolynomial.X (ULift.up 0))) = 1 := by
-    rw [← hcon, crossU, IsUnit.unit_spec]
+    rw [← hcon]
+    exact ((isUnit_mk_rename_localisationIncl.{u} nodeTuple3.{u}
+      (MvPolynomial.X (ULift.up 0))).unit_spec).symm
   have hsub := RingHom.mem_ker.1 (hle (Ideal.Quotient.eq.1
     (hmk.trans (map_one (Ideal.Quotient.mk _)).symm)))
   rw [map_sub, map_one] at hsub
-  simp [crossPoint, localisationIncl] at hsub
+  simp [hpt, localisationIncl] at hsub
   norm_num at hsub
 
 /-- **The cross-member glue, at the node presented twice.**
