@@ -2384,7 +2384,9 @@ transport: `ComplexAnalytic.refineSwapGlueOfEq` is the one declaration whose two
 two different objects of `ComplexAnalytic.Presentation`, and every statement above it is over one.
 `ComplexAnalytic.refineDatumCrossAlgEquiv` is guarded here and used nowhere: it is the measurement
 that the *unequal* branch's algebra isomorphism is the original datum's own glue and not a missing
-construction.
+construction. `ComplexAnalytic.refineSwapGlue_eq` and `ComplexAnalytic.refineDatumGlueEq_eq` are
+guarded beside the definitions they unfold, which is where a reader looking for a missing guard
+would expect them.
 -/
 
 /--
@@ -2407,6 +2409,20 @@ info: 'ComplexAnalytic.refineSwapGlue' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.refineSwapGlue
+
+/--
+info: 'ComplexAnalytic.refineSwapMul' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineSwapMul
+
+/--
+info: 'ComplexAnalytic.refineSwapGlue_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineSwapGlue_eq
 
 /--
 info: 'ComplexAnalytic.refineSwapGlue_symm' depends on axioms:
@@ -2449,6 +2465,13 @@ info: 'ComplexAnalytic.refineDatumGlueEq' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.refineDatumGlueEq
+
+/--
+info: 'ComplexAnalytic.refineDatumGlueEq_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumGlueEq_eq
 
 /--
 info: 'ComplexAnalytic.refineDatumGlueEq_symm' depends on axioms:

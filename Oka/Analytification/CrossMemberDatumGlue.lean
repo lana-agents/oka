@@ -59,18 +59,32 @@ structure literal, and `ComplexAnalytic.coverOverlap_refineDatumObj` says the ab
 overlap on the nose. It is an `abbrev` for the reason
 `ComplexAnalytic.refineDatumObj` is: everything below rewrites through it.
 
-## What the `rw` discipline cost here, and the one place it was not enough
+## The `rw` discipline, in both of its forms, and a third one
 
-`Oka/Analytification/CrossMemberGlue.lean` states the discipline and
-`Oka/Analytification/CrossMemberDatum.lean` adds the variant where the planted equation lemma
-belongs to another file. **Neither describes the failure this file met**, which is not about
-`rw` opening a definition but about `rw` failing to *find* a lemma that is visibly present:
-after `simp only [Category.assoc]` the goal is right-associated, so the subterm
-`eqToHom … ≫ localisationHom …` does not occur — it occurs as
-`eqToHom … ≫ (localisationHom … ≫ localisationHom …)` — and rewriting with the two-factor lemma
-reports *did not find an occurrence of the pattern* against a goal that prints it. `reassoc_of%`
-on the same lemma is what closes it, at both orientations, and that is a Mathlib term elaborator
-and not a new lemma.
+`Oka/Analytification/CrossMemberGlue.lean` states the discipline — open a definition with `change`
+or a term, not with `rw` — and `Oka/Analytification/CrossMemberDatum.lean` adds the variant where
+the planted equation lemma belongs to another file. **Both fired here and a third thing did.**
+
+* **The plain form, caught by the declaration dump and not by the build.** The first draft proved
+  the two symmetry laws and the two coherence triangles with `rw [refineSwapGlue]` and
+  `rw [refineDatumGlueEq]`. That is green, and it plants `ComplexAnalytic.refineSwapGlue.eq_1`,
+  `ComplexAnalytic.refineDatumGlueEq.eq_1` and `ComplexAnalytic.refineDatumGlueEq.congr_simp`:
+  `Δdump` was **+17** where the file declared fourteen things. The cure is
+  `ComplexAnalytic.refineSwapGlue_eq` and `ComplexAnalytic.refineDatumGlueEq_eq`, two `rfl`
+  theorems that say the same thing under a name this file owns, and rewriting with those instead.
+  It is also a better interface, which is why they are advertised.
+* **A definition whose body cannot be written back down cannot be opened by `change` either.**
+  The swap's middle factor was `eqToIso (by rw [mul_comm])`, and an anonymous tactic proof has no
+  spelling — so the `rfl` theorem above could not be stated until the transport was named.
+  `ComplexAnalytic.refineSwapMul` is that name. **A definition that a later proof will have to
+  open should not carry an anonymous proof term**, and this is the shape of that rule.
+* **`rw` can also fail to find a lemma that is visibly present.** After
+  `simp only [Category.assoc]` the goal is right-associated, so the subterm
+  `eqToHom … ≫ localisationHom …` does not occur — it occurs as
+  `eqToHom … ≫ (localisationHom … ≫ localisationHom …)` — and rewriting with the two-factor lemma
+  reports *did not find an occurrence of the pattern* against a goal that prints it. `reassoc_of%`
+  on the same lemma is what closes it, at both orientations, and that is a Mathlib term elaborator
+  and not a new lemma.
 
 ## Main definitions
 
@@ -89,6 +103,10 @@ and not a new lemma.
 
 - `ComplexAnalytic.coverOverlap_refineDatumObj`: the abstraction above is the refined overlap, by
   `rfl`.
+- `ComplexAnalytic.refineSwapMul`: the two orders of the product present the same localisation.
+- `ComplexAnalytic.refineSwapGlue_eq` and `ComplexAnalytic.refineDatumGlueEq_eq`: **the two
+  definitions unfolded, by `rfl`**, so that a proof can open them without planting an equation
+  lemma. See the `rw` section above for what that costs when they are absent.
 - `ComplexAnalytic.refineSwapGlue_symm` and `ComplexAnalytic.refineSwapGlueOfEq_symm`: **the swap
   is its own inverse**, which is the shape of the symmetry law a cover datum asks for.
 - `ComplexAnalytic.refineSwapGlue_comp` and `ComplexAnalytic.refineSwapGlueOfEq_comp`: **the
@@ -167,6 +185,15 @@ theorem coverOverlap_refineDatumObj
 
 /-! ### The swap over one member, and the transport of it -/
 
+/-- **The two orders of the product present the same localisation.** Named rather than inlined
+because the two proofs below unfold `ComplexAnalytic.refineSwapGlue` and have to spell its
+transport; an anonymous `by rw [mul_comm]` cannot be written back down. -/
+theorem refineSwapMul (i : J) (x y : MvPolynomial (ULift.{u} (Fin (obj i).n)) ℂ) :
+    (⟨(obj i).n + 1, (obj i).k + 1, localisationPresentation.{u} (obj i).g (y * x)⟩ :
+        Presentation.{u}) =
+      ⟨(obj i).n + 1, (obj i).k + 1, localisationPresentation.{u} (obj i).g (x * y)⟩ := by
+  rw [mul_comm]
+
 /-- **The swap of two refining polynomials over one member**: the overlap cut out of `D(x)` by `y`
 and the overlap cut out of `D(y)` by `x` are the same localisation, at the product read in either
 order.
@@ -178,13 +205,28 @@ def refineSwapGlue (i : J) (x y : MvPolynomial (ULift.{u} (Fin (obj i).n)) ℂ) 
     refineDatumOverlap.{u} obj i x (rename (localisationIncl.{u} (obj i).n) y) ≅
       refineDatumOverlap.{u} obj i y (rename (localisationIncl.{u} (obj i).n) x) :=
   localisationPresentationIsoMul.{u} (obj i).g x y ≪≫
-    eqToIso (by rw [mul_comm]) ≪≫ (localisationPresentationIsoMul.{u} (obj i).g y x).symm
+    eqToIso (refineSwapMul.{u} obj i x y) ≪≫
+      (localisationPresentationIsoMul.{u} (obj i).g y x).symm
+
+/-- **The swap, unfolded**, by `rfl`.
+
+It exists so that the two proofs below can rewrite with a declaration of this file rather than
+with the *name* of a definition: `rw [refineSwapGlue]` plants
+`ComplexAnalytic.refineSwapGlue.eq_1` in this module, which
+`Oka/Analytification/CrossMemberDatum.lean`'s discipline section is about and which the
+declaration dump is what shows. -/
+theorem refineSwapGlue_eq (i : J) (x y : MvPolynomial (ULift.{u} (Fin (obj i).n)) ℂ) :
+    refineSwapGlue.{u} obj i x y =
+      localisationPresentationIsoMul.{u} (obj i).g x y ≪≫
+        eqToIso (refineSwapMul.{u} obj i x y) ≪≫
+          (localisationPresentationIsoMul.{u} (obj i).g y x).symm :=
+  rfl
 
 /-- **The swap is its own inverse.** The two orders differ by the transport along `mul_comm`, and
 that is the only asymmetry in the definition. -/
 theorem refineSwapGlue_symm (i : J) (x y : MvPolynomial (ULift.{u} (Fin (obj i).n)) ℂ) :
     refineSwapGlue.{u} obj i y x = (refineSwapGlue.{u} obj i x y).symm := by
-  rw [refineSwapGlue, refineSwapGlue, Iso.trans_symm, Iso.trans_symm, Iso.symm_symm_eq,
+  rw [refineSwapGlue_eq, refineSwapGlue_eq, Iso.trans_symm, Iso.trans_symm, Iso.symm_symm_eq,
     Iso.trans_assoc, eqToIso_symm']
 
 /-- **The coherence triangle over the member.** Crossing to the other description of the overlap
@@ -197,7 +239,7 @@ theorem refineSwapGlue_comp (i : J) (x y : MvPolynomial (ULift.{u} (Fin (obj i).
       localisationHom.{u} (localisationPresentation.{u} (obj i).g x)
           (rename (localisationIncl.{u} (obj i).n) y) ≫ localisationHom.{u} (obj i).g x := by
   rw [← localisationPresentationIsoMul_hom_comp.{u} (obj i).g x y,
-    ← localisationPresentationIsoMul_hom_comp.{u} (obj i).g y x, refineSwapGlue]
+    ← localisationPresentationIsoMul_hom_comp.{u} (obj i).g y x, refineSwapGlue_eq]
   simp only [Iso.trans_hom, eqToIso.hom, Category.assoc, Iso.symm_hom]
   rw [show (localisationPresentationIsoMul.{u} (obj i).g y x).inv ≫
       (localisationPresentationIsoMul.{u} (obj i).g y x).hom ≫
@@ -265,13 +307,24 @@ def refineDatumGlueEq {a b : B} (h : σ a = σ b) :
       eqToIso (congrArg (refineDatumOverlap.{u} obj (σ b) (fam b))
         (refineDatumPoly_of_eq.{u} obj poly σ fam q h.symm)).symm
 
+/-- **The field, unfolded**, by `rfl`, and for the reason
+`ComplexAnalytic.refineSwapGlue_eq` exists. -/
+theorem refineDatumGlueEq_eq {a b : B} (h : σ a = σ b) :
+    refineDatumGlueEq.{u} obj σ fam poly q h =
+      eqToIso (congrArg (refineDatumOverlap.{u} obj (σ a) (fam a))
+          (refineDatumPoly_of_eq.{u} obj poly σ fam q h)) ≪≫
+        refineSwapGlueOfEq.{u} obj h (fam a) (fam b) ≪≫
+          eqToIso (congrArg (refineDatumOverlap.{u} obj (σ b) (fam b))
+            (refineDatumPoly_of_eq.{u} obj poly σ fam q h.symm)).symm :=
+  rfl
+
 /-- **The symmetry law, on this branch.** A cover datum asks for it at every ordered pair; this is
 the half of that quantifier whose two members are equal. -/
 theorem refineDatumGlueEq_symm {a b : B} (h : σ a = σ b) :
     refineDatumGlueEq.{u} obj σ fam poly q h.symm =
       (refineDatumGlueEq.{u} obj σ fam poly q h).symm := by
-  rw [refineDatumGlueEq, refineDatumGlueEq, Iso.trans_symm, Iso.trans_symm, Iso.trans_assoc,
-    eqToIso_symm', eqToIso_symm', refineSwapGlueOfEq_symm]
+  rw [refineDatumGlueEq_eq, refineDatumGlueEq_eq, Iso.trans_symm, Iso.trans_symm,
+    Iso.trans_assoc, eqToIso_symm', eqToIso_symm', refineSwapGlueOfEq_symm]
 
 /-- **The coherence triangle at the datum**, with the transport of members as its last factor.
 
@@ -286,7 +339,7 @@ theorem refineDatumGlueEq_comp {a b : B} (h : σ a = σ b) :
       localisationHom.{u} (refineDatumObj.{u} obj σ fam a).g
           (refineDatumPoly.{u} obj poly σ fam q a b) ≫
         localisationHom.{u} (obj (σ a)).g (fam a) ≫ eqToHom (congrArg obj h) := by
-  rw [refineDatumGlueEq]
+  rw [refineDatumGlueEq_eq]
   simp only [Iso.trans_hom, eqToIso.hom, Category.assoc]
   rw [reassoc_of% (eqToHom_localisationHom.{u} (localisationPresentation.{u} (obj (σ b)).g (fam b))
       (refineDatumPoly_of_eq.{u} obj poly σ fam q h.symm).symm),
