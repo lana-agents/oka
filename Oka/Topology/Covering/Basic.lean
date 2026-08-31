@@ -52,25 +52,33 @@ is not removable. And **the empty fibre is not a special case**: the intersectio
 index type is `U` itself, which is the right answer, since `f ⁻¹' U` is then empty and `U` misses
 `f '' C` outright.
 
-## Closedness cancels along a covering map
+## Closedness cancels along a covering map, with no separation axiom
 
 `IsCoveringMap.isClosedMap_of_comp`: if `f` is a covering map and `f ∘ u` is closed then `u` is
 closed, for a `u` asked only to be continuous. **Mathlib has no cancellation lemma for
 `IsCoveringMap` at all** — `comp_homeomorph` and `homeomorph_comp` conjugate by a homeomorphism,
-and there is no composition lemma either — which is the same absence
-`Oka/AnalyticSpace/FiniteEtaleOver.lean` records one level up.
+and there is no composition lemma either.
 
 The classical statement of this shape asks the second map to be **separated** and factors the
-first through its graph in a fibre product. Neither is used below and neither exists in this
-repository. A covering map instead decomposes `f ⁻¹' U` over an evenly covered `U` into open
-sheets, and **`f` is injective on each one**; that injectivity is the whole content, and the rest
-of the proof is that a sheet is open with open complement in `f ⁻¹' U`, so that a closed set of
-the source stays closed after being cut down to one sheet.
+first through its graph in a fibre product. Neither is used below. A covering map instead
+decomposes `f ⁻¹' U` over an evenly covered `U` into open sheets, and **`f` is injective on each
+one**; that injectivity is the whole content, and the rest of the proof is that a sheet is open
+with open complement in `f ⁻¹' U`, so that a closed set of the source stays closed after being cut
+down to one sheet.
 
-**No separation axiom is used**, which is worth saying because the statement one level up does
-need one: `ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale` asks `[T2Space]` of
-its source, and that is where the Hausdorff hypothesis of the analytic cancellation comes from —
-not from here.
+**What earns this its place is the separation axiom it does not ask for, and it is worth being
+exact about what that is worth.** Mathlib's three cancellations for proper maps are in
+`Mathlib/Topology/Maps/Proper/Basic.lean` and none of them applies: two ask the composite's second
+factor to be injective or its first to be surjective, and the third, `isProperMap_of_comp_of_t2`,
+asks the **middle space to be Hausdorff**. Where a Hausdorff middle space is available that third
+one is both shorter and more general than this — it asks nothing whatever of the second map —
+and it is what `Oka/AnalyticSpace/Finite.lean` uses for the analytic statement of this shape.
+`IsCoveringMap.isClosedMap_of_comp` is what is left when no separation axiom is available at all,
+and Mathlib has nothing there, not even at `IsSeparatedMap`, which a covering map satisfies.
+
+**Nothing in this repository consumes it**, and that is said rather than left to be discovered: it
+is mirror-tree material stated for its own sake, in a file whose other statements about closedness
+and covering maps are its natural neighbours.
 
 ## The fibres of a covering map over a preconnected base
 
@@ -205,9 +213,16 @@ this statement is false with `IsCoveringMap f` weakened to *`f` closed with fini
 compiles a witness for the weakening — a weaker one, since its second map is not a local
 homeomorphism.
 
-Mathlib has no cancellation lemma for `IsCoveringMap`: `IsCoveringMap.comp_homeomorph` and
-`IsCoveringMap.homeomorph_comp` are conjugation by a homeomorphism, and there is no composition
-lemma either. -/
+**Note what those two witnesses have in common besides failing to be covering maps: their `E` is
+not Hausdorff.** That is not an accident, and it means this lemma is *not* the cheapest route to
+any statement in which `E` is known to be Hausdorff. There `isProperMap_of_comp_of_t2` applies —
+Mathlib's proper-map cancellation, whose separation hypothesis is on `E` and which asks nothing at
+all of the first map — and it is both shorter and more general. This lemma is what remains when no
+separation axiom is available, which is the case Mathlib does not cover, at `IsCoveringMap` or at
+`IsSeparatedMap`; `IsCoveringMap.comp_homeomorph` and `IsCoveringMap.homeomorph_comp` are
+conjugation by a homeomorphism and there is no composition lemma either.
+
+**Nothing in this repository consumes this**; see the module docstring. -/
 theorem IsCoveringMap.isClosedMap_of_comp {W : Type*} [TopologicalSpace W] {u : W → E}
     (hf : IsCoveringMap f) (hu : Continuous u) (h : IsClosedMap (f ∘ u)) :
     IsClosedMap u := by

@@ -6,12 +6,11 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 import OkaTest.FiniteMorphism
 
 /-!
-# Finite étale cancellation: a non-vacuity, and the counterexample the hypothesis rules out
+# Finite étale cancellation: a non-vacuity, and the separation axiom that cannot be dropped
 
 Two unrelated things about `ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp`
-(`Oka/AnalyticSpace/FiniteEtaleCancel.lean`): that its hypotheses are satisfiable outside the
-isomorphisms, and that the covering hypothesis in the topological statement underneath it cannot
-be weakened to *closed with finite fibres*.
+(`Oka/AnalyticSpace/LocalIso.lean`): that its hypotheses are satisfiable outside the isomorphisms,
+and that the one hypothesis it costs — `[T2Space]` on the middle space — is not removable.
 
 ## The non-vacuity, and what it is not
 
@@ -31,46 +30,60 @@ identities — and that the `[T2Space]` side condition is dischargeable by somet
 repository. That is the same disclaimer `ComplexAnalytic.isCoveringMap_base_sq` carries for the
 covering rung, and for the same reason.
 
-## The counterexample, and it is about `g` finite and not about `g` finite étale
+## The counterexample, and it is about the separation axiom
 
 `Oka/AnalyticSpace/Finite.lean` records that the closed half of finiteness does **not** cancel
-along a merely finite second factor, with the line with two origins over the line as the witness,
-and says of that reasoning: *"That is a statement about topological spaces, it is compiled nowhere
-below."* `TwoIndiscrete.not_isClosedMap_pt_of_isClosedMap_comp` below compiles the statement.
+unconditionally, with the line with two origins over the line as the witness, and used to say of
+that reasoning: *"That is a statement about topological spaces, it is compiled nowhere below."*
+`TwoIndiscrete.not_isClosedMap_pt_of_isClosedMap_comp` below compiles a statement of that shape.
+
+**What it exhibits is a middle space that is not Hausdorff**, and that — not anything about the
+second factor — is what makes it a counterexample. Its second factor `TwoIndiscrete.fold` is
+continuous, closed and has finite fibres, so it is as strong a second factor as the finite rung
+knows how to ask for; the composite is closed and the first factor is not. The conjunction
+therefore says, in one statement, that
+`ComplexAnalytic.AnalyticSpace.isFinite_of_comp_of_t2Space` cannot have its `[T2Space Y]` dropped,
+and `TwoIndiscrete.not_t2Space` is included as a conjunct so that the statement says which
+hypothesis it is attacking rather than leaving it to be read off `⊤`.
+
+**It does not say the second factor cannot be weakened**, and there is nothing there to say:
+`ComplexAnalytic.AnalyticSpace.isFinite_of_comp_of_t2Space` asks nothing of the second factor at
+all, so there is no hypothesis on it to attack. An earlier draft of this file presented the same
+witness as ruling out a *finite* second factor in favour of a *finite étale* one; that reading is
+wrong, because it varies two things at once — the second factor and the separation axiom — and
+attributes the failure to the one that turns out to be inert.
 
 **The witness here is not the line with two origins**, and the difference matters in one direction
 only. Both are non-Hausdorff spaces mapping onto a Hausdorff one, closed with finite fibres, with
 a section-like map into them that is not closed. The line with two origins is the sharper example,
 because its fold map is additionally a **local homeomorphism** — so it exhibits the failure at a
-hypothesis one step stronger than the one below, which is *closed with finite fibres* and nothing
-more. Building it needs a gluing of two copies of `ℝ` along an open subset, which this repository
-does not have; the two-point indiscrete space is the same phenomenon with the local homeomorphism
-dropped, and it costs three definitions.
-
-**What both witnesses have in common is the point of the whole section**: the two indistinguishable
-points lie in no common evenly covered neighbourhood on which the fold is injective, which is
-exactly the ingredient `IsCoveringMap.isClosedMap_of_comp` (`Oka/Topology/Covering/Basic.lean`)
-consumes. So neither is a counterexample to the cancellation that file proves, and the reason is
-in one word: `TwoIndiscrete.fold` is not a covering map.
+second factor one step stronger than the one below. Building it needs a gluing of two copies of
+`ℝ` along an open subset, which this repository does not have; the two-point indiscrete space is
+the same phenomenon with the local homeomorphism dropped, and it costs four declarations.
 
 **The declarations of this section are outside `ComplexAnalytic`**, because none of them mentions
 a complex analytic space, a germ or a holomorphic function; they are a topological counterexample
 about a two-element type. They are in the `TwoIndiscrete` namespace and not at the root, so that
 every citation of them elsewhere is a dotted name and is therefore checked by
 `scripts/check_docstring_names.py`, which reads dotted names only — the bare `TwoIndiscrete` in
-this sentence is checked by nothing, and is the head of the four names that are.
-`ComplexAnalytic.punctured` in `OkaTest/HolomorphicMapOpen.lean` is the existing precedent for a
-test file declaring outside `ComplexAnalytic`, and its module docstring records what that cost.
+this sentence is checked by nothing, and is the head of the five names that are. The existing
+precedent for a test file declaring outside `ComplexAnalytic` is the root-namespace `punctured` of
+`OkaTest/HolomorphicMapOpen.lean`, which is a *different declaration* from
+`ComplexAnalytic.punctured` in `OkaTest/FiniteMorphism.lean`; that file's module docstring records
+what having two of them cost, and it is the reason this section takes a namespace rather than the
+root.
 
 ## What is not here
 
-* **No counterexample to the cancellation itself.** Nothing below exhibits a finite étale `g` with
-  a non-cancelling `f`, and nothing could: that statement is a theorem.
-* **Nothing about the `[T2Space]` hypothesis.** The counterexample below is against weakening
-  *finite étale* to *finite*; it says nothing about whether the Hausdorff condition on the middle
-  space can be dropped, which `Oka/AnalyticSpace/FiniteEtaleCancel.lean` records as unasked.
+* **No counterexample to the cancellation itself.** Nothing below exhibits a Hausdorff middle
+  space with a non-cancelling `f`, and nothing could: that statement is a theorem.
+* **Nothing about the second factor.** The cancellation asks nothing of it, so there is no
+  hypothesis there to attack and none is attacked.
+* **Nothing about the local-isomorphism rung.** `ComplexAnalytic.AnalyticSpace.isLocalIso_of_comp`
+  needs no separation axiom, so the witness below bears on the finite rung only, which is where
+  the whole cost of `ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp` sits.
 * **No line with two origins**, for the reason above, so nothing here witnesses the failure at a
-  second factor that is a local homeomorphism. That gap is the same one before this file and is
+  second factor that is a local homeomorphism. That gap is the same one as before this file and is
   narrower by exactly the local homeomorphism.
 * **No second non-vacuity.** `ComplexAnalytic.sq` is the only non-isomorphism available, so the
   cancellation is exercised at one morphism, composed with itself.
@@ -80,7 +93,7 @@ open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry Topology
 
 universe u
 
-/-! ### The counterexample: `g` finite is not enough
+/-! ### The counterexample: a non-Hausdorff middle space is enough
 
 Everything in this section is about topological spaces; nothing in it is analytic. -/
 
@@ -98,14 +111,30 @@ instance : TopologicalSpace TwoIndiscrete := ⊤
 instance : Finite TwoIndiscrete := inferInstanceAs (Finite Bool)
 
 /-- **The fold of the two indistinguishable points to a point.** Closed with finite fibres — it is
-the analogue of the map that makes the line with two origins finite over the line — and it is not
-a covering map, since the only neighbourhood of the image is the whole of `TwoIndiscrete`, on
-which it is not injective. -/
+the analogue of the map that makes the line with two origins finite over the line — and as strong
+a second factor as `ComplexAnalytic.AnalyticSpace.isFinite_of_comp_of_t2Space` could be asked
+about, since that statement asks nothing of its second factor at all. -/
 def TwoIndiscrete.fold : TwoIndiscrete → PUnit := fun _ ↦ ⟨⟩
 
 /-- **One of the two indistinguishable points, as a map from a point.** A section of
 `TwoIndiscrete.fold`, and the map that fails to be closed. -/
 def TwoIndiscrete.pt : PUnit → TwoIndiscrete := fun _ ↦ (true : Bool)
+
+/-- **The two points are not separated by open sets.** Two open sets containing them are each
+either empty or everything, so each is everything and they are not disjoint.
+
+This is the hypothesis the conjunction below attacks, stated on its own so that the conjunction
+can name it rather than leave a reader to unfold `⊤`. -/
+theorem TwoIndiscrete.not_t2Space : ¬ T2Space TwoIndiscrete := by
+  intro h
+  obtain ⟨u, v, hu, hv, hxu, hyv, huv⟩ :=
+    @t2_separation TwoIndiscrete _ h (true : Bool) (false : Bool) (by simp)
+  have hut : u = Set.univ :=
+    (TopologicalSpace.isOpen_top_iff u |>.1 hu).resolve_left fun hc ↦ by rw [hc] at hxu; exact hxu
+  have hvt : v = Set.univ :=
+    (TopologicalSpace.isOpen_top_iff v |>.1 hv).resolve_left fun hc ↦ by rw [hc] at hyv; exact hyv
+  rw [hut, hvt, Set.disjoint_iff_inter_eq_empty, Set.univ_inter] at huv
+  exact (Set.univ_eq_empty_iff.1 huv).elim ((true : Bool) : TwoIndiscrete)
 
 /-- **The image of `TwoIndiscrete.pt` is not closed**, because the complement of a single point of
 `TwoIndiscrete` is neither empty nor everything, hence not open. -/
@@ -121,24 +150,30 @@ theorem TwoIndiscrete.not_isClosedMap_pt : ¬ IsClosedMap TwoIndiscrete.pt := by
   · rw [hcl] at hmem; exact hmem
   · rw [hcl] at hnot; exact hnot (Set.mem_univ _)
 
-/-- **Closedness does not cancel along a map that is merely closed with finite fibres**, which is
-the statement `Oka/AnalyticSpace/Finite.lean` records as compiled nowhere.
+/-- **Closedness does not cancel over a middle space that is not Hausdorff**, whatever the second
+factor is. This is the statement `Oka/AnalyticSpace/Finite.lean` records as compiled nowhere.
 
-`TwoIndiscrete.fold` is closed, has finite fibres and is continuous;
-`TwoIndiscrete.fold ∘ TwoIndiscrete.pt` is closed, being a map between one-point spaces; and
-`TwoIndiscrete.pt` is continuous and **not** closed. So the covering hypothesis
-of `IsCoveringMap.isClosedMap_of_comp` cannot be weakened to this, and
-`ComplexAnalytic.AnalyticSpace.isFinite_of_comp_of_isFiniteEtale` cannot have `IsFiniteEtale g`
-weakened to `IsFinite g`.
+The middle space is `TwoIndiscrete`, and `TwoIndiscrete.not_t2Space` is the first conjunct because
+it is the hypothesis being attacked. Beside it: `TwoIndiscrete.fold` is continuous, closed and has
+finite fibres — everything a second factor could be asked for, and
+`ComplexAnalytic.AnalyticSpace.isFinite_of_comp_of_t2Space` asks it for nothing —
+`TwoIndiscrete.fold ∘ TwoIndiscrete.pt` is closed, being a map between one-point spaces, and
+`TwoIndiscrete.pt` is continuous and **not** closed.
 
-Stated as one conjunction rather than five theorems because each conjunct alone is uninteresting;
+So `[T2Space Y]` cannot be dropped from
+`ComplexAnalytic.AnalyticSpace.isFinite_of_comp_of_t2Space`, and neither can it be replaced by any
+hypothesis on the second factor that this witness already satisfies.
+
+Stated as one conjunction rather than six theorems because each conjunct alone is uninteresting;
 what is being exhibited is that they hold together. -/
 theorem TwoIndiscrete.not_isClosedMap_pt_of_isClosedMap_comp :
-    Continuous TwoIndiscrete.pt ∧ Continuous TwoIndiscrete.fold ∧
+    ¬ T2Space TwoIndiscrete ∧
+      Continuous TwoIndiscrete.pt ∧ Continuous TwoIndiscrete.fold ∧
       IsClosedMap TwoIndiscrete.fold ∧
       (∀ x, (TwoIndiscrete.fold ⁻¹' {x}).Finite) ∧
       IsClosedMap (TwoIndiscrete.fold ∘ TwoIndiscrete.pt) ∧ ¬ IsClosedMap TwoIndiscrete.pt :=
-  ⟨continuous_top, continuous_const, fun _ _ ↦ isClosed_discrete _, fun _ ↦ Set.toFinite _,
+  ⟨TwoIndiscrete.not_t2Space, continuous_top, continuous_const,
+    fun _ _ ↦ isClosed_discrete _, fun _ ↦ Set.toFinite _,
     fun _ _ ↦ isClosed_discrete _, TwoIndiscrete.not_isClosedMap_pt⟩
 
 namespace ComplexAnalytic
@@ -146,8 +181,9 @@ namespace ComplexAnalytic
 /-! ### The non-vacuity: cancellation at the squaring map -/
 
 /-- **The cancellation applies to a morphism that is not an isomorphism.**
-`ComplexAnalytic.sq` is finite étale, so `sq ≫ sq` is, and the punctured line is Hausdorff — so
-`ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp` returns `IsFiniteEtale sq`.
+`ComplexAnalytic.sq` is finite étale, so `sq ≫ sq` is and `sq` is a local isomorphism, and the
+punctured line is Hausdorff — so `ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp` returns
+`IsFiniteEtale sq`.
 
 **The conclusion is the hypothesis it was derived from**, since `IsFiniteEtale (sq ≫ sq)` comes
 from `ComplexAnalytic.isFiniteEtale_sq` through the composition instance. This is not evidence

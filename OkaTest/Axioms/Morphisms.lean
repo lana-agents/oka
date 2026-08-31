@@ -14,7 +14,7 @@ together with the topological criteria they are proved from, in both directions 
 that read a class off the underlying map, and the construction that produces a morphism in a
 class from a covering map — and the constructions that feed those criteria a family of monic
 polynomials, together with the category the finite étale ones form over a fixed base and the
-cancellation that says a morphism of that category is itself finite étale.
+cancellations that say a morphism of that category is itself finite étale.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -1364,18 +1364,26 @@ info: 'ComplexAnalytic.isLocalIso_comp_proj_of_pderiv' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isLocalIso_comp_proj_of_pderiv
 
-/-! ### Finite étale cancellation
+/-! ### Cancellation of finiteness and of finite étaleness
 
-`Oka/AnalyticSpace/FiniteEtaleCancel.lean`, and the mirror-tree statement it rests on.
-`IsCoveringMap.isClosedMap_of_comp` is the third `IsCoveringMap` statement guarded in this file
-and the only one that is a *cancellation*; it uses no separation axiom, and the `[T2Space]` of the
-two analytic statements below comes entirely from
-`ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale`, guarded above.
+`ComplexAnalytic.AnalyticSpace.isFinite_of_comp_of_t2Space` is in `Oka/AnalyticSpace/Finite.lean`
+beside the fibre half it completes, and
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp` is in `Oka/AnalyticSpace/LocalIso.lean`,
+which is where `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` is declared. Neither uses a covering
+map: the `[T2Space]` of both is on the middle space and is spent in the first, through Mathlib's
+proper-map cancellation.
 
-The counterexample that stops the covering hypothesis from being weakened to *closed with finite
-fibres* is `TwoIndiscrete.not_isClosedMap_pt_of_isClosedMap_comp`
-(`OkaTest/FiniteEtaleCancel.lean`) and is **not** guarded here: this file imports `Oka` and not
-`OkaTest`, so no declaration of a test file is in its environment. -/
+`IsCoveringMap.isClosedMap_of_comp` is the **fourth** `IsCoveringMap` statement guarded in this
+file — after `IsCoveringMap.isClosedMap`, `IsCoveringMap.eventually_nonempty_homeomorph` and
+`IsCoveringMap.nonempty_homeomorph_fiber` above — and the only one that is a *cancellation*. It
+is mirror-tree material that nothing in this repository consumes, which is why it is guarded here
+and named nowhere else: an unconsumed declaration is exactly the one whose disappearance nothing
+else would catch.
+
+The witness that the `[T2Space]` of the two analytic statements cannot be dropped is
+`TwoIndiscrete.not_isClosedMap_pt_of_isClosedMap_comp` (`OkaTest/FiniteEtaleCancel.lean`) and is
+**not** guarded here: this file imports `Oka` and not `OkaTest`, so no declaration of a test file
+is in its environment. -/
 
 /--
 info: 'IsCoveringMap.isClosedMap_of_comp' depends on axioms:
@@ -1385,11 +1393,11 @@ info: 'IsCoveringMap.isClosedMap_of_comp' depends on axioms:
 #print axioms IsCoveringMap.isClosedMap_of_comp
 
 /--
-info: 'ComplexAnalytic.AnalyticSpace.isFinite_of_comp_of_isFiniteEtale' depends on axioms:
+info: 'ComplexAnalytic.AnalyticSpace.isFinite_of_comp_of_t2Space' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms ComplexAnalytic.AnalyticSpace.isFinite_of_comp_of_isFiniteEtale
+#print axioms ComplexAnalytic.AnalyticSpace.isFinite_of_comp_of_t2Space
 
 /--
 info: 'ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp' depends on axioms:

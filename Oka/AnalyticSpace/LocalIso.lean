@@ -72,33 +72,32 @@ the rung.
 * **The analytification of a finite étale morphism** — the other blocker of #551, stateable only
   now that this exists.
 * **Cancellation for `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` — this is no longer absent, and
-  it is not in this file.** A Galois-category structure on the finite étale covers of a fixed base
-  — `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver`, in
-  `Oka/AnalyticSpace/FiniteEtaleOver.lean` — wants *"if `g` and `f ≫ g` are finite étale then `f`
-  is"*, and that is `ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp` in
-  `Oka/AnalyticSpace/FiniteEtaleCancel.lean`, for a `[T2Space]` middle space. Three of its four
-  halves are below or in `Oka/AnalyticSpace/Finite.lean`:
-  `ComplexAnalytic.AnalyticSpace.isLocalIso_of_comp` is both halves of the local-isomorphism rung,
+  it is `ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp` at the foot of this file.** A
+  Galois-category structure on the finite étale covers of a fixed base —
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver`, in `Oka/AnalyticSpace/FiniteEtaleOver.lean` —
+  wants *"if `g` and `f ≫ g` are finite étale then `f` is"*. All four halves cancel and **the only
+  hypothesis any of them needs is `[T2Space Y]` on the middle space**: three ask nothing at all —
+  `ComplexAnalytic.AnalyticSpace.isLocalIso_of_comp` is both halves of the local-isomorphism rung
   and `ComplexAnalytic.AnalyticSpace.finite_fiber_of_comp` is the fibre half of the finite one —
-  which does not even use `g`'s finiteness. **The fourth is closedness of `f`**, and what this
-  bullet used to say about it was that it does not follow, with the real line with two origins
-  over the real line as the witness and the classical graph-and-fibre-product proof as the only
-  route.
+  and the fourth, closedness of `f`, is
+  `ComplexAnalytic.AnalyticSpace.isFinite_of_comp_of_t2Space` in `Oka/AnalyticSpace/Finite.lean`,
+  which asks nothing of `g` either.
 
-  **The witness is right and the conclusion drawn from it was not.** That example has `g` closed
-  with finite fibres — it is a counterexample at the hypothesis *`g` finite*, which is what
-  `Oka/AnalyticSpace/Finite.lean`'s cancellation section is about, and
-  `TwoIndiscrete.not_isClosedMap_pt_of_isClosedMap_comp` (`OkaTest/FiniteEtaleCancel.lean`) now
-  compiles a witness for it. It is **not** a counterexample at the hypothesis this bullet was
-  about, `g` finite étale, and at that hypothesis no separatedness notion and no fibre product is
-  needed:
-  `IsCoveringMap.isClosedMap_of_comp` in `Oka/Topology/Covering/Basic.lean` cancels closedness
-  along a covering map, using only that a covering map is **injective on each sheet** of an evenly
-  covered neighbourhood — which the fold of the line with two origins is not, its two origins
-  lying in no common sheet. This repository still has neither a separatedness notion for
-  `ComplexAnalytic.AnalyticSpace` nor fibre products, which is the same absence
-  `Oka/AnalyticSpace/FiniteEtaleOver.lean` records as the reason base change is not statable
-  there; the point is that the finite étale case never needed them.
+  **What this bullet used to say was that closedness does not follow**, with the real line with
+  two origins over the real line as the witness and the classical graph-and-fibre-product proof as
+  the only route. **The witness is right and both conclusions drawn from it were wrong.** It is a
+  counterexample, and `TwoIndiscrete.not_isClosedMap_pt_of_isClosedMap_comp`
+  (`OkaTest/FiniteEtaleCancel.lean`) now compiles one of the same shape — but what it exhibits is
+  a **non-Hausdorff middle space**, and not anything about the second factor: its two origins are
+  two points of `Y` that no open set separates. At `[T2Space Y]` the cancellation holds for an
+  arbitrary second factor, by `isProperMap_of_comp_of_t2` and the properness of a finite morphism,
+  and no separatedness notion and no fibre product is needed at any point.
+
+  This repository still has neither a separatedness notion for `ComplexAnalytic.AnalyticSpace` nor
+  fibre products, which is the same absence `Oka/AnalyticSpace/FiniteEtaleOver.lean` records as
+  the reason base change is not statable there. **Neither was ever what obstructed this**; a
+  separation axiom on `Y` is a hypothesis and not a construction, and it is the whole of what was
+  missing.
 * **Grauert's finite mapping theorem**, which `Oka/AnalyticSpace/Finite.lean` already records as
   absent.
 
@@ -117,6 +116,9 @@ the rung.
   this repository had to supply.
 - `ComplexAnalytic.AnalyticSpace.isFiniteEtale_id` and `isFiniteEtale_comp`: the same for finite
   étale morphisms, from the two rungs' versions.
+- `ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp`: **finite étale morphisms cancel** — if
+  `f ≫ g` is finite étale and `g` is a local isomorphism then so is `f`, for a Hausdorff middle
+  space. That separation axiom is the whole cost of it and is spent entirely in the finite rung.
 
 ## References
 
@@ -291,5 +293,33 @@ theorem isFiniteEtale_of_isIso {X Y : AnalyticSpace.{u}} (f : X ⟶ Y) [IsIso f]
     IsFiniteEtale f where
   isFinite := isFinite_of_isIso f
   isLocalIso := isLocalIso_of_isIso f
+
+/-- **Finite étale morphisms cancel**: if `f ≫ g` is finite étale and `g` is a local isomorphism,
+then `f` is finite étale — provided `Y` is Hausdorff.
+
+This is the statement `Oka/AnalyticSpace/FiniteEtaleOver.lean` records as the first thing a
+Galois-category structure on `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver` would need, and it is
+the two rungs' cancellations put together:
+`ComplexAnalytic.AnalyticSpace.isFinite_of_comp_of_t2Space` in `Oka/AnalyticSpace/Finite.lean`,
+and `ComplexAnalytic.AnalyticSpace.isLocalIso_of_comp` above.
+
+**`g` is asked to be a local isomorphism and not to be finite étale**, because that is all that is
+used: the finite half of the cancellation asks nothing of `g` at all, and the local-isomorphism
+half asks exactly this. A caller holding `[IsFiniteEtale g]` — which is the Galois-category case —
+has it by `ComplexAnalytic.AnalyticSpace.IsFiniteEtale.isLocalIso`, so nothing is lost by stating
+the weaker hypothesis.
+
+**`[T2Space Y]` is the whole cost of the statement**, it is on the middle space, and it is not
+removable; see `ComplexAnalytic.AnalyticSpace.isFinite_of_comp_of_t2Space`, which is where it is
+spent and where the witness against dropping it is cited. Whether it can be dropped when `g` is
+additionally *finite* étale is not asked here — that witness has a second factor which is not a
+local isomorphism, so it does not settle the question.
+
+**It does not make the category Galois**, and `Oka/AnalyticSpace/FiniteEtaleOver.lean` says what
+else is wanted: no fibre products, hence no base change, and no fibre functor. -/
+theorem isFiniteEtale_of_comp {X Y Z : AnalyticSpace.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
+    [T2Space Y] [IsFiniteEtale (f ≫ g)] [IsLocalIso g] : IsFiniteEtale f where
+  isFinite := isFinite_of_comp_of_t2Space f g
+  isLocalIso := isLocalIso_of_comp f g
 
 end ComplexAnalytic.AnalyticSpace

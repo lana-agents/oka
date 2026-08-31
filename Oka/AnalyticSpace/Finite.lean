@@ -72,24 +72,33 @@ now compiled**: `TwoIndiscrete.not_isClosedMap_pt_of_isClosedMap_comp`
 (`OkaTest/FiniteEtaleCancel.lean`) exhibits a `g` that is continuous, closed and has finite
 fibres, an `f` that is continuous, a
 closed `f ≫ g` and a non-closed `f`. It is a two-point indiscrete space and not the line with two
-origins, so it is the weaker witness — the fold below is not a local homeomorphism — and the
-line with two origins is still compiled nowhere.
+origins, so it is the weaker witness in one respect — its `g` is not a local homeomorphism — and
+the line with two origins is still compiled nowhere.
 
 That paragraph does not collide with `ComplexAnalytic.AnalyticSpace.isFinite_of_isFinite_comp`,
-which is this file's cancellation lemma and asks the second factor to be injective: the `g` above
-is exactly not that, at the two origins.
+which is this file's older cancellation lemma and asks the second factor to be injective: the `g`
+above is exactly not that, at the two origins.
 
-**It also does not say the closed half never cancels, and this file used to leave that reading
-open.** The classical repair — factor `f` through its graph and ask `Y` to be separated over the
-base — needs a separatedness notion and fibre products, and neither exists here. But that is the
-repair for a *finite* second factor. When `g` is **finite étale** and its source is Hausdorff,
-neither ingredient is needed and the closed half cancels:
-`ComplexAnalytic.AnalyticSpace.isFinite_of_comp_of_isFiniteEtale` in
-`Oka/AnalyticSpace/FiniteEtaleCancel.lean`, whose content is
-`IsCoveringMap.isClosedMap_of_comp` (`Oka/Topology/Covering/Basic.lean`) — a covering map is
-injective on each sheet of an evenly covered neighbourhood, and the two origins lie in no common
-sheet. The absence of separatedness and of fibre products is real and is recorded in the
-base-change paragraph below; what it does not obstruct is the finite étale case.
+**What the two witnesses have in common is not their second factor, and that is what the closed
+half actually needs.** In both, the middle space carries two topologically indistinguishable
+points — the two origins, and the two points of the indiscrete pair — and that is the whole of
+what keeps the image of `f` from being closed. **A separation axiom on the middle space, and
+nothing about `g`, is therefore the hypothesis**:
+`ComplexAnalytic.AnalyticSpace.isFinite_of_comp_of_t2Space` asks `[T2Space Y]` and asks of `g`
+exactly what the fibre half asks, which is nothing. **So both halves cancel**, and the whole cost
+of the pair is one separation axiom on `Y`.
+
+**The classical repair is not needed, and this file used to imply that it was the only route.**
+Factoring `f` through its graph and asking `Y` to be separated over the base needs a separatedness
+notion and fibre products, and neither exists here — that absence is real and is recorded in the
+base-change paragraph below. It is not what was obstructing this: `isProperMap_of_comp_of_t2` is
+Mathlib's cancellation for proper maps at `[T2Space Y]` and asks nothing of the second factor
+beyond continuity, and a finite morphism is proper
+(`ComplexAnalytic.AnalyticSpace.isProperMap_base_of_isFinite`), so the closed half is those two
+lemmas and no new topology at all. **`[T2Space Y]` is a genuine hypothesis and not an instance
+that will be found** — `Oka/AnalyticSpace/Basic.lean` imposes no separation axiom, as
+`AlgebraicGeometry.Scheme` does not — and the counterexample above is exactly the witness that it
+cannot be dropped.
 
 ## What is not here, and it is the whole of the subject
 
@@ -134,9 +143,12 @@ stated here rather than left to be discovered.
   `ComplexAnalytic.isClosedEmbedding_base_analytificationIncl`.
 - `ComplexAnalytic.AnalyticSpace.finite_fiber_of_comp`: **the fibre half of finiteness cancels
   with no hypothesis at all** — if `f ≫ g` has finite fibres then so does `f`, and the second
-  factor is not asked to be finite, closed or injective. The closed half does not cancel with it
-  at that hypothesis, and does when the second factor is finite étale with Hausdorff source, which
-  is `Oka/AnalyticSpace/FiniteEtaleCancel.lean`; see the section above.
+  factor is not asked to be finite, closed or injective.
+- `ComplexAnalytic.AnalyticSpace.isFinite_of_comp_of_t2Space`: **the closed half cancels too, and
+  the only thing it costs is a separation axiom on the middle space** — if `f ≫ g` is finite and
+  the target of `f` is Hausdorff then `f` is finite, with nothing asked of the second factor
+  either. See the cancellation section above for the counterexample that says the separation
+  axiom cannot be dropped.
 - `ComplexAnalytic.AnalyticSpace.not_isFinite_of_infinite_fiber`: the criterion a non-example is
   exhibited by.
 - `ComplexAnalytic.AnalyticSpace.isProperMap_base_of_isFinite`: **a finite morphism is proper**,
@@ -283,9 +295,9 @@ set is finite. **There is no hypothesis on `g` at all** — no `[IsFinite g]`, n
 `g` is in the binders only because the composite mentions it.
 
 **This is one of the two halves of a cancellation statement for
-`ComplexAnalytic.AnalyticSpace.IsFinite`, and it is the half that needs no hypothesis**; the module
-docstring says what the other one costs — a counterexample at a merely finite second factor, and
-`ComplexAnalytic.AnalyticSpace.isFinite_of_comp_of_isFiniteEtale` at a finite étale one.
+`ComplexAnalytic.AnalyticSpace.IsFinite`, and it is the half that needs no hypothesis at all**; the
+other is `ComplexAnalytic.AnalyticSpace.isFinite_of_comp_of_t2Space` at the foot of this file,
+which asks nothing of `g` either and one separation axiom of `Y`.
 It is also the fibre half of
 `ComplexAnalytic.AnalyticSpace.isFinite_of_isFinite_comp` below, which is where this containment
 used to be written out inline: that lemma's injectivity hypothesis is consumed entirely in its
@@ -328,11 +340,14 @@ for no more than is used, as
 `ComplexAnalytic.AnalyticSpace.isFinite_of_isClosedEmbedding`'s docstring says of the structure
 sheaves.
 
-**Whether injectivity can be dropped is not settled here, and the shape a counterexample must
-have is.** Since the fibre half consumes nothing, a `f` that is not finite while `f ≫ i` is must
+**Injectivity can be dropped if `Y` is Hausdorff, and the shape any counterexample must have
+says why.** Since the fibre half consumes nothing, a `f` that is not finite while `f ≫ i` is must
 have finite fibres and a base map that is not closed; so the `i` beside it has to identify a limit
-point of some image `f.toLRSHom.base '' C` with a point of that image. No morphism below is asked
-whether it is of that shape. -/
+point of some image `f.toLRSHom.base '' C` with a point of that image — which is a point of `Y`
+not separated from that image, and is impossible in a Hausdorff space.
+`ComplexAnalytic.AnalyticSpace.isFinite_of_comp_of_t2Space` at the foot of this file is that
+statement, and the two are incomparable rather than one subsuming the other: this one holds for a
+non-Hausdorff `Y` and that one for a non-injective `i`. -/
 theorem isFinite_of_isFinite_comp {X Y S : AnalyticSpace.{u}} (f : X ⟶ Y) (i : Y ⟶ S)
     (hi : Function.Injective (i.toLRSHom.base : Y → S)) (h : IsFinite (f ≫ i)) :
     IsFinite f where
@@ -393,5 +408,46 @@ theorem isFinite_iff_isProperMap_base_and_finite_fiber {X Y : AnalyticSpace.{u}}
       ∀ y : Y, Finite (f.toLRSHom.base ⁻¹' {y}) :=
   ⟨fun _ ↦ ⟨isProperMap_base_of_isFinite f, fun y ↦ IsFinite.finite_fiber y⟩,
     fun h ↦ ⟨h.1.isClosedMap, h.2⟩⟩
+
+/-- **Finiteness cancels along a second factor whose source is Hausdorff**: if `f ≫ g` is finite
+and `Y` is Hausdorff, then `f` is finite. **Nothing is asked of `g`** — not finiteness, not
+closedness, not injectivity, not that it be a local isomorphism — exactly as in
+`ComplexAnalytic.AnalyticSpace.finite_fiber_of_comp`, of which this is the other half.
+
+Both fields are one lemma. The fibre half *is* `finite_fiber_of_comp`. The closed half is
+`isProperMap_of_comp_of_t2` — Mathlib's cancellation for proper maps, whose `[T2Space]` is on the
+**middle** space, which is `Y` here — applied to
+`ComplexAnalytic.AnalyticSpace.isProperMap_base_of_isFinite`, and then `IsProperMap.isClosedMap`.
+The `rfl` identifying the underlying map of `f ≫ g` with the composite of the two underlying maps
+is the one `ComplexAnalytic.AnalyticSpace.isFinite_comp` uses; it is stated rather than left to
+unification because the `▸` below needs it in that direction.
+
+**`[T2Space Y]` is a hypothesis and not an instance that will be found.**
+`Oka/AnalyticSpace/Basic.lean` imposes no separation axiom on an analytic space, for the reason
+`AlgebraicGeometry.Scheme` does not; the only `T2Space` instance for one in this repository is
+`ComplexAnalytic.t2Space_restrict_punctured`, about a single restriction of a single space. And it
+cannot be dropped: `TwoIndiscrete.not_isClosedMap_pt_of_isClosedMap_comp`
+(`OkaTest/FiniteEtaleCancel.lean`) is a compiled witness with a two-point indiscrete middle space,
+whose second factor is closed with finite fibres — so no strengthening of `g` short of one that
+forces `Y` to be Hausdorff can replace it.
+
+**It is on the *middle* space and not on the source or the target**, which is where the module
+docstring's counterexamples put the failure and is the position `isProperMap_of_comp_of_t2` asks
+for. `X` and `Z` are unconstrained.
+
+**A `theorem` and not an `instance`**, for the reason
+`ComplexAnalytic.AnalyticSpace.finite_fiber_of_comp` gives: instance search would have to invent
+`Z` and `g`, which the goal determines in no way.
+
+Placed here rather than beside `ComplexAnalytic.AnalyticSpace.finite_fiber_of_comp`, where it
+belongs thematically, only because it consumes
+`ComplexAnalytic.AnalyticSpace.isProperMap_base_of_isFinite` and that is declared above. -/
+theorem isFinite_of_comp_of_t2Space {X Y Z : AnalyticSpace.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
+    [T2Space Y] [IsFinite (f ≫ g)] : IsFinite f where
+  isClosedMap := by
+    have h : ((f ≫ g).toLRSHom.base : X → Z) = (g.toLRSHom.base : Y → Z) ∘ f.toLRSHom.base := rfl
+    exact (isProperMap_of_comp_of_t2 f.toLRSHom.base.hom.continuous
+      g.toLRSHom.base.hom.continuous (h ▸ isProperMap_base_of_isFinite (f ≫ g))).isClosedMap
+  finite_fiber y := finite_fiber_of_comp f g y
 
 end ComplexAnalytic.AnalyticSpace
