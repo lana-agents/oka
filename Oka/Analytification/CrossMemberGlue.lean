@@ -134,9 +134,15 @@ harder to read, which is a reason to state and not a reason to hide.
   **What that file corrects here is the sentence that a cover datum's `poly i i` being
   unconstrained stops the second formula serving at the first.** It does, and normalising the
   diagonal removes the obstruction, because `CategoryTheory.GlueData.ofGlueData'` discards `V i i`
-  — so `ComplexAnalytic.polyDiagOne` changes no glued space that anything below reads. **What is
-  still exactly right is the transport**: *"in the equal case the branch is handed `fam b`, which
-  is a polynomial over the member `σ b`, where it must produce one over the member `σ a`"*. It has
+  — so `ComplexAnalytic.polyDiagOne` changes no glued space. **That last clause was an argument
+  when it was written here and is now a theorem**:
+  `ComplexAnalytic.coverAnalytification_polyDiagOne`
+  (`Oka/Analytification/DiagonalIndependence.lean`), an instance of
+  `ComplexAnalytic.coverAnalytification_congr` — two cover data glue to the same analytic space as
+  soon as they agree off the diagonal. Read it and not this sentence: this one says what the
+  argument was and that one is what holds. **What is still exactly right is the transport**:
+  *"in the equal case the branch is handed `fam b`, which is a polynomial over the member `σ b`,
+  where it must produce one over the member `σ a`"*. It has
   not gone anywhere; it sits inside `ComplexAnalytic.refineDatumFactor`, between two values of one
   type, instead of in the shape of the refined overlap where every construction below would meet
   it. The equal case's *second* transport, between two objects of

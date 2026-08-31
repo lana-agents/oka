@@ -16,9 +16,24 @@ filling the diagonal with `dite`s. **Mathlib has no projection lemmas for it at 
 finds `ofGlueData'` only in its own defining file — so a caller that has to *use* `f` or `t` of
 the result has to unfold a `dite` by hand.
 
-This file supplies nine: two for `CategoryTheory.GlueData'.f'`, two for each of
-`CategoryTheory.GlueData.ofGlueData'`'s `f` and `t`, the composite `t i j ≫ f j i`, and the two
-directions of the compatibility condition a family of morphisms out of the members satisfies.
+This file supplies ten: two for `CategoryTheory.GlueData'.f'`, two for each of
+`CategoryTheory.GlueData.ofGlueData'`'s `f` and `t`, the composite `t i j ≫ f j i`, the two
+directions of the compatibility condition a family of morphisms out of the members satisfies, and
+an extensionality principle for `CategoryTheory.GlueData'` itself.
+
+## The extensionality principle asks for five fields of eight, and `t'` is not one of them
+
+`CategoryTheory.GlueData'.ext_of_heq` concludes `D = D'` from `J`, `U`, `V`, `f` and `t`. It says
+nothing about `t'`, and that is not an omission: **`t'` is determined by `t`.** Its own field
+`t_fac` reads `t' i j k ≫ pullback.snd _ _ = pullback.fst _ _ ≫ t i j`, and the
+`CategoryTheory.Limits.pullback.snd` there is a pullback of `f j k`, which the `f_mono` field
+makes a monomorphism — so `t'` is the unique morphism with that factorisation and two glue data
+agreeing through `t` cannot disagree below it. `CategoryTheory.cancel_mono` is the whole proof.
+
+The hypotheses are `HEq`s and not `Eq`s because the fields are dependent: `f`'s type mentions `V`
+and `U`, and `t`'s mentions `V`. A caller with `V`s that are only propositionally equal — which is
+the situation whenever the overlaps are cut out by data that has been changed — has no `Eq` to
+offer at `f` or below.
 
 ## Why they are not one `simp` call at the call site
 
@@ -88,6 +103,8 @@ inclusions `ι i` are themselves such a family and hence that gluing them return
 - `CategoryTheory.GlueData.ofGlueData'_t_comp_f_of_ne`
 - `CategoryTheory.GlueData.ofGlueData'_comm` and
   `CategoryTheory.GlueData.comm_of_ofGlueData'_comm`
+- `CategoryTheory.GlueData'.ext_of_heq`: **two glue data with the same `J`, `U`, `V`, `f` and `t`
+  are equal**, `t'` being determined by `t`.
 -/
 
 universe v u
@@ -221,5 +238,38 @@ theorem GlueData.comm_of_ofGlueData'_comm {Y : C} (fY : ∀ i, D.U i ⟶ Y)
   dsimp only [GlueData.ofGlueData'] at hij'
   rw [Category.assoc, Category.assoc, cancel_epi, Category.assoc] at hij'
   exact hij'
+
+/-! ### Extensionality -/
+
+/-- **A `CategoryTheory.GlueData'` is determined by `J`, `U`, `V`, `f` and `t`.**
+
+`t'` is absent from the hypotheses because it is not independent data: `t_fac` factorises it
+through `CategoryTheory.Limits.pullback.snd`, which is a pullback of the monomorphism `f j k` and
+so is itself monic, and `CategoryTheory.cancel_mono` finishes. The `f_mono` and `f_hasPullback`
+fields are the instances that make that argument available, and they are proofs, so they need no
+hypothesis either.
+
+The five hypotheses are `HEq`s rather than `Eq`s because the fields are dependent — `f`'s type
+mentions `V` and `U` — so a caller whose `V`s agree only propositionally has nothing else to
+offer. -/
+theorem GlueData'.ext_of_heq {D D' : GlueData' C}
+    (hJ : D.J = D'.J) (hU : HEq D.U D'.U) (hV : HEq D.V D'.V) (hf : HEq D.f D'.f)
+    (ht : HEq D.t D'.t) : D = D' := by
+  obtain ⟨J, U, V, f, fmono, fpb, t, t', tfac, tinv, cocy⟩ := D
+  obtain ⟨J', U', V', f', fmono', fpb', t₂, t'₂, tfac', tinv', cocy'⟩ := D'
+  dsimp only at hJ hU hV hf ht
+  subst hJ
+  obtain rfl := eq_of_heq hU
+  obtain rfl := eq_of_heq hV
+  obtain rfl := eq_of_heq hf
+  obtain rfl := eq_of_heq ht
+  haveI := fmono
+  haveI := fpb
+  have hlast : t' = t'₂ := by
+    funext i j k hij hik hjk
+    exact (cancel_mono (Limits.pullback.snd (f j k hjk) (f j i hij.symm))).1
+      ((tfac i j k hij hik hjk).trans (tfac' i j k hij hik hjk).symm)
+  subst hlast
+  rfl
 
 end CategoryTheory

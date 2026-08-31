@@ -62,6 +62,11 @@ with one `Iso.trans` removed.
 
 ## Main results
 
+- `AlgebraicGeometry.LocallyRingedSpace.GlueData.ext_of_toGlueData`: **the `LocallyRingedSpace`
+  layer of a glue datum carries no data**, so two of them with the same underlying
+  `CategoryTheory.GlueData` are equal. The only field the extension adds is `f_open`, a `Prop`;
+  Mathlib states `AlgebraicGeometry.PresheafedSpace.GlueData` and
+  `AlgebraicGeometry.SheafedSpace.GlueData` in the same shape and has the lemma for neither.
 - `AlgebraicGeometry.LocallyRingedSpace.GlueData.ι_eq_iff` and `…GlueData.isOpen_iff`: two points
   of a gluing are equal exactly when they are related in the evident way, and a subset of a
   gluing is open exactly when its preimage in every member is.
@@ -761,6 +766,27 @@ theorem isCompatible_restrictAlgMap {R : Type u} [CommRing R]
       exact (hg j).symm
   simp_rw [hαγ]
   exact D.openCover.isCompatible_restrictAlgMap_comapAlgMap γ c
+
+/-! ### Extensionality -/
+
+/-- **Two glue data of locally ringed spaces with the same underlying `CategoryTheory.GlueData`
+are equal.**
+
+`AlgebraicGeometry.LocallyRingedSpace.GlueData` extends `CategoryTheory.GlueData` by `f_open`
+alone, which is a `Prop`, so the extension carries no data and the two `cases` below leave a goal
+that proof irrelevance closes.
+
+What it is for is the step after a congruence: a caller who has proved two
+`CategoryTheory.GlueData`s equal — because the data they were built from agree — still has to get
+past a field whose type mentions the thing just proved equal, and `subst` cannot fire until the
+structure is taken apart. Doing that once here is what keeps it out of every such proof. -/
+theorem ext_of_toGlueData {D₁ D₂ : GlueData.{u}} (h : D₁.toGlueData = D₂.toGlueData) :
+    D₁ = D₂ := by
+  obtain ⟨d₁, o₁⟩ := D₁
+  obtain ⟨d₂, o₂⟩ := D₂
+  dsimp only at h
+  subst h
+  rfl
 
 end GlueData
 

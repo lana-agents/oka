@@ -60,11 +60,19 @@ choice, satisfies it, and is checked by nothing"*. What normalising buys is that
 formula is then correct at `σ a = σ b` as well, where for a datum with an arbitrary `poly i i` it
 cuts out too little.
 
-**What is not proved here is that normalising leaves the glued space unchanged.** It is a
-statement about `ComplexAnalytic.coverAnalytification` of two data that differ on the diagonal,
-nothing below states it, and the paragraph above is an argument and not a citation of one — the
-two facts it rests on are compiled, the conclusion drawn from them is not. A consumer that needs
-the refined datum to refine *the same space* needs it and will have to state it.
+**That normalising leaves the glued space unchanged is now proved, and by more than the
+paragraph above argues.** `ComplexAnalytic.coverAnalytification_polyDiagOne`
+(`Oka/Analytification/DiagonalIndependence.lean`) is the statement, and it is an instance of
+`ComplexAnalytic.coverAnalytification_congr`: two cover data glue to the same analytic space as
+soon as their `poly` and their `glue` agree **off** the diagonal, with nothing asked at `i = i` on
+either side. So the argument above is a citation of one, `poly i i` is unread in the strong sense
+that the glued space is a function of the off-diagonal data alone, and a consumer that needs the
+refined datum to refine *the same space* has this step rather than a gap.
+
+Until 2026-08-31 this paragraph said the opposite — that the conclusion was drawn and not compiled
+— and it was right when written. What it cost to compile is not geometry: `poly i i` occurs in the
+**type** of `glue`, so the two data are not two values of one type and every field of the glue
+datum below `V` is compared by `HEq`. That file's module docstring is where the cost is.
 
 ## The four proofs open a definition with `change` or a term, and none with `rw`
 
@@ -136,9 +144,12 @@ goal.
   on it that file did not have**: `ComplexAnalytic.refineDatumFactor` is the caller's `q` only off
   the diagonal, so a caller's `q` is read at pairs with `σ a ≠ σ b` and ignored elsewhere, and
   what makes the formula correct at those pairs is unproved here exactly as it is there.
-* **No statement that the refined data cover anything**, and none that the diagonal normalisation
-  preserves the glued space — the second is stated as an absence in a section of its own above
-  because this file *uses* the normalisation.
+* **No statement that the refined data cover anything.** The other half of this bullet is
+  retired: `ComplexAnalytic.coverAnalytification_polyDiagOne` says the diagonal normalisation
+  preserves the glued space, and the section above now cites it. **What that does *not* say is
+  that the refined datum refines the original space**, which is a statement about
+  `ComplexAnalytic.refineDatumPoly` and not about `ComplexAnalytic.polyDiagOne`; nothing on this
+  line states it and the normalisation result is a step it may or may not go through.
 * **No witness at a concrete cover datum.** What stands in for one is
   `ComplexAnalytic.refineDatumPoly_const` and `ComplexAnalytic.coverOverlap_refineDatumPoly_const`:
   the general form reduces to a configuration that `OkaTest/CoverRefinement.lean` and
