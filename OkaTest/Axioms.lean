@@ -46,7 +46,7 @@ happened to open.**
 | --- | --- |
 | Oka's theorem and the coherence of `𝒪_X` | `OkaTest/Axioms/MainTheorem.lean` |
 | Weierstrass division and preparation | `OkaTest/Axioms/Weierstrass.lean` |
-| complex analysis, and the topology of polynomial zero loci | `OkaTest/Axioms/Analysis.lean` |
+| complex analysis, `π₁(ℂ ∖ {0})`, and polynomial zero loci | `OkaTest/Axioms/Analysis.lean` |
 | `LocalOkaRing`: Rückert, maximal ideal, regularity | `OkaTest/Axioms/LocalOkaRing.lean` |
 | `OkaRing` and the structure sheaf of `ℂ^ι` | `OkaTest/Axioms/ComplexSpace.lean` |
 | analytification, and the comparison morphisms to `Spec` | `OkaTest/Axioms/Analytification.lean` |
