@@ -14,9 +14,9 @@ the polynomial `f` occurs in the *type* of everything built from it: two polynom
 the same distinguished open give two different objects of `ComplexAnalytic.Presentation` and two
 different analytic spaces. This file says they are canonically the same one.
 
-Eight statements. The first four identify the two presentations and put the identification over
-the member; the last four are about the case where the two polynomials differ by a **unit**, and
-about where such a pair comes from:
+The first four statements identify the two presentations and put the identification over the
+member; the next four are about the case where the two polynomials differ by a **unit**, and about
+where such a pair comes from; the last two vary the base rather than the polynomial:
 
 * `ComplexAnalytic.localisationPresentationIsoOfDvdPow` — **the presentations of the localisation
   at `f` and at `f'` are isomorphic** whenever the images of `f` and `f'` in `A` each divide a
@@ -47,6 +47,11 @@ about where such a pair comes from:
   `ComplexAnalytic.exists_localisationOpen_eq_rename`, whose geometric conclusion discards the
   unit; the unit is what the isomorphism above needs and what an equality of non-vanishing loci
   does not give.
+* `ComplexAnalytic.localisationPresentationIsoOfAlgEquiv` and
+  `ComplexAnalytic.localisationPresentationIsoOfAlgEquiv_hom_comp` — **the base moves too**: an
+  isomorphism of two presented algebras carrying one cutting polynomial to the other identifies
+  the two localisations, over that isomorphism. Everything before this keeps the base fixed, and a
+  cross-member overlap of a refined cover is the case where it does not.
 
 ## Where this is needed
 
@@ -333,5 +338,125 @@ theorem exists_mk_rename_eq (q : MvPolynomial (ULift.{u} (Fin (n + 1))) ℂ) :
     (presentationIdeal.{u} (localisationPresentation.{u} g f))) h
   rw [map_mul, map_pow, map_add, map_mul, hrel, zero_mul, add_zero, ← hu] at hq
   rw [← hq, Units.val_pow_eq_pow_val]
+
+/-! ### Two presentations identified, and the localisations carried across
+
+Everything above keeps the **base** fixed and varies the polynomial. This section varies the base:
+given an isomorphism of two presented algebras carrying one cutting polynomial to the other, the
+two localisations are isomorphic over it.
+
+**That is the case a cross-member overlap is in.** In `ComplexAnalytic.coverGlueData'` the overlap
+of two members is presented once on each side and the datum's `glue` identifies the two — an
+isomorphism of two *different* presentations. Refining such a cover localises both sides again,
+and nothing above can cross between them, because every statement above is about one base.
+
+The commutative algebra is Mathlib's: `IsLocalization.algEquivOfAlgEquiv` transports a
+localisation along an isomorphism of the bases matching the submonoids, and for
+`Localization.Away` the submonoid condition is `Submonoid.map_powers`, a `simp` lemma. What is
+here is the transport of that statement to this development's presentations, and the fact that it
+is one **over the two members**, which is what the isomorphism is used for and what the
+isomorphism alone does not say.
+-/
+
+section Transport
+
+variable {n' k' : ℕ} {g' : Fin k' → MvPolynomial (ULift.{u} (Fin n')) ℂ}
+  (q : MvPolynomial (ULift.{u} (Fin n)) ℂ) (q' : MvPolynomial (ULift.{u} (Fin n')) ℂ)
+  (e : PresentedAlgebra.{u} n k g ≃ₐ[ℂ] PresentedAlgebra.{u} n' k' g')
+  (he : e (Ideal.Quotient.mk (presentationIdeal.{u} g) q) =
+    Ideal.Quotient.mk (presentationIdeal.{u} g') q')
+
+include he in
+/-- **The two localised presented algebras are isomorphic**, when an isomorphism of the bases
+carries the class of `q` to the class of `q'`.
+
+`ComplexAnalytic.localisationPresentedAlgebraEquiv` at each end and
+`IsLocalization.algEquivOfAlgEquiv` in the middle. The hypothesis is stated on the **classes** and
+not on the polynomials, because that is the form it arrives in: an isomorphism of presentations
+gives a map of presented algebras and says nothing about polynomials.
+
+The hypothesis is what fixes the isomorphism: `q'` is not determined by `e` and `q`, only its
+class is, and two polynomials with the same class give the same statement. -/
+noncomputable def localisationPresentedAlgebraEquivOfAlgEquiv :
+    PresentedAlgebra.{u} (n + 1) (k + 1) (localisationPresentation.{u} g q) ≃ₐ[ℂ]
+      PresentedAlgebra.{u} (n' + 1) (k' + 1) (localisationPresentation.{u} g' q') :=
+  (localisationPresentedAlgebraEquiv.{u} g q).trans
+    ((IsLocalization.algEquivOfAlgEquiv
+        (M := Submonoid.powers (Ideal.Quotient.mk (presentationIdeal.{u} g) q))
+        (T := Submonoid.powers (Ideal.Quotient.mk (presentationIdeal.{u} g') q'))
+        (Localization.Away (Ideal.Quotient.mk (presentationIdeal.{u} g) q))
+        (Localization.Away (Ideal.Quotient.mk (presentationIdeal.{u} g') q')) e
+        (by simp [he])).trans
+      (localisationPresentedAlgebraEquiv.{u} g' q').symm)
+
+include he in
+/-- **And the isomorphism is one over the two members**: it carries the structure map `A ⟶ A_q` to
+`A' ⟶ A'_{q'}` composed with `e`.
+
+The companion of `ComplexAnalytic.localisationPresentedAlgebraEquivOfDvdPow_localisationRingHom`,
+which says the same for two witnesses over one member, and it is the half with content for the
+same reason: an isomorphism of two localisations that is compatible with nothing identifies two
+objects and relates nothing. The two outer steps are
+`ComplexAnalytic.localisationPresentedAlgebraEquiv_localisationRingHom` and the middle one is
+`IsLocalization.algEquivOfAlgEquiv_eq`.
+
+**The first step is a `change` and not a `rw` at the definition above**, which is the one
+difference from the proof of the `OfDvdPow` companion. A `rw` at a definition generates an
+auto-generated equation lemma for it, and the environment carries
+`ComplexAnalytic.localisationPresentedAlgebraEquivOfDvdPow.eq_1` for exactly that reason — and a
+generated `eq_1` makes its own definition a namespace, which switches off
+`scripts/check_docstring_names.py`'s field-notation rule for that name. The `change` costs the two
+submonoids written out and leaves the environment with the four declarations of this section and
+nothing else. -/
+theorem localisationPresentedAlgebraEquivOfAlgEquiv_localisationRingHom
+    (x : PresentedAlgebra.{u} n k g) :
+    localisationPresentedAlgebraEquivOfAlgEquiv.{u} g q q' e he
+        (localisationRingHom.{u} g q x) =
+      localisationRingHom.{u} g' q' (e x) := by
+  have hx : localisationPresentedAlgebraEquiv.{u} g q (localisationRingHom.{u} g q x) =
+      algebraMap (PresentedAlgebra.{u} n k g)
+        (Localization.Away (Ideal.Quotient.mk (presentationIdeal.{u} g) q)) x :=
+    localisationPresentedAlgebraEquiv_localisationRingHom.{u} g q x
+  change (localisationPresentedAlgebraEquiv.{u} g' q').symm
+    (IsLocalization.algEquivOfAlgEquiv
+      (M := Submonoid.powers (Ideal.Quotient.mk (presentationIdeal.{u} g) q))
+      (T := Submonoid.powers (Ideal.Quotient.mk (presentationIdeal.{u} g') q'))
+      (Localization.Away (Ideal.Quotient.mk (presentationIdeal.{u} g) q))
+      (Localization.Away (Ideal.Quotient.mk (presentationIdeal.{u} g') q')) e (by simp [he])
+      (localisationPresentedAlgebraEquiv.{u} g q (localisationRingHom.{u} g q x))) = _
+  rw [hx, IsLocalization.algEquivOfAlgEquiv_eq,
+    ← localisationPresentedAlgebraEquiv_localisationRingHom, AlgEquiv.symm_apply_apply]
+
+include he in
+/-- **The two localisations are isomorphic objects of `ComplexAnalytic.Presentation`**, hence have
+isomorphic analytifications through `ComplexAnalytic.analytificationFunctor`.
+
+A consumer holding an isomorphism of *presentations* rather than of algebras — which is the shape
+a cover datum's glue field is in — reaches this through
+`ComplexAnalytic.Presentation.algEquivOfIso`. -/
+noncomputable def localisationPresentationIsoOfAlgEquiv :
+    (⟨n + 1, k + 1, localisationPresentation.{u} g q⟩ : Presentation.{u}) ≅
+      ⟨n' + 1, k' + 1, localisationPresentation.{u} g' q'⟩ :=
+  Presentation.isoOfAlgEquiv (localisationPresentedAlgebraEquivOfAlgEquiv.{u} g q q' e he).symm
+
+include he in
+/-- **The triangle**: the isomorphism of the localisations sits over the isomorphism of the
+members.
+
+`ComplexAnalytic.localisationPresentationIsoOfDvdPow_hom_comp` is the same statement when the two
+members are one and the same and the right-hand factor is the identity; here the members are two
+and the factor is the isomorphism between them. It is what a coherence law consumes, and it is
+`ComplexAnalytic.localisationPresentedAlgebraEquivOfAlgEquiv_localisationRingHom` read through
+`ComplexAnalytic.PresHom.ext`. -/
+theorem localisationPresentationIsoOfAlgEquiv_hom_comp :
+    (localisationPresentationIsoOfAlgEquiv.{u} g q q' e he).hom ≫ localisationHom.{u} g' q' =
+      localisationHom.{u} g q ≫ (Presentation.isoOfAlgEquiv e.symm).hom := by
+  refine PresHom.ext (RingHom.ext fun x ↦ ?_)
+  change (localisationPresentedAlgebraEquivOfAlgEquiv.{u} g q q' e he).symm
+    (localisationRingHom.{u} g' q' x) = localisationRingHom.{u} g q (e.symm x)
+  rw [AlgEquiv.symm_apply_eq, localisationPresentedAlgebraEquivOfAlgEquiv_localisationRingHom,
+    AlgEquiv.apply_symm_apply]
+
+end Transport
 
 end ComplexAnalytic

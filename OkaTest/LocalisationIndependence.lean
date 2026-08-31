@@ -5,6 +5,7 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Oka
 import OkaTest.AnalytificationDistinguishedOpen
+import OkaTest.AnalytificationFunctor
 
 /-!
 # Non-vacuity of the independence of the presentation of a distinguished open
@@ -151,6 +152,55 @@ instance nontrivial_presentedAlgebra_localisation_node :
     Nontrivial (PresentedAlgebra.{u} (2 + 1) (1 + 1)
       (localisationPresentation.{u} nodePres.{u} nodeX.{u})) :=
   Ideal.Quotient.nontrivial_iff.mpr presentationIdeal_localisation_node_ne_top.{u}
+
+/-! ### Carrying a localisation across two *different* presentations
+
+`ComplexAnalytic.localisationPresentationIsoOfAlgEquiv` is satisfiable at
+`AlgEquiv.refl` and one polynomial, where it identifies an object with itself and says nothing.
+The witness below is at two presentations that are **not equal**: `nodePres2` and `nodePres3`,
+the node in two variables and in three, which `nodePres2_ne_nodePres3` separates by their variable
+counts, with `nodePresIso` the isomorphism between them.
+
+`localisationPresentation_node_ne` says the two *localisations* are still not equal, which does not
+follow from the members being different — an isomorphism of presentations can identify objects
+whose localisations coincide — and is what stops the witness from being an identity in disguise. -/
+
+/-- **The class of `z₀` on the node in two variables goes to the class of `z₀` on the node in
+three**, under the isomorphism of `nodePresIso`.
+
+`ComplexAnalytic.Presentation.algEquivOfIso` of an isomorphism is its `hom`'s ring map, so the
+`symm` here is `nodePresInv = presHom32`, and the value at the class of a variable is `vars23` at
+that variable. Reached with `change` and not by unfolding `presHom32`, which is another file's
+definition and would plant an equation lemma for it in this module. -/
+theorem algEquivOfIso_nodePresIso_symm_mk_X0 :
+    (Presentation.algEquivOfIso.{u} nodePresIso.{u}).symm
+        (Ideal.Quotient.mk (presentationIdeal.{u} nodeTuple2.{u}) (MvPolynomial.X (ULift.up 0))) =
+      Ideal.Quotient.mk (presentationIdeal.{u} nodeTuple3.{u}) (MvPolynomial.X (ULift.up 0)) := by
+  change MvPolynomial.eval₂Hom (presentedAlgebraMap.{u} nodeTuple3.{u}) vars23.{u}
+    (MvPolynomial.X (ULift.up 0)) = _
+  rw [MvPolynomial.eval₂Hom_X']
+  rfl
+
+/-- **`D(z₀)` in the node, presented over two different presentations of the node.** The
+transport of `ComplexAnalytic.localisationPresentationIsoOfAlgEquiv` at an isomorphism which is
+not an identity and between objects which are not equal. -/
+def nodeLocIso :
+    (⟨2 + 1, 1 + 1, localisationPresentation.{u} nodeTuple2.{u} (MvPolynomial.X (ULift.up 0))⟩ :
+        Presentation.{u}) ≅
+      ⟨3 + 1, 2 + 1, localisationPresentation.{u} nodeTuple3.{u} (MvPolynomial.X (ULift.up 0))⟩ :=
+  localisationPresentationIsoOfAlgEquiv.{u} nodeTuple2.{u} _ _
+    (Presentation.algEquivOfIso.{u} nodePresIso.{u}).symm algEquivOfIso_nodePresIso_symm_mk_X0.{u}
+
+/-- **The two localisations are different objects**, as the two members were: the isomorphism
+above is not an identity in disguise. Their variable counts differ, which is the same separator
+`nodePres2_ne_nodePres3` uses one level down. -/
+theorem localisationPresentation_node_ne :
+    (⟨2 + 1, 1 + 1, localisationPresentation.{u} nodeTuple2.{u} (MvPolynomial.X (ULift.up 0))⟩ :
+        Presentation.{u}) ≠
+      ⟨3 + 1, 2 + 1,
+        localisationPresentation.{u} nodeTuple3.{u} (MvPolynomial.X (ULift.up 0))⟩ := by
+  intro h
+  exact absurd (congrArg Presentation.n h) (by decide)
 
 end OkaTest.LocalisationIndependence
 
