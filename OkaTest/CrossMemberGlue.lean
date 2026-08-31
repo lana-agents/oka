@@ -42,7 +42,10 @@ refined overlaps are the two localisations `nodeLocPresIso` identifies.
 `crossPoint`, `crossU` and — worse, because it is another file's — `nodeTuple3` all acquired an
 auto-generated `eq_1` on the first head of this file, from being named in a `simp` set or a `rw`.
 Each is now a `have … := rfl` in the proof that needs it, or a `change`, so the environment gains
-nothing: `comm -13` on `scripts/DumpOkaDecls.lean`'s output is this file's own three declarations.
+nothing: `comm -13` on `scripts/DumpOkaDecls.lean`'s output is this file's own **eleven**
+declarations and no twelfth — no `eq_1`, no `match_` and no `congr_simp`. (This sentence said
+*three* until a reviewer counted; three is how many names had acquired an `eq_1`, which is the
+sentence above, and not how many declarations this file contributes to the dump.)
 **The build reported none of it**, which is the reason to take the dump and not the build as the
 instrument.
 

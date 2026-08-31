@@ -53,8 +53,12 @@ and it is the form that answer takes: for any `ℂ`-algebra map out of a present
 `(A_f)`-shaped and any distinguished open `D(p')` of its target, the preimage of `D(p')` is the
 preimage along the projection of a distinguished open **of the base `A`** — one polynomial, on the
 member the refined piece sits in. Taxis #1287 names this as its item (a); nothing here builds a
-refinement, and the remaining two items of that issue — transporting the original cover's `glue`
-through two localisations, and the two geometric laws across members — are untouched.
+refinement. Of the remaining two items of that issue, the transport of the original cover's `glue`
+through two localisations is `ComplexAnalytic.refineCrossGlue`
+(`Oka/Analytification/CrossMemberGlue.lean`), whose extra factor and unit are **arguments**: that
+file produces neither, and names the theorem above, with `ComplexAnalytic.exists_mk_rename_eq`,
+as where a caller gets them. **The two geometric laws across members are still untouched**, and so
+is the refined datum those two would be laws of.
 
 ## Non-vacuity
 

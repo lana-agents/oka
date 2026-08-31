@@ -19,11 +19,14 @@ morphism of covers is.
 ## The property is already a `MorphismProperty`, and the `def` below buys dot notation
 
 `CategoryTheory.MorphismProperty C` is `∀ ⦃X Y : C⦄, (X ⟶ Y) → Prop`, and
-`ComplexAnalytic.AnalyticSpace.IsFiniteEtale` is declared with exactly those binders, so
-`@ComplexAnalytic.AnalyticSpace.IsFiniteEtale` **is** a morphism property with no repackaging:
+`ComplexAnalytic.AnalyticSpace.IsFiniteEtale` is declared over the same telescope — `{X Y}` where
+that is `⦃X Y⦄`, and **a binder annotation is not part of the type**, which is what the `@` below
+discharges — so `@ComplexAnalytic.AnalyticSpace.IsFiniteEtale` **is** a morphism property with no
+repackaging:
 `example : MorphismProperty AnalyticSpace.{u} := @IsFiniteEtale.{u}` elaborates on the nose. This
 is the same arrangement `Mathlib/AlgebraicGeometry/Morphisms/Finite.lean` relies on, where
-`@AlgebraicGeometry.IsFinite` is used as a morphism property while remaining a class.
+`@AlgebraicGeometry.IsFinite` — a class with the same `{X Y}` binders — is used as a morphism
+property while remaining a class.
 
 **What does not work is dot notation.** `(@IsFiniteEtale).Over ⊤ X` fails, because the elaborator
 sees a function type and goes looking for a field of `Function`; the message names a declaration
@@ -75,12 +78,34 @@ docstring, because `scripts/guard_coverage.py` reads every backticked repository
 
 * **No cancellation, and it is the gap that matters.** Nothing says that a morphism between two
   finite étale covers of `X` is itself finite étale — that is the statement *"if `g` and `f ≫ g`
-  are finite étale then `f` is"*, and neither rung has it: `ComplexAnalytic.AnalyticSpace.IsFinite`
-  and `IsLocalIso` are both stated as stability under composition only. Mathlib is in the same
-  position one level down — `Mathlib/Topology/Covering/Basic.lean` has no composition or
-  cancellation lemma for `IsCoveringMap` at all, only conjugation by a homeomorphism. **This is
-  what a Galois-category structure on the category below would need first**, and taxis #1114's
-  report identifies the same absence as the difficulty of essential surjectivity.
+  are finite étale then `f` is"*, and nothing below states it. **This is what a Galois-category
+  structure on the category below would need first**, and taxis #1114's report identifies the same
+  absence as the difficulty of essential surjectivity.
+
+  **What is absent is one topological statement and not the whole of it**, which an earlier
+  version of this bullet did not know: it said the two classes are stated as stability under
+  composition only and that Mathlib is in the same position one level down. Both halves of that
+  were wrong, and taxis #1312 measured how.
+
+  * `ComplexAnalytic.AnalyticSpace.IsFinite` **does** have a cancellation lemma —
+    `ComplexAnalytic.AnalyticSpace.isFinite_of_isFinite_comp`, which concludes `IsFinite f` from
+    `IsFinite (f ≫ i)`. What it asks in place of `IsFinite i` is
+    `Function.Injective i.toLRSHom.base`, and the `i` here is the structure map of a cover, which
+    is exactly what is not injective: `OkaTest/FiniteEtaleOver.lean`'s separating object is
+    `ComplexAnalytic.sq`, whose `ComplexAnalytic.not_isIso_sq` is proved *from*
+    non-injectivity. So the lemma exists and its hypothesis is the one a cover cannot supply,
+    which is a route where "nothing exists" offered none.
+  * `ComplexAnalytic.AnalyticSpace.IsLocalIso` has no cancellation lemma **declared** here, but it
+    is free from Mathlib rather than hard: `IsLocalHomeomorph.of_comp` is its topological half and
+    asks only that `f` be continuous, which a morphism's base map is, and
+    `AlgebraicGeometry.LocallyRingedSpace.stalkMap_comp` with two-out-of-three is the stalk half.
+    `Mathlib/Topology/Covering/Basic.lean` really does have no composition or cancellation lemma
+    for `IsCoveringMap`, only conjugation by a homeomorphism — but that is the wrong file for this
+    class, and the earlier version of this bullet carried that negative across from taxis #1114's
+    report without noticing.
+  * **What is left is closedness of `f` alone**, and taxis #1312 gives a topological reason not to
+    expect it without a separatedness hypothesis on `Y` over `Z` — which this category cannot
+    state, for the same reason as the base-change bullet below: no fibre products.
 * **No fibre functor and no Galois category.** The fibre functor of a Galois category — declared
   in `Mathlib/CategoryTheory/Galois/Basic.lean`, whose namespace is not in this repository's
   import closure and so cannot be cited by name here — lands in `FintypeCat`, and the fibre of a

@@ -32,16 +32,22 @@ file exhibits none of them and computes no hom-set. In particular it says nothin
 morphism between two objects is itself finite étale, which is the cancellation statement
 `Oka/AnalyticSpace/FiniteEtaleOver.lean` names as absent.
 
-**One collision met on the way, and it is recorded rather than fixed.** The base here has to be
-spelled `ComplexAnalytic.punctured` and not `punctured`: `OkaTest/HolomorphicMapOpen.lean`
-declares a root-namespace `punctured` and `OkaTest/FiniteMorphism.lean` declares
-`ComplexAnalytic.punctured`, **both of them an `Opens` of
+**One name that has to be qualified here, and the duplicate behind it is decided elsewhere.** The
+base has to be spelled `ComplexAnalytic.punctured` and not `punctured`, because
+`OkaTest/HolomorphicMapOpen.lean` declares a root-namespace `punctured` and
+`OkaTest/FiniteMorphism.lean` declares `ComplexAnalytic.punctured`, **both of them an `Opens` of
 `ComplexAnalytic.AnalyticSpace.complexAffineSpace 1` and both of them `{z₀ ≠ 0}`** — one built as
 a carrier with an openness proof, the other as
-`ComplexAnalytic.AnalyticSpace.nonvanishing` of a coordinate — and each carries its own
-`mem_punctured_iff`. Any file importing both meets an ambiguous term, which is what happened here.
-That is a duplicate definition and not only a name clash, so which one survives is a decision this
-branch does not take.
+`ComplexAnalytic.AnalyticSpace.nonvanishing` of a coordinate — so with `ComplexAnalytic` open the
+bare name is ambiguous.
+
+**That is where this file's part ends, and an earlier version of this paragraph did not say so.**
+`OkaTest/FiniteMorphism.lean`, which this file imports, already records the duplicate at length,
+already proves the two are the same open set — `ComplexAnalytic.punctured_eq_punctured`, which is
+`TopologicalSpace.Opens.ext` over the two `mem_punctured_iff`s — and already **takes** the
+decision this paragraph used to describe as untaken: both stand, because each has a use the other
+cannot discharge, and the retirement is priced there at a rename across four files. Nothing here
+reopens it.
 
 **Nothing about the trivial cover.** `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.trivial` at a
 two-element index type is the other obvious second object, and separating *it* from the identity
