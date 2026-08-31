@@ -147,9 +147,13 @@ harder to read, which is a reason to state and not a reason to hide.
   type, instead of in the shape of the refined overlap where every construction below would meet
   it. The equal case's *second* transport, between two objects of
   `ComplexAnalytic.Presentation`, is paid in `Oka/Analytification/CrossMemberDatumGlue.lean`,
-  which builds that branch of the glue with its symmetry and its coherence triangle; `hrange` and
-  `hcocycle` are untouched in both branches, `hsymm` holds on the equal branch alone, and no file
-  assembles the two branches into a `glue` field.
+  which builds that branch of the glue with its symmetry and its coherence triangle — **and the
+  same file now assembles the two branches into a `glue` field**,
+  `ComplexAnalytic.refineDatumGlue`, whose unequal branch is
+  `ComplexAnalytic.refineCrossGlue` below conjugated onto the datum's own overlaps. What that
+  field takes is the caller's `r`, `u` and two equations, one per ordered pair off the diagonal,
+  so the bullet below is what it is still a function of; `hrange` and `hcocycle` are untouched in
+  both branches, and `hsymm` holds on the equal branch alone.
 * **Nothing here produces `q`.** The extra factor and the unit are arguments, and where they come
   from is `ComplexAnalytic.exists_localisationOpen_eq_rename` with
   `ComplexAnalytic.exists_mk_rename_eq` for the algebra and

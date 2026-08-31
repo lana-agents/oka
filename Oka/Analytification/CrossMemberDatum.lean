@@ -136,8 +136,12 @@ goal.
   `ComplexAnalytic.refineDatumGlueEq`, with its symmetry, its coherence triangle and the
   analytified form of that triangle; the transport costs one `subst`, available once the two
   members are generalised to free indices, and at constant `σ` the field is the one-member glue by
-  `rfl`. **What is still absent is a `glue` field**: the unequal branch is not assembled with the
-  equal one, and that file says what putting them together would take.
+  `rfl`. **The `glue` field is there too**, as `ComplexAnalytic.refineDatumGlue`: the unequal
+  branch is `Oka/Analytification/CrossMemberGlue.lean`'s cross-member glue conjugated onto the
+  datum's own overlaps, and the two are joined by a case split on `σ a = σ b` which — unlike the
+  one this file makes inside a polynomial — needs no transport, because both branches are
+  isomorphisms between the same two objects. **What it is a function of is the caller's choice**,
+  the bullet below.
 * **Nothing produces `q`.** As in `Oka/Analytification/CrossMemberGlue.lean`, the extra factor is
   an argument, and `ComplexAnalytic.exists_localisationOpen_eq_rename` with
   `ComplexAnalytic.exists_mk_rename_eq` is where a caller gets one. **This file adds a constraint

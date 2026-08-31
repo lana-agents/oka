@@ -58,12 +58,14 @@ through two localisations is `ComplexAnalytic.refineCrossGlue`
 (`Oka/Analytification/CrossMemberGlue.lean`), whose extra factor and unit are **arguments**: that
 file produces neither, and names the theorem above, with `ComplexAnalytic.exists_mk_rename_eq`,
 as where a caller gets them. **The two geometric laws across members are still untouched.** The
-datum those two would be laws of now has one field and half of a second —
+datum those two would be laws of now has two fields —
 `ComplexAnalytic.refineDatumPoly` (`Oka/Analytification/CrossMemberDatum.lean`), its `poly`, whose
-extra factor is the `q` the theorem above produces, and `ComplexAnalytic.refineDatumGlueEq`
-(`Oka/Analytification/CrossMemberDatumGlue.lean`), its `glue` on the branch where the two refined
-members lie over one member. The other branch of that glue is where the `q` this file produces is
-read, and it is unbuilt; `hrange` and `hcocycle` are as untouched as the two laws are.
+extra factor is the `q` the theorem above produces, and `ComplexAnalytic.refineDatumGlue`
+(`Oka/Analytification/CrossMemberDatumGlue.lean`), its `glue`, the branch where the two refined
+members lie over one member and the cross-member one under a case split. **The theorem above is
+read on that second branch and still only by a caller**: the branch takes the extra factor, the
+polynomial `r` and the unit as arguments, and nothing instantiates the existentials that would
+supply them. `hrange` and `hcocycle` are as untouched as the two laws are.
 
 ## Non-vacuity
 

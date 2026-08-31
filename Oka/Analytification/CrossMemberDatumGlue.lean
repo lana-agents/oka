@@ -6,8 +6,8 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 import Oka.Analytification.CrossMemberDatum
 
 /-!
-# The `glue` of a cross-member refined datum where the two members are equal, and the transport it
-was priced at
+# The `glue` field of a cross-member refined datum: the two branches, and the case split between
+them
 
 `Oka/Analytification/CrossMemberDatum.lean` builds the `poly` field of a refined cover datum whose
 members lie over different members of the original cover, and prices the next field in its
@@ -24,6 +24,36 @@ members lie over different members of the original cover, and prices the next fi
 **The type mismatch is real and it is discharged here in one tactic.** The equal branch of the
 glue, its symmetry, its coherence triangle and the analytified form of that triangle are all
 below; what the branch costs is one generalisation and `subst`.
+
+**The other branch is `Oka/Analytification/CrossMemberGlue.lean`'s cross-member glue, and the
+field is the two of them under a case split.** `ComplexAnalytic.refineDatumGlueNe` conjugates that
+glue onto the datum's own overlaps — the same three-factor shape as the equal branch, with
+`ComplexAnalytic.refineDatumPoly_of_ne` in place of `ComplexAnalytic.refineDatumPoly_of_eq` — and
+`ComplexAnalytic.refineDatumGlue` is `dite (σ a = σ b)` of the two.
+
+## The choice is the caller's, and that is a decision this file makes
+
+The cross-member glue takes a polynomial `r`, a unit `u` and two equations, and *"nothing produces
+`q`"* is what both facing files record. **The field takes them rather than producing them**,
+indexed by the ordered pair and guarded by `σ a ≠ σ b`, which is exactly what
+`ComplexAnalytic.refineDatumPoly` already does with `q`. Two consequences and neither is hidden:
+
+* the existence question is untouched — nothing here says a choice exists, and nothing here
+  instantiates `ComplexAnalytic.exists_localisationOpen_eq_rename` or
+  `ComplexAnalytic.exists_mk_rename_eq`;
+* **`hsymm` becomes an obligation on the caller's choice rather than a theorem about the field.**
+  A cover datum's symmetry law relates the pair `(a, b)` to the pair `(b, a)`, and off the
+  diagonal those are two independent choices; whether they can be made compatibly is unproved in
+  both directions, and stating a `hsymm` here would be stating something this file cannot prove.
+
+## The case split needs no transport, and that is worth saying because the last one did
+
+The field's type names `ComplexAnalytic.refineDatumPoly` and no case at all, so **both branches
+are isomorphisms between the same two objects** and the `dite` is a split between two *terms* of
+one type. `ComplexAnalytic.refineDatumFactor` splits between two *values* of one type and needs a
+`▸` for the equal case; nothing of that shape survives at this level. Had it not been so the split
+would have been a third transport, in the shape of the overlap, where every statement below would
+meet it.
 
 ## The transport, and why generalising the two members is the whole trick
 
@@ -63,11 +93,12 @@ structure literal, and `ComplexAnalytic.coverOverlap_refineDatumObj` says the ab
 overlap on the nose. It is an `abbrev` for the reason
 `ComplexAnalytic.refineDatumObj` is: everything below rewrites through it.
 
-## The `rw` discipline, in both of its forms, and a third one
+## The `rw` discipline, in both of its forms, and two things neither file describes
 
 `Oka/Analytification/CrossMemberGlue.lean` states the discipline — open a definition with `change`
 or a term, not with `rw` — and `Oka/Analytification/CrossMemberDatum.lean` adds the variant where
-the planted equation lemma belongs to another file. **Both fired here and a third thing did.**
+the planted equation lemma belongs to another file. **Both fired here**, the second one only when
+the unequal branch was added, **and two things neither file describes fired as well.**
 
 * **The plain form, caught by the declaration dump and not by the build.** The first draft proved
   the two symmetry laws and the two coherence triangles with `rw [refineSwapGlue]` and
@@ -91,6 +122,17 @@ the planted equation lemma belongs to another file. **Both fired here and a thir
   benign kind; `Oka/Analytification/CrossMemberGlue.lean` carries two of exactly this shape.
   **Recorded rather than removed**, because removing it means giving up `simp only … at` on a
   hypothesis that mentions a definition with a proof argument, and nothing here is worth that.
+* **The other-file variant fired, and from `simp only` rather than from `rw`.** The first draft
+  of `ComplexAnalytic.refineDatumGlueNe_comp` cancelled its two transports with
+  `simp only [Iso.trans_hom, Iso.symm_hom, Category.assoc, Iso.inv_hom_id_assoc]`. That is green,
+  and it plants **`ComplexAnalytic.refineCrossGlue.congr_simp` into this module** — an equation
+  lemma for a definition `Oka/Analytification/CrossMemberGlue.lean` owns, which is exactly the
+  variant that file's neighbour records and which nothing before this branch had produced under
+  `Oka/`. Attributed by re-running the dump after the change and not inferred: the row is there
+  with the `simp only` and gone without it. The cure is the explicit rewrite chain that proof now
+  carries, which needs no congruence lemma because every step is a named rewrite at a named
+  lemma. **`simp only` is subject to the same discipline as `rw` and neither file says so** — the
+  tactic is not what plants the lemma, traversing a definition with a proof argument is.
 * **`rw` can also fail to find a lemma that is visibly present.** After
   `simp only [Category.assoc]` the goal is right-associated, so the subterm
   `eqToHom … ≫ localisationHom …` does not occur — it occurs as
@@ -109,8 +151,19 @@ the planted equation lemma belongs to another file. **Both fired here and a thir
 - `ComplexAnalytic.refineDatumGlueEq`: **the `glue` of the refined datum where the two members are
   equal**, at the polynomial the datum's own `poly` field produces.
 - `ComplexAnalytic.refineDatumCrossAlgEquiv`: **the algebra isomorphism a cross-member glue takes,
-  read off the original datum's own glue.** Not used below; it is the measurement that says the
-  unequal branch is not blocked on this.
+  read off the original datum's own glue.** It is what the unequal branch below feeds to
+  `Oka/Analytification/CrossMemberGlue.lean`'s glue, and it is one application of
+  `ComplexAnalytic.Presentation.algEquivOfIso` to the datum's `glue`.
+- `ComplexAnalytic.RefineDatumCrossEq` and `ComplexAnalytic.RefineDatumCrossUnit`: **the two
+  equations the caller's choice of `r` and `u` has to satisfy at an ordered pair**, named because
+  the same lines occur in four signatures and because they are what a `hsymm` would be stated
+  against.
+- `ComplexAnalytic.refineDatumGlueNe`: **the `glue` of the refined datum where the two members are
+  different**, the cross-member glue conjugated onto the datum's own overlaps.
+- `ComplexAnalytic.refineDatumCrossProj`: **the refined overlap of two different members, read as
+  a localisation of the original overlap**, which is what the triangle on that branch is over.
+- `ComplexAnalytic.refineDatumGlue`: **the `glue` field**, the two branches under a case split on
+  `σ a = σ b`.
 
 ## Main results
 
@@ -130,32 +183,50 @@ the planted equation lemma belongs to another file. **Both fired here and a thir
 - `ComplexAnalytic.refineDatumGlueEq_comp` and
   `ComplexAnalytic.refineDatumGlueEq_analytification_comp`: **the coherence triangle at the
   datum**, and the analytified form of it. The second is the shape the two geometric laws consume.
-- `ComplexAnalytic.refineDatumGlueEq_const`: **at constant `σ` the field is the one-member file's
-  glue**, conjugated by the two transports that file's overlap already needs — and it is `rfl`,
-  which is what says this is the same construction and not a second one of the same shape.
+- `ComplexAnalytic.refineDatumGlueEq_const`: **at constant `σ` the equal branch is the one-member
+  file's glue**, conjugated by the two transports that file's overlap already needs — and it is
+  `rfl`, which is what says this is the same construction and not a second one of the same shape.
+- `ComplexAnalytic.refineDatumGlueNe_eq` and `ComplexAnalytic.refineDatumCrossProj_eq`: **the
+  unequal branch and its projection unfolded, by `rfl`**, for the reason the two above are.
+- `ComplexAnalytic.isoOfAlgEquiv_symm_refineDatumCrossAlgEquiv`: **reading the algebra
+  isomorphism back gives the datum's own `glue`**, by `rfl`. This is what lets the triangle below
+  be stated about `glue` and not about an algebra isomorphism built from it.
+- `ComplexAnalytic.refineDatumGlueNe_comp`: **the coherence triangle on the unequal branch**, over
+  the *original overlap* rather than over a member, with the datum's `glue` as its right-hand
+  factor. Its docstring records why the two conjugating transports are kept as isomorphisms.
+- `ComplexAnalytic.refineDatumGlue_of_eq` and `ComplexAnalytic.refineDatumGlue_of_ne`: **the two
+  branches read back off the field**, which is `dif_pos` and `dif_neg`.
+- `ComplexAnalytic.refineDatumGlue_const`: **at constant `σ` the field is the one-member file's
+  glue, for every choice** — and, unlike the equal branch's version, it is *not* `rfl`; its
+  docstring says which instance is in the way and what buying the `rfl` back would cost.
 
 ## What is not here
 
-* **No `glue` *field*, because the unequal branch is not assembled with this one.** What is below
-  is the `σ a = σ b` branch alone. The other branch is
-  `Oka/Analytification/CrossMemberGlue.lean`'s cross-member glue, and putting the two together is
-  a decision about what the refined datum's `glue` takes as input, which nothing here makes.
-* **What the unequal branch still needs, measured rather than guessed, and one item is off the
-  list.** That glue takes an algebra isomorphism `e`, a polynomial `r`, a unit `u` and two
-  equations. **The `e` is not missing**: `ComplexAnalytic.refineDatumCrossAlgEquiv` below is it,
-  and it is one application of `ComplexAnalytic.Presentation.algEquivOfIso` to the original
-  datum's own `glue`, typechecked with no transport. What is missing is `r`, `u` and the two
-  equations, **all four of which are about the caller's `q`** — so the unequal branch is blocked
-  on exactly the absence `Oka/Analytification/CrossMemberGlue.lean` and
-  `Oka/Analytification/CrossMemberDatum.lean` already record as *"nothing produces `q`"*, and on
-  nothing else that anybody has found.
+* **Nothing produces `r` or `u`, and so nothing produces a `glue` field that takes no arguments.**
+  The field below is a function of the caller's choice at every ordered pair; the existentials
+  that would supply one are `ComplexAnalytic.exists_localisationOpen_eq_rename` with
+  `ComplexAnalytic.exists_mk_rename_eq` for the algebra and
+  `ComplexAnalytic.exists_comap_analytificationMap_eq_comap_localisationProj` for the geometry,
+  and none of them is instantiated here. **This is the absence
+  `Oka/Analytification/CrossMemberGlue.lean` and `Oka/Analytification/CrossMemberDatum.lean`
+  already record as *"nothing produces `q`"*, moved one field along and not retired.**
+* **No `hsymm`, and the shape of what is missing has changed.** A cover datum's symmetry law is
+  quantified over every ordered pair. `ComplexAnalytic.refineDatumGlueEq_symm` is the half whose
+  members are equal; on the other half the pair `(a, b)` and the pair `(b, a)` carry two
+  *independent* choices of `r` and `u`, and whether they can be made compatibly is unproved in
+  both directions. So `hsymm` is now an obligation on a caller's choice and not a theorem about
+  the field, which is a statement about `ComplexAnalytic.RefineDatumCrossEq` and
+  `ComplexAnalytic.RefineDatumCrossUnit` and belongs wherever the choice is produced.
 * **No `hrange` and no `hcocycle`**, in either branch. They are geometric where everything here is
   algebraic, and `Oka/Analytification/CoverRefinement.lean`'s corresponding section says what
   makes them cheap for one fixed member — that every refined member lies over it — which is the
   sentence a general `σ` does not have.
-* **`hsymm` on one branch is not `hsymm`.** A cover datum's symmetry law is quantified over every
-  ordered pair, and what is below is quantified over the pairs with `σ a = σ b`.
-* **No witness at a non-constant `σ`.** `ComplexAnalytic.refineDatumGlueEq_const` says the general
+* **No analytified coherence triangle on the unequal branch.**
+  `ComplexAnalytic.refineDatumGlueEq_analytification_comp` is the equal branch's, and it is the
+  shape the two geometric laws consume; the same for `ComplexAnalytic.refineDatumGlueNe_comp`
+  would be one application of the analytification functor and it is not compiled here, so nothing
+  below is evidence about it.
+* **No witness at a non-constant `σ`.** `ComplexAnalytic.refineDatumGlue_const` says the general
   form reduces to a configuration the test files already exhibit, which is weaker than a witness
   and says nothing about `σ` ever being non-constant — the same gap
   `Oka/Analytification/CrossMemberDatum.lean` records for the `poly` field.
@@ -407,7 +478,9 @@ algebras* of the original overlap, where a cover datum carries an isomorphism of
 the unequal branch's remaining inputs are then exactly the ones about the caller's extra factor,
 and this is the one that is not.
 
-Nothing below uses it: this file assembles no unequal branch. -/
+`ComplexAnalytic.refineDatumGlueNe` below is what uses it, and
+`ComplexAnalytic.isoOfAlgEquiv_symm_refineDatumCrossAlgEquiv` is the round trip that lets the
+coherence triangle on that branch be stated about `glue` itself. -/
 def refineDatumCrossAlgEquiv
     (glue : ∀ i j : J, coverOverlap.{u} obj poly i j ≅ coverOverlap.{u} obj poly j i) (i j : J) :
     PresentedAlgebra.{u} ((obj i).n + 1) ((obj i).k + 1)
@@ -415,6 +488,245 @@ def refineDatumCrossAlgEquiv
       PresentedAlgebra.{u} ((obj j).n + 1) ((obj j).k + 1)
         (localisationPresentation.{u} (obj j).g (poly j i)) :=
   (Presentation.algEquivOfIso.{u} (glue i j)).symm
+
+/-! ### The field, at the pairs whose members are different -/
+
+variable (glue : ∀ i j : J, coverOverlap.{u} obj poly i j ≅ coverOverlap.{u} obj poly j i)
+
+/-- **The equation `ComplexAnalytic.refineCrossGlue` asks of the caller's `r` at the ordered pair
+`(a, b)`**: the algebra isomorphism the original datum's `glue` gives carries the class of
+`q a b * fam a` to the class of `r`.
+
+Named because the same six lines occur in three signatures below, and `abbrev` so that a caller
+may pass one of these where `ComplexAnalytic.refineCrossGlue` asks for the equation itself. -/
+abbrev RefineDatumCrossEq (a b : B)
+    (r : MvPolynomial (ULift.{u} (Fin ((obj (σ b)).n + 1))) ℂ) : Prop :=
+  refineDatumCrossAlgEquiv.{u} obj poly glue (σ a) (σ b)
+      (Ideal.Quotient.mk (presentationIdeal.{u} (localisationPresentation.{u} (obj (σ a)).g
+        (poly (σ a) (σ b)))) (rename (localisationIncl.{u} (obj (σ a)).n) (q a b * fam a))) =
+    Ideal.Quotient.mk (presentationIdeal.{u} (localisationPresentation.{u} (obj (σ b)).g
+      (poly (σ b) (σ a)))) r
+
+/-- **The equation `ComplexAnalytic.refineCrossGlue` asks of the caller's unit `u`**: the class of
+`q b a * fam b` is `u` times the class of `r`.
+
+The two agree only up to a unit because `ComplexAnalytic.exists_mk_rename_eq` produces one, and
+that is the whole reason the third step of the cross-member chain exists. -/
+abbrev RefineDatumCrossUnit (a b : B)
+    (r : MvPolynomial (ULift.{u} (Fin ((obj (σ b)).n + 1))) ℂ)
+    (u : (PresentedAlgebra.{u} ((obj (σ b)).n + 1) ((obj (σ b)).k + 1)
+      (localisationPresentation.{u} (obj (σ b)).g (poly (σ b) (σ a))))ˣ) : Prop :=
+  Ideal.Quotient.mk (presentationIdeal.{u} (localisationPresentation.{u} (obj (σ b)).g
+      (poly (σ b) (σ a)))) (rename (localisationIncl.{u} (obj (σ b)).n) (q b a * fam b)) =
+    (u : PresentedAlgebra.{u} ((obj (σ b)).n + 1) ((obj (σ b)).k + 1)
+        (localisationPresentation.{u} (obj (σ b)).g (poly (σ b) (σ a)))) *
+      Ideal.Quotient.mk (presentationIdeal.{u} (localisationPresentation.{u} (obj (σ b)).g
+        (poly (σ b) (σ a)))) r
+
+/-- **The `glue` of the refined cover datum, where the two refined members lie over two different
+members.**
+
+`Oka/Analytification/CrossMemberGlue.lean`'s cross-member glue, conjugated by the two equations
+that turn the datum's own `poly` field into the polynomial each side of it is stated at — the
+**same three-factor shape** as `ComplexAnalytic.refineDatumGlueEq`, with
+`ComplexAnalytic.refineSwapGlueOfEq` replaced by `ComplexAnalytic.refineCrossGlue` and
+`ComplexAnalytic.refineDatumPoly_of_eq` by `ComplexAnalytic.refineDatumPoly_of_ne`. The middle
+factor is where the original datum's own `glue` is read, through
+`ComplexAnalytic.refineDatumCrossAlgEquiv` above, and it is read exactly once.
+
+**`r`, `u` and the two equations are the caller's**, as `q` already is in
+`ComplexAnalytic.refineDatumPoly`; nothing here produces them, and this file's `## What is not
+here` says what that defers and what it does not.
+
+The two conjugating transports are `CategoryTheory.eqToIso` and not `CategoryTheory.eqToHom`
+for a measured reason, recorded at `ComplexAnalytic.refineDatumGlueNe_comp`. -/
+def refineDatumGlueNe {a b : B} (h : σ a ≠ σ b)
+    (r : MvPolynomial (ULift.{u} (Fin ((obj (σ b)).n + 1))) ℂ)
+    (he : RefineDatumCrossEq.{u} obj σ fam poly q glue a b r)
+    (u : (PresentedAlgebra.{u} ((obj (σ b)).n + 1) ((obj (σ b)).k + 1)
+      (localisationPresentation.{u} (obj (σ b)).g (poly (σ b) (σ a))))ˣ)
+    (hu : RefineDatumCrossUnit.{u} obj σ fam poly q a b r u) :
+    coverOverlap.{u} (refineDatumObj.{u} obj σ fam) (refineDatumPoly.{u} obj poly σ fam q) a b ≅
+      coverOverlap.{u} (refineDatumObj.{u} obj σ fam) (refineDatumPoly.{u} obj poly σ fam q) b a :=
+  eqToIso (congrArg (refineDatumOverlap.{u} obj (σ a) (fam a))
+      (refineDatumPoly_of_ne.{u} obj poly σ fam q h)) ≪≫
+    refineCrossGlue.{u} (obj (σ a)).g (obj (σ b)).g (poly (σ a) (σ b)) (fam a) (q a b)
+        (poly (σ b) (σ a)) (fam b) (q b a) r
+        (refineDatumCrossAlgEquiv.{u} obj poly glue (σ a) (σ b)) he u hu ≪≫
+      (eqToIso (congrArg (refineDatumOverlap.{u} obj (σ b) (fam b))
+        (refineDatumPoly_of_ne.{u} obj poly σ fam q h.symm))).symm
+
+/-- **The unequal branch, unfolded**, by `rfl`, and for the reason
+`ComplexAnalytic.refineDatumGlueEq_eq` exists: the triangle below has to open it, and a `rw` at
+the definition would plant an equation lemma under its own name. -/
+theorem refineDatumGlueNe_eq {a b : B} (h : σ a ≠ σ b)
+    (r : MvPolynomial (ULift.{u} (Fin ((obj (σ b)).n + 1))) ℂ)
+    (he : RefineDatumCrossEq.{u} obj σ fam poly q glue a b r)
+    (u : (PresentedAlgebra.{u} ((obj (σ b)).n + 1) ((obj (σ b)).k + 1)
+      (localisationPresentation.{u} (obj (σ b)).g (poly (σ b) (σ a))))ˣ)
+    (hu : RefineDatumCrossUnit.{u} obj σ fam poly q a b r u) :
+    refineDatumGlueNe.{u} obj σ fam poly q glue h r he u hu =
+      eqToIso (congrArg (refineDatumOverlap.{u} obj (σ a) (fam a))
+          (refineDatumPoly_of_ne.{u} obj poly σ fam q h)) ≪≫
+        refineCrossGlue.{u} (obj (σ a)).g (obj (σ b)).g (poly (σ a) (σ b)) (fam a) (q a b)
+            (poly (σ b) (σ a)) (fam b) (q b a) r
+            (refineDatumCrossAlgEquiv.{u} obj poly glue (σ a) (σ b)) he u hu ≪≫
+          (eqToIso (congrArg (refineDatumOverlap.{u} obj (σ b) (fam b))
+            (refineDatumPoly_of_ne.{u} obj poly σ fam q h.symm))).symm :=
+  rfl
+
+/-- **The refined overlap of two different members, read as a localisation of the original
+overlap.**
+
+`ComplexAnalytic.refineCrossProj` at the datum's own cutting polynomial, which is the composite
+the triangle below is stated over. There is no member-level version of it and that is not an
+oversight: the two refined members lie over `obj (σ a)` and `obj (σ b)` and a cover datum contains
+no morphism between those. -/
+def refineDatumCrossProj {a b : B} (h : σ a ≠ σ b) :
+    coverOverlap.{u} (refineDatumObj.{u} obj σ fam) (refineDatumPoly.{u} obj poly σ fam q) a b ⟶
+      coverOverlap.{u} obj poly (σ a) (σ b) :=
+  (eqToIso (congrArg (refineDatumOverlap.{u} obj (σ a) (fam a))
+      (refineDatumPoly_of_ne.{u} obj poly σ fam q h))).hom ≫
+    refineCrossProj.{u} (obj (σ a)).g (poly (σ a) (σ b)) (fam a) (q a b)
+
+/-- **The projection, unfolded**, by `rfl`, for the reason above. -/
+theorem refineDatumCrossProj_eq {a b : B} (h : σ a ≠ σ b) :
+    refineDatumCrossProj.{u} obj σ fam poly q h =
+      (eqToIso (congrArg (refineDatumOverlap.{u} obj (σ a) (fam a))
+          (refineDatumPoly_of_ne.{u} obj poly σ fam q h))).hom ≫
+        refineCrossProj.{u} (obj (σ a)).g (poly (σ a) (σ b)) (fam a) (q a b) :=
+  rfl
+
+/-- **Reading the algebra isomorphism back gives the datum's own `glue`.**
+
+`ComplexAnalytic.refineDatumCrossAlgEquiv` is `ComplexAnalytic.Presentation.algEquivOfIso` of the
+glue, inverted for the direction `ComplexAnalytic.PresHom` runs in; the cross-member triangle's
+right-hand factor is `ComplexAnalytic.Presentation.isoOfAlgEquiv` of the inverse of that, and the
+two inversions cancel. By `rfl`, which is what lets the triangle below be stated about `glue`
+itself rather than about an algebra isomorphism built from it. -/
+theorem isoOfAlgEquiv_symm_refineDatumCrossAlgEquiv (i j : J) :
+    Presentation.isoOfAlgEquiv.{u} (refineDatumCrossAlgEquiv.{u} obj poly glue i j).symm =
+      glue i j :=
+  rfl
+
+/-- **The coherence triangle on this branch, and it is over the *original overlap*.**
+
+`ComplexAnalytic.refineDatumGlueEq_comp` is over the member, with the transport of members as its
+last factor. **There is no such statement here and its absence is not a weakening**: the two
+refined members lie over `obj (σ a)` and `obj (σ b)`, and a cover datum contains no morphism
+between those — its `glue` relates the two *overlaps* and nothing relates the two members. So this
+is over the original overlap, exactly as `Oka/Analytification/CrossMemberGlue.lean`'s `## What the
+triangle is over, and it is not the members` sets out, and the right-hand factor is the datum's
+own `glue`.
+
+**Why the two transports are `CategoryTheory.eqToIso` and not `CategoryTheory.eqToHom`, and it is
+measured.** Written with `eqToHom` the proof has to cancel `eqToHom h.symm ≫ eqToHom h` against
+each other, and `CategoryTheory.eqToHom_refl` on these presentations does not elaborate:
+`rw [eqToHom_trans_assoc, eqToHom_refl]` gives `(deterministic) timeout at isDefEq, maximum number
+of heartbeats (200000)` at the second rewrite, because the objects are nested
+`ComplexAnalytic.localisationPresentation` structures and the lemma's object argument is a
+metavariable read off the type. Kept as isomorphisms, the same cancellation is
+`CategoryTheory.Iso.inv_hom_id_assoc` at an isomorphism the rewrite already has in hand, and it is
+instant. Both spellings are the same morphism (`CategoryTheory.eqToIso.hom`); only one of them
+elaborates here. -/
+theorem refineDatumGlueNe_comp {a b : B} (h : σ a ≠ σ b)
+    (r : MvPolynomial (ULift.{u} (Fin ((obj (σ b)).n + 1))) ℂ)
+    (he : RefineDatumCrossEq.{u} obj σ fam poly q glue a b r)
+    (u : (PresentedAlgebra.{u} ((obj (σ b)).n + 1) ((obj (σ b)).k + 1)
+      (localisationPresentation.{u} (obj (σ b)).g (poly (σ b) (σ a))))ˣ)
+    (hu : RefineDatumCrossUnit.{u} obj σ fam poly q a b r u) :
+    (refineDatumGlueNe.{u} obj σ fam poly q glue h r he u hu).hom ≫
+        refineDatumCrossProj.{u} obj σ fam poly q h.symm =
+      refineDatumCrossProj.{u} obj σ fam poly q h ≫ (glue (σ a) (σ b)).hom := by
+  rw [refineDatumGlueNe_eq, refineDatumCrossProj_eq, refineDatumCrossProj_eq, Iso.trans_hom,
+    Iso.trans_hom, Iso.symm_hom, Category.assoc, Category.assoc, Iso.inv_hom_id_assoc,
+    refineCrossGlue_hom_comp, isoOfAlgEquiv_symm_refineDatumCrossAlgEquiv, Category.assoc]
+
+/-! ### The field, assembled -/
+
+variable (r : ∀ _ b : B, MvPolynomial (ULift.{u} (Fin ((obj (σ b)).n + 1))) ℂ)
+  (u : ∀ a b : B, (PresentedAlgebra.{u} ((obj (σ b)).n + 1) ((obj (σ b)).k + 1)
+    (localisationPresentation.{u} (obj (σ b)).g (poly (σ b) (σ a))))ˣ)
+
+open Classical in
+/-- **The `glue` field of the refined cover datum, at every ordered pair.**
+
+The two branches joined by a case split on `σ a = σ b`, which is the same split
+`ComplexAnalytic.refineDatumPoly` makes inside a polynomial and this one makes between two
+isomorphisms.
+
+**The two branches have the same type and the split needs no transport.** The field's type names
+`ComplexAnalytic.refineDatumPoly` and no case at all, so both branches are isomorphisms between
+the same two objects; what the equal branch of `ComplexAnalytic.refineDatumFactor` needs a `▸` for
+is that its two *values* live in types indexed by the two members, and nothing of that shape
+survives here. Had it not been so the split would have been the third transport on this line, and
+it would have had to sit in the shape of the overlap where every statement below would meet it.
+
+**What the caller supplies is the choice, not its existence.** `r` and `u` are families over
+ordered pairs and `he`, `hu` are the two equations at the pairs whose members differ, exactly as
+`q` is a family in `ComplexAnalytic.refineDatumPoly`. Whether such a choice exists — and whether
+the choices at `(a, b)` and at `(b, a)` can be made compatibly, which is what a `hsymm` would be
+stated against — is untouched here and is the absence `Oka/Analytification/CrossMemberGlue.lean`
+records as *"nothing here produces `q`"*. -/
+def refineDatumGlue
+    (he : ∀ a b : B, ∀ _ : σ a ≠ σ b,
+      RefineDatumCrossEq.{u} obj σ fam poly q glue a b (r a b))
+    (hu : ∀ a b : B, ∀ _ : σ a ≠ σ b,
+      RefineDatumCrossUnit.{u} obj σ fam poly q a b (r a b) (u a b)) (a b : B) :
+    coverOverlap.{u} (refineDatumObj.{u} obj σ fam) (refineDatumPoly.{u} obj poly σ fam q) a b ≅
+      coverOverlap.{u} (refineDatumObj.{u} obj σ fam) (refineDatumPoly.{u} obj poly σ fam q) b a :=
+  if h : σ a = σ b then refineDatumGlueEq.{u} obj σ fam poly q h
+  else refineDatumGlueNe.{u} obj σ fam poly q glue h (r a b) (he a b h) (u a b) (hu a b h)
+
+/-- **Where the two refined members lie over one member**, the field is the equal branch. -/
+theorem refineDatumGlue_of_eq
+    (he : ∀ a b : B, ∀ _ : σ a ≠ σ b,
+      RefineDatumCrossEq.{u} obj σ fam poly q glue a b (r a b))
+    (hu : ∀ a b : B, ∀ _ : σ a ≠ σ b,
+      RefineDatumCrossUnit.{u} obj σ fam poly q a b (r a b) (u a b)) {a b : B} (h : σ a = σ b) :
+    refineDatumGlue.{u} obj σ fam poly q glue r u he hu a b =
+      refineDatumGlueEq.{u} obj σ fam poly q h :=
+  dif_pos h
+
+/-- **Where they lie over two**, it is the cross-member branch at the caller's choice for that
+ordered pair. -/
+theorem refineDatumGlue_of_ne
+    (he : ∀ a b : B, ∀ _ : σ a ≠ σ b,
+      RefineDatumCrossEq.{u} obj σ fam poly q glue a b (r a b))
+    (hu : ∀ a b : B, ∀ _ : σ a ≠ σ b,
+      RefineDatumCrossUnit.{u} obj σ fam poly q a b (r a b) (u a b)) {a b : B} (h : σ a ≠ σ b) :
+    refineDatumGlue.{u} obj σ fam poly q glue r u he hu a b =
+      refineDatumGlueNe.{u} obj σ fam poly q glue h (r a b) (he a b h) (u a b) (hu a b h) :=
+  dif_neg h
+
+/-- **At constant `σ` the field is `Oka/Analytification/CoverRefinement.lean`'s glue**, for every
+choice: every pair is on the diagonal, so the cross-member branch is never taken and `r`, `u` and
+the two equations are never read.
+
+**Unlike `ComplexAnalytic.refineDatumGlueEq_const` this is not `rfl`**, and the reason is the
+`open Classical in` above: the `dite`'s instance is `Classical.propDecidable`, which does not
+reduce on `(fun _ ↦ i) a = (fun _ ↦ i) b` even though that equation is `rfl`. So the statement
+goes through `ComplexAnalytic.refineDatumGlue_of_eq`, which is `dif_pos`, and then through the
+equal branch's own constant case. A `DecidableEq J` hypothesis would buy the `rfl` back and would
+cost every consumer an instance argument; `ComplexAnalytic.refineDatumFactor` and
+`ComplexAnalytic.polyDiagOne` make the same trade in the same direction. -/
+theorem refineDatumGlue_const (i : J)
+    (fam' : B → MvPolynomial (ULift.{u} (Fin (obj i).n)) ℂ)
+    (q' : ∀ _ : B, B → MvPolynomial (ULift.{u} (Fin (obj i).n)) ℂ)
+    (r' : ∀ _ _ : B, MvPolynomial (ULift.{u} (Fin ((obj i).n + 1))) ℂ)
+    (u' : ∀ _ _ : B, (PresentedAlgebra.{u} ((obj i).n + 1) ((obj i).k + 1)
+      (localisationPresentation.{u} (obj i).g (poly i i)))ˣ)
+    (he' : ∀ a b : B, ∀ _ : (fun _ ↦ i) a ≠ (fun _ ↦ i) b,
+      RefineDatumCrossEq.{u} obj (fun _ ↦ i) fam' poly q' glue a b (r' a b))
+    (hu' : ∀ a b : B, ∀ _ : (fun _ ↦ i) a ≠ (fun _ ↦ i) b,
+      RefineDatumCrossUnit.{u} obj (fun _ ↦ i) fam' poly q' a b (r' a b) (u' a b)) (a b : B) :
+    refineDatumGlue.{u} obj (fun _ ↦ i) fam' poly q' glue r' u' he' hu' a b =
+      eqToIso (coverOverlap_refineDatumPoly_const.{u} obj poly i fam' q' a b) ≪≫
+        refineGlue.{u} (obj i).g fam' a b ≪≫
+          eqToIso (coverOverlap_refineDatumPoly_const.{u} obj poly i fam' q' b a).symm := by
+  rw [refineDatumGlue_of_eq.{u} obj (fun _ ↦ i) fam' poly q' glue r' u' he' hu'
+    (rfl : (fun _ ↦ i) a = (fun _ ↦ i) b)]
+  exact refineDatumGlueEq_const.{u} obj poly i fam' q' a b
 
 end
 
