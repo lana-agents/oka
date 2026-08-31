@@ -164,8 +164,7 @@ theorem not_isZero_cokernel_specXHom : ¬ IsZero (cokernel specXHom.{u}) := by
 
 If it were, `x` would lie in `(xy)`, so `x = c * x * y` for some `c`; evaluating at the point
 `(1, 0)` of the node — `ComplexAnalytic.nodePtX` (`OkaTest/Analytification.lean`), kept in the
-development for exactly this
-kind of separation — gives `1 = 0`. -/
+development for exactly this kind of separation — gives `1 = 0`. -/
 theorem specX_ne_zero : specX.{u} ≠ 0 := by
   intro h
   have hmem : MvPolynomial.X (R := ℂ) (ULift.up 0) ∈ presentationIdeal.{u} nodeG.{u} :=

@@ -135,8 +135,8 @@ most of the target too.
 is exhibited and neither is proved, so the two-field definition is a design choice and not a
 theorem. What *is* checked is that the topological field is not idle:
 `ComplexAnalytic.not_isLocalIso_axisIncl` (`OkaTest/FiniteMorphism.lean`) rules out the closed
-immersion of an axis into
-`ℂ²` **using that field alone** — its own docstring records that nothing about stalks enters. That
+immersion of an axis into `ℂ²` **using that field alone** — its own docstring records that nothing
+about stalks enters. That
 morphism fails both fields, so it witnesses no implication in either direction. -/
 class IsLocalIso {X Y : AnalyticSpace.{u}} (f : X ⟶ Y) : Prop where
   /-- The underlying map is a local homeomorphism. -/

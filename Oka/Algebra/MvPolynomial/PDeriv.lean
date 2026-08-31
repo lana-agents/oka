@@ -19,8 +19,8 @@ coefficient beyond the constant one is a derivative and `MvPolynomial.pderiv` is
 file's import closure. This file is the degree-one case, and it is a separate file for exactly
 that reason: `Mathlib.Algebra.MvPolynomial.PDeriv` costs **118 Mathlib modules** against
 `Mathlib/Algebra/MvPolynomial/Eval.lean`'s closure, which is what
-`Oka/Algebra/MvPolynomial/Taylor.lean` imports, and
-**0** against `Mathlib/Algebra/MvPolynomial/PDeriv.lean`'s own, which is what this file mirrors —
+`Oka/Algebra/MvPolynomial/Taylor.lean` imports, and **0** against
+`Mathlib/Algebra/MvPolynomial/PDeriv.lean`'s own, which is what this file mirrors —
 both measured with `scripts/import_cost.py`. The mirror layering therefore matches the layering
 an upstreamed pair of files would have.
 
