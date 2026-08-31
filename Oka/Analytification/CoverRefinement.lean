@@ -179,10 +179,19 @@ overlaps sitting over three different members with no common target to cancel ag
   transition being a morphism over the fixed member.
 * **No cross-member refinement.** `σ` is constant here, so no overlap of the refined data ever
   meets two different members of the original. The cross-member case has to transport the original
-  `glue` through two localisations, it is the only part that uses the original data's own glue
-  isomorphism at all, and **nothing in this file is evidence about its size** — the whole reason
-  the same-member case closes cheaply is that `Oka/Analytification/LocalisationComposite.lean`
-  had already been written for exactly this configuration.
+  `glue` through two localisations and it is the only part that uses the original data's own glue
+  isomorphism at all; **nothing in this file is evidence about its size** — the whole reason the
+  same-member case closes cheaply is that `Oka/Analytification/LocalisationComposite.lean` had
+  already been written for exactly this configuration.
+
+  **The transport itself is no longer absent**: `ComplexAnalytic.refineCrossGlue`
+  (`Oka/Analytification/CrossMemberGlue.lean`) is the glue of a cross-member overlap, with the
+  coherence triangle it satisfies, and `ComplexAnalytic.refineGlue` above is an instance by `rfl`
+  of the re-association it is built from. What is still absent is a refined *datum* whose members
+  cross: its `poly` field needs one formula per ordered pair and the two cases are different
+  formulas, its `hsymm` is a constraint on choices nothing here makes, and the two geometric laws
+  have no analogue for the reason the paragraph above gives. That file's `## What is not here`
+  states all three.
 * **No hypothesis under which the morphism *is* an isomorphism, and no morphism back.** The
   answer to whether it is one is **no** and it is proved rather than argued:
   `ComplexAnalytic.not_isIso_refineToBase`, at an empty family, where the refinement refines

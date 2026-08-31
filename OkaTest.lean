@@ -34,6 +34,7 @@ import OkaTest.CoherentPresentation
 import OkaTest.Completion
 import OkaTest.CoverRefinement
 import OkaTest.CoveringSpace
+import OkaTest.CrossMemberGlue
 import OkaTest.CutOutQuotient
 import OkaTest.CutOutRestrict
 import OkaTest.DistinguishedOpenPullback

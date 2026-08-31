@@ -20,7 +20,8 @@ side, the glue data of an affine cover with distinguished
 overlaps together with the morphisms out of the space it glues to and the same glue data on the
 `Spec` side, the image of the analytification in `ℂ^n`, and the family of
 monic polynomials of a polynomial monic in the last variable, with the finiteness over `ℂ^n`
-that it supplies.
+that it supplies, and the glue of a refined overlap that meets two different members of the
+original cover.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -2174,3 +2175,79 @@ info: 'ComplexAnalytic.not_isIso_refineToBase' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.not_isIso_refineToBase
+
+/-! ### The glue of a refined overlap that meets two different members
+
+`Oka/Analytification/CrossMemberGlue.lean`. The re-association of a double localisation over
+either of its two factors, the transport across an isomorphism of the bases with a unit
+correcting the cutting polynomial, and the cross-member glue those two compose to, each with its
+coherence triangle. `ComplexAnalytic.refineGlue_eq_localisationPresentationIsoOfMulEq` is the
+`rfl` saying the same-member glue guarded above is an instance of the first of them.
+
+The two triangles are what carry the content: an isomorphism of the right type between two
+descriptions of an overlap says nothing until it is recorded as a morphism over the thing both
+descriptions lie over, which here is the original cover's own overlap and not either member.
+-/
+
+/--
+info: 'ComplexAnalytic.localisationPresentationIsoOfMulEq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.localisationPresentationIsoOfMulEq
+
+/--
+info: 'ComplexAnalytic.localisationPresentationIsoOfMulEq_hom_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.localisationPresentationIsoOfMulEq_hom_comp
+
+/--
+info: 'ComplexAnalytic.refineGlue_eq_localisationPresentationIsoOfMulEq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineGlue_eq_localisationPresentationIsoOfMulEq
+
+/--
+info: 'ComplexAnalytic.localisationPresentationIsoOfAlgEquivUnitMul' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.localisationPresentationIsoOfAlgEquivUnitMul
+
+/--
+info: 'ComplexAnalytic.localisationPresentationIsoOfAlgEquivUnitMul_hom_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.localisationPresentationIsoOfAlgEquivUnitMul_hom_comp
+
+/--
+info: 'ComplexAnalytic.refineCrossProj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineCrossProj
+
+/--
+info: 'ComplexAnalytic.refineCrossProj_localisationHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineCrossProj_localisationHom
+
+/--
+info: 'ComplexAnalytic.refineCrossGlue' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineCrossGlue
+
+/--
+info: 'ComplexAnalytic.refineCrossGlue_hom_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineCrossGlue_hom_comp
