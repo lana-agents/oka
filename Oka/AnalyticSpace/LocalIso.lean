@@ -71,23 +71,34 @@ the rung.
   `ComplexAnalytic.AnalyticSpace.degree_sigmaFold`.
 * **The analytification of a finite étale morphism** — the other blocker of #551, stateable only
   now that this exists.
-* **Cancellation for `ComplexAnalytic.AnalyticSpace.IsFiniteEtale`, and what is missing of it is
-  one topological statement.** A Galois-category structure on the finite étale covers of a fixed
-  base — `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver`, in
+* **Cancellation for `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` — this is no longer absent, and
+  it is not in this file.** A Galois-category structure on the finite étale covers of a fixed base
+  — `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver`, in
   `Oka/AnalyticSpace/FiniteEtaleOver.lean` — wants *"if `g` and `f ≫ g` are finite étale then `f`
-  is"*. Three of the four halves cancel and are below or in `Oka/AnalyticSpace/Finite.lean`:
+  is"*, and that is `ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp` in
+  `Oka/AnalyticSpace/FiniteEtaleCancel.lean`, for a `[T2Space]` middle space. Three of its four
+  halves are below or in `Oka/AnalyticSpace/Finite.lean`:
   `ComplexAnalytic.AnalyticSpace.isLocalIso_of_comp` is both halves of the local-isomorphism rung,
   and `ComplexAnalytic.AnalyticSpace.finite_fiber_of_comp` is the fibre half of the finite one —
-  which does not even use `g`'s finiteness. **The fourth is closedness of `f`**, and it does not
-  follow from the other three: for a `Y` that is not separated over `Z` — the real line with two
-  origins over the real line, with `f` the inclusion of one branch — `f ≫ g` is the identity and
-  `g` is closed with finite fibres, while the image of `f` has a non-open complement. That
-  reasoning is about topological spaces, is not compiled anywhere, and is recorded as the reason
-  not to expect the statement without a hypothesis rather than as a theorem. The classical proof
-  factors `f` through its graph and needs `Y` separated over `Z`; this repository has neither a
-  separatedness notion for `ComplexAnalytic.AnalyticSpace` nor the fibre products a graph is built
-  from, which is the same absence `Oka/AnalyticSpace/FiniteEtaleOver.lean` records as the reason
-  base change is not statable there.
+  which does not even use `g`'s finiteness. **The fourth is closedness of `f`**, and what this
+  bullet used to say about it was that it does not follow, with the real line with two origins
+  over the real line as the witness and the classical graph-and-fibre-product proof as the only
+  route.
+
+  **The witness is right and the conclusion drawn from it was not.** That example has `g` closed
+  with finite fibres — it is a counterexample at the hypothesis *`g` finite*, which is what
+  `Oka/AnalyticSpace/Finite.lean`'s cancellation section is about, and
+  `TwoIndiscrete.not_isClosedMap_pt_of_isClosedMap_comp` (`OkaTest/FiniteEtaleCancel.lean`) now
+  compiles a witness for it. It is **not** a counterexample at the hypothesis this bullet was
+  about, `g` finite étale, and at that hypothesis no separatedness notion and no fibre product is
+  needed:
+  `IsCoveringMap.isClosedMap_of_comp` in `Oka/Topology/Covering/Basic.lean` cancels closedness
+  along a covering map, using only that a covering map is **injective on each sheet** of an evenly
+  covered neighbourhood — which the fold of the line with two origins is not, its two origins
+  lying in no common sheet. This repository still has neither a separatedness notion for
+  `ComplexAnalytic.AnalyticSpace` nor fibre products, which is the same absence
+  `Oka/AnalyticSpace/FiniteEtaleOver.lean` records as the reason base change is not statable
+  there; the point is that the finite étale case never needed them.
 * **Grauert's finite mapping theorem**, which `Oka/AnalyticSpace/Finite.lean` already records as
   absent.
 

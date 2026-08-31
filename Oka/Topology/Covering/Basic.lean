@@ -6,9 +6,9 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 import Mathlib.Topology.Covering.Basic
 
 /-!
-# Three statements about covering maps: two criteria, and constancy of the fibre
+# Four statements about covering maps: two criteria, a cancellation, and constancy of the fibre
 
-Material for `Mathlib/Topology/Covering/Basic.lean`; see `README.md` on the mirror tree. Three
+Material for `Mathlib/Topology/Covering/Basic.lean`; see `README.md` on the mirror tree. Four
 independent statements, sharing only their destination.
 
 ## A closed local homeomorphism with finite fibres is a covering map
@@ -52,6 +52,26 @@ is not removable. And **the empty fibre is not a special case**: the intersectio
 index type is `U` itself, which is the right answer, since `f ⁻¹' U` is then empty and `U` misses
 `f '' C` outright.
 
+## Closedness cancels along a covering map
+
+`IsCoveringMap.isClosedMap_of_comp`: if `f` is a covering map and `f ∘ u` is closed then `u` is
+closed, for a `u` asked only to be continuous. **Mathlib has no cancellation lemma for
+`IsCoveringMap` at all** — `comp_homeomorph` and `homeomorph_comp` conjugate by a homeomorphism,
+and there is no composition lemma either — which is the same absence
+`Oka/AnalyticSpace/FiniteEtaleOver.lean` records one level up.
+
+The classical statement of this shape asks the second map to be **separated** and factors the
+first through its graph in a fibre product. Neither is used below and neither exists in this
+repository. A covering map instead decomposes `f ⁻¹' U` over an evenly covered `U` into open
+sheets, and **`f` is injective on each one**; that injectivity is the whole content, and the rest
+of the proof is that a sheet is open with open complement in `f ⁻¹' U`, so that a closed set of
+the source stays closed after being cut down to one sheet.
+
+**No separation axiom is used**, which is worth saying because the statement one level up does
+need one: `ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale` asks `[T2Space]` of
+its source, and that is where the Hausdorff hypothesis of the analytic cancellation comes from —
+not from here.
+
 ## The fibres of a covering map over a preconnected base
 
 `IsCoveringMap.nonempty_homeomorph_fiber`: over a preconnected base any two fibres of a covering
@@ -85,6 +105,9 @@ for it would make the statement fail on the empty space for no reason.
   fibres out of a Hausdorff space is a covering map.
 - `IsCoveringMap.isClosedMap`: **a covering map with finite fibres is closed**, which is the
   converse of the previous item with the Hausdorff hypothesis dropped.
+- `IsCoveringMap.isClosedMap_of_comp`: **closedness cancels along a covering map** — if `f` is a
+  covering map and `f ∘ u` is closed then so is `u`, with no hypothesis on `u` beyond continuity
+  and no separation axiom anywhere.
 - `IsEvenlyCovered.eventually`: an evenly covered point is evenly covered on a neighbourhood, with
   the same index type.
 - `IsCoveringMap.eventually_nonempty_homeomorph`: the fibres of a covering map are locally
@@ -150,6 +173,96 @@ theorem IsCoveringMap.isClosedMap (hf : IsCoveringMap f) (hfin : ∀ x, (f ⁻¹
   have hcU : c ∈ f ⁻¹' U := by rw [Set.mem_preimage, hfc]; exact u.2
   have hfst : (H ⟨c, hcU⟩).1 = u := Subtype.ext ((hH ⟨c, hcU⟩).trans hfc)
   exact (Set.mem_iInter.1 huW (H ⟨c, hcU⟩).2) ⟨⟨c, hcU⟩, hcC, by rw [← hfst]⟩
+
+/-- **Closedness cancels along a covering map**: if `f` is a covering map and `f ∘ u` is a closed
+map, then `u` is closed.
+
+Nothing is asked of `u` beyond continuity — not that it be closed, injective, surjective or a local
+homeomorphism — and **no separation axiom is used**, on any of the three spaces.
+
+The classical statement of this shape is *a map whose composite with a separated map is proper is
+proper*, proved by factoring `u` through its graph in a fibre product. **Neither ingredient is used
+here.** What a covering map supplies instead is a *sheet*: for `y : E` there is an evenly covered
+`U ∋ f y` and a decomposition of `f ⁻¹' U` into open pieces on each of which `f` is injective. The
+proof is that decomposition and nothing else:
+
+* the sheet `V ∋ y` and the union `V'` of the other sheets are **both open**, because the sheet
+  index is `Prod.snd ∘ H` into a discrete type, so `A := C ∩ u ⁻¹' V` is closed *in*
+  `u ⁻¹' (f ⁻¹' U)` — which is what `hAcl` says, and is where `V'` is used;
+* therefore `closure A` is a closed set on which the hypothesis can be spent, and
+  `T := (f ∘ u) '' closure A` is closed;
+* `f y ∉ T`: a witness would lie in `A` by the previous point, so its image under `u` lies in `V`
+  alongside `y` and has the same image under `f`, and **`f` is injective on `V`** — so it *is* `y`,
+  contradicting `y ∉ u '' C`;
+* `V ∩ f ⁻¹' Tᶜ` is then an open neighbourhood of `y` missing `u '' C`.
+
+**Injectivity on a sheet is the whole of what the hypothesis buys**, and it is what fails for a
+closed local homeomorphism with finite fibres that is not a covering map — the line with two
+origins over the line, whose two origins have no disjoint neighbourhoods and hence no sheet
+containing exactly one of them. `Oka/AnalyticSpace/Finite.lean` records that example as the reason
+this statement is false with `IsCoveringMap f` weakened to *`f` closed with finite fibres*, and
+`TwoIndiscrete.not_isClosedMap_pt_of_isClosedMap_comp` (`OkaTest/FiniteEtaleCancel.lean`)
+compiles a witness for the weakening — a weaker one, since its second map is not a local
+homeomorphism.
+
+Mathlib has no cancellation lemma for `IsCoveringMap`: `IsCoveringMap.comp_homeomorph` and
+`IsCoveringMap.homeomorph_comp` are conjugation by a homeomorphism, and there is no composition
+lemma either. -/
+theorem IsCoveringMap.isClosedMap_of_comp {W : Type*} [TopologicalSpace W] {u : W → E}
+    (hf : IsCoveringMap f) (hu : Continuous u) (h : IsClosedMap (f ∘ u)) :
+    IsClosedMap u := by
+  intro C hC
+  rw [← isOpen_compl_iff, isOpen_iff_mem_nhds]
+  intro y hy
+  obtain ⟨inst, U, hyU, hU, hfU, H, hH⟩ := hf (f y)
+  have hymem : y ∈ f ⁻¹' U := hyU
+  -- The sheet index of a point of `f ⁻¹' U`, a continuous map to a discrete type.
+  set p : (f ⁻¹' U) → (f ⁻¹' {f y}) := fun e ↦ (H e).2 with hp
+  have hpcont : Continuous p := continuous_snd.comp H.continuous
+  set i₀ := p ⟨y, hymem⟩ with hi₀
+  -- The sheet through `y`, and the union of all the other sheets.
+  set V : Set E := Subtype.val '' (p ⁻¹' {i₀}) with hV
+  set V' : Set E := Subtype.val '' (p ⁻¹' {i₀}ᶜ) with hV'
+  have hVopen : IsOpen V :=
+    hfU.isOpenMap_subtype_val _ (hpcont.isOpen_preimage _ (isOpen_discrete _))
+  have hV'open : IsOpen V' :=
+    hfU.isOpenMap_subtype_val _ (hpcont.isOpen_preimage _ (isOpen_discrete _))
+  have hyV : y ∈ V := ⟨⟨y, hymem⟩, rfl, rfl⟩
+  have hcover : ∀ e ∈ f ⁻¹' U, e ∈ V ∨ e ∈ V' := by
+    intro e he
+    by_cases hcase : p ⟨e, he⟩ = i₀
+    · exact Or.inl ⟨⟨e, he⟩, hcase, rfl⟩
+    · exact Or.inr ⟨⟨e, he⟩, hcase, rfl⟩
+  have hdisj : ∀ e ∈ V, e ∉ V' := by
+    rintro _ ⟨a, ha, rfl⟩ ⟨b, hb, hba⟩
+    exact hb (by rw [show b = a from Subtype.ext hba]; exact ha)
+  -- `f` is injective on a single sheet: two points of it have the same index, and equal images
+  -- under `f` make their two `H`-components agree.
+  have hinj : ∀ a ∈ V, ∀ b ∈ V, f a = f b → a = b := by
+    rintro _ ⟨ea, hea, rfl⟩ _ ⟨eb, heb, rfl⟩ hab
+    refine congrArg Subtype.val (H.injective (Prod.ext (Subtype.ext ?_) ?_))
+    · rw [hH ea, hH eb]; exact hab
+    · exact hea.trans heb.symm
+  set A : Set W := C ∩ u ⁻¹' V with hA
+  -- `A` is closed in `u ⁻¹' (f ⁻¹' U)`, which is what the other sheets being open gives.
+  have hAcl : ∀ w ∈ closure A, u w ∈ f ⁻¹' U → w ∈ A := by
+    intro w hw hwU
+    refine ⟨hC.closure_subset (closure_mono Set.inter_subset_left hw), ?_⟩
+    by_contra hnot
+    obtain ⟨z, hz1, hz2⟩ :=
+      mem_closure_iff.1 hw _ (hV'open.preimage hu) ((hcover _ hwU).resolve_left hnot)
+    exact hdisj _ hz2.2 hz1
+  set T : Set X := (f ∘ u) '' (closure A) with hT
+  have hfyT : f y ∉ T := by
+    rintro ⟨w, hw, hwy⟩
+    have hwA : w ∈ A :=
+      hAcl w hw (by rw [Set.mem_preimage, show f (u w) = f y from hwy]; exact hyU)
+    exact hy ⟨w, hwA.1, hinj _ hwA.2 _ hyV hwy⟩
+  refine Filter.mem_of_superset
+    ((hVopen.inter (((h _ isClosed_closure).isOpen_compl).preimage hf.continuous)).mem_nhds
+      ⟨hyV, hfyT⟩) ?_
+  rintro y' ⟨hy'V, hy'T⟩ ⟨c, hcC, rfl⟩
+  exact hy'T (Set.mem_image_of_mem _ (subset_closure ⟨hcC, hy'V⟩))
 
 /-- **An evenly covered point is evenly covered on a whole neighbourhood, with the same index
 type.**

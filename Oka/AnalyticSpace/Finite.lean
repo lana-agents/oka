@@ -55,7 +55,7 @@ There is deliberately no `IsProper` class. `IsProperMap` on `f.toLRSHom.base` al
 statement; a class would have to carry its own identity, composition and non-vacuity API to earn
 its place, and nothing here or downstream consumes one.
 
-## Cancellation, and the one half of it that is missing
+## Cancellation, and which hypothesis each half needs
 
 The two fields cancel differently, and saying which is which is what keeps the finite étale rung's
 gap legible. **The fibre half cancels outright**:
@@ -63,21 +63,33 @@ gap legible. **The fibre half cancels outright**:
 fibres for `f ≫ g`, and asks nothing whatever of `g` — not finiteness, not closedness, not
 injectivity — because the fibre of `f` over `y` sits inside the fibre of `f ≫ g` over `g y`.
 
-**The closed half does not**, and it does not even given that `g` is finite. Take the real line
+**The closed half does not, and it does not even given that `g` is finite.** Take the real line
 with two origins over the real line, with `f` the inclusion of one of the two branches: then
 `f ≫ g` is the identity, hence closed with finite fibres, and `g` is closed with fibres of at most
 two points, while the complement of the image of `f` is the other origin alone, which is not open
-— so `f` is not closed. **That is a statement about topological spaces, it is compiled nowhere
-below, and it is recorded as a reason not to expect a hypothesis-free cancellation rather than as
-a theorem.**
-It does not collide with `ComplexAnalytic.AnalyticSpace.isFinite_of_isFinite_comp`, which is this
-file's cancellation lemma and asks the second factor to be injective: the `g` above is exactly not
-that, at the two origins.
+— so `f` is not closed. **That is a statement about topological spaces, and one of that shape is
+now compiled**: `TwoIndiscrete.not_isClosedMap_pt_of_isClosedMap_comp`
+(`OkaTest/FiniteEtaleCancel.lean`) exhibits a `g` that is continuous, closed and has finite
+fibres, an `f` that is continuous, a
+closed `f ≫ g` and a non-closed `f`. It is a two-point indiscrete space and not the line with two
+origins, so it is the weaker witness — the fold below is not a local homeomorphism — and the
+line with two origins is still compiled nowhere.
 
-The classical repair is to factor `f` through its graph and ask `Y` to be separated over the base,
-and neither ingredient exists here — there is no separatedness notion for
-`ComplexAnalytic.AnalyticSpace` and no fibre products, which is the absence the base-change
-paragraph below records.
+That paragraph does not collide with `ComplexAnalytic.AnalyticSpace.isFinite_of_isFinite_comp`,
+which is this file's cancellation lemma and asks the second factor to be injective: the `g` above
+is exactly not that, at the two origins.
+
+**It also does not say the closed half never cancels, and this file used to leave that reading
+open.** The classical repair — factor `f` through its graph and ask `Y` to be separated over the
+base — needs a separatedness notion and fibre products, and neither exists here. But that is the
+repair for a *finite* second factor. When `g` is **finite étale** and its source is Hausdorff,
+neither ingredient is needed and the closed half cancels:
+`ComplexAnalytic.AnalyticSpace.isFinite_of_comp_of_isFiniteEtale` in
+`Oka/AnalyticSpace/FiniteEtaleCancel.lean`, whose content is
+`IsCoveringMap.isClosedMap_of_comp` (`Oka/Topology/Covering/Basic.lean`) — a covering map is
+injective on each sheet of an evenly covered neighbourhood, and the two origins lie in no common
+sheet. The absence of separatedness and of fibre products is real and is recorded in the
+base-change paragraph below; what it does not obstruct is the finite étale case.
 
 ## What is not here, and it is the whole of the subject
 
@@ -122,8 +134,9 @@ stated here rather than left to be discovered.
   `ComplexAnalytic.isClosedEmbedding_base_analytificationIncl`.
 - `ComplexAnalytic.AnalyticSpace.finite_fiber_of_comp`: **the fibre half of finiteness cancels
   with no hypothesis at all** — if `f ≫ g` has finite fibres then so does `f`, and the second
-  factor is not asked to be finite, closed or injective. The closed half does not cancel with it;
-  see the section above.
+  factor is not asked to be finite, closed or injective. The closed half does not cancel with it
+  at that hypothesis, and does when the second factor is finite étale with Hausdorff source, which
+  is `Oka/AnalyticSpace/FiniteEtaleCancel.lean`; see the section above.
 - `ComplexAnalytic.AnalyticSpace.not_isFinite_of_infinite_fiber`: the criterion a non-example is
   exhibited by.
 - `ComplexAnalytic.AnalyticSpace.isProperMap_base_of_isFinite`: **a finite morphism is proper**,
@@ -270,8 +283,10 @@ set is finite. **There is no hypothesis on `g` at all** — no `[IsFinite g]`, n
 `g` is in the binders only because the composite mentions it.
 
 **This is one of the two halves of a cancellation statement for
-`ComplexAnalytic.AnalyticSpace.IsFinite`, and the other one is missing**; the module docstring says
-which and gives the shape of a counterexample. It is also the fibre half of
+`ComplexAnalytic.AnalyticSpace.IsFinite`, and it is the half that needs no hypothesis**; the module
+docstring says what the other one costs — a counterexample at a merely finite second factor, and
+`ComplexAnalytic.AnalyticSpace.isFinite_of_comp_of_isFiniteEtale` at a finite étale one.
+It is also the fibre half of
 `ComplexAnalytic.AnalyticSpace.isFinite_of_isFinite_comp` below, which is where this containment
 used to be written out inline: that lemma's injectivity hypothesis is consumed entirely in its
 closed half, and factoring this out is what makes that visible in the statements rather than only
