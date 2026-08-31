@@ -43,6 +43,7 @@ import Oka.AnalyticSpace.Degree
 import Oka.AnalyticSpace.Evaluation
 import Oka.AnalyticSpace.Factorisation
 import Oka.AnalyticSpace.Finite
+import Oka.AnalyticSpace.FiniteEtaleOver
 import Oka.AnalyticSpace.Glue
 import Oka.AnalyticSpace.HolomorphicFamily
 import Oka.AnalyticSpace.HolomorphicMap
