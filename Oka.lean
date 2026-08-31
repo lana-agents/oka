@@ -31,6 +31,7 @@ import Oka.AlgebraicGeometry.Modules.Sheaf
 import Oka.AlgebraicGeometry.Modules.Tilde
 import Oka.AlgebraicGeometry.Spec
 import Oka.Analysis.Complex.CoveringMap
+import Oka.Analysis.Complex.FundamentalGroup
 import Oka.Analytic.DividedDifference
 import Oka.Analytic.ParametricCircleIntegral
 import Oka.AnalyticSpace.Basic
