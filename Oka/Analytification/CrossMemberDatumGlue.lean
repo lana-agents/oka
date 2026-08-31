@@ -78,6 +78,15 @@ the planted equation lemma belongs to another file. **Both fired here and a thir
   spelling — so the `rfl` theorem above could not be stated until the transport was named.
   `ComplexAnalytic.refineSwapMul` is that name. **A definition that a later proof will have to
   open should not carry an anonymous proof term**, and this is the shape of that rule.
+* **One generated declaration is left, and it is `simp only … at` and not `rw`.**
+  `ComplexAnalytic.refineDatumGlueEq.congr_simp` is planted by the `simp only … at e` in
+  `ComplexAnalytic.refineDatumGlueEq_analytification_comp` — **attributed by deleting that
+  theorem and re-running the dump**, not inferred. The one-member file's analytified triangle uses
+  the same tactic and plants nothing, and the difference is that the definition here takes a proof
+  argument, so simp needs a congruence lemma to traverse it. It belongs to this module and is the
+  benign kind; `Oka/Analytification/CrossMemberGlue.lean` carries two of exactly this shape.
+  **Recorded rather than removed**, because removing it means giving up `simp only … at` on a
+  hypothesis that mentions a definition with a proof argument, and nothing here is worth that.
 * **`rw` can also fail to find a lemma that is visibly present.** After
   `simp only [Category.assoc]` the goal is right-associated, so the subterm
   `eqToHom … ≫ localisationHom …` does not occur — it occurs as
