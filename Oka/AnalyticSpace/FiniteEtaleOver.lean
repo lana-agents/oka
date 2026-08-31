@@ -41,8 +41,11 @@ a second notion, it is `@IsFiniteEtale` with a head symbol, and
 their structure map, and `Q` cuts out the morphisms. **`Q` is `⊤` here**, so a morphism of covers
 is any morphism of analytic spaces commuting with the two structure maps, and nothing more. That
 is the definition the Riemann existence theorem needs, and it is *not* the same as asking the
-morphism to be finite étale itself — see `## What is not here`, where the missing cancellation
-statement is what would make the two agree.
+morphism to be finite étale itself. The two agree in extension —
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp` (`Oka/AnalyticSpace/LocalIso.lean`) says the
+underlying morphism of a morphism of covers is finite étale whenever the *target* cover's total
+space is Hausdorff — but `Q` is still `⊤`, and that is what makes the category cheap to form: an
+object of it carries no condition to discharge on its morphisms. See `## What is not here`.
 
 ## The four instances, and none of them is needed to form the category
 
@@ -76,16 +79,24 @@ docstring, because `scripts/guard_coverage.py` reads every backticked repository
 
 ## What is not here
 
-* **No cancellation, and it is the gap that matters.** Nothing says that a morphism between two
-  finite étale covers of `X` is itself finite étale — that is the statement *"if `g` and `f ≫ g`
-  are finite étale then `f` is"*, and nothing below states it. **This is what a Galois-category
-  structure on the category below would need first**, and taxis #1114's report identifies the same
-  absence as the difficulty of essential surjectivity.
+* **Cancellation — this is no longer absent, and it is not in this file.** *"If `g` and `f ≫ g`
+  are finite étale then `f` is"* is `ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp` in
+  `Oka/AnalyticSpace/LocalIso.lean`, for a `[T2Space]` middle space. **This is what a
+  Galois-category structure on the category below needs first**, and taxis #1114's report
+  identifies the same statement as the difficulty of essential surjectivity; what that structure
+  still lacks is in the two bullets below, and cancellation is no longer among it.
 
-  **What is absent is one topological statement and not the whole of it**, which an earlier
-  version of this bullet did not know: it said the two classes are stated as stability under
-  composition only and that Mathlib is in the same position one level down. Both halves of that
-  were wrong, and taxis #1312 measured how.
+  **What it does not do is make a morphism of `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver X`
+  carry a condition.** `Q` is `⊤` in the definition above and stays `⊤`; the cancellation says
+  that the underlying morphism of every such morphism *is* finite étale, not that the category
+  asks it to be. Nothing below reads it that way and nothing needs to.
+
+  **The bullet was retired in three steps and the last one is the interesting one.** It first said
+  the two classes are stated as stability under composition only and that Mathlib is in the same
+  position one level down; both halves of that were wrong, and taxis #1312 measured how. It then
+  said one topological statement was left, to be got at by a covering-map argument. That statement
+  is proved, and it turned out not to be about covering maps: what was missing was a separation
+  axiom on the middle space and nothing else — see the third sub-bullet.
 
   * `ComplexAnalytic.AnalyticSpace.IsFinite` **does** have a cancellation lemma —
     `ComplexAnalytic.AnalyticSpace.isFinite_of_isFinite_comp`, which concludes `IsFinite f` from
@@ -107,13 +118,21 @@ docstring, because `scripts/guard_coverage.py` reads every backticked repository
     for `IsCoveringMap`, only conjugation by a homeomorphism — but that is the wrong file for this
     class, and the earlier version of this bullet carried that negative across from taxis #1114's
     report without noticing.
-  * **What is left is closedness of `f` alone**, and the reason not to expect it without a
-    separatedness hypothesis on `Y` over `Z` is written out in the two files that own the rungs:
-    `Oka/AnalyticSpace/Finite.lean`'s cancellation section and `Oka/AnalyticSpace/LocalIso.lean`'s
-    own `## What is not here`. Both give the real line with two origins as the shape, and both say
-    that it is reasoning about topological spaces which is compiled nowhere. Separatedness is what
-    this category cannot state, for the same reason as the base-change bullet below: no fibre
-    products.
+  * **Closedness of `f` was the last one, and the recorded obstruction to it named the wrong
+    thing.** `Oka/AnalyticSpace/Finite.lean`'s cancellation section and
+    `Oka/AnalyticSpace/LocalIso.lean`'s `## What is not here` both gave the real line with two
+    origins as the shape, and both said the classical repair needs a separatedness notion and
+    fibre products — which this category cannot state, for the same reason as the base-change
+    bullet below. **What that example exhibits is a middle space with two points no open set
+    separates, and the second factor is not what makes it work**: at a Hausdorff middle space the
+    closed half cancels along an arbitrary second factor, by Mathlib's `isProperMap_of_comp_of_t2`
+    and the properness of a finite morphism, which is
+    `ComplexAnalytic.AnalyticSpace.isFinite_of_comp_of_t2Space` in
+    `Oka/AnalyticSpace/Finite.lean`. So no separatedness notion and no fibre product was ever
+    needed, and the hypothesis that was missing is a separation axiom rather than a construction.
+    The counterexample is now compiled as
+    `TwoIndiscrete.not_isClosedMap_pt_of_isClosedMap_comp` in `OkaTest/FiniteEtaleCancel.lean`,
+    where it is the witness that the separation axiom cannot be dropped.
 * **No fibre functor and no Galois category.** The fibre functor of a Galois category — declared
   in `Mathlib/CategoryTheory/Galois/Basic.lean`, whose namespace is not in this repository's
   import closure and so cannot be cited by name here — lands in `FintypeCat`, and the fibre of a
