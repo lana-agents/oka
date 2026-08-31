@@ -466,6 +466,13 @@ info: 'ComplexAnalytic.exists_presentation' depends on axioms:
 #print axioms ComplexAnalytic.exists_presentation
 
 /--
+info: 'ComplexAnalytic.finiteType_presentationAlg' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.finiteType_presentationAlg
+
+/--
 info: 'ComplexAnalytic.toFGAlg' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
@@ -1451,6 +1458,27 @@ info: 'ComplexAnalytic.specIncl_comp_specIota' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.specIncl_comp_specIota
+
+/--
+info: 'ComplexAnalytic.specGluedOpenCover' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specGluedOpenCover
+
+/--
+info: 'ComplexAnalytic.specGluedOpenCover_obj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specGluedOpenCover_obj
+
+/--
+info: 'ComplexAnalytic.specGluedOpenCover_map' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specGluedOpenCover_map
 
 /-! ### A morphism of covered schemes analytifies
 
