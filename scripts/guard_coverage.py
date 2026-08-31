@@ -254,9 +254,24 @@ def read_decls(dump: str) -> dict[str, str]:
 
 
 def read_env(dump: str) -> set[str]:
-    """Every name in `scripts/DumpEnvNames.lean`'s output — the whole environment, Mathlib too."""
+    """Every name in `scripts/DumpEnvNames.lean`'s output — the whole environment, Mathlib too.
+
+    Each line there is `<kind>` TAB `<name>` with `kind` either `module` or `decl`, and a name
+    never contains a tab; **an untagged line is the whole name**, which is what a dump written
+    before the tag existed looks like.  Nothing here cares which kind a name is — this set is
+    only ever asked *whether it contains* a name — so the tag is stripped and discarded.  It is
+    stripped rather than ignored because a line read whole would put `decl\tFoo.bar` in the set
+    and `Foo.bar` out of it, and the only symptom would be a name reported as unknown.
+    """
+    out = set()
     with open(dump, encoding="utf-8") as f:
-        return {line.rstrip("\n") for line in f if line.strip()}
+        for line in f:
+            line = line.rstrip("\n")
+            if not line.strip():
+                continue
+            kind, tab, rest = line.partition("\t")
+            out.add(rest if tab and kind in ("module", "decl") else line)
+    return out
 
 
 def build_dump() -> str:
