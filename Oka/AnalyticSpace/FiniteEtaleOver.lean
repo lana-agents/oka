@@ -95,17 +95,25 @@ docstring, because `scripts/guard_coverage.py` reads every backticked repository
     `ComplexAnalytic.sq`, whose `ComplexAnalytic.not_isIso_sq` is proved *from*
     non-injectivity. So the lemma exists and its hypothesis is the one a cover cannot supply,
     which is a route where "nothing exists" offered none.
-  * `ComplexAnalytic.AnalyticSpace.IsLocalIso` has no cancellation lemma **declared** here, but it
-    is free from Mathlib rather than hard: `IsLocalHomeomorph.of_comp` is its topological half and
-    asks only that `f` be continuous, which a morphism's base map is, and
+  * `ComplexAnalytic.AnalyticSpace.IsLocalIso` **cancels outright** —
+    `ComplexAnalytic.AnalyticSpace.isLocalIso_of_comp`, in `Oka/AnalyticSpace/LocalIso.lean` beside
+    the `ComplexAnalytic.AnalyticSpace.isLocalIso_comp` it is the companion of — and it was free
+    from Mathlib rather than hard: `IsLocalHomeomorph.of_comp` is its topological half and asks
+    only that `f` be continuous, which a morphism's base map is, and
     `AlgebraicGeometry.LocallyRingedSpace.stalkMap_comp` with two-out-of-three is the stalk half.
+    Those are the two steps that proof takes and it takes no others; the sentence was written here
+    before the theorem existed, and what changed is that it now describes something.
     `Mathlib/Topology/Covering/Basic.lean` really does have no composition or cancellation lemma
     for `IsCoveringMap`, only conjugation by a homeomorphism — but that is the wrong file for this
     class, and the earlier version of this bullet carried that negative across from taxis #1114's
     report without noticing.
-  * **What is left is closedness of `f` alone**, and taxis #1312 gives a topological reason not to
-    expect it without a separatedness hypothesis on `Y` over `Z` — which this category cannot
-    state, for the same reason as the base-change bullet below: no fibre products.
+  * **What is left is closedness of `f` alone**, and the reason not to expect it without a
+    separatedness hypothesis on `Y` over `Z` is written out in the two files that own the rungs:
+    `Oka/AnalyticSpace/Finite.lean`'s cancellation section and `Oka/AnalyticSpace/LocalIso.lean`'s
+    own `## What is not here`. Both give the real line with two origins as the shape, and both say
+    that it is reasoning about topological spaces which is compiled nowhere. Separatedness is what
+    this category cannot state, for the same reason as the base-change bullet below: no fibre
+    products.
 * **No fibre functor and no Galois category.** The fibre functor of a Galois category — declared
   in `Mathlib/CategoryTheory/Galois/Basic.lean`, whose namespace is not in this repository's
   import closure and so cannot be cited by name here — lands in `FintypeCat`, and the fibre of a

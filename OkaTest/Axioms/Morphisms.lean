@@ -354,6 +354,13 @@ info: 'ComplexAnalytic.AnalyticSpace.isFinite_of_isFinite_comp' depends on axiom
 #print axioms ComplexAnalytic.AnalyticSpace.isFinite_of_isFinite_comp
 
 /--
+info: 'ComplexAnalytic.AnalyticSpace.finite_fiber_of_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.finite_fiber_of_comp
+
+/--
 info: 'ComplexAnalytic.AnalyticSpace.not_isFinite_of_infinite_fiber' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
@@ -396,6 +403,13 @@ info: 'ComplexAnalytic.AnalyticSpace.isLocalIso_comp' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.isLocalIso_comp
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isLocalIso_of_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isLocalIso_of_comp
 
 /--
 info: 'ComplexAnalytic.AnalyticSpace.isLocalIso_of_isIso' depends on axioms:

@@ -71,6 +71,23 @@ the rung.
   `ComplexAnalytic.AnalyticSpace.degree_sigmaFold`.
 * **The analytification of a finite étale morphism** — the other blocker of #551, stateable only
   now that this exists.
+* **Cancellation for `ComplexAnalytic.AnalyticSpace.IsFiniteEtale`, and what is missing of it is
+  one topological statement.** A Galois-category structure on the finite étale covers of a fixed
+  base — `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver`, in
+  `Oka/AnalyticSpace/FiniteEtaleOver.lean` — wants *"if `g` and `f ≫ g` are finite étale then `f`
+  is"*. Three of the four halves cancel and are below or in `Oka/AnalyticSpace/Finite.lean`:
+  `ComplexAnalytic.AnalyticSpace.isLocalIso_of_comp` is both halves of the local-isomorphism rung,
+  and `ComplexAnalytic.AnalyticSpace.finite_fiber_of_comp` is the fibre half of the finite one —
+  which does not even use `g`'s finiteness. **The fourth is closedness of `f`**, and it does not
+  follow from the other three: for a `Y` that is not separated over `Z` — the real line with two
+  origins over the real line, with `f` the inclusion of one branch — `f ≫ g` is the identity and
+  `g` is closed with finite fibres, while the image of `f` has a non-open complement. That
+  reasoning is about topological spaces, is not compiled anywhere, and is recorded as the reason
+  not to expect the statement without a hypothesis rather than as a theorem. The classical proof
+  factors `f` through its graph and needs `Y` separated over `Z`; this repository has neither a
+  separatedness notion for `ComplexAnalytic.AnalyticSpace` nor the fibre products a graph is built
+  from, which is the same absence `Oka/AnalyticSpace/FiniteEtaleOver.lean` records as the reason
+  base change is not statable there.
 * **Grauert's finite mapping theorem**, which `Oka/AnalyticSpace/Finite.lean` already records as
   absent.
 
@@ -84,6 +101,9 @@ the rung.
 
 - `ComplexAnalytic.AnalyticSpace.isLocalIso_id`, `isLocalIso_comp` and `isLocalIso_of_isIso`:
   the local isomorphisms contain the isomorphisms and are closed under composition.
+- `ComplexAnalytic.AnalyticSpace.isLocalIso_of_comp`: **local isomorphism cancels** — if `f ≫ g`
+  and `g` are local isomorphisms then so is `f`, and neither half of the proof asks for anything
+  this repository had to supply.
 - `ComplexAnalytic.AnalyticSpace.isFiniteEtale_id` and `isFiniteEtale_comp`: the same for finite
   étale morphisms, from the two rungs' versions.
 
@@ -168,6 +188,43 @@ instance isLocalIso_comp {X Y Z : AnalyticSpace.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
       IsLocalIso.isIso_stalkMap _
     rw [h, LocallyRingedSpace.stalkMap_comp]
     exact CategoryTheory.IsIso.comp_isIso' h2 h1
+
+/-- **Local isomorphism cancels**: if `f ≫ g` and `g` are local isomorphisms, then so is `f`.
+
+**Both halves are free and neither is this repository's work**, which is the content of the
+statement rather than a remark about the proof. The topological one is `IsLocalHomeomorph.of_comp`,
+whose third hypothesis is the *continuity* of `f` alone — and a morphism's base map is a `TopCat`
+morphism, so it carries that with it. The stalk one is
+`AlgebraicGeometry.LocallyRingedSpace.stalkMap_comp` read as a factorisation of the composite's
+stalk map, plus two-out-of-three in the shape `CategoryTheory.IsIso.of_isIso_comp_left`.
+
+**Nothing is asked of `f` that a morphism does not already have**, so this is a cancellation
+statement with no side condition, unlike the finite rung's
+`ComplexAnalytic.AnalyticSpace.isFinite_of_isFinite_comp`, which asks for injectivity of the second
+factor. The module docstring's `## What is not here` says what that difference costs the finite
+étale rung.
+
+**It is a `theorem` and not an `instance`, deliberately.** As an instance it would fire on every
+`ComplexAnalytic.AnalyticSpace.IsLocalIso` goal and ask instance search to invent both the object
+`Z` and the morphism `g` to factor through, neither of which is determined by the goal.
+
+`ComplexAnalytic.AnalyticSpace.isLocalIso_comp`, directly above, is the composition companion.
+**The third position of two-out-of-three — concluding about `g` from `f` and `f ≫ g` — is not
+stated here and should not be expected**: both hypotheses see `g` only along the image of `f`, the
+stalk field of each being quantified over points of its own source, so `g` is unconstrained away
+from that image. No morphism below is asked to witness that, and this sentence is a reading of the
+two definitions rather than a theorem. -/
+theorem isLocalIso_of_comp {X Y Z : AnalyticSpace.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
+    [IsLocalIso (f ≫ g)] [IsLocalIso g] : IsLocalIso f where
+  isLocalHomeomorph :=
+    IsLocalHomeomorph.of_comp (IsLocalIso.isLocalHomeomorph (f := f ≫ g))
+      (IsLocalIso.isLocalHomeomorph (f := g)) f.toLRSHom.base.hom.continuous
+  isIso_stalkMap x := by
+    haveI : IsIso (g.toLRSHom.stalkMap (f.toLRSHom.base x) ≫ f.toLRSHom.stalkMap x) := by
+      rw [← LocallyRingedSpace.stalkMap_comp]
+      exact IsLocalIso.isIso_stalkMap (f := f ≫ g) x
+    exact IsIso.of_isIso_comp_left (g.toLRSHom.stalkMap (f.toLRSHom.base x))
+      (f.toLRSHom.stalkMap x)
 
 /-- **An isomorphism is a local isomorphism.**
 
