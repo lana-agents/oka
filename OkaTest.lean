@@ -75,4 +75,5 @@ import OkaTest.SimpDiscrTree
 import OkaTest.SimpleZeroStalk
 import OkaTest.SpecCoherent
 import OkaTest.StandardEtaleAnalytification
+import OkaTest.StandardEtaleCond
 import OkaTest.UliftCoord

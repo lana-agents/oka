@@ -56,18 +56,19 @@ below says anything about the underlying map of `i ≫ p`, not even that it is o
 below says anything about it either: the four results are the four it re-states, at a hypothesis
 a polynomial supplies.
 
-**Nothing reads `StandardEtalePair.cond`.** The step that would — from
+**Nothing here reads `StandardEtalePair.cond`, and the step that does is now elsewhere.** From
 `derivative f * p₁ + f * p₂ = g ^ n` in `R[X]`, at a point where `f` vanishes and `g` does not, to
-the derivative being nonzero there — is about `Polynomial.derivative` in a **one**-variable
-polynomial ring over `MvPolynomial (ULift (Fin n)) ℂ`. **The bridge to `MvPolynomial.pderiv` in
-`MvPolynomial (ULift (Fin (n+1))) ℂ` is no longer the missing part**: it is
-`ComplexAnalytic.polyPresentedAlgebraEquiv_mk_pderiv`
-(`Oka/Analytification/StandardEtale.lean`), which says `MvPolynomial.pderiv` of a lift is a lift
-of the derivative — a lift, because that is how
-`ComplexAnalytic.exists_lift_polyPresentedAlgebraEquiv` produces the polynomial the étale
-presentation cuts with. What is missing is the **evaluation** step above it, at a point where `F`
-vanishes and `G` does not, and no declaration below or in that file attempts it.
-`Oka/Analytification/StandardEtaleAnalytification.lean` records what is left.
+the derivative being nonzero there is `ComplexAnalytic.eval_pderiv_ne_zero`
+(`Oka/Analytification/StandardEtale.lean`) — which supplies exactly the hypothesis of the four
+results below, since `ComplexAnalytic.localisationVar n` is `ULift.up (Fin.last n)` by definition
+and nothing has to be relabelled. It stands on
+`ComplexAnalytic.polyPresentedAlgebraEquiv_mk_pderiv` in the same file, which says
+`MvPolynomial.pderiv` of a lift is a lift of the `Polynomial.derivative` — a lift, because that is
+how `ComplexAnalytic.exists_lift_polyPresentedAlgebraEquiv` produces the polynomial the étale
+presentation cuts with. **It is stated there and not here for the reason this file exists**: those
+statements mention a presentation and a `StandardEtalePair`, and nothing below does.
+`Oka/Analytification/StandardEtaleAnalytification.lean` records what is left, and the restriction
+to `D(G)` is still the largest of it.
 
 **No hypersurface inside an open subset.** As in the file this one builds on, `F` is entire and
 the ambient space is the whole of `ℂ^(n+1)`; the transport to an open base is
