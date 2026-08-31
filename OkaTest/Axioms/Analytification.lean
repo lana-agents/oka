@@ -878,6 +878,48 @@ info: 'ComplexAnalytic.isOpenImmersion_analytificationMap_localisationPresHom' d
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isOpenImmersion_analytificationMap_localisationPresHom
 
+/-! ### Two polynomials cutting out the same distinguished open, up to a unit
+
+The four statements `Oka/Analytification/LocalisationIndependence.lean` gained for the
+cross-member overlap of a refinement: the isomorphism at a **unit multiple** and its triangle,
+that the inverted polynomial is a unit upstairs, and that every polynomial of a localisation is a
+unit multiple of a renamed one.
+
+**That file's other four declarations are unguarded and this heading does not retrofit them.**
+They are unguarded because the file has no `## Main results` heading — its list of statements
+sits under the title — so `scripts/guard_coverage.py` reads nothing from it in either direction,
+and the four below land in *guarded and advertised nowhere* rather than in the overlap. Guarding
+what a branch adds is this project's practice; guarding four declarations a branch does not touch
+is another branch's business. -/
+
+/--
+info: 'ComplexAnalytic.localisationPresentationIsoOfUnitMul' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.localisationPresentationIsoOfUnitMul
+
+/--
+info: 'ComplexAnalytic.localisationPresentationIsoOfUnitMul_hom_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.localisationPresentationIsoOfUnitMul_hom_comp
+
+/--
+info: 'ComplexAnalytic.isUnit_mk_rename_localisationIncl' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isUnit_mk_rename_localisationIncl
+
+/--
+info: 'ComplexAnalytic.exists_mk_rename_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.exists_mk_rename_eq
+
 /-! ### The same distinguished open on the `Spec` side
 
 `Oka/Analytification/SpecDistinguishedOpen.lean`, the mirror of the two above. The triangle is

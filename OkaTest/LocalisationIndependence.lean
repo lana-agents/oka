@@ -40,10 +40,37 @@ Mathlib's `IsLocalization.Away.of_associated`, which the mirror file
 presentation, by `dvd_pow_sq` and `sq_dvd_pow` below, and need not be associated — that file's
 witness is `2` and `4` in `ℤ`.
 
-**What is not checked here.** Whether `f` and `f ^ 2` are associated *at the node*. No statement
-below mentions `Associated`: `localisationPresentation_ne_sq` distinguishes the two presentations
-by total degree, which is what the non-vacuity argument needs, and it says nothing about the
-units of the node ring.
+## The unit-multiple statements, and what their witness can and cannot be
+
+`ComplexAnalytic.exists_mk_rename_eq` says every polynomial of a localisation is a unit multiple
+of a renamed one, in the presented algebra. The reading that would empty it is the one that
+empties every equation in a ring: **that the ring is zero**, in which case it and
+`ComplexAnalytic.localisationPresentationIsoOfUnitMul` hold of nothing and the unit group is
+trivial. That is not a hypothetical here — for `f = 0` the last equation is `0 = 1` and the
+presented algebra really is the zero ring.
+
+`nontrivial_presentedAlgebra_localisation_node` closes it at the node localised at `z₀`, and the
+witness is the point `(1, 0, 1)` that `OkaTest/AnalytificationDistinguishedOpen.lean` already
+built: **a point of the analytification is an evaluation that kills every relation**, so the ideal
+misses `1` and the quotient is not the zero ring. Nothing about the localisation is used beyond
+its being presented, which is why the proof is four lines and not a computation in `ℂ[x, y, t]`.
+
+**What is not checked, and the first of the two is a real question with a known route.** That
+the `Q` the existential produces can never be `q` itself — that is, that the unit is doing work —
+is **not** established here, and the reason is that nobody has written the argument, not that the
+argument is out of reach. **Evaluation does separate**, at the family of points rather than at
+one: a point of this analytification is a common zero of `z₀z₁` and `t·z₀ - 1`, so it is
+`(x, 0, 1/x)` for any `x ≠ 0`, of which the point above is the member at `x = 1`. On it `t` takes
+the value `1/x` and a renamed `Q` takes `Q(x, 0)`, so `mk (rename Q) = mk (X_t)` would force
+`x · Q(x, 0) = 1` for **every** non-zero `x`, and a polynomial with infinitely many roots is zero.
+What that costs is the family — one parameterised point, where this file has one point — and the
+polynomial-identity step; **it does not need the identification of this localisation with
+`ℂ[z₀, z₀⁻¹]`**, which an earlier version of this paragraph claimed and which is a much larger
+statement.
+
+And whether `f` and `f ^ 2` are associated at the node is untouched, as before: no statement below
+mentions `Associated`, and `localisationPresentation_ne_sq` distinguishes the two presentations by
+total degree without saying anything about units.
 -/
 
 open CategoryTheory MvPolynomial ComplexAnalytic
@@ -93,6 +120,37 @@ theorem localisationPresentation_ne_sq :
   have h2 := mul_left_cancel₀ (MvPolynomial.X_ne_zero (R := ℂ) (localisationVar.{u} 2)) h
   have h3 := MvPolynomial.rename_injective _ (localisationIncl_injective.{u} 2) h2
   simpa using congrArg MvPolynomial.totalDegree h3
+
+/-- **The ideal of the node localised at `z₀` is not everything.**
+
+Evaluating at the point `(1, 0, 1)` kills every relation of
+`ComplexAnalytic.localisationPresentation nodePres nodeX` — that is what
+`nodeLocPoint` being a point of the analytification says, through
+`ComplexAnalytic.mem_zeroLocus_polySection_iff` — so the ideal is inside the kernel of that
+evaluation, which does not contain `1`. -/
+theorem presentationIdeal_localisation_node_ne_top :
+    presentationIdeal.{u} (localisationPresentation.{u} nodePres.{u} nodeX.{u}) ≠ ⊤ := by
+  intro hcon
+  have hle : presentationIdeal.{u} (localisationPresentation.{u} nodePres.{u} nodeX.{u}) ≤
+      RingHom.ker (MvPolynomial.eval
+        (nodeLocPoint.{u}.1.1 : ULift.{u} (Fin (2 + 1)) → ℂ)) := by
+    refine Ideal.span_le.2 ?_
+    rintro _ ⟨j, rfl⟩
+    exact (mem_zeroLocus_polySection_iff _ _).1 nodeLocPoint.{u}.2 j
+  have h1 := RingHom.mem_ker.1 (hle ((Ideal.eq_top_iff_one _).1 hcon))
+  rw [map_one] at h1
+  exact one_ne_zero h1
+
+/-- **So the presented algebra the unit-multiple statements are equations in is not the zero
+ring**, at the node localised at `z₀`.
+
+`ComplexAnalytic.exists_mk_rename_eq` and `ComplexAnalytic.localisationPresentationIsoOfUnitMul`
+are statements about `Ideal.Quotient.mk` and the units of this algebra; in the zero ring both hold
+of nothing, and for `f = 0` that is exactly what happens. -/
+instance nontrivial_presentedAlgebra_localisation_node :
+    Nontrivial (PresentedAlgebra.{u} (2 + 1) (1 + 1)
+      (localisationPresentation.{u} nodePres.{u} nodeX.{u})) :=
+  Ideal.Quotient.nontrivial_iff.mpr presentationIdeal_localisation_node_ne_top.{u}
 
 end OkaTest.LocalisationIndependence
 
