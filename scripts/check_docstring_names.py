@@ -78,11 +78,33 @@ compared was two different trees.
 ## What counts as a candidate
 
 A backtick-delimited run of non-backtick, non-whitespace characters, occurring inside a `--`,
-`/- -/`, `/-- -/` or `/-! -/` region of a `.lean` file under `Oka/` or `OkaTest/`, containing at
-least one `.`, and shaped like a Lean name: every dot-separated component non-empty and starting
-with a letter or `_`, every character alphanumeric or one of `_ ' ! ?`.  That shape test alone
-discards `Mathlib/RingTheory/Filtration.lean`, `[M.IsCoherent]`, `Scheme.{0}`,
+`/- -/`, `/-- -/` or `/-! -/` region of a `.lean` file under `Oka/`, `OkaTest/` or `scripts/`,
+containing at least one `.`, and shaped like a Lean name: every dot-separated component non-empty
+and starting with a letter or `_`, every character alphanumeric or one of `_ ' ! ?`.  That shape
+test alone discards `Mathlib/RingTheory/Filtration.lean`, `[M.IsCoherent]`, `Scheme.{0}`,
 `?V.isOpenEmbedding` and `⊤.isOpenEmbedding` without any of them needing to be listed anywhere.
+
+**`scripts/` is in the walk and was not until 2026-08-31**, which made the module docstrings of
+`scripts/DumpEnvNames.lean` and `scripts/DumpOkaDecls.lean` — the two files that *describe* this
+check — the only Lean prose in the repository that it did not read.  taxis #1337 has the
+measurement; what found it is that a reviewer who knows this script well predicted, on a
+one-paragraph edit to `scripts/DumpOkaDecls.lean`, that the headline figure would move, and it
+could not.  Three of the eight dotted candidates under `scripts/` were findings, and two of those
+three are in the paragraph above this one in `scripts/DumpEnvNames.lean`.
+
+`scripts/` is walked for its `.lean` files only, like the other two.  **The `.py` files there —
+this one included — are still read by nothing**, and they carry the same prose in the same
+backticked form: the field-notation rule below is stated with `head.tail` twice in this very
+docstring.  Whether a Python docstring should be checked at all is a separate question and this
+script does not answer it; what widening the walk to `.lean` alone settles is that the two Lean
+helpers are no longer the exception.
+
+**Widening the walk turned up a class of name the escape hatch did not have a clause for**: prose
+*about* the rules, where the name is written as an example and resolving would defeat the point of
+writing it.  Both members are in `scripts/DumpEnvNames.lean` — the schematic `head.tail`, and
+`OkaTest.FiniteMorphism.someDecl`, which is exhibited there precisely as a citation the tightened
+field-notation rule now rejects.  They are in `scripts/docstring-names-ignore.txt` under a header
+clause of their own; see that file for why no rewording fixes the second one.
 
 ## What counts as resolving
 
@@ -257,6 +279,12 @@ IGNORE_FILE = os.path.join("scripts", "docstring-names-ignore.txt")
 DUMP_SCRIPT = os.path.join("scripts", "DumpEnvNames.lean")
 ROOTS = ("Oka", "OkaTest")
 
+# Directories walked for prose that are **not** library roots: no `<name>.lean` root module sits
+# beside them, and their presence is not what makes a directory a checkout of this repository.
+# Keeping them out of `ROOTS` is what stops `check_tree` from asking a worktree for `scripts.lean`
+# and `candidates` from trying to open it.
+PROSE_DIRS = ("scripts",)
+
 # A candidate whose head component is at most this long, and is not a root namespace, is field
 # notation on a local binder rather than a declaration reference.
 MAX_LOCAL_HEAD = 2
@@ -339,6 +367,13 @@ def candidates(repo: str | None = None) -> dict[str, list[tuple[str, int]]]:
     `repo` is the checkout to walk, defaulting to the one this file lives in.  It is a parameter
     and not the module-level `REPO` so that two trees can be scanned in one process, which is
     what `--diff` needs and what the `os.chdir` driver this replaced could not do.
+
+    The two loops differ in one line and it is the reason `PROSE_DIRS` is a separate constant: a
+    library root has a `<name>.lean` module beside the directory and is `open`ed unconditionally,
+    while a prose directory has none and `scripts.lean` does not exist.  `os.walk` on a directory
+    that is not there yields nothing rather than raising, so a `PROSE_DIRS` entry absent from a
+    tree costs a silent zero — which is what lets `--self-test` plant fixtures with no `scripts/`
+    and what would let a `--diff` base predating this change be scanned without special-casing.
     """
     repo = REPO if repo is None else repo
     paths = []
@@ -346,6 +381,9 @@ def candidates(repo: str | None = None) -> dict[str, list[tuple[str, int]]]:
         for dirpath, _, filenames in os.walk(os.path.join(repo, root)):
             paths += [os.path.join(dirpath, f) for f in filenames if f.endswith(".lean")]
         paths.append(os.path.join(repo, root + ".lean"))
+    for extra in PROSE_DIRS:
+        for dirpath, _, filenames in os.walk(os.path.join(repo, extra)):
+            paths += [os.path.join(dirpath, f) for f in filenames if f.endswith(".lean")]
     found: dict[str, list[tuple[str, int]]] = {}
     for path in sorted(paths):
         rel = os.path.relpath(path, repo)
@@ -629,17 +667,22 @@ def self_test() -> int:
     **The test that matters is the positive one.**  "Two identical trees diff to empty" is what
     the `os.chdir` driver this option replaced printed on every branch it was ever run on, so a
     self-test built only from that would have passed while measuring nothing.  **Every check below
-    carries a `positive:` or `negative:` label and there are sixteen and six** — a count is
+    carries a `positive:` or `negative:` label and there are eighteen and eight** — a count is
     stated here rather than left to be inferred because a reader who trusts the labels has to be
     able to see that none is missing.
 
-    The last ten are about the *rules* rather than about the walk, and they reach them by planting
+    Ten of them are about the *rules* rather than about the walk, and they reach them by planting
     an environment as a `--dump` file instead of building one.  That is the only way to hold
     everything fixed but the environment, which is the variable the field-notation rule turns on,
-    and it keeps the whole self-test free of `lake`.  The last four of those are about the
+    and it keeps the whole self-test free of `lake`.  Four of those are about the
     `module`/`decl` tag: a module head must be *reported*, a declaration head with the same shape
     must not be, the message must say which of the two declined it, and an untagged dump must
     revert loudly rather than silently.
+
+    **The last four are about the walk and arrived with taxis #1337**, which found that
+    `scripts/` had never been in it.  They are one positive — a name in a `scripts/*.lean`
+    docstring is read and reported — and three controls that fix the boundary on both sides, so
+    that neither narrowing the walk back nor widening it to everything passes here.
     """
     def plant(root: str, body: str) -> str:
         os.makedirs(os.path.join(root, "Oka"), exist_ok=True)
@@ -873,6 +916,43 @@ def self_test() -> int:
               legacy.returncode == 0 and "names nothing" not in legacy.stdout
               and "no `module`/`decl` tags" in legacy.stderr,
               (legacy.stderr.strip() or legacy.stdout.strip()).replace("\n", " | "))
+
+        # **The walk, and the boundary it stops at.**  Until 2026-08-31 `scripts/` was outside it,
+        # so the two Lean helpers that describe this checker were checked by nothing; taxis #1337
+        # has the measurement.  The failure mode is the one this whole file is built against — a
+        # green run that measured less than the reader thinks — so it gets a positive control and
+        # two negatives that between them say the walk widened by exactly one directory.
+        #
+        # Every other fixture here has no `scripts/` at all, which is why they still work: a
+        # `PROSE_DIRS` entry missing from a tree costs a silent zero rather than a traceback.
+        w = plant(os.path.join(tmp, "w"), "/-! `Planted.someField` -/\n")
+        for sub, leaf, body in (
+                ("scripts", "Tool.lean", "/-! `Walked.zzzBogus` -/\n"),
+                # A Lean comment in a `.py` file, so that the *extension* filter is the only
+                # thing keeping it out and a check that widened `.lean` to `*` would fail here.
+                ("scripts", "Tool.py", "/-! `Unwalked.zzzPy` -/\n"),
+                # A `.lean` file in a directory that is in neither list, so that the *directory*
+                # list is the only thing keeping it out.
+                ("docs", "Note.lean", "/-! `Unwalked.zzzDir` -/\n")):
+            os.makedirs(os.path.join(w, sub), exist_ok=True)
+            with open(os.path.join(w, sub, leaf), "w", encoding="utf-8") as fh:
+                fh.write(body)
+        walked = subprocess.run(
+            [sys.executable, os.path.abspath(__file__), "--tree", w,
+             "--dump", tagged_env("env-walk.txt", "decl\tPlanted", "decl\tUnrelated.decl")],
+            capture_output=True, text=True,
+            env=dict(os.environ, PYTHONDONTWRITEBYTECODE="1"))
+        check("positive: a name in a `scripts/*.lean` docstring is read and reported",
+              walked.returncode == 1 and "Walked.zzzBogus" in walked.stdout
+              and "scripts/Tool.lean" in walked.stdout,
+              walked.stdout.strip().replace("\n", " | ") or f"rc={walked.returncode}")
+        check("negative: a `.py` file under `scripts/` is not read",
+              "Unwalked.zzzPy" not in walked.stdout)
+        check("negative: a `.lean` file outside the three walked directories is not read",
+              "Unwalked.zzzDir" not in walked.stdout)
+        check("positive: `Planted.someField` in the same tree still resolves",
+              "Planted.someField" not in walked.stdout,
+              "the run above reports one name and it is the planted one")
 
     if failures:
         print(f"\n{len(failures)} check(s) failed: " + ", ".join(failures))

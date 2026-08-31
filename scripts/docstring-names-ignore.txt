@@ -33,3 +33,35 @@
 # of what this checker is for; the prose is written with the full path instead.
 AlgebraicGeometry.Scheme.Hom.toRingCatSheafHom
 AlgebraicGeometry.Scheme.Modules
+
+# Names written as **examples of the rules**, in the prose of the two Lean helpers under
+# `scripts/`. This is the second class, and it arrived on 2026-08-31 with taxis #1337, which put
+# `scripts/*.lean` into the walk for the first time; before that the checker did not read the
+# files that describe it and neither entry was needed.
+#
+# It is a different class from the one above and the difference is worth stating, because the
+# header's opening paragraph describes only the first: those names are *correct* and resolve
+# nowhere because this build does not import them, so a bigger environment would retire them.
+# These two are correct as prose and must **never** resolve — the whole content of the sentences
+# they appear in is that they do not.
+#
+# `head.tail` is the schematic form of the field-notation rule, in `scripts/DumpEnvNames.lean`
+# and twice more in `scripts/check_docstring_names.py`, which is not walked. It is metasyntax and
+# not a citation. It is reported for a reason nobody would guess and which is nothing to do with
+# being schematic: `head` resolves as a declaration, but `Lean.FuzzyMatching.CharRole.head` has a
+# child, so `head` is a namespace and the field-notation rule declines namespaces.
+#
+# `OkaTest.FiniteMorphism.someDecl` is the illustrative **bad** citation in that same file's
+# format section — the shape taxis #1326 made the checker reject, exhibited so that a reader can
+# see it. **No rewording repairs it**, and that is the argument for an entry rather than a
+# reword: any name written to show what the rule rejects is a name the rule rejects. Spelling it
+# `OkaTest.SomeFile.someDecl`, as `README.md` does, resolves no better — that head names no module
+# at all — and dropping the backticks would leave the two files describing one rule in two
+# notations.
+#
+# Both are exempt tree-wide, as every entry here is, and both are metasyntactic placeholders
+# (`someDecl`, `tail`) that name nothing now and cannot come to name anything. A file-scoped
+# entry would be tighter and is deliberately not built: the mechanism should be added when an
+# unscoped entry is measured to hide something, and neither of these can.
+head.tail
+OkaTest.FiniteMorphism.someDecl
