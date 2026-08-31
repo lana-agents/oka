@@ -266,17 +266,16 @@ theorem isFinite_comp_of_isClosedEmbedding {X Y S : AnalyticSpace.{u}} (i : X �
 fibres then so does `f`, whatever `g` is.
 
 The fibre of `f` over `y` is contained in the fibre of `f ≫ g` over `g y`, and a subset of a finite
-set is finite. **`g`'s finiteness is not used** — it is in the binders only because the class is
-where the hypothesis on the composite is read from — so this is not the fibre half of
-`ComplexAnalytic.AnalyticSpace.isFinite_comp` run backwards, which would need it.
+set is finite. **There is no hypothesis on `g` at all** — no `[IsFinite g]`, no injectivity — and
+`g` is in the binders only because the composite mentions it.
 
 **This is one of the two halves of a cancellation statement for
 `ComplexAnalytic.AnalyticSpace.IsFinite`, and the other one is missing**; the module docstring says
 which and gives the shape of a counterexample. It is also the fibre half of
-`ComplexAnalytic.AnalyticSpace.isFinite_of_isFinite_comp` below, which is where the containment
-above used to be written out inline: that lemma's injectivity hypothesis is consumed entirely in
-its closed half, and factoring this out is what makes that visible in the statements rather than
-only in the prose.
+`ComplexAnalytic.AnalyticSpace.isFinite_of_isFinite_comp` below, which is where this containment
+used to be written out inline: that lemma's injectivity hypothesis is consumed entirely in its
+closed half, and factoring this out is what makes that visible in the statements rather than only
+in the prose.
 
 **A `theorem` and not an `instance`**, for the reason
 `ComplexAnalytic.AnalyticSpace.isLocalIso_of_comp` gives in `Oka/AnalyticSpace/LocalIso.lean`:

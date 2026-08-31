@@ -79,7 +79,7 @@ the rung.
   `ComplexAnalytic.AnalyticSpace.isLocalIso_of_comp` is both halves of the local-isomorphism rung,
   and `ComplexAnalytic.AnalyticSpace.finite_fiber_of_comp` is the fibre half of the finite one —
   which does not even use `g`'s finiteness. **The fourth is closedness of `f`**, and it does not
-  follow from the other three: for a `Y` that is not Hausdorff over `Z` — the real line with two
+  follow from the other three: for a `Y` that is not separated over `Z` — the real line with two
   origins over the real line, with `f` the inclusion of one branch — `f ≫ g` is the identity and
   `g` is closed with finite fibres, while the image of `f` has a non-open complement. That
   reasoning is about topological spaces, is not compiled anywhere, and is recorded as the reason
