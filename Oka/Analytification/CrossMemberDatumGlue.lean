@@ -41,8 +41,12 @@ layers, and only the first has any mathematics in it:
   is the previous one after `subst h`.
 * `ComplexAnalytic.refineDatumGlueEq` — the datum's field, which is the previous one conjugated by
   the two transports that turn `ComplexAnalytic.refineDatumPoly` into the polynomial each side is
-  stated at. Those two are `ComplexAnalytic.refineDatumPoly_of_eq` at `h` and at `h.symm`, and
-  nothing else is needed.
+  stated at. Those two are `ComplexAnalytic.refineDatumPoly_of_eq` at the equation and at its
+  `Eq.symm`, and nothing else is needed. (Spelled that way because field notation on a local
+  hypothesis, in backticks, has no whitespace in it, so `scripts/check_docstring_names.py` reads
+  it as a declaration reference — and the one this paragraph first used *resolved*, against
+  something in Mathlib that has nothing to do with this file. A checker that reports zero
+  unresolved names has not said the citations are right.)
 
 **The two bare polynomials are what make the middle layer possible.** Stating the swap for a
 *family* `K → MvPolynomial …` would put `K`'s indexing between `subst` and the goal; stating it at
