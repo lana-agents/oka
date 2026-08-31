@@ -861,11 +861,19 @@ info: 'ComplexAnalytic.isFinite_comp_proj_of_isCutOutBy' depends on axioms:
 
 /-! ### Over an open subset of the base: the projection of a cylinder
 
-`Oka/AnalyticSpace/OpenBaseProjection.lean`, together with
+`Oka/AnalyticSpace/OpenBaseProjection.lean` and
+`Oka/AnalyticSpace/OpenBaseProjectionPolynomial.lean`, together with
 `ComplexAnalytic.AnalyticSpace.restrictHom` from `Oka/AnalyticSpace/OpenSubspace.lean`, which is
 what makes the projection over `V` a restricted morphism. The two headings above are the same two
-halves over the whole of `ℂ^(n+1)`; these carry both across the restriction, which is what a
-standard étale algebra — inverting a polynomial as well as cutting one out — needs. -/
+halves over the whole of `ℂ^(n+1)`; these carry both across the restriction, in all three
+spellings of the simple-zero hypothesis — an order, one Taylor coefficient, and a derivative of a
+polynomial.
+
+**The restriction is of the base**, `V ⊆ ℂ^n` with `ComplexAnalytic.cylinder V` its preimage. A
+standard étale algebra also inverts a polynomial, and that polynomial involves the fibre variable,
+so `D(G)` is cut out of the *source* and is a cylinder only in the special case where `G` does
+not; `Oka/Analytification/StandardEtaleAnalytification.lean` records which of the two this line
+still lacks. -/
 
 /--
 info: 'ComplexAnalytic.AnalyticSpace.restrictHom' depends on axioms:
@@ -905,6 +913,13 @@ info: 'ComplexAnalytic.base_projRestrict_eq' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.base_projRestrict_eq
+
+/--
+info: 'ComplexAnalytic.Γgerm_resΓ_mem_maximalIdeal_iff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.Γgerm_resΓ_mem_maximalIdeal_iff
 
 /--
 info: 'ComplexAnalytic.range_base_eq_of_isCutOutBy_resΓ' depends on axioms:
@@ -974,6 +989,41 @@ info: 'ComplexAnalytic.isIso_stalkMap_comp_projRestrict' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isIso_stalkMap_comp_projRestrict
+
+/--
+info: 'ComplexAnalytic.evalHom_eq_zero_of_isCutOutBy_resΓ' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.evalHom_eq_zero_of_isCutOutBy_resΓ
+
+/--
+info: 'ComplexAnalytic.bijective_stalkMap_comp_projRestrict_of_coeff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.bijective_stalkMap_comp_projRestrict_of_coeff
+
+/--
+info: 'ComplexAnalytic.isIso_stalkMap_comp_projRestrict_of_coeff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isIso_stalkMap_comp_projRestrict_of_coeff
+
+/--
+info: 'ComplexAnalytic.bijective_stalkMap_comp_projRestrict_of_pderiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.bijective_stalkMap_comp_projRestrict_of_pderiv
+
+/--
+info: 'ComplexAnalytic.isIso_stalkMap_comp_projRestrict_of_pderiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isIso_stalkMap_comp_projRestrict_of_pderiv
 
 /-! ### A covering space of a complex analytic space is a complex analytic space
 

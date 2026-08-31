@@ -79,10 +79,15 @@ statements mention a presentation and a `StandardEtalePair`, and nothing below d
 `Oka/Analytification/StandardEtaleAnalytification.lean` records what is left, and the restriction
 to `D(G)` is still the largest of it.
 
-**No hypersurface inside an open subset.** As in the file this one builds on, `F` is entire and
-the ambient space is the whole of `ℂ^(n+1)`; the transport to an open base is
-`Oka/AnalyticSpace/OpenBaseProjection.lean` and it is stated for the germ hypothesis, not for this
-one.
+**No hypersurface inside an open subset, and the transport is no longer stated only for the germ
+hypothesis.** As in the file this one builds on, `F` is entire and the ambient space here is the
+whole of `ℂ^(n+1)`. The transport to an open base is `Oka/AnalyticSpace/OpenBaseProjection.lean`,
+which now carries the coefficient form as well as the order one, and the derivative form of it —
+this file's four statements over an open `V` — is
+`Oka/AnalyticSpace/OpenBaseProjectionPolynomial.lean`. **That open subset is of the base**: it is
+a cylinder `V × ℂ`, and the `D(G)` a standard étale algebra inverts is cut out of the *source* by
+a polynomial in the fibre variable, so the two restrictions are not the same one and neither file
+claims they are.
 
 **No non-polynomial gain.** Every statement here is an instance of one in the imported file, so a
 consumer holding a general holomorphic `F` should use that file directly; this one is not more

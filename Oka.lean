@@ -59,6 +59,7 @@ import Oka.AnalyticSpace.MonicProjection
 import Oka.AnalyticSpace.Noetherian
 import Oka.AnalyticSpace.Nonvanishing
 import Oka.AnalyticSpace.OpenBaseProjection
+import Oka.AnalyticSpace.OpenBaseProjectionPolynomial
 import Oka.AnalyticSpace.OpenSubspace
 import Oka.AnalyticSpace.ProjectionStalk
 import Oka.AnalyticSpace.PullbackModulesStalk
