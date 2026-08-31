@@ -847,6 +847,13 @@ info: 'ComplexAnalytic.range_base_eq_of_isCutOutBy' depends on axioms:
 #print axioms ComplexAnalytic.range_base_eq_of_isCutOutBy
 
 /--
+info: 'ComplexAnalytic.isFinite_comp_proj_of_range_subset' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isFinite_comp_proj_of_range_subset
+
+/--
 info: 'ComplexAnalytic.isFinite_comp_proj_of_range_eq' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/

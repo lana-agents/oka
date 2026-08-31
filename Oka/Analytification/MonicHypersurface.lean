@@ -376,12 +376,22 @@ algebra.** That analytification sits inside `ℂ^n` as a closed subspace, and th
 two statements is `ComplexAnalytic.AnalyticSpace.isFinite_of_isFinite_comp`: it cancels an
 **injective second factor**, so applying it here means cancelling
 `ComplexAnalytic.analytificationInclHom` for the base algebra, whose base map is injective by
-`ComplexAnalytic.isClosedEmbedding_base_analytificationIncl`. **What is missing is not the arrow
-but its hypothesis**: the cancellation needs the composite above to *be* the composite through the
-base algebra's analytification, and no statement in this repository factors it that way. That
-factorisation is a compatibility of `ComplexAnalytic.AnalyticSpace.analytification` with the two
-ring maps and is not proved anywhere. `Oka/AnalyticSpace/Finite.lean`'s `## Main results` names
-this file from the other side. -/
+`ComplexAnalytic.isClosedEmbedding_base_analytificationIncl`. **That is now done**, in
+`Oka/Analytification/HypersurfaceFinite.lean`:
+`ComplexAnalytic.analytificationMap_hypersurfacePresHom_comp` is the factorisation this paragraph
+said no statement supplied, and
+`ComplexAnalytic.isFinite_analytificationMap_hypersurfacePresHom` is the conclusion — the
+analytification of `A ⟶ A[X] ⧸ (F)` is finite over `A^an` for any presented `A`.
+
+**Until 2026-08-31 this paragraph said the factorisation was the only thing missing, and it was
+one of two.** The other is in the theorem below rather than in the arrow: its range hypothesis is
+an **equality** with the hypersurface, and the analytification of a base algebra's hypersurface is
+cut out by the relations of that algebra as well as by `G`, so its image is a proper closed subset
+of the hypersurface as soon as the base has a relation.
+`ComplexAnalytic.isFinite_comp_proj_of_range_subset` (`Oka/AnalyticSpace/MonicProjection.lean`) is
+that hypothesis weakened to an inclusion, which is all the proof ever used;
+`ComplexAnalytic.isFinite_comp_proj_of_range_eq` is now one line of it.
+`Oka/AnalyticSpace/Finite.lean`'s `## Main results` names this file from the other side. -/
 theorem isFinite_analytification_comp_proj (hG : G.Monic) :
     AnalyticSpace.IsFinite
       (analytificationInclHom.{u} ![(lastVarPolyEquiv.{u} n).symm G] ≫
