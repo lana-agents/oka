@@ -59,6 +59,9 @@ functor would be a definition nothing can be computed from.
 - `ComplexAnalytic.Presentation.isoOfAlgEquiv`: **an isomorphism of the presented algebras is
   an isomorphism of presentations** — the general companion of
   `ComplexAnalytic.Presentation.isoOfRename`.
+- `ComplexAnalytic.Presentation.algEquivOfIso`: **and back again**, which is what a consumer
+  holding an isomorphism of presentations needs before it can reach any statement phrased about
+  algebras.
 - `ComplexAnalytic.toFGAlg : Presentation ⥤ (isFiniteType.FullSubcategory)ᵒᵖ`: a presentation,
   read as the finitely generated `ℂ`-algebra it presents.
 - `ComplexAnalytic.analytificationFGAlg`: **the analytification of a finitely generated
@@ -226,6 +229,28 @@ def Presentation.isoOfAlgEquiv {P Q : Presentation.{u}} (e : Q.alg ≃ₐ[ℂ] P
   inv := ⟨e.symm.toRingHom, RingHom.ext fun c ↦ e.symm.commutes c⟩
   hom_inv_id := PresHom.ext (RingHom.ext fun x ↦ e.apply_symm_apply x)
   inv_hom_id := PresHom.ext (RingHom.ext fun x ↦ e.symm_apply_apply x)
+
+/-- **An isomorphism of presentations is a `ℂ`-algebra isomorphism of the presented algebras**,
+the inverse of `ComplexAnalytic.Presentation.isoOfAlgEquiv`.
+
+Both directions of the algebra map are already there — a `ComplexAnalytic.PresHom` *is* a ring map
+and its `commutes` field is the `ℂ`-linearity — so the four fields below are the two triangles of
+the isomorphism read at a point. It is stated because a consumer who holds an isomorphism of
+presentations, rather than of algebras, could otherwise reach nothing that is phrased about
+algebras: `ComplexAnalytic.Presentation.isoOfAlgEquiv` went one way only until this was written.
+
+Mind the direction, which is that of `ComplexAnalytic.PresHom` itself: the algebra map of
+`P ⟶ Q` runs `Q.alg → P.alg`, so an isomorphism `P ≅ Q` gives `Q.alg ≃ₐ[ℂ] P.alg` and not the
+other way about. -/
+noncomputable def Presentation.algEquivOfIso {P Q : Presentation.{u}} (φ : P ≅ Q) :
+    Q.alg ≃ₐ[ℂ] P.alg where
+  toFun := φ.hom.toRingHom
+  invFun := φ.inv.toRingHom
+  left_inv x := congrArg (fun ψ : PresHom.{u} _ _ ↦ ψ.toRingHom x) φ.inv_hom_id
+  right_inv x := congrArg (fun ψ : PresHom.{u} _ _ ↦ ψ.toRingHom x) φ.hom_inv_id
+  map_mul' := map_mul _
+  map_add' := map_add _
+  commutes' c := RingHom.congr_fun φ.hom.commutes c
 
 /-! ### Presentations are the finitely generated `ℂ`-algebras -/
 

@@ -437,6 +437,13 @@ info: 'ComplexAnalytic.Presentation.isoOfRename' depends on axioms:
 #print axioms ComplexAnalytic.Presentation.isoOfRename
 
 /--
+info: 'ComplexAnalytic.Presentation.algEquivOfIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.Presentation.algEquivOfIso
+
+/--
 info: 'ComplexAnalytic.exists_presentation' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
@@ -919,6 +926,46 @@ info: 'ComplexAnalytic.exists_mk_rename_eq' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.exists_mk_rename_eq
+
+/-! ### The same distinguished open of two *different* members
+
+The two statements `Oka/Analytification/LocalisationIndependence.lean` gained for the step after
+the block above: an isomorphism of two presented algebras carrying one cutting polynomial to the
+other identifies the two localisations, and the identification is one over that isomorphism.
+Everything in the block above keeps the base fixed and varies the polynomial; these vary the base.
+
+The same sentence as that heading applies to the coverage figures: that file still has no
+`## Main results` heading, so both land in *guarded and advertised nowhere* rather than in the
+overlap, and the four declarations of the block above stay guarded while the file's original
+eight stay unguarded. -/
+
+/--
+info: 'ComplexAnalytic.localisationPresentedAlgebraEquivOfAlgEquiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.localisationPresentedAlgebraEquivOfAlgEquiv
+
+/--
+info: 'ComplexAnalytic.localisationPresentedAlgebraEquivOfAlgEquiv_localisationRingHom' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.localisationPresentedAlgebraEquivOfAlgEquiv_localisationRingHom
+
+/--
+info: 'ComplexAnalytic.localisationPresentationIsoOfAlgEquiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.localisationPresentationIsoOfAlgEquiv
+
+/--
+info: 'ComplexAnalytic.localisationPresentationIsoOfAlgEquiv_hom_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.localisationPresentationIsoOfAlgEquiv_hom_comp
 
 /-! ### The same distinguished open on the `Spec` side
 
