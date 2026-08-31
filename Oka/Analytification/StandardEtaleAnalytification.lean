@@ -135,11 +135,17 @@ standard étale pair.
   along the isomorphism. **It is a construction rather than a quotation**, and in particular not a
   quotation of taxis #1112's `Pex`, which witnesses a non-closed *image* and says nothing about an
   inhabited `D(G)`.
-* **No `IsLocalIso` and no `IsFiniteEtale`.** Beside the missing lemma above,
-  `Oka/AnalyticSpace/SimpleZeroStalk.lean` records that its stalk statement says **nothing about
-  the underlying map** — *"not even that it is open"* — so the topological field of
-  `ComplexAnalytic.AnalyticSpace.IsLocalIso` is a separate absence and not a base-restriction
-  question.
+* **No `IsLocalIso` and no `IsFiniteEtale`, and the reason has changed.** The topological field
+  of `ComplexAnalytic.AnalyticSpace.IsLocalIso` is no longer an absence in general:
+  `ComplexAnalytic.isLocalHomeomorph_base_comp_uliftProj_of_pderiv`
+  (`Oka/AnalyticSpace/SimpleZeroTopology.lean`) makes the projection of a polynomial hypersurface
+  in `ℂ^(n+1)` a local homeomorphism from exactly the derivative hypothesis
+  `ComplexAnalytic.eval_pderiv_ne_zero_of_mem` produces. **What is missing is the same thing that
+  is missing on the stalk side**: that theorem is about the hypersurface in `ℂ^(n+1)` and the
+  étale presentation is that hypersurface met with `D(G)` in `ℂ^(n+2)`, so it is a
+  base-restriction question after all, and one nobody has priced for the topological field —
+  `Oka/AnalyticSpace/OpenBaseProjection.lean` transports the stalk field and has no topological
+  counterpart.
 * **No finiteness.** `IsFiniteEtale` of the unrestricted morphism is **false**: a standard étale
   algebra inverts `g`, and `Spec` of `(ℂ[X][x] ⧸ (x² - X))[1/x]` over `ℂ` has the punctured line
   for image, which is not closed. `Oka/Analytification/MonicHypersurface.lean`'s `## What is not

@@ -50,11 +50,15 @@ coefficient off the shift.
 
 ## What is not here
 
-**No `IsLocalIso` and no `IsFiniteEtale`, and this file moves neither any closer than its
-import did.** `Oka/AnalyticSpace/SimpleZeroStalk.lean` says of its own conclusion that *"nothing
-below says anything about the underlying map of `i ≫ p`, not even that it is open"*, and nothing
-below says anything about it either: the four results are the four it re-states, at a hypothesis
-a polynomial supplies.
+**No `IsLocalIso` and no `IsFiniteEtale` below, and the first of the two is no longer as far
+away as this bullet used to say.** Nothing below says anything about the underlying map of
+`i ≫ p` — the four results are the four `Oka/AnalyticSpace/SimpleZeroStalk.lean` states, at a
+hypothesis a polynomial supplies — but they are now the *stalk input* of one:
+`ComplexAnalytic.isLocalIso_comp_proj_of_pderiv`, in
+`Oka/AnalyticSpace/SimpleZeroTopology.lean`, is
+`ComplexAnalytic.isIso_stalkMap_comp_uliftProj_of_pderiv` below together with the implicit
+function theorem, at the same polynomial hypothesis quantified over every point.
+`IsFiniteEtale` is untouched: its finiteness field is not on this line at all.
 
 **Nothing here reads `StandardEtalePair.cond`, and the step that does is now elsewhere.** From
 `derivative f * p₁ + f * p₂ = g ^ n` in `R[X]`, at a point where `f` vanishes and `g` does not, to

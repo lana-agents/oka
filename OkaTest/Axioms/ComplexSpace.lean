@@ -77,3 +77,19 @@ info: 'isLocalRing_okaStalk' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms isLocalRing_okaStalk
+
+/-! ### The linear coefficients of a germ, as derivatives -/
+
+/--
+info: 'OkaRing.toGlobalFun_eq_evalHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms OkaRing.toGlobalFun_eq_evalHom
+
+/--
+info: 'OkaRing.coeff_single_one_germ' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms OkaRing.coeff_single_one_germ

@@ -30,6 +30,7 @@ import Oka.AlgebraicGeometry.Modules.Coherent
 import Oka.AlgebraicGeometry.Modules.Sheaf
 import Oka.AlgebraicGeometry.Modules.Tilde
 import Oka.AlgebraicGeometry.Spec
+import Oka.Analysis.Calculus.Implicit
 import Oka.Analysis.Complex.CoveringMap
 import Oka.Analysis.Complex.FundamentalGroup
 import Oka.Analytic.DividedDifference
@@ -68,6 +69,7 @@ import Oka.AnalyticSpace.Sigma
 import Oka.AnalyticSpace.SigmaFiniteEtale
 import Oka.AnalyticSpace.SimpleZeroPolynomial
 import Oka.AnalyticSpace.SimpleZeroStalk
+import Oka.AnalyticSpace.SimpleZeroTopology
 import Oka.AnalyticSpace.StalkLocalInverse
 import Oka.Analytification.AffineCover
 import Oka.Analytification.AffineSpace
@@ -124,6 +126,7 @@ import Oka.Geometry.RingedSpace.LocallyRingedSpace.Modules
 import Oka.Geometry.RingedSpace.OpenImmersion
 import Oka.Geometry.RingedSpace.PresheafedSpace.Gluing
 import Oka.Geometry.RingedSpace.ZeroLocus
+import Oka.GermDerivative
 import Oka.LocalOkaRing
 import Oka.MaximalIdeal
 import Oka.Noetherian

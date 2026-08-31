@@ -1201,3 +1201,100 @@ info: 'ComplexAnalytic.AnalyticSpace.isIso_hom_of_iso_id' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.isIso_hom_of_iso_id
+
+/-! ### The projection of a hypersurface with a simple zero, and the implicit function theorem
+
+`Oka/Analysis/Calculus/Implicit.lean` is mirror-tree — level sets of a strictly differentiable
+function on `ι → 𝕜`, with no complex analysis and nothing sheaf-theoretic in it — and no row of
+`OkaTest/Axioms.lean`'s topic table names its subject. Its guards are therefore here, with the
+guards of the analytic result that motivated it, which is the rule that table states and the
+placement `Oka/Topology/Covering/Basic.lean` already has in this file. -/
+
+/--
+info: 'ImplicitFunctionData.ofCoordProj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ImplicitFunctionData.ofCoordProj
+
+/--
+info: 'ImplicitFunctionData.injOn_rightFun_levelSet' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ImplicitFunctionData.injOn_rightFun_levelSet
+
+/--
+info: 'ImplicitFunctionData.isOpen_image_rightFun_levelSet' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ImplicitFunctionData.isOpen_image_rightFun_levelSet
+
+/--
+info: 'isLocalHomeomorph_coordProj_comp_of_isEmbedding' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms isLocalHomeomorph_coordProj_comp_of_isEmbedding
+
+/--
+info: 'isLocalHomeomorph_coordProj_levelSet' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms isLocalHomeomorph_coordProj_levelSet
+
+/--
+info: 'ComplexAnalytic.not_mem_range_uliftCastSuccEmb' depends on axioms: [propext]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.not_mem_range_uliftCastSuccEmb
+
+/--
+info: 'ComplexAnalytic.mem_range_uliftCastSuccEmb' does not depend on any axioms
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.mem_range_uliftCastSuccEmb
+
+/--
+info: 'ComplexAnalytic.range_base_eq_zeroSet' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.range_base_eq_zeroSet
+
+/--
+info: 'ComplexAnalytic.base_comp_uliftProj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.base_comp_uliftProj
+
+/--
+info: 'ComplexAnalytic.isLocalHomeomorph_base_comp_uliftProj_of_coeff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isLocalHomeomorph_base_comp_uliftProj_of_coeff
+
+/--
+info: 'ComplexAnalytic.isLocalHomeomorph_base_comp_uliftProj_of_pderiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isLocalHomeomorph_base_comp_uliftProj_of_pderiv
+
+/--
+info: 'ComplexAnalytic.isLocalIso_comp_proj_of_coeff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isLocalIso_comp_proj_of_coeff
+
+/--
+info: 'ComplexAnalytic.isLocalIso_comp_proj_of_pderiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isLocalIso_comp_proj_of_pderiv

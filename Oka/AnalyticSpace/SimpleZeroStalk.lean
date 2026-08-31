@@ -86,9 +86,17 @@ than about the order of a power series.
 coefficient is `MvPolynomial.pderiv` of `P` in the last variable, evaluated at the point
 (`LocalOkaRing.coeff_single_one_ofMvPolynomial`). **It is still not here and it is still not a
 derivative on `LocalOkaRing`**: the derivative there is Mathlib's, on polynomials, and it reaches
-the germ by translating the polynomial to the point rather than by differentiating a germ. For a
-general holomorphic `F` there is nothing to identify the coefficient with, and that is the half
-this paragraph still leaves open.
+the germ by translating the polynomial to the point rather than by differentiating a germ.
+
+**For a general holomorphic `F` there is now something to identify the coefficient with too, and
+this paragraph used to say there was not.** `OkaRing.coeff_single_one_germ`
+(`Oka/GermDerivative.lean`) says the coefficient is `fderiv ℂ (F.toGlobalFun ⊤) y (Pi.single j 1)`
+— the derivative of the *function*, at the point, in the direction of the last axis. **It is
+still not a derivative on `LocalOkaRing`**, for the reason the previous paragraph gives and which
+`Oka/Regular.lean` states in full: the value is a complex number and not a germ, so *"`∂F/∂X_n`
+is a unit at the point"* remains unstatable. What changes is that the hypothesis of the four
+`…_of_coeff` results below can be read as a derivative by a caller who has `F` as a holomorphic
+function rather than as a polynomial.
 
 **And only one of the two is a hypothesis, because the other is free.** The first says through
 `OkaRing.constantCoeff_germ` that `F` vanishes at the point, and
@@ -136,11 +144,16 @@ the paragraphs before it. `scripts/guard_coverage.py` reads every backticked rep
 under a `## Main results` heading as a result the file advertises, and none of those is a result
 of this file.
 
-**No finiteness, and so no `IsLocalIso` and no `IsFiniteEtale`.**
-`ComplexAnalytic.AnalyticSpace.IsLocalIso` asks for a topological condition beside the stalk one,
-and finiteness of the projection of a monic hypersurface to its base — that the map is closed —
-is a separate and much larger piece of work. Nothing below says anything about the underlying
-map of `i ≫ p`, not even that it is open.
+**No finiteness, and so no `IsFiniteEtale`. And no `IsLocalIso` — but that is now an absence
+from this *file* and not from the tree.** Nothing below says anything about the underlying map of
+`i ≫ p`, not even that it is open, and that has not changed. What has changed is that the other
+field of `ComplexAnalytic.AnalyticSpace.IsLocalIso` is supplied elsewhere:
+`ComplexAnalytic.isLocalHomeomorph_base_comp_uliftProj_of_coeff` in
+`Oka/AnalyticSpace/SimpleZeroTopology.lean`, which imports this file, proves the projection a
+local homeomorphism from the *same* coefficient hypothesis quantified over every point, and
+`ComplexAnalytic.isLocalIso_comp_proj_of_coeff` there is the two halves together. Finiteness is
+untouched by all of it — that the projection of a monic hypersurface to its base is closed is a
+separate and much larger piece of work, and it is what `IsFiniteEtale` still waits on.
 
 **No hypersurface inside an open subset — this is no longer absent, and it is not in this
 file.** `Y` is the whole of `ℂ^(n+1)` below, so `F` is entire, and that has not changed. A
