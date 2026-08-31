@@ -136,7 +136,10 @@ theorem crossHu :
           (presentationIdeal.{u}
             (localisationPresentation.{u} nodeTuple3.{u} (MvPolynomial.X (ULift.up 0))))
           (MvPolynomial.rename (localisationIncl.{u} 3) (MvPolynomial.X (ULift.up 0))) := by
-  rw [crossU, IsUnit.unit_spec, map_mul, map_mul]
+  change _ = ((isUnit_mk_rename_localisationIncl.{u} nodeTuple3.{u}
+    (MvPolynomial.X (ULift.up 0))).unit : PresentedAlgebra.{u} (3 + 1) (2 + 1)
+      (localisationPresentation.{u} nodeTuple3.{u} (MvPolynomial.X (ULift.up 0)))) * _
+  rw [IsUnit.unit_spec, map_mul, map_mul]
 
 /-- **The cross-member glue, at the node presented twice.**
 

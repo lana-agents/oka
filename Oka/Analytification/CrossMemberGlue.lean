@@ -58,6 +58,15 @@ two of those and the isomorphism between them.
 consumer that wants the member-level statement composes the two and gets one whose right-hand
 side ends in the original glue.
 
+## Every proof below opens a definition with `change` and not with `rw`
+
+All four coherence triangles have to see through the `Iso.trans` their definition is, and a `rw`
+at the definition would generate an auto-generated equation lemma under its own name, as
+`Oka/Analytification/CoverRefinement.lean` records itself doing twice. The declaration dump is
+what shows such a lemma and the build is not, which is why `change` is worth the extra lines: with
+it this file adds its own declarations to the dump and nothing else, apart from two `congr_simp`
+lemmas that the `simp only` in the last proof generates.
+
 ## Where the two general statements would live if one lemma moved
 
 `ComplexAnalytic.localisationPresentationIsoOfMulEq` and
@@ -173,8 +182,10 @@ theorem localisationPresentationIsoOfMulEq_hom_comp
           (MvPolynomial.rename (localisationIncl.{u} n) y') ≫ localisationHom.{u} g x' =
       localisationHom.{u} (localisationPresentation.{u} g x)
           (MvPolynomial.rename (localisationIncl.{u} n) y) ≫ localisationHom.{u} g x := by
-  rw [localisationPresentationIsoOfMulEq, Iso.trans_hom, Iso.trans_hom, Category.assoc,
-    Category.assoc, ← localisationPresentationIsoMul_hom_comp.{u} g x' y', Iso.symm_hom,
+  change (localisationPresentationIsoMul.{u} g x y ≪≫ eqToIso _ ≪≫
+    (localisationPresentationIsoMul.{u} g x' y').symm).hom ≫ _ = _
+  rw [Iso.trans_hom, Iso.trans_hom, Category.assoc, Category.assoc,
+    ← localisationPresentationIsoMul_hom_comp.{u} g x' y', Iso.symm_hom,
     ← Category.assoc ((localisationPresentationIsoMul.{u} g x' y').inv), Iso.inv_hom_id,
     Category.id_comp, eqToIso.hom, eqToHom_localisationHom.{u} g h,
     localisationPresentationIsoMul_hom_comp]
@@ -247,8 +258,10 @@ theorem localisationPresentationIsoOfAlgEquivUnitMul_hom_comp
     (localisationPresentationIsoOfAlgEquivUnitMul.{u} g g' q r q' e he u hu).hom ≫
         localisationHom.{u} g' q' =
       localisationHom.{u} g q ≫ (Presentation.isoOfAlgEquiv e.symm).hom := by
-  rw [localisationPresentationIsoOfAlgEquivUnitMul, Iso.trans_hom, Category.assoc,
-    localisationPresentationIsoOfUnitMul_hom_comp, localisationPresentationIsoOfAlgEquiv_hom_comp]
+  change (localisationPresentationIsoOfAlgEquiv.{u} g q r e he ≪≫
+    localisationPresentationIsoOfUnitMul.{u} g' r q' u hu).hom ≫ _ = _
+  rw [Iso.trans_hom, Category.assoc, localisationPresentationIsoOfUnitMul_hom_comp,
+    localisationPresentationIsoOfAlgEquiv_hom_comp]
 
 /-! ### The cross-member glue -/
 
@@ -279,7 +292,8 @@ theorem refineCrossProj_localisationHom (f x q : MvPolynomial (ULift.{u} (Fin n)
     refineCrossProj.{u} g f x q ≫ localisationHom.{u} g f =
       localisationHom.{u} (localisationPresentation.{u} g x)
           (MvPolynomial.rename (localisationIncl.{u} n) (f * q)) ≫ localisationHom.{u} g x := by
-  rw [refineCrossProj, Category.assoc, localisationPresentationIsoOfMulEq_hom_comp]
+  change ((localisationPresentationIsoOfMulEq.{u} g x (f * q) f (q * x) _).hom ≫ _) ≫ _ = _
+  rw [Category.assoc, localisationPresentationIsoOfMulEq_hom_comp]
 
 /-- **The glue of a cross-member refined overlap.**
 
@@ -348,8 +362,15 @@ theorem refineCrossGlue_hom_comp (f x q : MvPolynomial (ULift.{u} (Fin n)) ℂ)
     (refineCrossGlue.{u} g g' f x q f' x' q' r e he u hu).hom ≫
         refineCrossProj.{u} g' f' x' q' =
       refineCrossProj.{u} g f x q ≫ (Presentation.isoOfAlgEquiv e.symm).hom := by
-  rw [refineCrossGlue, refineCrossProj, refineCrossProj, Iso.trans_hom, Iso.trans_hom,
-    Iso.symm_hom]
+  change (localisationPresentationIsoOfMulEq.{u} g x (f * q) f (q * x) _ ≪≫
+      localisationPresentationIsoOfAlgEquivUnitMul.{u} (localisationPresentation.{u} g f)
+        (localisationPresentation.{u} g' f')
+        (MvPolynomial.rename (localisationIncl.{u} n) (q * x)) r
+        (MvPolynomial.rename (localisationIncl.{u} n') (q' * x')) e he u hu ≪≫
+      (localisationPresentationIsoOfMulEq.{u} g' x' (f' * q') f' (q' * x') _).symm).hom ≫
+    ((localisationPresentationIsoOfMulEq.{u} g' x' (f' * q') f' (q' * x') _).hom ≫ _) =
+      ((localisationPresentationIsoOfMulEq.{u} g x (f * q) f (q * x) _).hom ≫ _) ≫ _
+  rw [Iso.trans_hom, Iso.trans_hom, Iso.symm_hom]
   simp only [Category.assoc, Iso.inv_hom_id_assoc]
   rw [localisationPresentationIsoOfAlgEquivUnitMul_hom_comp]
 
