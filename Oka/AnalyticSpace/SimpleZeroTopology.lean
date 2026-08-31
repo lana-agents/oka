@@ -85,8 +85,9 @@ uniform in the point, and nothing needs to be.
   injective, and nothing below says which points of `ℂ^n` are hit or how often.
 * **Nothing here is a statement about the projection alone, and the hypersurface is what makes
   the difference.** `ComplexAnalytic.proj` itself is **not** a local isomorphism —
-  `OkaTest.FiniteMorphism.not_isLocalIso_proj` — so no result below is an instance of one about
-  `p`, and the simple-zero hypothesis is what rules out the collapsing that statement exhibits.
+  `ComplexAnalytic.not_isLocalIso_proj` (`OkaTest/FiniteMorphism.lean`) — so no result below is
+  an instance of one about `p`, and the simple-zero hypothesis is what rules out the collapsing
+  that statement exhibits.
 * **Nothing is moved.** `ComplexAnalytic.not_mem_range_uliftCastSuccEmb` and
   `ComplexAnalytic.mem_range_uliftCastSuccEmb` are facts about `ComplexAnalytic.uliftCastSuccEmb`
   alone and their home is `Oka/AnalyticSpace/ProjectionStalk.lean`, where that embedding is
@@ -223,16 +224,32 @@ first at every point at once, the second at one point at a time.
 whose underlying morphism of locally ringed spaces is the `ComplexAnalytic.okaMapHom` the two
 halves are stated for.
 
-**The name has no `AnalyticSpace.` prefix and that is not an oversight.** Declared with one —
-that is, into the `ComplexAnalytic.AnalyticSpace` namespace — this theorem is **silently dropped
-from the environment**: no error is reported by
-`lake env lean` or by `lake build --wfail`, the only symptom is a spurious *"Variable name `hcut`
-is not explicitly referenced"*, and `#check` on the name then fails. Bisecting the signature,
-the trigger is the `OkaRing.germ` application in `hlin`; the same statement under a name without
-that prefix elaborates and is added. Two other declarations in the same namespace with simpler
-signatures are unaffected, so this is not a blanket fact about the namespace. Recorded here
-because the failure is invisible to every check this repository runs except a declaration
-count. -/
+**The name has no `AnalyticSpace.` prefix and that is not an oversight**; the reason is a
+shadowed identifier and it is worth knowing for this file's neighbours. Inside the
+`ComplexAnalytic.AnalyticSpace` namespace — entered by a dotted declaration name or by
+`namespace AnalyticSpace`, it makes no difference — `Opens` does not resolve to
+`TopologicalSpace.Opens`. It resolves to `ComplexAnalytic.AnalyticSpace.Opens`
+(`Oka/AnalyticSpace/Basic.lean`), the open sets *of a complex analytic space*, whose argument is
+an `AnalyticSpace` and not a type. The section variable `F` above is declared with the plain
+spelling, `OkaRing (⊤ : Opens (ULift (Fin (n + 1)) → ℂ))`, so **every declaration in that
+namespace that mentions `F` re-elaborates that binder against the wrong `Opens`.** Declarations
+there that do not mention it are unaffected.
+
+**How loudly that fails depends on where the spelling sits.** Written out in the statement itself
+it is a hard `Application type mismatch … in the application Opens (ULift (Fin (n + 1)) → ℂ)`.
+In the `variable` binder it is recovered as `sorryAx` with no error reported at all, and the
+declaration is then either added with `sorryAx` in its *statement* — that is what happens when
+`F` appears only under `ComplexAnalytic.IsCutOutBy` — or dropped from the environment outright,
+which is what happens here, `#check` on the name failing afterwards.
+`theorem AnalyticSpace.foo (h : F = F) : True := trivial` is the whole reproduction, and writing
+`TopologicalSpace.Opens` in that binder removes it.
+
+**`lake build --wfail` catches both forms and this is not invisible to CI.** The dropped form
+leaves the unused-variable warnings for the hypotheses of the theorem that is now absent, the
+recovered form leaves the `sorryAx` warning, and `.orchestra/validation.sh` runs
+`lake build --wfail || exit 1`, which turns either into `error: build failed`. What misleads is
+the *message*: it names an unused variable rather than a missing theorem, so a reader who takes
+`--wfail` output for noise loses it. -/
 theorem isLocalIso_comp_proj_of_coeff (hcut : IsCutOutBy i'.toLRSHom ![F])
     (hlin : ∀ x : W, MvPowerSeries.coeff (Finsupp.single (ULift.up.{u} (Fin.last n)) 1)
       ((OkaRing.germ (show i'.toLRSHom.base x ∈
