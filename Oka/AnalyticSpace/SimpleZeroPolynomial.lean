@@ -59,9 +59,18 @@ a polynomial supplies.
 **Nothing here reads `StandardEtalePair.cond`, and the step that does is now elsewhere.** From
 `derivative f * p₁ + f * p₂ = g ^ n` in `R[X]`, at a point where `f` vanishes and `g` does not, to
 the derivative being nonzero there is `ComplexAnalytic.eval_pderiv_ne_zero`
-(`Oka/Analytification/StandardEtale.lean`) — which supplies exactly the hypothesis of the four
-results below, since `ComplexAnalytic.localisationVar n` is `ULift.up (Fin.last n)` by definition
-and nothing has to be relabelled. It stands on
+(`Oka/Analytification/StandardEtale.lean`). **It reaches the last two results below and not the
+first two, and what separates them is the indexing rather than the mathematics.** It concludes
+about `MvPolynomial (ULift (Fin (n+1))) ℂ`, where `ComplexAnalytic.localisationVar n` is
+`ULift.up (Fin.last n)` by definition and so nothing has to be relabelled; the first two are about
+`MvPolynomial (Fin (n+1)) ℂ`, which is a different type and is reachable only through a
+`MvPolynomial.rename` along `ULift.up` that nothing on this line asks for. **And what it supplies
+is the shape of that hypothesis and not an instance of it**: those last two take it at `i.base x`
+for a cut-out immersion `i`, while the theorem there delivers it at a tuple already known to
+satisfy the relations and `F`. Between the two sits the `ComplexAnalytic.IsCutOutBy` datum — one
+cutting section, which is what all four results below take, against a presentation's `k + 1`
+relations — and `Oka/Analytification/StandardEtaleAnalytification.lean` records it as absent.
+`ComplexAnalytic.eval_pderiv_ne_zero` stands on
 `ComplexAnalytic.polyPresentedAlgebraEquiv_mk_pderiv` in the same file, which says
 `MvPolynomial.pderiv` of a lift is a lift of the `Polynomial.derivative` — a lift, because that is
 how `ComplexAnalytic.exists_lift_polyPresentedAlgebraEquiv` produces the polynomial the étale
