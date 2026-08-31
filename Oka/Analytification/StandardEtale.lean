@@ -88,6 +88,13 @@ them.
   hypothesis feeds is another file's declaration and is named in the proof's docstring rather
   than here, since `scripts/guard_coverage.py` reads every backticked repository name under this
   heading as a result this file advertises.)
+- `ComplexAnalytic.exists_mk_pderiv_mul_add_eq_mk_pow`: **`StandardEtalePair.cond` read on the
+  polynomial lifts**, which is the equation moved from `A[X]` down to the polynomial ring the
+  presentation cuts with.
+- `ComplexAnalytic.eval_pderiv_ne_zero`: **and evaluated** — at a point where the relations and
+  `F` vanish and `G` does not, the partial derivative of `F` in the last variable does not vanish
+  either. (What that hypothesis then feeds is another file's declaration and is named in the
+  proof's docstring rather than here, for the reason the bullet above gives.)
 
 ## What is not here
 
@@ -98,8 +105,12 @@ them.
   of `ComplexAnalytic.hypersurfacePresentation`, and
   `ComplexAnalytic.etaleAnalytificationIso_hom_comp` says the identification is one over the base.
 * **That the étale algebra is étale.** `Algebra.Etale R P.Ring` is Mathlib's, and nothing here
-  reproves or uses it; the monicity of `f` and the invertibility of `f'` are carried by `P` and
-  are not read.
+  reproves or uses it. **`StandardEtalePair.cond` is read**, by the last two results above and by
+  nothing else in this file; `monic_f` is carried by `P` and is not read anywhere here, and the
+  invertibility of `f'` as an element of a ring — as opposed to its non-vanishing at one point —
+  is neither stated nor used. Mathlib's `StandardEtalePair.HasMap.isUnit_derivative_f` is that
+  stronger statement, at a point of an `R`-algebra; `ComplexAnalytic.eval_pderiv_ne_zero`'s
+  docstring says why it is not quoted.
 * **Any statement about `ComplexAnalytic.etalePresHom` beyond its existence.** That it is flat, or
   unramified, or that the induced morphism of analytic spaces is a local isomorphism, is the
   content of the stalk half and is not here.
@@ -499,6 +510,83 @@ theorem polyPresentedAlgebraEquiv_mk_pderiv (F : MvPolynomial (ULift.{u} (Fin (n
           polyPresentedAlgebraEquiv_mk_rename]
         simp only [map_zero, mul_zero, add_zero, Polynomial.derivative_C, hp]
         ring
+
+
+/-! ### `StandardEtalePair.cond` at a point -/
+
+/-- **`StandardEtalePair.cond`, read on the polynomial lifts.**
+
+The field is `∃ p₁ p₂ n, derivative f * p₁ + f * p₂ = g ^ n`, an equation in `A[X]`, and a
+presentation cuts with polynomials — so before anything can be evaluated at a point the equation
+has to be moved down to `MvPolynomial (ULift (Fin (n + 1))) ℂ`, modulo the relations. That is what
+this is: `ComplexAnalytic.polyPresentedAlgebraEquiv_mk_pderiv` for the derivative, and
+`ComplexAnalytic.exists_lift_polyPresentedAlgebraEquiv` for `p₁` and `p₂`.
+
+**The conclusion is an existential because `p₁` and `p₂` are**, and for one more reason: the lifts
+are chosen here rather than supplied, so no caller can be asked for them. `F` and `G` are not
+chosen — they are this file's hypotheses `hF` and `hG` throughout, for the reason the module
+docstring gives.
+
+**The `simp only` is not a `rw`, and the difference is not cosmetic.** Both
+`Ideal.Quotient.mk` and `ComplexAnalytic.polyPresentedAlgebraEquiv` are ring maps, so a
+`rw [map_mul]` fires on the inner one and leaves a goal
+`polyPresentedAlgebraEquiv g (mk (pderiv _ F) * mk P₁ + …)` that the bridge above does not match.
+The `simp only` distributes both layers first, and then the bridge and the four hypotheses close
+it against `StandardEtalePair.cond`'s own equation. -/
+theorem exists_mk_pderiv_mul_add_eq_mk_pow
+    (hF : polyPresentedAlgebraEquiv.{u} g (Ideal.Quotient.mk _ F) = P.f)
+    (hG : polyPresentedAlgebraEquiv.{u} g (Ideal.Quotient.mk _ G) = P.g) :
+    ∃ (P₁ P₂ : MvPolynomial (ULift.{u} (Fin (n + 1))) ℂ) (m : ℕ),
+      Ideal.Quotient.mk (presentationIdeal.{u} (polyPresentation.{u} g))
+          (MvPolynomial.pderiv (localisationVar.{u} n) F * P₁ + F * P₂) =
+        Ideal.Quotient.mk _ (G ^ m) := by
+  obtain ⟨p₁, p₂, m, e⟩ := P.cond
+  obtain ⟨P₁, hP₁⟩ := exists_lift_polyPresentedAlgebraEquiv.{u} g p₁
+  obtain ⟨P₂, hP₂⟩ := exists_lift_polyPresentedAlgebraEquiv.{u} g p₂
+  refine ⟨P₁, P₂, m, (polyPresentedAlgebraEquiv.{u} g).injective ?_⟩
+  simp only [map_add, map_mul, map_pow, polyPresentedAlgebraEquiv_mk_pderiv, hF, hG, hP₁, hP₂]
+  exact e
+
+/-- **The derivative does not vanish at a point of the hypersurface off `D(G)`'s complement**:
+where the relations of `g` and `F` all vanish and `G` does not,
+`MvPolynomial.pderiv (localisationVar n) F` does not vanish either.
+
+This is the step `Oka/AnalyticSpace/SimpleZeroPolynomial.lean` and
+`Oka/Analytification/StandardEtaleAnalytification.lean` were both written naming as absent, and
+the index it concludes about is the one
+`ComplexAnalytic.isIso_stalkMap_comp_uliftProj_of_pderiv` asks for:
+`ComplexAnalytic.localisationVar n` is `ULift.up (Fin.last n)` by definition, so nothing has to be
+relabelled between the two.
+
+**There is no analysis in it and no geometry either.** The equation above holds modulo
+`presentationIdeal (polyPresentation g)`, `hx` says evaluation at `x` kills that ideal, so the
+equation holds at `x` as complex numbers; `hFx` deletes the second summand and the right-hand side
+is a power of a non-zero number. **`hGx` is not removable and the test file says so with a
+theorem**: at a point of the same hypersurface where `G` does vanish the derivative may vanish
+too, which is exactly the locus a standard étale algebra inverts away.
+
+Mathlib proves the same divisibility one level up, as
+`StandardEtalePair.HasMap.isUnit_derivative_f`, for a point of any `R`-algebra. It is not quoted
+here: `ℂ` is not an algebra over `ComplexAnalytic.PresentedAlgebra n k g`, so using it would mean
+building one with `RingHom.toAlgebra` at each point and then proving the resulting `aeval` is the
+composite above — the same bookkeeping, with a local instance added to it. What gets repeated by
+not quoting it is two lines. -/
+theorem eval_pderiv_ne_zero
+    (hF : polyPresentedAlgebraEquiv.{u} g (Ideal.Quotient.mk _ F) = P.f)
+    (hG : polyPresentedAlgebraEquiv.{u} g (Ideal.Quotient.mk _ G) = P.g)
+    (x : ULift.{u} (Fin (n + 1)) → ℂ)
+    (hx : ∀ j, MvPolynomial.eval x (polyPresentation.{u} g j) = 0)
+    (hFx : MvPolynomial.eval x F = 0) (hGx : MvPolynomial.eval x G ≠ 0) :
+    MvPolynomial.eval x (MvPolynomial.pderiv (localisationVar.{u} n) F) ≠ 0 := by
+  obtain ⟨P₁, P₂, m, hm⟩ := exists_mk_pderiv_mul_add_eq_mk_pow.{u} g F G P hF hG
+  have hker : presentationIdeal.{u} (polyPresentation.{u} g) ≤
+      RingHom.ker (MvPolynomial.eval x) :=
+    Ideal.span_le.2 (Set.range_subset_iff.2 fun j ↦ RingHom.mem_ker.2 (hx j))
+  have hsub := RingHom.mem_ker.1 (hker (Ideal.Quotient.eq.1 hm))
+  rw [map_sub, sub_eq_zero] at hsub
+  intro h
+  rw [map_add, map_mul, map_mul, map_pow, h, hFx, zero_mul, zero_mul, add_zero] at hsub
+  exact pow_ne_zero m hGx hsub.symm
 
 /-- **A standard étale algebra over a presented `ℂ`-algebra is presented**, on two more variables
 and two more relations.

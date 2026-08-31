@@ -1825,13 +1825,36 @@ info: 'ComplexAnalytic.polyPresentedAlgebraEquiv_mk_pderiv' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.polyPresentedAlgebraEquiv_mk_pderiv
 
+/-! ### `StandardEtalePair.cond` at a point
+
+The two results of `Oka/Analytification/StandardEtale.lean` that read that field: the equation
+moved from `A[X]` down to the polynomial ring the presentation cuts with, and the same equation
+evaluated at a point of the hypersurface off the zero locus of `G`. The third of the chain is in
+the guard block below, since it is declared one file on.
+-/
+
+/--
+info: 'ComplexAnalytic.exists_mk_pderiv_mul_add_eq_mk_pow' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.exists_mk_pderiv_mul_add_eq_mk_pow
+
+/--
+info: 'ComplexAnalytic.eval_pderiv_ne_zero' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.eval_pderiv_ne_zero
+
 /-! ### The étale presentation analytifies to a distinguished open
 
-The three advertised results of `Oka/Analytification/StandardEtaleAnalytification.lean`: the ideal
+The advertised results of `Oka/Analytification/StandardEtaleAnalytification.lean`: the ideal
 identity that lets the two presentations be compared at all, the isomorphism read against the open
-immersion, and the statement that it is an isomorphism **over the base**. The last is the one that
-makes the first two say something about the projection of the étale cover rather than about two
-spaces that happen to be isomorphic.
+immersion, the statement that it is an isomorphism **over the base**, and — last, and about the
+étale hypothesis rather than about the comparison — `StandardEtalePair.cond` read at a point of
+the hypersurface's analytification. The third is the one that makes the first two say something
+about the projection of the étale cover rather than about two spaces that happen to be isomorphic.
 -/
 
 /--
@@ -1854,6 +1877,13 @@ info: 'ComplexAnalytic.etaleAnalytificationIso_hom_comp' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.etaleAnalytificationIso_hom_comp
+
+/--
+info: 'ComplexAnalytic.eval_pderiv_ne_zero_of_mem' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.eval_pderiv_ne_zero_of_mem
 
 /-! ### The image of the analytification in `ℂ^n` -/
 

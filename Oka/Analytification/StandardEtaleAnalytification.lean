@@ -64,10 +64,16 @@ standard étale pair.
   immersion is the localisation projection, composed with the comparison.
 - `ComplexAnalytic.etaleAnalytificationIso_hom_comp`: **the isomorphism is one over `A^an`** — the
   composite down to the base is the projection of the étale cover.
+- `ComplexAnalytic.eval_pderiv_ne_zero_of_mem`: **the derivative does not vanish at a point of the
+  hypersurface off the zero locus of `G`** — `StandardEtalePair.cond`, read at a point of the
+  analytification of the hypersurface presentation named above. (That presentation is this file's
+  own definition and is not backticked here, since `scripts/guard_coverage.py` reads every
+  backticked repository name under this heading as a result this file advertises.)
 
 ## What is not here
 
-* **Nothing reads `StandardEtalePair.cond`, and the simple-zero lemma is not here.** The step a
+* **The simple-zero lemma is not here, and until `ComplexAnalytic.eval_pderiv_ne_zero_of_mem`
+  below nothing in this development read `StandardEtalePair.cond` at all.** The step a
   local-isomorphism statement needs is that at a point where `F` vanishes and `G` does not, the
   germ of `F` has `PowerSeries.order (MvPowerSeries.partialEval (Fin.last n) …) = 1` — the
   hypothesis `ComplexAnalytic.bijective_stalkMap_comp_uliftProj` takes. **What is missing is the
@@ -103,14 +109,20 @@ standard étale pair.
   `R = MvPolynomial (ULift (Fin n)) ℂ`, can be read as an equation about
   `MvPolynomial.pderiv (localisationVar n) F`.
 
-  **Two steps of that chain are still missing and neither is the identification.** First, nothing
-  turns the `∃ p₁ p₂ n` behind `cond` into a *non-vanishing* derivative at a point — that is an
-  evaluation argument at a point where `F` vanishes and `G` does not, and no declaration below
-  attempts it. Second, the theorem above is about the hypersurface in `ℂ^(n+1)` and the étale
-  presentation is that hypersurface met with `D(G)` in `ℂ^(n+2)`;
+  **One step of that chain is here now and one is not, and neither is the identification.** The
+  first — turning the `∃ p₁ p₂ n` behind `cond` into a *non-vanishing* derivative at a point — is
+  `ComplexAnalytic.eval_pderiv_ne_zero_of_mem` below, on top of
+  `ComplexAnalytic.eval_pderiv_ne_zero` (`Oka/Analytification/StandardEtale.lean`): an evaluation
+  argument at a point where `F` vanishes and `G` does not, with no analysis and no geometry in
+  it. The second is untouched. The theorem above is about the hypersurface in `ℂ^(n+1)` and the
+  étale presentation is that hypersurface met with `D(G)` in `ℂ^(n+2)`;
   `Oka/AnalyticSpace/SimpleZeroPolynomial.lean` says the transport to an open base is
   `Oka/AnalyticSpace/OpenBaseProjection.lean` and is stated for the germ hypothesis rather than
-  for the derivative one. **No declaration below attempts either.**
+  for the derivative one, and **nobody has measured what restating it costs**. A third absence
+  was not named here before and is not the same one: all four stalk theorems take an
+  `ComplexAnalytic.IsCutOutBy` datum for **one** cutting section, and
+  `ComplexAnalytic.hypersurfacePresentation` has `k + 1` relations. **No declaration below
+  attempts either of those two.**
 * **No witness in this file that the open is ever non-empty, and the witness is elsewhere.** The
   statements below are hypothesis-free in `F` and `G`, so none of them can be vacuously
   satisfied — but that says nothing about whether the *objects* are degenerate, and for `F = 1`
@@ -292,6 +304,40 @@ theorem etaleAnalytificationIso_hom_comp :
         (hypersurfacePresentation.{u} g F) G (localisationIncl.{u} n i))) ?_
   exact (AnalyticSpace.coordPullback_comp _ _ _).symm.trans
     (coordPullback_analytificationCompare_comp _ _)
+
+/-! ### `StandardEtalePair.cond` at a point of the hypersurface -/
+
+/-- **The two vanishing hypotheses of `ComplexAnalytic.eval_pderiv_ne_zero` are one hypothesis for
+a caller: that the point lies on the hypersurface.**
+
+`ComplexAnalytic.hypersurfacePresentation g F` is `Fin.snoc (polyPresentation g) F`, so a point of
+its analytification satisfies the relations of `g` read upstairs *and* `F = 0` — which is exactly
+`hx` and `hFx` there. `ComplexAnalytic.eval_eq_zero_of_mem` at `Fin.castSucc j` gives the first
+and at `Fin.last k` the second, and the two `Fin.snoc` computations are the whole proof.
+
+**This is the form a consumer holds**, because the hypersurface's analytification is the space
+`ComplexAnalytic.etaleAnalytificationIso` compares the étale one to, and `G` is the polynomial
+whose distinguished open that isomorphism lands in. What is still missing above this is the
+restriction to `D(G)` and the cut-out datum; see this file's `## What is not here`.
+
+The `show … from` is not decoration: `rw [hypersurfacePresentation, Fin.snoc_castSucc]` fails with
+*"Failed to rewrite using equation theorems for `hypersurfacePresentation`"*, and naming the
+instance of `Fin.snoc_castSucc` is also what keeps an equation lemma for that definition out of
+the environment. -/
+theorem eval_pderiv_ne_zero_of_mem
+    (P : StandardEtalePair (PresentedAlgebra.{u} n k g))
+    (hF : polyPresentedAlgebraEquiv.{u} g (Ideal.Quotient.mk _ F) = P.f)
+    (hG : polyPresentedAlgebraEquiv.{u} g (Ideal.Quotient.mk _ G) = P.g)
+    (y : AnalyticSpace.analytification.{u} (hypersurfacePresentation.{u} g F))
+    (hGy : MvPolynomial.eval (y.1.1 : ULift.{u} (Fin (n + 1)) → ℂ) G ≠ 0) :
+    MvPolynomial.eval (y.1.1 : ULift.{u} (Fin (n + 1)) → ℂ)
+      (MvPolynomial.pderiv (localisationVar.{u} n) F) ≠ 0 := by
+  refine eval_pderiv_ne_zero.{u} g F G P hF hG _ (fun j ↦ ?_) ?_ hGy
+  · have hj := eval_eq_zero_of_mem.{u} (hypersurfacePresentation.{u} g F) y j.castSucc
+    rwa [show hypersurfacePresentation.{u} g F j.castSucc = polyPresentation.{u} g j from
+      Fin.snoc_castSucc _ _ _] at hj
+  · have hl := eval_eq_zero_of_mem.{u} (hypersurfacePresentation.{u} g F) y (Fin.last k)
+    rwa [show hypersurfacePresentation.{u} g F (Fin.last k) = F from Fin.snoc_last _ _] at hl
 
 end
 
