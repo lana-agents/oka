@@ -66,6 +66,10 @@ two lines crossing and its projection collapses one of them, so the conclusion f
   `Oka/AnalyticSpace/SimpleZeroPolynomial.lean`'s own consumers.
 * **Nothing about the image.** No statement below says the projection of the graph is injective
   or surjective, though it is both.
+* **Nothing about `ComplexAnalytic.proj` on its own.** `ComplexAnalytic.not_isLocalIso_proj`
+  (`OkaTest/FiniteMorphism.lean`) says the projection `ℂ² ⟶ ℂ` is not a local isomorphism, so the
+  statement below is not an instance of one about the projection: the hypersurface is doing the
+  work, and the two results are the same map read on different sources.
 * **No `Fin`-indexed form.** The theorem exists only at the `ULift (Fin _)` indexing, so there is
   nothing to test at the other one.
 -/
