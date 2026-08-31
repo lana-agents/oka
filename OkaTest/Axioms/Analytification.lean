@@ -444,6 +444,20 @@ info: 'ComplexAnalytic.Presentation.algEquivOfIso' depends on axioms:
 #print axioms ComplexAnalytic.Presentation.algEquivOfIso
 
 /--
+info: 'ComplexAnalytic.Presentation.isoOfAlgEquiv_algEquivOfIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.Presentation.isoOfAlgEquiv_algEquivOfIso
+
+/--
+info: 'ComplexAnalytic.Presentation.algEquivOfIso_isoOfAlgEquiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.Presentation.algEquivOfIso_isoOfAlgEquiv
+
+/--
 info: 'ComplexAnalytic.exists_presentation' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/

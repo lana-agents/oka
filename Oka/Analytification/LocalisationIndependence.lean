@@ -402,12 +402,17 @@ objects and relates nothing. The two outer steps are
 
 **The first step is a `change` and not a `rw` at the definition above**, which is the one
 difference from the proof of the `OfDvdPow` companion. A `rw` at a definition generates an
-auto-generated equation lemma for it, and the environment carries
-`ComplexAnalytic.localisationPresentedAlgebraEquivOfDvdPow.eq_1` for exactly that reason — and a
-generated `eq_1` makes its own definition a namespace, which switches off
-`scripts/check_docstring_names.py`'s field-notation rule for that name. The `change` costs the two
-submonoids written out and leaves the environment with the four declarations of this section and
-nothing else. -/
+auto-generated equation lemma for it, under the definition's own name, and the environment carries
+`ComplexAnalytic.localisationPresentedAlgebraEquivOfDvdPow.eq_1` for exactly that reason. **The
+declaration dump is what shows such a lemma and the build is not** — `comm -13` on
+`scripts/DumpOkaDecls.lean`'s output. The `change` costs the two submonoids written out and leaves
+the environment with the four declarations of this section and nothing else.
+
+(This paragraph used to add that a generated `eq_1` switches off
+`scripts/check_docstring_names.py`'s field-notation rule for that name. **It does not**: that
+script's `GENERATED_COMPONENT` excludes `eq_\d+` from the namespace test, and two of its own
+self-test checks assert the exclusion. The hazard was real and was closed before this file was
+written; the reason for the `change` is the dump and nothing else.) -/
 theorem localisationPresentedAlgebraEquivOfAlgEquiv_localisationRingHom
     (x : PresentedAlgebra.{u} n k g) :
     localisationPresentedAlgebraEquivOfAlgEquiv.{u} g q q' e he

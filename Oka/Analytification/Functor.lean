@@ -61,7 +61,8 @@ functor would be a definition nothing can be computed from.
   `ComplexAnalytic.Presentation.isoOfRename`.
 - `ComplexAnalytic.Presentation.algEquivOfIso`: **and back again**, which is what a consumer
   holding an isomorphism of presentations needs before it can reach any statement phrased about
-  algebras.
+  algebras. That the two really are mutually inverse is the pair of results below, and until they
+  were stated *"back again"* was a claim about the construction rather than a theorem about it.
 - `ComplexAnalytic.toFGAlg : Presentation ⥤ (isFiniteType.FullSubcategory)ᵒᵖ`: a presentation,
   read as the finitely generated `ℂ`-algebra it presents.
 - `ComplexAnalytic.analytificationFGAlg`: **the analytification of a finitely generated
@@ -80,6 +81,14 @@ functor would be a definition nothing can be computed from.
 - `ComplexAnalytic.analytificationFGAlgObjIso_hom`: the comparison isomorphism is the functor
   applied to the inverse of the unit — the only content in it, and what lets a consumer compose
   with it.
+- `ComplexAnalytic.Presentation.isoOfAlgEquiv_algEquivOfIso` and
+  `ComplexAnalytic.Presentation.algEquivOfIso_isoOfAlgEquiv`: **the two constructions above are
+  mutually inverse**, both by `rfl`. The first is the one on a consumer's path: a caller who
+  arrives with an isomorphism of presentations and feeds its algebra map to a statement whose
+  conclusion is phrased with the first construction above gets the isomorphism it started with
+  back. (That construction is named in the proofs' docstrings rather than here, since
+  `scripts/guard_coverage.py` reads every backticked repository name under this heading as a
+  result this file advertises, and it is a definition advertised above.)
 
 ## What is not here
 
@@ -251,6 +260,28 @@ noncomputable def Presentation.algEquivOfIso {P Q : Presentation.{u}} (φ : P �
   map_mul' := map_mul _
   map_add' := map_add _
   commutes' c := RingHom.congr_fun φ.hom.commutes c
+
+/-- **The two constructions are mutually inverse, in the direction a consumer meets first.**
+
+`ComplexAnalytic.Presentation.algEquivOfIso`'s docstring calls itself the inverse of
+`ComplexAnalytic.Presentation.isoOfAlgEquiv`, and this is what makes that a theorem rather than a
+description. It matters because statements about localisations of two presentations are phrased
+with `isoOfAlgEquiv` on the right-hand side, and the one this was written for is the triangle
+`ComplexAnalytic.localisationPresentationIsoOfAlgEquiv_hom_comp`
+(`Oka/Analytification/LocalisationIndependence.lean`) — while the datum a caller actually holds is
+an isomorphism of presentations. Without this, that caller ends up with
+`isoOfAlgEquiv (algEquivOfIso φ)` where they want `φ` and nothing closes the gap.
+
+`rfl`, because a `ComplexAnalytic.PresHom` is a ring map and a proof, and both fields come back
+unchanged; the two proof fields of the `CategoryTheory.Iso` are propositions. -/
+theorem Presentation.isoOfAlgEquiv_algEquivOfIso {P Q : Presentation.{u}} (φ : P ≅ Q) :
+    Presentation.isoOfAlgEquiv.{u} (Presentation.algEquivOfIso.{u} φ) = φ := rfl
+
+/-- **And in the other direction**, which costs the same and is stated so that neither half of the
+correspondence is the one nobody checked. -/
+theorem Presentation.algEquivOfIso_isoOfAlgEquiv {P Q : Presentation.{u}}
+    (e : Q.alg ≃ₐ[ℂ] P.alg) :
+    Presentation.algEquivOfIso.{u} (Presentation.isoOfAlgEquiv.{u} e) = e := rfl
 
 /-! ### Presentations are the finitely generated `ℂ`-algebras -/
 

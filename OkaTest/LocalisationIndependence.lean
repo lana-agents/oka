@@ -163,7 +163,13 @@ counts, with `nodePresIso` the isomorphism between them.
 
 `localisationPresentation_node_ne` says the two *localisations* are still not equal, which does not
 follow from the members being different — an isomorphism of presentations can identify objects
-whose localisations coincide — and is what stops the witness from being an identity in disguise. -/
+whose localisations coincide — and is what stops the witness from being an identity in disguise.
+
+**The name is `nodeLocPresIso` and not `nodeLocIso`** because
+`OkaTest/AnalytificationDistinguishedOpen.lean`, which this file imports, already declares a
+root-namespace `nodeLocIso` — the analytification of `ℂ[z₀, z₁]/(z₀z₁)[1/z₀]` read as the
+punctured first axis. Two declarations of that name, one of them in an imported file and both
+about a localisation of the same node, is a citation nobody can resolve by eye. -/
 
 /-- **The class of `z₀` on the node in two variables goes to the class of `z₀` on the node in
 three**, under the isomorphism of `nodePresIso`.
@@ -184,7 +190,7 @@ theorem algEquivOfIso_nodePresIso_symm_mk_X0 :
 /-- **`D(z₀)` in the node, presented over two different presentations of the node.** The
 transport of `ComplexAnalytic.localisationPresentationIsoOfAlgEquiv` at an isomorphism which is
 not an identity and between objects which are not equal. -/
-def nodeLocIso :
+def nodeLocPresIso :
     (⟨2 + 1, 1 + 1, localisationPresentation.{u} nodeTuple2.{u} (MvPolynomial.X (ULift.up 0))⟩ :
         Presentation.{u}) ≅
       ⟨3 + 1, 2 + 1, localisationPresentation.{u} nodeTuple3.{u} (MvPolynomial.X (ULift.up 0))⟩ :=
