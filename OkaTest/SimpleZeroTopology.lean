@@ -6,7 +6,8 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 import Oka
 
 /-!
-# Non-vacuity of the local homeomorphism, on a hypersurface that has one and one that does not
+# Non-vacuity of the local homeomorphism, on a hypersurface that has one, one that does not, and
+the open subspace on which the second one does
 
 `ComplexAnalytic.isLocalHomeomorph_base_comp_uliftProj_of_pderiv` says the projection of a
 polynomial hypersurface in `ℂ²` to the `z₀`-line is a local homeomorphism when `∂P/∂z₁` vanishes
@@ -33,7 +34,7 @@ homeomorphism at the origin. Neither file exhibits a morphism with both.
 The cut-out datum is `AlgebraicGeometry.LocallyRingedSpace.isCutOutBy_zeroLocusSubspaceι`, so the
 space is the zero locus with its quotient structure sheaf and nothing about it is chosen here.
 
-## The node, which is the control
+## The node, which is the control and then the example
 
 `ComplexAnalytic.nodePoly` is `z₀z₁`, and `ComplexAnalytic.pderiv_nodePoly` computes `∂/∂z₁` of it
 to be `z₀`, which **vanishes at the origin** — a point of the node, by
@@ -43,6 +44,26 @@ real restriction on the hypersurface and not a condition every polynomial satisf
 two lines crossing and its projection collapses one of them, so the conclusion fails there too;
 **that last clause is not compiled and nothing below claims it.**
 
+**And then the same curve is the example for the restricted statement**, which is why it is worth
+having both in one file.
+`ComplexAnalytic.isLocalHomeomorph_base_ofRestrict_comp_uliftProj_of_pderiv`
+asks the derivative to be nonzero only at the points of an open subspace, and
+`ComplexAnalytic.nodePunctured` — the node with `z₀ ≠ 0` — is one where it is.
+`ComplexAnalytic.isLocalHomeomorph_nodePuncturedProj` is that theorem applied. **The pair is what
+makes the restricted statement measurably stronger rather than a corollary**: the unrestricted
+theorem is unavailable on this hypersurface, and that is compiled rather than argued —
+`ComplexAnalytic.not_forall_eval_pderiv_nodeCutIncl_ne_zero` says its hypothesis is false, from
+`ComplexAnalytic.eval_pderiv_nodePoly_origin` and a point of this hypersurface over the origin.
+**That point needed a membership statement this repository did not have.** Every membership `iff`
+that reads off a *value* — `ComplexAnalytic.mem_zeroLocus_nodeSection_iff`,
+`ComplexAnalytic.mem_zeroLocus_polySection_iff`,
+`mem_zeroLocus_restrict_complexSpace_iff` — is stated for a `.restrict V`
+presentation, and the hypersurface below is cut out of `ComplexAnalytic.complexAffineSpace 2`
+directly, so `ComplexAnalytic.origin_mem_zeroLocus_nodeCutSection` goes through
+`not_isUnit_germ_ofMvPolynomial_iff` one germ at a time instead. **No `iff` for the unrestricted
+ambient is added here**: one membership is what this file needs and a general statement is a
+library question, not a test one.
+
 ## Main results
 
 - `ComplexAnalytic.pderiv_squareGraphPoly` and `ComplexAnalytic.pderiv_nodePoly`: the two
@@ -51,6 +72,14 @@ two lines crossing and its projection collapses one of them, so the conclusion f
   built here from `AlgebraicGeometry.LocallyRingedSpace.zeroLocusSubspaceι`.
 - `ComplexAnalytic.eval_pderiv_nodePoly_origin`: the control — the derivative is `0` at a point
   of the node.
+- `ComplexAnalytic.origin_mem_zeroLocus_nodeCutSection` and
+  `ComplexAnalytic.not_forall_eval_pderiv_nodeCutIncl_ne_zero`: **the origin is a point of the
+  node at the ambient used here, and so the unrestricted theorem's hypothesis is false on this
+  hypersurface** — the obstruction, compiled.
+- `ComplexAnalytic.nodePunctured`: **the open subspace of the node on which the derivative does
+  not vanish**, and `ComplexAnalytic.isLocalHomeomorph_nodePuncturedProj`: **the restricted
+  theorem applied to it**, on the one hypersurface here that the unrestricted theorem cannot
+  reach.
 
 ## What is not checked here
 
@@ -72,6 +101,20 @@ two lines crossing and its projection collapses one of them, so the conclusion f
   work, and the two results are the same map read on different sources.
 * **No `Fin`-indexed form.** The theorem exists only at the `ULift (Fin _)` indexing, so there is
   nothing to test at the other one.
+* **Nothing says the projection of the whole node fails to be a local homeomorphism.** What
+  `ComplexAnalytic.not_forall_eval_pderiv_nodeCutIncl_ne_zero` compiles is that the *hypothesis*
+  of the unrestricted theorem fails, which is what makes
+  `ComplexAnalytic.isLocalHomeomorph_nodePuncturedProj` not an instance of it. The conclusion at
+  the origin is a separate question and is asked nowhere here — and it would be a different kind
+  of statement, since a theorem with a hypothesis that fails is silent and not false.
+* **`ComplexAnalytic.nodePunctured` is not identified with a set.** Its carrier is written as the
+  non-vanishing locus of the first coordinate pulled back along the immersion, and no statement
+  below says it is one axis minus the origin, though
+  `ComplexAnalytic.mem_zeroLocus_nodeSection_iff` would give that in a line at the ambient
+  presentation `Oka/AnalyticSpace/LocalModel.lean` uses. It is a different ambient space from the
+  one used here, and that gap is not free: it is what made
+  `ComplexAnalytic.origin_mem_zeroLocus_nodeCutSection` a germ computation rather than a
+  quotation. The identification still buys nothing the theorem needs.
 -/
 
 open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry MvPolynomial
@@ -140,5 +183,91 @@ theorem eval_pderiv_nodePoly_origin :
       (MvPolynomial.pderiv (ULift.up.{u} (Fin.last 1)) nodePoly.{u}) = 0 := by
   rw [pderiv_nodePoly]
   simp
+
+/-! ### Restricting the source, where the node stops being a control and becomes an example -/
+
+/-- The one-element family cutting the node out of `ℂ²`, at the ambient space
+`ComplexAnalytic.complexAffineSpace 2` rather than the `restrict ⊤` presentation
+`ComplexAnalytic.nodeSection` of `Oka/AnalyticSpace/LocalModel.lean` uses. The polynomial is the
+same one and is quoted rather than repeated. -/
+def nodeCutSection : Fin 1 → OkaRing (⊤ : Opens (ULift.{u} (Fin 2) → ℂ)) :=
+  ![OkaRing.ofMvPolynomial ⊤ nodePoly.{u}]
+
+/-- The closed immersion of the node into `ℂ²`, built exactly as
+`ComplexAnalytic.squareGraphIncl` is. -/
+def nodeCutIncl :
+    (complexAffineSpace.{u} 2).zeroLocusSubspace nodeCutSection.{u} ⟶
+      complexAffineSpace.{u} 2 :=
+  (complexAffineSpace.{u} 2).zeroLocusSubspaceι nodeCutSection.{u}
+
+/-- The node is cut out by `z₀z₁`. -/
+theorem isCutOutBy_nodeCutIncl :
+    IsCutOutBy nodeCutIncl.{u} ![OkaRing.ofMvPolynomial ⊤ nodePoly.{u}] :=
+  (complexAffineSpace.{u} 2).isCutOutBy_zeroLocusSubspaceι nodeCutSection.{u}
+
+/-- **The origin is a point of the node at the ambient this file uses**, which is
+`ComplexAnalytic.complexAffineSpace 2` and not the `restrict ⊤` presentation
+`ComplexAnalytic.nodeAmbient` that `ComplexAnalytic.origin_mem_zeroLocus_nodeSection` is about.
+The membership `iff`s in the library — `ComplexAnalytic.mem_zeroLocus_nodeSection_iff` and its
+two ancestors — are all stated for a `.restrict V` presentation, so none of them applies here;
+what does is `not_isUnit_germ_ofMvPolynomial_iff` under
+`AlgebraicGeometry.LocallyRingedSpace.mem_zeroLocus_iff_not_isUnit`, one germ at a time. -/
+theorem origin_mem_zeroLocus_nodeCutSection :
+    (show complexAffineSpace.{u} 2 from (0 : ULift.{u} (Fin 2) → ℂ)) ∈
+      (complexAffineSpace.{u} 2).zeroLocus nodeCutSection.{u} := by
+  rw [AlgebraicGeometry.LocallyRingedSpace.mem_zeroLocus_iff_not_isUnit]
+  intro i
+  fin_cases i
+  exact (not_isUnit_germ_ofMvPolynomial_iff _ nodePoly.{u}).2 (by simp [nodePoly])
+
+/-- **The hypothesis of the unrestricted theorem really does fail on this hypersurface**, and
+this is the compiled obstruction the docstring below appeals to: the origin is a point of the
+node and `ComplexAnalytic.eval_pderiv_nodePoly_origin` says the derivative vanishes there.
+
+Without this the failure is an argument, because
+`ComplexAnalytic.isLocalHomeomorph_base_comp_uliftProj_of_pderiv` quantifies over the points of
+the *subspace* and nothing else in the tree puts a point in this one. -/
+theorem not_forall_eval_pderiv_nodeCutIncl_ne_zero :
+    ¬ ∀ x : (complexAffineSpace.{u} 2).zeroLocusSubspace nodeCutSection.{u},
+        MvPolynomial.eval (nodeCutIncl.{u}.base x)
+          (MvPolynomial.pderiv (ULift.up.{u} (Fin.last 1)) nodePoly.{u}) ≠ 0 :=
+  fun h ↦ h ⟨show complexAffineSpace.{u} 2 from (0 : ULift.{u} (Fin 2) → ℂ),
+    origin_mem_zeroLocus_nodeCutSection.{u}⟩ eval_pderiv_nodePoly_origin.{u}
+
+/-- **The part of the node where the first coordinate does not vanish**, as an open subspace of
+the node. It is one of the two axes with the origin removed, and the origin is precisely the point
+`ComplexAnalytic.eval_pderiv_nodePoly_origin` rules out. -/
+def nodePunctured : Opens ((complexAffineSpace.{u} 2).zeroLocusSubspace nodeCutSection.{u}) where
+  carrier := {x | (nodeCutIncl.{u}.base x : ULift.{u} (Fin 2) → ℂ) (ULift.up 0) ≠ 0}
+  is_open' :=
+    isOpen_ne.preimage ((continuous_apply _).comp nodeCutIncl.{u}.base.hom.continuous)
+
+/-- **The projection of the punctured node to the `z₀`-line is a local homeomorphism**, which is
+the restricted statement applied and is the point of this section.
+
+**The unrestricted theorem cannot give this, and the obstruction is compiled rather than
+argued.** `ComplexAnalytic.isLocalHomeomorph_base_comp_uliftProj_of_pderiv` asks the derivative
+to be nonzero at *every* point of the hypersurface, and
+`ComplexAnalytic.not_forall_eval_pderiv_nodeCutIncl_ne_zero` above says that hypothesis is false
+here — which needs a point of *this* subspace and not of `ComplexAnalytic.nodeAmbient`'s, so it
+is `ComplexAnalytic.origin_mem_zeroLocus_nodeCutSection` and not
+`ComplexAnalytic.origin_mem_zeroLocus_nodeSection` that supplies it. So this is not the
+unrestricted theorem precomposed with an open immersion — there is nothing to precompose — and
+the node is the witness that the restricted statement is strictly stronger rather than a
+corollary.
+
+**What is not claimed is that the conclusion fails without the restriction.** Nothing here says
+the projection of the whole node is not a local homeomorphism; what is exhibited is that the
+*hypothesis* fails there, which is what makes the open subspace necessary for this route and not
+for the statement. -/
+theorem isLocalHomeomorph_nodePuncturedProj :
+    IsLocalHomeomorph
+      ((((complexAffineSpace.{u} 2).zeroLocusSubspace nodeCutSection.{u}).ofRestrict
+        nodePunctured.{u}.isOpenEmbedding ≫ nodeCutIncl.{u} ≫
+          okaMapHom (coordEmb (uliftCastSuccEmb.{u} 1))).base) :=
+  isLocalHomeomorph_base_ofRestrict_comp_uliftProj_of_pderiv isCutOutBy_nodeCutIncl.{u}
+    nodePunctured.{u} fun x ↦ by
+      rw [pderiv_nodePoly, MvPolynomial.eval_X]
+      exact x.2
 
 end ComplexAnalytic

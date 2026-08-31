@@ -125,12 +125,20 @@ standard étale pair.
   `ComplexAnalytic.cylinder` is a preimage from the base, a cylinder `V × ℂ`, while `G` involves
   the fibre variable — `Y·G − 1` is a relation of `ComplexAnalytic.etalePresentation` — so
   `{G ≠ 0}` cuts the *source*. A cylinder it is only when `G` does not involve the last variable.
-  **Nothing below produces a `V` from a `G`, and no statement anywhere in this repository
-  transports the stalk half across a restriction of the source.** A third absence
+  **Nothing below produces a `V` from a `G`**, and that is still true. **What is no longer true
+  is that nothing transports the stalk half across a restriction of the source**, and the reason
+  it was recorded as an absence at all is worth stating, because it was never the hard half: the
+  four stalk theorems are quantified *one point at a time*, so they apply at a point of an open
+  subspace with the hypothesis asked only there, and the open immersion contributes an
+  isomorphism on stalks by `ComplexAnalytic.AnalyticSpace.isIso_stalkMap_ofRestrict`. That
+  composition is inside
+  `ComplexAnalytic.isLocalIso_ofRestrict_comp_proj_of_pderiv`
+  (`Oka/AnalyticSpace/SimpleZeroTopology.lean`) and is three lines of it. The half that did cost
+  something is the topological one; see the `IsLocalIso` bullet below. A third absence
   was not named here before and is not the same one: all four stalk theorems take an
   `ComplexAnalytic.IsCutOutBy` datum for **one** cutting section, and
-  `ComplexAnalytic.hypersurfacePresentation` has `k + 1` relations. **No declaration below
-  attempts either of those two.**
+  `ComplexAnalytic.hypersurfacePresentation` has `k + 1` relations. **That one is untouched and no
+  declaration below attempts it.**
 * **No witness in this file that the open is ever non-empty, and the witness is elsewhere.** The
   statements below are hypothesis-free in `F` and `G`, so none of them can be vacuously
   satisfied — but that says nothing about whether the *objects* are degenerate, and for `F = 1`
@@ -143,19 +151,44 @@ standard étale pair.
   along the isomorphism. **It is a construction rather than a quotation**, and in particular not a
   quotation of taxis #1112's `Pex`, which witnesses a non-closed *image* and says nothing about an
   inhabited `D(G)`.
-* **No `IsLocalIso` and no `IsFiniteEtale`, and the reason has changed.** The topological field
-  of `ComplexAnalytic.AnalyticSpace.IsLocalIso` is no longer an absence in general:
-  `ComplexAnalytic.isLocalHomeomorph_base_comp_uliftProj_of_pderiv`
-  (`Oka/AnalyticSpace/SimpleZeroTopology.lean`) makes the projection of a polynomial hypersurface
-  in `ℂ^(n+1)` a local homeomorphism from exactly the derivative hypothesis
-  `ComplexAnalytic.eval_pderiv_ne_zero_of_mem` produces. **What is missing is the same thing that
-  is missing on the stalk side, and it is a restriction of the *source*.** That theorem is about
-  the hypersurface in `ℂ^(n+1)`, and the étale presentation is that hypersurface met with `D(G)`
-  in `ℂ^(n+2)`; `D(G)` is not a cylinder, because `G` involves the fibre variable, so
+* **No `IsLocalIso` and no `IsFiniteEtale` *below*, and the reason has changed twice.** The
+  restriction of the source is no longer an absence.
+  `ComplexAnalytic.isLocalIso_ofRestrict_comp_proj_of_pderiv`
+  (`Oka/AnalyticSpace/SimpleZeroTopology.lean`) makes an **open subspace** of a polynomial
+  hypersurface in `ℂ^(n+1)` project as a local isomorphism, asking the derivative hypothesis only
+  at the points of that subspace — which is the shape
+  `ComplexAnalytic.eval_pderiv_ne_zero_of_mem` produces, since it needs `G` not to vanish and so
+  says nothing off `D(G)`.
+
+  **The two halves turned out to cost very different amounts, and the earlier form of this bullet
+  said they cost the same.** The stalk half is pointwise and transports by composition; the
+  topological one does not, because a local homeomorphism is a condition on a whole space and the
+  unrestricted statement's hypothesis is exactly what a restricted source fails to supply. What
+  the topological half needed is the implicit function theorem on a *relatively open piece* of a
+  level set, `isLocalHomeomorph_coordProj_comp_of_isEmbedding_inter`
+  (`Oka/Analysis/Calculus/Implicit.lean`). **That statement is not new mathematics and an earlier
+  form of this sentence said it was**: it is a twenty-line corollary of the unrestricted level-set
+  theorem, because the `f` there carries no hypothesis off its own level set and so can be
+  replaced by one whose level set is already cut down. What does not transport that way is the
+  statement one level up, where the cutting section is holomorphic; the docstrings of
+  `ComplexAnalytic.isLocalHomeomorph_base_ofRestrict_comp_uliftProj_of_coeff` and of the
+  mirror-tree theorem say which freedom is being spent and where it runs out. **So nothing in
+  this transport was out of reach of what the tree already had**: six statements, each proved
+  from one that was already there. That is a smaller claim than the one it replaces, and it is
+  checkable from the files rather than from a delivery note: the unrestricted level-set theorem
+  still
+  carries its own fifty-line proof and the restricted one is proved *from* it, so there is no
+  direction in which the dependency could be read the other way.
+
   `Oka/AnalyticSpace/OpenBaseProjection.lean` — which restricts the **base** and pulls back — is
-  not a missing counterpart but a statement about a different restriction. The bullet above says
-  that of the stalk half; it is equally true of the topological one, and **no statement anywhere
-  in this repository transports either half across a restriction of the source.**
+  still not a missing counterpart but a statement about a different restriction, and `D(G)` is
+  still not a cylinder.
+
+  **What this does not do is put the standard étale morphism itself into that shape**, and the
+  gap is the third absence of the bullet above: reaching `isLocalIso_ofRestrict_comp_proj_of_pderiv`
+  from `ComplexAnalytic.etaleAnalytificationIso` needs a `ComplexAnalytic.IsCutOutBy` datum for
+  the `k + 1` relations of `ComplexAnalytic.hypersurfacePresentation` against the one cutting
+  section the theorem takes, and nothing here supplies it.
 * **No finiteness.** `IsFiniteEtale` of the unrestricted morphism is **false**: a standard étale
   algebra inverts `g`, and `Spec` of `(ℂ[X][x] ⧸ (x² - X))[1/x]` over `ℂ` has the punctured line
   for image, which is not closed. `Oka/Analytification/MonicHypersurface.lean`'s `## What is not

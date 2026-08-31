@@ -57,7 +57,12 @@ hypothesis a polynomial supplies — but they are now the *stalk input* of one:
 `ComplexAnalytic.isLocalIso_comp_proj_of_pderiv`, in
 `Oka/AnalyticSpace/SimpleZeroTopology.lean`, is
 `ComplexAnalytic.isIso_stalkMap_comp_uliftProj_of_pderiv` below together with the implicit
-function theorem, at the same polynomial hypothesis quantified over every point.
+function theorem, at the same polynomial hypothesis quantified over every point. **And of a
+second one, for a reason that is a property of the statements below rather than of that file**:
+they are quantified one point at a time, so
+`ComplexAnalytic.isLocalIso_ofRestrict_comp_proj_of_pderiv` — the projection of an *open
+subspace* of the hypersurface — consumes the last of them at a point of that subspace with the
+hypothesis asked only there, and needs no restricted stalk statement of its own.
 `IsFiniteEtale` is untouched: its finiteness field is not on this line at all.
 
 **Nothing here reads `StandardEtalePair.cond`, and the step that does is now elsewhere.** From
@@ -80,8 +85,11 @@ relations — and `Oka/Analytification/StandardEtaleAnalytification.lean` record
 how `ComplexAnalytic.exists_lift_polyPresentedAlgebraEquiv` produces the polynomial the étale
 presentation cuts with. **It is stated there and not here for the reason this file exists**: those
 statements mention a presentation and a `StandardEtalePair`, and nothing below does.
-`Oka/Analytification/StandardEtaleAnalytification.lean` records what is left, and the restriction
-to `D(G)` is still the largest of it.
+`Oka/Analytification/StandardEtaleAnalytification.lean` records what is left. **The restriction to
+`D(G)` was the largest of it and is no longer part of it**: the projection statement now exists
+for an arbitrary open subspace of the source, so what stands between that theorem and the étale
+presentation is the `ComplexAnalytic.IsCutOutBy` datum named in the sentence above and nothing
+else on this line.
 
 **No hypersurface inside an open subset, and the transport is no longer stated only for the germ
 hypothesis.** As in the file this one builds on, `F` is entire and the ambient space here is the
@@ -91,7 +99,10 @@ this file's four statements over an open `V` — is
 `Oka/AnalyticSpace/OpenBaseProjectionPolynomial.lean`. **That open subset is of the base**: it is
 a cylinder `V × ℂ`, and the `D(G)` a standard étale algebra inverts is cut out of the *source* by
 a polynomial in the fibre variable, so the two restrictions are not the same one and neither file
-claims they are.
+claims they are. **The source one is stated and it is not in either of those files**: it is
+`ComplexAnalytic.isLocalIso_ofRestrict_comp_proj_of_pderiv`
+(`Oka/AnalyticSpace/SimpleZeroTopology.lean`), which takes an open subspace and not a cylinder,
+and shares no lemma with the open-base pair.
 
 **No non-polynomial gain.** Every statement here is an instance of one in the imported file, so a
 consumer holding a general holomorphic `F` should use that file directly; this one is not more

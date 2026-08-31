@@ -194,14 +194,23 @@ gives — and they are what make the simple-zero hypothesis and the cut-out hypo
   `ComplexAnalytic.IsCutOutBy` datum, for the reason this bullet gives. **Whether any output of
   it fails to extend is settled nowhere**: the coefficients of the one such polynomial this
   repository writes down are entire, which `OkaTest/HolomorphicFamily.lean` records.
-* **No second restriction, and in particular nothing about a restriction of the *source*.** `V` is
+* **No second restriction, and nothing here about a restriction of the *source*.** `V` is
   an open subset of `ℂ^n` and `ComplexAnalytic.cylinder V` is its preimage, so every statement
   below restricts the base and pulls back. There is no statement about restricting `V` further,
   which would be `ComplexAnalytic.restrictHom` again and is not needed by anything — **and none
   about an open subset of `ℂ^(n+1)` that is not a preimage**, which is the shape the standard
   étale line actually presents: `D(G)` for a `G` involving the fibre variable is not a cylinder
   over anything. Reading the paragraph at the top of this file as covering that case is the trap
-  taxis #1112's description names, and nothing below closes it.
+  taxis #1112's description names, and nothing *below* closes it.
+
+  **The source restriction is closed elsewhere and this file is still not where it lives.**
+  `ComplexAnalytic.isLocalIso_ofRestrict_comp_proj_of_pderiv`
+  (`Oka/AnalyticSpace/SimpleZeroTopology.lean`) takes an arbitrary open subspace of the
+  hypersurface and asks the simple-zero hypothesis only there. It is not an instance of anything
+  below and shares no lemma with this file: an open of the source is not a cylinder, so the
+  transport is the implicit function theorem on a relatively open piece of a level set rather
+  than a pullback along `ComplexAnalytic.cylinder`. The two restrictions remain separate and
+  neither subsumes the other.
 
 ## References
 

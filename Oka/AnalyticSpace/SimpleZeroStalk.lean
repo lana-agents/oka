@@ -164,6 +164,17 @@ lives in an open subspace; `ComplexAnalytic.IsLocalModel` is stated for
 `ComplexAnalytic.isIso_stalkMap_comp_projRestrict` in
 `Oka/AnalyticSpace/OpenBaseProjection.lean`, which imports this file.
 
+**That transport is of the *base* and the open subspace a standard étale algebra lives in is of
+the *source*, which the sentence above runs together.** The source one needs nothing new on the
+stalk side and that is a property of the statements below: they are quantified one point at a
+time, so a point of an open subspace supplies the hypothesis at itself and the open immersion
+contributes an isomorphism by
+`ComplexAnalytic.AnalyticSpace.isIso_stalkMap_ofRestrict`. The composition is inside
+`ComplexAnalytic.isLocalIso_ofRestrict_comp_proj_of_coeff`
+(`Oka/AnalyticSpace/SimpleZeroTopology.lean`); the topological half of that statement is the one
+that needed statements of its own, though none of them needed mathematics the tree did not
+already have.
+
 **And it does not go through `AlgebraicGeometry.LocallyRingedSpace.restrictStalkIso`**, which is
 what the paragraph that used to stand here predicted it would need. That `Iso` is never
 constructed there. `ComplexAnalytic.cylinderStalkEquiv` inverts the stalk map of the inclusion of

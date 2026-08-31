@@ -54,6 +54,11 @@ in coordinates and of reading off what it says about one fibre of the first comp
 - `isLocalHomeomorph_coordProj_comp_of_isEmbedding`: **forgetting the `j`-th coordinate is a local
   homeomorphism on the level set**, stated for an arbitrary topological space embedded onto that
   level set, which is the form a subspace of `ι → 𝕜` carrying extra structure needs.
+- `isLocalHomeomorph_coordProj_comp_of_isEmbedding_inter`: **the same on the part of the level set
+  lying in an open set**, with the two analytic hypotheses asked only there. This is the form a
+  restriction of the embedded space needs. **It is a corollary of the statement above**, and its
+  docstring says by what replacement — and why that replacement is unavailable to a caller whose
+  cutting function is constrained to be continuous, holomorphic, or a section of a sheaf.
 - `isLocalHomeomorph_coordProj_levelSet`: the same for the level set itself, as a subtype.
 
 ## What is not here
@@ -65,6 +70,16 @@ in coordinates and of reading off what it says about one fibre of the first comp
 * **No smoothness of the local inverse**, for the same reason.
 * **Nothing about the level set as a manifold or as an analytic space.** The conclusion is a
   statement about topological spaces.
+* **Nothing for a piece of the level set that is not relatively open.** The `Ω` of
+  `isLocalHomeomorph_coordProj_comp_of_isEmbedding_inter` is an *open* subset of `ι → 𝕜`, and its
+  openness is used — but **not** by the implicit function theorem, which never sees `Ω` at all.
+  It enters at `IsOpen.mem_nhds`, as what makes the replacement function of that proof agree with
+  `f` on a neighbourhood of each point of `Ω`, so that the derivative hypothesis transports with
+  the same `f'`. Replacing `Ω` by an arbitrary `S` gives a false statement and not merely an
+  unproved one — for `ι` with at least two elements take `f` the `j`-th coordinate, `c = 0`, `S` a
+  single point of the level set and `T` a one-point space embedded at it: both hypotheses hold on
+  `S`, and the image of the map is one point of `κ → 𝕜`, which is not open. **That counterexample
+  is an argument here and is compiled nowhere.**
 * **No converse.** Nothing says that a level set on which the projection is a local homeomorphism
   has a nonvanishing derivative, and the hypothesis is not necessary: `f` could be constant in a
   different set of coordinates.
@@ -278,6 +293,51 @@ theorem isLocalHomeomorph_coordProj_comp_of_isEmbedding
     rw [himg2, ← hset]
     exact φ.isOpen_image_rightFun_levelSet
       (hW₀open.inter φ.toOpenPartialHomeomorph.open_source) Set.inter_subset_right
+
+/-- **Forgetting the `j`-th coordinate is a local homeomorphism on the part of a level set of `f`
+lying in an open set**, at every point of which the derivative of `f` in the `j`-th direction is
+nonzero — the two analytic hypotheses being asked only there.
+
+This is the form a *restriction of the source* needs: an embedding onto the whole level set
+followed by the inclusion of an open subspace of `T` is an embedding onto such a piece.
+
+**It is a corollary of the theorem above and the reason is that `f` is arbitrary.** No regularity
+is asked of `f` anywhere off the level set, so the level set can be moved by moving `f`:
+`{z | f z = c} ∩ Ω` is exactly the level set of `fun z ↦ if z ∈ Ω then f z else c + 1`, which
+takes the value `c + 1 ≠ c` off `Ω`. Openness of `Ω` is what makes that replacement invisible to
+the derivative — the two functions agree on a neighbourhood of each point of `Ω`, so
+`HasStrictFDerivAt.congr_of_eventuallyEq` transports the hypothesis with the *same* `f'` — and it
+is load-bearing for that reason and not for a reason internal to the implicit function theorem.
+The auxiliary function is discontinuous across `frontier Ω` and nothing minds: the theorem above
+never looks there.
+
+**The freedom being spent is that `f` is a bare function**, and it is worth saying so because it
+is not available to every consumer of this theorem: a caller whose level set is cut out by a
+function it is required to keep — continuous, holomorphic, a section of a structure sheaf — has
+in general no replacement with level set `{z | f z = c} ∩ Ω`, and for such a caller the restricted
+statement is not a corollary of the unrestricted one. -/
+theorem isLocalHomeomorph_coordProj_comp_of_isEmbedding_inter
+    {T : Type*} [TopologicalSpace T] {g : T → (ι → 𝕜)} {Ω : Set (ι → 𝕜)}
+    (hg : Topology.IsEmbedding g) (hΩ : IsOpen Ω)
+    (he : ∀ i, i ≠ j → i ∈ Set.range e) (hj : j ∉ Set.range e)
+    (hrange : Set.range g = {z | f z = c} ∩ Ω)
+    (hf : ∀ z ∈ Ω, f z = c → HasStrictFDerivAt f (f' z) z)
+    (hne : ∀ z ∈ Ω, f z = c → f' z (Pi.single j 1) ≠ 0) :
+    IsLocalHomeomorph fun x ↦ g x ∘ e := by
+  classical
+  have hc : c + 1 ≠ c := by simp
+  set F : (ι → 𝕜) → 𝕜 := fun z ↦ if z ∈ Ω then f z else c + 1 with hF
+  have hFlevel : {z | F z = c} = {z | f z = c} ∩ Ω := by
+    ext z
+    by_cases hz : z ∈ Ω <;> simp [hF, hz, hc]
+  have hFeq : ∀ z ∈ Ω, F =ᶠ[𝓝 z] f := fun z hz ↦
+    Filter.eventuallyEq_of_mem (hΩ.mem_nhds hz) fun y hy ↦ by simp [hF, hy]
+  refine isLocalHomeomorph_coordProj_comp_of_isEmbedding (f := F) (f' := f') (c := c) hg he hj
+    (by rw [hrange, hFlevel]) (fun z hz ↦ ?_) fun z hz ↦ ?_
+  · obtain ⟨hzl, hzΩ⟩ : z ∈ {z | f z = c} ∩ Ω := hFlevel ▸ (show z ∈ {z | F z = c} from hz)
+    exact (hf z hzΩ hzl).congr_of_eventuallyEq (hFeq z hzΩ).symm
+  · obtain ⟨hzl, hzΩ⟩ : z ∈ {z | f z = c} ∩ Ω := hFlevel ▸ (show z ∈ {z | F z = c} from hz)
+    exact hne z hzΩ hzl
 
 /-- **The level set itself, as a subtype, is locally homeomorphic to the remaining
 coordinates.** `isLocalHomeomorph_coordProj_comp_of_isEmbedding` at the inclusion of the level

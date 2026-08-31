@@ -873,8 +873,11 @@ polynomial.
 **The restriction is of the base**, `V ⊆ ℂ^n` with `ComplexAnalytic.cylinder V` its preimage. A
 standard étale algebra also inverts a polynomial, and that polynomial involves the fibre variable,
 so `D(G)` is cut out of the *source* and is a cylinder only in the special case where `G` does
-not; `Oka/Analytification/StandardEtaleAnalytification.lean` records which of the two this line
-still lacks. -/
+not. **The source restriction is no longer missing and its guards are the `####` subsection
+below**, which is why this paragraph no longer sends a reader elsewhere for it; the two
+restrictions stay different and neither subsumes the other, and what
+`Oka/Analytification/StandardEtaleAnalytification.lean` still records as absent is the
+`ComplexAnalytic.IsCutOutBy` datum for a presentation's `k + 1` relations. -/
 
 /--
 info: 'ComplexAnalytic.AnalyticSpace.restrictHom' depends on axioms:
@@ -1304,6 +1307,13 @@ info: 'isLocalHomeomorph_coordProj_comp_of_isEmbedding' depends on axioms:
 #print axioms isLocalHomeomorph_coordProj_comp_of_isEmbedding
 
 /--
+info: 'isLocalHomeomorph_coordProj_comp_of_isEmbedding_inter' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms isLocalHomeomorph_coordProj_comp_of_isEmbedding_inter
+
+/--
 info: 'isLocalHomeomorph_coordProj_levelSet' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
@@ -1363,6 +1373,52 @@ info: 'ComplexAnalytic.isLocalIso_comp_proj_of_pderiv' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isLocalIso_comp_proj_of_pderiv
+
+/-! #### The same after restricting the source to an open subspace
+
+These five are the transport of the two halves across an open subspace of the *hypersurface*,
+which three module docstrings recorded as absent until taxis #1112. They are guarded together and
+apart from the unrestricted ones above because the asymmetry is the content: the stalk half is
+already quantified one point at a time and transports by composition, while the topological one
+is not reached from its own unrestricted form and goes through
+`isLocalHomeomorph_coordProj_comp_of_isEmbedding_inter` above — which is itself a corollary of
+the theorem guarded above it, so **nothing here rests on a statement the tree did not already
+have**. -/
+
+/--
+info: 'ComplexAnalytic.range_base_ofRestrict_eq_zeroSet_inter' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.range_base_ofRestrict_eq_zeroSet_inter
+
+/--
+info: 'ComplexAnalytic.isLocalHomeomorph_base_ofRestrict_comp_uliftProj_of_coeff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isLocalHomeomorph_base_ofRestrict_comp_uliftProj_of_coeff
+
+/--
+info: 'ComplexAnalytic.isLocalHomeomorph_base_ofRestrict_comp_uliftProj_of_pderiv' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isLocalHomeomorph_base_ofRestrict_comp_uliftProj_of_pderiv
+
+/--
+info: 'ComplexAnalytic.isLocalIso_ofRestrict_comp_proj_of_coeff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isLocalIso_ofRestrict_comp_proj_of_coeff
+
+/--
+info: 'ComplexAnalytic.isLocalIso_ofRestrict_comp_proj_of_pderiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isLocalIso_ofRestrict_comp_proj_of_pderiv
 
 /-! ### Cancellation of finiteness and of finite étaleness
 
