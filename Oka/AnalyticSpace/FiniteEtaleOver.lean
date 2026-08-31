@@ -25,12 +25,12 @@ morphism of covers is.
 is the same arrangement `Mathlib/AlgebraicGeometry/Morphisms/Finite.lean` relies on, where
 `@AlgebraicGeometry.IsFinite` is used as a morphism property while remaining a class.
 
-**What does not work is dot notation.** `(@IsFiniteEtale).Over ⊤ X` fails with *"the environment
-does not contain `Function.Over`"*, because the elaborator sees a function type and not the
-abbreviation. So `ComplexAnalytic.AnalyticSpace.isFiniteEtale` below is a name for something that
-already existed, and it is worth being precise about that: it is not a second notion, it is
-`@IsFiniteEtale` with a head symbol, and `ComplexAnalytic.AnalyticSpace.isFiniteEtale_iff` is
-`Iff.rfl`.
+**What does not work is dot notation.** `(@IsFiniteEtale).Over ⊤ X` fails, because the elaborator
+sees a function type and goes looking for a field of `Function`; the message names a declaration
+under that namespace which does not exist. So `ComplexAnalytic.AnalyticSpace.isFiniteEtale` below
+is a name for something that already existed, and it is worth being precise about that: it is not
+a second notion, it is `@IsFiniteEtale` with a head symbol, and
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_iff` is `Iff.rfl`.
 
 ## Why the morphisms are all morphisms over the base
 
@@ -81,8 +81,10 @@ docstring, because `scripts/guard_coverage.py` reads every backticked repository
   cancellation lemma for `IsCoveringMap` at all, only conjugation by a homeomorphism. **This is
   what a Galois-category structure on the category below would need first**, and taxis #1114's
   report identifies the same absence as the difficulty of essential surjectivity.
-* **No fibre functor and no Galois category.** `CategoryTheory.Galois.FiberFunctor` lands in
-  `FintypeCat`, and the fibre of a finite étale morphism is finite by
+* **No fibre functor and no Galois category.** The fibre functor of a Galois category — declared
+  in `Mathlib/CategoryTheory/Galois/Basic.lean`, whose namespace is not in this repository's
+  import closure and so cannot be cited by name here — lands in `FintypeCat`, and the fibre of a
+  finite étale morphism is finite by
   `ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale` — which asks `[T2Space]` of the
   source, a hypothesis lana-agents/oka#222's review measured is not free for a constructed cover.
   Nothing below builds the functor.
