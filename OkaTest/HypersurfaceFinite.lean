@@ -24,21 +24,31 @@ The witness is the square root of the coordinate over the parabola: base
   `OkaTest/MonicHypersurface.lean` tests. It is also what makes the range hypothesis of
   `ComplexAnalytic.isFinite_comp_proj_of_range_subset` an inclusion rather than an equality: the
   image below is cut out by two equations and the hypersurface of `X² - x₀` by one.
-* **The source is not empty and the morphism is not injective.**
+* **The source is not empty, and it has two points over one point of the base's ambient space.**
   `ComplexAnalytic.range_base_analytificationIncl_sqrtG` computes the image in `ℂ³` as
   `{x₁² = x₀} ∩ {x₂² = x₀}`, and `ComplexAnalytic.mem_range_sqrtG` puts both `(1, 1, 1)` and
-  `(1, 1, -1)` in it. Those two points agree in the coordinates the base reads, so the finiteness
-  of the analytified structure map is not an instance of
-  `ComplexAnalytic.AnalyticSpace.isFinite_of_isClosedEmbedding`.
+  `(1, 1, -1)` in it. Those two points agree in the coordinates the base reads, which is what a
+  structure map with a non-injective base map looks like from the ambient side — but it is only
+  the ambient side, so this file stops there and does **not** conclude that the finiteness proved
+  here is beyond the reach of
+  `ComplexAnalytic.AnalyticSpace.isFinite_of_isClosedEmbedding`; what that conclusion needs is
+  exactly what `## What is not checked here` records as missing.
 
 ## What is not checked here
 
 * **Nothing about the map on points of the analytifications.** The two points above are exhibited
   in the *ambient* `ℂ³`, through `ComplexAnalytic.range_base_analytificationIncl`; that the
-  structure map's own base map identifies them is the same statement one category down and would
-  need the factorisation read at a point, which no statement in this repository does. That is the
-  same gap `OkaTest/MonicHypersurface.lean`'s `## What is not checked here` records between the
-  hand-built parabola and the analytification.
+  structure map's own base map identifies them is the same statement one category down, and it is
+  not proved here. **It is a lemma and not a missing theory**, and the route is short enough to be
+  worth recording. Read at the two source points lying over `(1, 1, 1)` and `(1, 1, -1)`,
+  `ComplexAnalytic.analytificationMap_hypersurfacePresHom_comp` says that the base map of
+  `ComplexAnalytic.analytificationInclHom` for `ComplexAnalytic.parabolaBase` carries their two
+  images under the structure map to the projections of those ambient points, which are both
+  `(1, 1)`; that base map is injective by
+  `ComplexAnalytic.isClosedEmbedding_base_analytificationIncl`, so the two images agree.
+  That is the same gap `OkaTest/MonicHypersurface.lean`'s `## What is not checked here` records
+  between the hand-built parabola and the analytification, and it is left open here for the same
+  reason: this file is a witness for the theorem's hypotheses, not for its consequences.
 * **Nothing about the degree**, and nothing that says the source is the double cover rather than
   some space with the same image: comparing structure sheaves is
   `ComplexAnalytic.IsCutOutBy.uniqueIso`'s business and needs cut-out data this file does not

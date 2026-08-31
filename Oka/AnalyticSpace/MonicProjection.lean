@@ -52,16 +52,18 @@ steps:
 **inclusion**, `ComplexAnalytic.isFinite_comp_proj_of_range_eq` as a set **equation**, and neither
 asks anything about structure sheaves; `ComplexAnalytic.isFinite_comp_proj_of_isCutOutBy` takes
 `ComplexAnalytic.IsCutOutBy i.toLRSHom ![F]` and the pointwise identity between `F` and the
-family. The first is the general one and the other two are corollaries of it — the inclusion is
-what a source cut out by **more** equations than the family gives, which is the analytification of
-a base algebra's hypersurface (`Oka/Analytification/HypersurfaceFinite.lean`); a caller holding an
-equation should still quote the second. The second is the one a hand-built morphism satisfies —
+family. **The inclusion is the general one and the other two are corollaries of it** — it is what
+a source cut out by **more** equations than the family gives, which is the analytification of a
+base algebra's hypersurface (`Oka/Analytification/HypersurfaceFinite.lean`); a caller holding an
+equation should still quote **the equation form**, which is one line of the inclusion and keeps
+its own name and its consumers. **The equation form** is the one a hand-built morphism satisfies —
 `OkaTest/FiniteMorphism.lean` explains why cut-out data for a morphism of *analytic* spaces has
 to be built by hand in this development — and it is what `OkaTest/MonicProjection.lean` applies.
-The second is the one the Weierstrass line will consume and is a three-line corollary of it.
+**The `ComplexAnalytic.IsCutOutBy` form** is the one the Weierstrass line will consume, and is two
+lines of the equation form.
 
-**Neither takes the family from `F`.** The family `q` is an argument, and the hypothesis relating
-it to `F` is an equation the caller proves; nothing here extracts the coefficients of a
+**None of the three takes the family from `F`.** The family `q` is an argument, and the hypothesis
+relating it to `F` is an equation the caller proves; nothing here extracts the coefficients of a
 holomorphic function in its last variable, and no holomorphy of the coefficients is used —
 continuity is all the mathematics needs, and it is all that is asked for.
 
@@ -227,13 +229,14 @@ it is a hypothesis**: no holomorphy is used, and `hc` is what a Weierstrass poly
 
 **Why the hypothesis is an inclusion and not the equality
 `ComplexAnalytic.isFinite_comp_proj_of_range_eq` asks for.** Both of the theorem's obligations are
-*upward* closed in the image: closedness of `π '' t` is asked only of subsets `t` of that image,
-and the fibre obligation asks a set to be finite. So an image sitting strictly inside the
-hypersurface is no harder, and this is the form a subspace cut out by **more** equations than the
-one monic polynomial needs — the zero locus of a presentation with relations of its own, which is
-the analytification of a base algebra's hypersurface, is such a subspace and the equality is then
-unavailable. `ComplexAnalytic.isFinite_comp_proj_of_range_eq` is this theorem at
-`Eq.subset` and keeps its name and its consumers. -/
+*downward* closed in the image — a smaller image inherits them: closedness of `π '' t` is asked
+only of subsets `t` of that image, and the fibre obligation asks a set to be finite. So an image
+sitting strictly inside the hypersurface is no harder, and this is the form a subspace cut out by
+**more** equations than the one monic polynomial needs — the zero locus of a presentation with
+relations of its own, which is the analytification of a base algebra's hypersurface, is such a
+subspace and the equality is then unavailable.
+`ComplexAnalytic.isFinite_comp_proj_of_range_eq` is this theorem at `Eq.subset` and keeps its name
+and its consumers. -/
 theorem isFinite_comp_proj_of_range_subset
     (i : W ⟶ AnalyticSpace.complexAffineSpace.{u} (n + 1))
     (hi : IsClosedEmbedding (i.toLRSHom.base : W → _))

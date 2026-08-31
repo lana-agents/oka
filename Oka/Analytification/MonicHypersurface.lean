@@ -384,10 +384,11 @@ said no statement supplied, and
 analytification of `A ⟶ A[X] ⧸ (F)` is finite over `A^an` for any presented `A`.
 
 **Until 2026-08-31 this paragraph said the factorisation was the only thing missing, and it was
-one of two.** The other is in the theorem below rather than in the arrow: its range hypothesis is
-an **equality** with the hypersurface, and the analytification of a base algebra's hypersurface is
-cut out by the relations of that algebra as well as by `G`, so its image is a proper closed subset
-of the hypersurface as soon as the base has a relation.
+one of two.** The other is not in the arrow but in
+`ComplexAnalytic.isFinite_comp_proj_of_range_eq`, which the theorem below applies: its range
+hypothesis is an **equality** with the hypersurface, and the analytification of a base algebra's
+hypersurface is cut out by the relations of that algebra as well as by `G`, so its image is a
+proper closed subset of the hypersurface as soon as the base has a relation.
 `ComplexAnalytic.isFinite_comp_proj_of_range_subset` (`Oka/AnalyticSpace/MonicProjection.lean`) is
 that hypothesis weakened to an inclusion, which is all the proof ever used;
 `ComplexAnalytic.isFinite_comp_proj_of_range_eq` is now one line of it.
