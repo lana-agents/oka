@@ -163,7 +163,8 @@ theorem not_isZero_cokernel_specXHom : ¬ IsZero (cokernel specXHom.{u}) := by
 /-- **`x` is not zero in `A = ℂ[x, y] ⧸ (xy)`.**
 
 If it were, `x` would lie in `(xy)`, so `x = c * x * y` for some `c`; evaluating at the point
-`(1, 0)` of the node — `OkaTest.Analytification.nodePtX`, kept in the development for exactly this
+`(1, 0)` of the node — `ComplexAnalytic.nodePtX` (`OkaTest/Analytification.lean`), kept in the
+development for exactly this
 kind of separation — gives `1 = 0`. -/
 theorem specX_ne_zero : specX.{u} ≠ 0 := by
   intro h

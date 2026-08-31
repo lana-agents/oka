@@ -24,7 +24,9 @@ SheafOfModules.preservesFiniteLimits_pullback
 
 Right exactness of `SheafOfModules.pullback` is free — it is a left adjoint — so this is the
 whole of its exactness, and **it is where flatness is consumed**. The base-change formula of
-`PullbackStalk.lean` uses none.
+`Oka/Algebra/Category/ModuleCat/Sheaf/PullbackStalk.lean` uses none — and the path is written out
+because `Oka/Algebra/Category/ModuleCat/Presheaf/PullbackStalk.lean` states the same result one
+level down, so the file name alone names two files.
 
 ## The route, and it is monomorphisms rather than short complexes
 

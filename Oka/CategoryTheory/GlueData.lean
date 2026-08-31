@@ -127,8 +127,9 @@ theorem GlueData.ofGlueData'_f_self (i : D.J) :
 /-- **Off the diagonal, it is the given inclusion after the `eqToHom` that identifies
 `V (i, j)` with the given overlap.**
 
-This is `OkaTest.AffineCover.f_nodeTripleGlueData` and `ComplexAnalytic.f_projectiveLineGlueData`
-made general: both were the same three-line unfolding at a concrete glue datum. -/
+This is `ComplexAnalytic.f_nodeTripleGlueData` (`OkaTest/AffineCover.lean`) and
+`ComplexAnalytic.f_projectiveLineGlueData` made general: both were the same three-line unfolding
+at a concrete glue datum. -/
 theorem GlueData.ofGlueData'_f_of_ne {i j : D.J} (h : i ≠ j) :
     (GlueData.ofGlueData' D).f i j = eqToHom (dif_neg h) ≫ D.f i j h :=
   GlueData'.f'_of_ne D h

@@ -822,6 +822,12 @@ Lean knows about, and the check takes about ten seconds, nine of them spent impo
 deliberately permissive — a name resolves if *any* declaration in the environment ends with it,
 or it is a module, or a file in this repository, or field notation — because a checker that cries
 wolf is worse than none on a project whose pull request bodies quote its figures as evidence.
+**Field notation is on a declaration and not on a module**, which is why `DumpEnvNames.lean` tags
+each line `module` or `decl`: a module is not a term and has no fields, so a citation shaped like
+`OkaTest.SomeFile.someDecl` is not field notation on anything. Until 2026-08-31 the two kinds
+arrived in one undifferentiated list and every such citation passed unexamined — eight of them
+were doing so, three naming no declaration at all — which taxis #1326 measured with a planted
+control and `--self-test` now asserts in both directions.
 `scripts/docstring-names-ignore.txt` is the escape hatch, for a name that is correct, cited on
 purpose, and resolves nowhere only because this build does not import the declaration it names;
 its header says what qualifies, and fixing a rule in the checker beats adding an entry.

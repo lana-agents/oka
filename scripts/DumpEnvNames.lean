@@ -21,6 +21,24 @@ elaborate a file whose only purpose is to write a temporary file.
 Module names are dumped alongside constants because docstrings on this project cite modules —
 `Oka.Weierstrass`, `Mathlib.RingTheory.Filtration` — in exactly the same backticked form as
 declarations, and a checker that knew only about constants would report all of them.
+
+## The format, and why the two kinds are told apart
+
+Each line is `<kind>` TAB `<name>`, with `kind` either `module` or `decl`. **A name never
+contains a tab**, so the split is unambiguous.
+
+The tag exists because the checker's field-notation rule — which accepts `head.tail` when `head`
+resolves and is not a namespace, reading it as generalised field notation on the *term* `head` —
+is only ever right when `head` is a **declaration**. A module is not a term and has no fields, so
+`` `OkaTest.FiniteMorphism.someDecl` `` is not field notation on anything; without the tag it was
+accepted anyway, because modules and constants arrived here in one undifferentiated list and the
+rule could not see which it had. That made every `OkaTest/` module a head under which any tail
+whatsoever passed unchecked, since those modules declare into `ComplexAnalytic` and so are
+themselves empty as namespaces. See taxis #1326 for the control that measured it.
+
+**An untagged line is read as a declaration**, so a dump written by a checkout that predates the
+tag still parses; the checker says on stderr that it cannot tell modules from declarations in
+that case rather than silently reverting to the old behaviour.
 -/
 
 open Lean Elab Command in
@@ -29,7 +47,7 @@ run_cmd do
   let path := (← IO.getEnv "OKA_ENV_NAME_DUMP").getD "env-names.txt"
   let h ← IO.FS.Handle.mk path IO.FS.Mode.write
   for m in env.header.moduleNames do
-    h.putStrLn m.toString
+    h.putStrLn s!"module\t{m}"
   for (n, _) in env.constants.toList do
     unless n.isInternal do
-      h.putStrLn n.toString
+      h.putStrLn s!"decl\t{n}"

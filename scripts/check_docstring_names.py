@@ -104,11 +104,24 @@ positives.  A candidate resolves if any of the following holds.
   `/` in it — through without an entry each in the ignore file.
 
 * **Field-notation rule.**  Splitting the candidate as `head.tail` at any dot, `head` resolves by
-  the suffix or module rule and is *not itself a namespace* — no constant or module has it as a
-  run of components with further components after it.  Then `head.tail` is generalised field
-  notation on the term `head` rather than a declaration name, which is legitimate and idiomatic
-  prose: `restrictTopIso.hom`, `adicCompletionEquiv.symm`, `existsUnique_axisIncl.exists.choose`,
-  `AlgebraicGeometry.identityToΓSpec.naturality`.
+  the suffix rule **to a declaration** and is *not itself a namespace* — no constant or module has
+  it as a run of components with further components after it.  Then `head.tail` is generalised
+  field notation on the term `head` rather than a declaration name, which is legitimate and
+  idiomatic prose: `restrictTopIso.hom`, `adicCompletionEquiv.symm`,
+  `existsUnique_axisIncl.exists.choose`, `AlgebraicGeometry.identityToΓSpec.naturality`.
+
+  **The head must be a declaration and not a module, and until 2026-08-31 it could be either.**
+  Field notation is on a *term*; a module is not one and has no fields.  Because
+  `scripts/DumpEnvNames.lean` wrote modules and constants into one undifferentiated list, this
+  rule could not tell them apart, and every module that is an *empty namespace* — which is every
+  module under `OkaTest/`, since they all declare into `ComplexAnalytic` — became a head under
+  which **any tail whatsoever** was accepted, unexamined.  Planted on `master` = `4f96682` and
+  reverted: `` `OkaTest.FiniteMorphism.zzz_planted_bogus` `` was accepted silently while
+  `` `ComplexAnalytic.zzz_planted_bogus` `` was reported.  It cost eight real citations in this
+  tree — three declaration references naming nothing and five bare file names with no directory,
+  one of which (`PullbackStalk.lean`) is ambiguous between two files that state the same result.
+  The dump now tags each line `module` or `decl`; taxis #1326 has the measurement, and
+  `--self-test` asserts both halves.
 
   The namespace condition is what keeps this from swallowing the findings it is meant to leave
   alone.  `AlgebraicGeometry.Scheme.OpenCover.glueMorphisms` — the reference this checker was
@@ -348,7 +361,8 @@ def candidates(repo: str | None = None) -> dict[str, list[tuple[str, int]]]:
 
 
 def scan(dump: str, wanted: set[str],
-         heads: set[str]) -> tuple[set[str], set[str], set[str], dict[str, str], int]:
+         heads: set[str]) -> tuple[set[str], set[str], set[str], set[str], dict[str, str],
+                                   int, bool]:
     """One pass over the dump, classifying `wanted` and `heads` against every name in it.
 
     A *suffix* is a run of whole components reaching the end of the name; a *namespace* is a run
@@ -358,15 +372,24 @@ def scan(dump: str, wanted: set[str],
     than indexing every run of every name, keeps this linear in the dump with nothing but those
     sets held in memory.
 
+    Each line of the dump is `<kind>` TAB `<name>` with `kind` either `module` or `decl`, and a
+    name never contains a tab.  **An untagged line is read as a declaration**, so a dump written
+    before `scripts/DumpEnvNames.lean` grew the tag still parses; `tagged` in the return says
+    whether any tag was seen, and the caller says so on stderr rather than quietly treating a
+    module as a term.  The two resolution sets are what the tag is for: the suffix and module
+    rules take either kind, and the *field-notation* rule takes only `resolved_decl`, because a
+    module has no fields.
+
     The `GENERATED_COMPONENT` condition is the one thing here that is not the obvious reading of
     "namespace".  Without it a `def` becomes a namespace the moment any tactic anywhere unfolds
     it, because that plants an equation lemma under its own name — so the classification would
     depend on which files happen to contain a `rw [thatDef]`, and it would turn *off* the
     field-notation rule for citations of that definition in unrelated files.
 
-    Returns `(resolved, namespaces, root_namespaces, namespace_cause, lines)`, the fourth being
-    one witness per namespace: the **first** run this pass meets that put it there, which is what
-    the finding message needs in order to say why field notation was not tried.  It is the head
+    Returns `(resolved, resolved_decl, namespaces, root_namespaces, namespace_cause, lines,
+    tagged)`, `namespace_cause` being one witness per namespace: the **first** run this pass meets
+    that put it there, which is what the finding message needs in order to say why field notation
+    was not tried.  It is the head
     plus the one component after it, so it need not be a name in the dump — against a dump whose
     only `Planted` entry is `Planted.Sub.child` the witness is `Planted.Sub` — and where a head
     has several children it is the one the dump happens to list first, not the shortest.  Neither
@@ -374,15 +397,23 @@ def scan(dump: str, wanted: set[str],
     witness is one of them, so a suffix `GENERATED_COMPONENT` is missing always gets named.
     """
     resolved: set[str] = set()
+    resolved_decl: set[str] = set()
     namespaces: set[str] = set()
     root_namespaces: set[str] = set()
     namespace_cause: dict[str, str] = {}
     lines = 0
+    tagged = False
     with open(dump, encoding="utf-8") as f:
         for line in f:
             full = line.rstrip("\n")
             if not full:
                 continue
+            kind, tab, rest = full.partition("\t")
+            if tab:
+                tagged = True
+                full, is_module = rest, kind == "module"
+            else:
+                is_module = False
             lines += 1
             parts = full.split(".")
             last = len(parts) - 1
@@ -394,12 +425,15 @@ def scan(dump: str, wanted: set[str],
                     if j == last:
                         if run in wanted:
                             resolved.add(run)
+                            if not is_module:
+                                resolved_decl.add(run)
                     elif run in heads and not GENERATED_COMPONENT.fullmatch(parts[j + 1]):
                         namespaces.add(run)
                         namespace_cause.setdefault(run, ".".join(parts[:j + 2]))
                         if i == 0:
                             root_namespaces.add(run)
-    return resolved, namespaces, root_namespaces, namespace_cause, lines
+    return (resolved, resolved_decl, namespaces, root_namespaces, namespace_cause, lines,
+            tagged)
 
 
 def read_ignore(repo: str | None = None) -> set[str]:
@@ -595,14 +629,17 @@ def self_test() -> int:
     **The test that matters is the positive one.**  "Two identical trees diff to empty" is what
     the `os.chdir` driver this option replaced printed on every branch it was ever run on, so a
     self-test built only from that would have passed while measuring nothing.  **Every check below
-    carries a `positive:` or `negative:` label and there are thirteen and five** — a count is
+    carries a `positive:` or `negative:` label and there are sixteen and six** — a count is
     stated here rather than left to be inferred because a reader who trusts the labels has to be
     able to see that none is missing.
 
-    The last six are about the *rules* rather than about the walk, and they reach them by planting
+    The last ten are about the *rules* rather than about the walk, and they reach them by planting
     an environment as a `--dump` file instead of building one.  That is the only way to hold
     everything fixed but the environment, which is the variable the field-notation rule turns on,
-    and it keeps the whole self-test free of `lake`.
+    and it keeps the whole self-test free of `lake`.  The last four of those are about the
+    `module`/`decl` tag: a module head must be *reported*, a declaration head with the same shape
+    must not be, the message must say which of the two declined it, and an untagged dump must
+    revert loudly rather than silently.
     """
     def plant(root: str, body: str) -> str:
         os.makedirs(os.path.join(root, "Oka"), exist_ok=True)
@@ -796,6 +833,47 @@ def self_test() -> int:
               and "`Planted.realChild` makes it a namespace" in real.stdout,
               real.stdout.strip().replace("\n", " | "))
 
+        # The tag, and the rule it exists for.  `env` above writes untagged lines, which the
+        # checker reads as declarations, so every check up to here is about a declaration head;
+        # these three are the module head, and they are the whole of taxis #1326.
+        def tagged_env(name: str, *kinded: str) -> str:
+            path = os.path.join(tmp, name)
+            with open(path, "w", encoding="utf-8") as f:
+                f.write("".join(k + "\n" for k in kinded))
+            return path
+
+        # **The defect.**  `Planted` is a module with nothing declared into it — which is what
+        # every module under `OkaTest/` is, since they all `namespace ComplexAnalytic` — so it
+        # resolves and is not a namespace, and before the tag existed the field-notation rule
+        # accepted `Planted.someField` and never looked at the tail.  A module has no fields.
+        mod = run_on(tagged_env("env-module.txt", "module\tPlanted", "decl\tUnrelated.decl"))
+        check("negative: field notation on a *module* head is reported",
+              mod.returncode == 1 and "`Planted.someField` names nothing" in mod.stdout,
+              mod.stdout.strip().replace("\n", " | ") or f"rc={mod.returncode}")
+
+        # ...and the message says which of the two reasons declined it, because "names nothing"
+        # about a head that plainly does resolve is the report that costs a reader a session.
+        check("positive: the message says the head resolves only as a module",
+              "only as a **module**" in mod.stdout,
+              mod.stdout.strip().replace("\n", " | "))
+
+        # The control that makes the one above a statement about the *tag* and not about the
+        # fixture: the same two names, the same shape, `Planted` tagged as a declaration instead.
+        # Without this, a script that reported every tagged dump would pass.
+        dec = run_on(tagged_env("env-decl.txt", "decl\tPlanted", "decl\tUnrelated.decl"))
+        check("positive: field notation on a declaration head is still accepted, tag and all",
+              dec.returncode == 0 and "names nothing" not in dec.stdout,
+              dec.stdout.strip().replace("\n", " | ") or "rc=0, nothing reported")
+
+        # A dump from a checkout older than the tag has no kinds in it.  It must still parse, it
+        # must revert to the behaviour that dump was written for, and it must say so — a silent
+        # revert is indistinguishable in the report from the fix working.
+        legacy = run_on(env("env-legacy.txt", "Planted", "Unrelated.decl"))
+        check("positive: an untagged dump is accepted, reverts, and says so on stderr",
+              legacy.returncode == 0 and "names nothing" not in legacy.stdout
+              and "no `module`/`decl` tags" in legacy.stderr,
+              (legacy.stderr.strip() or legacy.stdout.strip()).replace("\n", " | "))
+
     if failures:
         print(f"\n{len(failures)} check(s) failed: " + ", ".join(failures))
         return 2
@@ -843,30 +921,57 @@ def main() -> int:
     wanted |= heads
 
     dump = args.dump or build_dump(repo)
-    resolved, namespaces, root_namespaces, namespace_cause, dumped = scan(dump, wanted, heads)
+    (resolved, resolved_decl, namespaces, root_namespaces, namespace_cause, dumped,
+     tagged) = scan(dump, wanted, heads)
     if not args.dump:
         os.unlink(dump)
+    if not tagged:
+        # Not an error: the dump parses, and reverting to the pre-tag behaviour is the only thing
+        # that can be done with it.  Said out loud because the difference is invisible in the
+        # report — the names a module head would have swallowed are exactly the ones nobody sees.
+        sys.stderr.write(
+            "This dump has no `module`/`decl` tags, so it predates the ones\n"
+            "`scripts/DumpEnvNames.lean` writes and modules cannot be told from declarations in\n"
+            "it. Field notation is therefore accepted on a module head as it was before taxis\n"
+            "#1326; rebuild the dump from this checkout to get the stricter rule.\n")
+        resolved_decl = resolved
 
     def is_field_notation(name: str) -> bool:
-        parts = name.split(".")
-        for k in range(len(parts) - 1, 0, -1):
-            head = ".".join(parts[:k])
-            if head in resolved and head not in namespaces:
-                return True
-        return False
+        """Is `name` generalised field notation on a term, rather than a declaration reference?
 
-    def blocked_head(name: str) -> tuple[str, str] | None:
-        """The head that resolves but is a namespace, so field notation was not tried on it.
-
-        The one thing a reader of a finding cannot see from the message alone.  A head that
-        resolves is a head the prose is probably right about, and *why* the rule declined it is
-        a fact about some other declaration entirely — see `scan`.
+        The head has to resolve to a **declaration**.  `resolved` rather than `resolved_decl`
+        here is the defect taxis #1326 records: a module resolves too, and every `OkaTest/`
+        module in this repository is an empty namespace — its declarations are named into
+        `ComplexAnalytic` — so `` `OkaTest.SomeFile.anythingAtAll` `` was read as field notation
+        on the module and its tail was never looked at.
         """
         parts = name.split(".")
         for k in range(len(parts) - 1, 0, -1):
             head = ".".join(parts[:k])
-            if head in resolved and head in namespaces:
+            if head in resolved_decl and head not in namespaces:
+                return True
+        return False
+
+    def blocked_head(name: str) -> tuple[str, str] | None:
+        """The head that resolves, and why field notation was not tried on it anyway.
+
+        The one thing a reader of a finding cannot see from the message alone.  A head that
+        resolves is a head the prose is probably right about, and *why* the rule declined it is
+        a fact about something else entirely — either another declaration (see `scan`) or the
+        head being a module, which has no fields to notate.
+        """
+        parts = name.split(".")
+        for k in range(len(parts) - 1, 0, -1):
+            head = ".".join(parts[:k])
+            if head not in resolved:
+                continue
+            # The **longest** resolving head, and then why it was declined: a shorter one always
+            # resolves too — `OkaTest` is a namespace because `OkaTest.OpenSubspace` is a module —
+            # and naming it instead sends the reader to the wrong prefix of their own citation.
+            if head in namespaces:
                 return head, namespace_cause.get(head, "another declaration under it")
+            if head not in resolved_decl:
+                return head, "module"
         return None
 
     def is_local_binder(name: str) -> bool:
@@ -889,9 +994,14 @@ def main() -> int:
         blocked = blocked_head(name)
         if blocked:
             head, cause = blocked
-            print(f"    `{head}` does resolve, so this would be read as field notation, but "
-                  f"`{cause}` makes it a namespace and the field-notation rule does not apply "
-                  f"to namespaces")
+            if cause == "module":
+                print(f"    `{head}` does resolve, but only as a **module**, and field notation "
+                      f"is on a term: a module has no fields. Cite the declaration by the name "
+                      f"it is declared under, or the file by its path.")
+            else:
+                print(f"    `{head}` does resolve, so this would be read as field notation, but "
+                      f"`{cause}` makes it a namespace and the field-notation rule does not "
+                      f"apply to namespaces")
 
     total = sum(len(v) for v in found.values())
     print(f"checked {total} backticked names ({len(found)} distinct) against {dumped} "

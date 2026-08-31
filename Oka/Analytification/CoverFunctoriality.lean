@@ -98,8 +98,8 @@ it costs one attribute.
   `ComplexAnalytic.coverMap` and that file's morphism at once, so it is in neither and is
   `Oka/Analytification/ComparisonSquare.lean`, which imports both. **This bullet has twice
   recorded an absence a later file retired**: it said the morphism did not exist until
-  `CoverComparison.lean` arrived, and that the square was stated nowhere until
-  `ComparisonSquare.lean` did.
+  `Oka/Analytification/CoverComparison.lean` arrived, and that the square was stated nowhere
+  until `Oka/Analytification/ComparisonSquare.lean` did.
 -/
 
 open CategoryTheory TopologicalSpace AlgebraicGeometry

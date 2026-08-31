@@ -35,7 +35,7 @@ is that counterpart with `ComplexAnalytic.specFunctor` where that file has
 eight there.** The extra is `ComplexAnalytic.comm_specGlueData`, which is an addition and not a
 mirror, and the next section is about where its counterpart does live.
 
-## `ComplexAnalytic.comm_specGlueData` is here and not in `SpecAffineCover.lean`
+## `ComplexAnalytic.comm_specGlueData` is here and not in `Oka/Analytification/SpecAffineCover.lean`
 
 Its analytic mirror `ComplexAnalytic.comm_coverGlueData` lives in
 `Oka/Analytification/AffineCover.lean`, under that file's `### Morphisms out of \`X^an\`` heading —
