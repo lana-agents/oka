@@ -2810,3 +2810,37 @@ info: 'ComplexAnalytic.refineDatumGlue_const' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.refineDatumGlue_const
+
+
+/-! ### The analytified form of the unequal branch's triangle, and the projection it needs
+
+`Oka/Analytification/CrossMemberDatumGlue.lean`. The `a`-side projection of a cross-member refined
+overlap followed down to its member, the same statement under the analytification functor, and the
+unequal branch's coherence triangle analytified.
+
+They are guarded in their own section rather than folded into the one above because the section
+above enumerates what that branch had when it was written, and the file's `## What is not here`
+said at the time that the analytified triangle was absent. All three are theorems, so none of them
+is the `abbrev` case that section records.
+-/
+
+/--
+info: 'ComplexAnalytic.refineDatumCrossProj_localisationHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumCrossProj_localisationHom
+
+/--
+info: 'ComplexAnalytic.refineDatumCrossProj_analytification_localisationProj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumCrossProj_analytification_localisationProj
+
+/--
+info: 'ComplexAnalytic.refineDatumGlueNe_analytification_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumGlueNe_analytification_comp
