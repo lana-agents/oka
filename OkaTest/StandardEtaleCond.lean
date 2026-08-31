@@ -56,9 +56,13 @@ not choices; `monic_f` is `Polynomial.monic_X_pow_sub_C` and `cond` holds at `pâ
 
 * **Nothing about `ComplexAnalytic.etalePresentation` or its analytification.** This is the
   algebraic hypothesis alone; whether the Ã©tale presentation's analytification is a local
-  isomorphism needs the restriction to `D(G)` and a cut-out datum, and
-  `Oka/Analytification/StandardEtaleAnalytification.lean`'s `## What is not here` records both as
-  absent.
+  isomorphism needs the restriction to `D(G)` and a cut-out datum. **Only the second of those is
+  still absent**, and `Oka/Analytification/StandardEtaleAnalytification.lean`'s
+  `## What is not here` records which is which:
+  `ComplexAnalytic.isLocalIso_ofRestrict_comp_proj_of_pderiv`
+  (`Oka/AnalyticSpace/SimpleZeroTopology.lean`) takes an arbitrary open subspace of the source
+  and asks the derivative hypothesis only there, and what stands between it and the presentation
+  is the `ComplexAnalytic.IsCutOutBy` datum for `k + 1` relations.
 * **No claim that this is the smallest witness, or that one exists for every pair.** For `F` a
   unit the hypersurface is empty and there is no point at all.
 * **Nothing about `Algebra.Etale`.** `ComplexAnalytic.condPair` is a `StandardEtalePair` because

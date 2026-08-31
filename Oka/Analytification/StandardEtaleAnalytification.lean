@@ -166,8 +166,19 @@ standard étale pair.
   unrestricted statement's hypothesis is exactly what a restricted source fails to supply. What
   the topological half needed is the implicit function theorem on a *relatively open piece* of a
   level set, `isLocalHomeomorph_coordProj_comp_of_isEmbedding_inter`
-  (`Oka/Analysis/Calculus/Implicit.lean`), which is new and is the only new mathematics in the
-  transport.
+  (`Oka/Analysis/Calculus/Implicit.lean`). **That statement is not new mathematics and an earlier
+  form of this sentence said it was**: it is a twenty-line corollary of the unrestricted level-set
+  theorem, because the `f` there carries no hypothesis off its own level set and so can be
+  replaced by one whose level set is already cut down. What does not transport that way is the
+  statement one level up, where the cutting section is holomorphic; the docstrings of
+  `ComplexAnalytic.isLocalHomeomorph_base_ofRestrict_comp_uliftProj_of_coeff` and of the
+  mirror-tree theorem say which freedom is being spent and where it runs out. **So nothing in
+  this transport was out of reach of what the tree already had**: six statements, each proved
+  from one that was already there. That is a smaller claim than the one it replaces, and it is
+  checkable from the files rather than from a delivery note: the unrestricted level-set theorem
+  still
+  carries its own fifty-line proof and the restricted one is proved *from* it, so there is no
+  direction in which the dependency could be read the other way.
 
   `Oka/AnalyticSpace/OpenBaseProjection.lean` — which restricts the **base** and pulls back — is
   still not a missing counterpart but a statement about a different restriction, and `D(G)` is

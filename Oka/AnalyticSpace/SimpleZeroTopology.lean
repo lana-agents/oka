@@ -265,7 +265,17 @@ unrestricted statement is exactly what a restricted source does not supply, so n
 available to precompose with. What the proof needs instead is the implicit function theorem on a
 *relatively open piece* of the level set, which is
 `isLocalHomeomorph_coordProj_comp_of_isEmbedding_inter`, and `Ω` comes from
-`ComplexAnalytic.range_base_ofRestrict_eq_zeroSet_inter` above. -/
+`ComplexAnalytic.range_base_ofRestrict_eq_zeroSet_inter` above.
+
+**One level down that restriction is free, and this is the level at which it stops being free.**
+`isLocalHomeomorph_coordProj_comp_of_isEmbedding_inter` is a twenty-line corollary of its own
+unrestricted form, because the `f` there is a bare function and can be replaced by one whose
+level set is already `{f = c} ∩ Ω`; its docstring gives the replacement. Here `F` is an
+`OkaRing` section, so it is holomorphic, and there is in general no holomorphic `F'` on `ℂ^(n+1)`
+with `{F' = 0} = {F = 0} ∩ Ω` for an arbitrary open `Ω` — the zero set of a holomorphic function
+is closed and `{F = 0} ∩ Ω` need not be. **That is an argument and no counterexample is compiled
+for it**; what is compiled is that this statement is proved from the mirror-tree one and not from
+`ComplexAnalytic.isLocalHomeomorph_base_comp_uliftProj_of_coeff`. -/
 theorem isLocalHomeomorph_base_ofRestrict_comp_uliftProj_of_coeff (hcut : IsCutOutBy i ![F])
     (U : Opens X)
     (hlin : ∀ x : X.restrict U.isOpenEmbedding,
@@ -388,9 +398,12 @@ as a local isomorphism of complex analytic spaces.**
 
 The two fields come from opposite places and it is worth saying which, because the asymmetry is
 the content of this section. The topological one is
-`ComplexAnalytic.isLocalHomeomorph_base_ofRestrict_comp_uliftProj_of_coeff`, which is new
-mathematics: the implicit function theorem on a relatively open piece of the level set. **The
-stalk one is not new and never was.** `ComplexAnalytic.isIso_stalkMap_comp_uliftProj_of_coeff` is
+`ComplexAnalytic.isLocalHomeomorph_base_ofRestrict_comp_uliftProj_of_coeff`, which is the
+implicit function theorem on a relatively open piece of the level set and is not reached from the
+unrestricted statement — **though that is a fact about *this* level and not about the mirror-tree
+theorem it rests on**, which is a twenty-line corollary of its own unrestricted form; the
+docstring of that theorem above says why the two levels differ. **The stalk one needed nothing new
+and never did.** `ComplexAnalytic.isIso_stalkMap_comp_uliftProj_of_coeff` is
 already quantified one point at a time, so it applies at `x.1` with the hypothesis asked only
 there, and the open immersion contributes an isomorphism by
 `ComplexAnalytic.AnalyticSpace.isIso_stalkMap_ofRestrict`. Three module docstrings recorded the

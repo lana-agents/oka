@@ -172,7 +172,8 @@ contributes an isomorphism by
 `ComplexAnalytic.AnalyticSpace.isIso_stalkMap_ofRestrict`. The composition is inside
 `ComplexAnalytic.isLocalIso_ofRestrict_comp_proj_of_coeff`
 (`Oka/AnalyticSpace/SimpleZeroTopology.lean`); the topological half of that statement is the one
-that cost something.
+that needed statements of its own, though none of them needed mathematics the tree did not
+already have.
 
 **And it does not go through `AlgebraicGeometry.LocallyRingedSpace.restrictStalkIso`**, which is
 what the paragraph that used to stand here predicted it would need. That `Iso` is never
