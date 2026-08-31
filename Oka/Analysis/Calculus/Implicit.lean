@@ -51,6 +51,9 @@ in coordinates and of reading off what it says about one fibre of the first comp
 
 - `ImplicitFunctionData.injOn_rightFun_levelSet`
 - `ImplicitFunctionData.isOpen_image_rightFun_levelSet`
+- `isLocalHomeomorph_coordProj_comp_of_isEmbedding_inter`: **the same on the part of the level set
+  lying in an open set**, with the two analytic hypotheses asked only there. This is the form a
+  restriction of the embedded space needs, and the unrestricted statement is it at `Set.univ`.
 - `isLocalHomeomorph_coordProj_comp_of_isEmbedding`: **forgetting the `j`-th coordinate is a local
   homeomorphism on the level set**, stated for an arbitrary topological space embedded onto that
   level set, which is the form a subspace of `ι → 𝕜` carrying extra structure needs.
@@ -68,6 +71,12 @@ in coordinates and of reading off what it says about one fibre of the first comp
 * **No converse.** Nothing says that a level set on which the projection is a local homeomorphism
   has a nonvanishing derivative, and the hypothesis is not necessary: `f` could be constant in a
   different set of coordinates.
+* **Nothing for a piece of the level set that is not relatively open.** The `Ω` of
+  `isLocalHomeomorph_coordProj_comp_of_isEmbedding_inter` is an *open* subset of `ι → 𝕜`, and its
+  openness is used and not decorative: the last step exhibits the image of an open set as the
+  slice of `W₀ ∩ Ω ∩ φ.toOpenPartialHomeomorph.source`, which has to be open. **Whether some
+  weaker condition on `Ω` would do is not asked and no counterexample is compiled**; what is
+  recorded here is only that the hypothesis is load-bearing at that step.
 * **`e` is asked to enumerate the complement of `j` exactly.** With `Set.range e` smaller the
   projection forgets more than one coordinate and the conclusion is false; with `j ∈ Set.range e`
   the two kernels are not complementary. Both are hypotheses `he` and `hj` and neither is derived.
@@ -211,35 +220,40 @@ variable {𝕜 : Type*} [NontriviallyNormedField 𝕜] [CompleteSpace 𝕜]
   {ι κ : Type*} [Finite ι] [DecidableEq ι] [Finite κ] {e : κ ↪ ι} {j : ι}
   {f : (ι → 𝕜) → 𝕜} {f' : (ι → 𝕜) → ((ι → 𝕜) →L[𝕜] 𝕜)} {c : 𝕜}
 
-/-- **Forgetting the `j`-th coordinate is a local homeomorphism on a level set of `f`**, at every
-point of which the derivative of `f` in the `j`-th direction is nonzero.
+/-- **Forgetting the `j`-th coordinate is a local homeomorphism on a relatively open piece of a
+level set of `f`**, at every point of which the derivative of `f` in the `j`-th direction is
+nonzero.
 
-The level set is not taken as a subtype but presented by a topological embedding `g` of an
-arbitrary space onto it, which is what a subspace carrying its own structure — a complex analytic
-space cut out by `f`, say — supplies.
+`isLocalHomeomorph_coordProj_comp_of_isEmbedding` is this at `Ω = Set.univ`, and the two differ in
+exactly the way a *restriction of the source* needs: `g` is asked to embed `T` onto the part of the
+level set lying in an open `Ω`, not onto all of it, and the two analytic hypotheses are asked only
+there. An embedding onto the whole level set followed by the inclusion of an open subspace of `T`
+is an embedding onto such a piece and onto no smaller a set, which is why intersecting with an open
+is the right weakening and cutting out an arbitrary subset is not: the proof below needs the
+neighbourhood it builds inside `Ω` to stay inside the image of `T`.
 
-The proof is the implicit function theorem at each point and nothing else: `g x` lies in the
-source of the partial homeomorphism `z ↦ (f z, z ∘ e)` of
-`ImplicitFunctionData.ofCoordProj`, its `g`-preimage is the required neighbourhood, and the two
-halves of `IsOpenEmbedding` on it are
-`ImplicitFunctionData.injOn_rightFun_levelSet` and
-`ImplicitFunctionData.isOpen_image_rightFun_levelSet`. Openness of the image needs that an open
-subset of the domain is `g ⁻¹' W` for some open `W`, which is `Topology.IsInducing.isOpen_iff`. -/
-theorem isLocalHomeomorph_coordProj_comp_of_isEmbedding
-    {T : Type*} [TopologicalSpace T] {g : T → (ι → 𝕜)} (hg : Topology.IsEmbedding g)
+Everything in the proof is the argument of the unrestricted statement with `Ω` carried along; the
+only step that is not bookkeeping is `hset`, where the open set whose slice the image is has to be
+shrunk to `W₀ ∩ Ω` so that the slice is `g '' (U ∩ W')` and not a larger piece of the level set. -/
+theorem isLocalHomeomorph_coordProj_comp_of_isEmbedding_inter
+    {T : Type*} [TopologicalSpace T] {g : T → (ι → 𝕜)} {Ω : Set (ι → 𝕜)}
+    (hg : Topology.IsEmbedding g) (hΩ : IsOpen Ω)
     (he : ∀ i, i ≠ j → i ∈ Set.range e) (hj : j ∉ Set.range e)
-    (hrange : Set.range g = {z | f z = c})
-    (hf : ∀ z, f z = c → HasStrictFDerivAt f (f' z) z)
-    (hne : ∀ z, f z = c → f' z (Pi.single j 1) ≠ 0) :
+    (hrange : Set.range g = {z | f z = c} ∩ Ω)
+    (hf : ∀ z ∈ Ω, f z = c → HasStrictFDerivAt f (f' z) z)
+    (hne : ∀ z ∈ Ω, f z = c → f' z (Pi.single j 1) ≠ 0) :
     IsLocalHomeomorph fun x ↦ g x ∘ e := by
   haveI : Fintype ι := Fintype.ofFinite ι
   haveI : Fintype κ := Fintype.ofFinite κ
   rw [isLocalHomeomorph_iff_isOpenEmbedding_restrict]
   intro x
-  have hmem : ∀ y : T, f (g y) = c := fun y ↦ by
-    have hy : g y ∈ {z | f z = c} := hrange ▸ Set.mem_range_self y
-    exact hy
-  set φ := ImplicitFunctionData.ofCoordProj he hj (hf _ (hmem x)) (hne _ (hmem x)) with hφ
+  have hmemr : ∀ y : T, g y ∈ {z | f z = c} ∩ Ω := fun y ↦ by
+    have hy : g y ∈ Set.range g := Set.mem_range_self y
+    rwa [hrange] at hy
+  have hmem : ∀ y : T, f (g y) = c := fun y ↦ (hmemr y).1
+  have hmemΩ : ∀ y : T, g y ∈ Ω := fun y ↦ (hmemr y).2
+  set φ := ImplicitFunctionData.ofCoordProj he hj (hf _ (hmemΩ x) (hmem x))
+    (hne _ (hmemΩ x) (hmem x)) with hφ
   have hlevel : {z | φ.leftFun z = φ.leftFun φ.pt} = {z | f z = c} := by
     ext z; simp [hφ, hmem x]
   set U : Set T := g ⁻¹' φ.toOpenPartialHomeomorph.source with hU
@@ -265,19 +279,44 @@ theorem isLocalHomeomorph_coordProj_comp_of_isEmbedding
       rw [← hW₀, Set.image_preimage_eq_inter_range]
     have hgVsub : g '' (U ∩ W') ⊆ φ.toOpenPartialHomeomorph.source := by
       rintro _ ⟨y, hy, rfl⟩; exact (hsub y hy.1).1
-    have hset : (W₀ ∩ φ.toOpenPartialHomeomorph.source) ∩
+    have hset : ((W₀ ∩ Ω) ∩ φ.toOpenPartialHomeomorph.source) ∩
         {z | φ.leftFun z = φ.leftFun φ.pt} = g '' (U ∩ W') := by
       rw [hgV, hlevel, hrange]
       ext z
       constructor
-      · rintro ⟨⟨hzW, _⟩, hzl⟩; exact ⟨hzW, hzl⟩
-      · rintro ⟨hzW, hzl⟩
-        exact ⟨⟨hzW, hgVsub (by rw [hgV, hrange]; exact ⟨hzW, hzl⟩)⟩, hzl⟩
+      · rintro ⟨⟨⟨hzW, hzΩ⟩, _⟩, hzl⟩; exact ⟨hzW, hzl, hzΩ⟩
+      · rintro ⟨hzW, hzl, hzΩ⟩
+        exact ⟨⟨⟨hzW, hzΩ⟩, hgVsub (by rw [hgV, hrange]; exact ⟨hzW, hzl, hzΩ⟩)⟩, hzl⟩
     have himg2 : (fun t ↦ g t ∘ e) '' (U ∩ W') = φ.rightFun '' (g '' (U ∩ W')) := by
       rw [← Set.image_comp]; rfl
     rw [himg2, ← hset]
     exact φ.isOpen_image_rightFun_levelSet
-      (hW₀open.inter φ.toOpenPartialHomeomorph.open_source) Set.inter_subset_right
+      ((hW₀open.inter hΩ).inter φ.toOpenPartialHomeomorph.open_source) Set.inter_subset_right
+
+
+/-- **Forgetting the `j`-th coordinate is a local homeomorphism on a level set of `f`**, at every
+point of which the derivative of `f` in the `j`-th direction is nonzero.
+
+The level set is not taken as a subtype but presented by a topological embedding `g` of an
+arbitrary space onto it, which is what a subspace carrying its own structure — a complex analytic
+space cut out by `f`, say — supplies.
+
+The proof is the implicit function theorem at each point and nothing else: `g x` lies in the
+source of the partial homeomorphism `z ↦ (f z, z ∘ e)` of
+`ImplicitFunctionData.ofCoordProj`, its `g`-preimage is the required neighbourhood, and the two
+halves of `IsOpenEmbedding` on it are
+`ImplicitFunctionData.injOn_rightFun_levelSet` and
+`ImplicitFunctionData.isOpen_image_rightFun_levelSet`. Openness of the image needs that an open
+subset of the domain is `g ⁻¹' W` for some open `W`, which is `Topology.IsInducing.isOpen_iff`. -/
+theorem isLocalHomeomorph_coordProj_comp_of_isEmbedding
+    {T : Type*} [TopologicalSpace T] {g : T → (ι → 𝕜)} (hg : Topology.IsEmbedding g)
+    (he : ∀ i, i ≠ j → i ∈ Set.range e) (hj : j ∉ Set.range e)
+    (hrange : Set.range g = {z | f z = c})
+    (hf : ∀ z, f z = c → HasStrictFDerivAt f (f' z) z)
+    (hne : ∀ z, f z = c → f' z (Pi.single j 1) ≠ 0) :
+    IsLocalHomeomorph fun x ↦ g x ∘ e :=
+  isLocalHomeomorph_coordProj_comp_of_isEmbedding_inter hg isOpen_univ he hj
+    (by rw [hrange, Set.inter_univ]) (fun z _ hz ↦ hf z hz) fun z _ hz ↦ hne z hz
 
 /-- **The level set itself, as a subtype, is locally homeomorphic to the remaining
 coordinates.** `isLocalHomeomorph_coordProj_comp_of_isEmbedding` at the inclusion of the level

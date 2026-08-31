@@ -57,6 +57,17 @@ uniform in the point, and nothing needs to be.
 - `ComplexAnalytic.isLocalIso_comp_proj_of_coeff` and
   `ComplexAnalytic.isLocalIso_comp_proj_of_pderiv`: **`i ≫ p` is a local isomorphism of complex
   analytic spaces**, the two halves together.
+- `ComplexAnalytic.range_base_ofRestrict_eq_zeroSet_inter`: **the image of an open subspace of the
+  hypersurface is the zero set met with an open subset of `ℂ^(n+1)`.**
+- `ComplexAnalytic.isLocalHomeomorph_base_ofRestrict_comp_uliftProj_of_coeff` and
+  `ComplexAnalytic.isLocalHomeomorph_base_ofRestrict_comp_uliftProj_of_pderiv`: **the same
+  topological half after restricting the source to an open subspace**, with the hypothesis asked
+  only at the points of that subspace.
+- `ComplexAnalytic.isLocalIso_ofRestrict_comp_proj_of_coeff` and
+  `ComplexAnalytic.isLocalIso_ofRestrict_comp_proj_of_pderiv`: **an open subspace of the
+  hypersurface projects as a local isomorphism**, which is what a standard étale presentation
+  needs, since it inverts a polynomial and so supplies the simple-zero hypothesis on an open
+  subset of the hypersurface and nowhere else.
 - `ComplexAnalytic.not_mem_range_uliftCastSuccEmb` and
   `ComplexAnalytic.mem_range_uliftCastSuccEmb`: the last coordinate is the only one the
   projection forgets.
@@ -74,11 +85,15 @@ uniform in the point, and nothing needs to be.
   is compiled nowhere** — no declaration in this repository states it, and the only compiled
   non-closed image on this line is `ComplexAnalytic.not_isClosedMap_base_proj`, which is about a
   different morphism.
-* **Nothing about a hypersurface inside an open subset.** `i` maps into the whole of `ℂ^(n+1)`,
-  so the cutting section is entire. The stalk half has an open-base version in
-  `Oka/AnalyticSpace/OpenBaseProjection.lean` and the topological half has none; a standard étale
-  algebra inverts a polynomial as well as cutting one out, which is why that matters and why this
-  file does not close the standard étale case.
+* **Nothing about a hypersurface inside an open subset of the *ambient* space.** `i` maps into the
+  whole of `ℂ^(n+1)`, so the cutting section is entire, and that is unchanged by the restricted
+  statements above: those restrict the **source**, and the section they cut it out by is still an
+  entire one. The stalk half has an open-*base* version in
+  `Oka/AnalyticSpace/OpenBaseProjection.lean` — a cylinder over an open `V ⊆ ℂ^n`, pulled back —
+  and the topological half still has none. **The two restrictions are different and neither
+  subsumes the other**, which the earlier form of this bullet did not distinguish: `D(G)` for a
+  `G` involving the fibre variable is not a cylinder over anything, and an open subspace of the
+  source is not a preimage from the base.
 * **No converse.** Nothing says that a hypersurface whose projection is a local isomorphism has a
   simple zero. The hypothesis is sufficient and is not claimed to be necessary.
 * **No statement about the image.** A local homeomorphism need not be surjective and need not be
@@ -207,6 +222,92 @@ theorem isLocalHomeomorph_base_comp_uliftProj_of_pderiv
   rw [← LocalOkaRing.ofMvPolynomial_eq, LocalOkaRing.coeff_single_one_ofMvPolynomial]
   exact hlin x
 
+/-! ### Restricting the source -/
+
+/-- **The image of an open subspace of the hypersurface is the zero set met with an open subset of
+the ambient space.**
+
+This is the whole of what a *restriction of the source* costs, and it is what
+`Oka/AnalyticSpace/OpenBaseProjection.lean` is not: that file restricts the **base** and pulls
+back, so its open is a cylinder, while `U` here is any open of `X` whatever and the `Ω` it
+produces is an open of `ℂ^(n+1)` with no product structure asked of it. The `Ω` exists because
+`i.base` is an embedding, so every open of `X` is the preimage of one; it is not unique and
+nothing below needs it to be. -/
+theorem range_base_ofRestrict_eq_zeroSet_inter (hcut : IsCutOutBy i ![F]) (U : Opens X) :
+    ∃ Ω : Set (ULift.{u} (Fin (n + 1)) → ℂ), IsOpen Ω ∧
+      Set.range ((X.ofRestrict U.isOpenEmbedding ≫ i).base :
+        X.restrict U.isOpenEmbedding → (ULift.{u} (Fin (n + 1)) → ℂ)) =
+        {z : ULift.{u} (Fin (n + 1)) → ℂ | F.toGlobalFun ⊤ z = 0} ∩ Ω := by
+  obtain ⟨Ω, hΩ, hUΩ⟩ := hcut.isClosedEmbedding.isEmbedding.isInducing.isOpen_iff.1 U.isOpen
+  refine ⟨Ω, hΩ, ?_⟩
+  have hr : Set.range ((X.ofRestrict U.isOpenEmbedding ≫ i).base :
+      X.restrict U.isOpenEmbedding → (ULift.{u} (Fin (n + 1)) → ℂ)) =
+      (i.base : X → (ULift.{u} (Fin (n + 1)) → ℂ)) '' (U : Set X) := by
+    ext z
+    constructor
+    · rintro ⟨x, rfl⟩; exact ⟨x.1, x.2, rfl⟩
+    · rintro ⟨x, hx, rfl⟩; exact ⟨⟨x, hx⟩, rfl⟩
+  rw [hr, ← hUΩ, Set.image_preimage_eq_inter_range, range_base_eq_zeroSet hcut]
+  exact Set.inter_comm _ _
+
+/-- **The projection of an open subspace of a hypersurface is a local homeomorphism**, at the
+simple-zero hypothesis asked only at the points of that open subspace.
+
+This is the statement three module docstrings recorded as absent — the hypersurface met with
+`D(G)` of a standard étale presentation is a restriction of the *source*, and
+`ComplexAnalytic.eval_pderiv_ne_zero_of_mem` supplies the derivative only there, so
+`ComplexAnalytic.isLocalHomeomorph_base_comp_uliftProj_of_coeff`, whose hypothesis is at every
+point of `X`, cannot be applied.
+
+**It is not a corollary of that theorem and it is not a composition.** A local homeomorphism
+precomposed with an open immersion is a local homeomorphism, but the hypothesis of the
+unrestricted statement is exactly what a restricted source does not supply, so nothing is
+available to precompose with. What the proof needs instead is the implicit function theorem on a
+*relatively open piece* of the level set, which is
+`isLocalHomeomorph_coordProj_comp_of_isEmbedding_inter`, and `Ω` comes from
+`ComplexAnalytic.range_base_ofRestrict_eq_zeroSet_inter` above. -/
+theorem isLocalHomeomorph_base_ofRestrict_comp_uliftProj_of_coeff (hcut : IsCutOutBy i ![F])
+    (U : Opens X)
+    (hlin : ∀ x : X.restrict U.isOpenEmbedding,
+      MvPowerSeries.coeff (Finsupp.single (ULift.up.{u} (Fin.last n)) 1)
+      ((OkaRing.germ (show (X.ofRestrict U.isOpenEmbedding ≫ i).base x ∈
+          (⊤ : Opens (ULift.{u} (Fin (n + 1)) → ℂ)) from trivial) F :
+        LocalOkaRing (ULift.{u} (Fin (n + 1)))) :
+          MvPowerSeries (ULift.{u} (Fin (n + 1))) ℂ) ≠ 0) :
+    IsLocalHomeomorph ((X.ofRestrict U.isOpenEmbedding ≫ i ≫
+      okaMapHom (coordEmb (uliftCastSuccEmb.{u} n))).base :
+        X.restrict U.isOpenEmbedding → _) := by
+  obtain ⟨Ω, hΩ, hrange⟩ := range_base_ofRestrict_eq_zeroSet_inter hcut U
+  rw [← Category.assoc, base_comp_uliftProj]
+  refine isLocalHomeomorph_coordProj_comp_of_isEmbedding_inter
+    (hcut.isClosedEmbedding.isEmbedding.comp Topology.IsEmbedding.subtypeVal) hΩ
+    (f := F.toGlobalFun ⊤) (f' := fun z ↦ fderiv ℂ (F.toGlobalFun ⊤) z)
+    (fun m hm ↦ mem_range_uliftCastSuccEmb hm) not_mem_range_uliftCastSuccEmb hrange
+    (fun z _ _ ↦ (F.analyticAt_toGlobalFun trivial).hasStrictFDerivAt) fun z hzΩ hz ↦ ?_
+  have hmem : z ∈ Set.range ((X.ofRestrict U.isOpenEmbedding ≫ i).base :
+      X.restrict U.isOpenEmbedding → (ULift.{u} (Fin (n + 1)) → ℂ)) := by
+    rw [hrange]; exact ⟨hz, hzΩ⟩
+  obtain ⟨x, rfl⟩ := hmem
+  rw [← OkaRing.coeff_single_one_germ]
+  exact hlin x
+
+/-- **The same for a polynomial cutting section**, by the rewrite
+`LocalOkaRing.coeff_single_one_ofMvPolynomial` that
+`ComplexAnalytic.isLocalHomeomorph_base_comp_uliftProj_of_pderiv` makes at the unrestricted
+hypothesis. -/
+theorem isLocalHomeomorph_base_ofRestrict_comp_uliftProj_of_pderiv
+    {P : MvPolynomial (ULift.{u} (Fin (n + 1))) ℂ}
+    (hcut : IsCutOutBy i ![OkaRing.ofMvPolynomial ⊤ P]) (U : Opens X)
+    (hlin : ∀ x : X.restrict U.isOpenEmbedding,
+      MvPolynomial.eval ((X.ofRestrict U.isOpenEmbedding ≫ i).base x)
+        (MvPolynomial.pderiv (ULift.up.{u} (Fin.last n)) P) ≠ 0) :
+    IsLocalHomeomorph ((X.ofRestrict U.isOpenEmbedding ≫ i ≫
+      okaMapHom (coordEmb (uliftCastSuccEmb.{u} n))).base :
+        X.restrict U.isOpenEmbedding → _) := by
+  refine isLocalHomeomorph_base_ofRestrict_comp_uliftProj_of_coeff hcut U fun x ↦ ?_
+  rw [← LocalOkaRing.ofMvPolynomial_eq, LocalOkaRing.coeff_single_one_ofMvPolynomial]
+  exact hlin x
+
 /-! ### The two halves together -/
 
 section AnalyticSpaceLevel
@@ -281,6 +382,60 @@ theorem isLocalIso_comp_proj_of_pderiv {P : MvPolynomial (ULift.{u} (Fin (n + 1)
     AnalyticSpace.IsLocalIso (i' ≫ AnalyticSpace.proj.{u} n) :=
   ⟨isLocalHomeomorph_base_comp_uliftProj_of_pderiv hcut hlin,
     fun x ↦ isIso_stalkMap_comp_uliftProj_of_pderiv hcut x (hlin x)⟩
+
+/-- **An open subspace of a hypersurface with a simple zero at each of its own points projects
+as a local isomorphism of complex analytic spaces.**
+
+The two fields come from opposite places and it is worth saying which, because the asymmetry is
+the content of this section. The topological one is
+`ComplexAnalytic.isLocalHomeomorph_base_ofRestrict_comp_uliftProj_of_coeff`, which is new
+mathematics: the implicit function theorem on a relatively open piece of the level set. **The
+stalk one is not new and never was.** `ComplexAnalytic.isIso_stalkMap_comp_uliftProj_of_coeff` is
+already quantified one point at a time, so it applies at `x.1` with the hypothesis asked only
+there, and the open immersion contributes an isomorphism by
+`ComplexAnalytic.AnalyticSpace.isIso_stalkMap_ofRestrict`. Three module docstrings recorded the
+two halves as equally absent across a restriction of the source; only one of them was.
+
+**This is not `ComplexAnalytic.isLocalIso_comp_proj_of_coeff` composed with the open immersion.**
+That composition is available — `isLocalIso_ofRestrict` and
+`ComplexAnalytic.AnalyticSpace.isLocalIso_comp` give it in one `infer_instance` — and it is not
+this, because it needs the simple-zero hypothesis at **every** point of `W`. What a standard
+étale presentation supplies is the hypothesis on `D(G)` only, which is exactly a `U`. -/
+theorem isLocalIso_ofRestrict_comp_proj_of_coeff (hcut : IsCutOutBy i'.toLRSHom ![F])
+    (U : W.Opens)
+    (hlin : ∀ x : W.restrict U, MvPowerSeries.coeff
+      (Finsupp.single (ULift.up.{u} (Fin.last n)) 1)
+      ((OkaRing.germ (show i'.toLRSHom.base x.1 ∈
+          (⊤ : Opens (ULift.{u} (Fin (n + 1)) → ℂ)) from trivial) F :
+        LocalOkaRing (ULift.{u} (Fin (n + 1)))) :
+          MvPowerSeries (ULift.{u} (Fin (n + 1))) ℂ) ≠ 0) :
+    AnalyticSpace.IsLocalIso (W.ofRestrict U ≫ i' ≫ AnalyticSpace.proj.{u} n) where
+  isLocalHomeomorph := isLocalHomeomorph_base_ofRestrict_comp_uliftProj_of_coeff hcut _ hlin
+  isIso_stalkMap x := by
+    have h : (W.ofRestrict U ≫ i' ≫ AnalyticSpace.proj.{u} n).toLRSHom =
+        (W.ofRestrict U).toLRSHom ≫ (i' ≫ AnalyticSpace.proj.{u} n).toLRSHom := rfl
+    rw [h, LocallyRingedSpace.stalkMap_comp]
+    exact IsIso.comp_isIso' (isIso_stalkMap_comp_uliftProj_of_coeff hcut x.1 (hlin x))
+      (AnalyticSpace.isIso_stalkMap_ofRestrict W U x)
+
+/-- **The same for a polynomial cutting section.** This is the form the standard étale line
+consumes: the hypersurface is `ComplexAnalytic.hypersurfacePresentation`'s and the `U` is the
+`D(G)` that presentation is localised at, on which — and only on which —
+`ComplexAnalytic.eval_pderiv_ne_zero_of_mem` produces the derivative. -/
+theorem isLocalIso_ofRestrict_comp_proj_of_pderiv
+    {P : MvPolynomial (ULift.{u} (Fin (n + 1))) ℂ}
+    (hcut : IsCutOutBy i'.toLRSHom ![OkaRing.ofMvPolynomial ⊤ P]) (U : W.Opens)
+    (hlin : ∀ x : W.restrict U, MvPolynomial.eval (i'.toLRSHom.base x.1)
+      (MvPolynomial.pderiv (ULift.up.{u} (Fin.last n)) P) ≠ 0) :
+    AnalyticSpace.IsLocalIso (W.ofRestrict U ≫ i' ≫ AnalyticSpace.proj.{u} n) where
+  isLocalHomeomorph :=
+    isLocalHomeomorph_base_ofRestrict_comp_uliftProj_of_pderiv hcut _ hlin
+  isIso_stalkMap x := by
+    have h : (W.ofRestrict U ≫ i' ≫ AnalyticSpace.proj.{u} n).toLRSHom =
+        (W.ofRestrict U).toLRSHom ≫ (i' ≫ AnalyticSpace.proj.{u} n).toLRSHom := rfl
+    rw [h, LocallyRingedSpace.stalkMap_comp]
+    exact IsIso.comp_isIso' (isIso_stalkMap_comp_uliftProj_of_pderiv hcut x.1 (hlin x))
+      (AnalyticSpace.isIso_stalkMap_ofRestrict W U x)
 
 end AnalyticSpaceLevel
 

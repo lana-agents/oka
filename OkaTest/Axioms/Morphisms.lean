@@ -1304,6 +1304,13 @@ info: 'isLocalHomeomorph_coordProj_comp_of_isEmbedding' depends on axioms:
 #print axioms isLocalHomeomorph_coordProj_comp_of_isEmbedding
 
 /--
+info: 'isLocalHomeomorph_coordProj_comp_of_isEmbedding_inter' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms isLocalHomeomorph_coordProj_comp_of_isEmbedding_inter
+
+/--
 info: 'isLocalHomeomorph_coordProj_levelSet' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
@@ -1363,6 +1370,49 @@ info: 'ComplexAnalytic.isLocalIso_comp_proj_of_pderiv' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isLocalIso_comp_proj_of_pderiv
+
+/-! #### The same after restricting the source to an open subspace
+
+These five are the transport of the two halves across an open subspace of the *hypersurface*,
+which three module docstrings recorded as absent until taxis #1112. They are guarded together and
+apart from the unrestricted ones above because the asymmetry is the content: only the topological
+half needed anything new, and what it needed is
+`isLocalHomeomorph_coordProj_comp_of_isEmbedding_inter` above. -/
+
+/--
+info: 'ComplexAnalytic.range_base_ofRestrict_eq_zeroSet_inter' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.range_base_ofRestrict_eq_zeroSet_inter
+
+/--
+info: 'ComplexAnalytic.isLocalHomeomorph_base_ofRestrict_comp_uliftProj_of_coeff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isLocalHomeomorph_base_ofRestrict_comp_uliftProj_of_coeff
+
+/--
+info: 'ComplexAnalytic.isLocalHomeomorph_base_ofRestrict_comp_uliftProj_of_pderiv' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isLocalHomeomorph_base_ofRestrict_comp_uliftProj_of_pderiv
+
+/--
+info: 'ComplexAnalytic.isLocalIso_ofRestrict_comp_proj_of_coeff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isLocalIso_ofRestrict_comp_proj_of_coeff
+
+/--
+info: 'ComplexAnalytic.isLocalIso_ofRestrict_comp_proj_of_pderiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isLocalIso_ofRestrict_comp_proj_of_pderiv
 
 /-! ### Cancellation of finiteness and of finite étaleness
 
