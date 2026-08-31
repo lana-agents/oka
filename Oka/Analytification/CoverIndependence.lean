@@ -141,10 +141,20 @@ docstring predicts that every consumer of the functor spells its object the othe
   of what this file does.
 
   Still absent there, and so still absent everywhere: the **cross-member** case, where `σ` is not
-  constant and the original cover's own `glue` has to be transported; and a literal
-  `ComplexAnalytic.coverMap` out of a refinement, which needs `A^an` presented as a one-member
-  cover datum and that gluing identified with `A^an` — an identification nothing in this
-  repository states.
+  constant; and a literal `ComplexAnalytic.coverMap` out of a refinement, which needs `A^an`
+  presented as a one-member cover datum and that gluing identified with `A^an` — an identification
+  nothing in this repository states.
+
+  **What is absent in the cross-member case is the datum and no longer the transport.** This
+  bullet used to say that the case is absent because the original cover's own `glue` has to be
+  transported; `Oka/Analytification/CrossMemberGlue.lean` transports it —
+  `ComplexAnalytic.refineCrossGlue` with its coherence triangle
+  `ComplexAnalytic.refineCrossGlue_hom_comp`, over the *original overlap* rather than over either
+  member, since the data relates no two members. What no file has is a refined cover datum whose
+  members cross: its `poly` field needs one formula per ordered pair and the two cases are
+  different formulas, its `hsymm` constrains choices that two existentials make, and the two
+  geometric laws have no cross-member analogue. That file's `## What is not here` states all
+  three.
 
   **This bullet also said refinement is where `σ` and `ψ` "have to be built", with the implication
   that building them is the work; the second half is false and was measured so on 2026-08-30.**
