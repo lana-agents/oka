@@ -385,9 +385,18 @@ not two values of one type and `HEq` is the only comparison available before the
 **Give the `HEq` a stated type at the call site.** A caller whose two families are literally the
 same expression still has to convince the elaborator that the two types agree, which means
 reducing `D.U j` through `CategoryTheory.GlueData.ofGlueData'` on both sides; supplying
-`HEq.rfl` against an inferred type does that inside a metavariable and does not terminate within a
-million heartbeats, while `have : HEq f f := HEq.rfl` at the spelled-out family and then `exact`
-is immediate. -/
+`HEq.rfl` against an inferred type does that inside a metavariable and **exceeds the default
+heartbeat budget**, while `have : HEq f f := HEq.rfl` at the spelled-out family and then `exact`
+is immediate.
+
+**It is a cost and not a non-termination**, which is worth the extra clause because the two are
+fixed by different things. `lakefile.toml` sets no `maxHeartbeats`, so the budget in force is
+Lean's default 200000; the inline form exceeds it, in different ways on different machines —
+`(kernel) deterministic timeout` after 2m32s and after 154s on two, an OOM kill after 150s on a
+third. With `set_option maxHeartbeats 0` the consuming module
+`Oka/Analytification/DiagonalIndependence.lean` **elaborates**, in 489s against 60s as shipped
+(562s against 82s on another machine). So the hoisted `have` buys about eight times the file, not
+the difference between finishing and not. -/
 theorem ofGlueDataCLinear_congr {D D' : LocallyRingedSpace.GlueData.{u}} (h : D = D')
     {α : ∀ j, ℂ →+* (D.U j).presheaf.obj (op ⊤)}
     {α' : ∀ j, ℂ →+* (D'.U j).presheaf.obj (op ⊤)} (hα : HEq α α')

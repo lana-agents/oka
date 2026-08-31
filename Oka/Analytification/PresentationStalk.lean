@@ -32,11 +32,22 @@ with `ComplexAnalytic.quotientToGlobal` in place of `okaGlobalOfMvPolynomial`.
 
 That is worth saying explicitly, because it is the answer to a question the issue this file
 closes flagged as its schedule risk. The `Spec.locallyRingedSpaceObj` transparency problem
-measured on taxis #599 — where `isDefEq` times out at a million heartbeats — **does not fire
-here either**, for the same reason it did not fire for the ambient map: the `Algebra` and
-`IsLocalization.AtPrime` instances are restated at the *concrete point*
+**does not fire here either**, for the same reason it did not fire for the ambient map: the
+`Algebra` and `IsLocalization.AtPrime` instances are restated at the *concrete point*
 `(analytificationToSpec g).base y`, where instance search can key on them, rather than for a
 general `PrimeSpectrum`.
+
+**Until 2026-08-31 that sentence described the problem as an `isDefEq` timing out at a million
+heartbeats, and it is the description taxis #599 retracted.**
+`Oka/Analytification/AffineSpace.lean` is the file that documents this seam, and it says the
+opposite in terms: the failure is *"instant,
+a keying miss during instance search rather than a defeq blow-up"* — which is the whole reason the
+route around it exists, since a search that fails on keying can be routed around and a defeq
+blow-up usually cannot. There is a real timeout on that line of work, and it is a different step:
+crossing the seam while the goal is still wrapped in `RingHom.comp`. So this paragraph was
+carrying, into a second file, the misattribution that #599 was rejected for and corrected in the
+first; what makes the correction cheap to state is that the sentence it belongs to was already
+right about *why* nothing fires here.
 
 ## Main definitions
 

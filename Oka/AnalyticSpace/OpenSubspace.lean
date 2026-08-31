@@ -372,9 +372,21 @@ abbrev resΓ (X : AnalyticSpace.{u}) (U : X.Opens) (g : X.presheaf.obj (op ⊤))
 
 Spelled at the level of locally ringed spaces throughout — `Γ.map` of the underlying morphism
 rather than of the morphism of analytic spaces. That is not cosmetic: the same proof written
-against `X.restrictLE h` and `X.ofRestrict W` as morphisms of analytic spaces does not
-elaborate in a million heartbeats, because unifying `(f ≫ g).toLRSHom` with
-`f.toLRSHom ≫ g.toLRSHom` forces the category instance open at every step. -/
+against `X.restrictLE h` and `X.ofRestrict W` as morphisms of analytic spaces **exceeds the
+default heartbeat budget**, because unifying `(f ≫ g).toLRSHom` with `f.toLRSHom ≫ g.toLRSHom`
+forces the category instance open at every step.
+
+**Measured 2026-08-31**, by replacing the `congrArg` below with one whose motive is over
+`X.restrict V ⟶ X` and whose argument is `ComplexAnalytic.AnalyticSpace.restrictLE_fac` rather
+than `AlgebraicGeometry.LocallyRingedSpace.restrictLE_fac`:
+`(deterministic) timeout at whnf, maximum number of heartbeats (200000)`, reached in 20s.
+**200000 is the budget in force** — `lakefile.toml` sets no `maxHeartbeats`, so a figure of a
+million, which this paragraph gave until today, names a budget nobody set.
+
+**Unlike the seam in `Oka/AnalyticSpace/Glue.lean`, this one is not known to be merely
+expensive.** There the same counterfactual under `set_option maxHeartbeats 0` finishes, at about
+eight times the file; here it was still elaborating after 21m29s and 5.4GB and was stopped, so
+nothing measured says it terminates and nothing says it does not. -/
 lemma resΓ_restrictLE (X : AnalyticSpace.{u}) {V W : X.Opens} (h : V ≤ W)
     (g : X.presheaf.obj (op ⊤)) :
     (LocallyRingedSpace.Γ.map (X.toLocallyRingedSpace.restrictLE h).op).hom (X.resΓ W g) =
