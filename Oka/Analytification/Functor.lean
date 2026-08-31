@@ -61,7 +61,9 @@ functor would be a definition nothing can be computed from.
   `ComplexAnalytic.Presentation.isoOfRename`.
 - `ComplexAnalytic.Presentation.algEquivOfIso`: **and back again**, which is what a consumer
   holding an isomorphism of presentations needs before it can reach any statement phrased about
-  algebras.
+  algebras, with `ComplexAnalytic.Presentation.isoOfAlgEquiv_algEquivOfIso` and
+  `ComplexAnalytic.Presentation.algEquivOfIso_isoOfAlgEquiv` saying that the two are mutually
+  inverse — the first is the composite that consumer meets.
 - `ComplexAnalytic.toFGAlg : Presentation ⥤ (isFiniteType.FullSubcategory)ᵒᵖ`: a presentation,
   read as the finitely generated `ℂ`-algebra it presents.
 - `ComplexAnalytic.analytificationFGAlg`: **the analytification of a finitely generated
@@ -251,6 +253,36 @@ noncomputable def Presentation.algEquivOfIso {P Q : Presentation.{u}} (φ : P �
   map_mul' := map_mul _
   map_add' := map_add _
   commutes' c := RingHom.congr_fun φ.hom.commutes c
+
+/-- **The round trip through the algebras is the identity**, which is the half of *"the inverse
+of"* that a consumer travels.
+
+A consumer holding `φ : P ≅ Q` — the shape a cover datum's glue field is in — and wanting a
+statement phrased about algebras passes to `ComplexAnalytic.Presentation.algEquivOfIso`, and the
+statement hands back an isomorphism of presentations built with
+`ComplexAnalytic.Presentation.isoOfAlgEquiv`. Without this they land on
+`ComplexAnalytic.Presentation.isoOfAlgEquiv (ComplexAnalytic.Presentation.algEquivOfIso φ)` where
+they wanted `φ`, with nothing to close the gap:
+`ComplexAnalytic.localisationPresentationIsoOfAlgEquiv_hom_comp` is exactly such a consumer, since
+its right-hand factor is an `isoOfAlgEquiv`.
+
+It is `rfl` because both constructions only repackage the two ring maps already present, and an
+`Iso` is its two morphisms and two proofs; no field is computed on either side. -/
+theorem Presentation.isoOfAlgEquiv_algEquivOfIso {P Q : Presentation.{u}} (φ : P ≅ Q) :
+    Presentation.isoOfAlgEquiv.{u} (Presentation.algEquivOfIso.{u} φ) = φ :=
+  rfl
+
+/-- **And the round trip through the presentations is the identity**, so *"the inverse of"* in
+`ComplexAnalytic.Presentation.algEquivOfIso`'s docstring is a claim this file backs in both
+directions rather than a name.
+
+`rfl` for the reason its companion
+`ComplexAnalytic.Presentation.isoOfAlgEquiv_algEquivOfIso` is. This direction is on no consumer
+path yet; it is stated because *"inverse"* is not a property of one composite. -/
+theorem Presentation.algEquivOfIso_isoOfAlgEquiv {P Q : Presentation.{u}}
+    (e : Q.alg ≃ₐ[ℂ] P.alg) :
+    Presentation.algEquivOfIso.{u} (Presentation.isoOfAlgEquiv.{u} e) = e :=
+  rfl
 
 /-! ### Presentations are the finitely generated `ℂ`-algebras -/
 
