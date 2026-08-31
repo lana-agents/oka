@@ -89,7 +89,8 @@ docstring, because `scripts/guard_coverage.py` reads every backticked repository
   source, a hypothesis lana-agents/oka#222's review measured is not free for a constructed cover.
   Nothing below builds the functor.
 * **No pullbacks, so no base change.** `ComplexAnalytic.AnalyticSpace` has no `HasPullback`
-  instance anywhere in this repository, so `CategoryTheory.MorphismProperty.IsStableUnderBaseChange`
+  instance anywhere in this repository, so
+  `CategoryTheory.MorphismProperty.IsStableUnderBaseChange`
   is not even statable for `isFiniteEtale` here, and the pullback of a cover along a morphism of
   the base — which is how a Galois category's fibre functor is usually built — does not exist.
 * **No degree on objects.** `ComplexAnalytic.AnalyticSpace.degree` is a function of a morphism and
