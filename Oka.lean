@@ -81,6 +81,7 @@ import Oka.Analytification.CoverComparison
 import Oka.Analytification.CoverFunctoriality
 import Oka.Analytification.CoverIndependence
 import Oka.Analytification.CoverRefinement
+import Oka.Analytification.CrossMemberDatum
 import Oka.Analytification.CrossMemberGlue
 import Oka.Analytification.DistinguishedOpen
 import Oka.Analytification.DistinguishedOpenPullback

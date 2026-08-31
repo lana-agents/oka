@@ -57,8 +57,11 @@ refinement. Of the remaining two items of that issue, the transport of the origi
 through two localisations is `ComplexAnalytic.refineCrossGlue`
 (`Oka/Analytification/CrossMemberGlue.lean`), whose extra factor and unit are **arguments**: that
 file produces neither, and names the theorem above, with `ComplexAnalytic.exists_mk_rename_eq`,
-as where a caller gets them. **The two geometric laws across members are still untouched**, and so
-is the refined datum those two would be laws of.
+as where a caller gets them. **The two geometric laws across members are still untouched.** The
+datum those two would be laws of now has one field —
+`ComplexAnalytic.refineDatumPoly` (`Oka/Analytification/CrossMemberDatum.lean`), its `poly`, whose
+extra factor is the `q` the theorem above produces — and no other; its `glue`, `hrange`, `hsymm`
+and `hcocycle` are as untouched as the two laws are.
 
 ## Non-vacuity
 

@@ -151,10 +151,13 @@ docstring predicts that every consumer of the functor spells its object the othe
   `ComplexAnalytic.refineCrossGlue` with its coherence triangle
   `ComplexAnalytic.refineCrossGlue_hom_comp`, over the *original overlap* rather than over either
   member, since the data relates no two members. What no file has is a refined cover datum whose
-  members cross: its `poly` field needs one formula per ordered pair and the two cases are
-  different formulas, its `hsymm` constrains choices that two existentials make, and the two
-  geometric laws have no cross-member analogue. That file's `## What is not here` states all
-  three.
+  members cross, and it is now one field short of three rather than of four: its `poly` field is
+  `ComplexAnalytic.refineDatumPoly` (`Oka/Analytification/CrossMemberDatum.lean`), one formula per
+  ordered pair with the two cases read back off it, and what is left is that its `hsymm`
+  constrains choices that two existentials make, the two geometric laws have no cross-member
+  analogue, and the `glue` needs a transport between two objects of
+  `ComplexAnalytic.Presentation` that the one-member case never meets. Those two files' `## What
+  is not here` state all of it.
 
   **This bullet also said refinement is where `σ` and `ψ` "have to be built", with the implication
   that building them is the work; the second half is false and was measured so on 2026-08-30.**

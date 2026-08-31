@@ -646,9 +646,13 @@ imports this file. It is bookkeeping about `ComplexAnalytic.polyToGlobal` and
 predicted when it was still missing, and it is stated there rather than here because it needs
 `Oka/Analytification/ChangeOfVariables.lean`, which this file does not import.
 
-**Nothing there builds a refinement either**, and the two remaining pieces — transporting the
-original cover's own glue isomorphism through two localisations, and the two geometric laws
-across members — are still nowhere. Taxis #1287 is where that question lives. Nothing here is
+**Nothing there builds a refinement either**, and of the two remaining pieces this paragraph named
+only one is still nowhere. Transporting the original cover's own glue isomorphism through two
+localisations is `ComplexAnalytic.refineCrossGlue`
+(`Oka/Analytification/CrossMemberGlue.lean`), with the coherence triangle
+`ComplexAnalytic.refineCrossGlue_hom_comp`; **the two geometric laws across members are still
+nowhere**, and so is the datum they would be laws of, except for its `poly` field
+(`ComplexAnalytic.refineDatumPoly`). Taxis #1287 is where that question lives. Nothing here is
 about a scheme.
 -/
 
