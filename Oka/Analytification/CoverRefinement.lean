@@ -203,10 +203,14 @@ overlaps sitting over three different members with no common target to cancel ag
   (`Oka/Analytification/CrossMemberDatumGlue.lean`) is that branch, the transport between two
   objects of `ComplexAnalytic.Presentation` it needed costs one `subst`, and
   `ComplexAnalytic.refineDatumGlueEq_const` says `ComplexAnalytic.refineGlue` above is it at
-  constant `σ` — by `rfl`, up to the two transports of the overlap. What is left is the other
-  branch of that field, an `hsymm` quantified over every pair rather than over the equal ones, and
-  the two geometric laws, which have no analogue for the reason the paragraph above gives. Those
-  three files' `## What is not here` state all of it.
+  constant `σ` — by `rfl`, up to the two transports of the overlap. **Nor is the field itself**:
+  `ComplexAnalytic.refineDatumGlue` is the two branches under a case split, and
+  `ComplexAnalytic.refineDatumGlue_const` says `ComplexAnalytic.refineGlue` above is it at
+  constant `σ` for every choice — not by `rfl` this time, for the reason that statement gives.
+  What is left is that nothing produces the choice the unequal branch takes, an `hsymm` quantified
+  over every pair rather than over the equal ones, and the two geometric laws, which have no
+  analogue for the reason the paragraph above gives. Those three files' `## What is not here`
+  state all of it.
 * **No hypothesis under which the morphism *is* an isomorphism, and no morphism back.** The
   answer to whether it is one is **no** and it is proved rather than argued:
   `ComplexAnalytic.not_isIso_refineToBase`, at an empty family, where the refinement refines

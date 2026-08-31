@@ -2382,11 +2382,12 @@ constant-`σ` reduction.
 They are guarded together and after the `poly` field because the point of the file is the
 transport: `ComplexAnalytic.refineSwapGlueOfEq` is the one declaration whose two sides sit over
 two different objects of `ComplexAnalytic.Presentation`, and every statement above it is over one.
-`ComplexAnalytic.refineDatumCrossAlgEquiv` is guarded here and used nowhere: it is the measurement
-that the *unequal* branch's algebra isomorphism is the original datum's own glue and not a missing
-construction. `ComplexAnalytic.refineSwapGlue_eq` and `ComplexAnalytic.refineDatumGlueEq_eq` are
-guarded beside the definitions they unfold, which is where a reader looking for a missing guard
-would expect them.
+`ComplexAnalytic.refineDatumCrossAlgEquiv` is guarded here and is what the unequal branch, in the
+section at the end of this file, feeds to `Oka/Analytification/CrossMemberGlue.lean`'s glue: it is
+the original datum's own glue and not a missing construction.
+`ComplexAnalytic.refineSwapGlue_eq` and `ComplexAnalytic.refineDatumGlueEq_eq` are guarded beside
+the definitions they unfold, which is where a reader looking for a missing guard would expect
+them.
 -/
 
 /--
@@ -2708,3 +2709,104 @@ info: 'ComplexAnalytic.isFinite_analytificationMap_hypersurfacePresHom' depends 
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isFinite_analytificationMap_hypersurfacePresHom
+
+
+/-! ### The unequal branch of that `glue`, and the field the two branches assemble into
+
+`Oka/Analytification/CrossMemberDatumGlue.lean`. The two equations a caller's choice of `r` and
+`u` has to satisfy, the cross-member glue conjugated onto the datum's own overlaps, the projection
+of a cross-member refined overlap to the original overlap, the coherence triangle over that
+projection, and the `glue` field the two branches assemble into with its two readers and its
+constant-`σ` reduction.
+
+They are guarded here rather than beside the equal branch above because the file's section split
+is the same: everything above is the branch that needs a transport between two members, and
+everything here takes the caller's choice as an argument. `ComplexAnalytic.RefineDatumCrossEq` and
+`ComplexAnalytic.RefineDatumCrossUnit` are `abbrev`s and so are guarded like the definitions they
+are, and `ComplexAnalytic.refineDatumGlueNe_eq` and `ComplexAnalytic.refineDatumCrossProj_eq` sit
+beside the definitions they unfold, as their equal-branch counterparts do.
+-/
+
+/--
+info: 'ComplexAnalytic.RefineDatumCrossEq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.RefineDatumCrossEq
+
+/--
+info: 'ComplexAnalytic.RefineDatumCrossUnit' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.RefineDatumCrossUnit
+
+/--
+info: 'ComplexAnalytic.refineDatumGlueNe' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumGlueNe
+
+/--
+info: 'ComplexAnalytic.refineDatumGlueNe_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumGlueNe_eq
+
+/--
+info: 'ComplexAnalytic.refineDatumCrossProj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumCrossProj
+
+/--
+info: 'ComplexAnalytic.refineDatumCrossProj_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumCrossProj_eq
+
+/--
+info: 'ComplexAnalytic.isoOfAlgEquiv_symm_refineDatumCrossAlgEquiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isoOfAlgEquiv_symm_refineDatumCrossAlgEquiv
+
+/--
+info: 'ComplexAnalytic.refineDatumGlueNe_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumGlueNe_comp
+
+/--
+info: 'ComplexAnalytic.refineDatumGlue' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumGlue
+
+/--
+info: 'ComplexAnalytic.refineDatumGlue_of_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumGlue_of_eq
+
+/--
+info: 'ComplexAnalytic.refineDatumGlue_of_ne' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumGlue_of_ne
+
+/--
+info: 'ComplexAnalytic.refineDatumGlue_const' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumGlue_const

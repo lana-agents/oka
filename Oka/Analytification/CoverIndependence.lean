@@ -153,14 +153,17 @@ docstring predicts that every consumer of the functor spells its object the othe
   member, since the data relates no two members. What no file has is a refined cover datum whose
   members cross, and what is missing has gone from four things to two and a half. Its `poly`
   field is `ComplexAnalytic.refineDatumPoly` (`Oka/Analytification/CrossMemberDatum.lean`), one
-  formula per ordered pair with the two cases read back off it; its `glue` exists on the branch
-  where the two refined members lie over one member, as `ComplexAnalytic.refineDatumGlueEq`
-  (`Oka/Analytification/CrossMemberDatumGlue.lean`), with the symmetry law on that branch and the
-  coherence triangle — the transport between two objects of `ComplexAnalytic.Presentation` that
-  the one-member case never meets cost one `subst`. What is left is the other branch of the glue,
-  blocked on the same existentials `hsymm` is and not on a transport; an `hsymm` quantified over
-  every ordered pair; and the two geometric laws, which have no cross-member analogue at all.
-  Those three files' `## What is not here` state all of it.
+  formula per ordered pair with the two cases read back off it; its `glue` is
+  `ComplexAnalytic.refineDatumGlue` (`Oka/Analytification/CrossMemberDatumGlue.lean`), the equal
+  branch and the cross-member one under a case split, each with its coherence triangle — the
+  transport between two objects of `ComplexAnalytic.Presentation` that the one-member case never
+  meets cost one `subst`, and the case split itself cost nothing, both branches being isomorphisms
+  between the same two objects. **So the count is two rather than two and a half, and the half
+  that moved did not become nothing**: the unequal branch takes the caller's `r`, `u` and two
+  equations, and the existentials that would produce them are the same ones `hsymm` is blocked on.
+  What is left is that choice, an `hsymm` quantified over every ordered pair, and the two
+  geometric laws, which have no cross-member analogue at all. Those three files'
+  `## What is not here` state all of it.
 
   **This bullet also said refinement is where `σ` and `ψ` "have to be built", with the implication
   that building them is the work; the second half is false and was measured so on 2026-08-30.**
