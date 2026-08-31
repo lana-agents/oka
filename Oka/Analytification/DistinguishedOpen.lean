@@ -413,8 +413,17 @@ Spelled at the level of locally ringed spaces, and proved from
 `AlgebraicGeometry.LocallyRingedSpace.liftRestrict_fac` rather than from
 `ComplexAnalytic.localisationToRestrict_fac`, for the reason
 `ComplexAnalytic.AnalyticSpace.resΓ_restrictLE` records: a `congrArg` over morphisms of *analytic*
-spaces forces the unification of `(f ≫ g).toLRSHom` with `f.toLRSHom ≫ g.toLRSHom` and does not
-elaborate in a million heartbeats. -/
+spaces forces the unification of `(f ≫ g).toLRSHom` with `f.toLRSHom ≫ g.toLRSHom` and **exceeds
+the default heartbeat budget**.
+
+**Measured here and not inherited**, 2026-08-31, by giving the `congrArg` below a motive over
+`AnalyticSpace.analytification (localisationPresentation g f) ⟶ AnalyticSpace.analytification g`
+and `ComplexAnalytic.localisationToRestrict_fac` as its argument:
+`(deterministic) timeout at whnf, maximum number of heartbeats (200000)`, reached in 23s.
+That is the same failure at the same budget as the site above, at a different pair of morphisms,
+and 200000 is what `lakefile.toml` leaves in force — the figure of a million this paragraph gave
+until today was a budget nobody set. The unbounded run was **not** made here; at the site this
+one cites it was still elaborating after 21m29s. -/
 @[simp]
 theorem pullbackΓ_localisationToRestrict_resΓ
     (s : (AnalyticSpace.analytification.{u} g).presheaf.obj (op ⊤)) :

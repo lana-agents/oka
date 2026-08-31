@@ -57,13 +57,21 @@ determined by `t` and `CategoryTheory.cancel_mono` supplies it. That lemma is in
 * **`ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear_congr`'s `HEq` argument.** The two
   `ℂ`-algebra families here are the *same expression* — the members' own algebra maps — but their
   types read `(D.U i).presheaf.obj (op ⊤)` at two different glue data. Passing `HEq.rfl` against an
-  inferred type does not elaborate at all; a `have` at the spelled-out family is immediate, and the
-  difference is that the second never asks the elaborator to reduce
+  inferred type exceeds the default heartbeat budget; a `have` at the spelled-out family is
+  immediate, and the difference is that the second never asks the elaborator to reduce
   `CategoryTheory.GlueData.ofGlueData'` inside a metavariable. **The failure is machine-dependent
-  and the workaround is not**: measured twice on 2026-08-31, the inline form gives
-  `(kernel) deterministic timeout` after 2m32s on one machine and is killed after 150s on another,
-  where the hoisted form costs about a minute for the whole file. The `have hα` inside
-  `ComplexAnalytic.coverAnalytification_congr` is that, and it is not style.
+  and the workaround is not**: measured three times on 2026-08-31, the inline form gives
+  `(kernel) deterministic timeout` after 2m32s and after 154s on two machines and is killed after
+  150s on a third, where the hoisted form costs about a minute for the whole file. The `have hα`
+  inside `ComplexAnalytic.coverAnalytification_congr` is that, and it is not style.
+
+  **It is a cost and not a non-termination**, and until 2026-08-31 the first sentence above said
+  *"does not elaborate at all"*, which is stronger than any of those three runs shows. Under
+  `set_option maxHeartbeats 0` this module **builds** with the inline form, in 489s against 60s as
+  shipped — so what the `have` buys is about eight times the file. `lakefile.toml` sets no
+  `maxHeartbeats`, so the budget all three failures met is Lean's default 200000, and the figure
+  of a million that `Oka/AnalyticSpace/Glue.lean` gave for the same seam named a budget nobody
+  set. See that file for the same correction from the other side.
 * **`ComplexAnalytic.coverAnalytification_polyDiagOne` needs no such thing, and this section said
   it did.** Until 2026-08-31 the bullet here read *"with the six `Prop` arguments left to
   unification the application times out, and with all of `poly`, `poly'`, `glue`, `glue'` and the

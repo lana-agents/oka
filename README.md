@@ -995,6 +995,37 @@ paragraph describes, and `lake env lean` it, so that a positive and a negative a
 rather than a reading. **Quote the error** — half of these already do, and those are the ones an
 audit costs one command each.
 
+**A seam note that prices its obstacle in heartbeats is making two claims, and each has its own
+way of being false.**
+
+The first is *which budget*, **and there are two of them in force, not one**. `lakefile.toml`'s
+`[leanOptions]` sets **no** `maxHeartbeats`, so elaboration runs at Lean's default 200000 — but
+typeclass resolution has a **separate** budget, `synthInstance.maxHeartbeats`, its own
+`register_builtin_option` at `Lean/Meta/SynthInstance.lean:19` with `defValue := 20000` and
+checked separately at `:195`. The tree carries an instance of each:
+`OkaTest/AffineSections.lean:279` records `(deterministic) timeout at typeclass`, **20000**
+heartbeats, and its `:320` records `(deterministic) timeout at whnf`, **200000**, in the same
+file with no `set_option` in it. So a note that says *a million* names a budget nobody set — four
+`Oka/` docstrings did on 2026-08-31 — while the two sites that already gave a number gave 200000,
+and `Oka/AnalyticSpace/Sigma.lean:63` gives a third kind, a failure that *survives* `maxHeartbeats
+2000000`, which is the most informative form because it names the budget it raised to. The one
+`set_option maxHeartbeats 1000000` in the tree raises the elaboration budget for a single
+declaration in one file and is the likely origin of the idiom. **Quoting the error settles all of
+this for free, because Lean prints both which budget and which limit it hit.**
+
+The second is *does not terminate*, which no run under a budget can establish. `set_option
+maxHeartbeats 0 in` — placed **before** the doc comment, since between it and `theorem` is a parse
+error — removes the *elaboration* budget and asks the question directly; **it does not remove the
+typeclass one**, which is a different option, so a seam whose failure is `at typeclass` needs
+`synthInstance.maxHeartbeats 0` instead and the two are not interchangeable. Run here twice, and
+it came out differently each time: `Oka/AnalyticSpace/Glue.lean`'s seam **finishes**, at about
+eight times the file, so it is a cost, while `Oka/AnalyticSpace/OpenSubspace.lean`'s was still
+elaborating after 21m29s and was stopped, so nothing says either way and its docstring says that
+rather than choosing. **Write the pair of times, not the verdict**, and if the counterfactual is a
+reconstruction rather than a substitution — the other spelling is not in the file, so you have to
+write it — say so, because then a failure is evidence about your reconstruction as much as about
+the seam.
+
 **The word `seam` is a leaky marker, and the unmarked half is where the failures are.** A clean
 sweep of a marked population says nothing about an unmarked one, so the vocabulary of the species
 itself was counted — *instance search does not*, *does not cross*, *will not fire*, *does not
