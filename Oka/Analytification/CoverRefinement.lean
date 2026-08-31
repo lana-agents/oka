@@ -198,11 +198,15 @@ overlaps sitting over three different members with no common target to cancel ag
   cross, and its `poly` field is no longer part of that: `ComplexAnalytic.refineDatumPoly`
   (`Oka/Analytification/CrossMemberDatum.lean`) is one formula per ordered pair, and
   `ComplexAnalytic.refineDatumPoly_const` says `ComplexAnalytic.refinePoly` above is it at
-  constant `σ`. What is left is that its `hsymm` is a constraint on choices nothing here makes,
-  the two geometric laws have no analogue for the reason the paragraph above gives, and its
-  `glue` needs a transport between two objects of `ComplexAnalytic.Presentation` — the equal case
-  of a general `σ`, which this file's fixed member makes vacuous. Those two files' `## What is not
-  here` state all of it.
+  constant `σ`. Its `glue` is no longer part of it either on the branch where the two refined
+  members lie over one member: `ComplexAnalytic.refineDatumGlueEq`
+  (`Oka/Analytification/CrossMemberDatumGlue.lean`) is that branch, the transport between two
+  objects of `ComplexAnalytic.Presentation` it needed costs one `subst`, and
+  `ComplexAnalytic.refineDatumGlueEq_const` says `ComplexAnalytic.refineGlue` above is it at
+  constant `σ` — by `rfl`, up to the two transports of the overlap. What is left is the other
+  branch of that field, an `hsymm` quantified over every pair rather than over the equal ones, and
+  the two geometric laws, which have no analogue for the reason the paragraph above gives. Those
+  three files' `## What is not here` state all of it.
 * **No hypothesis under which the morphism *is* an isomorphism, and no morphism back.** The
   answer to whether it is one is **no** and it is proved rather than argued:
   `ComplexAnalytic.not_isIso_refineToBase`, at an empty family, where the refinement refines

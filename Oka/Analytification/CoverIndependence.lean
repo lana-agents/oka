@@ -151,13 +151,16 @@ docstring predicts that every consumer of the functor spells its object the othe
   `ComplexAnalytic.refineCrossGlue` with its coherence triangle
   `ComplexAnalytic.refineCrossGlue_hom_comp`, over the *original overlap* rather than over either
   member, since the data relates no two members. What no file has is a refined cover datum whose
-  members cross, and it is now one field short of three rather than of four: its `poly` field is
-  `ComplexAnalytic.refineDatumPoly` (`Oka/Analytification/CrossMemberDatum.lean`), one formula per
-  ordered pair with the two cases read back off it, and what is left is that its `hsymm`
-  constrains choices that two existentials make, the two geometric laws have no cross-member
-  analogue, and the `glue` needs a transport between two objects of
-  `ComplexAnalytic.Presentation` that the one-member case never meets. Those two files' `## What
-  is not here` state all of it.
+  members cross, and what is missing has gone from four things to two and a half. Its `poly`
+  field is `ComplexAnalytic.refineDatumPoly` (`Oka/Analytification/CrossMemberDatum.lean`), one
+  formula per ordered pair with the two cases read back off it; its `glue` exists on the branch
+  where the two refined members lie over one member, as `ComplexAnalytic.refineDatumGlueEq`
+  (`Oka/Analytification/CrossMemberDatumGlue.lean`), with the symmetry law on that branch and the
+  coherence triangle — the transport between two objects of `ComplexAnalytic.Presentation` that
+  the one-member case never meets cost one `subst`. What is left is the other branch of the glue,
+  blocked on the same existentials `hsymm` is and not on a transport; an `hsymm` quantified over
+  every ordered pair; and the two geometric laws, which have no cross-member analogue at all.
+  Those three files' `## What is not here` state all of it.
 
   **This bullet also said refinement is where `σ` and `ψ` "have to be built", with the implication
   that building them is the work; the second half is false and was measured so on 2026-08-30.**
