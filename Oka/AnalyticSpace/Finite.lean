@@ -138,9 +138,10 @@ stated here rather than left to be discovered.
   then `f` is finite. This is what carries a finiteness statement proved over an ambient `ℂ^n`
   back to one over a closed analytic subspace of it, which is the shape the standard-étale line
   needs: `Oka/Analytification/MonicHypersurface.lean` proves the projection of a hypersurface to
-  `ℂ^n` finite, while the theorem wanted is finiteness over the analytification of the base
-  algebra, which sits inside `ℂ^n` by
-  `ComplexAnalytic.isClosedEmbedding_base_analytificationIncl`.
+  `ℂ^n` finite, and `Oka/Analytification/HypersurfaceFinite.lean` cancels
+  `ComplexAnalytic.isClosedEmbedding_base_analytificationIncl` against it to get finiteness over
+  the analytification of the base algebra — `A ⟶ A[X] ⧸ (F)` for `F` monic, which is this
+  theorem's first consumer that is not about `ℂ^n`.
 - `ComplexAnalytic.AnalyticSpace.finite_fiber_of_comp`: **the fibre half of finiteness cancels
   with no hypothesis at all** — if `f ≫ g` has finite fibres then so does `f`, and the second
   factor is not asked to be finite, closed or injective.

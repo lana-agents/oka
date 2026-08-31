@@ -2676,3 +2676,35 @@ info: 'ComplexAnalytic.coverAnalytification_polyDiagOne' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.coverAnalytification_polyDiagOne
+
+/-! ### Finiteness over a presented base
+
+`Oka/Analytification/HypersurfaceFinite.lean`. The coordinates of the projection `ℂ^(n+1) ⟶ ℂ^n`,
+the factorisation of the analytified structure map `A ⟶ A[X] ⧸ (F)` through the ambient `ℂ^(n+1)`,
+and the finiteness that cancelling `A^an ↪ ℂ^n` against it gives. They are guarded here rather
+than in `OkaTest/Axioms/Morphisms.lean`, where the projection's own finiteness lives, because the
+file that declares them is under `Oka/Analytification/`; the theorem they generalise,
+`ComplexAnalytic.isFinite_comp_proj_of_range_subset`, is guarded there beside
+`ComplexAnalytic.isFinite_comp_proj_of_range_eq`.
+-/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.coordPullback_proj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.coordPullback_proj
+
+/--
+info: 'ComplexAnalytic.analytificationMap_hypersurfacePresHom_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationMap_hypersurfacePresHom_comp
+
+/--
+info: 'ComplexAnalytic.isFinite_analytificationMap_hypersurfacePresHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isFinite_analytificationMap_hypersurfacePresHom

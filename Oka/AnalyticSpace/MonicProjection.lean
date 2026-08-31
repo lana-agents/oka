@@ -46,18 +46,24 @@ steps:
   `ComplexAnalytic.IsCutOutBy`'s `range_base` field, which is phrased with germs and maximal
   ideals, into the vanishing of a function, by `germ_mem_maximalIdeal_iff`.
 
-## The two spellings of the hypothesis on the image
+## The three spellings of the hypothesis on the image
 
-`ComplexAnalytic.isFinite_comp_proj_of_range_eq` takes the image of `i` as a set equation and
-asks nothing about structure sheaves; `ComplexAnalytic.isFinite_comp_proj_of_isCutOutBy` takes
+`ComplexAnalytic.isFinite_comp_proj_of_range_subset` takes the image of `i` as a set
+**inclusion**, `ComplexAnalytic.isFinite_comp_proj_of_range_eq` as a set **equation**, and neither
+asks anything about structure sheaves; `ComplexAnalytic.isFinite_comp_proj_of_isCutOutBy` takes
 `ComplexAnalytic.IsCutOutBy i.toLRSHom ![F]` and the pointwise identity between `F` and the
-family. The first is the one a hand-built morphism satisfies —
+family. **The inclusion is the general one and the other two are corollaries of it** — it is what
+a source cut out by **more** equations than the family gives, which is the analytification of a
+base algebra's hypersurface (`Oka/Analytification/HypersurfaceFinite.lean`); a caller holding an
+equation should still quote **the equation form**, which is one line of the inclusion and keeps
+its own name and its consumers. **The equation form** is the one a hand-built morphism satisfies —
 `OkaTest/FiniteMorphism.lean` explains why cut-out data for a morphism of *analytic* spaces has
 to be built by hand in this development — and it is what `OkaTest/MonicProjection.lean` applies.
-The second is the one the Weierstrass line will consume and is a three-line corollary of it.
+**The `ComplexAnalytic.IsCutOutBy` form** is the one the Weierstrass line will consume, and is two
+lines of the equation form.
 
-**Neither takes the family from `F`.** The family `q` is an argument, and the hypothesis relating
-it to `F` is an equation the caller proves; nothing here extracts the coefficients of a
+**None of the three takes the family from `F`.** The family `q` is an argument, and the hypothesis
+relating it to `F` is an equation the caller proves; nothing here extracts the coefficients of a
 holomorphic function in its last variable, and no holomorphy of the coefficients is used —
 continuity is all the mathematics needs, and it is all that is asked for.
 
@@ -68,9 +74,13 @@ continuity is all the mathematics needs, and it is all that is asked for.
   (`ComplexAnalytic.base_proj_eq`).
 - `ComplexAnalytic.range_base_eq_of_isCutOutBy`: **a hypersurface cut out by one global section
   of `𝒪_{ℂ^m}` has that section's zero set for its image.**
+- `ComplexAnalytic.isFinite_comp_proj_of_range_subset`: **a closed subspace of a monic
+  hypersurface is finite over the base**, the hypersurface being the zero locus of a continuous
+  family of monic polynomials of one fixed degree. Both obligations are asked only along the image,
+  so an image strictly inside the hypersurface is no harder — which is what a subspace cut out by
+  further equations, such as the analytification of a base algebra's hypersurface, needs.
 - `ComplexAnalytic.isFinite_comp_proj_of_range_eq`: **the projection of a monic hypersurface to
-  its base is finite**, with the hypersurface given as the zero locus of a continuous family of
-  monic polynomials of one fixed degree.
+  its base is finite**, the case of the above where the image is the whole hypersurface.
 - `ComplexAnalytic.isFinite_comp_proj_of_isCutOutBy`: the same with the hypersurface presented as
   a cut-out by one global section rather than as a set.
 
@@ -205,23 +215,35 @@ theorem range_base_eq_of_isCutOutBy {m : ℕ} {W : AnalyticSpace.{u}}
 
 variable {d : ℕ} {W : AnalyticSpace.{u}}
 
-/-- **The projection of a monic hypersurface to its base is finite.**
+/-- **A closed subspace of a monic hypersurface is finite over the base.**
 
-`i` is any closed embedding of `W` into `ℂ^(n+1)` whose image is the zero locus of the family
-`q` of monic polynomials of one fixed degree `d`, read in the last coordinate; the conclusion is
-that `i` followed by the projection forgetting that coordinate is closed with finite fibres.
+`i` is any closed embedding of `W` into `ℂ^(n+1)` whose image is **contained in** the zero locus
+of the family `q` of monic polynomials of one fixed degree `d`, read in the last coordinate; the
+conclusion is that `i` followed by the projection forgetting that coordinate is closed with finite
+fibres.
 
 The whole proof is `ComplexAnalytic.AnalyticSpace.isFinite_comp_of_isClosedEmbedding` at the two
 set-level theorems of `Oka/Topology/Algebra/Polynomial.lean`, transported across
 `ComplexAnalytic.uliftSnocHomeo`. **Continuity of the coefficients is the only analytic input and
-it is a hypothesis**: no holomorphy is used, and `hc` is what a Weierstrass polynomial supplies. -/
-theorem isFinite_comp_proj_of_range_eq
+it is a hypothesis**: no holomorphy is used, and `hc` is what a Weierstrass polynomial supplies.
+
+**Why the hypothesis is an inclusion and not the equality
+`ComplexAnalytic.isFinite_comp_proj_of_range_eq` asks for.** Both of the theorem's obligations are
+*downward* closed in the image — a smaller image inherits them: closedness of `π '' t` is asked
+only of subsets `t` of that image, and the fibre obligation asks a set to be finite. So an image
+sitting strictly inside the hypersurface is no harder, and this is the form a subspace cut out by
+**more** equations than the one monic polynomial needs — the zero locus of a presentation with
+relations of its own, which is the analytification of a base algebra's hypersurface, is such a
+subspace and the equality is then unavailable.
+`ComplexAnalytic.isFinite_comp_proj_of_range_eq` is this theorem at `Eq.subset` and keeps its name
+and its consumers. -/
+theorem isFinite_comp_proj_of_range_subset
     (i : W ⟶ AnalyticSpace.complexAffineSpace.{u} (n + 1))
     (hi : IsClosedEmbedding (i.toLRSHom.base : W → _))
     {q : (ULift.{u} (Fin n) → ℂ) → Polynomial ℂ}
     (hm : ∀ w, (q w).Monic) (hd : ∀ w, (q w).natDegree = d)
     (hc : ∀ j, Continuous fun w ↦ (q w).coeff j)
-    (hrange : Set.range (i.toLRSHom.base : W → _) =
+    (hrange : Set.range (i.toLRSHom.base : W → _) ⊆
       {z | (q (uliftSnocHomeo.{u} n z).1).eval (uliftSnocHomeo.{u} n z).2 = 0}) :
     AnalyticSpace.IsFinite (i ≫ AnalyticSpace.proj.{u} n) := by
   refine AnalyticSpace.isFinite_comp_of_isClosedEmbedding i _ hi (fun t ht hsub ↦ ?_) (fun s ↦ ?_)
@@ -233,20 +255,30 @@ theorem isFinite_comp_proj_of_range_eq
     refine Polynomial.isClosed_fst_image_of_monic hm hd hc
       ((uliftSnocHomeo.{u} n).isClosedMap t ht) ?_
     rintro _ ⟨z, hz, rfl⟩
-    have hmem := hsub hz
-    rw [hrange] at hmem
-    exact hmem
-  · have hset : Set.range (i.toLRSHom.base : W → _) ∩
-        ⇑(AnalyticSpace.proj.{u} n).toLRSHom.base ⁻¹' {s}
-        = uliftSnocHomeo.{u} n ⁻¹'
-          ({y : (ULift.{u} (Fin n) → ℂ) × ℂ | (q y.1).eval y.2 = 0} ∩ Prod.fst ⁻¹' {s}) := by
-      ext z
-      simp only [hrange, base_proj_eq, Set.mem_inter_iff, Set.mem_preimage,
-        Function.comp_apply, Set.mem_singleton_iff]
-      exact Iff.rfl
-    rw [hset]
-    exact Set.Finite.preimage (uliftSnocHomeo.{u} n).injective.injOn
-      (Polynomial.finite_inter_fst_preimage_of_monic hm s fun y hy ↦ hy)
+    exact hrange (hsub hz)
+  · refine Set.Finite.subset (Set.Finite.preimage (uliftSnocHomeo.{u} n).injective.injOn
+      (Polynomial.finite_inter_fst_preimage_of_monic hm s fun y hy ↦ hy)) ?_
+    intro z hz
+    have hfib := hz.2
+    rw [base_proj_eq] at hfib
+    exact ⟨hrange hz.1, hfib⟩
+
+/-- **The projection of a monic hypersurface to its base is finite.**
+
+The special case of `ComplexAnalytic.isFinite_comp_proj_of_range_subset` where the image is the
+whole hypersurface. It is kept under its own name because every consumer in the repository takes
+this form, and because a caller with an equality should not have to know that the proof needs only
+half of it. -/
+theorem isFinite_comp_proj_of_range_eq
+    (i : W ⟶ AnalyticSpace.complexAffineSpace.{u} (n + 1))
+    (hi : IsClosedEmbedding (i.toLRSHom.base : W → _))
+    {q : (ULift.{u} (Fin n) → ℂ) → Polynomial ℂ}
+    (hm : ∀ w, (q w).Monic) (hd : ∀ w, (q w).natDegree = d)
+    (hc : ∀ j, Continuous fun w ↦ (q w).coeff j)
+    (hrange : Set.range (i.toLRSHom.base : W → _) =
+      {z | (q (uliftSnocHomeo.{u} n z).1).eval (uliftSnocHomeo.{u} n z).2 = 0}) :
+    AnalyticSpace.IsFinite (i ≫ AnalyticSpace.proj.{u} n) :=
+  isFinite_comp_proj_of_range_subset.{u} i hi hm hd hc hrange.subset
 
 /-- **The same, for a hypersurface presented by `ComplexAnalytic.IsCutOutBy`.**
 

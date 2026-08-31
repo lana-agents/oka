@@ -91,6 +91,7 @@ import Oka.Analytification.Flatness
 import Oka.Analytification.FlatnessAtAPoint
 import Oka.Analytification.Functor
 import Oka.Analytification.GlueShape
+import Oka.Analytification.HypersurfaceFinite
 import Oka.Analytification.LocalRing
 import Oka.Analytification.LocalisationComposite
 import Oka.Analytification.LocalisationFunctor
