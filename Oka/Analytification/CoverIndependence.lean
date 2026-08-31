@@ -165,8 +165,16 @@ docstring predicts that every consumer of the functor spells its object the othe
   there is no scheme in this line of files at all, and
   `Oka/Analytification/CoverFunctoriality.lean` and `Oka/Analytification/AffineCover.lean` each
   argue in a titled section why. taxis #1107's headline speaks of two *admissible covers of a
-  scheme*, and **admissible is a notion this repository does not have**; defining it is that
-  issue's fourth increment and comes before proving anything about it.
+  scheme*, and there is still no predicate of that name — but **defining one is not what that
+  issue's fourth increment is blocked on, and this bullet said until 2026-08-31 that it was.**
+  Every part admissibility asserts of a member already holds of a cover datum, with nothing
+  defined: `ComplexAnalytic.finitePresentation_presentedAlgebra` for finite type over `ℂ`,
+  `ComplexAnalytic.isOpenImmersion_specIota` for openness, and `ComplexAnalytic.specGluedOpenCover`
+  for the covering. What a common refinement of two data has to reproduce is a **stronger**
+  condition the data already carries and nobody had named — every pairwise overlap is a
+  *distinguished* open of each of the two members it lies in —
+  and `Oka/Analytification/SpecAffineCover.lean`'s admissibility section is where it is written
+  down. taxis #1329 has the measurement.
 * **No naturality.** That the isomorphism commutes with `ComplexAnalytic.coverMap` out of either
   side, or with the comparison morphisms of `Oka/Analytification/CoverComparison.lean`, is not
   stated. Nothing consumes it yet.

@@ -561,6 +561,34 @@ def projectiveLineSpecGlued : LocallyRingedSpace.{u} :=
   specGlued.{u} lineCoverObj.{u} lineCoverPoly.{u} lineSwapIso.{u} specHrange_lineCover.{u}
     hsymm_lineCover.{u} specHcocycle_lineCover.{u}
 
+/-- **The two spectra, as an open cover of `X`.**
+
+`ComplexAnalytic.specGluedOpenCover` at this datum, and the non-vacuity of that definition.
+
+**It is a two-member instance and so exercises neither triple-overlap hypothesis**, for the reason
+`ComplexAnalytic.specHcocycle_lineCover` above is proved by
+`ComplexAnalytic.pair_no_distinct_triple`: `ComplexAnalytic.GlueShape.hRange_of_no_three` and
+`ComplexAnalytic.GlueShape.hCocycle_of_no_three` make both vacuous below three members. That is
+the right price here — this is a witness that the *definition* is inhabited and that its two `rfl`
+lemmas hold at a real datum, not a test of the hypotheses — and `OkaTest/AffineCover.lean`'s
+`ComplexAnalytic.nodeTripleOpenCover` is the three-member instance on the analytic side. -/
+noncomputable def projectiveLineSpecOpenCover :
+    LocallyRingedSpace.OpenCover.{u} (projectiveLineSpecGlued.{u}) :=
+  specGluedOpenCover.{u} lineCoverObj.{u} lineCoverPoly.{u} lineSwapIso.{u}
+    specHrange_lineCover.{u} hsymm_lineCover.{u} specHcocycle_lineCover.{u}
+
+/-- **Its maps are `ComplexAnalytic.specIota`**, on the nose. -/
+example (i : pair.{u}) :
+    (projectiveLineSpecOpenCover.{u}).map i =
+      specIota.{u} lineCoverObj.{u} lineCoverPoly.{u} lineSwapIso.{u} specHrange_lineCover.{u}
+        hsymm_lineCover.{u} specHcocycle_lineCover.{u} i := rfl
+
+/-- **And its members are the two spectra**, on the nose — the same two `𝔸¹` charts
+`ComplexAnalytic.projectiveLineSpace` is glued from, and not two objects of a glue datum that
+happen to be them. -/
+example (i : pair.{u}) :
+    (projectiveLineSpecOpenCover.{u}).obj i = specSpace.{u} lineCoverObj.{u} i := rfl
+
 /-- **The comparison morphism of `ℙ¹`**, `ComplexAnalytic.projectiveLineSpace` to the gluing of
 the two spectra. -/
 def projectiveLineComparison :

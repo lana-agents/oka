@@ -121,6 +121,13 @@ info: 'ComplexAnalytic.AnalyticSpace.mem_toΓSpec_base_asIdeal_iff' depends on a
 #print axioms ComplexAnalytic.AnalyticSpace.mem_toΓSpec_base_asIdeal_iff
 
 /--
+info: 'ComplexAnalytic.finitePresentation_presentedAlgebra' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.finitePresentation_presentedAlgebra
+
+/--
 info: 'ComplexAnalytic.analytificationToSpec' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
@@ -1451,6 +1458,27 @@ info: 'ComplexAnalytic.specIncl_comp_specIota' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.specIncl_comp_specIota
+
+/--
+info: 'ComplexAnalytic.specGluedOpenCover' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specGluedOpenCover
+
+/--
+info: 'ComplexAnalytic.specGluedOpenCover_obj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specGluedOpenCover_obj
+
+/--
+info: 'ComplexAnalytic.specGluedOpenCover_map' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specGluedOpenCover_map
 
 /-! ### A morphism of covered schemes analytifies
 

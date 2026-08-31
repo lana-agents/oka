@@ -97,6 +97,33 @@ factors through `ComplexAnalytic.coverIncl` by the same definition, so weakening
 other would have made the pair *less* symmetric and not more.
 `Oka/Analytification/AffineCover.lean` carries the mirror of each theorem below.
 
+## The members are an admissible affine cover of `X`, and no notion had to be defined
+
+taxis #1107's headline is *"two **admissible** covers of a scheme give canonically isomorphic
+analytifications"*, and three files in this line record `admissible` as a notion this repository
+does not have. It has none, and it does not need one: for the analytification of a scheme locally
+of finite type over `ℂ`, an admissible cover is an open cover by affine opens each of finite type
+over `ℂ`, and a cover datum satisfies all three parts with nothing defined.
+
+* **Affine and of finite type over `ℂ`** — `ComplexAnalytic.Presentation` is `n : ℕ` variables and
+  `k : ℕ` relations, so `ComplexAnalytic.finitePresentation_presentedAlgebra` is the whole of it,
+  and it is one term.
+* **Open in `X`** — `ComplexAnalytic.isOpenImmersion_specIota` below.
+* **Covering `X`** — `AlgebraicGeometry.LocallyRingedSpace.GlueData.ι_jointly_surjective`.
+
+`ComplexAnalytic.specGluedOpenCover` below is the three packaged, and it is one term at
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.openCover`.
+
+**What a cover datum asks *beyond* admissibility is the thing worth carrying away, and nobody had
+named it.** `ComplexAnalytic.specOpen obj poly i j` is `ComplexAnalytic.specLocalisationOpen` —
+the **distinguished** open `D(f_ij)` of the `i`-th member — and `glue i j` identifies it with
+`D(f_ji)` in the `j`-th. So the data forces every pairwise overlap to be a distinguished open of
+*each* of the two members it lies in, which an affine cover of a scheme need not satisfy: `U ∩ V`
+is not in general a basic open of either, and separatedness does not make it one. **That, and not
+a definition of `admissible`, is what a common refinement of two data has to reproduce**, and
+`Oka/Analytification/CoverRefinement.lean` builds refinements by distinguished opens of one fixed
+member only. Nothing here is about two data at once; taxis #1329 has the measurement.
+
 ## Main definitions
 
 - `ComplexAnalytic.specSpace`, `ComplexAnalytic.specOpen`, `ComplexAnalytic.specPart`,
@@ -110,6 +137,8 @@ other would have made the pair *less* symmetric and not more.
   members' `Spec`s**, which is what this file exists for.
 - `ComplexAnalytic.specGlued` and `ComplexAnalytic.specIota`: the glued locally ringed space `X`
   and the `i`-th member's inclusion into it.
+- `ComplexAnalytic.specGluedOpenCover`: **the members, as an open cover of `X`** — the
+  counterpart of `ComplexAnalytic.coverAnalytificationOpenCover`.
 
 ## Main results
 
@@ -124,6 +153,9 @@ other would have made the pair *less* symmetric and not more.
 - `ComplexAnalytic.isOpenImmersion_specIota`: **each member is an open subspace of `X`**, which
   together with `AlgebraicGeometry.LocallyRingedSpace.GlueData.ι_jointly_surjective` is the
   statement that the construction is a *cover*.
+- `ComplexAnalytic.specGluedOpenCover_obj` and `ComplexAnalytic.specGluedOpenCover_map`: **that
+  cover is by the members one started from, mapped by the inclusions above** — both `rfl`, and
+  without them the definition above is a cover of a gluing by objects of a glue datum.
 - `ComplexAnalytic.specIncl_comp_specIota`: **the inclusions agree over the overlaps**, in the
   vocabulary the input is written in rather than in `CategoryTheory.GlueData.ofGlueData'`'s. This
   is the statement taxis #1105 consumes, and it is the one thing here that a construction ignoring
@@ -438,6 +470,43 @@ from are an open cover of `X`. -/
 theorem isOpenImmersion_specIota (i : J) :
     LocallyRingedSpace.IsOpenImmersion (specIota.{u} obj poly glue hrange hsymm hcocycle i) :=
   specGlueData_ι_isOpenImmersion.{u} obj poly glue hrange hsymm hcocycle i
+
+/-! ### The members as an open cover of `X` -/
+
+/-- **The members are an open cover of `X`.**
+
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.openCover` at this glue datum, and it is the
+counterpart of `ComplexAnalytic.coverAnalytificationOpenCover`, which
+`Oka/Analytification/AffineCover.lean` has had since taxis #1105 and which this file did not.
+As there, the two `rfl` lemmas below are what make it a cover *by the members one started from*
+rather than a cover of a gluing by objects of a glue datum that happen to be them.
+
+Noncomputable and non-canonical for the reason
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.openCover` is: the index of a point is *chosen*,
+and nothing downstream depends on which. -/
+noncomputable def specGluedOpenCover :
+    LocallyRingedSpace.OpenCover.{u} (specGlued.{u} obj poly glue hrange hsymm hcocycle) :=
+  (specGlueData.{u} obj poly glue hrange hsymm hcocycle).openCover
+
+/-- **The `i`-th member of the cover is the `i`-th member's `Spec`**, by `rfl` —
+`ComplexAnalytic.specGlueData_U` at the glue datum. -/
+@[simp]
+theorem specGluedOpenCover_obj (i : J) :
+    (specGluedOpenCover.{u} obj poly glue hrange hsymm hcocycle).obj i = specSpace.{u} obj i :=
+  rfl
+
+/-- **The `i`-th map of the cover is `ComplexAnalytic.specIota`**, by `rfl`.
+
+Stated against `ComplexAnalytic.specIota` rather than against
+`(specGlueData …).toGlueData.ι`, which is the same choice
+`ComplexAnalytic.isOpenImmersion_specIota` makes directly above and
+`ComplexAnalytic.coverAnalytificationOpenCover_map` makes on the analytic side: a consumer of this
+cover is working in the vocabulary the input was written in. -/
+@[simp]
+theorem specGluedOpenCover_map (i : J) :
+    (specGluedOpenCover.{u} obj poly glue hrange hsymm hcocycle).map i =
+      specIota.{u} obj poly glue hrange hsymm hcocycle i :=
+  rfl
 
 /-- **The inclusions agree over the overlaps**, stated in the vocabulary the input is written in.
 

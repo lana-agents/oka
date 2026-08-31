@@ -209,7 +209,11 @@ overlaps sitting over three different members with no common target to cancel ag
   them by the caller, so neither is evidence about the other one here.
 * **No scheme, and no `admissible`.** As in the two files this one sits beside, and for the same
   reason: there is no `AlgebraicGeometry.Scheme` in this line of files, and `admissible` is a
-  notion this repository does not have.
+  notion this repository does not have. **What it does have is everything that notion asserts** —
+  `Oka/Analytification/SpecAffineCover.lean`'s admissibility section — including the observation
+  that bears directly on this file: a cover datum's pairwise overlaps are *distinguished* opens of
+  each of their two members, which is what a refinement general enough for taxis #1107's fourth
+  increment would have to reproduce, and what the refinements below produce for one fixed member.
 -/
 
 open CategoryTheory TopologicalSpace AlgebraicGeometry
