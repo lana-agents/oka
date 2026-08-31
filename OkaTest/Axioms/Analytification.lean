@@ -121,13 +121,6 @@ info: 'ComplexAnalytic.AnalyticSpace.mem_toΓSpec_base_asIdeal_iff' depends on a
 #print axioms ComplexAnalytic.AnalyticSpace.mem_toΓSpec_base_asIdeal_iff
 
 /--
-info: 'ComplexAnalytic.finitePresentation_presentedAlgebra' depends on axioms:
-  [propext, Classical.choice, Quot.sound]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms ComplexAnalytic.finitePresentation_presentedAlgebra
-
-/--
 info: 'ComplexAnalytic.analytificationToSpec' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
@@ -471,6 +464,13 @@ info: 'ComplexAnalytic.exists_presentation' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.exists_presentation
+
+/--
+info: 'ComplexAnalytic.finiteType_presentationAlg' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.finiteType_presentationAlg
 
 /--
 info: 'ComplexAnalytic.toFGAlg' depends on axioms:

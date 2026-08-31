@@ -297,7 +297,17 @@ def PresHom.toAlgHom {n k n' k' : ℕ} {g : Fin k → MvPolynomial (ULift.{u} (F
 `ComplexAnalytic.toFGAlg`. -/
 abbrev isFiniteType : ObjectProperty (CommAlgCat.{u} ℂ) := fun A ↦ Algebra.FiniteType ℂ A
 
-instance (P : Presentation.{u}) : Algebra.FiniteType ℂ P.alg :=
+/-- **The algebra a presentation presents is of finite type over `ℂ`**, structurally: it is a
+quotient of a polynomial ring in `P.n` variables. `ComplexAnalytic.toFGAlg` below is this instance
+read as a functor and `ComplexAnalytic.instIsEquivalenceToFGAlg` is the sharp form of it.
+
+**It was anonymous until 2026-08-31**, which is enough to be inferred and not enough to be cited,
+and being uncitable is how it came to be overlooked: `Oka/Analytification/SpecAffineCover.lean`'s
+admissibility section needs exactly this statement — *each member of an admissible cover is of
+finite type over `ℂ`* — and the branch that wrote that section first added a second proof of it
+next to `ComplexAnalytic.PresentedAlgebra` before finding this one. The name is so that the
+section can cite it. -/
+instance finiteType_presentationAlg (P : Presentation.{u}) : Algebra.FiniteType ℂ P.alg :=
   Algebra.FiniteType.of_surjective (Ideal.Quotient.mkₐ ℂ (presentationIdeal.{u} P.g))
     Ideal.Quotient.mk_surjective
 

@@ -167,10 +167,12 @@ docstring predicts that every consumer of the functor spells its object the othe
   argue in a titled section why. taxis #1107's headline speaks of two *admissible covers of a
   scheme*, and there is still no predicate of that name — but **defining one is not what that
   issue's fourth increment is blocked on, and this bullet said until 2026-08-31 that it was.**
-  Every part admissibility asserts of a member already holds of a cover datum, with nothing
-  defined: `ComplexAnalytic.finitePresentation_presentedAlgebra` for finite type over `ℂ`,
-  `ComplexAnalytic.isOpenImmersion_specIota` for openness, and `ComplexAnalytic.specGluedOpenCover`
-  for the covering. What a common refinement of two data has to reproduce is a **stronger**
+  Every part admissibility asserts of a member already held of a cover datum, and each was already
+  a declaration: `ComplexAnalytic.finiteType_presentationAlg` for finite type over `ℂ`,
+  `ComplexAnalytic.isOpenImmersion_specIota` for openness, and
+  `AlgebraicGeometry.LocallyRingedSpace.GlueData.ι_jointly_surjective` for the covering, the three
+  packaged as `ComplexAnalytic.specGluedOpenCover`. What a common refinement of two data has to
+  reproduce is a **stronger**
   condition the data already carries and nobody had named — every pairwise overlap is a
   *distinguished* open of each of the two members it lies in —
   and `Oka/Analytification/SpecAffineCover.lean`'s admissibility section is where it is written

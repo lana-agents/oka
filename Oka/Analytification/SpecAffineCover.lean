@@ -97,22 +97,30 @@ factors through `ComplexAnalytic.coverIncl` by the same definition, so weakening
 other would have made the pair *less* symmetric and not more.
 `Oka/Analytification/AffineCover.lean` carries the mirror of each theorem below.
 
-## The members are an admissible affine cover of `X`, and no notion had to be defined
+## The members are an admissible affine cover of `X`, and nothing had to be defined or proved
 
 taxis #1107's headline is *"two **admissible** covers of a scheme give canonically isomorphic
 analytifications"*, and three files in this line record `admissible` as a notion this repository
 does not have. It has none, and it does not need one: for the analytification of a scheme locally
 of finite type over `ℂ`, an admissible cover is an open cover by affine opens each of finite type
-over `ℂ`, and a cover datum satisfies all three parts with nothing defined.
+over `ℂ`, and **every one of those three parts was already a declaration** when the question was
+asked. The heading says *or proved* because the first draft of this section proved the first
+bullet again, next to `ComplexAnalytic.PresentedAlgebra`, having failed to find the instance that
+had been discharging it since `ComplexAnalytic.toFGAlg` was written — the two arrived in one
+commit, and the instance exists because that functor needs it.
 
-* **Affine and of finite type over `ℂ`** — `ComplexAnalytic.Presentation` is `n : ℕ` variables and
-  `k : ℕ` relations, so `ComplexAnalytic.finitePresentation_presentedAlgebra` is the whole of it,
-  and it is one term.
+* **Affine and of finite type over `ℂ`** — `ComplexAnalytic.finiteType_presentationAlg`: a
+  `ComplexAnalytic.Presentation` is `n : ℕ` variables and `k : ℕ` relations, so the algebra it
+  presents is a quotient of a polynomial ring in `n` of them and the instance is one term. The
+  repository has a sharper form still, in the same file — `ComplexAnalytic.toFGAlg` is that
+  instance read as a functor into the finite-type `ℂ`-algebras, and
+  `ComplexAnalytic.instIsEquivalenceToFGAlg` says presentations *are* exactly those.
 * **Open in `X`** — `ComplexAnalytic.isOpenImmersion_specIota` below.
 * **Covering `X`** — `AlgebraicGeometry.LocallyRingedSpace.GlueData.ι_jointly_surjective`.
 
 `ComplexAnalytic.specGluedOpenCover` below is the three packaged, and it is one term at
-`AlgebraicGeometry.LocallyRingedSpace.GlueData.openCover`.
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.openCover`. **It is the only declaration
+admissibility cost on this side**, and it is a packaging rather than a fact.
 
 **What a cover datum asks *beyond* admissibility is the thing worth carrying away, and nobody had
 named it.** `ComplexAnalytic.specOpen obj poly i j` is `ComplexAnalytic.specLocalisationOpen` —
