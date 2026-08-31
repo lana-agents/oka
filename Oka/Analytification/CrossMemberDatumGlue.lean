@@ -113,15 +113,24 @@ the unequal branch was added, **and two things neither file describes fired as w
   spelling — so the `rfl` theorem above could not be stated until the transport was named.
   `ComplexAnalytic.refineSwapMul` is that name. **A definition that a later proof will have to
   open should not carry an anonymous proof term**, and this is the shape of that rule.
-* **One generated declaration is left, and it is `simp only … at` and not `rw`.**
+* **Three generated declarations are left, and each is `simp only … at` and not `rw`.**
   `ComplexAnalytic.refineDatumGlueEq.congr_simp` is planted by the `simp only … at e` in
-  `ComplexAnalytic.refineDatumGlueEq_analytification_comp` — **attributed by deleting that
-  theorem and re-running the dump**, not inferred. The one-member file's analytified triangle uses
-  the same tactic and plants nothing, and the difference is that the definition here takes a proof
-  argument, so simp needs a congruence lemma to traverse it. It belongs to this module and is the
-  benign kind; `Oka/Analytification/CrossMemberGlue.lean` carries two of exactly this shape.
-  **Recorded rather than removed**, because removing it means giving up `simp only … at` on a
+  `ComplexAnalytic.refineDatumGlueEq_analytification_comp`;
+  `ComplexAnalytic.refineDatumGlueNe.congr_simp` and
+  `ComplexAnalytic.refineDatumCrossProj.congr_simp` by the ones in
+  `ComplexAnalytic.refineDatumGlueNe_analytification_comp` and
+  `ComplexAnalytic.refineDatumCrossProj_analytification_localisationProj` — **each attributed by
+  deleting the theorem and re-running the dump**, not inferred, and the two are not
+  interchangeable: with the triangle deleted the first of them goes and the second stays. The
+  one-member file's analytified triangle uses the same tactic and plants nothing, and the
+  difference is that all three definitions here take a proof argument, so simp needs a congruence
+  lemma to traverse them. They belong to this module and are the benign kind;
+  `Oka/Analytification/CrossMemberGlue.lean` carries two of exactly this shape.
+  **Recorded rather than removed**, because removing them means giving up `simp only … at` on a
   hypothesis that mentions a definition with a proof argument, and nothing here is worth that.
+  **The arithmetic this makes**: three declarations and `Δdump = +5`, which is the figure to check
+  a branch on this file by — an unexplained `Δdump` here is a planted equation lemma and not a
+  rounding.
 * **The other-file variant fired, and from `simp only` rather than from `rw`.** The first draft
   of `ComplexAnalytic.refineDatumGlueNe_comp` cancelled its two transports with
   `simp only [Iso.trans_hom, Iso.symm_hom, Category.assoc, Iso.inv_hom_id_assoc]`. That is green,
@@ -140,6 +149,46 @@ the unequal branch was added, **and two things neither file describes fired as w
   reports *did not find an occurrence of the pattern* against a goal that prints it. `reassoc_of%`
   on the same lemma is what closes it, at both orientations, and that is a Mathlib term elaborator
   and not a new lemma.
+
+## The two branches do not analytify to the same shape, and the price on record was an estimate
+
+`Oka/Analytification/CoverRefinement.lean` and the equal branch here each state a coherence
+triangle and then its image under `ComplexAnalytic.analytificationFunctor`, and in both the image
+comes out with `ComplexAnalytic.localisationProj` in every position but the glue. The recipe is
+three lines — build the mapped equation with `congrArg`, normalise the *hypothesis* with
+`CategoryTheory.Functor.map_comp` and
+`ComplexAnalytic.analytificationFunctor_map_localisationPresHom`, discharge with `exact` — and
+this file's `## What is not here` priced the unequal branch's version at *"one application of the
+analytification functor"* on the strength of it.
+
+**That was right about the functor application and wrong about the shape.** The rewrite fires on a
+`ComplexAnalytic.localisationPresHom`, and every factor of `ComplexAnalytic.refineDatumGlueEq_comp`
+is one *in the statement*. The factors of `ComplexAnalytic.refineDatumGlueNe_comp` are
+`ComplexAnalytic.refineDatumCrossProj`, which is a `def`: `CategoryTheory.Functor.map_comp` splits
+a composite and does not enter a definition, so after it there is nothing for the rewrite to see.
+**Adding it to the `simp` set is not merely useless but detectably so** — `linter.unusedSimpArgs`
+reports the argument as unused, which is how this was found rather than argued.
+
+So the two branches' analytified triangles are in different vocabularies, and no better choice of
+tactic makes one look like the other: the difference is in what the statements are built from.
+What closes the gap is a separate statement rather than a better proof —
+`ComplexAnalytic.refineDatumCrossProj_analytification_localisationProj`, which does the rewrite
+once on the `a`-side projection and which a consumer composes with. **The estimate was short by
+that lemma and by the algebraic one under it**, and this section exists because the estimate stood
+in a `## What is not here`, where a price is a claim like any other.
+
+**The general-level mirror was measured and is deliberately not here.** The same statement one
+level down — `ComplexAnalytic.refineCrossProj` followed down to the member, under the functor,
+stated at `Oka/Analytification/CrossMemberGlue.lean`'s own variables — compiles by the same three
+lines. It is left out because nothing would consume it: the datum-level pair above is what the
+triangle beside them is stated against, and a lemma carrying an axiom guard is a claim that
+something reads it.
+
+**What did not change is the triangle's shape over the overlap.** It is still not over a member and
+there is still no member-level version of it, for the reason
+`ComplexAnalytic.refineDatumGlueNe_comp`'s own docstring gives: the two refined members lie over
+`obj (σ a)` and `obj (σ b)` and a cover datum carries no morphism between those. The new projection
+lemma is about one member and one side of the overlap and is not a step towards one that is not.
 
 ## Main definitions
 
@@ -188,12 +237,20 @@ the unequal branch was added, **and two things neither file describes fired as w
   `rfl`, which is what says this is the same construction and not a second one of the same shape.
 - `ComplexAnalytic.refineDatumGlueNe_eq` and `ComplexAnalytic.refineDatumCrossProj_eq`: **the
   unequal branch and its projection unfolded, by `rfl`**, for the reason the two above are.
+- `ComplexAnalytic.refineDatumCrossProj_localisationHom` and
+  `ComplexAnalytic.refineDatumCrossProj_analytification_localisationProj`: **the projection to the
+  original overlap, followed down to the member, is the datum's own two structure maps**, and the
+  same under the functor. The second is the one place on this branch where the structure maps come
+  out as the analytified projections, and the analytified triangle below is not.
 - `ComplexAnalytic.isoOfAlgEquiv_symm_refineDatumCrossAlgEquiv`: **reading the algebra
   isomorphism back gives the datum's own `glue`**, by `rfl`. This is what lets the triangle below
   be stated about `glue` and not about an algebra isomorphism built from it.
 - `ComplexAnalytic.refineDatumGlueNe_comp`: **the coherence triangle on the unequal branch**, over
   the *original overlap* rather than over a member, with the datum's `glue` as its right-hand
   factor. Its docstring records why the two conjugating transports are kept as isomorphisms.
+- `ComplexAnalytic.refineDatumGlueNe_analytification_comp`: **the same, analytified.** Unlike
+  `ComplexAnalytic.refineDatumGlueEq_analytification_comp` it keeps its two projections under the
+  functor, for the reason the section below gives.
 - `ComplexAnalytic.refineDatumGlue_of_eq` and `ComplexAnalytic.refineDatumGlue_of_ne`: **the two
   branches read back off the field**, which is `dif_pos` and `dif_neg`.
 - `ComplexAnalytic.refineDatumGlue_const`: **at constant `σ` the field is the one-member file's
@@ -221,11 +278,6 @@ the unequal branch was added, **and two things neither file describes fired as w
   algebraic, and `Oka/Analytification/CoverRefinement.lean`'s corresponding section says what
   makes them cheap for one fixed member — that every refined member lies over it — which is the
   sentence a general `σ` does not have.
-* **No analytified coherence triangle on the unequal branch.**
-  `ComplexAnalytic.refineDatumGlueEq_analytification_comp` is the equal branch's, and it is the
-  shape the two geometric laws consume; the same for `ComplexAnalytic.refineDatumGlueNe_comp`
-  would be one application of the analytification functor and it is not compiled here, so nothing
-  below is evidence about it.
 * **No witness at a non-constant `σ`.** `ComplexAnalytic.refineDatumGlue_const` says the general
   form reduces to a configuration the test files already exhibit, which is weaker than a witness
   and says nothing about `σ` ever being non-constant — the same gap
@@ -597,6 +649,56 @@ theorem refineDatumCrossProj_eq {a b : B} (h : σ a ≠ σ b) :
         refineCrossProj.{u} (obj (σ a)).g (poly (σ a) (σ b)) (fam a) (q a b) :=
   rfl
 
+/-- **The projection to the original overlap, followed down to the member, is the datum's own two
+structure maps.**
+
+`ComplexAnalytic.refineCrossProj_localisationHom` at the datum's own cutting polynomial, with the
+transport cancelled against the outer structure map. So reading the `a`-side of a cross-member
+refined overlap over the *original overlap* rather than over the member loses nothing: a consumer
+that wants it over `obj (σ a)` composes this with the triangle below.
+
+**This is not the member-level triangle the paragraph above says does not exist, and it is not a
+step towards one.** That absence is about *two* members and a morphism between them that a cover
+datum does not carry; this statement mentions one member and says where the `a`-side goes. Nothing
+here says anything about the `b`-side, and there is no analogue of it that could.
+
+The transport cancels the way `ComplexAnalytic.refineDatumGlueEq_comp`'s do, by
+`ComplexAnalytic.eqToHom_localisationHom` reassociated. The extra step is
+`CategoryTheory.eqToIso.hom`, because `ComplexAnalytic.refineDatumCrossProj` carries its transport
+as an isomorphism and the cancellation lemma is stated at the morphism. -/
+theorem refineDatumCrossProj_localisationHom {a b : B} (h : σ a ≠ σ b) :
+    refineDatumCrossProj.{u} obj σ fam poly q h ≫
+        localisationHom.{u} (obj (σ a)).g (poly (σ a) (σ b)) =
+      localisationHom.{u} (refineDatumObj.{u} obj σ fam a).g
+          (refineDatumPoly.{u} obj poly σ fam q a b) ≫
+        localisationHom.{u} (obj (σ a)).g (fam a) := by
+  rw [refineDatumCrossProj_eq, eqToIso.hom, Category.assoc, refineCrossProj_localisationHom,
+    ← reassoc_of% (eqToHom_localisationHom.{u}
+      (localisationPresentation.{u} (obj (σ a)).g (fam a))
+      (refineDatumPoly_of_ne.{u} obj poly σ fam q h))]
+
+/-- **The same, analytified**, with the structure maps read as `ComplexAnalytic.localisationProj`.
+The previous statement under the functor with nothing added.
+
+**This is the statement the analytified triangle below does not give**, and the reason is the
+difference between the two branches. Every factor of `ComplexAnalytic.refineDatumGlueEq_comp` is a
+`ComplexAnalytic.localisationHom` *in the statement*, so its image under the functor rewrites into
+`ComplexAnalytic.localisationProj` everywhere but the glue. The factors of
+`ComplexAnalytic.refineDatumGlueNe_comp` are `ComplexAnalytic.refineDatumCrossProj`, and that is a
+`def`: `CategoryTheory.Functor.map_comp` cannot enter one, so nothing in the mapped triangle is a
+structure map that the rewrite can see. This is where that rewrite happens instead, once, on the
+`a`-side projection, and it is what a consumer composes with to get past the functor. -/
+theorem refineDatumCrossProj_analytification_localisationProj {a b : B} (h : σ a ≠ σ b) :
+    analytificationFunctor.{u}.map (refineDatumCrossProj.{u} obj σ fam poly q h) ≫
+        localisationProj.{u} (obj (σ a)).g (poly (σ a) (σ b)) =
+      localisationProj.{u} (refineDatumObj.{u} obj σ fam a).g
+          (refineDatumPoly.{u} obj poly σ fam q a b) ≫
+        localisationProj.{u} (obj (σ a)).g (fam a) := by
+  have e := congrArg (analytificationFunctor.{u}.map)
+    (refineDatumCrossProj_localisationHom.{u} obj σ fam poly q h)
+  simp only [Functor.map_comp, analytificationFunctor_map_localisationPresHom] at e
+  exact e
+
 /-- **Reading the algebra isomorphism back gives the datum's own `glue`.**
 
 `ComplexAnalytic.refineDatumCrossAlgEquiv` is `ComplexAnalytic.Presentation.algEquivOfIso` of the
@@ -641,6 +743,39 @@ theorem refineDatumGlueNe_comp {a b : B} (h : σ a ≠ σ b)
   rw [refineDatumGlueNe_eq, refineDatumCrossProj_eq, refineDatumCrossProj_eq, Iso.trans_hom,
     Iso.trans_hom, Iso.symm_hom, Category.assoc, Category.assoc, Iso.inv_hom_id_assoc,
     refineCrossGlue_hom_comp, isoOfAlgEquiv_symm_refineDatumCrossAlgEquiv, Category.assoc]
+
+/-- **The coherence triangle on this branch, analytified**, and it is over the original overlap
+for the reason the statement above is.
+
+The previous statement under the functor with nothing added — but **not in the shape the equal
+branch's version has, and the difference is measured rather than predicted**.
+`ComplexAnalytic.refineDatumGlueEq_analytification_comp` comes out with
+`ComplexAnalytic.localisationProj` in every position but the glue; here the projections stay under
+`ComplexAnalytic.analytificationFunctor`, because
+`ComplexAnalytic.refineDatumCrossProj` is a `def` and `CategoryTheory.Functor.map_comp` does not
+enter one. Adding
+`ComplexAnalytic.analytificationFunctor_map_localisationPresHom` to the `simp` set below rewrites
+nothing and `linter.unusedSimpArgs` reports it as unused; that is how the difference was found and
+it is why it is not in the list.
+
+`ComplexAnalytic.refineDatumCrossProj_analytification_localisationProj` is what a consumer
+composes with to push the `a`-side projection down to its member, and between the two of them this
+branch is in the same vocabulary as the equal one. -/
+theorem refineDatumGlueNe_analytification_comp {a b : B} (h : σ a ≠ σ b)
+    (r : MvPolynomial (ULift.{u} (Fin ((obj (σ b)).n + 1))) ℂ)
+    (he : RefineDatumCrossEq.{u} obj σ fam poly q glue a b r)
+    (u : (PresentedAlgebra.{u} ((obj (σ b)).n + 1) ((obj (σ b)).k + 1)
+      (localisationPresentation.{u} (obj (σ b)).g (poly (σ b) (σ a))))ˣ)
+    (hu : RefineDatumCrossUnit.{u} obj σ fam poly q a b r u) :
+    analytificationFunctor.{u}.map
+          (refineDatumGlueNe.{u} obj σ fam poly q glue h r he u hu).hom ≫
+        analytificationFunctor.{u}.map (refineDatumCrossProj.{u} obj σ fam poly q h.symm) =
+      analytificationFunctor.{u}.map (refineDatumCrossProj.{u} obj σ fam poly q h) ≫
+        analytificationFunctor.{u}.map (glue (σ a) (σ b)).hom := by
+  have e := congrArg (analytificationFunctor.{u}.map)
+    (refineDatumGlueNe_comp.{u} obj σ fam poly q glue h r he u hu)
+  simp only [Functor.map_comp] at e
+  exact e
 
 /-! ### The field, assembled -/
 
