@@ -121,8 +121,15 @@ goal.
   `σ a = σ b` the two sides of `ComplexAnalytic.refineGlue`'s configuration sit over `obj (σ a)`
   and over `obj (σ b)`, which are propositionally and not definitionally equal, so the equal
   branch needs a transport between two objects of `ComplexAnalytic.Presentation` that the
-  one-member file never meets. **That is measured only as a type mismatch and no attempt to
-  discharge it is compiled**; nothing here is evidence about its size.
+  one-member file never meets.
+
+  **That transport is discharged, and this paragraph's estimate of it was the only part that was
+  wrong.** `Oka/Analytification/CrossMemberDatumGlue.lean` builds the equal branch as
+  `ComplexAnalytic.refineDatumGlueEq`, with its symmetry, its coherence triangle and the
+  analytified form of that triangle; the transport costs one `subst`, available once the two
+  members are generalised to free indices, and at constant `σ` the field is the one-member glue by
+  `rfl`. **What is still absent is a `glue` field**: the unequal branch is not assembled with the
+  equal one, and that file says what putting them together would take.
 * **Nothing produces `q`.** As in `Oka/Analytification/CrossMemberGlue.lean`, the extra factor is
   an argument, and `ComplexAnalytic.exists_localisationOpen_eq_rename` with
   `ComplexAnalytic.exists_mk_rename_eq` is where a caller gets one. **This file adds a constraint

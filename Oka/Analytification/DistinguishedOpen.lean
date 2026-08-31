@@ -652,7 +652,8 @@ localisations is `ComplexAnalytic.refineCrossGlue`
 (`Oka/Analytification/CrossMemberGlue.lean`), with the coherence triangle
 `ComplexAnalytic.refineCrossGlue_hom_comp`; **the two geometric laws across members are still
 nowhere**, and so is the datum they would be laws of, except for its `poly` field
-(`ComplexAnalytic.refineDatumPoly`). Taxis #1287 is where that question lives. Nothing here is
+(`ComplexAnalytic.refineDatumPoly`) and one branch of its `glue`
+(`ComplexAnalytic.refineDatumGlueEq`). Taxis #1287 is where that question lives. Nothing here is
 about a scheme.
 -/
 

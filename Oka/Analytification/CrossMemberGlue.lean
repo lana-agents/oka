@@ -139,9 +139,11 @@ harder to read, which is a reason to state and not a reason to hide.
   is a polynomial over the member `σ b`, where it must produce one over the member `σ a`"*. It has
   not gone anywhere; it sits inside `ComplexAnalytic.refineDatumFactor`, between two values of one
   type, instead of in the shape of the refined overlap where every construction below would meet
-  it. The remaining fields — `glue`, `hrange`, `hsymm`, `hcocycle` — are untouched, and the glue
-  is where the equal case's *second* transport, between two objects of
-  `ComplexAnalytic.Presentation`, has to be paid.
+  it. The equal case's *second* transport, between two objects of
+  `ComplexAnalytic.Presentation`, is paid in `Oka/Analytification/CrossMemberDatumGlue.lean`,
+  which builds that branch of the glue with its symmetry and its coherence triangle; `hrange` and
+  `hcocycle` are untouched in both branches, `hsymm` holds on the equal branch alone, and no file
+  assembles the two branches into a `glue` field.
 * **Nothing here produces `q`.** The extra factor and the unit are arguments, and where they come
   from is `ComplexAnalytic.exists_localisationOpen_eq_rename` with
   `ComplexAnalytic.exists_mk_rename_eq` for the algebra and
