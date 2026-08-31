@@ -80,6 +80,11 @@ carry the three together, bundle then.
   `ComplexAnalytic.AnalyticSpace.algebraMap_ofGlueDataCLinear_comapAlgMap`: the hypothesis is
   automatic when the structures come from the gluing, and in that case the construction returns
   the structure it came from.
+- `ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear_congr`: **equal glue data give the same analytic
+  space**, the two `Prop` arguments being irrelevant. The `ℂ`-algebra structures are compared by
+  `HEq` and not by `Eq` because their type mentions the glue datum; a caller whose two families
+  are the *same expression* — which is the case whenever they are read off the members, since the
+  members do not move — discharges that with `HEq.rfl` at a stated type.
 - `ComplexAnalytic.IsCLinearHom.of_openCover`: **`ℂ`-linearity is local on the source** — a
   morphism out of a covered space is `ℂ`-linear as soon as its restriction to each member is.
   Nothing is assumed about the morphism, so it applies to one that arrives from a universal
@@ -368,6 +373,28 @@ lemma ofGlueDataCLinear_toLocallyRingedSpace (D : LocallyRingedSpace.GlueData.{u
     (α : ∀ j, ℂ →+* (D.U j).presheaf.obj (op ⊤)) (hα : GlueDataCLinear D α)
     (h : ∀ j, HasLocalModels (D.U j) (α j)) :
     (ofGlueDataCLinear D α hα h).toLocallyRingedSpace = D.toGlueData.glued :=
+  rfl
+
+/-- **Equal glue data give the same analytic space.**
+
+Both `Prop` arguments are discharged by proof irrelevance once the glue datum is substituted, so
+they are implicit and unnamed. The `ℂ`-algebra structures cannot be: their type
+`∀ j, ℂ →+* (D.U j).presheaf.obj (op ⊤)` mentions the glue datum, so two families for two data are
+not two values of one type and `HEq` is the only comparison available before the `subst`.
+
+**Give the `HEq` a stated type at the call site.** A caller whose two families are literally the
+same expression still has to convince the elaborator that the two types agree, which means
+reducing `D.U j` through `CategoryTheory.GlueData.ofGlueData'` on both sides; supplying
+`HEq.rfl` against an inferred type does that inside a metavariable and does not terminate within a
+million heartbeats, while `have : HEq f f := HEq.rfl` at the spelled-out family and then `exact`
+is immediate. -/
+theorem ofGlueDataCLinear_congr {D D' : LocallyRingedSpace.GlueData.{u}} (h : D = D')
+    {α : ∀ j, ℂ →+* (D.U j).presheaf.obj (op ⊤)}
+    {α' : ∀ j, ℂ →+* (D'.U j).presheaf.obj (op ⊤)} (hα : HEq α α')
+    {hc hc' hl hl'} :
+    ofGlueDataCLinear D α hc hl = ofGlueDataCLinear D' α' hc' hl' := by
+  subst h
+  obtain rfl := eq_of_heq hα
   rfl
 
 /-- **The glued `ℂ`-algebra structure pulls back to the given one on every member**, which is the

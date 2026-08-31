@@ -84,6 +84,7 @@ import Oka.Analytification.CoverRefinement
 import Oka.Analytification.CrossMemberDatum
 import Oka.Analytification.CrossMemberDatumGlue
 import Oka.Analytification.CrossMemberGlue
+import Oka.Analytification.DiagonalIndependence
 import Oka.Analytification.DistinguishedOpen
 import Oka.Analytification.DistinguishedOpenPullback
 import Oka.Analytification.Flatness

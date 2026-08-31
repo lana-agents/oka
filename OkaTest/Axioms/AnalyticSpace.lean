@@ -521,6 +521,13 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.GlueData.isCompatible_restrictAlgMap
 #print axioms AlgebraicGeometry.LocallyRingedSpace.GlueData.isCompatible_restrictAlgMap
 
 /--
+info: 'AlgebraicGeometry.LocallyRingedSpace.GlueData.ext_of_toGlueData' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.GlueData.ext_of_toGlueData
+
+/--
 info: 'ComplexAnalytic.GlueDataCLinear' depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
@@ -560,6 +567,13 @@ info: 'ComplexAnalytic.AnalyticSpace.algebraMap_ofGlueDataCLinear_comapAlgMap' d
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.algebraMap_ofGlueDataCLinear_comapAlgMap
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear_congr' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear_congr
 
 /-! ### The fields of `CategoryTheory.GlueData.ofGlueData'` -/
 
@@ -625,6 +639,13 @@ info: 'CategoryTheory.GlueData.comm_of_ofGlueData'_comm' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms CategoryTheory.GlueData.comm_of_ofGlueData'_comm
+
+/--
+info: 'CategoryTheory.GlueData'.ext_of_heq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms CategoryTheory.GlueData'.ext_of_heq
 
 /--
 info: 'ComplexAnalytic.AnalyticSpace.comapAlgMap_toLRSHom' depends on axioms:

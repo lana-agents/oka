@@ -2507,3 +2507,172 @@ info: 'ComplexAnalytic.refineDatumCrossAlgEquiv' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.refineDatumCrossAlgEquiv
+
+/-! ### The diagonal of a cover datum is unread
+
+`Oka/Analytification/DiagonalIndependence.lean`. The transports that say each piece of
+`Oka/Analytification/AffineCover.lean`'s glue datum reads `poly` only at the pair it is indexed
+by, the two geometric hypotheses transporting because they are stated at distinct indices, the
+glue datum and the glued analytic space depending on nothing at the diagonal, and the
+diagonal-normalised datum of `Oka/Analytification/CrossMemberDatum.lean` as the instance.
+
+They are guarded together and after `ComplexAnalytic.refineDatumPoly` above because the
+normalisation is what that declaration uses and this is the statement it left open.
+`ComplexAnalytic.glueDiagOne` is the only definition among them; everything else is a transport,
+and each is `Classical.choice` only through the `HEq` machinery and the `Classical.dec` inside
+`ComplexAnalytic.polyDiagOne`.
+-/
+
+/--
+info: 'ComplexAnalytic.coverOverlap_congr' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverOverlap_congr
+
+/--
+info: 'ComplexAnalytic.coverOverlapSpace_congr' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverOverlapSpace_congr
+
+/--
+info: 'ComplexAnalytic.coverOpen_congr' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverOpen_congr
+
+/--
+info: 'ComplexAnalytic.coverPart_congr' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverPart_congr
+
+/--
+info: 'ComplexAnalytic.coverTriplePart_congr' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverTriplePart_congr
+
+/--
+info: 'ComplexAnalytic.heq_coverIncl' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.heq_coverIncl
+
+/--
+info: 'ComplexAnalytic.heq_coverOverlapIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.heq_coverOverlapIso
+
+/--
+info: 'ComplexAnalytic.heq_coverTripleIncl' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.heq_coverTripleIncl
+
+/--
+info: 'ComplexAnalytic.heq_coverGlueIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.heq_coverGlueIso
+
+/--
+info: 'ComplexAnalytic.heq_coverTransition' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.heq_coverTransition
+
+/--
+info: 'ComplexAnalytic.heq_coverTransitionHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.heq_coverTransitionHom
+
+/--
+info: 'ComplexAnalytic.heq_coverTriple' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.heq_coverTriple
+
+/--
+info: 'ComplexAnalytic.hrange_congr' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.hrange_congr
+
+/--
+info: 'ComplexAnalytic.hcocycle_congr' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.hcocycle_congr
+
+/--
+info: 'ComplexAnalytic.coverGlueData'_congr' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverGlueData'_congr
+
+/--
+info: 'ComplexAnalytic.coverGlueData_congr' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverGlueData_congr
+
+/--
+info: 'ComplexAnalytic.coverAnalytification_congr' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverAnalytification_congr
+
+/--
+info: 'ComplexAnalytic.glueDiagOne' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.glueDiagOne
+
+/--
+info: 'ComplexAnalytic.heq_glueDiagOne' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.heq_glueDiagOne
+
+/--
+info: 'ComplexAnalytic.glueDiagOne_of_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.glueDiagOne_of_eq
+
+/--
+info: 'ComplexAnalytic.hsymm_glueDiagOne' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.hsymm_glueDiagOne
+
+/--
+info: 'ComplexAnalytic.coverAnalytification_polyDiagOne' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverAnalytification_polyDiagOne
