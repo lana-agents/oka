@@ -183,8 +183,13 @@ theorem algEquivOfIso_nodePresIso_symm_mk_X0 :
 
 /-- **`D(z₀)` in the node, presented over two different presentations of the node.** The
 transport of `ComplexAnalytic.localisationPresentationIsoOfAlgEquiv` at an isomorphism which is
-not an identity and between objects which are not equal. -/
-def nodeLocIso :
+not an identity and between objects which are not equal.
+
+Named for the *presentations* because `nodeLocIso` is taken:
+`OkaTest/AnalytificationDistinguishedOpen.lean`, which this file imports, declares one at the root
+namespace and it is an isomorphism of analytic spaces rather than of
+`ComplexAnalytic.Presentation`. Both would be in scope here under the same last component. -/
+def nodeLocPresIso :
     (⟨2 + 1, 1 + 1, localisationPresentation.{u} nodeTuple2.{u} (MvPolynomial.X (ULift.up 0))⟩ :
         Presentation.{u}) ≅
       ⟨3 + 1, 2 + 1, localisationPresentation.{u} nodeTuple3.{u} (MvPolynomial.X (ULift.up 0))⟩ :=

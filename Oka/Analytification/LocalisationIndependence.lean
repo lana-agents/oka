@@ -16,7 +16,7 @@ different analytic spaces. This file says they are canonically the same one.
 
 The first four statements identify the two presentations and put the identification over the
 member; the next four are about the case where the two polynomials differ by a **unit**, and about
-where such a pair comes from; the last two vary the base rather than the polynomial:
+where such a pair comes from; the last three vary the base rather than the polynomial:
 
 * `ComplexAnalytic.localisationPresentationIsoOfDvdPow` — **the presentations of the localisation
   at `f` and at `f'` are isomorphic** whenever the images of `f` and `f'` in `A` each divide a
@@ -47,6 +47,13 @@ where such a pair comes from; the last two vary the base rather than the polynom
   `ComplexAnalytic.exists_localisationOpen_eq_rename`, whose geometric conclusion discards the
   unit; the unit is what the isomorphism above needs and what an equality of non-vanishing loci
   does not give.
+* `ComplexAnalytic.localisationPresentedAlgebraEquivOfAlgEquiv_localisationRingHom` — **and the
+  identification of the two localised algebras is one over the two members**: it carries
+  `A ⟶ A_q` to `A' ⟶ A'_{q'}` composed with the isomorphism of the members. It stands to the
+  bullet below as
+  `ComplexAnalytic.localisationPresentedAlgebraEquivOfDvdPow_localisationRingHom` stands to the
+  first, and it is the half with content for the same reason: an isomorphism of two localisations
+  that is compatible with nothing identifies two objects and relates nothing.
 * `ComplexAnalytic.localisationPresentationIsoOfAlgEquiv` and
   `ComplexAnalytic.localisationPresentationIsoOfAlgEquiv_hom_comp` — **the base moves too**: an
   isomorphism of two presented algebras carrying one cutting polynomial to the other identifies
@@ -403,11 +410,10 @@ objects and relates nothing. The two outer steps are
 **The first step is a `change` and not a `rw` at the definition above**, which is the one
 difference from the proof of the `OfDvdPow` companion. A `rw` at a definition generates an
 auto-generated equation lemma for it, and the environment carries
-`ComplexAnalytic.localisationPresentedAlgebraEquivOfDvdPow.eq_1` for exactly that reason — and a
-generated `eq_1` makes its own definition a namespace, which switches off
-`scripts/check_docstring_names.py`'s field-notation rule for that name. The `change` costs the two
-submonoids written out and leaves the environment with the four declarations of this section and
-nothing else. -/
+`ComplexAnalytic.localisationPresentedAlgebraEquivOfDvdPow.eq_1` for exactly that reason — a
+declaration nobody wrote, which a build reports nowhere and which only `scripts/DumpOkaDecls.lean`
+shows. The `change` costs the two submonoids written out and leaves the environment with the four
+declarations of this section and nothing else. -/
 theorem localisationPresentedAlgebraEquivOfAlgEquiv_localisationRingHom
     (x : PresentedAlgebra.{u} n k g) :
     localisationPresentedAlgebraEquivOfAlgEquiv.{u} g q q' e he
