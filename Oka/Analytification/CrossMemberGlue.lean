@@ -11,10 +11,12 @@ import Oka.Analytification.CoverRefinement
 `Oka/Analytification/CoverRefinement.lean` refines **one fixed member** of a cover by
 distinguished opens. Its `σ` is constant, so every overlap of the refined data is an overlap
 inside one member, and its own `## What is not here` says why that is a boundary rather than a
-size: the cross-member case *"has to transport the original `glue` through two localisations, it
-is the only part that uses the original data's own glue isomorphism at all"*. **This file builds
-that transport**, as an isomorphism with a coherence triangle, and it uses the original `glue`
-exactly once.
+size: the cross-member case *"has to transport the original `glue` through two localisations and
+it is the only part that uses the original data's own glue isomorphism at all"*. **This file
+builds that transport**, as an isomorphism with a coherence triangle, and it uses the original
+`glue` exactly once. (That sentence is quoted as this branch leaves it: the same branch narrows
+the bullet it sits in, and a quotation of the version on the parent commit would be a citation of
+a tree nobody can check out.)
 
 ## The chain, and it is three tools that had never been composed
 
@@ -71,13 +73,26 @@ lemmas that the `simp only` in the last proof generates.
 
 `ComplexAnalytic.localisationPresentationIsoOfMulEq` and
 `ComplexAnalytic.localisationPresentationIsoOfAlgEquivUnitMul` mention no cover and no refinement,
-and they belong in `Oka/Analytification/LocalisationComposite.lean` beside the statements they are
-built from. What keeps them here is one line: the triangle of the first needs
-`ComplexAnalytic.eqToHom_localisationHom`, which is declared in
+and neither belongs here on its subject. **They are held here for different reasons and only one
+of them is a reason.**
+
+`ComplexAnalytic.localisationPresentationIsoOfMulEq` is built from
+`ComplexAnalytic.localisationPresentationIsoMul`, so
+`Oka/Analytification/LocalisationComposite.lean` is where it goes; what keeps it here is one line,
+that its triangle needs `ComplexAnalytic.eqToHom_localisationHom`, which is declared in
 `Oka/Analytification/CoverRefinement.lean` and is a general statement about a transport cancelling
 against a structure map. Moving that lemma earlier is the right change and it is **not** bundled
 here: it would move a declaration between files in the same branch that adds nine, and a census
 taken across a move counts the moved file.
+
+`ComplexAnalytic.localisationPresentationIsoOfAlgEquivUnitMul` is held by nothing. Its two
+ingredients and both of their triangles are in `Oka/Analytification/LocalisationIndependence.lean`
+— which `Oka/Analytification/LocalisationComposite.lean` imports, so that file is *downstream* of
+them rather than beside them — and it touches `ComplexAnalytic.eqToHom_localisationHom` nowhere.
+**It could move to the file that declares its ingredients today, with no lemma moved and no census
+taken across a move.** It is here because it and the statement above are the two halves of one
+chain and splitting them across two files at the moment of writing them would have made the chain
+harder to read, which is a reason to state and not a reason to hide.
 
 ## Main definitions
 

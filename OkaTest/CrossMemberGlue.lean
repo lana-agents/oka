@@ -26,11 +26,13 @@ refined overlaps are the two localisations `nodeLocPresIso` identifies.
   presentations, not an algebra isomorphism supplied by hand. `crossE_eq` says that this lands on
   the nose on the transported equivalence, by `rfl`; that composite is what
   `ComplexAnalytic.Presentation.isoOfAlgEquiv_algEquivOfIso` was stated for.
-* **The unit is not `1`.** On the second side the refined overlap is cut out by `z₀ · z₀` where
-  the crossing produces `z₀`, and the two differ by the unit `ComplexAnalytic.mk (rename z₀)` —
-  which is a unit for the reason `ComplexAnalytic.isUnit_mk_rename_localisationIncl` gives, that
-  the polynomial one inverts is invertible upstairs. So `crossHu` is an instance of the
-  hypothesis with content and not of `x = 1 * x`.
+* **The unit is not `1`, and that is a theorem here and not a remark.** On the second side the
+  refined overlap is cut out by `z₀ · z₀` where the crossing produces `z₀`, and the two differ by
+  the class of `z₀` read upstairs, which is a unit for the reason
+  `ComplexAnalytic.isUnit_mk_rename_localisationIncl` gives — the polynomial one inverts is
+  invertible upstairs. `crossU_ne_one` separates it from `1`, by evaluating at `crossPoint`,
+  a point of that analytification where `z₀` takes the value `2`. So `crossHu` is an instance of
+  the hypothesis with content and not of `x = 1 * x`.
 * **And the two objects glued are not equal** — `nodeCrossGlue_ne` — so the isomorphism is not an
   identity in disguise and `Iso.refl` does not typecheck at that type. The same separator
   `localisationPresentation_node_ne` uses one level down: the variable counts differ.
@@ -140,6 +142,53 @@ theorem crossHu :
     (MvPolynomial.X (ULift.up 0))).unit : PresentedAlgebra.{u} (3 + 1) (2 + 1)
       (localisationPresentation.{u} nodeTuple3.{u} (MvPolynomial.X (ULift.up 0)))) * _
   rw [IsUnit.unit_spec, map_mul, map_mul]
+
+/-- **A point of the analytification of the node in three variables localised at `z₀`**, where
+`z₀` does not take the value `1`: `(2, 0, 0, 1/2)`.
+
+The three relations vanish on it — `z₀z₁ = 2·0`, `z₂ = 0`, and `t·z₀ - 1 = ½·2 - 1` — which is
+what makes evaluation at it a ring map killing the ideal, and `z₀` takes the value `2`, which is
+what separates `crossU` from `1` below. -/
+def crossPoint : ULift.{u} (Fin (3 + 1)) → ℂ :=
+  fun i ↦ ![2, 0, 0, 1 / 2] i.down
+
+/-- **Every relation of that localised presentation vanishes at `crossPoint`.** -/
+theorem eval_crossPoint_localisationPresentation (j : Fin (2 + 1)) :
+    MvPolynomial.eval crossPoint.{u}
+      (localisationPresentation.{u} nodeTuple3.{u} (MvPolynomial.X (ULift.up 0)) j) = 0 := by
+  refine Fin.lastCases ?_ ?_ j
+  · rw [localisationPresentation_last]
+    simp [crossPoint, localisationVar, localisationIncl]
+  · intro j
+    rw [localisationPresentation_castSucc]
+    fin_cases j <;>
+      simp [nodeTuple3, crossPoint, localisationIncl]
+
+/-- **The unit is not `1`**, so `crossHu` is an instance of the hypothesis with content and not of
+`x = 1 * x`.
+
+Evaluation at `crossPoint` is a ring map killing the ideal, and it sends the class of `z₀` read
+upstairs to `2`. This is the same argument `presentationIdeal_localisation_node_ne_top` makes one
+localisation over, at a point rather than at a family. -/
+theorem crossU_ne_one :
+    (crossU.{u} : PresentedAlgebra.{u} (3 + 1) (2 + 1)
+      (localisationPresentation.{u} nodeTuple3.{u} (MvPolynomial.X (ULift.up 0)))) ≠ 1 := by
+  intro hcon
+  have hle : presentationIdeal.{u}
+      (localisationPresentation.{u} nodeTuple3.{u} (MvPolynomial.X (ULift.up 0))) ≤
+      RingHom.ker (MvPolynomial.eval crossPoint.{u}) := by
+    refine Ideal.span_le.2 ?_
+    rintro _ ⟨j, rfl⟩
+    exact RingHom.mem_ker.2 (eval_crossPoint_localisationPresentation.{u} j)
+  have hmk : Ideal.Quotient.mk (presentationIdeal.{u}
+      (localisationPresentation.{u} nodeTuple3.{u} (MvPolynomial.X (ULift.up 0))))
+      (MvPolynomial.rename (localisationIncl.{u} 3) (MvPolynomial.X (ULift.up 0))) = 1 := by
+    rw [← hcon, crossU, IsUnit.unit_spec]
+  have hsub := RingHom.mem_ker.1 (hle (Ideal.Quotient.eq.1
+    (hmk.trans (map_one (Ideal.Quotient.mk _)).symm)))
+  rw [map_sub, map_one] at hsub
+  simp [crossPoint, localisationIncl] at hsub
+  norm_num at hsub
 
 /-- **The cross-member glue, at the node presented twice.**
 

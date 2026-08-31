@@ -95,9 +95,16 @@ close it, and the difference between the two is the whole of that step.
 
 Both proofs rewrite at a definition — `ComplexAnalytic.refineMul` in one and
 `ComplexAnalytic.refineGlue` in the other — so the environment gains an auto-generated equation
-lemma for each. Nothing below depends on them, but a generated `eq_1` makes its own definition a
-**namespace**, which switches off `scripts/check_docstring_names.py`'s field-notation rule for
-that name; taxis #1229 and #1243 record that effect biting in a different file and at a distance.
+lemma for each. Nothing below depends on them, and **the declaration dump is what shows such a
+lemma while the build shows nothing**: `comm -13` on `scripts/DumpOkaDecls.lean`'s output.
+
+(This paragraph used to add that a generated `eq_1` makes its own definition a namespace and so
+switches off `scripts/check_docstring_names.py`'s field-notation rule. **It does not**: that
+script's `GENERATED_COMPONENT` excludes `eq_\d+` from the namespace test and its own self-test
+checks assert the exclusion. The hazard was real when taxis #1229 and #1243 recorded it and was
+closed before this file was written; the correction is taxis #1301's, and
+`Oka/Analytification/CrossMemberGlue.lean` opens its own definitions with `change` for the reason
+that survives.)
 
 ## The shape of the geometric proofs, which is one sentence used three times
 
