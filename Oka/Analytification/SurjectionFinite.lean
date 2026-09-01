@@ -36,9 +36,12 @@ that triangle, and `Topology.IsClosedEmbedding.of_comp_iff` cancels the outer on
 topology and no Nullstellensatz.**
 
 `ComplexAnalytic.AnalyticSpace.isFinite_of_isClosedEmbedding` turns the embedding into
-`ComplexAnalytic.AnalyticSpace.IsFinite`, which is what the general theorem would compose with the
-tower's finiteness. That step asks nothing of the map on structure sheaves, so a surjection being
-finite here is a topological fact and not a coherence one.
+`ComplexAnalytic.AnalyticSpace.IsFinite`, which is what the general theorem composes with the
+tower's finiteness — this sentence said *"would compose"*, and
+`ComplexAnalytic.isFinite_analytificationMap_ofRename_id_comp_towerPresHom`
+(`Oka/Analytification/ModuleFiniteAnalytification.lean`) is the composition. That step asks
+nothing of the map on structure sheaves, so a surjection being finite here is a topological fact
+and not a coherence one.
 
 ## Why the two theorems are stated at `ComplexAnalytic.PresHom.ofRename` and not at a wrapper
 
@@ -72,16 +75,22 @@ containment of ideals doing the work either way.
 
 ## What is not here
 
-* **The general module-finite theorem, and this file is one of its three inputs and not the
-  theorem.** What is missing between here and it is a *construction*: from a module-finite
+* **The general module-finite theorem, which is not here and is no longer missing.** This bullet
+  used to read *"What is missing between here and it is a **construction**: from a module-finite
   `ψ : ComplexAnalytic.PresHom g g'`, pick module generators, adjoin one root per generator with
   `ComplexAnalytic.towerPresHom`, and exhibit the target as the quotient of that tower by the
-  kernel. `Oka/Analytification/HypersurfaceFinite.lean`'s `## What is not here` states what that
-  costs and is where the count lives; nothing here reduces it beyond supplying this input.
+  kernel."* That construction is `Oka/Analytification/ModuleFiniteAnalytification.lean` and it is
+  the construction this bullet describes, step for step;
+  `ComplexAnalytic.isFinite_analytificationMap_of_finite` is the theorem and it reads this file's
+  `ComplexAnalytic.isFinite_analytificationMap_ofRename_id`. **This file is still one of its
+  inputs and not the theorem**, which is what the bullet's first clause says and what stays true.
 * **The different-numbers-of-variables surjection.** A surjection between presentations in
   different numbers of variables is not a `ComplexAnalytic.PresHom.ofRename` at the identity and
   **nothing here is evidence about it.** The same-variables case is the one the module-finite
-  argument produces, because the quotient there is taken inside the tower's own polynomial ring.
+  argument produces, because the quotient there is taken inside the tower's own polynomial ring —
+  which `ComplexAnalytic.isFinite_analytificationMap_of_finite` now confirms by construction
+  rather than by prediction, at the cost of the source presentation it produces not being the one
+  it is handed.
 * **No converse.** Nothing says a finite analytification comes from a module-finite map, and
   nothing here relates the fibres to anything.
 * **Nothing about `ComplexAnalytic.AnalyticSpace.IsFinite`'s sheaf-theoretic strength.** The class
@@ -186,8 +195,12 @@ the whole of it: the class asks for a closed map with finite fibres and a closed
 so **nothing about the map on structure sheaves enters**.
 
 This is the input `Oka/Analytification/HypersurfaceFinite.lean`'s third obstruction needs, and it
-is the half of that obstruction which is analytic. The half that is left is the construction — the
-generators and the kernel — and it is not here. -/
+is the half of that obstruction which is analytic. The other half is the construction — the
+generators and the kernel — and it is not here: it is
+`ComplexAnalytic.isFinite_analytificationMap_of_finite`
+(`Oka/Analytification/ModuleFiniteAnalytification.lean`). This theorem's only consumer is that
+file's `ComplexAnalytic.isFinite_analytificationMap_ofRename_id_comp_towerPresHom`, which composes
+it with the tower. -/
 theorem isFinite_analytificationMap_ofRename_id
     (h : ∀ j, MvPolynomial.rename (id : ULift.{u} (Fin n) → ULift.{u} (Fin n)) (g' j) ∈
       presentationIdeal.{u} g) :

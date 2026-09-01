@@ -85,6 +85,13 @@ construction rather than by a compatibility lemma.
 
 - `ComplexAnalytic.eval_eq_eval_lastVarPolyEquiv`: **evaluating a polynomial in `n + 1`
   variables is evaluating its family at the first `n` coordinates and then at the last.**
+- `ComplexAnalytic.lastVarPolyEquiv_rename_localisationIncl`,
+  `ComplexAnalytic.lastVarPolyEquiv_symm_C` and `ComplexAnalytic.lastVarPolyEquiv_symm_X`:
+  **the equivalence and its inverse on the two blocks of variables** — a polynomial in the first
+  `n` variables is a constant, a constant is such a polynomial, and the polynomial variable is
+  the last one. The two simp lemmas beside `ComplexAnalytic.lastVarPolyEquiv` go only one way
+  and only at a variable; a consumer that *builds* a polynomial in `n + 1` variables out of a
+  one-variable one, as `ComplexAnalytic.hypersurfacePresentation` does, needs the other three.
 - `ComplexAnalytic.monic_polyFamily`, `ComplexAnalytic.natDegree_polyFamily` and
   `ComplexAnalytic.continuous_coeff_polyFamily`: **the family of a monic `G` satisfies the three
   hypotheses `ComplexAnalytic.isFinite_comp_proj_of_range_eq` asks of a family.**
@@ -259,6 +266,41 @@ theorem lastVarPolyEquiv_X_localisationIncl (i : ULift.{u} (Fin n)) :
     lastVarPolyEquiv.{u} n (MvPolynomial.X (localisationIncl.{u} n i)) =
       Polynomial.C (MvPolynomial.X i) := by
   simp [lastVarPolyEquiv]
+
+/-- **A polynomial in the first `n` variables is a constant**, which is the two `simp` lemmas
+above read at a whole polynomial rather than at a variable.
+
+`MvPolynomial.algHom_ext` reduces it to the variable case, which is
+`ComplexAnalytic.lastVarPolyEquiv_X_localisationIncl`: both sides are `ℂ`-algebra maps
+`MvPolynomial (ULift (Fin n)) ℂ ⟶ Polynomial (MvPolynomial (ULift (Fin n)) ℂ)`, one the
+renaming followed by the equivalence and the other `Polynomial.C`. -/
+theorem lastVarPolyEquiv_rename_localisationIncl (p : MvPolynomial (ULift.{u} (Fin n)) ℂ) :
+    lastVarPolyEquiv.{u} n (MvPolynomial.rename (localisationIncl.{u} n) p) = Polynomial.C p := by
+  have key : ((lastVarPolyEquiv.{u} n).toAlgHom.comp
+      (MvPolynomial.rename (localisationIncl.{u} n) : _ →ₐ[ℂ] _)) =
+      (Polynomial.CAlgHom.comp (AlgHom.id ℂ _) :
+        MvPolynomial (ULift.{u} (Fin n)) ℂ →ₐ[ℂ]
+          Polynomial (MvPolynomial (ULift.{u} (Fin n)) ℂ)) :=
+    MvPolynomial.algHom_ext fun i ↦ by simp
+  exact congrArg (fun f ↦ f p) (congrArg (fun f : _ →ₐ[ℂ] _ ↦ (f : _ → _)) key)
+
+/-- **The constants come back as polynomials in the first `n` variables**: the inverse reading of
+`ComplexAnalytic.lastVarPolyEquiv_rename_localisationIncl`.
+
+Stated because a *consumer* of `ComplexAnalytic.lastVarPolyEquiv` builds a polynomial in `n + 1`
+variables out of a one-variable one — which is what `ComplexAnalytic.hypersurfacePresentation`
+takes — and then has to evaluate it; the two `simp` lemmas above go the other way and say
+nothing about `.symm`. -/
+theorem lastVarPolyEquiv_symm_C (p : MvPolynomial (ULift.{u} (Fin n)) ℂ) :
+    (lastVarPolyEquiv.{u} n).symm (Polynomial.C p) =
+      MvPolynomial.rename (localisationIncl.{u} n) p := by
+  rw [← lastVarPolyEquiv_rename_localisationIncl.{u} p, AlgEquiv.symm_apply_apply]
+
+/-- **The polynomial variable comes back as the last variable**, the companion of
+`ComplexAnalytic.lastVarPolyEquiv_symm_C` at `Polynomial.X`. -/
+theorem lastVarPolyEquiv_symm_X :
+    (lastVarPolyEquiv.{u} n).symm Polynomial.X = MvPolynomial.X (localisationVar.{u} n) := by
+  rw [← lastVarPolyEquiv_X_localisationVar.{u} (n := n), AlgEquiv.symm_apply_apply]
 
 /-- **A point of `ℂ^(n+1)` is its first `n` coordinates together with its last**, in the form
 `MvPolynomial.eval_rename` consumes: reading the point through

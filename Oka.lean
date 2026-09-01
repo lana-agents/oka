@@ -97,6 +97,7 @@ import Oka.Analytification.LocalRing
 import Oka.Analytification.LocalisationComposite
 import Oka.Analytification.LocalisationFunctor
 import Oka.Analytification.LocalisationIndependence
+import Oka.Analytification.ModuleFiniteAnalytification
 import Oka.Analytification.MonicHypersurface
 import Oka.Analytification.OpenBaseFiniteness
 import Oka.Analytification.Presentation

@@ -3534,3 +3534,170 @@ info: 'ComplexAnalytic.refineDatumAnalytification_toLocallyRingedSpace' depends 
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.refineDatumAnalytification_toLocallyRingedSpace
+
+
+/-! ### A module-finite map of presented algebras analytifies to a finite morphism
+
+`Oka/Analytification/ModuleFiniteAnalytification.lean`, together with the three lemmas about
+`ComplexAnalytic.lastVarPolyEquiv` that it needs and that live in
+`Oka/Analytification/MonicHypersurface.lean`. The values of the tower's variables and the
+evaluation at them, the compatibility of that evaluation with each inclusion of variables the
+tower uses and with the one-variable reading of the last one, the tower's relations dying, the
+tower's structure map as one renaming, every ideal of the polynomial ring being a presentation
+ideal, an isomorphism of presentations being finite, the join of the surjection with the tower,
+and the general theorem.
+
+**The three `ComplexAnalytic.lastVarPolyEquiv` lemmas are guarded here and not in
+`### The monic-hypersurface family of a polynomial` above**, where their file's other guards are,
+for the reason the sections above give: a section moved is a conflict for somebody else, and so
+is one grown in the middle.
+
+**`ComplexAnalytic.hypersurfacePresentation` is guarded here and it is not new.** It is
+`Oka/Analytification/StandardEtaleAnalytification.lean`'s and it was unguarded; this push cites it
+in a `## Main results` block, which is what makes `scripts/guard_coverage.py` count it as
+*advertised*, and an advertised declaration with no guard is the gap that script measures. Guarding
+it is a line, and the alternative — not naming it — would have been hiding the gap rather than
+closing it.
+
+`ComplexAnalytic.towerVal`, `ComplexAnalytic.towerVar` and `ComplexAnalytic.towerVal_self` depend
+on **no** axioms, and `ComplexAnalytic.towerIncl`, `ComplexAnalytic.towerVal_localisationVar` and
+`ComplexAnalytic.towerVal_towerVar` on `propext` and `Quot.sound` only — the last two because
+`omega` discharges their bound, and `ComplexAnalytic.towerIncl` for the same reason. **No
+`Classical.choice` in any of the six**, which is what a proof that is a `change` to the `dite` and
+one `dif_pos` or `dif_neg` costs. Those six lines are what they are and not the usual triple.
+-/
+
+/--
+info: 'ComplexAnalytic.lastVarPolyEquiv_rename_localisationIncl' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.lastVarPolyEquiv_rename_localisationIncl
+
+/--
+info: 'ComplexAnalytic.lastVarPolyEquiv_symm_C' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.lastVarPolyEquiv_symm_C
+
+/--
+info: 'ComplexAnalytic.lastVarPolyEquiv_symm_X' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.lastVarPolyEquiv_symm_X
+
+/--
+info: 'ComplexAnalytic.towerVal' does not depend on any axioms
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.towerVal
+
+/--
+info: 'ComplexAnalytic.towerAeval' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.towerAeval
+
+/--
+info: 'ComplexAnalytic.towerVal_localisationVar' depends on axioms: [propext, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.towerVal_localisationVar
+
+/--
+info: 'ComplexAnalytic.towerVal_self' does not depend on any axioms
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.towerVal_self
+
+/--
+info: 'ComplexAnalytic.towerAeval_rename_localisationIncl' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.towerAeval_rename_localisationIncl
+
+/--
+info: 'ComplexAnalytic.towerAeval_lastVarPolyEquiv_symm' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.towerAeval_lastVarPolyEquiv_symm
+
+/--
+info: 'ComplexAnalytic.presentationIdeal_towerPresentation_le_ker' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.presentationIdeal_towerPresentation_le_ker
+
+/--
+info: 'ComplexAnalytic.towerIncl' depends on axioms:
+  [propext, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.towerIncl
+
+/--
+info: 'ComplexAnalytic.towerVar' does not depend on any axioms
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.towerVar
+
+/--
+info: 'ComplexAnalytic.towerVal_towerVar' depends on axioms: [propext, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.towerVal_towerVar
+
+/--
+info: 'ComplexAnalytic.towerAeval_rename_towerIncl' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.towerAeval_rename_towerIncl
+
+/--
+info: 'ComplexAnalytic.towerPresHom_toRingHom_mk' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.towerPresHom_toRingHom_mk
+
+/--
+info: 'ComplexAnalytic.exists_presentationIdeal_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.exists_presentationIdeal_eq
+
+/--
+info: 'ComplexAnalytic.isFinite_analytificationMap_of_inv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isFinite_analytificationMap_of_inv
+
+/--
+info: 'ComplexAnalytic.isFinite_analytificationMap_ofRename_id_comp_towerPresHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isFinite_analytificationMap_ofRename_id_comp_towerPresHom
+
+/--
+info: 'ComplexAnalytic.isFinite_analytificationMap_of_finite' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isFinite_analytificationMap_of_finite
+
+/--
+info: 'ComplexAnalytic.hypersurfacePresentation' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.hypersurfacePresentation
