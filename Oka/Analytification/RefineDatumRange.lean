@@ -119,7 +119,10 @@ under `## Main results` below — so fifteen is that push's figure and not a cou
   `ComplexAnalytic.coverSpaceHomOfEq_comp_symm`: **the identification composes, is the identity at
   every proof of `i = i`, and cancels its own inverse.** They are the groupoid facts about the
   definition above and are stated here for that reason and not for their consumer's: everything
-  that reads them is under `ComplexAnalytic.refineDatumHcocycle`, four files downstream.
+  that reads them is under `ComplexAnalytic.refineDatumHcocycle`, in
+  `Oka/Analytification/RefineDatumCocycle.lean` — **two import edges below this file**, through
+  `Oka/Analytification/RefineDatumGlueData.lean`. (This bullet read *"four files downstream"*
+  until the distance was measured.)
 - `ComplexAnalytic.mem_localisationOpen_coverSpaceHomOfEq` and
   `ComplexAnalytic.mem_coverOpen_coverSpaceHomOfEq`: **the identification carries a distinguished
   open to the corresponding one**, once for a polynomial of the refining family and once for one

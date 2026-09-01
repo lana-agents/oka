@@ -90,7 +90,10 @@ are used. `ComplexAnalytic.coverTransitionHom_of_fac_eq_ab`,
 `ComplexAnalytic.coverTransitionHom_of_fac_eq_ac` are therefore stated at abstract `i`, `j`, `k`
 with the equality as a hypothesis, where `subst` *is* available and reduces all three to
 `ComplexAnalytic.coverTransitionHom_of_fac`. This is the move
-`ComplexAnalytic.mem_localisationOpen_coverSpaceHomOfEq` makes one file up, for the same reason.
+`ComplexAnalytic.mem_localisationOpen_coverSpaceHomOfEq` makes in
+`Oka/Analytification/RefineDatumRange.lean`, for the same reason. (This sentence read *"one file
+up"*; that file is **two** import edges up, through
+`Oka/Analytification/RefineDatumGlueData.lean`.)
 
 ## Where the helper lemmas this file needed were put, and why the two answers differ
 
@@ -101,7 +104,9 @@ it, and it separates them:
 * `ComplexAnalytic.coverTransition_hom_comp` — `t i j ≫ t j i = 𝟙` — is in
   `Oka/Analytification/AffineCover.lean`, which declares `ComplexAnalytic.coverTransition` and
   already holds `ComplexAnalytic.coverGlueIso_symm`, the same statement one level down. Its only
-  consumer is four files downstream and it went up anyway.
+  consumer is this file, **ten import edges below it with nine modules in between**, and it went
+  up anyway. (This bullet read *"four files downstream"* until the distance was measured. Four is
+  the gap from `Oka/Analytification/CrossMemberDatumGlue.lean`, which is neither endpoint here.)
 * `ComplexAnalytic.coverSpaceHomOfEq_trans`, `ComplexAnalytic.coverSpaceHomOfEq_self` and
   `ComplexAnalytic.coverSpaceHomOfEq_comp_symm` are in
   `Oka/Analytification/RefineDatumRange.lean` for the same reason: that file declares
