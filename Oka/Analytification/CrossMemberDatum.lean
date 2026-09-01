@@ -162,15 +162,18 @@ goal.
   that the refined datum refines the original space**, which is a statement about
   `ComplexAnalytic.refineDatumPoly` and not about `ComplexAnalytic.polyDiagOne`; nothing on this
   line states it and the normalisation result is a step it may or may not go through.
-* **No witness at a concrete cover datum.** What stands in for one is
-  `ComplexAnalytic.refineDatumPoly_const` and `ComplexAnalytic.coverOverlap_refineDatumPoly_const`:
-  the general form reduces to a configuration that `OkaTest/CoverRefinement.lean` and
-  `OkaTest/CrossMemberGlue.lean` do exhibit. That is weaker than a witness and is not the same
-  thing, since neither says the general `σ` is ever non-constant. **The clause this bullet ended
-  with is now answered elsewhere and not here**: `Oka/Analytification/RefineDatumWitness.lean`
-  exhibits a refined cover datum at an arbitrary `σ`, at every cover datum, and says what makes
-  `σ` non-constant — but its refining family is constantly `1`, so it is not a witness at a
-  concrete datum with a `poly` field of its own either.
+* **No witness at a concrete cover datum *here*.** This bullet said there was none anywhere:
+  *"its refining family is constantly `1`, so it is not a witness at a concrete datum with a
+  `poly` field of its own either"*. There is one — `OkaTest/RefineDatumWitness.lean` instantiates
+  `Oka/Analytification/RefineDatumWitness.lean`'s construction at `OkaTest/AffineCover.lean`'s
+  three copies of the node, whose `poly` field is `z₀` and whose three laws are theorems, at
+  `σ = id` on a three-element index type — so that space has **no hypothesis left open** and its
+  index map is provably not constant. **The refining family there is still constantly `1`**, so
+  what is exhibited is that cover reindexed and not one cut down, and what stands in for a witness
+  *in this file* is unchanged: `ComplexAnalytic.refineDatumPoly_const` and
+  `ComplexAnalytic.coverOverlap_refineDatumPoly_const` reduce the general form to a configuration
+  `OkaTest/CoverRefinement.lean` and `OkaTest/CrossMemberGlue.lean` exhibit, which says nothing
+  about `σ` being non-constant.
 * **No scheme and no `admissible`**, as in the three files this one sits beside.
 -/
 
