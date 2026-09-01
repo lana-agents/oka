@@ -2844,3 +2844,58 @@ info: 'ComplexAnalytic.refineDatumGlueNe_analytification_comp' depends on axioms
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.refineDatumGlueNe_analytification_comp
+
+
+/-! ### The hypersurface over an open subset of the base
+
+`Oka/Analytification/OpenBaseFiniteness.lean`. The image in `ℂ^n` of the points of a hypersurface
+at which a second polynomial vanishes, its closedness, the vacuity of that vanishing above the
+complement, the finiteness of the hypersurface over the cylinder, and the two witnesses that bound
+how large the complement can be.
+
+The first is a `def` and is guarded for that reason: the convention here is every declaration and
+not every theorem, and `scripts/guard_coverage.py` cannot report a missing guard on a name
+advertised under `## Main definitions`, which it does not read.
+-/
+
+/--
+info: 'ComplexAnalytic.hypersurfaceCommonZeroImage' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.hypersurfaceCommonZeroImage
+
+/--
+info: 'ComplexAnalytic.isClosed_hypersurfaceCommonZeroImage' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isClosed_hypersurfaceCommonZeroImage
+
+/--
+info: 'ComplexAnalytic.eval_ne_zero_of_notMem_hypersurfaceCommonZeroImage' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.eval_ne_zero_of_notMem_hypersurfaceCommonZeroImage
+
+/--
+info: 'ComplexAnalytic.isFinite_analytification_comp_projRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isFinite_analytification_comp_projRestrict
+
+/--
+info: 'ComplexAnalytic.hypersurfaceCommonZeroImage_one' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.hypersurfaceCommonZeroImage_one
+
+/--
+info: 'ComplexAnalytic.hypersurfaceCommonZeroImage_X' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.hypersurfaceCommonZeroImage_X
