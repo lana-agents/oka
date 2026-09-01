@@ -33,14 +33,19 @@ glue onto the datum's own overlaps — the same three-factor shape as the equal 
 
 ## The choice is the caller's, and that is a decision this file makes
 
-The cross-member glue takes a polynomial `r`, a unit `u` and two equations, and *"nothing produces
-`q`"* is what both facing files record. **The field takes them rather than producing them**,
+The cross-member glue takes a polynomial `r`, a unit `u` and two equations, and a bullet saying
+nothing there produces `q` is what both facing files carry. **The field takes them rather than
+producing them**,
 indexed by the ordered pair and guarded by `σ a ≠ σ b`, which is exactly what
 `ComplexAnalytic.refineDatumPoly` already does with `q`. Two consequences and neither is hidden:
 
-* the existence question is untouched — nothing here says a choice exists, and nothing here
-  instantiates `ComplexAnalytic.exists_localisationOpen_eq_rename` or
-  `ComplexAnalytic.exists_mk_rename_eq`;
+* the existence question is untouched *here* — nothing below says a choice exists, and nothing
+  below instantiates `ComplexAnalytic.exists_localisationOpen_eq_rename` or
+  `ComplexAnalytic.exists_mk_rename_eq`. **It is settled elsewhere and only in its algebraic
+  half**: `ComplexAnalytic.exists_refineDatumCross`
+  (`Oka/Analytification/CrossMemberChoice.lean`) produces a choice at every ordered pair, spending
+  the second of those two and neither the first nor the geometric one, and the first bullet of
+  `## What is not here` says what that does and does not buy;
 * **`hsymm` becomes an obligation on the caller's choice rather than a theorem about the field.**
   A cover datum's symmetry law relates the pair `(a, b)` to the pair `(b, a)`, and off the
   diagonal those are two independent choices; whether they can be made compatibly is unproved in
@@ -119,9 +124,18 @@ the unequal branch was added, **and two things neither file describes fired as w
   `ComplexAnalytic.refineDatumGlueNe.congr_simp` and
   `ComplexAnalytic.refineDatumCrossProj.congr_simp` by the ones in
   `ComplexAnalytic.refineDatumGlueNe_analytification_comp` and
-  `ComplexAnalytic.refineDatumCrossProj_analytification_localisationProj` — **each attributed by
-  deleting the theorem and re-running the dump**, not inferred, and the two are not
-  interchangeable: with the triangle deleted the first of them goes and the second stays. The
+  `ComplexAnalytic.refineDatumCrossProj_analytification_localisationProj` — **and the two have
+  different numbers of sources, which no single deletion can tell you.** Deleting each theorem and
+  re-dumping, three times and from a tree restored between runs: the triangle alone costs
+  `Δdump = −2` and takes `ComplexAnalytic.refineDatumGlueNe.congr_simp` with it; the projection
+  lemma alone costs **`−1`** and takes neither; the two together cost `−4`. So the first has one
+  source and **`ComplexAnalytic.refineDatumCrossProj.congr_simp` is planted redundantly, by either
+  theorem on its own** — the triangle's hypothesis mentions
+  `ComplexAnalytic.refineDatumCrossProj` at `h` and at `h.symm`, so simp needs the congruence
+  lemma to traverse it there exactly as it does in the projection lemma. **A branch that drops the
+  projection lemma should expect `−1` and not `−2`**, and deleting both leaves a dump that is this
+  file's own predecessor plus `ComplexAnalytic.refineDatumCrossProj_localisationHom`, which
+  is where the arithmetic closes. The
   one-member file's analytified triangle uses the same tactic and plants nothing, and the
   difference is that all three definitions here take a proof argument, so simp needs a congruence
   lemma to traverse them. They belong to this module and are the benign kind;
@@ -168,6 +182,16 @@ is one *in the statement*. The factors of `ComplexAnalytic.refineDatumGlueNe_com
 a composite and does not enter a definition, so after it there is nothing for the rewrite to see.
 **Adding it to the `simp` set is not merely useless but detectably so** — `linter.unusedSimpArgs`
 reports the argument as unused, which is how this was found rather than argued.
+
+**And it stays unused one level deeper, which is the answer to the obvious objection.** Opening the
+projection first with `ComplexAnalytic.refineDatumCrossProj_eq`, at both `h` and `h.symm`, does not
+help: the linter reports the same argument on the same line, because
+`ComplexAnalytic.refineCrossProj` underneath is a `def` too and the rewrite needs a
+`ComplexAnalytic.localisationPresHom` in the *statement* and not in the unfolding. **The route is
+worse than useless, and that is measured rather than asserted**: neither way of reassembling the
+hypothesis afterwards closed, one failing to find its pattern and the other exceeding the default
+`maxHeartbeats` of 200000 at the `exact`. So a reader who thinks of unfolding before reading on is
+answered here.
 
 So the two branches' analytified triangles are in different vocabularies, and no better choice of
 tactic makes one look like the other: the difference is in what the statements are built from.
@@ -259,14 +283,22 @@ lemma is about one member and one side of the overlap and is not a step towards 
 
 ## What is not here
 
-* **Nothing produces `r` or `u`, and so nothing produces a `glue` field that takes no arguments.**
-  The field below is a function of the caller's choice at every ordered pair; the existentials
-  that would supply one are `ComplexAnalytic.exists_localisationOpen_eq_rename` with
-  `ComplexAnalytic.exists_mk_rename_eq` for the algebra and
-  `ComplexAnalytic.exists_comap_analytificationMap_eq_comap_localisationProj` for the geometry,
-  and none of them is instantiated here. **This is the absence
+* **Nothing *here* produces `r` or `u`, and something elsewhere now does.** The field below is a
+  function of the caller's choice at every ordered pair and this file instantiates nothing;
+  `ComplexAnalytic.exists_refineDatumCross` (`Oka/Analytification/CrossMemberChoice.lean`)
+  produces `q`, `r`, `u` and both obligations at every ordered pair, from the input datum's
+  symmetry law alone. **So the sentence this bullet used to carry — that nothing produces `r` or
+  `u` — is retired, and so is the reading that went with it**: three existentials did not have to
+  be instantiated, one did, and it is `ComplexAnalytic.exists_mk_rename_eq`.
+  **What is not retired is what a choice buys.** Both obligations are equations between elements
+  of the overlap algebras, and **no statement anywhere says the refined overlap a choice induces
+  is the geometric one** — that is where `ComplexAnalytic.exists_localisationOpen_eq_rename` and
+  `ComplexAnalytic.exists_comap_analytificationMap_eq_comap_localisationProj` would be spent, and
+  neither is spent anywhere. So a `glue` field taking no arguments is one application away and a
+  refined cover datum is not, and of the absence
   `Oka/Analytification/CrossMemberGlue.lean` and `Oka/Analytification/CrossMemberDatum.lean`
-  already record as *"nothing produces `q`"*, moved one field along and not retired.**
+  record as *"nothing produces `q`"* it is the algebraic half that is retired and not the
+  geometric one those files' own bullets are about.
 * **No `hsymm`, and the shape of what is missing has changed.** A cover datum's symmetry law is
   quantified over every ordered pair. `ComplexAnalytic.refineDatumGlueEq_symm` is the half whose
   members are equal; on the other half the pair `(a, b)` and the pair `(b, a)` carry two
@@ -799,10 +831,12 @@ it would have had to sit in the shape of the overlap where every statement below
 
 **What the caller supplies is the choice, not its existence.** `r` and `u` are families over
 ordered pairs and `he`, `hu` are the two equations at the pairs whose members differ, exactly as
-`q` is a family in `ComplexAnalytic.refineDatumPoly`. Whether such a choice exists — and whether
-the choices at `(a, b)` and at `(b, a)` can be made compatibly, which is what a `hsymm` would be
-stated against — is untouched here and is the absence `Oka/Analytification/CrossMemberGlue.lean`
-records as *"nothing here produces `q`"*. -/
+`q` is a family in `ComplexAnalytic.refineDatumPoly`. **That a choice exists is settled** and not
+here: `ComplexAnalytic.exists_refineDatumCross` (`Oka/Analytification/CrossMemberChoice.lean`)
+produces one at every ordered pair, algebraically. What is untouched here, and is the absence
+`Oka/Analytification/CrossMemberGlue.lean` records as *"nothing here produces `q`"*, is whether
+the choices at `(a, b)` and at `(b, a)` can be made compatibly — which is what a `hsymm` would be
+stated against — and whether the overlap a choice refines to is the geometric one. -/
 def refineDatumGlue
     (he : ∀ a b : B, ∀ _ : σ a ≠ σ b,
       RefineDatumCrossEq.{u} obj σ fam poly q glue a b (r a b))

@@ -142,12 +142,20 @@ goal.
   one this file makes inside a polynomial — needs no transport, because both branches are
   isomorphisms between the same two objects. **What it is a function of is the caller's choice**,
   the bullet below.
-* **Nothing produces `q`.** As in `Oka/Analytification/CrossMemberGlue.lean`, the extra factor is
-  an argument, and `ComplexAnalytic.exists_localisationOpen_eq_rename` with
+* **Nothing produces a `q` that makes this formula correct — and the reading matters now, because
+  something does produce a `q`.** As in `Oka/Analytification/CrossMemberGlue.lean`, the extra
+  factor is an argument, and `ComplexAnalytic.exists_localisationOpen_eq_rename` with
   `ComplexAnalytic.exists_mk_rename_eq` is where a caller gets one. **This file adds a constraint
   on it that file did not have**: `ComplexAnalytic.refineDatumFactor` is the caller's `q` only off
   the diagonal, so a caller's `q` is read at pairs with `σ a ≠ σ b` and ignored elsewhere, and
   what makes the formula correct at those pairs is unproved here exactly as it is there.
+  `ComplexAnalytic.exists_refineDatumCrossFactor` (`Oka/Analytification/CrossMemberChoice.lean`)
+  supplies a `q` at every ordered pair, and it is **not** a producer in the sense this bullet
+  means: what it supplies obeys `ComplexAnalytic.RefineDatumCrossFactor`, a rule about classes in
+  an overlap algebra, and nothing says the polynomial it supplies is one under which the chain
+  above cuts out the refined overlap. **On the literal reading this bullet would now be false and
+  on the one it is written under it stands; the second is the reading, and the heading above says
+  so rather than leaving it to be inferred.**
 * **No statement that the refined data cover anything.** The other half of this bullet is
   retired: `ComplexAnalytic.coverAnalytification_polyDiagOne` says the diagonal normalisation
   preserves the glued space, and the section above now cites it. **What that does *not* say is

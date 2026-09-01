@@ -2844,3 +2844,71 @@ info: 'ComplexAnalytic.refineDatumGlueNe_analytification_comp' depends on axioms
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.refineDatumGlueNe_analytification_comp
+
+/-! ### The caller's choice in a cross-member `glue`
+
+`Oka/Analytification/CrossMemberChoice.lean`: the two obligations a cross-member `glue` puts on
+the caller collapse to one associate statement, and that statement holds — so the choice the field
+takes exists at every ordered pair. -/
+
+/--
+info: 'ComplexAnalytic.coverOverlapClass' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverOverlapClass
+
+/--
+info: 'ComplexAnalytic.coverOverlapClass_mul' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverOverlapClass_mul
+
+/--
+info: 'ComplexAnalytic.refineDatumCrossAlgEquiv_symm' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumCrossAlgEquiv_symm
+
+/--
+info: 'ComplexAnalytic.exists_refineDatumCrossEq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.exists_refineDatumCrossEq
+
+/--
+info: 'ComplexAnalytic.refineDatumCross_exists_iff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumCross_exists_iff
+
+/--
+info: 'ComplexAnalytic.RefineDatumCrossFactor' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.RefineDatumCrossFactor
+
+/--
+info: 'ComplexAnalytic.exists_refineDatumCrossFactor' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.exists_refineDatumCrossFactor
+
+/--
+info: 'ComplexAnalytic.exists_refineDatumCrossUnit_of_factor' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.exists_refineDatumCrossUnit_of_factor
+
+/--
+info: 'ComplexAnalytic.exists_refineDatumCross' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.exists_refineDatumCross
