@@ -176,9 +176,24 @@ docstring predicts that every consumer of the functor spells its object the othe
   **Then the `hsymm` went**:
   `ComplexAnalytic.refineDatumGlue_symm` (`Oka/Analytification/RefineDatumSymm.lean`) is that law
   at every ordered pair, for two arbitrary independent choices, so the compatibility this bullet
-  expected to be needed is not needed at all. **What is left is the two geometric laws**, which
-  have no cross-member analogue at all — and one law coming free is no evidence about those two,
-  which that file says of itself. Those five files' `## What is not here` state all of it.
+  expected to be needed is not needed at all. **What is left is the two geometric laws**, and the
+  count above stays at one — but the two no longer stand or fall together. This sentence read
+  *"which have no cross-member analogue at all"* until
+  `ComplexAnalytic.refineDatumTransitionHom_localisationProj_of_ne`
+  (`Oka/Analytification/RefineDatumTransition.lean`) gave `hrange` one: the refined transition
+  lies over the original datum's own `ComplexAnalytic.coverTransitionHom`, there being no morphism
+  between two members of a cover datum for it to lie over instead. It leaves `hrange` a single
+  containment, in the caller's own `D(q b c)`, at a triple whose three members are pairwise
+  different — `ComplexAnalytic.range_refineDatumTransitionHom_subset_iff` states that as an
+  *equivalence* and not as a sufficient condition — and nothing at all at the mixed triples, where
+  `ComplexAnalytic.refineDatumGlue` takes its equal branch and the triangle is over a member.
+  `hcocycle` keeps the clause, and cannot be stated before `hrange` is proved in any case:
+  `ComplexAnalytic.coverTriple` takes the range law as an argument. **The count is not moved by a
+  law that is reduced rather than proved** — it counts what a refined datum still owes, and it
+  owes both, which is why this is a narrowing of the clause and not a fourth decrement of the
+  number. One law coming free and a second one reduced is no evidence about what is left of
+  either, which those files say of themselves. Those six files' `## What is not here` state all
+  of it.
 
   **This bullet also said refinement is where `σ` and `ψ` "have to be built", with the implication
   that building them is the work; the second half is false and was measured so on 2026-08-30.**
