@@ -4180,3 +4180,71 @@ info: 'ComplexAnalytic.refineDatumUnitFamAnalytification' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.refineDatumUnitFamAnalytification
+
+/-! ### A cover glued along the whole of each member
+
+`Oka/Analytification/CoverGlueTop.lean`, all five of it: the general form of the member inclusion
+off the diagonal, its surjectivity when the overlap is `⊤`, the surjectivity of the member's
+inclusion into the gluing, the isomorphism that follows, and the `eqToHom` helper the first of
+them produces.
+
+Two of the five are a `def` and are guarded for the reason the
+`Oka/Analytification/RefineDatumRange.lean` section gives: the convention here is every
+declaration and not every theorem.
+
+**The instance that consumes them is `ComplexAnalytic.isoNodeRefineGlued` in
+`OkaTest/RefineDatumUnitFamilyNode.lean`, which carries no guard**, as no declaration of the test
+library does.
+-/
+
+/--
+info: 'ComplexAnalytic.surjective_base_eqToHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.surjective_base_eqToHom
+
+/--
+info: 'ComplexAnalytic.f_coverGlueData_of_ne' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.f_coverGlueData_of_ne
+
+/--
+info: 'ComplexAnalytic.surjective_f_coverGlueData' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.surjective_f_coverGlueData
+
+/--
+info: 'ComplexAnalytic.surjective_ι_coverGlueData' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.surjective_ι_coverGlueData
+
+/--
+info: 'ComplexAnalytic.isoCoverGlued' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isoCoverGlued
+
+/-! ### The gap that file opened and closed in the same push
+
+`ComplexAnalytic.coverIncl` is an `abbrev` of `Oka/Analytification/AffineCover.lean` and carried no
+guard, because until `ComplexAnalytic.f_coverGlueData_of_ne` named it in a `## Main results` bullet
+it was advertised nowhere. **Citing an older declaration in such a block makes it a newly
+*unguarded advertised* result**, and the identity `Δguards = Δ(in both) + Δ(nowhere)` that
+`scripts/guard_coverage.py` is checked by still closes when that happens — so the row that moves
+is `unguarded`, and nothing else says why.
+The gap is closed here rather than reported.
+-/
+
+/--
+info: 'ComplexAnalytic.coverIncl' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverIncl

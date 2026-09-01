@@ -121,7 +121,12 @@ it fails.
   satisfies either condition is untouched here in both directions; this file, like the witness
   file, exhibits `r` and `u` rather than asking for them.
 * **No statement that the refined space is the original one**, in either direction, and no
-  morphism between the two gluings.
+  morphism between the two gluings. What *is* known about the refined space at the two instances
+  this construction has is that it is **one of its own refined members**: at both of them the
+  caller's `q` is the datum's own `poly` and the family is that same polynomial, so every refined
+  overlap is the whole refined member and `ComplexAnalytic.isoCoverGlued`
+  (`Oka/Analytification/CoverGlueTop.lean`) applies. That is a fact about those inputs and not
+  about this construction, which says nothing about the overlaps at a family it is not given.
 * **No scheme, no `admissible`, and no comparison functor**, as in the files this one sits beside.
 -/
 
