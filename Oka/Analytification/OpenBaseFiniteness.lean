@@ -10,10 +10,26 @@ import Oka.AnalyticSpace.OpenBaseProjection
 # The hypersurface over an open subset of the base, and where a second polynomial cannot vanish
 
 `Oka/AnalyticSpace/OpenBaseProjection.lean` proves that a closed subspace of the cylinder over an
-open `V ⊆ ℂ^n`, cut out by a family of monic polynomials of fixed degree, is finite over `V`. Until
-now **nothing anywhere consumed it**: `ComplexAnalytic.isFinite_comp_projRestrict_of_range_eq` was
-named in no file but its own. This file is its first consumer, at the analytification of
-`ℂ[x₁, …, x_n, X] ⧸ (F)` for `F` monic in the last variable.
+open `V ⊆ ℂ^n`, cut out by a family of monic polynomials of fixed degree, is finite over `V`. This
+file is the first consumer of `ComplexAnalytic.isFinite_comp_projRestrict_of_range_eq` **whose
+source is an analytification**, at `ℂ[x₁, …, x_n, X] ⧸ (F)` for `F` monic in the last variable.
+
+The three consumers that came before it all build their source by other means, which is why an
+analytification is worth calling out and why nothing here could be quoted from them:
+`ComplexAnalytic.isFinite_comp_projRestrict_of_isCutOutBy` in that same file;
+`ComplexAnalytic.isFinite_comp_projRestrict_of_monic` in
+`Oka/AnalyticSpace/HolomorphicFamily.lean`, whose family comes from a monic polynomial with
+`OkaRing` coefficients; and the parabola over the punctured line in
+`OkaTest/OpenBaseProjection.lean`, whose morphism is a `ComplexAnalytic.AnalyticSpace.okaMap`
+written out by hand.
+
+**An earlier draft of this paragraph said that nothing anywhere consumed the theorem and that this
+file was its first consumer, and that was false when it was written**: the theorem was already
+named in seven files and applied in three. It is recorded here rather than quietly deleted because
+the way it went wrong is reusable — the hits sort `Oka/` before `OkaTest/`, so a
+`git grep -n … | head` at the default ten lines stops one line short of the test file, and both
+the draft and the first review of it made that cut. **Count with `git grep -c` before claiming
+that nothing anywhere does something.**
 
 The reason to want it is `Oka/Analytification/MonicHypersurface.lean`'s `## What is not here`,
 which said, until this file landed and the same push corrected it, what a standard étale algebra
@@ -157,7 +173,10 @@ the hypersurface is closed; and the image of that is closed because
 `ComplexAnalytic.isFinite_analytification_comp_proj` makes the projection of the hypersurface a
 finite morphism, whose **first field** is `ComplexAnalytic.AnalyticSpace.IsFinite.isClosedMap`.
 
-`F.Monic` is used exactly once, in that last step, and it is the only hypothesis in this file. -/
+`F.Monic` is used exactly once **in this proof**, in that last step. It is also the only
+hypothesis anywhere in the file, which is a different claim and not a stronger one:
+`ComplexAnalytic.isFinite_analytification_comp_projRestrict` asks for it as well and spends it
+twice. What no result here asks for is a hypothesis on `G`. -/
 theorem isClosed_hypersurfaceCommonZeroImage (hF : F.Monic) :
     IsClosed (hypersurfaceCommonZeroImage.{u} F G) := by
   haveI := isFinite_analytification_comp_proj.{u} F hF
@@ -195,8 +214,9 @@ theorem eval_ne_zero_of_notMem_hypersurfaceCommonZeroImage
 /-- **The hypersurface over the cylinder is finite over `V`**, for every open `V ⊆ ℂ^n` and for
 every monic `F`, with no hypothesis relating `V` to anything.
 
-This is the first consumer anywhere of
-`ComplexAnalytic.isFinite_comp_projRestrict_of_range_eq`. Its four hypotheses:
+This is the first consumer of `ComplexAnalytic.isFinite_comp_projRestrict_of_range_eq` whose
+source is an analytification, and not its first consumer — the module docstring names the three
+that came before. Its four hypotheses:
 
 * the closed embedding is `ComplexAnalytic.isClosedEmbedding_base_restrictHom` applied to
   `ComplexAnalytic.isClosedEmbedding_base_analytificationIncl` — restricting a closed embedding
@@ -211,8 +231,10 @@ This is the first consumer anywhere of
   `ComplexAnalytic.range_base_analytificationIncl` and
   `ComplexAnalytic.eval_lastVarPolyEquiv_symm`.
 
-**The range step is built with `Set.ext` and `Iff.trans` rather than with `rw`**, and that is
-measured rather than stylistic: `ComplexAnalytic.cylinder V` is declared at
+**The range step is built with `Set.ext` and `Iff.trans` rather than with `rw`.** That shape is
+`ComplexAnalytic.range_base_parabolaPunctured`'s in `OkaTest/OpenBaseProjection.lean` and is not
+this file's invention; what is stated nowhere else, and is the reason to keep the paragraph, is
+*why* `rw` is unavailable. `ComplexAnalytic.cylinder V` is declared at
 `TopologicalSpace.Opens (ULift (Fin (n + 1)) → ℂ)` while
 `ComplexAnalytic.AnalyticSpace.restrict` asks for the space's own `Opens`, so a goal mentioning
 `(complexAffineSpace (n + 1)).restrict (cylinder V)` is not type-correct at `instances`
