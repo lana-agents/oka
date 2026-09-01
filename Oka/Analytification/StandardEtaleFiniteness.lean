@@ -91,15 +91,17 @@ was neither of them.
 
 ## What is not here
 
-* **No `ComplexAnalytic.AnalyticSpace.IsFiniteEtale`, and it is now one lemma away rather than a
-  programme.** That class is `IsFinite` together with `IsLocalIso`; the second field of the
-  restricted morphism would follow from
-  `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_comp`
-  (`Oka/Analytification/StandardEtaleLocalIso.lean`) **if** `IsLocalIso` transported along
-  `ComplexAnalytic.AnalyticSpace.restrictHom`, and **nothing in the repository transports it** —
-  measured, not read: no statement anywhere has `IsLocalIso` applied to a `restrictHom`. That
-  transport is a general fact about open subspaces, not about étale morphisms, and it is not
-  attempted here.
+* **No `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` *here*, and the lemma this bullet said was
+  missing now exists.** It ended *"nothing in the repository transports it — measured, not read:
+  no statement anywhere has `IsLocalIso` applied to a `restrictHom`"*, and the sizing was right:
+  the transport is a general fact about open subspaces with nothing étale in it, and it is
+  `ComplexAnalytic.AnalyticSpace.isLocalIso_restrictHom`
+  (`Oka/AnalyticSpace/OpenSubspace.lean`), which asks nothing of the morphism and nothing of the
+  open. The class itself is
+  `ComplexAnalytic.isFiniteEtale_restrictHom_analytificationMap_etalePresHom_comp`
+  (`Oka/Analytification/StandardEtaleFiniteEtale.lean`), whose first field is the theorem below
+  verbatim. **It is not here, and that is a placement decision rather than an absence**: the
+  bullet below says this file reads no `StandardEtalePair`, and the class does read one.
 
   **The unrestricted `IsFiniteEtale` stays false forever** and nothing here bears on it:
   `Oka/Analytification/MonicHypersurface.lean` carries the counterexample, in terms, and nothing

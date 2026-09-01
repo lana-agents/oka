@@ -105,14 +105,19 @@ anywhere. A reader comparing the two signatures will otherwise go looking for on
   **The base restriction is now constructed, in a file that imports this one's imports and not
   this one**: `ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp`
   (`Oka/Analytification/StandardEtaleFiniteness.lean`) makes the étale analytification finite over
-  an open `V ⊆ ℂ^n` on which the inversion is vacuous. **That does not put `IsFiniteEtale` within
-  reach of a rewrite**, and the missing step is worth naming because it is not about étale
-  morphisms at all: the class would be wanted for
+  an open `V ⊆ ℂ^n` on which the inversion is vacuous. **And the step that paragraph named as
+  missing has since been taken.** It said the class
+  would be wanted for
   `ComplexAnalytic.AnalyticSpace.restrictHom (… ≫ analytificationInclHom g) V`, whose `IsFinite`
   field is that theorem and whose `IsLocalIso` field would follow from the last theorem below **if
-  `IsLocalIso` transported along `ComplexAnalytic.AnalyticSpace.restrictHom`**. Nothing in the
-  repository does — measured, no statement anywhere applies `IsLocalIso` to a `restrictHom` — and
-  it is a general fact about open subspaces rather than anything this line owns.
+  `IsLocalIso` transported along `ComplexAnalytic.AnalyticSpace.restrictHom`** — and that it was
+  a general fact about open subspaces rather than anything this line owns. Both readings held:
+  the transport is `ComplexAnalytic.AnalyticSpace.isLocalIso_restrictHom`
+  (`Oka/AnalyticSpace/OpenSubspace.lean`), which reads nothing about étale morphisms, and the
+  class is `ComplexAnalytic.isFiniteEtale_restrictHom_analytificationMap_etalePresHom_comp`
+  (`Oka/Analytification/StandardEtaleFiniteEtale.lean`). **The last theorem below is its second
+  field and is read unrestricted** — the restriction is asked for by the first field alone,
+  because unrestricted finiteness is false and unrestricted local-isomorphy is not.
 * **Nothing at `k ≥ 1`**, for the reason at the top of this docstring: not a gap but a different
   statement.
 * **Nothing saying `ComplexAnalytic.analytificationInclHom g` is an isomorphism when `g` is the

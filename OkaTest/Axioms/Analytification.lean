@@ -4053,9 +4053,17 @@ the only place `G` does anything — and the finiteness of the standard étale a
 statement at the largest such `V`, the complement of
 `ComplexAnalytic.hypersurfaceCommonZeroImage`.
 
-**No `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` is guarded here and none is stated**: the
-unrestricted one is false, and the restricted one waits on a transport of
-`ComplexAnalytic.AnalyticSpace.IsLocalIso` along a restriction that the repository does not have.
+**No `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` is guarded *in this section*, and two of the
+three clauses that used to follow are no longer true.** The sentence read *"none is stated, … and
+the restricted one waits on a transport of `ComplexAnalytic.AnalyticSpace.IsLocalIso` along a
+restriction that the repository does not have"*. The transport is
+`ComplexAnalytic.AnalyticSpace.isLocalIso_restrictHom` (`Oka/AnalyticSpace/OpenSubspace.lean`,
+guarded in `OkaTest/Axioms/Morphisms.lean`), and the restricted `IsFiniteEtale` is both stated and
+guarded — **in this file**, in the *Finite étale over an open subset of the base* section below.
+**`here` is read as this section and not as this file**, which is the only reading that survives,
+and it is spelled out because it did not survive being left implicit. What stays true and is the
+reason the section is worth this paragraph: **the unrestricted `IsFiniteEtale` is false**, and
+`Oka/Analytification/MonicHypersurface.lean` carries the witness.
 
 Appended as its own section for the reason the sections above give: a section moved is a conflict
 for somebody else.
@@ -4248,3 +4256,29 @@ info: 'ComplexAnalytic.coverIncl' depends on axioms: [propext, Classical.choice,
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.coverIncl
+
+/-! ### Finite étale over an open subset of the base, which is both halves at once
+
+`Oka/Analytification/StandardEtaleFiniteEtale.lean`. Two declarations, and neither adds an axiom
+to the two halves it conjoins. The finiteness half is
+`ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp`, the
+local-isomorphism half is
+`ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_comp`, both guarded above, and the
+transport that joins them is `ComplexAnalytic.AnalyticSpace.isLocalIso_restrictHom`, guarded in
+`OkaTest/Axioms/Morphisms.lean` beside the `IsFinite` statement it is the analogue of. All four
+carry the same three axioms.
+-/
+
+/--
+info: 'ComplexAnalytic.isFiniteEtale_restrictHom_analytificationMap_etalePresHom_comp' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isFiniteEtale_restrictHom_analytificationMap_etalePresHom_comp
+
+/--
+info: 'ComplexAnalytic.isFiniteEtale_restrictHom_analytificationMap_etalePresHom_comp_compl'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isFiniteEtale_restrictHom_analytificationMap_etalePresHom_comp_compl

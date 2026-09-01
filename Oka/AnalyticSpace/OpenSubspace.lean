@@ -80,6 +80,10 @@ transport of algebra structures along an isomorphism is needed anywhere.
 - `ComplexAnalytic.AnalyticSpace.isFinite_restrictHom_of_subset_range`: **a morphism whose base is
   an embedding restricts to a finite morphism over any open subset of its image** — the shape an
   *open* immersion needs, since it is finite over such a subset and is not finite at all.
+- `ComplexAnalytic.AnalyticSpace.isLocalIso_restrictHom`: **a local isomorphism restricted over an
+  open subset of the target is a local isomorphism**, with no hypothesis on the morphism or the
+  open beyond that. Unlike the bullet above this needs nothing of the base map's image, because
+  both fields are local at a point and a restriction changes neither.
 
 ## Why `Oka/AnalyticSpace/LocalIso.lean` is imported here, when no import was forced
 
@@ -87,12 +91,18 @@ transport of algebra structures along an isomorphism is needed anywhere.
 `ComplexAnalytic.AnalyticSpace.IsLocalIso`, defined there. **That does not mean one of the two
 files had to import the other, and an earlier draft of this paragraph said it did.** Three files
 already reach both: `Oka/AnalyticSpace/CoveringSpace.lean`, `Oka/AnalyticSpace/Degree.lean` and
-`Oka/AnalyticSpace/SigmaFiniteEtale.lean`. Any of them would have cost **nothing**, so this import
-is a placement decision and can be undone by moving one instance. **None of the three is where the
-instance is used**, and that draft said the first of them was: the only consumer of
-`ComplexAnalytic.AnalyticSpace.isLocalIso_ofRestrict` anywhere is `OkaTest/CoveringSpace.lean`,
-which imports `Oka` wholesale and so finds it wherever it sits. That is what makes the placement
-free rather than merely cheap.
+`Oka/AnalyticSpace/SigmaFiniteEtale.lean`. Any of them would have cost **nothing**. **None of the
+three is where the instance is used**, and that draft said the first of them was: the only
+consumer of `ComplexAnalytic.AnalyticSpace.isLocalIso_ofRestrict` anywhere is
+`OkaTest/CoveringSpace.lean`, which imports `Oka` wholesale and so finds it wherever it sits.
+
+**This paragraph also said the import "can be undone by moving one instance", and that is no
+longer true.** `ComplexAnalytic.AnalyticSpace.isLocalIso_restrictHom` below is a second
+declaration in this file whose statement mentions `ComplexAnalytic.AnalyticSpace.IsLocalIso`, and
+unlike the instance above it has a consumer **under `Oka/`** —
+`Oka/Analytification/StandardEtaleFiniteEtale.lean` — rather than only in the test library. So
+undoing the edge now means moving two declarations and giving that consumer an import it does not
+have. The edge is still cheap, for the reason measured below; what it is no longer is free.
 
 **It is here because both of its ingredients are.** The first field is
 `Topology.IsOpenEmbedding.isLocalHomeomorph` at `U.isOpenEmbedding`; the second is
@@ -398,6 +408,51 @@ theorem isFinite_restrictHom_of_subset_range {A B : AnalyticSpace.{u}} {f : A �
     IsFinite (restrictHom f V) :=
   isFinite_of_isClosedEmbedding _
     (ComplexAnalytic.isClosedEmbedding_base_restrictHom_of_subset_range hemb hV)
+
+/-- **A local isomorphism restricted over an open subset of the target is a local isomorphism.**
+
+Nothing about the morphism is asked and nothing about the open subset is: both fields of
+`ComplexAnalytic.AnalyticSpace.IsLocalIso` are conditions at a point, and a restriction changes
+the point's neighbourhoods on neither side. **That is what separates this from
+`ComplexAnalytic.AnalyticSpace.isFinite_restrictHom_of_subset_range` above**, whose hypothesis is
+there because finiteness is not local on the target: the inclusion of an open subspace restricts
+to a finite morphism only over a `V` inside its image, and is a local isomorphism over every `V`.
+
+**The topological field is the commuting square and not a lemma about restrictions.**
+`ComplexAnalytic.base_restrictHom` says `ofRestrict V ∘ restrictHom f V = f ∘ ofRestrict (f⁻¹ V)`
+on points; the right-hand side is a local homeomorphism because both factors are, and
+`IsLocalHomeomorph.of_comp` then peels off the left factor, which is one because
+`Topology.IsOpenEmbedding.isLocalHomeomorph` applies to `V.isOpenEmbedding`. The continuity
+`of_comp` asks for is the base map's own.
+
+**The stalk field is a term and not a `rw`, and that is forced.**
+`ComplexAnalytic.stalkMap_restrictHom_eq'` already writes the stalk map as an isomorphism, then
+`f`'s stalk map, then an isomorphism, so instance search closes it once that factorisation is in
+the goal — but `rw` fails to find the pattern, because `V : B.Opens` elaborates at the `toTopCat`
+spelling of the carrier while the lemma wants `Opens ↑B.toTopCat` reached through
+`toPresheafedSpace`. That seam runs through this corner of the tree and
+`Oka/Analytification/StandardEtaleFiniteness.lean` records two more instances of it. -/
+theorem isLocalIso_restrictHom {A B : AnalyticSpace.{u}} (f : A ⟶ B) [IsLocalIso f] (V : B.Opens) :
+    IsLocalIso (restrictHom f V) where
+  isLocalHomeomorph := by
+    have hsq : ((B.ofRestrict V).toLRSHom.base : B.restrict V → B) ∘
+        ((restrictHom f V).toLRSHom.base : _ → B.restrict V) =
+        (f.toLRSHom.base : A → B) ∘
+          ((A.ofRestrict ((Opens.map f.toLRSHom.base).obj V)).toLRSHom.base : _ → A) :=
+      funext fun x ↦ ComplexAnalytic.base_restrictHom f.toLRSHom V x
+    refine IsLocalHomeomorph.of_comp (g := ((B.ofRestrict V).toLRSHom.base : B.restrict V → B))
+      ?_ V.isOpenEmbedding.isLocalHomeomorph
+      (restrictHom f V).toLRSHom.base.hom.continuous
+    rw [hsq]
+    exact (IsLocalIso.isLocalHomeomorph (f := f)).comp
+      ((Opens.map f.toLRSHom.base).obj V).isOpenEmbedding.isLocalHomeomorph
+  isIso_stalkMap x :=
+    (ComplexAnalytic.stalkMap_restrictHom_eq' f.toLRSHom V x).symm ▸
+      (inferInstance : IsIso ((ComplexAnalytic.restrictStalkEquiv f.toLRSHom V x).hom ≫
+        f.toLRSHom.stalkMap ((A.toLocallyRingedSpace.ofRestrict
+            ((Opens.map f.toLRSHom.base).obj V).isOpenEmbedding).base x) ≫
+          (A.toLocallyRingedSpace.ofRestrict
+            ((Opens.map f.toLRSHom.base).obj V).isOpenEmbedding).stalkMap x))
 
 /-- **The restriction of a global section of `𝒪_X` to an open subspace**, as a global section of
 `𝒪_{X|U}`.
