@@ -316,8 +316,13 @@ lemma is about one member and one side of the overlap and is not a step towards 
   constraining it, and everything follows from the triangle.
 * **No `hrange` and no `hcocycle`**, in either branch. They are geometric where everything here is
   algebraic, and `Oka/Analytification/CoverRefinement.lean`'s corresponding section says what
-  makes them cheap for one fixed member — that every refined member lies over it — which is the
-  sentence a general `σ` does not have.
+  makes them cheap for one fixed member: that every refined member lies over it. **This bullet
+  ended *"which is the sentence a general `σ` does not have"*, and a general `σ` has a replacement
+  for it**: `ComplexAnalytic.refineDatumTransitionHom_localisationProj_of_ne`
+  (`Oka/Analytification/RefineDatumTransition.lean`) says the refined transition lies over the
+  original cover's own *transition*, and it is the two triangles below joined — nothing else went
+  into it. It buys `hrange` at a triple whose three members are different, up to one containment
+  in the caller's own open, and buys nothing at the other triples and nothing for `hcocycle`.
 * **No witness at a non-constant `σ`.** `ComplexAnalytic.refineDatumGlue_const` says the general
   form reduces to a configuration the test files already exhibit, which is weaker than a witness
   and says nothing about `σ` ever being non-constant — the same gap

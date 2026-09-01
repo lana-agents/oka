@@ -171,11 +171,24 @@ harder to read, which is a reason to state and not a reason to hide.
   `Oka/Analytification/RefineDatumSymm.lean` states the symmetry law against two arbitrary
   independent choices and proves it, because the coherence triangle below determines the
   isomorphism once the projection it is over is known to be a monomorphism.
-* **No `hrange` and no `hcocycle`.** They are the cross-member analogue of
-  `ComplexAnalytic.refineHrange` and `ComplexAnalytic.refineHcocycle`, and the argument that
-  discharges those does not transfer: it cancels against the projection of the *one* fixed member,
-  and three cross-member triple overlaps sit over three different members with no common target.
-  Nothing here is evidence about their size.
+* **No `hrange` and no `hcocycle`, and the two no longer stand or fall together.** They are the
+  cross-member analogue of `ComplexAnalytic.refineHrange` and `ComplexAnalytic.refineHcocycle`.
+  **This bullet said of both that the argument discharging those does not transfer, because it
+  cancels against the projection of the *one* fixed member and three cross-member triple overlaps
+  sit over three different members with no common target. That is `hcocycle`'s argument and it
+  stands** — and `ComplexAnalytic.coverTriple` takes `hrange` as an argument, so the cocycle law
+  of a refined datum cannot be stated at all before the range law is proved.
+
+  **`hrange`'s argument is a different one and it does transfer**, with the original datum's own
+  `hrange` in place of the fixed member.
+  `ComplexAnalytic.refineDatumTransitionHom_localisationProj_of_ne`
+  (`Oka/Analytification/RefineDatumTransition.lean`) is the sentence it is read off — the refined
+  transition lies over the original cover's own *transition*, there being no morphism between two
+  members to lie over — and
+  `ComplexAnalytic.range_refineDatumTransitionHom_subset_iff` says what is left at a triple whose
+  three members are different: one containment, in the caller's own `D(q b c)`, and nothing more.
+  Nothing there is evidence about the mixed triples, where the refined `glue` takes its equal
+  branch.
 * **No scheme and no `admissible`**, as in the three files this one sits beside.
 -/
 

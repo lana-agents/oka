@@ -103,6 +103,7 @@ import Oka.Analytification.Presentation
 import Oka.Analytification.PresentationFlatness
 import Oka.Analytification.PresentationStalk
 import Oka.Analytification.RefineDatumSymm
+import Oka.Analytification.RefineDatumTransition
 import Oka.Analytification.Sheaf
 import Oka.Analytification.SheafCoherent
 import Oka.Analytification.SpecAffineCover
