@@ -3424,3 +3424,41 @@ info: 'ComplexAnalytic.range_refineDatumTransitionHom_subset_iff_of_eq_bc' depen
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.range_refineDatumTransitionHom_subset_iff_of_eq_bc
+
+/-! ### A surjection of presented algebras analytifies to a finite morphism
+
+`Oka/Analytification/SurjectionFinite.lean`. The surjectivity of a rename at the identity, the
+triangle over `ℂ^n` it induces, the closed embedding that follows and the finiteness that follows
+from that.
+
+Appended as its own section for the reason the sections above give: a section moved is a conflict
+for somebody else.
+-/
+
+/--
+info: 'ComplexAnalytic.PresHom.ofRename_id_toRingHom_surjective' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.PresHom.ofRename_id_toRingHom_surjective
+
+/--
+info: 'ComplexAnalytic.analytificationMap_ofRename_id_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.analytificationMap_ofRename_id_comp
+
+/--
+info: 'ComplexAnalytic.isClosedEmbedding_base_analytificationMap_ofRename_id' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isClosedEmbedding_base_analytificationMap_ofRename_id
+
+/--
+info: 'ComplexAnalytic.isFinite_analytificationMap_ofRename_id' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isFinite_analytificationMap_ofRename_id

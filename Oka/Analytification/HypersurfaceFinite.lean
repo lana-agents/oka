@@ -77,42 +77,53 @@ runs three obstructions together, and they are of very different sizes. Measured
   kernel. The surjection is finite on the algebraic side because it is a closed immersion, and what
   that needs analytically is that a surjection of presented algebras has closed-embedding base map.
 
-**The third is reachable from what is here, and this is measured rather than argued.** A surjection
-of presented `ℂ`-algebras adds relations and no variables, so it is
+**The third's analytic half is no longer an estimate, and this paragraph used to price it as one.**
+It read *"In a spike, deleted and not committed, the statement `IsClosedEmbedding
+(analytificationMap (PresHom.ofRename id h)).base` compiles in about fifteen lines"*, and went on
+**"It is not here, deliberately. Nothing would consume it until the general theorem is built, and
+this file's own standard is that an unused lemma with an axiom guard is worse than an absence with
+a sentence."** Both halves have been paid.
+`ComplexAnalytic.isClosedEmbedding_base_analytificationMap_ofRename_id`
+(`Oka/Analytification/SurjectionFinite.lean`) is that statement, re-derived rather than
+reconstructed from this paragraph, and the estimate was right about the route and about the size: a
+surjection of presented `ℂ`-algebras adds relations and no variables, so it is
 `ComplexAnalytic.PresHom.ofRename` at the identity between two presentations in the *same* `n`
-variables whose ideals are nested, and its analytification is the inclusion of one zero locus into
-a larger one inside one `ℂ^n`. In a spike, deleted and not committed, the statement
-
-    IsClosedEmbedding ⇑(analytificationMap (PresHom.ofRename id h)).base
-
-compiles in about fifteen lines: the triangle `analytificationMap (ofRename id h) ≫
-analytificationInclHom b = analytificationInclHom a` by
+variables whose ideals are nested; the triangle is
 `ComplexAnalytic.AnalyticSpace.hom_ext_complexAffineSpace` and
 `ComplexAnalytic.coordPullback_analytificationMap_comp` — the transported tuple of a rename at the
 identity is the source's own coordinates — and then
 `ComplexAnalytic.isClosedEmbedding_base_analytificationIncl` **twice** with
-`Topology.IsClosedEmbedding.of_comp_iff`. No new topology and no Nullstellensatz.
+`Topology.IsClosedEmbedding.of_comp_iff`. **No new topology and no Nullstellensatz**, which is the
+part of the estimate worth having been right.
 
-**It is not here, deliberately.** Nothing would consume it until the general theorem is built, and
-this file's own standard is that an unused lemma with an axiom guard is worse than an absence with
-a sentence. What the spike buys is the answer to the question the old bullet left open: the wall is
-priced, it is low, and the general statement is a construction problem — pick module generators,
-build the tower, exhibit the kernel — rather than a missing piece of analytic geometry.
+**And it is consumed rather than orphaned**, which is what the standard quoted above actually asks:
+`ComplexAnalytic.isFinite_analytificationMap_ofRename_id` reads it through
+`ComplexAnalytic.AnalyticSpace.isFinite_of_isClosedEmbedding`, so *the analytification of a
+surjection of presented algebras is finite* is a theorem and not a lemma waiting for one. It is in
+a sibling file rather than here because its subject is a surjection and this file's is a
+hypersurface, and because nothing in it mentions monicity or a projection.
 
-**Of those three, `build the tower` is now discharged and the other two are not.**
-`ComplexAnalytic.towerPresHom` and `ComplexAnalytic.isFinite_analytificationMap_towerPresHom` are
-below, so the iterate is a theorem rather than an estimate. **Picking module generators and
-exhibiting the kernel is untouched**, and so is the closed-embedding lemma above — the tower does
-not consume it, the kernel step is what would, and the paragraph above still describes an absence.
-So the count of **that** triple — generators, tower, kernel — goes to one, and the one left is
-the quotient, which is the generators and the kernel together. The heading above names a
-*different* three, and this push does not move its count: of the free second step, the comparison
-of the two structure maps and the quotient, the first two were already discharged when that
-section was written.
+**Of the triple `generators, tower, kernel` the tower is discharged and the other two are not — and
+this paragraph used to count the closed-embedding lemma among what was left.** It read
+*"**Picking module generators and exhibiting the kernel is untouched**, and so is the
+closed-embedding lemma above — the tower does not consume it, the kernel step is what would, and
+the paragraph above still describes an absence"*. **The lemma is no longer among them.** What is
+left is a construction with nothing analytic in it: pick module generators of the target over the
+source, adjoin one root per generator with `ComplexAnalytic.towerPresHom`, and exhibit the target
+as the quotient of that tower by the kernel of the resulting surjection. Two of its steps were
+compiled on taxis #1429 and are cheap — turning that kernel, finitely generated because the
+polynomial ring is Noetherian, into a `ComplexAnalytic.presentationIdeal` is about seven lines, and
+pushing a monic polynomial up the tower along a rename is `Polynomial.Monic.map` — and the two that
+were **not** measured are the surjection onto the target and the identification of the composite
+with the original `ComplexAnalytic.PresHom`. Neither is estimated here. The heading above names a
+*different* three and this push does not move its count: of the free second step, the comparison of
+the two structure maps and the quotient, the first two were already discharged when that section
+was written, and the third's analytic input landing is not the third being discharged.
 
-**And the shape of the surjection matters.** What compiles is the same-variables case, which is the
-one the module-finite argument produces; a surjection between presentations in *different* numbers
-of variables is not of that form and nothing above is evidence about it.
+**And the shape of the surjection matters.** What is proved is the same-variables case, which is
+the one the module-finite argument produces — the quotient there is taken inside the tower's own
+polynomial ring; a surjection between presentations in *different* numbers of variables is not of
+that form and **nothing above is evidence about it**.
 
 ## Main definitions
 
@@ -154,8 +165,14 @@ of variables is not of that form and nothing above is evidence about it.
 * **No general finite morphism, and the section above says which of its three parts is missing.**
   **This bullet used to name two absences and now names one**: it read *"what is here is two
   adjoined roots; the `m`-step iterate and the quotient are not"*, and the `m`-step iterate is
-  `ComplexAnalytic.isFinite_analytificationMap_towerPresHom` below. **The quotient is not**, and it
-  is still the one nothing in the repository states.
+  `ComplexAnalytic.isFinite_analytificationMap_towerPresHom` below. **The quotient is not** — and
+  this bullet also said of it *"it is still the one nothing in the repository states"*, which has
+  stopped being true of the whole of it. Its **analytic** half is
+  `ComplexAnalytic.isFinite_analytificationMap_ofRename_id`
+  (`Oka/Analytification/SurjectionFinite.lean`): a surjection of presented algebras analytifies to
+  a finite morphism. What nothing states is the **construction** that produces such a surjection
+  from a module-finite `ComplexAnalytic.PresHom` — the generators and the kernel — and that is a
+  statement about presentations with no analysis in it.
 * **The `m`-step iterate is here, and this bullet used to say it was not.** It read *"the tower is
   a dependent recursion and not a family; nothing here builds it"*, and went on that the two-step
   case needs no such recursion *"because the second step is the first at a different base, and

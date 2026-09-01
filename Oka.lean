@@ -113,6 +113,7 @@ import Oka.Analytification.SpecFunctoriality
 import Oka.Analytification.StandardEtale
 import Oka.Analytification.StandardEtaleAnalytification
 import Oka.Analytification.StandardEtaleLocalIso
+import Oka.Analytification.SurjectionFinite
 import Oka.Analytification.UniversalProperty
 import Oka.CategoryTheory.Abelian.Basic
 import Oka.CategoryTheory.GlueData
