@@ -20,8 +20,9 @@ side, the glue data of an affine cover with distinguished
 overlaps together with the morphisms out of the space it glues to and the same glue data on the
 `Spec` side, the image of the analytification in `ℂ^n`, and the family of
 monic polynomials of a polynomial monic in the last variable, with the finiteness over `ℂ^n`
-that it supplies, and the glue of a refined overlap that meets two different members of the
-original cover.
+that it supplies, the glue of a refined overlap that meets two different members of the
+original cover with the symmetry law it satisfies, and the square saying that the refined
+transition lies over the original cover's own transition.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -3077,3 +3078,112 @@ info: 'ComplexAnalytic.refineDatumGlue_symm' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.refineDatumGlue_symm
+
+/-! ### The cross-member refined transition, over the original cover's transition
+
+`Oka/Analytification/RefineDatumTransition.lean`. The comparison of a cross-member refined overlap
+with the original overlap it lies over, on a double overlap and on a triple one, the square saying
+that the refined transition lies over the original datum's own transition, and what that makes of
+`hrange`: the half the original law supplies, and the equivalence saying it is the only half.
+
+Three of the fourteen are `def`s and are guarded for the same reason the rest are: the convention
+here is every declaration and not every theorem.
+-/
+
+/--
+info: 'ComplexAnalytic.refineDatumCrossProjSpace' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumCrossProjSpace
+
+/--
+info: 'ComplexAnalytic.refineDatumCrossProjSpace_localisationProj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumCrossProjSpace_localisationProj
+
+/--
+info: 'ComplexAnalytic.refineDatumCrossPart' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumCrossPart
+
+/--
+info: 'ComplexAnalytic.refineDatumCrossPart_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumCrossPart_eq
+
+/--
+info: 'ComplexAnalytic.refineDatumCrossPart_coverIncl' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumCrossPart_coverIncl
+
+/--
+info: 'ComplexAnalytic.refineDatumGlueNe_analytification_localisationProj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumGlueNe_analytification_localisationProj
+
+/--
+info: 'ComplexAnalytic.refineDatumTransitionHom_localisationProj_of_ne' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumTransitionHom_localisationProj_of_ne
+
+/--
+info: 'ComplexAnalytic.coverOpen_refineDatumPoly_of_ne' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverOpen_refineDatumPoly_of_ne
+
+/--
+info: 'ComplexAnalytic.range_refineDatumCrossTriple_subset' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.range_refineDatumCrossTriple_subset
+
+/--
+info: 'ComplexAnalytic.refineDatumCrossTriple' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumCrossTriple
+
+/--
+info: 'ComplexAnalytic.refineDatumCrossTriple_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumCrossTriple_eq
+
+/--
+info: 'ComplexAnalytic.refineDatumCrossTriple_coverTripleIncl' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumCrossTriple_coverTripleIncl
+
+/--
+info: 'ComplexAnalytic.range_refineDatumTransitionHom_localisationProj_subset' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.range_refineDatumTransitionHom_localisationProj_subset
+
+/--
+info: 'ComplexAnalytic.range_refineDatumTransitionHom_subset_iff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.range_refineDatumTransitionHom_subset_iff
