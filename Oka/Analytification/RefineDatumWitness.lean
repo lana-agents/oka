@@ -86,14 +86,21 @@ one in both directions.
 
 ## What is not here
 
-* **No witness at a refining family that is not a unit**, which is what a *proper* refinement at a
-  non-constant `σ` would be. `ComplexAnalytic.exists_refineDatumCross_of_isUnit` says exactly what
-  such a witness needs of its family — `fam a` a unit in the localisation at `f_{σa σb}`, which is
-  the geometric statement that the refined member contains the whole overlap — and that is
-  satisfiable by a family that cuts the member down: on the projective line the coordinate of each
-  member is a unit on the overlap. **Nothing here builds one**, and the one condition that would
-  not come free is `RefineDatumRangeEq`, which asks the transition's image to land in `D(fam c)`
-  and has no free half at any file on this line.
+* **No witness at a refining family that is not a unit *here*, and the diagnosis this bullet gave
+  was wrong.** It ended *"the one condition that would not come free is `RefineDatumRangeEq`, which
+  asks the transition's image to land in `D(fam c)` and has no free half at any file on this
+  line"*. Every clause of that is true of the condition and none of it is what blocks a proper
+  refinement: `ComplexAnalytic.RefineDatumRangeEq` is quantified over triples with `b ≠ c` **and**
+  `σ b = σ c`, so an injective `σ` admits none and
+  `ComplexAnalytic.refineDatumRangeEq_of_injective`
+  (`Oka/Analytification/RefineDatumUnitFamily.lean`) closes it in one line at every refining
+  family. That file also generalises `ComplexAnalytic.refineDatumOneRangeCross` below off
+  `fam ≡ 1`, and `OkaTest/RefineDatumUnitFamily.lean` exhibits the refinement of `ℙ¹`'s two-chart
+  cover by the coordinate, where every refined member is a proper non-empty open of its chart.
+  **What stays open is what `ComplexAnalytic.exists_refineDatumCross_of_isUnit` asks of the
+  family** — `fam a` a unit in the localisation at `f_{σa σb}`, which is the geometric statement
+  that the refined member contains the whole overlap — since that is a hypothesis there and no
+  file discharges it; and **nothing here builds any of it.**
 * **Nothing about `ComplexAnalytic.exists_refineDatumCross`.** Whether the `q` it produces
   satisfies either condition is untouched here in both directions, and the associate question
   `Oka/Analytification/CrossMemberGlue.lean` records is not narrowed.
@@ -221,7 +228,11 @@ theorem refineDatumOneCrossUnit (a b : B) (_h : σ a ≠ σ b) :
 member `σ b = σ c`; at a family constantly `1` that open is the whole space and there is nothing
 left. **This is the condition with no free half**, so it is the one the trivial family is doing
 the work for: at any other family it is a statement about where the original cover's transition
-goes, and no file on this line proves one. -/
+goes, and no file on this line proves one **at a `σ` that collapses two indices**. At an injective
+`σ` it has no triple to speak about at all, which is
+`ComplexAnalytic.refineDatumRangeEq_of_injective`
+(`Oka/Analytification/RefineDatumUnitFamily.lean`) and holds at every family — so what `fam ≡ 1`
+buys here is exactly the collapsing case. -/
 theorem refineDatumOneRangeEq :
     RefineDatumRangeEq.{u} obj poly σ (fun _ ↦ 1) (fun x y ↦ poly (σ x) (σ y)) glue
       (refineDatumOneR.{u} obj poly σ glue) (refineDatumOneU.{u} obj poly σ glue)

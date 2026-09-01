@@ -96,7 +96,12 @@ consumes this one and reopens nothing in it.
   `ComplexAnalytic.exists_refineDatumCross`'s choice satisfies `RefineDatumRangeCross`, and
   whether a caller can arrange `RefineDatumRangeEq`, are untouched here in both directions; this
   file adopts, and `Oka/Analytification/CrossMemberGlue.lean`'s record that nothing produces `q`
-  stands.
+  stands. **Two files below do discharge both**, and a reader should not stop at the *"no free
+  half at all"* above: `Oka/Analytification/RefineDatumWitness.lean` at a refining family
+  constantly `1`, and `Oka/Analytification/RefineDatumUnitFamily.lean` at every family once `σ` is
+  injective — `RefineDatumRangeEq`'s binders ask for `b ≠ c` together with `σ b = σ c`, and an
+  injective `σ` admits no such pair. Neither fact is about the containment, which is what the
+  sentence above is about and which remains as free of a free half as it says.
 * **No witness *here*.** This bullet said *"there is still no example of a refined cover datum at
   a non-constant `σ` … a construction whose hypotheses nobody has met is not one"*, and both
   hypotheses this file adopts have since been met:

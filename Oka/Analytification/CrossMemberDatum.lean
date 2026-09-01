@@ -169,8 +169,13 @@ goal.
   three copies of the node, whose `poly` field is `z₀` and whose three laws are theorems, at
   `σ = id` on a three-element index type — so that space has **no hypothesis left open** and its
   index map is provably not constant. **The refining family there is still constantly `1`**, so
-  what is exhibited is that cover reindexed and not one cut down, and what stands in for a witness
-  *in this file* is unchanged: `ComplexAnalytic.refineDatumPoly_const` and
+  what is exhibited is that cover reindexed and not one cut down. **And there is now one at a
+  family that is not `1`**: `OkaTest/RefineDatumUnitFamily.lean`'s
+  `ComplexAnalytic.lineRefinement` is `ComplexAnalytic.refineDatumUnitFamAnalytification` at
+  `OkaTest/ProjectiveLine.lean`'s two-chart cover of `ℙ¹` — also a concrete datum with a `poly`
+  field of its own — at `σ = id` and at a refining family that cuts every member down to a
+  proper non-empty open. What stands in for a witness *in this file* is unchanged:
+  `ComplexAnalytic.refineDatumPoly_const` and
   `ComplexAnalytic.coverOverlap_refineDatumPoly_const` reduce the general form to a configuration
   `OkaTest/CoverRefinement.lean` and `OkaTest/CrossMemberGlue.lean` exhibit, which says nothing
   about `σ` being non-constant.
