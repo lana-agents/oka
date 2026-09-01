@@ -3704,15 +3704,22 @@ info: 'ComplexAnalytic.hypersurfacePresentation' depends on axioms:
 
 /-! ### The cocycle law of a cross-member refinement, and the space it leaves unconditional
 
-`Oka/Analytification/RefineDatumCocycle.lean`, and one declaration of
-`Oka/Analytification/AffineCover.lean` that this line added: the pair cancellation the three
+`Oka/Analytification/RefineDatumCocycle.lean`, one declaration of
+`Oka/Analytification/AffineCover.lean` and three of
+`Oka/Analytification/RefineDatumRange.lean` that this line added: the pair cancellation the three
 mixed shapes run on, the descent of a refined triple overlap, the two edge statements that replace
 `ComplexAnalytic.refineTriple_localisationProj`, the five shapes, the law itself, and the glue data
 and analytic space that no longer ask for it.
 
 `ComplexAnalytic.coverTransition_hom_comp` is guarded here rather than in the
-`Oka/Analytification/AffineCover.lean` section above for the reason every section here gives: a
-section moved is a conflict for somebody else, and so is a guard inserted into one.
+`Oka/Analytification/AffineCover.lean` section above, and
+`ComplexAnalytic.coverSpaceHomOfEq_trans`, `ComplexAnalytic.coverSpaceHomOfEq_self` and
+`ComplexAnalytic.coverSpaceHomOfEq_comp_symm` here rather than in the
+`Oka/Analytification/RefineDatumRange.lean` section above, for the reason every section here
+gives: a section moved is a conflict for somebody else, and so is a guard inserted into one. The
+three were declared in `Oka/Analytification/RefineDatumCocycle.lean` when this section was
+written and were moved to the file that owns `ComplexAnalytic.coverSpaceHomOfEq` afterwards; the
+guards stayed.
 
 Six of the twenty-seven are a `def` and are guarded for the reason the
 `Oka/Analytification/RefineDatumRange.lean` section gives: the convention here is every
