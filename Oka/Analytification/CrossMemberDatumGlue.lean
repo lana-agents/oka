@@ -324,7 +324,12 @@ lemma is about one member and one side of the overlap and is not a step towards 
   (`Oka/Analytification/RefineDatumTransition.lean`) says the refined transition lies over the
   original cover's own *transition*, and it is the two triangles below joined — nothing else went
   into it. It buys `hrange` at a triple whose three members are different, up to one containment
-  in the caller's own open, and buys nothing at the other triples and nothing for `hcocycle`.
+  in the caller's own open, and buys nothing for `hrange` at the other triples. **This sentence
+  also said it buys nothing for `hcocycle`, and that has stopped being true**:
+  `ComplexAnalytic.refineDatumTriple_localisationProj_of_ne`
+  (`Oka/Analytification/RefineDatumCocycle.lean`) is `ComplexAnalytic.coverTriple_fac` followed by
+  exactly this lemma, and it is the unequal edge of the cocycle law — read by four of that law's
+  five shapes, every one except the triple whose three members are equal.
 * **No witness at a non-constant `σ`.** `ComplexAnalytic.refineDatumGlue_const` says the general
   form reduces to a configuration the test files already exhibit, which is weaker than a witness
   and says nothing about `σ` ever being non-constant — the same gap
