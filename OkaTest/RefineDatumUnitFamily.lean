@@ -75,7 +75,11 @@ exercise `RefineDatumRangeCross` as well, and is not built here.
   `ComplexAnalytic.projectiveLineSpace` in either direction. The only statement on this board
   about a refinement's comparison morphism is `ComplexAnalytic.not_isIso_refineToBase`
   (`Oka/Analytification/CoverRefinement.lean`), and there is no such morphism here to apply it
-  to.
+  to. **What that gluing is has since been identified**, and this bullet said nothing about it:
+  the `D(z)` the two copies are glued along is the *whole* of each of them, so
+  `ComplexAnalytic.isoLineRefineGlued` (`OkaTest/RefineDatumUnitFamilyNode.lean`) says the glued
+  space is one copy of `𝔸¹ ∖ {0}`. **The comparison with `ℙ¹` is still absent** — that would need
+  the two spaces to be told apart, which nothing here does.
 * **Nothing about the refined overlaps being the geometric ones**, which is
   `Oka/Analytification/CrossMemberDatumGlue.lean`'s absence and is about the construction rather
   than about any input to it.

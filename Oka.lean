@@ -79,6 +79,7 @@ import Oka.Analytification.Comparison
 import Oka.Analytification.ComparisonSquare
 import Oka.Analytification.CoverComparison
 import Oka.Analytification.CoverFunctoriality
+import Oka.Analytification.CoverGlueTop
 import Oka.Analytification.CoverIndependence
 import Oka.Analytification.CoverRefinement
 import Oka.Analytification.CrossMemberChoice
