@@ -375,12 +375,38 @@ hypothesis below is about: where the overlap of `i` and `j` goes inside `A_j^an`
 def coverTransitionHom (i j : J) : coverPart.{u} obj poly i j ⟶ coverSpace.{u} obj j :=
   (coverTransition.{u} obj poly glue i j).hom ≫ coverIncl.{u} obj poly j i
 
-/-- **The transition isomorphisms are inverse to each other**, provided the input isomorphisms
-are. `Functor.mapIso` commutes with `Iso.symm`, twice. -/
+/-- **The analytified glue isomorphisms are inverse to each other**, provided the input
+isomorphisms are. `Functor.mapIso` commutes with `Iso.symm`, twice.
+
+This is the statement one level below `ComplexAnalytic.coverTransition`, between the two
+`ComplexAnalytic.coverOverlapSpace`s; the transitions themselves are the next declaration, which
+is this one conjugated by `ComplexAnalytic.coverOverlapIso` at each end. -/
 theorem coverGlueIso_symm (hsymm : ∀ i j : J, glue j i = (glue i j).symm) (i j : J) :
     coverGlueIso.{u} obj poly glue j i = (coverGlueIso.{u} obj poly glue i j).symm := by
   rw [coverGlueIso, coverGlueIso, hsymm i j, Functor.mapIso_symm, Functor.mapIso_symm]
   rfl
+
+/-- **Going from `i` to `j` and back is the identity of the overlap**, provided the input
+isomorphisms are inverse to each other.
+
+The previous lemma conjugated: the two inner comparison isomorphisms of the two transitions cancel
+against each other, the two glue isomorphisms cancel by that lemma, and the two outer ones cancel
+last. Nothing in the proof is about analytification.
+
+**This is `hsymm`'s only geometric consequence in this file**, and it is what a caller reaching for
+"the transition is invertible" wants: `ComplexAnalytic.coverTransition` is an isomorphism whatever
+the input is, and this says which isomorphism its inverse is. Its consumer is the cocycle law of a
+cross-member refinement (`Oka/Analytification/RefineDatumCocycle.lean`), where the three edges of a
+triple whose members are not all different compose to a *pair* going out and back, and not to a
+triple of the original datum's own — an original triple `(i, i, j)` is not one
+`ComplexAnalytic.coverTriple` accepts. -/
+theorem coverTransition_hom_comp (hsymm : ∀ i j : J, glue j i = (glue i j).symm) (i j : J) :
+    (coverTransition.{u} obj poly glue i j).hom ≫ (coverTransition.{u} obj poly glue j i).hom =
+      𝟙 _ := by
+  rw [coverTransition, coverTransition, Iso.trans_hom, Iso.trans_hom, Iso.trans_hom,
+    Iso.trans_hom, Iso.symm_hom, Iso.symm_hom,
+    coverGlueIso_symm.{u} obj poly glue hsymm i j, Iso.symm_hom]
+  simp
 
 /-! ### The range hypothesis, half of which is free -/
 

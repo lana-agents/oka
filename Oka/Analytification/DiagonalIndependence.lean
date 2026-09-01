@@ -122,7 +122,8 @@ determined by `t` and `CategoryTheory.cancel_mono` supplies it. That lemma is in
   the four have since been built or proved on that thread** — `ComplexAnalytic.refineDatumGlue`,
   `ComplexAnalytic.refineDatumGlue_symm` and `ComplexAnalytic.refineDatumHrange`, the last from
   two conditions `Oka/Analytification/RefineDatumGlueData.lean` adopts and shows equivalent to
-  it. `hcocycle` is stated there and proved nowhere.
+  it. **The count is now four of four**: `hcocycle` is stated in that file and proved in
+  `Oka/Analytification/RefineDatumCocycle.lean`. Nothing in *this* file moved.
 * **No converse.** Nothing here says two data whose glued spaces agree must agree off the
   diagonal, and nothing needs it.
 * **No `Iso`.** The conclusions are equalities of `ComplexAnalytic.AnalyticSpace`, which is what

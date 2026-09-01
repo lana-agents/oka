@@ -94,9 +94,14 @@ over an identification of the two members does, and it is what
 `Oka/Analytification/RefineDatumRange.lean` reads the other four shapes off;
 `Oka/Analytification/RefineDatumGlueData.lean` joins all five into one law. This sentence ended
 *"and the square has no statement there at all"* until the first of those.
-**`hcocycle` keeps the clause**, for the reason `Oka/Analytification/CoverRefinement.lean` gives.
-It can now be *stated* — `ComplexAnalytic.RefineDatumCocycle`, which needed the assembled range
-law, `ComplexAnalytic.coverTriple` taking a proof of it as an argument — and nothing proves it.
+**This paragraph said `hcocycle` "keeps the clause", for the reason
+`Oka/Analytification/CoverRefinement.lean` gives, and that clause is retired there.** The law is
+stated — `ComplexAnalytic.RefineDatumCocycle`, which needed the assembled range law,
+`ComplexAnalytic.coverTriple` taking a proof of it as an argument — and
+`ComplexAnalytic.refineDatumHcocycle` (`Oka/Analytification/RefineDatumCocycle.lean`) proves it.
+**So the two geometric laws do not merely no longer stand or fall together: neither of them is
+what a refined datum still owes**, which is the two conditions
+`Oka/Analytification/RefineDatumGlueData.lean` adopts and nothing here meets.
 
 ## Non-vacuity
 

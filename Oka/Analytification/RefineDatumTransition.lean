@@ -11,9 +11,9 @@ import Oka.Analytification.CrossMemberDatumGlue
 `Oka/Analytification/CoverRefinement.lean` discharges both geometric laws of a refined cover datum
 with one sentence — **every refined member lies over the fixed member, and every transition is a
 morphism over it**, which is `ComplexAnalytic.refineTransitionHom_localisationProj`. At a
-non-constant `σ` there is no fixed member, and that file says so: the cross-member case has
+non-constant `σ` there is no fixed member, and that file said so: the cross-member case has
 "three triple overlaps sitting over three different members with no common target to cancel
-against".
+against". That sentence is retired there — it was said of both laws, and it is true of neither.
 
 **There is an analogue anyway, and what changes is what the transition is said to lie over.** A
 cover datum carries no morphism between two of its members, so nothing can be stated over one. It
@@ -154,10 +154,14 @@ definition. A reader repairing a regression here should re-measure one change at
   `ComplexAnalytic.coverTriple` takes `hrange` as an argument, so the cocycle law of the refined
   datum mentions a proof of the refined `hrange` three times in its own statement, and one shape
   of five is not one. It is stated in `Oka/Analytification/RefineDatumGlueData.lean`, as
-  `ComplexAnalytic.RefineDatumCocycle`, off the assembled law — and **it is proved nowhere**.
-  Nothing here is evidence about it, and the cancellation the same-member proof uses — against
-  the projection of the one fixed member, a monomorphism because it is an open immersion — has
-  no analogue, for the reason `Oka/Analytification/CoverRefinement.lean` gives.
+  `ComplexAnalytic.RefineDatumCocycle`, off the assembled law. **This bullet said it is proved
+  nowhere and that the cancellation the same-member proof uses — against the projection of the one
+  fixed member, a monomorphism because it is an open immersion — has no analogue, for the reason
+  `Oka/Analytification/CoverRefinement.lean` gives. That cancellation does have one**, against the
+  projection of the member the triple's first index lies over, and
+  `ComplexAnalytic.refineDatumHcocycle` (`Oka/Analytification/RefineDatumCocycle.lean`) proves the
+  law. Nothing *here* is evidence about it: that file reads the square below at one edge of a
+  triple and reopens nothing.
 * **No hypothesis on `q`, and no refined cover datum.** This file adds no hypothesis and no
   structure. `ComplexAnalytic.coverGlueData` at a non-constant `σ` asks for all three laws at
   once and none of them is here; `Oka/Analytification/RefineDatumGlueData.lean` is where two of

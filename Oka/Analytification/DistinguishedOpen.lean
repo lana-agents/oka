@@ -673,17 +673,19 @@ the square over an identification of the two members does, which is
 `Oka/Analytification/RefineDatumRange.lean` and settles the other four shapes.
 `Oka/Analytification/RefineDatumGlueData.lean` joins the five into one law, on two conditions it
 adopts and proves necessary. This sentence ended *"the square has no statement there at all"*
-until the first of those, and **`hcocycle` is still nowhere**: it can now be *stated*, as
-`ComplexAnalytic.RefineDatumCocycle`, which needed the assembled range law because
-`ComplexAnalytic.coverTriple` takes a proof of it as an argument, and nothing proves it. The
-datum they would be laws of is built out of its `poly` field (`ComplexAnalytic.refineDatumPoly`)
+until the first of those, and it then said **`hcocycle` is still nowhere**, which is no longer
+true either: it is stated as `ComplexAnalytic.RefineDatumCocycle`, which needed the assembled
+range law because `ComplexAnalytic.coverTriple` takes a proof of it as an argument, and
+`ComplexAnalytic.refineDatumHcocycle` (`Oka/Analytification/RefineDatumCocycle.lean`) proves it
+from the original datum's own three laws. The datum they are laws of is built out of its `poly`
+field (`ComplexAnalytic.refineDatumPoly`)
 and its `glue` (`ComplexAnalytic.refineDatumGlue`, both branches under a case split) — the latter
 a function of a choice of extra factor and unit, which
 `ComplexAnalytic.exists_refineDatumCross` (`Oka/Analytification/CrossMemberChoice.lean`) produces
 at every ordered pair, algebraically and without saying that the overlap it refines to is the
-geometric one — and it reaches a glue data only under that one unproved law and the two
-conditions the file above adopts. **Nothing says a choice meets either condition**, in either
-direction, and taxis #1287 is where that question lives. Nothing here is
+geometric one — and it reaches a glue data under the two conditions the file above adopts and no
+law at all (`ComplexAnalytic.refineDatumGlueDataOfLaws`). **Nothing says a choice meets either
+condition**, in either direction, and taxis #1287 is where that question lives. Nothing here is
 about a scheme.
 -/
 

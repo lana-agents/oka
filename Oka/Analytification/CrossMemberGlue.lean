@@ -156,7 +156,8 @@ harder to read, which is a reason to state and not a reason to hide.
   and neither geometric law is touched *here* — `hrange` is proved of both branches at once in
   `Oka/Analytification/RefineDatumGlueData.lean`, from two conditions that file adopts and shows
   *equivalent* to it, so what a caller carries there is the range law under another name rather
-  than a discharge of it; and `hcocycle` is stated there and proved nowhere.
+  than a discharge of it; and `hcocycle` is stated there and proved in
+  `Oka/Analytification/RefineDatumCocycle.lean`, from the original datum's own three laws.
 * **Nothing here produces `q`.** The extra factor and the unit are arguments. This bullet used to
   offer `ComplexAnalytic.exists_localisationOpen_eq_rename`,
   `ComplexAnalytic.exists_mk_rename_eq` and
@@ -179,13 +180,16 @@ harder to read, which is a reason to state and not a reason to hide.
   `ComplexAnalytic.refineHcocycle`.
   **This bullet said of both that the argument discharging those does not transfer, because it
   cancels against the projection of the *one* fixed member and three cross-member triple overlaps
-  sit over three different members with no common target. That is `hcocycle`'s argument and it
-  stands** — and `ComplexAnalytic.coverTriple` takes `hrange` as an argument, so the cocycle law
-  of a refined datum could not be stated at all before the range law was proved. **The range law
-  is proved now**, in `Oka/Analytification/RefineDatumGlueData.lean`, from two conditions that
+  sit over three different members with no common target. That was said of `hcocycle`'s argument,
+  and it does not stand either.** The cancellation is against the projection of the member the
+  triple's *first* index lies over, which exists whatever `σ` is
+  (`ComplexAnalytic.refineDatumCocycle_of_localisationProj`); what has no analogue is the step
+  after it, which reads all three edges of the triple over one member. **Both laws are proved
+  now**: the range law in `Oka/Analytification/RefineDatumGlueData.lean`, from two conditions that
   file adopts and shows *equivalent* to it — so what a caller carries there is the range law under
-  another name and not a discharge of it — and the cocycle law is stated there,
-  `ComplexAnalytic.RefineDatumCocycle`, and proved nowhere.
+  another name and not a discharge of it — and the cocycle law, stated there as
+  `ComplexAnalytic.RefineDatumCocycle`, in `Oka/Analytification/RefineDatumCocycle.lean`, from the
+  original datum's own three laws and no further hypothesis.
 
   **`hrange`'s argument is a different one and it does transfer**, with the original datum's own
   `hrange` in place of the fixed member.

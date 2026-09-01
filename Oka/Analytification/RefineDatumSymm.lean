@@ -101,9 +101,13 @@ what relates the two orders of a pair — the choices contribute nothing, which 
 
 ## What is not here
 
-* **No `hrange` and no `hcocycle`.** They are the other two laws, they are geometric where
+* **No `hrange` and no `hcocycle` here.** They are the other two laws, they are geometric where
   everything here is algebraic, and nothing below is evidence about either. What is proved here
-  is that one law is free; that says nothing about the two that are not.
+  is that one law is free; that says nothing about the two that are not. Both are proved
+  elsewhere on this line — `ComplexAnalytic.refineDatumHrange` and
+  `ComplexAnalytic.refineDatumHcocycle` — and **the second of them consumes this file's theorem**,
+  since the shapes with two of the three members equal cancel against the original datum's own
+  `hsymm` rather than against its `hcocycle`.
 * **Nothing about whether the refined overlap is the geometric one.**
   `Oka/Analytification/CrossMemberChoice.lean` records that the extra factor it produces obeys an
   algebraic rule and that nothing says the overlap the rule induces is the one the geometry names.
@@ -340,7 +344,9 @@ the two refined members lie over one member, and
 
 **This is the first of the three laws a cover datum has to satisfy discharged for a refinement
 whose `σ` is not constant.** The other two are `hrange` and `hcocycle`; they are geometric, they
-are untouched here, and that one law came free is not evidence about them. -/
+are untouched *here*, and that one law came free is not evidence about them. Both have since been
+proved — `ComplexAnalytic.refineDatumHrange` and `ComplexAnalytic.refineDatumHcocycle` — and the
+second is a consumer of this theorem rather than a repetition of it. -/
 theorem refineDatumGlue_symm (hsym : ∀ i j : J, glue j i = (glue i j).symm)
     (he : ∀ a b : B, ∀ _ : σ a ≠ σ b,
       RefineDatumCrossEq.{u} obj σ fam poly q glue a b (r a b))
