@@ -72,10 +72,16 @@ question.
 **No `ComplexAnalytic.IsCutOutBy` datum for a presentation.** Both results take a cut-out by a
 **single** section, as all four of their unrestricted ancestors do, while
 `ComplexAnalytic.hypersurfacePresentation` has `k + 1` relations.
-`Oka/Analytification/StandardEtaleAnalytification.lean` records that as the absence standing
-between `ComplexAnalytic.eval_pderiv_ne_zero`'s conclusion at a tuple and this hypothesis at
-`i.base x`, and this file does not close it: it changes which hypothesis is asked for, not who
-supplies the datum.
+**This bullet said `Oka/Analytification/StandardEtaleAnalytification.lean` *"records that as the
+absence"* standing between `ComplexAnalytic.eval_pderiv_ne_zero`'s conclusion at a tuple and this
+hypothesis at `i.base x`; that file now records it as a misdiagnosis instead** — the count is
+right and the reading of it was wrong, the conclusion in question being about the projection to
+`ℂ^n`, so `k + 1` against one is the signature of a statement whose base is the whole of `ℂ^n`.
+At `k = 0` the datum is `ComplexAnalytic.isCutOutBy_analytificationInclHom_hypersurface`
+(`Oka/Analytification/StandardEtaleLocalIso.lean`), stated there for `g : Fin 0 → _`; at `k ≥ 1`
+what is missing is a statement and not a datum, since the conclusion those results reach is over
+`ℂ^n`. **What has not changed is this file's own part in it**: this file does not supply that
+datum, and it changes which hypothesis is asked for, not who supplies the datum.
 
 **No second generality.** Every statement here is an instance of one in
 `Oka/AnalyticSpace/OpenBaseProjection.lean`, so a consumer holding a general holomorphic cutting
