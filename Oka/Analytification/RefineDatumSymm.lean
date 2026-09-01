@@ -105,9 +105,17 @@ what relates the two orders of a pair — the choices contribute nothing, which 
   everything here is algebraic, and nothing below is evidence about either. What is proved here
   is that one law is free; that says nothing about the two that are not. Both are proved
   elsewhere on this line — `ComplexAnalytic.refineDatumHrange` and
-  `ComplexAnalytic.refineDatumHcocycle` — and **the second of them consumes this file's theorem**,
-  since the shapes with two of the three members equal cancel against the original datum's own
-  `hsymm` rather than against its `hcocycle`.
+  `ComplexAnalytic.refineDatumHcocycle`. **This bullet said that the second of them *"consumes
+  this file's theorem"*, and it does not**: `ComplexAnalytic.refineDatumGlue_symm` is named
+  nowhere in `Oka/Analytification/RefineDatumCocycle.lean`. What the shapes with two of the three
+  members equal cancel against is the original datum's own `hsymm` **hypothesis**, carried through
+  `ComplexAnalytic.coverTransition_hom_comp` — the same hypothesis this file's theorem takes, and
+  spent one level below it rather than through it. The theorem's only term-level consumers
+  anywhere are `ComplexAnalytic.refineDatumGlueData` and
+  `ComplexAnalytic.refineDatumAnalytification`
+  (`Oka/Analytification/RefineDatumGlueData.lean`), where a symmetry law and a cocycle law are
+  supplied to the same construction, and they were its only consumers before
+  `Oka/Analytification/RefineDatumCocycle.lean` existed too.
 * **Nothing about whether the refined overlap is the geometric one.**
   `Oka/Analytification/CrossMemberChoice.lean` records that the extra factor it produces obeys an
   algebraic rule and that nothing says the overlap the rule induces is the one the geometry names.
@@ -345,8 +353,12 @@ the two refined members lie over one member, and
 **This is the first of the three laws a cover datum has to satisfy discharged for a refinement
 whose `σ` is not constant.** The other two are `hrange` and `hcocycle`; they are geometric, they
 are untouched *here*, and that one law came free is not evidence about them. Both have since been
-proved — `ComplexAnalytic.refineDatumHrange` and `ComplexAnalytic.refineDatumHcocycle` — and the
-second is a consumer of this theorem rather than a repetition of it. -/
+proved — `ComplexAnalytic.refineDatumHrange` and `ComplexAnalytic.refineDatumHcocycle`. **This
+docstring said the second was *"a consumer of this theorem rather than a repetition of it"*, and
+it is neither**: it does not name this theorem, and what its mixed shapes cancel against is the
+`hsym` hypothesis below, spent directly through
+`ComplexAnalytic.coverTransition_hom_comp`. `ComplexAnalytic.refineDatumGlueData` is where the two
+laws meet. -/
 theorem refineDatumGlue_symm (hsym : ∀ i j : J, glue j i = (glue i j).symm)
     (he : ∀ a b : B, ∀ _ : σ a ≠ σ b,
       RefineDatumCrossEq.{u} obj σ fam poly q glue a b (r a b))

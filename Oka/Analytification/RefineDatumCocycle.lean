@@ -92,6 +92,31 @@ with the equality as a hypothesis, where `subst` *is* available and reduces all 
 `ComplexAnalytic.coverTransitionHom_of_fac`. This is the move
 `ComplexAnalytic.mem_localisationOpen_coverSpaceHomOfEq` makes one file up, for the same reason.
 
+## Where the helper lemmas this file needed were put, and why the two answers differ
+
+Three lemmas this file's proofs run on are not in it, and one that is could be read as belonging
+elsewhere. The rule applied is **the file that owns the vocabulary**, not the file that consumes
+it, and it separates them:
+
+* `ComplexAnalytic.coverTransition_hom_comp` — `t i j ≫ t j i = 𝟙` — is in
+  `Oka/Analytification/AffineCover.lean`, which declares `ComplexAnalytic.coverTransition` and
+  already holds `ComplexAnalytic.coverGlueIso_symm`, the same statement one level down. Its only
+  consumer is four files downstream and it went up anyway.
+* `ComplexAnalytic.coverSpaceHomOfEq_trans`, `ComplexAnalytic.coverSpaceHomOfEq_self` and
+  `ComplexAnalytic.coverSpaceHomOfEq_comp_symm` are in
+  `Oka/Analytification/RefineDatumRange.lean` for the same reason: that file declares
+  `ComplexAnalytic.coverSpaceHomOfEq` and holds `ComplexAnalytic.coverSpaceHomOfEq_refl` beside
+  it, and the three are the groupoid facts about a transport, whose statements say nothing about a
+  triple. This file is their only consumer. **They were written here first and moved**, which is
+  why their guards are in this file's section of `OkaTest/Axioms/Analytification.lean`.
+* `ComplexAnalytic.coverTransitionHom_of_fac_eq_ab`,
+  `ComplexAnalytic.coverTransitionHom_of_fac_eq_bc` and
+  `ComplexAnalytic.coverTransitionHom_of_fac_eq_ac` **stay here**, and that is not an
+  inconsistency. They are stated with two morphisms and a factorisation hypothesis *because that
+  is the form a triple's edges arrive in* — the paragraph above is the whole reason they exist —
+  so they are consumer-shaped, and `Oka/Analytification/AffineCover.lean` would carry a statement
+  written for a caller it does not know about.
+
 ## Main definitions
 
 - `ComplexAnalytic.refineDatumTripleProj`: **the refined triple overlap read down on the member
@@ -185,37 +210,6 @@ theorem coverTransitionHom_of_fac (hsymm : ∀ i j : J, glue j i = (glue i j).sy
   rw [hcancel, Category.assoc, coverTransitionHom,
     (Category.assoc _ _ _).symm.trans (coverTransition_hom_comp.{u} obj poly glue hsymm i j =≫ _),
     Category.id_comp]
-
-/-! ### The identification of two equal members, composed -/
-
-/-- **The identification of two equal members composes**, which is the all-equal shape's whole
-content once the three edges are read down.
-
-`subst` on the first equality and `ComplexAnalytic.coverSpaceHomOfEq_refl`; the second transport is
-then along the same proof it started as. -/
-theorem coverSpaceHomOfEq_trans {i j k : J} (h₁ : i = j) (h₂ : j = k) :
-    coverSpaceHomOfEq.{u} obj h₁ ≫ coverSpaceHomOfEq.{u} obj h₂ =
-      coverSpaceHomOfEq.{u} obj (h₁.trans h₂) := by
-  subst h₁
-  rw [coverSpaceHomOfEq_refl, Category.id_comp]
-
-/-- **An identification of a member with itself is the identity**, whatever proof it is along.
-
-It is `ComplexAnalytic.coverSpaceHomOfEq_refl` verbatim: a proof of `i = i` and `rfl` are the same
-proof, so no `subst` and no transport is involved. Stated because the all-equal shape's composite
-of three identifications lands on a proof built out of the triple's three equalities and not on
-`rfl`, and a reader should not have to reconstruct why that costs nothing. -/
-theorem coverSpaceHomOfEq_self {i : J} (h : i = i) :
-    coverSpaceHomOfEq.{u} obj h = 𝟙 (coverSpace.{u} obj i) :=
-  coverSpaceHomOfEq_refl.{u} obj i
-
-/-- **An identification and its inverse compose to the identity**, which is what the shape with
-`σ a = σ b` is left with after its pair cancellation. -/
-theorem coverSpaceHomOfEq_comp_symm {i j : J} (h : i = j) :
-    coverSpaceHomOfEq.{u} obj h ≫ coverSpaceHomOfEq.{u} obj h.symm = 𝟙 _ := by
-  subst h
-  rw [coverSpaceHomOfEq_refl]
-  exact Category.comp_id _
 
 /-! ### The pair cancellation across an equality of members -/
 

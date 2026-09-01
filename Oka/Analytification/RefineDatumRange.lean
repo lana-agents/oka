@@ -100,8 +100,11 @@ the draft declared fourteen things.
 The cure is that file's: the bridge is `rfl`, so
 `ComplexAnalytic.refineDatumTripleIncl_localisationProj_apply_of_eq` states the composite applied
 to a point with its type written out and proves it by `congrArg`, and no tactic below has to
-traverse either term. `Δdump` here is now **+15**, the number of declarations, and that is the
-figure to check a branch on this file by.
+traverse either term. `Δdump` for the push that created this file was **+15**, the number of
+declarations it then had, and *`Δdump` equal to the declaration count* is the figure to check a
+branch on this file by. It has since taken in three more declarations from
+`Oka/Analytification/RefineDatumCocycle.lean` — the groupoid facts about the identification, named
+under `## Main results` below — so fifteen is that push's figure and not a count of this file.
 
 ## Main definitions
 
@@ -112,6 +115,11 @@ figure to check a branch on this file by.
 
 - `ComplexAnalytic.coverSpaceHomOfEq_refl`: **the identification at `rfl` is the identity**, which
   is the whole content of the two transport lemmas.
+- `ComplexAnalytic.coverSpaceHomOfEq_trans`, `ComplexAnalytic.coverSpaceHomOfEq_self` and
+  `ComplexAnalytic.coverSpaceHomOfEq_comp_symm`: **the identification composes, is the identity at
+  every proof of `i = i`, and cancels its own inverse.** They are the groupoid facts about the
+  definition above and are stated here for that reason and not for their consumer's: everything
+  that reads them is under `ComplexAnalytic.refineDatumHcocycle`, four files downstream.
 - `ComplexAnalytic.mem_localisationOpen_coverSpaceHomOfEq` and
   `ComplexAnalytic.mem_coverOpen_coverSpaceHomOfEq`: **the identification carries a distinguished
   open to the corresponding one**, once for a polynomial of the refining family and once for one
@@ -209,6 +217,38 @@ theorem coverSpaceHomOfEq_refl (i : J) :
   (congrArg AnalyticSpace.forgetToLocallyRingedSpace.{u}.map
       (CategoryTheory.Functor.map_id analytificationFunctor.{u} (obj i))).trans
     (CategoryTheory.Functor.map_id AnalyticSpace.forgetToLocallyRingedSpace.{u} _)
+
+/-- **The identification of two equal members composes**, which is the whole content of the shape
+where a triple's three members are all equal, once its three edges are read down.
+
+`subst` on the first equality and `ComplexAnalytic.coverSpaceHomOfEq_refl`; the second transport is
+then along the same proof it started as. Its consumer is
+`Oka/Analytification/RefineDatumCocycle.lean`. -/
+theorem coverSpaceHomOfEq_trans {i j k : J} (h₁ : i = j) (h₂ : j = k) :
+    coverSpaceHomOfEq.{u} obj h₁ ≫ coverSpaceHomOfEq.{u} obj h₂ =
+      coverSpaceHomOfEq.{u} obj (h₁.trans h₂) := by
+  subst h₁
+  rw [coverSpaceHomOfEq_refl, Category.id_comp]
+
+/-- **An identification of a member with itself is the identity**, whatever proof it is along.
+
+It is `ComplexAnalytic.coverSpaceHomOfEq_refl` verbatim: a proof of `i = i` and `rfl` are the same
+proof, so no `subst` and no transport is involved. Stated because the all-equal shape of the
+cocycle law in `Oka/Analytification/RefineDatumCocycle.lean` composes three identifications and
+lands on a proof built out of that triple's three equalities and not on `rfl`, and a reader should
+not have to reconstruct why that costs nothing. -/
+theorem coverSpaceHomOfEq_self {i : J} (h : i = i) :
+    coverSpaceHomOfEq.{u} obj h = 𝟙 (coverSpace.{u} obj i) :=
+  coverSpaceHomOfEq_refl.{u} obj i
+
+/-- **An identification and its inverse compose to the identity**, which is what the shape with two
+of a triple's three members equal is left with after its pair cancellation, in
+`Oka/Analytification/RefineDatumCocycle.lean`. -/
+theorem coverSpaceHomOfEq_comp_symm {i j : J} (h : i = j) :
+    coverSpaceHomOfEq.{u} obj h ≫ coverSpaceHomOfEq.{u} obj h.symm = 𝟙 _ := by
+  subst h
+  rw [coverSpaceHomOfEq_refl]
+  exact Category.comp_id _
 
 /-- **The identification carries `D(y)` to `D(y)`**, for a polynomial `y` of a third member equal
 to both — the form the all-equal triple below reads, where the polynomial is `fam c` and the three
