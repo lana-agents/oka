@@ -136,7 +136,11 @@ construction rather than by a compatibility lemma.
   unproved.
 
   What is true is that the inversion becomes **vacuous over an open subset of the base**, and that
-  is the shape of the remaining work rather than a lemma anyone has. The theorem below makes the
+  is now stated: `Oka/Analytification/OpenBaseFiniteness.lean` is the open set, its closedness and
+  the vacuity above its complement. **This paragraph read *"that is the shape of the remaining work
+  rather than a lemma anyone has"* until that file landed**, and what it retires is the
+  hypersurface half only — the identification of the source with a *localised* algebra is still
+  nowhere, and so is everything about stalks. The theorem below makes the
   projection of the hypersurface a closed map — **and it asks that hypersurface to be cut out by a
   polynomial monic in the last variable, which here is `F`, so a monic lift has to be chosen.**
   `StandardEtalePair.monic_f` gives monicity of `StandardEtalePair.f` in `A[X]` over
@@ -148,9 +152,13 @@ construction rather than by a compatibility lemma.
   closed; above its complement `V` no point of the hypersurface has `G = 0`, so there the source
   of the localised algebra *is* the hypersurface over the cylinder, which is what
   `ComplexAnalytic.isFinite_comp_projRestrict_of_range_eq` takes, with the same family `q`
-  restricted to `V`. Nothing in this repository states that, and it is what makes the base
-  restriction the relevant one after all — not because it handles the inverted `G`, but because it
-  is where there is nothing left to invert.
+  restricted to `V`. That is what makes the base restriction the relevant one after all — not
+  because it handles the inverted `G`, but because it is where there is nothing left to invert.
+  **One thing this paragraph got the wrong way round and the file that carries it out corrects**:
+  the finiteness over the cylinder needs no `V` and holds over every open subset of the base, so
+  `V` is not what makes the projection finite. `V` is what makes the *source* the hypersurface
+  rather than an open subset of it. **And nothing here says `V` is nonempty** — that file exhibits
+  a pair `(F, G)` for which it is empty, and one for which it is everything.
 
   **And over `V` the step back to the base algebra is not the one the theorem below takes.**
   `ComplexAnalytic.AnalyticSpace.isFinite_of_isFinite_comp` cancels an injective second factor, so

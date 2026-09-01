@@ -98,6 +98,7 @@ import Oka.Analytification.LocalisationComposite
 import Oka.Analytification.LocalisationFunctor
 import Oka.Analytification.LocalisationIndependence
 import Oka.Analytification.MonicHypersurface
+import Oka.Analytification.OpenBaseFiniteness
 import Oka.Analytification.Presentation
 import Oka.Analytification.PresentationFlatness
 import Oka.Analytification.PresentationStalk
