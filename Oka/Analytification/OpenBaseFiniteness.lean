@@ -14,14 +14,15 @@ open `V ⊆ ℂ^n`, cut out by a family of monic polynomials of fixed degree, is
 file is the first consumer of `ComplexAnalytic.isFinite_comp_projRestrict_of_range_eq` **whose
 source is an analytification**, at `ℂ[x₁, …, x_n, X] ⧸ (F)` for `F` monic in the last variable.
 
-The three consumers that came before it all build their source by other means, which is why an
-analytification is worth calling out and why nothing here could be quoted from them:
-`ComplexAnalytic.isFinite_comp_projRestrict_of_isCutOutBy` in that same file;
-`ComplexAnalytic.isFinite_comp_projRestrict_of_monic` in
-`Oka/AnalyticSpace/HolomorphicFamily.lean`, whose family comes from a monic polynomial with
-`OkaRing` coefficients; and the parabola over the punctured line in
-`OkaTest/OpenBaseProjection.lean`, whose morphism is a `ComplexAnalytic.AnalyticSpace.okaMap`
-written out by hand.
+The consumers that came before it split two ways and neither way reaches an analytification.
+`ComplexAnalytic.isFinite_comp_projRestrict_of_isCutOutBy` and
+`ComplexAnalytic.isFinite_comp_projRestrict_of_monic` are **restatements**: each takes the source
+`i` as a hypothesis and exhibits no space at all, so neither has a source to be an analytification
+of. The sources that *are* exhibited are both in the test tree and both hand-written
+`ComplexAnalytic.AnalyticSpace.okaMap`s — the parabola of `OkaTest/OpenBaseProjection.lean`, and
+the transcendental curve of `OkaTest/HolomorphicFamily.lean`, which reaches the theorem through
+the second restatement. **So this is also the first consumer in the library that supplies a source
+rather than passing one through**, and that is the same fact said the other way round.
 
 **An earlier draft of this paragraph said that nothing anywhere consumed the theorem and that this
 file was its first consumer, and that was false when it was written**: the theorem was already
@@ -232,9 +233,10 @@ that came before. Its four hypotheses:
   `ComplexAnalytic.eval_lastVarPolyEquiv_symm`.
 
 **The range step is built with `Set.ext` and `Iff.trans` rather than with `rw`.** That shape is
-`ComplexAnalytic.range_base_parabolaPunctured`'s in `OkaTest/OpenBaseProjection.lean` and is not
-this file's invention; what is stated nowhere else, and is the reason to keep the paragraph, is
-*why* `rw` is unavailable. `ComplexAnalytic.cylinder V` is declared at
+not this file's invention: it is `ComplexAnalytic.range_base_parabolaPunctured`'s in
+`OkaTest/OpenBaseProjection.lean` and `ComplexAnalytic.range_base_curvePunctured`'s in
+`OkaTest/HolomorphicFamily.lean`. What is stated nowhere else, and is the reason to keep the
+paragraph, is *why* `rw` is unavailable. `ComplexAnalytic.cylinder V` is declared at
 `TopologicalSpace.Opens (ULift (Fin (n + 1)) → ℂ)` while
 `ComplexAnalytic.AnalyticSpace.restrict` asks for the space's own `Opens`, so a goal mentioning
 `(complexAffineSpace (n + 1)).restrict (cylinder V)` is not type-correct at `instances`
