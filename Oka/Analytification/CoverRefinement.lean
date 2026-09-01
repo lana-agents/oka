@@ -217,10 +217,28 @@ overlaps sitting over three different members with no common target to cancel ag
   pair, and for two arbitrary independent choices, which is more than the sentence asked for. It
   came free because `ComplexAnalytic.refineDatumCrossProj` is a monomorphism, so the coherence
   triangle `ComplexAnalytic.refineDatumGlueNe_comp` *determines* its isomorphism rather than
-  merely constraining it. **What is left is the two geometric laws** and nothing else, and they
-  have no analogue for the reason the paragraph above gives — one law coming free is not evidence
-  about the other two, and that file says so itself. Those five files' `## What is not here`
-  state all of it.
+  merely constraining it. **Nor do the two geometric laws stand or fall together any longer.**
+  This sentence read *"what is left is the two geometric laws and nothing else, and they have no
+  analogue for the reason the paragraph above gives"* until
+  `ComplexAnalytic.refineDatumTransitionHom_localisationProj_of_ne`
+  (`Oka/Analytification/RefineDatumTransition.lean`) gave `hrange` one. What *"every refined
+  member lies over the fixed member"* becomes when there is no fixed member is that the refined
+  transition lies over the original datum's own `ComplexAnalytic.coverTransitionHom`: a cover
+  datum has no morphism between two of its members, so the lower edge of that square is the
+  transition rather than a projection, and it is the *point-chase* half of the paragraph above
+  that transfers, with the original datum's own `hrange` in place of the fixed member.
+  **`hrange` is not proved by it.** At a triple whose three members are pairwise different what
+  is left is a single containment, in the caller's own `D(q b c)`, and
+  `ComplexAnalytic.range_refineDatumTransitionHom_subset_iff` states it as an *equivalence* and
+  not as a sufficient condition, so no weaker hypothesis on the choice can discharge it; at the
+  mixed triples `ComplexAnalytic.refineDatumGlue` takes its equal branch, whose triangle is over
+  a *member*, and the square has no statement there at all. **`hcocycle` keeps the clause**, for
+  the reason the paragraph above gives — the cancellation is against the projection of the one
+  fixed member — and it cannot even be stated first: `ComplexAnalytic.coverTriple` takes `hrange`
+  as an argument, so the cocycle law of a refined datum mentions a proof of the refined `hrange`
+  three times in its own statement. One law coming free and a second one reduced is not evidence
+  about what is left of either, and both of those files say so of themselves. Those six files'
+  `## What is not here` state all of it.
 * **No hypothesis under which the morphism *is* an isomorphism, and no morphism back.** The
   answer to whether it is one is **no** and it is proved rather than argued:
   `ComplexAnalytic.not_isIso_refineToBase`, at an empty family, where the refinement refines
