@@ -4095,3 +4095,88 @@ info: 'ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp_compl
+
+/-! ### A refined cover datum at a family that is not `1`, and the two conditions again
+
+`Oka/Analytification/RefineDatumUnitFamily.lean`, all nine of it: the second adopted condition at
+an injective index map, the first at the original datum's own cutting polynomial and at *every*
+refining family, the choice at a family that is a unit on each overlap, the caller's `r` and `u`
+and the two laws they satisfy, and the glue data and the analytic space they assemble to.
+
+Three of the nine are a `def` and are guarded for the reason the
+`Oka/Analytification/RefineDatumRange.lean` section gives: the convention here is every
+declaration and not every theorem.
+
+**Every one of the nine has the same three axioms, including the two that discharge a condition.**
+`ComplexAnalytic.refineDatumRangeEq_of_injective` is a one-line term and carries `Classical.choice`
+only through `ComplexAnalytic.RefineDatumRangeEq`'s own statement, which mentions
+`ComplexAnalytic.refineDatumGlue`; that is worth saying because the section above it records the
+opposite case, a guard with an *empty* list, for the same kind of reason — what an axiom list
+reports here is the statement's ancestry and not the proof's difficulty.
+
+`OkaTest/RefineDatumUnitFamily.lean`'s instance of all this is in the test library and carries no
+guard, as `ComplexAnalytic.nodeCoverObj` and `ComplexAnalytic.lineCoverObj` carry none.
+-/
+
+/--
+info: 'ComplexAnalytic.refineDatumRangeEq_of_injective' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumRangeEq_of_injective
+
+/--
+info: 'ComplexAnalytic.refineDatumRangeCross_poly' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumRangeCross_poly
+
+/--
+info: 'ComplexAnalytic.exists_refineDatumCross_unitFam' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.exists_refineDatumCross_unitFam
+
+/--
+info: 'ComplexAnalytic.refineDatumUnitFamR' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumUnitFamR
+
+/--
+info: 'ComplexAnalytic.refineDatumUnitFamU' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumUnitFamU
+
+/--
+info: 'ComplexAnalytic.refineDatumUnitFamCrossEq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumUnitFamCrossEq
+
+/--
+info: 'ComplexAnalytic.refineDatumUnitFamCrossUnit' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumUnitFamCrossUnit
+
+/--
+info: 'ComplexAnalytic.refineDatumUnitFamGlueData' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumUnitFamGlueData
+
+/--
+info: 'ComplexAnalytic.refineDatumUnitFamAnalytification' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumUnitFamAnalytification

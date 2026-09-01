@@ -1,0 +1,165 @@
+/-
+Copyright (c) 2026 Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
+-/
+import OkaTest.ProjectiveLine
+
+/-!
+# A refinement of the two-chart cover of `ℙ¹` that actually refines something
+
+`Oka/Analytification/RefineDatumUnitFamily.lean` builds the analytic space of a refined cover
+datum at an injective index map and a refining family that is a unit on each overlap, taking the
+original datum's three laws and nothing else. **This file meets all of that at a cover datum whose
+three laws are proved**, so the resulting `ComplexAnalytic.AnalyticSpace` has no open hypothesis
+at all.
+
+The cover is `OkaTest/ProjectiveLine.lean`'s: two copies of `𝔸¹`, every overlap cut out by the
+coordinate `z`, transition `z ↦ 1/z`. The index map is `id` on `ComplexAnalytic.pair`, which is
+injective and — by `ComplexAnalytic.not_isConstant_id` — not constant. The refining family is `z`
+itself, and `ComplexAnalytic.lineCoverPoly` is the constant family `z`, so the hypothesis that the
+family be a unit on each overlap is `ComplexAnalytic.isUnit_mk_rename_localisationIncl` verbatim:
+the polynomial that was inverted is a unit upstairs.
+
+## Why this is not either degeneracy the board has already been caught by
+
+`ComplexAnalytic.refineDatumObj obj σ fam b` is the distinguished open `D(fam b)` of the member
+`σ b`, so what the refining family is decides whether a "refinement" refines anything:
+
+* `Oka/Analytification/RefineDatumWitness.lean`'s witness takes `fam ≡ 1`, where `D(1)` is the
+  whole member and the refined cover is the original one reindexed;
+* `OkaTest/CoverRefinement.lean` exists because this project accepted `fam ≡ 0` once, where
+  `D(0)` is empty and every overlap with it.
+
+Here `D(z)` is **neither**, and both halves are quotations of the non-degeneracy statements
+`OkaTest/ProjectiveLine.lean` proves for its own cover:
+`ComplexAnalytic.localisationOpen_lineRefineFam_ne_top` and `…_ne_bot`.
+
+## What this instance is *not* evidence about, and it is both range conditions
+
+**At two members both adopted range conditions are vacuous**, since each is quantified over a
+triple of pairwise different indices of `ComplexAnalytic.pair` and there is none
+(`ComplexAnalytic.pair_no_distinct_triple`) — the same reason
+`OkaTest/ProjectiveLine.lean`'s module docstring gives for `hrange` and `hcocycle` there. So what
+this instance exercises is the **choice** conditions and the cross-member `glue` at a family that
+is not `1`, and nothing else; the two range conditions are discharged at every index type by
+`ComplexAnalytic.refineDatumRangeCross_poly` and
+`ComplexAnalytic.refineDatumRangeEq_of_injective`, which is where the evidence for them is.
+
+A proper refinement at **three** members — `OkaTest/AffineCover.lean`'s `nodeCover` at `σ = id`
+and the family `nodeX`, whose `ComplexAnalytic.nodeCoverPoly` is constant in the same way — would
+exercise `RefineDatumRangeCross` as well, and is not built here.
+
+## Main definitions
+
+- `ComplexAnalytic.lineRefineFam`: **the refining family**, the coordinate `z` on each chart.
+- `ComplexAnalytic.lineRefinement`: **the analytic space of the refined cover**, with no
+  hypothesis left open.
+
+## Main results
+
+- `ComplexAnalytic.isUnit_lineRefineFam`: **the family is a unit on each overlap**, which is the
+  one hypothesis of the construction that is about the family.
+- `ComplexAnalytic.localisationOpen_lineRefineFam_ne_top`: **each refined member is a proper open
+  of its chart**, so this refines and does not reindex.
+- `ComplexAnalytic.localisationOpen_lineRefineFam_ne_bot`: **and is not empty**, so it is not
+  `OkaTest/CoverRefinement.lean`'s degenerate family either.
+- `ComplexAnalytic.not_isConstant_id_pair`: **the index map is not constant**, which is
+  `ComplexAnalytic.not_isConstant_id` at this instance and is what makes this a witness at a
+  non-constant `σ` rather than only at an injective one.
+
+## What is not here
+
+* **No claim that the refined space is `ℙ¹`, or that it is not.** It is the gluing of two copies
+  of `𝔸¹ ∖ {0}` along `D(z)` in each, and no morphism relates it to
+  `ComplexAnalytic.projectiveLineSpace` in either direction. The only statement on this board
+  about a refinement's comparison morphism is `ComplexAnalytic.not_isIso_refineToBase`
+  (`Oka/Analytification/CoverRefinement.lean`), and there is no such morphism here to apply it
+  to.
+* **Nothing about the refined overlaps being the geometric ones**, which is
+  `Oka/Analytification/CrossMemberDatumGlue.lean`'s absence and is about the construction rather
+  than about any input to it.
+* **No axiom guards.** Declarations of the test library carry none —
+  `ComplexAnalytic.nodeCoverObj` and `ComplexAnalytic.lineCoverObj` are the precedent — and
+  `OkaTest/Axioms.lean`'s placement rule is about `Oka/`.
+-/
+
+open CategoryTheory MvPolynomial AlgebraicGeometry
+
+universe u
+
+namespace ComplexAnalytic
+
+noncomputable section
+
+/-! ### The refining family, and it is the coordinate -/
+
+/-- **The refining family**: the coordinate `z` on each of the two charts.
+
+It is written against `id` rather than against nothing because the construction indexes a family
+by `b : B` at the member `σ b`, and here `B = J = pair` with `σ = id`. -/
+abbrev lineRefineFam : ∀ b : pair.{u},
+    MvPolynomial (ULift.{u} (Fin (lineCoverObj.{u} (id b)).n)) ℂ := fun _ ↦ lineZ.{u}
+
+/-- **The family is a unit on each overlap**, which is
+`ComplexAnalytic.refineDatumUnitFamAnalytification`'s one hypothesis about the family.
+
+`ComplexAnalytic.lineCoverPoly` is the constant family `z`, so the polynomial the class is taken
+in is the one being asserted invertible and this is
+`ComplexAnalytic.isUnit_mk_rename_localisationIncl` with nothing in between. **That is what makes
+this cover the cheap instance**: a family which is a unit on the overlap without being the
+overlap's own polynomial would need an argument here. -/
+theorem isUnit_lineRefineFam (a b : pair.{u}) (_h : id a ≠ id b) :
+    IsUnit (Ideal.Quotient.mk (presentationIdeal.{u} (localisationPresentation.{u}
+      (lineCoverObj.{u} (id a)).g (lineCoverPoly.{u} (id a) (id b))))
+      (MvPolynomial.rename (localisationIncl.{u} (lineCoverObj.{u} (id a)).n)
+        (lineRefineFam.{u} a))) :=
+  isUnit_mk_rename_localisationIncl.{u} (lineCoverObj.{u} a).g lineZ.{u}
+
+/-! ### The refinement -/
+
+/-- **The analytic space of the refined cover**, and it has no open hypothesis.
+
+`ComplexAnalytic.refineDatumUnitFamAnalytification` at `OkaTest/ProjectiveLine.lean`'s cover
+datum, `σ = id`, and the coordinate as the refining family: the three laws are
+`ComplexAnalytic.hsymm_lineCover`, `ComplexAnalytic.hrange_lineCover` and
+`ComplexAnalytic.hcocycle_lineCover`, the injectivity is `Function.injective_id`, and the family's
+hypothesis is the theorem above. -/
+def lineRefinement : AnalyticSpace.{u} :=
+  refineDatumUnitFamAnalytification.{u} lineCoverObj.{u} lineCoverPoly.{u} id lineRefineFam.{u}
+    lineSwapIso.{u} isUnit_lineRefineFam.{u} hsymm_lineCover.{u} hrange_lineCover.{u}
+    Function.injective_id hcocycle_lineCover.{u}
+
+/-! ### And it refines -/
+
+/-- **Each refined member is a proper open of its chart.**
+
+`ComplexAnalytic.refineDatumObj` at `b` is `D(fam b)` inside the member `σ b`, so this is the
+statement that the refinement is not `Oka/Analytification/RefineDatumWitness.lean`'s reindexing:
+there `fam ≡ 1` and `D(1)` is the whole member. It is
+`ComplexAnalytic.localisationOpen_lineRel_ne_top`, which `OkaTest/ProjectiveLine.lean` proves from
+the origin lying off `D(z)`. -/
+theorem localisationOpen_lineRefineFam_ne_top (b : pair.{u}) :
+    localisationOpen.{u} (lineCoverObj.{u} b).g (lineRefineFam.{u} b) ≠ ⊤ :=
+  localisationOpen_lineRel_ne_top.{u}
+
+/-- **And it is not empty**, so this is not the other degeneracy: `OkaTest/CoverRefinement.lean`
+exists because a family constantly `0` was accepted once, and there every overlap is empty.
+`ComplexAnalytic.localisationOpen_lineRel_ne_bot`, from the point `z = 1`. -/
+theorem localisationOpen_lineRefineFam_ne_bot (b : pair.{u}) :
+    localisationOpen.{u} (lineCoverObj.{u} b).g (lineRefineFam.{u} b) ≠ ⊥ :=
+  localisationOpen_lineRel_ne_bot.{u}
+
+/-- **The index map of this refinement is not constant.**
+
+`ComplexAnalytic.refineDatumUnitFamAnalytification` asks for an *injective* `σ` and the absence
+five files recorded is worded about a *non-constant* one, so the two have to be joined at the
+instance rather than left to a reader. `ComplexAnalytic.not_isConstant_id` at
+`ComplexAnalytic.pair`, which is `Nontrivial`. -/
+theorem not_isConstant_id_pair :
+    ¬ ∃ j : pair.{u}, ∀ b : pair.{u}, (id : pair.{u} → pair.{u}) b = j :=
+  not_isConstant_id.{u}
+
+end
+
+end ComplexAnalytic
