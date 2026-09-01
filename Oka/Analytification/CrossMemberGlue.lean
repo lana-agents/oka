@@ -164,10 +164,13 @@ harder to read, which is a reason to state and not a reason to hide.
   ones an associate does not follow from — `ComplexAnalytic.exists_mk_rename_eq`'s own docstring
   names that implication as a Nullstellensatz statement this repository does not prove. A worker
   who took the list at face value would spend a session on the two that are not the obstruction.
-  A choice being an existential, a datum built from one chooses; **that choice is what a `hsymm`
-  would then have to be stated against**, and nothing anywhere says the choice for the pair
-  `(a, b)` and the choice for `(b, a)` can be made compatibly. That is a statement about the datum
-  and it is unproved in both directions.
+  A choice being an existential, a datum built from one chooses. **This bullet then said that
+  choice was *"what a `hsymm` would then have to be stated against"*, and that nothing anywhere
+  says the choice for the pair `(a, b)` and the choice for `(b, a)` can be made compatibly** —
+  the second half is still true and the first is not.
+  `Oka/Analytification/RefineDatumSymm.lean` states the symmetry law against two arbitrary
+  independent choices and proves it, because the coherence triangle below determines the
+  isomorphism once the projection it is over is known to be a monomorphism.
 * **No `hrange` and no `hcocycle`.** They are the cross-member analogue of
   `ComplexAnalytic.refineHrange` and `ComplexAnalytic.refineHcocycle`, and the argument that
   discharges those does not transfer: it cancels against the projection of the *one* fixed member,
