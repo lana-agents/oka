@@ -50,13 +50,17 @@ this file is for. `ComplexAnalytic.refineDatumGlueData` and
 symmetry law being `ComplexAnalytic.refineDatumGlue_symm` and the range law being the theorem
 above — so of the three laws a cross-member refinement needs, one was **already proved** before
 this file, one is **proved here from two conditions this file adopts and shows equivalent to it**,
-and the third is **named here and proved nowhere.** Neither geometric law was available at a
-non-constant `σ` before this file; the symmetry law was, and bringing all three together is what
-`ComplexAnalytic.refineDatumGlueData` is.
+and the third is **named here and proved in the file that consumes this one.** Neither geometric
+law was available at a non-constant `σ` before this file; the symmetry law was, and bringing all
+three together is what `ComplexAnalytic.refineDatumGlueData` is.
 
-**Nothing here is evidence about the cocycle law**, and the reason is on record: the cancellation
-`Oka/Analytification/CoverRefinement.lean` uses at a constant `σ` is against the projection of
-the one fixed member, and at a general `σ` there is no one fixed member to project to.
+**Nothing here is evidence about the cocycle law**, and this paragraph gave a reason that was on
+record and wrong: *"the cancellation `Oka/Analytification/CoverRefinement.lean` uses at a constant
+`σ` is against the projection of the one fixed member, and at a general `σ` there is no one fixed
+member to project to"*. There is — the member the triple's first index lies over —, and
+`ComplexAnalytic.refineDatumHcocycle` (`Oka/Analytification/RefineDatumCocycle.lean`) proves the
+law from the original datum's own three. **Nothing here is still evidence about it**: that file
+consumes this one and reopens nothing in it.
 
 ## Main definitions
 
@@ -65,7 +69,8 @@ the one fixed member, and at a general `σ` there is no one fixed member to proj
 - `ComplexAnalytic.RefineDatumRangeEq`: **the whole of the range law where `σ b = σ c` and
   `σ a ≠ σ b`**, which is a containment in the caller's own refining family.
 - `ComplexAnalytic.RefineDatumCocycle`: **the cocycle law of the refined datum**, statable
-  because the range law is now one proof.
+  because the range law is now one proof — and proved, in
+  `Oka/Analytification/RefineDatumCocycle.lean`, which is what this name being writable was for.
 - `ComplexAnalytic.refineDatumGlueData`: **the glue data of the refined cover** at a general
   `σ`, with the cocycle law as its one hypothesis.
 - `ComplexAnalytic.refineDatumAnalytification`: **the analytic space it glues to.**
@@ -81,8 +86,12 @@ the one fixed member, and at a general `σ` there is no one fixed member to proj
 
 ## What is not here
 
-* **`ComplexAnalytic.RefineDatumCocycle` is named and not proved**, and nothing on this line is
-  evidence about it in either direction. It is the last of the three laws.
+* **`ComplexAnalytic.RefineDatumCocycle` is named and not proved *here*.** This bullet said it
+  was proved nowhere and that nothing on this line was evidence about it in either direction;
+  `ComplexAnalytic.refineDatumHcocycle` (`Oka/Analytification/RefineDatumCocycle.lean`) proves it,
+  from the original datum's own three laws, and the hypothesis-free forms of the two definitions
+  below are there. Nothing in *this* file is evidence about it, which is what the bullet is now
+  saying.
 * **Nothing that discharges either adopted condition.** Whether
   `ComplexAnalytic.exists_refineDatumCross`'s choice satisfies `RefineDatumRangeCross`, and
   whether a caller can arrange `RefineDatumRangeEq`, are untouched here in both directions; this
@@ -275,7 +284,11 @@ law is `ComplexAnalytic.refineDatumGlue_symm` and the range law is
 `ComplexAnalytic.refineDatumHrange`. **The cocycle law is the one hypothesis left**, and it is
 here as an explicit argument rather than as an absence for the reason this file exists: a law
 that a definition asks for by name is a smaller thing to leave open than three laws that no
-statement mentions. -/
+statement mentions. It is left open here and supplied in
+`Oka/Analytification/RefineDatumCocycle.lean`, whose
+`ComplexAnalytic.refineDatumGlueDataOfLaws` is this definition at
+`ComplexAnalytic.refineDatumHcocycle` — so **this definition stays because it is the general one**,
+not because the law is open. -/
 def refineDatumGlueData
     (hsym : ∀ i j : J, glue j i = (glue i j).symm)
     (hrange : ∀ i j k : J, i ≠ j → i ≠ k → j ≠ k →
@@ -294,7 +307,7 @@ def refineDatumGlueData
 /-- **The analytic space the refined cover glues to.**
 
 `ComplexAnalytic.coverAnalytification` at the same arguments. Nothing is proved here that the
-previous definition does not already carry; it is separate because a
+previous definition does not already carry; it is separate because an
 `AlgebraicGeometry.LocallyRingedSpace.GlueData` is gluing *data* and not a space — the space is
 its `.toGlueData.glued`, which is what the theorem below says — and this is the object the
 comparison of two covers is a statement about. -/

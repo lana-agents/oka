@@ -190,16 +190,18 @@ docstring predicts that every consumer of the functor spells its object the othe
   triangle is over a member", and a triangle over a member is what settles them**:
   `Oka/Analytification/RefineDatumRange.lean` reads all four remaining shapes off it — `hrange`
   outright where the three members are equal, that same containment at two more, and a
-  containment in the caller's own `D(fam c)` at the fourth. `hcocycle` keeps the clause, and
-  **this sentence also said it "cannot be stated before `hrange` is proved in any case"**, which
-  was right about `ComplexAnalytic.coverTriple` taking the range law as an argument and is no
-  longer a bar: `Oka/Analytification/RefineDatumGlueData.lean` joins the five shapes into one
-  proof and states the cocycle law off it, as `ComplexAnalytic.RefineDatumCocycle`. **The count is
-  still not moved**, and now for a sharper reason than "a law reduced rather than proved":
-  `ComplexAnalytic.refineDatumHrange_iff` says the two conditions that assembled law is proved
-  from are *equivalent* to it, so what a caller carries is the range law under another name and
-  not a discharge of it, and `hcocycle` is proved nowhere at all. It counts what a refined datum
-  still owes and it owes both. Those eight files' `## What is not here` state all of it.
+  containment in the caller's own `D(fam c)` at the fourth. **This sentence said `hcocycle` "keeps
+  the clause" and that it "cannot be stated before `hrange` is proved in any case"**, which was
+  right about `ComplexAnalytic.coverTriple` taking the range law as an argument and is no longer a
+  bar: `Oka/Analytification/RefineDatumGlueData.lean` joins the five shapes into one proof and
+  states the cocycle law off it, as `ComplexAnalytic.RefineDatumCocycle`, and
+  `ComplexAnalytic.refineDatumHcocycle` (`Oka/Analytification/RefineDatumCocycle.lean`) proves it
+  from the original datum's own three laws. **The count is still not moved, and now the whole of
+  the reason is the range law**: `ComplexAnalytic.refineDatumHrange_iff` says the two conditions
+  the assembled law is proved from are *equivalent* to it, so what a caller carries is the range
+  law under another name and not a discharge of it. It counts what a refined datum still owes,
+  which is those two conditions and no law at all. Those nine files' `## What is not here` state
+  all of it.
 
   **This bullet also said refinement is where `σ` and `ψ` "have to be built", with the implication
   that building them is the work; the second half is false and was measured so on 2026-08-30.**

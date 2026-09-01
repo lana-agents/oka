@@ -122,9 +122,16 @@ morphisms, and the two cancellations that reduce it to nothing are
 `AlgebraicGeometry.LocallyRingedSpace.hom_ext_restrict` and the fact that
 `ComplexAnalytic.localisationProj` is a monomorphism, being an open immersion.
 
-**Neither proof is an argument about refinements in general**, and the mono is where that shows:
-it is the projection of the *one* fixed member, and the cross-member case has three triple
-overlaps sitting over three different members with no common target to cancel against.
+**Neither proof is an argument about refinements in general**, and the mono is where that shows.
+This sentence read *"it is the projection of the one fixed member, and the cross-member case has
+three triple overlaps sitting over three different members with no common target to cancel
+against"*, and the second half of that is wrong about `hcocycle`: the mono is the projection of
+the member the triple's *first* index lies over, which exists whatever `σ` is, and
+`ComplexAnalytic.refineDatumCocycle_of_localisationProj`
+(`Oka/Analytification/RefineDatumCocycle.lean`) is exactly these two cancellations at a general
+`σ`. What is special to a constant `σ` is the step *after* them —
+`ComplexAnalytic.refineTriple_localisationProj` reads all three edges of the triple over one
+member, and at a general `σ` they lie over three.
 
 ## Main definitions
 
@@ -235,15 +242,19 @@ overlaps sitting over three different members with no common target to cancel ag
   whose triangle is over a *member*, and the square has no statement there at all", and a
   triangle over a member is the shape this file discharges both laws from at a constant `σ`**:
   `Oka/Analytification/RefineDatumRange.lean` is that statement at a general one, and reads all
-  four remaining shapes off it. **`hcocycle` keeps the clause**, for the reason the paragraph
-  above gives — the cancellation is against the projection of the one fixed member — and **this
-  sentence also said it "cannot even be stated first"**, which was right about
-  `ComplexAnalytic.coverTriple` taking `hrange` as an argument and is no longer a bar:
-  `Oka/Analytification/RefineDatumGlueData.lean` joins the five shapes into one proof and states
-  the law off it, as `ComplexAnalytic.RefineDatumCocycle`. It proves nothing about it, and the
-  two conditions its `hrange` is proved from are *equivalent* to that law
-  (`ComplexAnalytic.refineDatumHrange_iff`) rather than a discharge of it, so a refined datum
-  still owes both. Those eight files' `## What is not here` state all of it.
+  four remaining shapes off it. **This sentence said `hcocycle` "keeps the clause", for the reason
+  the paragraph above gives — the cancellation is against the projection of the one fixed member —
+  and it also said the law "cannot even be stated first". Both clauses are retired and the reason
+  the first gave was the wrong step.** `Oka/Analytification/RefineDatumGlueData.lean` joins the
+  five shapes into one proof and states the law off it, as
+  `ComplexAnalytic.RefineDatumCocycle`; `ComplexAnalytic.refineDatumHcocycle`
+  (`Oka/Analytification/RefineDatumCocycle.lean`) **proves it**, at every triple, from the original
+  datum's own three laws and nothing else — the cancellation is against the member the triple's
+  *first* index lies over, which is not a fixed one. **What a refined datum still owes is the two
+  conditions, and they are not a law**: they are *equivalent* to the assembled `hrange`
+  (`ComplexAnalytic.refineDatumHrange_iff`) rather than a discharge of it, so a caller carries the
+  range law under another name, and nothing anywhere meets them. Those nine files'
+  `## What is not here` state all of it.
 * **No hypothesis under which the morphism *is* an isomorphism, and no morphism back.** The
   answer to whether it is one is **no** and it is proved rather than argued:
   `ComplexAnalytic.not_isIso_refineToBase`, at an empty family, where the refinement refines
@@ -555,9 +566,13 @@ cancellations the goal is an equation between two morphisms into `A^an`, and
 `ComplexAnalytic.refineTriple_localisationProj` applied three times walks the composite down to
 the inclusion it started from.
 
-**This is the step that would not survive the cross-member case unchanged**: the mono it cancels
-against is the projection of *one* fixed member, and with `σ` non-constant the three triples sit
-over three different members with no common target to cancel against. -/
+**This docstring said the two cancellations are "the step that would not survive the cross-member
+case unchanged", and they are not**: the mono is the projection of the member the triple's *first*
+index lies over, and `ComplexAnalytic.refineDatumCocycle_of_localisationProj`
+(`Oka/Analytification/RefineDatumCocycle.lean`) is both of them at a general `σ`. **The step that
+does not survive is the third one**, `ComplexAnalytic.refineTriple_localisationProj`: it reads all
+three edges over one member, and with `σ` non-constant they lie over three different members with
+no common target. What replaces it is a statement per edge rather than one for the triple. -/
 theorem refineHcocycle (a b c : K) (hab : a ≠ b) (hac : a ≠ c) (hbc : b ≠ c) :
     coverTriple.{u} (refineObj.{u} g fam) (refinePoly.{u} g fam) (refineGlue.{u} g fam)
         (refineHrange.{u} g fam) a b c hab hac hbc ≫
