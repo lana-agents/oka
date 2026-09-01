@@ -46,10 +46,15 @@ indexed by the ordered pair and guarded by `σ a ≠ σ b`, which is exactly wha
   (`Oka/Analytification/CrossMemberChoice.lean`) produces a choice at every ordered pair, spending
   the second of those two and neither the first nor the geometric one, and the first bullet of
   `## What is not here` says what that does and does not buy;
-* **`hsymm` becomes an obligation on the caller's choice rather than a theorem about the field.**
-  A cover datum's symmetry law relates the pair `(a, b)` to the pair `(b, a)`, and off the
-  diagonal those are two independent choices; whether they can be made compatibly is unproved in
-  both directions, and stating a `hsymm` here would be stating something this file cannot prove.
+* **`hsymm` is a theorem about the field after all, and it is not proved here.** A cover datum's
+  symmetry law relates the pair `(a, b)` to the pair `(b, a)`, and off the diagonal those are two
+  independent choices. **This bullet read *"`hsymm` becomes an obligation on the caller's choice
+  rather than a theorem about the field … whether they can be made compatibly is unproved in both
+  directions"* until `Oka/Analytification/RefineDatumSymm.lean` landed**, and that file proves the
+  law for two arbitrary independent choices: the two never have to be compatible, because the
+  coherence triangle below determines the isomorphism and the inverse of the one at `(a, b)`
+  satisfies the triangle at `(b, a)`. What is still true is that this file does not state it —
+  the monomorphism that makes the triangle determining is not available here.
 
 ## The case split needs no transport, and that is worth saying because the last one did
 
@@ -299,13 +304,16 @@ lemma is about one member and one side of the overlap and is not a step towards 
   `Oka/Analytification/CrossMemberGlue.lean` and `Oka/Analytification/CrossMemberDatum.lean`
   record as *"nothing produces `q`"* it is the algebraic half that is retired and not the
   geometric one those files' own bullets are about.
-* **No `hsymm`, and the shape of what is missing has changed.** A cover datum's symmetry law is
-  quantified over every ordered pair. `ComplexAnalytic.refineDatumGlueEq_symm` is the half whose
-  members are equal; on the other half the pair `(a, b)` and the pair `(b, a)` carry two
-  *independent* choices of `r` and `u`, and whether they can be made compatibly is unproved in
-  both directions. So `hsymm` is now an obligation on a caller's choice and not a theorem about
-  the field, which is a statement about `ComplexAnalytic.RefineDatumCrossEq` and
-  `ComplexAnalytic.RefineDatumCrossUnit` and belongs wherever the choice is produced.
+* **No `hsymm` here, and it is a theorem elsewhere rather than an open question.**
+  `ComplexAnalytic.refineDatumGlueEq_symm` is the half of the law whose members are equal. **This
+  bullet said of the other half that the two orders *"carry two independent choices of `r` and
+  `u`, and whether they can be made compatibly is unproved in both directions"*, and that the law
+  was therefore an obligation on a caller's choice rather than a theorem** — until
+  `Oka/Analytification/RefineDatumSymm.lean` landed and proved it for two arbitrary independent
+  choices. The compatibility is never needed. What that file spends and this one does not have is
+  a monomorphism: with `ComplexAnalytic.refineDatumCrossProj` one,
+  `ComplexAnalytic.refineDatumGlueNe_comp` below determines its isomorphism instead of merely
+  constraining it, and everything follows from the triangle.
 * **No `hrange` and no `hcocycle`**, in either branch. They are geometric where everything here is
   algebraic, and `Oka/Analytification/CoverRefinement.lean`'s corresponding section says what
   makes them cheap for one fixed member — that every refined member lies over it — which is the
@@ -835,8 +843,14 @@ ordered pairs and `he`, `hu` are the two equations at the pairs whose members di
 here: `ComplexAnalytic.exists_refineDatumCross` (`Oka/Analytification/CrossMemberChoice.lean`)
 produces one at every ordered pair, algebraically. What is untouched here, and is the absence
 `Oka/Analytification/CrossMemberGlue.lean` records as *"nothing here produces `q`"*, is whether
-the choices at `(a, b)` and at `(b, a)` can be made compatibly — which is what a `hsymm` would be
-stated against — and whether the overlap a choice refines to is the geometric one. -/
+the overlap a choice refines to is the geometric one.
+
+**This paragraph also asked whether the choices at `(a, b)` and at `(b, a)` can be made
+compatibly, calling that what a `hsymm` would be stated against.** They cannot be shown to be and
+they do not have to be: `ComplexAnalytic.refineDatumGlue_symm` is the law at two arbitrary
+choices, and `ComplexAnalytic.refineDatumGlueNe_congr` says this field does not depend on the
+choice at all. Both are in `Oka/Analytification/RefineDatumSymm.lean` and neither is available at
+this point in the import order. -/
 def refineDatumGlue
     (he : ∀ a b : B, ∀ _ : σ a ≠ σ b,
       RefineDatumCrossEq.{u} obj σ fam poly q glue a b (r a b))

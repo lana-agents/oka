@@ -3008,3 +3008,72 @@ info: 'ComplexAnalytic.hypersurfaceCommonZeroImage_X' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.hypersurfaceCommonZeroImage_X
+
+/-! ### The refined datum's symmetry law, and the monomorphism under it
+
+`Oka/Analytification/RefineDatumSymm.lean`. The universal property of a localisation at a
+distinguished open, the monomorphism it makes of the structure map, the two monomorphisms of the
+cross-member projection that follow, and the three consequences for the refined cover datum's
+`glue` — that the coherence triangle determines it, that it does not depend on the caller's
+choice, and that it is symmetric.
+
+Three of the eight are `instance`s and are guarded for the same reason the rest are: the
+convention here is every declaration and not every theorem, and `scripts/guard_coverage.py`
+reports nothing about a name it does not find under `## Main results`.
+-/
+
+/--
+info: 'ComplexAnalytic.ringHom_ext_localisationRingHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.ringHom_ext_localisationRingHom
+
+/--
+info: 'ComplexAnalytic.mono_localisationHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.mono_localisationHom
+
+/--
+info: 'ComplexAnalytic.mono_refineCrossProj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.mono_refineCrossProj
+
+/--
+info: 'ComplexAnalytic.mono_refineDatumCrossProj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.mono_refineDatumCrossProj
+
+/--
+info: 'ComplexAnalytic.refineDatumGlueNe_unique' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumGlueNe_unique
+
+/--
+info: 'ComplexAnalytic.refineDatumGlueNe_congr' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumGlueNe_congr
+
+/--
+info: 'ComplexAnalytic.refineDatumGlueNe_symm' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumGlueNe_symm
+
+/--
+info: 'ComplexAnalytic.refineDatumGlue_symm' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumGlue_symm

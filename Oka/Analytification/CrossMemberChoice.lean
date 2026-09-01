@@ -108,25 +108,34 @@ and it is also the reason to be careful about what it does *not* claim — see b
   applying `ComplexAnalytic.refineDatumGlue` to it and reading the result back is a separate
   step, and the two coherence triangles that step would consume are stated in the facing file
   against a *given* choice rather than against this one.
-* **No `hsymm` for the refined datum, and what stands in the way is not what was predicted.** The
-  construction is symmetric in shape — the rule at `(b, a)` is the rule at `(a, b)` with the
-  members exchanged — but that is not a proof that the resulting `glue` satisfies a symmetry law,
-  and no such proof is attempted. The obligation the facing file describes is unchanged.
-  **The asymmetry that was expected is absent.** The route guessed in advance was to *define*
-  `q b a` out of `q a b`, which picks an order on the pair and builds an asymmetry in; this file
-  does not, each entry obeys the same rule on its own, and what relates the two orders is the
-  input datum's own `hsymm`. **What is in the way instead is the choosing.**
-  `ComplexAnalytic.exists_refineDatumCross` runs `choose` over *ordered* pairs, so the entry at
-  `(a, b)` and the entry at `(b, a)` are two unrelated runs of
-  `ComplexAnalytic.exists_mk_rename_eq` — the bullet below about there being no canonical choice
-  is the same observation from the other side. A refined `hsymm` would need one choice per
-  *unordered* pair, read at both orders; whether both obligations can be met by one such choice
-  is unmeasured here in both directions, and this file is not evidence either way.
+* **No `hsymm` for the refined datum, and nothing here was in its way.** The construction is
+  symmetric in shape — the rule at `(b, a)` is the rule at `(a, b)` with the members exchanged —
+  but that is not a proof that the resulting `glue` satisfies a symmetry law, and no such proof is
+  attempted here. **The asymmetry that was expected is absent.** The route guessed in advance was
+  to *define* `q b a` out of `q a b`, which picks an order on the pair and builds an asymmetry in;
+  this file does not, each entry obeys the same rule on its own, and what relates the two orders
+  is the input datum's own `hsymm`.
+
+  **This bullet then named the choosing as the remaining obstacle, and it was not one.** It read:
+  *"What is in the way instead is the choosing. `ComplexAnalytic.exists_refineDatumCross` runs
+  `choose` over ordered pairs, so the entry at `(a, b)` and the entry at `(b, a)` are two
+  unrelated runs of `ComplexAnalytic.exists_mk_rename_eq`. … A refined `hsymm` would need one
+  choice per unordered pair, read at both orders; whether both obligations can be met by one such
+  choice is unmeasured here in both directions."* **A refined `hsymm` needs no such thing.**
+  `Oka/Analytification/RefineDatumSymm.lean` proves the law for two arbitrary independent choices,
+  by making the coherence triangle of the cross-member glue determine it; the question of one
+  choice per unordered pair is not answered there and does not have to be. The two runs of the
+  existence being unrelated is still true and is still what the bullet below says.
 * **No `hrange` and no `hcocycle`**, in either branch. They are geometric where everything here is
   algebraic, and nothing below is evidence about them.
-* **No canonical choice.** Three `choose`s: a different run of `ComplexAnalytic.exists_mk_rename_eq`
-  gives a different extra factor, and nothing here says two choices are related. A consumer that
-  needs the *same* choice twice has to carry it rather than re-derive it.
+* **No canonical choice, and after `Oka/Analytification/RefineDatumSymm.lean` that matters less
+  than this bullet used to say.** Three `choose`s: a different run of
+  `ComplexAnalytic.exists_mk_rename_eq` gives a different extra factor, and nothing here says two
+  choices are related — **all of which stands**. What no longer follows is the sentence this
+  bullet ended with, *"a consumer that needs the same choice twice has to carry it rather than
+  re-derive it"*: `ComplexAnalytic.refineDatumGlueNe_congr` says the glue a choice produces is the
+  same for every choice, so a consumer that needs the same *glue* twice may re-derive it. One that
+  needs the same `q` — a polynomial and not an isomorphism — still has to carry it.
 * **No geometric reading of the extra factor.** `Oka/Analytification/CrossMemberDatum.lean`'s
   chain says the refined overlap is cut out by the original overlap's polynomial times an extra
   one; the factor produced here obeys an algebraic rule and **nothing below says it is that
