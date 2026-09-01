@@ -166,8 +166,14 @@ docstring predicts that every consumer of the functor spells its object the othe
   ordered pair, and the two geometric laws"*. **The half went first**:
   `ComplexAnalytic.exists_refineDatumCross` (`Oka/Analytification/CrossMemberChoice.lean`)
   produces `q`, `r`, `u` and both obligations at every ordered pair from the *input* datum's
-  symmetry law, using none of the three existentials that sentence had in mind and saying nothing
-  about what the overlap so refined cuts out. **Then the `hsymm` went**:
+  symmetry law, algebraically. **This sentence said it did so *"using none of the three
+  existentials that sentence had in mind"*, and it spends one of them**: three existentials did
+  not have to be instantiated, one did, and it is `ComplexAnalytic.exists_mk_rename_eq` — that is
+  `Oka/Analytification/CrossMemberDatumGlue.lean`'s own wording for the correction — and
+  `ComplexAnalytic.exists_refineDatumCrossFactor` is where it is spent. The two it does **not**
+  spend are the two that produce an equality of *opens*, which is exactly why it says nothing
+  about what the overlap so refined cuts out: an equality of opens does not give an associate.
+  **Then the `hsymm` went**:
   `ComplexAnalytic.refineDatumGlue_symm` (`Oka/Analytification/RefineDatumSymm.lean`) is that law
   at every ordered pair, for two arbitrary independent choices, so the compatibility this bullet
   expected to be needed is not needed at all. **What is left is the two geometric laws**, which
