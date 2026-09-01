@@ -34,15 +34,17 @@ consumer use the universal property of the localisation on anything built from
 `ComplexAnalytic.localisationRingHom`, *"for instance to see that two descriptions of the same
 distinguished open agree over the member they sit in"*.
 
-**Nobody had used it that way.** Counted with `git grep -c`, it is named in three files — its own,
+**Nobody had used it that way.** Both counts below are with `git grep -c` **on the commit this
+file was cut from**, so they describe the tree without this file and are not claims about the
+tree with it. It was named in three files — its own,
 `Oka/Analytification/LocalisationComposite.lean` and
 `Oka/Analytification/SpecDistinguishedOpen.lean` — and in none of them to conclude that two maps
-out of a localisation agree: the first two use it as a rewrite and under
-`congrArg Submonoid.powers`, and the third through `CommRingCat.hom_ext (RingHom.ext …)`, which
+out of a localisation agree: the first two used it as a rewrite and under
+`congrArg Submonoid.powers`, the third through `CommRingCat.hom_ext (RingHom.ext …)`, which
 compares two ring maps pointwise and is the opposite of an appeal to the universal property. The
-independent count says the same: every one of the seven call sites of
-`IsLocalization.ringHom_ext` in this repository is at an `Ideal.primeCompl`, so the universal
-property was used at stalks and never at a distinguished open.
+independent count said the same: all seven call sites of `IsLocalization.ringHom_ext` were at an
+`Ideal.primeCompl`, so the universal property was used at stalks and never at a distinguished
+open. The first result below is the eighth call site and the first that is not.
 
 `ComplexAnalytic.ringHom_ext_localisationRingHom` uses it at `Submonoid.powers`, and
 `ComplexAnalytic.mono_localisationHom` is the three-line consequence: **the structure map
