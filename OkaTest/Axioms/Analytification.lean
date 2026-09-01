@@ -3304,3 +3304,123 @@ info: 'ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_comp' depends 
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_comp
+
+/-! ### The refined `hrange` at the triples whose three members are not all different
+
+`Oka/Analytification/RefineDatumRange.lean`. The identification of two members the index map sends
+two indices to and the two transport lemmas that cross it, the refined overlap of two members
+lying over one, the equal branch's transition over its member on a double overlap and on a triple
+one, `hrange` at an all-equal triple, the free half at the two mixed triples that have one, and
+what is left at each of the three shapes with a residue.
+
+One of the fifteen is a `def` and is guarded for the same reason the rest are: the convention
+here is every declaration and not every theorem.
+
+Appended as its own section for the reason the two sections above give: a section moved is a
+conflict for somebody else.
+-/
+
+/--
+info: 'ComplexAnalytic.coverSpaceHomOfEq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverSpaceHomOfEq
+
+/--
+info: 'ComplexAnalytic.coverSpaceHomOfEq_refl' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverSpaceHomOfEq_refl
+
+/--
+info: 'ComplexAnalytic.mem_localisationOpen_coverSpaceHomOfEq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.mem_localisationOpen_coverSpaceHomOfEq
+
+/--
+info: 'ComplexAnalytic.mem_coverOpen_coverSpaceHomOfEq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.mem_coverOpen_coverSpaceHomOfEq
+
+/--
+info: 'ComplexAnalytic.coverOpen_refineDatumPoly_of_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverOpen_refineDatumPoly_of_eq
+
+/--
+info: 'ComplexAnalytic.refineDatumTransitionHom_localisationProj_of_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumTransitionHom_localisationProj_of_eq
+
+/--
+info: 'ComplexAnalytic.refineDatumTripleIncl_localisationProj_of_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumTripleIncl_localisationProj_of_eq
+
+/--
+info: 'ComplexAnalytic.refineDatumTripleIncl_localisationProj_apply_of_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumTripleIncl_localisationProj_apply_of_eq
+
+/--
+info: 'ComplexAnalytic.range_refineDatumTransitionHom_subset_of_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.range_refineDatumTransitionHom_subset_of_eq
+
+/--
+info: 'ComplexAnalytic.range_refineDatumTransitionHom_localisationProj_subset_of_eq_ac' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.range_refineDatumTransitionHom_localisationProj_subset_of_eq_ac
+
+/--
+info: 'ComplexAnalytic.range_refineDatumTransitionHom_localisationProj_subset_of_eq_ab' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.range_refineDatumTransitionHom_localisationProj_subset_of_eq_ab
+
+/--
+info: 'ComplexAnalytic.range_refineDatumTransitionHom_subset_iff_of_ne_bc' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.range_refineDatumTransitionHom_subset_iff_of_ne_bc
+
+/--
+info: 'ComplexAnalytic.range_refineDatumTransitionHom_subset_iff_of_eq_ac' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.range_refineDatumTransitionHom_subset_iff_of_eq_ac
+
+/--
+info: 'ComplexAnalytic.range_refineDatumTransitionHom_subset_iff_of_eq_ab' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.range_refineDatumTransitionHom_subset_iff_of_eq_ab
+
+/--
+info: 'ComplexAnalytic.range_refineDatumTransitionHom_subset_iff_of_eq_bc' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.range_refineDatumTransitionHom_subset_iff_of_eq_bc
