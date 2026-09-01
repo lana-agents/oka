@@ -67,6 +67,7 @@ import OkaTest.LocallyRingedSpaceCoproduct
 import OkaTest.MonicHypersurface
 import OkaTest.MonicProjection
 import OkaTest.Nonvanishing
+import OkaTest.OpenBaseFiniteness
 import OkaTest.OpenBaseProjection
 import OkaTest.OpenSubspace
 import OkaTest.ProjectiveLine
