@@ -3187,3 +3187,27 @@ info: 'ComplexAnalytic.range_refineDatumTransitionHom_subset_iff' depends on axi
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.range_refineDatumTransitionHom_subset_iff
+
+/-! ### The side condition of the two-root renaming
+
+`ComplexAnalytic.rename_mem_presentationIdeal`'s first consumer, and the composite law of
+`Oka/Analytification/HypersurfaceFinite.lean` with its hypothesis discharged at it. Both are
+theorems.
+
+Appended as its own section for the reason the section above gives: a section moved is a conflict
+for somebody else.
+-/
+
+/--
+info: 'ComplexAnalytic.rename_localisationIncl_comp_mem' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.rename_localisationIncl_comp_mem
+
+/--
+info: 'ComplexAnalytic.hypersurfacePresHom_comp_hypersurfacePresHom'' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.hypersurfacePresHom_comp_hypersurfacePresHom'

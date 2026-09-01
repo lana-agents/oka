@@ -112,9 +112,14 @@ of variables is not of that form and nothing above is evidence about it.
   `ℂ^(n+1)` followed by the projection.
 - `ComplexAnalytic.isFinite_analytificationMap_hypersurfacePresHom`: **the analytification of
   `A ⟶ A[X] ⧸ (F)` is finite**, for `F` monic in the last variable.
+- `ComplexAnalytic.rename_localisationIncl_comp_mem`: **the two inclusions of old variables,
+  composed, carry every relation of the base into the ideal of the two-step hypersurface**, for
+  every `g`, `F` and `F'` — which is the side condition of the renaming below.
 - `ComplexAnalytic.hypersurfacePresHom_comp_hypersurfacePresHom`: **two adjoined roots are one
   renaming** — the composite of the two structure maps is the map of presentations given by the
   inclusion of the old variables into the new, composed.
+- `ComplexAnalytic.hypersurfacePresHom_comp_hypersurfacePresHom'`: **the same law with its
+  hypothesis discharged**, at the witness above.
 - `ComplexAnalytic.isFinite_analytificationMap_hypersurfacePresHom_comp_hypersurfacePresHom`:
   **the analytification of `A ⟶ A[X₁] ⧸ (F₁) ⟶ (A[X₁] ⧸ (F₁))[X₂] ⧸ (F₂)` is finite**, as one
   morphism, for both polynomials monic in their last variable.
@@ -232,6 +237,40 @@ theorem isFinite_analytificationMap_hypersurfacePresHom
 
 variable (F' : MvPolynomial (ULift.{u} (Fin (n + 1 + 1))) ℂ)
 
+/-- **The renaming that adjoins two roots carries the base's relations into the two-step ideal.**
+
+The side condition of `ComplexAnalytic.PresHom.ofRename` at the composite inclusion, which the
+theorem below takes as an argument. It holds for **every** `g`, `F` and `F'`: nothing here reads
+any of the three, exactly as the equality below reads none of them.
+
+`ComplexAnalytic.rename_mem_presentationIdeal` is the whole proof and **this is its first
+consumer**, which is the case its own docstring names — *"the same statement about every element,
+which is what a composite of two such renamings needs"*. The element it is applied at is
+`MvPolynomial.rename (localisationIncl n) (g j)`, a relation of the middle presentation rather
+than a generator, and `MvPolynomial.rename_rename` is what turns the two renamings into the
+composite the statement is about.
+
+**The named `(g' := …)` is load-bearing.** That lemma's `g` and `g'` are implicit, and after the
+`rw` the goal fixes the target presentation and says nothing about the middle one, so without the
+ascription `g'` is still a metavariable when the two subgoals are created and elaboration reports a
+mismatch against an unfolded `ComplexAnalytic.presentationIdeal` with an unsolved ideal in it.
+
+The two subgoals are the same membership twice, once at each step, and it is the one
+`ComplexAnalytic.hypersurfacePresHom` discharges inside its own `ofRename` argument — the old
+relations are literally among the new ones. Neither `hypersurfacePresHom` itself appears. -/
+theorem rename_localisationIncl_comp_mem (j : Fin k) :
+    MvPolynomial.rename (localisationIncl.{u} (n + 1) ∘ localisationIncl.{u} n) (g j) ∈
+      presentationIdeal.{u}
+        (hypersurfacePresentation.{u} (hypersurfacePresentation.{u} g F) F') := by
+  rw [← MvPolynomial.rename_rename]
+  refine rename_mem_presentationIdeal.{u}
+    (g' := hypersurfacePresentation.{u} g F) (localisationIncl.{u} (n + 1)) ?_ ?_
+  · intro i
+    rw [presentationIdeal_hypersurfacePresentation.{u} (hypersurfacePresentation.{u} g F) F']
+    exact Ideal.mem_sup_left (Ideal.subset_span ⟨i, rfl⟩)
+  · rw [presentationIdeal_hypersurfacePresentation.{u} g F]
+    exact Ideal.mem_sup_left (Ideal.subset_span ⟨j, rfl⟩)
+
 /-- **Adjoining two roots one after the other is one renaming of variables.**
 
 The composite of the two structure maps `A ⟶ A[X₁] ⧸ (F)` and
@@ -246,8 +285,11 @@ other, so no re-indexing happens anywhere.
 
 `h` is an argument for the reason it is one there: it occurs only under `ofRename`, whose value
 does not depend on it, and `ComplexAnalytic.rename_mem_presentationIdeal` supplies it from the two
-memberships `hypersurfacePresHom` already carries. **Nothing here reads `F` or `F'`** — the
-equality holds for every pair, and monicity enters only in the finiteness below. -/
+memberships `hypersurfacePresHom` already carries. **That last clause was a sentence and is now
+`ComplexAnalytic.rename_localisationIncl_comp_mem` above**, which discharges it for every `g`, `F`
+and `F'`; `ComplexAnalytic.hypersurfacePresHom_comp_hypersurfacePresHom'` below is this theorem at
+that witness. **Nothing here reads `F` or `F'`** — the equality holds for every pair, and monicity
+enters only in the finiteness below. -/
 theorem hypersurfacePresHom_comp_hypersurfacePresHom
     (h : ∀ j, MvPolynomial.rename (localisationIncl.{u} (n + 1) ∘ localisationIncl.{u} n) (g j) ∈
       presentationIdeal.{u}
@@ -256,6 +298,25 @@ theorem hypersurfacePresHom_comp_hypersurfacePresHom
         (hypersurfacePresHom.{u} g F) =
       PresHom.ofRename.{u} (localisationIncl.{u} (n + 1) ∘ localisationIncl.{u} n) h :=
   PresHom.ofRename_comp.{u} _ _ _ _ _
+
+/-- **The composite law with its side condition discharged.**
+
+The theorem above at `ComplexAnalytic.rename_localisationIncl_comp_mem`, so that the tree carries
+the statement *"two adjoined roots are one renaming"* unconditionally and not only relative to a
+hypothesis. Until this landed nothing applied that theorem, and its docstring's claim that the
+hypothesis is supplied was a sentence rather than a proof.
+
+**The general form stays, and keeps its argument.** That `h` is an argument rather than a proof
+term is a decision this file and `Oka/Analytification/ChangeOfVariables.lean` both argue for in the
+same words — the statement then reads as a law about `ofRename` and not about a particular way of
+proving its side condition — and which proof is supplied is immaterial, since `h` occurs only under
+`ofRename`, whose value does not depend on it. This one sits beside it and does not replace it. -/
+theorem hypersurfacePresHom_comp_hypersurfacePresHom' :
+    (hypersurfacePresHom.{u} (hypersurfacePresentation.{u} g F) F').comp
+        (hypersurfacePresHom.{u} g F) =
+      PresHom.ofRename.{u} (localisationIncl.{u} (n + 1) ∘ localisationIncl.{u} n)
+        (rename_localisationIncl_comp_mem.{u} g F F') :=
+  hypersurfacePresHom_comp_hypersurfacePresHom.{u} g F F' _
 
 /-- **The analytification of `A ⟶ (A[X₁] ⧸ (F₁))[X₂] ⧸ (F₂)` is finite**, for both polynomials
 monic in their last variable, as one morphism rather than as a composite.
