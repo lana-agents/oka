@@ -99,9 +99,24 @@ a sentence. What the spike buys is the answer to the question the old bullet lef
 priced, it is low, and the general statement is a construction problem — pick module generators,
 build the tower, exhibit the kernel — rather than a missing piece of analytic geometry.
 
+**Of those three, `build the tower` is now discharged and the other two are not.**
+`ComplexAnalytic.towerPresHom` and `ComplexAnalytic.isFinite_analytificationMap_towerPresHom` are
+below, so the iterate is a theorem rather than an estimate. **Picking module generators and
+exhibiting the kernel is untouched**, and so is the closed-embedding lemma above — the tower does
+not consume it, the kernel step is what would, and the paragraph above still describes an absence.
+So the count of the three problems this file names goes to one, and the one left is the quotient.
+
 **And the shape of the surjection matters.** What compiles is the same-variables case, which is the
 one the module-finite argument produces; a surjection between presentations in *different* numbers
 of variables is not of that form and nothing above is evidence about it.
+
+## Main definitions
+
+- `ComplexAnalytic.towerPresentation`: **the `m`-step tower** —
+  `ComplexAnalytic.hypersurfacePresentation` applied `m` times, as a presentation in `n + m`
+  variables with `k + m` relations.
+- `ComplexAnalytic.towerPresHom`: **its structure map**, `A ⟶ A[X₁] ⧸ (F₁) ⟶ ⋯ ⟶ ⋯[Xₘ] ⧸ (Fₘ)`,
+  as one morphism of presentations.
 
 ## Main results
 
@@ -123,17 +138,32 @@ of variables is not of that form and nothing above is evidence about it.
 - `ComplexAnalytic.isFinite_analytificationMap_hypersurfacePresHom_comp_hypersurfacePresHom`:
   **the analytification of `A ⟶ A[X₁] ⧸ (F₁) ⟶ (A[X₁] ⧸ (F₁))[X₂] ⧸ (F₂)` is finite**, as one
   morphism, for both polynomials monic in their last variable.
+- `ComplexAnalytic.isFinite_analytificationMap_towerPresHom`: **the analytification of an
+  `m`-step tower of monic hypersurfaces is finite**, for every `m` — the theorem above at `m = 2`.
+- `ComplexAnalytic.towerPresentation_one` and `ComplexAnalytic.towerPresHom_one`: **one step of
+  the tower is one hypersurface**, on the nose.
+- `ComplexAnalytic.towerPresHom_two`: **two steps of the tower are the two-step composite**, on
+  the nose — so the theorem above is subsumed definitionally and not merely in effect.
 
 ## What is not here
 
 * **No general finite morphism, and the section above says which of its three parts is missing.**
-  What is here is two adjoined roots; the `m`-step iterate and the quotient are not, and the
-  quotient is the one nothing in the repository states.
-* **No `m`-step iterate.** `ComplexAnalytic.hypersurfacePresentation` applied `m` times is a
-  presentation in `n + m` variables whose `i`-th polynomial lives over `n + i` of them, so the
-  tower is a dependent recursion and not a family; nothing here builds it. The two-step case below
-  needs no such recursion because the second step is the first at a different base, and that is
-  exactly what stops being available once the base is `Nat.rec`.
+  **This bullet used to name two absences and now names one**: it read *"what is here is two
+  adjoined roots; the `m`-step iterate and the quotient are not"*, and the `m`-step iterate is
+  `ComplexAnalytic.isFinite_analytificationMap_towerPresHom` below. **The quotient is not**, and it
+  is still the one nothing in the repository states.
+* **The `m`-step iterate is here, and this bullet used to say it was not.** It read *"the tower is
+  a dependent recursion and not a family; nothing here builds it"*, and went on that the two-step
+  case needs no such recursion *"because the second step is the first at a different base, and
+  that is exactly what stops being available once the base is `Nat.rec`."* **The diagnosis was
+  right and the estimate was wrong.** It is a dependent recursion — the type of the `i`-th
+  polynomial mentions `i` — and `ComplexAnalytic.towerPresentation` is four lines with no
+  `Fin.cast` and no transport in it. What the bullet did not consider is the **indexing**: taking
+  a `Polynomial` over `n + i` variables rather than an `MvPolynomial` over `n + i + 1` of them —
+  the shape `ComplexAnalytic.isFinite_analytificationMap_hypersurfacePresHom` already asks for —
+  makes every index in the recursion definitional, and the base at `Nat.rec` is then available
+  after all. **What survives is the observation itself**: each step is still the one-step theorem
+  at a different base, which is exactly why the induction proves nothing new.
 * **Nothing about `ComplexAnalytic.etalePresentation`.** A standard étale algebra is this
   hypersurface with `G` inverted, and inverting `G` destroys finiteness: the punctured parabola
   over the line is the witness, and `Oka/Analytification/MonicHypersurface.lean`'s
@@ -252,8 +282,13 @@ composite the statement is about.
 
 **The named `(g' := …)` is load-bearing.** That lemma's `g` and `g'` are implicit, and after the
 `rw` the goal fixes the target presentation and says nothing about the middle one, so without the
-ascription `g'` is still a metavariable when the two subgoals are created and elaboration reports a
-mismatch against an unfolded `ComplexAnalytic.presentationIdeal` with an unsolved ideal in it.
+ascription `g'` is still a metavariable when the two subgoals are created. **This paragraph
+described the resulting error wrongly until it was re-run**: it said elaboration reports *"a
+mismatch against an unfolded `ComplexAnalytic.presentationIdeal` with an unsolved ideal in it"*,
+and it does not. Deleting the ascription from the proof below and nothing else gives
+`don't know how to synthesize implicit argument 'g''`, and a second of the same for `k'`, with no
+occurrence of `Set.range` or of an intersection anywhere in the error. The necessity and the
+diagnosis are unaffected; only the output was misreported.
 
 The two subgoals are the same membership twice, once at each step, and it is the one
 `ComplexAnalytic.hypersurfacePresHom` discharges inside its own `ofRename` argument — the old
@@ -344,5 +379,129 @@ theorem isFinite_analytificationMap_hypersurfacePresHom_comp_hypersurfacePresHom
     (hypersurfacePresentation.{u} g ((lastVarPolyEquiv.{u} n).symm G₁)) G₂ hG₂
   rw [analytificationMap_comp]
   infer_instance
+
+/-! ### The `m`-step tower -/
+
+/-- **The `m`-step tower of hypersurfaces over a presented base.**
+
+`ComplexAnalytic.hypersurfacePresentation` applied `m` times: a presentation in `n + m` variables
+with `k + m` relations, whose `i`-th adjoined polynomial lives over the first `n + i` variables.
+That dependence is why this is a recursion on `m` and not a family indexed by `Fin m` — the type
+of `G i` mentions `i`.
+
+**The indexing is what makes it free.** `G` takes a `Polynomial` over `n + i` variables rather
+than an `MvPolynomial` over `n + i + 1` of them, which is the shape
+`ComplexAnalytic.isFinite_analytificationMap_hypersurfacePresHom` already asks for; with it, every
+index in the recursion is definitional and **no `Fin.cast` and no transport appears anywhere**.
+At the successor step `n + (m + 1)` and `k + (m + 1)` reduce to where
+`ComplexAnalytic.hypersurfacePresentation` puts them, `Fin.castSucc` makes `n + i.1` agree on
+both sides, and `(Fin.last m).1` reduces to `m`. At `m = 0` the value is literally `g`, because
+`n + 0` and `k + 0` reduce. -/
+noncomputable def towerPresentation (g : Fin k → MvPolynomial (ULift.{u} (Fin n)) ℂ) :
+    ∀ (m : ℕ), (∀ i : Fin m, Polynomial (MvPolynomial (ULift.{u} (Fin (n + i.1))) ℂ)) →
+      Fin (k + m) → MvPolynomial (ULift.{u} (Fin (n + m))) ℂ
+  | 0, _ => g
+  | (m + 1), G =>
+      hypersurfacePresentation.{u} (towerPresentation g m fun i ↦ G i.castSucc)
+        ((lastVarPolyEquiv.{u} (n + m)).symm (G (Fin.last m)))
+
+/-- **The structure map of the tower**, `A ⟶ A[X₁] ⧸ (F₁) ⟶ ⋯ ⟶ ⋯[Xₘ] ⧸ (Fₘ)`, as one morphism
+of presentations.
+
+Each step is `ComplexAnalytic.hypersurfacePresHom` at the presentation the step below produced,
+composed with what came before. The base case is `ComplexAnalytic.PresHom.id`, and that costs
+nothing rather than needing to be worked around: `ComplexAnalytic.PresHom.comp ψ
+(ComplexAnalytic.PresHom.id g)` **reduces to `ψ`**, which is why the two grounding lemmas below
+are `rfl`. -/
+noncomputable def towerPresHom (g : Fin k → MvPolynomial (ULift.{u} (Fin n)) ℂ) :
+    ∀ (m : ℕ) (G : ∀ i : Fin m, Polynomial (MvPolynomial (ULift.{u} (Fin (n + i.1))) ℂ)),
+      PresHom.{u} (towerPresentation.{u} g m G) g
+  | 0, _ => PresHom.id.{u} g
+  | (m + 1), G =>
+      PresHom.comp.{u}
+        (hypersurfacePresHom.{u} (towerPresentation.{u} g m fun i ↦ G i.castSucc)
+          ((lastVarPolyEquiv.{u} (n + m)).symm (G (Fin.last m))))
+        (towerPresHom g m fun i ↦ G i.castSucc)
+
+/-- **The analytification of an `m`-step tower of monic hypersurfaces is finite.**
+
+The induction is the two-step proof below run `m` times, and it proves nothing the one-step
+theorem did not: `ComplexAnalytic.analytificationMap_comp` splits the step and
+`ComplexAnalytic.AnalyticSpace.isFinite_comp` closes it. **Monicity is asked of every `G i` and
+of nothing else**; no relation between the steps is needed, because each step is the one-step
+theorem at the base the step below produced.
+
+Three phrasings here are load-bearing and a reader should not tidy them away.
+
+**Both branches open with a `change` rather than a `rw` at `ComplexAnalytic.towerPresHom`.**
+Rewriting at a definition plants an auto-generated equation lemma in this module under that
+definition's own name, where it is picked up by `scripts/DumpOkaDecls.lean` and by nothing else;
+the `change`s are what keep this file's declaration count equal to what it declares.
+(`change` and not `show`: `show` is for goals it does not alter, and `Mathlib`'s style linter
+rejects one that does — which both of these do.)
+
+**The `change` in the base case is there for a second and different reason.** After the `| 0` split
+the goal reads `analytificationMap (PresHom.id g)` but is elaborated with the indices at `n + 0`
+and `k + 0`, while `ComplexAnalytic.analytificationMap_id` is stated at `n` and `k`. The two are
+definitionally equal and `rw` still fails, with *"Did not find an occurrence of the pattern"* and
+the note that the target is not type-correct at `instances` transparency. The `change`
+re-elaborates at the reduced indices.
+
+**The last step is `exact @ComplexAnalytic.AnalyticSpace.isFinite_comp _ _ _ _ _ h2 h1` and not
+`infer_instance`**, which is the one difference from the two-step theorem below. With `h2`
+written out at its exactly-ascribed type — the ascription typechecks and the hypothesis is in
+context — instance synthesis still reports `failed to synthesize` for precisely that type.
+Supplying both positionally goes through. **Why it fails here and not below is not established**,
+and this docstring does not guess. -/
+theorem isFinite_analytificationMap_towerPresHom (g : Fin k → MvPolynomial (ULift.{u} (Fin n)) ℂ) :
+    ∀ (m : ℕ) (G : ∀ i : Fin m, Polynomial (MvPolynomial (ULift.{u} (Fin (n + i.1))) ℂ))
+      (_ : ∀ i, (G i).Monic),
+      AnalyticSpace.IsFinite (analytificationMap.{u} (towerPresHom.{u} g m G))
+  | 0, _, _ => by
+      change AnalyticSpace.IsFinite (analytificationMap.{u} (PresHom.id.{u} g))
+      rw [analytificationMap_id.{u}]
+      infer_instance
+  | (m + 1), G, hG => by
+      change AnalyticSpace.IsFinite (analytificationMap.{u} (PresHom.comp.{u}
+        (hypersurfacePresHom.{u} (towerPresentation.{u} g m fun i ↦ G i.castSucc)
+          ((lastVarPolyEquiv.{u} (n + m)).symm (G (Fin.last m))))
+        (towerPresHom.{u} g m fun i ↦ G i.castSucc)))
+      rw [analytificationMap_comp.{u}]
+      haveI h1 := isFinite_analytificationMap_towerPresHom g m (fun i ↦ G i.castSucc)
+        (fun i ↦ hG i.castSucc)
+      haveI h2 : AnalyticSpace.IsFinite (analytificationMap.{u}
+          (hypersurfacePresHom.{u} (towerPresentation.{u} g m fun i ↦ G i.castSucc)
+            ((lastVarPolyEquiv.{u} (n + m)).symm (G (Fin.last m))))) :=
+        isFinite_analytificationMap_hypersurfacePresHom.{u}
+          (towerPresentation.{u} g m fun i ↦ G i.castSucc) (G (Fin.last m)) (hG (Fin.last m))
+      exact @AnalyticSpace.isFinite_comp _ _ _ _ _ h2 h1
+
+/-- **One step of the tower is one hypersurface**, on the nose. -/
+theorem towerPresentation_one (g : Fin k → MvPolynomial (ULift.{u} (Fin n)) ℂ)
+    (G : ∀ i : Fin 1, Polynomial (MvPolynomial (ULift.{u} (Fin (n + i.1))) ℂ)) :
+    towerPresentation.{u} g 1 G =
+      hypersurfacePresentation.{u} g ((lastVarPolyEquiv.{u} n).symm (G 0)) := rfl
+
+/-- **The one-step tower's structure map is `ComplexAnalytic.hypersurfacePresHom`**, on the nose:
+the trailing `ComplexAnalytic.PresHom.id` of the base case reduces away. -/
+theorem towerPresHom_one (g : Fin k → MvPolynomial (ULift.{u} (Fin n)) ℂ)
+    (G : ∀ i : Fin 1, Polynomial (MvPolynomial (ULift.{u} (Fin (n + i.1))) ℂ)) :
+    towerPresHom.{u} g 1 G = hypersurfacePresHom.{u} g ((lastVarPolyEquiv.{u} n).symm (G 0)) := rfl
+
+/-- **The two-step tower's structure map is the composite the theorem below is stated about**, on
+the nose.
+
+This is the evidence that `ComplexAnalytic.isFinite_analytificationMap_towerPresHom` **subsumes**
+`ComplexAnalytic.isFinite_analytificationMap_hypersurfacePresHom_comp_hypersurfacePresHom` rather
+than sitting beside it: the two theorems are about the same morphism at `m = 2`, and `rfl` is the
+proof. Stated as a theorem rather than remarked on in prose, because a claim of definitional
+equality that nothing checks is exactly the kind of sentence this file's history is made of. -/
+theorem towerPresHom_two (g : Fin k → MvPolynomial (ULift.{u} (Fin n)) ℂ)
+    (G : ∀ i : Fin 2, Polynomial (MvPolynomial (ULift.{u} (Fin (n + i.1))) ℂ)) :
+    towerPresHom.{u} g 2 G =
+      (hypersurfacePresHom.{u}
+          (hypersurfacePresentation.{u} g ((lastVarPolyEquiv.{u} n).symm (G 0)))
+          ((lastVarPolyEquiv.{u} (n + 1)).symm (G 1))).comp
+        (hypersurfacePresHom.{u} g ((lastVarPolyEquiv.{u} n).symm (G 0))) := rfl
 
 end ComplexAnalytic

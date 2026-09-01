@@ -2956,6 +2956,47 @@ info: 'ComplexAnalytic.isFinite_analytificationMap_hypersurfacePresHom_comp_hype
 #print axioms
   ComplexAnalytic.isFinite_analytificationMap_hypersurfacePresHom_comp_hypersurfacePresHom
 
+/--
+info: 'ComplexAnalytic.towerPresentation' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.towerPresentation
+
+/--
+info: 'ComplexAnalytic.towerPresHom' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.towerPresHom
+
+/--
+info: 'ComplexAnalytic.isFinite_analytificationMap_towerPresHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isFinite_analytificationMap_towerPresHom
+
+/--
+info: 'ComplexAnalytic.towerPresentation_one' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.towerPresentation_one
+
+/--
+info: 'ComplexAnalytic.towerPresHom_one' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.towerPresHom_one
+
+/--
+info: 'ComplexAnalytic.towerPresHom_two' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.towerPresHom_two
+
 /-! ### The hypersurface over an open subset of the base
 
 `Oka/Analytification/OpenBaseFiniteness.lean`. The image in `ℂ^n` of the points of a hypersurface
