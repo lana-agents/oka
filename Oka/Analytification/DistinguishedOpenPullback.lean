@@ -70,10 +70,14 @@ polynomial `r` and the unit as arguments. **What is no longer true is that nothi
 This sentence ended *"and nothing instantiates the existentials that would supply them"* until
 `ComplexAnalytic.exists_refineDatumCross` (`Oka/Analytification/CrossMemberChoice.lean`) produced
 the extra factor, `r` and the unit at every ordered pair from the *input* datum's symmetry law,
-algebraically and using none of the three existentials that sentence had in mind. What it does not
-supply is a reason to think the overlap so refined is the geometric one, which is where the caller
-still comes in, and `Oka/Analytification/DistinguishedOpen.lean` has said as much since the same
-push; this file had not been opened.
+algebraically. **Three existentials did not have to be instantiated; one did, and it is
+`ComplexAnalytic.exists_mk_rename_eq`** — that is `Oka/Analytification/CrossMemberDatumGlue.lean`'s
+own wording for the correction, and `ComplexAnalytic.exists_refineDatumCrossFactor` is where
+`Oka/Analytification/CrossMemberChoice.lean` spends it. The two it does not spend are the two that
+produce an equality of *opens*, which is why what it does not supply is a reason to think the
+overlap so refined is the geometric one: an equality of opens does not give an associate. That is
+where the caller still comes in, and `Oka/Analytification/DistinguishedOpen.lean` has said as much
+since the same push; this file had not been opened.
 
 **And the two geometric laws no longer stand or fall together.** This paragraph ended *"`hrange`
 and `hcocycle` are as untouched as the two laws are"*, which said of both what is now true of only
