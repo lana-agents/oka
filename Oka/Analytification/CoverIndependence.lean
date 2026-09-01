@@ -158,12 +158,21 @@ docstring predicts that every consumer of the functor spells its object the othe
   branch and the cross-member one under a case split, each with its coherence triangle — the
   transport between two objects of `ComplexAnalytic.Presentation` that the one-member case never
   meets cost one `subst`, and the case split itself cost nothing, both branches being isomorphisms
-  between the same two objects. **So the count is two rather than two and a half, and the half
-  that moved did not become nothing**: the unequal branch takes the caller's `r`, `u` and two
-  equations, and the existentials that would produce them are the same ones `hsymm` is blocked on.
-  What is left is that choice, an `hsymm` quantified over every ordered pair, and the two
-  geometric laws, which have no cross-member analogue at all. Those three files'
-  `## What is not here` state all of it.
+  between the same two objects. **So the count is one rather than two and a half, and this
+  sentence gave two until two later increments landed.** It read *"the count is two rather than
+  two and a half, and the half that moved did not become nothing: the unequal branch takes the
+  caller's `r`, `u` and two equations, and the existentials that would produce them are the same
+  ones `hsymm` is blocked on. What is left is that choice, an `hsymm` quantified over every
+  ordered pair, and the two geometric laws"*. **The half went first**:
+  `ComplexAnalytic.exists_refineDatumCross` (`Oka/Analytification/CrossMemberChoice.lean`)
+  produces `q`, `r`, `u` and both obligations at every ordered pair from the *input* datum's
+  symmetry law, using none of the three existentials that sentence had in mind and saying nothing
+  about what the overlap so refined cuts out. **Then the `hsymm` went**:
+  `ComplexAnalytic.refineDatumGlue_symm` (`Oka/Analytification/RefineDatumSymm.lean`) is that law
+  at every ordered pair, for two arbitrary independent choices, so the compatibility this bullet
+  expected to be needed is not needed at all. **What is left is the two geometric laws**, which
+  have no cross-member analogue at all — and one law coming free is no evidence about those two,
+  which that file says of itself. Those five files' `## What is not here` state all of it.
 
   **This bullet also said refinement is where `σ` and `ψ` "have to be built", with the implication
   that building them is the work; the second half is false and was measured so on 2026-08-30.**
