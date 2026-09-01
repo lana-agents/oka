@@ -75,6 +75,15 @@ are. `OkaTest/CoverRefinement.lean` exists because this project accepted a degen
 once, at `fam` constantly `0` where every overlap is empty; this is the opposite extreme and it is
 named rather than left for a reader to notice.
 
+**And the hypotheses below are met by something**, which nothing in `Oka/` can say because every
+concrete cover datum in this repository is under `OkaTest/`:
+`OkaTest/RefineDatumWitness.lean` instantiates the construction at `OkaTest/AffineCover.lean`'s
+three copies of the node, whose three laws are theorems, at `σ = id` on a three-element index
+type — giving an `ComplexAnalytic.AnalyticSpace` with **no hypothesis left open at all** and an
+index map `ComplexAnalytic.not_isConstant_id` proves is not constant. It also checks there that
+every refined overlap is non-empty and proper, which is what separates this family from the `0`
+one in both directions.
+
 ## What is not here
 
 * **No witness at a refining family that is not a unit**, which is what a *proper* refinement at a
@@ -89,7 +98,14 @@ named rather than left for a reader to notice.
   satisfies either condition is untouched here in both directions, and the associate question
   `Oka/Analytification/CrossMemberGlue.lean` records is not narrowed.
 * **Nothing about whether the refined overlap is the geometric one**, which is the same file's
-  other absence and is about the construction rather than about any input to it.
+  other absence and is about the construction rather than about any input to it. **At one
+  concrete datum that identification is now made**, in `OkaTest/RefineDatumWitness.lean`: at the
+  node cover, `σ = id` and the caller's `q` taken to be the datum's own `poly`, the refined
+  overlap is the preimage of the original overlap along the projection of the refined member.
+  That is a fact about that data — the extra factor there is `z₀`, the original overlap's own
+  polynomial, so `D(z₀ · z₀) = D(z₀)` and it cuts nothing away — and it is **not** evidence about
+  the factor `ComplexAnalytic.exists_refineDatumCross` produces, which is what the absence is
+  about.
 * **No scheme, no `admissible`, and no comparison functor**, as in the files this one sits beside.
 
 ## Main definitions
