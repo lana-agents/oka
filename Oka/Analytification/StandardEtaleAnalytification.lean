@@ -390,8 +390,25 @@ and at `Fin.last k` the second, and the two `Fin.snoc` computations are the whol
 
 **This is the form a consumer holds**, because the hypersurface's analytification is the space
 `ComplexAnalytic.etaleAnalytificationIso` compares the étale one to, and `G` is the polynomial
-whose distinguished open that isomorphism lands in. What is still missing above this is the
-restriction to `D(G)` and the cut-out datum; see this file's `## What is not here`.
+whose distinguished open that isomorphism lands in. **This sentence then said that *"what is
+still missing above this is the restriction to `D(G)` and the cut-out datum"*, and neither half is
+missing any longer.** The restriction is
+`ComplexAnalytic.isLocalIso_ofRestrict_comp_proj_of_pderiv`
+(`Oka/AnalyticSpace/SimpleZeroTopology.lean`), which asks the derivative hypothesis only at the
+points of the open subspace — the shape this theorem produces, since it needs `G` not to vanish
+and so says nothing off `D(G)`. The datum at `k = 0` is
+`ComplexAnalytic.isCutOutBy_analytificationInclHom_hypersurface`
+(`Oka/Analytification/StandardEtaleLocalIso.lean`), and that file joins the two end to end:
+`ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_comp` takes this theorem as its
+derivative input.
+
+**What stays true is the file-scoped half, and it is why the cross-reference is worth rewriting
+rather than deleting**: neither the restriction nor the datum is supplied *here*, and this file's
+`## What is not here` is where both were retired — the first at the `IsLocalIso` bullet, the
+second where the `k + 1`-against-one count is read as the signature of a statement over `ℂ^n`
+rather than as a datum nobody has built. Untouched at `k ≥ 1` is a *statement* and not this
+datum: over a general base it is a different theorem, needing an implicit function theorem
+relative to `X^an` that `Oka/Analysis/Calculus/Implicit.lean` does not have.
 
 The `show … from` is not decoration: `rw [hypersurfacePresentation, Fin.snoc_castSucc]` fails with
 *"Failed to rewrite using equation theorems for `hypersurfacePresentation`"*, and naming the
