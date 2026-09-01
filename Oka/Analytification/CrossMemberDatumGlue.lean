@@ -35,8 +35,7 @@ glue onto the datum's own overlaps — the same three-factor shape as the equal 
 
 The cross-member glue takes a polynomial `r`, a unit `u` and two equations, and a bullet saying
 nothing there produces `q` is what both facing files carry. **The field takes them rather than
-producing them**,
-indexed by the ordered pair and guarded by `σ a ≠ σ b`, which is exactly what
+producing them**, indexed by the ordered pair and guarded by `σ a ≠ σ b`, which is exactly what
 `ComplexAnalytic.refineDatumPoly` already does with `q`. Two consequences and neither is hidden:
 
 * the existence question is untouched *here* — nothing below says a choice exists, and nothing
@@ -300,10 +299,13 @@ lemma is about one member and one side of the overlap and is not a step towards 
   is the geometric one** — that is where `ComplexAnalytic.exists_localisationOpen_eq_rename` and
   `ComplexAnalytic.exists_comap_analytificationMap_eq_comap_localisationProj` would be spent, and
   neither is spent anywhere. So a `glue` field taking no arguments is one application away and a
-  refined cover datum is not, and of the absence
-  `Oka/Analytification/CrossMemberGlue.lean` and `Oka/Analytification/CrossMemberDatum.lean`
-  record as *"nothing produces `q`"* it is the algebraic half that is retired and not the
-  geometric one those files' own bullets are about.
+  refined cover datum is not, and of the absence `Oka/Analytification/CrossMemberGlue.lean`
+  records as *"nothing here produces `q`"* and `Oka/Analytification/CrossMemberDatum.lean` as
+  *"nothing produces a `q` that makes this formula correct"* it is the algebraic half that is
+  retired and not the geometric one those files' own bullets are about. (The two were quoted here
+  jointly as *"nothing produces `q`"*, which is neither file's wording and makes the second the
+  wider claim it is not: its bullet is about a `q` that satisfies one formula, not about
+  producing a `q` at all.)
 * **No `hsymm` here, and it is a theorem elsewhere rather than an open question.**
   `ComplexAnalytic.refineDatumGlueEq_symm` is the half of the law whose members are equal. **This
   bullet said of the other half that the two orders *"carry two independent choices of `r` and

@@ -222,11 +222,18 @@ variable (σ : B → J) (fam : ∀ b : B, MvPolynomial (ULift.{u} (Fin (obj (σ 
 class of `r`, and `r` occurs nowhere else in it, so `Ideal.Quotient.mk` being surjective settles
 it. Nothing about the cover, the glue or the choice of `q` is used.
 
-**This retires half of a sentence two files carried until this one landed.** *"Nothing produces
-`r` or `u`"* was true of `u` and not of `r`: what a caller has to produce is a preimage of
-something already determined. The rest of it goes with
-`ComplexAnalytic.exists_refineDatumCross` below, and both facing bullets are rewritten in the same
-push. -/
+**This retires half of a sentence one file carried until this one landed**, and that file is
+`Oka/Analytification/CrossMemberDatumGlue.lean`. *"Nothing produces `r` or `u`"* was true of `u`
+and not of `r`: what a caller has to produce is a preimage of something already determined. The
+rest of it goes with `ComplexAnalytic.exists_refineDatumCross` below, and both facing bullets are
+rewritten in the same push.
+
+**This paragraph said *"two files carried"* until somebody ran the grep.** At the commit this file
+was cut from, `git grep -c` for that sentence returns one file and it is the one named above —
+which is what the quotation block at the top of this module docstring and the docstring of
+`ComplexAnalytic.exists_refineDatumCross` below had both said all along, each naming that file and
+no second one. A count is a claim like any other and this one was outvoted twice inside its own
+file. -/
 theorem exists_refineDatumCrossEq (a b : B) :
     ∃ r : MvPolynomial (ULift.{u} (Fin ((obj (σ b)).n + 1))) ℂ,
       RefineDatumCrossEq.{u} obj σ fam poly q glue a b r :=

@@ -210,10 +210,17 @@ overlaps sitting over three different members with no common target to cancel ag
   **Nor is the choice that branch takes**: `ComplexAnalytic.exists_refineDatumCross`
   (`Oka/Analytification/CrossMemberChoice.lean`) produces the extra factor, the polynomial and the
   unit at every ordered pair from the input datum's symmetry law alone — algebraically, saying
-  nothing about what the overlap so refined cuts out. What is left is an `hsymm` quantified over
-  every pair rather than over the equal ones, and the two geometric laws, which have no analogue
-  for the reason the paragraph above gives. Those four files' `## What is not here` state all of
-  it.
+  nothing about what the overlap so refined cuts out. **Nor is the symmetry law.** This sentence
+  read *"what is left is an `hsymm` quantified over every pair rather than over the equal ones,
+  and the two geometric laws"* until `ComplexAnalytic.refineDatumGlue_symm`
+  (`Oka/Analytification/RefineDatumSymm.lean`) proved exactly that `hsymm` — at every ordered
+  pair, and for two arbitrary independent choices, which is more than the sentence asked for. It
+  came free because `ComplexAnalytic.refineDatumCrossProj` is a monomorphism, so the coherence
+  triangle `ComplexAnalytic.refineDatumGlueNe_comp` *determines* its isomorphism rather than
+  merely constraining it. **What is left is the two geometric laws** and nothing else, and they
+  have no analogue for the reason the paragraph above gives — one law coming free is not evidence
+  about the other two, and that file says so itself. Those five files' `## What is not here`
+  state all of it.
 * **No hypothesis under which the morphism *is* an isomorphism, and no morphism back.** The
   answer to whether it is one is **no** and it is proved rather than argued:
   `ComplexAnalytic.not_isIso_refineToBase`, at an empty family, where the refinement refines

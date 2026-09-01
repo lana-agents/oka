@@ -121,8 +121,15 @@ what relates the two orders of a pair — the choices contribute nothing, which 
   `ComplexAnalytic.ringHom_ext_localisationRingHom` and `ComplexAnalytic.mono_localisationHom`
   mention nothing about covers, refinements or `σ`, and belong beside the equivalence they are
   proved from, in `Oka/Analytification/LocalisationIndependence.lean`. They are here because they
-  arrive with their first consumer and because a second consumer earlier in the import order is
-  what would decide the move; until there is one, moving them is an import change nothing needs.
+  arrive with their first consumer, and a second consumer earlier in the import order is what
+  would decide the move; until there is one they stay here. **What is not a reason is the price,
+  and this bullet used to give one**: it read *"moving them is an import change nothing needs"*,
+  and the move is **no import change at all**, in either direction. Measured rather than read off
+  the graph — both go through verbatim in a file whose only import is
+  `Oka/Analytification/LocalisationIndependence.lean`, and this file would still name them after
+  the move, because it already reaches that one transitively through
+  `Oka/Analytification/CrossMemberChoice.lean`. So the question left is editorial and costs
+  nothing either way.
 -/
 
 open CategoryTheory MvPolynomial
