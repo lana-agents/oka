@@ -108,6 +108,7 @@ import Oka.Analytification.RefineDatumGlueData
 import Oka.Analytification.RefineDatumRange
 import Oka.Analytification.RefineDatumSymm
 import Oka.Analytification.RefineDatumTransition
+import Oka.Analytification.RefineDatumWitness
 import Oka.Analytification.Sheaf
 import Oka.Analytification.SheafCoherent
 import Oka.Analytification.SpecAffineCover

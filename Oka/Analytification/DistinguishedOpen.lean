@@ -95,6 +95,8 @@ coordinate down, which is why it was affordable there.
   projection forgets the last coordinate.
 - `ComplexAnalytic.mem_localisationOpen_iff`: a point lies in `D(f)` exactly when `f` does not
   vanish there.
+- `ComplexAnalytic.localisationOpen_one`: **`D(1)` is the whole space**, which is the extreme
+  opposite of the bullet below and is what a refinement with a trivial refining family asks for.
 - `ComplexAnalytic.localisationOpen_ne_top`: **`D(f)` is a proper open subset** whenever `f` has a
   zero on `X^an`.
 - `ComplexAnalytic.localisationOpen_mul`: **`D(f · f') = D(f) ⊓ D(f')`** — the triple overlap of
@@ -568,6 +570,17 @@ theorem mem_localisationOpen_iff {y : AnalyticSpace.analytification.{u} g} :
     y ∈ localisationOpen.{u} g f ↔
       MvPolynomial.eval (y.1.1 : ULift.{u} (Fin n) → ℂ) f ≠ 0 := by
   rw [AnalyticSpace.mem_nonvanishing_iff, eval_polyToGlobal]
+
+/-- **`D(1)` is the whole space.**
+
+The constant `1` vanishes nowhere, which `ComplexAnalytic.mem_localisationOpen_iff` turns into a
+membership. Stated because a *refinement* whose refining family is constantly `1` is the cheapest
+witness that the cross-member construction is non-vacuous, and its range law asks for exactly this
+open — see `Oka/Analytification/RefineDatumWitness.lean`. It is the extreme opposite of the
+theorem below, which is what stops the statements here from being satisfied by `D(f) = ⊤`. -/
+theorem localisationOpen_one : localisationOpen.{u} g 1 = ⊤ := by
+  ext y
+  simp [mem_localisationOpen_iff]
 
 /-- **`D(f)` is a proper open subset whenever `f` vanishes somewhere on `X^an`.**
 

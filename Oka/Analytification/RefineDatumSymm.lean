@@ -127,8 +127,12 @@ what relates the two orders of a pair — the choices contribute nothing, which 
   two equations, and `ComplexAnalytic.refineDatumGlueNe_congr` says the result ignores the first
   two. Removing them would need the existence to be threaded through instead, which is a decision
   with consumers and belongs where the datum is assembled.
-* **No witness at a non-constant `σ`**, and nothing about `AlgebraicGeometry.Scheme` or
-  `admissible`, as in the four files this one sits beside.
+* **No witness at a non-constant `σ` *here***. This bullet said only *"no witness at a
+  non-constant `σ`"*, and there is one — `Oka/Analytification/RefineDatumWitness.lean` exhibits a
+  refined cover datum at an arbitrary index map, for every cover datum, by taking the refining
+  family constantly `1`. It reads this file's theorem, through
+  `ComplexAnalytic.refineDatumGlueData`, and nothing here is evidence for it. Nothing about
+  `AlgebraicGeometry.Scheme` or `admissible` either, as in the four files this one sits beside.
 * **The first two results are general and this is not their natural home.**
   `ComplexAnalytic.ringHom_ext_localisationRingHom` and `ComplexAnalytic.mono_localisationHom`
   mention nothing about covers, refinements or `σ`, and belong beside the equivalence they are

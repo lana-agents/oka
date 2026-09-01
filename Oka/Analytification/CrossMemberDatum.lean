@@ -166,7 +166,11 @@ goal.
   `ComplexAnalytic.refineDatumPoly_const` and `ComplexAnalytic.coverOverlap_refineDatumPoly_const`:
   the general form reduces to a configuration that `OkaTest/CoverRefinement.lean` and
   `OkaTest/CrossMemberGlue.lean` do exhibit. That is weaker than a witness and is not the same
-  thing, since neither says the general `σ` is ever non-constant.
+  thing, since neither says the general `σ` is ever non-constant. **The clause this bullet ended
+  with is now answered elsewhere and not here**: `Oka/Analytification/RefineDatumWitness.lean`
+  exhibits a refined cover datum at an arbitrary `σ`, at every cover datum, and says what makes
+  `σ` non-constant — but its refining family is constantly `1`, so it is not a witness at a
+  concrete datum with a `poly` field of its own either.
 * **No scheme and no `admissible`**, as in the three files this one sits beside.
 -/
 

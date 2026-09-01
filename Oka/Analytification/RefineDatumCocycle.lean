@@ -146,13 +146,15 @@ it, and it separates them:
 
 ## What is not here
 
-* **No witness.** There is still no example of a refined cover datum at a non-constant `σ`, which
-  is taxis #1107's fourth deliverable, and nothing here discharges either of the two conditions
-  `Oka/Analytification/RefineDatumGlueData.lean` adopts — whether
-  `ComplexAnalytic.exists_refineDatumCross`'s choice satisfies them is untouched in both
-  directions. **What this file removes is the last law, not the last hypothesis**: the two
-  conditions are the hypothesis, and `ComplexAnalytic.refineDatumHrange_iff` says no weaker pair
-  will do.
+* **No witness *here*.** This bullet said *"there is still no example of a refined cover datum at
+  a non-constant `σ`"*, and there is one: `Oka/Analytification/RefineDatumWitness.lean` meets
+  both conditions `Oka/Analytification/RefineDatumGlueData.lean` adopts, for every cover datum
+  and every index map, and instantiates
+  `ComplexAnalytic.refineDatumAnalytificationOfLaws` below at them. **Nothing here discharges
+  either condition**, and whether `ComplexAnalytic.exists_refineDatumCross`'s choice satisfies
+  them is untouched in both directions — the witness does not call it. **What this file removes
+  is the last law, not the last hypothesis**: the two conditions are the hypothesis, and
+  `ComplexAnalytic.refineDatumHrange_iff` says no weaker pair will do.
 * **Nothing that says the refined cover's analytic space is the original one.** It is a space, and
   `ComplexAnalytic.not_isIso_refineToBase` says at a constant `σ` that the comparison need not be
   an isomorphism; there is no morphism between the two gluings here in either direction.
@@ -794,9 +796,11 @@ def refineDatumGlueDataOfLaws
 /-- **The analytic space a cross-member refinement glues to, with no law left over**, and this is
 what the whole line of files was for.
 
-`ComplexAnalytic.refineDatumAnalytification` at the same arguments. **Nothing here is a witness**:
-there is still no example of a refined cover datum at a non-constant `σ` whose two conditions
-anything meets, which is taxis #1107's fourth deliverable and is untouched. What has changed is
+`ComplexAnalytic.refineDatumAnalytification` at the same arguments. **Nothing here is a witness**,
+and this docstring said there was none anywhere: *"there is still no example of a refined cover
+datum at a non-constant `σ` whose two conditions anything meets"*.
+`Oka/Analytification/RefineDatumWitness.lean` is one, at every cover datum and every index map,
+and it is a caller of this definition rather than a part of it. What has changed is
 that a caller who meets them owes nothing further — before this file the object also asked for a
 law nothing could prove. -/
 def refineDatumAnalytificationOfLaws
