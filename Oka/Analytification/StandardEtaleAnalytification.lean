@@ -58,6 +58,9 @@ standard étale pair.
 
 ## Main results
 
+- `ComplexAnalytic.hypersurfacePresentation_empty`: **over an empty base presentation the
+  hypersurface presentation is `![F]`**, the spelling every statement about a hypersurface of
+  `ℂ^(n+1)` is written in. Not `rfl`.
 - `ComplexAnalytic.presentationIdeal_etalePresentation_eq_localisation`: **the étale presentation
   and the localisation of the hypersurface presentation span the same ideal.**
 - `ComplexAnalytic.etaleAnalytificationIso_hom_ofRestrict`: the isomorphism followed by the open
@@ -216,8 +219,15 @@ standard étale pair.
 * **No finiteness.** `IsFiniteEtale` of the unrestricted morphism is **false**: a standard étale
   algebra inverts `g`, and `Spec` of `(ℂ[X][x] ⧸ (x² - X))[1/x]` over `ℂ` has the punctured line
   for image, which is not closed. `Oka/Analytification/MonicHypersurface.lean`'s `## What is not
-  here` carries that, and the finiteness that *is* true — over an open subset of the base on which
-  the inversion is vacuous — is a construction and is not here.
+  here` carries that. **The finiteness that *is* true — over an open subset of the base on which
+  the inversion is vacuous — is now built, and this paragraph said it was "a construction and is
+  not here" when only the second half was right.** It is
+  `ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp`
+  (`Oka/Analytification/StandardEtaleFiniteness.lean`), at `k = 0`, and
+  `ComplexAnalytic.etaleAnalytificationIso_hom_comp` below is what it spends: the étale
+  analytification is `D(G)` inside the hypersurface **over the base**, and over a `V` avoiding
+  `ComplexAnalytic.hypersurfaceCommonZeroImage` the part of the hypersurface lying over `V` is
+  already inside `D(G)`. Nothing here changes and nothing here is stated at `k ≥ 1`.
 * **No comparison with `StandardEtalePair.Ring`.** `ComplexAnalytic.etalePresentedAlgebraEquivRing`
   relates the presented algebra to Mathlib's, and the lifts `hF`, `hG` it needs are hypotheses;
   nothing below takes them, because nothing below needs `F` and `G` to come from a pair.
@@ -263,6 +273,39 @@ theorem presentationIdeal_hypersurfacePresentation :
     presentationIdeal.{u} (hypersurfacePresentation.{u} g F) =
       presentationIdeal.{u} (polyPresentation.{u} g) ⊔ Ideal.span {F} :=
   presentationIdeal_snoc.{u} _ _
+
+/-- **Over an empty base presentation the hypersurface presentation is the one-element family
+`![F]`**, which is the spelling every statement about a hypersurface of `ℂ^(n+1)` is written in.
+
+`Fin.snoc` of an empty family is that family's single entry, and `Fin.lastCases` is the whole
+proof: the `castSucc` branch is indexed by `Fin 0` and is discharged by `Fin.elim0`.
+
+**It is not `rfl`**, measured — `rfl` at this goal reports *"Type mismatch: rfl has type `?m = ?m`
+but is expected to have type `hypersurfacePresentation Fin.elim0 F = ![F]`"* — which is why the
+bridge exists at all rather than being left to unification.
+
+**Stated at an arbitrary `g : Fin 0 → …` and not at `Fin.elim0`**, because nothing in the proof
+reads `g`: `Fin.lastCases` never reaches it. So a caller holding a `variable (g : Fin 0 → …)`,
+which is how `Oka/Analytification/StandardEtaleLocalIso.lean` and
+`Oka/Analytification/StandardEtaleFiniteness.lean` are both written, spends it with no
+`Subsingleton` step.
+
+**Here rather than in either consumer, and the cost was measured rather than assumed**: **three**
+modules under `Oka/` imported this file when the placement was decided and **four** do after the
+consumer below was added — the figure that priced the decision is the first, and the second is
+what a reader recomputing it on the merged tree will get. Either is against the whole of
+`Oka/Analytification/`, which is what the two files that would each carry a copy cost.
+
+**The precedent points the other way** —
+`ComplexAnalytic.section_hypersurfacePresentation_empty` is a `k = 0` fact about this definition
+living in its consumer — and it is a weaker precedent than it looks, since that statement is about
+`OkaRing.ofMvPolynomial` and belongs to the cut-out datum it feeds, while this one mentions
+nothing but the definition. -/
+theorem hypersurfacePresentation_empty (g₀ : Fin 0 → MvPolynomial (ULift.{u} (Fin n)) ℂ) :
+    hypersurfacePresentation.{u} g₀ F = ![F] := by
+  funext j
+  refine Fin.lastCases ?_ (fun i ↦ i.elim0) j
+  exact Fin.snoc_last _ _
 
 /-- **The structure map `A ⟶ A[X] ⧸ (F)`, as a morphism of presentations.**
 

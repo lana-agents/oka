@@ -146,8 +146,17 @@ construction rather than by a compatibility lemma.
   is now stated: `Oka/Analytification/OpenBaseFiniteness.lean` is the open set, its closedness and
   the vacuity above its complement. **This paragraph read *"that is the shape of the remaining work
   rather than a lemma anyone has"* until that file landed**, and what it retires is the
-  hypersurface half only — the identification of the source with a *localised* algebra is still
-  nowhere, and so is everything about stalks. The theorem below makes the
+  hypersurface half only. **Both of the two things that sentence then called *"still nowhere"* are
+  somewhere now, and they stopped being nowhere in different pushes.** The identification of the
+  source with a *localised* algebra is
+  `ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp`
+  (`Oka/Analytification/StandardEtaleFiniteness.lean`), at `k = 0`; the stalk half is
+  `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_comp`
+  (`Oka/Analytification/StandardEtaleLocalIso.lean`), which landed earlier and which this
+  paragraph did not track. What is still nowhere is `ComplexAnalytic.AnalyticSpace.IsFiniteEtale`
+  of either morphism — false for the unrestricted one, and for the restricted one waiting on a
+  transport of `ComplexAnalytic.AnalyticSpace.IsLocalIso` along a restriction that nothing has.
+  The theorem below makes the
   projection of the hypersurface a closed map — **and it asks that hypersurface to be cut out by a
   polynomial monic in the last variable, which here is `F`, so a monic lift has to be chosen.**
   `StandardEtalePair.monic_f` gives monicity of `StandardEtalePair.f` in `A[X]` over

@@ -116,7 +116,15 @@ available here.
   taxis #1112 carries the counterexample, the punctured parabola over the line — and nothing here
   states it. Identifying the source of this theorem with the analytification of a *localised*
   algebra is the step `ComplexAnalytic.etaleAnalytificationIso` would be spent on, and it is not
-  taken: the vacuity below is a statement about points, not an isomorphism of analytic spaces.
+  taken **here**; it is taken in `Oka/Analytification/StandardEtaleFiniteness.lean`, at `k = 0`,
+  by `ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp`. **This bullet
+  ended by giving a reason — *"the vacuity below is a statement about points, not an isomorphism
+  of analytic spaces"* — and that reason was wrong**: no isomorphism of analytic spaces was
+  needed. What the identification consumes is exactly the vacuity below, read as an inequality of
+  *opens* (`ComplexAnalytic.map_le_localisationOpen_of_subset_compl`), and being about points is
+  what makes it cheap rather than what stands in the way. `IsFiniteEtale` is still nowhere, for
+  the separate reason that nothing transports `ComplexAnalytic.AnalyticSpace.IsLocalIso` along a
+  restriction.
 * **Nothing about the stalks**, so no local-isomorphism half and no `IsFiniteEtale`. That is the
   other half of taxis #1112 and it is where `Oka/AnalyticSpace/SimpleZeroTopology.lean` and
   `Oka/AnalyticSpace/OpenBaseProjection.lean`'s stalk half live.
@@ -193,9 +201,14 @@ This is the vacuity of the inversion, and it is the whole of what an open subset
 the theorem below is finite over every `V`, and this is the statement that says what is special
 about a `V` avoiding `ComplexAnalytic.hypersurfaceCommonZeroImage`.
 
-**It is a statement about points and not an isomorphism of spaces.** Turning it into the assertion
-that the source below *is* the analytification of the localised algebra is where
-`ComplexAnalytic.etaleAnalytificationIso` would be spent, and that step is not taken here.
+**It is a statement about points and not an isomorphism of spaces**, and that turned out to be
+the reason it is enough rather than a reason it is not. Turning it into the assertion that the
+source below *is* the analytification of the localised algebra is where
+`ComplexAnalytic.etaleAnalytificationIso` is spent, and that step is not taken here — it is
+`Oka/Analytification/StandardEtaleFiniteness.lean`, which quotes this theorem once, at every point
+of the hypersurface lying over `V`, to get the containment of that part in `D(G)`. **No
+isomorphism of analytic spaces is built there either**, and this paragraph said one would be
+needed.
 
 The proof is the definition read backwards — a point of the hypersurface at which `G` vanishes is
 by construction in the image — so it is `fun h ↦ hy ⟨y, h, rfl⟩` and needs no monicity. -/

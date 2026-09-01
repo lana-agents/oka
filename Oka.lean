@@ -116,6 +116,7 @@ import Oka.Analytification.SpecDistinguishedOpen
 import Oka.Analytification.SpecFunctoriality
 import Oka.Analytification.StandardEtale
 import Oka.Analytification.StandardEtaleAnalytification
+import Oka.Analytification.StandardEtaleFiniteness
 import Oka.Analytification.StandardEtaleLocalIso
 import Oka.Analytification.SurjectionFinite
 import Oka.Analytification.UniversalProperty

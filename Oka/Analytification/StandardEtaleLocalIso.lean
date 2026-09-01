@@ -101,6 +101,18 @@ anywhere. A reader comparing the two signatures will otherwise go looking for on
   in terms. So the two fields of `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` are not two halves
   of one job here: one of them is a theorem and the other is a false statement waiting for a base
   restriction that nothing below constructs.
+
+  **The base restriction is now constructed, in a file that imports this one's imports and not
+  this one**: `ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp`
+  (`Oka/Analytification/StandardEtaleFiniteness.lean`) makes the étale analytification finite over
+  an open `V ⊆ ℂ^n` on which the inversion is vacuous. **That does not put `IsFiniteEtale` within
+  reach of a rewrite**, and the missing step is worth naming because it is not about étale
+  morphisms at all: the class would be wanted for
+  `ComplexAnalytic.AnalyticSpace.restrictHom (… ≫ analytificationInclHom g) V`, whose `IsFinite`
+  field is that theorem and whose `IsLocalIso` field would follow from the last theorem below **if
+  `IsLocalIso` transported along `ComplexAnalytic.AnalyticSpace.restrictHom`**. Nothing in the
+  repository does — measured, no statement anywhere applies `IsLocalIso` to a `restrictHom` — and
+  it is a general fact about open subspaces rather than anything this line owns.
 * **Nothing at `k ≥ 1`**, for the reason at the top of this docstring: not a gap but a different
   statement.
 * **Nothing saying `ComplexAnalytic.analytificationInclHom g` is an isomorphism when `g` is the

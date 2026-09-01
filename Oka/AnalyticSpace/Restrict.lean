@@ -85,11 +85,21 @@ cut-out along that isomorphism.
 - `ComplexAnalytic.isCLinearHom_restrictHom`: the restriction of a `ℂ`-linear morphism is
   `ℂ`-linear.
 - `ComplexAnalytic.stalkMap_restrictHom_eq`: the stalk map of the restriction, factored.
+- `ComplexAnalytic.isClosedEmbedding_base_restrictHom`: the restriction of a morphism whose base
+  is a closed embedding is one, with no condition on the open subset.
 - `ComplexAnalytic.IsCutOutBy.iso_comp`: being cut out is transported by an isomorphism of the
   target, along which the cutting family is pulled back.
 - `ComplexAnalytic.Γ_map_restrictHom_toRestrictΓ`: **the sheaf map of the restriction is the
   sheaf map of `i`**, on a section over `V` viewed as a global section of `𝒪_{B|V}` — which is
   what makes a chart usable on a section that does not extend.
+- `ComplexAnalytic.restrictHom_comp`: **restricting a composite is composing the restrictions.**
+- `ComplexAnalytic.surjective_base_restrictHom` and
+  `ComplexAnalytic.isClosedEmbedding_base_restrictHom_of_subset_range`: **over an open subset of
+  the target that lies inside the image, the restriction is surjective, and is a closed embedding
+  as soon as the base is an embedding.** The second is the companion of
+  `ComplexAnalytic.isClosedEmbedding_base_restrictHom` at the opposite trade — a weaker hypothesis
+  on `i` against a hypothesis on `V` — and is what an *open* immersion needs, whose base is never
+  a closed embedding unless it is surjective.
 -/
 
 open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry Topology
@@ -127,6 +137,37 @@ lemma base_restrictHom (i : A ⟶ B) (V : Opens B)
   ConcreteCategory.congr_hom
     (congrArg (fun m : A.restrict ((Opens.map i.base).obj V).isOpenEmbedding ⟶ B ↦ m.base)
       (restrictHom_fac i V)) x
+
+/-- **Restricting a composite is composing the restrictions.**
+
+The two sides have *definitionally* the same source — `(Opens.map (f ≫ h).base).obj V` and
+`(Opens.map f.base).obj ((Opens.map h.base).obj V)` are both the preimage of a preimage — which
+is why the equation typechecks with no transport in it.
+
+**Written as a term and not as a `rw` chain, and that is forced rather than stylistic.** The goal
+after `← cancel_mono` mentions `(Opens.map (f ≫ h).base).obj V`, and there `V` is elaborated at
+the `toTopCat` spelling of the carrier while `Opens.map` asks for the `toPresheafedSpace` one; the
+two are the same type and `rw` cannot build a motive across them, failing with *"Did not find an
+occurrence of the pattern"* on a `Category.assoc` whose pattern is visibly present. That is the
+same seam `ComplexAnalytic.isFinite_analytification_comp_projRestrict` records at its range step
+in `Oka/Analytification/OpenBaseFiniteness.lean`; a term proof sidesteps the motive entirely.
+
+`ComplexAnalytic.restrictHom` is `LocallyRingedSpace.IsOpenImmersion.lift`, so the only equation
+available about it is `ComplexAnalytic.restrictHom_fac` — and the inclusion of an open subspace is
+a monomorphism, which is what turns three uses of that equation into this one. -/
+lemma restrictHom_comp {C : LocallyRingedSpace.{u}} (f : A ⟶ B) (h : B ⟶ C) (V : Opens C) :
+    restrictHom (f ≫ h) V =
+      restrictHom f ((Opens.map h.base).obj V) ≫ restrictHom h V :=
+  (cancel_mono (C.ofRestrict V.isOpenEmbedding)).1 <|
+    (restrictHom_fac (f ≫ h) V).trans <|
+      Eq.symm <|
+        (Category.assoc (restrictHom f ((Opens.map h.base).obj V)) (restrictHom h V)
+            (C.ofRestrict V.isOpenEmbedding)).trans <|
+          (congrArg (restrictHom f ((Opens.map h.base).obj V) ≫ ·) (restrictHom_fac h V)).trans <|
+            ((Category.assoc (restrictHom f ((Opens.map h.base).obj V))
+                (B.ofRestrict ((Opens.map h.base).obj V).isOpenEmbedding) h).symm.trans
+              ((congrArg (· ≫ h) (restrictHom_fac f ((Opens.map h.base).obj V))).trans
+                (Category.assoc _ f h)))
 
 lemma stalkMap_restrictHom (i : A ⟶ B) (V : Opens B)
     (x : A.restrict ((Opens.map i.base).obj V).isOpenEmbedding) :
@@ -191,6 +232,50 @@ theorem isClosedEmbedding_base_restrictHom {i : A ⟶ B} (hce : IsClosedEmbeddin
     (B.ofRestrict V.isOpenEmbedding).base.hom.continuous hemb, ?_⟩
   rw [hset]
   exact hce.isClosed_range.preimage (B.ofRestrict V.isOpenEmbedding).base.hom.continuous
+
+/-- **An open subset of the target that lies inside the image is covered by the restriction.**
+
+Read the other way round: shrinking the target to a `V` the morphism already surjects onto makes
+the restricted morphism surjective. It is `ComplexAnalytic.mem_range_base_restrictHom_iff` and
+nothing else — that lemma decides membership of the range upstairs by membership downstairs, and
+`hV` supplies the latter at every point of `V` by construction.
+
+**No embedding hypothesis is used here**, which is why it is stated apart from the closed
+embedding below: surjectivity of the restriction is a statement about the two ranges alone. -/
+theorem surjective_base_restrictHom (i : A ⟶ B) {V : Opens B}
+    (hV : (V : Set B) ⊆ Set.range i.base) :
+    Function.Surjective (restrictHom i V).base :=
+  fun y ↦ (mem_range_base_restrictHom_iff i V y).2 (hV y.2)
+
+/-- **A morphism whose base is an embedding restricts to a closed embedding over any open subset
+of its image.**
+
+The companion of `ComplexAnalytic.isClosedEmbedding_base_restrictHom` at the opposite trade: that
+one asks the base to be *closed* and puts no condition on `V`; this one weakens the hypothesis on
+`i` to an embedding and asks instead that `V` lie inside the image. The embedding half of the two
+proofs is the same `IsEmbedding.of_comp` argument, and only the closedness of the range is
+different — here the range is **everything**, by `ComplexAnalytic.surjective_base_restrictHom`,
+and `isClosed_univ` closes it.
+
+**The pair is what an open immersion needs**, and neither member covers it: the inclusion of an
+open subspace is an embedding whose base is not closed, so the first theorem does not apply to it,
+while `V ⊆ range` is a real hypothesis that the first theorem does not need. The consumer is
+`Oka/Analytification/StandardEtaleFiniteness.lean`, where `i` is the standard étale
+analytification read as `D(G)` inside a hypersurface and `V` is the part of that hypersurface
+lying over an open subset of the base on which `G` cannot vanish. -/
+theorem isClosedEmbedding_base_restrictHom_of_subset_range {i : A ⟶ B}
+    (hemb : IsEmbedding i.base) {V : Opens B} (hV : (V : Set B) ⊆ Set.range i.base) :
+    IsClosedEmbedding (restrictHom i V).base := by
+  have hcomp : ⇑(B.ofRestrict V.isOpenEmbedding).base ∘ ⇑(restrictHom i V).base =
+      ⇑i.base ∘ ⇑(A.ofRestrict ((Opens.map i.base).obj V).isOpenEmbedding).base :=
+    funext (base_restrictHom i V)
+  have hemb' : IsEmbedding (⇑(B.ofRestrict V.isOpenEmbedding).base ∘ ⇑(restrictHom i V).base) := by
+    rw [hcomp]
+    exact hemb.comp ((Opens.map i.base).obj V).isOpenEmbedding.isEmbedding
+  refine ⟨IsEmbedding.of_comp (restrictHom i V).base.hom.continuous
+    (B.ofRestrict V.isOpenEmbedding).base.hom.continuous hemb', ?_⟩
+  rw [Set.range_eq_univ.2 (surjective_base_restrictHom i hV)]
+  exact isClosed_univ
 
 theorem range_base_restrictHom {i : A ⟶ B} {f : Fin k → B.presheaf.obj (op ⊤)}
     (hcut : IsCutOutBy i f) (V : Opens B) :

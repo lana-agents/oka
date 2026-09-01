@@ -4037,3 +4037,61 @@ info: 'ComplexAnalytic.not_isConstant_id' does not depend on any axioms
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.not_isConstant_id
+
+/-! ### The standard étale analytification is finite over an open subset of the base
+
+`Oka/Analytification/StandardEtaleFiniteness.lean`, together with
+`ComplexAnalytic.hypersurfacePresentation_empty` from
+`Oka/Analytification/StandardEtaleAnalytification.lean`, which is the spelling bridge between the
+presentation the comparison is stated for and the one-element family every statement about a
+hypersurface of `ℂ^(n+1)` is written in.
+
+This is taxis #1112's §1 at `k = 0`: the hypersurface over `V` in the presentation spelling, the
+containment of that part in `D(G)` above a `V` avoiding the bad set — which is the geometry and is
+the only place `G` does anything — and the finiteness of the standard étale analytification over
+`V`, where `ComplexAnalytic.etaleAnalytificationIso` is spent. The last of the four is the same
+statement at the largest such `V`, the complement of
+`ComplexAnalytic.hypersurfaceCommonZeroImage`.
+
+**No `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` is guarded here and none is stated**: the
+unrestricted one is false, and the restricted one waits on a transport of
+`ComplexAnalytic.AnalyticSpace.IsLocalIso` along a restriction that the repository does not have.
+
+Appended as its own section for the reason the sections above give: a section moved is a conflict
+for somebody else.
+-/
+
+/--
+info: 'ComplexAnalytic.hypersurfacePresentation_empty' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.hypersurfacePresentation_empty
+
+/--
+info: 'ComplexAnalytic.isFinite_restrictHom_hypersurface_comp_proj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isFinite_restrictHom_hypersurface_comp_proj
+
+/--
+info: 'ComplexAnalytic.map_le_localisationOpen_of_subset_compl' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.map_le_localisationOpen_of_subset_compl
+
+/--
+info: 'ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp
+
+/--
+info: 'ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp_compl' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp_compl
