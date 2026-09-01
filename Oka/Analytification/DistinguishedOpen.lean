@@ -656,11 +656,21 @@ predicted when it was still missing, and it is stated there rather than here bec
 `Oka/Analytification/ChangeOfVariables.lean`, which this file does not import.
 
 **Nothing there builds a refinement either**, and of the two remaining pieces this paragraph named
-only one is still nowhere. Transporting the original cover's own glue isomorphism through two
-localisations is `ComplexAnalytic.refineCrossGlue`
+one is now here and the other is here in part. Transporting the original cover's own glue
+isomorphism through two localisations is `ComplexAnalytic.refineCrossGlue`
 (`Oka/Analytification/CrossMemberGlue.lean`), with the coherence triangle
-`ComplexAnalytic.refineCrossGlue_hom_comp`; **the two geometric laws across members are still
-nowhere**, and so is the datum they would be laws of, except for its `poly` field
+`ComplexAnalytic.refineCrossGlue_hom_comp`. **This sentence read *"only one is still nowhere"* and
+*"the two geometric laws across members are still nowhere"*, and the two no longer stand or fall
+together**: `ComplexAnalytic.refineDatumTransitionHom_localisationProj_of_ne`
+(`Oka/Analytification/RefineDatumTransition.lean`) is `hrange`'s cross-member analogue, the refined
+transition lying over the original datum's own `ComplexAnalytic.coverTransitionHom` for want of any
+morphism between two members to lie over. **It does not prove `hrange`**: at a triple whose three
+members are pairwise different what is left is one containment, in the caller's own `D(q b c)`,
+which `ComplexAnalytic.range_refineDatumTransitionHom_subset_iff` states as an *equivalence* and
+not as a sufficient condition; and at the mixed triples `ComplexAnalytic.refineDatumGlue` takes its
+equal branch, whose triangle is over a *member*, so the square has no statement there at all.
+**`hcocycle` is still nowhere** and cannot even be stated first, `ComplexAnalytic.coverTriple`
+taking `hrange` as an argument. So is the datum they would be laws of, except for its `poly` field
 (`ComplexAnalytic.refineDatumPoly`) and its `glue` (`ComplexAnalytic.refineDatumGlue`, both
 branches under a case split) — the latter a function of a choice of extra factor and unit, which
 `ComplexAnalytic.exists_refineDatumCross` (`Oka/Analytification/CrossMemberChoice.lean`) produces

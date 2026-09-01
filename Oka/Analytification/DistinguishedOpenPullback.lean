@@ -57,15 +57,41 @@ refinement. Of the remaining two items of that issue, the transport of the origi
 through two localisations is `ComplexAnalytic.refineCrossGlue`
 (`Oka/Analytification/CrossMemberGlue.lean`), whose extra factor and unit are **arguments**: that
 file produces neither, and names the theorem above, with `ComplexAnalytic.exists_mk_rename_eq`,
-as where a caller gets them. **The two geometric laws across members are still untouched.** The
+as where a caller gets them. **The two geometric laws across members are no longer equally
+untouched, and this sentence said they were**: it read *"the two geometric laws across members are
+still untouched"*, and for `hrange` that has stopped being so — see the paragraph below. The
 datum those two would be laws of now has two fields —
 `ComplexAnalytic.refineDatumPoly` (`Oka/Analytification/CrossMemberDatum.lean`), its `poly`, whose
 extra factor is the `q` the theorem above produces, and `ComplexAnalytic.refineDatumGlue`
 (`Oka/Analytification/CrossMemberDatumGlue.lean`), its `glue`, the branch where the two refined
 members lie over one member and the cross-member one under a case split. **The theorem above is
 read on that second branch and still only by a caller**: the branch takes the extra factor, the
-polynomial `r` and the unit as arguments, and nothing instantiates the existentials that would
-supply them. `hrange` and `hcocycle` are as untouched as the two laws are.
+polynomial `r` and the unit as arguments. **What is no longer true is that nothing supplies them.**
+This sentence ended *"and nothing instantiates the existentials that would supply them"* until
+`ComplexAnalytic.exists_refineDatumCross` (`Oka/Analytification/CrossMemberChoice.lean`) produced
+the extra factor, `r` and the unit at every ordered pair from the *input* datum's symmetry law,
+algebraically. **Three existentials did not have to be instantiated; one did, and it is
+`ComplexAnalytic.exists_mk_rename_eq`** — that is `Oka/Analytification/CrossMemberDatumGlue.lean`'s
+own wording for the correction, and `ComplexAnalytic.exists_refineDatumCrossFactor` is where
+`Oka/Analytification/CrossMemberChoice.lean` spends it. The two it does not spend are the two that
+produce an equality of *opens*, which is why what it does not supply is a reason to think the
+overlap so refined is the geometric one: an equality of opens does not give an associate. That is
+where the caller still comes in, and `Oka/Analytification/DistinguishedOpen.lean` has said as much
+since the same push; this file had not been opened.
+
+**And the two geometric laws no longer stand or fall together.** This paragraph ended *"`hrange`
+and `hcocycle` are as untouched as the two laws are"*, which said of both what is now true of only
+one. `ComplexAnalytic.refineDatumTransitionHom_localisationProj_of_ne`
+(`Oka/Analytification/RefineDatumTransition.lean`) is `hrange`'s cross-member analogue: the refined
+transition lies over the original datum's own `ComplexAnalytic.coverTransitionHom`, there being no
+morphism between two members of a cover datum for it to lie over instead. **It does not prove
+`hrange`.** At a triple whose three members are pairwise different what is left is one containment,
+in the caller's own `D(q b c)`, and `ComplexAnalytic.range_refineDatumTransitionHom_subset_iff`
+states that as an *equivalence* rather than a sufficient condition, so no weaker hypothesis on the
+choice can discharge it; at the mixed triples `ComplexAnalytic.refineDatumGlue` takes its equal
+branch, whose triangle is over a *member*, and the square has no statement there at all.
+**`hcocycle` keeps the clause**, for the reason `Oka/Analytification/CoverRefinement.lean` gives,
+and cannot even be stated first: `ComplexAnalytic.coverTriple` takes `hrange` as an argument.
 
 ## Non-vacuity
 
