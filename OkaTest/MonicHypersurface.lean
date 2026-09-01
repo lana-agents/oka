@@ -42,9 +42,11 @@ out at `G = X² - x₀`, the parabola `OkaTest/MonicProjection.lean` already bui
   They have the same image in `ℂ²` — that is `ComplexAnalytic.range_base_parabolaIncl` against
   `ComplexAnalytic.range_base_analytificationIncl_parabolaG` — and nothing below claims more.
   Comparing their structure sheaves is `ComplexAnalytic.IsCutOutBy.uniqueIso`'s business and
-  needs cut-out data for `ComplexAnalytic.parabolaIncl`, which
-  `OkaTest/MonicProjection.lean`'s `## What is not checked here` explains this repository does
-  not produce.
+  needs cut-out data for **both** sides. For the analytification it is now one quotation,
+  `ComplexAnalytic.isCutOutBy_analytificationInclHom`; for `ComplexAnalytic.parabolaIncl` it is
+  still produced by nothing, that morphism being built by hand, which is what
+  `OkaTest/MonicProjection.lean`'s `## What is not checked here` explains. **So this absence has
+  gone from two missing data to one**, and the comparison is still not made below.
 * **Nothing about degeneration or about a bound in place of a fixed degree**, exactly as in
   `OkaTest/MonicProjection.lean`; the family here has constant degree by construction because
   `G` is monic.

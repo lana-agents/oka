@@ -3211,3 +3211,55 @@ info: 'ComplexAnalytic.hypersurfacePresHom_comp_hypersurfacePresHom'' depends on
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.hypersurfacePresHom_comp_hypersurfacePresHom'
+
+/-! ### The cut-out datum of an analytification, and the standard étale local isomorphism
+
+`ComplexAnalytic.isCutOutBy_analytificationInclHom` is the datum every consumer of
+`ComplexAnalytic.IsCutOutBy` on the projection line asks for, and the five below it are
+`Oka/Analytification/StandardEtaleLocalIso.lean` in order. All six are theorems.
+
+Appended as its own section for the reason the sections above give: a section moved is a conflict
+for somebody else.
+-/
+
+/--
+info: 'ComplexAnalytic.isCutOutBy_analytificationInclHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isCutOutBy_analytificationInclHom
+
+/--
+info: 'ComplexAnalytic.section_hypersurfacePresentation_empty' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.section_hypersurfacePresentation_empty
+
+/--
+info: 'ComplexAnalytic.isCutOutBy_analytificationInclHom_hypersurface' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isCutOutBy_analytificationInclHom_hypersurface
+
+/--
+info: 'ComplexAnalytic.isLocalIso_hypersurface_ofRestrict_comp_proj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isLocalIso_hypersurface_ofRestrict_comp_proj
+
+/--
+info: 'ComplexAnalytic.isLocalIso_hypersurface_of_standardEtale' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isLocalIso_hypersurface_of_standardEtale
+
+/--
+info: 'ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_comp

@@ -75,8 +75,12 @@ prove; and the family is `ComplexAnalytic.parabolaPoly` read on the subtype.
   `ComplexAnalytic.isFinite_comp_projRestrict_of_range_eq` is what is applied and
   `ComplexAnalytic.isFinite_comp_projRestrict_of_isCutOutBy` and
   `ComplexAnalytic.range_base_eq_of_isCutOutBy_resΓ` are exercised nowhere. The reason is the one
-  `OkaTest/FiniteMorphism.lean` gives: cut-out data for a morphism of *analytic* spaces is never
-  produced in this repository, only assumed — and the stalk half above escapes that because
+  `OkaTest/FiniteMorphism.lean` gives, and this bullet used to state it in a form that is no
+  longer true — *"cut-out data for a morphism of *analytic* spaces is never produced in this
+  repository, only assumed"*. `ComplexAnalytic.isCutOutBy_analytificationInclHom` produces it,
+  for the inclusion of an analytification into `ℂ^n`; what is built by hand here is
+  `ComplexAnalytic.parabolaPunctured`, which is not one, so nothing below gains a datum from it.
+  The stalk half above escapes the question entirely, because
   `AlgebraicGeometry.LocallyRingedSpace.isCutOutBy_zeroLocusSubspaceι` supplies the datum for a
   locally ringed space, which is all those theorems ask.
 * **No second example.** One instance is what makes the hypotheses jointly satisfiable over a
@@ -269,7 +273,8 @@ def onePoint : (AnalyticSpace.complexAffineSpace.{u} 2).restrict (cylinder punct
 Unlike `ComplexAnalytic.parabolaPunctured`, which is a hand-built morphism restricted, this one
 comes with a `ComplexAnalytic.IsCutOutBy` datum for free —
 `AlgebraicGeometry.LocallyRingedSpace.isCutOutBy_zeroLocusSubspaceι` — which is what the stalk
-theorems ask for and what `OkaTest/FiniteMorphism.lean` records is otherwise never produced. -/
+theorems ask for and what `OkaTest/FiniteMorphism.lean` records is not produced for a morphism
+built by hand. -/
 def parabolaCyl : LocallyRingedSpace.{u} :=
   ((AnalyticSpace.complexAffineSpace.{u} 2).restrict
     (cylinder punctured.{u})).toLocallyRingedSpace.zeroLocusSubspace ![parabolaCylSection.{u}]

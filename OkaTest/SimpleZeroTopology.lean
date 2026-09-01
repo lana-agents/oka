@@ -83,15 +83,38 @@ library question, not a test one.
 
 ## What is not checked here
 
-* **The `ComplexAnalytic.AnalyticSpace.IsLocalIso` form is not instantiated.**
-  `ComplexAnalytic.isLocalIso_comp_proj_of_pderiv` needs a morphism in
+* **The `ComplexAnalytic.AnalyticSpace.IsLocalIso` form is not instantiated *below*, and it is
+  no longer uninstantiated.** This bullet used to read that
+  `ComplexAnalytic.isLocalIso_comp_proj_of_pderiv` *"needs a morphism in
   `ComplexAnalytic.AnalyticSpace`, that is a `ℂ`-linear one, together with an
   `ComplexAnalytic.IsCutOutBy` datum for it; `ComplexAnalytic.nodeIncl` is the only such
   inclusion of a hypersurface in the tree, its cut-out datum through
   `AlgebraicGeometry.LocallyRingedSpace.ofRestrict` is stated nowhere, and the node fails the
-  hypothesis anyway. Building the graph at that level is the same construction repeated and is
-  not done here. **So the local-isomorphism theorem is an assembly of two halves, of which only
-  the topological one is exercised below**; the stalk one is exercised by
+  hypothesis anyway"*, and that *"the local-isomorphism theorem is an assembly of two halves, of
+  which only the topological one is exercised below"*.
+
+  **The middle clause named the right place and misdescribed what was missing there.** The
+  crossing of that `ofRestrict` is `ComplexAnalytic.IsCutOutBy.iso_comp`
+  (`Oka/AnalyticSpace/Restrict.lean`), which has been in the tree since open subspaces were made
+  analytic spaces — so what was stated nowhere was not the transport but any *application* of it,
+  and the clause reads as a missing lemma where there was a missing quotation.
+  `ComplexAnalytic.isCutOutBy_analytificationInclHom` is now that application, for the
+  analytification of *any* presentation, so `ComplexAnalytic.nodeIncl` is no longer the only
+  `ℂ`-linear inclusion of a hypersurface with a chance of carrying a datum.
+  `ComplexAnalytic.isLocalIso_hypersurface_ofRestrict_comp_proj`
+  (`Oka/Analytification/StandardEtaleLocalIso.lean`) is the resulting instance and
+  `OkaTest/StandardEtaleAnalytification.lean` exercises it, so **both** halves of the assembly
+  now have a witness somewhere in the tree.
+
+  What is still true is the first word of the bullet: nothing *below* instantiates it, and the
+  obstruction here was never the cut-out datum. `ComplexAnalytic.isCutOutBy_squareGraphIncl`
+  below states one, at the unrestricted ambient and with no `ofRestrict` to cross. What
+  `ComplexAnalytic.squareGraphIncl` has no chance of is being a morphism of *analytic* spaces:
+  its source is `AlgebraicGeometry.LocallyRingedSpace.zeroLocusSubspace`, a bare locally ringed
+  space, and `OkaTest/OpenBaseProjection.lean` records that nothing in this repository makes such
+  a subspace an analytic space. `ComplexAnalytic.AnalyticSpace.analytification` is one by
+  construction, which is why the instance above goes through it and not through anything here.
+  And the node still fails the hypothesis. The stalk half is separately exercised by
   `Oka/AnalyticSpace/SimpleZeroPolynomial.lean`'s own consumers.
 * **Nothing about the image.** No statement below says the projection of the graph is injective
   or surjective, though it is both.

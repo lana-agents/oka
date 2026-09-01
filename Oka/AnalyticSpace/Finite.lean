@@ -239,9 +239,11 @@ makes the class non-vacuous in general rather than at one example: every closed 
 this development cuts out — every local model, in particular — is finite over its ambient space.
 
 Like `ComplexAnalytic.AnalyticSpace.mono_of_isCutOutBy`, this takes the cut-out data as a
-hypothesis about `f.toLRSHom` rather than producing it, because the analytic-level morphisms
+hypothesis about `f.toLRSHom` rather than producing it, because most analytic-level morphisms
 carrying such data are built by the caller; see `OkaTest/FiniteMorphism.lean` for a closed
-embedding exhibited directly instead. -/
+embedding exhibited directly instead. **One class of them is not**: an analytification carries
+its own datum, `ComplexAnalytic.isCutOutBy_analytificationInclHom`, and a caller holding one of
+those has this theorem for free. -/
 theorem isFinite_of_isCutOutBy {X Y : AnalyticSpace.{u}} (f : X ⟶ Y) {k : ℕ}
     {s : Fin k → Y.presheaf.obj (op ⊤)} (h : IsCutOutBy f.toLRSHom s) : IsFinite f :=
   isFinite_of_isClosedEmbedding f h.isClosedEmbedding

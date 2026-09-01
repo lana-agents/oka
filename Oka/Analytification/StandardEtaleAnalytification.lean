@@ -135,10 +135,19 @@ standard étale pair.
   `ComplexAnalytic.isLocalIso_ofRestrict_comp_proj_of_pderiv`
   (`Oka/AnalyticSpace/SimpleZeroTopology.lean`) and is three lines of it. The half that did cost
   something is the topological one; see the `IsLocalIso` bullet below. A third absence
-  was not named here before and is not the same one: all four stalk theorems take an
-  `ComplexAnalytic.IsCutOutBy` datum for **one** cutting section, and
-  `ComplexAnalytic.hypersurfacePresentation` has `k + 1` relations. **That one is untouched and no
-  declaration below attempts it.**
+  was not named here before, is not the same one, and **was misdiagnosed when it was**: it read
+  that all four stalk theorems take an `ComplexAnalytic.IsCutOutBy` datum for **one** cutting
+  section while `ComplexAnalytic.hypersurfacePresentation` has `k + 1` relations, and that
+  *"That one is untouched and no declaration below attempts it."* **The count is right and the
+  reading of it was wrong.** Those theorems conclude about the projection to `ℂ^n`, and for
+  `k ≥ 1` that conclusion is *false* — a hypersurface lying over a proper closed `X^an ⊆ ℂ^n` has
+  its image inside `X^an` and cannot project to `ℂ^n` as a local isomorphism. So `k + 1` against
+  one is not a datum nobody has built; it is the signature of a statement whose base is the whole
+  of `ℂ^n`. At `k = 0` the datum is one rewrite —
+  `ComplexAnalytic.isCutOutBy_analytificationInclHom_hypersurface`
+  (`Oka/Analytification/StandardEtaleLocalIso.lean`) — and it is built there. **Still untouched is
+  any statement at `k ≥ 1`**, which is a different theorem and needs an implicit function theorem
+  relative to `X^an`.
 * **No witness in this file that the open is ever non-empty, and the witness is elsewhere.** The
   statements below are hypothesis-free in `F` and `G`, so none of them can be vacuously
   satisfied — but that says nothing about whether the *objects* are degenerate, and for `F = 1`
@@ -184,11 +193,16 @@ standard étale pair.
   still not a missing counterpart but a statement about a different restriction, and `D(G)` is
   still not a cylinder.
 
-  **What this does not do is put the standard étale morphism itself into that shape**, and the
-  gap is the third absence of the bullet above: reaching `isLocalIso_ofRestrict_comp_proj_of_pderiv`
-  from `ComplexAnalytic.etaleAnalytificationIso` needs a `ComplexAnalytic.IsCutOutBy` datum for
-  the `k + 1` relations of `ComplexAnalytic.hypersurfacePresentation` against the one cutting
-  section the theorem takes, and nothing here supplies it.
+  **What this does not do is put the standard étale morphism itself into that shape, and that
+  is now done elsewhere and only over `ℂ^n`.** This paragraph used to end by saying that reaching
+  `isLocalIso_ofRestrict_comp_proj_of_pderiv` from `ComplexAnalytic.etaleAnalytificationIso`
+  *"needs a `ComplexAnalytic.IsCutOutBy` datum for the `k + 1` relations of
+  `ComplexAnalytic.hypersurfacePresentation` against the one cutting section the theorem takes,
+  and nothing here supplies it."* The bullet above says why that is a misdiagnosis rather than a
+  gap. `Oka/Analytification/StandardEtaleLocalIso.lean` closes the `k = 0` case end to end —
+  `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_comp` — and takes
+  `ComplexAnalytic.eval_pderiv_ne_zero_of_mem` below as its derivative input. Nothing here
+  changes, and nothing below is stated at `k ≥ 1`.
 * **No finiteness.** `IsFiniteEtale` of the unrestricted morphism is **false**: a standard étale
   algebra inverts `g`, and `Spec` of `(ℂ[X][x] ⧸ (x² - X))[1/x]` over `ℂ` has the punctured line
   for image, which is not closed. `Oka/Analytification/MonicHypersurface.lean`'s `## What is not
