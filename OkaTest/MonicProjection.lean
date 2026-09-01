@@ -53,9 +53,13 @@ obtained from the family bound; the two share no lemma, and the puncture is what
   and `ComplexAnalytic.isFinite_comp_proj_of_isCutOutBy` is not. Its one consumer anywhere is
   `ComplexAnalytic.isFinite_comp_proj_of_monic` in `Oka/Analytification/MonicHypersurface.lean`,
   which still takes the cut-out datum as a *hypothesis* — so what is not exhibited, here or there,
-  is a concrete morphism of analytic spaces carrying one. The reason is the one
-  `OkaTest/FiniteMorphism.lean` gives for `ComplexAnalytic.axisIncl`: cut-out data for a
-  morphism of *analytic* spaces is never produced in this repository, only assumed.
+  is a concrete morphism of analytic spaces carrying one. **One does now exist and it is not
+  this curve**: `ComplexAnalytic.isCutOutBy_analytificationInclHom` produces the datum for the
+  inclusion of an analytification into `ℂ^n`, and `ComplexAnalytic.parabolaIncl` here is built by
+  hand and is not an analytification, so the reason `OkaTest/FiniteMorphism.lean` gives for
+  `ComplexAnalytic.axisIncl` still applies verbatim to it. This bullet used to state that reason
+  as a fact about the whole repository — *"cut-out data for a morphism of *analytic* spaces is
+  never produced in this repository, only assumed"* — and that general form is now false.
 * **Nothing about stalks**, so nothing here is a finite étale morphism.
   `Oka/AnalyticSpace/SimpleZeroStalk.lean` is the other half and the germ of `X² - C z` at a point
   of the parabola has a simple zero along the last axis only away from the origin, so this curve

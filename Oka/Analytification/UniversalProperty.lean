@@ -113,6 +113,12 @@ of possibly different lengths — therefore give canonically isomorphic analytif
 - `ComplexAnalytic.existsUnique_hom_analytification`: **the universal property.**
 - `ComplexAnalytic.hom_ext_analytification`: two morphisms into `X^an` agreeing on the
   coordinates are equal — the uniqueness half, usable without producing the tuple's `∃!`.
+- `ComplexAnalytic.isCutOutBy_analytificationInclHom`: **the analytification is cut out of `ℂ^n`
+  itself by its defining polynomials** — the zero-locus statement of
+  `Oka/AnalyticSpace/LocalModel.lean` at the *other* presentation of `ℂ^n`, which is the one
+  every consumer of a cut-out datum takes. (Named by file rather than by declaration on purpose:
+  this heading is what `scripts/guard_coverage.py` reads, and a name backticked here is counted
+  as a result *this* file advertises. The declaration's own docstring names it.)
 
 ## References
 
@@ -212,6 +218,51 @@ def analytificationInclHom :
     AnalyticSpace.analytification.{u} g ⟶ AnalyticSpace.complexAffineSpace.{u} n :=
   ⟨analytificationIncl.{u} g, (isCLinearHom_zeroLocusSubspaceι_polySection g).comp
     (isCLinearHom_ofRestrict_complexSpace _)⟩
+
+/-- **The analytification is cut out of `ℂ^n` by its own defining polynomials**, read as
+holomorphic functions on `ℂ^n` itself.
+
+`AlgebraicGeometry.LocallyRingedSpace.isCutOutBy_zeroLocusSubspaceι` says this for
+`ComplexAnalytic.analytificationι`, whose target is `ℂ^n` **presented as an open subspace of
+itself**. Every consumer of a cut-out datum in this development takes a morphism into
+`ComplexAnalytic.AnalyticSpace.complexAffineSpace n`, i.e. into `ℂ^n` itself, and
+`ComplexAnalytic.analytificationIncl` is the first composed with `ofRestrict`. This crosses that
+`ofRestrict`.
+
+**Nothing general had to be proved for it.** `ComplexAnalytic.IsCutOutBy.iso_comp`
+(`Oka/AnalyticSpace/Restrict.lean`) is the transport along an isomorphism of the target and has
+been in the tree since open subspaces were made analytic spaces;
+`AlgebraicGeometry.LocallyRingedSpace.restrictTopIso.hom` **is** that `ofRestrict` by definition,
+so all that is left is that the family `iso_comp` produces is the one wanted, and
+`AlgebraicGeometry.LocallyRingedSpace.Γ_map_inv_hom_apply` collapses the round trip because
+`ComplexAnalytic.polySection g j` *is* the pullback of `OkaRing.ofMvPolynomial ⊤ (g j)` along
+`restrictTopIso.hom` — the same definitional fact `ComplexAnalytic.c_app_toAmbient_polySection`
+below rests on. **The `Γ_map_inv_hom_apply` argument has to be written out** rather than left as
+`_`: solving it from the expected type would need `ComplexAnalytic.polySection` unfolded, and
+unification does not do that, so the hole is reported as a type mismatch between two spellings
+of the same term.
+
+**It is the first cut-out datum this repository produces, rather than assumes, for a morphism of
+complex analytic spaces**, which is a sentence six files carried and
+`OkaTest/FiniteMorphism.lean` owned. What it does *not* do is produce one for a morphism built by
+hand: `ComplexAnalytic.axisIncl` and `ComplexAnalytic.parabolaIncl` are still supplied by
+nothing, and those files' bullets say so in their own terms.
+
+The sections are written out rather than given as `ComplexAnalytic.polySection g`, which is the
+same tuple at the other presentation of `ℂ^n` and is a different type. -/
+theorem isCutOutBy_analytificationInclHom :
+    IsCutOutBy (analytificationInclHom.{u} g).toLRSHom
+      (fun j ↦ (OkaRing.ofMvPolynomial (⊤ : Opens (ULift.{u} (Fin n) → ℂ)) (g j) :
+        (AnalyticSpace.complexAffineSpace.{u} n).presheaf.obj (op ⊤))) := by
+  have hfam : (fun j ↦ (LocallyRingedSpace.Γ.map
+      (complexAffineSpace.{u} n).restrictTopIso.inv.op).hom (polySection.{u} g j)) =
+      fun j ↦ (OkaRing.ofMvPolynomial (⊤ : Opens (ULift.{u} (Fin n) → ℂ)) (g j) :
+        (AnalyticSpace.complexAffineSpace.{u} n).presheaf.obj (op ⊤)) :=
+    funext fun j ↦ LocallyRingedSpace.Γ_map_inv_hom_apply
+      (complexAffineSpace.{u} n).restrictTopIso
+      (OkaRing.ofMvPolynomial (⊤ : Opens (ULift.{u} (Fin n) → ℂ)) (g j))
+  exact hfam ▸ ((complexAffineSpaceTop.{u} n).isCutOutBy_zeroLocusSubspaceι
+    (polySection.{u} g)).iso_comp (complexAffineSpace.{u} n).restrictTopIso
 
 /-- **The `n` coordinate functions of the analytification**: the pullbacks of the coordinates of
 `ℂ^n` along the inclusion. `ComplexAnalytic.nodeCoord` is this at the node's tuple. -/

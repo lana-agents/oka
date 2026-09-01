@@ -97,8 +97,12 @@ and only the family is.
   coefficient is `ComplexAnalytic.zExp2`, nothing of that sort is available, and that is the same
   gap the bullet above states in its own terms — *the coefficient is not a polynomial*.
 * **Nothing about `ComplexAnalytic.IsCutOutBy`.** The image is computed from the parametrisation,
-  so the range form of the projection theorem is what is applied. Cut-out data for a morphism of
-  *analytic* spaces is never produced in this repository, only assumed.
+  so the range form of the projection theorem is what is applied. This bullet used to add that
+  *"cut-out data for a morphism of *analytic* spaces is never produced in this repository, only
+  assumed"*, which is no longer true in general —
+  `ComplexAnalytic.isCutOutBy_analytificationInclHom` produces it for the inclusion of an
+  analytification into `ℂ^n` — and is still true of everything here, the morphism below being
+  built from a parametrisation rather than from a presentation.
 * **No `Nontrivial` instance for `OkaRing`.** `ComplexAnalytic.nontrivial_okaRing_punctured` is
   proved here for the one open set this file needs it at, by evaluating at a point. The general
   statement — a nonempty `U` makes `OkaRing U` nontrivial — is true, is not in the library, and

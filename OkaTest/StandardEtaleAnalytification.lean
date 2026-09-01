@@ -6,7 +6,8 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 import Oka
 
 /-!
-# `ComplexAnalytic.etaleAnalytificationIso` is not an isomorphism of empty spaces
+# The line `z₁ = 0` in `ℂ²` with `z₀` inverted: a non-empty étale analytification, and a local
+isomorphism
 
 `Oka/Analytification/StandardEtaleAnalytification.lean` proves that the analytification of a
 standard étale presentation is the distinguished open `D(G)` inside the analytification of the
@@ -23,6 +24,13 @@ work: `Pex` is a `StandardEtalePair` exhibited to show the *unrestricted* `IsFin
 statement false, by way of a **non-closed image**
 (`Oka/Analytification/MonicHypersurface.lean`'s `## What is not here`). That shares no hypothesis
 with "some `localisationOpen` is inhabited", and no amount of quoting it produces a point.
+
+**The same data is also the witness for the local-isomorphism theorem**, and that is the second
+thing this file does. `ComplexAnalytic.isLocalIso_hypersurface_ofRestrict_comp_proj`
+(`Oka/Analytification/StandardEtaleLocalIso.lean`) asks for the derivative of `F` in the last
+variable not to vanish on `D(G)`; here `F` is a coordinate, so that derivative is `1` and the
+hypothesis costs one `simp`. Nothing else in the tree instantiates that theorem, and until it
+did, the statement was an implication whose antecedent nothing was known to satisfy.
 
 ## The data, and why it is not degenerate in a second way
 
@@ -54,6 +62,13 @@ else is satisfied by data that trivialises the construction:
   side**, by transporting the point along the isomorphism itself. This is the statement that makes
   the isomorphism one of non-empty spaces, and it is the only place in this file where
   `ComplexAnalytic.etaleAnalytificationIso` is applied rather than described.
+- `ComplexAnalytic.isLocalIso_hyperLine_ofRestrict_comp_proj`: **`D(G)` in this hypersurface
+  projects to `ℂ` as a local isomorphism** — the witness for
+  `ComplexAnalytic.isLocalIso_hypersurface_ofRestrict_comp_proj`, and the first witness for
+  `ComplexAnalytic.AnalyticSpace.IsLocalIso` that comes from a *presentation* rather than from a
+  morphism built by hand — `ComplexAnalytic.isLocalIso_sq` (`OkaTest/FiniteMorphism.lean`) and
+  `ComplexAnalytic.isLocalIso_puncturedInclCoveringSpaceHom` (`OkaTest/CoveringSpace.lean`) are
+  the two that were already there.
 
 ## What is not checked here
 
@@ -62,11 +77,14 @@ else is satisfied by data that trivialises the construction:
   claim is made that they come from a standard étale pair, and
   `ComplexAnalytic.etaleAnalytificationIso` does not ask for one. So this is non-vacuity of the
   *isomorphism*, not evidence about étale morphisms.
-* **Nothing about the simple-zero condition.** The germ of `z₁` at a point of `D(G)` does have
-  order one along the last axis — `OkaTest/SimpleZeroStalk.lean` computes exactly that shape for
-  a coordinate — but connecting it to `ComplexAnalytic.bijective_stalkMap_comp_uliftProj` here
-  would need the cut-out datum for this hypersurface, which is not built. Taxis #1187 §3 is where
-  that gap is recorded and it is unaffected.
+* **The simple-zero condition is now used here, in the derivative form and not the germ form.**
+  This bullet used to say that connecting the order-one germ of `z₁` to
+  `ComplexAnalytic.bijective_stalkMap_comp_uliftProj` *"would need the cut-out datum for this
+  hypersurface, which is not built"*. It is built —
+  `ComplexAnalytic.isCutOutBy_analytificationInclHom_hypersurface` — and the local isomorphism
+  below is that connection made, through `MvPolynomial.pderiv` rather than through
+  `PowerSeries.order`. **The germ form is still not used**: nothing here computes an order, and
+  `OkaTest/SimpleZeroStalk.lean`'s computations for a coordinate are quoted by nothing below.
 * **No claim that this is the smallest witness**, or that a witness exists for every `F` and `G`.
   It does not: `F = 1` makes the hypersurface empty and `G = 0` makes `D(G)` empty. The statements
   in the library file are hypothesis-free precisely because they are true of those too, both sides
@@ -167,6 +185,30 @@ theorem nonempty_analytification_etalePresentation_hyperLine :
       (etalePresentation.{u} hyperLineBase.{u} hyperLineF.{u} hyperLineG.{u})) :=
   ⟨(etaleAnalytificationIso.{u} hyperLineBase.{u} hyperLineF.{u} hyperLineG.{u}).inv.toLRSHom.base
     ⟨hyperLinePoint.{u}, hyperLinePoint_mem.{u}⟩⟩
+
+/-! ### The projection to `ℂ` is a local isomorphism -/
+
+/-- **`D(G)` inside this hypersurface projects to `ℂ` as a local isomorphism**, which is
+`ComplexAnalytic.isLocalIso_hypersurface_ofRestrict_comp_proj` at this data.
+
+Geometrically it is `ℂ ∖ {0} ↪ ℂ`, so the theorem is not being tested on a covering: a local
+isomorphism need not be surjective and this one is not, which is worth knowing about the witness
+rather than about the theorem.
+
+The derivative hypothesis is `∂z₁/∂z₁ = 1`, and it holds at every point with no point named. It
+is discharged by `simp [localisationVar]` and **not** by `rw [hyperLineF]`, which fails with
+*"Failed to rewrite using equation theorems for `hyperLineF`"*: `ComplexAnalytic.hyperLineF` is
+an `abbrev`, so by the time the goal is elaborated against the theorem's statement it is already
+`MvPolynomial.X (ULift.up 1)` and there is nothing left for `rw` to find. The same tactic written
+against a goal that spells `ComplexAnalytic.hyperLineF` out does succeed, which is what makes the
+failure confusing rather than obvious. -/
+theorem isLocalIso_hyperLine_ofRestrict_comp_proj :
+    AnalyticSpace.IsLocalIso
+      ((AnalyticSpace.analytification.{u} hyperLinePres.{u}).ofRestrict
+          (localisationOpen.{u} hyperLinePres.{u} hyperLineG.{u}) ≫
+        analytificationInclHom.{u} hyperLinePres.{u} ≫ AnalyticSpace.proj.{u} 1) :=
+  isLocalIso_hypersurface_ofRestrict_comp_proj.{u} hyperLineBase.{u} hyperLineF.{u}
+    hyperLineG.{u} fun _ ↦ by simp [localisationVar]
 
 end
 

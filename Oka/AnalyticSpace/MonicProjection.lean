@@ -57,8 +57,11 @@ a source cut out by **more** equations than the family gives, which is the analy
 base algebra's hypersurface (`Oka/Analytification/HypersurfaceFinite.lean`); a caller holding an
 equation should still quote **the equation form**, which is one line of the inclusion and keeps
 its own name and its consumers. **The equation form** is the one a hand-built morphism satisfies —
-`OkaTest/FiniteMorphism.lean` explains why cut-out data for a morphism of *analytic* spaces has
-to be built by hand in this development — and it is what `OkaTest/MonicProjection.lean` applies.
+`OkaTest/FiniteMorphism.lean` explains why cut-out data for a *hand-built* morphism of analytic
+spaces still has to be built by hand, which is a claim about those morphisms and not about the
+category: `ComplexAnalytic.isCutOutBy_analytificationInclHom` produces the datum for the
+inclusion of an analytification into `ℂ^n`, and nothing built by hand is one — and it is what
+`OkaTest/MonicProjection.lean` applies.
 **The `ComplexAnalytic.IsCutOutBy` form** is the one the Weierstrass line will consume, and is two
 lines of the equation form.
 

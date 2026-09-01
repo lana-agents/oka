@@ -51,8 +51,10 @@ The witness is the square root of the coordinate over the parabola: base
   reason: this file is a witness for the theorem's hypotheses, not for its consequences.
 * **Nothing about the degree**, and nothing that says the source is the double cover rather than
   some space with the same image: comparing structure sheaves is
-  `ComplexAnalytic.IsCutOutBy.uniqueIso`'s business and needs cut-out data this file does not
-  produce.
+  `ComplexAnalytic.IsCutOutBy.uniqueIso`'s business and needs cut-out data for both sides, which
+  this file does not produce. **One of the two is no longer work**: the analytification's datum
+  is `ComplexAnalytic.isCutOutBy_analytificationInclHom`, one quotation. The hand-built side is
+  still supplied by nothing, and the comparison is still not made here.
 * **Nothing standard étale.** `x₀` vanishes at the origin of the base, so this cover is branched
   there; it is a witness for finiteness and not for étaleness.
 -/

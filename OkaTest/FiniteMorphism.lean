@@ -23,11 +23,23 @@ spaces, with the two morphisms between `ℂ` and `ℂ²` that everyone draws fir
   quoted, because `ComplexAnalytic.AnalyticSpace.isFinite_of_isCutOutBy` has no instance to be
   applied at. `ComplexAnalytic.IsCutOutBy` is a condition on a morphism of *locally ringed
   spaces*, and cut-out data is produced — that is what
-  `AlgebraicGeometry.LocallyRingedSpace.isCutOutBy_zeroLocusSubspaceι` does — but never for a
-  morphism of *analytic* spaces:
-  `git grep 'IsCutOutBy.*toLRSHom'` over the whole repository returns two hits,
-  `ComplexAnalytic.AnalyticSpace.mono_of_isCutOutBy` and `isFinite_of_isCutOutBy` itself, and both
-  take it as a hypothesis. So a witness has to be built by hand.
+  `AlgebraicGeometry.LocallyRingedSpace.isCutOutBy_zeroLocusSubspaceι` does. **For a morphism of
+  *analytic* spaces there is now exactly one producer, and it does not reach
+  `ComplexAnalytic.axisIncl`**: `ComplexAnalytic.isCutOutBy_analytificationInclHom` is about the
+  inclusion of an *analytification* into `ℂ^n`, and `ComplexAnalytic.axisIncl` is built by hand
+  and is not one. So the witness here still has to be built by hand, for the reason it always
+  did — the morphism, not the category.
+
+  **Two sentences that stood here are retired and they were wrong in different ways.** The first
+  said that cut-out data for a morphism of analytic spaces is produced *"never"*, which is what
+  the producer above falsifies. The second was an instrument reading that had gone stale without
+  anybody noticing: *"`git grep 'IsCutOutBy.*toLRSHom'` over the whole repository returns two
+  hits, `ComplexAnalytic.AnalyticSpace.mono_of_isCutOutBy` and `isFinite_of_isCutOutBy` itself,
+  and both take it as a hypothesis."* By the time it was reread that grep returned **thirteen**
+  lines — eleven hypothesis binders across six files, plus two occurrences in prose — and the
+  conclusion drawn from it was nevertheless still correct, since all eleven were binders. **A
+  count quoted in prose is a measurement with no check on it**, and this one survived four merges
+  that added nine hits to it; the sentence that replaces it names no number for that reason.
 * **`ComplexAnalytic.proj`, `(z, w) ↦ z`, is not finite, and fails *both* conditions.** Its fibre
   over the origin is the second axis, which is infinite; and its underlying map is not closed,
   because the hyperbola `z w = 1` is closed in `ℂ²` and its image is `ℂ ∖ {0}`, which is not
@@ -172,8 +184,16 @@ around them, which is a parametrisation and a lemma and not bookkeeping.
   (`ComplexAnalytic.isIso_stalkMap_sq`) and **not** an isomorphism
   (`ComplexAnalytic.not_isIso_sq`) — hence `ComplexAnalytic.isFiniteEtale_sq`, a finite étale
   morphism which is not an isomorphism. **The stalk half of
-  `ComplexAnalytic.AnalyticSpace.IsLocalIso` is exercised by it**, and by nothing else: the
-  non-example `ComplexAnalytic.axisIncl` fails the topological field alone.
+  `ComplexAnalytic.AnalyticSpace.IsLocalIso` is exercised by it**, and within this file by
+  nothing else: the non-example `ComplexAnalytic.axisIncl` fails the topological field alone.
+  This bullet used to say *"and by nothing else"* without the qualification, and that stopped
+  being true when `OkaTest/StandardEtaleAnalytification.lean` began exercising it through
+  `ComplexAnalytic.isLocalIso_hypersurface_ofRestrict_comp_proj`; the two witnesses are
+  independent — that one is an open immersion and this one is not injective. (The third,
+  `ComplexAnalytic.isLocalIso_puncturedInclCoveringSpaceHom` in `OkaTest/CoveringSpace.lean`,
+  goes through `ComplexAnalytic.AnalyticSpace.isLocalIso_coveringSpaceHom` and so exercises the
+  stalk field only as that instance's own conclusion, which is why this bullet did not count
+  it.)
 * **A `degree` function on morphisms — this is no longer absent, and this file is where it is
   checked.** The bullet that used to stand here said two things, and **both are now retired**:
   that the constancy of the number of sheets over a connected base was not proved anywhere — it
