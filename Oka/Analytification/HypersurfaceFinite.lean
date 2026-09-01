@@ -53,6 +53,56 @@ is `Oka/Analytification/MonicHypersurface.lean`, this file's own import. So it i
 where it is used, rather than by adding an import edge between two files under `Oka/AnalyticSpace/`
 — which is a decision about that directory's shape and not one this file needs to take.
 
+## The iteration is three problems, and the price on record covered only the first two
+
+The bullet under `## What is not here` used to read *"a module-finite extension is a quotient of an
+iterated one, and the induction — which needs the presentation of the intermediate algebras and a
+comparison of the two structure maps — is not attempted and is not a corollary"*. That sentence
+runs three obstructions together, and they are of very different sizes. Measured, on taxis #1379:
+
+* **The second step is free.** `ComplexAnalytic.isFinite_analytificationMap_hypersurfacePresHom` is
+  stated over an *arbitrary* presentation `g`, and `ComplexAnalytic.hypersurfacePresentation g F`
+  is a presentation of the same shape one variable up. So the second step is the first at a
+  different base, the `Fin.snoc` produces exactly the index arithmetic the theorem's binders want,
+  and the composite is finite by the `ComplexAnalytic.AnalyticSpace.isFinite_comp` instance with
+  **nothing to prove**. *"Is not a corollary"* was right about the general case and wrong about
+  this one.
+* **The comparison of the two structure maps is one missing composition law.** Both structure maps
+  are `ComplexAnalytic.PresHom.ofRename`, and `Oka/Analytification/ChangeOfVariables.lean` had only
+  the *inverse-pair* statement about that constructor — `σ ∘ τ = id` giving the identity — which
+  says nothing about a tower. The general law is `ComplexAnalytic.PresHom.ofRename_comp`, added
+  there rather than here, and with it the two-step extension is one `PresHom` and not a composite.
+* **The quotient is the wall, and it is not an induction at all.** A module-finite `A`-algebra is a
+  *quotient* of an iterated hypersurface: adjoin one root per module generator, then kill the
+  kernel. The surjection is finite on the algebraic side because it is a closed immersion, and what
+  that needs analytically is that a surjection of presented algebras has closed-embedding base map.
+
+**The third is reachable from what is here, and this is measured rather than argued.** A surjection
+of presented `ℂ`-algebras adds relations and no variables, so it is
+`ComplexAnalytic.PresHom.ofRename` at the identity between two presentations in the *same* `n`
+variables whose ideals are nested, and its analytification is the inclusion of one zero locus into
+a larger one inside one `ℂ^n`. In a spike, deleted and not committed, the statement
+
+    IsClosedEmbedding ⇑(analytificationMap (PresHom.ofRename id h)).base
+
+compiles in about fifteen lines: the triangle `analytificationMap (ofRename id h) ≫
+analytificationInclHom b = analytificationInclHom a` by
+`ComplexAnalytic.AnalyticSpace.hom_ext_complexAffineSpace` and
+`ComplexAnalytic.coordPullback_analytificationMap_comp` — the transported tuple of a rename at the
+identity is the source's own coordinates — and then
+`ComplexAnalytic.isClosedEmbedding_base_analytificationIncl` **twice** with
+`Topology.IsClosedEmbedding.of_comp_iff`. No new topology and no Nullstellensatz.
+
+**It is not here, deliberately.** Nothing would consume it until the general theorem is built, and
+this file's own standard is that an unused lemma with an axiom guard is worse than an absence with
+a sentence. What the spike buys is the answer to the question the old bullet left open: the wall is
+priced, it is low, and the general statement is a construction problem — pick module generators,
+build the tower, exhibit the kernel — rather than a missing piece of analytic geometry.
+
+**And the shape of the surjection matters.** What compiles is the same-variables case, which is the
+one the module-finite argument produces; a surjection between presentations in *different* numbers
+of variables is not of that form and nothing above is evidence about it.
+
 ## Main results
 
 - `ComplexAnalytic.AnalyticSpace.coordPullback_proj`: **the `j`-th coordinate of the projection
@@ -62,13 +112,23 @@ where it is used, rather than by adding an import edge between two files under `
   `ℂ^(n+1)` followed by the projection.
 - `ComplexAnalytic.isFinite_analytificationMap_hypersurfacePresHom`: **the analytification of
   `A ⟶ A[X] ⧸ (F)` is finite**, for `F` monic in the last variable.
+- `ComplexAnalytic.hypersurfacePresHom_comp_hypersurfacePresHom`: **two adjoined roots are one
+  renaming** — the composite of the two structure maps is the map of presentations given by the
+  inclusion of the old variables into the new, composed.
+- `ComplexAnalytic.isFinite_analytificationMap_hypersurfacePresHom_comp_hypersurfacePresHom`:
+  **the analytification of `A ⟶ A[X₁] ⧸ (F₁) ⟶ (A[X₁] ⧸ (F₁))[X₂] ⧸ (F₂)` is finite**, as one
+  morphism, for both polynomials monic in their last variable.
 
 ## What is not here
 
-* **No general finite morphism.** One adjoined root of one monic polynomial is what this covers;
-  a module-finite extension is a quotient of an iterated one, and the induction — which needs the
-  presentation of the intermediate algebras and a comparison of the two structure maps — is not
-  attempted and is not a corollary.
+* **No general finite morphism, and the section above says which of its three parts is missing.**
+  What is here is two adjoined roots; the `m`-step iterate and the quotient are not, and the
+  quotient is the one nothing in the repository states.
+* **No `m`-step iterate.** `ComplexAnalytic.hypersurfacePresentation` applied `m` times is a
+  presentation in `n + m` variables whose `i`-th polynomial lives over `n + i` of them, so the
+  tower is a dependent recursion and not a family; nothing here builds it. The two-step case below
+  needs no such recursion because the second step is the first at a different base, and that is
+  exactly what stops being available once the base is `Nat.rec`.
 * **Nothing about `ComplexAnalytic.etalePresentation`.** A standard étale algebra is this
   hypersurface with `G` inverted, and inverting `G` destroys finiteness: the punctured parabola
   over the line is the witness, and `Oka/Analytification/MonicHypersurface.lean`'s
@@ -169,5 +229,59 @@ theorem isFinite_analytificationMap_hypersurfacePresHom
   rw [← eval_lastVarPolyEquiv_symm.{u} G]
   have hlast := hz (Fin.last k)
   rwa [hypersurfacePresentation, Fin.snoc_last] at hlast
+
+variable (F' : MvPolynomial (ULift.{u} (Fin (n + 1 + 1))) ℂ)
+
+/-- **Adjoining two roots one after the other is one renaming of variables.**
+
+The composite of the two structure maps `A ⟶ A[X₁] ⧸ (F)` and
+`A[X₁] ⧸ (F) ⟶ (A[X₁] ⧸ (F))[X₂] ⧸ (F')` is `ComplexAnalytic.PresHom.ofRename` at the two
+inclusions of old variables composed — which is what the sentence *"a comparison of the two
+structure maps"* in this file's `## What is not here` used to ask for.
+
+`ComplexAnalytic.PresHom.ofRename_comp` is the whole proof, because
+`ComplexAnalytic.hypersurfacePresHom` **is** an `ofRename` on both sides; the second step is the
+first at the base `ComplexAnalytic.hypersurfacePresentation g F`, which is a presentation like any
+other, so no re-indexing happens anywhere.
+
+`h` is an argument for the reason it is one there: it occurs only under `ofRename`, whose value
+does not depend on it, and `ComplexAnalytic.rename_mem_presentationIdeal` supplies it from the two
+memberships `hypersurfacePresHom` already carries. **Nothing here reads `F` or `F'`** — the
+equality holds for every pair, and monicity enters only in the finiteness below. -/
+theorem hypersurfacePresHom_comp_hypersurfacePresHom
+    (h : ∀ j, MvPolynomial.rename (localisationIncl.{u} (n + 1) ∘ localisationIncl.{u} n) (g j) ∈
+      presentationIdeal.{u}
+        (hypersurfacePresentation.{u} (hypersurfacePresentation.{u} g F) F')) :
+    (hypersurfacePresHom.{u} (hypersurfacePresentation.{u} g F) F').comp
+        (hypersurfacePresHom.{u} g F) =
+      PresHom.ofRename.{u} (localisationIncl.{u} (n + 1) ∘ localisationIncl.{u} n) h :=
+  PresHom.ofRename_comp.{u} _ _ _ _ _
+
+/-- **The analytification of `A ⟶ (A[X₁] ⧸ (F₁))[X₂] ⧸ (F₂)` is finite**, for both polynomials
+monic in their last variable, as one morphism rather than as a composite.
+
+`ComplexAnalytic.analytificationMap_comp` splits it, and then the two factors are the one-step
+theorem above at two different bases: at `g` for the first, and at
+`ComplexAnalytic.hypersurfacePresentation g ((lastVarPolyEquiv n).symm G₁)` for the second, which
+is a presentation of the same shape one variable up. **The last step is `infer_instance`**, because
+`ComplexAnalytic.AnalyticSpace.isFinite_comp` is an instance and the two `haveI`s are what it
+needs; nothing is proved here that the one-step theorem did not already prove.
+
+`ComplexAnalytic.hypersurfacePresHom_comp_hypersurfacePresHom` above says the morphism this is
+about is one `ComplexAnalytic.PresHom.ofRename`, so this is a statement about a single map of
+presentations and not only about a factorisation of one. -/
+theorem isFinite_analytificationMap_hypersurfacePresHom_comp_hypersurfacePresHom
+    (G₁ : Polynomial (MvPolynomial (ULift.{u} (Fin n)) ℂ)) (hG₁ : G₁.Monic)
+    (G₂ : Polynomial (MvPolynomial (ULift.{u} (Fin (n + 1))) ℂ)) (hG₂ : G₂.Monic) :
+    AnalyticSpace.IsFinite (analytificationMap.{u}
+      ((hypersurfacePresHom.{u}
+          (hypersurfacePresentation.{u} g ((lastVarPolyEquiv.{u} n).symm G₁))
+          ((lastVarPolyEquiv.{u} (n + 1)).symm G₂)).comp
+        (hypersurfacePresHom.{u} g ((lastVarPolyEquiv.{u} n).symm G₁)))) := by
+  haveI h₁ := isFinite_analytificationMap_hypersurfacePresHom.{u} g G₁ hG₁
+  haveI h₂ := isFinite_analytificationMap_hypersurfacePresHom.{u}
+    (hypersurfacePresentation.{u} g ((lastVarPolyEquiv.{u} n).symm G₁)) G₂ hG₂
+  rw [analytificationMap_comp]
+  infer_instance
 
 end ComplexAnalytic

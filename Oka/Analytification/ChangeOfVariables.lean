@@ -91,6 +91,10 @@ isomorphism of presented algebras into an isomorphism of analytifications, which
   mutually inverse `ℂ`-algebra maps, which is what makes such a pair an isomorphism of
   presentations (`ComplexAnalytic.Presentation.isoOfRename`, in
   `Oka/Analytification/Functor.lean`, where presentations have a category).
+- `ComplexAnalytic.rename_mem_presentationIdeal`: a renaming carrying the generators of one
+  presentation's ideal into another's carries **every element** of it there.
+- `ComplexAnalytic.PresHom.ofRename_comp`: **two renamings compose to the renaming of the
+  composite** — the general law, of which the inverse-pair statement above is not a case.
 - `ComplexAnalytic.Γ_map_analytificationMap_comp_quotientToGlobal`: `quotientToGlobal` is natural
   along the induced morphism.
 - `ComplexAnalytic.analytificationMap_id` and `ComplexAnalytic.analytificationMap_comp`:
@@ -228,6 +232,57 @@ theorem PresHom.ofRename_comp_ofRename (σ : ULift.{u} (Fin n') → ULift.{u} (F
   · simp [PresHom.comp, PresHom.id]
   · have hi : σ (τ i) = i := congrFun hστ i
     simp [PresHom.comp, PresHom.id, hi]
+
+/-- **A renaming that carries each relation of `g'` into the ideal of `g` carries the whole ideal
+of `g'` into it.**
+
+The hypothesis of `ComplexAnalytic.PresHom.ofRename` is about the generators; this is the same
+statement about every element, which is what a *composite* of two such renamings needs — the
+middle presentation's ideal is met at an arbitrary element and not at a generator.
+
+`Ideal.span` induction, with the three closure cases discharged by `map_add`, `map_mul` and the
+ideal's own closure properties. It is stated here rather than beside
+`ComplexAnalytic.presentationIdeal` in `Oka/Analytification/Presentation.lean` because it mentions
+two presentations and a rename between them, and that file has neither. -/
+theorem rename_mem_presentationIdeal (σ : ULift.{u} (Fin n') → ULift.{u} (Fin n))
+    (h : ∀ j, MvPolynomial.rename σ (g' j) ∈ presentationIdeal.{u} g)
+    {p : MvPolynomial (ULift.{u} (Fin n')) ℂ} (hp : p ∈ presentationIdeal.{u} g') :
+    MvPolynomial.rename σ p ∈ presentationIdeal.{u} g := by
+  refine Submodule.span_induction ?_ ?_ ?_ ?_ hp
+  · rintro _ ⟨j, rfl⟩
+    exact h j
+  · simp
+  · intro x y _ _ hx hy
+    simpa using Ideal.add_mem _ hx hy
+  · intro a x _ hx
+    simpa using Ideal.mul_mem_left _ _ hx
+
+/-- **Two renamings compose to the renaming of the composite.**
+
+The general composition law for `ComplexAnalytic.PresHom.ofRename`, which
+`ComplexAnalytic.PresHom.ofRename_comp_ofRename` above is *not*: that one assumes `σ ∘ τ = id` and
+concludes `ComplexAnalytic.PresHom.id`, so it says nothing about a composite of two renamings that
+is not an identity — a tower of presentations, each adjoining variables to the one below, is
+exactly that case.
+
+The third hypothesis is what `ComplexAnalytic.rename_mem_presentationIdeal` above supplies, in one
+line, from the first two; it is an argument rather than a proof term in the statement so that the
+statement reads as a law about `ofRename` and not about a particular way of proving its side
+condition. Which proof is supplied is immaterial — `h''` occurs only under `ofRename`, whose value
+does not depend on it.
+
+Both sides are ring maps out of a quotient, so the proof is `Ideal.Quotient.ringHom_ext` and then
+one element; the variable case of the composite is `MvPolynomial.rename_rename`, which is where the
+`σ ∘ τ` on the right-hand side comes from. -/
+theorem PresHom.ofRename_comp (σ : ULift.{u} (Fin n') → ULift.{u} (Fin n))
+    (h : ∀ j, MvPolynomial.rename σ (g' j) ∈ presentationIdeal.{u} g)
+    (τ : ULift.{u} (Fin n'') → ULift.{u} (Fin n'))
+    (h' : ∀ j, MvPolynomial.rename τ (g'' j) ∈ presentationIdeal.{u} g')
+    (h'' : ∀ j, MvPolynomial.rename (σ ∘ τ) (g'' j) ∈ presentationIdeal.{u} g) :
+    (PresHom.ofRename.{u} σ h).comp (PresHom.ofRename.{u} τ h') =
+      PresHom.ofRename.{u} (σ ∘ τ) h'' := by
+  refine PresHom.ext (Ideal.Quotient.ringHom_ext (RingHom.ext fun p ↦ ?_))
+  simp [PresHom.comp, MvPolynomial.rename_rename]
 
 /-! ### The induced morphism of analytifications -/
 

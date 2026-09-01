@@ -2912,3 +2912,45 @@ info: 'ComplexAnalytic.exists_refineDatumCross' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.exists_refineDatumCross
+
+/-! ### Two adjoined roots, and the composition law for a renaming that it needs
+
+`Oka/Analytification/ChangeOfVariables.lean` and `Oka/Analytification/HypersurfaceFinite.lean`.
+The general composition law for `ComplexAnalytic.PresHom.ofRename` with the ideal statement under
+it, and the two-step hypersurface extension it makes expressible as one map of presentations,
+with its finiteness.
+
+Appended as their own section rather than folded into the two above because those sections
+enumerate what their files had when they were written, and because every branch on this board adds
+a section at the end of this file — a section moved is a conflict for somebody else. All four are
+theorems.
+-/
+
+/--
+info: 'ComplexAnalytic.rename_mem_presentationIdeal' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.rename_mem_presentationIdeal
+
+/--
+info: 'ComplexAnalytic.PresHom.ofRename_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.PresHom.ofRename_comp
+
+/--
+info: 'ComplexAnalytic.hypersurfacePresHom_comp_hypersurfacePresHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.hypersurfacePresHom_comp_hypersurfacePresHom
+
+/--
+info: 'ComplexAnalytic.isFinite_analytificationMap_hypersurfacePresHom_comp_hypersurfacePresHom'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  ComplexAnalytic.isFinite_analytificationMap_hypersurfacePresHom_comp_hypersurfacePresHom
