@@ -124,9 +124,18 @@ the unequal branch was added, **and two things neither file describes fired as w
   `ComplexAnalytic.refineDatumGlueNe.congr_simp` and
   `ComplexAnalytic.refineDatumCrossProj.congr_simp` by the ones in
   `ComplexAnalytic.refineDatumGlueNe_analytification_comp` and
-  `ComplexAnalytic.refineDatumCrossProj_analytification_localisationProj` — **each attributed by
-  deleting the theorem and re-running the dump**, not inferred, and the two are not
-  interchangeable: with the triangle deleted the first of them goes and the second stays. The
+  `ComplexAnalytic.refineDatumCrossProj_analytification_localisationProj` — **and the two have
+  different numbers of sources, which no single deletion can tell you.** Deleting each theorem and
+  re-dumping, three times and from a tree restored between runs: the triangle alone costs
+  `Δdump = −2` and takes `ComplexAnalytic.refineDatumGlueNe.congr_simp` with it; the projection
+  lemma alone costs **`−1`** and takes neither; the two together cost `−4`. So the first has one
+  source and **`ComplexAnalytic.refineDatumCrossProj.congr_simp` is planted redundantly, by either
+  theorem on its own** — the triangle's hypothesis mentions
+  `ComplexAnalytic.refineDatumCrossProj` at `h` and at `h.symm`, so simp needs the congruence
+  lemma to traverse it there exactly as it does in the projection lemma. **A branch that drops the
+  projection lemma should expect `−1` and not `−2`**, and deleting both leaves a dump that is this
+  file's own predecessor plus `ComplexAnalytic.refineDatumCrossProj_localisationHom`, which
+  is where the arithmetic closes. The
   one-member file's analytified triangle uses the same tactic and plants nothing, and the
   difference is that all three definitions here take a proof argument, so simp needs a congruence
   lemma to traverse them. They belong to this module and are the benign kind;
@@ -173,6 +182,16 @@ is one *in the statement*. The factors of `ComplexAnalytic.refineDatumGlueNe_com
 a composite and does not enter a definition, so after it there is nothing for the rewrite to see.
 **Adding it to the `simp` set is not merely useless but detectably so** — `linter.unusedSimpArgs`
 reports the argument as unused, which is how this was found rather than argued.
+
+**And it stays unused one level deeper, which is the answer to the obvious objection.** Opening the
+projection first with `ComplexAnalytic.refineDatumCrossProj_eq`, at both `h` and `h.symm`, does not
+help: the linter reports the same argument on the same line, because
+`ComplexAnalytic.refineCrossProj` underneath is a `def` too and the rewrite needs a
+`ComplexAnalytic.localisationPresHom` in the *statement* and not in the unfolding. **The route is
+worse than useless, and that is measured rather than asserted**: neither way of reassembling the
+hypothesis afterwards closed, one failing to find its pattern and the other exceeding the default
+`maxHeartbeats` of 200000 at the `exact`. So a reader who thinks of unfolding before reading on is
+answered here.
 
 So the two branches' analytified triangles are in different vocabularies, and no better choice of
 tactic makes one look like the other: the difference is in what the statements are built from.
