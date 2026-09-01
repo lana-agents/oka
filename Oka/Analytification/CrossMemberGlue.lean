@@ -154,14 +154,20 @@ harder to read, which is a reason to state and not a reason to hide.
   field takes is the caller's `r`, `u` and two equations, one per ordered pair off the diagonal,
   so the bullet below is what it is still a function of; `hrange` and `hcocycle` are untouched in
   both branches, and `hsymm` holds on the equal branch alone.
-* **Nothing here produces `q`.** The extra factor and the unit are arguments, and where they come
-  from is `ComplexAnalytic.exists_localisationOpen_eq_rename` with
-  `ComplexAnalytic.exists_mk_rename_eq` for the algebra and
-  `ComplexAnalytic.exists_comap_analytificationMap_eq_comap_localisationProj` for the geometry.
-  Both are existentials, so a datum built from them chooses; **that choice is what a `hsymm`
-  would then have to be stated against**, and nothing here says the choice for the pair `(a, b)`
-  and the choice for `(b, a)` can be made compatibly. That is a statement about the datum and it
-  is unproved in both directions.
+* **Nothing here produces `q`.** The extra factor and the unit are arguments. This bullet used to
+  offer `ComplexAnalytic.exists_localisationOpen_eq_rename`,
+  `ComplexAnalytic.exists_mk_rename_eq` and
+  `ComplexAnalytic.exists_comap_analytificationMap_eq_comap_localisationProj` as *where they come
+  from*, and **that reading is wrong in a way worth recording rather than deleting**:
+  `ComplexAnalytic.exists_refineDatumCross` (`Oka/Analytification/CrossMemberChoice.lean`)
+  produces a choice from the second alone, and the two that produce an equality of opens are the
+  ones an associate does not follow from — `ComplexAnalytic.exists_mk_rename_eq`'s own docstring
+  names that implication as a Nullstellensatz statement this repository does not prove. A worker
+  who took the list at face value would spend a session on the two that are not the obstruction.
+  A choice being an existential, a datum built from one chooses; **that choice is what a `hsymm`
+  would then have to be stated against**, and nothing anywhere says the choice for the pair
+  `(a, b)` and the choice for `(b, a)` can be made compatibly. That is a statement about the datum
+  and it is unproved in both directions.
 * **No `hrange` and no `hcocycle`.** They are the cross-member analogue of
   `ComplexAnalytic.refineHrange` and `ComplexAnalytic.refineHcocycle`, and the argument that
   discharges those does not transfer: it cancels against the projection of the *one* fixed member,

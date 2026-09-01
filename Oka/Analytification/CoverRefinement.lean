@@ -207,10 +207,13 @@ overlaps sitting over three different members with no common target to cancel ag
   `ComplexAnalytic.refineDatumGlue` is the two branches under a case split, and
   `ComplexAnalytic.refineDatumGlue_const` says `ComplexAnalytic.refineGlue` above is it at
   constant `σ` for every choice — not by `rfl` this time, for the reason that statement gives.
-  What is left is that nothing produces the choice the unequal branch takes, an `hsymm` quantified
-  over every pair rather than over the equal ones, and the two geometric laws, which have no
-  analogue for the reason the paragraph above gives. Those three files' `## What is not here`
-  state all of it.
+  **Nor is the choice that branch takes**: `ComplexAnalytic.exists_refineDatumCross`
+  (`Oka/Analytification/CrossMemberChoice.lean`) produces the extra factor, the polynomial and the
+  unit at every ordered pair from the input datum's symmetry law alone — algebraically, saying
+  nothing about what the overlap so refined cuts out. What is left is an `hsymm` quantified over
+  every pair rather than over the equal ones, and the two geometric laws, which have no analogue
+  for the reason the paragraph above gives. Those four files' `## What is not here` state all of
+  it.
 * **No hypothesis under which the morphism *is* an isomorphism, and no morphism back.** The
   answer to whether it is one is **no** and it is proved rather than argued:
   `ComplexAnalytic.not_isIso_refineToBase`, at an empty family, where the refinement refines

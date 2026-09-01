@@ -662,8 +662,10 @@ localisations is `ComplexAnalytic.refineCrossGlue`
 `ComplexAnalytic.refineCrossGlue_hom_comp`; **the two geometric laws across members are still
 nowhere**, and so is the datum they would be laws of, except for its `poly` field
 (`ComplexAnalytic.refineDatumPoly`) and its `glue` (`ComplexAnalytic.refineDatumGlue`, both
-branches under a case split) — the latter a function of a choice of extra factor and unit that
-nothing produces. Taxis #1287 is where that question lives. Nothing here is
+branches under a case split) — the latter a function of a choice of extra factor and unit, which
+`ComplexAnalytic.exists_refineDatumCross` (`Oka/Analytification/CrossMemberChoice.lean`) produces
+at every ordered pair, algebraically and without saying that the overlap it refines to is the
+geometric one. Taxis #1287 is where that question lives. Nothing here is
 about a scheme.
 -/
 
