@@ -97,8 +97,14 @@ consumes this one and reopens nothing in it.
   whether a caller can arrange `RefineDatumRangeEq`, are untouched here in both directions; this
   file adopts, and `Oka/Analytification/CrossMemberGlue.lean`'s record that nothing produces `q`
   stands.
-* **No witness.** There is still no example of a refined cover datum at a non-constant `σ`, which
-  is taxis #1107's fourth deliverable; a construction whose hypotheses nobody has met is not one.
+* **No witness *here*.** This bullet said *"there is still no example of a refined cover datum at
+  a non-constant `σ` … a construction whose hypotheses nobody has met is not one"*, and both
+  hypotheses this file adopts have since been met:
+  `Oka/Analytification/RefineDatumWitness.lean` discharges `ComplexAnalytic.RefineDatumRangeCross`
+  and `ComplexAnalytic.RefineDatumRangeEq` for every cover datum and every index map, by taking
+  the refining family constantly `1`. **Nothing in this file is evidence for that** — it is the
+  file the two conditions are stated in, and a condition being satisfiable is a fact about the
+  caller, not about the statement.
 * **None of the five shapes is reproved.** `Oka/Analytification/RefineDatumRange.lean` and
   `Oka/Analytification/RefineDatumTransition.lean` are consumed and not opened.
 * **The scheme side, `admissible`, and the comparison functor**, as in the files this one sits

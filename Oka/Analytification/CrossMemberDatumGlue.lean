@@ -284,6 +284,10 @@ lemma is about one member and one side of the overlap and is not a step towards 
 - `ComplexAnalytic.refineDatumGlue_const`: **at constant `σ` the field is the one-member file's
   glue, for every choice** — and, unlike the equal branch's version, it is *not* `rfl`; its
   docstring says which instance is in the way and what buying the `rfl` back would cost.
+- `ComplexAnalytic.exists_refineDatumCross_of_isUnit`: **both equations have a solution as soon as
+  the four polynomials they are stated at are units**, at a `q` and a `fam` the caller names. It
+  is not `ComplexAnalytic.exists_refineDatumCross`, which produces `q` itself, and the two are not
+  comparable.
 
 ## What is not here
 
@@ -332,10 +336,14 @@ lemma is about one member and one side of the overlap and is not a step towards 
   except the shape whose three members are equal, since at two members equal the remaining two
   edges are still unequal. What stays true is the clause about `hrange`, which is
   `Oka/Analytification/RefineDatumRange.lean`'s own finding.
-* **No witness at a non-constant `σ`.** `ComplexAnalytic.refineDatumGlue_const` says the general
-  form reduces to a configuration the test files already exhibit, which is weaker than a witness
-  and says nothing about `σ` ever being non-constant — the same gap
-  `Oka/Analytification/CrossMemberDatum.lean` records for the `poly` field.
+* **No witness at a non-constant `σ` *here*, and the theorem above is not one.**
+  `ComplexAnalytic.refineDatumGlue_const` says the general form reduces to a configuration the
+  test files already exhibit, which is weaker than a witness and says nothing about `σ` ever
+  being non-constant — the same gap `Oka/Analytification/CrossMemberDatum.lean` records for the
+  `poly` field. **What this bullet said was missing outright now exists**, in
+  `Oka/Analytification/RefineDatumWitness.lean`, and it is
+  `ComplexAnalytic.exists_refineDatumCross_of_isUnit` above that supplies its `r` and `u` — so
+  this file holds an input to the witness and still exhibits none of its own.
 * **No scheme and no `admissible`**, as in the four files this one sits beside.
 -/
 
@@ -628,6 +636,72 @@ abbrev RefineDatumCrossUnit (a b : B)
         (localisationPresentation.{u} (obj (σ b)).g (poly (σ b) (σ a)))) *
       Ideal.Quotient.mk (presentationIdeal.{u} (localisationPresentation.{u} (obj (σ b)).g
         (poly (σ b) (σ a)))) r
+
+/-! ### When a caller can meet both equations at once -/
+
+/-- **Both equations have a solution as soon as the four polynomials they are stated at are
+units**, and then the caller owes nothing further at that ordered pair.
+
+`r` is a preimage of the transported class under `Ideal.Quotient.mk`, which is surjective, so
+`ComplexAnalytic.RefineDatumCrossEq` holds **by construction and says nothing**; all the content
+is in `ComplexAnalytic.RefineDatumCrossUnit`, which then relates two elements that are both units
+— the left-hand side by hypothesis, the right-hand side because an `AlgEquiv` carries a unit to a
+unit — and `u` is their ratio.
+
+**This is not `ComplexAnalytic.exists_refineDatumCross`**, which produces `q` as well and whose
+content is that the factor's class is an *associate* of the transported one. Here `q` is the
+caller's and the hypotheses are about it; the two are not comparable, and a caller who has this
+one does not need that one. `Oka/Analytification/RefineDatumWitness.lean` is what it was written
+for.
+
+**The hypotheses are on the four factors separately rather than on the two products
+`q a b * fam a` and `q b a * fam b`.** The product form is what the proof uses and is the more
+natural statement, but it does not instantiate: at a refining family given as `fun _ ↦ 1` the
+`1` carries an index type the caller's `σ` has not been reduced in, and `simp only [mul_one]`
+reports the argument unused. Splitting costs two `rw [map_mul, map_mul]` here and removes the
+problem at every call site. -/
+theorem exists_refineDatumCross_of_isUnit (a b : B)
+    (hqa : IsUnit (Ideal.Quotient.mk (presentationIdeal.{u} (localisationPresentation.{u}
+      (obj (σ a)).g (poly (σ a) (σ b))))
+      (MvPolynomial.rename (localisationIncl.{u} (obj (σ a)).n) (q a b))))
+    (hfa : IsUnit (Ideal.Quotient.mk (presentationIdeal.{u} (localisationPresentation.{u}
+      (obj (σ a)).g (poly (σ a) (σ b))))
+      (MvPolynomial.rename (localisationIncl.{u} (obj (σ a)).n) (fam a))))
+    (hqb : IsUnit (Ideal.Quotient.mk (presentationIdeal.{u} (localisationPresentation.{u}
+      (obj (σ b)).g (poly (σ b) (σ a))))
+      (MvPolynomial.rename (localisationIncl.{u} (obj (σ b)).n) (q b a))))
+    (hfb : IsUnit (Ideal.Quotient.mk (presentationIdeal.{u} (localisationPresentation.{u}
+      (obj (σ b)).g (poly (σ b) (σ a))))
+      (MvPolynomial.rename (localisationIncl.{u} (obj (σ b)).n) (fam b)))) :
+    ∃ (r : MvPolynomial (ULift.{u} (Fin ((obj (σ b)).n + 1))) ℂ)
+      (u : (PresentedAlgebra.{u} ((obj (σ b)).n + 1) ((obj (σ b)).k + 1)
+        (localisationPresentation.{u} (obj (σ b)).g (poly (σ b) (σ a))))ˣ),
+      RefineDatumCrossEq.{u} obj σ fam poly q glue a b r ∧
+        RefineDatumCrossUnit.{u} obj σ fam poly q a b r u := by
+  have ha : IsUnit (Ideal.Quotient.mk (presentationIdeal.{u} (localisationPresentation.{u}
+      (obj (σ a)).g (poly (σ a) (σ b))))
+      (MvPolynomial.rename (localisationIncl.{u} (obj (σ a)).n) (q a b * fam a))) := by
+    rw [map_mul, map_mul]; exact hqa.mul hfa
+  have hb : IsUnit (Ideal.Quotient.mk (presentationIdeal.{u} (localisationPresentation.{u}
+      (obj (σ b)).g (poly (σ b) (σ a))))
+      (MvPolynomial.rename (localisationIncl.{u} (obj (σ b)).n) (q b a * fam b))) := by
+    rw [map_mul, map_mul]; exact hqb.mul hfb
+  set L := refineDatumCrossAlgEquiv.{u} obj poly glue (σ a) (σ b)
+    (Ideal.Quotient.mk (presentationIdeal.{u} (localisationPresentation.{u} (obj (σ a)).g
+      (poly (σ a) (σ b)))) (MvPolynomial.rename (localisationIncl.{u} (obj (σ a)).n)
+        (q a b * fam a))) with hL
+  refine ⟨Function.surjInv (Ideal.Quotient.mk_surjective (I :=
+    presentationIdeal.{u} (localisationPresentation.{u} (obj (σ b)).g (poly (σ b) (σ a))))) L, ?_⟩
+  have hmk : Ideal.Quotient.mk (presentationIdeal.{u} (localisationPresentation.{u}
+      (obj (σ b)).g (poly (σ b) (σ a)))) (Function.surjInv (Ideal.Quotient.mk_surjective (I :=
+        presentationIdeal.{u} (localisationPresentation.{u} (obj (σ b)).g (poly (σ b) (σ a))))) L)
+      = L := Function.surjInv_eq _ _
+  obtain ⟨v, hv⟩ : IsUnit L :=
+    hL ▸ ha.map (refineDatumCrossAlgEquiv.{u} obj poly glue (σ a) (σ b))
+  obtain ⟨w, hw⟩ := hb
+  refine ⟨w * v⁻¹, hmk.symm, ?_⟩
+  change Ideal.Quotient.mk _ _ = _
+  rw [hmk, ← hv, Units.val_mul, mul_assoc, Units.inv_mul, mul_one, hw]
 
 /-- **The `glue` of the refined cover datum, where the two refined members lie over two different
 members.**

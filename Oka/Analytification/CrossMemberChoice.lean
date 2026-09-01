@@ -141,8 +141,14 @@ and it is also the reason to be careful about what it does *not* claim — see b
   one; the factor produced here obeys an algebraic rule and **nothing below says it is that
   polynomial**, or that the resulting refined overlap is the geometric one. That identification is
   where the two existentials this file does not use would be spent, and it is not made.
-* **No witness at a non-constant `σ`**, and nothing about `AlgebraicGeometry.Scheme` or
-  `admissible`, as in the files this one sits beside.
+* **No witness at a non-constant `σ` *here*, and the one that exists does not come from this
+  file.** This bullet said only *"no witness at a non-constant `σ`"*;
+  `Oka/Analytification/RefineDatumWitness.lean` has one, and it is built by exhibiting `r` and
+  `u` rather than by calling `ComplexAnalytic.exists_refineDatumCross` — which it cannot, since
+  that lemma produces `q` in its conclusion and a witness names its own. **Whether the choice
+  this file produces meets the two conditions a refined datum adopts is still untouched in both
+  directions.** Nothing about `AlgebraicGeometry.Scheme` or `admissible` either, as in the files
+  this one sits beside.
 -/
 
 open CategoryTheory MvPolynomial

@@ -3918,3 +3918,122 @@ info: 'ComplexAnalytic.refineDatumAnalytificationOfLaws_toLocallyRingedSpace' de
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.refineDatumAnalytificationOfLaws_toLocallyRingedSpace
+
+/-! ### A refined cover datum at a non-constant `σ`, and the two conditions met
+
+`Oka/Analytification/RefineDatumWitness.lean`, one declaration of
+`Oka/Analytification/DistinguishedOpen.lean` and one of
+`Oka/Analytification/CrossMemberDatumGlue.lean` that this line added: `D(1)` is the whole space in
+both the plain and the transported form, both equations have a solution wherever the four
+polynomials are units, the caller's `r` and `u` at a trivial refining family, the two laws they
+satisfy, the two adopted conditions discharged, the glue data and the analytic space, and the
+sentence that makes the index map non-constant.
+
+`ComplexAnalytic.localisationOpen_one` and
+`ComplexAnalytic.exists_refineDatumCross_of_isUnit` are guarded here rather than in the
+`Oka/Analytification/DistinguishedOpen.lean` and
+`Oka/Analytification/CrossMemberDatumGlue.lean` sections above, for the reason every section here
+gives: a section moved is a conflict for somebody else, and so is a guard inserted into one.
+
+Four of the thirteen are a `def` and are guarded for the reason the
+`Oka/Analytification/RefineDatumRange.lean` section gives: the convention here is every
+declaration and not every theorem.
+
+**`ComplexAnalytic.not_isConstant_id` is the one guard in this section with an empty axiom list**,
+and it is worth one line of explanation rather than being read as an anomaly: it is a statement
+about a `Nontrivial` type and the identity, with no analytic geometry in it at all, and every
+other declaration on this line reaches `Classical.choice` through the analytification functor.
+
+Appended as its own section for the reason the sections above give: a section moved is a conflict
+for somebody else.
+-/
+
+/--
+info: 'ComplexAnalytic.localisationOpen_one' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.localisationOpen_one
+
+/--
+info: 'ComplexAnalytic.exists_refineDatumCross_of_isUnit' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.exists_refineDatumCross_of_isUnit
+
+/--
+info: 'ComplexAnalytic.mem_localisationOpen_transport_one' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.mem_localisationOpen_transport_one
+
+/--
+info: 'ComplexAnalytic.exists_refineDatumCross_one' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.exists_refineDatumCross_one
+
+/--
+info: 'ComplexAnalytic.refineDatumOneR' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumOneR
+
+/--
+info: 'ComplexAnalytic.refineDatumOneU' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumOneU
+
+/--
+info: 'ComplexAnalytic.refineDatumOneCrossEq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumOneCrossEq
+
+/--
+info: 'ComplexAnalytic.refineDatumOneCrossUnit' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumOneCrossUnit
+
+/--
+info: 'ComplexAnalytic.refineDatumOneRangeEq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumOneRangeEq
+
+/--
+info: 'ComplexAnalytic.refineDatumOneRangeCross' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumOneRangeCross
+
+/--
+info: 'ComplexAnalytic.refineDatumOneGlueData' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumOneGlueData
+
+/--
+info: 'ComplexAnalytic.refineDatumOneAnalytification' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumOneAnalytification
+
+/--
+info: 'ComplexAnalytic.not_isConstant_id' does not depend on any axioms
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.not_isConstant_id
