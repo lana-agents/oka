@@ -140,8 +140,18 @@ standard étale pair.
   section while `ComplexAnalytic.hypersurfacePresentation` has `k + 1` relations, and that
   *"That one is untouched and no declaration below attempts it."* **The count is right and the
   reading of it was wrong.** Those theorems conclude about the projection to `ℂ^n`, and for
-  `k ≥ 1` that conclusion is *false* — a hypersurface lying over a proper closed `X^an ⊆ ℂ^n` has
-  its image inside `X^an` and cannot project to `ℂ^n` as a local isomorphism. So `k + 1` against
+  `k ≥ 1` that conclusion fails unless the hypersurface's analytification is empty. **This
+  sentence gave the reason as a hypersurface over a proper closed `X^an ⊆ ℂ^n` having *"its image
+  inside `X^an`"*, and that reason is a step short**: a local isomorphism need not be surjective —
+  `Oka/Analytification/StandardEtaleLocalIso.lean`'s `## What is not here` says so of the one
+  built there — so containment in a proper closed subset does not by itself contradict it. The
+  step is that the image is **open**: a local isomorphism is a local homeomorphism, which is the
+  field `ComplexAnalytic.AnalyticSpace.IsLocalIso.isLocalHomeomorph`, and so an open map; a proper
+  closed `X^an ⊆ ℂ^n` has empty interior, since `X^an` is the zero locus of the relations of `g`
+  and a polynomial vanishing on a non-empty open subset of `ℂ^n` is zero; and an open subset of a
+  set with empty interior is empty. *Unless empty* rather than a bare *false* because both fields
+  of `ComplexAnalytic.AnalyticSpace.IsLocalIso` quantify over the points of the source, so an
+  empty analytification satisfies them vacuously and is not a counterexample. So `k + 1` against
   one is not a datum nobody has built; it is the signature of a statement whose base is the whole
   of `ℂ^n`. At `k = 0` the datum is one rewrite —
   `ComplexAnalytic.isCutOutBy_analytificationInclHom_hypersurface`

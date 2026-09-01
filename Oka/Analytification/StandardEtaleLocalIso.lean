@@ -27,9 +27,21 @@ relations of the base algebra read upstairs, and `F`. The theorem above takes a 
 mismatch as a missing datum for `k + 1` relations against one section.
 
 **It is not a missing datum.** The conclusion of that theorem is about the projection to `ℂ^n`,
-and for `k ≥ 1` it is *false*: a hypersurface lying over a proper closed `X^an ⊆ ℂ^n` does not
-project to `ℂ^n` as a local isomorphism, since its image is contained in `X^an`. The `k + 1`
-versus one is the signature of a statement whose base is the whole of `ℂ^n`, i.e. `k = 0`, and
+and for `k ≥ 1` it fails unless the hypersurface's analytification is empty. **This sentence gave
+the reason as *"since its image is contained in `X^an`"*, and that reason is a step short**:
+containment in a proper closed subset is not on its own incompatible with being a local
+isomorphism, and this file's `## What is not here` says in terms that *"a local isomorphism need
+not be surjective and this one is not"*. What closes it is that the image is **open**. A local
+isomorphism is a local homeomorphism — that is the field
+`ComplexAnalytic.AnalyticSpace.IsLocalIso.isLocalHomeomorph` — and so an open map, hence its image
+is open; a proper closed `X^an ⊆ ℂ^n` has empty interior, since `X^an` is the zero locus of the
+relations of `g` and a polynomial vanishing on a non-empty open subset of `ℂ^n` is zero; and an
+open subset of a set with empty interior is empty. **So the two sentences are not in tension**:
+non-surjectivity is exactly what makes the containment reading fail, and openness is what makes
+the corrected one work. *Unless empty* rather than a bare *false* because the empty case is not a
+counterexample: both fields of `ComplexAnalytic.AnalyticSpace.IsLocalIso` quantify over the points
+of the source, so an empty analytification satisfies them vacuously. The `k + 1` versus one is the
+signature of a statement whose base is the whole of `ℂ^n`, i.e. `k = 0`, and
 that is what everything below is stated at. A statement over a general base is a different
 theorem and needs an implicit function theorem relative to `X^an`, which
 `Oka/Analysis/Calculus/Implicit.lean` does not have.
