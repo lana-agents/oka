@@ -141,10 +141,15 @@ one — and the build turns that warning into a failure. The two tactics do the 
 
 The `show … from Fin.snoc_last _ _` inside the `rw` is a different `show`, is a term and not a
 tactic, and is untouched by that linter. It is the shape
-`ComplexAnalytic.eval_pderiv_ne_zero_of_mem` uses one file over and for the same reason: a bare
+`ComplexAnalytic.eval_pderiv_ne_zero_of_mem` uses one file over, **and here it is a choice rather
+than a necessity**. This paragraph said it was forced, for the sibling's reason: that a bare
 `rw [hypersurfacePresentation, Fin.snoc_last]` fails with *"Failed to rewrite using equation
-theorems for `hypersurfacePresentation`"*, and naming the instance is also what keeps an equation
-lemma for that definition out of the environment. -/
+theorems for `hypersurfacePresentation`"*, and that naming the instance is what keeps an equation
+lemma for that definition out of the environment. **Neither holds at this rewrite**, measured in
+tree: the bare form compiles, and `scripts/DumpOkaDecls.lean`'s output is byte-identical either
+way, so no equation lemma enters the environment on either spelling. The sibling states its
+version of the reason at `Fin.snoc_castSucc` under `rwa … at`, which is a different rewrite and
+is untouched here; the named form is kept for consistency with it and for nothing else. -/
 theorem section_hypersurfacePresentation_empty :
     (fun j ↦ (OkaRing.ofMvPolynomial (⊤ : Opens (ULift.{u} (Fin (n + 1)) → ℂ))
         (hypersurfacePresentation.{u} g F j) :
@@ -226,10 +231,13 @@ followed by the base's inclusion into the hypersurface's inclusion followed by t
 and then the composite is an isomorphism followed by the theorem above, which
 `ComplexAnalytic.AnalyticSpace.isLocalIso_comp` closes.
 
-**`haveI` and not `have` for both**: `ComplexAnalytic.AnalyticSpace.isLocalIso_comp` is an
-instance and the two facts have to be in the instance cache for it to fire, which is the same
-reason `ComplexAnalytic.AnalyticSpace.isLocalIso_of_isIso` is a `theorem` and not an instance —
-its own docstring says why. -/
+**`haveI` for both, and that is emphasis rather than necessity.**
+`ComplexAnalytic.AnalyticSpace.isLocalIso_comp` is an instance and needs the two facts as local
+instances to fire, which a plain `have` supplies as well: the proof compiles unchanged with
+`have` twice, measured in tree. This paragraph also called that *"the same reason
+`ComplexAnalytic.AnalyticSpace.isLocalIso_of_isIso` is a `theorem` and not an instance — its own
+docstring says why"*; that docstring explains a discrimination-tree seam in its own proof and
+says nothing about instance-versus-theorem, so the citation is withdrawn rather than replaced. -/
 theorem isLocalIso_analytificationMap_etalePresHom_comp
     (P : StandardEtalePair (PresentedAlgebra.{u} n 0 g))
     (hF : polyPresentedAlgebraEquiv.{u} g (Ideal.Quotient.mk _ F) = P.f)
