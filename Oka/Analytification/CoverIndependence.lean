@@ -185,15 +185,21 @@ docstring predicts that every consumer of the functor spells its object the othe
   between two members of a cover datum for it to lie over instead. It leaves `hrange` a single
   containment, in the caller's own `D(q b c)`, at a triple whose three members are pairwise
   different — `ComplexAnalytic.range_refineDatumTransitionHom_subset_iff` states that as an
-  *equivalence* and not as a sufficient condition — and nothing at all at the mixed triples, where
-  `ComplexAnalytic.refineDatumGlue` takes its equal branch and the triangle is over a member.
-  `hcocycle` keeps the clause, and cannot be stated before `hrange` is proved in any case:
-  `ComplexAnalytic.coverTriple` takes the range law as an argument. **The count is not moved by a
-  law that is reduced rather than proved** — it counts what a refined datum still owes, and it
-  owes both, which is why this is a narrowing of the clause and not a fourth decrement of the
-  number. One law coming free and a second one reduced is no evidence about what is left of
-  either, which those files say of themselves. Those six files' `## What is not here` state all
-  of it.
+  *equivalence* and not as a sufficient condition. **This sentence went on to say "and nothing at
+  all at the mixed triples, where `ComplexAnalytic.refineDatumGlue` takes its equal branch and the
+  triangle is over a member", and a triangle over a member is what settles them**:
+  `Oka/Analytification/RefineDatumRange.lean` reads all four remaining shapes off it — `hrange`
+  outright where the three members are equal, that same containment at two more, and a
+  containment in the caller's own `D(fam c)` at the fourth. `hcocycle` keeps the clause, and
+  **this sentence also said it "cannot be stated before `hrange` is proved in any case"**, which
+  was right about `ComplexAnalytic.coverTriple` taking the range law as an argument and is no
+  longer a bar: `Oka/Analytification/RefineDatumGlueData.lean` joins the five shapes into one
+  proof and states the cocycle law off it, as `ComplexAnalytic.RefineDatumCocycle`. **The count is
+  still not moved**, and now for a sharper reason than "a law reduced rather than proved":
+  `ComplexAnalytic.refineDatumHrange_iff` says the two conditions that assembled law is proved
+  from are *equivalent* to it, so what a caller carries is the range law under another name and
+  not a discharge of it, and `hcocycle` is proved nowhere at all. It counts what a refined datum
+  still owes and it owes both. Those eight files' `## What is not here` state all of it.
 
   **This bullet also said refinement is where `σ` and `ψ` "have to be built", with the implication
   that building them is the work; the second half is false and was measured so on 2026-08-30.**

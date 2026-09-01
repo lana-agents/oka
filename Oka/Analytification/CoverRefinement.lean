@@ -230,15 +230,20 @@ overlaps sitting over three different members with no common target to cancel ag
   **`hrange` is not proved by it.** At a triple whose three members are pairwise different what
   is left is a single containment, in the caller's own `D(q b c)`, and
   `ComplexAnalytic.range_refineDatumTransitionHom_subset_iff` states it as an *equivalence* and
-  not as a sufficient condition, so no weaker hypothesis on the choice can discharge it; at the
-  mixed triples `ComplexAnalytic.refineDatumGlue` takes its equal branch, whose triangle is over
-  a *member*, and the square has no statement there at all. **`hcocycle` keeps the clause**, for
-  the reason the paragraph above gives — the cancellation is against the projection of the one
-  fixed member — and it cannot even be stated first: `ComplexAnalytic.coverTriple` takes `hrange`
-  as an argument, so the cocycle law of a refined datum mentions a proof of the refined `hrange`
-  three times in its own statement. One law coming free and a second one reduced is not evidence
-  about what is left of either, and both of those files say so of themselves. Those six files'
-  `## What is not here` state all of it.
+  not as a sufficient condition, so no weaker hypothesis on the choice can discharge it. **This
+  sentence ended "at the mixed triples `ComplexAnalytic.refineDatumGlue` takes its equal branch,
+  whose triangle is over a *member*, and the square has no statement there at all", and a
+  triangle over a member is the shape this file discharges both laws from at a constant `σ`**:
+  `Oka/Analytification/RefineDatumRange.lean` is that statement at a general one, and reads all
+  four remaining shapes off it. **`hcocycle` keeps the clause**, for the reason the paragraph
+  above gives — the cancellation is against the projection of the one fixed member — and **this
+  sentence also said it "cannot even be stated first"**, which was right about
+  `ComplexAnalytic.coverTriple` taking `hrange` as an argument and is no longer a bar:
+  `Oka/Analytification/RefineDatumGlueData.lean` joins the five shapes into one proof and states
+  the law off it, as `ComplexAnalytic.RefineDatumCocycle`. It proves nothing about it, and the
+  two conditions its `hrange` is proved from are *equivalent* to that law
+  (`ComplexAnalytic.refineDatumHrange_iff`) rather than a discharge of it, so a refined datum
+  still owes both. Those eight files' `## What is not here` state all of it.
 * **No hypothesis under which the morphism *is* an isomorphism, and no morphism back.** The
   answer to whether it is one is **no** and it is proved rather than argued:
   `ComplexAnalytic.not_isIso_refineToBase`, at an empty family, where the refinement refines

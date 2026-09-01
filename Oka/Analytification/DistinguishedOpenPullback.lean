@@ -89,9 +89,14 @@ morphism between two members of a cover datum for it to lie over instead. **It d
 in the caller's own `D(q b c)`, and `ComplexAnalytic.range_refineDatumTransitionHom_subset_iff`
 states that as an *equivalence* rather than a sufficient condition, so no weaker hypothesis on the
 choice can discharge it; at the mixed triples `ComplexAnalytic.refineDatumGlue` takes its equal
-branch, whose triangle is over a *member*, and the square has no statement there at all.
-**`hcocycle` keeps the clause**, for the reason `Oka/Analytification/CoverRefinement.lean` gives,
-and cannot even be stated first: `ComplexAnalytic.coverTriple` takes `hrange` as an argument.
+branch, whose triangle is over a *member*, and **that** square has no statement there. The square
+over an identification of the two members does, and it is what
+`Oka/Analytification/RefineDatumRange.lean` reads the other four shapes off;
+`Oka/Analytification/RefineDatumGlueData.lean` joins all five into one law. This sentence ended
+*"and the square has no statement there at all"* until the first of those.
+**`hcocycle` keeps the clause**, for the reason `Oka/Analytification/CoverRefinement.lean` gives.
+It can now be *stated* — `ComplexAnalytic.RefineDatumCocycle`, which needed the assembled range
+law, `ComplexAnalytic.coverTriple` taking a proof of it as an argument — and nothing proves it.
 
 ## Non-vacuity
 

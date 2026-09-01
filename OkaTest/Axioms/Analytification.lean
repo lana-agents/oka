@@ -3462,3 +3462,75 @@ info: 'ComplexAnalytic.isFinite_analytificationMap_ofRename_id' depends on axiom
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isFinite_analytificationMap_ofRename_id
+
+/-! ### The refined cover datum's glue data, and the cocycle law named
+
+`Oka/Analytification/RefineDatumGlueData.lean`. The two conditions the range law of a
+cross-member refined cover datum reduces to, that law itself with the five shapes joined, the
+equivalence saying the two conditions are exactly what it asks, the cocycle law — statable only
+once the range law is a single proof — and the glue data and analytic space that take it as their
+one hypothesis.
+
+Five of the eight are a `def` or an `abbrev` and are guarded for the reason the
+`Oka/Analytification/RefineDatumRange.lean` section above gives: the convention here is every
+declaration and not every theorem.
+
+Appended as its own section for the reason the sections above give: a section moved is a conflict
+for somebody else.
+-/
+
+/--
+info: 'ComplexAnalytic.RefineDatumRangeCross' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.RefineDatumRangeCross
+
+/--
+info: 'ComplexAnalytic.RefineDatumRangeEq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.RefineDatumRangeEq
+
+/--
+info: 'ComplexAnalytic.refineDatumHrange' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumHrange
+
+/--
+info: 'ComplexAnalytic.refineDatumHrange_iff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumHrange_iff
+
+/--
+info: 'ComplexAnalytic.RefineDatumCocycle' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.RefineDatumCocycle
+
+/--
+info: 'ComplexAnalytic.refineDatumGlueData' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumGlueData
+
+/--
+info: 'ComplexAnalytic.refineDatumAnalytification' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumAnalytification
+
+/--
+info: 'ComplexAnalytic.refineDatumAnalytification_toLocallyRingedSpace' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumAnalytification_toLocallyRingedSpace

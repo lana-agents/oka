@@ -141,19 +141,27 @@ definition. A reader repairing a regression here should re-measure one change at
 
 * **`hrange` itself, and it is not one case away.** Everything above is at a triple with
   `σ a`, `σ b`, `σ c` pairwise different. The mixed triples — `σ a = σ b` with `σ c` different,
-  and the two others — are untouched, and they are not this argument with a hypothesis dropped:
-  `ComplexAnalytic.refineDatumGlue` takes its equal branch there, whose triangle
+  and the two others — are untouched *here*, and they are not this argument with a hypothesis
+  dropped: `ComplexAnalytic.refineDatumGlue` takes its equal branch there, whose triangle
   (`ComplexAnalytic.refineDatumGlueEq_analytification_comp`) is over a *member* and not over an
-  overlap, so the square below has no statement at those triples, let alone a proof.
-* **`hcocycle`, and it cannot even be stated yet.** `ComplexAnalytic.coverTriple` takes `hrange`
-  as an argument, so the cocycle law of the refined datum mentions a proof of the refined `hrange`
-  three times in its own statement. Nothing here is evidence about it, and the cancellation the
-  same-member proof uses — against the projection of the one fixed member, a monomorphism because
-  it is an open immersion — has no analogue, for the reason
-  `Oka/Analytification/CoverRefinement.lean` gives.
+  overlap, so the square below has no statement at those triples and there is none to be had —
+  at an equal pair there is no `ComplexAnalytic.coverTransitionHom` to lie over. **That reason
+  is what settles them rather than what blocks them**: it is the shape a *different* square has,
+  over an identification of the two members, and
+  `Oka/Analytification/RefineDatumRange.lean` builds it and reads all four remaining shapes off
+  it. This sentence ended *"let alone a proof"* until it did.
+* **`hcocycle`, and it cannot be stated from anything in this file.**
+  `ComplexAnalytic.coverTriple` takes `hrange` as an argument, so the cocycle law of the refined
+  datum mentions a proof of the refined `hrange` three times in its own statement, and one shape
+  of five is not one. It is stated in `Oka/Analytification/RefineDatumGlueData.lean`, as
+  `ComplexAnalytic.RefineDatumCocycle`, off the assembled law — and **it is proved nowhere**.
+  Nothing here is evidence about it, and the cancellation the same-member proof uses — against
+  the projection of the one fixed member, a monomorphism because it is an open immersion — has
+  no analogue, for the reason `Oka/Analytification/CoverRefinement.lean` gives.
 * **No hypothesis on `q`, and no refined cover datum.** This file adds no hypothesis and no
-  structure: `ComplexAnalytic.coverGlueData` is still unreachable for a non-constant `σ`, since it
-  asks for all three laws at once.
+  structure. `ComplexAnalytic.coverGlueData` at a non-constant `σ` asks for all three laws at
+  once and none of them is here; `Oka/Analytification/RefineDatumGlueData.lean` is where two of
+  the three are supplied, the third is named and the datum is built.
 * **Nothing about `hsymm`.** That law is `ComplexAnalytic.refineDatumGlue_symm`
   (`Oka/Analytification/RefineDatumSymm.lean`), it is algebraic where everything here is
   geometric, and neither is evidence about the other.

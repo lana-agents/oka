@@ -144,15 +144,18 @@ figure to check a branch on this file by.
 
 ## What is not here
 
-* **No single `hrange`, and so no `hcocycle`.** This file produces one theorem and three
-  equivalences at four disjoint shapes, not one proof of the law; and
+* **No single `hrange` here, and so no `hcocycle` here.** This file produces one theorem and
+  three equivalences at four disjoint shapes, not one proof of the law; and
   `ComplexAnalytic.coverTriple` takes `hrange` as an argument, so the cocycle law of the refined
   datum mentions such a proof three times in its own statement. Assembling the shapes needs a
   hypothesis on `q`, which is the next bullet, and the assembly is a decision nothing here makes.
+  `Oka/Analytification/RefineDatumGlueData.lean` makes it, joins these four shapes to the
+  pairwise different one and states the cocycle law off the result — which it does not prove.
 * **No hypothesis on `q`, and no refined cover datum.** As in
   `Oka/Analytification/RefineDatumTransition.lean`: nothing here adopts a right-hand side as an
-  assumption, and `ComplexAnalytic.coverGlueData` is still unreachable at a non-constant `σ`,
-  which asks for all three laws at once.
+  assumption. `ComplexAnalytic.coverGlueData` at a non-constant `σ` asks for all three laws at
+  once and this file supplies part of one; the file above supplies two and takes the third as a
+  hypothesis, which is as close to reachable as it is.
 * **Nothing about the fourth shape's residue.** That `D(fam c)` containment relates the caller's
   extra factor to the caller's refining family, and this file says only that it is what the law
   asks — not whether `ComplexAnalytic.exists_refineDatumCross`'s choice satisfies it, in either

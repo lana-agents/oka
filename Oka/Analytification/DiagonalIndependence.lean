@@ -118,7 +118,11 @@ determined by `t` and `CategoryTheory.cancel_mono` supplies it. That lemma is in
   such proof exists and this file is not evidence that one will take that route.**
 * **Nothing about `ComplexAnalytic.refineDatumPoly` itself**, and no refined datum: `glue`,
   `hrange`, `hsymm` and `hcocycle` for a cross-member refinement are taxis #1287's and are
-  untouched.
+  untouched *here*. **This bullet said they were untouched, without the last word, and three of
+  the four have since been built or proved on that thread** — `ComplexAnalytic.refineDatumGlue`,
+  `ComplexAnalytic.refineDatumGlue_symm` and `ComplexAnalytic.refineDatumHrange`, the last from
+  two conditions `Oka/Analytification/RefineDatumGlueData.lean` adopts and shows equivalent to
+  it. `hcocycle` is stated there and proved nowhere.
 * **No converse.** Nothing here says two data whose glued spaces agree must agree off the
   diagonal, and nothing needs it.
 * **No `Iso`.** The conclusions are equalities of `ComplexAnalytic.AnalyticSpace`, which is what
