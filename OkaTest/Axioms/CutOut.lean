@@ -167,3 +167,54 @@ info: 'ComplexAnalytic.IsCutOutBy.iso_comp' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.IsCutOutBy.iso_comp
+
+/-! ### Restricting a composite, and restricting over an open inside the image
+
+`Oka/AnalyticSpace/Restrict.lean`. Three general facts about `ComplexAnalytic.restrictHom` that
+the section above did not need: that it takes a composite to a composite, and that over an open
+subset of the target lying **inside the image** it is surjective and — once the base of the
+morphism is an embedding — a closed embedding.
+
+The last of the three is the companion of `ComplexAnalytic.isClosedEmbedding_base_restrictHom` at
+the opposite trade, and it is what an *open* immersion needs: the inclusion of an open subspace is
+an embedding whose base is not a closed map, so the earlier theorem does not reach it, while its
+restriction over a smaller open **is** a closed embedding because the two ranges then agree.
+
+**`ComplexAnalytic.isClosedEmbedding_base_restrictHom` is guarded here too, and it is older than
+this section.** It had no guard because it was in no `## Main results` list; naming it in the one
+the third theorem below needed — the two are a pair and neither reads without the other — is what
+`scripts/guard_coverage.py` then reported as a **new** unguarded result. The gap was there before
+and the citation is what made it visible, so it is closed here rather than left for the counter to
+carry.
+
+Appended as its own section for the reason the sections in the other guard files give: a section
+moved is a conflict for somebody else.
+-/
+
+/--
+info: 'ComplexAnalytic.isClosedEmbedding_base_restrictHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isClosedEmbedding_base_restrictHom
+
+/--
+info: 'ComplexAnalytic.restrictHom_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.restrictHom_comp
+
+/--
+info: 'ComplexAnalytic.surjective_base_restrictHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.surjective_base_restrictHom
+
+/--
+info: 'ComplexAnalytic.isClosedEmbedding_base_restrictHom_of_subset_range' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isClosedEmbedding_base_restrictHom_of_subset_range

@@ -1473,3 +1473,29 @@ info: 'ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp
+
+/-! ### Restricting a composite, and the finiteness of a restriction over an open inside the image
+
+`Oka/AnalyticSpace/OpenSubspace.lean`, at the level of complex analytic spaces. The first is
+`ComplexAnalytic.restrictHom_comp` reflected along the faithful forgetful functor; the second is
+`ComplexAnalytic.isClosedEmbedding_base_restrictHom_of_subset_range` read through
+`ComplexAnalytic.AnalyticSpace.isFinite_of_isClosedEmbedding`, and it is the shape an **open**
+immersion needs — finite over an open subset of its image while not finite at all.
+
+Appended as its own section for the reason the sections above give: a section moved is a conflict
+for somebody else.
+-/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.restrictHom_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.restrictHom_comp
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isFinite_restrictHom_of_subset_range' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFinite_restrictHom_of_subset_range

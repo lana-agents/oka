@@ -75,6 +75,11 @@ transport of algebra structures along an isomorphism is needed anywhere.
   `AlgebraicGeometry.LocallyRingedSpace.isOpenImmersion_ofRestrict` does one field further in.
 - `ComplexAnalytic.AnalyticSpace.isLocalIso_ofRestrict`: **the inclusion of an open subspace is a
   local isomorphism.**
+- `ComplexAnalytic.AnalyticSpace.restrictHom_comp`: **restricting a composite is composing the
+  restrictions.**
+- `ComplexAnalytic.AnalyticSpace.isFinite_restrictHom_of_subset_range`: **a morphism whose base is
+  an embedding restricts to a finite morphism over any open subset of its image** — the shape an
+  *open* immersion needs, since it is finite over such a subset and is not finite at all.
 
 ## Why `Oka/AnalyticSpace/LocalIso.lean` is imported here, when no import was forced
 
@@ -356,6 +361,43 @@ lemma toLRSHom_restrictHom {A B : AnalyticSpace.{u}} (f : A ⟶ B) (V : B.Opens)
 lemma restrictHom_fac {A B : AnalyticSpace.{u}} (f : A ⟶ B) (V : B.Opens) :
     restrictHom f V ≫ B.ofRestrict V = A.ofRestrict ((Opens.map f.toLRSHom.base).obj V) ≫ f :=
   forgetToLocallyRingedSpace.map_injective (ComplexAnalytic.restrictHom_fac f.toLRSHom V)
+
+/-- **Restricting a composite is composing the restrictions.**
+
+`ComplexAnalytic.restrictHom_comp` one category down, reflected along the faithful
+`ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace` — which is all a morphism of analytic
+spaces needs, since the `ℂ`-linearity field is a proposition and equality of the two underlying
+morphisms is equality of the two. The two sides have definitionally the same source; see the
+locally-ringed-space statement for why its proof is a term rather than a `rw` chain. -/
+lemma restrictHom_comp {A B C : AnalyticSpace.{u}} (f : A ⟶ B) (h : B ⟶ C) (V : C.Opens) :
+    restrictHom (f ≫ h) V =
+      restrictHom f ((Opens.map h.toLRSHom.base).obj V) ≫ restrictHom h V :=
+  forgetToLocallyRingedSpace.map_injective
+    (ComplexAnalytic.restrictHom_comp f.toLRSHom h.toLRSHom V)
+
+/-- **A morphism whose base is an embedding restricts to a finite morphism over any open subset of
+its image.**
+
+`ComplexAnalytic.isClosedEmbedding_base_restrictHom_of_subset_range` and
+`ComplexAnalytic.AnalyticSpace.isFinite_of_isClosedEmbedding`, and nothing between them.
+
+**It is stated because the unrestricted morphism is usually not finite and this is not a weakening
+of a stronger fact.** The case it exists for is an *open* immersion: `X.ofRestrict U` is never a
+closed map unless `U` is clopen, so `IsFinite` of it is false in general, and yet its restriction
+over a `V` contained in `U` is finite — the two ranges then agree and the restricted map is a
+homeomorphism. That is what
+`Oka/Analytification/StandardEtaleFiniteness.lean` spends, and it is why the hypothesis is on `V`
+rather than on the morphism.
+
+The import that makes this statable is `Oka/AnalyticSpace/LocalIso.lean`'s, whose closure carries
+`Oka/AnalyticSpace/Finite.lean`; the section above prices that edge for a different reason and
+this is a second consumer of it. -/
+theorem isFinite_restrictHom_of_subset_range {A B : AnalyticSpace.{u}} {f : A ⟶ B}
+    (hemb : IsEmbedding (f.toLRSHom.base : A → B)) {V : B.Opens}
+    (hV : (V : Set B) ⊆ Set.range (f.toLRSHom.base : A → B)) :
+    IsFinite (restrictHom f V) :=
+  isFinite_of_isClosedEmbedding _
+    (ComplexAnalytic.isClosedEmbedding_base_restrictHom_of_subset_range hemb hV)
 
 /-- **The restriction of a global section of `𝒪_X` to an open subspace**, as a global section of
 `𝒪_{X|U}`.
