@@ -103,22 +103,29 @@ surjection of presented algebras is finite* is a theorem and not a lemma waiting
 a sibling file rather than here because its subject is a surjection and this file's is a
 hypersurface, and because nothing in it mentions monicity or a projection.
 
-**Of the triple `generators, tower, kernel` the tower is discharged and the other two are not — and
-this paragraph used to count the closed-embedding lemma among what was left.** It read
-*"**Picking module generators and exhibiting the kernel is untouched**, and so is the
-closed-embedding lemma above — the tower does not consume it, the kernel step is what would, and
-the paragraph above still describes an absence"*. **The lemma is no longer among them.** What is
-left is a construction with nothing analytic in it: pick module generators of the target over the
-source, adjoin one root per generator with `ComplexAnalytic.towerPresHom`, and exhibit the target
-as the quotient of that tower by the kernel of the resulting surjection. Two of its steps were
-compiled on taxis #1429 and are cheap — turning that kernel, finitely generated because the
-polynomial ring is Noetherian, into a `ComplexAnalytic.presentationIdeal` is about seven lines, and
-pushing a monic polynomial up the tower along a rename is `Polynomial.Monic.map` — and the two that
-were **not** measured are the surjection onto the target and the identification of the composite
-with the original `ComplexAnalytic.PresHom`. Neither is estimated here. The heading above names a
-*different* three and this push does not move its count: of the free second step, the comparison of
-the two structure maps and the quotient, the first two were already discharged when that section
-was written, and the third's analytic input landing is not the third being discharged.
+**All three of `generators, tower, kernel` are discharged, and this paragraph used to describe two
+of them as an absence.** It read *"Of the triple `generators, tower, kernel` the tower is
+discharged and the other two are not … What is left is a construction with nothing analytic in it:
+pick module generators of the target over the source, adjoin one root per generator with
+`ComplexAnalytic.towerPresHom`, and exhibit the target as the quotient of that tower by the kernel
+of the resulting surjection … the two that were **not** measured are the surjection onto the target
+and the identification of the composite with the original `ComplexAnalytic.PresHom`. Neither is
+estimated here."* **That construction is `Oka/Analytification/ModuleFiniteAnalytification.lean`,
+and `ComplexAnalytic.isFinite_analytificationMap_of_finite` is the theorem it closes**: a
+`ComplexAnalytic.PresHom` whose ring map is module-finite analytifies to a finite morphism, with no
+monicity, no tower and no surjection in its statement. The description was accurate, including
+that there is no analysis in it. The two steps priced as cheap were cheap —
+`ComplexAnalytic.exists_presentationIdeal_eq` is nine lines and the push-up is
+`Polynomial.Monic.map` — and of the two that were declined, the surjection is the spanning
+statement read through `Submodule.mem_span_range_iff_exists_fun` and the identification of the
+composite is `ComplexAnalytic.towerPresHom_toRingHom_mk`, *the tower's structure map is one
+renaming*. **What the paragraph did not foresee is the one thing that had to be decided**: the
+quotient is taken inside the tower's own polynomial ring, so it presents the target in `n + m`
+variables and **not** in the presentation the theorem is handed, and the two readings are
+identified by `ComplexAnalytic.analytificationIsoOfPresHom`. The heading above names a *different*
+three and this push **does** close its count: of the free second step, the comparison of the two
+structure maps and the quotient, the first two were already discharged when that section was
+written and the third is discharged now.
 
 **And the shape of the surjection matters.** What is proved is the same-variables case, which is
 the one the module-finite argument produces — the quotient there is taken inside the tower's own
@@ -162,17 +169,17 @@ that form and **nothing above is evidence about it**.
 
 ## What is not here
 
-* **No general finite morphism, and the section above says which of its three parts is missing.**
-  **This bullet used to name two absences and now names one**: it read *"what is here is two
-  adjoined roots; the `m`-step iterate and the quotient are not"*, and the `m`-step iterate is
-  `ComplexAnalytic.isFinite_analytificationMap_towerPresHom` below. **The quotient is not** — and
-  this bullet also said of it *"it is still the one nothing in the repository states"*, which has
-  stopped being true of the whole of it. Its **analytic** half is
+* **No general finite morphism *in this file*, and that is now all this bullet says.** It used to
+  go on: *"What nothing states is the **construction** that produces such a surjection from a
+  module-finite `ComplexAnalytic.PresHom` — the generators and the kernel — and that is a
+  statement about presentations with no analysis in it."* **Something states it.**
+  `ComplexAnalytic.isFinite_analytificationMap_of_finite`
+  (`Oka/Analytification/ModuleFiniteAnalytification.lean`) is the general theorem, and it consumes
+  this file's `ComplexAnalytic.isFinite_analytificationMap_towerPresHom` together with
   `ComplexAnalytic.isFinite_analytificationMap_ofRename_id`
-  (`Oka/Analytification/SurjectionFinite.lean`): a surjection of presented algebras analytifies to
-  a finite morphism. What nothing states is the **construction** that produces such a surjection
-  from a module-finite `ComplexAnalytic.PresHom` — the generators and the kernel — and that is a
-  statement about presentations with no analysis in it.
+  (`Oka/Analytification/SurjectionFinite.lean`), which is exactly the shape the section above
+  predicted. What is *not* here is the theorem itself, which is in that file because its subject is
+  a module-finite map and this file's is a hypersurface.
 * **The `m`-step iterate is here, and this bullet used to say it was not.** It read *"the tower is
   a dependent recursion and not a family; nothing here builds it"*, and went on that the two-step
   case needs no such recursion *"because the second step is the first at a different base, and
