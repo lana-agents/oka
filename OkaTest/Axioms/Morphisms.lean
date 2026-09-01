@@ -882,9 +882,14 @@ standard étale algebra also inverts a polynomial, and that polynomial involves 
 so `D(G)` is cut out of the *source* and is a cylinder only in the special case where `G` does
 not. **The source restriction is no longer missing and its guards are the `####` subsection
 below**, which is why this paragraph no longer sends a reader elsewhere for it; the two
-restrictions stay different and neither subsumes the other, and what
-`Oka/Analytification/StandardEtaleAnalytification.lean` still records as absent is the
-`ComplexAnalytic.IsCutOutBy` datum for a presentation's `k + 1` relations. -/
+restrictions stay different and neither subsumes the other. **This sentence ended by naming what
+`Oka/Analytification/StandardEtaleAnalytification.lean` *"still records as absent"* — the
+`ComplexAnalytic.IsCutOutBy` datum for a presentation's `k + 1` relations — and that file no
+longer records it as absent**: the count was right and the reading of it was wrong, `k + 1`
+against one being the signature of a statement whose base is the whole of `ℂ^n`, and at `k = 0`
+the datum is `ComplexAnalytic.isCutOutBy_analytificationInclHom_hypersurface`
+(`Oka/Analytification/StandardEtaleLocalIso.lean`). Still untouched is any statement at
+`k ≥ 1`. -/
 
 /--
 info: 'ComplexAnalytic.AnalyticSpace.restrictHom' depends on axioms:

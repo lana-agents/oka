@@ -56,13 +56,19 @@ not choices; `monic_f` is `Polynomial.monic_X_pow_sub_C` and `cond` holds at `pâ
 
 * **Nothing about `ComplexAnalytic.etalePresentation` or its analytification.** This is the
   algebraic hypothesis alone; whether the Ã©tale presentation's analytification is a local
-  isomorphism needs the restriction to `D(G)` and a cut-out datum. **Only the second of those is
-  still absent**, and `Oka/Analytification/StandardEtaleAnalytification.lean`'s
-  `## What is not here` records which is which:
-  `ComplexAnalytic.isLocalIso_ofRestrict_comp_proj_of_pderiv`
+  isomorphism needs the restriction to `D(G)` and a cut-out datum. **This bullet said *"only the
+  second of those is still absent"*; at `k = 0` neither is, and the count it gives goes from one
+  to zero.** `ComplexAnalytic.isLocalIso_ofRestrict_comp_proj_of_pderiv`
   (`Oka/AnalyticSpace/SimpleZeroTopology.lean`) takes an arbitrary open subspace of the source
-  and asks the derivative hypothesis only there, and what stands between it and the presentation
-  is the `ComplexAnalytic.IsCutOutBy` datum for `k + 1` relations.
+  and asks the derivative hypothesis only there, the datum is
+  `ComplexAnalytic.isCutOutBy_analytificationInclHom_hypersurface`
+  (`Oka/Analytification/StandardEtaleLocalIso.lean`), and
+  `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_comp` joins the two end to end.
+  **The reading taken here is that the two absences this bullet named are discharged, and not
+  that the question is closed**: everything there is stated at `k = 0`, and over a general base
+  it is a different theorem needing an implicit function theorem relative to `X^an` that
+  `Oka/Analysis/Calculus/Implicit.lean` does not have. What is not checked *here* is unchanged:
+  this file is the algebraic hypothesis and nothing else.
 * **No claim that this is the smallest witness, or that one exists for every pair.** For `F` a
   unit the hypersurface is empty and there is no point at all.
 * **Nothing about `Algebra.Etale`.** `ComplexAnalytic.condPair` is a `StandardEtalePair` because

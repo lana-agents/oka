@@ -78,7 +78,17 @@ is the shape of that hypothesis and not an instance of it**: those last two take
 for a cut-out immersion `i`, while the theorem there delivers it at a tuple already known to
 satisfy the relations and `F`. Between the two sits the `ComplexAnalytic.IsCutOutBy` datum — one
 cutting section, which is what all four results below take, against a presentation's `k + 1`
-relations — and `Oka/Analytification/StandardEtaleAnalytification.lean` records it as absent.
+relations. **This sentence ended *"and `Oka/Analytification/StandardEtaleAnalytification.lean`
+records it as absent"*, and that file no longer records it as absent**: it says the count was
+right and the reading of it was wrong, because those four results conclude about the projection
+to `ℂ^n`, so `k + 1` against one is the signature of a statement whose base is the whole of
+`ℂ^n`. At `k = 0` the datum is
+`ComplexAnalytic.isCutOutBy_analytificationInclHom_hypersurface`
+(`Oka/Analytification/StandardEtaleLocalIso.lean`), one rewrite off
+`ComplexAnalytic.isCutOutBy_analytificationInclHom`
+(`Oka/Analytification/UniversalProperty.lean`), which holds for every `k`. What is untouched is
+any statement at `k ≥ 1`, which is a different theorem over a general base and needs an implicit
+function theorem relative to `X^an` that `Oka/Analysis/Calculus/Implicit.lean` does not have.
 `ComplexAnalytic.eval_pderiv_ne_zero` stands on
 `ComplexAnalytic.polyPresentedAlgebraEquiv_mk_pderiv` in the same file, which says
 `MvPolynomial.pderiv` of a lift is a lift of the `Polynomial.derivative` — a lift, because that is
@@ -87,9 +97,15 @@ presentation cuts with. **It is stated there and not here for the reason this fi
 statements mention a presentation and a `StandardEtalePair`, and nothing below does.
 `Oka/Analytification/StandardEtaleAnalytification.lean` records what is left. **The restriction to
 `D(G)` was the largest of it and is no longer part of it**: the projection statement now exists
-for an arbitrary open subspace of the source, so what stands between that theorem and the étale
-presentation is the `ComplexAnalytic.IsCutOutBy` datum named in the sentence above and nothing
-else on this line.
+for an arbitrary open subspace of the source. **This sentence went on to say that what stands
+between that theorem and the étale presentation is *"the `ComplexAnalytic.IsCutOutBy` datum named
+in the sentence above and nothing else on this line"*, and at `k = 0` nothing stands between them
+at all**: the datum is built, and
+`ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_comp`
+(`Oka/Analytification/StandardEtaleLocalIso.lean`) is the end-to-end statement, taking
+`ComplexAnalytic.eval_pderiv_ne_zero_of_mem` as its derivative input. **The reading taken here is
+that this line is closed rather than one datum short**, and that what is open at `k ≥ 1` is not
+on it: it is a statement over a general base, which is a different theorem.
 
 **No hypersurface inside an open subset, and the transport is no longer stated only for the germ
 hypothesis.** As in the file this one builds on, `F` is entire and the ambient space here is the
