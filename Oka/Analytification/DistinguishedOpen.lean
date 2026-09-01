@@ -668,14 +668,22 @@ morphism between two members to lie over. **It does not prove `hrange`**: at a t
 members are pairwise different what is left is one containment, in the caller's own `D(q b c)`,
 which `ComplexAnalytic.range_refineDatumTransitionHom_subset_iff` states as an *equivalence* and
 not as a sufficient condition; and at the mixed triples `ComplexAnalytic.refineDatumGlue` takes its
-equal branch, whose triangle is over a *member*, so the square has no statement there at all.
-**`hcocycle` is still nowhere** and cannot even be stated first, `ComplexAnalytic.coverTriple`
-taking `hrange` as an argument. So is the datum they would be laws of, except for its `poly` field
-(`ComplexAnalytic.refineDatumPoly`) and its `glue` (`ComplexAnalytic.refineDatumGlue`, both
-branches under a case split) — the latter a function of a choice of extra factor and unit, which
+equal branch, whose triangle is over a *member*, so **that** square has no statement there — and
+the square over an identification of the two members does, which is
+`Oka/Analytification/RefineDatumRange.lean` and settles the other four shapes.
+`Oka/Analytification/RefineDatumGlueData.lean` joins the five into one law, on two conditions it
+adopts and proves necessary. This sentence ended *"the square has no statement there at all"*
+until the first of those, and **`hcocycle` is still nowhere**: it can now be *stated*, as
+`ComplexAnalytic.RefineDatumCocycle`, which needed the assembled range law because
+`ComplexAnalytic.coverTriple` takes a proof of it as an argument, and nothing proves it. The
+datum they would be laws of is built out of its `poly` field (`ComplexAnalytic.refineDatumPoly`)
+and its `glue` (`ComplexAnalytic.refineDatumGlue`, both branches under a case split) — the latter
+a function of a choice of extra factor and unit, which
 `ComplexAnalytic.exists_refineDatumCross` (`Oka/Analytification/CrossMemberChoice.lean`) produces
 at every ordered pair, algebraically and without saying that the overlap it refines to is the
-geometric one. Taxis #1287 is where that question lives. Nothing here is
+geometric one — and it reaches a glue data only under that one unproved law and the two
+conditions the file above adopts. **Nothing says a choice meets either condition**, in either
+direction, and taxis #1287 is where that question lives. Nothing here is
 about a scheme.
 -/
 

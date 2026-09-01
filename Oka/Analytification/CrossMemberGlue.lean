@@ -152,8 +152,11 @@ harder to read, which is a reason to state and not a reason to hide.
   `ComplexAnalytic.refineDatumGlue`, whose unequal branch is
   `ComplexAnalytic.refineCrossGlue` below conjugated onto the datum's own overlaps. What that
   field takes is the caller's `r`, `u` and two equations, one per ordered pair off the diagonal,
-  so the bullet below is what it is still a function of; `hrange` and `hcocycle` are untouched in
-  both branches, and `hsymm` holds on the equal branch alone.
+  so the bullet below is what it is still a function of; `hsymm` holds on the equal branch alone,
+  and neither geometric law is touched *here* — `hrange` is proved of both branches at once in
+  `Oka/Analytification/RefineDatumGlueData.lean`, from two conditions that file adopts and shows
+  *equivalent* to it, so what a caller carries there is the range law under another name rather
+  than a discharge of it; and `hcocycle` is stated there and proved nowhere.
 * **Nothing here produces `q`.** The extra factor and the unit are arguments. This bullet used to
   offer `ComplexAnalytic.exists_localisationOpen_eq_rename`,
   `ComplexAnalytic.exists_mk_rename_eq` and
@@ -171,13 +174,18 @@ harder to read, which is a reason to state and not a reason to hide.
   `Oka/Analytification/RefineDatumSymm.lean` states the symmetry law against two arbitrary
   independent choices and proves it, because the coherence triangle below determines the
   isomorphism once the projection it is over is known to be a monomorphism.
-* **No `hrange` and no `hcocycle`, and the two no longer stand or fall together.** They are the
-  cross-member analogue of `ComplexAnalytic.refineHrange` and `ComplexAnalytic.refineHcocycle`.
+* **No `hrange` and no `hcocycle` here, and the two no longer stand or fall together.** They are
+  the cross-member analogue of `ComplexAnalytic.refineHrange` and
+  `ComplexAnalytic.refineHcocycle`.
   **This bullet said of both that the argument discharging those does not transfer, because it
   cancels against the projection of the *one* fixed member and three cross-member triple overlaps
   sit over three different members with no common target. That is `hcocycle`'s argument and it
   stands** — and `ComplexAnalytic.coverTriple` takes `hrange` as an argument, so the cocycle law
-  of a refined datum cannot be stated at all before the range law is proved.
+  of a refined datum could not be stated at all before the range law was proved. **The range law
+  is proved now**, in `Oka/Analytification/RefineDatumGlueData.lean`, from two conditions that
+  file adopts and shows *equivalent* to it — so what a caller carries there is the range law under
+  another name and not a discharge of it — and the cocycle law is stated there,
+  `ComplexAnalytic.RefineDatumCocycle`, and proved nowhere.
 
   **`hrange`'s argument is a different one and it does transfer**, with the original datum's own
   `hrange` in place of the fixed member.
@@ -187,8 +195,9 @@ harder to read, which is a reason to state and not a reason to hide.
   members to lie over — and
   `ComplexAnalytic.range_refineDatumTransitionHom_subset_iff` says what is left at a triple whose
   three members are different: one containment, in the caller's own `D(q b c)`, and nothing more.
-  Nothing there is evidence about the mixed triples, where the refined `glue` takes its equal
-  branch.
+  Nothing *there* is evidence about the mixed triples, where the refined `glue` takes its equal
+  branch; `Oka/Analytification/RefineDatumRange.lean` is what settles those, out of the equal
+  branch's own triangle over a member.
 * **No scheme and no `admissible`**, as in the three files this one sits beside.
 -/
 
