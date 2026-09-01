@@ -104,7 +104,11 @@ build the tower, exhibit the kernel — rather than a missing piece of analytic 
 below, so the iterate is a theorem rather than an estimate. **Picking module generators and
 exhibiting the kernel is untouched**, and so is the closed-embedding lemma above — the tower does
 not consume it, the kernel step is what would, and the paragraph above still describes an absence.
-So the count of the three problems this file names goes to one, and the one left is the quotient.
+So the count of **that** triple — generators, tower, kernel — goes to one, and the one left is
+the quotient, which is the generators and the kernel together. The heading above names a
+*different* three, and this push does not move its count: of the free second step, the comparison
+of the two structure maps and the quotient, the first two were already discharged when that
+section was written.
 
 **And the shape of the surjection matters.** What compiles is the same-variables case, which is the
 one the module-finite argument produces; a surjection between presentations in *different* numbers
@@ -431,7 +435,7 @@ theorem did not: `ComplexAnalytic.analytificationMap_comp` splits the step and
 of nothing else**; no relation between the steps is needed, because each step is the one-step
 theorem at the base the step below produced.
 
-Three phrasings here are load-bearing and a reader should not tidy them away.
+Two phrasings here are load-bearing and a reader should not tidy them away.
 
 **Both branches open with a `change` rather than a `rw` at `ComplexAnalytic.towerPresHom`.**
 Rewriting at a definition plants an auto-generated equation lemma in this module under that
@@ -447,12 +451,15 @@ definitionally equal and `rw` still fails, with *"Did not find an occurrence of 
 the note that the target is not type-correct at `instances` transparency. The `change`
 re-elaborates at the reduced indices.
 
-**The last step is `exact @ComplexAnalytic.AnalyticSpace.isFinite_comp _ _ _ _ _ h2 h1` and not
-`infer_instance`**, which is the one difference from the two-step theorem below. With `h2`
-written out at its exactly-ascribed type — the ascription typechecks and the hypothesis is in
-context — instance synthesis still reports `failed to synthesize` for precisely that type.
-Supplying both positionally goes through. **Why it fails here and not below is not established**,
-and this docstring does not guess. -/
+**The last step is `infer_instance`, exactly as in the two-step theorem below**, and this
+paragraph used to say the opposite: that `infer_instance` reports `failed to synthesize` there,
+that `exact @ComplexAnalytic.AnalyticSpace.isFinite_comp _ _ _ _ _ h2 h1` was required, and that
+why it failed here and not below was not established. **It does not fail.** The claim was
+measured against an earlier draft of this proof and carried across without a re-run; with
+`infer_instance` there is no difference between this ending and the two-step theorem's at all,
+which is the sentence the file should have carried. Nothing else in the proof changes and the
+declaration dump is byte-identical either way, so no discipline is being traded for the shorter
+form. -/
 theorem isFinite_analytificationMap_towerPresHom (g : Fin k → MvPolynomial (ULift.{u} (Fin n)) ℂ) :
     ∀ (m : ℕ) (G : ∀ i : Fin m, Polynomial (MvPolynomial (ULift.{u} (Fin (n + i.1))) ℂ))
       (_ : ∀ i, (G i).Monic),
@@ -474,7 +481,7 @@ theorem isFinite_analytificationMap_towerPresHom (g : Fin k → MvPolynomial (UL
             ((lastVarPolyEquiv.{u} (n + m)).symm (G (Fin.last m))))) :=
         isFinite_analytificationMap_hypersurfacePresHom.{u}
           (towerPresentation.{u} g m fun i ↦ G i.castSucc) (G (Fin.last m)) (hG (Fin.last m))
-      exact @AnalyticSpace.isFinite_comp _ _ _ _ _ h2 h1
+      infer_instance
 
 /-- **One step of the tower is one hypersurface**, on the nose. -/
 theorem towerPresentation_one (g : Fin k → MvPolynomial (ULift.{u} (Fin n)) ℂ)
