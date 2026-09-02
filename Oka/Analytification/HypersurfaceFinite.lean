@@ -171,15 +171,27 @@ that form and **nothing above is evidence about it**.
   `ComplexAnalytic.isFinite_analytificationMap_hypersurfacePresHom_comp_hypersurfacePresHom` is
   subsumed definitionally and not merely in effect.
 
-**A back-reference in the list above is spelled with the declaration's name and not as *the
-theorem above*.** Two of them read that way until this was written, two bullets apart, and only
-the first resolved by adjacency: for the tower's finiteness the bullet immediately above it is the
-two-step theorem, while for `ComplexAnalytic.towerPresHom_two` the bullet immediately above is the
-pair of one-step identifications, which nothing subsumes. A reader who applied the reading that
-had just worked got the wrong declaration — and that both sentences are about one and the same
-theorem, which is the whole of what *subsumes* is claiming, could not be seen from the list at all.
-
 ## What is not here
+
+* **Two `## Main results` bullets refer back to
+  `ComplexAnalytic.isFinite_analytificationMap_hypersurfacePresHom_comp_hypersurfacePresHom` —
+  the one for `ComplexAnalytic.isFinite_analytificationMap_towerPresHom` and the one for
+  `ComplexAnalytic.towerPresHom_two` — and both said *the theorem above* until this was
+  written.** They sit two bullets apart and only the first resolved by adjacency: for the tower's
+  finiteness the bullet immediately above it is the two-step theorem, while for
+  `ComplexAnalytic.towerPresHom_two` the bullet immediately above is the pair of one-step
+  identifications, which nothing subsumes. A reader who applied the reading that had just worked
+  got the wrong declaration — and that both sentences are about one and the same theorem, which
+  is the whole of what *subsumes* is claiming, could not be seen from the list at all. **Nothing
+  about the rest of that list follows from this.**
+  `ComplexAnalytic.hypersurfacePresHom_comp_hypersurfacePresHom'`'s bullet keeps two
+  back-references by description — *the same law* and *the witness above* — and each of those
+  resolves: *the same law* by adjacency, being the bullet immediately above it, and *the witness
+  above* by predicate, being the only membership statement in the list. **This note is here and
+  not under `## Main results`** because `scripts/guard_coverage.py` reads every backticked
+  repository name under that heading as a result the file advertises, so a paragraph left there
+  is counted as though it were more bullets; `Oka/AnalyticSpace/SimpleZeroStalk.lean` keeps its
+  equivalent note in the same place for the same reason.
 
 * **No general finite morphism *in this file*, and that is now all this bullet says.** It used to
   go on: *"What nothing states is the **construction** that produces such a surjection from a
