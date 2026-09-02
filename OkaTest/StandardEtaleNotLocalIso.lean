@@ -59,10 +59,16 @@ that the composite's failure is the second factor's and not the first's.
 
 * **Only the first of the node's two pairs.** `ComplexAnalytic.nodeEtaleGSubOne`
   (`OkaTest/StandardEtaleLocalIsoBase.lean`) is a second lift with its own local-isomorphism
-  witness, and the projection statement holds of it too by the same theorem — but its source's
-  non-emptiness is **not** in the repository, and that gap is the one
-  `oka-slot-2-1c`'s verdict on lana-agents/oka#367 recorded as a rider still owed. This file does
-  not close it and does not need it: one satisfied instance settles vacuity.
+  witness, and the projection statement holds of it too by the same theorem — but this file does
+  not instantiate the theorem there, and does not need to: one satisfied instance settles vacuity.
+
+  **This bullet said the second lift's source-nonemptiness was *not in the repository*, and that
+  was true when it was written and is false now.**
+  `ComplexAnalytic.nonempty_analytification_etalePresentation_node_sqSubOne`
+  (`OkaTest/StandardEtaleLocalIsoBase.lean`) is that space's point, and it discharges the rider
+  `oka-slot-2-1c`'s verdict on lana-agents/oka#367 recorded as still owed. **The branch that
+  falsified the sentence is the branch repairing it**, in the same push. What the bullet is still
+  for is the scope: the projection statement is instantiated here at one lift and not at both.
 * **No claim that either hypothesis is necessary.** That `g = 0` makes the conclusion false is
   argued in `Oka/Analytification/StandardEtaleLocalIso.lean`'s prose and is uncompiled; that an
   empty source would satisfy `ComplexAnalytic.AnalyticSpace.IsLocalIso` is a reading of that

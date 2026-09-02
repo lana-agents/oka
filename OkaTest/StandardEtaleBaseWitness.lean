@@ -138,10 +138,22 @@ a defect of either.
   above is that file's own two theorems read together, not a new one.
 * **No claim that this is the smallest `k ≥ 1` witness.** `OkaTest/StandardEtaleLocalIsoBase.lean`
   is smaller in the only sense that matters — its two pairs are constants where this one is a
-  family — and the base there is the node rather than the hyperbola for a reason this file's base
-  does not have: it is inside the hypotheses of the argument
-  `Oka/Analytification/StandardEtaleLocalIso.lean` makes against the *projection* statement.
-  Nothing here bears on that argument.
+  family. **Nothing here bears on the *projection* statement**, which is a different morphism and
+  is `ComplexAnalytic.not_isLocalIso_analytificationMap_etalePresHom_comp`
+  (`Oka/Analytification/StandardEtaleNotLocalIso.lean`).
+
+  **A draft of this bullet said the node was chosen there rather than the hyperbola because the
+  node is inside that statement's hypotheses and this file's base is not. That is false, and this
+  file is what refutes it.** Those hypotheses are `∃ j, g j ≠ 0` and a non-empty source, and both
+  hold at the hyperbola: `ComplexAnalytic.eval_hyperbolaBase_zero_ne_zero` makes the single
+  relation a non-zero polynomial, and
+  `ComplexAnalytic.nonempty_analytification_etalePresentation_hyperbola` is the source's point.
+  What is true is that `OkaTest/StandardEtaleLocalIsoBase.lean` chose the node **deliberately**
+  for that property while this file chose the hyperbola for a different one
+  — `a = z₀` is a unit there, so the cover is the square root of a nowhere-vanishing function —
+  and *deliberately* is not *uniquely*. **The clause was written while the projection statement
+  was prose; lana-agents/oka#373 compiled it, and a claim about which bases satisfy its
+  hypotheses became something a reader can check.**
 
 ## A name that is taken, and is a different object
 

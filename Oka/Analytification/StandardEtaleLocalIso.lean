@@ -215,14 +215,19 @@ anywhere. A reader comparing the two signatures will otherwise go looking for on
   landed.** `ComplexAnalytic.condPair` (`OkaTest/StandardEtaleCond.lean`) arrived a day earlier
   and `ComplexAnalytic.eval_pderiv_condF_condHyperPoint_ne_zero` is that theorem applied at it, so
   the `cond` route through the two theorems below is checked there and not by nothing. There are
-  three more: `ComplexAnalytic.sqSubOnePair` (`OkaTest/OpenBaseFiniteness.lean`),
+  more, **named rather than counted, because the sentence this replaces was a count and a second
+  count would rot the same way — and did**: `ComplexAnalytic.sqSubOnePair` and
+  `ComplexAnalytic.xPair` (`OkaTest/OpenBaseFiniteness.lean`),
   `ComplexAnalytic.sqSubOneTwoPair` (`OkaTest/StandardEtaleLocalIsoBase.lean`), and
   `ComplexAnalytic.sqrtCoverPair` (`OkaTest/StandardEtaleBaseWitness.lean`), the last a family
-  over an arbitrary `ℂ`-algebra. **What survives is the placement and it is what the bullet is
-  for**: the two theorems below inherit that hypothesis rather than discharging it, and this file
-  adds no new unwitnessed one. `OkaTest/StandardEtaleAnalytification.lean` exercises the
-  *derivative* form instead, on the line `z₁ = 0` in `ℂ²` with `z₀` inverted, where the derivative
-  is `1` and no pair is needed.
+  over an arbitrary `ℂ`-algebra. **They are not all pairs the base theorem has been fired at**:
+  `OkaTest/StandardEtaleBaseWitness.lean` names the three that it has, and `ComplexAnalytic.xPair`
+  and `ComplexAnalytic.condPair` are not among them — `ComplexAnalytic.subsingleton_xPairRing`
+  makes the first's standard étale algebra the zero ring. **What survives is the placement and it
+  is what the bullet is for**: the two theorems below inherit that hypothesis rather than
+  discharging it, and this file adds no new unwitnessed one.
+  `OkaTest/StandardEtaleAnalytification.lean` exercises the *derivative* form instead, on the
+  line `z₁ = 0` in `ℂ²` with `z₀` inverted, where the derivative is `1` and no pair is needed.
 
   **The bullet was invisible to any sweep of `Oka/`, and that is the transferable part.** It is an
   absence scoped to *anywhere* whose refutation lives under `OkaTest/`; nothing under `Oka/`
