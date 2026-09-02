@@ -4652,10 +4652,14 @@ info: 'ComplexAnalytic.not_isLocalIso_analytificationMap_etalePresHom_comp' depe
 `Oka/Analytification/RefineDatumRange.lean`, appended as their own section for the reason the
 sections above give: a section moved is a conflict for somebody else.
 
-**`ComplexAnalytic.coverMap` is guarded above and this is its first instance whose compatibility
-hypothesis is discharged rather than taken from a caller** — the guard on
-`ComplexAnalytic.comm_refineDatumMapPart` is the one that says so, and it is the only declaration
-here that would notice if either of the two squares it runs on started resting on a fourth axiom.
+**`ComplexAnalytic.coverMap` is guarded above and this is its first instance outside
+`Oka/Analytification/CoverFunctoriality.lean` whose compatibility hypothesis is discharged rather
+than taken from a caller** — the guard on `ComplexAnalytic.comm_refineDatumMapPart` is the one
+that says so, and it is the only declaration here that would notice if either of the two squares
+it runs on started resting on a fourth axiom. Inside that file the two functor laws discharge the
+hypothesis already, `ComplexAnalytic.comm_coverMapPart_id` at the identity data and
+`ComplexAnalytic.comm_coverMapPart_comp` at a composite; the qualifier is there because a draft of
+this paragraph did without it and was false.
 `ComplexAnalytic.refineDatumPresHom` is an `abbrev` with no content and is guarded because it is
 advertised under `## Main definitions`; `ComplexAnalytic.coverSpaceHomOfEq_comp_coverIota` is
 guarded here rather than in that file's own section for the same reason the section exists.

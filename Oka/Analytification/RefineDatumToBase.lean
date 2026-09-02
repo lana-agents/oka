@@ -71,7 +71,21 @@ branches are theorems at every pair. `ComplexAnalytic.coverMap` is then fed
 `fun a b _ ↦ …`. Nothing below consumes the extra generality; it is recorded because a hypothesis
 that turns out to be inert is a fact about the construction and not a tidying detail.
 
-## This is the first `coverMap` whose compatibility is discharged rather than assumed
+## The first `coverMap` whose compatibility is discharged outside its home file
+
+**Where the qualifier comes from, since an earlier draft of this heading did without it and was
+false.** `ComplexAnalytic.coverMap`'s compatibility hypothesis is already discharged twice inside
+`Oka/Analytification/CoverFunctoriality.lean`, by the two functor laws:
+`ComplexAnalytic.coverMap_id` is fed `ComplexAnalytic.comm_coverMapPart_id`, and
+`ComplexAnalytic.coverMap_comp` is fed `ComplexAnalytic.comm_coverMapPart_comp`, which
+`ComplexAnalytic.coverMap_comp`'s own docstring says in terms — it calls the composite's
+compatibility that lemma *"rather than a hypothesis a caller has to supply"*.
+
+**Both are the functor laws' own data**: `id` with `fun i ↦ 𝟙 (obj i)`, and the
+composite `τ ∘ σ` with `fun i ↦ ψ i ≫ χ (σ i)` of two cover maps a caller supplies — and the
+second proves nothing from nothing, deriving the composite's hypothesis from the two `hcomm`s of
+the morphisms being composed. **So the qualifier is the whole of what this section claims**, and
+what is new below is the data the discharge is at rather than the fact of a discharge.
 
 `Oka/Analytification/CoverFunctoriality.lean`'s `## What is not here` says *"No non-identity
 instance. Nothing below exhibits a `σ` and a `ψ` other than the identity."* **That bullet is about
@@ -88,13 +102,15 @@ claim with no instrument watching it:
   `ComplexAnalytic.toLRSHom_coverMap_comp_analytificationToSpecGlued`.
 
 **At every one of them `σ` is `id` or an `Equiv` the caller hands over, `ψ` is an isomorphism the
-caller hands over, and `hcomm` is a hypothesis.** The only discharge in the repository is
-`ComplexAnalytic.comm_coverMapPart_id`, for the identity data.
+caller hands over, and `hcomm` is a hypothesis.** So the discharges are the two named above and
+both are inside the home file: `ComplexAnalytic.comm_coverMapPart_id` unconditionally, for the
+identity data, and `ComplexAnalytic.comm_coverMapPart_comp` conditionally, from two hypotheses of
+the same shape.
 
 So what is new here is not "a non-identity `σ`" but **a `σ` that is an arbitrary map of index
-types, a `ψ` this repository constructs, and an `hcomm` that is proved** — and of the three it is
-the third that was the open question, since the first two are one line each and
-`Oka/Analytification/CoverIndependence.lean` had already said so.
+types, a `ψ` this repository constructs, and an `hcomm` proved *of that data*, from the geometry
+of the refinement** — and of the three it is the third that was the open question, since the first
+two are one line each and `Oka/Analytification/CoverIndependence.lean` had already said so.
 
 ## No `rw` here names a definition, and that is measured rather than stylistic
 

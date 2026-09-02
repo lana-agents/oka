@@ -88,8 +88,12 @@ it costs one attribute.
   `ComplexAnalytic.refineDatumToBase` (`Oka/Analytification/RefineDatumToBase.lean`) is
   `ComplexAnalytic.coverMap` from a cross-member refined cover datum down to the datum it refines,
   at an arbitrary map of index types, at a `ψ` that is `ComplexAnalytic.localisationHom`, and with
-  `hcomm` **proved**. So the identity law is no longer the only control on this definition, and the
-  hypothesis is met by something other than `ComplexAnalytic.comm_coverMapPart_id`.
+  `hcomm` **proved**. So the identity law is no longer the only control on this definition: the
+  hypothesis is now met with a `ψ` this repository constructs and a proof that comes from the
+  refinement's geometry. `ComplexAnalytic.comm_coverMapPart_id` and
+  `ComplexAnalytic.comm_coverMapPart_comp` below discharge it too — at the identity data, and at a
+  composite whose two factors already carry it — so what is new elsewhere is the data and where
+  the proof comes from, not the fact of a discharge.
 
   **This bullet also said `OkaTest/ProjectiveLine.lean` and `OkaTest/AffineCover.lean` hold *"the
   only two instantiations of `ComplexAnalytic.coverAnalytification` in this repository"*, and that

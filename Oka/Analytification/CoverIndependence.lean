@@ -150,9 +150,12 @@ docstring predicts that every consumer of the functor spells its object the othe
   `ComplexAnalytic.coverAnalytification` of the original datum, which is already a cover datum, so
   neither the one-member presentation nor the identification exists to be paid.
   `ComplexAnalytic.refineDatumToBase` (`Oka/Analytification/RefineDatumToBase.lean`) is that
-  `coverMap`, and it is the first one in this repository whose compatibility hypothesis is
-  discharged rather than taken from a caller. The identification is still not stated and is still
-  what a *one-member* `coverMap` would need.
+  `coverMap`, and it is the first one **outside `Oka/Analytification/CoverFunctoriality.lean`**
+  whose compatibility hypothesis is discharged rather than taken from a caller — inside that file
+  the two functor laws already discharge it, `ComplexAnalytic.comm_coverMapPart_id` at the
+  identity data and `ComplexAnalytic.comm_coverMapPart_comp` at a composite, the latter from the
+  two hypotheses of the morphisms being composed. The identification is still not stated and is
+  still what a *one-member* `coverMap` would need.
 
   **What is absent in the cross-member case is the datum and no longer the transport.** This
   bullet used to say that the case is absent because the original cover's own `glue` has to be
