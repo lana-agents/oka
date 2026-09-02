@@ -143,9 +143,10 @@ standard étale pair.
   section while `ComplexAnalytic.hypersurfacePresentation` has `k + 1` relations, and that
   *"That one is untouched and no declaration below attempts it."* **The count is right and the
   reading of it was wrong.** Those theorems conclude about the projection to `ℂ^n`, and for
-  `k ≥ 1` that conclusion fails unless the hypersurface's analytification is empty. **This
-  sentence gave the reason as a hypersurface over a proper closed `X^an ⊆ ℂ^n` having *"its image
-  inside `X^an`"*, and that reason is a step short**: a local isomorphism need not be surjective —
+  `k ≥ 1` that conclusion fails — **whenever the base's analytification `X^an` is a proper closed
+  subset of `ℂ^n`** — unless the hypersurface's analytification is empty. **This sentence gave the
+  reason as a hypersurface over a proper closed `X^an ⊆ ℂ^n` having *"its image inside `X^an`"*,
+  and that reason is a step short**: a local isomorphism need not be surjective —
   `Oka/Analytification/StandardEtaleLocalIso.lean`'s `## What is not here` says so of the one
   built there — so containment in a proper closed subset does not by itself contradict it. The
   step is that the image is **open**: a local isomorphism is a local homeomorphism, which is the
@@ -154,10 +155,17 @@ standard étale pair.
   and a polynomial vanishing on a non-empty open subset of `ℂ^n` is zero; and an open subset of a
   set with empty interior is empty. *Unless empty* rather than a bare *false* because both fields
   of `ComplexAnalytic.AnalyticSpace.IsLocalIso` quantify over the points of the source, so an
-  empty analytification satisfies them vacuously and is not a counterexample. So `k + 1` against
-  one is not a datum nobody has built; it is the signature of a statement whose base is the whole
-  of `ℂ^n`. At `k = 0` the datum is one rewrite —
-  `ComplexAnalytic.isCutOutBy_analytificationInclHom_hypersurface`
+  empty analytification satisfies them vacuously and is not a counterexample. ***Proper* is a
+  hypothesis and not a consequence of `k ≥ 1`**, which is why the clause above carries it: this
+  file's `variable` line asks nothing of `g`, and at `g = 0` the relations cut out nothing, so
+  `X^an` is the whole of `ℂ^n`, its interior is everything, and the argument has no step left.
+  That configuration is degenerate and nothing on this line calls it, but the clause is a claim
+  about **every** `g` at `k ≥ 1`. So `k + 1` against one is not a datum nobody has built; it is
+  the signature of a statement whose base is the whole of `ℂ^n`. **This argument is written out
+  twice, as two copies and not as one citation**: the other copy is
+  `Oka/Analytification/StandardEtaleLocalIso.lean`'s section on why the base is `ℂ^n`, each names
+  the other, and a repair to one is not made without the other. At `k = 0` the datum is one
+  rewrite — `ComplexAnalytic.isCutOutBy_analytificationInclHom_hypersurface`
   (`Oka/Analytification/StandardEtaleLocalIso.lean`) — and it is built there. **Still untouched is
   any statement at `k ≥ 1`**, which is a different theorem and needs an implicit function theorem
   relative to `X^an`.

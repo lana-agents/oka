@@ -27,23 +27,44 @@ relations of the base algebra read upstairs, and `F`. The theorem above takes a 
 mismatch as a missing datum for `k + 1` relations against one section.
 
 **It is not a missing datum.** The conclusion of that theorem is about the projection to `ℂ^n`,
-and for `k ≥ 1` it fails unless the hypersurface's analytification is empty. **This sentence gave
-the reason as *"since its image is contained in `X^an`"*, and that reason is a step short**:
-containment in a proper closed subset is not on its own incompatible with being a local
-isomorphism, and this file's `## What is not here` says in terms that *"a local isomorphism need
-not be surjective and this one is not"*. What closes it is that the image is **open**. A local
-isomorphism is a local homeomorphism — that is the field
+and for `k ≥ 1` it fails — **whenever the base's analytification `X^an` is a proper closed subset
+of `ℂ^n`** — unless the hypersurface's analytification is empty. **This sentence gave the reason
+as *"since its image is contained in `X^an`"*, and that reason is a step short**: containment in a
+proper closed subset is not on its own incompatible with being a local isomorphism, and this
+file's `## What is not here` says in terms that *"a local isomorphism need not be surjective and
+this one is not"*. What closes it is that the image is **open**. A local isomorphism is a local
+homeomorphism — that is the field
 `ComplexAnalytic.AnalyticSpace.IsLocalIso.isLocalHomeomorph` — and so an open map, hence its image
 is open; a proper closed `X^an ⊆ ℂ^n` has empty interior, since `X^an` is the zero locus of the
 relations of `g` and a polynomial vanishing on a non-empty open subset of `ℂ^n` is zero; and an
 open subset of a set with empty interior is empty. **So the two sentences are not in tension**:
 non-surjectivity is exactly what makes the containment reading fail, and openness is what makes
-the corrected one work. *Unless empty* rather than a bare *false* because the empty case is not a
-counterexample: both fields of `ComplexAnalytic.AnalyticSpace.IsLocalIso` quantify over the points
-of the source, so an empty analytification satisfies them vacuously. The `k + 1` versus one is the
-signature of a statement whose base is the whole of `ℂ^n`, i.e. `k = 0`, and
-that is what everything below is stated at. A statement over a general base is a different
-theorem and needs an implicit function theorem relative to `X^an`, which
+the corrected one work.
+
+*Unless empty* rather than a bare *false* because the empty case is not a counterexample: both
+fields of `ComplexAnalytic.AnalyticSpace.IsLocalIso` quantify over the points of the source, so an
+empty analytification satisfies them vacuously.
+
+***Proper* is a hypothesis at `k ≥ 1` and not a consequence of it, which is why the clause above
+carries it rather than leaving it to be read out of the argument.** Nothing constrains `g`:
+`Oka/Analytification/StandardEtaleAnalytification.lean`, where the `k ≥ 1` configuration is
+written down, takes it under a `variable` line that asks nothing of it. At `g = 0` the relations
+cut out nothing, `X^an` is the whole of `ℂ^n`, its interior is everything, and the argument has no
+step left — and `ComplexAnalytic.analytificationInclHom g` is then a local isomorphism rather
+than a closed immersion onto a proper subset. That configuration is degenerate and nothing on
+this line calls it, but the clause is a claim about **every** `g` at `k ≥ 1`, and a reader who
+tests it there finds it false rather than unmotivated.
+
+**This argument is written out twice, as two copies and not as one citation, and that is
+deliberate.** The other copy is `Oka/Analytification/StandardEtaleAnalytification.lean`'s
+`## What is not here`. Each sits inside a section about something else — there a misdiagnosed
+absence, here why the base is `ℂ^n` — so a citation would send a reader to a paragraph whose
+subject is not the one they came for. Both are kept, **each names the other**, and a repair to
+one is not made without the other.
+
+The `k + 1` versus one is the signature of a statement whose base is the whole of `ℂ^n`, i.e.
+`k = 0`, and that is what everything below is stated at. A statement over a general base is a
+different theorem and needs an implicit function theorem relative to `X^an`, which
 `Oka/Analysis/Calculus/Implicit.lean` does not have.
 
 **That sentence is about the projection to `ℂ^n`, and at `k ≥ 1` there are two statements and not
@@ -57,8 +78,11 @@ statement over a general base"* above should be read as naming the projection on
 is unattempted rather than priced. **It is also not obtained by cancelling** the composite against
 `ComplexAnalytic.AnalyticSpace.isLocalIso_of_comp`, whose second factor would have to be
 `ComplexAnalytic.analytificationInclHom g` — a closed immersion, and by the argument above not a
-local isomorphism at `k ≥ 1` unless `X^an` is empty, since its image is the whole of `X^an` and a
-local isomorphism has open image.
+local isomorphism whenever `X^an` is a proper non-empty closed subset of `ℂ^n`, since its image is
+the whole of `X^an` and a local isomorphism has open image. **Neither qualification follows from
+`k ≥ 1`**: at `g = 0` the image is the whole of `ℂ^n` and this morphism is a local isomorphism,
+and at a `g` with the constant `1` among its relations the source is empty and it is one
+vacuously.
 
 **Whether that other statement takes an implicit function theorem is not settled by the sentence
 above**, which prices the projection one; nobody has measured it. One general lemma of the shape
