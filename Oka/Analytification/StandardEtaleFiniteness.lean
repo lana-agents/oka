@@ -120,11 +120,12 @@ was neither of them.
   `ℂ^n` and `ComplexAnalytic.etaleAnalytificationIso`'s is `A^an`, and a statement over a
   presented base is a different theorem rather than a missing hypothesis.
 * **No `StandardEtalePair`, and no `StandardEtalePair.cond` is read** — by any theorem below,
-  including the instance. **The two *general* theorems hold for every monic `F` and every `G`**
-  — `G` is read only through the bad set — so nothing here says the source is étale, only that it
-  is the analytification of the presentation `ComplexAnalytic.etalePresentation` names. That is
-  the same stance `ComplexAnalytic.etaleAnalytificationIso` takes, and it is a weaker hypothesis
-  than `Oka/Analytification/StandardEtaleLocalIso.lean`'s last two theorems take.
+  including the instance. **Every theorem below except the instance holds for every monic `F` and
+  every `G`** — `G` is read only through the bad set — so nothing here says the source is étale,
+  only that it is the analytification of the presentation
+  `ComplexAnalytic.etalePresentation` names. That is the same stance
+  `ComplexAnalytic.etaleAnalytificationIso` takes, and it is a weaker hypothesis than
+  `Oka/Analytification/StandardEtaleLocalIso.lean`'s last two theorems take.
 
   **This bullet used to say "the theorems below" where it meant the general ones**, and
   `ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp_parabola` is at one
@@ -132,6 +133,14 @@ was neither of them.
   stance is unweakened**: an instance narrows what is *quantified over* and not what is *asked
   of* the pair, and the instance asks no more than monicity — which is why it can sit in this file
   at all, where `Oka/Analytification/StandardEtaleFiniteEtale.lean` could not.
+
+  **The first scoping of it said "the two general theorems" and there are four** — the `## Main
+  results` list above names all four before it names the instance. That is worth a sentence rather
+  than a silent correction, because of *how* it happened: the sentence being repaired was a
+  **universal**, which is falsified by one counterexample, and scoping a universal turns it into a
+  **count**, which is falsified only by enumerating. The repair created a claim nobody had to
+  check before it existed. **After scoping a universal, count.** This bullet now says *every
+  theorem below except the instance*, which is the same statement with no arithmetic in it.
 * **No isomorphism of restricted spaces**, and the containment is not turned into one. Finiteness
   needs a closed embedding and no more, which is what
   `ComplexAnalytic.AnalyticSpace.isFinite_restrictHom_of_subset_range` supplies. The restricted
