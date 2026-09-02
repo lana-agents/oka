@@ -2931,11 +2931,16 @@ is four of them.** The other six are `Oka/Analytification/HypersurfaceFinite.lea
 generalisation of the two-step extension named above, with
 `ComplexAnalytic.isFinite_analytificationMap_towerPresHom` and the three `rfl` identifications
 `ComplexAnalytic.towerPresentation_one` and `ComplexAnalytic.towerPresHom_one`, the tower at one
-step, and `ComplexAnalytic.towerPresHom_two`, the tower at two — which is the evidence that the
-two-step theorem above is subsumed rather than sitting beside it, and not a base case: the
-recursion's is `m = 0`. **Two of the ten are a `def`** — `towerPresentation` and
-`towerPresHom` — and the rest are theorems; this clause read *"All four are theorems"*, which was
-true of the four and said nothing about the six.
+step, and `ComplexAnalytic.towerPresHom_two`, the tower at two — which is the evidence that
+`ComplexAnalytic.isFinite_analytificationMap_hypersurfacePresHom_comp_hypersurfacePresHom` is
+subsumed rather than sitting beside it, and not a base case: the recursion's is `m = 0`. **That
+name is spelled out because two of the four are two-step theorems and only this one is
+subsumed**: the other, `ComplexAnalytic.hypersurfacePresHom_comp_hypersurfacePresHom`, is an
+equation of presentation morphisms, and nothing states `ComplexAnalytic.towerPresHom` as a
+`ComplexAnalytic.PresHom.ofRename`, so on the tower line there is nothing for it to be subsumed
+by. **Two of the ten are a `def`** — `towerPresentation` and `towerPresHom` — and the rest are
+theorems; this clause read *"All four are theorems"*, which was true of the four and said nothing
+about the six.
 
 **Widened rather than split**, and the alternative was real: this file's rule is that a guard goes
 in the section of the push that added it, so a tower section of its own at the end would have been

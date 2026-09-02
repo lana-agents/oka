@@ -161,11 +161,23 @@ that form and **nothing above is evidence about it**.
   **the analytification of `A ⟶ A[X₁] ⧸ (F₁) ⟶ (A[X₁] ⧸ (F₁))[X₂] ⧸ (F₂)` is finite**, as one
   morphism, for both polynomials monic in their last variable.
 - `ComplexAnalytic.isFinite_analytificationMap_towerPresHom`: **the analytification of an
-  `m`-step tower of monic hypersurfaces is finite**, for every `m` — the theorem above at `m = 2`.
+  `m`-step tower of monic hypersurfaces is finite**, for every `m` —
+  `ComplexAnalytic.isFinite_analytificationMap_hypersurfacePresHom_comp_hypersurfacePresHom` at
+  `m = 2`.
 - `ComplexAnalytic.towerPresentation_one` and `ComplexAnalytic.towerPresHom_one`: **one step of
   the tower is one hypersurface**, on the nose.
 - `ComplexAnalytic.towerPresHom_two`: **two steps of the tower are the two-step composite**, on
-  the nose — so the theorem above is subsumed definitionally and not merely in effect.
+  the nose — so
+  `ComplexAnalytic.isFinite_analytificationMap_hypersurfacePresHom_comp_hypersurfacePresHom` is
+  subsumed definitionally and not merely in effect.
+
+**A back-reference in the list above is spelled with the declaration's name and not as *the
+theorem above*.** Two of them read that way until this was written, two bullets apart, and only
+the first resolved by adjacency: for the tower's finiteness the bullet immediately above it is the
+two-step theorem, while for `ComplexAnalytic.towerPresHom_two` the bullet immediately above is the
+pair of one-step identifications, which nothing subsumes. A reader who applied the reading that
+had just worked got the wrong declaration — and that both sentences are about one and the same
+theorem, which is the whole of what *subsumes* is claiming, could not be seen from the list at all.
 
 ## What is not here
 
