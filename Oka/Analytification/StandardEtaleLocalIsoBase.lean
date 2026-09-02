@@ -24,17 +24,27 @@ is a proper non-empty closed subset, because a local isomorphism has open image 
 closed zero locus has empty interior. **Openness in `X^an` is not openness in `ℂ^n`**, so nothing
 in that argument touches the statement above.
 
-## There is no implicit function theorem here, and five files priced one
+## No implicit function theorem *relative to `X^an`*, and five files priced one
 
 Five sites said that a statement over a general base *"needs an implicit function theorem relative
 to `X^an`, which `Oka/Analysis/Calculus/Implicit.lean` does not have"*. They are about the
 projection to `ℂ^n`, which is a different statement and is the false one; the sentence was never
-tested against this one. **It takes no analysis at all.** The whole content is that the `k ≥ 1`
-configuration is the `k = 0` one restricted over a subspace on both sides, and the transport of
-local isomorphisms across such a restriction is
+tested against this one. **The step from `k = 0` to `k ≥ 1` takes no analysis at all**: the
+`k ≥ 1` configuration is the `k = 0` one restricted over a subspace on both sides, and the
+transport of local isomorphisms across such a restriction is
 `ComplexAnalytic.AnalyticSpace.isLocalIso_of_isCutOutBy_pullbackΓ`
 (`Oka/AnalyticSpace/CutOutLocalIso.lean`), which is a statement about cut-out data and mentions
 no polynomial.
+
+**What this file does *not* claim is that no implicit function theorem is spent anywhere beneath
+it**, and the claim would be false. Step 3 below is
+`ComplexAnalytic.isLocalIso_ofRestrict_comp_proj_of_pderiv`
+(`Oka/AnalyticSpace/SimpleZeroTopology.lean`), whose topological half runs through
+`isLocalHomeomorph_coordProj_comp_of_isEmbedding_inter` in `Oka/Analysis/Calculus/Implicit.lean`
+— that file imports it, and its own docstring calls that lemma *"the implicit function theorem"*
+in terms. **One is spent, relative to `ℂ^n`, and it is the one the `k = 0` line already spent.**
+The sharp claim is that going to a presented base costs no second one relative to `X^an`, which
+is what the five sites priced and what nothing here needs.
 
 ## The route, in the order the declarations come
 
@@ -121,8 +131,20 @@ hypersurface `ComplexAnalytic.hypersurfacePresentation g F`.
   `Oka/Analytification/StandardEtaleLocalIso.lean` records why and this file does not touch it.
 * **No general étale morphism.** Every étale morphism is Zariski-locally standard étale and the
   gluing is a separate construction that nothing starts.
-* **No implicit function theorem**, and nothing here consumes
-  `Oka/Analysis/Calculus/Implicit.lean`.
+* **No `k ≥ 1` instance is exhibited, so the new content of the last theorem is unwitnessed.** It
+  is not vacuous — the statement is general in `k` and subsumes `k = 0`, where
+  `ComplexAnalytic.condPair` (`OkaTest/StandardEtaleCond.lean`) is a `StandardEtalePair` over
+  `ComplexAnalytic.PresentedAlgebra 1 0 ComplexAnalytic.condBase` — but nothing below produces one
+  at `k ≥ 1`. The cheapest would be `ComplexAnalytic.sqSubOnePair`
+  (`OkaTest/OpenBaseFiniteness.lean`), which is a `StandardEtalePair` over an **arbitrary**
+  commutative ring and so over a presented algebra at any `k`: **an instantiation and not a
+  construction**, and this file does not make it.
+* **No implicit function theorem *relative to `X^an`*, which is the one the five sites priced.**
+  One relative to `ℂ^n` is spent four links down — step 3 is
+  `ComplexAnalytic.isLocalIso_ofRestrict_comp_proj_of_pderiv`, whose topological half is
+  `Oka/Analysis/Calculus/Implicit.lean`'s
+  `isLocalHomeomorph_coordProj_comp_of_isEmbedding_inter` — and the `k = 0` line already spent
+  it. **What is not here is a second one.**
 -/
 
 open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry Topology
@@ -456,8 +478,10 @@ theorem comap_localisationOpen_hypersurfaceCompare
 isomorphism onto that base**, at every `k`.
 
 The statement taxis #1113's comparison functor consumes and the one five files priced as needing
-an implicit function theorem. `ComplexAnalytic.etaleAnalytificationIso_hom_comp` — an equation
-already in the tree and general in `k` — replaces the étale analytification by `D(G)` in the
+an implicit function theorem relative to `X^an`; it needs none, and spends only the one relative
+to `ℂ^n` that the `k = 0` line already spends.
+`ComplexAnalytic.etaleAnalytificationIso_hom_comp` — an equation already in the tree and general
+in `k` — replaces the étale analytification by `D(G)` in the
 hypersurface over the base, `ComplexAnalytic.comap_localisationOpen_hypersurfaceCompare` says
 that `D(G)` is the open the transport landed on, and
 `ComplexAnalytic.AnalyticSpace.isLocalIso_comp` composes the result with an isomorphism.

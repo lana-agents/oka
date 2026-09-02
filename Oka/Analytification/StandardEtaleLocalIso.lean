@@ -86,7 +86,8 @@ the whole of `X^an` and a local isomorphism has open image. **Neither qualificat
 and at a `g` with the constant `1` among its relations the source is empty and it is one
 vacuously.
 
-**That other statement takes no implicit function theorem, and this is measured rather than
+**That other statement takes no implicit function theorem relative to `X^an` — only the one
+relative to `ℂ^n` that everything below already spends — and this is measured rather than
 read.** `ComplexAnalytic.AnalyticSpace.isLocalIso_of_isCutOutBy_pullbackΓ`
 (`Oka/AnalyticSpace/CutOutLocalIso.lean`) transports the class from a local isomorphism
 `p : E ⟶ B` to any morphism between subspaces cut out of `E` and of `B` by a family of sections

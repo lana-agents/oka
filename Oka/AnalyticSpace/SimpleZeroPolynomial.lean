@@ -90,7 +90,8 @@ to `ℂ^n`, so `k + 1` against one is the signature of a statement whose base is
 `k ≥ 1` is the **projection** statement, which is a different theorem over a general base and is
 false there; the statement about the structure map to `X^an` alone is
 `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom`
-(`Oka/Analytification/StandardEtaleLocalIsoBase.lean`) and needs no implicit function theorem.
+(`Oka/Analytification/StandardEtaleLocalIsoBase.lean`) and needs no implicit function theorem
+relative to `X^an`.
 `ComplexAnalytic.eval_pderiv_ne_zero` stands on
 `ComplexAnalytic.polyPresentedAlgebraEquiv_mk_pderiv` in the same file, which says
 `MvPolynomial.pderiv` of a lift is a lift of the `Polynomial.derivative` — a lift, because that is

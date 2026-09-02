@@ -463,8 +463,8 @@ second where the `k + 1`-against-one count is read as the signature of a stateme
 rather than as a datum nobody has built. Untouched at `k ≥ 1` is a *statement* and not this
 datum: over a general base it is a different theorem, and the one about the structure map to
 `X^an` alone is `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom`
-(`Oka/Analytification/StandardEtaleLocalIsoBase.lean`), which needs no implicit function theorem;
-the projection one remains false.
+(`Oka/Analytification/StandardEtaleLocalIsoBase.lean`), which needs no implicit function theorem
+relative to `X^an`; the projection one remains false.
 
 The `show … from` is not decoration: `rw [hypersurfacePresentation, Fin.snoc_castSucc]` fails with
 *"Failed to rewrite using equation theorems for `hypersurfacePresentation`"*, and naming the
