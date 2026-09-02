@@ -87,4 +87,5 @@ import OkaTest.StandardEtaleAnalytification
 import OkaTest.StandardEtaleCond
 import OkaTest.StandardEtaleLocalIsoBase
 import OkaTest.StandardEtaleNotFinite
+import OkaTest.StandardEtaleNotLocalIso
 import OkaTest.UliftCoord

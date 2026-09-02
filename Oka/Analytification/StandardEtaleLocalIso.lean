@@ -45,6 +45,25 @@ the corrected one work.
 fields of `ComplexAnalytic.AnalyticSpace.IsLocalIso` quantify over the points of the source, so an
 empty analytification satisfies them vacuously.
 
+**Since 2026-09-02 this paragraph is a theorem and not only an argument.**
+`ComplexAnalytic.not_isLocalIso_analytificationMap_etalePresHom_comp`
+(`Oka/Analytification/StandardEtaleNotLocalIso.lean`) is the failure above, compiled, with the two
+qualifications restated so that they are checkable: *proper* becomes `∃ j, g j ≠ 0`, which is what
+makes the zero locus a proper subset and is what the proof consumes, and *unless empty* becomes a
+`Nonempty` on the source. **The argument above is not the proof's.** The proof does not pass
+through the interior of `X^an`: having the image open and inside the zero locus, it applies
+`MvPolynomial.eq_zero_of_eval_eq_zero_of_isOpen` (`Oka/Algebra/MvPolynomial/Funext.lean`) to make
+every relation zero, which contradicts `∃ j, g j ≠ 0` at once. The two routes are the same three
+facts in a different order and the paragraph is kept as written because it is the one a reader
+meets here; **and it is kept as a paragraph rather than replaced by a citation**, for the reason
+the section below gives about the two copies of it.
+
+**Both hypotheses are met together at the node**, so the theorem is not vacuous:
+`ComplexAnalytic.not_isLocalIso_analytificationMap_etalePresHom_comp_node`
+(`OkaTest/StandardEtaleNotLocalIso.lean`), where the same standard étale data **is** a local
+isomorphism onto the base's own analytification and is not one onto `ℂ²`. That is this paragraph's
+distinction exhibited rather than argued.
+
 ***Proper* is a hypothesis at `k ≥ 1` and not a consequence of it, which is why the clause above
 carries it rather than leaving it to be read out of the argument.** Nothing constrains `g`:
 `Oka/Analytification/StandardEtaleAnalytification.lean`, where the `k ≥ 1` configuration is

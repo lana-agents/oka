@@ -23,6 +23,7 @@ import Oka.Algebra.Category.ModuleCat.Sheaf.Submodule
 import Oka.Algebra.Category.ModuleCat.Stalk
 import Oka.Algebra.Module.FinitePresentation
 import Oka.Algebra.MvPolynomial.Equiv
+import Oka.Algebra.MvPolynomial.Funext
 import Oka.Algebra.MvPolynomial.PDeriv
 import Oka.Algebra.MvPolynomial.Taylor
 import Oka.AlgebraicGeometry.GammaSpecAdjunction
@@ -125,6 +126,7 @@ import Oka.Analytification.StandardEtaleFiniteEtale
 import Oka.Analytification.StandardEtaleFiniteness
 import Oka.Analytification.StandardEtaleLocalIso
 import Oka.Analytification.StandardEtaleLocalIsoBase
+import Oka.Analytification.StandardEtaleNotLocalIso
 import Oka.Analytification.SurjectionFinite
 import Oka.Analytification.UniversalProperty
 import Oka.CategoryTheory.Abelian.Basic

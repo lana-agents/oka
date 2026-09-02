@@ -180,3 +180,21 @@ info: 'MvPolynomial.eval_eq_eval_optionEquivLeft' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms MvPolynomial.eval_eq_eval_optionEquivLeft
+
+/-! ### A polynomial vanishing on a non-empty open set is zero
+
+`Oka/Algebra/MvPolynomial/Funext.lean`, appended as its own section so that no section above
+moves. It sits with `MvPolynomial.eval_eq_eval_optionEquivLeft` above rather than in
+`OkaTest/Axioms/Analytification.lean` because it is a mirror-tree lemma about `MvPolynomial` and
+names nothing of this repository's own.
+
+Its consumer is `ComplexAnalytic.not_isLocalIso_analytificationMap_etalePresHom_comp`, guarded in
+`OkaTest/Axioms/Analytification.lean`, which is the only place the topology hypotheses are
+discharged — at `ℂ`, by instances Mathlib already has. -/
+
+/--
+info: 'MvPolynomial.eq_zero_of_eval_eq_zero_of_isOpen' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms MvPolynomial.eq_zero_of_eval_eq_zero_of_isOpen

@@ -24,6 +24,16 @@ is a proper non-empty closed subset, because a local isomorphism has open image 
 closed zero locus has empty interior. **Openness in `X^an` is not openness in `ℂ^n`**, so nothing
 in that argument touches the statement above.
 
+**That failure is a theorem since 2026-09-02** —
+`ComplexAnalytic.not_isLocalIso_analytificationMap_etalePresHom_comp`
+(`Oka/Analytification/StandardEtaleNotLocalIso.lean`), which takes *proper* as `∃ j, g j ≠ 0` and
+*non-empty* as a `Nonempty` on the source — so the contrast this paragraph draws is now between
+two compiled statements rather than between a theorem and an argument. **At the node it is drawn
+at the same data**: `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_node` below and
+`ComplexAnalytic.not_isLocalIso_analytificationMap_etalePresHom_comp_node`
+(`OkaTest/StandardEtaleNotLocalIso.lean`) are the two halves of the sentence above at
+`ComplexAnalytic.nodeG`, `ComplexAnalytic.nodeEtaleF` and `ComplexAnalytic.nodeEtaleG`.
+
 ## No implicit function theorem *relative to `X^an`*, and five files priced one
 
 Five sites said that a statement over a general base *"needs an implicit function theorem relative

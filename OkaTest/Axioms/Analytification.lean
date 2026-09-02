@@ -4619,3 +4619,29 @@ info: 'ComplexAnalytic.base_analytificationMap_etalePresHom_comp_apply' depends 
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.base_analytificationMap_etalePresHom_comp_apply
+
+/-! ### The projection to `ℂ^n` at a presented base, refuted
+
+`Oka/Analytification/StandardEtaleNotLocalIso.lean`, appended as its own section for the reason
+the sections above give: a section moved is a conflict for somebody else.
+
+**The negative counterpart of `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_comp`
+and `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom`, both guarded above.** The three
+are stated at two different morphisms and that is the content: the structure map to the base's own
+analytification is a local isomorphism at every `k`, and the same map followed by the base's
+inclusion into `ℂ^n` is one at `k = 0` and is not one as soon as a relation of the base is a
+non-zero polynomial and the source is not empty. The hypotheses of the last are unsatisfiable at
+`k = 0`, so the three do not overlap.
+
+Its only new ingredient is `MvPolynomial.eq_zero_of_eval_eq_zero_of_isOpen`, a mirror-tree lemma
+guarded in `OkaTest/Axioms/RingTheory.lean`.
+`ComplexAnalytic.not_isLocalIso_analytificationMap_etalePresHom_comp_node`
+(`OkaTest/StandardEtaleNotLocalIso.lean`) meets both hypotheses at the node and is a test
+declaration, so it is not guarded here. -/
+
+/--
+info: 'ComplexAnalytic.not_isLocalIso_analytificationMap_etalePresHom_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.not_isLocalIso_analytificationMap_etalePresHom_comp

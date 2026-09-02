@@ -175,6 +175,19 @@ standard étale pair.
   `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom`
   (`Oka/Analytification/StandardEtaleLocalIsoBase.lean`), and takes no implicit function theorem
   **relative to `X^an`** — only the one relative to `ℂ^n` that the `k = 0` line already spends.
+
+  **Since 2026-09-02 the falsity is compiled and this paragraph is no longer the only record of
+  it**: `ComplexAnalytic.not_isLocalIso_analytificationMap_etalePresHom_comp`
+  (`Oka/Analytification/StandardEtaleNotLocalIso.lean`), with *proper* restated as
+  `∃ j, g j ≠ 0` and *unless empty* as a `Nonempty` on the source, and with both met together at
+  the node in `OkaTest/StandardEtaleNotLocalIso.lean`. **The argument above stays here in full**,
+  and so does the copy this paragraph names, because the two copies are two copies by the decision
+  recorded three sentences up and a citation is not what either of them is for. What the theorem
+  replaces is one step and not the argument: instead of the interior of `X^an` it applies
+  `MvPolynomial.eq_zero_of_eval_eq_zero_of_isOpen` (`Oka/Algebra/MvPolynomial/Funext.lean`) to the
+  open image directly. **The sentence in this paragraph that is still only prose is *"a proper
+  closed `X^an ⊆ ℂ^n` has empty interior"***, which nothing states and which that theorem does not
+  need.
 * **No witness in this file that the open is ever non-empty, and the witness is elsewhere.** The
   statements below are hypothesis-free in `F` and `G`, so none of them can be vacuously
   satisfied — but that says nothing about whether the *objects* are degenerate, and for `F = 1`
