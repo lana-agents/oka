@@ -65,10 +65,16 @@ not choices; `monic_f` is `Polynomial.monic_X_pow_sub_C` and `cond` holds at `p�
   (`Oka/Analytification/StandardEtaleLocalIso.lean`), and
   `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_comp` joins the two end to end.
   **The reading taken here is that the two absences this bullet named are discharged, and not
-  that the question is closed**: everything there is stated at `k = 0`, and over a general base
-  it is a different theorem needing an implicit function theorem relative to `X^an` that
-  `Oka/Analysis/Calculus/Implicit.lean` does not have. What is not checked *here* is unchanged:
-  this file is the algebraic hypothesis and nothing else.
+  that the question is closed**: everything there is stated at `k = 0`, and over a general base it
+  is a different theorem. **This bullet went on to price that theorem — *"needing an implicit
+  function theorem relative to `X^an` that `Oka/Analysis/Calculus/Implicit.lean` does not have"* —
+  and that price is false**, as `Oka/Analytification/StandardEtaleLocalIsoBase.lean`'s titled
+  section says at length: the step from `k = 0` to `k ≥ 1` takes no analysis at all, and
+  `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom` is the theorem, at every `k`. Of
+  the two statements over a general base it is the **projection** one that is untouched, and that
+  one is false rather than expensive. What is not checked *here* is unchanged: this file is the
+  algebraic hypothesis and nothing else, and `OkaTest/StandardEtaleLocalIsoBase.lean` is where the
+  `k ≥ 1` witness is.
 * **No claim that this is the smallest witness, or that one exists for every pair.** For `F` a
   unit the hypersurface is empty and there is no point at all.
 * **Nothing about `Algebra.Etale`.** `ComplexAnalytic.condPair` is a `StandardEtalePair` because

@@ -131,14 +131,21 @@ hypersurface `ComplexAnalytic.hypersurfacePresentation g F`.
   `Oka/Analytification/StandardEtaleLocalIso.lean` records why and this file does not touch it.
 * **No general étale morphism.** Every étale morphism is Zariski-locally standard étale and the
   gluing is a separate construction that nothing starts.
-* **No `k ≥ 1` instance is exhibited, so the new content of the last theorem is unwitnessed.** It
-  is not vacuous — the statement is general in `k` and subsumes `k = 0`, where
+* **No `k ≥ 1` instance is exhibited *here*, and the absence this bullet recorded is retired.**
+  Nothing below produces one — the statement is general in `k` and subsumes `k = 0`, where
   `ComplexAnalytic.condPair` (`OkaTest/StandardEtaleCond.lean`) is a `StandardEtalePair` over
-  `ComplexAnalytic.PresentedAlgebra 1 0 ComplexAnalytic.condBase` — but nothing below produces one
-  at `k ≥ 1`. The cheapest would be `ComplexAnalytic.sqSubOnePair`
-  (`OkaTest/OpenBaseFiniteness.lean`), which is a `StandardEtalePair` over an **arbitrary**
-  commutative ring and so over a presented algebra at any `k`: **an instantiation and not a
-  construction**, and this file does not make it.
+  `ComplexAnalytic.PresentedAlgebra 1 0 ComplexAnalytic.condBase` — but
+  `OkaTest/StandardEtaleLocalIsoBase.lean` now does, at `k = 1` and over the node
+  `ComplexAnalytic.nodeG`, which is a base whose zero locus is proper and non-empty and so one at
+  which the bullet above's false statement really is false. **This bullet predicted the route and
+  was right about it**: `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_node_sqSubOne`
+  is `ComplexAnalytic.sqSubOnePair` (`OkaTest/OpenBaseFiniteness.lean`) instantiated, an
+  instantiation and not a construction. **What it did not say is that that pair's cover is an
+  isomorphism** — `ComplexAnalytic.sqSubOneRingEquiv` identifies its standard étale algebra with
+  the base — so the cheapest witness is a local isomorphism for a reason this theorem does not
+  need, and `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_node` is a second witness
+  at a pair whose algebra is not the base. Both spaces are exhibited non-empty there; **how many
+  sheets either cover has is proved nowhere**.
 * **No implicit function theorem *relative to `X^an`*, which is the one the five sites priced.**
   One relative to `ℂ^n` is spent four links down — step 3 is
   `ComplexAnalytic.isLocalIso_ofRestrict_comp_proj_of_pderiv`, whose topological half is
