@@ -40,6 +40,7 @@ import Oka.AnalyticSpace.Coherent
 import Oka.AnalyticSpace.Continuity
 import Oka.AnalyticSpace.CoveringMap
 import Oka.AnalyticSpace.CoveringSpace
+import Oka.AnalyticSpace.CutOutCancel
 import Oka.AnalyticSpace.CutOutLocalIso
 import Oka.AnalyticSpace.Degree
 import Oka.AnalyticSpace.Evaluation
