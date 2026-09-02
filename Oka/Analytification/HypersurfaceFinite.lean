@@ -224,10 +224,13 @@ that form and **nothing above is evidence about it**.
 * **No converse and no degree.** Nothing says the fibres have `G.natDegree` points — that is a
   statement about `ComplexAnalytic.AnalyticSpace.degree` and about multiplicity, and finiteness is
   indifferent to it.
-* **No claim that this is a scheme-theoretic statement.** There is no `AlgebraicGeometry.Scheme`
-  on this line of files; what is analytified is a presentation, and `A ⟶ A[X] ⧸ (F)` is a map of
-  presented `ℂ`-algebras. The scheme-level reading is the reason the statement is wanted and is not
-  what is proved.
+* **No claim that this is a scheme-theoretic statement.** What is analytified is a presentation,
+  and `A ⟶ A[X] ⧸ (F)` is a map of presented `ℂ`-algebras; no `AlgebraicGeometry.Scheme` appears
+  anywhere below. **This bullet said *"there is no `AlgebraicGeometry.Scheme` on this line of
+  files"* until 2026-09-02**, when `Oka/Analytification/SpecScheme.lean` put one there — a
+  promotion of a *gluing* of `Spec`s, which is a different subject from this file's and does not
+  make anything here scheme-theoretic. The scheme-level reading is the reason the statement is
+  wanted and is not what is proved.
 -/
 
 open CategoryTheory TopologicalSpace Opposite AlgebraicGeometry Topology

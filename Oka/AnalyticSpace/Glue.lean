@@ -110,8 +110,12 @@ carry the three together, bundle then.
   general cover** in that same file, by `ComplexAnalytic.coverAnalytification`, whose members are
   open subspaces of it by `ComplexAnalytic.isOpenImmersion_coverIota`; `OkaTest/AffineCover.lean`
   and `OkaTest/ProjectiveLine.lean` do it at concrete data. The input is still the cover **as
-  data** rather than a scheme, since this repository constructs no `AlgebraicGeometry.Scheme`
-  beyond Mathlib's `Spec` and has no cover API for one.
+  data** rather than a scheme, since this repository has no cover API for one. **The reason given
+  here until 2026-09-02 was that it "constructs no `AlgebraicGeometry.Scheme` beyond Mathlib's
+  `Spec`", and `Oka/Analytification/SpecScheme.lean` retired that**:
+  `ComplexAnalytic.specScheme` is a scheme glued from `Spec`s rather than one of them. It changes
+  nothing here — it is an *output* of a cover datum and not an input to one, so what this bullet
+  is about, a passage from a scheme to the data below, is still absent.
 * **The analytification of a *morphism* of non-affine spaces.**
   `ComplexAnalytic.AnalyticSpace.glueMorphisms` below now glues a morphism out of a covered
   analytic space, which is the ingredient that was missing; what is still absent is anything that

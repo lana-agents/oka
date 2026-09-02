@@ -118,6 +118,7 @@ import Oka.Analytification.SheafCoherent
 import Oka.Analytification.SpecAffineCover
 import Oka.Analytification.SpecDistinguishedOpen
 import Oka.Analytification.SpecFunctoriality
+import Oka.Analytification.SpecScheme
 import Oka.Analytification.StandardEtale
 import Oka.Analytification.StandardEtaleAnalytification
 import Oka.Analytification.StandardEtaleFiniteEtale

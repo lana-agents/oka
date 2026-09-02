@@ -179,12 +179,30 @@ member only. Nothing here is about two data at once; taxis #1329 has the measure
   `ComplexAnalytic.specIncl_comp_specIota` composed with the naturality of
   `ComplexAnalytic.analytificationToSpecNatTrans`. It is not here because that file needs both
   gluings and this one is only half of the input.
-* **Any statement that `X` is a scheme.** `ComplexAnalytic.specFunctor` lands in
-  `AlgebraicGeometry.LocallyRingedSpace`, and `Oka/Analytification/Comparison.lean` argues in a
-  titled section that the absence of `AlgebraicGeometry.Scheme` from its statements is a *result*
-  rather than an omission. Nothing below mentions one. A gluing of affine schemes along opens is
-  of course a scheme; saying so needs `AlgebraicGeometry.Scheme.GlueData` and is not free, and no
-  consumer has asked for it.
+* **Any statement that `X` is a scheme — it is in `Oka/Analytification/SpecScheme.lean`, which
+  imports this file.** `ComplexAnalytic.specFunctor` lands in
+  `AlgebraicGeometry.LocallyRingedSpace`, so the gluing below is a locally ringed space and
+  nothing below mentions a scheme; `Oka/Analytification/Comparison.lean` argues in a titled
+  section that the absence of `AlgebraicGeometry.Scheme` from *its* statements is a result rather
+  than an omission, and that section is about that file and is untouched by this one.
+
+  **Until 2026-09-02 this bullet also priced the statement, and the price was wrong in both
+  halves.** It said saying so *"needs `AlgebraicGeometry.Scheme.GlueData` and is not free, and no
+  consumer has asked for it"*. It needs
+  `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.scheme`, which consumes
+  `AlgebraicGeometry.LocallyRingedSpace.GlueData.ι_jointly_surjective` and
+  `ComplexAnalytic.isOpenImmersion_specIota` — both of them below — where
+  `AlgebraicGeometry.Scheme.GlueData` would mean rebuilding this file's `t`, `t'`, `t_fac`,
+  `t_inv` and `cocycle` at the scheme level. It cost six declarations and no new import, and
+  `Oka/Analytification/CoverIndependence.lean` is the consumer: the condition it names as what a
+  common refinement of two cover data has to reproduce has a Mathlib statement,
+  `AlgebraicGeometry.exists_basicOpen_le_affine_inter`, which applies once the members are affine
+  opens and is `ComplexAnalytic.exists_basicOpen_specSchemeIota_inter` there.
+
+  **A separate module rather than the end of this file, and the reason is this bullet**: ten
+  docstrings on this line say there is no `AlgebraicGeometry.Scheme` in *their* file, so keeping
+  the scheme out of this one leaves all ten true verbatim and makes the property an import-graph
+  fact rather than a prose one. `Oka/Analytification/SpecScheme.lean` records the counter-argument.
 * **No input exhibited, and so no non-vacuity of the *input*.** As in
   `Oka/Analytification/AffineCover.lean`, nothing here builds a family; the two instances that do
   — the node cover and `ℙ¹` — are exhibited under `OkaTest/` and are not re-run here. What *is*

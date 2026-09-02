@@ -208,11 +208,15 @@ docstring predicts that every consumer of the functor spells its object the othe
   `ψ` is `ComplexAnalytic.localisationHom`, whose direction convention is already the one
   `ComplexAnalytic.coverMap` wants, and `σ` is constant in the case that file treats — neither
   costs a line. The work is the refined cover *datum*, which is what that file is mostly about.
-* **No scheme.** Nothing here says the two data describe the same scheme —
-  there is no scheme in this line of files at all, and
+* **No scheme.** Nothing here says the two data describe the same scheme. **The clause that used
+  to follow — *"there is no scheme in this line of files at all"* — was retired on 2026-09-02**:
+  `Oka/Analytification/SpecScheme.lean` promotes `ComplexAnalytic.specGlued` to
+  `ComplexAnalytic.specScheme`, and it is the only scheme on this line.
   `Oka/Analytification/CoverFunctoriality.lean` and `Oka/Analytification/AffineCover.lean` each
-  argue in a titled section why. taxis #1107's headline speaks of two *admissible covers of a
-  scheme*, and there is still no predicate of that name — but **defining one is not what that
+  argue in a titled section why nothing *here* is one, and neither is weakened by that module:
+  what they are about is the absence of a scheme from the **input**, which is still a cover datum
+  and is still not produced from a scheme. taxis #1107's headline speaks of two *admissible covers
+  of a scheme*, and there is still no predicate of that name — but **defining one is not what that
   issue's fourth increment is blocked on, and this bullet said until 2026-08-31 that it was.**
   Every part admissibility asserts of a member already held of a cover datum, and each was already
   a declaration: `ComplexAnalytic.finiteType_presentationAlg` for finite type over `ℂ`,
@@ -223,7 +227,15 @@ docstring predicts that every consumer of the functor spells its object the othe
   condition the data already carries and nobody had named — every pairwise overlap is a
   *distinguished* open of each of the two members it lies in —
   and `Oka/Analytification/SpecAffineCover.lean`'s admissibility section is where it is written
-  down. taxis #1329 has the measurement.
+  down. taxis #1329 has the measurement. **Its *local* form turned out to be a Mathlib lemma
+  nobody had connected to it**: any two affine opens of a scheme have, at each point of their
+  overlap, an open distinguished in both, which is
+  `AlgebraicGeometry.exists_basicOpen_le_affine_inter` and is stated at the members of a cover
+  datum by `ComplexAnalytic.exists_basicOpen_specSchemeIota_inter`. **That is strictly weaker than
+  the condition above** — a datum's overlap *is* a distinguished open of each member, where the
+  lemma gives only a distinguished neighbourhood of each point of it — and it is the local
+  statement a common refinement would be assembled from rather than a step of one. Nothing builds
+  such a refinement.
 * **No naturality.** That the isomorphism commutes with `ComplexAnalytic.coverMap` out of either
   side, or with the comparison morphisms of `Oka/Analytification/CoverComparison.lean`, is not
   stated. Nothing consumes it yet.

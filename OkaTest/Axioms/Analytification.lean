@@ -4539,3 +4539,66 @@ info: 'ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom' depends on ax
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom
+
+/-! ### The glued `Spec`s, as a scheme
+
+`Oka/Analytification/SpecScheme.lean`, all six of it, in the order they are declared. **Two are a
+`def`** — `ComplexAnalytic.specScheme` and `ComplexAnalytic.specSchemeIota` — one is an
+`instance`, and the remaining three are theorems.
+
+The section exists because the `Spec`-side section above guards a gluing of locally ringed spaces
+and says nothing about a scheme: `ComplexAnalytic.specGlued` is guarded there, and that its
+promotion `ComplexAnalytic.specScheme` is a scheme is a different statement in a different module.
+It is the **first** `AlgebraicGeometry.Scheme` guarded in this file.
+
+The last one is the reason the module exists rather than a corollary of it:
+`ComplexAnalytic.exists_basicOpen_specSchemeIota_inter` is the local form of the condition
+`Oka/Analytification/CoverIndependence.lean` names as what a common refinement of two cover data
+has to reproduce. It is about two members of **one** datum and is not a common refinement; that
+module's docstring says what a refinement needs beyond it.
+
+Appended as its own section rather than folded into the `Spec`-side section above, for the reason
+those sections give: a section moved is a conflict for somebody else.
+-/
+
+/--
+info: 'ComplexAnalytic.specScheme' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specScheme
+
+/--
+info: 'ComplexAnalytic.specScheme_toLocallyRingedSpace' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specScheme_toLocallyRingedSpace
+
+/--
+info: 'ComplexAnalytic.specSchemeIota' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specSchemeIota
+
+/--
+info: 'ComplexAnalytic.isOpenImmersion_specSchemeIota' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isOpenImmersion_specSchemeIota
+
+/--
+info: 'ComplexAnalytic.isAffineOpen_specSchemeIota' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isAffineOpen_specSchemeIota
+
+/--
+info: 'ComplexAnalytic.exists_basicOpen_specSchemeIota_inter' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.exists_basicOpen_specSchemeIota_inter

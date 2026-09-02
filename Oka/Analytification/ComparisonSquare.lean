@@ -93,8 +93,10 @@ each cost a measured number of attempts:
   `ComplexAnalytic.analytificationToSpec` and belong wherever that is studied; this file relates
   two morphisms that already exist.
 * **Nothing about cover independence.** Two covers of one scheme is taxis #1107 and is a different
-  question: a morphism of cover *data* is what the input here is, and there is no scheme in any of
-  these files.
+  question: a morphism of cover *data* is what the input here is, and no scheme is an input to
+  anything on this line. **This bullet said *"there is no scheme in any of these files"* until
+  2026-09-02**, which `Oka/Analytification/SpecScheme.lean` retired; nothing in that module is an
+  input, and the distinction is the one this bullet was making.
 -/
 
 open CategoryTheory TopologicalSpace AlgebraicGeometry
