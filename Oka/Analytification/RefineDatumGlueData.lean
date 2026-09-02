@@ -47,11 +47,12 @@ With `hrange` a single proof, `ComplexAnalytic.coverTriple` applies at the refin
 cocycle law becomes statable: `ComplexAnalytic.RefineDatumCocycle`. Naming it is most of what
 this file is for. `ComplexAnalytic.refineDatumGlueData` and
 `ComplexAnalytic.refineDatumAnalytification` then take it as their one remaining hypothesis, the
-symmetry law being `ComplexAnalytic.refineDatumGlue_symm` and the range law being the theorem
-above — so of the three laws a cross-member refinement needs, one was **already proved** before
-this file, one is **proved here from two conditions this file adopts and shows equivalent to it**,
-and the third is **named here and proved in the file that consumes this one.** Neither geometric
-law was available at a non-constant `σ` before this file; the symmetry law was, and bringing all
+symmetry law being `ComplexAnalytic.refineDatumGlue_symm` and the range law being
+`ComplexAnalytic.refineDatumHrange` — so of the three laws a cross-member refinement needs, one
+was **already proved** before this file, one is **proved here from two conditions this file adopts
+and shows equivalent to it**, and the third is **named here and proved in the file that consumes
+this one.** Neither geometric law was available at a non-constant `σ` before this file; the
+symmetry law was, and bringing all
 three together is what `ComplexAnalytic.refineDatumGlueData` is.
 
 **Nothing here is evidence about the cocycle law**, and this paragraph gave a reason that was on
