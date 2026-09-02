@@ -45,8 +45,11 @@ is *not* finite unless the other members are empty, *"since its image is not clo
 and both the claim and its reason were wrong**: the members of a coproduct are pairwise disjoint,
 so each image is the complement of a union of opens and is **clopen** —
 `ComplexAnalytic.AnalyticSpace.isClosed_range_sigmaι_base`. What an inclusion is *not* is
-**surjective**, which is `ComplexAnalytic.AnalyticSpace.not_surjective_sigmaι_base`, is true, and
-is a different statement from not being finite.
+**surjective** — and unlike finiteness that one carries hypotheses.
+`ComplexAnalytic.AnalyticSpace.not_surjective_sigmaι_base` is, in the words
+`Oka/AnalyticSpace/Sigma.lean` already uses for it, about the *inclusion* being non-surjective on
+points at a two-member family with the other member inhabited: its two hypotheses are `i ≠ j` and
+a point of the `j`-th member. It is true, and it is a different statement from not being finite.
 
 ## The trivial cover, and what the count is a test of
 

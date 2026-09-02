@@ -185,9 +185,13 @@ arbitrary point of the coproduct in *some* member and
 `AlgebraicGeometry.LocallyRingedSpace.disjoint_range_sigmaι` keeps it out of this one; the image
 being open is `AlgebraicGeometry.LocallyRingedSpace.sigmaι_isOpenImmersion`.
 
-**This is the fact the two instances below are about**, and it is worth naming on its own:
-*clopen*, and not *open*, is what an inclusion of a member is, and a bullet in
-`OkaTest/AnalyticSigma.lean` priced it as merely open and drew a false conclusion from that.
+**This is what `ComplexAnalytic.AnalyticSpace.isFinite_sigmaι` takes from the coproduct**, and
+through it `ComplexAnalytic.AnalyticSpace.isFiniteEtale_sigmaι`;
+`ComplexAnalytic.AnalyticSpace.isLocalIso_sigmaι` uses none of it — both of its fields are the
+inclusion being an *open* immersion, as its own docstring below records. It is worth naming on
+its own: *clopen*, and not
+*open*, is what an inclusion of a member is, and a bullet in `OkaTest/AnalyticSigma.lean` priced
+it as merely open and drew a false conclusion from that.
 
 `AlgebraicGeometry.LocallyRingedSpace.disjoint_range_sigmaι _ hij` at `hij : i ≠ j` is already
 `Disjoint (Set.range (Sigma.ι f i).base) (Set.range (Sigma.ι f j).base)` in that order; adding a
@@ -215,8 +219,9 @@ above — and the second is that an injective map has subsingleton fibres, injec
 
 **An `instance` rather than a `theorem`, and the choice is deliberate.** Its head is
 `ComplexAnalytic.AnalyticSpace.sigmaι`, which no other instance on this line produces, so it
-fires only on a goal that already names an inclusion and cannot chain; the two rungs above it are
-instances for the same reason. -/
+fires only on a goal that already names an inclusion and cannot chain;
+`ComplexAnalytic.AnalyticSpace.isFinite_sigmaDesc` and
+`ComplexAnalytic.AnalyticSpace.isLocalIso_sigmaDesc` are instances for the same reason. -/
 instance isFinite_sigmaι (j : ι) : IsFinite (sigmaι F j) where
   isClosedMap :=
     (IsClosedEmbedding.mk

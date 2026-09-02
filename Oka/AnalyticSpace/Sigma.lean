@@ -90,7 +90,10 @@ file — **and the reason is not the same for the two**. The descent map's needs
 map, which is why it is stated where they are; the **inclusion**'s needs only that the members
 are pairwise disjoint, which is `ComplexAnalytic.AnalyticSpace.not_surjective_sigmaι_base`'s own
 input and is here, so `ComplexAnalytic.AnalyticSpace.isFiniteEtale_sigmaι` is over there for the
-import edge to `Oka/AnalyticSpace/Finite.lean` and not for anything it reads from this file.
+import edge to `Oka/AnalyticSpace/Finite.lean` alone: this file reaches neither of the two
+classes. It is not that its proofs read nothing from here —
+`ComplexAnalytic.AnalyticSpace.isLocalIso_sigmaι`, one of the two rungs it is built from, rewrites
+with `ComplexAnalytic.AnalyticSpace.sigmaι_toLRSHom` twice.
 
 **No claim that the disjoint union is not one of its members** beyond
 `ComplexAnalytic.AnalyticSpace.not_surjective_sigmaι_base`, which is about the *inclusion* being
