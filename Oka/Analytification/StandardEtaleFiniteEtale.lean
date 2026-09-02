@@ -21,7 +21,10 @@ presentation this repository has had both for two files without ever putting the
 
 The two are stated about different morphisms, and that is not an oversight in either file:
 unrestricted finiteness is **false**, and
-`Oka/Analytification/MonicHypersurface.lean` carries the counterexample. So the class can only be
+`Oka/Analytification/MonicHypersurface.lean` carries the counterexample in terms — compiled since
+2026-09-02 as `ComplexAnalytic.not_isFinite_condEtaleProj`
+(`OkaTest/StandardEtaleNotFinite.lean`), which is what makes *"stated about different morphisms"*
+a measurement rather than a reading. So the class can only be
 claimed for the restricted morphism, and what was missing was the second field *at the
 restriction* — which is `ComplexAnalytic.AnalyticSpace.isLocalIso_restrictHom`
 (`Oka/AnalyticSpace/OpenSubspace.lean`), a general fact about open subspaces with nothing étale in
@@ -91,8 +94,10 @@ theorem reads a `StandardEtalePair`, so appending it there would have turned tha
 ## What is not here
 
 * **No `IsFiniteEtale` of the unrestricted morphism**, and there never will be: it is **false**,
-  `Oka/Analytification/MonicHypersurface.lean` carries the witness, and nothing in this file
-  narrows that. The restriction is in the statement because the first field needs it.
+  `Oka/Analytification/MonicHypersurface.lean` carries the witness and
+  `ComplexAnalytic.not_isFiniteEtale_condEtaleProj` (`OkaTest/StandardEtaleNotFinite.lean`)
+  compiles it, and nothing in this file narrows that. The restriction is in the statement because
+  the first field needs it.
 * **Nothing at `k ≥ 1`.** Both halves are at an empty base presentation, for the reasons their own
   files give, and a presented base is a different theorem rather than a missing hypothesis. **The
   local-isomorphism half of that different theorem now exists** —

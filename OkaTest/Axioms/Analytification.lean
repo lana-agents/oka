@@ -4602,3 +4602,20 @@ info: 'ComplexAnalytic.exists_basicOpen_specSchemeIota_inter' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.exists_basicOpen_specSchemeIota_inter
+
+/-! ### The base map of the standard étale projection, on points
+
+`Oka/Analytification/StandardEtaleAnalytification.lean`, appended as its own section so that no
+section above moves.
+
+`ComplexAnalytic.base_analytificationMap_etalePresHom_comp_apply` is the only description of that
+morphism on points in the repository, and it is what a statement about its *image* has to be fed;
+`ComplexAnalytic.base_condEtaleProj_ne_zero` (`OkaTest/StandardEtaleNotFinite.lean`) is the first
+consumer and is a test declaration, so it is not guarded here. -/
+
+/--
+info: 'ComplexAnalytic.base_analytificationMap_etalePresHom_comp_apply' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.base_analytificationMap_etalePresHom_comp_apply

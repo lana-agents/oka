@@ -155,7 +155,13 @@ construction rather than by a compatibility lemma.
   (`Oka/Analytification/StandardEtaleLocalIso.lean`), which landed earlier and which this
   paragraph did not track. `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` of the
   **unrestricted** morphism is still nowhere and is **false**, which is what the counterexample
-  in this file is for and which nothing narrows. Of the *restricted* one this paragraph said it
+  in this file is for and which nothing narrows. **The counterexample is no longer only in this
+  paragraph**: `ComplexAnalytic.not_isFiniteEtale_condEtaleProj`
+  (`OkaTest/StandardEtaleNotFinite.lean`) compiles it at the square-root cover of the line, since
+  2026-09-02. It proves the image misses the origin and reads the rest off connectedness, so what
+  it settles is the two words *"and is **false**"*; the *"image the punctured line"* computation
+  three lines above is still prose here and nowhere else. Of the *restricted* one this
+  paragraph said it
   was *"waiting on a transport of `ComplexAnalytic.AnalyticSpace.IsLocalIso` along a restriction
   that nothing has"*; that transport is
   `ComplexAnalytic.AnalyticSpace.isLocalIso_restrictHom` (`Oka/AnalyticSpace/OpenSubspace.lean`)

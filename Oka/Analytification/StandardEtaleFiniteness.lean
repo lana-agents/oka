@@ -110,8 +110,10 @@ was neither of them.
   bullet below says this file reads no `StandardEtalePair`, and the class does read one.
 
   **The unrestricted `IsFiniteEtale` stays false forever** and nothing here bears on it:
-  `Oka/Analytification/MonicHypersurface.lean` carries the counterexample, in terms, and nothing
-  below narrows it. A **different and broader** absence — *the analytification of a finite étale
+  `Oka/Analytification/MonicHypersurface.lean` carries the counterexample in terms and
+  `ComplexAnalytic.not_isFiniteEtale_condEtaleProj` (`OkaTest/StandardEtaleNotFinite.lean`)
+  compiles it, since 2026-09-02; nothing below narrows either. A **different and broader**
+  absence — *the analytification of a finite étale
   morphism of schemes*, the other blocker of the Riemann existence theorem — is what
   `Oka/AnalyticSpace/LocalIso.lean`, `Oka/AnalyticSpace/CoveringMap.lean` and
   `Oka/AnalyticSpace/SigmaFiniteEtale.lean` record, in those words. Nothing below narrows that
@@ -264,9 +266,27 @@ analytification and the hypersurface agree there.
 conclusion fails.** At `F = X² - x` and `G = X` the bad set is the origin of the line, so `V = ⊤`
 meets it, and inverting `G` cuts the point `(0, 0)` out of the parabola; the projection of what is
 left has the punctured line for image, which is not closed, so the morphism is not finite.
-`Oka/Analytification/MonicHypersurface.lean` carries that computation in terms. **It is not
-compiled anywhere in this repository** and is asserted here on the same footing it is asserted
-there.
+`Oka/Analytification/MonicHypersurface.lean` carries that computation in terms. **This paragraph
+said *"it is not compiled anywhere in this repository"* until 2026-09-02, and it now is**:
+`ComplexAnalytic.not_isFinite_condEtaleProj` and
+`ComplexAnalytic.not_isFiniteEtale_condEtaleProj` (`OkaTest/StandardEtaleNotFinite.lean`), at
+exactly this pair — `ComplexAnalytic.condPair`, which is `f = X² - C z₀`, `g = X` over the empty
+presentation of the line.
+
+**What is compiled is the conclusion and not the computation above.** That file proves the
+morphism misses **one** point of the base, the origin, and reads the rest off
+`ComplexAnalytic.AnalyticSpace.not_isFinite_of_isLocalIso_of_not_surjective`
+(`Oka/AnalyticSpace/LocalIso.lean`): a local isomorphism has open image, a finite morphism has
+closed image, and the line is connected, so a non-empty source and one missing point are enough.
+**The image is not computed there and nothing says it is the punctured line** — that is a
+strictly stronger statement needing a square root of every non-zero complex number, and this
+sentence's *"has the punctured line for image"* remains uncompiled. What was uncompiled and is no
+longer is *"so the morphism is not finite"*.
+
+**Nothing here says the `hV` hypothesis is irredundant**, and that is a third statement again:
+this theorem is about `ComplexAnalytic.AnalyticSpace.restrictHom` of the composite and the
+counterexample is about the composite itself, and nothing in this repository relates the two at
+`V = ⊤`.
 
 **This sentence used to end by generalising that witness, and the generalisation is false.** It
 read *"over a `V` meeting the bad set the conclusion is **false**"*, which as a universal claims
