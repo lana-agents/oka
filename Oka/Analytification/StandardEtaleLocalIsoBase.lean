@@ -131,14 +131,18 @@ hypersurface `ComplexAnalytic.hypersurfacePresentation g F`.
   `Oka/Analytification/StandardEtaleLocalIso.lean` records why and this file does not touch it.
 * **No general étale morphism.** Every étale morphism is Zariski-locally standard étale and the
   gluing is a separate construction that nothing starts.
-* **No `k ≥ 1` instance is exhibited, so the new content of the last theorem is unwitnessed.** It
-  is not vacuous — the statement is general in `k` and subsumes `k = 0`, where
-  `ComplexAnalytic.condPair` (`OkaTest/StandardEtaleCond.lean`) is a `StandardEtalePair` over
-  `ComplexAnalytic.PresentedAlgebra 1 0 ComplexAnalytic.condBase` — but nothing below produces one
-  at `k ≥ 1`. The cheapest would be `ComplexAnalytic.sqSubOnePair`
-  (`OkaTest/OpenBaseFiniteness.lean`), which is a `StandardEtalePair` over an **arbitrary**
-  commutative ring and so over a presented algebra at any `k`: **an instantiation and not a
-  construction**, and this file does not make it.
+* **No `k ≥ 1` instance, because a witness goes under `OkaTest/` and one is there.**
+  `OkaTest/StandardEtaleBaseWitness.lean` has it: `ComplexAnalytic.isLocalIso_hyperbolaSqrtCover` is
+  the last theorem at `k = 1`, over the hyperbola `z₀z₁ = 1` in `ℂ²`, whose analytification that
+  file proves non-empty and proper. It is **an instantiation and not a construction**, as this
+  bullet predicted a witness would be, and it takes a route this bullet did not name: the pair is
+  `f = X² − C a`, `g = X` over an arbitrary `ℂ`-algebra
+  (`ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_sqrtCover` is it over an arbitrary
+  presented base), and **not** `ComplexAnalytic.sqSubOnePair` — that one is cheaper still and
+  `ComplexAnalytic.sqSubOnePair_X` collapses its standard étale algebra onto the base over any
+  `ℂ`-algebra, so it would have fired the theorem at an isomorphism. Nothing below is changed by
+  either, and `ComplexAnalytic.condPair` (`OkaTest/StandardEtaleCond.lean`) remains the `k = 0`
+  one.
 * **No implicit function theorem *relative to `X^an`*, which is the one the five sites priced.**
   One relative to `ℂ^n` is spent four links down — step 3 is
   `ComplexAnalytic.isLocalIso_ofRestrict_comp_proj_of_pderiv`, whose topological half is
