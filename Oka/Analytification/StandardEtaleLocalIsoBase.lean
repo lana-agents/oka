@@ -35,12 +35,34 @@ at the same data**: `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_
 (`OkaTest/StandardEtaleNotLocalIso.lean`) are the two halves of the sentence above at
 `ComplexAnalytic.nodeG`, `ComplexAnalytic.nodeEtaleF` and `ComplexAnalytic.nodeEtaleG`.
 
-## No implicit function theorem *relative to `X^an`*, and five files priced one
+## No implicit function theorem *relative to `X^an`*, and the files that priced one
 
 Five sites said that a statement over a general base *"needs an implicit function theorem relative
-to `X^an`, which `Oka/Analysis/Calculus/Implicit.lean` does not have"*. They are about the
-projection to `ℂ^n`, which is a different statement and is the false one; the sentence was never
-tested against this one. **The step from `k = 0` to `k ≥ 1` takes no analysis at all**: the
+to `X^an`, which `Oka/Analysis/Calculus/Implicit.lean` does not have"*. They stood, at the tree
+this section was written against, in **four** files:
+
+* `Oka/AnalyticSpace/SimpleZeroPolynomial.lean`;
+* `Oka/Analytification/StandardEtaleAnalytification.lean`, **twice** — the full price in one
+  place and the same price in a shorter wording in another, which is the whole of why five sites
+  sit in four files;
+* `Oka/Analytification/StandardEtaleLocalIso.lean`;
+* `OkaTest/StandardEtaleCond.lean`.
+
+**Two sentences of this file used to say *five files*, and there were four**: this heading, two
+lines above a *five sites* that was right, and
+`ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom`'s docstring below. The file count is
+now the list, because a numeral is falsified by any addition anywhere while a list is falsified by
+a missing entry. **The likeliest source of the wrong numeral is a guess and is marked as one**:
+the branch that wrote this section edited five files under `Oka/`, and two of them never carried
+the price at all.
+
+**`OkaTest/StandardEtaleCond.lean` is one of the five and not a sixth.** That branch repaired the
+four `Oka/` sites and left the `OkaTest/` one standing, and a later one swept `OkaTest/` and
+repaired it; the site that had been missed was inside the five, so the total never moved.
+
+The five are about the projection to `ℂ^n`, which is a different statement and is the false one;
+the sentence was never tested against this one. **The step from `k = 0` to `k ≥ 1` takes no
+analysis at all**: the
 `k ≥ 1` configuration is the `k = 0` one restricted over a subspace on both sides, and the
 transport of local isomorphisms across such a restriction is
 `ComplexAnalytic.AnalyticSpace.isLocalIso_of_isCutOutBy_pullbackΓ`
@@ -509,9 +531,11 @@ theorem comap_localisationOpen_hypersurfaceCompare
 /-- **The analytification of a standard étale morphism over a presented base is a local
 isomorphism onto that base**, at every `k`.
 
-The statement taxis #1113's comparison functor consumes and the one five files priced as needing
-an implicit function theorem relative to `X^an`; it needs none, and spends only the one relative
-to `ℂ^n` that the `k = 0` line already spends.
+The statement taxis #1113's comparison functor consumes and the one the five sites priced as
+needing an implicit function theorem relative to `X^an`; it needs none, and spends only the one
+relative to `ℂ^n` that the `k = 0` line already spends. Those five sites are listed in this file's
+module docstring, and they sit in **four** files — this sentence said *five files* until the
+count was replaced by the list.
 `ComplexAnalytic.etaleAnalytificationIso_hom_comp` — an equation already in the tree and general
 in `k` — replaces the étale analytification by `D(G)` in the
 hypersurface over the base, `ComplexAnalytic.comap_localisationOpen_hypersurfaceCompare` says
