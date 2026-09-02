@@ -161,13 +161,37 @@ that form and **nothing above is evidence about it**.
   **the analytification of `A ⟶ A[X₁] ⧸ (F₁) ⟶ (A[X₁] ⧸ (F₁))[X₂] ⧸ (F₂)` is finite**, as one
   morphism, for both polynomials monic in their last variable.
 - `ComplexAnalytic.isFinite_analytificationMap_towerPresHom`: **the analytification of an
-  `m`-step tower of monic hypersurfaces is finite**, for every `m` — the theorem above at `m = 2`.
+  `m`-step tower of monic hypersurfaces is finite**, for every `m` —
+  `ComplexAnalytic.isFinite_analytificationMap_hypersurfacePresHom_comp_hypersurfacePresHom` at
+  `m = 2`.
 - `ComplexAnalytic.towerPresentation_one` and `ComplexAnalytic.towerPresHom_one`: **one step of
   the tower is one hypersurface**, on the nose.
 - `ComplexAnalytic.towerPresHom_two`: **two steps of the tower are the two-step composite**, on
-  the nose — so the theorem above is subsumed definitionally and not merely in effect.
+  the nose — so
+  `ComplexAnalytic.isFinite_analytificationMap_hypersurfacePresHom_comp_hypersurfacePresHom` is
+  subsumed definitionally and not merely in effect.
 
 ## What is not here
+
+* **Two `## Main results` bullets refer back to
+  `ComplexAnalytic.isFinite_analytificationMap_hypersurfacePresHom_comp_hypersurfacePresHom` —
+  the one for `ComplexAnalytic.isFinite_analytificationMap_towerPresHom` and the one for
+  `ComplexAnalytic.towerPresHom_two` — and both said *the theorem above* until this was
+  written.** They sit two bullets apart and only the first resolved by adjacency: for the tower's
+  finiteness the bullet immediately above it is the two-step theorem, while for
+  `ComplexAnalytic.towerPresHom_two` the bullet immediately above is the pair of one-step
+  identifications, which nothing subsumes. A reader who applied the reading that had just worked
+  got the wrong declaration — and that both sentences are about one and the same theorem, which
+  is the whole of what *subsumes* is claiming, could not be seen from the list at all. **Nothing
+  about the rest of that list follows from this.**
+  `ComplexAnalytic.hypersurfacePresHom_comp_hypersurfacePresHom'`'s bullet keeps two
+  back-references by description — *the same law* and *the witness above* — and each of those
+  resolves: *the same law* by adjacency, being the bullet immediately above it, and *the witness
+  above* by predicate, being the only membership statement in the list. **This note is here and
+  not under `## Main results`** because `scripts/guard_coverage.py` reads every backticked
+  repository name under that heading as a result the file advertises, so a paragraph left there
+  is counted as though it were more bullets; `Oka/AnalyticSpace/SimpleZeroStalk.lean` keeps its
+  equivalent note in the same place for the same reason.
 
 * **No general finite morphism *in this file*, and that is now all this bullet says.** It used to
   go on: *"What nothing states is the **construction** that produces such a surjection from a
