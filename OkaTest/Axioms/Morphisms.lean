@@ -1584,3 +1584,37 @@ info: 'ComplexAnalytic.AnalyticSpace.isLocalIso_of_isCutOutBy_pullbackΓ' depend
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.isLocalIso_of_isCutOutBy_pullbackΓ
+
+/-! ### Surjectivity of a finite local isomorphism over a connected base
+
+`Oka/AnalyticSpace/LocalIso.lean`, appended as its own section for the reason the sections above
+give: a section moved is a conflict for somebody else.
+
+The three read the two rungs against each other and nothing else — a local isomorphism is an open
+map and a finite morphism is a closed one, so over a preconnected base the image of a non-empty
+source is everything. The contrapositive is the one with a consumer:
+`ComplexAnalytic.not_isFinite_condEtaleProj` (`OkaTest/StandardEtaleNotFinite.lean`) is where the
+unrestricted standard étale morphism is refuted by a missing point, and that consumer is a test
+declaration and so is **not** guarded here — this file imports `Oka` and not `OkaTest`, which is
+the reason the cancellation section above gives for the same omission. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.surjective_base_of_isLocalIso_of_isFinite' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.surjective_base_of_isLocalIso_of_isFinite
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.surjective_base_of_isFiniteEtale' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.surjective_base_of_isFiniteEtale
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.not_isFinite_of_isLocalIso_of_not_surjective' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.not_isFinite_of_isLocalIso_of_not_surjective

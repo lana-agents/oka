@@ -72,6 +72,9 @@ standard étale pair.
   analytification of the hypersurface presentation named above. (That presentation is this file's
   own definition and is not backticked here, since `scripts/guard_coverage.py` reads every
   backticked repository name under this heading as a result this file advertises.)
+- `ComplexAnalytic.base_analytificationMap_etalePresHom_comp_apply`: **the projection to the base
+  forgets the last two coordinates**, coordinate by coordinate — the only description of that
+  morphism on points, and what a statement about its *image* has to be fed.
 
 ## What is not here
 
@@ -230,7 +233,12 @@ standard étale pair.
 * **No finiteness.** `IsFiniteEtale` of the unrestricted morphism is **false**: a standard étale
   algebra inverts `g`, and `Spec` of `(ℂ[X][x] ⧸ (x² - X))[1/x]` over `ℂ` has the punctured line
   for image, which is not closed. `Oka/Analytification/MonicHypersurface.lean`'s `## What is not
-  here` carries that. **The finiteness that *is* true — over an open subset of the base on which
+  here` carries that argument, and since 2026-09-02
+  `ComplexAnalytic.not_isFiniteEtale_condEtaleProj` (`OkaTest/StandardEtaleNotFinite.lean`)
+  compiles the conclusion, at `ComplexAnalytic.condPair` — **this bullet cited only the argument
+  until then**. It proves the image misses the origin rather than computing it, so the *"punctured
+  line for image"* half of the sentence above is still prose. **The finiteness that *is* true —
+  over an open subset of the base on which
   the inversion is vacuous — is now built, and this paragraph said it was "a construction and is
   not here" when only the second half was right.** It is
   `ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp`
@@ -484,6 +492,52 @@ theorem eval_pderiv_ne_zero_of_mem
       Fin.snoc_castSucc _ _ _] at hj
   · have hl := eval_eq_zero_of_mem.{u} (hypersurfacePresentation.{u} g F) y (Fin.last k)
     rwa [show hypersurfacePresentation.{u} g F (Fin.last k) = F from Fin.snoc_last _ _] at hl
+
+/-! ### The base map of the projection, on points -/
+
+/-- **The projection of the standard étale analytification to the base forgets the last two
+coordinates.**
+
+`ComplexAnalytic.etalePresentation` adjoins two variables — the root of `F` and the inverse of
+`G` — so a point of its analytification is a tuple in `ℂ^(n+2)`, and this says the morphism
+`ComplexAnalytic.analytificationMap (etalePresHom g F G) ≫ analytificationInclHom g` sends it to
+its first `n` entries. Stated coordinate by coordinate because that is how a caller reads a point
+of `ℂ^n`: `ComplexAnalytic.AnalyticSpace.base_eq_eval_coordPullback` is the only description of
+the base map of a morphism into `ℂ^n` this repository has, and it is coordinatewise.
+
+**Nothing in it is about `F` and `G`, and it takes no hypothesis on either.** The three steps are
+`ComplexAnalytic.coordPullback_analytificationMap_comp`, which names the pullback of the `i`-th
+coordinate as `ComplexAnalytic.transported`; the observation that
+`ComplexAnalytic.etalePresHom` is `ComplexAnalytic.PresHom.ofRename` at the inclusion of the old
+variables, so that transported class is the class of a **variable**; and
+`ComplexAnalytic.eval_polyToGlobal`, which evaluates a polynomial's global section at a point as
+the polynomial at the tuple. The relations play no part, which is why this is stated here rather
+than beside a statement that uses them.
+
+**Why a caller wants it.** A morphism produced by `ComplexAnalytic.analytificationMap` is opaque
+on points, so a statement about the *image* — that it misses a point, or that it is not closed —
+has no route to the definitions without this. It is what
+`ComplexAnalytic.AnalyticSpace.not_isFinite_of_isLocalIso_of_not_surjective`
+(`Oka/AnalyticSpace/LocalIso.lean`) has to be fed. -/
+theorem base_analytificationMap_etalePresHom_comp_apply
+    (y : AnalyticSpace.analytification.{u} (etalePresentation.{u} g F G))
+    (i : ULift.{u} (Fin n)) :
+    (((analytificationMap.{u} (etalePresHom.{u} g F G) ≫
+        analytificationInclHom.{u} g).toLRSHom.base y : AnalyticSpace.complexAffineSpace.{u} n) :
+      ULift.{u} (Fin n) → ℂ) i =
+      (y.1.1 : ULift.{u} (Fin (n + 2)) → ℂ)
+        (localisationIncl.{u} (n + 1) (localisationIncl.{u} n i)) := by
+  rw [AnalyticSpace.base_eq_eval_coordPullback, coordPullback_analytificationMap_comp]
+  change (AnalyticSpace.analytification.{u} (etalePresentation.{u} g F G)).eval (U := ⊤) y trivial
+    (quotientToGlobal.{u} _ ((etalePresHom.{u} g F G).toRingHom
+      (Ideal.Quotient.mk _ (MvPolynomial.X i)))) = _
+  rw [show (etalePresHom.{u} g F G).toRingHom (Ideal.Quotient.mk _ (MvPolynomial.X i)) =
+      Ideal.Quotient.mk _ (MvPolynomial.X
+        (localisationIncl.{u} (n + 1) (localisationIncl.{u} n i))) from by
+    simp [etalePresHom, PresHom.ofRename]]
+  change (AnalyticSpace.analytification.{u} (etalePresentation.{u} g F G)).eval (U := ⊤) y trivial
+    (polyToGlobal.{u} _ (MvPolynomial.X _)) = _
+  rw [eval_polyToGlobal, MvPolynomial.eval_X]
 
 end
 

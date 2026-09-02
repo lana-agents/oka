@@ -119,8 +119,10 @@ available here.
 ## What is not here
 
 * **No standard étale algebra, and no `IsFiniteEtale`.** The unrestricted statement is **false** —
-  taxis #1112 carries the counterexample, the punctured parabola over the line — and nothing here
-  states it. Identifying the source of this theorem with the analytification of a *localised*
+  taxis #1112 carries the counterexample, the punctured parabola over the line, and since
+  2026-09-02 `ComplexAnalytic.not_isFiniteEtale_condEtaleProj`
+  (`OkaTest/StandardEtaleNotFinite.lean`) compiles it — and nothing here states either.
+  Identifying the source of this theorem with the analytification of a *localised*
   algebra is the step `ComplexAnalytic.etaleAnalytificationIso` would be spent on, and it is not
   taken **here**; it is taken in `Oka/Analytification/StandardEtaleFiniteness.lean`, at `k = 0`,
   by `ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp`. **This bullet
