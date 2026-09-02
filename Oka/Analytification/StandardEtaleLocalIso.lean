@@ -64,8 +64,11 @@ one is not made without the other.
 
 The `k + 1` versus one is the signature of a statement whose base is the whole of `ℂ^n`, i.e.
 `k = 0`, and that is what everything below is stated at. A statement over a general base is a
-different theorem and needs an implicit function theorem relative to `X^an`, which
-`Oka/Analysis/Calculus/Implicit.lean` does not have.
+different theorem. **This sentence went on to price that theorem — *"needs an implicit function
+theorem relative to `X^an`, which `Oka/Analysis/Calculus/Implicit.lean` does not have"* — and the
+pricing was a misdiagnosis in both directions**, which the two paragraphs below say in full: of
+the two statements at `k ≥ 1` the projection one is **false** rather than expensive, and the
+other takes no implicit function theorem relative to `X^an` at all.
 
 **That sentence is about the projection to `ℂ^n`, and at `k ≥ 1` there are two statements and not
 one.** The other is about the analytified structure map to `X^an` **alone**, without
@@ -92,12 +95,15 @@ read.** `ComplexAnalytic.AnalyticSpace.isLocalIso_of_isCutOutBy_pullbackΓ`
 (`Oka/AnalyticSpace/CutOutLocalIso.lean`) transports the class from a local isomorphism
 `p : E ⟶ B` to any morphism between subspaces cut out of `E` and of `B` by a family of sections
 and by its pullbacks along `p`, and `Oka/Analytification/StandardEtaleLocalIsoBase.lean` supplies
-the two cut-out data and the commuting square at these arguments. **Nothing analytic enters
-either**: the datum for the smaller space is a cancellation of cut-out data
+the two cut-out data and the commuting square at these arguments. **Nothing analytic enters those
+three**: the datum for the smaller space is a cancellation of cut-out data
 (`ComplexAnalytic.IsCutOutBy.of_comp_of_range_eq`), and the one place a naive transcription of
 the `k = 0` proof breaks is the open — `ComplexAnalytic.eval_pderiv_ne_zero_of_mem` supplies the
 derivative only on the `k ≥ 1` hypersurface, so the `k = 0` side is stated at `D(G · ∂F)` and
-`ComplexAnalytic.localisationOpen_mul_pderiv` says that names `D(G)` on the `k ≥ 1` side.
+`ComplexAnalytic.localisationOpen_mul_pderiv` says that names `D(G)` on the `k ≥ 1` side. **What
+is analytic is the fourth input** — that the projection of `D(G · ∂F)` is itself a local
+isomorphism, which is `ComplexAnalytic.isLocalIso_ofRestrict_comp_proj_of_pderiv` and is this
+file's own input at `k = 0`, spent again and not spent twice.
 
 At `k = 0` the two families agree on the nose: `ComplexAnalytic.hypersurfacePresentation g F` is
 a `Fin 1`-family whose only entry is `F`, and
