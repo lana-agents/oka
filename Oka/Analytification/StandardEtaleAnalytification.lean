@@ -166,9 +166,12 @@ standard étale pair.
   `Oka/Analytification/StandardEtaleLocalIso.lean`'s section on why the base is `ℂ^n`, each names
   the other, and a repair to one is not made without the other. At `k = 0` the datum is one
   rewrite — `ComplexAnalytic.isCutOutBy_analytificationInclHom_hypersurface`
-  (`Oka/Analytification/StandardEtaleLocalIso.lean`) — and it is built there. **Still untouched is
-  any statement at `k ≥ 1`**, which is a different theorem and needs an implicit function theorem
-  relative to `X^an`.
+  (`Oka/Analytification/StandardEtaleLocalIso.lean`) — and it is built there. **What is untouched
+  at `k ≥ 1` is the projection statement, and it is false rather than missing**; the statement
+  about the structure map to `X^an` alone is a different theorem, is
+  `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom`
+  (`Oka/Analytification/StandardEtaleLocalIsoBase.lean`), and takes no implicit function theorem
+  **relative to `X^an`** — only the one relative to `ℂ^n` that the `k = 0` line already spends.
 * **No witness in this file that the open is ever non-empty, and the witness is elsewhere.** The
   statements below are hypothesis-free in `F` and `G`, so none of them can be vacuously
   satisfied — but that says nothing about whether the *objects* are degenerate, and for `F = 1`
@@ -458,8 +461,10 @@ rather than deleting**: neither the restriction nor the datum is supplied *here*
 `## What is not here` is where both were retired — the first at the `IsLocalIso` bullet, the
 second where the `k + 1`-against-one count is read as the signature of a statement over `ℂ^n`
 rather than as a datum nobody has built. Untouched at `k ≥ 1` is a *statement* and not this
-datum: over a general base it is a different theorem, needing an implicit function theorem
-relative to `X^an` that `Oka/Analysis/Calculus/Implicit.lean` does not have.
+datum: over a general base it is a different theorem, and the one about the structure map to
+`X^an` alone is `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom`
+(`Oka/Analytification/StandardEtaleLocalIsoBase.lean`), which needs no implicit function theorem;
+the projection one remains false.
 
 The `show … from` is not decoration: `rw [hypersurfacePresentation, Fin.snoc_castSucc]` fails with
 *"Failed to rewrite using equation theorems for `hypersurfacePresentation`"*, and naming the

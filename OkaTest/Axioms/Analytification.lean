@@ -4415,3 +4415,122 @@ info: 'ComplexAnalytic.refineDatumUnitFamAnalytification_toLocallyRingedSpace' d
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.refineDatumUnitFamAnalytification_toLocallyRingedSpace
+
+/-! ### The local isomorphism over a presented base
+
+`Oka/Analytification/StandardEtaleLocalIsoBase.lean`, all fourteen of it, in the order they are
+declared. **Two are a `def`** — `ComplexAnalytic.hypersurfaceOnly` and
+`ComplexAnalytic.hypersurfaceCompare`, both `abbrev` — and the rest are theorems.
+
+The statement the section exists for is the last:
+`ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom`, the analytification of a standard
+étale morphism over a **presented** base as a local isomorphism onto that base, at every `k`. It
+is the first thing on this line stated at a base other than `ℂ^n`, and its target is `X^an`
+rather than `ℂ^n` — the composite with `ComplexAnalytic.analytificationInclHom` is a different
+statement and is false at `k ≥ 1`, which
+`Oka/Analytification/StandardEtaleLocalIso.lean` records and this file's earlier section guards
+the `k = 0` half of.
+
+Appended as its own section rather than folded into a section above, for the reason those
+sections give: a section moved is a conflict for somebody else. Nothing here is
+`ComplexAnalytic.AnalyticSpace.IsFiniteEtale`; the finiteness field at `k ≥ 1` is untouched by
+that file and by this section.
+-/
+
+/--
+info: 'ComplexAnalytic.hypersurfaceOnly' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.hypersurfaceOnly
+
+/--
+info: 'ComplexAnalytic.presentationIdeal_hypersurfaceOnly_le' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.presentationIdeal_hypersurfaceOnly_le
+
+/--
+info: 'ComplexAnalytic.hypersurfaceCompare' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.hypersurfaceCompare
+
+/--
+info: 'ComplexAnalytic.hypersurfaceCompare_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.hypersurfaceCompare_comp
+
+/--
+info: 'ComplexAnalytic.range_section_hypersurfacePresentation' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.range_section_hypersurfacePresentation
+
+/--
+info: 'ComplexAnalytic.isCutOutBy_hypersurfaceCompare' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isCutOutBy_hypersurfaceCompare
+
+/--
+info: 'ComplexAnalytic.pullbackΓ_proj_ofMvPolynomial' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.pullbackΓ_proj_ofMvPolynomial
+
+/--
+info: 'ComplexAnalytic.isLocalIso_hypersurfaceOnly_ofRestrict_comp_proj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isLocalIso_hypersurfaceOnly_ofRestrict_comp_proj
+
+/--
+info: 'ComplexAnalytic.localisationOpen_mul_pderiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.localisationOpen_mul_pderiv
+
+/--
+info: 'ComplexAnalytic.restrictSections_hypersurfaceCompare' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.restrictSections_hypersurfaceCompare
+
+/--
+info: 'ComplexAnalytic.ofRestrict_comp_analytificationMap_comp_analytificationInclHom'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.ofRestrict_comp_analytificationMap_comp_analytificationInclHom
+
+/--
+info: 'ComplexAnalytic.isLocalIso_ofRestrict_comp_analytificationMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isLocalIso_ofRestrict_comp_analytificationMap
+
+/--
+info: 'ComplexAnalytic.comap_localisationOpen_hypersurfaceCompare' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.comap_localisationOpen_hypersurfaceCompare
+
+/--
+info: 'ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom

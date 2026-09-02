@@ -94,7 +94,12 @@ theorem reads a `StandardEtalePair`, so appending it there would have turned tha
   `Oka/Analytification/MonicHypersurface.lean` carries the witness, and nothing in this file
   narrows that. The restriction is in the statement because the first field needs it.
 * **Nothing at `k ≥ 1`.** Both halves are at an empty base presentation, for the reasons their own
-  files give, and a presented base is a different theorem rather than a missing hypothesis.
+  files give, and a presented base is a different theorem rather than a missing hypothesis. **The
+  local-isomorphism half of that different theorem now exists** —
+  `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom`
+  (`Oka/Analytification/StandardEtaleLocalIsoBase.lean`), at every `k`, and about the structure
+  map to `X^an` rather than the projection to `ℂ^n`. The finiteness half at `k ≥ 1` is untouched,
+  so this bullet stands for the class as a whole.
 * **Nothing about how large `V` is *here*.** This bullet said no pair `(F, G)` was exhibited
   anywhere for which `V` is proper *and* nonempty; one now is —
   `ComplexAnalytic.hypersurfaceCommonZeroImage_parabola`

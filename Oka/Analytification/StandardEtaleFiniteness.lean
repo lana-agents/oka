@@ -121,7 +121,11 @@ was neither of them.
   `Oka/Analytification/StandardEtaleLocalIso.lean` gives for its own restriction: the two sides
   meet only over `ℂ^n`. `ComplexAnalytic.isFinite_analytification_comp_projRestrict`'s base is
   `ℂ^n` and `ComplexAnalytic.etaleAnalytificationIso`'s is `A^an`, and a statement over a
-  presented base is a different theorem rather than a missing hypothesis.
+  presented base is a different theorem rather than a missing hypothesis. **That different theorem
+  now exists for the local-isomorphism half and not for this one**:
+  `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom`
+  (`Oka/Analytification/StandardEtaleLocalIsoBase.lean`) is about the structure map to `X^an`, and
+  nothing on the finiteness line has moved.
 * **No `StandardEtalePair`, and no `StandardEtalePair.cond` is read** — by any theorem below,
   including the instance. **Every theorem below except the instance holds for every monic `F` and
   every `G`** — `G` is read only through the bad set — so nothing here says the source is étale,
