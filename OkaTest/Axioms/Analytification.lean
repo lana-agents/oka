@@ -4106,10 +4106,17 @@ info: 'ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp
 
 /-! ### A refined cover datum at a family that is not `1`, and the two conditions again
 
-`Oka/Analytification/RefineDatumUnitFamily.lean`, all nine of it: the second adopted condition at
+`Oka/Analytification/RefineDatumUnitFamily.lean`, nine of its ten: the second adopted condition at
 an injective index map, the first at the original datum's own cutting polynomial and at *every*
 refining family, the choice at a family that is a unit on each overlap, the caller's `r` and `u`
 and the two laws they satisfy, and the glue data and the analytic space they assemble to.
+
+**This header read "all nine of it" and the file has ten**, since
+`ComplexAnalytic.refineDatumUnitFamAnalytification_toLocallyRingedSpace` was added to it. That
+guard is in a **section of its own at the end of this file** rather than appended here, on this
+file's standing convention that a section moved is a conflict for somebody else — and the count
+above is corrected rather than left to be recomputed, because a section header that enumerates
+what is under it goes false silently.
 
 Three of the nine are a `def` and are guarded for the reason the
 `Oka/Analytification/RefineDatumRange.lean` section gives: the convention here is every
@@ -4282,3 +4289,29 @@ info: 'ComplexAnalytic.isFiniteEtale_restrictHom_analytificationMap_etalePresHom
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isFiniteEtale_restrictHom_analytificationMap_etalePresHom_comp_compl
+
+/-! ### The refinement's space is its glue data's gluing
+
+`Oka/Analytification/RefineDatumUnitFamily.lean`'s tenth declaration, and the section above says
+why it is here rather than there.
+`ComplexAnalytic.refineDatumUnitFamAnalytification_toLocallyRingedSpace` relates the two
+definitions guarded at the end of that section, which is what makes every statement about the
+gluing a statement about the space. Same three axioms as all nine of them —
+`ComplexAnalytic.refineDatumAnalytificationOfLaws_toLocallyRingedSpace` at the same arguments and
+nothing else.
+
+The two instances that spend it, `ComplexAnalytic.nodeRefinement_toLocallyRingedSpace` and
+`ComplexAnalytic.lineRefinement_toLocallyRingedSpace`, are in
+`OkaTest/RefineDatumUnitFamilyNode.lean` and carry no guard: this file imports `Oka` and not
+`OkaTest`, so no declaration of a test file is in its environment.
+
+Appended as its own section for the reason the sections above give: a section moved is a conflict
+for somebody else.
+-/
+
+/--
+info: 'ComplexAnalytic.refineDatumUnitFamAnalytification_toLocallyRingedSpace' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumUnitFamAnalytification_toLocallyRingedSpace

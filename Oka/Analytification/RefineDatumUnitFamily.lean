@@ -103,6 +103,9 @@ it fails.
 - `ComplexAnalytic.refineDatumUnitFamCrossEq` and
   `ComplexAnalytic.refineDatumUnitFamCrossUnit`: the two equations, at the pairs the datum asks
   them at.
+- `ComplexAnalytic.refineDatumUnitFamAnalytification_toLocallyRingedSpace`: **the space is that
+  glue data's gluing**, with no transport — the relation without which the two definitions above
+  are two well-typed objects and every statement about the gluing says nothing about the space.
 
 ## What is not here
 
@@ -127,6 +130,12 @@ it fails.
   overlap is the whole refined member and `ComplexAnalytic.isoCoverGlued`
   (`Oka/Analytification/CoverGlueTop.lean`) applies. That is a fact about those inputs and not
   about this construction, which says nothing about the overlaps at a family it is not given.
+  **This bullet said "at the two instances" while only one of them had it as a statement about the
+  space**: the node's `ComplexAnalytic.isoNodeRefineGlued` landed on
+  `ComplexAnalytic.nodeRefinement`, and `ComplexAnalytic.isoLineRefineGlued` landed on a glue
+  data's gluing with nothing tying it to `ComplexAnalytic.lineRefinement`. The theorem above is
+  what both now spend, so the sentence is true of both by a theorem rather than of one by a
+  theorem and of the other by a reader composing two definitions.
 * **No scheme, no `admissible`, and no comparison functor**, as in the files this one sits beside.
 -/
 
@@ -332,6 +341,37 @@ def refineDatumUnitFamAnalytification (hσ : Function.Injective σ)
           coverTriple.{u} obj poly glue hrange k i j hik.symm hjk.symm hij = 𝟙 _) :
     AnalyticSpace.{u} :=
   refineDatumAnalytificationOfLaws.{u} obj poly σ fam (fun x y ↦ poly (σ x) (σ y)) glue
+    (refineDatumUnitFamR.{u} obj poly σ fam glue hfam)
+    (refineDatumUnitFamU.{u} obj poly σ fam glue hfam)
+    (refineDatumUnitFamCrossEq.{u} obj poly σ fam glue hfam)
+    (refineDatumUnitFamCrossUnit.{u} obj poly σ fam glue hfam) hrange
+    (refineDatumRangeCross_poly.{u} obj poly σ fam glue _ _ _ _ hrange)
+    (refineDatumRangeEq_of_injective.{u} obj poly σ fam _ glue _ _ _ _ hσ) hsym hcocycle
+
+include hfam in
+/-- **That space has that glue data's gluing underneath it**, with no transport.
+
+`ComplexAnalytic.refineDatumAnalytificationOfLaws_toLocallyRingedSpace` at the same arguments, and
+it is here for that theorem's own stated reason: without it the two definitions above are two
+well-typed objects with no recorded relation to each other, and every statement about the gluing
+says nothing about the space.
+
+**It is stated here rather than at each instance, which is where it was missing.**
+`OkaTest/RefineDatumUnitFamilyNode.lean` spelled the general theorem out at fifteen arguments to
+get the node's copy, and shipped the `ℙ¹` half without one at all — so
+`ComplexAnalytic.isoLineRefineGlued` was an isomorphism onto a gluing with nothing tying it to
+`ComplexAnalytic.lineRefinement`. Both instances now spend this. -/
+theorem refineDatumUnitFamAnalytification_toLocallyRingedSpace (hσ : Function.Injective σ)
+    (hcocycle : ∀ i j k : J, ∀ hij : i ≠ j, ∀ hik : i ≠ k, ∀ hjk : j ≠ k,
+      coverTriple.{u} obj poly glue hrange i j k hij hik hjk ≫
+        coverTriple.{u} obj poly glue hrange j k i hjk hij.symm hik.symm ≫
+          coverTriple.{u} obj poly glue hrange k i j hik.symm hjk.symm hij = 𝟙 _) :
+    (refineDatumUnitFamAnalytification.{u} obj poly σ fam glue hfam hsym hrange hσ
+        hcocycle).toLocallyRingedSpace =
+      (refineDatumUnitFamGlueData.{u} obj poly σ fam glue hfam hsym hrange hσ
+        hcocycle).toGlueData.glued :=
+  refineDatumAnalytificationOfLaws_toLocallyRingedSpace.{u} obj poly σ fam
+    (fun x y ↦ poly (σ x) (σ y)) glue
     (refineDatumUnitFamR.{u} obj poly σ fam glue hfam)
     (refineDatumUnitFamU.{u} obj poly σ fam glue hfam)
     (refineDatumUnitFamCrossEq.{u} obj poly σ fam glue hfam)
