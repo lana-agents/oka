@@ -86,9 +86,12 @@ to `ℂ^n`, so `k + 1` against one is the signature of a statement whose base is
 `ComplexAnalytic.isCutOutBy_analytificationInclHom_hypersurface`
 (`Oka/Analytification/StandardEtaleLocalIso.lean`), one rewrite off
 `ComplexAnalytic.isCutOutBy_analytificationInclHom`
-(`Oka/Analytification/UniversalProperty.lean`), which holds for every `k`. What is untouched is
-any statement at `k ≥ 1`, which is a different theorem over a general base and needs an implicit
-function theorem relative to `X^an` that `Oka/Analysis/Calculus/Implicit.lean` does not have.
+(`Oka/Analytification/UniversalProperty.lean`), which holds for every `k`. What is untouched at
+`k ≥ 1` is the **projection** statement, which is a different theorem over a general base and is
+false there; the statement about the structure map to `X^an` alone is
+`ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom`
+(`Oka/Analytification/StandardEtaleLocalIsoBase.lean`) and needs no implicit function theorem
+relative to `X^an`.
 `ComplexAnalytic.eval_pderiv_ne_zero` stands on
 `ComplexAnalytic.polyPresentedAlgebraEquiv_mk_pderiv` in the same file, which says
 `MvPolynomial.pderiv` of a lift is a lift of the `Polynomial.derivative` — a lift, because that is
@@ -104,8 +107,11 @@ at all**: the datum is built, and
 `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_comp`
 (`Oka/Analytification/StandardEtaleLocalIso.lean`) is the end-to-end statement, taking
 `ComplexAnalytic.eval_pderiv_ne_zero_of_mem` as its derivative input. **The reading taken here is
-that this line is closed rather than one datum short**, and that what is open at `k ≥ 1` is not
-on it: it is a statement over a general base, which is a different theorem.
+that this line is closed rather than one datum short**, and that what remains at `k ≥ 1` is not
+on it: it is a statement over a general base, which is a different theorem —
+`ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom`
+(`Oka/Analytification/StandardEtaleLocalIsoBase.lean`) for the structure map, and a false one for
+the projection.
 
 **No hypersurface inside an open subset, and the transport is no longer stated only for the germ
 hypothesis.** As in the file this one builds on, `F` is entire and the ambient space here is the

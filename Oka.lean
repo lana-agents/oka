@@ -123,6 +123,7 @@ import Oka.Analytification.StandardEtaleAnalytification
 import Oka.Analytification.StandardEtaleFiniteEtale
 import Oka.Analytification.StandardEtaleFiniteness
 import Oka.Analytification.StandardEtaleLocalIso
+import Oka.Analytification.StandardEtaleLocalIsoBase
 import Oka.Analytification.SurjectionFinite
 import Oka.Analytification.UniversalProperty
 import Oka.CategoryTheory.Abelian.Basic
