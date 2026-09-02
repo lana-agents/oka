@@ -46,6 +46,30 @@ that is what everything below is stated at. A statement over a general base is a
 theorem and needs an implicit function theorem relative to `X^an`, which
 `Oka/Analysis/Calculus/Implicit.lean` does not have.
 
+**That sentence is about the projection to `ℂ^n`, and at `k ≥ 1` there are two statements and not
+one.** The other is about the analytified structure map to `X^an` **alone**, without
+`ComplexAnalytic.analytificationInclHom g` after it:
+`ComplexAnalytic.AnalyticSpace.IsLocalIso (analytificationMap (etalePresHom g F G))`. It is a
+different statement, and the argument above does not touch it — that argument concludes from the
+image being an open subset of a proper closed subset **of `ℂ^n`**, and openness in `X^an` is not
+openness in `ℂ^n`. **Nothing in this repository states it, proves it, or refutes it**, and *"a
+statement over a general base"* above should be read as naming the projection one only; the other
+is unattempted rather than priced. **It is also not obtained by cancelling** the composite against
+`ComplexAnalytic.AnalyticSpace.isLocalIso_of_comp`, whose second factor would have to be
+`ComplexAnalytic.analytificationInclHom g` — a closed immersion, and by the argument above not a
+local isomorphism at `k ≥ 1` unless `X^an` is empty, since its image is the whole of `X^an` and a
+local isomorphism has open image.
+
+**Whether that other statement takes an implicit function theorem is not settled by the sentence
+above**, which prices the projection one; nobody has measured it. One general lemma of the shape
+a proof avoiding analysis would want is now in the tree:
+`ComplexAnalytic.AnalyticSpace.isLocalIso_of_isCutOutBy_pullbackΓ`
+(`Oka/AnalyticSpace/CutOutLocalIso.lean`) transports the class from a local isomorphism
+`p : E ⟶ B` to any morphism between subspaces cut out of `E` and of `B` by a family of sections
+and by its pullbacks along `p`. **This is a statement about what is available and not a proof
+that it closes the gap**: applying it here needs the two cut-out data and the commuting square at
+these arguments, and none of the three is in the tree. See taxis #1485.
+
 At `k = 0` the two families agree on the nose: `ComplexAnalytic.hypersurfacePresentation g F` is
 a `Fin 1`-family whose only entry is `F`, and
 `ComplexAnalytic.section_hypersurfacePresentation_empty` is the one line that says so. The datum
