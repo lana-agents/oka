@@ -282,7 +282,25 @@ theorem isFinite_analytification_comp_projRestrict (hF : F.Monic)
   simp only [Fin.forall_fin_one, Matrix.cons_val_zero]
   exact Iff.of_eq (congrArg (fun t : ℂ ↦ t = 0) (eval_lastVarPolyEquiv_symm.{u} F _))
 
-/-! ### The two witnesses, in both directions -/
+/-! ### The two witnesses, in both directions
+
+**There is a third and it is not here**, because its pair is a `StandardEtalePair` and this file
+declares none: `ComplexAnalytic.hypersurfaceCommonZeroImage_sqSubOnePair`
+(`OkaTest/OpenBaseFiniteness.lean`) makes the bad set everything at
+`ComplexAnalytic.sqSubOnePair`. It is worth knowing about beside the two below because it
+separates two things this pair cannot. `ComplexAnalytic.hypersurfaceCommonZeroImage_X` reaches
+*everything* at a pair where `G` vanishes on the whole hypersurface, so nothing survives the
+inversion and a reader may take a bad set of `ℂ^n` for a symptom of that; at
+`ComplexAnalytic.sqSubOnePair` the bad set is still everything and plenty survives. **Both
+algebras are theorems in that file and not readings of a picture**:
+`ComplexAnalytic.sqSubOneRingEquiv` makes the standard étale algebra of that pair the base
+itself, `ComplexAnalytic.moduleFinite_sqSubOnePair` records it finite over the base, and
+`ComplexAnalytic.subsingleton_xPairRing` makes the algebra of `ComplexAnalytic.xPair` — the pair
+behind `ComplexAnalytic.hypersurfaceCommonZeroImage_X` — the zero ring. **So "the bad set is all
+of `ℂ^n`" is not by itself a statement that the pair is degenerate**, and
+`Oka/Analytification/StandardEtaleFiniteness.lean`'s main theorem docstring is where that
+distinction is spent. What is **not** proved anywhere is the step from either algebra to what
+survives in the *analytification*, which is the reading the sentence above is written in. -/
 
 /-- **With nothing inverted the bad set is empty**, so the open subset of the base may be all of
 `ℂ^n`.
