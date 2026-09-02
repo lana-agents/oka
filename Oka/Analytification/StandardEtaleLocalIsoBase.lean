@@ -165,8 +165,11 @@ hypersurface `ComplexAnalytic.hypersurfacePresentation g F`.
   at once, with a `k = 1` instance over the hyperbola `z₀z₁ = 1` as a corollary. It is still an
   instantiation of the theorem below and adds nothing to it — **and it is quantified over an `a`
   at which it is vacuous**: at `a = 0` the two new relations force `z_n = 0` and then `0 = 1`, so
-  the source is empty and both fields below hold for the reason
-  `Oka/AnalyticSpace/LocalIso.lean`'s docstring gives. The instance whose source is exhibited
+  the source is empty and both fields of `ComplexAnalytic.AnalyticSpace.IsLocalIso` hold for the
+  reason `Oka/Analytification/StandardEtaleLocalIso.lean` gives — they quantify over the points of
+  the source. `Oka/AnalyticSpace/LocalIso.lean`'s own docstring says that of the **stalk** field
+  only, `IsLocalHomeomorph` being where the other one hides its quantifier, which is why the
+  citation here is to the file above and not to the class. The instance whose source is exhibited
   non-empty is the hyperbola one and not the family.
 * **No implicit function theorem *relative to `X^an`*, which is the one the five sites priced.**
   One relative to `ℂ^n` is spent four links down — step 3 is
