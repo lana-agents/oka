@@ -3764,9 +3764,14 @@ three were declared in `Oka/Analytification/RefineDatumCocycle.lean` when this s
 written and were moved to the file that owns `ComplexAnalytic.coverSpaceHomOfEq` afterwards; the
 guards stayed.
 
-Six of the twenty-seven are a `def` and are guarded for the reason the
+**Four of the twenty-seven are a `def`** — `ComplexAnalytic.refineDatumTripleProj`,
+`ComplexAnalytic.refineDatumTripleCross`, `ComplexAnalytic.refineDatumGlueDataOfLaws` and
+`ComplexAnalytic.refineDatumAnalytificationOfLaws` — and are guarded for the reason the
 `Oka/Analytification/RefineDatumRange.lean` section gives: the convention here is every
-declaration and not every theorem.
+declaration and not every theorem. **This clause read *six*, and it read six at the commit that
+wrote it**, where the section already had these twenty-seven guards and these four `def`s. The
+section below on a refined cover datum at a family that is not `1` says why a count of this kind
+is the one nothing catches.
 
 Appended as its own section for the reason the sections above give: a section moved is a conflict
 for somebody else.
@@ -4168,9 +4173,21 @@ file's standing convention that a section moved is a conflict for somebody else 
 above is corrected rather than left to be recomputed, because a section header that enumerates
 what is under it goes false silently.
 
-Three of the nine are a `def` and are guarded for the reason the
-`Oka/Analytification/RefineDatumRange.lean` section gives: the convention here is every
+**Four of the nine are a `def`** — the caller's `ComplexAnalytic.refineDatumUnitFamR` and
+`ComplexAnalytic.refineDatumUnitFamU`, and the `ComplexAnalytic.refineDatumUnitFamGlueData` and
+`ComplexAnalytic.refineDatumUnitFamAnalytification` they assemble to — and are guarded for the
+reason the `Oka/Analytification/RefineDatumRange.lean` section gives: the convention here is every
 declaration and not every theorem.
+
+**This clause read *three*, and it read three on the day it was written.** That is the *other* way
+a count in a section header goes false, and the `### The hypersurface over an open subset of the
+base` section above states the distinction: the *nine* corrected in the paragraph above moved when
+a declaration was added, so a writer thinks to re-check it, while the *three* could not have been
+made wrong by any later change and only a reading of the sentence against
+`Oka/Analytification/RefineDatumUnitFamily.lean` catches it. **The two look identical in the file
+and are found by opposite habits**, and it is why the four are now named rather than counted: a
+name a reader can check beats a number they have to recount. The tenth declaration is a `theorem`,
+so this is four of the ten as well and the correction above does not move it.
 
 **Every one of the nine has the same three axioms, including the two that discharge a condition.**
 `ComplexAnalytic.refineDatumRangeEq_of_injective` is a one-line term and carries `Classical.choice`
@@ -4253,9 +4270,11 @@ off the diagonal, its surjectivity when the overlap is `⊤`, the surjectivity o
 inclusion into the gluing, the isomorphism that follows, and the `eqToHom` helper the first of
 them produces.
 
-Two of the five are a `def` and are guarded for the reason the
-`Oka/Analytification/RefineDatumRange.lean` section gives: the convention here is every
-declaration and not every theorem.
+**One of the five is a `def`**, `ComplexAnalytic.isoCoverGlued`, and it is guarded for the reason
+the `Oka/Analytification/RefineDatumRange.lean` section gives: the convention here is every
+declaration and not every theorem. **This clause read *two*, and it read two at the commit that
+wrote it**, where `Oka/Analytification/CoverGlueTop.lean` already held the four theorems and the
+one `def` it holds now.
 
 **The instance that consumes them is `ComplexAnalytic.isoNodeRefineGlued` in
 `OkaTest/RefineDatumUnitFamilyNode.lean`, which carries no guard**, as no declaration of the test
