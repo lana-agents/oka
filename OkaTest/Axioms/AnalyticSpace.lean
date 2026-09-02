@@ -11,8 +11,9 @@ import Oka
 Complex analytic spaces as objects, and the constructions that build one: local models and the
 node; the residue field, the continuity and naturality of the value of a section, and the
 rigidity of germs; open subspaces and the non-vanishing locus; that being a complex analytic
-space is a local condition; **gluing** — a cover by abstract spaces, the analytic structure on
-the gluing, the fields of `CategoryTheory.GlueData.ofGlueData'`, and gluing a morphism; and the
+space is a local condition; **gluing** — the `ℂ`-algebra structure of a glued space, a cover by
+abstract spaces, the analytic structure on the gluing, the fields of
+`CategoryTheory.GlueData.ofGlueData'`, and gluing a morphism; and the
 **coproduct** — the disjoint union of a family, the trivial `n`-sheeted cover, and the sheet
 comparison. **Two of the sixteen headings below are about morphisms after all** — gluing one, and
 that a morphism to `ℂ^n` is determined by the pullbacks of the coordinates — because each is a
@@ -22,17 +23,40 @@ statement about the space the construction produces; the *classes* of morphisms 
 **That is a description and not a list, and the sixteen headings below are the record**: each
 names the statement its assertions defend, and the recipe beside `OkaTest/Axioms.lean`'s routing
 table resolves them to modules. The stance is `OkaTest/Axioms/Sheaves.lean`'s and
-`OkaTest/Axioms/LocalOkaRing.lean`'s, and it is taken here because 108 guards over eighteen
+`OkaTest/Axioms/LocalOkaRing.lean`'s, and it is taken here because 112 guards over eighteen
 modules is past the size at which a list stays true.
 
 **The sentence this replaces named local models, the node and the value of a section**, which at
-`27c185a` is at most 19 of those 102 guards and four of the sixteen headings. Gluing alone is 48
-of the 108 here and the coproduct 19, and neither appeared in it. **Six of the eighteen modules
-are not `Oka/AnalyticSpace/`'s**, and contribute 27 guards: `Oka/CategoryTheory/GlueData.lean`
-nine, four modules of `Oka/Geometry/RingedSpace/` fourteen, and
+`27c185a` is at most 19 of those 102 guards and four of the sixteen headings. Gluing alone —
+**the five headings named above**, from the `ℂ`-algebra structure of a glued space to gluing a
+morphism — is 51 of the 112 here and the coproduct 19, and neither appeared in it. **Six of the
+eighteen modules are not `Oka/AnalyticSpace/`'s**, and contribute 29 guards:
+`Oka/CategoryTheory/GlueData.lean` ten, four modules of `Oka/Geometry/RingedSpace/` fifteen, and
 `Oka/AlgebraicGeometry/GammaSpecAdjunction.lean` four — most of them under the gluing headings,
 beside the analytic statements they serve. See `OkaTest/Axioms.lean` on why a mirror-tree module
 such as the first has no row of its own.
+
+**Every undated count in the two paragraphs above is a claim about the tree and goes stale; the
+`27c185a` ones are records and do not.** *Every* one, including the ones the repair below does not
+touch: the coproduct *19* stands in the same clause as the *51*, is the same kind of number — a
+guard total under a group of headings — and moves the same way; it has simply not moved yet. **So
+the list below is what had gone false, and it is not the list to recheck after adding a guard.**
+That list is every undated numeral above, and it is deliberately not given as a count here, for
+the reason `OkaTest/Axioms/Analytification.lean`'s tower section states: a member a reader can
+check beats a cardinal they have to recount, and a census of a paragraph is the second.
+
+Five had gone false. The *112*, the *51*, the *29*, the *ten* and the *fifteen* last read *108*,
+*48*, *27*, *nine* and *fourteen*, and all five were right at `f63cb3a`, which wrote them. Four
+guards have been added since and none
+removed — `AlgebraicGeometry.LocallyRingedSpace.GlueData.ext_of_toGlueData`,
+`CategoryTheory.GlueData'.ext_of_heq`,
+`ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear_congr` and
+`ComplexAnalytic.AnalyticSpace.nonvanishing_pullbackΓ` — and they account for every one of the
+five deltas exactly, three of them under gluing headings and two outside
+`Oka/AnalyticSpace/`. **What made *48* uncheckable rather than merely stale is that the sentence
+listing the gluing headings named four of them and the number counted five**, so a recount could
+not tell a wrong number from a different partition; the list above is now the five the number is
+of. Counted as `#print axioms` **names**, which here equals the command count, both 112.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/

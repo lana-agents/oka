@@ -2923,8 +2923,30 @@ with its finiteness.
 
 Appended as their own section rather than folded into the two above because those sections
 enumerate what their files had when they were written, and because every branch on this board adds
-a section at the end of this file — a section moved is a conflict for somebody else. All four are
-theorems.
+a section at the end of this file — a section moved is a conflict for somebody else.
+
+**And then six more were appended into this one, so it now guards ten and the enumeration above
+is four of them.** The other six are `Oka/Analytification/HypersurfaceFinite.lean`'s tower block:
+`ComplexAnalytic.towerPresentation` and `ComplexAnalytic.towerPresHom`, the `m`-step
+generalisation of the two-step extension named above, with
+`ComplexAnalytic.isFinite_analytificationMap_towerPresHom` and the three `rfl` identifications
+`ComplexAnalytic.towerPresentation_one` and `ComplexAnalytic.towerPresHom_one`, the tower at one
+step, and `ComplexAnalytic.towerPresHom_two`, the tower at two — which is the evidence that the
+two-step theorem above is subsumed rather than sitting beside it, and not a base case: the
+recursion's is `m = 0`. **Two of the ten are a `def`** — `towerPresentation` and
+`towerPresHom` — and the rest are theorems; this clause read *"All four are theorems"*, which was
+true of the four and said nothing about the six.
+
+**Widened rather than split**, and the alternative was real: this file's rule is that a guard goes
+in the section of the push that added it, so a tower section of its own at the end would have been
+consistent with it. Against that, the tower is the `m`-step form of the very extension this
+section's headline is about, so a split separates a statement from its generalisation;
+`Oka/Analytification/HypersurfaceFinite.lean`'s guards are already spread over three sections and
+`Oka/Analytification/ChangeOfVariables.lean`'s over two, so the boundary would buy no property the
+file has elsewhere; and moving six guard blocks is the one operation here that can drop a guard
+without any check noticing. **The members are named rather than counted**, which is the repair
+`Oka/Analytification/RefineDatumUnitFamily.lean`'s section below now uses for the same defect: a
+list a reader can check beats a number they have to recount.
 -/
 
 /--
@@ -4097,9 +4119,18 @@ hypersurface of `ℂ^(n+1)` is written in.
 This is taxis #1112's §1 at `k = 0`: the hypersurface over `V` in the presentation spelling, the
 containment of that part in `D(G)` above a `V` avoiding the bad set — which is the geometry and is
 the only place `G` does anything — and the finiteness of the standard étale analytification over
-`V`, where `ComplexAnalytic.etaleAnalytificationIso` is spent. The last of the four is the same
+`V`, where `ComplexAnalytic.etaleAnalytificationIso` is spent. The last of those four is the same
 statement at the largest such `V`, the complement of
 `ComplexAnalytic.hypersurfaceCommonZeroImage`.
+
+**A fifth was appended after that sentence was written and it named nothing**:
+`ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp_parabola`, the instance
+at the parabola with its last coordinate inverted — the first pair on this line for which that
+open subset of the base is both proper and non-empty. So this section guards **six**: the spelling
+bridge named above, and all five declarations of
+`Oka/Analytification/StandardEtaleFiniteness.lean`. *"The last of the four"* was true of the four
+listed and false of the section, and which of the two a numeral in a header means is settled here
+by enumerating the section.
 
 **No `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` is guarded *in this section*, and two of the
 three clauses that used to follow are no longer true.** The sentence read *"none is stated, … and
