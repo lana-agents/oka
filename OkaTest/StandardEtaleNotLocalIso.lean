@@ -69,6 +69,17 @@ that the composite's failure is the second factor's and not the first's.
   `oka-slot-2-1c`'s verdict on lana-agents/oka#367 recorded as still owed. **The branch that
   falsified the sentence is the branch repairing it**, in the same push. What the bullet is still
   for is the scope: the projection statement is instantiated here at one lift and not at both.
+
+  **Asked again once that point was in the tree, the answer is still no, and this records the
+  decision rather than leaving it to be re-derived.** The second lift's instance now costs one
+  term — the same theorem, the same `ComplexAnalytic.nodeG_ne_zero`, and
+  `ComplexAnalytic.nonempty_analytification_etalePresentation_node_sqSubOne` in place of the first
+  lift's point — so it is available and is declined. Vacuity is settled by one instance, and what a
+  further instance can buy is a contrast that does not merely repeat; a second lift over *this*
+  base repeats the whole argument at the same `g`. **A second base does not**, which is why
+  `ComplexAnalytic.not_isLocalIso_hyperbolaSqrtCover_comp`
+  (`OkaTest/StandardEtaleBaseWitness.lean`, the hyperbola `z₀z₁ = 1`) was written instead. So the
+  projection statement now has two compiled instances, at two bases, and still only one per base.
 * **No claim that either hypothesis is necessary.** That `g = 0` makes the conclusion false is
   argued in `Oka/Analytification/StandardEtaleLocalIso.lean`'s prose and is uncompiled; that an
   empty source would satisfy `ComplexAnalytic.AnalyticSpace.IsLocalIso` is a reading of that

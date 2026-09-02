@@ -91,6 +91,46 @@ hyperbola at `a = z₀` and **not** about the family — the family is genuinely
 at which it says nothing, and that is a fact about the library theorem it instantiates rather than
 a defect of either.
 
+## Both statements at one base, and the sentence that had to become false
+
+An earlier form of this file said, under *What is not here*, that **nothing here bears on the
+*projection* statement** — `ComplexAnalytic.not_isLocalIso_analytificationMap_etalePresHom_comp`
+(`Oka/Analytification/StandardEtaleNotLocalIso.lean`), which is this same standard étale morphism
+followed by the inclusion of the base into `ℂ^n`. That sentence stood two paragraphs above the
+discharge of both of that statement's hypotheses at this file's own base, so the instance was one
+term away and the file bore on the statement whatever the sentence said. **The way to make it true
+was to make it false**, and `ComplexAnalytic.not_isLocalIso_hyperbolaSqrtCover_comp` is that
+instance.
+
+At the hyperbola, and at the **same** standard étale data, both of these hold:
+
+* `ComplexAnalytic.isLocalIso_hyperbolaSqrtCover` — the analytification of the standard étale
+  morphism **onto the base's own analytification** is a local isomorphism;
+* `ComplexAnalytic.not_isLocalIso_hyperbolaSqrtCover_comp` — the **same morphism followed by the
+  inclusion of the hyperbola into `ℂ²`** is not.
+
+That is the contrast `Oka/Analytification/StandardEtaleLocalIsoBase.lean` draws in prose and
+`OkaTest/StandardEtaleNotLocalIso.lean` compiles at the node, drawn here at a second base.
+
+**Only one of the two hypotheses needed anything new.**
+`ComplexAnalytic.nonempty_analytification_etalePresentation_hyperbola` above *is* the second, at
+the same three arguments rather than at a restatement of them. The first is
+`ComplexAnalytic.hyperbolaBase_ne_zero`, the contrapositive of
+`ComplexAnalytic.eval_hyperbolaBase_zero_ne_zero`: a polynomial with a non-zero evaluation is not
+the zero polynomial. **That step is the only thing in this section the repository did not already
+have**, and it is one `rw`, which is what makes the section an instantiation and not an argument.
+
+**What a second base buys, and it is less than it looks.** Vacuity is settled by one satisfied
+instance and `OkaTest/StandardEtaleNotLocalIso.lean` supplied it at the node; a second instance
+adds nothing there. What it does add is that neither hypothesis is discharged the same way twice:
+`ComplexAnalytic.nodeG_ne_zero` is `mul_ne_zero` at a relation written as a product, and
+`ComplexAnalytic.hyperbolaBase_ne_zero` is an evaluation at a relation written as a difference, so
+the properness hypothesis is met at two unrelated bases by two routes rather than by one idiom
+twice. **No claim beyond that is made here.** Nothing anywhere in this file says either curve is
+smooth, singular, irreducible or connected, and
+`ComplexAnalytic.not_isLocalIso_analytificationMap_etalePresHom_comp` asks none of it — it is
+general in `g` already, and neither instance narrows it.
+
 ## Main definitions
 
 - `ComplexAnalytic.sqrtCoverPair`: **the pair `f = X² − C a`, `g = X`** over an arbitrary
@@ -112,6 +152,10 @@ a defect of either.
 - `ComplexAnalytic.eval_etalePresentation_hyperbolaEtalePt` and
   `ComplexAnalytic.nonempty_analytification_etalePresentation_hyperbola`: **the source of that
   witness is not empty**, so it is not a statement about a morphism out of an empty space.
+- `ComplexAnalytic.hyperbolaBase_ne_zero` and
+  `ComplexAnalytic.not_isLocalIso_hyperbolaSqrtCover_comp`: **the same morphism followed by the
+  inclusion of the hyperbola into `ℂ²` is *not* a local isomorphism**, so at this base the two
+  statements come apart.
 - `ComplexAnalytic.hasMap_two_sqrtCoverPair_four`,
   `ComplexAnalytic.hasMap_neg_two_sqrtCoverPair_four` and
   `ComplexAnalytic.exists_ne_hasMap_sqrtCoverPair_four`: **two distinct points of one fibre**, so
@@ -138,18 +182,25 @@ a defect of either.
   above is that file's own two theorems read together, not a new one.
 * **No claim that this is the smallest `k ≥ 1` witness.** `OkaTest/StandardEtaleLocalIsoBase.lean`
   is smaller in the only sense that matters — its two pairs are constants where this one is a
-  family. **Nothing here bears on the *projection* statement**, which is a different morphism and
-  is `ComplexAnalytic.not_isLocalIso_analytificationMap_etalePresHom_comp`
-  (`Oka/Analytification/StandardEtaleNotLocalIso.lean`).
+  family.
+* **Nothing about *which* bases the projection statement fails at**, beyond the two that now
+  instantiate it — `OkaTest/StandardEtaleNotLocalIso.lean`'s node and the hyperbola here. It is
+  also not instantiated at the second node lift `ComplexAnalytic.nodeEtaleGSubOne`, whose
+  ingredients are all in the tree; that is a decision and the bullet recording it is in
+  `OkaTest/StandardEtaleNotLocalIso.lean`, where the node's instance lives.
+* **No statement about which `a` make `ComplexAnalytic.isLocalIso_hyperbolaSqrtCover`'s family
+  vacuous.** That `a = 0` empties the source is argued in the paragraph above and is a theorem
+  nowhere; `¬ Nonempty` there is a few lines and nobody has written them.
 
-  **A draft of this bullet said the node was chosen there rather than the hyperbola because the
-  node is inside that statement's hypotheses and this file's base is not. That is false, and this
-  file is what refutes it.** Those hypotheses are `∃ j, g j ≠ 0` and a non-empty source, and both
-  hold at the hyperbola: `ComplexAnalytic.eval_hyperbolaBase_zero_ne_zero` makes the single
-  relation a non-zero polynomial, and
-  `ComplexAnalytic.nonempty_analytification_etalePresentation_hyperbola` is the source's point.
-  What is true is that `OkaTest/StandardEtaleLocalIsoBase.lean` chose the node **deliberately**
-  for that property while this file chose the hyperbola for a different one
+  **A draft of this file said the node was chosen in `OkaTest/StandardEtaleLocalIsoBase.lean`
+  rather than the hyperbola because the node is inside the projection statement's hypotheses and
+  this file's base is not. That is false, and the section above is what refutes it.** Those
+  hypotheses are `∃ j, g j ≠ 0` and a non-empty source, and both hold at the hyperbola —
+  `ComplexAnalytic.hyperbolaBase_ne_zero` and
+  `ComplexAnalytic.nonempty_analytification_etalePresentation_hyperbola`, which are no longer two
+  theorems a reader has to put together but the two arguments of one. What is true is that
+  `OkaTest/StandardEtaleLocalIsoBase.lean` chose the node **deliberately** for that property while
+  this file chose the hyperbola for a different one
   — `a = z₀` is a unit there, so the cover is the square root of a nowhere-vanishing function —
   and *deliberately* is not *uniquely*. **The clause was written while the projection statement
   was prose; lana-agents/oka#373 compiled it, and a claim about which bases satisfy its
@@ -172,7 +223,7 @@ unrelated narrative into this change. The duplication is one `def` with four fie
 named here rather than hidden.
 -/
 
-open MvPolynomial Polynomial
+open CategoryTheory MvPolynomial Polynomial
 
 universe u
 
@@ -398,6 +449,45 @@ theorem nonempty_analytification_etalePresentation_hyperbola :
         (sqrtCoverF.{u} (MvPolynomial.X (ULift.up 0))) (sqrtCoverG.{u} 2))) :=
   ⟨⟨⟨hyperbolaEtalePt.{u}, trivial⟩,
     (mem_zeroLocus_polySection_iff.{u} _ _).2 eval_etalePresentation_hyperbolaEtalePt.{u}⟩⟩
+
+/-! ### The projection to `ℂ²` over the hyperbola -/
+
+/-- **The hyperbola's single relation is a non-zero polynomial**, which is
+`ComplexAnalytic.not_isLocalIso_analytificationMap_etalePresHom_comp`'s properness hypothesis at
+this base.
+
+The contrapositive of `ComplexAnalytic.eval_hyperbolaBase_zero_ne_zero`: a polynomial with a
+non-zero evaluation is not the zero polynomial, so rewriting by the assumed equation leaves
+`map_zero`. **This is the only step of this section that was not already in the repository.**
+
+`ComplexAnalytic.nodeG_ne_zero` (`OkaTest/StandardEtaleNotLocalIso.lean`) is the same hypothesis
+at the node and takes the other route: the relation there is written as a product of two
+variables, so `mul_ne_zero` closes it and no evaluation is needed. **Neither proof transfers as
+written** — there is no product for `mul_ne_zero` to be applied to here, and the node's relation
+is a product of variables, on which `MvPolynomial.eval (fun _ ↦ 0)` is `0` and refutes nothing. -/
+theorem hyperbolaBase_ne_zero : ∃ j, hyperbolaBase.{u} j ≠ 0 :=
+  ⟨0, fun h ↦ eval_hyperbolaBase_zero_ne_zero.{u} (by rw [h, map_zero])⟩
+
+/-- **The square-root cover of the hyperbola, followed by the inclusion of the hyperbola into
+`ℂ²`, is not a local isomorphism.**
+
+`ComplexAnalytic.not_isLocalIso_analytificationMap_etalePresHom_comp` at
+`ComplexAnalytic.hyperbolaBase` and the two lifts above, with its two hypotheses supplied by
+`ComplexAnalytic.hyperbolaBase_ne_zero` and
+`ComplexAnalytic.nonempty_analytification_etalePresentation_hyperbola`. An instantiation and not
+an argument: nothing is re-proved here.
+
+Read it against `ComplexAnalytic.isLocalIso_hyperbolaSqrtCover`, which is the same standard étale
+data **without** the inclusion into `ℂ²`. The two together are what
+`Oka/Analytification/StandardEtaleLocalIsoBase.lean` states in prose and
+`OkaTest/StandardEtaleNotLocalIso.lean` compiles at the node, at a second base. -/
+theorem not_isLocalIso_hyperbolaSqrtCover_comp :
+    ¬ AnalyticSpace.IsLocalIso
+      (analytificationMap.{u} (etalePresHom.{u} hyperbolaBase.{u}
+          (sqrtCoverF.{u} (MvPolynomial.X (ULift.up 0))) (sqrtCoverG.{u} 2)) ≫
+        analytificationInclHom.{u} hyperbolaBase.{u}) :=
+  not_isLocalIso_analytificationMap_etalePresHom_comp.{u} _ _ _ hyperbolaBase_ne_zero.{u}
+    nonempty_analytification_etalePresentation_hyperbola.{u}
 
 end
 
