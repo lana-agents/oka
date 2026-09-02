@@ -29,7 +29,8 @@ in that argument touches the statement above.
 (`Oka/Analytification/StandardEtaleNotLocalIso.lean`), which takes *proper* as `∃ j, g j ≠ 0` and
 *non-empty* as a `Nonempty` on the source — so the contrast this paragraph draws is now between
 two compiled statements rather than between a theorem and an argument. **At the node it is drawn
-at the same data**: `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_node` below and
+at the same data**: `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_node`
+(`OkaTest/StandardEtaleLocalIsoBase.lean`) and
 `ComplexAnalytic.not_isLocalIso_analytificationMap_etalePresHom_comp_node`
 (`OkaTest/StandardEtaleNotLocalIso.lean`) are the two halves of the sentence above at
 `ComplexAnalytic.nodeG`, `ComplexAnalytic.nodeEtaleF` and `ComplexAnalytic.nodeEtaleG`.

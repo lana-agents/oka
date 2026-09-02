@@ -23,8 +23,8 @@ point or the whole of `R` and so is infinite (`infinite_of_mem_nhds`), and then
 
 **There is no analysis in it and no identity theorem.** The hypotheses are that `R` is an integral
 domain carrying a topology in which points are closed and no point is isolated — `T1Space` and
-`(𝓝[≠] x).NeBot` at every `x` — and that the index type is finite. `ℂ` satisfies all of them by
-instances Mathlib already has, and so do `ℝ`, `ℚ` and any non-discrete normed field. **The
+`(𝓝[≠] x).NeBot` at every `x` — and there is no hypothesis on the index type at all. `ℂ` satisfies
+both by instances Mathlib already has, and so do `ℝ`, `ℚ` and any non-discrete normed field. **The
 statement is an algebraic one with a topological hypothesis**, which is worth saying because the
 places in this repository that wanted it describe it as *"a polynomial vanishing on a non-empty
 open subset of `ℂ^n` is zero"* and that phrasing invites an appeal to analyticity that is not
