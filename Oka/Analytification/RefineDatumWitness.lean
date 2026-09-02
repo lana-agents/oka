@@ -81,8 +81,19 @@ concrete cover datum in this repository is under `OkaTest/`:
 three copies of the node, whose three laws are theorems, at `σ = id` on a three-element index
 type — giving an `ComplexAnalytic.AnalyticSpace` with **no hypothesis left open at all** and an
 index map `ComplexAnalytic.not_isConstant_id` proves is not constant. It also checks there that
-every refined overlap is non-empty and proper, which is what separates this family from the `0`
-one in both directions.
+every refined overlap is non-empty and proper, and **those two rule out two different things.**
+`OkaTest.RefineDatumWitness.coverOpen_nodeRefineOne_ne_bot` is what separates this family from the
+`0` one, where every overlap is empty and every law holds of nothing.
+`OkaTest.RefineDatumWitness.coverOpen_nodeRefineOne_ne_top` rules out the *other* degeneracy — a
+cover glued along the whole of each member, which `Oka/Analytification/CoverGlueTop.lean` shows
+glues to one member — and it is **inert** against `fam ≡ 0`, where every overlap is `⊥` and so
+also `≠ ⊤`. This sentence used to offer both halves as the separation from `0`;
+`OkaTest/RefineDatumWitness.lean`'s own module docstring has always worded it correctly, as the
+two checks that separate that witness from *both* degeneracies.
+
+**And it checks there that the glued space is not one of its members**
+(`OkaTest.RefineDatumWitness.exists_ι_nodeRefineOne_ne`), which is the statement neither overlap
+check reaches: the overlaps say what the members are glued along, not what they glue to.
 
 ## What is not here
 

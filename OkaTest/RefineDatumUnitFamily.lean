@@ -24,7 +24,12 @@ the polynomial that was inverted is a unit upstairs.
 ## Why this is not either degeneracy the board has already been caught by
 
 `ComplexAnalytic.refineDatumObj obj σ fam b` is the distinguished open `D(fam b)` of the member
-`σ b`, so what the refining family is decides whether a "refinement" refines anything:
+`σ b`, so what the refining family is decides whether a "refinement" refines anything. **That step
+is a theorem here and not a composition left to the reader** —
+`ComplexAnalytic.refineDatumObj_lineRefineFam` identifies the refined member with the chart
+localised at the family, and `ComplexAnalytic.range_base_localisationProj_lineRefineFam` puts it
+in the chart as `D(z)` — which is what makes the two non-degeneracy statements below statements
+about *this refinement* rather than about an open of its chart:
 
 * `Oka/Analytification/RefineDatumWitness.lean`'s witness takes `fam ≡ 1`, where `D(1)` is the
   whole member and the refined cover is the original one reindexed;
@@ -60,6 +65,9 @@ exercise `RefineDatumRangeCross` as well, and is not built here.
 
 - `ComplexAnalytic.isUnit_lineRefineFam`: **the family is a unit on each overlap**, which is the
   one hypothesis of the construction that is about the family.
+- `ComplexAnalytic.refineDatumObj_lineRefineFam`: **the refined member is the chart localised at
+  the family**, and `ComplexAnalytic.range_base_localisationProj_lineRefineFam`: **its image in
+  the chart is `D(z)`.** These two are what the next two statements are read through.
 - `ComplexAnalytic.localisationOpen_lineRefineFam_ne_top`: **each refined member is a proper open
   of its chart**, so this refines and does not reindex.
 - `ComplexAnalytic.localisationOpen_lineRefineFam_ne_bot`: **and is not empty**, so it is not
@@ -136,20 +144,48 @@ def lineRefinement : AnalyticSpace.{u} :=
 
 /-! ### And it refines -/
 
+/-- **The refined member at `b` is the chart localised at the family.**
+
+Definitionally: `ComplexAnalytic.refineDatumObj obj σ fam b` *is*
+`ComplexAnalytic.localisationPresentation (obj (σ b)).g (fam b)`, and here `σ = id`. **It is
+stated because the two properness theorems below are about the localisation and the sentences
+around them are about the refined member**, and until this theorem existed a reader had to make
+that identification themselves — the shape `Oka/Analytification/RefineDatumWitness.lean`'s own
+absence bullet was written against. -/
+theorem refineDatumObj_lineRefineFam (b : pair.{u}) :
+    (refineDatumObj.{u} lineCoverObj.{u} (id : pair.{u} → pair.{u}) lineRefineFam.{u} b).g =
+      localisationPresentation.{u} (lineCoverObj.{u} b).g (lineRefineFam.{u} b) :=
+  rfl
+
+/-- **And it sits inside its chart as `D(z)`.**
+
+`ComplexAnalytic.range_base_localisationProj` at this family: the image of the refined member's
+projection into the chart is the distinguished open the two theorems below are statements about.
+**This is what turns them into statements about the refinement** rather than about an open of the
+chart that a reader is left to connect to it. -/
+theorem range_base_localisationProj_lineRefineFam (b : pair.{u}) :
+    Set.range (localisationProj.{u} (lineCoverObj.{u} b).g (lineRefineFam.{u} b)).toLRSHom.base =
+      (localisationOpen.{u} (lineCoverObj.{u} b).g (lineRefineFam.{u} b) :
+        Set (AnalyticSpace.analytification.{u} (lineCoverObj.{u} b).g)) :=
+  range_base_localisationProj.{u} _ _
+
 /-- **Each refined member is a proper open of its chart.**
 
-`ComplexAnalytic.refineDatumObj` at `b` is `D(fam b)` inside the member `σ b`, so this is the
-statement that the refinement is not `Oka/Analytification/RefineDatumWitness.lean`'s reindexing:
-there `fam ≡ 1` and `D(1)` is the whole member. It is
 `ComplexAnalytic.localisationOpen_lineRel_ne_top`, which `OkaTest/ProjectiveLine.lean` proves from
-the origin lying off `D(z)`. -/
+the origin lying off `D(z)`. The two theorems above are what make it a statement about the refined
+member: by `ComplexAnalytic.refineDatumObj_lineRefineFam` that member is the chart localised at
+`z`, and by `ComplexAnalytic.range_base_localisationProj_lineRefineFam` it sits in the chart as
+exactly this open. So this says the refinement is not
+`Oka/Analytification/RefineDatumWitness.lean`'s reindexing, where `fam ≡ 1` and `D(1)` is the
+whole member. -/
 theorem localisationOpen_lineRefineFam_ne_top (b : pair.{u}) :
     localisationOpen.{u} (lineCoverObj.{u} b).g (lineRefineFam.{u} b) ≠ ⊤ :=
   localisationOpen_lineRel_ne_top.{u}
 
 /-- **And it is not empty**, so this is not the other degeneracy: `OkaTest/CoverRefinement.lean`
 exists because a family constantly `0` was accepted once, and there every overlap is empty.
-`ComplexAnalytic.localisationOpen_lineRel_ne_bot`, from the point `z = 1`. -/
+`ComplexAnalytic.localisationOpen_lineRel_ne_bot`, from the point `z = 1`, read as a statement
+about the refined member through the same two theorems. -/
 theorem localisationOpen_lineRefineFam_ne_bot (b : pair.{u}) :
     localisationOpen.{u} (lineCoverObj.{u} b).g (lineRefineFam.{u} b) ≠ ⊥ :=
   localisationOpen_lineRel_ne_bot.{u}
