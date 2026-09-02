@@ -264,8 +264,11 @@ member, and at a general `σ` they lie over three.
   both increments in `Oka/Analytification/CoverIndependence.lean` had both directions handed to
   them by the caller, so neither is evidence about the other one here.
 * **No scheme, and no `admissible`.** As in the two files this one sits beside, and for the same
-  reason: there is no `AlgebraicGeometry.Scheme` in this line of files, and `admissible` is a
-  notion this repository does not have. **What it does have is everything that notion asserts** —
+  reason: nothing below mentions an `AlgebraicGeometry.Scheme`, and `admissible` is a notion this
+  repository does not have. **This bullet said *"there is no `AlgebraicGeometry.Scheme` in this
+  line of files"* until 2026-09-02**, and `Oka/Analytification/SpecScheme.lean` now has the one
+  there is; it is a separate module precisely so that the file-scoped form of this sentence stays
+  true here and in nine other places. **What it does have is everything that notion asserts** —
   `Oka/Analytification/SpecAffineCover.lean`'s admissibility section — including the observation
   that bears directly on this file: a cover datum's pairwise overlaps are *distinguished* opens of
   each of their two members, which is what a refinement general enough for taxis #1107's fourth

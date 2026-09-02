@@ -97,9 +97,12 @@ composition law asks a caller for nothing beyond the two hypotheses its two morp
   pay those three extra modules if the two lived together, and one of them is the whole analytic
   comparison.
 * **Nothing about `AlgebraicGeometry.Scheme`.** `ComplexAnalytic.specFunctor` lands in
-  `AlgebraicGeometry.LocallyRingedSpace` and so does everything below;
-  `Oka/Analytification/SpecAffineCover.lean` argues that absence is a result rather than an
-  omission and this file does not weaken it.
+  `AlgebraicGeometry.LocallyRingedSpace` and so does everything below. **The referent of the
+  second half moved on 2026-09-02**: `Oka/Analytification/SpecAffineCover.lean` no longer argues
+  that the absence is a result, because `Oka/Analytification/SpecScheme.lean` promotes its gluing
+  to a scheme; what that file's bullet now says is where the scheme is and that it is not in
+  either of these two modules. `Oka/Analytification/Comparison.lean`'s titled section is the
+  argument both bullets ultimately point at, and it is about *its* statements and is untouched.
 -/
 
 open CategoryTheory TopologicalSpace AlgebraicGeometry
