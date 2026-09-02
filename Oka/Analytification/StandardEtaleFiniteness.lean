@@ -89,8 +89,11 @@ was neither of them.
   the largest such subset, the complement of `ComplexAnalytic.hypersurfaceCommonZeroImage`, which
   is open by `ComplexAnalytic.isClosed_hypersurfaceCommonZeroImage`.
 - `ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp_parabola`: **and the
-  same at a pair for which that subset is proper and nonempty**, which is the only case either
-  theorem above is interesting in and the first instance of it on this line.
+  same at a pair for which that subset is proper and nonempty**, which is the only case the two
+  theorems this instance specialises —
+  `ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp` and
+  `ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp_compl` — are
+  interesting in, and the first instance of it on this line.
 
 ## What is not here
 
@@ -373,8 +376,10 @@ theorem isFinite_restrictHom_analytificationMap_etalePresHom_comp_compl (hF : F.
 
 /-- **The standard étale analytification of the parabola with its last coordinate inverted is
 finite over the complement of a coordinate hyperplane** — the first instance on this line at which
-the open subset of the base is known to be **proper and nonempty**, which is the only case either
-theorem above is interesting in.
+the open subset of the base is known to be **proper and nonempty**, which is the only case the two
+theorems this instance specialises are interesting in:
+`ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp` and
+`ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp_compl`.
 
 `ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp_compl` at
 `F = X² - x_i`, `G = X`, with `ComplexAnalytic.monic_X_sq_sub_C` as its monicity;
@@ -388,7 +393,20 @@ not another.** The hypothesis is *delete the bad set*, so a bad set that is prop
 exactly what makes the deletion both necessary and non-destructive: a pair with an empty bad set
 needs no hypothesis, and one with a full bad set leaves nothing behind. **This is the same pair
 `Oka/Analytification/MonicHypersurface.lean` uses to show the *unrestricted* statement is false**,
-and the coincidence is not one. -/
+and the coincidence is not one.
+
+**The clause above used to read "the only case *either theorem above* is interesting in", and four
+theorems are above it.** *Either* picks two of the four and does not say which, so the reading on
+which the sentence is true — the two named, the ones this instance specialises — had to be
+supplied by the reader, while the reading that ranges over all four is false:
+`ComplexAnalytic.isFinite_restrictHom_hypersurface_comp_proj` has no bad set in it at all and is
+finiteness over **every** open of `ℂ^n`, `⊤` included. **That is a third way a numeral in a
+docstring goes wrong here and it is neither of the two this file has already met**: it was not
+stale, since nothing added above it made it false, and it was not wrong when written, since under
+the intended scoping it was true then and is true now. It was **underdetermined**, and the two
+habits that catch the other two — recount after a change, and read the sentence against the file
+it describes — both pass it, because the arithmetic is not what is wrong. The repair is a name
+and not a number. -/
 theorem isFinite_restrictHom_analytificationMap_etalePresHom_comp_parabola
     (i : ULift.{u} (Fin n)) :
     AnalyticSpace.IsFinite (AnalyticSpace.restrictHom
