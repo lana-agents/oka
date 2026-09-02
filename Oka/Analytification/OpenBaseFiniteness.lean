@@ -122,9 +122,12 @@ available here.
   of analytic spaces"* — and that reason was wrong**: no isomorphism of analytic spaces was
   needed. What the identification consumes is exactly the vacuity below, read as an inequality of
   *opens* (`ComplexAnalytic.map_le_localisationOpen_of_subset_compl`), and being about points is
-  what makes it cheap rather than what stands in the way. `IsFiniteEtale` is still nowhere, for
-  the separate reason that nothing transports `ComplexAnalytic.AnalyticSpace.IsLocalIso` along a
-  restriction.
+  what makes it cheap rather than what stands in the way. `IsFiniteEtale` is no longer nowhere: this
+  bullet's *"nothing transports `ComplexAnalytic.AnalyticSpace.IsLocalIso` along a restriction"*
+  is retired by `ComplexAnalytic.AnalyticSpace.isLocalIso_restrictHom`
+  (`Oka/AnalyticSpace/OpenSubspace.lean`), and the class is assembled at `k = 0` in
+  `Oka/Analytification/StandardEtaleFiniteEtale.lean`. **Nothing of that is here**, and the next
+  bullet's absence is untouched.
 * **Nothing about the stalks**, so no local-isomorphism half and no `IsFiniteEtale`. That is the
   other half of taxis #1112 and it is where `Oka/AnalyticSpace/SimpleZeroTopology.lean` and
   `Oka/AnalyticSpace/OpenBaseProjection.lean`'s stalk half live.

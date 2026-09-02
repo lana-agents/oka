@@ -1499,3 +1499,28 @@ info: 'ComplexAnalytic.AnalyticSpace.isFinite_restrictHom_of_subset_range' depen
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.isFinite_restrictHom_of_subset_range
+
+/-! ### And a local isomorphism restricted over an open of the target is one
+
+`Oka/AnalyticSpace/OpenSubspace.lean`. Its own section rather than an addition to the one above,
+because that header enumerates the two statements under it and a third appended silently would
+make the header false — which is the failure this file's section docstrings are most exposed to,
+since they assert the state of the repository and a sweep over `Oka/` does not reach them.
+
+**Read it against `ComplexAnalytic.AnalyticSpace.isFinite_restrictHom_of_subset_range` directly
+above**: that one needs `V` inside the image because finiteness is not local on the target, and
+this one needs nothing at all because both fields of
+`ComplexAnalytic.AnalyticSpace.IsLocalIso` are conditions at a point. It is the second field of
+`Oka/Analytification/StandardEtaleFiniteEtale.lean`'s `IsFiniteEtale`, whose two guards are in
+`OkaTest/Axioms/Analytification.lean`.
+
+Appended as its own section for the reason the sections above give: a section moved is a conflict
+for somebody else.
+-/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isLocalIso_restrictHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isLocalIso_restrictHom

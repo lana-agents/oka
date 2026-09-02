@@ -153,9 +153,15 @@ construction rather than by a compatibility lemma.
   (`Oka/Analytification/StandardEtaleFiniteness.lean`), at `k = 0`; the stalk half is
   `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_comp`
   (`Oka/Analytification/StandardEtaleLocalIso.lean`), which landed earlier and which this
-  paragraph did not track. What is still nowhere is `ComplexAnalytic.AnalyticSpace.IsFiniteEtale`
-  of either morphism — false for the unrestricted one, and for the restricted one waiting on a
-  transport of `ComplexAnalytic.AnalyticSpace.IsLocalIso` along a restriction that nothing has.
+  paragraph did not track. `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` of the
+  **unrestricted** morphism is still nowhere and is **false**, which is what the counterexample
+  in this file is for and which nothing narrows. Of the *restricted* one this paragraph said it
+  was *"waiting on a transport of `ComplexAnalytic.AnalyticSpace.IsLocalIso` along a restriction
+  that nothing has"*; that transport is
+  `ComplexAnalytic.AnalyticSpace.isLocalIso_restrictHom` (`Oka/AnalyticSpace/OpenSubspace.lean`)
+  and the class is
+  `ComplexAnalytic.isFiniteEtale_restrictHom_analytificationMap_etalePresHom_comp`
+  (`Oka/Analytification/StandardEtaleFiniteEtale.lean`), at `k = 0`.
   The theorem below makes the
   projection of the hypersurface a closed map — **and it asks that hypersurface to be cut out by a
   polynomial monic in the last variable, which here is `F`, so a monic lift has to be chosen.**
