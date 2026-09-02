@@ -150,9 +150,19 @@ docstring, because `scripts/guard_coverage.py` reads every backticked repository
 * **No scheme side and no comparison functor.** Taxis #1113 wants a functor from finite étale
   covers of a presented affine `ℂ`-scheme to these; the source of that functor is
   `(@AlgebraicGeometry.IsFinite ⊓ @AlgebraicGeometry.IsEtale).Over ⊤ X` and is available in
-  Mathlib immediately, but it mentions `AlgebraicGeometry.Scheme`, which this line of files does
-  not have — three of them argue in titled sections that its absence is a result. **Nothing below
-  mentions a scheme.**
+  Mathlib immediately, but it mentions `AlgebraicGeometry.Scheme`. **The reason given here until
+  2026-09-02 was that "this line of files does not have" one, "three of them argue in titled
+  sections that its absence is a result", and both halves of that have moved.** The appositive
+  names the `Oka/Analytification/` line, since that is where those sections are, and
+  `Oka/Analytification/SpecScheme.lean` put `ComplexAnalytic.specScheme` on it; and there are
+  **two** of them, not three — `Oka/Analytification/Comparison.lean`'s, which is about that file's
+  own statements, and `Oka/Analytification/AffineCover.lean`'s, which is about its input. No file
+  under `Oka/AnalyticSpace/`, where this one lives, has such a section.
+  **What survives is the shape of the obstruction and not its price**: `ComplexAnalytic.specScheme`
+  is glued *from* a cover datum and is an output of one, where the functor above wants a scheme as
+  its *input*, and nothing on either line passes from a scheme to a cover.
+  `Oka/AnalyticSpace/Glue.lean`'s first bullet makes the same distinction for the same reason.
+  **Nothing below mentions a scheme.**
 -/
 
 open CategoryTheory

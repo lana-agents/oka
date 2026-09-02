@@ -212,8 +212,11 @@ docstring predicts that every consumer of the functor spells its object the othe
   to follow — *"there is no scheme in this line of files at all"* — was retired on 2026-09-02**:
   `Oka/Analytification/SpecScheme.lean` promotes `ComplexAnalytic.specGlued` to
   `ComplexAnalytic.specScheme`, and it is the only scheme on this line.
-  `Oka/Analytification/CoverFunctoriality.lean` and `Oka/Analytification/AffineCover.lean` each
-  argue in a titled section why nothing *here* is one, and neither is weakened by that module:
+  `Oka/Analytification/Comparison.lean` and `Oka/Analytification/AffineCover.lean` each
+  argue in a titled section why nothing *here* is one — **this sentence named
+  `Oka/Analytification/CoverFunctoriality.lean` for the first until 2026-09-02, and that file has
+  no such section**; its `## What is not here` argues there is no category of covered schemes to
+  be a functor out of, which is a different absence. Neither is weakened by that module:
   what they are about is the absence of a scheme from the **input**, which is still a cover datum
   and is still not produced from a scheme. taxis #1107's headline speaks of two *admissible covers
   of a scheme*, and there is still no predicate of that name — but **defining one is not what that

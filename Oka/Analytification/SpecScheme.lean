@@ -45,6 +45,17 @@ prose: a file that wants a scheme has to import `Oka.Analytification.SpecScheme`
 `Oka/Analytification/` does. The four claims that were about the *line of files* rather than about
 one file are falsified either way, and have been repaired in this same change.
 
+**The numeral is scoped to this line and a fifth claim of the same shape sat outside it.**
+`Oka/AnalyticSpace/FiniteEtaleOver.lean` said the line of files this one is on has no scheme, and
+was repaired on 2026-09-02 rather than here. **The sweep that made the count above could not have
+seen it, and this change is why that has to be said in the past tense**: at `74bffec` the phrase
+there straddled a hard line break, so `grep "line of files does not have"` returned nothing and so
+did `git log -S` on it. The repair un-wraps the phrase and quotes it whole, so from this commit on
+both commands do find it — this paragraph included, since a pattern written into the tree it
+searches joins the corpus it is searching. Normalise whitespace before believing a census of a
+wrapped phrase, and pin a negative grep to the commit it was run at, because the repair it
+motivates is what falsifies it.
+
 The counter-argument is real and is recorded rather than dismissed:
 `Oka/Analytification/SpecAffineCover.lean` is where the glue datum is, six declarations is a small
 module, and this repository does not otherwise split a file at this size. It was decided on the
