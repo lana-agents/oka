@@ -85,7 +85,10 @@ rather than the content.
 
 **The general theorem admits vacuous instances and nothing here removes them.** At `a = 0` its
 relations are `z_n² = 0` and `w · z_n = 1`, which force `z_n = 0` and then `0 = 1`: the source is
-empty and the conclusion holds for the reason above. So
+empty and the conclusion holds for the reason above. **That is a theorem and not only this
+paragraph** — `ComplexAnalytic.not_nonempty_analytification_etalePresentation_sqrtCover_zero`,
+below and at every base, so the argument here can be checked rather than believed. It exhibits one
+vacuous instance and removes none, which is what *admits* says. So
 `ComplexAnalytic.nonempty_analytification_etalePresentation_hyperbola` is a statement about the
 hyperbola at `a = z₀` and **not** about the family — the family is genuinely quantified over an `a`
 at which it says nothing, and that is a fact about the library theorem it instantiates rather than
@@ -152,6 +155,8 @@ general in `g` already, and neither instance narrows it.
 - `ComplexAnalytic.eval_etalePresentation_hyperbolaEtalePt` and
   `ComplexAnalytic.nonempty_analytification_etalePresentation_hyperbola`: **the source of that
   witness is not empty**, so it is not a statement about a morphism out of an empty space.
+- `ComplexAnalytic.not_nonempty_analytification_etalePresentation_sqrtCover_zero`: **the family's
+  source is empty at `a = 0`**, at every base — one vacuous instance exhibited, and none removed.
 - `ComplexAnalytic.hyperbolaBase_ne_zero` and
   `ComplexAnalytic.not_isLocalIso_hyperbolaSqrtCover_comp`: **the same morphism followed by the
   inclusion of the hyperbola into `ℂ²` is *not* a local isomorphism**, so at this base the two
@@ -189,8 +194,12 @@ general in `g` already, and neither instance narrows it.
   ingredients are all in the tree; that is a decision and the bullet recording it is in
   `OkaTest/StandardEtaleNotLocalIso.lean`, where the node's instance lives.
 * **No statement about which `a` make `ComplexAnalytic.isLocalIso_hyperbolaSqrtCover`'s family
-  vacuous.** That `a = 0` empties the source is argued in the paragraph above and is a theorem
-  nowhere; `¬ Nonempty` there is a few lines and nobody has written them.
+  vacuous.** `ComplexAnalytic.not_nonempty_analytification_etalePresentation_sqrtCover_zero` says
+  `a = 0` is one of them, at every base; **that is one `a` and not a characterisation.** Which `a`
+  give a non-empty source is a question about `a` in the presented algebra rather than about `a`
+  as a polynomial — being a unit there is sufficient and nothing here proves even that — and no
+  declaration approaches it. **This bullet said the emptiness at `a = 0` was *a theorem nowhere*,
+  which was true when it was written and is what the theorem below retires.**
 
   **A draft of this file said the node was chosen in `OkaTest/StandardEtaleLocalIsoBase.lean`
   rather than the hyperbola because the node is inside the projection statement's hypotheses and
@@ -358,6 +367,46 @@ theorem isLocalIso_analytificationMap_etalePresHom_sqrtCover {n k : ℕ}
       (analytificationMap.{u} (etalePresHom.{u} g (sqrtCoverF.{u} a) (sqrtCoverG.{u} n))) :=
   isLocalIso_analytificationMap_etalePresHom.{u} g _ _ _ (sqrtCoverF_eq.{u} g a)
     (sqrtCoverG_eq.{u} g a)
+
+/-! ### An instance of that family whose source is empty -/
+
+/-- **At `a = 0` the source of the square-root cover is empty**, at every base.
+
+The two new relations of `ComplexAnalytic.etalePresentation` are then `z_n² = 0` and
+`w · z_n = 1`: the first forces `z_n = 0` at any point, and the second becomes `−1 = 0`. **No
+hypothesis on the base at all** — this holds at every `n`, `k` and `g`, which is more than the
+paragraph it discharges claimed for it.
+
+**What it does and does not say about
+`ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_sqrtCover`.** That theorem's
+conclusion is *true* here, and for the reason a reader has to know: both fields of
+`ComplexAnalytic.AnalyticSpace.IsLocalIso` quantify over the source, so a morphism out of an empty
+space satisfies them. **So this exhibits one vacuous instance of the family and removes none.**
+Which `a` give a non-empty source is a different question — it is about `a` in the presented
+algebra and not about `a` as a polynomial — and nothing here approaches it.
+
+The two indices are `Fin.last (k + 1)` for `F` and `Fin.castSucc (Fin.last k)` for the
+localisation relation, `ComplexAnalytic.etalePresentation` being `Fin.snoc` of
+`ComplexAnalytic.localisationPresentation` — so reaching the second needs
+`ComplexAnalytic.localisationPresentation_eq_snoc` and a **second** `Fin.snoc_last`, which is the
+one step of this that is not immediate. -/
+theorem not_nonempty_analytification_etalePresentation_sqrtCover_zero {n k : ℕ}
+    (g : Fin k → MvPolynomial (ULift.{u} (Fin n)) ℂ) :
+    ¬ Nonempty (AnalyticSpace.analytification.{u}
+      (etalePresentation.{u} g (sqrtCoverF.{u} (0 : MvPolynomial (ULift.{u} (Fin n)) ℂ))
+        (sqrtCoverG.{u} n))) := by
+  rintro ⟨p, hp⟩
+  have h := (mem_zeroLocus_polySection_iff.{u} _ _).1 hp
+  have hF := h (Fin.last (k + 1))
+  have hG := h (Fin.castSucc (Fin.last k))
+  rw [etalePresentation, Fin.snoc_last] at hF
+  rw [etalePresentation, Fin.snoc_castSucc, localisationPresentation_eq_snoc,
+    Fin.snoc_last] at hG
+  simp only [sqrtCoverF, rename_zero, sub_zero, map_pow, rename_X, MvPolynomial.eval_X, ne_eq,
+    OfNat.ofNat_ne_zero, not_false_eq_true, pow_eq_zero_iff, sqrtCoverG, map_sub, map_mul,
+    map_one] at hF hG
+  rw [hF, mul_zero, zero_sub, neg_eq_zero] at hG
+  exact one_ne_zero hG
 
 /-! ### A base with `k = 1` -/
 
