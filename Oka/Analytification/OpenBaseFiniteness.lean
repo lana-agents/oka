@@ -106,9 +106,15 @@ available here.
 - `ComplexAnalytic.isFinite_analytification_comp_projRestrict`: **the hypersurface over the
   cylinder is finite over `V`**, for every open `V` and with no hypothesis relating `V` to `G`.
 - `ComplexAnalytic.hypersurfaceCommonZeroImage_one` and
-  `ComplexAnalytic.hypersurfaceCommonZeroImage_X`: **the two witnesses** — the bad set is empty for
+  `ComplexAnalytic.hypersurfaceCommonZeroImage_X`: **the two extremes** — the bad set is empty for
   `G = 1` and is everything for `F = G = X`, so the complement is `ℂ^n` in one case and empty in
   the other.
+- `ComplexAnalytic.hypersurfaceCommonZeroImage_parabola`,
+  `ComplexAnalytic.hypersurfaceCommonZeroImage_parabola_nonempty` and
+  `ComplexAnalytic.hypersurfaceCommonZeroImage_parabola_ne_univ`: **and the case between them** —
+  at the parabola with its last coordinate inverted the bad set is a coordinate hyperplane, so the
+  open subset of the base is proper and nonempty. This is the first such pair on this line.
+- `ComplexAnalytic.monic_X_sq_sub_C`: the monicity that pair needs, general in the constant.
 
 ## What is not here
 
@@ -282,19 +288,24 @@ theorem isFinite_analytification_comp_projRestrict (hF : F.Monic)
   simp only [Fin.forall_fin_one, Matrix.cons_val_zero]
   exact Iff.of_eq (congrArg (fun t : ℂ ↦ t = 0) (eval_lastVarPolyEquiv_symm.{u} F _))
 
-/-! ### The two witnesses, in both directions
+/-! ### The three witnesses, at the two extremes and in between
 
-**There is a third and it is not here**, because its pair is a `StandardEtalePair` and this file
-declares none: `ComplexAnalytic.hypersurfaceCommonZeroImage_sqSubOnePair`
+**The third is the one the rest of this line is written against**, and it was missing until
+`ComplexAnalytic.hypersurfaceCommonZeroImage_parabola` below: at `F = X² - x_i` and `G = X` the
+bad set is a coordinate hyperplane, so the open subset of the base is **proper and nonempty**,
+which is the only case in which a *finite over `V`* statement is interesting at all. The two
+extremes below bound `V` at `∅` and at `ℂ^n` and say nothing about anything between them.
+
+**A fourth is elsewhere and is worth knowing about**, because its pair is a `StandardEtalePair`
+and this file declares none: `ComplexAnalytic.hypersurfaceCommonZeroImage_sqSubOnePair`
 (`OkaTest/OpenBaseFiniteness.lean`) makes the bad set everything at
-`ComplexAnalytic.sqSubOnePair`. It is worth knowing about beside the two below because it
-separates two things this pair cannot. `ComplexAnalytic.hypersurfaceCommonZeroImage_X` reaches
-*everything* at a pair where `G` vanishes on the whole hypersurface, so nothing survives the
-inversion and a reader may take a bad set of `ℂ^n` for a symptom of that; at
-`ComplexAnalytic.sqSubOnePair` the bad set is still everything and plenty survives. **Both
-algebras are theorems in that file and not readings of a picture**:
-`ComplexAnalytic.sqSubOneRingEquiv` makes the standard étale algebra of that pair the base
-itself, `ComplexAnalytic.moduleFinite_sqSubOnePair` records it finite over the base, and
+`ComplexAnalytic.sqSubOnePair`. It separates two things the extremes cannot.
+`ComplexAnalytic.hypersurfaceCommonZeroImage_X` reaches *everything* at a pair where `G` vanishes
+on the whole hypersurface, so nothing survives the inversion and a reader may take a bad set of
+`ℂ^n` for a symptom of that; at `ComplexAnalytic.sqSubOnePair` the bad set is still everything and
+plenty survives. **Both algebras are theorems in that file and not readings of a picture**:
+`ComplexAnalytic.sqSubOneRingEquiv` makes the standard étale algebra of that pair the base itself,
+`ComplexAnalytic.moduleFinite_sqSubOnePair` records it finite over the base, and
 `ComplexAnalytic.subsingleton_xPairRing` makes the algebra of `ComplexAnalytic.xPair` — the pair
 behind `ComplexAnalytic.hypersurfaceCommonZeroImage_X` — the zero ring. **So "the bad set is all
 of `ℂ^n`" is not by itself a statement that the pair is degenerate**, and
@@ -361,6 +372,137 @@ theorem hypersurfaceCommonZeroImage_X :
       rw [base_proj_eq.{u}, hz]
       simp
     exact (congrArg (⇑(AnalyticSpace.proj.{u} n).toLRSHom.base) hy).trans h1
+
+/-! ### And the case between them, which is the parabola with its last coordinate inverted -/
+
+/-- **`X² - C a` is monic**, general in the constant.
+
+Stated because the witness below needs it and `Polynomial.monic_X_pow_add_C` wants the constant
+term written as an addition; the rewrite through `map_neg` is the whole content. -/
+theorem monic_X_sq_sub_C (a : MvPolynomial (ULift.{u} (Fin n)) ℂ) :
+    (Polynomial.X ^ 2 - Polynomial.C a :
+      Polynomial (MvPolynomial (ULift.{u} (Fin n)) ℂ)).Monic := by
+  have h : (Polynomial.X ^ 2 - Polynomial.C a :
+      Polynomial (MvPolynomial (ULift.{u} (Fin n)) ℂ)) =
+      Polynomial.X ^ 2 + Polynomial.C (- a) := by
+    rw [map_neg]; ring
+  rw [h]
+  exact Polynomial.monic_X_pow_add_C _ two_ne_zero
+
+/-- **At the parabola `X² = x_i` with the last coordinate inverted the bad set is the coordinate
+hyperplane `{w | w i = 0}`.**
+
+`G = X` vanishes on the hypersurface exactly where the last coordinate does, and `F` then reads
+`0 - x_i = 0`, so a point of the base is bad precisely when its `i`-th coordinate vanishes. **Both
+inclusions are needed and only one of them has a precedent**: the `⊇` half is
+`ComplexAnalytic.hypersurfaceCommonZeroImage_X`'s proof with the base point moved, and the `⊆`
+half is the first non-trivial containment proved about this set — the two witnesses above conclude
+`= ∅` and `= Set.univ`, neither of which needs one.
+
+**This is the same geometry `OkaTest/OpenBaseProjection.lean` carries as
+`ComplexAnalytic.parabolaPunctured`**, in different vocabulary: that file works through
+`ComplexAnalytic.cylinder` and `ComplexAnalytic.punctured` and never mentions the bad set, which
+is why the two were never seen to be the same example. **Nothing here relates them**, and doing so
+is not attempted; see this file's `## What is not here`. -/
+theorem hypersurfaceCommonZeroImage_parabola (i : ULift.{u} (Fin n)) :
+    hypersurfaceCommonZeroImage.{u}
+      (Polynomial.X ^ 2 - Polynomial.C (MvPolynomial.X i))
+      (Polynomial.X : Polynomial (MvPolynomial (ULift.{u} (Fin n)) ℂ)) = {w | w i = 0} := by
+  set F : Polynomial (MvPolynomial (ULift.{u} (Fin n)) ℂ) :=
+    Polynomial.X ^ 2 - Polynomial.C (MvPolynomial.X i) with hF
+  ext w
+  constructor
+  · rintro ⟨y, hy, rfl⟩
+    set z := ⇑(AnalyticSpace.Hom.toLRSHom
+      (analytificationInclHom.{u} ![(lastVarPolyEquiv.{u} n).symm F])).base y with hzdef
+    have hGz : MvPolynomial.eval z ((lastVarPolyEquiv.{u} n).symm (Polynomial.X :
+        Polynomial (MvPolynomial (ULift.{u} (Fin n)) ℂ))) = 0 := hy
+    have hFz : MvPolynomial.eval z ((lastVarPolyEquiv.{u} n).symm F) = 0 := by
+      have hr : Set.range ⇑(AnalyticSpace.Hom.toLRSHom
+          (analytificationInclHom.{u} ![(lastVarPolyEquiv.{u} n).symm F])).base =
+          {v | ∀ j, MvPolynomial.eval v (![(lastVarPolyEquiv.{u} n).symm F] j) = 0} :=
+        range_base_analytificationIncl.{u} _
+      have hzr : z ∈ Set.range ⇑(AnalyticSpace.Hom.toLRSHom
+          (analytificationInclHom.{u} ![(lastVarPolyEquiv.{u} n).symm F])).base := ⟨y, rfl⟩
+      rw [hr] at hzr
+      exact hzr 0
+    rw [eval_lastVarPolyEquiv_symm.{u}] at hGz hFz
+    simp only [polyFamily, hF, Polynomial.map_sub, Polynomial.map_pow, Polynomial.map_X,
+      Polynomial.map_C, Polynomial.eval_sub, Polynomial.eval_pow, Polynomial.eval_X,
+      Polynomial.eval_C, MvPolynomial.eval_X] at hGz hFz
+    have hbase : ⇑(AnalyticSpace.Hom.toLRSHom
+        (analytificationInclHom.{u} ![(lastVarPolyEquiv.{u} n).symm F] ≫
+          AnalyticSpace.proj.{u} n)).base y = (uliftSnocHomeo.{u} n z).1 := by
+      change ⇑(AnalyticSpace.proj.{u} n).toLRSHom.base z = _
+      rw [base_proj_eq.{u}]
+      rfl
+    change _ = 0
+    rw [hbase]
+    rw [hGz] at hFz
+    simpa using hFz.symm
+  · intro hw
+    set z : ULift.{u} (Fin (n + 1)) → ℂ := (uliftSnocHomeo.{u} n).symm (w, 0) with hz
+    have hGz : MvPolynomial.eval z ((lastVarPolyEquiv.{u} n).symm (Polynomial.X :
+        Polynomial (MvPolynomial (ULift.{u} (Fin n)) ℂ))) = 0 := by
+      rw [eval_lastVarPolyEquiv_symm.{u}, hz, Homeomorph.apply_symm_apply]
+      simp [polyFamily]
+    have hFz : MvPolynomial.eval z ((lastVarPolyEquiv.{u} n).symm F) = 0 := by
+      rw [eval_lastVarPolyEquiv_symm.{u}, hz, Homeomorph.apply_symm_apply]
+      simp only [polyFamily, hF, Polynomial.map_sub, Polynomial.map_pow, Polynomial.map_X,
+        Polynomial.map_C, Polynomial.eval_sub, Polynomial.eval_pow, Polynomial.eval_X,
+        Polynomial.eval_C, MvPolynomial.eval_X]
+      simpa using hw
+    have hmem : z ∈ Set.range ⇑(AnalyticSpace.Hom.toLRSHom
+        (analytificationInclHom.{u} ![(lastVarPolyEquiv.{u} n).symm F])).base := by
+      have hr : Set.range ⇑(AnalyticSpace.Hom.toLRSHom
+          (analytificationInclHom.{u} ![(lastVarPolyEquiv.{u} n).symm F])).base =
+          {v | ∀ j, MvPolynomial.eval v (![(lastVarPolyEquiv.{u} n).symm F] j) = 0} :=
+        range_base_analytificationIncl.{u} _
+      rw [hr]
+      intro j
+      fin_cases j
+      exact hFz
+    obtain ⟨y, hy⟩ := hmem
+    refine ⟨y, ?_, ?_⟩
+    · change MvPolynomial.eval _ _ = 0
+      rw [hy]
+      exact hGz
+    · have h1 : ⇑(AnalyticSpace.proj.{u} n).toLRSHom.base z = w := by
+        rw [base_proj_eq.{u}, hz]
+        simp
+      exact (congrArg (⇑(AnalyticSpace.proj.{u} n).toLRSHom.base) hy).trans h1
+
+/-- **The bad set of that pair is not empty**, so the open subset of the base is not the whole of
+`ℂ^n`: the origin of the base lies in it.
+
+**`Set.Nonempty` and not `≠ ∅`, and that is forced.** Written the second way the proof needs
+`rw [hcon] at h0`, which fails with *"Did not find an occurrence of the pattern"* on a pattern that
+is visibly present, because the set is spelled at `ULift (Fin n) → ℂ` in the hypothesis and at
+`↑(ComplexAnalytic.AnalyticSpace.complexAffineSpace n).toTopCat` in the goal. **The point has to
+be ascribed for the same reason** — a bare `⟨0, rfl⟩` fails to synthesize `OfNat` at the
+carrier. -/
+theorem hypersurfaceCommonZeroImage_parabola_nonempty (i : ULift.{u} (Fin n)) :
+    (hypersurfaceCommonZeroImage.{u}
+      (Polynomial.X ^ 2 - Polynomial.C (MvPolynomial.X i))
+      (Polynomial.X : Polynomial (MvPolynomial (ULift.{u} (Fin n)) ℂ))).Nonempty := by
+  rw [hypersurfaceCommonZeroImage_parabola.{u} i]
+  exact ⟨(0 : ULift.{u} (Fin n) → ℂ), rfl⟩
+
+/-- **And it is not everything**, so the open subset of the base is not empty: the point all of
+whose coordinates are `1` lies off it.
+
+Together with `ComplexAnalytic.hypersurfaceCommonZeroImage_parabola_nonempty` this is the
+statement the two witnesses above cannot make between them — **the open subset of the base is
+proper and nonempty**, which is the case
+`Oka/Analytification/StandardEtaleFiniteness.lean`'s theorems are interesting in. -/
+theorem hypersurfaceCommonZeroImage_parabola_ne_univ (i : ULift.{u} (Fin n)) :
+    hypersurfaceCommonZeroImage.{u}
+      (Polynomial.X ^ 2 - Polynomial.C (MvPolynomial.X i))
+      (Polynomial.X : Polynomial (MvPolynomial (ULift.{u} (Fin n)) ℂ)) ≠ Set.univ := by
+  rw [hypersurfaceCommonZeroImage_parabola.{u} i]
+  intro hcon
+  have h1 : (fun _ ↦ (1 : ℂ)) ∈ {w : ULift.{u} (Fin n) → ℂ | w i = 0} := hcon ▸ Set.mem_univ _
+  exact one_ne_zero h1
 
 end
 

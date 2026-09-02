@@ -2999,14 +2999,29 @@ info: 'ComplexAnalytic.towerPresHom_two' depends on axioms:
 
 /-! ### The hypersurface over an open subset of the base
 
-`Oka/Analytification/OpenBaseFiniteness.lean`. The image in `ℂ^n` of the points of a hypersurface
-at which a second polynomial vanishes, its closedness, the vacuity of that vanishing above the
-complement, the finiteness of the hypersurface over the cylinder, and the two witnesses that bound
-how large the complement can be.
+`Oka/Analytification/OpenBaseFiniteness.lean`, **all ten of it**, in the order they are guarded:
+the image in `ℂ^n` of the points of a hypersurface at which a second polynomial vanishes, its
+closedness, the vacuity of that vanishing above the complement, the finiteness of the hypersurface
+over the cylinder, the two witnesses bounding the complement at `ℂ^n` and at `∅`, the monicity of
+`X² - C a`, and the **three** declarations of the witness between them — the bad set of the
+parabola with its last coordinate inverted, and that it is neither empty nor everything, which
+together are the only case the theorems downstream are interesting in.
+
+**This paragraph is an exact enumeration and it has now gone false twice, in two different ways.**
+It said *"the two witnesses"* and a third arrived — a **stale** count, the kind that moves when
+somebody adds a declaration and that a writer thinks to re-check. A first draft of this very push
+then corrected that and left *"and one at which it is proper and nonempty"* describing **three**
+declarations, and omitted the monicity entirely — a count that was **never right**, which no later
+change could have made wrong and which only a reading of the paragraph against the file catches.
+**The two look identical here and are found by opposite habits.** Nothing mechanical sees either:
+a sweep scoped to `Oka/` does not reach a guard file, and `scripts/check_docstring_names.py`
+resolves every name in such a sentence. That is what lana-agents/oka#349 was rejected for, one
+section over.
 
 The first is a `def` and is guarded for that reason: the convention here is every declaration and
 not every theorem, and `scripts/guard_coverage.py` cannot report a missing guard on a name
-advertised under `## Main definitions`, which it does not read.
+advertised under `## Main definitions`, which it does not read. **It is the only `def` of the
+ten.**
 -/
 
 /--
@@ -3050,6 +3065,34 @@ info: 'ComplexAnalytic.hypersurfaceCommonZeroImage_X' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.hypersurfaceCommonZeroImage_X
+
+/--
+info: 'ComplexAnalytic.monic_X_sq_sub_C' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.monic_X_sq_sub_C
+
+/--
+info: 'ComplexAnalytic.hypersurfaceCommonZeroImage_parabola' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.hypersurfaceCommonZeroImage_parabola
+
+/--
+info: 'ComplexAnalytic.hypersurfaceCommonZeroImage_parabola_nonempty' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.hypersurfaceCommonZeroImage_parabola_nonempty
+
+/--
+info: 'ComplexAnalytic.hypersurfaceCommonZeroImage_parabola_ne_univ' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.hypersurfaceCommonZeroImage_parabola_ne_univ
 
 /-! ### The refined datum's symmetry law, and the monomorphism under it
 
@@ -4103,6 +4146,13 @@ info: 'ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp_compl
+
+/--
+info: 'ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp_parabola'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp_parabola
 
 /-! ### A refined cover datum at a family that is not `1`, and the two conditions again
 

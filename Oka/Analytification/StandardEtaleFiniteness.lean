@@ -88,6 +88,9 @@ was neither of them.
 - `ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp_compl`: the same at
   the largest such subset, the complement of `ComplexAnalytic.hypersurfaceCommonZeroImage`, which
   is open by `ComplexAnalytic.isClosed_hypersurfaceCommonZeroImage`.
+- `ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp_parabola`: **and the
+  same at a pair for which that subset is proper and nonempty**, which is the only case either
+  theorem above is interesting in and the first instance of it on this line.
 
 ## What is not here
 
@@ -116,12 +119,19 @@ was neither of them.
   meet only over `ℂ^n`. `ComplexAnalytic.isFinite_analytification_comp_projRestrict`'s base is
   `ℂ^n` and `ComplexAnalytic.etaleAnalytificationIso`'s is `A^an`, and a statement over a
   presented base is a different theorem rather than a missing hypothesis.
-* **No `StandardEtalePair`, and no `StandardEtalePair.cond` is read.** The theorems below hold for
-  **every** monic `F` and **every** `G` — `G` is read only through the bad set — so nothing here
-  says the source is étale, only that it is the analytification of the presentation
-  `ComplexAnalytic.etalePresentation` names. That is the same stance
-  `ComplexAnalytic.etaleAnalytificationIso` takes, and it is a weaker hypothesis than
-  `Oka/Analytification/StandardEtaleLocalIso.lean`'s last two theorems take.
+* **No `StandardEtalePair`, and no `StandardEtalePair.cond` is read** — by any theorem below,
+  including the instance. **The two *general* theorems hold for every monic `F` and every `G`**
+  — `G` is read only through the bad set — so nothing here says the source is étale, only that it
+  is the analytification of the presentation `ComplexAnalytic.etalePresentation` names. That is
+  the same stance `ComplexAnalytic.etaleAnalytificationIso` takes, and it is a weaker hypothesis
+  than `Oka/Analytification/StandardEtaleLocalIso.lean`'s last two theorems take.
+
+  **This bullet used to say "the theorems below" where it meant the general ones**, and
+  `ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp_parabola` is at one
+  `F` and one `G`, so the quantifier had to be scoped rather than left to be read charitably. **The
+  stance is unweakened**: an instance narrows what is *quantified over* and not what is *asked
+  of* the pair, and the instance asks no more than monicity — which is why it can sit in this file
+  at all, where `Oka/Analytification/StandardEtaleFiniteEtale.lean` could not.
 * **No isomorphism of restricted spaces**, and the containment is not turned into one. Finiteness
   needs a closed embedding and no more, which is what
   `ComplexAnalytic.AnalyticSpace.isFinite_restrictHom_of_subset_range` supplies. The restricted
@@ -135,11 +145,17 @@ was neither of them.
   theorem. `Oka/Analytification/OpenBaseFiniteness.lean` bounds it from both ends —
   `ComplexAnalytic.hypersurfaceCommonZeroImage_one` makes the bad set empty at `G = 1`, so `V` may
   be all of `ℂ^n`, and `ComplexAnalytic.hypersurfaceCommonZeroImage_X` makes it everything, so `V`
-  may be empty and the theorem below say nothing. **No pair is exhibited anywhere for which `V` is
-  proper *and* nonempty**, which is the case the statement is interesting in;
-  `OkaTest/OpenBaseFiniteness.lean` exhibits a non-degenerate pair at which `V` is empty. Read
-  this file as the transport of a finiteness across `ComplexAnalytic.etaleAnalytificationIso`, and
-  read `OkaTest/OpenBaseFiniteness.lean` for what such a statement buys.
+  may be empty and the theorem below say nothing. **This bullet said "No pair is exhibited
+  anywhere for which `V` is proper *and* nonempty", and one now is**:
+  `ComplexAnalytic.hypersurfaceCommonZeroImage_parabola` makes the bad set a coordinate hyperplane
+  at `F = X² - x_i`, `G = X`, and the theorem below is instantiated there as
+  `ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp_parabola`. So the
+  quantification is no longer empty of content in the only case it is interesting in. **What is
+  still not here is any *general* statement about the size of `V`** — it remains a hypothesis on
+  the pair and not a theorem, and `OkaTest/OpenBaseFiniteness.lean` exhibits a non-degenerate pair
+  at which `V` is empty. Read this file as the transport of a finiteness across
+  `ComplexAnalytic.etaleAnalytificationIso`, and read `OkaTest/OpenBaseFiniteness.lean` for what
+  such a statement buys.
 * **No stalks, no germs and no derivative.** The local-isomorphism half is
   `Oka/Analytification/StandardEtaleLocalIso.lean` and nothing here is evidence about it.
 -/
@@ -343,6 +359,38 @@ theorem isFinite_restrictHom_analytificationMap_etalePresHom_comp_compl (hF : F.
       ⟨(hypersurfaceCommonZeroImage.{u} F G)ᶜ,
         (isClosed_hypersurfaceCommonZeroImage.{u} F G hF).isOpen_compl⟩) :=
   isFinite_restrictHom_analytificationMap_etalePresHom_comp.{u} g F G hF _ subset_rfl
+
+/-! ### At a pair for which the open subset of the base is proper and nonempty -/
+
+/-- **The standard étale analytification of the parabola with its last coordinate inverted is
+finite over the complement of a coordinate hyperplane** — the first instance on this line at which
+the open subset of the base is known to be **proper and nonempty**, which is the only case either
+theorem above is interesting in.
+
+`ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp_compl` at
+`F = X² - x_i`, `G = X`, with `ComplexAnalytic.monic_X_sq_sub_C` as its monicity;
+`ComplexAnalytic.hypersurfaceCommonZeroImage_parabola` computes the bad set as
+`{w | w i = 0}` and `ComplexAnalytic.hypersurfaceCommonZeroImage_parabola_nonempty` and
+`ComplexAnalytic.hypersurfaceCommonZeroImage_parabola_ne_univ` are what say the complement is
+neither empty nor everything.
+
+**Necessary and satisfiable are two readings of the same properness, and that is why this pair and
+not another.** The hypothesis is *delete the bad set*, so a bad set that is proper and nonempty is
+exactly what makes the deletion both necessary and non-destructive: a pair with an empty bad set
+needs no hypothesis, and one with a full bad set leaves nothing behind. **This is the same pair
+`Oka/Analytification/MonicHypersurface.lean` uses to show the *unrestricted* statement is false**,
+and the coincidence is not one. -/
+theorem isFinite_restrictHom_analytificationMap_etalePresHom_comp_parabola
+    (i : ULift.{u} (Fin n)) :
+    AnalyticSpace.IsFinite (AnalyticSpace.restrictHom
+      (analytificationMap.{u} (etalePresHom.{u} g
+          ((lastVarPolyEquiv.{u} n).symm (Polynomial.X ^ 2 - Polynomial.C (MvPolynomial.X i)))
+          ((lastVarPolyEquiv.{u} n).symm Polynomial.X)) ≫ analytificationInclHom.{u} g)
+      ⟨(hypersurfaceCommonZeroImage.{u}
+          (Polynomial.X ^ 2 - Polynomial.C (MvPolynomial.X i)) Polynomial.X)ᶜ,
+        (isClosed_hypersurfaceCommonZeroImage.{u} _ _ (monic_X_sq_sub_C.{u} _)).isOpen_compl⟩) :=
+  isFinite_restrictHom_analytificationMap_etalePresHom_comp_compl.{u} g _ _
+    (monic_X_sq_sub_C.{u} _)
 
 end
 
