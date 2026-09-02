@@ -30,8 +30,9 @@ statements about a factorisation `j ≫ iW` of closed immersions of locally ring
 
 * **The closed embedding** is `IsEmbedding.of_comp` for the embedding half and, for the closed
   half, the observation that `Set.range j.base` is the `iW`-preimage of `Set.range (j ≫ iW).base`
-  — which uses only that `iW.base` is injective, and is the identity every other field is read
-  through as well.
+  — which uses only that `iW.base` is injective. That observation is `hrange` in the proof below,
+  and the one other field read through it is `range_base`; the two stalk conditions never mention
+  it.
 * **`range_base`** splits the conjunction over `Fin.append f₁ f₂` into its two halves. The `f₁`
   half is **free and carries no hypothesis about `Y`**: every point of `W` lies in the image of
   `iW`, so `hW.range_base` already puts the germs of `f₁` in the maximal ideal there. The `f₂`
@@ -130,9 +131,11 @@ of `f₂` along `iW`.
 
 The module docstring says what each of the four conditions costs. The one hypothesis that is
 **not** used anywhere is `hW.isClosedEmbedding`'s closedness — only the injectivity of `iW.base`
-is, and it is used three times: to identify `Set.range j.base` as a preimage, to get the embedding
-half from `IsEmbedding.of_comp`, and nowhere else. The closedness of `Set.range j.base` comes from
-`hY`, not from `hW`. -/
+is, and it is read for one thing: to identify `Set.range j.base` as the `iW`-preimage of
+`Set.range (j ≫ iW).base`, in `hrange` below. **The embedding half does not read it either**:
+`IsEmbedding.of_comp` asks for two continuities and an embedding of the composite, so the
+injectivity of `j.base` comes out of `hY`. The closedness of `Set.range j.base` comes from `hY`
+too, not from `hW`. -/
 theorem IsCutOutBy.of_comp_append {iW : W ⟶ Z} {j : Y ⟶ W} {k₁ k₂ : ℕ}
     {f₁ : Fin k₁ → Z.presheaf.obj (op ⊤)} {f₂ : Fin k₂ → Z.presheaf.obj (op ⊤)}
     (hW : IsCutOutBy iW f₁) (hY : IsCutOutBy (j ≫ iW) (Fin.append f₁ f₂)) :

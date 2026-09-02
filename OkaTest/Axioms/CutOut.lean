@@ -9,13 +9,15 @@ import Oka
 # Axiom regression tests: Subspaces cut out by global sections
 
 The zero locus of a family of global sections of the structure sheaf of a locally ringed
-space, the closed immersion cutting it out, and the mapping property of that immersion —
-together with the two ways such a datum moves: restricting it to an open of the ambient space,
-and cancelling it against a datum for an intermediate subspace.
+space, the closed immersion cutting it out, the mapping property of that immersion, and how
+such a datum is transported.
 
-The last clause is here because the description above did not reach the last section, whose
-subject is neither a zero locus nor a mapping property; it names the two transports rather than
-counting the sections, so appending a third does not falsify it.
+The last clause is here because the description above did not reach the sections whose subject
+is neither a zero locus nor a mapping property. It says **how** and not *which*, and that is
+deliberate: this file already guards transport along an isomorphism of the target
+(`ComplexAnalytic.IsCutOutBy.iso_comp`), to an open of the ambient space, to another family with
+the same range, and against a datum for an intermediate subspace, so a clause naming *two* ways
+a datum moves would have been false of this file the day it was written.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
