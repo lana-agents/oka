@@ -162,7 +162,13 @@ it, and it separates them:
   `ComplexAnalytic.refineDatumHrange_iff` says no weaker pair will do.
 * **Nothing that says the refined cover's analytic space is the original one.** It is a space, and
   `ComplexAnalytic.not_isIso_refineToBase` says at a constant `σ` that the comparison need not be
-  an isomorphism; there is no morphism between the two gluings here in either direction.
+  an isomorphism. **This bullet ended *"there is no morphism between the two gluings here in either
+  direction"*, and one direction of that is retired**:
+  `ComplexAnalytic.refineDatumToBase` (`Oka/Analytification/RefineDatumToBase.lean`) is
+  `ComplexAnalytic.coverMap` at this file's own space, and its whole cost was one hypothesis, both
+  branches of which were theorems on this line already. **The direction that stays absent is the
+  other one**, from the original gluing to the refined one, and so does the identification: a
+  morphism down is not an isomorphism and nothing here or there is evidence that it is one.
 * **No `hrange` reproved and no shape statement reopened.**
   `Oka/Analytification/RefineDatumGlueData.lean`,
   `Oka/Analytification/RefineDatumRange.lean` and

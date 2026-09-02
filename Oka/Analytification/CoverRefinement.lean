@@ -184,6 +184,14 @@ member, and at a general `σ` they lie over three.
   somewhere only known to be `A^an` up to work nobody has done. That identification, not the
   refinement, is what stands between this file and a literal `coverMap`.
 
+  **That diagnosis is right about this file and it does not transfer, which is worth saying here
+  because it was read as transferring.** The obstruction is a fact about the *target* being a
+  single presentation, not about refinement; a **cross-member** refinement's target is a cover
+  datum, so `ComplexAnalytic.refineDatumToBase`
+  (`Oka/Analytification/RefineDatumToBase.lean`) is a literal `coverMap` and pays neither step.
+  `Oka/Analytification/CoverIndependence.lean` quoted this paragraph's price as a tree-wide
+  absence and has been corrected.
+
   **The two geometric laws are here and the obstruction that kept them out is retired.** They
   needed the refined overlap to be the *preimage* of the refining open along the projection;
   `ComplexAnalytic.localisationOpen_rename` (`Oka/Analytification/DistinguishedOpen.lean`) is

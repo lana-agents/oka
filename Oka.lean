@@ -111,6 +111,7 @@ import Oka.Analytification.RefineDatumCocycle
 import Oka.Analytification.RefineDatumGlueData
 import Oka.Analytification.RefineDatumRange
 import Oka.Analytification.RefineDatumSymm
+import Oka.Analytification.RefineDatumToBase
 import Oka.Analytification.RefineDatumTransition
 import Oka.Analytification.RefineDatumUnitFamily
 import Oka.Analytification.RefineDatumWitness
