@@ -95,11 +95,15 @@ theorem reads a `StandardEtalePair`, so appending it there would have turned tha
   narrows that. The restriction is in the statement because the first field needs it.
 * **Nothing at `k ≥ 1`.** Both halves are at an empty base presentation, for the reasons their own
   files give, and a presented base is a different theorem rather than a missing hypothesis.
-* **Nothing about how large `V` is.** No pair `(F, G)` is exhibited anywhere for which `V` is
-  proper *and* nonempty, which is the case the statement is interesting in; that absence is
-  `Oka/Analytification/StandardEtaleFiniteness.lean`'s and this file inherits it unchanged. A
-  reader should not take the conclusion as saying the morphism is finite étale over anything in
-  particular.
+* **Nothing about how large `V` is *here*.** This bullet said no pair `(F, G)` was exhibited
+  anywhere for which `V` is proper *and* nonempty; one now is —
+  `ComplexAnalytic.hypersurfaceCommonZeroImage_parabola`
+  (`Oka/Analytification/OpenBaseFiniteness.lean`), instantiated for the finiteness half as
+  `ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp_parabola`. **It is
+  not instantiated for *this* class**, because the second field needs a `StandardEtalePair` and
+  nothing exhibits the parabola as one; so a reader should still not take the conclusion below as
+  saying the morphism is finite étale over anything in particular. The size of `V` remains a
+  hypothesis on the pair rather than a theorem.
 * **No comparison functor and no Riemann existence theorem.** A *different and broader* absence —
   the analytification of a finite étale morphism of **schemes** — is what
   `Oka/AnalyticSpace/LocalIso.lean`, `Oka/AnalyticSpace/CoveringMap.lean` and
