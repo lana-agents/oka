@@ -146,10 +146,13 @@ def lineRefinement : AnalyticSpace.{u} :=
 
 /-- **The refined member at `b` is the chart localised at the family.**
 
-Definitionally: `ComplexAnalytic.refineDatumObj obj σ fam b` *is*
-`ComplexAnalytic.localisationPresentation (obj (σ b)).g (fam b)`, and here `σ = id`. **It is
-stated because the two properness theorems below are about the localisation and the sentences
-around them are about the refined member**, and until this theorem existed a reader had to make
+Definitionally: the `g` of `ComplexAnalytic.refineDatumObj obj σ fam b` *is*
+`ComplexAnalytic.localisationPresentation (obj (σ b)).g (fam b)`, and here `σ = id`. The `g` and
+not the member — `ComplexAnalytic.refineDatumObj` returns a `ComplexAnalytic.Presentation`, whose
+other two fields are the variable and relation counts — which is why the statement below is the
+one it is, and not an equation between presentations. **It is stated because the two properness
+theorems below are about the localisation and the sentences around them are about the refined
+member**, and until this theorem existed a reader had to make
 that identification themselves — the shape `Oka/Analytification/RefineDatumWitness.lean`'s own
 absence bullet was written against. -/
 theorem refineDatumObj_lineRefineFam (b : pair.{u}) :
