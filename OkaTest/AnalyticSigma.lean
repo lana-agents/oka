@@ -35,11 +35,18 @@ isomorphic to a third, and no invariant is computed anywhere in this repository 
 it. `OkaTest/AffineCover.lean` and `OkaTest/ProjectiveLine.lean` say the same about their own
 gluings.
 
-**Nothing about `ComplexAnalytic.AnalyticSpace.IsFinite` or `…IsLocalIso` for the
-inclusions.** The section on the trivial cover below is about the descent map
-`∐_{i : ι} X ⟶ X` and says nothing about `ComplexAnalytic.AnalyticSpace.sigmaι`; an inclusion is
-an open immersion and is *not* finite unless the other members are empty, since its image is not
-closed in general.
+**`ComplexAnalytic.AnalyticSpace.IsFinite` and `…IsLocalIso` for the inclusions are settled, and
+not here.** The section on the trivial cover below is about the descent map `∐_{i : ι} X ⟶ X` and
+says nothing about `ComplexAnalytic.AnalyticSpace.sigmaι`;
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_sigmaι`
+(`Oka/AnalyticSpace/SigmaFiniteEtale.lean`) is the statement for the inclusion, and it holds for
+**every** family with no hypothesis on the other members. **This bullet used to say an inclusion
+is *not* finite unless the other members are empty, *"since its image is not closed in general"*,
+and both the claim and its reason were wrong**: the members of a coproduct are pairwise disjoint,
+so each image is the complement of a union of opens and is **clopen** —
+`ComplexAnalytic.AnalyticSpace.isClosed_range_sigmaι_base`. What an inclusion is *not* is
+**surjective**, which is `ComplexAnalytic.AnalyticSpace.not_surjective_sigmaι_base`, is true, and
+is a different statement from not being finite.
 
 ## The trivial cover, and what the count is a test of
 

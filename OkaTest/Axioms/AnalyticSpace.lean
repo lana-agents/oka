@@ -820,11 +820,13 @@ info: 'ComplexAnalytic.AnalyticSpace.sigmaι_sigmaDesc' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.sigmaι_sigmaDesc
 
-/-! ### The trivial `n`-sheeted cover, and finiteness of a descent map
+/-! ### The trivial `n`-sheeted cover, the descent map, and the inclusions
 
 `Oka/AnalyticSpace/SigmaFiniteEtale.lean`. That finiteness and being a local isomorphism pass
-from the members of a disjoint union to a descent map out of it, and the trivial `ι`-sheeted
-cover `∐_{i : ι} X ⟶ X` with its count of sheets. -/
+from the members of a disjoint union to a descent map out of it; the trivial `ι`-sheeted cover
+`∐_{i : ι} X ⟶ X` with its count of sheets; and the same two properties of the **inclusion** of a
+member, which hold for every family and are the other direction. The header names the subjects
+rather than counting the guards, so appending one does not falsify it. -/
 
 /--
 info: 'ComplexAnalytic.AnalyticSpace.toLRSHom_sigmaDesc' depends on axioms:
@@ -874,6 +876,34 @@ info: 'ComplexAnalytic.AnalyticSpace.card_fiber_sigmaFold' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.card_fiber_sigmaFold
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isClosed_range_sigmaι_base' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isClosed_range_sigmaι_base
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isFinite_sigmaι' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFinite_sigmaι
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isLocalIso_sigmaι' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isLocalIso_sigmaι
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isFiniteEtale_sigmaι' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFiniteEtale_sigmaι
 
 
 /-! ### The sheet comparison is `ℂ`-linear

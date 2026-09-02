@@ -93,6 +93,14 @@ blocker of the Riemann existence theorem and is untouched.
   finite étale** for a finite `ι`.
 - `ComplexAnalytic.AnalyticSpace.card_fiber_sigmaFold`: **every fibre of it has `Nat.card ι`
   points**, at every point of the base and with no connectedness hypothesis.
+- `ComplexAnalytic.AnalyticSpace.isClosed_range_sigmaι_base`: **the image of a member of a
+  disjoint union is closed**, and so clopen — the members are disjoint, so one image's complement
+  is a union of the others'.
+- `ComplexAnalytic.AnalyticSpace.isFinite_sigmaι`,
+  `ComplexAnalytic.AnalyticSpace.isLocalIso_sigmaι` and
+  `ComplexAnalytic.AnalyticSpace.isFiniteEtale_sigmaι`: **the inclusion of a member is finite, a
+  local isomorphism, and finite étale**, for every family and with no hypothesis on the other
+  members and none on the index type.
 
 ## References
 
@@ -164,6 +172,93 @@ instance isLocalIso_sigmaDesc [∀ i, IsLocalIso (g i)] : IsLocalIso (sigmaDesc 
 each of its restrictions is**, from the two rungs above and nothing else. -/
 instance isFiniteEtale_sigmaDesc [Finite ι] [∀ i, IsFiniteEtale (g i)] :
     IsFiniteEtale (sigmaDesc F g) where
+  isFinite := inferInstance
+  isLocalIso := inferInstance
+
+/-! ### The inclusions -/
+
+/-- **The image of a member of a disjoint union is closed**, and not merely open.
+
+The members are pairwise disjoint, so the complement of one image is the union of the others' —
+a union of opens. `AlgebraicGeometry.LocallyRingedSpace.exists_sigma_ι_base_eq` places an
+arbitrary point of the coproduct in *some* member and
+`AlgebraicGeometry.LocallyRingedSpace.disjoint_range_sigmaι` keeps it out of this one; the image
+being open is `AlgebraicGeometry.LocallyRingedSpace.sigmaι_isOpenImmersion`.
+
+**This is the fact the two instances below are about**, and it is worth naming on its own:
+*clopen*, and not *open*, is what an inclusion of a member is, and a bullet in
+`OkaTest/AnalyticSigma.lean` priced it as merely open and drew a false conclusion from that.
+
+`AlgebraicGeometry.LocallyRingedSpace.disjoint_range_sigmaι _ hij` at `hij : i ≠ j` is already
+`Disjoint (Set.range (Sigma.ι f i).base) (Set.range (Sigma.ι f j).base)` in that order; adding a
+`.symm` to fit `Set.subset_compl_iff_disjoint_right` is the wrong way round, and the error names
+two ranges that print almost identically. -/
+theorem isClosed_range_sigmaι_base (j : ι) :
+    IsClosed (Set.range (sigmaι F j).toLRSHom.base) := by
+  rw [← isOpen_compl_iff, isOpen_iff_forall_mem_open]
+  intro x hx
+  obtain ⟨i, y, hy⟩ := exists_sigma_ι_base_eq (fun i ↦ (F i).toLocallyRingedSpace) x
+  have hij : i ≠ j := by rintro rfl; exact hx ⟨y, hy⟩
+  refine ⟨Set.range (Sigma.ι (fun i ↦ (F i).toLocallyRingedSpace) i).base, ?_, ?_, ⟨y, hy⟩⟩
+  · rw [Set.subset_compl_iff_disjoint_right]
+    exact disjoint_range_sigmaι _ hij
+  · exact (sigmaι_isOpenImmersion _ i).base_open.isOpen_range
+
+/-- **The inclusion of a member of a disjoint union is finite**, for every family and with no
+hypothesis on the other members.
+
+`ComplexAnalytic.AnalyticSpace.IsFinite` is a closed base map and finite fibres and nothing else.
+The first is a closed embedding — an open embedding by
+`AlgebraicGeometry.LocallyRingedSpace.sigmaι_isOpenImmersion` with closed range by the theorem
+above — and the second is that an injective map has subsingleton fibres, injectivity being
+`AlgebraicGeometry.LocallyRingedSpace.sigmaι_base_injective`.
+
+**An `instance` rather than a `theorem`, and the choice is deliberate.** Its head is
+`ComplexAnalytic.AnalyticSpace.sigmaι`, which no other instance on this line produces, so it
+fires only on a goal that already names an inclusion and cannot chain; the two rungs above it are
+instances for the same reason. -/
+instance isFinite_sigmaι (j : ι) : IsFinite (sigmaι F j) where
+  isClosedMap :=
+    (IsClosedEmbedding.mk
+      (sigmaι_isOpenImmersion (fun i ↦ (F i).toLocallyRingedSpace) j).base_open.isEmbedding
+      (isClosed_range_sigmaι_base F j)).isClosedMap
+  finite_fiber y := by
+    have hsub : ((sigmaι F j).toLRSHom.base ⁻¹' {y}).Subsingleton := fun a ha b hb ↦
+      sigmaι_base_injective (fun i ↦ (F i).toLocallyRingedSpace) j (ha.trans hb.symm)
+    exact hsub.finite.to_subtype
+
+/-- **The inclusion of a member of a disjoint union is a local isomorphism**, for every family.
+
+Both fields are the inclusion being an open immersion:
+`Topology.IsOpenEmbedding.isLocalHomeomorph` for the base and
+`AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.stalk_iso` for the stalks. **Neither is
+about the coproduct**; the same two lines prove it for any open immersion, and what is particular
+here is only that the inclusion is one.
+
+**The point has to be retyped before the stalk instance is found.** `x` arrives as a point of the
+analytic space `F j` and the instance is indexed on a point of `(F j).toLocallyRingedSpace`; the
+two are definitionally equal and instance search is syntactic, so `inferInstanceAs` at the second
+spelling is what fires. Without it the goal reports `failed to synthesize IsIso …` with a term
+that prints identically to one that does synthesise. -/
+instance isLocalIso_sigmaι (j : ι) : IsLocalIso (sigmaι F j) where
+  isLocalHomeomorph := by
+    rw [sigmaι_toLRSHom]
+    exact (sigmaι_isOpenImmersion
+      (fun i ↦ (F i).toLocallyRingedSpace) j).base_open.isLocalHomeomorph
+  isIso_stalkMap x := by
+    rw [sigmaι_toLRSHom]
+    exact inferInstanceAs (IsIso ((Sigma.ι (fun i ↦ (F i).toLocallyRingedSpace) j).stalkMap
+      (x : (F j).toLocallyRingedSpace)))
+
+/-- **The inclusion of a member of a disjoint union is finite étale**, for every family, from the
+two rungs above and nothing else.
+
+**No `[Finite ι]`**, unlike `ComplexAnalytic.AnalyticSpace.isFiniteEtale_sigmaDesc`: the fibres of
+an inclusion are subsingletons whatever the index type is, and the closedness of its image is a
+complement of a *single* union of opens rather than a finite union of closed sets. The asymmetry
+is real and is the same one `ComplexAnalytic.AnalyticSpace.isLocalIso_sigmaDesc`'s docstring
+records from the other side. -/
+instance isFiniteEtale_sigmaι (j : ι) : IsFiniteEtale (sigmaι F j) where
   isFinite := inferInstance
   isLocalIso := inferInstance
 

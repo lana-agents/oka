@@ -85,7 +85,12 @@ consumes one.
 
 **Nothing about `ComplexAnalytic.AnalyticSpace.IsFinite` or
 `ComplexAnalytic.AnalyticSpace.IsLocalIso`** for the inclusions or for `∐_{Fin n} X ⟶ X`, and no
-count of sheets. Those need the fibres of the descent map and are not touched here.
+count of sheets. All of it is `Oka/AnalyticSpace/SigmaFiniteEtale.lean`'s, which imports this
+file — **and the reason is not the same for the two**. The descent map's needs the fibres of that
+map, which is why it is stated where they are; the **inclusion**'s needs only that the members
+are pairwise disjoint, which is `ComplexAnalytic.AnalyticSpace.not_surjective_sigmaι_base`'s own
+input and is here, so `ComplexAnalytic.AnalyticSpace.isFiniteEtale_sigmaι` is over there for the
+import edge to `Oka/AnalyticSpace/Finite.lean` and not for anything it reads from this file.
 
 **No claim that the disjoint union is not one of its members** beyond
 `ComplexAnalytic.AnalyticSpace.not_surjective_sigmaι_base`, which is about the *inclusion* being
