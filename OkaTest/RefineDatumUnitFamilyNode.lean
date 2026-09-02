@@ -48,6 +48,20 @@ this file knows and does not say is the failure mode this line has already had t
 `D(z)` as well. Neither statement contradicts anything either file claims — neither claims
 anything about its glued space — and both are why the *third* degeneracy deserves a name.
 
+**That last sentence was three prose sites ahead of what was stated, and this file's own standard
+is what it fell short of.** `ComplexAnalytic.isoLineRefineGlued` landed on
+`ComplexAnalytic.lineRefineGlueData.toGlueData.glued`, and nothing anywhere connected that gluing
+to `ComplexAnalytic.lineRefinement` — while
+`ComplexAnalytic.nodeRefinement_toLocallyRingedSpace`, one section earlier, says in terms that
+without such a step *"every statement below about the gluing would say nothing about"* the space.
+The missing step was not a `ℙ¹` fact: the bridge was absent at the level where
+`ComplexAnalytic.refineDatumUnitFamGlueData` and
+`ComplexAnalytic.refineDatumUnitFamAnalytification` are introduced, which is why the node's copy
+was fifteen arguments of the theorem below them spelled out. It is now
+`ComplexAnalytic.refineDatumUnitFamAnalytification_toLocallyRingedSpace`, both instances spend it
+in one line, and `ComplexAnalytic.isoLineRefineGlued` lands on
+`ComplexAnalytic.lineRefinement.toLocallyRingedSpace` the way its node counterpart does.
+
 ## What this is and is not evidence about
 
 * **It is evidence that `ComplexAnalytic.refineDatumRangeCross_poly` is instantiable at a triple
@@ -81,8 +95,10 @@ anything about its glued space — and both are why the *third* degeneracy deser
 - `ComplexAnalytic.localisationOpen_nodeRefineFam_ne_top` and
   `ComplexAnalytic.localisationOpen_nodeRefineFam_ne_bot`: **each refined member is a proper
   non-empty open of its copy of the node.**
-- `ComplexAnalytic.nodeRefinement_toLocallyRingedSpace`: **the space is the glue data's gluing**,
-  with no transport.
+- `ComplexAnalytic.nodeRefinement_toLocallyRingedSpace` and
+  `ComplexAnalytic.lineRefinement_toLocallyRingedSpace`: **each space is its glue data's gluing**,
+  with no transport, both from
+  `ComplexAnalytic.refineDatumUnitFamAnalytification_toLocallyRingedSpace`.
 - `ComplexAnalytic.coverOpen_nodeRefine_eq_top`: **every off-diagonal overlap of the refined cover
   is the whole refined member.**
 - `ComplexAnalytic.isoNodeRefineGlued` and `ComplexAnalytic.isoLineRefineGlued`: **so both proper
@@ -141,29 +157,20 @@ def nodeRefinement : AnalyticSpace.{u} :=
 
 /-- **That space has that glue data's gluing underneath it**, with no transport.
 
-`ComplexAnalytic.refineDatumAnalytificationOfLaws_toLocallyRingedSpace` at the same arguments,
-spelled out. **Without it the two definitions above are two well-typed objects with no recorded
-relation**, and every statement below about the gluing would say nothing about
-`ComplexAnalytic.nodeRefinement`. -/
+`ComplexAnalytic.refineDatumUnitFamAnalytification_toLocallyRingedSpace` at the arguments of the
+two definitions above. **Without it the two are two well-typed objects with no recorded relation**,
+and every statement below about the gluing would say nothing about
+`ComplexAnalytic.nodeRefinement`.
+
+**This was fifteen arguments of
+`ComplexAnalytic.refineDatumAnalytificationOfLaws_toLocallyRingedSpace` spelled out**, because the
+bridge did not exist one level up, where the pair of definitions it relates is introduced. It does
+now, and it is why the `ℙ¹` half below has one too. -/
 theorem nodeRefinement_toLocallyRingedSpace :
     nodeRefinement.{u}.toLocallyRingedSpace = nodeRefineGlueData.{u}.toGlueData.glued :=
-  refineDatumAnalytificationOfLaws_toLocallyRingedSpace.{u} nodeCoverObj.{u} nodeCoverPoly.{u}
-    (id : triple.{u} → triple.{u}) nodeRefineFam.{u}
-    (fun x y ↦ nodeCoverPoly.{u} (id x) (id y)) nodeCoverGlue.{u}
-    (refineDatumUnitFamR.{u} nodeCoverObj.{u} nodeCoverPoly.{u} _ nodeRefineFam.{u}
-      nodeCoverGlue.{u} isUnit_nodeRefineFam.{u})
-    (refineDatumUnitFamU.{u} nodeCoverObj.{u} nodeCoverPoly.{u} _ nodeRefineFam.{u}
-      nodeCoverGlue.{u} isUnit_nodeRefineFam.{u})
-    (refineDatumUnitFamCrossEq.{u} nodeCoverObj.{u} nodeCoverPoly.{u} _ nodeRefineFam.{u}
-      nodeCoverGlue.{u} isUnit_nodeRefineFam.{u})
-    (refineDatumUnitFamCrossUnit.{u} nodeCoverObj.{u} nodeCoverPoly.{u} _ nodeRefineFam.{u}
-      nodeCoverGlue.{u} isUnit_nodeRefineFam.{u})
-    hrange_nodeCover.{u}
-    (refineDatumRangeCross_poly.{u} nodeCoverObj.{u} nodeCoverPoly.{u} _ nodeRefineFam.{u}
-      nodeCoverGlue.{u} _ _ _ _ hrange_nodeCover.{u})
-    (refineDatumRangeEq_of_injective.{u} nodeCoverObj.{u} nodeCoverPoly.{u} _ nodeRefineFam.{u} _
-      nodeCoverGlue.{u} _ _ _ _ Function.injective_id)
-    hsymm_nodeCover.{u} hcocycle_nodeCover.{u}
+  refineDatumUnitFamAnalytification_toLocallyRingedSpace.{u} nodeCoverObj.{u} nodeCoverPoly.{u}
+    id nodeRefineFam.{u} nodeCoverGlue.{u} isUnit_nodeRefineFam.{u} hsymm_nodeCover.{u}
+    hrange_nodeCover.{u} Function.injective_id hcocycle_nodeCover.{u}
 
 /-! ### It refines, and there is a triple to refine at -/
 
@@ -287,21 +294,48 @@ theorem coverOpen_lineRefine_eq_top (a b : pair.{u}) (h : a ≠ b) :
   refine Opens.ext (Set.eq_univ_of_forall fun w ↦ ?_)
   exact range_base_localisationProj_subset.{u} lineRel.{u} lineZ.{u} ⟨w, rfl⟩
 
-/-- The glue data behind `ComplexAnalytic.lineRefinement`. -/
+/-- The glue data behind `ComplexAnalytic.lineRefinement`, and the theorem immediately below is
+what makes *behind* a statement rather than a description. -/
 def lineRefineGlueData : LocallyRingedSpace.GlueData.{u} :=
   refineDatumUnitFamGlueData.{u} lineCoverObj.{u} lineCoverPoly.{u} id lineRefineFam.{u}
     lineSwapIso.{u} isUnit_lineRefineFam.{u} hsymm_lineCover.{u} hrange_lineCover.{u}
     Function.injective_id hcocycle_lineCover.{u}
 
-/-- **`ComplexAnalytic.lineRefinement`'s gluing is one chart's `D(z)`.**
+/-- **That space has that glue data's gluing underneath it**, with no transport, and this is the
+`ℙ¹` half of `ComplexAnalytic.nodeRefinement_toLocallyRingedSpace`.
+
+`ComplexAnalytic.refineDatumUnitFamAnalytification_toLocallyRingedSpace` at the arguments of
+`ComplexAnalytic.lineRefinement` (`OkaTest/RefineDatumUnitFamily.lean`) and of
+`ComplexAnalytic.lineRefineGlueData` above, which are the same list.
+
+**Without it every statement here about `ComplexAnalytic.lineRefineGlueData`'s gluing says nothing
+about `ComplexAnalytic.lineRefinement`**, which is the standard the node's copy states one section
+above and which the `ℙ¹` half shipped without. -/
+theorem lineRefinement_toLocallyRingedSpace :
+    lineRefinement.{u}.toLocallyRingedSpace = lineRefineGlueData.{u}.toGlueData.glued :=
+  refineDatumUnitFamAnalytification_toLocallyRingedSpace.{u} lineCoverObj.{u} lineCoverPoly.{u}
+    id lineRefineFam.{u} lineSwapIso.{u} isUnit_lineRefineFam.{u} hsymm_lineCover.{u}
+    hrange_lineCover.{u} Function.injective_id hcocycle_lineCover.{u}
+
+/-- **`ComplexAnalytic.lineRefinement` is one chart's `D(z)`.**
+
+`ComplexAnalytic.isoCoverGlued` at `ComplexAnalytic.coverOpen_lineRefine_eq_top`, transported to
+`ComplexAnalytic.lineRefinement` through `ComplexAnalytic.lineRefinement_toLocallyRingedSpace` —
+the same two steps as `ComplexAnalytic.isoNodeRefineGlued`, and it lands on the same kind of
+object.
 
 The `ℙ¹` instance is a proper refinement of a cover of `ℙ¹` and its glued space is a single copy
 of `𝔸¹ ∖ {0}`. **Nothing in `OkaTest/RefineDatumUnitFamily.lean` says otherwise** — that file
 records that it makes no claim about its glued space in either direction — and this is why the
-absence it records is worth the space it takes. -/
+absence it records is worth the space it takes.
+
+**This used to land on `ComplexAnalytic.lineRefineGlueData.toGlueData.glued` and stop there**, so
+the three prose sites calling it a statement about `ComplexAnalytic.lineRefinement` were attaching
+it to an object no declaration connected it to. -/
 def isoLineRefineGlued (i : pair.{u}) :
-    lineRefineGlueData.{u}.toGlueData.U i ≅ lineRefineGlueData.{u}.toGlueData.glued :=
-  isoCoverGlued.{u} _ _ _ _ _ _ coverOpen_lineRefine_eq_top.{u} i
+    lineRefineGlueData.{u}.toGlueData.U i ≅ lineRefinement.{u}.toLocallyRingedSpace :=
+  (isoCoverGlued.{u} _ _ _ _ _ _ coverOpen_lineRefine_eq_top.{u} i).trans
+    (eqToIso lineRefinement_toLocallyRingedSpace.{u}).symm
 
 end
 
