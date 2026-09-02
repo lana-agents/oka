@@ -36,10 +36,18 @@ eighteen modules are not `Oka/AnalyticSpace/`'s**, and contribute 29 guards:
 beside the analytic statements they serve. See `OkaTest/Axioms.lean` on why a mirror-tree module
 such as the first has no row of its own.
 
-**The five undated counts in the two paragraphs above are claims about the tree and go stale; the
-`27c185a` ones are records and do not.** Those five — the *112*, the *51*, the *29*, the *ten* and
-the *fifteen* — last read *108*, *48*, *27*, *nine* and *fourteen*, and all five were right at
-`f63cb3a`, which wrote them. Four guards have been added since and none
+**Every undated count in the two paragraphs above is a claim about the tree and goes stale; the
+`27c185a` ones are records and do not.** *Every* one, including the ones the repair below does not
+touch: the coproduct *19* stands in the same clause as the *51*, is the same kind of number — a
+guard total under a group of headings — and moves the same way; it has simply not moved yet. **So
+the list below is what had gone false, and it is not the list to recheck after adding a guard.**
+That list is every undated numeral above, and it is deliberately not given as a count here, for
+the reason `OkaTest/Axioms/Analytification.lean`'s tower section states: a member a reader can
+check beats a cardinal they have to recount, and a census of a paragraph is the second.
+
+Five had gone false. The *112*, the *51*, the *29*, the *ten* and the *fifteen* last read *108*,
+*48*, *27*, *nine* and *fourteen*, and all five were right at `f63cb3a`, which wrote them. Four
+guards have been added since and none
 removed — `AlgebraicGeometry.LocallyRingedSpace.GlueData.ext_of_toGlueData`,
 `CategoryTheory.GlueData'.ext_of_heq`,
 `ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear_congr` and

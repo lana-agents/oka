@@ -2929,9 +2929,11 @@ a section at the end of this file — a section moved is a conflict for somebody
 is four of them.** The other six are `Oka/Analytification/HypersurfaceFinite.lean`'s tower block:
 `ComplexAnalytic.towerPresentation` and `ComplexAnalytic.towerPresHom`, the `m`-step
 generalisation of the two-step extension named above, with
-`ComplexAnalytic.isFinite_analytificationMap_towerPresHom` and the three base cases
-`ComplexAnalytic.towerPresentation_one`, `ComplexAnalytic.towerPresHom_one` and
-`ComplexAnalytic.towerPresHom_two`. **Two of the ten are a `def`** — `towerPresentation` and
+`ComplexAnalytic.isFinite_analytificationMap_towerPresHom` and the three `rfl` identifications
+`ComplexAnalytic.towerPresentation_one` and `ComplexAnalytic.towerPresHom_one`, the tower at one
+step, and `ComplexAnalytic.towerPresHom_two`, the tower at two — which is the evidence that the
+two-step theorem above is subsumed rather than sitting beside it, and not a base case: the
+recursion's is `m = 0`. **Two of the ten are a `def`** — `towerPresentation` and
 `towerPresHom` — and the rest are theorems; this clause read *"All four are theorems"*, which was
 true of the four and said nothing about the six.
 
