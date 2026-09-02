@@ -121,7 +121,7 @@ the rung.
   space. That separation axiom is the whole cost of it and is spent entirely in the finite rung.
 - `ComplexAnalytic.AnalyticSpace.surjective_base_of_isLocalIso_of_isFinite` and
   `ComplexAnalytic.AnalyticSpace.surjective_base_of_isFiniteEtale`: **a finite local isomorphism
-  out of a non-empty space onto a connected base is surjective** — the image is open because the
+  out of a non-empty space onto a preconnected base is surjective** — the image is open because the
   morphism is a local isomorphism and closed because it is finite, and a preconnected base has no
   other clopen set than `∅` and itself.
 - `ComplexAnalytic.AnalyticSpace.not_isFinite_of_isLocalIso_of_not_surjective`: **the
@@ -330,15 +330,22 @@ theorem isFiniteEtale_of_comp {X Y Z : AnalyticSpace.{u}} (f : X ⟶ Y) (g : Y �
   isFinite := isFinite_of_comp_of_t2Space f g
   isLocalIso := isLocalIso_of_comp f g
 
-/-! ### Surjectivity over a connected base -/
+/-! ### Surjectivity over a preconnected base -/
 
-/-- **A finite local isomorphism out of a non-empty space onto a connected base is surjective.**
+/-- **A finite local isomorphism out of a non-empty space onto a preconnected base is
+surjective.**
 
 The two rungs pull the image in opposite directions and connectedness closes the gap: a local
 isomorphism is a local homeomorphism, hence an open map, so its image is **open**
 (`IsLocalHomeomorph.isOpenMap`); a finite morphism has `IsClosedMap` as its first field, so the
 image of the whole source is **closed**. On a preconnected base a clopen set is empty or
 everything, and a non-empty source rules out empty.
+
+**`[PreconnectedSpace Y]` and not `[ConnectedSpace Y]`**, because that is what the argument reads;
+under `[Nonempty X]` the two coincide here, a point of `X` giving a point of `Y`. This headline
+and the two below it said *connected* in an earlier draft, which is the slip the module
+docstring already records once — there in a place where connectedness was not a hypothesis at
+all.
 
 **This is what the module docstring's *"a point outside the range is evenly covered by the empty
 index type"* costs.** That sentence is about why
@@ -368,7 +375,7 @@ theorem surjective_base_of_isLocalIso_of_isFinite {X Y : AnalyticSpace.{u}} (f :
       (IsLocalIso.isLocalHomeomorph (f := f)).isOpenMap.isOpen_range⟩
     (Set.range_nonempty _))
 
-/-- **A finite étale morphism out of a non-empty space onto a connected base is surjective**:
+/-- **A finite étale morphism out of a non-empty space onto a preconnected base is surjective**:
 `ComplexAnalytic.AnalyticSpace.surjective_base_of_isLocalIso_of_isFinite` at a caller holding the
 class, whose two fields are instances. -/
 theorem surjective_base_of_isFiniteEtale {X Y : AnalyticSpace.{u}} (f : X ⟶ Y)
@@ -376,15 +383,27 @@ theorem surjective_base_of_isFiniteEtale {X Y : AnalyticSpace.{u}} (f : X ⟶ Y)
     Function.Surjective (f.toLRSHom.base : X → Y) :=
   surjective_base_of_isLocalIso_of_isFinite f
 
-/-- **A local isomorphism out of a non-empty space onto a connected base that misses a point is
-not finite** — the contrapositive of
+/-- **A local isomorphism out of a non-empty space onto a preconnected base that misses a point
+is not finite** — the contrapositive of
 `ComplexAnalytic.AnalyticSpace.surjective_base_of_isLocalIso_of_isFinite`, and the form a
 non-example is stated in.
 
-It is the only route this repository has to refuting `ComplexAnalytic.AnalyticSpace.IsFinite`
-without computing a fibre: `ComplexAnalytic.AnalyticSpace.not_isFinite_of_infinite_fiber`
-(`Oka/AnalyticSpace/Finite.lean`) refutes the second field, and this refutes the first from a
-missing point rather than from a non-closed set exhibited by hand. -/
+It is the only *general criterion* the library has for refuting
+`ComplexAnalytic.AnalyticSpace.IsFinite`'s **first** field, and it is **not** the only route this
+repository has to that refutation — an earlier draft of this paragraph said it was.
+`ComplexAnalytic.AnalyticSpace.not_isFinite_of_infinite_fiber` (`Oka/AnalyticSpace/Finite.lean`)
+refutes the second field, and `ComplexAnalytic.not_isFinite_puncturedInclCoveringSpaceHom`
+(`OkaTest/CoveringSpace.lean`) refutes the first already, with no fibre anywhere in it — by
+exhibiting a non-closed image by hand, which is the route this theorem replaces rather than the
+one it is alone against.
+
+**That morphism is an instance of this theorem**, which is a better pedigree than being the only
+route would have been: it is a local isomorphism by
+`ComplexAnalytic.isLocalIso_puncturedInclCoveringSpaceHom`, out of a non-empty source, over the
+preconnected `ℂ¹`, and its base map is the inclusion on the nose by
+`ComplexAnalytic.AnalyticSpace.base_coveringSpaceHom`, so the origin is missed. **The rewrite is
+not carried out**: `OkaTest/CoveringSpace.lean`'s own proof is untouched and this paragraph is a
+reading of it, not a second proof. -/
 theorem not_isFinite_of_isLocalIso_of_not_surjective {X Y : AnalyticSpace.{u}} (f : X ⟶ Y)
     [IsLocalIso f] [Nonempty X] [PreconnectedSpace Y]
     (hf : ¬ Function.Surjective (f.toLRSHom.base : X → Y)) : ¬ IsFinite f :=

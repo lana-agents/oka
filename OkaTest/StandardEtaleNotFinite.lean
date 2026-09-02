@@ -35,7 +35,11 @@ Named rather than counted from here on, because a count of prose sites is what g
 different statement citing the same counterexample. **The numeral is pinned and this file is not
 in it** — a claim of this shape written into the tree it counts becomes a member of what it
 counts, which is the trap `Oka/Analytification/MonicHypersurface.lean` records for a printed
-`grep`.
+`grep`. **It is pinned here and nowhere else, and an earlier draft of this file did not manage
+that**: the count escaped into three declaration docstrings below as *three*, a numeral no
+sweep supports and which this paragraph refutes. They now point back at the list above and carry
+no count of their own, which is what *named rather than counted* has to mean if it is to survive
+the next edit.
 
 **And the sweep that found the seventh had to normalise whitespace, and had to reach outside
 `Oka/`.** `Oka/Analytification/StandardEtaleLocalIsoBase.lean` wraps as *"Unrestricted finiteness
@@ -102,7 +106,7 @@ unrelated, since a morphism out of `ComplexAnalytic.analytificationMap` is opaqu
 
 - `ComplexAnalytic.condEtaleProj`: **the morphism**, the analytification of
   `ComplexAnalytic.condPair`'s structure map followed by the base's inclusion into `ℂ¹` — the
-  unrestricted composite the three docstrings above are about.
+  unrestricted composite the module docstrings named at the top of this file are about.
 - `ComplexAnalytic.condEtalePt`: the tuple `(1, 1, 1)` of `ℂ³`, a point of its source.
 
 ## Main results
@@ -250,8 +254,8 @@ theorem base_condEtaleProj_ne_zero
   exact one_ne_zero h0
 
 /-- **The analytification of a standard étale morphism is not finite over the whole base**, at the
-square-root cover of the line — the counterexample three module docstrings under `Oka/` assert and
-none compiles.
+square-root cover of the line — the counterexample the module docstrings named at the top of this
+file assert and none of them compiles.
 
 The three inputs are `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_comp` at
 `ComplexAnalytic.condPair`, `ComplexAnalytic.nonempty_analytification_etalePresentation_cond`, and
@@ -270,7 +274,7 @@ theorem not_isFinite_condEtaleProj : ¬ AnalyticSpace.IsFinite condEtaleProj.{u}
   obtain ⟨y, hy⟩ := hsurj (fun _ ↦ 0)
   exact base_condEtaleProj_ne_zero.{u} y (by rw [hy])
 
-/-- **And so it is not finite étale**, which is the shape the three docstrings state the falsity
+/-- **And so it is not finite étale**, which is the shape those same docstrings state the falsity
 in. `ComplexAnalytic.AnalyticSpace.IsFiniteEtale.isFinite` is the whole proof; the
 local-isomorphism field is *true* here, so it is the finiteness alone that fails. -/
 theorem not_isFiniteEtale_condEtaleProj : ¬ AnalyticSpace.IsFiniteEtale condEtaleProj.{u} :=
