@@ -193,11 +193,19 @@ member only. Nothing here is about two data at once; taxis #1329 has the measure
   `AlgebraicGeometry.LocallyRingedSpace.GlueData.ι_jointly_surjective` and
   `ComplexAnalytic.isOpenImmersion_specIota` — both of them below — where
   `AlgebraicGeometry.Scheme.GlueData` would mean rebuilding this file's `t`, `t'`, `t_fac`,
-  `t_inv` and `cocycle` at the scheme level. It cost six declarations and no new import, and
-  `Oka/Analytification/CoverIndependence.lean` is the consumer: the condition it names as what a
-  common refinement of two cover data has to reproduce has a Mathlib statement,
-  `AlgebraicGeometry.exists_basicOpen_le_affine_inter`, which applies once the members are affine
-  opens and is `ComplexAnalytic.exists_basicOpen_specSchemeIota_inter` there.
+  `t_inv` and `cocycle` at the scheme level. It cost six declarations and no new import, and what
+  had asked for it is taxis #1107's fourth increment, in
+  `Oka/Analytification/CoverIndependence.lean`. **This sentence said that file "is the consumer"
+  and named the condition it wants without a qualifier the same push states twice elsewhere; both
+  were repaired on 2026-09-02.** What that Mathlib statement is,
+  `AlgebraicGeometry.exists_basicOpen_le_affine_inter`, is the **local form** of the condition —
+  it is stated at a *point* of the overlap of two affine opens and returns an open distinguished
+  in both through that point, where the condition asks that the overlap *be* a distinguished open
+  of each member — so it is **strictly weaker**, as
+  `Oka/Analytification/SpecScheme.lean` and `Oka/Analytification/CoverIndependence.lean` both say.
+  It applies once the members are affine opens and is
+  `ComplexAnalytic.exists_basicOpen_specSchemeIota_inter` there, **which no declaration consumes
+  yet**: what asked is a deliverable and not a proof term.
 
   **A separate module rather than the end of this file, and the reason is this bullet**: ten
   docstrings on this line say there is no `AlgebraicGeometry.Scheme` in *their* file, so keeping

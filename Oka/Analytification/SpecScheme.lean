@@ -45,6 +45,13 @@ prose: a file that wants a scheme has to import `Oka.Analytification.SpecScheme`
 `Oka/Analytification/` does. The four claims that were about the *line of files* rather than about
 one file are falsified either way, and have been repaired in this same change.
 
+**The numeral is scoped to this line and a fifth claim of the same shape sat outside it.**
+`Oka/AnalyticSpace/FiniteEtaleOver.lean` said the line of files this one is on has no scheme, and
+was repaired on 2026-09-02 rather than here. **The sweep that made the count above could not have
+seen it**: the phrase there straddles a hard line break, so `grep "line of files does not have"`
+returns nothing and so does `git log -S` on it. Normalise whitespace before believing a census of
+a wrapped phrase.
+
 The counter-argument is real and is recorded rather than dismissed:
 `Oka/Analytification/SpecAffineCover.lean` is where the glue datum is, six declarations is a small
 module, and this repository does not otherwise split a file at this size. It was decided on the
