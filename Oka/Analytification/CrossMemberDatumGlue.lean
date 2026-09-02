@@ -119,9 +119,13 @@ the unequal branch was added, **and two things neither file describes fired as w
   It is also a better interface, which is why they are advertised.
 * **A definition whose body cannot be written back down cannot be opened by `change` either.**
   The swap's middle factor was `eqToIso (by rw [mul_comm])`, and an anonymous tactic proof has no
-  spelling — so the `rfl` theorem above could not be stated until the transport was named.
-  `ComplexAnalytic.refineSwapMul` is that name. **A definition that a later proof will have to
-  open should not carry an anonymous proof term**, and this is the shape of that rule.
+  spelling — so `ComplexAnalytic.refineSwapGlue_eq` could not be stated until the transport was
+  named, and `ComplexAnalytic.refineSwapMul` is that name. **Only that one of the two `rfl`
+  theorems named above was blocked on it**: `ComplexAnalytic.refineDatumGlueEq_eq`'s right-hand
+  side spells `ComplexAnalytic.refineSwapGlueOfEq` and two `ComplexAnalytic.refineDatumPoly_of_eq`
+  congruences, and mentions `ComplexAnalytic.refineSwapMul` nowhere — so it was statable with the
+  `mul_comm` proof still anonymous. **A definition that a later proof will have to open should
+  not carry an anonymous proof term**, and this is the shape of that rule.
 * **Three generated declarations are left, and each is `simp only … at` and not `rw`.**
   `ComplexAnalytic.refineDatumGlueEq.congr_simp` is planted by the `simp only … at e` in
   `ComplexAnalytic.refineDatumGlueEq_analytification_comp`;
