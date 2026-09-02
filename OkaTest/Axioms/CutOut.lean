@@ -9,7 +9,13 @@ import Oka
 # Axiom regression tests: Subspaces cut out by global sections
 
 The zero locus of a family of global sections of the structure sheaf of a locally ringed
-space, the closed immersion cutting it out, and the mapping property of that immersion.
+space, the closed immersion cutting it out, and the mapping property of that immersion —
+together with the two ways such a datum moves: restricting it to an open of the ambient space,
+and cancelling it against a datum for an intermediate subspace.
+
+The last clause is here because the description above did not reach the last section, whose
+subject is neither a zero locus nor a mapping property; it names the two transports rather than
+counting the sections, so appending a third does not falsify it.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -218,3 +224,38 @@ info: 'ComplexAnalytic.isClosedEmbedding_base_restrictHom_of_subset_range' depen
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isClosedEmbedding_base_restrictHom_of_subset_range
+
+/-! ### Cancelling a cut-out datum: cutting out inside a subspace
+
+`Oka/AnalyticSpace/CutOutCancel.lean`, all three of it, in the order they are declared. Appended
+as its own section rather than into the one above, which is about
+`ComplexAnalytic.restrictHom` and would be falsified by an addition it does not describe — the
+same reason that section gives for being its own.
+
+**None of the three is about complex analytic spaces**, and the one general `Fin` fact the last
+of them consumes, `Fin.range_append`, is in the mirror tree
+(`Oka/Data/Fin/Tuple/Basic.lean`) and is **deliberately not guarded here**: no guard file in this
+repository guards a `Fin` lemma, and `Fin.init_zero`, the file's only other declaration, is not
+guarded either.
+-/
+
+/--
+info: 'ComplexAnalytic.IsCutOutBy.of_range_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.IsCutOutBy.of_range_eq
+
+/--
+info: 'ComplexAnalytic.IsCutOutBy.of_comp_append' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.IsCutOutBy.of_comp_append
+
+/--
+info: 'ComplexAnalytic.IsCutOutBy.of_comp_of_range_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.IsCutOutBy.of_comp_of_range_eq
