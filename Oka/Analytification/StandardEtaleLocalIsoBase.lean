@@ -261,7 +261,7 @@ theorem pullbackΓ_proj_ofMvPolynomial (q : MvPolynomial (ULift.{u} (Fin n)) ℂ
         (MvPolynomial.rename (localisationIncl.{u} n) q)) =
       OkaRing.ofMvPolynomial (⊤ : Opens (ULift.{u} (Fin (n + 1)) → ℂ))
         (MvPolynomial.rename (localisationIncl.{u} n) q) := by
-    show (LocallyRingedSpace.Γ.map
+    change (LocallyRingedSpace.Γ.map
       (𝟙 (AnalyticSpace.complexAffineSpace.{u} (n + 1)).toLocallyRingedSpace).op).hom _ = _
     rw [op_id, LocallyRingedSpace.Γ.map_id]
     rfl
@@ -270,11 +270,11 @@ theorem pullbackΓ_proj_ofMvPolynomial (q : MvPolynomial (ULift.{u} (Fin n)) ℂ
         localisationIncl.{u} n := by
     funext j
     rw [AnalyticSpace.coordPullback_proj]
-    show _ = AnalyticSpace.coordPullback (𝟙 _) (localisationIncl.{u} n j)
+    change _ = AnalyticSpace.coordPullback (𝟙 _) (localisationIncl.{u} n j)
     rw [show AnalyticSpace.coordPullback (𝟙 (AnalyticSpace.complexAffineSpace.{u} (n + 1)))
         (localisationIncl.{u} n j) = coord (localisationIncl.{u} n j) from ?_]
     · rfl
-    · show (LocallyRingedSpace.Γ.map
+    · change (LocallyRingedSpace.Γ.map
         (𝟙 (AnalyticSpace.complexAffineSpace.{u} (n + 1)).toLocallyRingedSpace).op).hom _ = _
       rw [op_id, LocallyRingedSpace.Γ.map_id]
       rfl
@@ -348,15 +348,16 @@ theorem restrictSections_hypersurfaceCompare :
         AnalyticSpace.proj.{u} n).pullbackΓ
       (OkaRing.ofMvPolynomial (⊤ : Opens (ULift.{u} (Fin n) → ℂ)) (g r)) := by
   funext r
-  show (LocallyRingedSpace.Γ.map ((AnalyticSpace.analytification.{u}
+  change (LocallyRingedSpace.Γ.map ((AnalyticSpace.analytification.{u}
       (hypersurfaceOnly.{u} (n := n) F)).ofRestrict _).toLRSHom.op).hom
       ((LocallyRingedSpace.Γ.map (analytificationInclHom.{u}
         (hypersurfaceOnly.{u} (n := n) F)).toLRSHom.op).hom
         (OkaRing.ofMvPolynomial (⊤ : Opens (ULift.{u} (Fin (n + 1)) → ℂ))
           (MvPolynomial.rename (localisationIncl.{u} n) (g r)))) = _
   rw [← pullbackΓ_proj_ofMvPolynomial.{u} (g r)]
-  show _ = (LocallyRingedSpace.Γ.map
-      (((AnalyticSpace.analytification.{u} (hypersurfaceOnly.{u} (n := n) F)).ofRestrict _).toLRSHom ≫
+  change _ = (LocallyRingedSpace.Γ.map
+      (((AnalyticSpace.analytification.{u} (hypersurfaceOnly.{u} (n := n) F)).ofRestrict
+            _).toLRSHom ≫
         (analytificationInclHom.{u} (hypersurfaceOnly.{u} (n := n) F)).toLRSHom ≫
           (AnalyticSpace.proj.{u} n).toLRSHom).op).hom _
   rw [LocallyRingedSpace.Γ_map_comp_apply, LocallyRingedSpace.Γ_map_comp_apply]
