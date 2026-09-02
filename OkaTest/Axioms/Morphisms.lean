@@ -14,7 +14,10 @@ together with the topological criteria they are proved from, in both directions 
 that read a class off the underlying map, and the construction that produces a morphism in a
 class from a covering map — and the constructions that feed those criteria a family of monic
 polynomials, together with the category the finite étale ones form over a fixed base and the
-cancellations that say a morphism of that category is itself finite étale.
+cancellations that say a morphism of that category is itself finite étale. The last two sections
+are of a third kind, named here because the description above does not reach them: **transports
+of the local-isomorphism class along a change of source and target** — over an open subset of the
+target, and to subspaces cut out by a family of global sections and by its pullbacks.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -1524,3 +1527,60 @@ info: 'ComplexAnalytic.AnalyticSpace.isLocalIso_restrictHom' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.isLocalIso_restrictHom
+
+/-! ### And a local isomorphism restricted to subspaces cut out by a family and by its pullbacks
+
+`Oka/AnalyticSpace/CutOutLocalIso.lean`, all six of it, in the order they are declared. The
+sibling of the section directly above and appended as its own for the same reason that one gives:
+that header enumerates what its file had when it was written, and a guard appended into it would
+make it false silently.
+
+**Two of the six ask nothing of the morphism the class is transported along.**
+`ComplexAnalytic.AnalyticSpace.stalkMap_Γgerm_pullbackΓ` and
+`ComplexAnalytic.AnalyticSpace.range_base_of_isCutOutBy_pullbackΓ` hold for an arbitrary morphism
+of analytic spaces; `ComplexAnalytic.AnalyticSpace.isOpenMap_base_of_isCutOutBy_pullbackΓ` asks
+only that its base map is open. The `ComplexAnalytic.AnalyticSpace.IsLocalIso` hypothesis is
+spent by the last three alone. **All six are theorems.**
+-/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.stalkMap_Γgerm_pullbackΓ' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.stalkMap_Γgerm_pullbackΓ
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.range_base_of_isCutOutBy_pullbackΓ' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.range_base_of_isCutOutBy_pullbackΓ
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isOpenMap_base_of_isCutOutBy_pullbackΓ' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isOpenMap_base_of_isCutOutBy_pullbackΓ
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isLocalHomeomorph_base_of_isCutOutBy_pullbackΓ' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isLocalHomeomorph_base_of_isCutOutBy_pullbackΓ
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.bijective_stalkMap_of_isCutOutBy_pullbackΓ' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.bijective_stalkMap_of_isCutOutBy_pullbackΓ
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isLocalIso_of_isCutOutBy_pullbackΓ' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isLocalIso_of_isCutOutBy_pullbackΓ
