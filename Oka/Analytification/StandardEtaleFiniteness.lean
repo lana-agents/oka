@@ -226,9 +226,40 @@ The theorem taxis #1112's §1 is named for, and the one place in the development
 **Read the hypothesis first.** `V` is any open subset of `ℂ^n` disjoint from
 `ComplexAnalytic.hypersurfaceCommonZeroImage F G` — the image of the points of `{F = 0}` at which
 `G` also vanishes. Above such a `V` there is nothing to invert, which is what makes the étale
-analytification and the hypersurface agree there; over a `V` meeting the bad set the conclusion is
-**false**, since the unrestricted morphism is not finite and `taxis #1112`'s punctured parabola is
-the witness.
+analytification and the hypersurface agree there.
+
+**The hypothesis is not decoration: there are pairs and `V` meeting the bad set at which the
+conclusion fails.** At `F = X² - x` and `G = X` the bad set is the origin of the line, so `V = ⊤`
+meets it, and inverting `G` cuts the point `(0, 0)` out of the parabola; the projection of what is
+left has the punctured line for image, which is not closed, so the morphism is not finite.
+`Oka/Analytification/MonicHypersurface.lean` carries that computation in terms. **It is not
+compiled anywhere in this repository** and is asserted here on the same footing it is asserted
+there.
+
+**This sentence used to end by generalising that witness, and the generalisation is false.** It
+read *"over a `V` meeting the bad set the conclusion is **false**"*, which as a universal claims
+failure at every pair and every such `V`. `ComplexAnalytic.hypersurfaceCommonZeroImage_sqSubOnePair`
+(`OkaTest/OpenBaseFiniteness.lean`) proves the bad set is **all of `ℂ^n`** at `F = X² - 1`,
+`G = X - 1`, so every non-empty `V` there meets it — and there the inversion removes an entire
+connected component of `{X² = 1}` rather than a point of one, leaving the single sheet `{X = -1}`,
+a graph over the base with no reason for finiteness to fail. **That is the distinction the old
+sentence collapsed**: what breaks finiteness is not that the bad set is met but that the inversion
+punctures a component, and meeting the bad set does not say which of the two happens.
+
+**Three claims have just been made and exactly one of them is a theorem here, so read them
+apart.** *(i)* The bad set is everything at `ComplexAnalytic.sqSubOnePair` — **proved**,
+`ComplexAnalytic.hypersurfaceCommonZeroImage_sqSubOnePair`. *(ii)* The restricted morphism is
+finite there — **not proved, in either direction, and nothing below states it**; it is a reading
+of the geometry. *(iii)* The puncture-versus-component criterion of the previous paragraph — **not
+proved either, and it is a universal over every pair, so it is the strongest thing here and the
+least supported.** The criterion is where the geometry says finiteness ought to live: the piece
+kept is open in a hypersurface that is finite over the base, and an open subspace of that is
+finite exactly when it is also closed, which is to say a union of components. **That argument is
+not carried out anywhere in this repository.**
+
+So this paragraph claims that the sentence it retires was **unsupported**, not that its negation
+is established, and it offers *(iii)* as the shape of what a proof would look like rather than as
+one.
 
 The proof is the factorisation `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_comp`
 uses, regrouped. `ComplexAnalytic.etaleAnalytificationIso_hom_comp` and
