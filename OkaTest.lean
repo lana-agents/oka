@@ -85,4 +85,5 @@ import OkaTest.SimpleZeroTopology
 import OkaTest.SpecCoherent
 import OkaTest.StandardEtaleAnalytification
 import OkaTest.StandardEtaleCond
+import OkaTest.StandardEtaleLocalIsoBase
 import OkaTest.UliftCoord
