@@ -208,12 +208,26 @@ anywhere. A reader comparing the two signatures will otherwise go looking for on
   consumes it**: the last theorem below is a complete statement with `ℂ^n` as its target, and the
   thing that would want the other spelling is the assembly of the Riemann existence theorem, not
   this file.
-* **No `StandardEtalePair` is constructed anywhere.** The two theorems taking one inherit that
-  hypothesis from `ComplexAnalytic.eval_pderiv_ne_zero_of_mem`, which has been on `master`
-  without a witness since it landed, and this file adds no new unwitnessed hypothesis.
-  `OkaTest/StandardEtaleAnalytification.lean` exercises the *derivative* form instead, on the
-  line `z₁ = 0` in `ℂ²` with `z₀` inverted, where the derivative is `1` and no pair is needed —
-  so the theorems below are not vacuous, but the `cond` route through them is checked by nothing.
+* **No `StandardEtalePair` is constructed *here*, and this bullet's own count of what is
+  constructed elsewhere was wrong in both of its halves.** It said *"no `StandardEtalePair` is
+  constructed anywhere"* and that `ComplexAnalytic.eval_pderiv_ne_zero_of_mem` *"has been on
+  `master` without a witness since it landed"*; **both were already false the day this file
+  landed.** `ComplexAnalytic.condPair` (`OkaTest/StandardEtaleCond.lean`) arrived a day earlier
+  and `ComplexAnalytic.eval_pderiv_condF_condHyperPoint_ne_zero` is that theorem applied at it, so
+  the `cond` route through the two theorems below is checked there and not by nothing. There are
+  three more: `ComplexAnalytic.sqSubOnePair` (`OkaTest/OpenBaseFiniteness.lean`),
+  `ComplexAnalytic.sqSubOneTwoPair` (`OkaTest/StandardEtaleLocalIsoBase.lean`), and
+  `ComplexAnalytic.sqrtCoverPair` (`OkaTest/StandardEtaleBaseWitness.lean`), the last a family
+  over an arbitrary `ℂ`-algebra. **What survives is the placement and it is what the bullet is
+  for**: the two theorems below inherit that hypothesis rather than discharging it, and this file
+  adds no new unwitnessed one. `OkaTest/StandardEtaleAnalytification.lean` exercises the
+  *derivative* form instead, on the line `z₁ = 0` in `ℂ²` with `z₀` inverted, where the derivative
+  is `1` and no pair is needed.
+
+  **The bullet was invisible to any sweep of `Oka/`, and that is the transferable part.** It is an
+  absence scoped to *anywhere* whose refutation lives under `OkaTest/`; nothing under `Oka/`
+  imports `OkaTest/`, so the claim is true of this file's import closure and false of the
+  repository, and a grep of the library cannot see the difference.
 * **Nothing about the image.** A local isomorphism need not be surjective and this one is not:
   the witness in the test library misses the origin. No statement below says anything about the
   image, about fibres, or about degree.
