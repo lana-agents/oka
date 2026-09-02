@@ -123,7 +123,8 @@ the unequal branch was added, **and two things neither file describes fired as w
   named, and `ComplexAnalytic.refineSwapMul` is that name. **Only that one of the two `rfl`
   theorems named above was blocked on it**: `ComplexAnalytic.refineDatumGlueEq_eq`'s right-hand
   side spells `ComplexAnalytic.refineSwapGlueOfEq` and two `ComplexAnalytic.refineDatumPoly_of_eq`
-  congruences and no transport at all. **A definition that a later proof will have to open should
+  congruences, and mentions `ComplexAnalytic.refineSwapMul` nowhere — so it was statable with the
+  `mul_comm` proof still anonymous. **A definition that a later proof will have to open should
   not carry an anonymous proof term**, and this is the shape of that rule.
 * **Three generated declarations are left, and each is `simp only … at` and not `rw`.**
   `ComplexAnalytic.refineDatumGlueEq.congr_simp` is planted by the `simp only … at e` in
