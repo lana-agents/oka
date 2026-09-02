@@ -48,8 +48,9 @@ here`; the claim made is only that the witness sits where the question is live.
 * `ComplexAnalytic.sqSubOnePair` is `f = X² − 1`, `g = X − 1`. Its own file proves
   `ComplexAnalytic.sqSubOnePair_X : (sqSubOnePair R).X = -1` — both relations are used — and
   builds `ComplexAnalytic.sqSubOneRingEquiv` out of it, so **the standard étale algebra is the
-  base**. The morphism the first witness is about is therefore an isomorphism, and a local
-  isomorphism for a reason the theorem does not need.
+  base**. The morphism `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_node_sqSubOne`
+  is about is therefore an isomorphism, and a local isomorphism for a reason the theorem does not
+  need.
 * `ComplexAnalytic.sqSubOneTwoPair` is `f = X² − 1`, **`g = 2`**. Inverting `2` changes nothing
   over a `ℂ`-algebra, so the algebra is `R[X]/(X² − 1)` — two sheets, and not the base.
 
@@ -78,7 +79,7 @@ the difference is measurable.** A draft that wrote `simp [nodeEtaleF, nodeEtaleG
 `ComplexAnalytic.nodeG.eq_1`, for a definition `OkaTest/Analytification.lean` owns**, which is the
 one worth avoiding: a delta-unfold plants the equation lemma in the module that does the
 unfolding, not in the module that made the definition. With the `show`s the module contributes
-exactly its twelve declarations and `grep -E 'eq_1|match_'` over them is empty. This is the same
+exactly its own declarations and `grep -E 'eq_1|match_'` over them is empty. This is the same
 economy `ComplexAnalytic.sqSubOnePair_f`'s docstring buys with a named `rfl` lemma; a `show` is
 the cheaper form where only one proof needs the unfolding.
 
@@ -91,8 +92,15 @@ taxis #1196's species — *"nothing says `localisationOpen …` is ever non-empt
 ends are exhibited below:
 
 * the **base** by `nodeOrigin`, through `ComplexAnalytic.analytification_nodeG`, which is `rfl`;
-* the **source** by the tuple `(0, 0, 1, 1/2)` of `ℂ⁴`, whose three relations evaluate to `0 · 0`,
-  `2⁻¹ · 2 − 1` and `1 − 1`.
+* the **source of the `ComplexAnalytic.sqSubOneTwoPair` witness** by the tuple `(0, 0, 1, 1/2)` of
+  `ℂ⁴`, whose three relations evaluate to `0 · 0`, `2⁻¹ · 2 − 1` and `1 − 1`;
+* the **source of the `ComplexAnalytic.sqSubOnePair` witness** by `(0, 0, −1, −1/2)`, which is a
+  different space — the two witnesses invert different `G`, so their presentations differ in one
+  relation and a point of one is not a point of the other.
+
+**There are two source bullets because there are two sources**, and this section said *"the
+source"* while exhibiting one of them. The heading's *"neither space is empty"* is now what the
+declarations below prove.
 
 **On the import of `OkaTest.OpenSubspace`.** It is for one named witness, `nodeOrigin`, which is
 the reason `OkaTest/HolomorphicMapGeneral.lean` gives for the same edge. Re-deriving the origin
@@ -110,11 +118,18 @@ absent, which is the second thing that draft learned.
 ## Main definitions
 
 - `ComplexAnalytic.sqSubOneTwoPair`: **the pair `f = X² − 1`, `g = 2`**, over an arbitrary
-  commutative ring — the second witness's pair, whose algebra is not the base.
+  commutative ring — the pair whose algebra is not the base.
 - `ComplexAnalytic.nodeEtaleF`, `ComplexAnalytic.nodeEtaleG` and
   `ComplexAnalytic.nodeEtaleGSubOne`: the lifts `Z² − 1`, `2` and `Z − 1` in the new variable.
-- `ComplexAnalytic.nodeEtalePt`: the tuple `(0, 0, 1, 1/2)`, a point of the second witness's
-  source.
+- `ComplexAnalytic.nodeEtalePt` and `ComplexAnalytic.nodeEtaleSqSubOnePt`: the tuples
+  `(0, 0, 1, 1/2)` and `(0, 0, −1, −1/2)`, one point of each witness's source.
+
+**The two witnesses are named and never numbered**, here or below. The prose above calls
+`ComplexAnalytic.sqSubOnePair` the first of the two pairs and `## Main results` lists the
+`ComplexAnalytic.sqSubOneTwoPair` witness first, so an ordinal in this file resolves two ways;
+until it was repaired, `ComplexAnalytic.nonempty_analytification_etalePresentation_node`'s
+docstring and the bullet above read *"the first witness"* and *"the second witness's source"* about
+the same declaration.
 
 ## Main results
 
@@ -126,8 +141,13 @@ absent, which is the second thing that draft learned.
   base.
 - `ComplexAnalytic.nonempty_analytification_nodeG`: **the base is not empty.**
 - `ComplexAnalytic.eval_etalePresentation_nodeEtalePt` and
-  `ComplexAnalytic.nonempty_analytification_etalePresentation_node`: **the source is not empty**,
-  so neither witness is a statement about an empty space.
+  `ComplexAnalytic.nonempty_analytification_etalePresentation_node`: **the source of the
+  `ComplexAnalytic.sqSubOneTwoPair` witness is not empty.**
+- `ComplexAnalytic.eval_etalePresentation_nodeEtaleSqSubOnePt` and
+  `ComplexAnalytic.nonempty_analytification_etalePresentation_node_sqSubOne`: **the same for the
+  `ComplexAnalytic.sqSubOnePair` witness**, whose source is a different space — a different `G`
+  and so a different presentation. With the two together, **neither** witness is a statement about
+  an empty space; that claim was made here when only the first of the two was proved.
 
 ## What is not checked here
 
@@ -276,13 +296,57 @@ theorem eval_etalePresentation_nodeEtalePt (j : Fin 3) :
       show nodeEtalePt.{u} =
         fun i ↦ if i.down = 2 then (1 : ℂ) else if i.down = 3 then 2⁻¹ else 0 from rfl]
 
-/-- **The source of the first witness is not empty**, so that witness is not a statement about a
-morphism out of an empty space. -/
+/-- **The source of the `ComplexAnalytic.sqSubOneTwoPair` witness is not empty**, so that witness
+is not a statement about a morphism out of an empty space.
+
+It says nothing about the other one, which is over a different presentation;
+`ComplexAnalytic.nonempty_analytification_etalePresentation_node_sqSubOne` is that. -/
 theorem nonempty_analytification_etalePresentation_node :
     Nonempty (AnalyticSpace.analytification.{u}
       (etalePresentation.{u} nodeG.{u} nodeEtaleF.{u} nodeEtaleG.{u})) :=
   ⟨⟨⟨nodeEtalePt.{u}, trivial⟩,
     (mem_zeroLocus_polySection_iff.{u} _ _).2 eval_etalePresentation_nodeEtalePt.{u}⟩⟩
+
+/-- The tuple `(0, 0, −1, −1/2)` of `ℂ⁴`: the origin of the node, the square root `−1`, and the
+inverse of `G = Z − 1` there.
+
+**`Z = 1` is not available and `Z = −1` is forced**, which is the difference between this point
+and `ComplexAnalytic.nodeEtalePt`: `ComplexAnalytic.sqSubOnePair`'s `g` is `X − 1` rather than `2`,
+so the two new relations are `Z² − 1 = 0` and `w(Z − 1) = 1` together, and the first root of the
+first relation is killed by the second. -/
+def nodeEtaleSqSubOnePt : ULift.{u} (Fin 4) → ℂ :=
+  fun i ↦ if i.down = 2 then -1 else if i.down = 3 then -2⁻¹ else 0
+
+/-- **The three relations vanish there**: `0 · 0`, `(−2⁻¹)(−1 − 1) − 1` and `(−1)² − 1`.
+
+Unlike `ComplexAnalytic.eval_etalePresentation_nodeEtalePt` this needs no `map_ofNat`: the `G`
+here is `Z − 1` and carries through `MvPolynomial.rename` as a variable and a one. -/
+theorem eval_etalePresentation_nodeEtaleSqSubOnePt (j : Fin 3) :
+    MvPolynomial.eval nodeEtaleSqSubOnePt.{u}
+      (etalePresentation.{u} nodeG.{u} nodeEtaleF.{u} nodeEtaleGSubOne.{u} j) = 0 := by
+  fin_cases j <;>
+    simp [etalePresentation, localisationPresentation, polyPresentation, localisationIncl,
+      localisationVar, Fin.snoc,
+      show nodeG.{u} = fun _ ↦ nodePoly.{u} from rfl,
+      show nodePoly.{u} =
+        MvPolynomial.X (ULift.up 0) * MvPolynomial.X (ULift.up 1) from rfl,
+      show nodeEtaleF.{u} = MvPolynomial.X (localisationVar.{u} 2) ^ 2 - 1 from rfl,
+      show nodeEtaleGSubOne.{u} = MvPolynomial.X (localisationVar.{u} 2) - 1 from rfl,
+      show nodeEtaleSqSubOnePt.{u} =
+        fun i ↦ if i.down = 2 then (-1 : ℂ) else if i.down = 3 then -2⁻¹ else 0 from rfl]
+  ring
+
+/-- **The source of the `ComplexAnalytic.sqSubOnePair` witness is not empty either**, which is
+what makes `## Main results`' claim true of both witnesses rather than of one.
+
+The two are over **different presentations** — `ComplexAnalytic.nodeEtaleG` against
+`ComplexAnalytic.nodeEtaleGSubOne` — so they are morphisms out of two different spaces and
+`ComplexAnalytic.nonempty_analytification_etalePresentation_node` says nothing about this one. -/
+theorem nonempty_analytification_etalePresentation_node_sqSubOne :
+    Nonempty (AnalyticSpace.analytification.{u}
+      (etalePresentation.{u} nodeG.{u} nodeEtaleF.{u} nodeEtaleGSubOne.{u})) :=
+  ⟨⟨⟨nodeEtaleSqSubOnePt.{u}, trivial⟩,
+    (mem_zeroLocus_polySection_iff.{u} _ _).2 eval_etalePresentation_nodeEtaleSqSubOnePt.{u}⟩⟩
 
 end
 

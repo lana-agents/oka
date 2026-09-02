@@ -155,8 +155,22 @@ hypersurface `ComplexAnalytic.hypersurfacePresentation g F`.
   isomorphism** — `ComplexAnalytic.sqSubOneRingEquiv` identifies its standard étale algebra with
   the base — so the cheapest witness is a local isomorphism for a reason this theorem does not
   need, and `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_node` is a second witness
-  at a pair whose algebra is not the base. Both spaces are exhibited non-empty there; **how many
-  sheets either cover has is proved nowhere**.
+  at a pair whose algebra is not the base. The base and both witnesses' sources are exhibited
+  non-empty there; **how many sheets either cover has is proved nowhere**.
+* **Nothing below is uniform in the base, and the test library now is.** Both witnesses above are
+  at one presentation with one relation, so they say the theorem is instantiable and not that it
+  is instantiable uniformly. `OkaTest/StandardEtaleBaseWitness.lean` closes that with
+  `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_sqrtCover`: the square-root pair
+  `f = X² − C a`, `g = X` over an arbitrary `ℂ`-algebra, fired at **every** `n`, `k`, `g` and `a`
+  at once, with a `k = 1` instance over the hyperbola `z₀z₁ = 1` as a corollary. It is still an
+  instantiation of the theorem below and adds nothing to it — **and it is quantified over an `a`
+  at which it is vacuous**: at `a = 0` the two new relations force `z_n = 0` and then `0 = 1`, so
+  the source is empty and both fields of `ComplexAnalytic.AnalyticSpace.IsLocalIso` hold for the
+  reason `Oka/Analytification/StandardEtaleLocalIso.lean` gives — they quantify over the points of
+  the source. `Oka/AnalyticSpace/LocalIso.lean`'s own docstring says that of the **stalk** field
+  only, `IsLocalHomeomorph` being where the other one hides its quantifier, which is why the
+  citation here is to the file above and not to the class. The instance whose source is exhibited
+  non-empty is the hyperbola one and not the family.
 * **No implicit function theorem *relative to `X^an`*, which is the one the five sites priced.**
   One relative to `ℂ^n` is spent four links down — step 3 is
   `ComplexAnalytic.isLocalIso_ofRestrict_comp_proj_of_pderiv`, whose topological half is

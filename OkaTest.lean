@@ -84,6 +84,7 @@ import OkaTest.SimpleZeroStalk
 import OkaTest.SimpleZeroTopology
 import OkaTest.SpecCoherent
 import OkaTest.StandardEtaleAnalytification
+import OkaTest.StandardEtaleBaseWitness
 import OkaTest.StandardEtaleCond
 import OkaTest.StandardEtaleLocalIsoBase
 import OkaTest.StandardEtaleNotFinite
