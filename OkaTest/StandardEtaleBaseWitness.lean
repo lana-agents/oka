@@ -193,13 +193,21 @@ general in `g` already, and neither instance narrows it.
   also not instantiated at the second node lift `ComplexAnalytic.nodeEtaleGSubOne`, whose
   ingredients are all in the tree; that is a decision and the bullet recording it is in
   `OkaTest/StandardEtaleNotLocalIso.lean`, where the node's instance lives.
-* **No statement about which `a` make `ComplexAnalytic.isLocalIso_hyperbolaSqrtCover`'s family
-  vacuous.** `ComplexAnalytic.not_nonempty_analytification_etalePresentation_sqrtCover_zero` says
-  `a = 0` is one of them, at every base; **that is one `a` and not a characterisation.** Which `a`
-  give a non-empty source is a question about `a` in the presented algebra rather than about `a`
-  as a polynomial — being a unit there is sufficient and nothing here proves even that — and no
-  declaration approaches it. **This bullet said the emptiness at `a = 0` was *a theorem nowhere*,
-  which was true when it was written and is what the theorem below retires.**
+* **No statement about which `a` make
+  `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_sqrtCover` vacuous.**
+  `ComplexAnalytic.not_nonempty_analytification_etalePresentation_sqrtCover_zero` says `a = 0` is
+  one of them, at every base; **that is one `a` and not a characterisation**, and in the other
+  direction nothing here goes beyond the hyperbola's own `a = z₀`, where
+  `ComplexAnalytic.nonempty_analytification_etalePresentation_hyperbola` exhibits a point. A point
+  of the source **is** a point of the base together with an invertible square root of `a` there —
+  that is what the two relations `z_n² = a` and `w · z_n = 1` say at a point, and the second of
+  them is what the proof below contradicts — so the question is about `a` **and the base
+  together**, and no condition on `a` alone settles it. In particular it is **not** *"the class of
+  `a` is a unit in the presented algebra"*: that condition says nothing about the base having a
+  point at all, and where the presented algebra is the zero ring it holds of every `a`, `a = 0`
+  included, at which the theorem below still empties the source. **No declaration approaches the
+  question in either direction.** What this bullet used to say — that the emptiness at `a = 0` was
+  *a theorem nowhere* — was true when it was written and is what the theorem below retires.
 
   **A draft of this file said the node was chosen in `OkaTest/StandardEtaleLocalIsoBase.lean`
   rather than the hyperbola because the node is inside the projection statement's hypotheses and
@@ -374,16 +382,18 @@ theorem isLocalIso_analytificationMap_etalePresHom_sqrtCover {n k : ℕ}
 
 The two new relations of `ComplexAnalytic.etalePresentation` are then `z_n² = 0` and
 `w · z_n = 1`: the first forces `z_n = 0` at any point, and the second becomes `−1 = 0`. **No
-hypothesis on the base at all** — this holds at every `n`, `k` and `g`, which is more than the
-paragraph it discharges claimed for it.
+hypothesis on the base at all** — it holds at every `n`, `k` and `g`, which is the generality the
+family theorem itself is stated at.
 
 **What it does and does not say about
 `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_sqrtCover`.** That theorem's
 conclusion is *true* here, and for the reason a reader has to know: both fields of
 `ComplexAnalytic.AnalyticSpace.IsLocalIso` quantify over the source, so a morphism out of an empty
 space satisfies them. **So this exhibits one vacuous instance of the family and removes none.**
-Which `a` give a non-empty source is a different question — it is about `a` in the presented
-algebra and not about `a` as a polynomial — and nothing here approaches it.
+Which `a` give a non-empty source is a different question: a point of the source is a point of the
+base carrying an invertible square root of `a`, so it is a question about `a` **and the base
+together** rather than about `a` alone, and nothing here approaches it. See *What is not here* for
+one reading of it that is not the question — that the class of `a` is a unit — and why.
 
 The two indices are `Fin.last (k + 1)` for `F` and `Fin.castSucc (Fin.last k)` for the
 localisation relation, `ComplexAnalytic.etalePresentation` being `Fin.snoc` of
