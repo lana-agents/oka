@@ -81,8 +81,35 @@ concrete cover datum in this repository is under `OkaTest/`:
 three copies of the node, whose three laws are theorems, at `σ = id` on a three-element index
 type — giving an `ComplexAnalytic.AnalyticSpace` with **no hypothesis left open at all** and an
 index map `ComplexAnalytic.not_isConstant_id` proves is not constant. It also checks there that
-every refined overlap is non-empty and proper, which is what separates this family from the `0`
-one in both directions.
+every refined overlap is non-empty and proper. This clause used to end *"which is what separates
+this family from the `0` one in both directions"*, and it is **narrowed rather than withdrawn**:
+both halves do fail at `fam ≡ 0`, so both do separate this family from that one. What is not two
+is the directions.
+
+**At `fam ≡ 0` the two checks are the same statement, and it is the refined member rather than the
+overlap that makes them so.** `ComplexAnalytic.localisationPresentation` adjoins `t·f - 1`, which
+at `f = 0` is a constant vanishing nowhere — `ComplexAnalytic.eval_rename_localisationIncl_ne_zero`
+is that fact — so at that family every refined member is **empty**, which is how
+`Oka/Analytification/CoverGlueTop.lean` and `OkaTest/RefineDatumWitness.lean` both word the
+degeneracy `OkaTest/CoverRefinement.lean` accepted once. An empty space has one open and it is `⊥`
+and `⊤` at once. So neither `≠ ⊥` nor `≠ ⊤` is inert against the `0` family: each is refuted
+there, and by the same emptiness. The paragraph above says the overlaps are empty there, which is
+this one step later.
+
+**Where the two do come apart is the other degeneracy, and only one of them reaches it.**
+`OkaTest.RefineDatumWitness.coverOpen_nodeRefineOne_ne_top` says an overlap is not the whole
+refined member, which is the third check `Oka/Analytification/CoverGlueTop.lean` names: a cover
+can be non-degenerate in its refining family and still glue to one member, and that file's theorem
+is why. `OkaTest.RefineDatumWitness.coverOpen_nodeRefineOne_ne_bot` does not see that case — a
+non-empty member glued along the whole of itself has overlap `⊤`, which is `≠ ⊥` — and is not
+implied by it either, since a non-empty member glued along nothing has overlap `⊥`, which is
+`≠ ⊤`. **Both of those turn on the member being non-empty**, which is the same hypothesis the
+paragraph above is about. `OkaTest/RefineDatumWitness.lean`'s own module docstring states the pair
+as *nothing glued along nothing and nothing along everything*, which is what they check.
+
+**And it checks there that the glued space is not one of its members**
+(`OkaTest.RefineDatumWitness.exists_ι_nodeRefineOne_ne`), which is the statement neither overlap
+check reaches: the overlaps say what the members are glued along, not what they glue to.
 
 ## What is not here
 
