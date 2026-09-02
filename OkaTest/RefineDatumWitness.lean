@@ -56,9 +56,11 @@ that separate this from *both* degeneracies are about the refined overlaps.
   original datum's own `glue` through `ComplexAnalytic.refineDatumCrossAlgEquiv` — at every pair.
   A witness at a family that is not a unit is still open, and
   `ComplexAnalytic.exists_refineDatumCross_of_isUnit` says what one would need of its family.
-* **Nothing here says the glued space is not one member, and nothing has attempted it.**
-  `ComplexAnalytic.ι_nodeOrigin_ne` proves that for the *unrefined* node cover, by exhibiting three
-  distinct points of the gluing. **This bullet used to give the obstacle as
+* **Nothing here says the glued space is not one member, and no declaration in this repository
+  says it of any *refined* datum.** `ComplexAnalytic.ι_nodeOrigin_ne` says it of the
+  *unrefined* node cover, by exhibiting three distinct points of the gluing.
+
+  **This bullet used to give the obstacle as
   `ComplexAnalytic.ι_nodeOrigin_ne`'s proof reading `CategoryTheory.GlueData'.f'` off the
   unrefined datum, with "no such reading of the refined datum" existing. Both halves of that were
   wrong.** That proof reads `CategoryTheory.GlueData.f` and not `GlueData'.f'`, through
@@ -70,11 +72,18 @@ that separate this from *both* degeneracies are about the refined overlaps.
   needs is solved from the goal, as that file's docstring says in terms. Compiled as a check
   rather than read off the two docstrings.
 
-  **What is genuinely absent is the rest of the argument, not its first ingredient**: the analogue
-  of `ComplexAnalytic.range_f_subset_nodeTripleGlueData` at this datum, and a point of a refined
-  member lying off the refined overlap. Neither is attempted here and neither is priced. **The two
-  checks above are about the overlaps and not about the gluing**, which is weaker, and the
-  difference is what `OkaTest/AffineCover.lean` spends its second half on.
+  **What is absent is a statement in this repository and not an argument anybody lacks.** The rest
+  of the route — the analogue of `ComplexAnalytic.range_f_subset_nodeTripleGlueData` at this datum,
+  and a point of a refined member over the origin — was compiled by the session that reviewed
+  lana-agents/oka#345 and is **taxis #1457's first deliverable**, which is to fold four
+  declarations in here and rewrite this bullet again to say the gluing *is* known not to be one
+  member. **Nothing in this sentence should be read as saying that is hard or unattempted**; it is
+  written down elsewhere and it is somebody's open issue. What this branch establishes is only the
+  narrower thing its own issue asked for: the ingredient the previous wording named as missing is
+  not missing.
+
+  **The two checks above are about the overlaps and not about the gluing**, which is weaker, and
+  the difference is what `OkaTest/AffineCover.lean` spends its second half on.
 * **No `admissible`, no scheme and no comparison functor**, as in the files this one sits beside.
 
 ## Main definitions
