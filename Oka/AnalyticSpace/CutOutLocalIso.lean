@@ -104,7 +104,19 @@ and `scripts/DumpOkaDecls.lean` then attributes `TopCat.Presheaf.Γgerm.eq_1` to
 a declaration in a namespace this repository does not own, appearing in a declaration diff as
 though the branch had added it. `Oka/Analytification/StandardEtaleLocalIso.lean` records the same
 mechanism at a rewrite of its own where it does *not* fire; here it did, and the term avoids
-it. -/
+it.
+
+**And the repository already had this lemma one level down**, which the paragraph above did not
+say: `AlgebraicGeometry.LocallyRingedSpace.Γgerm_Γ_map`
+(`Oka/Geometry/RingedSpace/LocallyRingedSpace.lean`) is the same statement for a morphism of
+locally ringed spaces, read in the other direction, and its own docstring makes the same point
+about `⊤` costing nothing. The two proof *terms* are definitionally equal — `p.pullbackΓ` is
+`ComplexAnalytic.AnalyticSpace.Hom.pullbackΓ`, an `abbrev` for `Γ.map p.toLRSHom.op`, so
+`stalkMap_Γgerm_pullbackΓ p e s` and `(Γgerm_Γ_map p.toLRSHom s e).symm` are the same proof.
+**This declaration is kept rather than retired** because it is the spelling in
+`ComplexAnalytic.AnalyticSpace`'s own binders, which is what the file below consumes and what
+`ComplexAnalytic.IsCutOutBy` — stated at `LocallyRingedSpace` — does not reach; a consumer at
+the lower level should use `Γgerm_Γ_map` and not this. -/
 theorem stalkMap_Γgerm_pullbackΓ (p : E ⟶ B) (e : E) (s : B.presheaf.obj (op ⊤)) :
     p.toLRSHom.stalkMap e (B.presheaf.Γgerm (p.toLRSHom.base e) s) =
       E.presheaf.Γgerm e (p.pullbackΓ s) :=
