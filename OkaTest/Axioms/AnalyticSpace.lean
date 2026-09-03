@@ -95,10 +95,16 @@ paragraph that stood here said six guards from `Oka/AnalyticSpace/OpenSubspace.l
 the placement in terms. What `3177e67` did not do is write the heading in the `/-! ### … -/`
 form the rule beside `OkaTest/Axioms.lean`'s routing table asks for: it opened the doc comment
 on one line and put the `###` on the next. **Every count this file has ever been given matches a
-header by its opening delimiter and `###` on one line** — that is the anchor of the per-heading
-`awk` in the recipe beside that table, and of every recount run from it — so all of them were
-blind to the eighteenth heading and charged its six guards to the seventeenth. The repair is the
-one line that pulls that `###` up onto the delimiter, and it moves no guard.
+header by its opening delimiter and `###` on one line**, so all of them were blind to the
+eighteenth heading and charged its six guards to the seventeenth. The repair is the one line that
+pulls that `###` up onto the delimiter, and it moves no guard.
+
+**This paragraph located that anchor in a per-heading `awk` in the recipe beside that table, and
+there was no such `awk`.** That recipe resolves a guard *name* to its module and reads no heading
+at all, so every count of this file had in fact been taken by an instrument written out on a
+thread and kept nowhere — which is why each of them repeated the same blindness. There is a
+per-heading recipe beside the table now; it matches a heading in either form, and
+`.orchestra/validation.sh` rejects the second outright.
 
 **Two numerals were wrong from `3177e67` for that one reason, and neither is the kind an author
 is told to recheck.** The heading count, because a heading the instrument cannot see is not one

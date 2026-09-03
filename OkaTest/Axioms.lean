@@ -85,6 +85,35 @@ whose name is wrapped onto the next line, and there is one such guard today, in
 wrong when some module's guards are covered by no row at all — that is the failure this table
 exists to prevent — and not merely when its phrase is shorter than the file.
 
+**A second recipe, for the other question the rule above raises: which *heading* a guard sits
+under.** The one above resolves a guard to its module; this one counts guards per section, which
+is what a module docstring's subtotals are of and what nothing in `scripts/` reads:
+
+    awk '/^\/[-]! ### /{if(h!="")print n"\t"h; h=$0; n=0; next}
+         /^### /        {if(h!="")print n"\t"h; h=$0; n=0; next}
+         /^#print axioms/{n++}
+         END{print n"\t"h}' OkaTest/Axioms/<File>.lean
+
+**The bracket in the first pattern is a Lean requirement and not an awk one.** This file is
+itself a doc comment and Lean's block comments nest, so spelling the opening delimiter literally
+here would open a comment that never closes; at a shell you would type it without the brackets.
+**Neither of the two oddities that are awk's is optional and both were paid for.** The trailing
+space in the first pattern is what stops a `####` sub-heading opening a section of its own —
+there are two today — and without it `OkaTest/Axioms/Morphisms.lean` comes out as 28 sections
+where it has 27, with five guards under a heading that holds three. The second pattern, matching
+a heading on a line of its own, is what sees one whose author opened the doc comment on one line
+and wrote the `###` on the next: that form elaborates identically, and a recipe blind to it
+charges the heading's guards to the *previous* one and reports a wrong partition from there to
+the end of the file, silently. **That is how `OkaTest/Axioms/AnalyticSpace.lean`'s docstring came
+to give a coproduct subtotal of *29* for a partition holding 23.**
+`.orchestra/validation.sh` now rejects the two-line form, so the second pattern is a fallback
+rather than a licence, and the check there says why it is a `grep` and not a comparison of these
+counts.
+
+**The worked example is `OkaTest/Axioms/AnalyticSpace.lean`**, the only file here whose
+per-heading distribution has been checked against its own prose: eighteen rows summing to 129,
+four guards under the sheet comparison and six under the open subspace at `⊤`.
+
 **Most mirror-tree material is routed by a row, and a small tail of it is deliberately routed by
 none.** `README.md`'s *Layout: the Mathlib mirror tree* defines a mirror-tree file by its path — a
 file under `Oka/` mirroring a path under `Mathlib/`, holding no complex-analytic mathematics and

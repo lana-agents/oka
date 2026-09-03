@@ -422,4 +422,45 @@ python3 scripts/check_docstring_names.py || exit 1
 python3 scripts/check_module_docstrings.py --self-test || exit 1
 python3 scripts/check_module_docstrings.py || exit 1
 
+# Verify that every section heading in a guard file is written on the line that opens its doc
+# comment.
+#
+# A guard file is divided into sections by `/-! ### … ` headings, and everything that attributes a
+# guard to a section matches one by that opener: the per-heading recipe beside
+# `OkaTest/Axioms.lean`'s routing table, and every recount run from it. A heading written as `/-!`
+# on one line and `### Title` on the next elaborates identically and is **invisible to all of
+# them** — its guards are charged to the *previous* heading, so the partition is wrong from there
+# to the end of the file and nothing says so. `3177e67` wrote one in each of the two guard files
+# it touched, on 2026-09-03. The first cost `OkaTest/Axioms/AnalyticSpace.lean`'s module docstring
+# a coproduct subtotal of 29 where the partition holds 23, and a heading count one short; the
+# second stood in `OkaTest/Axioms/Morphisms.lean` until the commit that added this check, and had
+# already falsified a positional claim in that file's own docstring.
+#
+# `scripts/check_module_docstrings.py`'s docstring has carried the identical trap since
+# 2026-08-23, one heading level up: a one-line grep for the opening delimiter carrying `##`
+# returns 58 where that script's own predicate returns 59, and the file it cannot see,
+# `Oka/LocalOkaRing.lean`, has its header written across two lines. Nobody joined that to the
+# guard files for eleven days, and this is the first thing in the tree that checks for it.
+#
+# **It is one grep and deliberately not the count comparison it was priced as.** That form was
+# `grep -c '^/-! ###'` per file against `grep -cE '^(/-! )?### '`, and over the twelve guard files
+# at `6e80a99` it is wrong in both directions: `^/-! ###` also matches a `####` sub-heading, so
+# `OkaTest/Axioms/Analytification.lean` fails it 81 against 80 on a legitimate one — and on
+# `OkaTest/Axioms/Morphisms.lean`, the one file that held the defect, the extra `####` cancelled
+# the missing heading exactly and it read 28 against 28, green. Requiring the trailing space on
+# both sides repairs both; but the two counts then differ exactly when some line matches `^### `,
+# so that comparison *is* the grep below, and the grep names the file and the line rather than a
+# number. Widened to three-or-more `#` because a `#### ` sub-heading across two lines is invisible
+# to exactly the same degree.
+#
+# Text only, twelve files, no build: microseconds. It covers `OkaTest/Axioms/` and nothing else,
+# because that is where a heading is a unit somebody counts; the tree-wide `##` version is a
+# bigger instrument and a different subject. The failing case is not hypothetical — it was red on
+# `OkaTest/Axioms/Morphisms.lean` at the commit before this one, which is the only evidence that
+# it is an instrument and not a `true`.
+if grep -nE '^#{3,} ' OkaTest/Axioms/*.lean; then
+  echo 'The heading(s) above are not written on the line that opens the doc comment; join them.'
+  exit 1
+fi
+
 echo "Validation succeeded."

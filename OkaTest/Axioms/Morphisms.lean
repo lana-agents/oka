@@ -14,10 +14,21 @@ together with the topological criteria they are proved from, in both directions 
 that read a class off the underlying map, and the construction that produces a morphism in a
 class from a covering map — and the constructions that feed those criteria a family of monic
 polynomials, together with the category the finite étale ones form over a fixed base and the
-cancellations that say a morphism of that category is itself finite étale. The last two sections
-are of a third kind, named here because the description above does not reach them: **transports
-of the local-isomorphism class along a change of source and target** — over an open subset of the
-target, and to subspaces cut out by a family of global sections and by its pullbacks.
+cancellations that say a morphism of that category is itself finite étale. Two sections are of a
+third kind, named here because the description above does not reach them: **transports of the
+local-isomorphism class along a change of source and target** — over an open subset of the
+target, and to subspaces cut out by a family of global sections and by its pullbacks. Those are
+`### And a local isomorphism restricted over an open of the target is one` and
+`### And a local isomorphism restricted to subspaces cut out by a family and by its pullbacks`.
+
+**Named rather than counted from the end**, which is the repair and not the description. **The
+sentence this replaces called them *the last two***; they stopped being that when two further
+sections were appended past them — and one of those two was written across two lines, so no
+count of this file could see it and the claim went stale without leaving a trace anything could
+find. **That
+is the best argument for the heading check `.orchestra/validation.sh` now runs**: not a wrong
+number, which a recount repairs, but a positional claim in an append-at-end file that nothing
+was able to contradict.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -1619,8 +1630,7 @@ info: 'ComplexAnalytic.AnalyticSpace.not_isFinite_of_isLocalIso_of_not_surjectiv
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.not_isFinite_of_isLocalIso_of_not_surjective
 
-/-!
-### A property of the restriction over `⊤` is a property of the morphism
+/-! ### A property of the restriction over `⊤` is a property of the morphism
 
 `ComplexAnalytic.AnalyticSpace.restrictHom f V` is a morphism between two *other* spaces, so a
 statement about it is not on its face a statement about `f`. At `V = ⊤` the two inclusions are
