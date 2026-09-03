@@ -59,11 +59,18 @@ the member it refines** — an affine open of `X`, presented — and no transpor
   with lana-agents/oka#374, after this branch was cut.
   `ComplexAnalytic.opensRange_refinedIota` below states the range as the image of a
   `PrimeSpectrum.basicOpen` instead — **which is a statement about the open itself, and stays the
-  usable one for a reader who has not imported that file.** The second of those two theorems turns
-  it into a statement about a section of `X` in one rewrite, and that rewrite belongs with the
-  choice step rather than here. **That step landed without it**: the file named in the bullet
-  above has the `choose` and not the rewrite, so the section spelling of this range is still not
-  stated anywhere, and where it goes is taxis #1556's question rather than this file's.
+  usable one for a reader who has not imported that file.** **The section spelling of this range
+  has since been added, and not to this file either**:
+  `ComplexAnalytic.opensRange_refinedIota_eq_basicOpen`
+  (`Oka/Analytification/SpecRefinedMemberSection.lean`) is
+  `ComplexAnalytic.opensRange_refinedIota` composed with
+  `ComplexAnalytic.basicOpen_specSchemeIotaSection`, whose right-hand sides are the same term.
+  **This bullet used to price that step as *one rewrite* and to say it belonged with the choice
+  step; both are corrected rather than deleted.** It is `Eq.trans` and `Eq.symm` and no rewrite at
+  all — the `AlgebraicGeometry.Scheme.Hom.opensRange` motive hazard never arises for a term — and
+  the choice step landed without it: the file named in the bullet above has the `choose` and not
+  this equation. **Keeping it out of this file is the decision that clause above records**, since
+  the import would make this file's own reader one who has imported that file.
 * **No `poly`, no `glue`, and none of a cover datum's three laws.** That is the rest of
   `Oka/Analytification/SpecScheme.lean`'s third piece and it is taxis #1287's line, not this one —
   `Oka/Analytification/CrossMemberDatum.lean`, `Oka/Analytification/CrossMemberDatumGlue.lean` and

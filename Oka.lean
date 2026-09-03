@@ -124,6 +124,7 @@ import Oka.Analytification.SpecFunctoriality
 import Oka.Analytification.SpecMemberChoice
 import Oka.Analytification.SpecMemberSections
 import Oka.Analytification.SpecRefinedMember
+import Oka.Analytification.SpecRefinedMemberSection
 import Oka.Analytification.SpecScheme
 import Oka.Analytification.SpecTwoData
 import Oka.Analytification.StandardEtale
