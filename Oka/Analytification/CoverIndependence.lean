@@ -140,10 +140,22 @@ docstring predicts that every consumer of the functor spells its object the othe
   isomorphism**, which is proved there rather than left open, so a refinement is not an instance
   of what this file does.
 
-  Still absent there, and so still absent everywhere: the **cross-member** case, where `σ` is not
-  constant; and a literal `ComplexAnalytic.coverMap` out of a refinement, which needs `A^an`
-  presented as a one-member cover datum and that gluing identified with `A^an` — an identification
-  nothing in this repository states.
+  **This sentence read *"Still absent there, and so still absent everywhere: … a literal
+  `ComplexAnalytic.coverMap` out of a refinement, which needs `A^an` presented as a one-member
+  cover datum and that gluing identified with `A^an` — an identification nothing in this
+  repository states"*, and the price it quotes is the *one-member* case's and is not owed by the
+  cross-member one.** `coverMap` runs between two cover **data**. What blocks it at
+  `Oka/Analytification/CoverRefinement.lean` is that the *target* there is a single
+  `ComplexAnalytic.Presentation`; a cross-member refinement's target is
+  `ComplexAnalytic.coverAnalytification` of the original datum, which is already a cover datum, so
+  neither the one-member presentation nor the identification exists to be paid.
+  `ComplexAnalytic.refineDatumToBase` (`Oka/Analytification/RefineDatumToBase.lean`) is that
+  `coverMap`, and it is the first one **outside `Oka/Analytification/CoverFunctoriality.lean`**
+  whose compatibility hypothesis is discharged rather than taken from a caller — inside that file
+  the two functor laws already discharge it, `ComplexAnalytic.comm_coverMapPart_id` at the
+  identity data and `ComplexAnalytic.comm_coverMapPart_comp` at a composite, the latter from the
+  two hypotheses of the morphisms being composed. The identification is still not stated and is
+  still what a *one-member* `coverMap` would need.
 
   **What is absent in the cross-member case is the datum and no longer the transport.** This
   bullet used to say that the case is absent because the original cover's own `glue` has to be

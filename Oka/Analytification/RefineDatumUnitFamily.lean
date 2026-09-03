@@ -123,8 +123,12 @@ it fails.
 * **Nothing about `ComplexAnalytic.exists_refineDatumCross`.** Whether the `q` it produces
   satisfies either condition is untouched here in both directions; this file, like the witness
   file, exhibits `r` and `u` rather than asking for them.
-* **No statement that the refined space is the original one**, in either direction, and no
-  morphism between the two gluings. What *is* known about the refined space at the two instances
+* **No statement that the refined space is the original one**, in either direction. **This bullet
+  also said there is *"no morphism between the two gluings"*, and that half is retired**: the space
+  above is `ComplexAnalytic.refineDatumAnalytificationOfLaws` at particular arguments, so
+  `ComplexAnalytic.refineDatumToBase` (`Oka/Analytification/RefineDatumToBase.lean`) applies to it
+  with no work — down to the original cover, in that direction only, and it is not claimed to be an
+  isomorphism anywhere. What *is* known about the refined space at the two instances
   this construction has is that it is **one of its own refined members**: at both of them the
   caller's `q` is the datum's own `poly` and the family is that same polynomial, so every refined
   overlap is the whole refined member and `ComplexAnalytic.isoCoverGlued`

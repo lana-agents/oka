@@ -123,6 +123,11 @@ under `## Main results` below — so fifteen is that push's figure and not a cou
   `Oka/Analytification/RefineDatumCocycle.lean` — **two import edges below this file**, through
   `Oka/Analytification/RefineDatumGlueData.lean`. (This bullet read *"four files downstream"*
   until the distance was measured.)
+- `ComplexAnalytic.coverSpaceHomOfEq_comp_coverIota`: **the identification is one over the glued
+  space** — including the `j`-th member after it is including the `i`-th. It is here for the same
+  reason as the three above and by the same rule, and it is the only statement in this repository
+  that mentions both `ComplexAnalytic.coverSpaceHomOfEq` and `ComplexAnalytic.coverIota`; its
+  consumer is `Oka/Analytification/RefineDatumToBase.lean`.
 - `ComplexAnalytic.mem_localisationOpen_coverSpaceHomOfEq` and
   `ComplexAnalytic.mem_coverOpen_coverSpaceHomOfEq`: **the identification carries a distinguished
   open to the corresponding one**, once for a polynomial of the refining family and once for one
@@ -252,6 +257,42 @@ theorem coverSpaceHomOfEq_comp_symm {i j : J} (h : i = j) :
   subst h
   rw [coverSpaceHomOfEq_refl]
   exact Category.comp_id _
+
+section
+
+variable (glue : ∀ i j : J, coverOverlap.{u} obj poly i j ≅ coverOverlap.{u} obj poly j i)
+  (hrangeC : ∀ i j k : J, i ≠ j → i ≠ k → j ≠ k →
+    Set.range (coverTripleIncl.{u} obj poly i j k ≫
+        coverTransitionHom.{u} obj poly glue i j).base ⊆
+      (coverOpen.{u} obj poly j k : Set (coverSpace.{u} obj j)))
+  (hsymmC : ∀ i j : J, glue j i = (glue i j).symm)
+  (hcocycleC : ∀ i j k : J, ∀ hij : i ≠ j, ∀ hik : i ≠ k, ∀ hjk : j ≠ k,
+    coverTriple.{u} obj poly glue hrangeC i j k hij hik hjk ≫
+      coverTriple.{u} obj poly glue hrangeC j k i hjk hij.symm hik.symm ≫
+        coverTriple.{u} obj poly glue hrangeC k i j hik.symm hjk.symm hij = 𝟙 _)
+
+/-- **The identification of two equal members is one over the glued space**: including the `j`-th
+member after it is including the `i`-th.
+
+`subst` and `ComplexAnalytic.coverSpaceHomOfEq_refl`, as with the three groupoid facts above and
+for the same reason — at abstract indices the equality is a variable and `subst` has something to
+eliminate.
+
+**It is here rather than in `Oka/Analytification/AffineCover.lean`, and that is not a free
+choice**: this file declares `ComplexAnalytic.coverSpaceHomOfEq`, and the module it would
+otherwise go to does not know the name. It is the only statement in this repository that mentions
+both that definition and `ComplexAnalytic.coverIota`, so the placement rule
+`Oka/Analytification/RefineDatumCocycle.lean` states — the file that owns the vocabulary, not the
+file that consumes it — has one answer even though the vocabulary is two files'. Its consumer is
+`Oka/Analytification/RefineDatumToBase.lean`. -/
+theorem coverSpaceHomOfEq_comp_coverIota {i j : J} (h : i = j) :
+    coverSpaceHomOfEq.{u} obj h ≫
+        (coverIota.{u} obj poly glue hrangeC hsymmC hcocycleC j).toLRSHom =
+      (coverIota.{u} obj poly glue hrangeC hsymmC hcocycleC i).toLRSHom := by
+  subst h
+  rw [coverSpaceHomOfEq_refl, Category.id_comp]
+
+end
 
 /-- **The identification carries `D(y)` to `D(y)`**, for a polynomial `y` of a third member equal
 to both — the form the all-equal triple below reads, where the polynomial is `fam c` and the three

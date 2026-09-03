@@ -84,11 +84,26 @@ it costs one attribute.
   of*: the input is a cover as data, and two covers of the same scheme are different inputs with
   no morphism between them until cover independence exists. The two laws below are the content a
   functor instance would carry, stated where they can be stated.
-* **No non-identity instance.** Nothing below exhibits a `σ` and a `ψ` other than the identity, so
-  the identity law is the only control this file has on the definition.
-  `OkaTest/ProjectiveLine.lean` and `OkaTest/AffineCover.lean` hold the only two instantiations of
-  `ComplexAnalytic.coverAnalytification` in this repository — measured, not assumed — and neither
-  has a map to the other.
+* **No non-identity instance *below*, and there is one elsewhere now.**
+  `ComplexAnalytic.refineDatumToBase` (`Oka/Analytification/RefineDatumToBase.lean`) is
+  `ComplexAnalytic.coverMap` from a cross-member refined cover datum down to the datum it refines,
+  at an arbitrary map of index types, at a `ψ` that is `ComplexAnalytic.localisationHom`, and with
+  `hcomm` **proved**. So the identity law is no longer the only control on this definition: the
+  hypothesis is now met with a `ψ` this repository constructs and a proof that comes from the
+  refinement's geometry. `ComplexAnalytic.comm_coverMapPart_id` and
+  `ComplexAnalytic.comm_coverMapPart_comp` below discharge it too — at the identity data, and at a
+  composite whose two factors already carry it — so what is new elsewhere is the data and where
+  the proof comes from, not the fact of a discharge.
+
+  **This bullet also said `OkaTest/ProjectiveLine.lean` and `OkaTest/AffineCover.lean` hold *"the
+  only two instantiations of `ComplexAnalytic.coverAnalytification` in this repository"*, and that
+  was already wrong when it was written**: `ComplexAnalytic.refineAnalytification`
+  (`Oka/Analytification/CoverRefinement.lean`) and `ComplexAnalytic.refineDatumAnalytification`
+  (`Oka/Analytification/RefineDatumGlueData.lean`) are instantiations too, in `Oka/` rather than in
+  `OkaTest/`. The claim the sentence was reaching for is about the *test* covers and it survives:
+  `ComplexAnalytic.projectiveLineSpace` and `ComplexAnalytic.nodeTripleSpace` are the two
+  instantiations under `OkaTest/`, and neither has a map to the other. Named rather than counted,
+  because a cardinal about the contents of a directory is a dated claim nothing checks.
 * **Nothing algebraic about the compatibility.** The hypothesis is an equation of morphisms of
   locally ringed spaces; deriving it from a compatibility of the `ψ i` with the two glue data would
   need the overlaps of `X` to map into the overlaps of `Y`, which is a refinement condition on the
