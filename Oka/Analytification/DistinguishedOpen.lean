@@ -622,16 +622,28 @@ what it is guarding against is exactly this — at `f = 1` there is no zero, `D(
 projection is an isomorphism, so a statement about a general `f` that were satisfied by `f = 1`
 would be saying nothing. Nothing below is stated at `f = 1`.
 
-**It says nothing at the level of presentations, and the two are still not related.**
-`ComplexAnalytic.localisationHom` (`Oka/Analytification/LocalisationFunctor.lean`) is the same map
-as a morphism of `ComplexAnalytic.Presentation`, and whether *it* is an isomorphism at `f = 1` — a
-statement about presented algebras — does not follow from this:
+**It says nothing at the level of presentations, and what is missing between the two runs one
+way only.** `ComplexAnalytic.localisationHom` (`Oka/Analytification/LocalisationFunctor.lean`) is
+the same map as a morphism of `ComplexAnalytic.Presentation`, and whether *it* is an isomorphism
+at `f = 1` — a statement about presented algebras — does not follow from this:
 `ComplexAnalytic.analytificationFunctor` is not known here to reflect isomorphisms, and nothing in
 this repository says it is. **This paragraph also said the presentation-level statement was not
 decided anywhere, and that is no longer true**: `ComplexAnalytic.isIso_localisationHom_one`
 (`Oka/Analytification/LocalisationIndependence.lean`, two modules downstream of this one) is that
-statement, proved out of `IsLocalization.atUnits` rather than out of anything here. **The
-implication is what is still absent**, in both directions and for the reason just given. -/
+statement, proved out of `IsLocalization.atUnits` rather than out of anything here.
+
+**The other direction is not absent, and this paragraph once said the implication was missing in
+both.** A presentation-level isomorphism gives the analytic one by functoriality and nothing else:
+`ComplexAnalytic.analytificationFunctor_map_localisationPresHom`
+(`Oka/Analytification/LocalisationFunctor.lean`) identifies the projection here with the functor's
+value on that morphism, and a functor carries an isomorphism to one. **This repository has been
+running that step since before either statement here existed** —
+`OkaTest.LocalisationFunctor.not_isIso_nodeStructureHom` takes it by `inferInstance`, through one
+further forgetful functor, to carry a non-isomorphism of spaces back to a non-isomorphism of
+algebras at `f = z₀` on the node — and its `OkaTest.LocalisationFunctor.nodeStructureHom` is
+`ComplexAnalytic.localisationHom` at that presentation and that polynomial, so the theorem is
+about this very morphism and not about a cousin of it. **So what is absent here is the
+*reflection* and nothing else** — the analytic-to-presentation direction named above. -/
 theorem isIso_localisationProj_one : IsIso (localisationProj.{u} g 1) := by
   haveI : IsIso ((AnalyticSpace.analytification.{u} g).ofRestrict
       (localisationOpen.{u} g 1)) := by
