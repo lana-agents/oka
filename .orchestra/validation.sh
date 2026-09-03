@@ -115,19 +115,64 @@ fi
 # no `pipefail`, so the CI copy of the pipe form passes: a green CI and a red `validation.sh` for
 # the same loop. `<<<` has no second process and no pipeline status to inherit.
 #
-# It runs here, before the build, because it reads two text files and nothing else. This mirrors
-# the check in `.github/workflows/lean_action_ci.yml`.
+# **The set asked about is the tracked set, and until 2026-09-03 it was the directory listing.**
+# `for f in scripts/*` is a shell glob over what is *on disk*, so `.gitignore` is invisible to it
+# and any ignored artifact under `scripts/` becomes an entry demanding a sentence in `README.md`.
+# That is not hypothetical: importing a module under `scripts/` — which is how a session prices an
+# import through `import_cost.py`'s `Mathlib.closure`, or chases a `guard_coverage.py` census row
+# with the script's own predicate — makes Python write `scripts/__pycache__/`, and the glob then
+# reported `checked 9 files under scripts/: __pycache__`. Ignoring the directory (`.gitignore`,
+# 2026-09-03) fixes the clean-tree check at the top of this file and moves that failure here
+# rather than removing it, which is strictly worse: `Not named in README.md: __pycache__` sends
+# the reader to `README.md`'s index to write a sentence about a bytecode cache, where the
+# clean-tree check at least named the directory.
+#
+# `git ls-files` is the right set rather than merely a working one. A sentence in `README.md` is a
+# claim about a file *in the repository*, and the clean-tree check above already guarantees that
+# anything present-but-untracked is ignored on purpose — so it is not part of the repository and
+# there is nothing for the index to say about it. It is also the shape that survives a
+# `scripts/<subdir>/`: `git ls-files` lists that subdirectory's files, so each is checked, where
+# the glob would have demanded a `README.md` sentence naming the *directory*. The smaller fix —
+# `[ -d "$f" ] && continue` in the glob — passes today with the same 8/0 figures, but it buys that
+# by silently checking nothing inside such a subdirectory, and it still asks about untracked
+# files.
+#
+# Two shell details, both load-bearing:
+#
+#   * **`-z` and `read -r -d ''`**, not `for f in $(git ls-files scripts/)`, which word-splits. No
+#     name under `scripts/` contains whitespace today and this check's own token alphabet could
+#     not match one that did — a name with a space falls to the containment branch below — but
+#     the `-z` form does not depend on either fact.
+#   * **Process substitution, not a pipe.** `git ls-files -z … | while` runs the loop in a
+#     subshell, so `scripts_undocumented` and `scripts_checked` would be discarded at `done` and
+#     every tree would report clean. `< <(…)` keeps the loop in this shell, and it also has no
+#     pipeline status for the `set -o pipefail` at the top of this file to inherit — the trap
+#     documented on the here-string above.
+#
+# **The vacuity guard is new with the tracked-set form and is not decoration.** An unmatched
+# `scripts/*` still yields one iteration, so the glob could not report zero files; `git ls-files`
+# can — it exits non-zero outside a work tree, and this script has no `set -e`, so without the
+# guard a broken invocation would print `checked 0 files under scripts/: 0 not named in README.md`
+# and pass. Measured by pointing the same loop at a path that matches nothing: 0 checked, guard
+# fires, exit 1.
+#
+# It runs here, before the build, because it reads two text files and the index and nothing else.
+# This mirrors the check in `.github/workflows/lean_action_ci.yml`.
 scripts_undocumented=""
 scripts_checked=0
 readme_tokens="$(tr -c 'A-Za-z0-9_.-' '\n' < README.md)"
-for f in scripts/*; do
+while IFS= read -r -d '' f; do
   name="$(basename "$f")"
   scripts_checked=$((scripts_checked + 1))
   case "$name" in
     *[!A-Za-z0-9_.-]*) grep -qF -- "$name" README.md ;;
     *) grep -qxF -- "$name" <<< "$readme_tokens" ;;
   esac || scripts_undocumented="$scripts_undocumented $name"
-done
+done < <(git ls-files -z -- scripts/)
+if [ "$scripts_checked" -eq 0 ]; then
+  echo 'No file under `scripts/` was checked; `git ls-files -z -- scripts/` listed nothing.'
+  exit 1
+fi
 if [ -n "$scripts_undocumented" ]; then
   echo "Not named in README.md:$scripts_undocumented"
   echo 'Every file under `scripts/` needs a sentence in `README.md`; see its `### Checking`.'
