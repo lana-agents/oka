@@ -138,9 +138,13 @@ Three facts, and only the last one is now load-bearing.
 * **No common refinement**, and no part of one. There is no choice function, no refined family and
   none of a cover datum's three laws; `Oka/Analytification/SpecScheme.lean` names those three
   pieces and this file adds to none of them. What it adds is the vocabulary they would be stated
-  in. **The last theorem below is the closest this repository comes to the second piece** — a
-  statement at every point, across two data, in polynomials — and it is still an existential and
-  not a choice.
+  in. **The last theorem below is the second piece pointwise** — a statement at every point,
+  across two data, in polynomials — **and it is an existential rather than a choice, which is
+  what keeps this file clear of that piece.** This bullet said it was *"the closest this
+  repository comes"* to the second piece; that is no longer true of the repository, only of this
+  file. `ComplexAnalytic.exists_family_mvPolynomial_basicOpen_specSchemeIotaMap`
+  (`Oka/Analytification/SpecMemberChoice.lean`) takes the word *choice*, in one `choose` on the
+  theorem below and nothing else, and the second piece is therefore no longer anywhere absent.
 * **Nothing that constructs `Φ`**, and nothing that says two cover data with isomorphic gluings
   have anything else in common. `Oka/Analytification/SpecTwoData.lean` says the same of itself and
   the last two theorems here inherit its hypotheses unchanged: an open immersion for the fixed-index

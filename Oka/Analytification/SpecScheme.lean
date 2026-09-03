@@ -97,12 +97,23 @@ their overlap has a neighbourhood distinguished in both. That is the local state
 refinement is assembled from; it is **not** a common refinement, which needs two data and an
 isomorphism of what they glue, a choice of such an open at every point, and the refined family
 assembled into a cover datum with its three laws. None of those three is here, and when this
-section was written none of them was anywhere. **The first, and the local half of the second, are
-now `Oka/Analytification/SpecTwoData.lean`** — a member of a second datum is an affine open of this
-scheme, and at an isomorphism of the two gluings every point has a neighbourhood distinguished in a
-member of each. **The third is still nowhere and its size is still unmeasured**, which is what this
-sentence said of all three; the two sections that file produces are not polynomials either, and it
-prices that step rather than taking it.
+section was written none of them was anywhere. **The first two are now here in full and the third
+is not here at all**, which is what this sentence said of all three.
+
+**The first is `Oka/Analytification/SpecTwoData.lean`** — a member of a second datum is an affine
+open of this scheme, and at an isomorphism of the two gluings every point has a neighbourhood
+distinguished in a member of each. **The second is complete in two more steps.** That file's two
+sections are not polynomials, and it prices that step rather than taking it;
+`Oka/Analytification/SpecMemberSections.lean` takes it, so the pointwise statement is in the
+vocabulary a cover datum is written in, and
+`ComplexAnalytic.exists_family_mvPolynomial_basicOpen_specSchemeIotaMap`
+(`Oka/Analytification/SpecMemberChoice.lean`) is the word *choice* in it — four functions on this
+scheme, by `choose` and nothing else. **The third is still nowhere**: no `poly`, no `glue` and no
+law, and the family just named is indexed by the **points** of this scheme, which is not a cover
+datum's index type. **Its size is still unmeasured on this side**; the same assembly on the
+analytic side is `Oka/Analytification/CrossMemberDatum.lean` and the
+`Oka/Analytification/RefineDatum*.lean` files, and how much of that transfers here is not
+something any statement in this repository answers.
 
 ## Main definitions
 
