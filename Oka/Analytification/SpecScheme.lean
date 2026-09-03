@@ -96,8 +96,13 @@ closure, and once the members are affine opens it applies with no work.
 their overlap has a neighbourhood distinguished in both. That is the local statement a common
 refinement is assembled from; it is **not** a common refinement, which needs two data and an
 isomorphism of what they glue, a choice of such an open at every point, and the refined family
-assembled into a cover datum with its three laws. None of those three is here and this file says
-nothing about their size.
+assembled into a cover datum with its three laws. None of those three is here, and when this
+section was written none of them was anywhere. **The first, and the local half of the second, are
+now `Oka/Analytification/SpecTwoData.lean`** — a member of a second datum is an affine open of this
+scheme, and at an isomorphism of the two gluings every point has a neighbourhood distinguished in a
+member of each. **The third is still nowhere and its size is still unmeasured**, which is what this
+sentence said of all three; the two sections that file produces are not polynomials either, and it
+prices that step rather than taking it.
 
 ## Main definitions
 
@@ -127,7 +132,12 @@ nothing about their size.
   never needed. Both stay true. This file uses `AlgebraicGeometry.Spec` as an *object* and not
   `AlgebraicGeometry.Spec` as a functor into schemes, so that file's *"is not needed, not that it
   is missing"* stands as written.
-* **No common refinement, and no part of one.** See the three unbuilt pieces above.
+* **No common refinement**, and no part of one *here*. The scope of that is worth spelling,
+  because the bullet said *"see the three unbuilt pieces above"* and one of them is now built:
+  `Oka/Analytification/SpecTwoData.lean` has the first and the local half of the second, and this
+  file is unchanged, so what survives is the file-scoped half and what was falsified is the word
+  *unbuilt*. The third piece — the refined family as a cover datum with its three laws — is
+  unbuilt in the repository as well as absent here.
 * **Nothing on the analytic side.** `X^an` is glued from analytic spaces and is not a scheme;
   nothing here touches it, and no comparison morphism is restated at the scheme level.
 * **No `AlgebraicGeometry.IsAffine`, `AlgebraicGeometry.IsSeparated` or any other property of

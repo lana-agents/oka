@@ -4708,3 +4708,78 @@ info: 'ComplexAnalytic.refineDatumToBase_unique' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.refineDatumToBase_unique
+
+/-! ### Two cover data over one scheme
+
+`Oka/Analytification/SpecTwoData.lean`, all six of it, in the order they are declared. **One is a
+`def`** — `ComplexAnalytic.specSchemeIotaMap` — one is an `instance`, and the remaining four are
+theorems.
+
+The section exists because the scheme section above guards statements about **one** cover datum
+and every declaration here is about two: a member of a second datum carried into the first datum's
+scheme, that it is an affine open there, and the doubly-distinguished open across the two.
+
+**These are not the first guarded statements in this file about a pair of data**, and an earlier
+version of this paragraph said they were. The section above for
+`Oka/Analytification/SpecFunctoriality.lean` guards that file's declarations, and from its
+`### The morphism` heading on they are about two cover data on the `Spec` side;
+`ComplexAnalytic.coverMap` further up is a morphism out of two data as well. The second datum is
+opened by a `variable` line in each case, which is why a sweep of the prose for the phrase returned
+neither.
+
+**What is new is the way the two data are related.** There the caller hands in an index map `σ`
+and morphisms `ψ i : obj i ⟶ obj' (σ i)`, matching the members up before anything is proved. Here
+nothing matches them up: the only relation is a single morphism between what the two data glue,
+every pair of members is admissible, and the last theorem produces its two indices rather than
+taking them.
+
+The last two are the ones that ask for `CategoryTheory.IsIso` on the morphism between the two
+gluings; the four before them hold at an open immersion. **None of them is a common refinement**,
+and `Oka/Analytification/SpecTwoData.lean`'s own `## What is not here` says which piece of one is
+still missing and what the two steps after it were measured to cost.
+
+Appended as its own section rather than folded into the section above, for the reason those
+sections give: a section moved is a conflict for somebody else.
+-/
+
+/--
+info: 'ComplexAnalytic.specSchemeIotaMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specSchemeIotaMap
+
+/--
+info: 'ComplexAnalytic.isOpenImmersion_specSchemeIotaMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isOpenImmersion_specSchemeIotaMap
+
+/--
+info: 'ComplexAnalytic.isAffineOpen_specSchemeIotaMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isAffineOpen_specSchemeIotaMap
+
+/--
+info: 'ComplexAnalytic.exists_basicOpen_specSchemeIotaMap_inter' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.exists_basicOpen_specSchemeIotaMap_inter
+
+/--
+info: 'ComplexAnalytic.mem_opensRange_specSchemeIotaMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.mem_opensRange_specSchemeIotaMap
+
+/--
+info: 'ComplexAnalytic.exists_index_basicOpen_specSchemeIotaMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.exists_index_basicOpen_specSchemeIotaMap
