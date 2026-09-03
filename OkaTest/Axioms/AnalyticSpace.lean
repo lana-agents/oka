@@ -10,18 +10,19 @@ import Oka
 
 Complex analytic spaces as objects, and the constructions that build one: local models and the
 node; the residue field, the continuity and naturality of the value of a section, and the
-rigidity of germs; open subspaces and the non-vanishing locus; that being a complex analytic
-space is a local condition; **gluing** — the `ℂ`-algebra structure of a glued space, a cover by
-abstract spaces, the analytic structure on the gluing, the fields of
+rigidity of germs; open subspaces — in general and at the open that is everything — and the
+non-vanishing locus; that being a complex analytic space is a local condition; **gluing** — the
+`ℂ`-algebra structure of a glued space, a cover by abstract spaces, the analytic structure on
+the gluing, the fields of
 `CategoryTheory.GlueData.ofGlueData'`, and gluing a morphism; and the
 **coproduct** — the disjoint union of a family, the trivial `n`-sheeted cover, and the sheet
 comparison; and that the spaces this development **constructs** are **Hausdorff**, which is the
 one heading below naming a property of a space rather than a construction of one. **Two of the
-seventeen headings below are about morphisms after all** — gluing one, and that a morphism to
+eighteen headings below are about morphisms after all** — gluing one, and that a morphism to
 `ℂ^n` is determined by the pullbacks of the coordinates — because each is a statement about the
 space the construction produces; the *classes* of morphisms are `OkaTest/Axioms/Morphisms.lean`'s.
 
-**That is a description and not a list, and the seventeen headings below are the record**: each
+**That is a description and not a list, and the eighteen headings below are the record**: each
 names the statement its assertions defend, and the recipe beside `OkaTest/Axioms.lean`'s routing
 table resolves them to modules. The stance is `OkaTest/Axioms/Sheaves.lean`'s and
 `OkaTest/Axioms/LocalOkaRing.lean`'s, and it is taken here because 129 guards over nineteen
@@ -30,7 +31,7 @@ modules is past the size at which a list stays true.
 **The sentence this replaces named local models, the node and the value of a section**, which at
 `27c185a` was at most 19 of the 102 guards there and four of the sixteen headings there. Gluing
 alone — **the five headings named above**, from the `ℂ`-algebra structure of a glued space to
-gluing a morphism — is 51 of the 129 here and the coproduct 29, and neither appeared in it. **Six
+gluing a morphism — is 51 of the 129 here and the coproduct 23, and neither appeared in it. **Six
 of the nineteen modules are not `Oka/AnalyticSpace/`'s**, and contribute 29 guards:
 `Oka/CategoryTheory/GlueData.lean` ten, four modules of `Oka/Geometry/RingedSpace/` fifteen, and
 `Oka/AlgebraicGeometry/GammaSpecAdjunction.lean` four — most of them under the gluing headings,
@@ -64,35 +65,62 @@ had made *48* uncheckable rather than merely stale is that the sentence listing 
 headings named four of them and the number counted five**, so a recount could not tell a wrong
 number from a different partition; the list above is the five the number is of.
 
-**Two of those five went stale again before this branch touched anything, and one of them was
+**Two of those five went stale again before `0ad0426` touched anything, and one of them was
 never repaired at `4c91029` at all.** At `a4f3a81` the guard total is **122** and not *112*, and
-the coproduct subtotal is **29** and not the *19* that has stood since `f63cb3a` — ten guards
+the coproduct subtotal is **23** and not the *19* that has stood since `f63cb3a` — ten guards
 arrived between `4c91029` and `a4f3a81`, four from lana-agents/oka#365 and six from
-lana-agents/oka#380, **all ten under coproduct headings**, which is why the coproduct moved by
-exactly ten and the gluing *51* did not move at all. The *19* is the case this file's own warning
+lana-agents/oka#380, and **only the four are under a coproduct heading**, which is why the
+coproduct moved by exactly four and the gluing *51* did not move at all. The other six have a
+heading of their own, and the last paragraph below is why every count of this file taken before
+it charged them to the sheet comparison anyway. The *19* is the case this file's own warning
 is about: it stood in the same clause as the *51*, was the same kind of number, and had simply not
 moved yet when the clause was written.
 
-**This branch adds seven guards under one new heading and one new module**, so *112* → **129**,
-sixteen headings → **seventeen** and eighteen modules → **nineteen**; the gluing *51*, the *29*
+**`0ad0426` added seven guards under one new heading and one new module**, so *112* → **129**,
+seventeen headings → **eighteen** and eighteen modules → **nineteen**; the gluing *51*, the *29*
 outside `Oka/AnalyticSpace/`, the *ten*, the *fifteen* and the *four* are all unmoved, because
 `Oka/AnalyticSpace/Hausdorff.lean` is under `Oka/AnalyticSpace/` and none of its guards is under a
 gluing or coproduct heading.
 
-**One defect found by this recount and deliberately not fixed here.** The *29* the coproduct now
-reads is a count of a partition that is itself wrong: six of those guards —
+**Why every count above was wrong in the same place, and the one line that fixes it.** The
+paragraph that stood here said six guards from `Oka/AnalyticSpace/OpenSubspace.lean` —
 `ComplexAnalytic.AnalyticSpace.mono_ofRestrict`, `ComplexAnalytic.AnalyticSpace.liftTop`,
 `ComplexAnalytic.AnalyticSpace.liftTop_ofRestrict`,
 `ComplexAnalytic.AnalyticSpace.isIso_ofRestrict_of_eq_univ`,
 `ComplexAnalytic.AnalyticSpace.isIso_liftTop` and
-`ComplexAnalytic.AnalyticSpace.liftTop_comp_restrictHom_top`, all from
-`Oka/AnalyticSpace/OpenSubspace.lean` — sit under `### The sheet comparison is ℂ-linear`, which is
-about none of them, and belong under `### An open subspace of a complex analytic space is a
-complex analytic space`, which holds three. Moving them takes the coproduct to **23** and that
-heading to **nine** and leaves the 129 alone. **That is the same defect lana-agents/oka#358
-repaired in this file at `4c91029`, recurring at the next append**, and it is a one-file follow-up
-for anyone: moving twelve lines here would change the numbers this branch is repairing under a
-reviewer's feet.
+`ComplexAnalytic.AnalyticSpace.liftTop_comp_restrictHom_top` — sat under
+`### The sheet comparison is ℂ-linear`, which is about none of them, and had to be moved.
+**They never sat there.** `3177e67` gave them a heading of its own,
+`### The open subspace at an open that is everything`, and that section's own prose argues for
+the placement in terms. What `3177e67` did not do is write the heading in the `/-! ### … -/`
+form the rule beside `OkaTest/Axioms.lean`'s routing table asks for: it opened the doc comment
+on one line and put the `###` on the next. **Every count this file has ever been given matches a
+header by its opening delimiter and `###` on one line** — that is the anchor of the per-heading
+`awk` in the recipe beside that table, and of every recount run from it — so all of them were
+blind to the eighteenth heading and charged its six guards to the seventeenth. The repair is the
+one line that pulls that `###` up onto the delimiter, and it moves no guard.
+
+**Two numerals were wrong from `3177e67` for that one reason, and neither is the kind an author
+is told to recheck.** The heading count, because a heading the instrument cannot see is not one
+the author is warned they added: *sixteen* at `a4f3a81` where the file held seventeen, hence the
+ledger row above reading *seventeen* where it should read **eighteen**. And the coproduct, whose
+three headings hold `8 + 11 + 4 = 23` and which was read as *29*. Both are repaired here; the
+guard total 129 does not move, and that it does not is the check that no guard was touched.
+
+**So this is not the defect lana-agents/oka#358 repaired at `4c91029`, though it was filed as a
+recurrence of it.** That one was a guard appended past a heading. `3177e67` appended a heading
+too — it did the thing the rule asks for — and the counting still went wrong, one level down: **an
+instrument blind to a heading reports a wrong partition for every section after it, and reports
+it silently.** No checker in `scripts/` attributes a guard to a heading, so there is nothing to
+harden there; the operative sentence is already in `OkaTest/Axioms.lean` and it already says
+`/-! ### … -/`, on one line. What this file lacked was a reason to believe the form mattered.
+`scripts/check_module_docstrings.py`'s own docstring has carried that reason since 2026-08-23: a
+one-line grep for an opening delimiter carrying `##` returns 58 where its own predicate returns
+59, and it names `Oka/LocalOkaRing.lean`, *"whose header is written across two lines"*, as the
+file the grep cannot see.
+The same has been true of this file since `3177e67`, across the one recount of it taken
+since — `0ad0426`'s, which is where the *seventeen* above came from — and nobody joined the two
+up.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -977,8 +1005,7 @@ info: 'ComplexAnalytic.comapAlgMap_sheetHom' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.comapAlgMap_sheetHom
 
-/-!
-### The open subspace at an open that is everything
+/-! ### The open subspace at an open that is everything
 
 `ComplexAnalytic.AnalyticSpace.ofRestrict` is guarded above; guarded here are
 `ComplexAnalytic.AnalyticSpace.liftTop`, its section at an open that is everything, and the
@@ -1054,10 +1081,11 @@ info: 'ComplexAnalytic.AnalyticSpace.liftTop_comp_restrictHom_top' depends on ax
 /-! ### The analytic spaces this development constructs are Hausdorff
 
 `Oka/AnalyticSpace/Hausdorff.lean`, all seven of it, appended as its own heading rather than under
-one above: none of the sixteen names a separation property, and a guard appended past the end of
-the file would have landed under the sheet comparison, which is what happened to the six guards
-`### An open subspace of a complex analytic space is a complex analytic space` should hold and does
-not.
+one above: none of the seventeen names a separation property. **The clause that stood here said a
+guard appended past the end of the file would have landed under the sheet comparison, and that
+this is what had happened to the six guards below.** It had not; they have a heading of their own
+and always did. See the last paragraph of the module docstring for what actually went wrong and
+why this file's own counts could not see it.
 
 **Every one of the seven is one `inferInstanceAs`**, so a guard here is a weak check by design —
 what it defends is that no route to `T2Space` of a construction ever acquires an axiom, which is
