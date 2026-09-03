@@ -45,7 +45,8 @@ the member it refines** — an affine open of `X`, presented — and no transpor
   `ComplexAnalytic.exists_index_mvPolynomial_basicOpen_specSchemeIotaMap`, which gives at every
   point of `X` and an isomorphism of two cover data two indices and two polynomials in the
   members' own variables — to be turned into four chosen functions by `choose`. **That is one
-  tactic and it is deliberately a separate branch.** It was not merely out of scope when this file
+  tactic and it is deliberately a separate file**, `Oka/Analytification/SpecMemberChoice.lean`,
+  which has since landed. It was not merely out of scope when this file
   was written but unwritable: the theorem arrives with
   `Oka/Analytification/SpecMemberSections.lean`, which lana-agents/oka#374 added *after* this
   branch was cut, so there was nothing to `choose` from. Landing that branch removed the obstacle
@@ -60,7 +61,9 @@ the member it refines** — an affine open of `X`, presented — and no transpor
   `PrimeSpectrum.basicOpen` instead — **which is a statement about the open itself, and stays the
   usable one for a reader who has not imported that file.** The second of those two theorems turns
   it into a statement about a section of `X` in one rewrite, and that rewrite belongs with the
-  choice step in the branch above rather than here.
+  choice step rather than here. **That step landed without it**: the file named in the bullet
+  above has the `choose` and not the rewrite, so the section spelling of this range is still not
+  stated anywhere, and where it goes is taxis #1556's question rather than this file's.
 * **No `poly`, no `glue`, and none of a cover datum's three laws.** That is the rest of
   `Oka/Analytification/SpecScheme.lean`'s third piece and it is taxis #1287's line, not this one —
   `Oka/Analytification/CrossMemberDatum.lean`, `Oka/Analytification/CrossMemberDatumGlue.lean` and
