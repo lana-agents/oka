@@ -622,12 +622,16 @@ what it is guarding against is exactly this — at `f = 1` there is no zero, `D(
 projection is an isomorphism, so a statement about a general `f` that were satisfied by `f = 1`
 would be saying nothing. Nothing below is stated at `f = 1`.
 
-**It says nothing at the level of presentations.** `ComplexAnalytic.localisationHom`
-(`Oka/Analytification/LocalisationFunctor.lean`) is the same map as a morphism of
-`ComplexAnalytic.Presentation`, and whether *it* is an isomorphism at `f = 1` — a statement about
-presented algebras — is not decided here and does not follow from this:
+**It says nothing at the level of presentations, and the two are still not related.**
+`ComplexAnalytic.localisationHom` (`Oka/Analytification/LocalisationFunctor.lean`) is the same map
+as a morphism of `ComplexAnalytic.Presentation`, and whether *it* is an isomorphism at `f = 1` — a
+statement about presented algebras — does not follow from this:
 `ComplexAnalytic.analytificationFunctor` is not known here to reflect isomorphisms, and nothing in
-this repository says it is. -/
+this repository says it is. **This paragraph also said the presentation-level statement was not
+decided anywhere, and that is no longer true**: `ComplexAnalytic.isIso_localisationHom_one`
+(`Oka/Analytification/LocalisationIndependence.lean`, two modules downstream of this one) is that
+statement, proved out of `IsLocalization.atUnits` rather than out of anything here. **The
+implication is what is still absent**, in both directions and for the reason just given. -/
 theorem isIso_localisationProj_one : IsIso (localisationProj.{u} g 1) := by
   haveI : IsIso ((AnalyticSpace.analytification.{u} g).ofRestrict
       (localisationOpen.{u} g 1)) := by

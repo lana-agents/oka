@@ -16,7 +16,8 @@ different analytic spaces. This file says they are canonically the same one.
 
 The first four statements identify the two presentations and put the identification over the
 member; the next four are about the case where the two polynomials differ by a **unit**, and about
-where such a pair comes from; the last three vary the base rather than the polynomial:
+where such a pair comes from; the three after those vary the base rather than the polynomial;
+and the last group is about the one polynomial there is nothing to say about, `f = 1`:
 
 * `ComplexAnalytic.localisationPresentationIsoOfDvdPow` — **the presentations of the localisation
   at `f` and at `f'` are isomorphic** whenever the images of `f` and `f'` in `A` each divide a
@@ -58,6 +59,13 @@ where such a pair comes from; the last three vary the base rather than the polyn
   isomorphism of two presented algebras carrying one cutting polynomial to the other identifies
   the two localisations, over that isomorphism. Everything before this keeps the base fixed, and a
   cross-member overlap of a refined cover is the case where it does not.
+* `ComplexAnalytic.isIso_localisationHom_one` — **localising at `1` changes nothing**: the
+  structure map `A ⟶ A_1` is an isomorphism in `ComplexAnalytic.Presentation`, so the
+  presentation of `D(1)` is the base's own up to canonical isomorphism even though it carries an
+  extra variable and an extra equation. `ComplexAnalytic.bijective_localisationRingHom_one` is
+  the ring-level half and `ComplexAnalytic.localisationIsoOne` the isomorphism the instance
+  names. For a general `f` the statement is false, which is
+  `ComplexAnalytic.localisationOpen_ne_top`.
 
 ## Where this is needed
 
@@ -469,5 +477,135 @@ theorem localisationPresentationIsoOfAlgEquiv_hom_comp :
     AlgEquiv.apply_symm_apply]
 
 end Transport
+
+/-! ### The degenerate polynomial: localising at `1` changes nothing
+
+Every statement above keeps `f` general and compares two localisations. This section is about the
+one polynomial for which there is nothing to compare: at `f = 1` the distinguished open is the
+whole member, and the presentation `ComplexAnalytic.localisationPresentation g 1` — which still
+carries an extra variable and an extra equation — presents the base algebra itself.
+
+**The extra variable does not go away and that is the point.** The adjoined equation at `f = 1` is
+`X_last * 1 - 1` and not `X_last - 1`; the object below is genuinely `⟨n + 1, k + 1, …⟩` and is
+isomorphic to `⟨n, k, g⟩` rather than equal to it, which is why the conclusion is an `IsIso` and
+not a `rfl`.
+
+**Why the route goes through the algebras.** The inverse has to send the adjoined variable to the
+constant `1`, and `ComplexAnalytic.PresHom.ofRename` sends variables to variables — this
+repository has no `ComplexAnalytic.PresHom` constructor for a polynomial substitution, as
+`Oka/Analytification/ChangeOfVariables.lean` records. `ComplexAnalytic.Presentation.isoOfAlgEquiv`
+is what avoids writing one, and it puts no constraint on the two variable counts. -/
+
+/-- **The structure map `A ⟶ A_1` is bijective.**
+
+`IsLocalization.atUnits` at the powers of the class of `1`, whose generator is a unit because
+`map_one` makes it `1`; then `ComplexAnalytic.localisationPresentedAlgebraEquiv` is cancelled on
+the left, which is legitimate exactly because
+`ComplexAnalytic.localisationPresentedAlgebraEquiv_localisationRingHom` puts that identification
+over `A` and not merely over `ℂ`. This is a consumer of that lemma of the kind its own docstring
+anticipates.
+
+**`IsLocalization.atOne` is the closer-looking fit and is not the one.** It asks for the instance
+`IsLocalization.Away (1 : R) S` with a syntactic `1`, where the object here is
+`Localization.Away (Ideal.Quotient.mk _ 1)`; `IsLocalization.atUnits` takes the submonoid
+explicitly and its side condition falls to one `rw` chain. A reader who reaches for `atOne` should
+expect an *instance* failure rather than a proof failure.
+
+**The three `have`s are not collapsible into a `simp` for free.**
+`ComplexAnalytic.localisationPresentedAlgebraEquiv` and `ComplexAnalytic.localisationRingHom` are
+`def`s, and naming either as a rewrite rule generates its equation lemma into this module — the
+hazard `Oka/Analytification/RefineDatumCocycle.lean` records at its own `rw`s and
+`OkaTest/LocalisationIndependence.lean`, this file's facing test, records for a definition of
+*another* module. It is recorded in many files here and counting them is not worth the sentence.
+The step is stated as a `funext` of the existing lemma for that reason. -/
+theorem bijective_localisationRingHom_one :
+    Function.Bijective (localisationRingHom.{u} g 1) := by
+  have h1 : Ideal.Quotient.mk (presentationIdeal.{u} g) (1 : MvPolynomial (ULift.{u} (Fin n)) ℂ)
+      = 1 := map_one _
+  have hb : Function.Bijective
+      (algebraMap (PresentedAlgebra.{u} n k g)
+        (Localization.Away (Ideal.Quotient.mk (presentationIdeal.{u} g)
+          (1 : MvPolynomial (ULift.{u} (Fin n)) ℂ)))) := by
+    refine (IsLocalization.atUnits (PresentedAlgebra.{u} n k g)
+      (Submonoid.powers (Ideal.Quotient.mk (presentationIdeal.{u} g)
+        (1 : MvPolynomial (ULift.{u} (Fin n)) ℂ))) ?_).bijective
+    rw [Submonoid.powers_eq_closure, Submonoid.closure_le, Set.singleton_subset_iff, h1]
+    exact isUnit_one
+  have hcomp : ⇑(localisationPresentedAlgebraEquiv.{u} g 1) ∘ ⇑(localisationRingHom.{u} g 1) =
+      ⇑(algebraMap (PresentedAlgebra.{u} n k g)
+        (Localization.Away (Ideal.Quotient.mk (presentationIdeal.{u} g)
+          (1 : MvPolynomial (ULift.{u} (Fin n)) ℂ)))) :=
+    funext fun x ↦ localisationPresentedAlgebraEquiv_localisationRingHom.{u} g 1 x
+  have hequiv := (localisationPresentedAlgebraEquiv.{u} g 1).bijective
+  have hb' : Function.Bijective
+      (⇑(localisationPresentedAlgebraEquiv.{u} g 1) ∘ ⇑(localisationRingHom.{u} g 1)) := by
+    rw [hcomp]; exact hb
+  exact (Function.Bijective.of_comp_iff' hequiv _).mp hb'
+
+/-- **The base algebra and its localisation at `1` are the same `ℂ`-algebra**, along the structure
+map itself.
+
+`AlgEquiv.ofBijective` at `ComplexAnalytic.bijective_localisationRingHom_one`. It is a declaration
+of its own rather than inlined because it is what a caller who wants the *algebras* rather than
+the presentations reaches for, and it has no other name; the two declarations below are about
+`ComplexAnalytic.Presentation`. -/
+noncomputable def presentedAlgebraEquivLocalisationOne :
+    PresentedAlgebra.{u} n k g ≃ₐ[ℂ]
+      PresentedAlgebra.{u} (n + 1) (k + 1) (localisationPresentation.{u} g 1) :=
+  AlgEquiv.ofBijective (PresHom.toAlgHom.{u} (localisationPresHom.{u} g 1))
+    (bijective_localisationRingHom_one.{u} g)
+
+/-- **The presentation of `D(1)` is isomorphic to the base's own**, in
+`ComplexAnalytic.Presentation`.
+
+`ComplexAnalytic.Presentation.isoOfAlgEquiv` at
+`ComplexAnalytic.presentedAlgebraEquivLocalisationOne`. Nothing here says the two objects are
+equal — they have different variable counts — and nothing here is about a general `f`: for a
+general `f` the statement is **false**, which is what
+`ComplexAnalytic.localisationOpen_ne_top` is about. The bare `1` is doing the work. -/
+noncomputable def localisationIsoOne :
+    (⟨n + 1, k + 1, localisationPresentation.{u} g 1⟩ : Presentation.{u}) ≅ ⟨n, k, g⟩ :=
+  Presentation.isoOfAlgEquiv.{u} (presentedAlgebraEquivLocalisationOne.{u} g)
+
+/-- **And that isomorphism's forward direction is the structure map itself.**
+
+`ComplexAnalytic.PresHom.ext` at `rfl`: `ComplexAnalytic.Presentation.isoOfAlgEquiv e`'s `hom` is
+`e`'s ring map with a proof beside it, `e` is `AlgEquiv.ofBijective` of
+`ComplexAnalytic.localisationPresHom`'s own algebra map, and a `ComplexAnalytic.PresHom` is a ring
+map and a proposition — so the two are the same term.
+
+**This is the load-bearing step and it is the one to be hardest on.** Without it the declaration
+above says only that *some* isomorphism exists between the two presentations, and an `IsIso` of a
+morphism that is not `ComplexAnalytic.localisationHom` is worth nothing to a caller: the whole
+question this answers is about that morphism. -/
+theorem localisationIsoOne_hom : (localisationIsoOne.{u} g).hom = localisationHom.{u} g 1 :=
+  PresHom.ext rfl
+
+/-- **`ComplexAnalytic.localisationHom g 1` is an isomorphism.**
+
+The two declarations above, joined by `ComplexAnalytic.localisationIsoOne_hom`.
+
+**An `instance` and not a `theorem`**, for the reason
+`ComplexAnalytic.isOpenImmersion_specSchemeIota` gives for its own: instance search does not
+unfold a definition, so a caller holding `ComplexAnalytic.localisationHom g 1` in the shape a
+construction handed it needs the statement in the form search can try. It is cheap to try — the
+head is a single named morphism at a literal `1`. A consumer that would rather have a `theorem`
+pays a `haveI`.
+
+**What this does and does not settle about the analytic side.** It is the presentation-level
+statement, one category down from
+`ComplexAnalytic.isIso_localisationProj_one`
+(`Oka/Analytification/DistinguishedOpen.lean`), which says the *analytic* projection at `f = 1` is
+an isomorphism. Neither implies the other here: no statement in this repository says
+`ComplexAnalytic.analytificationFunctor` is full, faithful or reflects isomorphisms, so the
+analytic form does not give this one, and this one gives the analytic form only by being pushed
+through that functor. **What it is *for* is that a construction taking an isomorphism in
+`ComplexAnalytic.Presentation` can now be fed at `f = 1`** — and whether any particular such
+construction's remaining hypotheses hold is a question about that construction and is not answered
+here. `OkaTest/RefineDatumWitness.lean`'s `## What this is not` says which one is open and what is
+left of it. -/
+instance isIso_localisationHom_one : IsIso (localisationHom.{u} g 1) := by
+  rw [← localisationIsoOne_hom.{u} g]
+  infer_instance
 
 end ComplexAnalytic
