@@ -65,9 +65,14 @@ jobs:
       # drift-prevention: this file and `.orchestra/validation.sh` must run the same check, and
       # that script's header says so. The argument for the tracked set over the listing, the
       # reason for `-z` over word-splitting, and the zero-files guard are all stated once, beside
-      # the same loop there. The guard matters less here — a `run:` block is `bash -e`, so a
-      # failing `git ls-files` aborts the step rather than passing it — and it is kept so the two
-      # copies stay identical.
+      # the same loop there. **The guard is exactly as load-bearing here as it is there**, and an
+      # earlier draft of this comment said the opposite. A `run:` block is `bash -e`, but `-e`
+      # never sees a failing process substitution: `git ls-files` is not a command this shell
+      # tests, it is the producer on the other end of the `< <(…)` redirect, and nothing collects
+      # its status. Measured on this step's body, run as `bash -e` from outside a work tree, where
+      # `git ls-files` exits 128 — with the guard: `::error::no file under scripts/ was checked`
+      # and exit 1; with the guard deleted: `checked 0 files under scripts/: 0 not named in
+      # README.md` and **exit 0**, a silent green.
       - name: Check every file under scripts is named in README.md
         run: |
           undocumented=""
