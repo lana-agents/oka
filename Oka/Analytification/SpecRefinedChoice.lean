@@ -77,9 +77,16 @@ file-scoped bullet is worth here**, which is the same trade
 * **No index type for a refinement**, and nothing that turns the point-indexed family below into
   one. `Oka/Analytification/SpecMemberChoice.lean`'s `## What the index type is` says that a family
   indexed by the points of `X` is not a cover datum's index type and that **a refinement indexed by
-  points is not a refinement anybody would assemble**; that stands, and the theorem below is
-  indexed by points exactly as the theorem it is proved from is. Choosing a set of opens and an
-  index type for it is the assembly step and is not here.
+  points is not a refinement anybody would assemble as a cover datum**; that stands, and the
+  theorem below is indexed by points exactly as the theorem it is proved from is. Choosing a set of
+  opens and an index type for it is the assembly step and is not here.
+  **A cover has since been assembled out of this family, and not in this file**:
+  `Oka/Analytification/SpecRefinedCover.lean` builds an
+  `AlgebraicGeometry.Scheme.AffineOpenCover` of `X` indexed by the points, whose covering field is
+  the second conjunct below. **That does not weaken this bullet**, which is about a cover *datum*'s
+  index type — the three words added to the quoted sentence are that narrowing, made in the file
+  that owns it — and it is one module downstream rather than here for the reason this file's own
+  existence records: appending it would have falsified this bullet's first clause.
 * **No `poly`, no `glue`, and none of a cover datum's three laws**, so nothing here is or produces
   a common refinement. That is `Oka/Analytification/CrossMemberDatum.lean`,
   `Oka/Analytification/CrossMemberDatumGlue.lean` and the `Oka/Analytification/RefineDatum*.lean`

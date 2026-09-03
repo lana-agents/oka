@@ -126,6 +126,7 @@ import Oka.Analytification.SpecFunctoriality
 import Oka.Analytification.SpecMemberChoice
 import Oka.Analytification.SpecMemberSections
 import Oka.Analytification.SpecRefinedChoice
+import Oka.Analytification.SpecRefinedCover
 import Oka.Analytification.SpecRefinedMember
 import Oka.Analytification.SpecRefinedMemberSection
 import Oka.Analytification.SpecScheme
