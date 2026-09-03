@@ -804,3 +804,45 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.sheetIso' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.sheetIso
+
+/-! ### Sections over the range of an open immersion of schemes
+
+`Oka/AlgebraicGeometry/OpenImmersion.lean`, appended as its own section for the reason
+`OkaTest/Axioms.lean` gives: a section moved is a conflict for somebody else. Mirror-tree
+material with nothing analytic in it, and it sits with
+`AlgebraicGeometry.StructureSheaf.germ_algebraMap_mem_maximalIdeal_iff` above rather than in
+`OkaTest/Axioms/Analytification.lean` for the same reason that one does.
+
+**The `def` is guarded and not only the two theorems.**
+`AlgebraicGeometry.IsOpenImmersion.specΓIsoTop` is an isomorphism rather than a proposition, so
+nothing else in this repository would notice if it started resting on a fourth axiom, and
+`ComplexAnalytic.presentationSection` (`OkaTest/Axioms/Analytification.lean`) is the consumer
+that would carry it.
+
+**There are three guards here and a first version of this section had four.** The fourth was for a
+definition spelled *Scheme.Hom.opensRangeIso* — deliberately not backticked, since it names
+nothing in this tree — which turned out to be `AlgebraicGeometry.IsOpenImmersion.ΓIsoTop` already
+in the mirror file's own target module; that file's header records what happened. Nothing
+guards `ΓIsoTop` — it is Mathlib's, and `OkaTest/Axioms.lean` scopes this directory to what this
+repository declares. -/
+
+/--
+info: 'AlgebraicGeometry.IsOpenImmersion.image_basicOpen_ΓIsoTop' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.IsOpenImmersion.image_basicOpen_ΓIsoTop
+
+/--
+info: 'AlgebraicGeometry.IsOpenImmersion.specΓIsoTop' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.IsOpenImmersion.specΓIsoTop
+
+/--
+info: 'AlgebraicGeometry.IsOpenImmersion.image_primeSpectrum_basicOpen' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.IsOpenImmersion.image_primeSpectrum_basicOpen

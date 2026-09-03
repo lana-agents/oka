@@ -30,6 +30,7 @@ import Oka.AlgebraicGeometry.GammaSpecAdjunction
 import Oka.AlgebraicGeometry.Modules.Coherent
 import Oka.AlgebraicGeometry.Modules.Sheaf
 import Oka.AlgebraicGeometry.Modules.Tilde
+import Oka.AlgebraicGeometry.OpenImmersion
 import Oka.AlgebraicGeometry.Spec
 import Oka.Analysis.Calculus.Implicit
 import Oka.Analysis.Complex.CoveringMap
@@ -120,6 +121,7 @@ import Oka.Analytification.SheafCoherent
 import Oka.Analytification.SpecAffineCover
 import Oka.Analytification.SpecDistinguishedOpen
 import Oka.Analytification.SpecFunctoriality
+import Oka.Analytification.SpecMemberSections
 import Oka.Analytification.SpecScheme
 import Oka.Analytification.SpecTwoData
 import Oka.Analytification.StandardEtale
