@@ -85,7 +85,7 @@ refined datum itself.
 
 **It is not claimed to be an isomorphism**, although the shape of this data makes that the obvious
 next question — see the second bullet of `## What this is not`, which records what an answer would
-need and does not compile it.
+need, says which part of that is now a theorem elsewhere, and compiles none of it here.
 
 ## What this is not
 
@@ -128,18 +128,42 @@ need and does not compile it.
   node cover **reindexed along `id`**, every refined member being the whole of its original member,
   so a reader meeting the morphism will ask. **Nothing below answers it in either direction.**
 
-  What an answer would need, recorded so that it is not re-derived and **not compiled**:
+  What an answer would need, recorded so that it is not re-derived:
   `ComplexAnalytic.coverAnalytificationIso` (`Oka/Analytification/CoverIndependence.lean`) turns a
-  member-matched comparison into an isomorphism when each member's morphism is one, and at
-  `σ = id` that is the shape of
-  `OkaTest.RefineDatumWitness.coverIota_comp_nodeRefineOneToBase` above — so it would suffice that
-  `ComplexAnalytic.localisationProj (nodeCoverObj b).g 1` is an isomorphism.
+  member-matched comparison into an isomorphism, and at `σ = id` that is the shape of
+  `OkaTest.RefineDatumWitness.coverIota_comp_nodeRefineOneToBase` above.
+
+  **This bullet said it would suffice that `ComplexAnalytic.localisationProj (nodeCoverObj b).g 1`
+  is an isomorphism, and that is not so** — which is worth stating rather than deleting, because
+  the statement it names is now a theorem and the route still does not close.
+  `ComplexAnalytic.isIso_localisationProj_one`
+  (`Oka/Analytification/DistinguishedOpen.lean`) says exactly that, and it is not what
+  `ComplexAnalytic.coverAnalytificationIso` consumes: that construction takes an isomorphism of
+  each member **in `ComplexAnalytic.Presentation`**, feeds it to
+  `ComplexAnalytic.coverMapPart` as a `ComplexAnalytic.PresHom` and pushes it through
+  `ComplexAnalytic.analytificationFunctor`, and an isomorphism of analytic spaces supplies none of
+  that. Nothing in this repository closes the gap in general either: no statement anywhere says
+  that functor is full, faithful, or reflects isomorphisms, and
+  `OkaTest/ProjectiveLineDirected.lean` records the same absence from the other side — it needs
+  `ComplexAnalytic.analytificationFunctor` to be faithful on a pair of legs and says in terms that
+  nothing here supplies it.
+
+  **So the sufficient condition for this route is one category down**: that
+  `ComplexAnalytic.localisationHom (nodeCoverObj b).g 1`
+  (`Oka/Analytification/LocalisationFunctor.lean`) is an isomorphism, which is a statement about
+  presented algebras rather than about spaces. **It is unproved, unpriced and not claimed here**,
+  in either direction.
+
+  **The step this bullet recorded as missing is no longer missing**, and it is the reason
+  `ComplexAnalytic.isIso_localisationProj_one` exists:
   `ComplexAnalytic.localisationIso` identifies the localised presentation's analytification with
-  `X^an` restricted to `D(f)`, and `ComplexAnalytic.localisationOpen_one` says `D(1) = ⊤`, which
-  leaves one step: that the inclusion of an open subspace at an open that is all of the space is an
-  isomorphism. **This file neither states that step nor uses it**, and whether the two statements
-  line up without a transport is the part I have not checked. lana-agents/oka#380 is where that
-  step is being added, unmerged at the time of writing.
+  `X^an` restricted to `D(f)`, `ComplexAnalytic.localisationOpen_one` says `D(1) = ⊤`, and
+  `ComplexAnalytic.AnalyticSpace.isIso_ofRestrict_of_eq_univ` inverts the inclusion of such an
+  open. **This file still neither states that step nor uses it**, which is what this bullet said
+  before and is still true of the step; `ComplexAnalytic.localisationOpen_one` it does use, in
+  `OkaTest.RefineDatumWitness.surjective_base_localisationProj_one` below. The open question this
+  bullet flagged — whether the two statements line up without a transport — is answered: they do,
+  in eight lines and with no transport, and lining up was not what the route was short of.
 
   **`ComplexAnalytic.not_isIso_refineToBase` bears on none of this in either direction.** It is a
   *negative* about the one-member comparison at a constant `σ`, a different morphism, and
@@ -255,7 +279,15 @@ theorem not_isConstant_id_triple :
 `ComplexAnalytic.localisationOpen_one` says that is the whole space. **This is the precise sense in
 which a refining family constantly `1` refines nothing**, and it is what carries both statements
 below: a point of the node is a point of the refined member, so no question about the refined
-overlaps needs a point of a double localisation to be written down. -/
+overlaps needs a point of a double localisation to be written down.
+
+**`ComplexAnalytic.isIso_localisationProj_one` is about the same morphism and is a stronger
+statement about it**, and this proof does not go through it: that one says the morphism is an
+isomorphism of analytic spaces, this one says its base map is onto. Whether the second now follows
+from the first is **not checked here** — it would need the base map of an isomorphism of
+`ComplexAnalytic.AnalyticSpace` to be surjective, which no statement in this repository records —
+so the two are kept separate rather than one being rewritten in terms of the other on an untested
+claim. -/
 theorem surjective_base_localisationProj_one :
     Function.Surjective (localisationProj.{u} nodePres.{u} 1).toLRSHom.base := by
   intro y

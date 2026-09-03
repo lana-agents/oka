@@ -4783,3 +4783,26 @@ info: 'ComplexAnalytic.exists_index_basicOpen_specSchemeIotaMap' depends on axio
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.exists_index_basicOpen_specSchemeIotaMap
+
+/-! ### The projection of `D(1)`, and the isomorphism the `V = ⊤` bridge makes available
+
+`Oka/Analytification/DistinguishedOpen.lean`'s one declaration on this line: at `f = 1` the
+projection of a distinguished open is not merely an open immersion but an isomorphism.
+
+Guarded here rather than in the `Oka/Analytification/DistinguishedOpen.lean` sections above, and
+appended as its own section, for the reason every section here gives: a section moved is a conflict
+for somebody else, and so is a guard inserted into one.
+
+**The axiom list is the same three as its ingredients'** —
+`ComplexAnalytic.localisationIso_hom_ofRestrict` and `ComplexAnalytic.localisationOpen_one` are
+guarded above and `ComplexAnalytic.AnalyticSpace.isIso_ofRestrict_of_eq_univ` in
+`OkaTest/Axioms/AnalyticSpace.lean`, so this guard records that composing the three adds nothing,
+which is the whole claim the theorem makes.
+-/
+
+/--
+info: 'ComplexAnalytic.isIso_localisationProj_one' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isIso_localisationProj_one

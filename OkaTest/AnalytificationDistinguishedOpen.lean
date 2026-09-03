@@ -164,10 +164,17 @@ theorem nodeOrigin_notMem_range_base_localisationProj :
 
 `ComplexAnalytic.isOpenImmersion_localisationProj` says every such projection is an open
 immersion, and an open immersion which happens to be an isomorphism says nothing about a cover —
-which is the degeneracy the statement invites, since `D(f) = ⊤` makes it one. This rules it out at
-the node with `f = z₀`: an isomorphism of locally ringed spaces has a surjective underlying map,
-by `AlgebraicGeometry.LocallyRingedSpace.homeoOfIso`, and the origin of the node is not in the
-image. -/
+which is the degeneracy the statement invites, since `D(f) = ⊤` makes it one. **That last clause
+was an assertion in prose and is now a theorem**: `ComplexAnalytic.isIso_localisationProj_one`
+(`Oka/Analytification/DistinguishedOpen.lean`) says the projection at `f = 1` is an isomorphism,
+so the degeneracy this theorem rules out at `f = z₀` is exhibited rather than described. It is
+stated at `ComplexAnalytic.AnalyticSpace` and this one at
+`AlgebraicGeometry.LocallyRingedSpace`, so neither is the other read through the forgetful
+functor, and nothing here derives one from the other.
+
+This rules it out at the node with `f = z₀`: an isomorphism of locally ringed spaces has a
+surjective underlying map, by `AlgebraicGeometry.LocallyRingedSpace.homeoOfIso`, and the origin of
+the node is not in the image. -/
 theorem not_isIso_localisationProj_nodePres :
     ¬ IsIso (localisationProj.{u} nodePres.{u} nodeX.{u}).toLRSHom := fun _ ↦
   nodeOrigin_notMem_range_base_localisationProj.{u}
