@@ -240,3 +240,28 @@ jobs:
       - name: Check module docstrings are non-empty
         if: ${{ !cancelled() }}
         run: python3 scripts/check_module_docstrings.py
+
+      # Every section heading in a guard file must be written on the line that opens its doc
+      # comment. A heading written as `/-!` on one line and `### Title` on the next elaborates
+      # identically and is invisible to everything that attributes a guard to a section — all of
+      # which match a heading by that opener — so its guards are silently charged to the previous
+      # heading and the partition is wrong from there to the end of the file. Two such headings
+      # were written on 2026-09-03, one of which had already put a wrong subtotal into a module
+      # docstring and the other a wrong positional claim.
+      #
+      # `.orchestra/validation.sh` carries the full argument, the measurements, and the reason
+      # this is a `grep` rather than the comparison of two per-file counts it was first priced as
+      # — the short version being that the obvious form of that comparison is green on the one
+      # file that held the defect. The reasoning lives in one place on purpose; what must not
+      # drift between the two files is the command, and it is the same command.
+      #
+      # Text only, twelve files, no build — hence `!cancelled()`, so a build failure does not hide
+      # it and turn two findings into two round trips.
+      - name: Check guard-file headings open their doc comment
+        if: ${{ !cancelled() }}
+        run: |
+          if grep -nE '^#{3,} ' OkaTest/Axioms/*.lean; then
+            echo "::error::a heading above is not written on the line that opens its doc comment"
+            exit 1
+          fi
+          echo "checked $(ls OkaTest/Axioms/*.lean | wc -l) guard files: 0 split headings"

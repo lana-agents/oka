@@ -804,14 +804,23 @@ lake build
 `bash .orchestra/validation.sh` is the check. It builds with `--wfail`, runs Mathlib's
 environment linters and text linters, verifies both root modules against `mk_all`, checks that
 every backticked dotted name in a comment resolves, checks that every file under `scripts/` is
-named in this README, and checks that every file has a module docstring with a non-empty body. **A
-claim that something compiles means this script.**
+named in this README, checks that every section heading in a guard file is written on the line
+that opens its doc comment, and checks that every file has a module docstring with a non-empty
+body. **A claim that something compiles means this script.**
 
-The last of those, `scripts/check_module_docstrings.py`, is the narrow rule and only the narrow
-rule: a **module** docstring whose body is not whitespace. It says nothing about what the body
-contains, and in particular does not require a `# Title` line. What it does insist on is that the
-`/-! … -/` block it looks at really is the module docstring — nothing but comments, `module` and
-imports before it, and not a `##`-or-deeper heading itself. Both halves are needed: a section
+The heading check is two lines of `grep` in the script rather than an entry under `scripts/`, and
+the script says why and what it is for: a heading written as `/-!` on one line and `### Title` on
+the next elaborates identically to the one-line form and is invisible to everything that
+attributes a guard to a section, so its guards are charged to the previous heading and the
+partition is wrong from there to the end of the file with nothing to say so. Two such headings
+were written on 2026-09-03 and both had already put something false into a module docstring —
+one a subtotal, one a positional claim.
+
+The module-docstring check, `scripts/check_module_docstrings.py`, is the narrow rule and only the
+narrow rule: a **module** docstring whose body is not whitespace. It says nothing about what the
+body contains, and in particular does not require a `# Title` line. What it does insist on is that
+the `/-! … -/` block it looks at really is the module docstring — nothing but comments, `module`
+and imports before it, and not a `##`-or-deeper heading itself. Both halves are needed: a section
 header is a `/-!` block too and about a third of the files here contain one, so a check that takes
 merely the first `/-!` block passes a file whose module docstring has been deleted outright. The
 script's own docstring gives the measurement — with the count, the date it was taken, and why the
