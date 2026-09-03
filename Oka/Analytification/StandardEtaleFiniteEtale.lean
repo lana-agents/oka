@@ -105,15 +105,33 @@ theorem reads a `StandardEtalePair`, so appending it there would have turned tha
   (`Oka/Analytification/StandardEtaleLocalIsoBase.lean`), at every `k`, and about the structure
   map to `X^an` rather than the projection to `ℂ^n`. The finiteness half at `k ≥ 1` is untouched,
   so this bullet stands for the class as a whole.
-* **Nothing about how large `V` is *here*.** This bullet said no pair `(F, G)` was exhibited
-  anywhere for which `V` is proper *and* nonempty; one now is —
+* **Nothing about how large `V` is *here*, and the class is now instantiated elsewhere at a `V`
+  that is proper and nonempty.** This bullet said no pair `(F, G)` was exhibited anywhere for
+  which `V` is proper *and* nonempty; one is —
   `ComplexAnalytic.hypersurfaceCommonZeroImage_parabola`
   (`Oka/Analytification/OpenBaseFiniteness.lean`), instantiated for the finiteness half as
-  `ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp_parabola`. **It is
-  not instantiated for *this* class**, because the second field needs a `StandardEtalePair` and
-  nothing exhibits the parabola as one; so a reader should still not take the conclusion below as
-  saying the morphism is finite étale over anything in particular. The size of `V` remains a
-  hypothesis on the pair rather than a theorem.
+  `ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp_parabola`.
+
+  **It then said the parabola is *not* instantiated for this class, *"because the second field
+  needs a `StandardEtalePair` and nothing exhibits the parabola as one"*, and that reason was
+  false when it was written.** `ComplexAnalytic.condPair` (`OkaTest/StandardEtaleCond.lean`) *is*
+  the parabola, at `n = 1` and `i = 0`, in the multivariate vocabulary rather than the polynomial
+  one; `ComplexAnalytic.condPair` predates this bullet by 1d 22h and the parabola by 1d 23h, and
+  nobody read them against each other. **This bullet is 1h 14m older than the parabola**, so the
+  two intervals are not the same one: the pair is `5ae9ed5`, this bullet was first written at
+  `868ed5f`, and the parabola and the clause just quoted arrived together at `028808f`.
+  `ComplexAnalytic.isFiniteEtale_restrictHom_condEtaleProj`
+  (`OkaTest/CondFiniteEtale.lean`) is the theorem below at that pair, and the `V` it holds over is
+  the punctured line — proper and nonempty, by
+  `ComplexAnalytic.condGoodOpen_nonempty` and `ComplexAnalytic.condGoodOpen_ne_univ`. **The same
+  morphism unrestricted is not finite étale**, which is
+  `ComplexAnalytic.not_isFiniteEtale_condEtaleProj` (`OkaTest/StandardEtaleNotFinite.lean`), so
+  the restriction in the statement below is doing visible work at one compiled instance.
+
+  **What stays true is the last clause and it is the one that matters here**: the size of `V`
+  remains a hypothesis on the pair rather than a theorem, nothing below bounds it, and the
+  instance is in the test library rather than in this one — a reader of the theorem below alone
+  still cannot conclude that the morphism is finite étale over anything in particular.
 * **No comparison functor and no Riemann existence theorem.** A *different and broader* absence —
   the analytification of a finite étale morphism of **schemes** — is what
   `Oka/AnalyticSpace/LocalIso.lean`, `Oka/AnalyticSpace/CoveringMap.lean` and

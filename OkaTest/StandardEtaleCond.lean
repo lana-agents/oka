@@ -114,11 +114,13 @@ abbrev condRoot : PresentedAlgebra.{u} 1 0 condBase.{u} :=
 observation that `z₁` *is* `ComplexAnalytic.localisationVar 1` and that `z₀` *is* `z₀` renamed
 along `ComplexAnalytic.localisationIncl`, both by `rfl`.
 
-**The `change` is not a `rw [condF]`, here and in the four proofs below that unfold this file's
-data.** A `rw` at a definition plants an auto-generated equation lemma under its own name, and a
-first head of this file left one under `ComplexAnalytic.condF`'s that way — it is not in the
-environment now, which is the point. `comm -13` on `scripts/DumpOkaDecls.lean`'s output is what
-shows such a lemma, not the build. The `change`
+**The `change` is not a `rw [condF]`, here and in every proof below that unfolds this file's
+data.** (This sentence read *"and in the four proofs below"*; `grep -n "^ *change "` on this file
+returns **six**, of which this is the first, so it was one short and a numeral was the wrong shape
+for it in the first place.) A `rw` at a definition plants an auto-generated equation lemma under
+its own name, and a first head of this file left one under `ComplexAnalytic.condF`'s that way —
+it is not in the environment now, which is the point. `comm -13` on
+`scripts/DumpOkaDecls.lean`'s output is what shows such a lemma, not the build. The `change`
 costs the unfolded goal written out and leaves the environment with this file's own declarations
 and nothing else. -/
 theorem condF_eq :

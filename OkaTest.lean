@@ -32,6 +32,7 @@ import OkaTest.CoherentCokernel
 import OkaTest.CoherentFree
 import OkaTest.CoherentPresentation
 import OkaTest.Completion
+import OkaTest.CondFiniteEtale
 import OkaTest.CoverRefinement
 import OkaTest.CoveringSpace
 import OkaTest.CrossMemberGlue
