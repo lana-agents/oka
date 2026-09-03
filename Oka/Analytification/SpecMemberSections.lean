@@ -282,11 +282,10 @@ theorem surjective_specSchemeIotaSection (i : J) :
 
 /-- **The open that section cuts out in `X` is the image of `D(p)` in the member.**
 
-`ComplexAnalytic.basicOpen_presentationSection` at the same immersion. This is what makes a
-statement in polynomials say the same thing whichever of the two spaces it is read in, and it is
-why the theorems below could be stated about opens of `X` without a second description: an open of
-the glued scheme distinguished by a section over a member **is** an open of that member,
-transported. -/
+`ComplexAnalytic.basicOpen_presentationSection` at the same immersion. What the specialisation
+adds is the index: the general form describes the open as the image under *an* immersion, and here
+it is the image under the `i`-th member's own, so the open is named by a member of this cover datum
+rather than by a morphism the reader has to supply. -/
 theorem basicOpen_specSchemeIotaSection (i : J)
     (p : MvPolynomial (ULift.{u} (Fin (obj i).n)) ℂ) :
     (specScheme.{u} obj poly glue hrange hsymm hcocycle).basicOpen
