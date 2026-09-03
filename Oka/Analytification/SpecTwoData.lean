@@ -132,7 +132,7 @@ ask for it to know that `Φ` is surjective on points.
   `CommRingCat.of (obj i).alg` by `AlgebraicGeometry.Scheme.Hom.appIso` at `⊤` composed with
   `AlgebraicGeometry.Scheme.ΓSpecIso`, which compiles as one term; and the lift from
   `ComplexAnalytic.PresentedAlgebra` to a polynomial is `Ideal.Quotient.mk_surjective`, which this
-  repository already spends at fifteen sites. **Neither is here**, because the first has no
+  repository already spends widely. **Neither is here**, because the first has no
   complex-analytic content and `README.md`'s mirror-tree rule puts it under
   `Oka/AlgebraicGeometry/` rather than in this tree. **Both have since been added, and neither to
   this file**: the first is `AlgebraicGeometry.IsOpenImmersion.specΓIsoTop`
