@@ -23,12 +23,23 @@ Those three conditions are exactly the hypotheses of Mathlib's
 theorem at `Set.univ` and is the only thing this file uses. **The stalk field of `IsLocalIso` is
 not used**, and cannot be: `IsCoveringMap` is a condition on the underlying map alone.
 
-**The source is required Hausdorff, and this development does not give that for free.**
-`ComplexAnalytic.AnalyticSpace` imposes no separation axiom — see `Oka/AnalyticSpace/Basic.lean`,
-which says so for the same reason `AlgebraicGeometry.Scheme` does — so `[T2Space X]` is a genuine
-hypothesis rather than an instance that will be found. It is Mathlib's hypothesis, used to
-separate the finitely many points of a fibre, and it is where the statement below is weaker than
-the classical one, which is stated for Hausdorff spaces throughout.
+**The source is required Hausdorff, and for a general analytic space this development does not
+give that for free.** `ComplexAnalytic.AnalyticSpace` imposes no separation axiom — see
+`Oka/AnalyticSpace/Basic.lean`, which says so for the same reason `AlgebraicGeometry.Scheme` does
+— so `[T2Space X]` is a genuine hypothesis on the class and not a consequence of it. It is
+Mathlib's hypothesis, used to separate the finitely many points of a fibre, and it is where the
+statement below is weaker than the classical one, which is stated for Hausdorff spaces throughout.
+
+**At the spaces this development constructs it is found, and that sentence used to stand without
+this one.** `Oka/AnalyticSpace/Hausdorff.lean` gives the instance for a zero locus inside an open
+subset of `ℂ^n` and for an open subspace of any Hausdorff analytic space, and
+`Oka/Analytification/Hausdorff.lean` for an analytification; between them a caller who built the
+source out of polynomials supplies nothing.
+`ComplexAnalytic.isCoveringMap_base_restrictHom_analytificationMap_etalePresHom_comp` is what that
+buys — the theorem below at the analytification of a standard étale morphism — and it is the
+second application of this rung anywhere, `ComplexAnalytic.isCoveringMap_base_sq`
+(`OkaTest/FiniteMorphism.lean`) being the first. **What stays true is the hypothesis**: `X` is
+arbitrary below and no instance fires at a variable.
 
 **Connectedness of the target is not needed for the rung**, and `Oka/AnalyticSpace/LocalIso.lean`
 used to phrase it as being about a connected base, which the argument never uses: a point outside

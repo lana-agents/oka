@@ -425,10 +425,15 @@ The `rfl` identifying the underlying map of `f ≫ g` with the composite of the 
 is the one `ComplexAnalytic.AnalyticSpace.isFinite_comp` uses; it is stated rather than left to
 unification because the `▸` below needs it in that direction.
 
-**`[T2Space Y]` is a hypothesis and not an instance that will be found.**
-`Oka/AnalyticSpace/Basic.lean` imposes no separation axiom on an analytic space, for the reason
-`AlgebraicGeometry.Scheme` does not; the only `T2Space` instance for one in this repository is
-`ComplexAnalytic.t2Space_restrict_punctured`, about a single restriction of a single space. And it
+**`[T2Space Y]` is a hypothesis and not an instance that will be found *at an arbitrary middle
+space*.** `Oka/AnalyticSpace/Basic.lean` imposes no separation axiom on an analytic space, for the
+reason `AlgebraicGeometry.Scheme` does not, so with `Y` a variable there is nothing to synthesise.
+A caller whose middle space is one this development *constructs* is in a different position:
+`Oka/AnalyticSpace/Hausdorff.lean` makes every zero locus inside an open subset of `ℂ^n`, and
+every open subspace of a Hausdorff analytic space, carry the instance. **This paragraph used to
+say that the only `T2Space` instance for an analytic space in this repository was
+`ComplexAnalytic.t2Space_restrict_punctured`, about a single restriction of a single space**; that
+was exact until that file was written and both halves of it are now false. And the hypothesis
 cannot be dropped: `TwoIndiscrete.not_isClosedMap_pt_of_isClosedMap_comp`
 (`OkaTest/FiniteEtaleCancel.lean`) is a compiled witness with a two-point indiscrete middle space,
 whose second factor is closed with finite fibres — so no strengthening of `g` short of one that

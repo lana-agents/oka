@@ -177,9 +177,16 @@ coherence statement for arbitrary complex analytic spaces:
   finite fibres and a local homeomorphism is a covering map, which Mathlib proves for
   `IsCoveringMapOn` and which the mirror tree restates globally
   (`Oka/Topology/Covering/Basic.lean`) — and the two conditions are literally the fields of the
-  first two rungs. Hausdorffness is a genuine hypothesis: an analytic space is no more assumed
-  separated here than a scheme is. Connectedness of the target is **not** needed for the rung, and
-  the earlier statement of it wrongly carried the hypothesis; what connectedness gives is that the
+  first two rungs. Hausdorffness is a genuine hypothesis on the class — an analytic space is no
+  more assumed separated here than a scheme is — but it is **not** one a caller of this
+  development has to discharge: `Oka/AnalyticSpace/Hausdorff.lean` and
+  `Oka/Analytification/Hausdorff.lean` make every space built here, being a zero locus inside an
+  open subset of `ℂ^n` or an open subspace of one, carry the instance. That is what turns the rung
+  into a corollary at a morphism the analytification machinery produces —
+  `ComplexAnalytic.isCoveringMap_base_restrictHom_analytificationMap_etalePresHom_comp`, the
+  analytification of a standard étale morphism over an open subset of the base. Connectedness of
+  the target is **not** needed for the rung, and the earlier statement of it wrongly carried the
+  hypothesis; what connectedness gives is that the
   **number of sheets is constant**, and that is
   `ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale` — over a *preconnected* target
   any two fibres of a finite étale morphism have the same cardinality, by the clopen argument in

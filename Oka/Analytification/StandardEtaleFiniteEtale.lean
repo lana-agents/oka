@@ -141,8 +141,15 @@ theorem reads a `StandardEtalePair`, so appending it there would have turned tha
   `Oka/AnalyticSpace/SigmaFiniteEtale.lean` record, and nothing here touches it: everything on
   this line is one standard étale presentation over `ℂ^n`, and the general morphism is a
   Zariski-local gluing that nothing starts.
-* **No `IsCoveringMap`.** `ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale`
-  needs a Hausdorff source and it is not checked here.
+* **No `IsCoveringMap` *here*, and it is no longer absent.** This bullet said
+  `ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale` *"needs a Hausdorff source
+  and it is not checked here"*. The source of the theorem below is an open subspace of
+  `ComplexAnalytic.AnalyticSpace.analytification`, and `Oka/AnalyticSpace/Hausdorff.lean` and
+  `Oka/Analytification/Hausdorff.lean` between them make that an instance rather than a check, so
+  `ComplexAnalytic.isCoveringMap_base_restrictHom_analytificationMap_etalePresHom_comp` is the
+  theorem below plus that rung and costs a `haveI`. It is stated in
+  `Oka/Analytification/Hausdorff.lean` and not appended here, because the instances it consumes
+  are what it is a corollary of and this file imports neither of them.
 -/
 
 open CategoryTheory MvPolynomial AlgebraicGeometry TopologicalSpace Opposite Topology

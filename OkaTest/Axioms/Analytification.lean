@@ -5158,3 +5158,42 @@ info: 'ComplexAnalytic.exists_family_opensRange_presentationRefinedIota_eq' depe
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.exists_family_opensRange_presentationRefinedIota_eq
+
+/-! ### The analytification is Hausdorff, and the standard étale cover is a covering map
+
+`Oka/Analytification/Hausdorff.lean`, all three of it, appended as its own section for the reason
+the sections above give: a section moved is a conflict for somebody else.
+
+**The instance is one `inferInstanceAs` and the two theorems are one `haveI` each**, so all three
+axiom lists are unions of lists this file and `OkaTest/Axioms/AnalyticSpace.lean` already record —
+`ComplexAnalytic.t2Space_zeroLocus` for the first, and
+`ComplexAnalytic.isFiniteEtale_restrictHom_analytificationMap_etalePresHom_comp` together with
+`ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale` for the other two. The guards
+are a check that the third rung introduced nothing, which is what a corollary of a theorem in
+another file most plausibly could. **Named and not located**: a section appended at the end of
+this file cannot say which section is above it and stay true, since the next branch appends between
+them. Said in full rather than by pointing at a neighbouring section that says it — that citation
+was itself the species it names, and it survived this branch's rebase only because the section that
+landed in between happens to carry the same sentence. -/
+
+/--
+info: 'ComplexAnalytic.t2Space_analytification' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.t2Space_analytification
+
+/--
+info: 'ComplexAnalytic.isCoveringMap_base_restrictHom_analytificationMap_etalePresHom_comp'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isCoveringMap_base_restrictHom_analytificationMap_etalePresHom_comp
+
+/--
+info: 'ComplexAnalytic.isCoveringMap_base_restrictHom_analytificationMap_etalePresHom_comp_compl'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  ComplexAnalytic.isCoveringMap_base_restrictHom_analytificationMap_etalePresHom_comp_compl
