@@ -76,6 +76,10 @@ docstring, because `scripts/guard_coverage.py` reads every backticked repository
   itself has an invertible structure map.** This is what turns a `¬ IsIso` statement about one
   cover into the statement that the category has an object the identity is not, and it is how the
   non-vacuity in `OkaTest/FiniteEtaleOver.lean` is stated.
+- `ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_restrictHom_top`: **a morphism whose restriction
+  over `⊤` is finite étale is finite étale** — the step that lets a `V` hypothesis be refuted
+  rather than only left unproved, and the only place in this file where the property is read
+  through an isomorphism rather than stated.
 
 ## What is not here
 
@@ -238,5 +242,51 @@ theorem isIso_hom_of_iso_id {X : AnalyticSpace.{u}} {A : FiniteEtaleOver.{u} X}
       CategoryTheory.Over.w ((MorphismProperty.Over.forget _ ⊤ X).map e.hom)
     exact (Category.comp_id _).symm.trans hw
   rwa [h2] at h1
+
+/-! ### The restriction over `⊤` -/
+
+/-- **A morphism whose restriction over `⊤` is finite étale is finite étale.**
+
+`ComplexAnalytic.AnalyticSpace.restrictHom f V` has source `X|f⁻¹V` and target `Y|V`, so it is a
+morphism between two *other* spaces and a property of it is not on its face a property of `f`. At
+`V = ⊤` the two inclusions are isomorphisms
+(`ComplexAnalytic.AnalyticSpace.isIso_ofRestrict_of_eq_univ`) and
+`ComplexAnalytic.AnalyticSpace.liftTop_comp_restrictHom_top` exhibits `f` as the conjugate, so the
+property transfers by `ComplexAnalytic.AnalyticSpace.isFiniteEtale`'s `RespectsIso` and
+`IsMultiplicative` instances above. **Nothing is proved about finite étale morphisms here**: the
+content is entirely in `Oka/AnalyticSpace/OpenSubspace.lean`, and this file supplies only the two
+instances that make the conjugation a transfer.
+
+**This is what makes a `V` hypothesis refutable rather than merely unproved.** A theorem of the
+form *"restricted over `V` the morphism is finite étale"* says nothing on its own about whether
+`V` can be `⊤`; with this, a morphism that is not finite étale gives
+`¬ IsFiniteEtale (restrictHom f ⊤)` by contraposition, so such a theorem at `V = ⊤` would be
+false. `OkaTest/StandardEtaleNotFinite.lean`'s `## What is not checked here` recorded the absence of
+exactly this step — **at `IsFinite`, not here**; see the paragraph below.
+
+**Nothing is said about `ComplexAnalytic.AnalyticSpace.IsLocalIso`.** The same conjugation would
+run and no prose site asks for it, so it is declined rather than overlooked.
+
+**The finiteness half of this is `ComplexAnalytic.AnalyticSpace.isFinite_of_restrictHom_top`**, in
+the file that owns the vocabulary, and it is the one two `## What is not here` bullets elsewhere
+were actually about — both name a *finiteness* theorem. It is not derived from this one and does
+not derive it: `IsFinite` is not a `CategoryTheory.MorphismProperty` here, so it runs through
+`ComplexAnalytic.AnalyticSpace.isFinite_comp` twice instead of through `RespectsIso`.
+
+**What is not here is the converse.** `IsFiniteEtale f → IsFiniteEtale (restrictHom f ⊤)` follows
+from the same conjugation read the other way and is not stated, because nothing asks for it; it is
+the same three lines. Nor is anything said about `restrictHom f V` at a proper `V` — the whole
+argument is that `⊤` makes the inclusions invertible, and at a proper `V` neither is. -/
+theorem isFiniteEtale_of_restrictHom_top {A B : AnalyticSpace.{u}} (f : A ⟶ B)
+    (hfe : IsFiniteEtale (restrictHom f (⊤ : B.Opens))) : IsFiniteEtale f := by
+  set U : A.Opens := (TopologicalSpace.Opens.map f.toLRSHom.base).obj (⊤ : B.Opens) with hUdef
+  have h : (U : Set A) = Set.univ := rfl
+  have hB : ((⊤ : B.Opens) : Set B) = Set.univ := rfl
+  haveI : IsIso (B.ofRestrict (⊤ : B.Opens)) := isIso_ofRestrict_of_eq_univ B ⊤ hB
+  haveI : IsIso (liftTop A U h) := isIso_liftTop A U h
+  have hp : isFiniteEtale.{u} (liftTop A U h ≫ restrictHom f ⊤ ≫ B.ofRestrict ⊤) :=
+    (isFiniteEtale.{u}).comp_mem _ _ (isFiniteEtale_of_isIso _)
+      ((isFiniteEtale.{u}).comp_mem _ _ hfe (isFiniteEtale_of_isIso _))
+  rwa [liftTop_comp_restrictHom_top] at hp
 
 end ComplexAnalytic.AnalyticSpace

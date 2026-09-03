@@ -209,8 +209,10 @@ construction rather than by a compatibility lemma.
   `Oka/AnalyticSpace/Finite.lean` and not in either file this sentence names.
 
   Two degenerate cases sit outside that, and neither rescues the route. `ofRestrict` at `V = ⊤`
-  *is* a closed map, being an isomorphism, so this is a statement about the plan's proper `V` and
-  not about open immersions in general. And `Polynomial.Monic` does not give positive degree:
+  *is* a closed map, being an isomorphism —
+  `ComplexAnalytic.AnalyticSpace.isIso_ofRestrict_of_eq_univ`, which this sentence asserted before
+  anything compiled it — so this is a statement about the plan's proper `V` and not about open
+  immersions in general. And `Polynomial.Monic` does not give positive degree:
   `StandardEtalePair` asks only `StandardEtalePair.monic_f`, so `d = 0` is permitted by the
   types — but then `q v = 1`, the hypersurface is empty, and the composite is finite for the
   reason that there is nothing to map. The plan is not for that case either, since

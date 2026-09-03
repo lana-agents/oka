@@ -131,13 +131,21 @@ unrelated, since a morphism out of `ComplexAnalytic.analytificationMap` is opaqu
   number and is a strictly stronger statement; it would also make
   `ComplexAnalytic.AnalyticSpace.not_isFinite_of_isLocalIso_of_not_surjective` unnecessary here,
   which is the trade this file declines.
-* **No statement says the `V` hypothesis of the restricted theorem is irredundant.**
+* **No statement says the `V` hypothesis of the restricted theorem is irredundant, and what is
+  missing is now one term rather than a theorem.**
   `ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp` is about
-  `ComplexAnalytic.AnalyticSpace.restrictHom` of this composite, and nothing in this repository
-  relates that at `V = ⊤` to the composite itself, so the two are different morphisms and the
-  implication is prose. **What is compiled is the counterexample the prose points at**, which is
-  what those docstrings say is missing; the last step from it to *"the hypothesis cannot be
-  dropped"* is not taken.
+  `ComplexAnalytic.AnalyticSpace.restrictHom` of this composite. **This bullet said
+  nothing in this repository relates that at `V = ⊤` to the composite itself; that is no longer
+  true** — `ComplexAnalytic.AnalyticSpace.isFinite_of_restrictHom_top`
+  (`Oka/AnalyticSpace/OpenSubspace.lean`) says a morphism whose restriction over `⊤` is finite is
+  finite, so `ComplexAnalytic.not_isFinite_condEtaleProj` below gives
+  `¬ ComplexAnalytic.AnalyticSpace.IsFinite` of *its* restriction over `⊤` by contraposition, and
+  the restricted theorem at `V = ⊤` would be false here. **That contrapositive is not compiled and
+  is deliberately not compiled here**: it is
+  `fun h ↦ not_isFinite_condEtaleProj (AnalyticSpace.isFinite_of_restrictHom_top _ h)`, one term,
+  and the branch that built the bridge left crossing it to whoever wants the statement in this
+  file rather than widening itself into the test library. **What is compiled is the counterexample
+  the prose points at**, which is what those docstrings say is missing.
 * **Nothing at `k ≥ 1`.** `ComplexAnalytic.condBase` is the empty presentation, so this is the
   `k = 0` case, which is what
   `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_comp` is stated at. The `k ≥ 1`
