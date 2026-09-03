@@ -78,7 +78,15 @@ additive.** Recording the decision rather than the alternative is the point of t
   on the `Spec` side, about a scheme glued from presented algebras.
 * **No statement that the chosen opens cover anything.** Every point lies in its own chosen open,
   which is what the theorem says; that the *range* of the family is a cover in any sense that a
-  glue datum would accept is a statement about the assembly and is not made here.
+  glue datum would accept is a statement about the assembly and is not made here. **A supremum
+  statement about the same family has since been added, and not to this file**:
+  `Oka/Analytification/SpecRefinedChoice.lean` says `⨆ x, … = ⊤` in the lattice of opens of the
+  glued scheme, over the points of that scheme. **That does not weaken this bullet and the
+  distinction is the one this bullet already draws**: a supremum over the points of `X` is not a
+  cover *a glue datum would accept*, because the points of `X` are not a cover datum's index type
+  — this file's `## What the index type is` section is the standing statement on that — and the
+  supremum is one module downstream rather than here for the reason that file gives, which is that
+  appending it would have falsified this bullet.
 -/
 
 open CategoryTheory AlgebraicGeometry
