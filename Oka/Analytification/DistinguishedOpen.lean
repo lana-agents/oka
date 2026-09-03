@@ -120,6 +120,11 @@ coordinate down, which is why it was affordable there.
   locally ringed spaces** — the `f_open` field of any
   `AlgebraicGeometry.LocallyRingedSpace.GlueData` built out of an affine cover, and the second
   thing such a glue data needs from this file, alongside the isomorphism.
+- `ComplexAnalytic.isIso_localisationProj_one`: **at `f = 1` that open immersion is an
+  isomorphism**, since `D(1)` is everything and the inclusion of such an open is invertible. It is
+  the degenerate end of the range `ComplexAnalytic.localisationOpen_ne_top` exists to keep the
+  statements here away from, and it says nothing about the corresponding morphism of
+  *presentations*.
 - `ComplexAnalytic.range_base_localisationProj`: **the image of the projection is exactly
   `D(f)`** — the equality, where `ComplexAnalytic.range_base_localisationProj_subset` is the
   containment. The side condition of an open-immersion lift is a containment *in* this range, so
@@ -594,6 +599,43 @@ theorem localisationOpen_ne_top (y : AnalyticSpace.analytification.{u} g)
   refine (mem_localisationOpen_iff.{u} g f).1 ?_ hy
   rw [hcon]
   trivial
+
+/-- **At `f = 1` the projection is an isomorphism**, and not merely the open immersion onto `D(f)`
+that `ComplexAnalytic.isOpenImmersion_localisationProj` gives at every `f`.
+
+`ComplexAnalytic.localisationIso` factors the projection through the inclusion of `D(1)`
+(`ComplexAnalytic.localisationIso_hom_ofRestrict`), `ComplexAnalytic.localisationOpen_one` says
+that open is everything, and `ComplexAnalytic.AnalyticSpace.isIso_ofRestrict_of_eq_univ` inverts
+the inclusion there. So both factors are isomorphisms and **nothing here is proved about
+localisation**: the content is entirely in those three, and this is their composite.
+
+**The hypothesis fed to `isIso_ofRestrict_of_eq_univ` is set-level and the `rfl` after the `rw` is
+what supplies it.** That theorem asks for `(U : Set X) = Set.univ` rather than `U = ⊤`, which is
+what makes it usable here at all: `ComplexAnalytic.localisationOpen_one` is an equality of
+`TopologicalSpace.Opens`, and rewriting with it leaves the coercion, where `rfl` closes it. Stating
+it at `U = ⊤` instead would have forced a transport, for the reason
+`ComplexAnalytic.AnalyticSpace.liftTop`'s docstring gives.
+
+**This is the degenerate case `ComplexAnalytic.localisationOpen_ne_top` above exists to exclude**,
+now exhibited rather than described: that lemma says `D(f)` is proper whenever `f` has a zero, and
+what it is guarding against is exactly this — at `f = 1` there is no zero, `D(1) = ⊤`, and the
+projection is an isomorphism, so a statement about a general `f` that were satisfied by `f = 1`
+would be saying nothing. Nothing below is stated at `f = 1`.
+
+**It says nothing at the level of presentations.** `ComplexAnalytic.localisationHom`
+(`Oka/Analytification/LocalisationFunctor.lean`) is the same map as a morphism of
+`ComplexAnalytic.Presentation`, and whether *it* is an isomorphism at `f = 1` — a statement about
+presented algebras — is not decided here and does not follow from this:
+`ComplexAnalytic.analytificationFunctor` is not known here to reflect isomorphisms, and nothing in
+this repository says it is. -/
+theorem isIso_localisationProj_one : IsIso (localisationProj.{u} g 1) := by
+  haveI : IsIso ((AnalyticSpace.analytification.{u} g).ofRestrict
+      (localisationOpen.{u} g 1)) := by
+    refine AnalyticSpace.isIso_ofRestrict_of_eq_univ.{u} _ _ ?_
+    rw [localisationOpen_one.{u} g]
+    rfl
+  rw [← localisationIso_hom_ofRestrict.{u} g 1]
+  infer_instance
 
 /-- **`D(f · f') = D(f) ⊓ D(f')`.**
 
