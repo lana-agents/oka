@@ -5274,3 +5274,79 @@ info: 'ComplexAnalytic.exists_affineOpenCover_opensRange_le' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.exists_affineOpenCover_opensRange_le
+
+/-! ### The refined cover's space maps onto the one it refines
+
+`Oka/Analytification/RefineDatumCover.lean`, which is the whole file. Appended as its own section
+rather than merged into an existing one, and the reason is stated here rather than cited: moving
+or reordering a section of this file is a conflict for every branch that has appended to it, and
+several appended to it on the day this was written.
+
+**Seven guards, and what they are a check of is the one place on this line that needs an equality
+of ranges rather than a containment.** `ComplexAnalytic.range_base_refineDatumToBase` computes the
+image of `ComplexAnalytic.refineDatumToBase` — guarded here — and its `⊇` half spends
+`ComplexAnalytic.range_base_localisationProj`, the equality, where every other consumer on this
+line of files spends `ComplexAnalytic.range_base_localisationProj_subset`. The other six are
+corollaries of it, of `Oka/Analytification/RefineDatumWitness.lean`'s trivial-family witness, or
+of the condition `ComplexAnalytic.RefineDatumCovers`, which is a `Prop`-valued definition and is
+guarded because every hypothesis on this line is.
+
+**`Classical.choice` is in all seven lists and is not a surprise**: the source's own glue data is
+built by `ComplexAnalytic.refineDatumOneR` and `ComplexAnalytic.refineDatumOneU`, both `choose`n,
+and `AlgebraicGeometry.LocallyRingedSpace.GlueData.ι_jointly_surjective` runs through the gluing's
+construction. This file's guards for `ComplexAnalytic.refineDatumToBase` and
+`ComplexAnalytic.refineDatumOneAnalytification` record the same three.
+
+**Named and not located, and this section holds itself to that.** No sentence in it says which
+section precedes or follows it — including the placement sentence, which gives its reason instead
+of citing a neighbour's — so an append anywhere leaves every sentence here true.
+-/
+
+/--
+info: 'ComplexAnalytic.RefineDatumCovers' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.RefineDatumCovers
+
+/--
+info: 'ComplexAnalytic.refineDatumToBase_base_coverIota' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumToBase_base_coverIota
+
+/--
+info: 'ComplexAnalytic.range_base_refineDatumToBase' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.range_base_refineDatumToBase
+
+/--
+info: 'ComplexAnalytic.surjective_base_refineDatumToBase' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.surjective_base_refineDatumToBase
+
+/--
+info: 'ComplexAnalytic.surjective_base_refineDatumToBase_iff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.surjective_base_refineDatumToBase_iff
+
+/--
+info: 'ComplexAnalytic.refineDatumOneCovers' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumOneCovers
+
+/--
+info: 'ComplexAnalytic.surjective_base_refineDatumOneToBase' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.surjective_base_refineDatumOneToBase

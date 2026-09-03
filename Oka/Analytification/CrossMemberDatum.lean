@@ -156,12 +156,19 @@ goal.
   above cuts out the refined overlap. **On the literal reading this bullet would now be false and
   on the one it is written under it stands; the second is the reading, and the heading above says
   so rather than leaving it to be inferred.**
-* **No statement that the refined data cover anything.** The other half of this bullet is
-  retired: `ComplexAnalytic.coverAnalytification_polyDiagOne` says the diagonal normalisation
-  preserves the glued space, and the section above now cites it. **What that does *not* say is
-  that the refined datum refines the original space**, which is a statement about
-  `ComplexAnalytic.refineDatumPoly` and not about `ComplexAnalytic.polyDiagOne`; nothing on this
-  line states it and the normalisation result is a step it may or may not go through.
+* **No statement that the refined data cover anything.** Two of the three things this bullet has
+  meant are now retired and the third is what is left, so the three are kept apart here rather
+  than left to a reader to separate. `ComplexAnalytic.coverAnalytification_polyDiagOne` says the
+  diagonal normalisation preserves the glued space, and this file's `## Why normalising the
+  diagonal is allowed` section cites it. And
+  `Oka/Analytification/RefineDatumCover.lean` says the refined datum's space maps **onto** the one
+  it refines when the refining family covers — with the image computed outright and no hypothesis,
+  in `ComplexAnalytic.range_base_refineDatumToBase` — so a covering statement about the refined
+  data now exists. **What neither of them says is that the refined datum *refines* the original
+  space**, which is a statement about `ComplexAnalytic.refineDatumPoly` — that the refined
+  overlaps are cut out where it says they are — and is about neither
+  `ComplexAnalytic.polyDiagOne` nor a surjection downstairs; nothing on this line states it, and
+  a morphism that is onto is not a refinement of covers.
 * **No witness at a concrete cover datum *here*.** This bullet said there was none anywhere:
   *"its refining family is constantly `1`, so it is not a witness at a concrete datum with a
   `poly` field of its own either"*. There is one — `OkaTest/RefineDatumWitness.lean` instantiates

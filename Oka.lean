@@ -111,6 +111,7 @@ import Oka.Analytification.Presentation
 import Oka.Analytification.PresentationFlatness
 import Oka.Analytification.PresentationStalk
 import Oka.Analytification.RefineDatumCocycle
+import Oka.Analytification.RefineDatumCover
 import Oka.Analytification.RefineDatumGlueData
 import Oka.Analytification.RefineDatumRange
 import Oka.Analytification.RefineDatumSymm
