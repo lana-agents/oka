@@ -3,6 +3,7 @@ Copyright (c) 2026 Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten. All righ
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
+import Oka.Analytification.RefineDatumCover
 import OkaTest.AffineCover
 
 /-!
@@ -182,10 +183,18 @@ need, says which part of that is now a theorem elsewhere, and compiles none of i
   *negative* about the one-member comparison at a constant `σ`, a different morphism, and
   `Oka/Analytification/RefineDatumToBase.lean` says in terms that nothing on that line inherits
   from it.
-* **No statement that the refined datum covers `ComplexAnalytic.nodeTripleSpace`.** A morphism down
-  is not a covering; nothing below says the base map is surjective, and
+* **The statement that the refined datum covers `ComplexAnalytic.nodeTripleSpace` is now here**,
+  and this bullet said it was not: `OkaTest.RefineDatumWitness.surjective_base_nodeRefineOneToBase`
+  below says the base map is surjective, by
+  `ComplexAnalytic.surjective_base_refineDatumOneToBase`
+  (`Oka/Analytification/RefineDatumCover.lean`) at `Function.surjective_id`. **What made it cheap
+  is that this refinement is a reindexing** — `D(1)` is the whole member, which is
+  `OkaTest.RefineDatumWitness.surjective_base_localisationProj_one`'s fact one level up — so it is
+  no evidence about a refinement that cuts a member down.
   `Oka/Analytification/CrossMemberDatum.lean`'s *"No statement that the refined data cover
-  anything"* is untouched.
+  anything"* is narrowed there by the same branch, and the half of it that survives — that the
+  refined datum *refines* the original space, which is a statement about
+  `ComplexAnalytic.refineDatumPoly` — is untouched here and by this.
 * **No `admissible`, no scheme and no comparison functor**, as in the files this one sits beside.
 
 ## Main definitions
@@ -217,6 +226,8 @@ need, says which part of that is now a theorem elsewhere, and compiles none of i
 - `OkaTest.RefineDatumWitness.coverIota_comp_nodeRefineOneToBase`: **the morphism down restricts on
   each refined member to that member's projection followed by the member's inclusion**, which is
   what says it is the intended morphism and not merely one of the right type.
+- `OkaTest.RefineDatumWitness.surjective_base_nodeRefineOneToBase`: **and it is onto** — the node
+  cover refined at three members covers `ComplexAnalytic.nodeTripleSpace`.
 -/
 
 open MvPolynomial CategoryTheory TopologicalSpace AlgebraicGeometry
@@ -505,6 +516,23 @@ theorem coverIota_comp_nodeRefineOneToBase (b : triple.{u}) :
         coverIota.{u} nodeCoverObj.{u} nodeCoverPoly.{u} nodeCoverGlue.{u} hrange_nodeCover.{u}
           hsymm_nodeCover.{u} hcocycle_nodeCover.{u} b :=
   ComplexAnalytic.coverIota_comp_refineDatumToBase.{u} _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ b
+
+/-- **And it is onto**: the node cover refined at three members covers
+`ComplexAnalytic.nodeTripleSpace`.
+
+`ComplexAnalytic.surjective_base_refineDatumOneToBase`
+(`Oka/Analytification/RefineDatumCover.lean`) at `Function.surjective_id`, every other argument
+solved from the goal. **The whole content is that `σ` here is `id` and that `D(1)` is the whole
+member** — the second being
+`OkaTest.RefineDatumWitness.surjective_base_localisationProj_one`'s fact one level up — so this is
+a covering because the refinement is a reindexing, and it is not evidence about a refinement that
+cuts a member down.
+
+**It says nothing about the morphism being injective or an isomorphism**, and the bullet in this
+file's `## What is not here` that declines that is untouched. -/
+theorem surjective_base_nodeRefineOneToBase :
+    Function.Surjective (nodeRefineOneToBase.{u}).toLRSHom.base :=
+  ComplexAnalytic.surjective_base_refineDatumOneToBase.{u} _ _ _ _ _ _ _ Function.surjective_id
 
 end
 

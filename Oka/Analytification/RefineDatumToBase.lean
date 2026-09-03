@@ -153,12 +153,24 @@ on this file by.
   `ComplexAnalytic.not_isIso_refineToBase` is the one-member analogue and it is a *negative* about
   a different morphism; nothing here inherits from it in either direction, and nothing here is a
   conjecture. What would make a comparison an isomorphism is the condition
-  `Oka/Analytification/CoverRefinement.lean` names and nobody has stated — that the refining
-  family covers — and this file does not state it either.
-* **Nothing that says the refined datum covers the original space.**
+  `Oka/Analytification/CoverRefinement.lean` names — that the refining family covers — and this
+  file does not state it. **The clause here that said nobody had stated it is retired**:
+  `Oka/Analytification/RefineDatumCover.lean` states it, as
+  `ComplexAnalytic.RefineDatumCovers`. **That does not weaken this bullet and the distinction is
+  the whole of why not**: what that condition buys there is that the base map of the morphism
+  below is *surjective*, and a surjection is not an isomorphism. Nothing anywhere says a word
+  about injectivity or about a morphism back, which is what both halves of this bullet are.
+* **Nothing *below* that says the refined datum covers the original space, and this bullet said
+  nothing anywhere did.** The surjectivity of this morphism is not proved, stated or needed in
+  this file, and nothing below changes; what is retired is the general half.
+  `Oka/Analytification/RefineDatumCover.lean` computes the image of the morphism below outright —
+  the union of the images of the `D(fam b)`, on no hypothesis at all — and proves the base map
+  surjective when the refining family covers, with an instance at
+  `Oka/Analytification/RefineDatumWitness.lean`'s trivial family and a concrete one at the node.
   `Oka/Analytification/CrossMemberDatum.lean`'s *"No statement that the refined data cover
-  anything"* is untouched: a morphism down is not a covering, and the surjectivity of this one is
-  not proved, stated, or needed below.
+  anything"* is narrowed there too and its remaining half — that the refined overlaps are cut out
+  where `ComplexAnalytic.refineDatumPoly` says they are — is a statement about that definition and
+  is untouched by any of it.
 * **No general form taking the refined cocycle law as an argument**, unlike
   `ComplexAnalytic.refineDatumGlueData` beside
   `ComplexAnalytic.refineDatumGlueDataOfLaws`. There would be no such thing to state: the
