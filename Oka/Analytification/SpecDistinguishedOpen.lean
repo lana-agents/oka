@@ -99,8 +99,8 @@ and costs three lines.
 
 ## What is not here
 
-* **Neither spelling of the range, but this bullet said the scheme-level one was absent and it is
-  not any more.** `ComplexAnalytic.opensRange_Spec_map_localisationRingHom` above is
+* **Neither spelling of the range is absent any more — this bullet recorded the scheme-level one
+  as missing and it is not.** `ComplexAnalytic.opensRange_Spec_map_localisationRingHom` above is
   `AlgebraicGeometry.Scheme.Hom.opensRange` at the structure map, proved out of
   `AlgebraicGeometry.Scheme.Hom.opensRange_localizationAway`, and it was added when a consumer
   that composes appeared. **The reason this bullet gave was right and is worth keeping**, because

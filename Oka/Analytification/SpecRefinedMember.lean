@@ -39,22 +39,28 @@ the member it refines** — an affine open of `X`, presented — and no transpor
 - `ComplexAnalytic.opensRange_refinedIota`: **and that range is exactly the image of `D(p)`**, so
   the open is the one a caller named rather than merely some open the construction produced.
 
-## What this is not, and the first two bullets are the operative ones
+## What is not here, and the first two bullets are the operative ones
 
 * **No choice function, and no family.** Taxis #1553 asks for a point-by-point existential —
-  the one that gives, at every point of `X` and an isomorphism of two data, two indices and two
-  polynomials in the members' own variables — to be turned into four chosen functions by
-  `choose`. **That theorem is not on `master`**: it is the last theorem of
-  `Oka/Analytification/SpecMemberSections.lean`, a file lana-agents/oka#374 adds and which was
-  approved and unlanded when this branch was cut. So there is nothing here to `choose` from, and
-  this file indexes nothing by the points of `X`. **When #374 lands the choice step is one tactic
-  on top of this file and it is a separate branch.**
-* **Nothing is said in terms of a polynomial read as a *section* of `X` either**, for the same
-  reason: the definition that does that, and the theorem saying which open in `X` it cuts out,
-  are both in `Oka/Analytification/SpecMemberSections.lean` and so are #374's too.
-  `ComplexAnalytic.opensRange_refinedIota` states the range as the image of a
-  `PrimeSpectrum.basicOpen`, which is what `master` can say; that theorem is what will turn it
-  into a statement about a section of `X`, in one rewrite, once it exists.
+  `ComplexAnalytic.exists_index_mvPolynomial_basicOpen_specSchemeIotaMap`, which gives at every
+  point of `X` and an isomorphism of two cover data two indices and two polynomials in the
+  members' own variables — to be turned into four chosen functions by `choose`. **That is one
+  tactic and it is deliberately a separate branch.** It was not merely out of scope when this file
+  was written but unwritable: the theorem arrives with
+  `Oka/Analytification/SpecMemberSections.lean`, which lana-agents/oka#374 added *after* this
+  branch was cut, so there was nothing to `choose` from. Landing that branch removed the obstacle
+  and did not put the step here. **This file indexes nothing by the points of `X`**, which is not
+  a cover datum's index type and is not claimed to be one.
+* **Nothing is said in terms of a polynomial read as a *section* of `X` either**, and that too is
+  now a scope decision rather than a blocked one. `ComplexAnalytic.presentationSection` is the
+  definition that reads a polynomial as a section over the range of an open immersion, and
+  `ComplexAnalytic.basicOpen_presentationSection` says which open of `X` it cuts out; both arrived
+  with lana-agents/oka#374, after this branch was cut.
+  `ComplexAnalytic.opensRange_refinedIota` below states the range as the image of a
+  `PrimeSpectrum.basicOpen` instead — **which is a statement about the open itself, and stays the
+  usable one for a reader who has not imported that file.** The second of those two theorems turns
+  it into a statement about a section of `X` in one rewrite, and that rewrite belongs with the
+  choice step in the branch above rather than here.
 * **No `poly`, no `glue`, and none of a cover datum's three laws.** That is the rest of
   `Oka/Analytification/SpecScheme.lean`'s third piece and it is taxis #1287's line, not this one —
   `Oka/Analytification/CrossMemberDatum.lean`, `Oka/Analytification/CrossMemberDatumGlue.lean` and
