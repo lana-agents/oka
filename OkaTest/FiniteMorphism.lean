@@ -96,8 +96,14 @@ strictly larger than the isomorphisms and neither rung is idle.
 `ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale`
 (`Oka/AnalyticSpace/CoveringMap.lean`) says a finite étale morphism out of a Hausdorff analytic
 space has a covering map for its underlying map; `ComplexAnalytic.isCoveringMap_base_sq` is the
-only place it is applied, and the only place at which its hypotheses are shown to be satisfiable
-by anything other than an isomorphism. **It proves nothing new about `z ↦ z²`** — Mathlib's
+only place at which its hypotheses are shown to be satisfiable by anything other than an
+isomorphism. **This sentence also said *"is the only place it is applied"*, and that clause is now
+false**: `ComplexAnalytic.isCoveringMap_base_restrictHom_analytificationMap_etalePresHom_comp`
+(`Oka/Analytification/Hausdorff.lean`) is a second application, at a morphism the analytification
+machinery produces rather than one written here by hand. **The two clauses are not the same claim
+and only one of them moved**, which is why the other is narrowed rather than deleted:
+`ComplexAnalytic.not_isIso_sq` shows `ComplexAnalytic.sq` is not an isomorphism, and nothing shows
+that of the second application's morphism. **It proves nothing new about `z ↦ z²`** — Mathlib's
 `isCoveringMap_npow` already covers that, and is what the local-homeomorphism field above is
 derived from — so read it as a test of the rung and not as a fact about the map.
 
@@ -1139,7 +1145,12 @@ theorem isFiniteEtale_sq : AnalyticSpace.IsFiniteEtale (ComplexAnalytic.sq.{u}) 
 
 `ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale` in
 `Oka/AnalyticSpace/CoveringMap.lean` says the underlying map of a finite étale morphism out of a
-Hausdorff analytic space is a covering map. This is the only place it is applied.
+Hausdorff analytic space is a covering map. **This was the only place it is applied until
+`ComplexAnalytic.isCoveringMap_base_restrictHom_analytificationMap_etalePresHom_comp`
+(`Oka/Analytification/Hausdorff.lean`) landed**, and the sentence is narrowed rather than deleted
+because what it recorded — that the rung had exactly one consumer — is what stopped being true. It
+is still the only application at a morphism this repository proves is not an isomorphism
+(`ComplexAnalytic.not_isIso_sq`).
 
 **Nothing here is new about `ComplexAnalytic.sq`, and the section would be misread if that were
 not said.** That `z ↦ z²` is a covering map of `ℂ ∖ {0}` is Mathlib's `isCoveringMap_npow`, which
@@ -1163,19 +1174,42 @@ one, as `AlgebraicGeometry.Scheme` does — so this is a hypothesis of
 
 Declared as an instance rather than a theorem so that the application below is one line. Its head
 is a particular restriction of a particular space, both defined in this file, so it cannot fire
-anywhere it is not wanted, and there is no competing `T2Space` instance for an analytic space to
-disagree with. -/
+anywhere it is not wanted.
+
+**It is subsumed and it is kept, and both halves are measured.** This paragraph used to end
+*"and there is no competing `T2Space` instance for an analytic space to disagree with"*, which
+`Oka/AnalyticSpace/Hausdorff.lean` makes false: `ComplexAnalytic.t2Space_complexAffineSpace` and
+`ComplexAnalytic.t2Space_restrict` prove this statement, which is the `example` below, so the two
+heads now overlap. `#synth` at this type still returns **this** instance, being declared later
+than the library's, which is what keeps the sentences below saying that a named theorem's
+`[T2Space]` hypothesis is *supplied by* it true. Retiring it is editorial, has no mathematical
+content, and costs re-verifying six citations — `Oka/AnalyticSpace/Finite.lean`,
+`OkaTest/FiniteEtaleCancel.lean` and four more in this file — so it is not done here. -/
 instance t2Space_restrict_punctured :
     T2Space ((AnalyticSpace.complexAffineSpace.{u} 1).restrict punctured.{u} : Type u) :=
   puncturedHomeo.{u}.symm.t2Space
 
+/-- **The general instances subsume the bespoke one**, which is the half of
+`ComplexAnalytic.t2Space_restrict_punctured`'s docstring that a reader cannot check by reading.
+`ComplexAnalytic.t2Space_complexAffineSpace` makes `ℂ¹` a Hausdorff analytic space and
+`ComplexAnalytic.t2Space_restrict` carries that to an open subspace;
+`ComplexAnalytic.puncturedHomeo` is not used. It is an `example` and not a `theorem` because
+nothing should cite it — its only job is to fail the build if the subsumption stops holding. -/
+example : T2Space ((AnalyticSpace.complexAffineSpace.{u} 1).restrict punctured.{u} : Type u) :=
+  ComplexAnalytic.t2Space_restrict _ _
+
 /-- **The underlying map of `ComplexAnalytic.sq` is a covering map**, from
 `ComplexAnalytic.isFiniteEtale_sq` and the third rung.
 
-This is the first — and so far only — application of
-`ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale` at anything other than an
-isomorphism, so it is what says the rung is not vacuous. It is *not* independent evidence that
-`z ↦ z²` covers the punctured line: see the section docstring. -/
+This is the **first** application of
+`ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale`, and still the only one at a
+morphism this repository proves is not an isomorphism — that is `ComplexAnalytic.not_isIso_sq`,
+and it is what says the rung is not vacuous. **The *"so far only"* this sentence carried is gone**:
+`ComplexAnalytic.isCoveringMap_base_restrictHom_analytificationMap_etalePresHom_comp`
+(`Oka/Analytification/Hausdorff.lean`) is a second application, and nothing shows *its* morphism is
+not an isomorphism — which is exactly where the two readings of the old clause part company, and
+why the surviving one is spelled out rather than left to a reader. It is *not* independent
+evidence that `z ↦ z²` covers the punctured line: see the section docstring. -/
 theorem isCoveringMap_base_sq :
     IsCoveringMap ((ComplexAnalytic.sq.{u}).toLRSHom.base :
       ((AnalyticSpace.complexAffineSpace.{u} 1).restrict punctured.{u} : Type u) → _) :=

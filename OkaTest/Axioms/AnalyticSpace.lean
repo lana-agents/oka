@@ -15,48 +15,84 @@ space is a local condition; **gluing** — the `ℂ`-algebra structure of a glue
 abstract spaces, the analytic structure on the gluing, the fields of
 `CategoryTheory.GlueData.ofGlueData'`, and gluing a morphism; and the
 **coproduct** — the disjoint union of a family, the trivial `n`-sheeted cover, and the sheet
-comparison. **Two of the sixteen headings below are about morphisms after all** — gluing one, and
-that a morphism to `ℂ^n` is determined by the pullbacks of the coordinates — because each is a
-statement about the space the construction produces; the *classes* of morphisms are
-`OkaTest/Axioms/Morphisms.lean`'s.
+comparison; and that the spaces this development **constructs** are **Hausdorff**, which is the
+one heading below naming a property of a space rather than a construction of one. **Two of the
+seventeen headings below are about morphisms after all** — gluing one, and that a morphism to
+`ℂ^n` is determined by the pullbacks of the coordinates — because each is a statement about the
+space the construction produces; the *classes* of morphisms are `OkaTest/Axioms/Morphisms.lean`'s.
 
-**That is a description and not a list, and the sixteen headings below are the record**: each
+**That is a description and not a list, and the seventeen headings below are the record**: each
 names the statement its assertions defend, and the recipe beside `OkaTest/Axioms.lean`'s routing
 table resolves them to modules. The stance is `OkaTest/Axioms/Sheaves.lean`'s and
-`OkaTest/Axioms/LocalOkaRing.lean`'s, and it is taken here because 112 guards over eighteen
+`OkaTest/Axioms/LocalOkaRing.lean`'s, and it is taken here because 129 guards over nineteen
 modules is past the size at which a list stays true.
 
 **The sentence this replaces named local models, the node and the value of a section**, which at
-`27c185a` is at most 19 of those 102 guards and four of the sixteen headings. Gluing alone —
-**the five headings named above**, from the `ℂ`-algebra structure of a glued space to gluing a
-morphism — is 51 of the 112 here and the coproduct 19, and neither appeared in it. **Six of the
-eighteen modules are not `Oka/AnalyticSpace/`'s**, and contribute 29 guards:
+`27c185a` was at most 19 of the 102 guards there and four of the sixteen headings there. Gluing
+alone — **the five headings named above**, from the `ℂ`-algebra structure of a glued space to
+gluing a morphism — is 51 of the 129 here and the coproduct 29, and neither appeared in it. **Six
+of the nineteen modules are not `Oka/AnalyticSpace/`'s**, and contribute 29 guards:
 `Oka/CategoryTheory/GlueData.lean` ten, four modules of `Oka/Geometry/RingedSpace/` fifteen, and
 `Oka/AlgebraicGeometry/GammaSpecAdjunction.lean` four — most of them under the gluing headings,
 beside the analytic statements they serve. See `OkaTest/Axioms.lean` on why a mirror-tree module
 such as the first has no row of its own.
 
 **Every undated count in the two paragraphs above is a claim about the tree and goes stale; the
-`27c185a` ones are records and do not.** *Every* one, including the ones the repair below does not
-touch: the coproduct *19* stands in the same clause as the *51*, is the same kind of number — a
-guard total under a group of headings — and moves the same way; it has simply not moved yet. **So
-the list below is what had gone false, and it is not the list to recheck after adding a guard.**
-That list is every undated numeral above, and it is deliberately not given as a count here, for
-the reason `OkaTest/Axioms/Analytification.lean`'s tower section states: a member a reader can
-check beats a cardinal they have to recount, and a census of a paragraph is the second.
+`27c185a` ones are records and do not.** *Every* one, including the ones a given repair does not
+touch — **and the coproduct subtotal is the proof of it.** When that warning was written the
+coproduct read *19* and the sentence carrying it said the number *"has simply not moved yet"*. The
+**very next commit to touch this file** falsified it — `d58c85d`, four guards under the trivial
+cover — and it then stood wrong for **23 commits**, because it was the one numeral nobody
+rechecked. **So the list to recheck after adding a guard is every undated numeral above and not
+the list of the ones some earlier branch repaired.** It is deliberately not given as a count here,
+for the reason `OkaTest/Axioms/Analytification.lean`'s tower section states: a member a reader
+can check beats a cardinal they have to recount, and a census of a paragraph is the second.
 
-Five had gone false. The *112*, the *51*, the *29*, the *ten* and the *fifteen* last read *108*,
-*48*, *27*, *nine* and *fourteen*, and all five were right at `f63cb3a`, which wrote them. Four
-guards have been added since and none
-removed — `AlgebraicGeometry.LocallyRingedSpace.GlueData.ext_of_toGlueData`,
+**The ledger of what has moved, in two rounds, because the second round found the first one's
+values already stale.** Counted as `#print axioms` **names**, which here equals the command count,
+at every figure below.
+
+At `4c91029` five numerals had gone false and were repaired to *112*, *51*, *29*, *ten* and
+*fifteen*, from *108*, *48*, *27*, *nine* and *fourteen*; all five had been right at `f63cb3a`,
+which wrote them, and four guards added and none removed since —
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.ext_of_toGlueData`,
 `CategoryTheory.GlueData'.ext_of_heq`,
 `ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear_congr` and
-`ComplexAnalytic.AnalyticSpace.nonvanishing_pullbackΓ` — and they account for every one of the
-five deltas exactly, three of them under gluing headings and two outside
-`Oka/AnalyticSpace/`. **What made *48* uncheckable rather than merely stale is that the sentence
-listing the gluing headings named four of them and the number counted five**, so a recount could
-not tell a wrong number from a different partition; the list above is now the five the number is
-of. Counted as `#print axioms` **names**, which here equals the command count, both 112.
+`ComplexAnalytic.AnalyticSpace.nonvanishing_pullbackΓ` — accounted for every one of the five
+deltas exactly, three of them under gluing headings and two outside `Oka/AnalyticSpace/`. **What
+had made *48* uncheckable rather than merely stale is that the sentence listing the gluing
+headings named four of them and the number counted five**, so a recount could not tell a wrong
+number from a different partition; the list above is the five the number is of.
+
+**Two of those five went stale again before this branch touched anything, and one of them was
+never repaired at `4c91029` at all.** At `a4f3a81` the guard total is **122** and not *112*, and
+the coproduct subtotal is **29** and not the *19* that has stood since `f63cb3a` — ten guards
+arrived between `4c91029` and `a4f3a81`, four from lana-agents/oka#365 and six from
+lana-agents/oka#380, **all ten under coproduct headings**, which is why the coproduct moved by
+exactly ten and the gluing *51* did not move at all. The *19* is the case this file's own warning
+is about: it stood in the same clause as the *51*, was the same kind of number, and had simply not
+moved yet when the clause was written.
+
+**This branch adds seven guards under one new heading and one new module**, so *112* → **129**,
+sixteen headings → **seventeen** and eighteen modules → **nineteen**; the gluing *51*, the *29*
+outside `Oka/AnalyticSpace/`, the *ten*, the *fifteen* and the *four* are all unmoved, because
+`Oka/AnalyticSpace/Hausdorff.lean` is under `Oka/AnalyticSpace/` and none of its guards is under a
+gluing or coproduct heading.
+
+**One defect found by this recount and deliberately not fixed here.** The *29* the coproduct now
+reads is a count of a partition that is itself wrong: six of those guards —
+`ComplexAnalytic.AnalyticSpace.mono_ofRestrict`, `ComplexAnalytic.AnalyticSpace.liftTop`,
+`ComplexAnalytic.AnalyticSpace.liftTop_ofRestrict`,
+`ComplexAnalytic.AnalyticSpace.isIso_ofRestrict_of_eq_univ`,
+`ComplexAnalytic.AnalyticSpace.isIso_liftTop` and
+`ComplexAnalytic.AnalyticSpace.liftTop_comp_restrictHom_top`, all from
+`Oka/AnalyticSpace/OpenSubspace.lean` — sit under `### The sheet comparison is ℂ-linear`, which is
+about none of them, and belong under `### An open subspace of a complex analytic space is a
+complex analytic space`, which holds three. Moving them takes the coproduct to **23** and that
+heading to **nine** and leaves the 129 alone. **That is the same defect lana-agents/oka#358
+repaired in this file at `4c91029`, recurring at the next append**, and it is a one-file follow-up
+for anyone: moving twelve lines here would change the numbers this branch is repairing under a
+reviewer's feet.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -1014,3 +1050,71 @@ info: 'ComplexAnalytic.AnalyticSpace.liftTop_comp_restrictHom_top' depends on ax
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.liftTop_comp_restrictHom_top
+
+/-! ### The analytic spaces this development constructs are Hausdorff
+
+`Oka/AnalyticSpace/Hausdorff.lean`, all seven of it, appended as its own heading rather than under
+one above: none of the sixteen names a separation property, and a guard appended past the end of
+the file would have landed under the sheet comparison, which is what happened to the six guards
+`### An open subspace of a complex analytic space is a complex analytic space` should hold and does
+not.
+
+**Every one of the seven is one `inferInstanceAs`**, so a guard here is a weak check by design —
+what it defends is that no route to `T2Space` of a construction ever acquires an axiom, which is
+exactly the failure a `sorry` in a subtype instance would produce.
+`ComplexAnalytic.t2Space_analytification` is not here: it is `Oka/Analytification/Hausdorff.lean`'s
+and is guarded in `OkaTest/Axioms/Analytification.lean` with the covering-map corollaries it exists
+for. **That sentence called it *"the seventh"*, which the two sentences before it falsify** — all
+seven of `Oka/AnalyticSpace/Hausdorff.lean` are guarded here, and that instance is an eighth in a
+different file; the ordinal is dropped rather than incremented, since no ordinal was doing any work
+in it. It is a leftover from a six-instance draft.
+-/
+
+/--
+info: 'ComplexAnalytic.t2Space_complexSpace' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.t2Space_complexSpace
+
+/--
+info: 'ComplexAnalytic.t2Space_restrict_complexAffineSpace' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.t2Space_restrict_complexAffineSpace
+
+/--
+info: 'ComplexAnalytic.t2Space_zeroLocusSubspace' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.t2Space_zeroLocusSubspace
+
+/--
+info: 'ComplexAnalytic.t2Space_restrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.t2Space_restrict
+
+/--
+info: 'ComplexAnalytic.t2Space_complexAffineSpace' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.t2Space_complexAffineSpace
+
+/--
+info: 'ComplexAnalytic.t2Space_zeroLocus' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.t2Space_zeroLocus
+
+/--
+info: 'ComplexAnalytic.t2Space_node' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.t2Space_node

@@ -50,6 +50,7 @@ import Oka.AnalyticSpace.Factorisation
 import Oka.AnalyticSpace.Finite
 import Oka.AnalyticSpace.FiniteEtaleOver
 import Oka.AnalyticSpace.Glue
+import Oka.AnalyticSpace.Hausdorff
 import Oka.AnalyticSpace.HolomorphicFamily
 import Oka.AnalyticSpace.HolomorphicMap
 import Oka.AnalyticSpace.HolomorphicMapGeneral
@@ -97,6 +98,7 @@ import Oka.Analytification.Flatness
 import Oka.Analytification.FlatnessAtAPoint
 import Oka.Analytification.Functor
 import Oka.Analytification.GlueShape
+import Oka.Analytification.Hausdorff
 import Oka.Analytification.HypersurfaceFinite
 import Oka.Analytification.LocalRing
 import Oka.Analytification.LocalisationComposite
