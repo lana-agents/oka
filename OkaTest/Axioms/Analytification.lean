@@ -4967,11 +4967,16 @@ info: 'ComplexAnalytic.isIso_localisationHom_one' depends on axioms:
 
 /-! ### A distinguished open of a member, as an affine open of the glued scheme
 
-`Oka/Analytification/SpecRefinedMember.lean`, plus the one declaration
+The **member-level** half of `Oka/Analytification/SpecRefinedMember.lean`, plus the one declaration
 `Oka/Analytification/SpecDistinguishedOpen.lean` gained for it. Appended as its own section for
 the reason the sections above give: a section moved is a conflict for somebody else.
 
-**All six are guarded, including the two that are data.**
+**This sentence named that whole file until its general level landed**, and it is narrowed rather
+than deleted: the five declarations stated at an arbitrary open immersion are guarded under the
+heading that names the general level, and the five here are those five at
+`ComplexAnalytic.specSchemeIota`.
+
+**All six here are guarded, including the two that are data.**
 `ComplexAnalytic.refinedPres` and `ComplexAnalytic.refinedIota` are a presentation and a morphism
 of schemes, so nothing else would notice if either started resting on a fourth axiom, and the
 three statements below them are exactly the statements *about* them.
@@ -4979,9 +4984,9 @@ three statements below them are exactly the statements *about* them.
 **`ComplexAnalytic.opensRange_Spec_map_localisationRingHom` is guarded here rather than beside
 `ComplexAnalytic.isOpenImmersion_Spec_map_localisationRingHom` above** for the same
 section-is-a-conflict reason, and because the two are one branch's worth of work: it exists
-because `ComplexAnalytic.opensRange_refinedIota` composes, and its axiom list is the interesting
-one of the pair, since Mathlib's `AlgebraicGeometry.Scheme.Hom.opensRange_localizationAway` is
-what it is proved out of.
+because the composite whose range `ComplexAnalytic.opensRange_refinedIota` describes has to be
+taken apart, and its axiom list is the interesting one of the pair, since Mathlib's
+`AlgebraicGeometry.Scheme.Hom.opensRange_localizationAway` is what it is proved out of.
 -/
 
 /--
@@ -5029,16 +5034,27 @@ info: 'ComplexAnalytic.opensRange_refinedIota' depends on axioms:
 `Oka/Analytification/SpecRefinedMemberSection.lean`, appended as its own section for the reason
 the sections above give: a section moved is a conflict for somebody else.
 
-**One declaration, and it is the whole file.**
-`ComplexAnalytic.opensRange_refinedIota_eq_basicOpen` is `ComplexAnalytic.opensRange_refinedIota`,
-which this file already guards, composed with `ComplexAnalytic.basicOpen_specSchemeIotaSection`,
-so its axiom list is the union of two lists this file already records and the guard is a check
-that composing them introduced nothing. **Named and not located**: a section appended at the end
-of this file cannot say which section is above it and stay true, since the next branch appends
-between them. That is a weaker claim than most guards here make, and it
-is the honest reason this section is one line long rather than a reason to leave it out: the
-declaration is advertised under a `## Main results`, and the rule this directory enforces is about
-placement rather than about how much a guard can surprise. -/
+**This section said *"One declaration, and it is the whole file"*, and that stopped being true
+when the general form landed**: `Oka/Analytification/SpecRefinedMemberSection.lean` now declares
+`ComplexAnalytic.opensRange_presentationRefinedIota_eq_basicOpen` as well, guarded under the
+heading that names the general level. **The sentence is corrected here rather than deleted**,
+because what it was recording — that this section guards the whole of what that file asserts — is
+what stopped being true and is worth saying once.
+
+**Its second claim needed the same correction.** This section said
+`ComplexAnalytic.opensRange_refinedIota_eq_basicOpen` *"is
+`ComplexAnalytic.opensRange_refinedIota` composed with
+`ComplexAnalytic.basicOpen_specSchemeIotaSection`"*, which was its proof and is no longer: it is
+now the general theorem at `ComplexAnalytic.specSchemeIota`, and the composition happens there.
+The guard is unchanged and is still a check that nothing was introduced, since the two proofs
+have the same axiom list and this guard is what says so.
+
+**Named and not located**: a section appended at the end of this file cannot say which section is
+above it and stay true, since the next branch appends between them. That is a weaker claim than
+most guards here make, and it is the honest reason this section carries one `#print axioms` rather
+than a reason to leave it out: the declaration is advertised under a `## Main results`, and the
+rule this directory enforces is about placement rather than about how much a guard can
+surprise. -/
 
 /--
 info: 'ComplexAnalytic.opensRange_refinedIota_eq_basicOpen' depends on axioms:
@@ -5046,3 +5062,72 @@ info: 'ComplexAnalytic.opensRange_refinedIota_eq_basicOpen' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.opensRange_refinedIota_eq_basicOpen
+
+/-! ### The refined member, at an arbitrary open immersion
+
+The general level of `Oka/Analytification/SpecRefinedMember.lean` and
+`Oka/Analytification/SpecRefinedMemberSection.lean`: a polynomial in the variables of a
+presentation, refining the open a presented affine open immersion into `X` names, rather than the
+open a member of a cover datum names. Appended as its own section for the reason the sections
+above give: a section moved is a conflict for somebody else.
+
+**One section for six declarations across two files, rather than two insertions under the two
+headings that name those files.** The subject the placement rule in `OkaTest/Axioms.lean` asks for
+is the general level, and it is one subject; splitting it would put half of it under a heading
+whose own text is about a member of a cover datum.
+
+**Every member-level guard this file already carries is now a guard on an application of one of
+these.** `ComplexAnalytic.refinedPres`, `ComplexAnalytic.refinedIota`,
+`ComplexAnalytic.isOpenImmersion_refinedIota`, `ComplexAnalytic.isAffineOpen_refinedIota`,
+`ComplexAnalytic.opensRange_refinedIota` and
+`ComplexAnalytic.opensRange_refinedIota_eq_basicOpen` are the six below at
+`ComplexAnalytic.specSchemeIota`, so **the two sets of guards are not independent and this file
+does not pretend they are**: what the member-level six now check is that specialising introduced
+nothing, and what the six below check is the mathematics. Both are worth keeping — a change to
+`ComplexAnalytic.specSchemeIota` itself would move the first six and not the second.
+
+**Named and not located.** No sentence here says which section is above or below it; the next
+branch appends between them.
+-/
+
+/--
+info: 'ComplexAnalytic.presentationRefinedPres' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.presentationRefinedPres
+
+/--
+info: 'ComplexAnalytic.presentationRefinedIota' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.presentationRefinedIota
+
+/--
+info: 'ComplexAnalytic.isOpenImmersion_presentationRefinedIota' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isOpenImmersion_presentationRefinedIota
+
+/--
+info: 'ComplexAnalytic.isAffineOpen_presentationRefinedIota' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isAffineOpen_presentationRefinedIota
+
+/--
+info: 'ComplexAnalytic.opensRange_presentationRefinedIota' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.opensRange_presentationRefinedIota
+
+/--
+info: 'ComplexAnalytic.opensRange_presentationRefinedIota_eq_basicOpen' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.opensRange_presentationRefinedIota_eq_basicOpen

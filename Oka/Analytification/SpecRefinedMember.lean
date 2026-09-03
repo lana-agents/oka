@@ -22,22 +22,63 @@ composite of `Spec` of the structure map with the member's own inclusion is an o
 `X` whose range is exactly `D(p)` seen in `X`. **So a refined member is the same kind of object as
 the member it refines** — an affine open of `X`, presented — and no transport is needed to say so.
 
+## Two levels, and the general one is where the content is
+
+Everything below is stated **twice**: once at an arbitrary open immersion
+`f : Spec (CommRingCat.of P.alg) ⟶ X` out of a presented algebra's spectrum, and once at
+`ComplexAnalytic.specSchemeIota`, the inclusion of a member of a cover datum. **The member-level
+form is the general one applied and every one of its proofs is a single application**; the
+mathematics is in the general form and the specialisation only fixes the immersion.
+
+**That is not symmetry for its own sake, and the cost of the one-level shape has already been paid
+once in this development.** `Oka/Analytification/SpecMemberSections.lean` states
+`ComplexAnalytic.presentationSection` and its two lemmas at an arbitrary immersion, and says on
+the declaration why: a member of a *second* cover datum carried into the first datum's scheme is
+`ComplexAnalytic.specSchemeIotaMap`, **which is not `ComplexAnalytic.specSchemeIota` of anything in
+the first datum**, so a lemma stated only at `specSchemeIota` reaches one of the two sides of a
+cross-datum statement and not the other. An earlier head of that file was one-level and mispriced
+the cross-datum theorem as a consequence; `Oka/Analytification/SpecTwoData.lean`'s bullet on
+`ComplexAnalytic.exists_index_mvPolynomial_basicOpen_specSchemeIotaMap` records the same event
+from the other side — *"the statement became cheap when that file restated its three lemmas at an
+arbitrary open immersion."*
+
+**A refined member of the second datum is exactly that situation**: what the choice step
+`ComplexAnalytic.exists_family_mvPolynomial_basicOpen_specSchemeIotaMap`
+(`Oka/Analytification/SpecMemberChoice.lean`) hands a caller is, at every point, a member of each
+of two data and a polynomial in each member's own variables, and only one of those two members is
+a `specSchemeIota`. **The general form below is what makes both refinable by one name.** No
+*statement* in this file mentions a second datum — the `## What is not here` bullet that says so
+is still true and now says explicitly that a legal argument is not an appearance — but the
+immersion is an argument rather than a fixed morphism, so a caller may supply one.
+
+**The immersion the specialised six are the general six at is named in this section and not under
+either heading below, and that is deliberate rather than terse**: `scripts/guard_coverage.py`
+reads every whitespace-free backticked token under a `## Main results` heading as a declaration
+that file advertises, and a token that is a *path* resolves to nothing and moves a census row for
+no reason. This paragraph is above the headings for the same reason.
+
 ## Main definitions
 
-- `ComplexAnalytic.refinedPres`: **`D(p)`'s presentation, as an object of
-  `ComplexAnalytic.Presentation`** — the member's presentation with one variable and one equation
-  adjoined.
-- `ComplexAnalytic.refinedIota`: **its inclusion into `X`**, as `Spec` of the structure map
-  followed by `ComplexAnalytic.specSchemeIota`.
+- `ComplexAnalytic.presentationRefinedPres`: **`D(p)`'s presentation**, for a polynomial `p` in
+  the variables of an arbitrary `ComplexAnalytic.Presentation` — that presentation with one
+  variable and one equation adjoined.
+- `ComplexAnalytic.presentationRefinedIota`: **its inclusion into `X`** along an arbitrary open
+  immersion, as `Spec` of the structure map followed by that immersion.
+- `ComplexAnalytic.refinedPres`: **the first at the `i`-th member of a cover datum.**
+- `ComplexAnalytic.refinedIota`: **the second at `ComplexAnalytic.specSchemeIota`.**
 
 ## Main results
 
-- `ComplexAnalytic.isOpenImmersion_refinedIota`: **the inclusion is an open immersion**, which is
-  what lets the two below be stated at all.
-- `ComplexAnalytic.isAffineOpen_refinedIota`: **its range is an affine open of `X`** — the
-  statement in the title and the reason the file exists.
-- `ComplexAnalytic.opensRange_refinedIota`: **and that range is exactly the image of `D(p)`**, so
-  the open is the one a caller named rather than merely some open the construction produced.
+- `ComplexAnalytic.isOpenImmersion_presentationRefinedIota`: **the inclusion is an open
+  immersion**, which is what lets the two below be stated at all.
+- `ComplexAnalytic.isAffineOpen_presentationRefinedIota`: **its range is an affine open of `X`** —
+  the statement in the title and the reason the file exists.
+- `ComplexAnalytic.opensRange_presentationRefinedIota`: **and that range is exactly the image of
+  `D(p)`**, so the open is the one a caller named rather than merely some open the construction
+  produced.
+- `ComplexAnalytic.isOpenImmersion_refinedIota`, `ComplexAnalytic.isAffineOpen_refinedIota` and
+  `ComplexAnalytic.opensRange_refinedIota`: **the same three at a member of a cover datum**, each
+  the general form at the member's own inclusion and nothing else.
 
 ## What is not here, and the first two bullets are the operative ones
 
@@ -61,10 +102,15 @@ the member it refines** — an affine open of `X`, presented — and no transpor
   `PrimeSpectrum.basicOpen` instead — **which is a statement about the open itself, and stays the
   usable one for a reader who has not imported that file.** **The section spelling of this range
   has since been added, and not to this file either**:
-  `ComplexAnalytic.opensRange_refinedIota_eq_basicOpen`
+  `ComplexAnalytic.opensRange_presentationRefinedIota_eq_basicOpen`
   (`Oka/Analytification/SpecRefinedMemberSection.lean`) is
-  `ComplexAnalytic.opensRange_refinedIota` composed with
-  `ComplexAnalytic.basicOpen_specSchemeIotaSection`, whose right-hand sides are the same term.
+  `ComplexAnalytic.opensRange_presentationRefinedIota` composed with
+  `ComplexAnalytic.basicOpen_presentationSection`, whose right-hand sides are the same term, and
+  `ComplexAnalytic.opensRange_refinedIota_eq_basicOpen` is that at
+  `ComplexAnalytic.specSchemeIota`. **This bullet named the member-level theorem as the
+  composition until the general level landed, and that is now where the composing happens**; the
+  correction is recorded rather than made silently, since the sentence was about a proof and the
+  proof moved.
   **This bullet used to price that step as *one rewrite* and to say it belonged with the choice
   step; both are corrected rather than deleted.** It is `Eq.trans` and `Eq.symm` and no rewrite at
   all — the `AlgebraicGeometry.Scheme.Hom.opensRange` motive hazard never arises for a term — and
@@ -78,7 +124,13 @@ the member it refines** — an affine open of `X`, presented — and no transpor
   here claims to refine one.** Two members' distinguished opens are not compared, in either
   direction: `i` and `p` are one member and one polynomial.
 * **No common refinement, and no second cover datum.** `ComplexAnalytic.specSchemeIotaMap` and
-  `Oka/Analytification/SpecTwoData.lean`'s two-datum vocabulary do not appear.
+  `Oka/Analytification/SpecTwoData.lean`'s two-datum vocabulary do not appear. **What the general
+  level changes is that such a morphism is now a legal argument, which is not the same as
+  appearing**: no *statement* below mentions a second datum, quantifies over one, or says anything
+  about two — the general declaration's own docstring names `ComplexAnalytic.specSchemeIotaMap` as
+  the immersion this is for, and naming it in prose is not asserting anything about it. The
+  immersion being an argument rather than a fixed morphism is exactly what keeps that true while
+  making the statement usable there.
 * **Nothing analytic.** No analytification, no `X^an`, no comparison morphism.
 * **Nothing about `p` being non-zero, or `D(p)` being non-empty.** At `p = 0` everything below is
   a statement about the empty open and stays true; nothing here excludes it and nothing here
@@ -93,6 +145,127 @@ namespace ComplexAnalytic
 
 noncomputable section
 
+/-! ### A distinguished open of any presented affine open -/
+
+/-- **The presentation of `D(p)` inside a presentation**, as an object of
+`ComplexAnalytic.Presentation`.
+
+`ComplexAnalytic.localisationPresentation` at that presentation's own relations: one variable and
+one equation more. **An `abbrev` and not a `def`**, so that
+`ComplexAnalytic.localisationRingHom`'s codomain and this object's
+`ComplexAnalytic.Presentation.alg` are the same term without a `change` — the same reason
+`ComplexAnalytic.refineDatumObj` (`Oka/Analytification/CrossMemberDatum.lean`) is one, and this is
+that object at the `Spec` side's spelling of the same situation.
+
+The tuple is `Fin.snoc`'d with `X_last · p − 1` and **not** with a reduced form of it; see
+`ComplexAnalytic.localisationPresentation`'s own docstring.
+
+**The presentation is an explicit argument of its own and not the section variable below**, which
+is forced rather than chosen: this object does not mention the immersion, so a section variable
+would not be included, and `P` is not inferable from `p : MvPolynomial (ULift (Fin P.n)) ℂ`
+because `P.n` does not determine `P`. Stating it with the presentation implicit fails to
+elaborate at the first use. -/
+abbrev presentationRefinedPres (P : Presentation.{u})
+    (p : MvPolynomial (ULift.{u} (Fin P.n)) ℂ) : Presentation.{u} :=
+  ⟨P.n + 1, P.k + 1, localisationPresentation.{u} P.g p⟩
+
+section
+
+variable {X : Scheme.{u}} {P : Presentation.{u}} (f : Spec (CommRingCat.of P.alg) ⟶ X)
+  [IsOpenImmersion f]
+
+/-- **The inclusion of `D(p)` into `X`**, along an arbitrary open immersion out of a presented
+algebra's spectrum.
+
+`Spec` of the structure map `A ⟶ A_p`, followed by `f`. Both factors are already here — the first
+is `Oka/Analytification/SpecDistinguishedOpen.lean`'s and the second is the caller's — and **the
+only content is that they compose**, which they do because `ComplexAnalytic.Presentation.alg` is
+an `abbrev` and the codomain of `ComplexAnalytic.localisationRingHom` is
+`ComplexAnalytic.presentationRefinedPres`'s algebra on the nose.
+
+The scheme-level spelling and not `ComplexAnalytic.specFunctor`'s: the target is an
+`AlgebraicGeometry.Scheme` and `f` is a morphism of schemes.
+
+**The immersion is arbitrary and that is the point**, for the reason
+`ComplexAnalytic.presentationSection` (`Oka/Analytification/SpecMemberSections.lean`) gives of
+itself: a member of a cover datum reaches this at `ComplexAnalytic.specSchemeIota`, and a member
+of a *second* datum carried into the first datum's scheme reaches it at
+`ComplexAnalytic.specSchemeIotaMap`, which is not `specSchemeIota` of anything in the first
+datum. -/
+def presentationRefinedIota (p : MvPolynomial (ULift.{u} (Fin P.n)) ℂ) :
+    Spec (CommRingCat.of (presentationRefinedPres.{u} P p).alg) ⟶ X :=
+  Spec.map (CommRingCat.ofHom (localisationRingHom.{u} P.g p)) ≫ f
+
+/-- **It is an open immersion**, being a composite of two.
+
+`AlgebraicGeometry.IsOpenImmersion.comp` at
+`ComplexAnalytic.isOpenImmersion_Spec_map_localisationRingHom` — which is a *theorem* and not an
+instance, so it is supplied by a `haveI` in the proof — and the `AlgebraicGeometry.IsOpenImmersion`
+instance the caller supplies for `f`.
+
+**A `haveI` here and an `attribute [local instance]` in
+`Oka/Analytification/SpecDistinguishedOpen.lean`, and the difference is not a matter of taste**:
+there the instance is needed to *state* the theorem, where a `haveI` cannot reach; here it is
+needed only inside the proof, and the narrower tool is the right one.
+
+**An `instance` and not a theorem**, because `AlgebraicGeometry.Scheme.Hom.opensRange` takes one
+as an argument and the two statements below are about that range: without it neither of them can
+be *stated*. -/
+instance isOpenImmersion_presentationRefinedIota (p : MvPolynomial (ULift.{u} (Fin P.n)) ℂ) :
+    IsOpenImmersion (presentationRefinedIota.{u} f p) :=
+  haveI := isOpenImmersion_Spec_map_localisationRingHom.{u} P.g p
+  IsOpenImmersion.comp _ _
+
+/-- **A distinguished open of a presented affine open of `X` is an affine open of `X`** — the
+statement this file exists for.
+
+`AlgebraicGeometry.isAffineOpen_opensRange` at the instance above, exactly as
+`ComplexAnalytic.isAffineOpen_specSchemeIota` gets a member's own statement: the
+`AlgebraicGeometry.IsAffine` side condition is on the *source*, and the source here is a spectrum.
+
+**What this adds to that theorem is that the affine opens of `X` this development can name are
+closed under passing to a distinguished open of one of them**, with the presentation carried
+along — `ComplexAnalytic.presentationRefinedPres` — rather than with the open produced abstractly
+and its affineness argued afterwards. -/
+theorem isAffineOpen_presentationRefinedIota (p : MvPolynomial (ULift.{u} (Fin P.n)) ℂ) :
+    IsAffineOpen (presentationRefinedIota.{u} f p).opensRange :=
+  isAffineOpen_opensRange _
+
+/-- **And the open it is, is the one the caller named**: the image under `f` of the basic open of
+`p`'s class in the presented algebra.
+
+`AlgebraicGeometry.Scheme.Hom.opensRange_comp` and
+`ComplexAnalytic.opensRange_Spec_map_localisationRingHom`. **Without this the two theorems above
+say only that *some* affine open of `X` is presented by
+`ComplexAnalytic.presentationRefinedPres`**, and a caller who chose `p` to cut out a particular
+open — which is what `ComplexAnalytic.exists_basicOpen_specSchemeIota_inter` produces at a member
+— could not tell that it got that one. This is the statement that makes
+`ComplexAnalytic.presentationRefinedIota` a *refinement* of the open `f` presents rather than an
+unrelated affine open of `X` that happens to sit inside it.
+
+**The image and not a `Set.range`, and that is why
+`ComplexAnalytic.opensRange_Spec_map_localisationRingHom` had to be stated**:
+`AlgebraicGeometry.Scheme.Hom.opensRange_comp` is at `AlgebraicGeometry.Scheme.Hom.opensRange`
+and has no `Set.range` form, so `ComplexAnalytic.range_base_specFunctor_map_localisationHom` — the
+spelling `Oka/Analytification/SpecAffineCover.lean`'s glue datum wants — cannot be used here.
+
+**The `have … := rfl` rather than naming `ComplexAnalytic.presentationRefinedIota` in the
+`simp only`.** It is a `def`, and naming a definition as a rewrite rule generates its equation
+lemma into this module, a hazard several files in this tree record. The composite is
+definitionally the definition, so `rfl` proves the unfolding and `simp only` consumes it as an
+ordinary hypothesis. -/
+theorem opensRange_presentationRefinedIota (p : MvPolynomial (ULift.{u} (Fin P.n)) ℂ) :
+    (presentationRefinedIota.{u} f p).opensRange =
+      f ''ᵁ PrimeSpectrum.basicOpen (Ideal.Quotient.mk (presentationIdeal.{u} P.g) p) := by
+  haveI := isOpenImmersion_Spec_map_localisationRingHom.{u} P.g p
+  have h : presentationRefinedIota.{u} f p =
+      Spec.map (CommRingCat.ofHom (localisationRingHom.{u} P.g p)) ≫ f := rfl
+  simp only [h, Scheme.Hom.opensRange_comp, opensRange_Spec_map_localisationRingHom]
+
+end
+
+/-! ### A distinguished open of a member of a cover datum -/
+
 variable {J : Type u} (obj : J → Presentation.{u})
   (poly : ∀ i : J, J → MvPolynomial (ULift.{u} (Fin (obj i).n)) ℂ)
   (glue : ∀ i j : J, coverOverlap.{u} obj poly i j ≅ coverOverlap.{u} obj poly j i)
@@ -105,105 +278,65 @@ variable {J : Type u} (obj : J → Presentation.{u})
       specTriple.{u} obj poly glue hrange j k i hjk hij.symm hik.symm ≫
       specTriple.{u} obj poly glue hrange k i j hik.symm hjk.symm hij = 𝟙 _)
 
-/-- **The presentation of `D(p)` inside the `i`-th member**, as an object of
-`ComplexAnalytic.Presentation`.
+/-- **The presentation of `D(p)` inside the `i`-th member.**
 
-`ComplexAnalytic.localisationPresentation` at the member's own relations: one variable and one
-equation more. **An `abbrev` and not a `def`**, so that `ComplexAnalytic.localisationRingHom`'s
-codomain and this object's `ComplexAnalytic.Presentation.alg` are the same term without a
-`change` — the same reason `ComplexAnalytic.refineDatumObj`
-(`Oka/Analytification/CrossMemberDatum.lean`) is one, and this is that object at the `Spec`
-side's spelling of the same situation.
-
-The tuple is `Fin.snoc`'d with `X_last · p − 1` and **not** with a reduced form of it; see
-`ComplexAnalytic.localisationPresentation`'s own docstring. -/
+`ComplexAnalytic.presentationRefinedPres` at the member's own presentation. What the
+specialisation adds is the index: the general form is at a presentation the reader supplies, and
+here it is the `i`-th member's, so the object is named by a member of this cover datum. -/
 abbrev refinedPres (i : J) (p : MvPolynomial (ULift.{u} (Fin (obj i).n)) ℂ) : Presentation.{u} :=
-  ⟨(obj i).n + 1, (obj i).k + 1, localisationPresentation.{u} (obj i).g p⟩
+  presentationRefinedPres.{u} (obj i) p
 
 /-- **The inclusion of `D(p)` into `X`.**
 
-`Spec` of the structure map `A_i ⟶ (A_i)_p`, followed by the member's own inclusion
-`ComplexAnalytic.specSchemeIota`. Both factors are already here — the first is
-`Oka/Analytification/SpecDistinguishedOpen.lean`'s and the second is
-`Oka/Analytification/SpecScheme.lean`'s — and **the only content is that they compose**, which
-they do because `ComplexAnalytic.Presentation.alg` is an `abbrev` and the codomain of
-`ComplexAnalytic.localisationRingHom` is `ComplexAnalytic.refinedPres`'s algebra on the nose.
-
-The scheme-level spelling and not `ComplexAnalytic.specFunctor`'s: the target is
-`ComplexAnalytic.specScheme`, which is a `AlgebraicGeometry.Scheme`, and
-`ComplexAnalytic.specSchemeIota` is the morphism of schemes it has. -/
+`ComplexAnalytic.presentationRefinedIota` at `ComplexAnalytic.specSchemeIota`, which is an open
+immersion out of `Spec` of `(obj i).alg`. It is a declaration of its own and not a local
+abbreviation because the immersion carries the whole cover datum: the general form takes six
+arguments before the index, and every statement below that mentions one member of one datum would
+spell them twice. That is `ComplexAnalytic.specSchemeIotaSection`'s reason for existing, in that
+declaration's own words, and it is this one's. -/
 def refinedIota (i : J) (p : MvPolynomial (ULift.{u} (Fin (obj i).n)) ℂ) :
     Spec (CommRingCat.of (refinedPres.{u} obj i p).alg) ⟶
       specScheme.{u} obj poly glue hrange hsymm hcocycle :=
-  Spec.map (CommRingCat.ofHom (localisationRingHom.{u} (obj i).g p)) ≫
-    specSchemeIota.{u} obj poly glue hrange hsymm hcocycle i
+  presentationRefinedIota.{u} (specSchemeIota.{u} obj poly glue hrange hsymm hcocycle i) p
 
-/-- **It is an open immersion**, being a composite of two.
+/-- **It is an open immersion.**
 
-`AlgebraicGeometry.IsOpenImmersion.comp` at
-`ComplexAnalytic.isOpenImmersion_Spec_map_localisationRingHom` — which is a *theorem* and not an
-instance, so it is supplied by a `haveI` in the proof — and
-`ComplexAnalytic.isOpenImmersion_specSchemeIota`, which is an instance and is found.
-
-**A `haveI` here and an `attribute [local instance]` in
-`Oka/Analytification/SpecDistinguishedOpen.lean`, and the difference is not a matter of taste**:
-there the instance is needed to *state* the theorem, where a `haveI` cannot reach; here it is
-needed only inside the proof, and the narrower tool is the right one.
-
-**An `instance` and not a theorem**, because `AlgebraicGeometry.Scheme.Hom.opensRange` takes one
-as an argument and the two statements below are about that range: without it neither of them can
-be *stated*. -/
+`ComplexAnalytic.isOpenImmersion_presentationRefinedIota` at the same immersion, whose own
+`AlgebraicGeometry.IsOpenImmersion` instance is
+`ComplexAnalytic.isOpenImmersion_specSchemeIota` and is found. **An `instance` and not a theorem**,
+for the reason the general form gives: the two statements below are about a
+`AlgebraicGeometry.Scheme.Hom.opensRange` and cannot be stated without one. -/
 instance isOpenImmersion_refinedIota (i : J)
     (p : MvPolynomial (ULift.{u} (Fin (obj i).n)) ℂ) :
     IsOpenImmersion (refinedIota.{u} obj poly glue hrange hsymm hcocycle i p) :=
-  haveI := isOpenImmersion_Spec_map_localisationRingHom.{u} (obj i).g p
-  IsOpenImmersion.comp _ _
+  isOpenImmersion_presentationRefinedIota.{u}
+    (specSchemeIota.{u} obj poly glue hrange hsymm hcocycle i) p
 
-/-- **A distinguished open of a member is an affine open of `X`** — the statement this file exists
-for.
+/-- **A distinguished open of a member is an affine open of `X`** — the statement in this file's
+title.
 
-`AlgebraicGeometry.isAffineOpen_opensRange` at the instance above, exactly as
-`ComplexAnalytic.isAffineOpen_specSchemeIota` gets the member's own statement: the
-`AlgebraicGeometry.IsAffine` side condition is on the *source*, and the source here is a spectrum.
-
-**What this adds to that theorem is that the affine opens of `X` this development can name are
-closed under passing to a distinguished open of one of them**, with the presentation carried
-along — `ComplexAnalytic.refinedPres` — rather than with the open produced abstractly and its
-affineness argued afterwards. -/
+`ComplexAnalytic.isAffineOpen_presentationRefinedIota` at the same immersion. What the
+specialisation adds is that the affine open is a distinguished open of a *member of this cover
+datum*, which is the form `Oka/Analytification/SpecScheme.lean`'s
+`ComplexAnalytic.exists_basicOpen_specSchemeIota_inter` produces its opens in. -/
 theorem isAffineOpen_refinedIota (i : J) (p : MvPolynomial (ULift.{u} (Fin (obj i).n)) ℂ) :
     IsAffineOpen (refinedIota.{u} obj poly glue hrange hsymm hcocycle i p).opensRange :=
-  isAffineOpen_opensRange _
+  isAffineOpen_presentationRefinedIota.{u}
+    (specSchemeIota.{u} obj poly glue hrange hsymm hcocycle i) p
 
 /-- **And the open it is, is the one the caller named**: the image under the member's inclusion of
 the basic open of `p`'s class in the member's algebra.
 
-`AlgebraicGeometry.Scheme.Hom.opensRange_comp` and
-`ComplexAnalytic.opensRange_Spec_map_localisationRingHom`. **Without this the two theorems above
-say only that *some* affine open of `X` is presented by `ComplexAnalytic.refinedPres`**, and a
-caller who chose `p` to cut out a particular open — which is what
-`ComplexAnalytic.exists_basicOpen_specSchemeIota_inter` produces — could not tell that it got that
-one. This is the statement that makes `ComplexAnalytic.refinedIota` a *refinement* of the member
-rather than an unrelated affine open of `X` that happens to sit inside it.
-
-**The image and not a `Set.range`, and that is why
-`ComplexAnalytic.opensRange_Spec_map_localisationRingHom` had to be stated**:
-`AlgebraicGeometry.Scheme.Hom.opensRange_comp` is at `AlgebraicGeometry.Scheme.Hom.opensRange`
-and has no `Set.range` form, so `ComplexAnalytic.range_base_specFunctor_map_localisationHom` — the
-spelling `Oka/Analytification/SpecAffineCover.lean`'s glue datum wants — cannot be used here.
-
-**The `have … := rfl` rather than naming `ComplexAnalytic.refinedIota` in the `simp only`.**
-`refinedIota` is a `def`, and naming a definition as a rewrite rule generates its equation lemma
-into this module, a hazard several files in this tree record. The composite is definitionally the
-definition, so `rfl` proves the unfolding and `simp only` consumes it as an ordinary hypothesis. -/
+`ComplexAnalytic.opensRange_presentationRefinedIota` at the same immersion. What the
+specialisation adds is the index: the general form describes the open as the image under *an*
+immersion, and here it is the image under the `i`-th member's own, so the open is named by a
+member of this cover datum rather than by a morphism the reader has to supply. -/
 theorem opensRange_refinedIota (i : J) (p : MvPolynomial (ULift.{u} (Fin (obj i).n)) ℂ) :
     (refinedIota.{u} obj poly glue hrange hsymm hcocycle i p).opensRange =
       specSchemeIota.{u} obj poly glue hrange hsymm hcocycle i ''ᵁ
-        PrimeSpectrum.basicOpen (Ideal.Quotient.mk (presentationIdeal.{u} (obj i).g) p) := by
-  haveI := isOpenImmersion_Spec_map_localisationRingHom.{u} (obj i).g p
-  have h : refinedIota.{u} obj poly glue hrange hsymm hcocycle i p =
-      Spec.map (CommRingCat.ofHom (localisationRingHom.{u} (obj i).g p)) ≫
-        specSchemeIota.{u} obj poly glue hrange hsymm hcocycle i := rfl
-  simp only [h, Scheme.Hom.opensRange_comp, opensRange_Spec_map_localisationRingHom]
+        PrimeSpectrum.basicOpen (Ideal.Quotient.mk (presentationIdeal.{u} (obj i).g) p) :=
+  opensRange_presentationRefinedIota.{u}
+    (specSchemeIota.{u} obj poly glue hrange hsymm hcocycle i) p
 
 end
 
