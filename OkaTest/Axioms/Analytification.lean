@@ -4964,3 +4964,62 @@ info: 'ComplexAnalytic.isIso_localisationHom_one' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isIso_localisationHom_one
+
+/-! ### A distinguished open of a member, as an affine open of the glued scheme
+
+`Oka/Analytification/SpecRefinedMember.lean`, plus the one declaration
+`Oka/Analytification/SpecDistinguishedOpen.lean` gained for it. Appended as its own section for
+the reason the sections above give: a section moved is a conflict for somebody else.
+
+**All six are guarded, including the two that are data.**
+`ComplexAnalytic.refinedPres` and `ComplexAnalytic.refinedIota` are a presentation and a morphism
+of schemes, so nothing else would notice if either started resting on a fourth axiom, and the
+three statements below them are exactly the statements *about* them.
+
+**`ComplexAnalytic.opensRange_Spec_map_localisationRingHom` is guarded here rather than beside
+`ComplexAnalytic.isOpenImmersion_Spec_map_localisationRingHom` above** for the same
+section-is-a-conflict reason, and because the two are one branch's worth of work: it exists
+because `ComplexAnalytic.opensRange_refinedIota` composes, and its axiom list is the interesting
+one of the pair, since Mathlib's `AlgebraicGeometry.Scheme.Hom.opensRange_localizationAway` is
+what it is proved out of.
+-/
+
+/--
+info: 'ComplexAnalytic.opensRange_Spec_map_localisationRingHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.opensRange_Spec_map_localisationRingHom
+
+/--
+info: 'ComplexAnalytic.refinedPres' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refinedPres
+
+/--
+info: 'ComplexAnalytic.refinedIota' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refinedIota
+
+/--
+info: 'ComplexAnalytic.isOpenImmersion_refinedIota' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isOpenImmersion_refinedIota
+
+/--
+info: 'ComplexAnalytic.isAffineOpen_refinedIota' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isAffineOpen_refinedIota
+
+/--
+info: 'ComplexAnalytic.opensRange_refinedIota' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.opensRange_refinedIota

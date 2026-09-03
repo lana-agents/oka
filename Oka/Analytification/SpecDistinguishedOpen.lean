@@ -91,19 +91,30 @@ and costs three lines.
 - `ComplexAnalytic.specLocalisationIso_hom_ofRestrict` and
   `ComplexAnalytic.specLocalisationIso_inv_specFunctor_map`: **the isomorphism is one over
   `Spec A`.**
+- `ComplexAnalytic.opensRange_Spec_map_localisationRingHom`: **the same image statement at
+  `AlgebraicGeometry.Scheme.Hom.opensRange`**, which is the spelling a consumer that *composes*
+  this open immersion with another needs, since
+  `AlgebraicGeometry.Scheme.Hom.opensRange_comp` has no `Set.range` form. What it costs is
+  recorded in its own docstring and in the first bullet below.
 
 ## What is not here
 
-* **`AlgebraicGeometry.Scheme.Hom.opensRange`**, and with it
-  `AlgebraicGeometry.Scheme.Hom.opensRange_localizationAway`, which is Mathlib's idiomatic form of
-  the range statement. `ComplexAnalytic.range_base_specFunctor_map_localisationHom` says the same
-  thing at `Set.range … .base`, and it is stated that way because
+* **Neither spelling of the range is absent any more — this bullet recorded the scheme-level one
+  as missing and it is not.** `ComplexAnalytic.opensRange_Spec_map_localisationRingHom` above is
+  `AlgebraicGeometry.Scheme.Hom.opensRange` at the structure map, proved out of
+  `AlgebraicGeometry.Scheme.Hom.opensRange_localizationAway`, and it was added when a consumer
+  that composes appeared. **The reason this bullet gave was right and is worth keeping**, because
+  it is what the proof pays and not what the statement pays:
+  `ComplexAnalytic.range_base_specFunctor_map_localisationHom` says the same thing at
+  `Set.range … .base`, and it is stated that way because
   `ComplexAnalytic.specLocalisationOpen` is declared at the `ComplexAnalytic.specFunctor.obj`
   spelling: the `Opens → Set` coercion then lands in the type the range already lives in, and the
   unification the scheme-level spelling asks for — between `↥(Spec (CommRingCat.of
   (PresentedAlgebra n k g)))` and `PrimeSpectrum ↑(CommRingCat.of (PresentedAlgebra n k g))`,
-  definitionally equal and not unified through that coercion — never arises. **Which of the two a
-  `Spec`-side glue data wants is answered**: `Oka/Analytification/SpecAffineCover.lean`'s
+  definitionally equal and not unified through that coercion — never arises **there**. It arises
+  here, in the `rw` and not in the statement, and `simp only` is what abstracts the instance
+  argument that makes the motive ill-typed. **Which of the two a `Spec`-side glue data wants is
+  answered**: `Oka/Analytification/SpecAffineCover.lean`'s
   `ComplexAnalytic.specOpen` — the `V` of its glue datum — is `ComplexAnalytic.specLocalisationOpen`
   and nothing else, so it wants the `ComplexAnalytic.specFunctor.obj` spelling, which is the one
   this file has.
@@ -308,6 +319,52 @@ theorem specLocalisationIso_inv_specFunctor_map :
       (specFunctor.{u}.obj ⟨n, k, g⟩).ofRestrict
         (specLocalisationOpen.{u} g f).isOpenEmbedding := by
   rw [← specLocalisationIso_hom_ofRestrict.{u} g f, Iso.inv_hom_id_assoc]
+
+/-! ### The range, at the scheme-level spelling -/
+
+section OpensRange
+
+attribute [local instance] isOpenImmersion_Spec_map_localisationRingHom
+
+/-- **The range of `Spec` of the structure map is `D(f)`**, at
+`AlgebraicGeometry.Scheme.Hom.opensRange` — Mathlib's idiomatic spelling, and the one a consumer
+that composes this morphism with another open immersion has to have.
+
+`ComplexAnalytic.range_base_specFunctor_map_localisationHom` above is the same fact at
+`Set.range … .base` and at the `ComplexAnalytic.specFunctor.obj` spelling, which is what a
+`Spec`-side glue datum wants. **This one is for a consumer that is composing**, since
+`AlgebraicGeometry.Scheme.Hom.opensRange_comp` is stated at `opensRange` and has no `Set.range`
+form: `Oka/Analytification/SpecRefinedMember.lean` is the first such consumer.
+
+**The unification this file's `## What is not here` priced is real and it is the `rw` that pays
+it, not the statement.** The two `Opens` types — over `↥(Spec (CommRingCat.of (PresentedAlgebra n
+k g)))` and over `PrimeSpectrum ↑(CommRingCat.of (PresentedAlgebra n k g))` — are definitionally
+equal, so the statement elaborates; what fails is `rw`, with *"motive is not type correct"*,
+because `AlgebraicGeometry.Scheme.Hom.opensRange` carries an
+`AlgebraicGeometry.IsOpenImmersion` argument that depends on the morphism being rewritten. **Two
+things buy it and both are one word**: `simp only` rather than `rw`, which abstracts the instance
+argument, and naming `R` explicitly in the final `exact`, since Mathlib's lemma is stated for
+`R : CommRingCat` and the `algebraMap` here has a bare type as its source.
+
+**`attribute [local instance]`, scoped to this section, rather than a `have`.** The instance is
+needed to *state* the theorem, not only to prove it, so a `have` cannot supply it; and
+`ComplexAnalytic.isOpenImmersion_Spec_map_localisationRingHom` is deliberately a theorem rather
+than an instance, for the reason its sibling's docstring gives. Nothing above this section is
+elaborated with it in scope. -/
+theorem opensRange_Spec_map_localisationRingHom :
+    (Spec.map (CommRingCat.ofHom (localisationRingHom.{u} g f))).opensRange =
+      PrimeSpectrum.basicOpen (Ideal.Quotient.mk (presentationIdeal.{u} g) f) := by
+  have h : CommRingCat.ofHom (localisationRingHom.{u} g f) =
+      CommRingCat.ofHom (algebraMap (PresentedAlgebra.{u} n k g)
+        (Localization.Away (Ideal.Quotient.mk (presentationIdeal.{u} g) f))) ≫
+        (specLocalisationRingIso.{u} g f).inv := by
+    rw [← localisationRingHom_comp_eq, Category.assoc, Iso.hom_inv_id, Category.comp_id]
+  simp only [h, Spec.map_comp, Scheme.Hom.opensRange_comp_of_isIso]
+  exact Scheme.Hom.opensRange_localizationAway
+    (R := CommRingCat.of (PresentedAlgebra.{u} n k g))
+    (Ideal.Quotient.mk (presentationIdeal.{u} g) f)
+
+end OpensRange
 
 end
 
