@@ -1618,3 +1618,42 @@ info: 'ComplexAnalytic.AnalyticSpace.not_isFinite_of_isLocalIso_of_not_surjectiv
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.not_isFinite_of_isLocalIso_of_not_surjective
+
+/-!
+### A property of the restriction over `⊤` is a property of the morphism
+
+`ComplexAnalytic.AnalyticSpace.restrictHom f V` is a morphism between two *other* spaces, so a
+statement about it is not on its face a statement about `f`. At `V = ⊤` the two inclusions are
+isomorphisms and the property transfers, which is what lets a `V` hypothesis be **refuted** rather
+than only left unproved: a morphism that is not finite étale now gives
+`¬ ComplexAnalytic.AnalyticSpace.IsFiniteEtale` of its own restriction over `⊤` by contraposition,
+and likewise for `ComplexAnalytic.AnalyticSpace.IsFinite`. **The finiteness half is the one the
+two `## What is not here` bullets elsewhere were about**, since both name a finiteness theorem; it
+lives in `Oka/AnalyticSpace/OpenSubspace.lean` because `ComplexAnalytic.AnalyticSpace.IsFinite` is
+not a `CategoryTheory.MorphismProperty` here and needs no part of this file.
+
+**Appended as its own section**, for the reason the sections above give. The open-subspace
+statements underneath these — `ComplexAnalytic.AnalyticSpace.mono_ofRestrict`,
+`ComplexAnalytic.AnalyticSpace.liftTop_ofRestrict`,
+`ComplexAnalytic.AnalyticSpace.isIso_ofRestrict_of_eq_univ`,
+`ComplexAnalytic.AnalyticSpace.isIso_liftTop` and
+`ComplexAnalytic.AnalyticSpace.liftTop_comp_restrictHom_top` — are guarded in
+`OkaTest/Axioms/AnalyticSpace.lean`, with the constructions that build a space rather than with the
+classes of morphisms, and so is the one definition they are stated about,
+`ComplexAnalytic.AnalyticSpace.liftTop`. **Listed rather than counted**, because a list is
+falsified by a missing entry and a numeral by any addition anywhere.
+-/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_restrictHom_top' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_restrictHom_top
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isFinite_of_restrictHom_top' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFinite_of_restrictHom_top

@@ -62,6 +62,8 @@ transport of algebra structures along an isomorphism is needed anywhere.
   subset of the target**, as a morphism of complex analytic spaces. This is the other way to land
   in an open subspace, and it asks nothing of the image: `liftRestrict` keeps the source and needs
   the image to lie in `V`, this shrinks the source to the preimage of `V` instead.
+- `ComplexAnalytic.AnalyticSpace.liftTop`: **the section of the inclusion at an open that is
+  everything**, which is `ComplexAnalytic.AnalyticSpace.liftRestrict` at the identity.
 - `ComplexAnalytic.AnalyticSpace.resΓ`: the restriction of a global section of `𝒪_X` to an open
   subspace.
 
@@ -84,6 +86,16 @@ transport of algebra structures along an isomorphism is needed anywhere.
   open subset of the target is a local isomorphism**, with no hypothesis on the morphism or the
   open beyond that. Unlike the bullet above this needs nothing of the base map's image, because
   both fields are local at a point and a restriction changes neither.
+- `ComplexAnalytic.AnalyticSpace.mono_ofRestrict`: **the inclusion of an open subspace is a
+  monomorphism**, reflected along the faithful forgetful functor.
+- `ComplexAnalytic.AnalyticSpace.isIso_ofRestrict_of_eq_univ`: **it is an isomorphism when the
+  open is everything.**
+- `ComplexAnalytic.AnalyticSpace.liftTop_comp_restrictHom_top`: **a morphism is its own
+  restriction over `⊤`, conjugated by two inclusions** — which is what carries a property of
+  `ComplexAnalytic.AnalyticSpace.restrictHom f ⊤` back to `f`.
+- `ComplexAnalytic.AnalyticSpace.isFinite_of_restrictHom_top`: **a morphism whose restriction over
+  `⊤` is finite is finite**, which is that transfer at the one property two `## What is not here`
+  bullets elsewhere were asking about.
 
 ## Why `Oka/AnalyticSpace/LocalIso.lean` is imported here, when no import was forced
 
@@ -527,6 +539,135 @@ lemma liftRestrict_fac {Z X : AnalyticSpace.{u}} (φ : Z ⟶ X) (V : X.Opens)
     (h : Set.range (φ.toLRSHom.base : Z → X) ⊆ (V : Set X)) :
     liftRestrict φ V h ≫ X.ofRestrict V = φ :=
   forgetToLocallyRingedSpace.map_injective (LocallyRingedSpace.liftRestrict_fac φ.toLRSHom V h)
+
+/-! ### The open subspace at an open that is everything -/
+
+/-- **The inclusion of an open subspace is a monomorphism.**
+
+`ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace` is faithful and a faithful functor
+*reflects* monomorphisms, so this is `AlgebraicGeometry.LocallyRingedSpace.ofRestrict`'s own
+`Mono` instance carried back. **Nothing is transported and no `ℂ`-linearity is checked**: a
+monomorphism is a cancellation property of the category, not structure on the morphism.
+
+**The `show` is load-bearing and is the seam this file's neighbours already record.**
+`forgetToLocallyRingedSpace.map (X.ofRestrict U)` and
+`X.toLocallyRingedSpace.ofRestrict U.isOpenEmbedding` are `rfl`-equal and are *different
+discrimination-tree keys*, so `infer_instance` finds the Mathlib instance only at the second
+spelling. `ComplexAnalytic.AnalyticSpace.isLocalIso_of_isIso`'s docstring calls that its third
+appearance; this is the fourth. **The step is a `change` and not a `show`**: the two spellings are
+`rfl`-equal but not syntactically equal, so `linter.style.show` fires and `lake build --wfail`
+turns the warning into an error, which `lake env lean` on a scratch file does not.
+
+Before this, `Mono` of an inclusion was available in this repository only through
+`AlgebraicGeometry.LocallyRingedSpace`, so a cancellation argument at the analytic level had to
+be routed through the underlying morphisms by hand. -/
+instance mono_ofRestrict (X : AnalyticSpace.{u}) (U : X.Opens) : Mono (X.ofRestrict U) := by
+  refine forgetToLocallyRingedSpace.{u}.mono_of_mono_map (f := X.ofRestrict U) ?_
+  change Mono (X.toLocallyRingedSpace.ofRestrict U.isOpenEmbedding)
+  infer_instance
+
+/-- **The section of `ComplexAnalytic.AnalyticSpace.ofRestrict` at an open that is everything**:
+`ComplexAnalytic.AnalyticSpace.liftRestrict` applied to the identity, whose range condition is
+then `Set.range id ⊆ Set.univ`.
+
+**The hypothesis is `(U : Set X) = Set.univ` and not `U = ⊤`, deliberately**, and it is the
+difference between this being usable and not. A caller holding
+`(Opens.map f.toLRSHom.base).obj ⊤` — which is what
+`ComplexAnalytic.AnalyticSpace.restrictHom` produces at `⊤` — can discharge the set-level equality
+by `rfl` and keep the open it already has. Stating it at `U = ⊤` instead forces the caller to
+transport `X.restrict ((Opens.map f.toLRSHom.base).obj ⊤)` to `X.restrict ⊤`, and **those two are
+`rfl`-equal but not type-correct at `instances` transparency**: the resulting goal elaborates and
+then `rw` reports *"Did not find an occurrence of the pattern"* with an application type mismatch
+underneath. Taking the open as a parameter removes the transport rather than discharging it. -/
+noncomputable def liftTop (X : AnalyticSpace.{u}) (U : X.Opens) (hU : (U : Set X) = Set.univ) :
+    X ⟶ X.restrict U :=
+  liftRestrict (𝟙 X) U (by rw [hU]; exact Set.subset_univ _)
+
+/-- **`ComplexAnalytic.AnalyticSpace.liftTop` is a section of the inclusion**, which is
+`ComplexAnalytic.AnalyticSpace.liftRestrict_fac` at the identity, **as a term and not as a
+`simpa [liftTop]`**: naming the definition asks Lean to generate its equation lemma, and here it
+planted two rows in this module's declaration dump — `ComplexAnalytic.AnalyticSpace.liftTop.eq_1`
+and a `congr_simp` under `ComplexAnalytic.AnalyticSpace.liftRestrict`, a definition declared thirty
+lines above. The term goes through definitional unfolding and generates neither. -/
+theorem liftTop_ofRestrict (X : AnalyticSpace.{u}) (U : X.Opens) (hU : (U : Set X) = Set.univ) :
+    liftTop X U hU ≫ X.ofRestrict U = 𝟙 X :=
+  liftRestrict_fac (𝟙 X) U (by rw [hU]; exact Set.subset_univ _)
+
+/-- **The inclusion of an open subspace at an open that is everything is an isomorphism.**
+
+One composite is `ComplexAnalytic.AnalyticSpace.liftTop_ofRestrict`; the other follows from it by
+cancelling the mono `ComplexAnalytic.AnalyticSpace.mono_ofRestrict`, which is why that instance is
+above rather than elsewhere.
+
+**Not an `instance`**: `hU` occurs in no instance-implicit argument and in no index of the
+conclusion, so Lean rejects the declaration outright — *"1 argument that cannot be inferred using
+typeclass synthesis"*. Callers use `haveI`. -/
+theorem isIso_ofRestrict_of_eq_univ (X : AnalyticSpace.{u}) (U : X.Opens)
+    (hU : (U : Set X) = Set.univ) : IsIso (X.ofRestrict U) := by
+  refine ⟨liftTop X U hU, ?_, liftTop_ofRestrict X U hU⟩
+  rw [← cancel_mono (X.ofRestrict U), Category.assoc, liftTop_ofRestrict, Category.comp_id,
+    Category.id_comp]
+
+/-- **`ComplexAnalytic.AnalyticSpace.liftTop` is an isomorphism**, being the two-sided inverse of
+an inclusion that `ComplexAnalytic.AnalyticSpace.isIso_ofRestrict_of_eq_univ` inverts. Stated
+separately from that theorem because two consumers need this side of it —
+`ComplexAnalytic.AnalyticSpace.isFinite_of_restrictHom_top` below and
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_restrictHom_top` in
+`Oka/AnalyticSpace/FiniteEtaleOver.lean`, so only one of the two is below — and for the same
+reason neither can be an `instance`: `hU` is inferable from nothing. -/
+theorem isIso_liftTop (X : AnalyticSpace.{u}) (U : X.Opens) (hU : (U : Set X) = Set.univ) :
+    IsIso (liftTop X U hU) := by
+  refine ⟨X.ofRestrict U, liftTop_ofRestrict X U hU, ?_⟩
+  rw [← cancel_mono (X.ofRestrict U), Category.assoc, liftTop_ofRestrict, Category.comp_id,
+    Category.id_comp]
+
+/-- **A morphism is its own restriction over `⊤`, conjugated by two inclusions.**
+
+`ComplexAnalytic.AnalyticSpace.restrictHom_fac` composed with
+`ComplexAnalytic.AnalyticSpace.liftTop_ofRestrict`. Both inclusions are isomorphisms by
+`ComplexAnalytic.AnalyticSpace.isIso_ofRestrict_of_eq_univ`, so this is what carries a property of
+`ComplexAnalytic.AnalyticSpace.restrictHom f ⊤` to the same property of `f` whenever the property
+respects isomorphisms and is stable under composition.
+
+**`h` is `rfl`** at every `f` — the preimage of `⊤` is `Set.univ` on the nose — and is taken as a
+hypothesis rather than proved here so that the open stays the one
+`ComplexAnalytic.AnalyticSpace.restrictHom` produced, for the reason
+`ComplexAnalytic.AnalyticSpace.liftTop`'s docstring gives. -/
+theorem liftTop_comp_restrictHom_top {A B : AnalyticSpace.{u}} (f : A ⟶ B)
+    (h : ((Opens.map f.toLRSHom.base).obj (⊤ : B.Opens) : Set A) = Set.univ) :
+    liftTop A _ h ≫ restrictHom f ⊤ ≫ B.ofRestrict ⊤ = f := by
+  rw [restrictHom_fac f ⊤, ← Category.assoc, liftTop_ofRestrict, Category.id_comp]
+
+/-- **A morphism whose restriction over `⊤` is finite is finite.**
+
+`ComplexAnalytic.AnalyticSpace.liftTop_comp_restrictHom_top` conjugated by the two isomorphisms,
+with `ComplexAnalytic.AnalyticSpace.isFinite_comp` and
+`ComplexAnalytic.AnalyticSpace.isFinite_of_isIso` doing the transfer. **`IsFinite` is not a
+`CategoryTheory.MorphismProperty` in this repository** — only the class is — so this is
+`inferInstance` over `ComplexAnalytic.AnalyticSpace.isFinite_comp`, which *is* an instance, rather
+than the `RespectsIso` route the finite étale version in
+`Oka/AnalyticSpace/FiniteEtaleOver.lean` takes. The two `haveI`s are what instance search cannot
+find on its own: `ComplexAnalytic.AnalyticSpace.isFinite_of_isIso` is a theorem and not an
+instance, so the isomorphisms have to be fed in by hand.
+
+**This is the version two `## What is not here` bullets were about**, and they were about
+finiteness rather than about finite étaleness:
+`Oka/Analytification/StandardEtaleFiniteness.lean`'s *"nothing in this repository relates the two
+at `V = ⊤`"* and `OkaTest/StandardEtaleNotFinite.lean`'s `V`-irredundance bullet both name
+`ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp`. The finite étale
+statement alone would not have retired either. -/
+theorem isFinite_of_restrictHom_top {A B : AnalyticSpace.{u}} (f : A ⟶ B)
+    (hfin : IsFinite (restrictHom f (⊤ : B.Opens))) : IsFinite f := by
+  set U : A.Opens := (Opens.map f.toLRSHom.base).obj (⊤ : B.Opens) with hUdef
+  have h : (U : Set A) = Set.univ := rfl
+  have hB : ((⊤ : B.Opens) : Set B) = Set.univ := rfl
+  haveI : IsIso (B.ofRestrict (⊤ : B.Opens)) := isIso_ofRestrict_of_eq_univ B ⊤ hB
+  haveI : IsIso (liftTop A U h) := isIso_liftTop A U h
+  haveI : IsFinite (restrictHom f (⊤ : B.Opens)) := hfin
+  haveI : IsFinite (B.ofRestrict (⊤ : B.Opens)) := isFinite_of_isIso _
+  haveI : IsFinite (liftTop A U h) := isFinite_of_isIso _
+  have hp : IsFinite (liftTop A U h ≫ restrictHom f ⊤ ≫ B.ofRestrict ⊤) := inferInstance
+  rwa [liftTop_comp_restrictHom_top] at hp
 
 end AnalyticSpace
 

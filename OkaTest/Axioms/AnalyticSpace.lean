@@ -940,3 +940,77 @@ info: 'ComplexAnalytic.comapAlgMap_sheetHom' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.comapAlgMap_sheetHom
+
+/-!
+### The open subspace at an open that is everything
+
+`ComplexAnalytic.AnalyticSpace.ofRestrict` is guarded above; guarded here are
+`ComplexAnalytic.AnalyticSpace.liftTop`, its section at an open that is everything, and the
+statements that make the two invertible — that the inclusion is a monomorphism, that the section
+is a section of it, and the two `IsIso` statements that follow — together with the factorisation
+of a morphism through its own restriction over `⊤` that they exist for. **Named rather than
+counted**, and every declaration this branch adds under `Oka/AnalyticSpace/OpenSubspace.lean` is
+guarded here except `ComplexAnalytic.AnalyticSpace.isFinite_of_restrictHom_top`, which is a class
+of morphisms and is in `OkaTest/Axioms/Morphisms.lean` with the finite étale one. **Appended as
+its own section rather than folded into the open-subspace heading above**, for the reason the
+sections above give: a section moved is a conflict for somebody else.
+
+**`ComplexAnalytic.AnalyticSpace.liftTop` is a `def` and is guarded anyway, and an earlier head of
+this branch left it out** — which made the sentence above false, since that sentence quantifies
+over declarations and its own pull-request body counts this one among them. The rule it is guarded
+under is the one `Oka/Analytification/RefineDatumToBase.lean`'s guards state in terms for
+`ComplexAnalytic.refineDatumPresHom`: a definition advertised under a `## Main definitions`
+heading is guarded even when it has no content of its own, and
+`Oka/AnalyticSpace/OpenSubspace.lean` advertises this one. **That is not a claim about the whole
+file**: `ComplexAnalytic.AnalyticSpace.resΓ` is advertised there too and is guarded nowhere, which
+predates this branch and is not its to close.
+
+`ComplexAnalytic.AnalyticSpace.mono_ofRestrict` is the one with a life outside this line — a
+cancellation property of the inclusion at *every* open, which before this had to be routed through
+`AlgebraicGeometry.LocallyRingedSpace` by hand. The consumers that asked are
+`ComplexAnalytic.AnalyticSpace.isFinite_of_restrictHom_top` and
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_restrictHom_top`, both guarded in
+`OkaTest/Axioms/Morphisms.lean` with the classes of morphisms rather than here.
+-/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.mono_ofRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.mono_ofRestrict
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.liftTop' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.liftTop
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.liftTop_ofRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.liftTop_ofRestrict
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isIso_ofRestrict_of_eq_univ' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isIso_ofRestrict_of_eq_univ
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isIso_liftTop' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isIso_liftTop
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.liftTop_comp_restrictHom_top' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.liftTop_comp_restrictHom_top

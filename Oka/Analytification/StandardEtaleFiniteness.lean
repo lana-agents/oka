@@ -158,7 +158,10 @@ was neither of them.
   homeomorphic; promoting that to an isomorphism of *analytic* spaces needs an inverse morphism
   together with its `ℂ`-linearity, and nothing here builds one.
   `Oka/AnalyticSpace/OpenSubspace.lean`'s `ComplexAnalytic.AnalyticSpace.liftRestrict` is the
-  construction that would, and it is not called.
+  construction that would. **This bullet said it is not called; it now is** — by
+  `ComplexAnalytic.AnalyticSpace.liftTop`, at an open that is all of the space, which is the
+  degenerate end of the range and not this one. So what is absent here is unchanged: at the proper
+  `V` this file is about, no inverse is built.
 * **Nothing about how large `V` is**, and that is a hypothesis on the pair `(F, G)` rather than a
   theorem. `Oka/Analytification/OpenBaseFiniteness.lean` bounds it from both ends —
   `ComplexAnalytic.hypersurfaceCommonZeroImage_one` makes the bad set empty at `G = 1`, so `V` may
@@ -285,8 +288,12 @@ longer is *"so the morphism is not finite"*.
 
 **Nothing here says the `hV` hypothesis is irredundant**, and that is a third statement again:
 this theorem is about `ComplexAnalytic.AnalyticSpace.restrictHom` of the composite and the
-counterexample is about the composite itself, and nothing in this repository relates the two at
-`V = ⊤`.
+counterexample is about the composite itself. **This sentence used to end *"and nothing in this
+repository relates the two at `V = ⊤`"*, and that is no longer true**:
+`ComplexAnalytic.AnalyticSpace.isFinite_of_restrictHom_top`
+(`Oka/AnalyticSpace/OpenSubspace.lean`) is that relation. What is still missing is the
+instantiation — nothing applies it to *this* theorem's composite — and it is one term rather than
+a construction.
 
 **This sentence used to end by generalising that witness, and the generalisation is false.** It
 read *"over a `V` meeting the bad set the conclusion is **false**"*, which as a universal claims
