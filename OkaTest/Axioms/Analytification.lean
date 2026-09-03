@@ -4890,3 +4890,22 @@ info: 'ComplexAnalytic.exists_index_mvPolynomial_basicOpen_specSchemeIotaMap' de
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.exists_index_mvPolynomial_basicOpen_specSchemeIotaMap
+
+/-! ### The pointwise existential, chosen into a family
+
+`Oka/Analytification/SpecMemberChoice.lean`, appended as its own section for the reason the
+sections above give: a section moved is a conflict for somebody else.
+
+**One guard, and the axiom list is the content.** The theorem is
+`ComplexAnalytic.exists_index_mvPolynomial_basicOpen_specSchemeIotaMap` — guarded elsewhere in
+this file — with `choose` applied to it, so `Classical.choice` is what the step *is* rather than
+something the proof happens to use. The two lists are identical, which is the honest reading here:
+this repository's guards do not distinguish a proof that uses choice incidentally from one whose
+whole content is choice, and this pair is the clearest example of that limit in the tree. -/
+
+/--
+info: 'ComplexAnalytic.exists_family_mvPolynomial_basicOpen_specSchemeIotaMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.exists_family_mvPolynomial_basicOpen_specSchemeIotaMap

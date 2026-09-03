@@ -147,8 +147,14 @@ ask for it to know that `Φ` is surjective on points.
   `ComplexAnalytic.surjective_specSchemeIotaSection` reaches a member of *this* datum and a carried
   member of the second is `ComplexAnalytic.specSchemeIotaMap`, which is not
   `ComplexAnalytic.specSchemeIota` of anything here; the statement became cheap when that file
-  restated its three lemmas at an arbitrary open immersion. **Still absent**, and this file's first
-  two bullets say it: any of it that is a *choice* rather than an existential.
+  restated its three lemmas at an arbitrary open immersion. **The last part of it that was still
+  absent — any of it that is a *choice* rather than an existential — has since been added, and
+  not to this file either**:
+  `ComplexAnalytic.exists_family_mvPolynomial_basicOpen_specSchemeIotaMap`
+  (`Oka/Analytification/SpecMemberChoice.lean`) is one `choose` on the polynomial form just named.
+  **What this file's first two bullets decline is untouched by that**: the family that theorem
+  produces is indexed by the *points* of the scheme, which is not what a refinement indexes its
+  members by, and choosing that index set is not done here.
 * **No consumer of `ComplexAnalytic.exists_basicOpen_specSchemeIota_inter` *in this file*.** It
   applies the same Mathlib lemma at a different pair of affine opens rather than calling that
   theorem, and taxis #1507 measured that absence rather than asserting it. **This bullet used to
