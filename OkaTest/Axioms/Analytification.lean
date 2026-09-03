@@ -5023,3 +5023,26 @@ info: 'ComplexAnalytic.opensRange_refinedIota' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.opensRange_refinedIota
+
+/-! ### The refined member's range, in the section vocabulary
+
+`Oka/Analytification/SpecRefinedMemberSection.lean`, appended as its own section for the reason
+the sections above give: a section moved is a conflict for somebody else.
+
+**One declaration, and it is the whole file.**
+`ComplexAnalytic.opensRange_refinedIota_eq_basicOpen` is `ComplexAnalytic.opensRange_refinedIota`,
+which this file already guards, composed with `ComplexAnalytic.basicOpen_specSchemeIotaSection`,
+so its axiom list is the union of two lists this file already records and the guard is a check
+that composing them introduced nothing. **Named and not located**: a section appended at the end
+of this file cannot say which section is above it and stay true, since the next branch appends
+between them. That is a weaker claim than most guards here make, and it
+is the honest reason this section is one line long rather than a reason to leave it out: the
+declaration is advertised under a `## Main results`, and the rule this directory enforces is about
+placement rather than about how much a guard can surprise. -/
+
+/--
+info: 'ComplexAnalytic.opensRange_refinedIota_eq_basicOpen' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.opensRange_refinedIota_eq_basicOpen
