@@ -66,6 +66,27 @@ is where the family being `1` is spent** — it is what puts a point of the refi
 `nodeOrigin`. Whether that is a defect of this witness or of the alternatives is
 the subject of the last bullet below.
 
+## And it maps down to the cover it refines
+
+`Oka/Analytification/RefineDatumToBase.lean` builds `ComplexAnalytic.refineDatumToBase`, the
+morphism from a cross-member refined cover datum's analytic space to the analytification of the
+cover it refines, at an arbitrary datum and an arbitrary index map. **Its argument list is met
+here with nothing left over**, so `OkaTest.RefineDatumWitness.nodeRefineOneToBase` exists by
+naming this file's data and the node cover's three laws, and
+`OkaTest.RefineDatumWitness.coverIota_comp_nodeRefineOneToBase` says it restricts on each refined
+member to that member's projection followed by the member's inclusion.
+
+**Nothing is built and that is the point.** What a concrete instance adds to the general
+construction is that its arguments can be supplied at once, by data rather than by hypotheses:
+this is the first instantiation of `ComplexAnalytic.refineDatumToBase` at data, and
+until it existed the morphism was a construction whose inputs might never have been met together.
+It is the same service `OkaTest.RefineDatumWitness.nodeRefineOneAnalytification` does for the
+refined datum itself.
+
+**It is not claimed to be an isomorphism**, although the shape of this data makes that the obvious
+next question — see the second bullet of `## What this is not`, which records what an answer would
+need and does not compile it.
+
 ## What this is not
 
 * **It is not a proper refinement.** Every refined member is the whole of its original member —
@@ -102,6 +123,32 @@ the subject of the last bullet below.
   fails `ComplexAnalytic.refineDatumUnitFamGlueData`'s hypothesis outright;
   `ComplexAnalytic.exists_refineDatumCross_of_isUnit` is what that one would have to supply.
   Neither has a witness in this repository and the containments above are the whole of why.
+* **No claim that `OkaTest.RefineDatumWitness.nodeRefineOneToBase` is an isomorphism**, and the
+  question is a live one rather than an idle one: by the first bullet above this refinement is the
+  node cover **reindexed along `id`**, every refined member being the whole of its original member,
+  so a reader meeting the morphism will ask. **Nothing below answers it in either direction.**
+
+  What an answer would need, recorded so that it is not re-derived and **not compiled**:
+  `ComplexAnalytic.coverAnalytificationIso` (`Oka/Analytification/CoverIndependence.lean`) turns a
+  member-matched comparison into an isomorphism when each member's morphism is one, and at
+  `σ = id` that is the shape of
+  `OkaTest.RefineDatumWitness.coverIota_comp_nodeRefineOneToBase` above — so it would suffice that
+  `ComplexAnalytic.localisationProj (nodeCoverObj b).g 1` is an isomorphism.
+  `ComplexAnalytic.localisationIso` identifies the localised presentation's analytification with
+  `X^an` restricted to `D(f)`, and `ComplexAnalytic.localisationOpen_one` says `D(1) = ⊤`, which
+  leaves one step: that the inclusion of an open subspace at an open that is all of the space is an
+  isomorphism. **This file neither states that step nor uses it**, and whether the two statements
+  line up without a transport is the part I have not checked. lana-agents/oka#380 is where that
+  step is being added, unmerged at the time of writing.
+
+  **`ComplexAnalytic.not_isIso_refineToBase` bears on none of this in either direction.** It is a
+  *negative* about the one-member comparison at a constant `σ`, a different morphism, and
+  `Oka/Analytification/RefineDatumToBase.lean` says in terms that nothing on that line inherits
+  from it.
+* **No statement that the refined datum covers `ComplexAnalytic.nodeTripleSpace`.** A morphism down
+  is not a covering; nothing below says the base map is surjective, and
+  `Oka/Analytification/CrossMemberDatum.lean`'s *"No statement that the refined data cover
+  anything"* is untouched.
 * **No `admissible`, no scheme and no comparison functor**, as in the files this one sits beside.
 
 ## Main definitions
@@ -109,6 +156,9 @@ the subject of the last bullet below.
 - `OkaTest.RefineDatumWitness.nodeRefineOneGlueData` and `nodeRefineOneAnalytification`: **the glue
   data and the analytic space of the node cover refined at `σ = id` and a trivial refining
   family**, with every hypothesis discharged.
+- `OkaTest.RefineDatumWitness.nodeRefineOneToBase`: **the morphism from that space down to the
+  cover it refines**, which is `ComplexAnalytic.refineDatumToBase` at this data and is the first
+  instantiation of it at data rather than at variables.
 
 ## Main results
 
@@ -127,6 +177,9 @@ the subject of the last bullet below.
   gluing** at a point over `nodeOrigin`, and
   `OkaTest.RefineDatumWitness.exists_ι_nodeRefineOne_ne`: **so the refined gluing is not one of
   its members**, with no hypothesis.
+- `OkaTest.RefineDatumWitness.coverIota_comp_nodeRefineOneToBase`: **the morphism down restricts on
+  each refined member to that member's projection followed by the member's inclusion**, which is
+  what says it is the intended morphism and not merely one of the right type.
 -/
 
 open MvPolynomial CategoryTheory TopologicalSpace AlgebraicGeometry
@@ -338,6 +391,75 @@ theorem exists_ι_nodeRefineOne_ne (i j : triple.{u}) (hij : i ≠ j) :
       (nodeRefineOneGlueData.{u}.toGlueData.ι j).base w := by
   obtain ⟨w, hw⟩ := surjective_base_localisationProj_one.{u} (nodeOrigin.{u})
   exact ⟨w, ι_nodeRefineOne_ne.{u} i j hij w hw⟩
+
+/-! ### The morphism down to the cover it refines -/
+
+/-- **The refined cover's analytic space maps down to the cover it refines**, with nothing left
+for a caller to supply.
+
+`ComplexAnalytic.refineDatumToBase` (`Oka/Analytification/RefineDatumToBase.lean`) at the
+arguments `OkaTest.RefineDatumWitness.nodeRefineOneAnalytification_toLocallyRingedSpace` already
+writes out, together with the node cover's three laws. **Nothing is built here**: the source is
+`ComplexAnalytic.refineDatumAnalytificationOfLaws` at the one-family arguments, by definition of
+`ComplexAnalytic.refineDatumOneAnalytification`, and the target is
+`ComplexAnalytic.coverAnalytification` at the node cover, by definition of
+`ComplexAnalytic.nodeTripleSpace` — so the general morphism applies on the nose and the content is
+that this file's data meets its argument list.
+
+**This is the first instantiation of `ComplexAnalytic.refineDatumToBase` at data.** Outside its
+own file that name occurs only in prose and in `OkaTest/Axioms/Analytification.lean`'s
+`#print axioms` command; inside it, it is applied only at that file's own section variables, in
+`ComplexAnalytic.coverIota_comp_refineDatumToBase` and
+`ComplexAnalytic.refineDatumToBase_unique`. What this adds to the general construction is that the
+argument list can in fact be met — every argument here is data these two files already carry, or a
+general theorem applied to it, and none of them leaves a hypothesis open — so the morphism exists
+at a cover datum a reader can point at.
+
+**It is not claimed to be an isomorphism.** See this file's `## What this is not` for what such a
+claim would need and for why the shape of this data makes the question a live one. -/
+noncomputable def nodeRefineOneToBase :
+    nodeRefineOneAnalytification.{u} ⟶ nodeTripleSpace.{u} :=
+  ComplexAnalytic.refineDatumToBase.{u} nodeCoverObj.{u} nodeCoverPoly.{u}
+    (id : triple.{u} → triple.{u}) (fun _ ↦ 1)
+    (fun x y ↦ nodeCoverPoly.{u} (id x) (id y)) nodeCoverGlue.{u}
+    (refineDatumOneR.{u} nodeCoverObj.{u} nodeCoverPoly.{u} _ nodeCoverGlue.{u})
+    (refineDatumOneU.{u} nodeCoverObj.{u} nodeCoverPoly.{u} _ nodeCoverGlue.{u})
+    (refineDatumOneCrossEq.{u} nodeCoverObj.{u} nodeCoverPoly.{u} _ nodeCoverGlue.{u})
+    (refineDatumOneCrossUnit.{u} nodeCoverObj.{u} nodeCoverPoly.{u} _ nodeCoverGlue.{u})
+    hsymm_nodeCover.{u} hrange_nodeCover.{u}
+    (refineDatumOneRangeCross.{u} nodeCoverObj.{u} nodeCoverPoly.{u} _ nodeCoverGlue.{u}
+      hrange_nodeCover.{u})
+    (refineDatumOneRangeEq.{u} nodeCoverObj.{u} nodeCoverPoly.{u} _ nodeCoverGlue.{u})
+    hcocycle_nodeCover.{u}
+
+/-- **It restricts on the `b`-th refined member to that member's projection followed by the `b`-th
+inclusion**, which is what says the definition above is the intended morphism rather than a
+well-typed one.
+
+`ComplexAnalytic.coverIota_comp_refineDatumToBase` with every argument solved from the goal. **The
+statement is worth writing out here even though the proof is one name**, because the `glue` the
+left-hand `ComplexAnalytic.coverIota` takes is the *refined* datum's and does not solve: it has to
+be spelled `ComplexAnalytic.refineDatumGlue` at the one-family arguments, while the `hrange`,
+`hsymm` and `hcocycle` beside it do solve and are left as `_`. A caller who has to rediscover that
+spelling has paid more than reading it.
+
+**`ComplexAnalytic.localisationProj (nodeCoverObj b).g 1` is the projection of the refined member
+onto the member it lies over**, and it is onto — which is
+`OkaTest.RefineDatumWitness.surjective_base_localisationProj_one` above, the same fact that makes
+this refinement a reindexing rather than a cutting-down. -/
+theorem coverIota_comp_nodeRefineOneToBase (b : triple.{u}) :
+    coverIota.{u} nodeRefineOneObj.{u} nodeRefineOnePoly.{u}
+        (refineDatumGlue.{u} nodeCoverObj.{u} (id : triple.{u} → triple.{u}) (fun _ ↦ 1)
+          nodeCoverPoly.{u} (fun x y ↦ nodeCoverPoly.{u} (id x) (id y)) nodeCoverGlue.{u}
+          (refineDatumOneR.{u} nodeCoverObj.{u} nodeCoverPoly.{u} _ nodeCoverGlue.{u})
+          (refineDatumOneU.{u} nodeCoverObj.{u} nodeCoverPoly.{u} _ nodeCoverGlue.{u})
+          (refineDatumOneCrossEq.{u} nodeCoverObj.{u} nodeCoverPoly.{u} _ nodeCoverGlue.{u})
+          (refineDatumOneCrossUnit.{u} nodeCoverObj.{u} nodeCoverPoly.{u} _ nodeCoverGlue.{u}))
+        _ _ _ b ≫ nodeRefineOneToBase.{u} =
+      localisationProj.{u} (nodeCoverObj.{u} b).g 1 ≫
+        coverIota.{u} nodeCoverObj.{u} nodeCoverPoly.{u} nodeCoverGlue.{u} hrange_nodeCover.{u}
+          hsymm_nodeCover.{u} hcocycle_nodeCover.{u} b :=
+  ComplexAnalytic.coverIota_comp_refineDatumToBase.{u} _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ b
 
 end
 
