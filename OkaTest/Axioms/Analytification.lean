@@ -4915,11 +4915,12 @@ info: 'ComplexAnalytic.exists_family_mvPolynomial_basicOpen_specSchemeIotaMap' d
 `Oka/Analytification/LocalisationIndependence.lean`, appended as its own section for the reason
 the sections above give: a section moved is a conflict for somebody else.
 
-**The presentation-level sibling of `ComplexAnalytic.isIso_localisationProj_one` above**, which is
-guarded a few lines up and is the *analytic* statement at the same polynomial. Neither is derived
-from the other: no statement in this repository says `ComplexAnalytic.analytificationFunctor` is
-full, faithful or reflects isomorphisms, so the two are guarded separately because they are proved
-separately — this one out of `IsLocalization.atUnits` and
+**The presentation-level sibling of `ComplexAnalytic.isIso_localisationProj_one`**, which is
+guarded above in this file and is the *analytic* statement at the same polynomial. Neither is
+derived from the other: no statement in this repository says
+`ComplexAnalytic.analytificationFunctor` is full, faithful or reflects isomorphisms, so the two
+are guarded separately because they are proved separately — this one out of
+`IsLocalization.atUnits` and
 `ComplexAnalytic.localisationPresentedAlgebraEquiv_localisationRingHom`, that one out of
 `ComplexAnalytic.localisationIso` and `ComplexAnalytic.localisationOpen_one`.
 
