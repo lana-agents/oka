@@ -151,10 +151,17 @@ fi
 #
 # **The vacuity guard is new with the tracked-set form and is not decoration.** An unmatched
 # `scripts/*` still yields one iteration, so the glob could not report zero files; `git ls-files`
-# can — it exits non-zero outside a work tree, and this script has no `set -e`, so without the
-# guard a broken invocation would print `checked 0 files under scripts/: 0 not named in README.md`
-# and pass. Measured by pointing the same loop at a path that matches nothing: 0 checked, guard
-# fires, exit 1.
+# can — it exits non-zero outside a work tree, so without the guard a broken invocation would
+# print `checked 0 files under scripts/: 0 not named in README.md` and pass. Measured by pointing
+# the same loop at a path that matches nothing: 0 checked, guard fires, exit 1.
+#
+# **`set -e` is not the missing defence**, and the sentence here used to give its absence from
+# this file as the reason the guard is needed. That is true of this file and is not the operative
+# fact: `-e` does not fire on a failing process substitution either, because `git ls-files` is the
+# producer on the other end of `< <(…)` and not a command the shell tests. So the CI copy, which
+# *is* `bash -e`, needs the guard exactly as much — measured on that step's own body, run as
+# `bash -e` from outside a work tree: guard present, exit 1; guard deleted, `checked 0 files under
+# scripts/` and **exit 0**.
 #
 # It runs here, before the build, because it reads two text files and the index and nothing else.
 # This mirrors the check in `.github/workflows/lean_action_ci.yml`.
