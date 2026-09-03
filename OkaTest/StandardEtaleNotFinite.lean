@@ -131,8 +131,8 @@ unrelated, since a morphism out of `ComplexAnalytic.analytificationMap` is opaqu
   number and is a strictly stronger statement; it would also make
   `ComplexAnalytic.AnalyticSpace.not_isFinite_of_isLocalIso_of_not_surjective` unnecessary here,
   which is the trade this file declines.
-* **No statement says the `V` hypothesis of the restricted theorem is irredundant, and what is
-  missing is now one term rather than a theorem.**
+* **No statement in this file says the `V` hypothesis of the restricted theorem is irredundant;
+  one file down there is now a theorem that does.**
   `ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp` is about
   `ComplexAnalytic.AnalyticSpace.restrictHom` of this composite. **This bullet said
   nothing in this repository relates that at `V = ⊤` to the composite itself; that is no longer
@@ -140,12 +140,24 @@ unrelated, since a morphism out of `ComplexAnalytic.analytificationMap` is opaqu
   (`Oka/AnalyticSpace/OpenSubspace.lean`) says a morphism whose restriction over `⊤` is finite is
   finite, so `ComplexAnalytic.not_isFinite_condEtaleProj` below gives
   `¬ ComplexAnalytic.AnalyticSpace.IsFinite` of *its* restriction over `⊤` by contraposition, and
-  the restricted theorem at `V = ⊤` would be false here. **That contrapositive is not compiled and
-  is deliberately not compiled here**: it is
+  the restricted theorem at `V = ⊤` would be false here. **That contrapositive is still not
+  compiled anywhere and is deliberately not compiled here**: it is
   `fun h ↦ not_isFinite_condEtaleProj (AnalyticSpace.isFinite_of_restrictHom_top _ h)`, one term,
-  and the branch that built the bridge left crossing it to whoever wants the statement in this
-  file rather than widening itself into the test library. **What is compiled is the counterexample
-  the prose points at**, which is what those docstrings say is missing.
+  and this file's business is the counterexample rather than what is read off it. **What is
+  compiled is the counterexample the prose points at**, which is what those docstrings say is
+  missing.
+
+  **Its finite-étale sibling *is* compiled, and not here — it is
+  `ComplexAnalytic.not_isFiniteEtale_restrictHom_condEtaleProj_top`
+  (`OkaTest/CondFiniteEtale.lean`)**, the same one-term contraposition through
+  `ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_restrictHom_top`. That file is where it belongs
+  because that is where the other half of the contrast is:
+  `ComplexAnalytic.isFiniteEtale_restrictHom_condEtaleProj` says the morphism below, restricted
+  over a `V` that `ComplexAnalytic.condGoodOpen_nonempty` and
+  `ComplexAnalytic.condGoodOpen_ne_univ` make proper and non-empty, **is** finite étale. So both
+  halves are compiled at one morphism and *"the `V` hypothesis cannot be dropped"* is a theorem
+  there rather than prose here — for `ComplexAnalytic.condEtaleProj` alone, and not as a general
+  statement about the hypothesis, which nothing states.
 * **Nothing at `k ≥ 1`.** `ComplexAnalytic.condBase` is the empty presentation, so this is the
   `k = 0` case, which is what
   `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_comp` is stated at. The `k ≥ 1`
