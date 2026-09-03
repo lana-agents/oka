@@ -125,8 +125,11 @@ theorem reads a `StandardEtalePair`, so appending it there would have turned tha
   the punctured line — proper and nonempty, by
   `ComplexAnalytic.condGoodOpen_nonempty` and `ComplexAnalytic.condGoodOpen_ne_univ`. **The same
   morphism unrestricted is not finite étale**, which is
-  `ComplexAnalytic.not_isFiniteEtale_condEtaleProj` (`OkaTest/StandardEtaleNotFinite.lean`), so
-  the restriction in the statement below is doing visible work at one compiled instance.
+  `ComplexAnalytic.not_isFiniteEtale_condEtaleProj` (`OkaTest/StandardEtaleNotFinite.lean`), and
+  neither is its restriction over `⊤`, which is
+  `ComplexAnalytic.not_isFiniteEtale_restrictHom_condEtaleProj_top` in the same file as the
+  positive half — so the two sides of the comparison are the restriction below at two opens, and
+  the hypothesis on `V` is doing visible work at one compiled instance.
 
   **What stays true is the last clause and it is the one that matters here**: the size of `V`
   remains a hypothesis on the pair rather than a theorem, nothing below bounds it, and the

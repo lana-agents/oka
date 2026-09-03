@@ -11,7 +11,9 @@ import OkaTest.StandardEtaleNotFinite
 `OkaTest/StandardEtaleNotFinite.lean` proves that `ComplexAnalytic.condEtaleProj` — the
 analytification of the square-root cover of the line, composed with the base's inclusion into
 `ℂ¹` — is **not** finite, and so not finite étale. This file proves that the **same** morphism,
-restricted over the complement of the origin, **is** finite étale.
+restricted over the complement of the origin, **is** finite étale, and that restricted over `⊤` it
+is **not** — so the whole contrast is between two restrictions of one morphism and is about which
+`V` is taken.
 
 `Oka/Analytification/StandardEtaleFiniteEtale.lean`'s `## What is not here` said this could not be
 done:
@@ -79,10 +81,30 @@ below would be statements about a morphism out of an empty space, which both fie
 `ComplexAnalytic.AnalyticSpace.IsLocalIso` and both of `ComplexAnalytic.AnalyticSpace.IsFinite`
 satisfy vacuously"* — and that is the very point this file reuses.
 
-**It is not the formal statement of that claim**, and `OkaTest/StandardEtaleNotFinite.lean`'s
-`## What is not checked here` says what would be: something relating
-`ComplexAnalytic.AnalyticSpace.restrictHom` at `V = ⊤` to the morphism itself, which nothing in
-this repository states. That bullet is **not** retired here and this file does not claim it is.
+**The finite-étale form of that claim is now formal at this one morphism, and a first head of this
+file said it could not be.** The pair that makes it formal is
+`ComplexAnalytic.isFiniteEtale_restrictHom_condEtaleProj` and
+`ComplexAnalytic.not_isFiniteEtale_restrictHom_condEtaleProj_top` below: the **same** restricted
+morphism at two opens, `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` true at
+`ComplexAnalytic.condGoodOpen` and false at `⊤`. That is the `V` of
+`Oka/Analytification/StandardEtaleFiniteEtale.lean`'s theorem rather than of
+`Oka/Analytification/StandardEtaleFiniteness.lean`'s, because both halves are at `IsFiniteEtale`;
+the finiteness form named in the paragraph above is still the informal contrast that
+`ComplexAnalytic.not_isFinite_condEtaleProj` makes, and is **not** compiled at `⊤` here.
+
+**What made it formal is a theorem that did not exist when that head was written.** It said the
+formal version needed something relating `ComplexAnalytic.AnalyticSpace.restrictHom` at `V = ⊤`
+to the morphism itself and that nothing in this repository stated it;
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_restrictHom_top`
+(`Oka/AnalyticSpace/FiniteEtaleOver.lean`) states exactly that and landed on `master` afterwards,
+and the theorem below is its one-term contraposition against
+`ComplexAnalytic.not_isFiniteEtale_condEtaleProj`.
+
+**What is still not here is the general statement.** That the hypothesis cannot be dropped from
+`Oka/Analytification/StandardEtaleFiniteEtale.lean`'s theorem for *every* pair is not proved by
+one pair, and nothing here quantifies over pairs;
+`OkaTest/StandardEtaleNotFinite.lean`'s `## What is not checked here` records the same
+distinction from the other side.
 
 ## Main definitions
 
@@ -100,6 +122,10 @@ this repository states. That bullet is **not** retired here and this file does n
   exists to make.
 - `ComplexAnalytic.isFiniteEtale_restrictHom_condEtaleProj`: **the restricted morphism is finite
   étale.**
+- `ComplexAnalytic.not_isFiniteEtale_restrictHom_condEtaleProj_top`: **and at `V = ⊤` it is not**,
+  so the two are the same morphism restricted over two opens and the `V` in
+  `Oka/Analytification/StandardEtaleFiniteEtale.lean`'s theorem cannot be dropped at this pair.
+  One term, through `ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_restrictHom_top`.
 - `ComplexAnalytic.condGoodOpen_eq`, `ComplexAnalytic.condGoodOpen_nonempty` and
   `ComplexAnalytic.condGoodOpen_ne_univ`: **the open subset it is finite étale over is the
   punctured line**, and is therefore proper and non-empty — so the restriction removes something
@@ -295,14 +321,46 @@ Together with `ComplexAnalytic.condGoodOpen_nonempty` and
 `ComplexAnalytic.not_isFinite_condEtaleProj` a contrast: the restriction removes a point of the
 base, and the source it restricts to is not empty.
 
-**It does not say the two would be inconsistent at `V = ⊤`, and that is deliberate.** They would
-be, but deriving it needs `ComplexAnalytic.AnalyticSpace.restrictHom` at `V = ⊤` related to the
-morphism itself, which is precisely the bridge `OkaTest/StandardEtaleNotFinite.lean`'s
-`## What is not checked here` records as absent — so the sentence would be true and underivable
-here, which is the shape this line keeps out of its docstrings. -/
+**That the two are inconsistent at `V = ⊤` is not this lemma and is now a theorem below.** A
+first head of this file said the sentence was true and underivable here, because deriving it
+needed `ComplexAnalytic.AnalyticSpace.restrictHom` at `V = ⊤` related to the morphism itself and
+that bridge was absent. It is `ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_restrictHom_top`
+and it is in the tree, so the sentence is
+`ComplexAnalytic.not_isFiniteEtale_restrictHom_condEtaleProj_top` and is no longer a sentence.
+What *this* lemma is for is unchanged: `ComplexAnalytic.condGoodOpen` is a proper open, so the
+restriction removes something. -/
 theorem condGoodOpen_ne_univ :
     (condGoodOpen.{u} : Set (ULift.{u} (Fin 1) → ℂ)) ≠ Set.univ :=
   Set.compl_ne_univ.2 (hypersurfaceCommonZeroImage_parabola_nonempty.{u} (ULift.up 0))
+
+/-! ### And at `V = ⊤` it is false -/
+
+/-- **The same morphism restricted over `⊤` is *not* finite étale**, which is what makes
+`ComplexAnalytic.isFiniteEtale_restrictHom_condEtaleProj` a statement about `V` rather than about
+the morphism.
+
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_restrictHom_top`
+(`Oka/AnalyticSpace/FiniteEtaleOver.lean`) says a morphism whose restriction over `⊤` is finite
+étale is finite étale; `ComplexAnalytic.not_isFiniteEtale_condEtaleProj`
+(`OkaTest/StandardEtaleNotFinite.lean`) says this one is not. **Nothing is built** — the whole
+proof is that contraposition, and the reason it is here rather than in either of those files is
+that this is the file with the positive half beside it.
+
+**The finiteness sibling is the same one term and is not taken.**
+`fun h ↦ not_isFinite_condEtaleProj (AnalyticSpace.isFinite_of_restrictHom_top _ h)` would give
+`¬ ComplexAnalytic.AnalyticSpace.IsFinite` of the same restriction, through
+`ComplexAnalytic.AnalyticSpace.isFinite_of_restrictHom_top`; it is declined because the theorem it
+contrasts with here is the finite **étale** one and a second statement would contrast with
+nothing. `OkaTest/StandardEtaleNotFinite.lean` records it as uncompiled and it stays that way.
+
+**No open is compared with any other.** This says nothing about `ComplexAnalytic.condGoodOpen`
+being maximal, nor that finite étaleness fails at every open strictly containing it; the two opens
+here are `⊤` and that one, and nothing interpolates. -/
+theorem not_isFiniteEtale_restrictHom_condEtaleProj_top :
+    ¬ AnalyticSpace.IsFiniteEtale (AnalyticSpace.restrictHom condEtaleProj.{u}
+      (⊤ : (AnalyticSpace.complexAffineSpace.{u} 1).Opens)) :=
+  fun h ↦ not_isFiniteEtale_condEtaleProj.{u}
+    (AnalyticSpace.isFiniteEtale_of_restrictHom_top _ h)
 
 /-! ### And the space the theorem is actually about is not empty -/
 
