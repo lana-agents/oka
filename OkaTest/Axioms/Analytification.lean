@@ -5131,3 +5131,30 @@ info: 'ComplexAnalytic.opensRange_presentationRefinedIota_eq_basicOpen' depends 
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.opensRange_presentationRefinedIota_eq_basicOpen
+
+/-! ### The two-datum choice, read through the refined member
+
+`Oka/Analytification/SpecRefinedChoice.lean`, which is the whole file. Appended as its own section
+for the reason the sections above give: a section moved is a conflict for somebody else.
+
+**One guard, and what it is a check of is the composition of two lists this file already
+records.** The theorem is
+`ComplexAnalytic.exists_family_mvPolynomial_basicOpen_specSchemeIotaMap` — guarded here — rewritten
+three times at `ComplexAnalytic.opensRange_presentationRefinedIota_eq_basicOpen`, also guarded
+here, plus `eq_top_iff` and `TopologicalSpace.Opens.mem_iSup` from Mathlib. So the guard says that
+composing them, and the covering statement the composition makes, introduced nothing.
+
+**`Classical.choice` is in the list and is not a surprise**: the theorem this is proved from is
+itself a `choose` over the points of a scheme, and its own guard in this file records the same
+three axioms.
+
+**Named and not located.** No sentence here says which section is above or below it; the next
+branch appends between them.
+-/
+
+/--
+info: 'ComplexAnalytic.exists_family_opensRange_presentationRefinedIota_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.exists_family_opensRange_presentationRefinedIota_eq
