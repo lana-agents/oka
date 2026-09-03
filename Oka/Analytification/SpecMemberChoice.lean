@@ -25,10 +25,20 @@ and that is the entire content: no new mathematics, and `Classical.choice` at ev
 
 **The four functions are indexed by the points of `X`.** That is not a cover datum's index type,
 and nothing below claims it is. A refinement indexed by points is not a refinement anybody would
-assemble — the assembly step chooses a *set* of opens and an index type for it, out of the family
-below or otherwise, and that choice is not made here. **So this file is the second piece and not
-the third**, and the third is `Oka/Analytification/CrossMemberDatum.lean`'s line, on the other
-side of the comparison.
+assemble **as a cover datum** — the assembly step chooses a *set* of opens and an index type for
+it, out of the family below or otherwise, and that choice is not made here. **So this file is the
+second piece and not the third**, and the third is
+`Oka/Analytification/CrossMemberDatum.lean`'s line, on the other side of the comparison.
+
+**Those three words are a narrowing and the sentence was wider when it was written; the wider form
+is false and the reason is worth having here.** `AlgebraicGeometry.Scheme.AffineOpenCover`'s index
+type is arbitrary and it carries its own choice function from the points of the scheme, so the
+family below *is* an affine open cover of `X` with no set chosen and no index type invented —
+`Oka/Analytification/SpecRefinedCover.lean` assembles exactly that and says so. What a cover
+**datum** additionally needs is `poly`, the three laws, and the condition that every pairwise
+overlap be a distinguished open of *each* of the two members it lies in; **that** is what the
+points of `X` cannot supply, it is what makes the third piece the work it is, and it is what this
+section is about.
 
 ## Existential over four functions, and not four definitions
 
@@ -71,6 +81,10 @@ additive.** Recording the decision rather than the alternative is the point of t
   `Oka/Analytification/CrossMemberDatumGlue.lean` and the `Oka/Analytification/RefineDatum*.lean`
   files, and this file adds to none of them.
 * **No index type for a refinement**, as the section above says: the family is indexed by points.
+  **A cover of `X` has since been built out of that family, and not in this file**:
+  `Oka/Analytification/SpecRefinedCover.lean` assembles it into an
+  `AlgebraicGeometry.Scheme.AffineOpenCover` indexed by the points. That is not a cover *datum* and
+  does not weaken this bullet, which is about the index type a refinement would be assembled at.
 * **Nothing that constructs the isomorphism `Φ`**, in either direction. It is a hypothesis here
   exactly as it is in `Oka/Analytification/SpecTwoData.lean`, and nothing in this repository
   produces one.

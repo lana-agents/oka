@@ -5076,8 +5076,12 @@ headings that name those files.** The subject the placement rule in `OkaTest/Axi
 is the general level, and it is one subject; splitting it would put half of it under a heading
 whose own text is about a member of a cover datum.
 
-**Every member-level guard this file already carries is now a guard on an application of one of
-these.** `ComplexAnalytic.refinedPres`, `ComplexAnalytic.refinedIota`,
+**Every member-level guard this file carried when this section was written is now a guard on an
+application of one of these**, and the scoping is not decoration: another section in this file
+guards `ComplexAnalytic.opensRange_refinedIota_le`, which is a member-level guard on an
+application of `ComplexAnalytic.opensRange_presentationRefinedIota_le` and so of neither of the
+six.
+`ComplexAnalytic.refinedPres`, `ComplexAnalytic.refinedIota`,
 `ComplexAnalytic.isOpenImmersion_refinedIota`, `ComplexAnalytic.isAffineOpen_refinedIota`,
 `ComplexAnalytic.opensRange_refinedIota` and
 `ComplexAnalytic.opensRange_refinedIota_eq_basicOpen` are the six below at
@@ -5197,3 +5201,76 @@ info: 'ComplexAnalytic.isCoveringMap_base_restrictHom_analytificationMap_etalePr
 #guard_msgs (whitespace := lax) in
 #print axioms
   ComplexAnalytic.isCoveringMap_base_restrictHom_analytificationMap_etalePresHom_comp_compl
+
+/-! ### The refined member sits inside the member it refines
+
+The containment half of `Oka/Analytification/SpecRefinedMember.lean`, at both of that file's two
+levels. Appended as its own section for the reason the sections above give: a section moved is a
+conflict for somebody else.
+
+**Two guards, and they are a check on one Mathlib name reaching this shape.** Each is the
+corresponding `opensRange` equation in that file followed by
+`AlgebraicGeometry.Scheme.Hom.image_le_opensRange`, and the member-level one is the general one
+applied — so what the pair records is that the containment costs no axiom the equations did not
+already cost, both of which are guarded here.
+
+**These two are the reason a count elsewhere in this file is written the way it is.**
+`ComplexAnalytic.opensRange_refinedIota_le` is a member-level guard on an application of
+`ComplexAnalytic.opensRange_presentationRefinedIota_le`, and neither is among the six declarations
+the section named *The refined member, at an arbitrary open immersion* enumerates; that section's
+sentence about the member-level guards is scoped to the guards it was written against and says so.
+
+**Named and not located.** No sentence here says which section is above or below it; the next
+branch appends between them.
+-/
+
+/--
+info: 'ComplexAnalytic.opensRange_presentationRefinedIota_le' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.opensRange_presentationRefinedIota_le
+
+/--
+info: 'ComplexAnalytic.opensRange_refinedIota_le' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.opensRange_refinedIota_le
+
+/-! ### The chosen family as an affine open cover of the glued scheme
+
+`Oka/Analytification/SpecRefinedCover.lean`, which is the whole file. Appended as its own section
+for the reason the sections above give: a section moved is a conflict for somebody else.
+
+**Two guards, and the second is the first applied twice.** The first assembles the four functions
+`ComplexAnalytic.exists_family_mvPolynomial_basicOpen_specSchemeIotaMap` chooses into an
+`AlgebraicGeometry.Scheme.AffineOpenCover` whose index type is the points of the glued scheme; the
+second is that theorem with `ComplexAnalytic.opensRange_presentationRefinedIota_le` at each of its
+two conjuncts.
+
+**`Classical.choice` is in both lists and is not a surprise**: the theorem they descend from is a
+`choose` over the points of a scheme, and its own guard in this file records the same three axioms.
+**What these two check that the guards on
+`ComplexAnalytic.exists_family_mvPolynomial_basicOpen_specSchemeIotaMap` and
+`ComplexAnalytic.exists_family_opensRange_presentationRefinedIota_eq` do not is that building the
+structure introduced nothing** — the covering field is the choice step's own second conjunct after
+one rewrite, and if that were not so the axiom list would be the place it showed.
+
+**Named and not located.** No sentence here says which section is above or below it; the next
+branch appends between them.
+-/
+
+/--
+info: 'ComplexAnalytic.exists_affineOpenCover_opensRange_presentationRefinedIota_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.exists_affineOpenCover_opensRange_presentationRefinedIota_eq
+
+/--
+info: 'ComplexAnalytic.exists_affineOpenCover_opensRange_le' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.exists_affineOpenCover_opensRange_le

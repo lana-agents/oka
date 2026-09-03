@@ -51,8 +51,8 @@ a `specSchemeIota`. **The general form below is what makes both refinable by one
 is still true and now says explicitly that a legal argument is not an appearance — but the
 immersion is an argument rather than a fixed morphism, so a caller may supply one.
 
-**The immersion the specialised six are the general six at is named in this section and not under
-either heading below, and that is deliberate rather than terse**: `scripts/guard_coverage.py`
+**The immersion the specialised forms are the general ones at is named in this section and not
+under either heading below, and that is deliberate rather than terse**: `scripts/guard_coverage.py`
 reads every whitespace-free backticked token under a `## Main results` heading as a declaration
 that file advertises, and a token that is a *path* resolves to nothing and moves a census row for
 no reason. This paragraph is above the headings for the same reason.
@@ -76,9 +76,13 @@ no reason. This paragraph is above the headings for the same reason.
 - `ComplexAnalytic.opensRange_presentationRefinedIota`: **and that range is exactly the image of
   `D(p)`**, so the open is the one a caller named rather than merely some open the construction
   produced.
-- `ComplexAnalytic.isOpenImmersion_refinedIota`, `ComplexAnalytic.isAffineOpen_refinedIota` and
-  `ComplexAnalytic.opensRange_refinedIota`: **the same three at a member of a cover datum**, each
-  the general form at the member's own inclusion and nothing else.
+- `ComplexAnalytic.opensRange_presentationRefinedIota_le`: **and it is contained in the open the
+  immersion presents**, which is the containment the word *refinement* usually means and is the
+  one-lemma consequence of the equation above.
+- `ComplexAnalytic.isOpenImmersion_refinedIota`, `ComplexAnalytic.isAffineOpen_refinedIota`,
+  `ComplexAnalytic.opensRange_refinedIota` and `ComplexAnalytic.opensRange_refinedIota_le`: **the
+  same four at a member of a cover datum**, each the general form at the member's own inclusion
+  and nothing else.
 
 ## What is not here, and the first two bullets are the operative ones
 
@@ -262,6 +266,23 @@ theorem opensRange_presentationRefinedIota (p : MvPolynomial (ULift.{u} (Fin P.n
       Spec.map (CommRingCat.ofHom (localisationRingHom.{u} P.g p)) ≫ f := rfl
   simp only [h, Scheme.Hom.opensRange_comp, opensRange_Spec_map_localisationRingHom]
 
+/-- **And it sits inside the open the immersion presents.**
+
+`ComplexAnalytic.opensRange_presentationRefinedIota` and
+`AlgebraicGeometry.Scheme.Hom.image_le_opensRange`, which is the general statement that the image
+of any open is contained in the range.
+
+**This is the statement that makes the word *refinement* mean what it usually means.** The theorem
+above says which open the range *is*, in the vocabulary of a `PrimeSpectrum.basicOpen` pushed
+forward; a caller who wants only that one affine open of `X` is contained in another — the
+ordinary definition of one cover refining another — should not have to unfold an image to get it.
+**The containment is a consequence and not an independent fact**, which is why the proof is the
+equation followed by one Mathlib lemma and nothing else. -/
+theorem opensRange_presentationRefinedIota_le (p : MvPolynomial (ULift.{u} (Fin P.n)) ℂ) :
+    (presentationRefinedIota.{u} f p).opensRange ≤ f.opensRange := by
+  rw [opensRange_presentationRefinedIota]
+  exact Scheme.Hom.image_le_opensRange _ _
+
 end
 
 /-! ### A distinguished open of a member of a cover datum -/
@@ -336,6 +357,18 @@ theorem opensRange_refinedIota (i : J) (p : MvPolynomial (ULift.{u} (Fin (obj i)
       specSchemeIota.{u} obj poly glue hrange hsymm hcocycle i ''ᵁ
         PrimeSpectrum.basicOpen (Ideal.Quotient.mk (presentationIdeal.{u} (obj i).g) p) :=
   opensRange_presentationRefinedIota.{u}
+    (specSchemeIota.{u} obj poly glue hrange hsymm hcocycle i) p
+
+/-- **And it sits inside the member it refines.**
+
+`ComplexAnalytic.opensRange_presentationRefinedIota_le` at the same immersion. What the
+specialisation adds is the index: this is the statement that the refined member is contained in
+the `i`-th member of *this* cover datum, which is the form in which a caller comparing a
+refinement with the cover it refines wants it. -/
+theorem opensRange_refinedIota_le (i : J) (p : MvPolynomial (ULift.{u} (Fin (obj i).n)) ℂ) :
+    (refinedIota.{u} obj poly glue hrange hsymm hcocycle i p).opensRange ≤
+      (specSchemeIota.{u} obj poly glue hrange hsymm hcocycle i).opensRange :=
+  opensRange_presentationRefinedIota_le.{u}
     (specSchemeIota.{u} obj poly glue hrange hsymm hcocycle i) p
 
 end
