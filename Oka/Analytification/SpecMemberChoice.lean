@@ -44,9 +44,15 @@ worth having on the record rather than in a commit message:
   polynomial at a point from another, so a `def` would name an arbitrary member of a class and
   every later statement about it would have to carry the arbitrariness anyway.
 * **The existential is what a reader can use without unfolding.**
-  `Oka/Analytification/CrossMemberChoice.lean`, which is the same step on the analytic side,
-  spends its existential into a definition precisely because it has a field to fill; there is no
-  field here yet.
+  `Oka/Analytification/CrossMemberChoice.lean`, which is the same step on the analytic side, made
+  the same call: it ends at `ComplexAnalytic.exists_refineDatumCross`, an existential over three
+  families with two laws, and its own `## What is not here` says of it that the file *"produces a
+  choice"* and that *"applying `ComplexAnalytic.refineDatumGlue` to it and reading the result back
+  is a separate step"*. It stopped there with the field already waiting —
+  `ComplexAnalytic.refineDatumGlueNe` takes that choice as explicit arguments and is *upstream* of
+  that file, in `Oka/Analytification/CrossMemberDatumGlue.lean`, its only import. So the precedent
+  is for the existential, and it is stronger than this file needs: there, a field was waiting and
+  the existential was still the right shape; here there is no field at all.
 
 **If the assembly step lands and wants definitions, this is one `choose` away and the change is
 additive.** Recording the decision rather than the alternative is the point of this section.
