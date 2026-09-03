@@ -151,8 +151,21 @@ need, says which part of that is now a theorem elsewhere, and compiles none of i
   **So the sufficient condition for this route is one category down**: that
   `ComplexAnalytic.localisationHom (nodeCoverObj b).g 1`
   (`Oka/Analytification/LocalisationFunctor.lean`) is an isomorphism, which is a statement about
-  presented algebras rather than about spaces. **It is unproved, unpriced and not claimed here**,
-  in either direction.
+  presented algebras rather than about spaces. **This bullet said that condition was unproved,
+  unpriced and not claimed; it is now a theorem** — `ComplexAnalytic.isIso_localisationHom_one`
+  (`Oka/Analytification/LocalisationIndependence.lean`), an `instance`, stated in general in the
+  base's equations and so available at `(nodeCoverObj b).g` with nothing to instantiate.
+
+  **The route still does not close and nothing below runs it, which is the half a reader will
+  otherwise supply.** `ComplexAnalytic.coverAnalytificationIso` takes an isomorphism of each
+  member matched by index **and two commutation hypotheses** — each a `∀ i j, i ≠ j →` square
+  relating a member's inclusion into an overlap to the datum's transition morphism — and the
+  theorem above supplies only the first, and only once it is known that the refining family is
+  the original member's localisation at `1` member by member. Both of those are questions about
+  this file's own `OkaTest.RefineDatumWitness.nodeRefineOneObj` and
+  `OkaTest.RefineDatumWitness.nodeRefineOnePoly`, and neither is opened here. **What
+  changed is that the ingredient this bullet named as absent is no longer absent**, not that the
+  question above it is answered.
 
   **The step this bullet recorded as missing is no longer missing**, and it is the reason
   `ComplexAnalytic.isIso_localisationProj_one` exists:

@@ -4909,3 +4909,58 @@ info: 'ComplexAnalytic.exists_family_mvPolynomial_basicOpen_specSchemeIotaMap' d
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.exists_family_mvPolynomial_basicOpen_specSchemeIotaMap
+
+/-! ### Localising at `1`
+
+`Oka/Analytification/LocalisationIndependence.lean`, appended as its own section for the reason
+the sections above give: a section moved is a conflict for somebody else.
+
+**The presentation-level sibling of `ComplexAnalytic.isIso_localisationProj_one`**, which is
+guarded above in this file and is the *analytic* statement at the same polynomial. Neither is
+derived from the other: no statement in this repository says
+`ComplexAnalytic.analytificationFunctor` is full, faithful or reflects isomorphisms, so the two
+are guarded separately because they are proved separately — this one out of
+`IsLocalization.atUnits` and
+`ComplexAnalytic.localisationPresentedAlgebraEquiv_localisationRingHom`, that one out of
+`ComplexAnalytic.localisationIso` and `ComplexAnalytic.localisationOpen_one`.
+
+**Both `def`s are guarded and not only the three propositions.**
+`ComplexAnalytic.presentedAlgebraEquivLocalisationOne` and
+`ComplexAnalytic.localisationIsoOne` are data, so nothing else would notice if either started
+resting on a fourth axiom, and `ComplexAnalytic.isIso_localisationHom_one` is the consumer that
+carries them both. -/
+
+/--
+info: 'ComplexAnalytic.bijective_localisationRingHom_one' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.bijective_localisationRingHom_one
+
+/--
+info: 'ComplexAnalytic.presentedAlgebraEquivLocalisationOne' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.presentedAlgebraEquivLocalisationOne
+
+/--
+info: 'ComplexAnalytic.localisationIsoOne' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.localisationIsoOne
+
+/--
+info: 'ComplexAnalytic.localisationIsoOne_hom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.localisationIsoOne_hom
+
+/--
+info: 'ComplexAnalytic.isIso_localisationHom_one' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isIso_localisationHom_one
