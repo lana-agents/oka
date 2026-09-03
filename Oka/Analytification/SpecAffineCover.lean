@@ -204,8 +204,14 @@ member only. Nothing here is about two data at once; taxis #1329 has the measure
   of each member — so it is **strictly weaker**, as
   `Oka/Analytification/SpecScheme.lean` and `Oka/Analytification/CoverIndependence.lean` both say.
   It applies once the members are affine opens and is
-  `ComplexAnalytic.exists_basicOpen_specSchemeIota_inter` there, **which no declaration consumes
-  yet**: what asked is a deliverable and not a proof term.
+  `ComplexAnalytic.exists_basicOpen_specSchemeIota_inter` there. **That theorem now has a Lean
+  consumer and this clause used to say it had none.**
+  `ComplexAnalytic.exists_mvPolynomial_basicOpen_specSchemeIota_inter`
+  (`Oka/Analytification/SpecMemberSections.lean`) restates it with polynomials in the two members'
+  own variables, and its proof term reads this one. **What that consumer does not do is the thing
+  this bullet is about**: it moves the local form into the vocabulary a cover datum is written in
+  and builds no refinement, so what asked for the condition is still a deliverable and not a proof
+  term.
 
   **A separate module rather than the end of this file, and the reason is this bullet**: ten
   docstrings on this line say there is no `AlgebraicGeometry.Scheme` in *their* file, so keeping

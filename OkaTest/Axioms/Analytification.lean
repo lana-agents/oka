@@ -4806,3 +4806,87 @@ info: 'ComplexAnalytic.isIso_localisationProj_one' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.isIso_localisationProj_one
+
+/-! ### A section over a member of the glued `Spec`, in polynomials
+
+`Oka/Analytification/SpecMemberSections.lean`, appended as its own section for the reason the
+sections above give: a section moved is a conflict for somebody else.
+
+**The continuation of `ComplexAnalytic.exists_basicOpen_specSchemeIota_inter` and
+`ComplexAnalytic.exists_index_basicOpen_specSchemeIotaMap`, both guarded above, into the vocabulary
+a cover datum is written in.** Those theorems produce *sections*; the last three guards here are
+the same statements with *polynomials* in the members' own variables, and the six before them are
+what carries one to the other — every section over the range of an open immersion out of a
+presented algebra's spectrum is such a polynomial, and the open it cuts out in the glued scheme is
+the image of `D(p)` under that immersion.
+
+**The first three are stated at an arbitrary open immersion and the next three are them at
+`ComplexAnalytic.specSchemeIota`.** The generality is what the cross-datum guards need: a carried
+member is `ComplexAnalytic.specSchemeIotaMap` and is not `ComplexAnalytic.specSchemeIota` of
+anything in the first datum, so the second side of those statements has no one-datum spelling.
+
+Its only new ingredient is `AlgebraicGeometry.IsOpenImmersion.specΓIsoTop`, a mirror-tree
+isomorphism guarded in `OkaTest/Axioms/Sheaves.lean`. -/
+
+/--
+info: 'ComplexAnalytic.presentationSection' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.presentationSection
+
+/--
+info: 'ComplexAnalytic.surjective_presentationSection' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.surjective_presentationSection
+
+/--
+info: 'ComplexAnalytic.basicOpen_presentationSection' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.basicOpen_presentationSection
+
+/--
+info: 'ComplexAnalytic.specSchemeIotaSection' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.specSchemeIotaSection
+
+/--
+info: 'ComplexAnalytic.surjective_specSchemeIotaSection' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.surjective_specSchemeIotaSection
+
+/--
+info: 'ComplexAnalytic.basicOpen_specSchemeIotaSection' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.basicOpen_specSchemeIotaSection
+
+/--
+info: 'ComplexAnalytic.exists_mvPolynomial_basicOpen_specSchemeIota_inter' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.exists_mvPolynomial_basicOpen_specSchemeIota_inter
+
+/--
+info: 'ComplexAnalytic.exists_mvPolynomial_basicOpen_specSchemeIotaMap_inter' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.exists_mvPolynomial_basicOpen_specSchemeIotaMap_inter
+
+/--
+info: 'ComplexAnalytic.exists_index_mvPolynomial_basicOpen_specSchemeIotaMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.exists_index_mvPolynomial_basicOpen_specSchemeIotaMap

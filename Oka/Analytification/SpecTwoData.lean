@@ -134,10 +134,29 @@ ask for it to know that `Φ` is surjective on points.
   `ComplexAnalytic.PresentedAlgebra` to a polynomial is `Ideal.Quotient.mk_surjective`, which this
   repository already spends at fifteen sites. **Neither is here**, because the first has no
   complex-analytic content and `README.md`'s mirror-tree rule puts it under
-  `Oka/AlgebraicGeometry/` rather than in this tree.
-* **No consumer of `ComplexAnalytic.exists_basicOpen_specSchemeIota_inter`.** That theorem still
-  has none — this file applies the same Mathlib lemma at a different pair of affine opens rather
-  than calling it — and taxis #1507 measured that absence rather than asserting it.
+  `Oka/AlgebraicGeometry/` rather than in this tree. **Both have since been added, and neither to
+  this file**: the first is `AlgebraicGeometry.IsOpenImmersion.specΓIsoTop`
+  (`Oka/AlgebraicGeometry/OpenImmersion.lean`), exactly where that rule puts it, and
+  `ComplexAnalytic.surjective_specSchemeIotaSection`
+  (`Oka/Analytification/SpecMemberSections.lean`) is the two of them together at one member.
+  **This bullet's own subject is no longer absent either, and that clause is why this sentence
+  exists**: `ComplexAnalytic.exists_index_mvPolynomial_basicOpen_specSchemeIotaMap` (same file) is
+  the polynomial form of the last theorem below, and
+  `ComplexAnalytic.exists_mvPolynomial_basicOpen_specSchemeIotaMap_inter` is the fixed-index one.
+  **What was priced wrong while it was absent was the second lift.**
+  `ComplexAnalytic.surjective_specSchemeIotaSection` reaches a member of *this* datum and a carried
+  member of the second is `ComplexAnalytic.specSchemeIotaMap`, which is not
+  `ComplexAnalytic.specSchemeIota` of anything here; the statement became cheap when that file
+  restated its three lemmas at an arbitrary open immersion. **Still absent**, and this file's first
+  two bullets say it: any of it that is a *choice* rather than an existential.
+* **No consumer of `ComplexAnalytic.exists_basicOpen_specSchemeIota_inter` *in this file*.** It
+  applies the same Mathlib lemma at a different pair of affine opens rather than calling that
+  theorem, and taxis #1507 measured that absence rather than asserting it. **This bullet used to
+  say the theorem had none anywhere, and that is no longer true**:
+  `ComplexAnalytic.exists_mvPolynomial_basicOpen_specSchemeIota_inter`
+  (`Oka/Analytification/SpecMemberSections.lean`) restates it with polynomials in the two members'
+  own variables and its proof term reads this one. What is unchanged is this file's own position —
+  nothing below calls it, for the reason given above and not for want of anyone who does.
 * **Nothing that constructs `Φ`**, in either direction, and no statement that two cover data with
   isomorphic gluings have anything else in common.
 * **Nothing on the analytic side.** `X^an` is glued from analytic spaces and is not a scheme;
@@ -281,9 +300,12 @@ no index is handed in, so it is a statement about the two data and not about a c
 members.
 
 **It is an existential at each point and not a choice.** A common refinement indexes its members
-by something, and picking that index set — as well as turning the two sections into polynomials in
-the members' own variables — is not here; this module's `## What is not here` says what each of
-those costs. -/
+by something, and picking that index set is not here; this module's `## What is not here` says what
+that costs. Turning the two sections into polynomials in the members' own variables is not here
+either and is no longer anywhere absent:
+`ComplexAnalytic.exists_index_mvPolynomial_basicOpen_specSchemeIotaMap`
+(`Oka/Analytification/SpecMemberSections.lean`) is this statement in that vocabulary, and its proof
+term reads this one. -/
 theorem exists_index_basicOpen_specSchemeIotaMap
     (Φ : specScheme.{u} obj' poly' glue' hrange' hsymm' hcocycle' ⟶
       specScheme.{u} obj poly glue hrange hsymm hcocycle) [IsIso Φ]
