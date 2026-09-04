@@ -41,6 +41,9 @@ are the same map. There is no analysis and no sheaf argument in it.
   hypothesis. Nothing in it is analytic, so it is stated for a family of locally ringed spaces.
 - `ComplexAnalytic.AnalyticSpace.sigmaι_sigmaDesc`: **the descent map restricts to the given
   morphism on each member**, which is the universal property in the form this file keeps.
+- `ComplexAnalytic.AnalyticSpace.hom_ext_sigma`: **and a morphism out of a disjoint union is
+  determined by those restrictions**, which is its uniqueness half. No agreement of the
+  restrictions is asked for anywhere, in either direction.
 - `ComplexAnalytic.AnalyticSpace.isEmpty_sigma` and
   `ComplexAnalytic.AnalyticSpace.not_surjective_sigmaι_base`: the two non-vacuity statements, at
   the two ends.
@@ -48,6 +51,9 @@ are the same map. There is no analysis and no sheaf argument in it.
   under the same two hypotheses. **This is still not a statement that the disjoint union and the
   member are non-isomorphic** — that would be a statement about an invariant, and the caveat on
   the item above applies here word for word.
+- `ComplexAnalytic.AnalyticSpace.isIso_sigmaι`: **at a subsingleton index type it is one**, which
+  is the case the hypotheses of the two items above exclude. Its inverse is a descent map, so
+  nothing about the structure sheaves is computed on the way.
 
 ## Why the descent map needs a lemma at all
 
@@ -83,9 +89,13 @@ costs anything.
 
 ## What is not here
 
-**No `CategoryTheory.Limits.IsColimit`.** The object, the inclusions and one descent map are
-what a consumer needs; the universal property as a colimit is a separate decision and nothing
-consumes one.
+**No `CategoryTheory.Limits.IsColimit`, and the two halves of the universal property are
+here as separate lemmas.** `ComplexAnalytic.AnalyticSpace.sigmaDesc` with
+`ComplexAnalytic.AnalyticSpace.sigmaι_sigmaDesc` is existence and
+`ComplexAnalytic.AnalyticSpace.hom_ext_sigma` is uniqueness, which is what every consumer here
+has needed. **What the bundle would additionally buy is not a proof but an interface** — the
+`CategoryTheory.Limits.Cocone`, the transport of colimits along the forgetful functor, and the
+`HasCoproduct` instance that lets `∐` be written for this object — and nothing consumes one.
 
 **Nothing about `ComplexAnalytic.AnalyticSpace.IsFinite` or
 `ComplexAnalytic.AnalyticSpace.IsLocalIso`** for the inclusions or for `∐_{Fin n} X ⟶ X`, and no
@@ -249,6 +259,27 @@ lemma sigmaι_sigmaDesc {Y : AnalyticSpace.{u}} (g : ∀ i, F i ⟶ Y) (j : ι) 
     sigmaι F j ≫ sigmaDesc F g = g j :=
   forgetToLocallyRingedSpace.map_injective (Sigma.ι_desc (fun i ↦ (g i).toLRSHom) j)
 
+/-- **A morphism out of a disjoint union is determined by its restrictions to the members**, with
+no agreement condition to check: the members are disjoint and there are no overlaps.
+
+This is the uniqueness half of the universal property, of which
+`ComplexAnalytic.AnalyticSpace.sigmaDesc` and
+`ComplexAnalytic.AnalyticSpace.sigmaι_sigmaDesc` are the existence half. Together they are what a
+consumer of a colimit would use; the bundled `CategoryTheory.Limits.IsColimit` is still not here,
+and `## What is not here` says what that would additionally cost.
+
+**The proof is the coproduct's own `hom_ext` and nothing else.** A morphism of analytic spaces is
+determined by its morphism of locally ringed spaces
+(`ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace` is faithful, which is what
+`map_injective` is), and there `CategoryTheory.Limits.Sigma.hom_ext` applies to the coproduct that
+`ComplexAnalytic.AnalyticSpace.sigma` is on the nose. Nothing analytic enters, and in particular
+the `ℂ`-algebra structures are never compared — they cannot differ, the two morphisms having the
+same source and target. -/
+theorem hom_ext_sigma {Y : AnalyticSpace.{u}} {f g : sigma F ⟶ Y}
+    (h : ∀ i, sigmaι F i ≫ f = sigmaι F i ≫ g) : f = g :=
+  forgetToLocallyRingedSpace.map_injective <|
+    Limits.Sigma.hom_ext _ _ fun i ↦ forgetToLocallyRingedSpace.congr_map (h i)
+
 /-! ### Non-vacuity, at the two ends -/
 
 /-- **The disjoint union of the empty family is empty.**
@@ -269,9 +300,10 @@ theorem isEmpty_sigma [IsEmpty ι] : IsEmpty (sigma F) := by
 union is not the member in disguise.
 
 The reading this closes is at the top end, and it needs both hypotheses: at a one-member family
-the inclusion *is* surjective, and at a family whose other members are empty it is surjective
-again. `AlgebraicGeometry.LocallyRingedSpace.eq_of_sigmaι_base_eq` is the whole proof — a point of
-the `j`-th member cannot be in the image of the `i`-th.
+the inclusion *is* surjective — `ComplexAnalytic.AnalyticSpace.isIso_sigmaι` below says it is an
+isomorphism there — and at a family whose other members are empty it is surjective again.
+`AlgebraicGeometry.LocallyRingedSpace.eq_of_sigmaι_base_eq` is the whole proof — a point of the
+`j`-th member cannot be in the image of the `i`-th.
 
 Note what it is not: two analytic spaces with different carriers can still be isomorphic to a
 third, and this says nothing about `ComplexAnalytic.AnalyticSpace.sigma F` being non-isomorphic to
@@ -296,6 +328,30 @@ one. The statement about an invariant is still the statement nothing here comput
 theorem not_isIso_sigmaι {i j : ι} (hij : i ≠ j) (y : (F j).toLocallyRingedSpace) :
     ¬ IsIso (sigmaι F i) := fun _ ↦
   not_surjective_sigmaι_base F hij y (surjective_base_of_isIso _)
+
+/-- **At a one-member family the inclusion is an isomorphism**, which is the converse case the two
+theorems above leave open and the reason both of their hypotheses are there.
+
+`ComplexAnalytic.AnalyticSpace.not_isIso_sigmaι` needs a second index with an inhabited member;
+this is what happens when there is no second index at all. `[Subsingleton ι]` and not `[Unique ι]`
+is the honest hypothesis: `j` supplies the point that would make `ι` unique, and a caller who has
+the index has it.
+
+**The inverse is a descent map and there is no sheaf argument in it.** Each member is sent to
+`F j` by the `eqToHom` of `Subsingleton.elim`, and the two round trips are
+`ComplexAnalytic.AnalyticSpace.sigmaι_sigmaDesc` and
+`ComplexAnalytic.AnalyticSpace.hom_ext_sigma`. So this is a corollary of the universal property
+rather than a computation with the structure sheaves — worth saying because
+`Oka/AnalyticSpace/SigmaFiniteEtale.lean` recorded the fold map's case as absent and priced it as
+*"a statement about the structure sheaves as well"*, and that price is not what it costs. -/
+instance isIso_sigmaι [Subsingleton ι] (j : ι) : IsIso (sigmaι F j) := by
+  refine ⟨sigmaDesc F (fun i ↦ eqToHom (congrArg F (Subsingleton.elim i j))), ?_, ?_⟩
+  · simp
+  · refine hom_ext_sigma F fun i ↦ ?_
+    have hij : i = j := Subsingleton.elim i j
+    subst hij
+    rw [← Category.assoc, sigmaι_sigmaDesc]
+    simp
 
 end AnalyticSpace
 

@@ -79,6 +79,8 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   itself, and the trivial `ι`-sheeted cover for a finite `ι`.
 - `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree`: **the degree of a cover**, which is
   `ComplexAnalytic.AnalyticSpace.degree` of its structure map.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.trivialIsoId`: **the trivial cover at one sheet
+  is the base over itself**, as an isomorphism of objects.
 - `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiber`: **the fibre of a cover over a point of
   the base**, as the preimage type.
 - `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberFunctor` and
@@ -107,6 +109,10 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_eq_of_iso_trivial`: **the trivial covers of a
   non-empty base are pairwise non-isomorphic**, indexed by `Nat.card`, so the category there has
   as many isomorphism classes as there are values of that.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.nonempty_iso_trivial_id_iff`: **and the first of
+  those is sharp** — over a non-empty base the trivial cover is the base over itself exactly when
+  its index type has one point. The two directions are proved by different means and neither is
+  the other read backwards: the degree separates and never produces an isomorphism.
 - `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preconnectedSpace_of_iso` and
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_iso_of_preconnectedSpace`:
   **preconnectedness of the total space is an invariant of an object**, and separates objects the
@@ -307,8 +313,11 @@ def FiniteEtaleOver.id (X : AnalyticSpace.{u}) : FiniteEtaleOver.{u} X :=
 /-- **The trivial `ι`-sheeted cover**, for a finite index type: `∐_{i : ι} X ⟶ X`.
 
 `ComplexAnalytic.AnalyticSpace.isFiniteEtale_sigmaFold` is what makes it an object, and it asks
-nothing of `X` — not Hausdorff, not connected, not non-empty. At `ι` a subsingleton this is
-`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.id` up to an isomorphism nothing below states. -/
+nothing of `X` — not Hausdorff, not connected, not non-empty. At an inhabited subsingleton `ι`
+this is `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.id` up to the isomorphism
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.trivialIsoId` below, and over a non-empty base
+those are the only index types at which it is
+(`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.nonempty_iso_trivial_id_iff`). -/
 noncomputable def FiniteEtaleOver.trivial (ι : Type u) [Finite ι] (X : AnalyticSpace.{u}) :
     FiniteEtaleOver.{u} X :=
   MorphismProperty.Over.mk _ (sigmaFold ι X) (isFiniteEtale_sigmaFold (ι := ι) X)
@@ -454,7 +463,9 @@ of any morphism is proved on the way, which is exactly why the route the absence
 not the route taken.
 
 `Nat.card ι ≠ 1` is the honest hypothesis and is weaker than `1 < Nat.card ι`: it also covers the
-empty `ι`, where the cover is the empty space and the degree is `0`. -/
+empty `ι`, where the cover is the empty space and the degree is `0`. **And it is sharp** —
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.nonempty_iso_trivial_id_iff` at the end of this
+file is this statement and its converse together. -/
 theorem FiniteEtaleOver.isEmpty_iso_trivial_id (ι : Type u) [Finite ι] (X : AnalyticSpace.{u})
     [Nonempty X] (h : Nat.card ι ≠ 1) :
     IsEmpty (FiniteEtaleOver.trivial.{u} ι X ≅ FiniteEtaleOver.id.{u} X) :=
@@ -558,9 +569,10 @@ objects of `CategoryTheory.Over X` of these shapes and asks the property for not
 to say "cover".
 
 **What it does not say.** A trivial cover with `Nat.card ι ≤ 1` is not covered, and correctly so:
-at one sheet the fold map is a bijection on points and the total space is a copy of `X`, which may
-perfectly well be preconnected. The hypothesis is two *distinct* indices and there is no weaker
-one. -/
+at one sheet the fold map is an isomorphism
+(`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.trivialIsoId`) and the total space is `X` itself,
+which may perfectly well be preconnected. The hypothesis is two *distinct* indices and there is no
+weaker one. -/
 theorem FiniteEtaleOver.isEmpty_iso_trivial_of_preconnectedSpace {X : AnalyticSpace.{u}}
     (A : FiniteEtaleOver.{u} X) [PreconnectedSpace A.left] (ι : Type u) [Finite ι] [Nonempty X]
     {i j : ι} (hij : i ≠ j) :
@@ -792,5 +804,64 @@ noncomputable def FiniteEtaleOver.fiberTrivialEquiv (ι : Type u) [Finite ι]
     infer_instance
   (AlgebraicGeometry.LocallyRingedSpace.fiberSigmaDescEquiv (fun _ : ι ↦ X.toLocallyRingedSpace)
       (fun _ ↦ (𝟙 X : X ⟶ X).toLRSHom) x).symm.trans (@Equiv.sigmaUnique ι _ hu)
+
+/-! ### The trivial cover at one sheet, where it is the base -/
+
+/-- **The trivial cover at one sheet is the base over itself.**
+
+The isomorphism the docstring of `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.trivial` said was
+not stated. It is `ComplexAnalytic.AnalyticSpace.sigmaFoldIso`
+(`Oka/AnalyticSpace/SigmaFiniteEtale.lean`) put over `X`: a morphism of this category is a
+morphism of analytic spaces commuting with the two structure maps and nothing more — `Q` is `⊤`,
+as the docstring above says — so the triangle is all there is to check, and it is
+`Category.comp_id` at the identity structure map of
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.id`.
+
+**The triangle is a term and not a `simp`, for the reason
+`ComplexAnalytic.AnalyticSpace.isIso_hom_of_iso_id` gives above.** The goal displays as
+`(sigmaFoldIso ι X).hom ≫ (FiniteEtaleOver.id X).hom = (FiniteEtaleOver.trivial ι X).hom`; both
+`def`s have to be unfolded to see a `𝟙 X` and a `sigmaFold ι X`, which `rw` and `simp` do not do
+at `instances` transparency, and `Category.comp_id _` is the same step at default transparency in
+one line.
+
+**`[Nonempty ι]` and `[Subsingleton ι]` and not `Nat.card ι = 1`**, which
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.nonempty_iso_trivial_id_iff` below converts for a
+caller holding the numeral. The instances are what the construction consumes; a hypothesis it
+would have to destructure is the wrong shape for a `def`, whose value would then depend on a
+proof. -/
+noncomputable def FiniteEtaleOver.trivialIsoId (ι : Type u) [Finite ι] [Nonempty ι]
+    [Subsingleton ι] (X : AnalyticSpace.{u}) :
+    FiniteEtaleOver.trivial.{u} ι X ≅ FiniteEtaleOver.id.{u} X :=
+  MorphismProperty.Over.isoMk (sigmaFoldIso ι X) (Category.comp_id _)
+
+/-- **So over a non-empty base the trivial cover is the base over itself exactly when its index
+type has one point.**
+
+The two directions are the two halves this file already had, joined:
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_iso_trivial_id` is the forward one and is
+proved through the degree, and
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.trivialIsoId` is the backward one and is proved
+through the universal property of the disjoint union. **Neither direction is the other read
+backwards**, and the degree cannot supply the backward one: it separates isomorphism classes and
+never produces an isomorphism.
+
+`[Nonempty X]` is where it is needed and not decorative — it is what
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_id` and
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_trivial` ask for, the degree of a morphism
+out of or into the empty space being `0` whatever the index type is. The backward direction needs
+nothing of `X`.
+
+**This is a classification of one isomorphism class and not of the category.** It says which
+trivial covers are the identity; it says nothing about a non-trivial cover of degree `1`, and
+`## What is not here` still records that no invariant here separates two *connected* covers. -/
+theorem FiniteEtaleOver.nonempty_iso_trivial_id_iff (ι : Type u) [Finite ι]
+    (X : AnalyticSpace.{u}) [Nonempty X] :
+    Nonempty (FiniteEtaleOver.trivial.{u} ι X ≅ FiniteEtaleOver.id.{u} X) ↔ Nat.card ι = 1 := by
+  refine ⟨fun he ↦ by_contra fun h ↦
+    not_nonempty_iff.mpr (FiniteEtaleOver.isEmpty_iso_trivial_id ι X h) he, fun h ↦ ?_⟩
+  obtain ⟨j, hj⟩ := Nat.card_eq_one_iff_exists.mp h
+  haveI : Nonempty ι := ⟨j⟩
+  haveI : Subsingleton ι := ⟨fun a b ↦ (hj a).trans (hj b).symm⟩
+  exact ⟨FiniteEtaleOver.trivialIsoId ι X⟩
 
 end ComplexAnalytic.AnalyticSpace

@@ -70,9 +70,15 @@ the count below is computed at every point directly, so
 `ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale` is not used and no connectedness
 hypothesis appears.
 
-**No claim that the trivial cover is not a non-trivial one.** For `n = 1` the fold map is a
-bijection on points and one would expect it to be an isomorphism; that is a statement about the
-structure sheaves as well and nothing here proves it.
+**The one-sheeted case is settled and it cost no sheaf argument.** This paragraph said that for
+`n = 1` the fold map is a bijection on points, that one would expect it to be an isomorphism, and
+that *"that is a statement about the structure sheaves as well and nothing here proves it"*.
+`ComplexAnalytic.AnalyticSpace.isIso_sigmaFold` proves it and reads no structure sheaf: the
+inclusion of the single member is a two-sided inverse by the universal property of the disjoint
+union, so the recorded obstruction named the wrong thing. **What is still not here is any claim
+that a trivial cover is not a non-trivial one at more than one sheet** — that is a statement about
+an invariant, and `Oka/AnalyticSpace/FiniteEtaleOver.lean` is where the two invariants this
+development has for it are read off an object.
 
 **Nothing about the analytification of a finite étale morphism of schemes**, which is the other
 blocker of the Riemann existence theorem and is untouched.
@@ -81,6 +87,8 @@ blocker of the Riemann existence theorem and is untouched.
 
 - `ComplexAnalytic.AnalyticSpace.sigmaFold`: **the trivial `ι`-sheeted cover** `∐_{i : ι} X ⟶ X`,
   the descent map of the constant family at the identity.
+- `ComplexAnalytic.AnalyticSpace.sigmaFoldIso`: **it, at one sheet, as an isomorphism onto the
+  base**.
 
 ## Main results
 
@@ -93,6 +101,10 @@ blocker of the Riemann existence theorem and is untouched.
   finite étale** for a finite `ι`.
 - `ComplexAnalytic.AnalyticSpace.card_fiber_sigmaFold`: **every fibre of it has `Nat.card ι`
   points**, at every point of the base and with no connectedness hypothesis.
+- `ComplexAnalytic.AnalyticSpace.isIso_sigmaFold`: **at one sheet it is an isomorphism**, by the
+  universal property and with no structure sheaf read — which is the case
+  `ComplexAnalytic.AnalyticSpace.card_fiber_sigmaFold` puts at one point per fibre and says
+  nothing more about.
 - `ComplexAnalytic.AnalyticSpace.isClosed_range_sigmaι_base` and
   `ComplexAnalytic.AnalyticSpace.isClopen_range_sigmaι_base`: **the image of a member of a
   disjoint union is closed**, and so clopen — the members are disjoint, so one image's complement
@@ -378,6 +390,55 @@ theorem card_fiber_sigmaFold (X : AnalyticSpace.{u}) (x : X) :
     (fiberSigmaDescEquiv (fun _ : ι ↦ X.toLocallyRingedSpace)
       (fun _ ↦ (𝟙 X : X ⟶ X).toLRSHom) x).symm.bijective).trans ?_
   exact Nat.card_eq_of_bijective _ (@Equiv.sigmaUnique ι _ hu).bijective
+
+/-- **The fold map restricts to the identity on each member**, which is
+`ComplexAnalytic.AnalyticSpace.sigmaι_sigmaDesc` at the constant family and is stated because
+`ComplexAnalytic.AnalyticSpace.sigmaFold` is a `def`: `simp` does not unfold it to reach the
+descent map underneath, so the general lemma does not fire on this composite. -/
+@[simp]
+theorem sigmaι_sigmaFold {ι : Type u} (X : AnalyticSpace.{u}) (j : ι) :
+    sigmaι (fun _ : ι ↦ X) j ≫ sigmaFold ι X = 𝟙 X :=
+  sigmaι_sigmaDesc _ _ j
+
+variable (ι) in
+/-- **At one sheet the trivial cover is an isomorphism**, so its total space is `X` and not merely
+a space with the same points.
+
+**This is what `## What is not here` recorded as absent, and the price recorded there is not what
+it costs.** That paragraph said the fold map is a bijection on points at one sheet, that one would
+expect it to be an isomorphism, and that *"that is a statement about the structure sheaves as well
+and nothing here proves it"*. No structure sheaf is touched: the inclusion of the single member is
+a two-sided inverse by the universal property, so this is
+`ComplexAnalytic.AnalyticSpace.isIso_sigmaι` (`Oka/AnalyticSpace/Sigma.lean`) read through
+`ComplexAnalytic.AnalyticSpace.sigmaι_sigmaFold` and two-out-of-three.
+
+**`[Nonempty ι]` and `[Subsingleton ι]` rather than `[Unique ι]`**, which are the same class of
+index types: the two instances are what the proof consumes, `Unique` is a structure carrying a
+chosen point that nothing here reads, and a caller holding `Nat.card ι = 1` produces the pair
+directly. The empty case is genuinely excluded and is not an oversight —
+`ComplexAnalytic.AnalyticSpace.isEmpty_sigma` makes the source empty there, and the fold map out
+of it is not an isomorphism over an inhabited `X`. -/
+instance isIso_sigmaFold [Nonempty ι] [Subsingleton ι] (X : AnalyticSpace.{u}) :
+    IsIso (sigmaFold ι X) := by
+  obtain ⟨j⟩ := ‹Nonempty ι›
+  haveI : IsIso (sigmaι (fun _ : ι ↦ X) j ≫ sigmaFold ι X) := by
+    rw [sigmaι_sigmaFold]; infer_instance
+  exact IsIso.of_isIso_comp_left (sigmaι (fun _ : ι ↦ X) j) (sigmaFold ι X)
+
+variable (ι) in
+/-- **The one-sheeted disjoint union, as an isomorphism onto the base.**
+
+`ComplexAnalytic.AnalyticSpace.isIso_sigmaFold` packaged by `CategoryTheory.asIso`, so that a
+consumer wanting an isomorphism of objects rather than a property of a morphism has one to hand;
+`Oka/AnalyticSpace/FiniteEtaleOver.lean` is that consumer. -/
+def sigmaFoldIso [Nonempty ι] [Subsingleton ι] (X : AnalyticSpace.{u}) :
+    sigma (fun _ : ι ↦ X) ≅ X :=
+  asIso (sigmaFold ι X)
+
+@[simp]
+theorem sigmaFoldIso_hom {ι : Type u} [Nonempty ι] [Subsingleton ι] (X : AnalyticSpace.{u}) :
+    (sigmaFoldIso ι X).hom = sigmaFold ι X :=
+  rfl
 
 end
 
