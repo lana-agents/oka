@@ -389,6 +389,13 @@ immersion's image of a preimage is its range met with the open, and the range is
 immersion's image of `⊤` is its range — so nothing here is independent of it, and this is the form
 a consumer that has *two* polynomials in hand needs.
 
+**That consumer is `ComplexAnalytic.opensRange_presentationRefinedIota_rename`**
+(`Oka/Analytification/SpecRefinedMemberSection.lean`), and it is the only one: it carries this
+statement along an arbitrary open immersion by `AlgebraicGeometry.Scheme.Hom.comp_image` and is
+the doubly-distinguished condition at a same-member pair. **It is named here and not in the
+`## Main results` bullet that points at this docstring**, because a backticked name belonging to
+another file under that heading is read as a result *this* file advertises.
+
 **The trailing `rfl` is the same unification the theorem above pays for in its proof and not in its
 statement**, and it is here for the same reason: the two `Opens` types are definitionally equal and
 the `rw` closes the goal up to that identity rather than through it. -/

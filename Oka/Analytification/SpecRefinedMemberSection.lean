@@ -339,8 +339,12 @@ restricted to it — the theorem above at the other of the two members the overl
 their left-hand sides have the same *shape* and differ only in which of `p` and `q` is restricted
 along; a descriptive suffix
 would have to name an argument position rather than a subject. **The prime is not a new convention
-here**: `Oka/` already carries twenty-four distinct primed names at thirty-eight declaration sites,
-four more sites again under `OkaTest/`. **The alternative — restating both as one theorem taking
+here**: `Oka/` already carries primed declaration names — `ComplexAnalytic.coverGlueData'` and
+`ComplexAnalytic.stalkMap_restrictHom_eq'` among them — and so does `OkaTest/`. **No figure is
+quoted for that because the reading decides it**: declaration sites whose name *contains* a prime,
+sites whose name *ends* in one, and rows of the environment dump are three different counts over
+one tree, and a sentence quoting one of them beside another rots the moment a reader checks the
+other. **The alternative — restating both as one theorem taking
 the member as an argument — was rejected**: it renames a declaration that is guarded, is advertised
 in the `## Main results` above, and is cited at eight sites in two files, and it buys nothing a
 caller can use.
