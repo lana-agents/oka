@@ -5451,7 +5451,8 @@ info: 'ComplexAnalytic.dupPtStrict' depends on axioms:
 
 /-! ### The refining condition at an index map that is the identity
 
-`Oka/Analytification/RefineDatumCover.lean`'s last section, which reads
+`Oka/Analytification/RefineDatumCover.lean`'s
+`### The condition at an index map that is the identity`, which reads
 `ComplexAnalytic.RefineDatumCovers` at `σ = id` — where the index a point must be reached through
 is forced, the identification of two members is the identity, and the condition is left saying that
 each `D(fam i)` is the whole of its member. Appended as its own section rather than merged into
@@ -5501,7 +5502,8 @@ info: 'ComplexAnalytic.not_refineDatumCovers_id_of_ne_top' depends on axioms:
 
 /-! ### The refining condition at an identity index map is that equation, and not merely implies it
 
-The converse half of `Oka/Analytification/RefineDatumCover.lean`'s last section, and the `Iff` that
+The converse half of `Oka/Analytification/RefineDatumCover.lean`'s
+`### The condition at an index map that is the identity`, and the `Iff` that
 joins the two. **Appended as its own section rather than merged into the one that guards the
 forward half**, for the reason this file gives everywhere: moving or reordering a section is a
 conflict for every branch that has appended to it, and a section that counts only its own guards
@@ -5535,3 +5537,41 @@ info: 'ComplexAnalytic.refineDatumCovers_id_iff' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.refineDatumCovers_id_iff
+
+/-! ### The morphism down at a family that is a unit on each overlap
+
+`Oka/Analytification/RefineDatumCover.lean`'s
+`### The instance at a family that is a unit on each overlap`, which names
+`ComplexAnalytic.refineDatumToBase` at an injective index map and a family that is a unit on each
+overlap, and reads the surjectivity equivalence at those arguments. Appended as its own section
+rather than merged into any above it, and the reason is stated here rather than cited: moving or
+reordering a section of this file is a conflict for every branch that has appended to it.
+
+**Two guards, one of them for a definition.** `ComplexAnalytic.refineDatumUnitFamToBase` is a
+`def` and is advertised under `## Main definitions` rather than `## Main results`, so
+`scripts/guard_coverage.py` counts it as guarded and advertised nowhere — which is that script's
+own recorded behaviour for a definition and not a gap.
+`ComplexAnalytic.surjective_base_refineDatumUnitFamToBase_iff` is the theorem and is advertised.
+
+**Neither is a new construction.** The definition is the general morphism at the unit family's own
+choices and the theorem is the general equivalence read at them, so `Classical.choice` is in both
+lists for the reason the other sections of this file give — the refined glue data is built from two
+`choose`n witnesses — and not because anything here is a choice.
+
+**Named and not located.** No sentence in this section says which section precedes or follows it,
+so an append anywhere leaves every sentence here true.
+-/
+
+/--
+info: 'ComplexAnalytic.refineDatumUnitFamToBase' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumUnitFamToBase
+
+/--
+info: 'ComplexAnalytic.surjective_base_refineDatumUnitFamToBase_iff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.surjective_base_refineDatumUnitFamToBase_iff
