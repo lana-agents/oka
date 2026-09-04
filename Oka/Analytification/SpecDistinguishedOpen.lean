@@ -96,6 +96,12 @@ and costs three lines.
   this open immersion with another needs, since
   `AlgebraicGeometry.Scheme.Hom.opensRange_comp` has no `Set.range` form. What it costs is
   recorded in its own docstring and in the first bullet below.
+- `ComplexAnalytic.image_basicOpen_rename_Spec_map_localisationRingHom`: **and the image of the
+  basic open a *renamed* polynomial cuts out upstairs is `D(f) ∩ D(q)`** — the bullet above with a
+  second polynomial carried along, and that bullet again at the polynomial 1. It is what a consumer
+  holding **two** polynomials on one member needs, and it is the geometric half of the
+  doubly-distinguished condition at a same-member pair; its one consumer is named in its own
+  docstring rather than here, for the reason the bullet above gives about backticked tokens.
 
 ## What is not here
 
@@ -363,6 +369,52 @@ theorem opensRange_Spec_map_localisationRingHom :
   exact Scheme.Hom.opensRange_localizationAway
     (R := CommRingCat.of (PresentedAlgebra.{u} n k g))
     (Ideal.Quotient.mk (presentationIdeal.{u} g) f)
+
+/-- **And the image of a basic open of `A_f` cut out by a renamed polynomial is the overlap of the
+two basic opens of `A`** — the theorem above with a second polynomial carried along.
+
+`ComplexAnalytic.localisationIncl` adjoins the new variable, so
+`MvPolynomial.rename (localisationIncl n) q` is `q` read as a polynomial on `D(f)`; this says the
+open it cuts out of `D(f)` is exactly `D(f) ∩ D(q)`, computed downstairs in `Spec A`.
+
+**It is the theorem above and not a second fact about the morphism.** The renamed polynomial's
+class is the image of `q`'s class under the structure map — `ComplexAnalytic.localisationRingHom_mk`
+says so by `rfl` — so the basic open upstairs is the *preimage* of `D(q)` by
+`AlgebraicGeometry.SpecMap_preimage_basicOpen`, which is also `rfl`; the whole `have` below is
+therefore one `rfl` and not a rewrite. What remains is
+`AlgebraicGeometry.Scheme.Hom.image_preimage_eq_opensRange_inf`, the general fact that an open
+immersion's image of a preimage is its range met with the open, and the range is the theorem above.
+
+**`q = 1` is the theorem above**, since `MvPolynomial.rename` is a ring map, `D(1) = ⊤` and an open
+immersion's image of `⊤` is its range — so nothing here is independent of it, and this is the form
+a consumer that has *two* polynomials in hand needs.
+
+**That consumer is `ComplexAnalytic.opensRange_presentationRefinedIota_rename`**
+(`Oka/Analytification/SpecRefinedMemberSection.lean`), and it is the only one: it carries this
+statement along an arbitrary open immersion by `AlgebraicGeometry.Scheme.Hom.comp_image` and is
+the doubly-distinguished condition at a same-member pair. **It is named here and not in the
+`## Main results` bullet that points at this docstring**, because a backticked name belonging to
+another file under that heading is read as a result *this* file advertises.
+
+**The trailing `rfl` is the same unification the theorem above pays for in its proof and not in its
+statement**, and it is here for the same reason: the two `Opens` types are definitionally equal and
+the `rw` closes the goal up to that identity rather than through it. -/
+theorem image_basicOpen_rename_Spec_map_localisationRingHom
+    (q : MvPolynomial (ULift.{u} (Fin n)) ℂ) :
+    Spec.map (CommRingCat.ofHom (localisationRingHom.{u} g f)) ''ᵁ
+        PrimeSpectrum.basicOpen (Ideal.Quotient.mk
+          (presentationIdeal.{u} (localisationPresentation.{u} g f))
+          (MvPolynomial.rename (localisationIncl.{u} n) q)) =
+      PrimeSpectrum.basicOpen (Ideal.Quotient.mk (presentationIdeal.{u} g) f) ⊓
+        PrimeSpectrum.basicOpen (Ideal.Quotient.mk (presentationIdeal.{u} g) q) := by
+  have h : PrimeSpectrum.basicOpen (Ideal.Quotient.mk
+      (presentationIdeal.{u} (localisationPresentation.{u} g f))
+      (MvPolynomial.rename (localisationIncl.{u} n) q)) =
+      Spec.map (CommRingCat.ofHom (localisationRingHom.{u} g f)) ⁻¹ᵁ
+        PrimeSpectrum.basicOpen (Ideal.Quotient.mk (presentationIdeal.{u} g) q) := rfl
+  rw [h, Scheme.Hom.image_preimage_eq_opensRange_inf,
+    opensRange_Spec_map_localisationRingHom]
+  rfl
 
 end OpensRange
 

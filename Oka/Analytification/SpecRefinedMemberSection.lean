@@ -29,7 +29,11 @@ right-hand sides of the two theorems are the same term, so the equation between 
 descriptions is `Eq.trans` and `Eq.symm` and nothing else — no rewrite under a dependent argument,
 and in particular no `rw` at `AlgebraicGeometry.Scheme.Hom.opensRange`, whose `IsOpenImmersion`
 argument makes a `rw` at the morphism fail with *"motive is not type correct"*. **The predicted
-hazard does not arise because the proof is a term.**
+hazard does not arise there because the proof is a term** — and it *does* arise in
+`ComplexAnalytic.opensRange_presentationRefinedIota_rename` below, in a second form the sentence
+above does not cover: a `ComplexAnalytic.presentationSection` is indexed by the open being
+rewritten, so a rewrite at that open is ill-typed even with the morphism left alone. That theorem's
+docstring records the failing rewrite and the route around it.
 
 ## Why this is a file of its own rather than a line in either of them
 
@@ -77,10 +81,14 @@ docstring: a caller holding a cover datum and an index should not have to spell 
 of the general form, and `Oka/Analytification/SpecMemberSections.lean` already argues against
 stating both. **Generality in the immersion is content; a second name at one immersion is not.**
 
-**Two backticked names and no file path in the `## Main results` block below, and that is
-deliberate rather than terse**: `scripts/guard_coverage.py` reads every whitespace-free backticked
-token under that heading as a declaration this file advertises, and a file path resolves to
-nothing and moves a census row for no reason. The files these theorems bridge are named in the
+**Every backticked token in the `## Main results` block below is a declaration of this file that is
+guarded here, and that is deliberate rather than terse**: `scripts/guard_coverage.py` reads every
+whitespace-free backticked token under that heading as a declaration this file advertises, so a
+file path or a piece of notation resolves to nothing and moves a census row for no reason, and
+another file's real name that is unguarded opens a coverage gap that was not there. **Stated as a
+rule rather than as a count**, because this sentence read *"two backticked names"* where there were
+five before this branch and are seven after: a numeral under this heading goes stale on the next
+append, and did. The files these theorems bridge are named in the
 paragraphs above, which is where the extractor does not look — and this paragraph is above the
 heading for the same reason.
 
@@ -100,17 +108,19 @@ and the overlap is cut out by `p * q`, a polynomial in the **ambient** member's 
 other reading of the same fact puts the overlap inside the *refined* member rather than the ambient
 one, and that is `AlgebraicGeometry.Scheme.basicOpen_res` with **no affineness hypothesis at all**.
 
-**That is not yet the doubly-distinguished condition at such a pair, and what is missing is a
-rename and a symmetry.** The condition quantifies over the two members the overlap lies in — here
-`D(p)` and `D(q)` — and asks for a polynomial in *each* of their own variables.
+**And the doubly-distinguished condition at such a pair holds, in both vocabularies and at both
+members.** The condition quantifies over the two members the overlap lies in — here `D(p)` and
+`D(q)` — and asks for a polynomial in *each* of their own variables.
 `ComplexAnalytic.presentationRefinedPres` gives `D(p)` a presentation with one variable more than
-`P`'s, so `p * q` is not a polynomial on `D(p)` at all and does not typecheck there. What is here
-at `D(p)` is `ComplexAnalytic.basicOpen_res_presentationSection`, which cuts the overlap out of
-`D(p)` by `ComplexAnalytic.presentationSection` of `q` restricted — the condition's content at that
-member in the vocabulary of *sections*. The same at `D(q)` is that theorem with the two polynomials
-exchanged and is not stated, and the polynomial spelling at either member would come from the
-other's polynomial along the map `ComplexAnalytic.localisationIncl` names. **So the same-member
-half is two steps short of a `poly` entry rather than none**, and neither step is taken below.
+`P`'s, so `p * q` is not a polynomial on `D(p)` at all and does not typecheck there; the map that
+carries `q` across is the one `ComplexAnalytic.localisationIncl` names, and
+`ComplexAnalytic.opensRange_presentationRefinedIota_rename` says the refined member of `D(p)` it
+names **is** the overlap. In the vocabulary of *sections* the same is
+`ComplexAnalytic.basicOpen_res_presentationSection` at `D(p)` and
+`ComplexAnalytic.basicOpen_res_presentationSection'` at `D(q)`. **So the same-member half of the
+condition is supplied and not described**, which is what this file's `## What is not here` said of
+it before those two theorems, and it is still not a `poly`: a `poly` is a function of two *indices*
+satisfying three laws.
 
 **At two refined members of different immersions nothing here applies and none of it is claimed.**
 The two sections live over different opens, so `AlgebraicGeometry.Scheme.basicOpen_mul` does not
@@ -120,13 +130,13 @@ statement — at each point of the intersection there is *some* doubly-distingui
 it — which `Oka/Analytification/SpecRefinedChoice.lean` already spends and which does not say the
 overlap *itself* is distinguished. That is the half those two sentences are right about.
 
-**The same split is on record one level down**, and a reader estimating from these three theorems
+**The same split is on record one level down**, and a reader estimating from these five theorems
 should have it: for a one-datum refinement of an analytic cover, the same-member overlaps are
 `Oka/Analytification/LocalisationComposite.lean`'s `D(f₁) ∩ D(f) = D(f₁·f)` at the presentation
 level, and the cross-member ones need the original transition transported through two
 localisations. **The two halves are not the same size, and it is the first that this file is
-about** — short of a `poly` entry by the two steps above, where the second is short of one by an
-amount nobody has measured.
+about** — supplied here, where the second is short of a `poly` entry by an amount nobody has
+measured.
 
 ## Main results
 
@@ -147,6 +157,16 @@ amount nobody has measured.
   of the first refined member itself**, cut out by the second section restricted to it — which is
   the doubly-distinguished condition at that one of the two members, in the vocabulary of sections
   and not of polynomials.
+- `ComplexAnalytic.basicOpen_res_presentationSection'`: **and of the second**, which is the
+  previous theorem at the exchanged pair with the overlap written in the same order. Stated rather
+  than left to a caller because the condition quantifies over *both* members.
+- `ComplexAnalytic.opensRange_presentationRefinedIota_rename`: **and the same in the vocabulary of
+  polynomials**, which is the vocabulary a cover datum's overlap data is written in: the overlap is
+  the refined member of the first at the second's polynomial renamed into the first's own
+  variables. **This is the same-member half of the doubly-distinguished condition and not a
+  description of it**, and the same statement at the exchanged pair is the condition at the second
+  member. The renaming map is named in its docstring rather than here, for the reason the paragraph
+  above this heading gives.
 
 ## What is not here
 
@@ -160,20 +180,25 @@ amount nobody has measured.
 * **No `poly`, no `glue`, and none of a cover datum's three laws**, so nothing here is or produces
   a common refinement — that is `Oka/Analytification/CrossMemberDatum.lean`,
   `Oka/Analytification/CrossMemberDatumGlue.lean` and the `Oka/Analytification/RefineDatum*.lean`
-  files. **Nothing here is a cover datum and nothing here claims to refine one**: the three
+  files. **Nothing here is a cover datum and nothing here claims to refine one**: the five
   overlap theorems are at **one** immersion and **two** polynomials, and a `poly` is a function of
-  two *indices* satisfying three laws. **The gap between them is not arithmetic, and it is not
+  two *indices* satisfying three laws. **The gap between them is not arithmetic, and it *is* now
   confined to the pairs whose two members are different.** A `poly` entry at a pair of refined
-  members is a polynomial in each of *their* variables, and
-  `ComplexAnalytic.opensRange_presentationRefinedIota_inf` names one in the ambient member's — so
-  even at a same-member pair two things are missing: the rename
-  `ComplexAnalytic.localisationIncl` names, and the companion of
-  `ComplexAnalytic.basicOpen_res_presentationSection` at the second member. At a pair whose two
-  members are different none of the three applies at all, and **that** is the half nobody has
-  sized.
-* **Nothing about overlaps of three or more.** The overlap theorem above is stated at two
-  polynomials; the triple overlaps a `hcocycle` quantifies over are not here, and iterating it is
-  not the same as stating the law.
+  members is a polynomial in each of *their* variables;
+  `ComplexAnalytic.opensRange_presentationRefinedIota_inf` names one in the ambient member's and
+  `ComplexAnalytic.opensRange_presentationRefinedIota_rename` names one in each of theirs, so at a
+  same-member pair what is left between these theorems and a `poly` is the indices and the laws.
+  **This bullet said two things were missing there — the rename `ComplexAnalytic.localisationIncl`
+  names and the companion of `ComplexAnalytic.basicOpen_res_presentationSection` at the second
+  member — and both are now stated**, the second as
+  `ComplexAnalytic.basicOpen_res_presentationSection'`. At a pair whose two members are different
+  none of the five applies at all, and **that** is the half nobody has sized.
+* **Nothing about overlaps of three or more.** Every overlap theorem here —
+  `ComplexAnalytic.opensRange_presentationRefinedIota_inf`,
+  `ComplexAnalytic.basicOpen_res_presentationSection`, its primed companion and
+  `ComplexAnalytic.opensRange_presentationRefinedIota_rename` — is stated at **two** polynomials;
+  the triple overlaps a `hcocycle` quantifies over are not here, and iterating one of them is not
+  the same as stating the law.
 * **Nothing indexed by the points of `X`.**
   `ComplexAnalytic.exists_family_mvPolynomial_basicOpen_specSchemeIotaMap`
   (`Oka/Analytification/SpecMemberChoice.lean`) is a family and it is indexed by points, which is
@@ -262,12 +287,15 @@ in that member's own variables. The two members here are `D(p)` and `D(q)`, and 
 polynomial in **`f`'s** variables and not in theirs: `ComplexAnalytic.presentationRefinedPres`
 gives `D(p)` a presentation with one variable more, so `p * q` does not typecheck as a polynomial
 on it. **So this is the condition's shape at the member the two sit inside, and not the condition
-at either of the two members it quantifies over** — for the second of those see
-`ComplexAnalytic.basicOpen_res_presentationSection` below, and this file's `## What is not here`
-for what is still missing after it. `Oka/Analytification/SpecMemberChoice.lean` and
+at either of the two members it quantifies over** — for those two see
+`ComplexAnalytic.opensRange_presentationRefinedIota_rename` below, which is this overlap named as a
+refined member of `D(p)` at a polynomial in `D(p)`'s own variables and, at the exchanged pair, of
+`D(q)`. `Oka/Analytification/SpecMemberChoice.lean` and
 `Oka/Analytification/SpecRefinedCover.lean` say that condition is what the points of `X` cannot
-supply; their sentences are now narrowed to say which half of it is a rename and a symmetry away
-and which half nobody has sized, and this theorem is why there are two halves.
+supply; their sentences are now narrowed to the pairs whose two members are different, and this
+theorem is why there are two halves. **This theorem is still the ambient member's statement and is
+not superseded by the one below**: `p * q` is the polynomial a caller who is cutting `f`'s own
+member down again wants, and it is what that proof lands on.
 
 **Nothing here is a `poly`.** A cover datum's `poly` is a function of *two indices* satisfying
 three laws, and this is one equation at one immersion and two polynomials; see this file's
@@ -293,13 +321,105 @@ is written in; this one says it is distinguished in `D(p)`, which is one of the 
 overlap actually lies in, in the vocabulary of sections, and that is the form a caller holding one
 refined member and wanting to cut it down again needs. **The two are about different members**, so
 neither implies the other and neither implies the other's spelling. The companion at `D(q)` is this
-theorem with `p` and `q` exchanged and is not stated; nor is either of them in the polynomial
-vocabulary the condition is written in. -/
+theorem with `p` and `q` exchanged and is `ComplexAnalytic.basicOpen_res_presentationSection'`
+below; the polynomial vocabulary the condition is written in is
+`ComplexAnalytic.opensRange_presentationRefinedIota_rename`, which reaches both members from one
+statement. -/
 theorem basicOpen_res_presentationSection (p q : MvPolynomial (ULift.{u} (Fin P.n)) ℂ) :
     X.basicOpen (X.presheaf.map (homOfLE (X.basicOpen_le (presentationSection.{u} f p))).op
         (presentationSection.{u} f q)) =
       X.basicOpen (presentationSection.{u} f p) ⊓ X.basicOpen (presentationSection.{u} f q) :=
   Scheme.basicOpen_res _ _ _
+
+/-- **And a distinguished open of the second refined member**, cut out by the first section
+restricted to it — the theorem above at the other of the two members the overlap lies in.
+
+**A prime, and the reason is that no token distinguishes the two.** Both statements are
+`AlgebraicGeometry.Scheme.basicOpen` of a restricted `ComplexAnalytic.presentationSection`, so
+their left-hand sides have the same *shape* and differ only in which of `p` and `q` is restricted
+along; a descriptive suffix
+would have to name an argument position rather than a subject. **The prime is not a new convention
+here**: `Oka/` already carries primed declaration names — `ComplexAnalytic.coverGlueData'` and
+`ComplexAnalytic.stalkMap_restrictHom_eq'` among them — and so does `OkaTest/`. **No figure is
+quoted for that because the reading decides it**: declaration sites whose name *contains* a prime,
+sites whose name *ends* in one, and rows of the environment dump are three different counts over
+one tree, and a sentence quoting one of them beside another rots the moment a reader checks the
+other. **The alternative — restating both as one theorem taking
+the member as an argument — was rejected**: it renames a declaration that is guarded, is advertised
+in the `## Main results` above, and is cited at eight sites in two files, and it buys nothing a
+caller can use.
+
+**It is the theorem above at `q` and `p` composed with `inf_comm`, and that is the whole of it.**
+`AlgebraicGeometry.Scheme.basicOpen_res` at the exchanged pair gives the right-hand side in the
+order `D(q) ⊓ D(p)`, and this states it in the order the theorem above uses, which is the order a
+caller matching against one fixed overlap has. **Bare `inf_comm` does not typecheck here** — it
+needs both arguments explicitly, an application type mismatch otherwise.
+
+**Why it is stated rather than left to the caller.** The doubly-distinguished condition quantifies
+over *both* members an overlap lies in, so a file that supplies it at one of them and leaves the
+other to an `Eq.trans` is describing the condition and not meeting it — which is what this file's
+`## What is not here` said of itself before this theorem existed. -/
+theorem basicOpen_res_presentationSection' (p q : MvPolynomial (ULift.{u} (Fin P.n)) ℂ) :
+    X.basicOpen (X.presheaf.map (homOfLE (X.basicOpen_le (presentationSection.{u} f q))).op
+        (presentationSection.{u} f p)) =
+      X.basicOpen (presentationSection.{u} f p) ⊓ X.basicOpen (presentationSection.{u} f q) :=
+  (Scheme.basicOpen_res _ _ _).trans (inf_comm _ _)
+
+/-- **The overlap of two refined members at one immersion is a refined member of each of them**,
+cut out by the other's polynomial renamed into its variables — the doubly-distinguished condition
+at a same-member pair, in the vocabulary of polynomials.
+
+`ComplexAnalytic.presentationRefinedPres` gives `D(p)` one variable more than `P` has, and
+`ComplexAnalytic.localisationIncl` is the map that adjoins it, so
+`MvPolynomial.rename (localisationIncl P.n) q` is `q` read as a polynomial **on `D(p)`**. This says
+the refined member it names inside `D(p)` is exactly the overlap.
+
+**Both members, from one statement.** `p` and `q` are both universally quantified, so this theorem
+at the exchanged pair is the condition at `D(q)`; its right-hand side comes out as `D(q) ⊓ D(p)`,
+which is one `inf_comm` from this one. That companion is **not** stated, and the asymmetry with
+`ComplexAnalytic.basicOpen_res_presentationSection'` above is a choice and not a principle: that
+one was named as missing by this file's `## What is not here` and this one was not. A reader who
+wants it writes `(opensRange_presentationRefinedIota_rename f q p).trans (inf_comm _ _)`.
+
+**The proof does not go through the two section theorems above, and that is measured rather than
+assumed.** Rewriting with `ComplexAnalytic.opensRange_presentationRefinedIota_eq_basicOpen` and
+then backwards with `ComplexAnalytic.basicOpen_res_presentationSection` fails with *"motive is not
+type correct"*: `ComplexAnalytic.presentationSection` of the renamed polynomial has type
+`Γ(X, (presentationRefinedIota f p).opensRange)`, and that is the very open the rewrite is at.
+**This is the hazard this file's header names and says does not arise in its own proofs** — it does
+arise here, because the term being rewritten is indexed by the open. The route that works goes down
+to `Spec` and never mentions a section:
+`ComplexAnalytic.image_basicOpen_rename_Spec_map_localisationRingHom`
+(`Oka/Analytification/SpecDistinguishedOpen.lean`) is the whole geometric content, and
+`AlgebraicGeometry.Scheme.Hom.comp_image` carries it up along `f`.
+
+**The right-hand side is then the product**, by
+`ComplexAnalytic.opensRange_presentationRefinedIota_inf` above — so this theorem and that one are
+the same overlap named at three different members, and it is the earlier one that supplies the
+`p * q` the proof lands on.
+
+**Still not a `poly`.** A cover datum's `poly` is a function of two *indices* satisfying three
+laws; this is one equation at one immersion and two polynomials, and every pair it reaches has both
+members refining the same one. See this file's `## What is not here` for the half that does not. -/
+theorem opensRange_presentationRefinedIota_rename (p q : MvPolynomial (ULift.{u} (Fin P.n)) ℂ) :
+    (presentationRefinedIota.{u} (presentationRefinedIota.{u} f p)
+        (MvPolynomial.rename (localisationIncl.{u} P.n) q)).opensRange =
+      (presentationRefinedIota.{u} f p).opensRange ⊓
+        (presentationRefinedIota.{u} f q).opensRange := by
+  haveI := isOpenImmersion_Spec_map_localisationRingHom.{u} P.g p
+  rw [opensRange_presentationRefinedIota_inf, opensRange_presentationRefinedIota,
+    opensRange_presentationRefinedIota]
+  have hc : presentationRefinedIota.{u} f p ''ᵁ
+      PrimeSpectrum.basicOpen (Ideal.Quotient.mk
+        (presentationIdeal.{u} (localisationPresentation.{u} P.g p))
+        (MvPolynomial.rename (localisationIncl.{u} P.n) q)) =
+      f ''ᵁ (Spec.map (CommRingCat.ofHom (localisationRingHom.{u} P.g p)) ''ᵁ
+        PrimeSpectrum.basicOpen (Ideal.Quotient.mk
+          (presentationIdeal.{u} (localisationPresentation.{u} P.g p))
+          (MvPolynomial.rename (localisationIncl.{u} P.n) q))) :=
+    Scheme.Hom.comp_image _ _ _
+  rw [hc, image_basicOpen_rename_Spec_map_localisationRingHom, map_mul,
+    PrimeSpectrum.basicOpen_mul]
 
 end
 
