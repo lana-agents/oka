@@ -1893,3 +1893,94 @@ info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_iso_trivial_of_prec
 #guard_msgs (whitespace := lax) in
 #print axioms
   ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_iso_trivial_of_preconnectedSpace
+
+/-! ### The fibre functor
+
+The fibre of a cover over a point of the base, the two functors it assembles into and the values
+they take, all of `Oka/AnalyticSpace/FiniteEtaleOver.lean`: the fibre type, its finiteness, the
+action of a morphism of covers on it, the functor into `Type u`, the functor into `FintypeCat`, the
+equivalence an isomorphism of covers induces, the count against
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree`, and the two values — a point over the base
+over itself and `ι` over the trivial `ι`-sheeted cover.
+
+**Named by file rather than counted**, as the two sections above say and for the reason they give.
+
+**Definitions are guarded here as well as theorems, and that is this file's existing practice
+rather than a departure** — `ComplexAnalytic.AnalyticSpace.okaMap` and
+`ComplexAnalytic.AnalyticSpace.restrictLE` are among the definitions guarded in the sections above,
+and this paragraph said the opposite until it was checked. A `#print axioms` on a `def` reports
+what its *value* was built from, which for the two functors is the whole of the claim that they are
+constructions and not a `Classical.choice` in disguise.
+
+**`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberTrivialEquiv` is `noncomputable` and is on
+the same three axioms as everything else here**, so noncomputability and the axiom footprint come
+apart. The modifier is forced and the reason was measured by deleting it and reading the error:
+`AlgebraicGeometry.LocallyRingedSpace.fiberSigmaDescEquiv` is `noncomputable`, and it is that and
+not anything in `Oka/AnalyticSpace/FiniteEtaleOver.lean` that the compiler stops at.
+
+`Mathlib.CategoryTheory.FintypeCat` enters `Oka/AnalyticSpace/FiniteEtaleOver.lean`'s import
+closure with the second functor and is the only import that push adds; it is not guarded here
+because nothing in this repository declares it. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiber' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiber
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.finite_fiber' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.finite_fiber
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberMap
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberFunctor' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberFunctor
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fintypeFiberFunctor' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fintypeFiberFunctor
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberEquivOfIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberEquivOfIso
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_fiber' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_fiber
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.uniqueFiberId' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.uniqueFiberId
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberTrivialEquiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberTrivialEquiv

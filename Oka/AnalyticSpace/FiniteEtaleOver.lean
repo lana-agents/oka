@@ -3,6 +3,7 @@ Copyright (c) 2026 Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten. All righ
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
+import Mathlib.CategoryTheory.FintypeCat
 import Mathlib.CategoryTheory.MorphismProperty.Comma
 import Oka.AnalyticSpace.Degree
 
@@ -50,14 +51,22 @@ object of it carries no condition to discharge on its morphisms. See `## What is
 ## The four instances, and none of them is needed to form the category
 
 `CategoryTheory.MorphismProperty.Over P Q X` asks its conditions of `Q`, and `Q` is `⊤` here, so
-the category below would exist with no instance on `P` at all. The four are stated because every
-downstream use of the property — a fibre functor, a Galois-category structure, the comparison
-functor taxis #1113 wants — asks for them, and because *finite étale morphisms compose and contain
-the identities* is a single statement worth having under one name rather than as two instances
-elaborated separately. Each is a quotation of a declaration that was already on `master`; nothing
-is proved here. (Those three are named in the instances' own vicinity rather than in this
-docstring, because `scripts/guard_coverage.py` reads every backticked repository name under a
-`## Main results` heading as a result this file advertises, and they are another file's.)
+the category below would exist with no instance on `P` at all. The four are stated because the
+downstream uses of the property — a Galois-category structure, the comparison functor taxis #1113
+wants — ask for them, and because *finite étale morphisms compose and contain the identities* is a
+single statement worth having under one name rather than as two instances elaborated separately.
+
+Each is a quotation of a declaration that was already on `master`; nothing is proved here. (Those
+three are named in the instances' own vicinity rather than in this docstring, because
+`scripts/guard_coverage.py` reads every backticked repository name under a `## Main results`
+heading as a result this file advertises, and they are another file's.)
+
+**That list named a fibre functor, and that is now measurably wrong.**
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberFunctor` below reads the structure map of an
+object and the triangle of a morphism, and **none of the four instances**;
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fintypeFiberFunctor` reads one thing more — the
+object's `prop` field — and reads it only for the finiteness of the values. That is why a fibre
+would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at this one.
 
 ## Main definitions
 
@@ -70,6 +79,12 @@ docstring, because `scripts/guard_coverage.py` reads every backticked repository
   itself, and the trivial `ι`-sheeted cover for a finite `ι`.
 - `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree`: **the degree of a cover**, which is
   `ComplexAnalytic.AnalyticSpace.degree` of its structure map.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiber`: **the fibre of a cover over a point of
+  the base**, as the preimage type.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberFunctor` and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fintypeFiberFunctor`: **the fibre functor at a
+  point**, into `Type u` and into `FintypeCat` — the first functors out of this category declared
+  here, and the second is the shape a Galois category asks for.
 
 ## Main results
 
@@ -101,6 +116,18 @@ docstring, because `scripts/guard_coverage.py` reads every backticked repository
   total space of a trivial cover with two distinct sheets is disconnected**, so **a cover with a
   preconnected total space is not a trivial one with two distinct sheets** — the separation that
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree` is too coarse to make.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.finite_fiber`: **a fibre is finite, with no
+  hypothesis at all** — not a separation axiom, not connectedness, nothing about the base. This is
+  what the fibre functor into `FintypeCat` needs, and the `## What is not here` bullet that priced
+  it at a `[T2Space]` was reading the hypothesis of a different theorem.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_fiber`: **the fibre counts the degree**, over
+  a preconnected base and a Hausdorff total space, which is where that `[T2Space]` does belong.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.uniqueFiberId` and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberTrivialEquiv`: **the two values of the fibre
+  functor this file can compute** — a point over the base over itself, and `ι` over the trivial
+  `ι`-sheeted cover, both as equivalences rather than as counts.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberEquivOfIso`: **isomorphic covers have
+  equinumerous fibres**, which is `CategoryTheory.Functor.mapIso` at that functor.
 
 ## What is not here
 
@@ -158,18 +185,36 @@ docstring, because `scripts/guard_coverage.py` reads every backticked repository
     The counterexample is now compiled as
     `TwoIndiscrete.not_isClosedMap_pt_of_isClosedMap_comp` in `OkaTest/FiniteEtaleCancel.lean`,
     where it is the witness that the separation axiom cannot be dropped.
-* **No fibre functor and no Galois category.** The fibre functor of a Galois category — declared
-  in `Mathlib/CategoryTheory/Galois/Basic.lean`, whose namespace is not in this repository's
-  import closure and so cannot be cited by name here — lands in `FintypeCat`, and the fibre of a
-  finite étale morphism is finite by
-  `ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale` — which asks `[T2Space]` of the
-  source, a hypothesis lana-agents/oka#222's review measured is not free for a constructed cover.
-  Nothing below builds the functor.
+* **The fibre functor is here and the Galois category is not.**
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberFunctor` and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fintypeFiberFunctor` below are the fibre at a
+  point of the base, into `Type u` and into `FintypeCat`; the second is the shape a Galois category
+  asks for, that definition being in `Mathlib/CategoryTheory/Galois/Basic.lean`, whose namespace is
+  not in this repository's import closure and so cannot be cited by name here.
+
+  **The reason this bullet gave for their absence was wrong, and saying how is the point.** It said
+  the fibre of a finite étale morphism is finite by
+  `ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale`, which asks `[T2Space]` of the
+  source — a hypothesis lana-agents/oka#222's review measured is not free for a constructed cover.
+  That theorem says two fibres have the **same** `Nat.card`, which a morphism all of whose fibres
+  are infinite satisfies; finiteness is a *field* of `ComplexAnalytic.AnalyticSpace.IsFinite` and
+  costs nothing, which is `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.finite_fiber` below. The
+  `[T2Space]` buys **constancy** of the count, and constancy is what
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_fiber` needs and what a `FintypeCat`-valued
+  functor does not.
+
+  **What is absent is the Galois category itself**, whose axioms need the base change the
+  **No pullbacks, so no base change** bullet below says this category has not, **and every
+  statement about the functor beyond its two laws**: nothing proves it faithful or conservative,
+  and nothing exhibits it as an equivalence onto anything.
 * **No pullbacks, so no base change.** `ComplexAnalytic.AnalyticSpace` has no `HasPullback`
   instance anywhere in this repository, so
   `CategoryTheory.MorphismProperty.IsStableUnderBaseChange`
   is not even statable for `isFiniteEtale` here, and the pullback of a cover along a morphism of
   the base — which is how a Galois category's fibre functor is usually built — does not exist.
+  **The functor above is not built that way and is not evidence that this absence is harmless**:
+  it reads the structure map at one point of the base directly, which is enough to *have* a fibre
+  and is not enough to say anything about how it varies.
 * **The degree on objects is here, it is coarse, and the second invariant that repairs that is
   here too.** This bullet said `ComplexAnalytic.AnalyticSpace.degree` is a function of a morphism
   and nothing below reads it off an object;
@@ -192,10 +237,12 @@ docstring, because `scripts/guard_coverage.py` reads every backticked repository
   separate those two objects, and it is a second invariant rather than a sharper first one that
   does.
 
-  **What is still not here is any invariant that separates two *connected* covers**, which is
-  where a fibre functor and a monodromy action would be needed and where the
-  **No fibre functor and no Galois category** and **No pullbacks, so no base change** bullets
-  above say this category has nothing.
+  **What is still not here is any invariant that separates two *connected* covers, and the fibre
+  functor above is not one.** As a bare finite set a fibre carries nothing the degree does not
+  already carry — over a preconnected base and a Hausdorff total space its size *is* the degree,
+  by `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_fiber` — and what separates is the
+  monodromy *action* on it, which needs a fundamental group nothing here connects to a cover and
+  the base change the **No pullbacks, so no base change** bullet above says this category has not.
 * **No scheme side and no comparison functor.** Taxis #1113 wants a functor from finite étale
   covers of a presented affine `ℂ`-scheme to these; the source of that functor is
   `(@AlgebraicGeometry.IsFinite ⊓ @AlgebraicGeometry.IsEtale).Over ⊤ X` and is available in
@@ -566,5 +613,184 @@ theorem isFiniteEtale_of_restrictHom_top {A B : AnalyticSpace.{u}} (f : A ⟶ B)
     (isFiniteEtale.{u}).comp_mem _ _ (isFiniteEtale_of_isIso _)
       ((isFiniteEtale.{u}).comp_mem _ _ hfe (isFiniteEtale_of_isIso _))
   rwa [liftTop_comp_restrictHom_top] at hp
+
+/-! ### The fibre functor -/
+
+/-- **The fibre of a cover over a point of the base**, as a type.
+
+Spelled as the preimage set and not as the subtype `{a // A.hom.toLRSHom.base a = x}`. The two are
+definitionally the same type — membership in `{x}` *is* that equation — and the preimage is the
+spelling `Oka/AnalyticSpace/Degree.lean` states every fibre count in, which is what makes
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_fiber` below the symmetric form of a theorem
+there rather than a transport across an equivalence.
+
+**Nothing finite étale is read here.** The definition mentions the structure map and nothing else,
+so it would make sense at every object of `CategoryTheory.MorphismProperty.Over` whatever the
+property is; what the property buys is the instance below and not the type. -/
+def FiniteEtaleOver.fiber {X : AnalyticSpace.{u}} (x : X) (A : FiniteEtaleOver.{u} X) : Type u :=
+  (A.hom.toLRSHom.base ⁻¹' {x} : Set A.left)
+
+/-- **The fibre of a cover is finite, and nothing has to be assumed for that.**
+
+Not a separation axiom, not connectedness, nothing about the base and nothing about the point.
+`finite_fiber` is a *field* of `ComplexAnalytic.AnalyticSpace.IsFinite`
+(`Oka/AnalyticSpace/Finite.lean`), `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` carries it through
+`ComplexAnalytic.AnalyticSpace.IsFiniteEtale.isFinite`, and an object of this category carries the
+class in its `prop` field, so this is three projections and no proof.
+
+**This corrects the pricing that stood in this file's `## What is not here` and is why the functor
+below was not built earlier.** That bullet said the fibre of a finite étale morphism is finite *by*
+`ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale`, which asks `[T2Space]` of the
+source. It is not: that theorem says two fibres have the **same** `Nat.card`, and `Nat.card` of an
+infinite type is `0`, so it is satisfied by a morphism all of whose fibres are infinite and cannot
+be where finiteness comes from — its own docstring says *"it does **not** say what that size is"*.
+`[T2Space]` is the price of **constancy** of the count, through
+`ComplexAnalytic.AnalyticSpace.nonempty_homeomorph_fiber_of_isFiniteEtale` and the covering-space
+theory behind it, and constancy is not what a `FintypeCat`-valued functor asks of a fibre. -/
+instance FiniteEtaleOver.finite_fiber {X : AnalyticSpace.{u}} (x : X) (A : FiniteEtaleOver.{u} X) :
+    Finite (FiniteEtaleOver.fiber.{u} x A) :=
+  (A.prop : IsFiniteEtale A.hom).isFinite.finite_fiber x
+
+/-- **A morphism of covers carries the fibre over `x` into the fibre over `x`.**
+
+The whole content is `CategoryTheory.MorphismProperty.Over.w f` — the triangle
+`f.left ≫ B.hom = A.hom` — read at one point: if `a` lies over `x` for `A` then `f.left a` lies
+over `x` for `B`, because the two structure maps agree along `f`.
+
+**No property of `f` is used and none is available**, the category's second `⊤` being exactly the
+statement that a morphism of covers carries no condition; the base map of a composite is the
+composite of the base maps by `rfl`, which is what makes the two functor laws below `rfl` too. -/
+def FiniteEtaleOver.fiberMap {X : AnalyticSpace.{u}} (x : X) {A B : FiniteEtaleOver.{u} X}
+    (f : A ⟶ B) (a : FiniteEtaleOver.fiber.{u} x A) : FiniteEtaleOver.fiber.{u} x B :=
+  ⟨f.left.toLRSHom.base a.1, by
+    have hw : f.left ≫ B.hom = A.hom := MorphismProperty.Over.w f
+    have h := congrArg (fun g ↦ (g.toLRSHom.base : A.left → X) a.1) hw
+    exact h.trans a.2⟩
+
+/-- **The fibre functor at a point of the base**, into `Type u`.
+
+**The first functor out of `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver` declared in this
+repository** — `CategoryTheory.MorphismProperty.Over.forget`, which the proofs above compose with,
+is Mathlib's — and the first invariant here that is read on morphisms as well as on objects:
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree` is a number attached to an object and
+preconnectedness of the total space is a proposition about one, while this carries every morphism
+of covers to a map of finite sets.
+
+**Both functor laws are `rfl`.** The underlying map of an identity of the comma category is the
+identity and the underlying map of a composite is the composite, so there is nothing to prove and
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberMap` is definitionally functorial.
+
+**`TypeCat.ofHom` is not decoration.** A morphism of `Type u` in this Mathlib is a one-field
+structure and not a function — `CategoryTheory.types` has `Hom := TypeCat.Hom` — so a bare
+`fun a ↦ …` does not elaborate against `⟶` and the `map` field has to wrap it. -/
+def FiniteEtaleOver.fiberFunctor {X : AnalyticSpace.{u}} (x : X) :
+    FiniteEtaleOver.{u} X ⥤ Type u where
+  obj A := FiniteEtaleOver.fiber.{u} x A
+  map f := TypeCat.ofHom (FiniteEtaleOver.fiberMap.{u} x f)
+  map_id _ := rfl
+  map_comp _ _ := rfl
+
+/-- **The fibre functor into `FintypeCat`**, which is the shape a Galois category asks for.
+
+The same functor as
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberFunctor` with its values bundled with the
+finiteness above; `Mathlib/CategoryTheory/Galois/Basic.lean` — whose namespace is not in this
+repository's import closure and so cannot be cited by name here — asks for a functor into
+`FintypeCat`, and this is one.
+
+**It is computable, which is worth recording because the obvious expectation is otherwise.**
+`FintypeCat.of` takes `[Finite X]` in this Mathlib and not `[Fintype X]`, so the instance above is
+what it wants and no `Fintype.ofFinite` and no `noncomputable` appears.
+**`Mathlib.CategoryTheory.FintypeCat` is the one import this file gains for it, and it costs one
+module**: the transitive closure of this file was 3463 modules before and is 3464 after, the new
+module being that one and nothing it depends on.
+
+**What this does not make is a Galois category.** The axioms need base change and this repository
+has no `CategoryTheory.Limits.HasPullback` instance for `ComplexAnalytic.AnalyticSpace`; see
+`## What is not here`. -/
+def FiniteEtaleOver.fintypeFiberFunctor {X : AnalyticSpace.{u}} (x : X) :
+    FiniteEtaleOver.{u} X ⥤ FintypeCat.{u} where
+  obj A := FintypeCat.of (FiniteEtaleOver.fiber.{u} x A)
+  map f := FintypeCat.homMk (FiniteEtaleOver.fiberMap.{u} x f)
+  map_id _ := rfl
+  map_comp _ _ := rfl
+
+/-- **Isomorphic covers have equinumerous fibres**, by an explicit equivalence.
+
+`CategoryTheory.Functor.mapIso` at the fibre functor, read through `CategoryTheory.Iso.toEquiv`.
+This is the equivalence behind the count in
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_eq_of_iso`, which reaches the same
+conclusion for `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree` through
+`ComplexAnalytic.AnalyticSpace.degree_isIso_comp` and without a fibre in sight; neither is derived
+from the other and this one asks nothing of the total spaces. -/
+def FiniteEtaleOver.fiberEquivOfIso {X : AnalyticSpace.{u}} (x : X) {A B : FiniteEtaleOver.{u} X}
+    (e : A ≅ B) : FiniteEtaleOver.fiber.{u} x A ≃ FiniteEtaleOver.fiber.{u} x B :=
+  ((FiniteEtaleOver.fiberFunctor.{u} x).mapIso e).toEquiv
+
+/-- **The fibre functor computes the degree**, over a preconnected base and a Hausdorff total
+space.
+
+`ComplexAnalytic.AnalyticSpace.degree_eq_card_fiber` (`Oka/AnalyticSpace/Degree.lean`) read at the
+structure map of an object, which is why
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiber` is spelled as a preimage: the two sides are
+the same type on the nose and the proof is one `Eq.symm`.
+
+**This is where `[T2Space]` genuinely enters**, and the contrast with
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.finite_fiber` above is the point: the fibre is
+finite for free, and it is the statement that its size does not depend on the point that costs a
+separation axiom on the source and preconnectedness of the base.
+
+**The two `inferInstanceAs` lines are the comma category's and not this statement's.** In the type
+of an object's structure map the total space appears through `CategoryTheory.Functor.id` and the
+base through `CategoryTheory.Functor.fromPUnit`, applied to the two components of the object; both
+are the space itself by `rfl` but **not reducibly so**, and instance search works up to reducible
+unfolding, so the `[T2Space]` and `[PreconnectedSpace]` written above are not the instances
+`ComplexAnalytic.AnalyticSpace.degree_eq_card_fiber` asks for until they are restated. That is
+what the two `haveI`s do and there is no mathematical content in either. -/
+theorem FiniteEtaleOver.card_fiber {X : AnalyticSpace.{u}} (A : FiniteEtaleOver.{u} X)
+    [T2Space A.left] [PreconnectedSpace X] (x : X) :
+    Nat.card (FiniteEtaleOver.fiber.{u} x A) = A.degree :=
+  haveI : IsFiniteEtale A.hom := A.prop
+  haveI : T2Space (((𝟭 AnalyticSpace.{u}).obj A.left : AnalyticSpace.{u}) : Type u) :=
+    inferInstanceAs (T2Space (A.left : Type u))
+  haveI : PreconnectedSpace
+      (((Functor.fromPUnit.{0} X).obj A.right : AnalyticSpace.{u}) : Type u) :=
+    inferInstanceAs (PreconnectedSpace (X : Type u))
+  (degree_eq_card_fiber A.hom x).symm
+
+/-- **The fibre of the base over itself is a point.**
+
+Stated as `Unique` rather than as a cardinality, so that it is the fibre functor's value and not a
+count of it; `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_id` is the same fact read
+through `Nat.card`, and it needs `[Nonempty X]` where this needs nothing — the point `x` is the
+one that is there. -/
+instance FiniteEtaleOver.uniqueFiberId {X : AnalyticSpace.{u}} (x : X) :
+    Unique (FiniteEtaleOver.fiber.{u} x (FiniteEtaleOver.id.{u} X)) := by
+  change Unique (((𝟙 X : X ⟶ X).toLRSHom.base : X → X) ⁻¹' {x} : Set X)
+  have h : ((𝟙 X : X ⟶ X).toLRSHom.base : X → X) = _root_.id := rfl
+  rw [h, Set.preimage_id]
+  infer_instance
+
+/-- **The fibre of the trivial `ι`-sheeted cover is `ι`**, as an equivalence.
+
+`AlgebraicGeometry.LocallyRingedSpace.fiberSigmaDescEquiv` presents the fibre of a descent map as
+`Σ i, (fibre of the i-th piece)` and every piece here is the identity, whose fibre is a point, so
+`Equiv.sigmaUnique` collapses the sum. That is exactly the proof of
+`ComplexAnalytic.AnalyticSpace.card_fiber_sigmaFold` (`Oka/AnalyticSpace/SigmaFiniteEtale.lean`)
+with the counting removed — **the equivalence is what that proof already had**, and that file's
+`## The fibre is an equivalence and not a cardinality` section says so of itself.
+
+`[Finite ι]` is here because `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.trivial` asks it in
+order to be an object, and for no reason of this statement's own. -/
+noncomputable def FiniteEtaleOver.fiberTrivialEquiv (ι : Type u) [Finite ι]
+    (X : AnalyticSpace.{u}) (x : X) :
+    FiniteEtaleOver.fiber.{u} x (FiniteEtaleOver.trivial.{u} ι X) ≃ ι :=
+  haveI hu : ∀ _ : ι, Unique (((𝟙 X : X ⟶ X).toLRSHom.base ⁻¹' {x} : Set X)) := by
+    intro _
+    have h : ((𝟙 X : X ⟶ X).toLRSHom.base : X → X) = _root_.id := rfl
+    rw [h, Set.preimage_id]
+    infer_instance
+  (AlgebraicGeometry.LocallyRingedSpace.fiberSigmaDescEquiv (fun _ : ι ↦ X.toLocallyRingedSpace)
+      (fun _ ↦ (𝟙 X : X ⟶ X).toLRSHom) x).symm.trans (@Equiv.sigmaUnique ι _ hu)
 
 end ComplexAnalytic.AnalyticSpace

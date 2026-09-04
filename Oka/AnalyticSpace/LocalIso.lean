@@ -324,7 +324,10 @@ additionally *finite* étale is not asked here — that witness has a second fac
 local isomorphism, so it does not settle the question.
 
 **It does not make the category Galois**, and `Oka/AnalyticSpace/FiniteEtaleOver.lean` says what
-else is wanted: no fibre products, hence no base change, and no fibre functor. -/
+else is wanted: no fibre products, hence no base change. **The fibre functor is no longer among
+it** — `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fintypeFiberFunctor` is in that file, and its
+fibres are finite with no hypothesis — so what is missing there is base change and every statement
+about that functor beyond its two laws. -/
 theorem isFiniteEtale_of_comp {X Y Z : AnalyticSpace.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
     [T2Space Y] [IsFiniteEtale (f ≫ g)] [IsLocalIso g] : IsFiniteEtale f where
   isFinite := isFinite_of_comp_of_t2Space f g
