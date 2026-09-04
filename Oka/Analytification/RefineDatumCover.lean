@@ -285,7 +285,7 @@ declarations across two files and pays two edges instead of one.
 - `ComplexAnalytic.range_base_refineDatumToBase_eq_iUnion_range` and
   `ComplexAnalytic.surjective_base_refineDatumToBase_iff_iUnion_range`: **the image of the morphism
   down is that union, so the cover's hypothesis is exactly that morphism's surjectivity** — the
-  one statement in the section that reads the refined datum.
+  only two statements in the section that read the refined datum.
 
 ## What is not here
 
@@ -415,11 +415,12 @@ variable (q : ∀ a : B, B → MvPolynomial (ULift.{u} (Fin (obj (σ a)).n)) ℂ
 
 /-! ### The condition, read as a statement about the members alone
 
-What `ComplexAnalytic.RefineDatumCovers` gives before any morphism is mentioned. The two
-statements below the next heading spend it, and so does
-`ComplexAnalytic.refineDatumOneOpenCover` at the end of this file — through the third of them,
-which is the same union in the vocabulary of a family of morphisms rather than of a family of
-images.
+What `ComplexAnalytic.RefineDatumCovers` gives before any morphism is mentioned. The lemma below
+has exactly two consumers: `ComplexAnalytic.surjective_base_refineDatumToBase` under
+`### Surjectivity`, and `ComplexAnalytic.iUnion_range_base_refineDatumMemberIota_eq_univ` in the
+open-cover section, which is the same union in the vocabulary of a family of morphisms rather than
+of a family of images. `ComplexAnalytic.refineDatumOneOpenCover` at the end of this file reaches
+it through the second.
 -/
 
 /-- **The refining family covering makes the images of the refined members exhaust `X^an`.**
@@ -432,9 +433,9 @@ holds of every index map and every refining family meeting the condition, with n
 and none of the refined datum's three laws — which is what makes it available to
 `ComplexAnalytic.refineDatumOpenCover` below, where no refined datum has been built.
 
-**The hypothesis enters the file here and nowhere else.** Everything under `### The image` holds of
-every refinement; `ComplexAnalytic.surjective_base_refineDatumToBase` is this theorem and the image
-computation, and has no argument of its own. -/
+**Nothing under `### The image` takes the hypothesis**: everything there holds of every refinement,
+and `ComplexAnalytic.surjective_base_refineDatumToBase` is this theorem and the image computation,
+and has no argument of its own. -/
 theorem iUnion_coverIota_image_localisationOpen_eq_univ (hcov : RefineDatumCovers.{u} obj σ fam) :
     ⋃ b : B, (coverIota.{u} obj poly glue hrange hsym hcocycle (σ b)).toLRSHom.base ''
         (localisationOpen.{u} (obj (σ b)).g (fam b) :
@@ -524,8 +525,8 @@ computation and that lemma and has no content of its own**, which is the split t
 argues: the condition is about the members of the two covers, and the surjectivity of the
 comparison is what it buys.
 
-**The hypothesis enters this file at that lemma and nowhere else**; everything above holds of
-every refinement. -/
+**This theorem's own hypothesis is spent entirely at that lemma**; nothing under `### The image`
+takes it, so everything there holds of every refinement. -/
 theorem surjective_base_refineDatumToBase (hcov : RefineDatumCovers.{u} obj σ fam) :
     Function.Surjective
       (refineDatumToBase.{u} obj poly σ fam q glue rr uu he hu hsym hrange hq hf
@@ -1194,9 +1195,10 @@ variable {J B : Type u} (obj : J → Presentation.{u})
 inclusions**, which is `ComplexAnalytic.range_base_refineDatumToBase` in the vocabulary the open
 cover above is stated in.
 
-This is the one statement in this section that reads the refined datum, and it is what says the
-open cover is a cover *by the image of that morphism* rather than by an unrelated family of opens
-that happens to be indexed by the same type. -/
+This and `ComplexAnalytic.surjective_base_refineDatumToBase_iff_iUnion_range` below are the only
+two statements in this section that read the refined datum, and this one is what says the open
+cover is a cover *by the image of that morphism* rather than by an unrelated family of opens that
+happens to be indexed by the same type. -/
 theorem range_base_refineDatumToBase_eq_iUnion_range :
     Set.range (refineDatumToBase.{u} obj poly σ fam q glue rr uu he hu hsym hrange hq hf
         hcocycle).toLRSHom.base =

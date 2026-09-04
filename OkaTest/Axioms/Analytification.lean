@@ -5277,10 +5277,11 @@ info: 'ComplexAnalytic.exists_affineOpenCover_opensRange_le' depends on axioms:
 
 /-! ### The refined cover's space maps onto the one it refines
 
-`Oka/Analytification/RefineDatumCover.lean`, which is the whole file. Appended as its own section
-rather than merged into an existing one, and the reason is stated here rather than cited: moving
-or reordering a section of this file is a conflict for every branch that has appended to it, and
-several appended to it on the day this was written.
+`Oka/Analytification/RefineDatumCover.lean`'s refining condition, the image of the morphism down
+and the surjectivity that follows, and the condition and the surjectivity again at the trivial
+refining family. Appended as its own section rather than merged into an existing one, and the
+reason is stated here rather than cited: moving or reordering a section of this file is a conflict
+for every branch that has appended to it, and several appended to it on the day this was written.
 
 **Seven guards, and what they are a check of is the one place on this line that needs an equality
 of ranges rather than a containment.** `ComplexAnalytic.range_base_refineDatumToBase` computes the
@@ -5629,10 +5630,9 @@ info: 'ComplexAnalytic.basicOpen_res_presentationSection' depends on axioms:
 /-! ### The refined members as an open cover of the space they refine
 
 `Oka/Analytification/RefineDatumCover.lean`'s open-cover section, together with the lemma that
-section moved the refining condition into. Appended as its own section rather than merged into
-either of that file's earlier sections here, and the reason is stated rather than cited: moving or
-reordering a section of this file is a conflict for every branch that has appended to it, and
-several have.
+section moved the refining condition into. Appended as its own section rather than merged into an
+existing one, and the reason is stated rather than cited: moving or reordering a section of this
+file is a conflict for every branch that has appended to it, and several have.
 
 **Twelve guards, and what they are a check of is that a cover of `X^an` by the refined members
 needs no refined datum.** Nine of the twelve are stated at an index map and a refining family
