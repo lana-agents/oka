@@ -362,8 +362,8 @@ declarations across two files and pays two edges instead of one.
   `Oka/Analytification/RefineDatumRefines.lean` says it at the pairs whose two refined members lie
   over one member, and at the other pairs says only that the refined overlap lands in the `a`-th
   refined member and in the part of the member `σ b` that meets the member `σ a`. It is built on
-  `ComplexAnalytic.refineDatumMemberIota` and on the two range statements about it below, and it
-  reopens nothing here.
+  `ComplexAnalytic.refineDatumMemberIota` and on
+  `ComplexAnalytic.range_base_refineDatumMemberIota` below, and it reopens nothing here.
   **Nor does the file that closes the remaining pairs**: since 2026-09-04
   `Oka/Analytification/RefineDatumRefinesCross.lean` proves the equality where the two refined
   members lie over two members as well, at a family of extra factors it produces, so the sentence

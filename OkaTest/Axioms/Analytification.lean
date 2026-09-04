@@ -5835,11 +5835,12 @@ info: 'ComplexAnalytic.refineDatumOpenCover_map_eq_comp' depends on axioms:
 /-! ### The refined datum refines the cover it refines
 
 `Oka/Analytification/RefineDatumRefines.lean`'s equality at a pair of refined members lying over
-one member of the original cover, its instance at a constant index map, and the containment where
-they lie over two — together with the three lemmas it is built from, which are guarded here
-although they live in the two files that own their subjects, since nothing else in this file
-guards them. Appended as its own section rather than merged into another: moving or reordering a
-section of this file is a conflict for every branch that has appended to it.
+one member of the original cover, its instance at a constant index map, the containment where they
+lie over two, and `ComplexAnalytic.coverIota_image_inter_of_eq`, the transport the equality is
+built on, which that file declares itself — together with the three lemmas they are built from,
+which are guarded here although they live in the two files that own their subjects, since nothing
+else in this file guards them. Appended as its own section rather than merged into another: moving
+or reordering a section of this file is a conflict for every branch that has appended to it.
 
 **Seven guards, and what they are a check of is one lemma and one `subst`.**
 `ComplexAnalytic.image_base_localisationProj_localisationOpen_rename` is

@@ -292,13 +292,20 @@ in the proof below only as the `_` of `CategoryTheory.MorphismProperty.Over.forg
 object's membership in it is ever opened — the degree of a cover is a fact about its structure map
 and not about why that map is an object.
 
-**The morphism is supplied by name rather than as a `_`, and that is forced.** Written
-`degree_isIso_comp _ _` the declaration fails with *"failed to synthesize instance of type class
-`IsIso e.hom.left`"* even though `haveI` has put exactly that in context and `inferInstance` finds
-it one line earlier — the instance argument is attempted before unification against the goal
-assigns the morphism. `(e := e.hom.left)` assigns it first and the instance is then found in
-context. Measured; an `@`-application with the instance passed positionally also works and is
-harder to read.
+**The morphism is supplied by name rather than as a `_`, and that is a choice and not a
+constraint.** `(e := e.hom.left)` says what the theorem is being applied at, which is worth the
+two words in a proof whose whole content is that one application. It is not required:
+`degree_isIso_comp _ _` compiles here — measured, by substituting that spelling into a copy of
+this file and running `lake env lean` on the copy, which prints nothing.
+
+**This paragraph said the `_` spelling was *forced*, and the failure it quoted belongs to the
+draft below rather than to this proof.** With `rw [FiniteEtaleOver.degree,
+FiniteEtaleOver.degree, ← hw]` in place of the `congrArg`, `exact degree_isIso_comp _ _` does
+fail with *"failed to synthesize instance of type class `IsIso e.hom.left`"*, `haveI`
+notwithstanding — both spellings were re-measured here, on copies of this file, and what changed
+under the paragraph was the proof. **What distinguishes the two is not settled by that
+measurement and nothing here claims it**; what is settled is that the constraint is the draft's
+and the name here is a reader's convenience.
 
 **No `rw` here names the definition, and the cost of the obvious one is a dump row.**
 `rw [FiniteEtaleOver.degree, FiniteEtaleOver.degree, ← hw]` is the spelling this proof was written
@@ -314,9 +321,14 @@ replaces it is `congrArg` and `Eq.trans` at the definition's own unfolding, whic
 definitional unfolding and generate nothing — the same cure, for the same defect, that
 `Oka/Analytification/RefineDatumToBase.lean` states as a rule for its own file, and the reason
 `Δdump` for this branch is the number of declarations it adds and no more. **A `show` reaches the
-same goal and is equally free of the equation lemma, and is not what is written**: Mathlib's style
-linter rejects `show` as the first tactic of a proof, and `lake build --wfail` — which
-`.orchestra/validation.sh` runs — turns that warning into a failure. -/
+same goal and is equally free of the equation lemma, and is not what is written**: Mathlib's
+`linter.style.show` warns on a `show` that **changed** the goal and asks for `change` in its
+place, and a `show` unfolding this definition changes it. It is in `linter.mathlibStandardSet`,
+which `lakefile.toml` enables weakly, so `lake build --wfail` — which `.orchestra/validation.sh`
+runs — turns the warning into a failure. **This sentence described the rule as one about the
+*first* tactic of a proof**, which is not what the linter does: a copy of this file carrying that
+`show` as the proof's **third** tactic draws the warning all the same, *"this tactic invocation
+changed the goal"*, measured here. The conclusion was right and the rule under it was not. -/
 theorem FiniteEtaleOver.degree_eq_of_iso {X : AnalyticSpace.{u}}
     {A B : FiniteEtaleOver.{u} X} (e : A ≅ B) :
     FiniteEtaleOver.degree.{u} A = FiniteEtaleOver.degree.{u} B := by
