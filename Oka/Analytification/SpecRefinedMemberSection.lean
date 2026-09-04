@@ -130,7 +130,7 @@ statement — at each point of the intersection there is *some* doubly-distingui
 it — which `Oka/Analytification/SpecRefinedChoice.lean` already spends and which does not say the
 overlap *itself* is distinguished. That is the half those two sentences are right about.
 
-**The same split is on record one level down**, and a reader estimating from these five theorems
+**The same split is on record one level down**, and a reader estimating from the theorems below
 should have it: for a one-datum refinement of an analytic cover, the same-member overlaps are
 `Oka/Analytification/LocalisationComposite.lean`'s `D(f₁) ∩ D(f) = D(f₁·f)` at the presentation
 level, and the cross-member ones need the original transition transported through two
@@ -180,19 +180,19 @@ measured.
 * **No `poly`, no `glue`, and none of a cover datum's three laws**, so nothing here is or produces
   a common refinement — that is `Oka/Analytification/CrossMemberDatum.lean`,
   `Oka/Analytification/CrossMemberDatumGlue.lean` and the `Oka/Analytification/RefineDatum*.lean`
-  files. **Nothing here is a cover datum and nothing here claims to refine one**: the five
-  overlap theorems are at **one** immersion and **two** polynomials, and a `poly` is a function of
-  two *indices* satisfying three laws. **The gap between them is not arithmetic, and it *is* now
-  confined to the pairs whose two members are different.** A `poly` entry at a pair of refined
-  members is a polynomial in each of *their* variables;
-  `ComplexAnalytic.opensRange_presentationRefinedIota_inf` names one in the ambient member's and
-  `ComplexAnalytic.opensRange_presentationRefinedIota_rename` names one in each of theirs, so at a
-  same-member pair what is left between these theorems and a `poly` is the indices and the laws.
+  files. **Nothing here is a cover datum and nothing here claims to refine one**: the overlap
+  theorems here are at **one** immersion and **two** polynomials, and a `poly` is a function of
+  two *indices* satisfying three laws. **The gap between them is not arithmetic, and only one part
+  of it has narrowed.** A `poly` entry at a pair of refined members is a polynomial in each of
+  *their* variables; `ComplexAnalytic.opensRange_presentationRefinedIota_inf` names one in the
+  ambient member's and `ComplexAnalytic.opensRange_presentationRefinedIota_rename` names one in
+  each of theirs, so **the entry is named at a same-member pair and is not named at a pair whose
+  two members are different — and the indices and the three laws are missing at every pair**.
   **This bullet said two things were missing there — the rename `ComplexAnalytic.localisationIncl`
   names and the companion of `ComplexAnalytic.basicOpen_res_presentationSection` at the second
   member — and both are now stated**, the second as
   `ComplexAnalytic.basicOpen_res_presentationSection'`. At a pair whose two members are different
-  none of the five applies at all, and **that** is the half nobody has sized.
+  none of the overlap theorems applies at all, and **that** is the half nobody has sized.
 * **Nothing about overlaps of three or more.** Every overlap theorem here —
   `ComplexAnalytic.opensRange_presentationRefinedIota_inf`,
   `ComplexAnalytic.basicOpen_res_presentationSection`, its primed companion and
