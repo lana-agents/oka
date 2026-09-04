@@ -5429,3 +5429,53 @@ info: 'ComplexAnalytic.dupPtStrict' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.dupPtStrict
+
+/-! ### The refining condition at an index map that is the identity
+
+`Oka/Analytification/RefineDatumCover.lean`'s last section, which reads
+`ComplexAnalytic.RefineDatumCovers` at `σ = id` — where the index a point must be reached through
+is forced, the identification of two members is the identity, and the condition is left saying that
+each `D(fam i)` is the whole of its member. Appended as its own section rather than merged into
+either of that file's two above, and the reason is stated here rather than cited: moving or
+reordering a section of this file is a conflict for every branch that has appended to it.
+
+**Three guards, and what they are a check of is a collapse and not a new geometry.** All three
+proofs are the identification being disposed of by `ComplexAnalytic.coverSpaceHomOfEq_self`, so
+`Classical.choice` is in all three lists for the reason the sections above it give — the refined
+glue data is built from two `choose`n witnesses — and not because anything here is a choice.
+
+**The consumer is in the test library and carries no guard**, which is that library's convention
+rather than an omission: `OkaTest/RefineDatumUnitFamily.lean` applies
+`ComplexAnalytic.not_refineDatumCovers_id_of_ne_top` to `ComplexAnalytic.lineRefinement` and
+concludes that the one refinement in this repository that cuts its members down does not meet the
+condition.
+
+**What none of the three says is anything about surjectivity.**
+`ComplexAnalytic.dupStrict`, guarded above, is the theorem that the condition is strictly stronger
+than the surjectivity of `ComplexAnalytic.refineDatumToBase`, so refuting the condition at a datum
+decides nothing about that morphism there.
+
+**Named and not located.** No sentence in this section says which section precedes or follows it,
+so an append anywhere leaves every sentence here true.
+-/
+
+/--
+info: 'ComplexAnalytic.mem_localisationOpen_of_refineDatumCovers_id' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.mem_localisationOpen_of_refineDatumCovers_id
+
+/--
+info: 'ComplexAnalytic.localisationOpen_eq_top_of_refineDatumCovers_id' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.localisationOpen_eq_top_of_refineDatumCovers_id
+
+/--
+info: 'ComplexAnalytic.not_refineDatumCovers_id_of_ne_top' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.not_refineDatumCovers_id_of_ne_top

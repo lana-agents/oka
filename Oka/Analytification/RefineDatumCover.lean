@@ -176,6 +176,11 @@ The tie is broken by what each candidate is for:
   halves at one refining family.
 - `ComplexAnalytic.dupPtStrict`: **and the witness is not vacuous** — at the presentation of a
   point, whose analytification has one.
+- `ComplexAnalytic.mem_localisationOpen_of_refineDatumCovers_id` and
+  `ComplexAnalytic.localisationOpen_eq_top_of_refineDatumCovers_id`: **at an index map that is the
+  identity the condition says exactly that each `D(fam i)` is the whole of its member.**
+- `ComplexAnalytic.not_refineDatumCovers_id_of_ne_top`: **so one member the family cuts down
+  refutes it outright**, which is what a refinement that refines fails on.
 
 ## What is not here
 
@@ -185,12 +190,18 @@ The tie is broken by what each candidate is for:
   both of its halves, and `ComplexAnalytic.not_isIso_refineToBase` — a negative about the
   one-member comparison at a constant `σ` — bears on nothing here, in either direction, for the
   reason that file gives.
-* **Nothing about a refining family that is not a unit.**
+* **Nothing about a refining family that is not a unit, beyond the reading at `σ = id`.**
   `Oka/Analytification/RefineDatumUnitFamily.lean` builds the only refinement in this repository
-  that cuts its members down, and **whether `ComplexAnalytic.lineRefinement` meets
-  `ComplexAnalytic.RefineDatumCovers` is untouched here in both directions.** Nothing below is
-  evidence either way and no sentence here should be read as one; it is the obvious next question
-  and it is a separate subject.
+  that cuts its members down. The last section below settles **one** of the two questions about it:
+  its index map is the identity and its `D(z)` is a proper open of its chart, so
+  `ComplexAnalytic.not_refineDatumCovers_id_of_ne_top` applies and that refinement does **not**
+  meet `ComplexAnalytic.RefineDatumCovers`. `OkaTest/RefineDatumUnitFamily.lean` is where that is
+  instantiated, and nothing here mentions it.
+  **Whether that refinement's `ComplexAnalytic.refineDatumToBase` is surjective is untouched, and
+  the paragraph above is not evidence about it in either direction**:
+  `ComplexAnalytic.dupStrict` is exactly the theorem that the condition is not necessary, so a
+  datum that fails it may still have a surjection down. That is the obvious next question and it is
+  a separate subject.
 * **No open cover out of the refined members.** `ComplexAnalytic.coverAnalytificationOpenCover`
   presents the *original* datum's members as an
   `AlgebraicGeometry.LocallyRingedSpace.OpenCover`; the same for the images of the refined members
@@ -598,6 +609,73 @@ theorem dupPtStrict :
   dupStrict.{u} dupPtPres.{u} dupPtPoint.{u}
 
 end Dup
+
+/-! ### The condition at an index map that is the identity, where it is one equation per member
+
+At `σ = id` the refined family is indexed by the original cover's own index type and the
+`∃ b, ∃ h : σ b = i` of the condition can only be answered by `i` itself, so
+`ComplexAnalytic.coverSpaceHomOfEq` is an identification of a member with itself and
+`ComplexAnalytic.coverSpaceHomOfEq_self` disposes of it. **What is left is that `D(fam i)` be the
+whole of the `i`-th member**, and a refining family that cuts a member down is exactly a family
+that fails that.
+
+**The three statements below are quantified over `i` rather than proved at an index**, and that is
+not a style choice. `ComplexAnalytic.RefineDatumCovers` is stated across an identification of two
+members, so at a concrete index `subst` has nothing to eliminate and
+`rw [ComplexAnalytic.coverSpaceHomOfEq_self]` fails on a goal reported as *"not type-correct under
+the `instances` transparency level"* — the defect `Oka/Analytification/RefineDatumRange.lean`
+documents, measured again here. Substituting inside a lemma stated at a variable is what makes
+these four lines, and it is the same ordering
+`ComplexAnalytic.surjective_base_refineDatumToBase` above is written in.
+
+**None of this is about surjectivity.** `ComplexAnalytic.dupStrict` says the condition is strictly
+stronger than the surjectivity of the morphism down, so refuting it at a datum decides nothing
+about that morphism at that datum, in either direction. A caller wanting surjectivity has
+`ComplexAnalytic.surjective_base_refineDatumToBase_iff` and nothing here.
+-/
+
+section CoversId
+
+variable (fam : ∀ b : J, MvPolynomial (ULift.{u} (Fin (obj (id b)).n)) ℂ)
+
+/-- **At an identity index map the condition puts every point of the `i`-th member in `D(fam i)`.**
+
+The condition offers a `b` with `id b = i`, which is `i`, and a point of `D(fam b)` mapping to `y`
+along the identification of the two; `subst` turns the first into `rfl` and
+`ComplexAnalytic.coverSpaceHomOfEq_self` turns the second into the identity, after which the point
+offered *is* `y`. **The `rfl` pattern in the `obtain` is what does the work**: it lands the
+identification's value in the goal rather than in a hypothesis, which is why nothing has to be
+rewritten in the other direction. -/
+theorem mem_localisationOpen_of_refineDatumCovers_id
+    (h : RefineDatumCovers.{u} obj id fam) (i : J) (y : coverSpace.{u} obj i) :
+    y ∈ localisationOpen.{u} (obj i).g (fam i) := by
+  obtain ⟨b, hb, z, hz, rfl⟩ := h i y
+  subst hb
+  rw [coverSpaceHomOfEq_self.{u}]
+  exact hz
+
+/-- **So at an identity index map each refined member is the whole of the member it lies over.**
+
+`eq_top_iff` at the theorem above. This is the form in which the condition is a statement about the
+*family* rather than about points, and it is what makes the contrapositive below one line. -/
+theorem localisationOpen_eq_top_of_refineDatumCovers_id
+    (h : RefineDatumCovers.{u} obj id fam) (i : J) :
+    localisationOpen.{u} (obj i).g (fam i) = ⊤ :=
+  eq_top_iff.2 fun y _ ↦ mem_localisationOpen_of_refineDatumCovers_id.{u} obj fam h i y
+
+/-- **One member whose `D(fam i)` is a proper open refutes the condition**, at an identity index
+map.
+
+The contrapositive of the theorem above, and the form an instance spends: a refinement is a
+refinement precisely when some `D(fam i)` is not the whole member, so at `σ = id` a refinement that
+refines cannot meet `ComplexAnalytic.RefineDatumCovers`. **That is a fact about the condition and
+not about the refinement's morphism down**, for the reason the section header gives. -/
+theorem not_refineDatumCovers_id_of_ne_top (i : J)
+    (hne : localisationOpen.{u} (obj i).g (fam i) ≠ ⊤) :
+    ¬ RefineDatumCovers.{u} obj id fam :=
+  fun h ↦ hne (localisationOpen_eq_top_of_refineDatumCovers_id.{u} obj fam h i)
+
+end CoversId
 
 end
 

@@ -55,6 +55,26 @@ A proper refinement at **three** members — `OkaTest/AffineCover.lean`'s `nodeC
 and the family `nodeX`, whose `ComplexAnalytic.nodeCoverPoly` is constant in the same way — would
 exercise `RefineDatumRangeCross` as well, and is not built here.
 
+## And it does not meet the covering condition, which is what refining costs
+
+`Oka/Analytification/RefineDatumCover.lean` asks a refining family to **cover**
+(`ComplexAnalytic.RefineDatumCovers`): every point of every member of the original cover must lie
+in a refined member lying over that member. **This refinement does not**, and the reason is the
+same fact that makes it a refinement at all. Its index map is the identity, so that file's
+`ComplexAnalytic.not_refineDatumCovers_id_of_ne_top` applies with nothing in between, and its
+hypothesis is `ComplexAnalytic.localisationOpen_lineRefineFam_ne_top` — the statement already
+proved above that `D(z)` is a *proper* open of its chart. So the theorem below is the two
+non-degeneracy statements read once more, in the vocabulary of the condition: **a family that cuts
+a member down cannot cover it.**
+
+**This says nothing about whether the refinement's morphism down is surjective**, and no sentence
+here should be read as though it did. `ComplexAnalytic.RefineDatumCovers` is a *sufficient*
+condition for that surjectivity and `ComplexAnalytic.dupStrict` is exactly the theorem that it is
+not a necessary one, so a datum that fails the condition may still have a surjection down. What
+surjectivity is equivalent to is `ComplexAnalytic.surjective_base_refineDatumToBase_iff`, this file
+does not instantiate it, and the morphism `ComplexAnalytic.refineDatumToBase` appears nowhere
+below.
+
 ## Main definitions
 
 - `ComplexAnalytic.lineRefineFam`: **the refining family**, the coordinate `z` on each chart.
@@ -75,6 +95,9 @@ exercise `RefineDatumRangeCross` as well, and is not built here.
 - `ComplexAnalytic.not_isConstant_id_pair`: **the index map is not constant**, which is
   `ComplexAnalytic.not_isConstant_id` at this instance and is what makes this a witness at a
   non-constant `σ` rather than only at an injective one.
+- `ComplexAnalytic.not_refineDatumCovers_lineRefineFam`: **and this refinement does not cover in
+  the sense the refining condition asks**, because a proper open is not the whole member. It is a
+  statement about the condition and not about any morphism.
 
 ## What is not here
 
@@ -91,6 +114,13 @@ exercise `RefineDatumRangeCross` as well, and is not built here.
 * **Nothing about the refined overlaps being the geometric ones**, which is
   `Oka/Analytification/CrossMemberDatumGlue.lean`'s absence and is about the construction rather
   than about any input to it.
+* **Nothing about the morphism down, and in particular no surjectivity.**
+  `ComplexAnalytic.refineDatumToBase` is not spelled at this refinement — at the unit family it
+  would take the four choices of `Oka/Analytification/RefineDatumUnitFamily.lean` and the two range
+  conditions explicitly, and nothing in `Oka/` shortens that — so whether this refinement's space
+  maps **onto** the glued space is untouched here in both directions. The theorem about
+  `ComplexAnalytic.RefineDatumCovers` below is not evidence either way, for the reason its own
+  paragraph gives.
 * **No axiom guards.** Declarations of the test library carry none —
   `ComplexAnalytic.nodeCoverObj` and `ComplexAnalytic.lineCoverObj` are the precedent — and
   `OkaTest/Axioms.lean`'s placement rule is about `Oka/`.
@@ -202,6 +232,25 @@ instance rather than left to a reader. `ComplexAnalytic.not_isConstant_id` at
 theorem not_isConstant_id_pair :
     ¬ ∃ j : pair.{u}, ∀ b : pair.{u}, (id : pair.{u} → pair.{u}) b = j :=
   not_isConstant_id.{u}
+
+/-! ### And it does not cover -/
+
+/-- **This refinement does not meet the refining condition.**
+
+`ComplexAnalytic.not_refineDatumCovers_id_of_ne_top` at the first chart, whose hypothesis is
+`ComplexAnalytic.localisationOpen_lineRefineFam_ne_top` — `D(z)` is a proper open of its chart. The
+index map being the identity is what makes the general theorem apply with nothing in between: at
+`σ = id` the condition is one equation per member, and this family fails it at every member rather
+than only at the one named here.
+
+**Nothing about surjectivity follows.** `ComplexAnalytic.RefineDatumCovers` is sufficient for the
+morphism down to be surjective and `ComplexAnalytic.dupStrict` says it is not necessary, so this
+refutes the condition and leaves the morphism untouched; that question is not asked in this file at
+all. -/
+theorem not_refineDatumCovers_lineRefineFam :
+    ¬ RefineDatumCovers.{u} lineCoverObj.{u} (id : pair.{u} → pair.{u}) lineRefineFam.{u} :=
+  not_refineDatumCovers_id_of_ne_top.{u} lineCoverObj.{u} lineRefineFam.{u} (ULift.up 0)
+    (localisationOpen_lineRefineFam_ne_top.{u} (ULift.up 0))
 
 end
 
