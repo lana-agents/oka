@@ -178,9 +178,15 @@ The tie is broken by what each candidate is for:
   point, whose analytification has one.
 - `ComplexAnalytic.mem_localisationOpen_of_refineDatumCovers_id` and
   `ComplexAnalytic.localisationOpen_eq_top_of_refineDatumCovers_id`: **at an index map that is the
-  identity the condition says exactly that each `D(fam i)` is the whole of its member.**
+  identity the condition puts every point of a member in `D(fam i)`, so each `D(fam i)` is the
+  whole of its member.**
+- `ComplexAnalytic.refineDatumCovers_id_of_forall_eq_top` and
+  `ComplexAnalytic.refineDatumCovers_id_iff`: **and conversely, so at an identity index map the
+  condition *is* that equation** — a biconditional, and not a collapse asserted in prose.
 - `ComplexAnalytic.not_refineDatumCovers_id_of_ne_top`: **so one member the family cuts down
-  refutes it outright**, which is what a refinement that refines fails on.
+  refutes it outright**, which is what a refinement that refines fails on. **Kept as its own name
+  though `ComplexAnalytic.refineDatumCovers_id_iff` now subsumes it**, for the reason the section
+  header gives.
 
 ## What is not here
 
@@ -623,6 +629,18 @@ At `σ = id` the refined family is indexed by the original cover's own index typ
 whole of the `i`-th member**, and a refining family that cuts a member down is exactly a family
 that fails that.
 
+**That is a biconditional and it is proved here as one**,
+`ComplexAnalytic.refineDatumCovers_id_iff`. The first draft of this section proved the forward
+implication at five sites that read as an equivalence, which is the defect
+`ComplexAnalytic.dupStrict` was written to retire one branch earlier and in this same file; the
+converse costs one term and the sentences are now true rather than nearly true.
+
+**`ComplexAnalytic.not_refineDatumCovers_id_of_ne_top` keeps its own name although the
+equivalence subsumes it**, because it is the form `OkaTest/RefineDatumUnitFamily.lean` spends and
+inlining it would put the negation step in a test file. The bullet for it above says so without
+naming that file, since a backticked path under `## Main results` is read by
+`scripts/guard_coverage.py` as a result this file advertises.
+
 **The three statements below are quantified over `i` rather than proved at an index**, and that is
 not a style choice. `ComplexAnalytic.RefineDatumCovers` is stated across an identification of two
 members, so at a concrete index `subst` has nothing to eliminate and
@@ -678,6 +696,40 @@ theorem not_refineDatumCovers_id_of_ne_top (i : J)
     (hne : localisationOpen.{u} (obj i).g (fam i) ≠ ⊤) :
     ¬ RefineDatumCovers.{u} obj id fam :=
   fun h ↦ hne (localisationOpen_eq_top_of_refineDatumCovers_id.{u} obj fam h i)
+
+/-- **And conversely: if every `D(fam i)` is the whole member, the condition holds** at an identity
+index map.
+
+A term and not a tactic proof, which is the point of writing it this way. The witness is `i`
+itself, the identification is along `rfl`, and the last component is
+`ComplexAnalytic.coverSpaceHomOfEq_refl` read at a point through `congrArg`.
+
+**The two obvious tactic steps both fail, and they fail for the reason the section header gives.**
+`rw [h i]` does not match a goal reading `y ∈ localisationOpen (obj (id i)).g (fam i)`, because
+`id i` is not syntactically `i`; and `rw [coverSpaceHomOfEq_self]` does not match either, because
+the stored proof has type `id i = i` while the pattern wants `?i = ?i` — the same *"not type-correct
+under the `instances` transparency level"* report the forward direction met, in a shape where
+nothing is available to `subst`. **A term application unifies at default transparency and neither
+step arises**, which is `Oka/Analytification/RefineDatumRange.lean`'s own prescription — the bridge
+is `rfl`, so state it with the type written out and let `congrArg` carry it. -/
+theorem refineDatumCovers_id_of_forall_eq_top
+    (h : ∀ i : J, localisationOpen.{u} (obj i).g (fam i) = ⊤) :
+    RefineDatumCovers.{u} obj id fam := fun i y ↦
+  ⟨i, rfl, y, (h i).ge trivial,
+    congrArg (fun m : coverSpace.{u} obj i ⟶ coverSpace.{u} obj i ↦
+      (ConcreteCategory.hom m.base) y) (coverSpaceHomOfEq_refl.{u} obj i)⟩
+
+/-- **So at an identity index map the condition *is* the equation**, and not merely implies it.
+
+The two directions above joined. **This is what the prose of this section says and what its first
+draft did not prove**: five sentences read as a biconditional where only `→` was available, which is
+the same species as the assertions `ComplexAnalytic.dupStrict` retired one branch earlier in this
+file. -/
+theorem refineDatumCovers_id_iff :
+    RefineDatumCovers.{u} obj id fam ↔
+      ∀ i : J, localisationOpen.{u} (obj i).g (fam i) = ⊤ :=
+  ⟨localisationOpen_eq_top_of_refineDatumCovers_id.{u} obj fam,
+    refineDatumCovers_id_of_forall_eq_top.{u} obj fam⟩
 
 end CoversId
 

@@ -5498,3 +5498,40 @@ info: 'ComplexAnalytic.not_refineDatumCovers_id_of_ne_top' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.not_refineDatumCovers_id_of_ne_top
+
+/-! ### The refining condition at an identity index map is that equation, and not merely implies it
+
+The converse half of `Oka/Analytification/RefineDatumCover.lean`'s last section, and the `Iff` that
+joins the two. **Appended as its own section rather than merged into the one that guards the
+forward half**, for the reason this file gives everywhere: moving or reordering a section is a
+conflict for every branch that has appended to it, and a section that counts only its own guards
+cannot be made stale by an append.
+
+**Two guards, and what they are a check of is that five sentences became true.** The branch that
+built the forward direction said at five sites that the condition at `σ = id` *is* `∀ i, D(fam i) =
+⊤`, and proved `→`; `ComplexAnalytic.refineDatumCovers_id_iff` is the biconditional those sentences
+assert, so they are now statements of a theorem rather than of a reading.
+`ComplexAnalytic.refineDatumCovers_id_of_forall_eq_top` is the direction that was missing and it is
+a term with no tactic in it.
+
+**`Classical.choice` is in both lists for the reason the other sections of this file give** — the
+refined glue data is built from two `choose`n witnesses — and not because anything here is a
+choice.
+
+**Named and not located.** No sentence in this section says which section precedes or follows it,
+so an append anywhere leaves every sentence here true.
+-/
+
+/--
+info: 'ComplexAnalytic.refineDatumCovers_id_of_forall_eq_top' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumCovers_id_of_forall_eq_top
+
+/--
+info: 'ComplexAnalytic.refineDatumCovers_id_iff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumCovers_id_iff
