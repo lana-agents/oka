@@ -1671,7 +1671,7 @@ info: 'ComplexAnalytic.AnalyticSpace.isFinite_of_restrictHom_top' depends on axi
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.isFinite_of_restrictHom_top
 
-/-! ### An isomorphism of analytic spaces is surjective on points
+/-! ### An isomorphism of analytic spaces is bijective on points
 
 `Oka/AnalyticSpace/Basic.lean`, appended as its own section for the reason the sections above
 give: a section moved is a conflict for somebody else.
@@ -1697,7 +1697,22 @@ and not the module.** That file holds three `Oka/AnalyticSpace/Basic.lean` guard
 `ComplexAnalytic.IsCLinearHom` statements sitting under its gluing heading; its own docstring sends
 the *classes* of morphisms here, and `CategoryTheory.IsIso` is one. The sibling above,
 `ComplexAnalytic.AnalyticSpace.surjective_base_of_isLocalIso_of_isFinite`, is guarded here for the
-same reason and is declared in a different module again. -/
+same reason and is declared in a different module again.
+
+**Two statements, and the second is the first's `.surjective`.**
+`ComplexAnalytic.AnalyticSpace.bijective_base_of_isIso` is where the homeomorphism and every
+caveat above now live; `ComplexAnalytic.AnalyticSpace.surjective_base_of_isIso` is a projection of
+it and is kept because a non-surjectivity is the shape that refutes an `IsIso`. Both are guarded,
+because both are advertised under `Oka/AnalyticSpace/Basic.lean`'s `## Main results` and a guard
+of a corollary does not guard what it is a corollary of — the axioms of the projection could in
+principle be a strict subset. Here they are not, and the two blocks below say so. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.bijective_base_of_isIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.bijective_base_of_isIso
 
 /--
 info: 'ComplexAnalytic.AnalyticSpace.surjective_base_of_isIso' depends on axioms:
@@ -1705,3 +1720,90 @@ info: 'ComplexAnalytic.AnalyticSpace.surjective_base_of_isIso' depends on axioms
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.surjective_base_of_isIso
+
+/-! ### The degree does not see a change of source, and is an invariant of a cover
+
+`Oka/AnalyticSpace/Degree.lean`'s two statements about precomposition, and the degree of an object
+of `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver` that they buy
+(`Oka/AnalyticSpace/FiniteEtaleOver.lean`), appended as their own section for the reason the
+sections above give: a section moved is a conflict for somebody else.
+
+**Guarded here and not with the `### The finite étale covers of a fixed base, as a category`
+section above, although four of the seven declarations are that file's.** The subject of all seven
+is `ComplexAnalytic.AnalyticSpace.degree`, which is a function of a *morphism* and belongs to this
+file by the topic table's `morphisms of analytic spaces` row; the category section above is about
+the objects and their separation by `¬ IsIso`, and none of its guards reads a fibre.
+
+**`Oka/AnalyticSpace/Degree.lean`'s older advertised results are still unguarded**, exactly as
+they were before this section existed — `ComplexAnalytic.AnalyticSpace.degree_eq_card_fiber`,
+`ComplexAnalytic.AnalyticSpace.degree_id`, `ComplexAnalytic.AnalyticSpace.degree_sigmaFold`,
+`ComplexAnalytic.AnalyticSpace.bijective_base_iff_degree_eq_one` and
+`ComplexAnalytic.AnalyticSpace.isHomeomorph_base_of_degree_eq_one`, which
+`scripts/guard_coverage.py --by-file` prints by name under that file. That is neither a regression
+nor a repair: **a branch guards what it adds**, the whole-file figure it leaves behind is
+whatever the sum is, and retro-guarding five declarations a branch does not touch is a separate
+and purely mechanical job. The list above is by name and not by count, so nothing in it goes
+stale when one of them is guarded. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.degree_comp_of_bijective_base' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.degree_comp_of_bijective_base
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.degree_isIso_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.degree_isIso_comp
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_eq_of_iso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_eq_of_iso
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_iso_of_degree_ne' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_iso_of_degree_ne
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_id' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_id
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_trivial' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_trivial
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_iso_trivial_id' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_iso_trivial_id
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_eq_of_iso_trivial' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_eq_of_iso_trivial

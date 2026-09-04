@@ -77,9 +77,12 @@ different files until it was collected here.
   in. `Oka/AnalyticSpace/LocalModel.lean` restates it for an open subset of `ℂ^n` and the
   constants there, which is a different spelling of the same fact and not a second result.
 
-And one statement about the category of analytic spaces itself, rather than about linearity over
-the constants.
+And statements about the category of analytic spaces itself, rather than about linearity over the
+constants.
 
+- `ComplexAnalytic.AnalyticSpace.bijective_base_of_isIso`: **an isomorphism of analytic spaces is
+  bijective on points**, which is the homeomorphism the functor to locally ringed spaces produces,
+  read as a map of sets.
 - `ComplexAnalytic.AnalyticSpace.surjective_base_of_isIso`: **an isomorphism of analytic spaces is
   surjective on points**, which is what turns a non-surjectivity into a `¬ IsIso`. It says nothing
   about whether the two spaces are isomorphic by some *other* morphism, and every consumer of it
@@ -493,12 +496,15 @@ theorem mono_of_isCutOutBy {B C : AnalyticSpace.{u}} (j : B ⟶ C) {k : ℕ}
     (hcut : IsCutOutBy j.toLRSHom f) : Mono j :=
   forgetToLocallyRingedSpace.mono_of_mono_map hcut.mono
 
-/-- **An isomorphism of analytic spaces is surjective on points.**
+/-- **An isomorphism of analytic spaces is bijective on points.**
 
 `AlgebraicGeometry.LocallyRingedSpace.homeoOfIso` at the image of `f` under
 `ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace`. That is the same bridge
 `ComplexAnalytic.IsCutOutBy.comp_iso` above spends, reached through the functor rather than
-restated.
+restated, and it is a homeomorphism rather than only a surjection — so **bijectivity is what that
+bridge gives and surjectivity is a projection of it**, which is why
+`ComplexAnalytic.AnalyticSpace.surjective_base_of_isIso` below is now this statement's
+`.surjective` and no longer a second call of the same one-liner.
 
 **Nothing has to be established about the functor.** `CategoryTheory.Functor.map_isIso` is an
 instance: *every* functor preserves isomorphisms, so `forgetToLocallyRingedSpace.map f` is an
@@ -515,10 +521,28 @@ quote this statement in the other direction.
 non-isomorphic: two spaces can be isomorphic by a morphism other than the one in hand.
 `ComplexAnalytic.AnalyticSpace.not_surjective_sigmaι_base`
 (`Oka/AnalyticSpace/Sigma.lean`) already writes that caveat for its own statement, and every
-consumer of this one inherits it. -/
+consumer of this one inherits it.
+
+**Which half a consumer needs is not a matter of taste.** A non-surjectivity refutes `IsIso` and
+wants the surjection; a *fibre count* wants the injection as well, because `Nat.card` of a
+preimage is preserved by a bijection and by nothing weaker —
+`ComplexAnalytic.AnalyticSpace.degree_isIso_comp` (`Oka/AnalyticSpace/Degree.lean`) is the
+consumer that made this statement rather than the one below the one to prove. -/
+theorem bijective_base_of_isIso {X Y : AnalyticSpace.{u}} (f : X ⟶ Y) [IsIso f] :
+    Function.Bijective (f.toLRSHom.base : X → Y) :=
+  (LocallyRingedSpace.homeoOfIso (asIso (forgetToLocallyRingedSpace.map f))).bijective
+
+/-- **An isomorphism of analytic spaces is surjective on points.**
+
+The surjectivity half of `ComplexAnalytic.AnalyticSpace.bijective_base_of_isIso` above, which is
+where the argument and every caveat now live. It is kept as a separate name because it has
+consumers — `ComplexAnalytic.AnalyticSpace.not_isIso_sigmaι` (`Oka/AnalyticSpace/Sigma.lean`) and
+`ComplexAnalytic.not_isIso_lineRefineToBase` (`OkaTest/RefineDatumUnitFamily.lean`) both spend it
+— and because a non-surjectivity is the shape that refutes an `IsIso`, which is what both of them
+are doing. -/
 theorem surjective_base_of_isIso {X Y : AnalyticSpace.{u}} (f : X ⟶ Y) [IsIso f] :
     Function.Surjective (f.toLRSHom.base : X → Y) :=
-  (LocallyRingedSpace.homeoOfIso (asIso (forgetToLocallyRingedSpace.map f))).surjective
+  (bijective_base_of_isIso f).surjective
 
 end AnalyticSpace
 
