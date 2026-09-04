@@ -367,8 +367,8 @@ declarations across two files and pays two edges instead of one.
   **Nor does the file that closes the remaining pairs**: since 2026-09-04
   `Oka/Analytification/RefineDatumRefinesCross.lean` proves the equality where the two refined
   members lie over two members as well, at a family of extra factors it produces, so the sentence
-  above is a description of one file and no longer of the tree — and it too is about
-  `ComplexAnalytic.refineDatumMemberIota` and reads nothing here.
+  above is a description of one file and no longer of the tree — and the equality it proves is
+  about `ComplexAnalytic.refineDatumMemberIota` too, and reads nothing here.
 * **No instance in `Oka/` of `### The instance at a family that is a unit on each overlap`.**
   `ComplexAnalytic.refineDatumUnitFamToBase` and its equivalence are stated for every cover datum
   and are spent in this library at none. **This bullet said `OkaTest/RefineDatumUnitFamily.lean`

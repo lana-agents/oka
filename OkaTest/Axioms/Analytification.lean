@@ -5912,14 +5912,22 @@ info: 'ComplexAnalytic.refineDatumMemberIota_image_coverOpen_subset_of_ne' depen
 
 /-! ### The refined datum refines across members, and the two members meet in nothing else
 
-`Oka/Analytification/RefineDatumRefinesCross.lean`'s equality at a pair of refined members lying
-over two different members of the original cover, and the family of extra factors at which it
-holds at every ordered pair — together with the six lemmas the two are built from, which are
-guarded here although four of them live in `Oka/Analytification/AffineCover.lean` and two in the
-files that own evaluation and the non-vanishing locus, since nothing else in this file guards
-them. Appended as its own section rather than merged into the one above, for the reason that
-section gives: moving or reordering a section of this file is a conflict for every branch that
-has appended to it.
+**Every declaration of `Oka/Analytification/RefineDatumRefinesCross.lean`** — its equality at a
+pair of refined members lying over two different members of the original cover, the family of
+extra factors at which that holds at every ordered pair, and the steps under its earlier headings
+that those two are proved through — together with the lemmas written for them elsewhere: in
+`Oka/Analytification/AffineCover.lean`, and in the files that own evaluation and the non-vanishing
+locus. They are guarded here because nothing else in this file guards them. Appended as its own
+section rather than merged into the one above, for the reason that section gives: moving or
+reordering a section of this file is a conflict for every branch that has appended to it.
+
+**The enumeration above counts nothing, and that is deliberate rather than an omission.** A clause
+that counts the declarations of a file or the guards of a section is falsified by the next append
+to either, and the section above this one had exactly such a clause repaired by a separate branch
+on 2026-09-04 — it had enumerated six of its seven guards. The spelling that survives an append is
+the one used here: name the file whose declarations are guarded and the files the rest were
+written in, and leave the arithmetic to a reader, who can run `grep -c '#print axioms'` over the
+section and get an answer that is right on the day they run it.
 
 **What the guards are a check of is two things and neither is analytic.**
 `ComplexAnalytic.localisationOpen_eq_of_isUnit_mul` is the whole of the passage from an identity
@@ -5929,9 +5937,10 @@ point kills the presentation ideal, and a unit does not vanish — and
 description of when two points of two members become one to the statement that the two members
 meet in the overlap and in nothing else. Everything else here is bookkeeping between the two.
 
-**`Classical.choice` is in all twelve and is expected**: `ComplexAnalytic.refineDatumFactor` is an
-`open Classical` case split, the analytification of a presentation runs through a gluing, and the
-last guard's statement is an existential produced by `choose` from another one.
+**`Classical.choice` is in every guard below and is expected**:
+`ComplexAnalytic.refineDatumFactor` is an `open Classical` case split, the analytification of a
+presentation runs through a gluing, and the last guard's statement is an existential produced by
+`choose` from another one.
 
 **Named and not located.** No sentence here says which section precedes or follows it.
 -/

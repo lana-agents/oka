@@ -85,10 +85,13 @@ a corollary of the containment that was already there.
 * **No canonical factor.** The family the last result produces is a `choose` from an existential
   whose own producer is a `choose`; a different run gives a different family, and nothing says
   two of them cut out the same overlaps. What is claimed is that one exists.
-* **No refined cover datum, and no space.** Every statement here is about
+* **No refined cover datum, and no space.** Nothing here is about the space the refined datum
+  glues to: `ComplexAnalytic.refineDatumToBase` occurs in this file only in this sentence, and the
+  three refined laws are not read. What reaches the refinement at all reaches it through
   `ComplexAnalytic.refineDatumMemberIota`, a composite of two open immersions into the space the
-  refinement refines, and none is about the space the refined datum glues to; the three refined
-  laws are not read and `ComplexAnalytic.refineDatumToBase` does not occur.
+  refinement refines; the results under `### The rule on the caller's factor, read as an equality
+  of opens` and `### So the two members' opens have one image` are stated at free indices of `J`,
+  with no `B`, no `σ` and no refining family in them at all.
 * **No injectivity and no isomorphism.** An equality of images is a statement about sets and says
   nothing about fibres — the reading `Oka/Analytification/RefineDatumCover.lean` records — and
   nothing here upgrades a refinement to a comparison of any kind.

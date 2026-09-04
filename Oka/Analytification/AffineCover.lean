@@ -213,7 +213,7 @@ a much larger tax than one unused value per index.
 - `ComplexAnalytic.coverIota_image_coverOpen`: **the two members meet where the datum says they
   do** — `D(f_ij)` and `D(f_ji)` have the same image in `X^an`. A fact about the two composites
   out of the overlap as an open subspace of a member, and not by itself a statement that the two
-  members meet in nothing else; **that one is the next two bullets**, and it was absent until
+  members meet in nothing else; **that one is the next bullet**, and it was absent until
   2026-09-04.
 - `ComplexAnalytic.preimage_range_coverIota` and `ComplexAnalytic.range_coverIota_inter`: **and
   they meet in nothing else** — what of the `j`-th member lies in the `i`-th is exactly `D(f_ji)`,
