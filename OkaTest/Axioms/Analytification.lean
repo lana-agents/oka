@@ -5625,3 +5625,116 @@ info: 'ComplexAnalytic.basicOpen_res_presentationSection' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.basicOpen_res_presentationSection
+
+/-! ### The refined members as an open cover of the space they refine
+
+`Oka/Analytification/RefineDatumCover.lean`'s open-cover section, together with the lemma that
+section moved the refining condition into. Appended as its own section rather than merged into
+either of that file's earlier sections here, and the reason is stated rather than cited: moving or
+reordering a section of this file is a conflict for every branch that has appended to it, and
+several have.
+
+**Twelve guards, and what they are a check of is that a cover of `X^an` by the refined members
+needs no refined datum.** Nine of the twelve are stated at an index map and a refining family
+alone — `ComplexAnalytic.refineDatumMemberIota` is
+`ComplexAnalytic.localisationProj` followed by `ComplexAnalytic.coverIota`, and no cross-member
+choice, no `q` and none of the three refined laws appears in any of them. The other three are
+`ComplexAnalytic.range_base_refineDatumToBase_eq_iUnion_range`,
+`ComplexAnalytic.surjective_base_refineDatumToBase_iff_iUnion_range` and
+`ComplexAnalytic.refineDatumOneOpenCover`, and the first two are the bridge to the morphism down.
+
+**`Classical.choice` is in all twelve and two of them are why.**
+`ComplexAnalytic.refineDatumOpenCover`'s `idx` field chooses an index for each point, which is
+what makes that definition `noncomputable`, and
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.ι_jointly_surjective` runs through the gluing's
+construction inside
+`ComplexAnalytic.iUnion_coverIota_image_localisationOpen_eq_univ`. Every guard in this file for a
+declaration of that module records the same three.
+
+**Named and not located, and this section holds itself to that.** No sentence in it says which
+section precedes or follows it, so an append anywhere leaves every sentence here true.
+-/
+
+/--
+info: 'ComplexAnalytic.iUnion_coverIota_image_localisationOpen_eq_univ' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.iUnion_coverIota_image_localisationOpen_eq_univ
+
+/--
+info: 'ComplexAnalytic.refineDatumMemberIota' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumMemberIota
+
+/--
+info: 'ComplexAnalytic.isOpenImmersion_refineDatumMemberIota' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isOpenImmersion_refineDatumMemberIota
+
+/--
+info: 'ComplexAnalytic.range_base_refineDatumMemberIota' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.range_base_refineDatumMemberIota
+
+/--
+info: 'ComplexAnalytic.iUnion_range_base_refineDatumMemberIota' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.iUnion_range_base_refineDatumMemberIota
+
+/--
+info: 'ComplexAnalytic.iUnion_range_base_refineDatumMemberIota_eq_univ' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.iUnion_range_base_refineDatumMemberIota_eq_univ
+
+/--
+info: 'ComplexAnalytic.refineDatumOpenCover' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumOpenCover
+
+/--
+info: 'ComplexAnalytic.refineDatumOpenCover_obj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumOpenCover_obj
+
+/--
+info: 'ComplexAnalytic.refineDatumOpenCover_map' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumOpenCover_map
+
+/--
+info: 'ComplexAnalytic.range_base_refineDatumToBase_eq_iUnion_range' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.range_base_refineDatumToBase_eq_iUnion_range
+
+/--
+info: 'ComplexAnalytic.surjective_base_refineDatumToBase_iff_iUnion_range' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.surjective_base_refineDatumToBase_iff_iUnion_range
+
+/--
+info: 'ComplexAnalytic.refineDatumOneOpenCover' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumOneOpenCover
