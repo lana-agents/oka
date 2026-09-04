@@ -5582,12 +5582,12 @@ info: 'ComplexAnalytic.surjective_base_refineDatumUnitFamToBase_iff' depends on 
 section for the reason the sections above give: a section moved is a conflict for somebody else.
 
 **Its own section rather than an insertion under either of that file's two headings here, and the
-reason is the subject and not the file.** The heading naming the general level of
-`Oka/Analytification/SpecRefinedMember.lean` and that file pairs **six** general declarations with
-six member-level ones and says in terms that the two sets are not independent; these three have no
-member-level counterpart, so inserting them there would falsify that pairing while stating nothing
-about it. The heading naming the member level is about one member's range and these are about two
-members' overlap.
+reason is the subject and not the file.** `### The refined member, at an arbitrary open immersion`
+covers the general level of `Oka/Analytification/SpecRefinedMember.lean` and of that file, and it
+pairs **six** general declarations with six member-level ones, saying in terms that the two sets
+are not independent; these three have no member-level counterpart, so inserting them there would
+falsify that pairing while stating nothing about it. `### The refined member's range, in the
+section vocabulary` is about one member's range, and these are about two members' overlap.
 
 **Three guards and what each is a check of.** `ComplexAnalytic.presentationSection_mul` is two
 `map_mul`s and is here because it is a declaration and not because anything about it is

@@ -45,9 +45,12 @@ datum*.
 Where two members of the cover below are chosen inside **one** member of a datum — which many
 pairs are, the index type being the points of `X` and `idx` sending many of them to one member —
 the overlap is a chosen open of that member again, at the product of the two polynomials, by
-`ComplexAnalytic.opensRange_presentationRefinedIota_inf`. Where they are chosen inside
-**different** members it is what the points of `X` cannot give, and that is the half the third
-piece is against.
+`ComplexAnalytic.opensRange_presentationRefinedIota_inf`. **That is the ambient member's statement
+and not yet the condition**, which asks for a polynomial in each of the two chosen opens' own
+variables — one more variable each than the member has. The map that carries a polynomial across is
+the one `ComplexAnalytic.localisationIncl` names, and no statement on this line carries one across
+it. Where they are chosen inside **different** members it is what the
+points of `X` cannot give, and that is the half the third piece is against.
 
 ## What the two statements are, and why there are two
 
