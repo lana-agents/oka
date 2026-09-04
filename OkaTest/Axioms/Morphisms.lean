@@ -1683,13 +1683,14 @@ needs a preconnected base and a non-empty source. This one is the categorical fa
 nothing: an inverse exists, so the base has a right inverse. **The section is named and not
 located**, because it is not the section immediately above this one and counting would say it was.
 
-Its consumers spend it in the contrapositive, to turn a non-surjectivity into a `¬ IsIso`, and both
-are `Oka/`'s: `ComplexAnalytic.AnalyticSpace.not_isIso_sigmaι` (`Oka/AnalyticSpace/Sigma.lean`),
-guarded in `OkaTest/Axioms/AnalyticSpace.lean` beside the disjoint union's other statements, and
-`ComplexAnalytic.not_isIso_lineRefineToBase` (`OkaTest/RefineDatumUnitFamily.lean`), which is a
-test declaration and so is **not** guarded here — this file imports `Oka` and not `OkaTest`, which
-is the reason the `### Cancellation of finiteness and of finite étaleness` section gives for the
-same omission.
+Its consumers spend it in the contrapositive, to turn a non-surjectivity into a `¬ IsIso`, and
+they are **not all `Oka/`'s** — which is what decides whether each of them is guarded here.
+`ComplexAnalytic.AnalyticSpace.not_isIso_sigmaι` (`Oka/AnalyticSpace/Sigma.lean`) is the library's,
+and is guarded in `OkaTest/Axioms/AnalyticSpace.lean` beside the disjoint union's other statements;
+`ComplexAnalytic.not_isIso_lineRefineToBase` (`OkaTest/RefineDatumUnitFamily.lean`) is a test
+declaration and so is **not** guarded here — this file imports `Oka` and not `OkaTest`, which is
+the reason the `### Cancellation of finiteness and of finite étaleness` section gives for the same
+omission.
 
 **Guarded here rather than in `OkaTest/Axioms/AnalyticSpace.lean`, and the reason is the subject
 and not the module.** That file holds three `Oka/AnalyticSpace/Basic.lean` guards and all three are
