@@ -5575,3 +5575,53 @@ info: 'ComplexAnalytic.surjective_base_refineDatumUnitFamToBase_iff' depends on 
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.surjective_base_refineDatumUnitFamToBase_iff
+
+/-! ### The overlap of two refined members at one immersion
+
+`Oka/Analytification/SpecRefinedMemberSection.lean`'s last three declarations. Appended as its own
+section for the reason the sections above give: a section moved is a conflict for somebody else.
+
+**Its own section rather than an insertion under either of that file's two headings here, and the
+reason is the subject and not the file.** `### The refined member, at an arbitrary open immersion`
+covers the general level of `Oka/Analytification/SpecRefinedMember.lean` and of that file, and it
+pairs **six** general declarations with six member-level ones, saying in terms that the two sets
+are not independent; these three have no member-level counterpart, so inserting them there would
+falsify that pairing while stating nothing about it. `### The refined member's range, in the
+section vocabulary` is about one member's range, and these are about two members' overlap.
+
+**Three guards and what each is a check of.** `ComplexAnalytic.presentationSection_mul` is two
+`map_mul`s and is here because it is a declaration and not because anything about it is
+surprising. `ComplexAnalytic.opensRange_presentationRefinedIota_inf` is
+`AlgebraicGeometry.Scheme.basicOpen_mul` read through the general range theorem, and
+`ComplexAnalytic.basicOpen_res_presentationSection` is `AlgebraicGeometry.Scheme.basicOpen_res`
+with no affineness hypothesis; **`Classical.choice` is in all three lists for the reason the
+sections on the rest of that file give** — the scheme structure underneath is built from chosen
+witnesses — and not because anything here is a choice.
+
+**What these do not assert, said here because a guard file is where a reader checks a claim against
+a list.** None of the three is a `poly`, none quantifies over two indices, and none says anything
+about two members of a cover datum chosen inside *different* members — which is the half of the
+doubly-distinguished condition that file's own prose says is not supplied.
+
+**Named and not located.** No sentence here says which section is above or below it. -/
+
+/--
+info: 'ComplexAnalytic.presentationSection_mul' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.presentationSection_mul
+
+/--
+info: 'ComplexAnalytic.opensRange_presentationRefinedIota_inf' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.opensRange_presentationRefinedIota_inf
+
+/--
+info: 'ComplexAnalytic.basicOpen_res_presentationSection' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.basicOpen_res_presentationSection

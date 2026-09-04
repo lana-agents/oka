@@ -37,10 +37,20 @@ step's own conclusion** — no set has to be chosen and no index type has to be 
 
 **What a cover datum needs and this does not supply is `poly` and the three laws**, together with
 the condition `Oka/Analytification/SpecScheme.lean` names: every pairwise overlap must be a
-distinguished open of *each* of the two members it lies in. That is what the points of `X` cannot
-give, it is the third of that file's three pieces, and none of it is here. The corrected sentence
-is therefore narrower and not weaker, and it is the reason this file's title says *cover* and not
-*cover datum*.
+distinguished open of *each* of the two members it lies in. That is the third of that file's three
+pieces and none of it is here, which is the reason this file's title says *cover* and not *cover
+datum*.
+
+**The condition is not uniformly out of reach, and which half is out of reach is worth stating.**
+Where two members of the cover below are chosen inside **one** member of a datum — which many
+pairs are, the index type being the points of `X` and `idx` sending many of them to one member —
+the overlap is a chosen open of that member again, at the product of the two polynomials, by
+`ComplexAnalytic.opensRange_presentationRefinedIota_inf`. **That is the ambient member's statement
+and not yet the condition**, which asks for a polynomial in each of the two chosen opens' own
+variables — one more variable each than the member has. The map that carries a polynomial across is
+the one `ComplexAnalytic.localisationIncl` names, and no statement on this line carries one across
+it. Where they are chosen inside **different** members it is what the
+points of `X` cannot give, and that is the half the third piece is against.
 
 ## What the two statements are, and why there are two
 

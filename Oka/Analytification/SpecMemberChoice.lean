@@ -36,9 +36,24 @@ type is arbitrary and it carries its own choice function from the points of the 
 family below *is* an affine open cover of `X` with no set chosen and no index type invented —
 `Oka/Analytification/SpecRefinedCover.lean` assembles exactly that and says so. What a cover
 **datum** additionally needs is `poly`, the three laws, and the condition that every pairwise
-overlap be a distinguished open of *each* of the two members it lies in; **that** is what the
-points of `X` cannot supply, it is what makes the third piece the work it is, and it is what this
-section is about.
+overlap be a distinguished open of *each* of the two members it lies in; that condition is what
+makes the third piece the work it is, and it is what this section is about.
+
+**It is not equally out of reach at every pair, and the two halves are not the same size.** At
+two chosen opens sitting inside the **same** member the overlap is a chosen open of *that* member
+again, at the product of the two polynomials —
+`ComplexAnalytic.opensRange_presentationRefinedIota_inf`, which is
+`AlgebraicGeometry.Scheme.basicOpen_mul` and needs nothing else. **That is a statement about the
+member the two sit inside, and it is not yet the condition at either of them**: the condition asks
+for a polynomial in each chosen open's *own* variables, of which a chosen open has one more than
+the member does, and the map that carries a polynomial across is the one
+`ComplexAnalytic.localisationIncl` names. **No statement on this line carries one across it.**
+
+At two sitting inside **different** members the two sections live over different opens,
+`AlgebraicGeometry.Scheme.basicOpen_mul` does not typecheck, and what is available is the
+**pointwise** statement this section produces and not a statement about the overlap itself.
+**That half is what the points of `X` cannot supply**, and it is the half the third piece is
+against.
 
 ## Existential over four functions, and not four definitions
 
