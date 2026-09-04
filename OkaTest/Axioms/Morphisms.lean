@@ -20,6 +20,9 @@ local-isomorphism class along a change of source and target** — over an open s
 target, and to subspaces cut out by a family of global sections and by its pullbacks. Those are
 `### And a local isomorphism restricted over an open of the target is one` and
 `### And a local isomorphism restricted to subspaces cut out by a family and by its pullbacks`.
+And one section is of a fourth kind, named here for the same reason: a statement about the class
+of **isomorphisms**, which is not built from a topological criterion and is not transported from
+anywhere — `### An isomorphism of analytic spaces is surjective on points`.
 
 **Named rather than counted from the end**, which is the repair and not the description. **The
 sentence this replaces called them *the last two***; they stopped being that when two further
@@ -1667,3 +1670,37 @@ info: 'ComplexAnalytic.AnalyticSpace.isFinite_of_restrictHom_top' depends on axi
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.isFinite_of_restrictHom_top
+
+/-! ### An isomorphism of analytic spaces is surjective on points
+
+`Oka/AnalyticSpace/Basic.lean`, appended as its own section for the reason the sections above
+give: a section moved is a conflict for somebody else.
+
+**Not the same statement as the one under `### Surjectivity of a finite local isomorphism over a
+connected base`**, which is the section this is most easily confused with. That one reads
+surjectivity off *two* classes — a local isomorphism is open, a finite morphism is closed — and
+needs a preconnected base and a non-empty source. This one is the categorical fact and needs
+nothing: an inverse exists, so the base has a right inverse. **The section is named and not
+located**, because it is not the section immediately above this one and counting would say it was.
+
+Its consumers spend it in the contrapositive, to turn a non-surjectivity into a `¬ IsIso`, and both
+are `Oka/`'s: `ComplexAnalytic.AnalyticSpace.not_isIso_sigmaι` (`Oka/AnalyticSpace/Sigma.lean`),
+guarded in `OkaTest/Axioms/AnalyticSpace.lean` beside the disjoint union's other statements, and
+`ComplexAnalytic.not_isIso_lineRefineToBase` (`OkaTest/RefineDatumUnitFamily.lean`), which is a
+test declaration and so is **not** guarded here — this file imports `Oka` and not `OkaTest`, which
+is the reason the `### Cancellation of finiteness and of finite étaleness` section gives for the
+same omission.
+
+**Guarded here rather than in `OkaTest/Axioms/AnalyticSpace.lean`, and the reason is the subject
+and not the module.** That file holds three `Oka/AnalyticSpace/Basic.lean` guards and all three are
+`ComplexAnalytic.IsCLinearHom` statements sitting under its gluing heading; its own docstring sends
+the *classes* of morphisms here, and `CategoryTheory.IsIso` is one. The sibling above,
+`ComplexAnalytic.AnalyticSpace.surjective_base_of_isLocalIso_of_isFinite`, is guarded here for the
+same reason and is declared in a different module again. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.surjective_base_of_isIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.surjective_base_of_isIso

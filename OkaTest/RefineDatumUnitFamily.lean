@@ -127,19 +127,32 @@ theorem below produces and one is all it claims.
 - `ComplexAnalytic.not_surjective_base_lineRefineToBase`: **and the morphism down really is not
   surjective**, which is the other question and does not follow from the one above — the origin of
   the first chart is in the image of neither refined member.
+- `ComplexAnalytic.not_isIso_lineRefineToBase`: **so the morphism down is not an isomorphism**,
+  which is the first such statement on this board about a refinement that refines. It is a
+  statement about this morphism and **not** about whether the two spaces are isomorphic; see this
+  file's `## What is not here`.
 
 ## What is not here
 
 * **No claim that the refined space is `ℙ¹`, or that it is not.** It is the gluing of two copies
-  of `𝔸¹ ∖ {0}` along `D(z)` in each, and no morphism relates it to
-  `ComplexAnalytic.projectiveLineSpace` in either direction. The only statement on this board
-  about a refinement's comparison morphism is `ComplexAnalytic.not_isIso_refineToBase`
-  (`Oka/Analytification/CoverRefinement.lean`), and there is no such morphism here to apply it
-  to. **What that gluing is has since been identified**, and this bullet said nothing about it:
-  the `D(z)` the two copies are glued along is the *whole* of each of them, so
-  `ComplexAnalytic.isoLineRefineGlued` (`OkaTest/RefineDatumUnitFamilyNode.lean`) says the glued
-  space is one copy of `𝔸¹ ∖ {0}`. **The comparison with `ℙ¹` is still absent** — that would need
-  the two spaces to be told apart, which nothing here does.
+  of `𝔸¹ ∖ {0}` along `D(z)` in each. **What that gluing is has since been identified**, and this
+  bullet said nothing about it: the `D(z)` the two copies are glued along is the *whole* of each of
+  them, so `ComplexAnalytic.isoLineRefineGlued` (`OkaTest/RefineDatumUnitFamilyNode.lean`) says the
+  glued space is one copy of `𝔸¹ ∖ {0}`. **The comparison with `ℙ¹` is still absent** — that would
+  need the two spaces to be told apart, which nothing here does.
+
+  **This bullet used to say that no morphism relates the refined space to
+  `ComplexAnalytic.projectiveLineSpace` in either direction, and that there was no comparison
+  morphism here at all.** Both were true when they were written and stopped being true when
+  `ComplexAnalytic.lineRefineToBase` was declared below: that morphism goes out of
+  `ComplexAnalytic.lineRefinement` and into `ComplexAnalytic.projectiveLineSpace`, and
+  `ComplexAnalytic.not_isIso_lineRefineToBase` says it is not an isomorphism. **What is absent is
+  the comparison of the two *spaces*, not of nothing at all**, and the two are different claims:
+  refuting `IsIso` for one morphism leaves open that some other morphism is one.
+  `ComplexAnalytic.not_isIso_refineToBase` (`Oka/Analytification/CoverRefinement.lean`) still does
+  not apply here, but not for want of a morphism — it is about
+  `ComplexAnalytic.refineToBase`, a refinement of a *single presentation* at an empty family, which
+  is a different construction from `ComplexAnalytic.refineDatumToBase` at a cover datum.
 * **Nothing about the refined overlaps being the geometric ones**, which is
   `Oka/Analytification/CrossMemberDatumGlue.lean`'s absence and is about the construction rather
   than about any input to it.
@@ -369,6 +382,31 @@ theorem not_surjective_base_lineRefineToBase :
   · exact lineOrigin_notMem_localisationOpen.{u}
       ((isOpenImmersion_lineIota.{u} (ULift.up 0)).base_open.injective hbz ▸ hz)
   · exact lineOrigin_notMem_range_ι.{u} (ULift.up 1) (ULift.up 0) (by decide) ⟨z, hbz⟩
+
+/-- **So the morphism down is not an isomorphism**, and this refinement is the first on this board
+that a `¬ IsIso` is available for.
+
+`ComplexAnalytic.AnalyticSpace.surjective_base_of_isIso` against the theorem above. **The whole
+content is that the theorem above is about the same morphism**, which the type of
+`ComplexAnalytic.lineRefineToBase` now says: it goes out of `ComplexAnalytic.lineRefinement` and
+into `ComplexAnalytic.projectiveLineSpace`, so this is a statement about the comparison between the
+refinement and the cover it refines.
+
+**Why the other `¬ IsIso` on this line does not give it.**
+`ComplexAnalytic.not_isIso_refineToBase` (`Oka/Analytification/CoverRefinement.lean`) is about
+`ComplexAnalytic.refineToBase`, which refines a *single presentation* by a family of opens and is
+stated at an empty one — where the refined space has no points at all. That is a different
+construction from `ComplexAnalytic.refineDatumToBase` at a cover datum, and it is a degenerate
+instance of it; **here the refinement refines, by a proper non-empty open of each member**, which
+is `ComplexAnalytic.localisationOpen_lineRefineFam_ne_top` and `…_ne_bot` above.
+
+**This does not say the two spaces are non-isomorphic**, and no sentence in this file should be
+read as though it did: it refutes `IsIso` for *this* morphism, and two spaces can be isomorphic by
+a morphism other than the one in hand. `ComplexAnalytic.AnalyticSpace.not_surjective_sigmaι_base`
+(`Oka/AnalyticSpace/Sigma.lean`) carries the same caveat for the same reason, and the `ℙ¹`
+comparison this file's `## What is not here` records as absent stays absent. -/
+theorem not_isIso_lineRefineToBase : ¬ IsIso lineRefineToBase.{u} := fun _ ↦
+  not_surjective_base_lineRefineToBase.{u} (AnalyticSpace.surjective_base_of_isIso.{u} _)
 
 end
 

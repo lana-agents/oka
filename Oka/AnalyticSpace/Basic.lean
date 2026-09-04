@@ -77,6 +77,14 @@ different files until it was collected here.
   in. `Oka/AnalyticSpace/LocalModel.lean` restates it for an open subset of `ℂ^n` and the
   constants there, which is a different spelling of the same fact and not a second result.
 
+And one statement about the category of analytic spaces itself, rather than about linearity over
+the constants.
+
+- `ComplexAnalytic.AnalyticSpace.surjective_base_of_isIso`: **an isomorphism of analytic spaces is
+  surjective on points**, which is what turns a non-surjectivity into a `¬ IsIso`. It says nothing
+  about whether the two spaces are isomorphic by some *other* morphism, and every consumer of it
+  owes that caveat.
+
 ## References
 
 - [Hans Grauert and Reinhold Remmert, *Coherent analytic sheaves*][grauert-remmert1984]
@@ -484,6 +492,33 @@ theorem mono_of_isCutOutBy {B C : AnalyticSpace.{u}} (j : B ⟶ C) {k : ℕ}
     {f : Fin k → C.toLocallyRingedSpace.presheaf.obj (op ⊤)}
     (hcut : IsCutOutBy j.toLRSHom f) : Mono j :=
   forgetToLocallyRingedSpace.mono_of_mono_map hcut.mono
+
+/-- **An isomorphism of analytic spaces is surjective on points.**
+
+`AlgebraicGeometry.LocallyRingedSpace.homeoOfIso` at the image of `f` under
+`ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace`. That is the same bridge
+`ComplexAnalytic.IsCutOutBy.comp_iso` above spends, reached through the functor rather than
+restated.
+
+**Nothing has to be established about the functor.** `CategoryTheory.Functor.map_isIso` is an
+instance: *every* functor preserves isomorphisms, so `forgetToLocallyRingedSpace.map f` is an
+isomorphism of locally ringed spaces for free and `CategoryTheory.asIso` packages it. What would
+need an argument is **reflection** — that a morphism of analytic spaces whose underlying morphism is
+invertible is itself invertible — and that is *not* the direction this proof uses and is not claimed
+anywhere here. `ComplexAnalytic.AnalyticSpace.Hom` is a structure over
+`AlgebraicGeometry.LocallyRingedSpace.Hom` carrying an `ComplexAnalytic.IsCLinearHom` field, so an
+`IsIso` in the ambient category is not on its face an `IsIso` here, and
+`ComplexAnalytic.IsCutOutBy.comp_iso` — whose isomorphism is one of locally ringed spaces — cannot
+quote this statement in the other direction.
+
+**What it does not say.** `¬ IsIso f` for one morphism `f` is not a statement that `X` and `Y` are
+non-isomorphic: two spaces can be isomorphic by a morphism other than the one in hand.
+`ComplexAnalytic.AnalyticSpace.not_surjective_sigmaι_base`
+(`Oka/AnalyticSpace/Sigma.lean`) already writes that caveat for its own statement, and every
+consumer of this one inherits it. -/
+theorem surjective_base_of_isIso {X Y : AnalyticSpace.{u}} (f : X ⟶ Y) [IsIso f] :
+    Function.Surjective (f.toLRSHom.base : X → Y) :=
+  (LocallyRingedSpace.homeoOfIso (asIso (forgetToLocallyRingedSpace.map f))).surjective
 
 end AnalyticSpace
 
