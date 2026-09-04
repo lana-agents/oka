@@ -102,8 +102,10 @@ theorem below produces and one is all it claims.
 - `ComplexAnalytic.lineRefineFam`: **the refining family**, the coordinate `z` on each chart.
 - `ComplexAnalytic.lineRefinement`: **the analytic space of the refined cover**, with no
   hypothesis left open.
-- `ComplexAnalytic.lineRefineToBase`: **the morphism down to the cover it refines**, which is
-  `ComplexAnalytic.refineDatumToBase` at this refinement's fifteen arguments.
+- `ComplexAnalytic.lineRefineToBase`: **the morphism down to the cover it refines**, out of
+  `ComplexAnalytic.lineRefinement` and into `ComplexAnalytic.projectiveLineSpace`. It is
+  `ComplexAnalytic.refineDatumToBase` at this refinement, and both of its ends are definitionally
+  one of those two objects, so its type names them.
 
 ## Main results
 
@@ -144,11 +146,13 @@ theorem below produces and one is all it claims.
 * **Nothing about the morphism down beyond its image missing one point.** The refined space does
   not map onto the space it refines, and that is all: **no fibre, no injectivity, no claim that the
   image is exactly the complement of two points**, and nothing about the refined members forming an
-  open cover of anything. `ComplexAnalytic.lineRefineToBase` is spelled here at fifteen arguments
-  because nothing in `Oka/` names the morphism at the unit family; a `refineDatumUnitFamToBase`
-  there would be the better shape and would cost `Oka/Analytification/RefineDatumUnitFamily.lean`
-  and `Oka/Analytification/RefineDatumToBase.lean` an import edge between two files that are
-  currently siblings.
+  open cover of anything. `ComplexAnalytic.lineRefineToBase`'s body is spelled here at fifteen
+  arguments because nothing in `Oka/` names the morphism at the unit family, and naming its two
+  ends in its type — which is free and is done — does not retire that; a
+  `refineDatumUnitFamToBase` there would still be the better shape for a second consumer and would
+  still cost `Oka/Analytification/RefineDatumUnitFamily.lean` and
+  `Oka/Analytification/RefineDatumToBase.lean` an import edge between two files that are currently
+  siblings.
 * **No axiom guards.** Declarations of the test library carry none —
   `ComplexAnalytic.nodeCoverObj` and `ComplexAnalytic.lineCoverObj` are the precedent — and
   `OkaTest/Axioms.lean`'s placement rule is about `Oka/`.
@@ -292,28 +296,25 @@ the second at `Function.injective_id`.
 
 **A `def` and not a `have` inside the theorem below**, because the statement of that theorem would
 otherwise carry all fifteen and be unreadable, and because the source and target are worth being
-able to name: the source is the refined analytification `ComplexAnalytic.lineRefinement` is built
-from and the target is `ComplexAnalytic.projectiveLineSpace`'s gluing. -/
-def lineRefineToBase :
-    refineDatumAnalytificationOfLaws.{u} lineCoverObj.{u} lineCoverPoly.{u}
-        (id : pair.{u} → pair.{u}) lineRefineFam.{u}
-        (fun x y ↦ lineCoverPoly.{u} (id x) (id y)) lineSwapIso.{u}
-        (refineDatumUnitFamR.{u} lineCoverObj.{u} lineCoverPoly.{u} id lineRefineFam.{u}
-          lineSwapIso.{u} isUnit_lineRefineFam.{u})
-        (refineDatumUnitFamU.{u} lineCoverObj.{u} lineCoverPoly.{u} id lineRefineFam.{u}
-          lineSwapIso.{u} isUnit_lineRefineFam.{u})
-        (refineDatumUnitFamCrossEq.{u} lineCoverObj.{u} lineCoverPoly.{u} id lineRefineFam.{u}
-          lineSwapIso.{u} isUnit_lineRefineFam.{u})
-        (refineDatumUnitFamCrossUnit.{u} lineCoverObj.{u} lineCoverPoly.{u} id lineRefineFam.{u}
-          lineSwapIso.{u} isUnit_lineRefineFam.{u})
-        hrange_lineCover.{u}
-        (refineDatumRangeCross_poly.{u} lineCoverObj.{u} lineCoverPoly.{u} id lineRefineFam.{u}
-          lineSwapIso.{u} _ _ _ _ hrange_lineCover.{u})
-        (refineDatumRangeEq_of_injective.{u} lineCoverObj.{u} lineCoverPoly.{u} id
-          lineRefineFam.{u} _ lineSwapIso.{u} _ _ _ _ Function.injective_id)
-        hsymm_lineCover.{u} hcocycle_lineCover.{u} ⟶
-      coverAnalytification.{u} lineCoverObj.{u} lineCoverPoly.{u} lineSwapIso.{u}
-        hrange_lineCover.{u} hsymm_lineCover.{u} hcocycle_lineCover.{u} :=
+able to name — which the type above does, since **each end is one of this file's named objects on
+the nose** and neither is a gluing:
+
+* the source **is** `ComplexAnalytic.lineRefinement`, and not an analytification that definition is
+  built from. `ComplexAnalytic.lineRefinement` is
+  `ComplexAnalytic.refineDatumUnitFamAnalytification` at these arguments, and that definition
+  (`Oka/Analytification/RefineDatumUnitFamily.lean:341`) is itself
+  `ComplexAnalytic.refineDatumAnalytificationOfLaws` at exactly the arguments the body spells
+  below — the same auxiliary polynomial family, the same four unit-family choices, the same two
+  range conditions, the same three laws, in that order.
+* the target **is** `ComplexAnalytic.projectiveLineSpace`, an analytic space, and not that space's
+  gluing. `OkaTest/ProjectiveLine.lean:462` defines it as `ComplexAnalytic.coverAnalytification`
+  at these arguments verbatim; the gluing is a different object, which the theorem below reaches
+  through `ComplexAnalytic.toLRSHom_coverIota` and this type does not mention at all.
+
+**Those two unfoldings are the whole content of the short type**, which is why they are cited
+rather than left to a reader: no bridge and no transport enters the term, so the body is the
+fifteen-argument `ComplexAnalytic.refineDatumToBase` call unchanged. -/
+def lineRefineToBase : lineRefinement.{u} ⟶ projectiveLineSpace.{u} :=
   refineDatumToBase.{u} lineCoverObj.{u} lineCoverPoly.{u} id lineRefineFam.{u}
     (fun x y ↦ lineCoverPoly.{u} (id x) (id y)) lineSwapIso.{u}
     (refineDatumUnitFamR.{u} lineCoverObj.{u} lineCoverPoly.{u} id lineRefineFam.{u}
