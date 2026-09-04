@@ -125,6 +125,26 @@ cross-member work has been done for them. That is not a small distinction on thi
 cross-member equations are what taxis #1287 spent a fortnight on and what
 `Oka/Analytification/RefineDatumUnitFamily.lean` still asks a unit hypothesis for.
 
+## And the refined space has a cover of its own, which the morphism down carries to that one
+
+`ComplexAnalytic.refineDatumGluedOpenCover` is the other cover this file's `## What is not here`
+kept apart from the first: the refined members covering **the space they glue to** rather than the
+space they refine. It is the general cover's own open cover at the refined datum, so nothing is
+built for it — what makes it worth a name is that it is the cover at which the restriction law
+`ComplexAnalytic.coverIota_comp_refineDatumToBase` becomes a statement about two covers.
+
+**That is `ComplexAnalytic.refineDatumOpenCover_map_eq_comp`, and it is more than the ranges.**
+Every earlier statement here relates the two families through images —
+`ComplexAnalytic.range_base_refineDatumToBase_eq_iUnion_range` is the sharpest of them — and an
+equality of images is compatible with the two families being unrelated as morphisms. The
+factorisation says the `b`-th map of the cover of `X^an` **is** the `b`-th map of the refined
+space's own cover followed by the morphism down, at the same index, with no reindexing.
+
+**The two covers have different hypotheses and that is not an asymmetry to repair.** The cover of
+`X^an` reads no refined datum, so it exists wherever the refined members exhaust the space; the
+cover of the refined space needs the datum, because the space does. The factorisation is stated
+where both are available and takes no hypothesis of its own.
+
 ## The instance, and it is what stops the condition from being empty
 
 `ComplexAnalytic.refineDatumOneCovers`: at `Oka/Analytification/RefineDatumWitness.lean`'s trivial
@@ -227,6 +247,9 @@ declarations across two files and pays two edges instead of one.
 - `ComplexAnalytic.refineDatumOneOpenCover`: **that cover at the trivial refining family and a
   surjective index map**, which is what stops the definition above from being one with no
   instance.
+- `ComplexAnalytic.refineDatumGluedOpenCover`: **the refined members as an open cover of the space
+  they glue to**, which is the other of the two covers this file's `## What is not here` kept
+  apart — a cover of the refined analytic space and not of `X^an`.
 
 ## Main results
 
@@ -286,6 +309,14 @@ declarations across two files and pays two edges instead of one.
   `ComplexAnalytic.surjective_base_refineDatumToBase_iff_iUnion_range`: **the image of the morphism
   down is that union, so the cover's hypothesis is exactly that morphism's surjectivity** — the
   only two statements in the section that read the refined datum.
+- `ComplexAnalytic.refineDatumGluedOpenCover_obj` and
+  `ComplexAnalytic.refineDatumGluedOpenCover_map`: **that cover's members are the refined members'
+  analytifications and its maps are the refined datum's own inclusions**, both definitional.
+- `ComplexAnalytic.refineDatumGluedOpenCover_map_comp_refineDatumToBase` and
+  `ComplexAnalytic.refineDatumOpenCover_map_eq_comp`: **the morphism down carries each of those
+  inclusions to the corresponding refined member of `X^an`, so the cover of `X^an` is the refined
+  space's own cover composed with it** — map by map, where the statements above relate the two
+  covers only through their ranges.
 
 ## What is not here
 
@@ -313,14 +344,16 @@ declarations across two files and pays two edges instead of one.
   the image of neither refined member. **Neither answer is derived from the other**, and nothing
   here is a statement about that refinement in either direction: what this file supplies is the
   general theorem the instance spends.
-* **The open cover out of the refined members is of `X^an` and not of the refined space.**
-  **This bullet said there was none at all**, and priced it at the `idx` choice and an
-  open-immersion statement for the composite; both are supplied below and each is one line, so
-  what it recorded as absent is `ComplexAnalytic.refineDatumOpenCover`. What is still absent is
-  the other direction: nothing here presents the members of the *refined* datum as a cover of the
-  space they glue to, and `ComplexAnalytic.refineDatumMemberIota` is not
-  `AlgebraicGeometry.LocallyRingedSpace.OpenCover.fromGlued` of anything — the refined space enters
-  this file only through `ComplexAnalytic.range_base_refineDatumToBase_eq_iUnion_range`.
+* **Neither of the two covers is `AlgebraicGeometry.LocallyRingedSpace.OpenCover.fromGlued` of the
+  other.** **This bullet said the open cover here was of `X^an` and not of the refined space, and
+  that nothing presented the members of the *refined* datum as a cover of the space they glue to**;
+  the second half is `ComplexAnalytic.refineDatumGluedOpenCover` and the first is now a distinction
+  between two definitions rather than an absence. What is still absent is the identification:
+  `ComplexAnalytic.refineDatumToBase` is not
+  `AlgebraicGeometry.LocallyRingedSpace.OpenCover.fromGlued` of
+  `ComplexAnalytic.refineDatumOpenCover`, and nothing here says the refined space is the gluing of
+  that cover — `ComplexAnalytic.refineDatumOpenCover_map_eq_comp` says the maps factor, which is a
+  statement about each member and not about the two spaces.
 * **Nothing that says the refined datum *refines* the original space.**
   `Oka/Analytification/CrossMemberDatum.lean`'s remaining half — that the refined overlaps are cut
   out where `ComplexAnalytic.refineDatumPoly` says they are — is a statement about that definition
@@ -1121,8 +1154,10 @@ unless it is spelled again.
 **What this is not.** It is a cover of `X^an` by the *refined members*, which are opens of the
 original members; it says nothing about the refined analytic space
 `ComplexAnalytic.refineDatumAnalytificationOfLaws`, and in particular it is not
-`AlgebraicGeometry.LocallyRingedSpace.OpenCover.fromGlued` of anything. What relates the two is
-`ComplexAnalytic.range_base_refineDatumToBase_eq_iUnion_range` below. -/
+`AlgebraicGeometry.LocallyRingedSpace.OpenCover.fromGlued` of anything. What relates the two are
+`ComplexAnalytic.range_base_refineDatumToBase_eq_iUnion_range` and
+`ComplexAnalytic.refineDatumOpenCover_map_eq_comp` below — the first through the ranges and the
+second map by map. -/
 def refineDatumOpenCover
     (hcov : ⋃ b : B, Set.range (refineDatumMemberIota.{u} obj poly σ fam glue hsym hrange
       hcocycle b).toLRSHom.base = Set.univ) :
@@ -1260,6 +1295,132 @@ def refineDatumOneOpenCover (hs : Function.Surjective σ) :
   refineDatumOpenCover.{u} obj poly σ (fun _ ↦ 1) glue hsym hrange hcocycle
     (iUnion_range_base_refineDatumMemberIota_eq_univ.{u} obj poly σ _ glue hsym hrange hcocycle
       (refineDatumOneCovers.{u} obj σ hs))
+
+end
+
+/-! ### And the refined space's own members cover it, compatibly with the morphism down -/
+
+noncomputable section
+
+variable {J B : Type u} (obj : J → Presentation.{u})
+  (poly : ∀ i : J, J → MvPolynomial (ULift.{u} (Fin (obj i).n)) ℂ)
+  (σ : B → J)
+  (fam : ∀ b : B, MvPolynomial (ULift.{u} (Fin (obj (σ b)).n)) ℂ)
+  (q : ∀ a : B, B → MvPolynomial (ULift.{u} (Fin (obj (σ a)).n)) ℂ)
+  (glue : ∀ i j : J, coverOverlap.{u} obj poly i j ≅ coverOverlap.{u} obj poly j i)
+  (rr : ∀ _ b : B, MvPolynomial (ULift.{u} (Fin ((obj (σ b)).n + 1))) ℂ)
+  (uu : ∀ a b : B, (PresentedAlgebra.{u} ((obj (σ b)).n + 1) ((obj (σ b)).k + 1)
+    (localisationPresentation.{u} (obj (σ b)).g (poly (σ b) (σ a))))ˣ)
+  (he : ∀ a b : B, ∀ _ : σ a ≠ σ b,
+    RefineDatumCrossEq.{u} obj σ fam poly q glue a b (rr a b))
+  (hu : ∀ a b : B, ∀ _ : σ a ≠ σ b,
+    RefineDatumCrossUnit.{u} obj σ fam poly q a b (rr a b) (uu a b))
+  (hsym : ∀ i j : J, glue j i = (glue i j).symm)
+  (hrange : ∀ i j k : J, i ≠ j → i ≠ k → j ≠ k →
+    Set.range (coverTripleIncl.{u} obj poly i j k ≫
+        coverTransitionHom.{u} obj poly glue i j).base ⊆
+      (coverOpen.{u} obj poly j k : Set (coverSpace.{u} obj j)))
+  (hq : RefineDatumRangeCross.{u} obj poly σ fam q glue rr uu he hu)
+  (hf : RefineDatumRangeEq.{u} obj poly σ fam q glue rr uu he hu)
+  (hcocycle : ∀ i j k : J, ∀ hij : i ≠ j, ∀ hik : i ≠ k, ∀ hjk : j ≠ k,
+    coverTriple.{u} obj poly glue hrange i j k hij hik hjk ≫
+      coverTriple.{u} obj poly glue hrange j k i hjk hij.symm hik.symm ≫
+        coverTriple.{u} obj poly glue hrange k i j hik.symm hjk.symm hij = 𝟙 _)
+
+/-- **The refined members as an open cover of the space they glue to** — the direction this file's
+`## What is not here` kept on recording as absent beside the one it retired.
+
+`ComplexAnalytic.coverAnalytificationOpenCover` at the refined datum, and **nothing is built
+here**: a refinement's `ComplexAnalytic.refineDatumObj`, `ComplexAnalytic.refineDatumPoly` and
+`ComplexAnalytic.refineDatumGlue` are a cover datum, its three laws are the ones
+`ComplexAnalytic.refineDatumToBase` already passes, and the general cover's own open cover applies
+to it with no transport. The type is stated against
+`ComplexAnalytic.refineDatumAnalytificationOfLaws` rather than against the
+`ComplexAnalytic.coverAnalytification` that definition unfolds to, so that a caller reads the space
+this line is about.
+
+**This costs the hypotheses the cover of `X^an` above does not.**
+`ComplexAnalytic.refineDatumOpenCover` covers `X^an` by opens of the original members and reads no
+refined datum at all, which is why it is available at data for which the cross-member equations
+have not been discharged; this one is a cover of the glued refined space and so needs the whole
+datum. **They are different statements about
+different spaces and neither is the other's corollary** — what relates them is the factorisation
+below. -/
+def refineDatumGluedOpenCover :
+    LocallyRingedSpace.OpenCover.{u}
+      (refineDatumAnalytificationOfLaws.{u} obj poly σ fam q glue rr uu he hu hrange hq hf hsym
+        hcocycle).toLocallyRingedSpace :=
+  coverAnalytificationOpenCover.{u} (refineDatumObj.{u} obj σ fam)
+    (refineDatumPoly.{u} obj poly σ fam q)
+    (refineDatumGlue.{u} obj σ fam poly q glue rr uu he hu)
+    (refineDatumHrange.{u} obj poly σ fam q glue rr uu he hu hrange hq hf)
+    (refineDatumGlue_symm.{u} obj σ fam poly q glue rr uu hsym he hu)
+    (refineDatumHcocycle.{u} obj poly σ fam q glue rr uu he hu hrange hq hf hsym hcocycle)
+
+/-- **Its `b`-th member is the `b`-th refined member's analytification**, by `rfl` — the same
+member `ComplexAnalytic.refineDatumOpenCover_obj` gives, so the two covers are indexed by `B` and
+have the same members and differ only in what they map into. -/
+@[simp]
+theorem refineDatumGluedOpenCover_obj (b : B) :
+    (refineDatumGluedOpenCover.{u} obj poly σ fam q glue rr uu he hu hsym hrange hq hf
+        hcocycle).obj b =
+      (AnalyticSpace.analytification.{u}
+        (localisationPresentation.{u} (obj (σ b)).g (fam b))).toLocallyRingedSpace :=
+  rfl
+
+/-- **And its `b`-th map is the refined datum's own `ComplexAnalytic.coverIota`**, by `rfl`, for
+the reason `ComplexAnalytic.coverAnalytificationOpenCover_map` gives: without it this is a cover
+whose maps are spelled in the glue data's vocabulary and a consumer would have to unfold the
+definition to say what it covers the refined space by. -/
+@[simp]
+theorem refineDatumGluedOpenCover_map (b : B) :
+    (refineDatumGluedOpenCover.{u} obj poly σ fam q glue rr uu he hu hsym hrange hq hf
+        hcocycle).map b =
+      (coverIota.{u} (refineDatumObj.{u} obj σ fam) (refineDatumPoly.{u} obj poly σ fam q)
+        (refineDatumGlue.{u} obj σ fam poly q glue rr uu he hu)
+        (refineDatumHrange.{u} obj poly σ fam q glue rr uu he hu hrange hq hf)
+        (refineDatumGlue_symm.{u} obj σ fam poly q glue rr uu hsym he hu)
+        (refineDatumHcocycle.{u} obj poly σ fam q glue rr uu he hu hrange hq hf hsym hcocycle)
+        b).toLRSHom :=
+  rfl
+
+/-- **The morphism down carries this cover's `b`-th map to
+`ComplexAnalytic.refineDatumMemberIota`**, which is what ties the two covers together.
+
+`ComplexAnalytic.coverIota_comp_refineDatumToBase` under `congrArg`, and it is that theorem's
+first consumer that is about a *cover* rather than about a range: the restriction law says the
+morphism down restricts on the `b`-th refined member to that member's projection and the inclusion
+of the member it lies over, and the map of this cover **is** that restriction. -/
+theorem refineDatumGluedOpenCover_map_comp_refineDatumToBase (b : B) :
+    (refineDatumGluedOpenCover.{u} obj poly σ fam q glue rr uu he hu hsym hrange hq hf
+          hcocycle).map b ≫
+        (refineDatumToBase.{u} obj poly σ fam q glue rr uu he hu hsym hrange hq hf
+          hcocycle).toLRSHom =
+      (refineDatumMemberIota.{u} obj poly σ fam glue hsym hrange hcocycle b).toLRSHom :=
+  congrArg AnalyticSpace.Hom.toLRSHom
+    (coverIota_comp_refineDatumToBase.{u} obj poly σ fam q glue rr uu he hu hsym hrange hq hf
+      hcocycle b)
+
+/-- **So the cover of `X^an` by the refined members is this one composed with the morphism down**,
+map by map — the sentence the bullet above could only make about ranges.
+
+`ComplexAnalytic.range_base_refineDatumToBase_eq_iUnion_range` says the *image* of the morphism
+down is the union of the ranges of `ComplexAnalytic.refineDatumOpenCover`'s maps; this says the
+maps themselves factor, which is strictly more and is what a consumer of the two covers wants.
+**The hypothesis is still the ranges covering and not `ComplexAnalytic.RefineDatumCovers`**, for
+the reason the definition above it gives, and it is used only to have a cover of `X^an` to state
+the equation against — the factorisation itself is the theorem above and takes no hypothesis at
+all. -/
+theorem refineDatumOpenCover_map_eq_comp
+    (hcov : ⋃ b : B, Set.range (refineDatumMemberIota.{u} obj poly σ fam glue hsym hrange
+      hcocycle b).toLRSHom.base = Set.univ) (b : B) :
+    (refineDatumOpenCover.{u} obj poly σ fam glue hsym hrange hcocycle hcov).map b =
+      (refineDatumGluedOpenCover.{u} obj poly σ fam q glue rr uu he hu hsym hrange hq hf
+          hcocycle).map b ≫
+        (refineDatumToBase.{u} obj poly σ fam q glue rr uu he hu hsym hrange hq hf
+          hcocycle).toLRSHom :=
+  (refineDatumGluedOpenCover_map_comp_refineDatumToBase.{u} obj poly σ fam q glue rr uu he hu hsym
+    hrange hq hf hcocycle b).symm
 
 end
 
