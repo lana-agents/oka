@@ -67,19 +67,43 @@ proved above that `D(z)` is a *proper* open of its chart. So the theorem below i
 non-degeneracy statements read once more, in the vocabulary of the condition: **a family that cuts
 a member down cannot cover it.**
 
-**This says nothing about whether the refinement's morphism down is surjective**, and no sentence
-here should be read as though it did. `ComplexAnalytic.RefineDatumCovers` is a *sufficient*
-condition for that surjectivity and `ComplexAnalytic.dupStrict` is exactly the theorem that it is
-not a necessary one, so a datum that fails the condition may still have a surjection down. What
-surjectivity is equivalent to is `ComplexAnalytic.surjective_base_refineDatumToBase_iff`, this file
-does not instantiate it, and the morphism `ComplexAnalytic.refineDatumToBase` appears nowhere
-below.
+**That does not by itself say the refinement fails to cover**, and no sentence here should be read
+as though it did. `ComplexAnalytic.RefineDatumCovers` is a *sufficient* condition for the morphism
+down to be surjective and `ComplexAnalytic.dupStrict` is exactly the theorem that it is not a
+necessary one, so a datum that fails the condition may still have a surjection down. **The two
+questions are answered separately below and they happen to agree**, which they were under no
+obligation to do.
+
+## And it does not cover, which is the second question and needed the first's answer for nothing
+
+`ComplexAnalytic.lineRefineToBase` is `ComplexAnalytic.refineDatumToBase` at this refinement,
+spelled out; `ComplexAnalytic.not_surjective_base_lineRefineToBase` says it is **not surjective**.
+So the refined space does not map onto the space it refines, and this is the first statement on
+this board about a refining family that cuts its members down rather than about `fam ≡ 1`.
+
+The route is `ComplexAnalytic.surjective_base_refineDatumToBase_iff` — surjective exactly when the
+images of the refined members are everything — spent in the negative direction, which is the
+direction `Oka/Analytification/RefineDatumCover.lean` says a caller arguing the other way has and
+which had no consumer until now. **The point that is missed is the origin of the first chart**, and
+the two cases are the two ways it could have been reached: through the first chart, where
+`ComplexAnalytic.isOpenImmersion_lineIota`'s open embedding is injective and
+`ComplexAnalytic.lineOrigin_notMem_localisationOpen` finishes it, and through the second, which is
+`ComplexAnalytic.lineOrigin_notMem_range_ι` with the point of the first member left arbitrary.
+
+**What this is not is a statement about `ℙ¹`.** `OkaTest/ProjectiveLine.lean` says in terms that
+nothing there shows the glued space *is* `ℙ¹` — it is not shown compact and not distinguished from
+the analytification of a single presentation. So what is missed is **the origin of the first
+chart** and not *the point `0` of the projective line*, and nothing here says whether the second
+chart's origin is the same point of the gluing or a different one: one missed point is what the
+theorem below produces and one is all it claims.
 
 ## Main definitions
 
 - `ComplexAnalytic.lineRefineFam`: **the refining family**, the coordinate `z` on each chart.
 - `ComplexAnalytic.lineRefinement`: **the analytic space of the refined cover**, with no
   hypothesis left open.
+- `ComplexAnalytic.lineRefineToBase`: **the morphism down to the cover it refines**, which is
+  `ComplexAnalytic.refineDatumToBase` at this refinement's fifteen arguments.
 
 ## Main results
 
@@ -98,6 +122,9 @@ below.
 - `ComplexAnalytic.not_refineDatumCovers_lineRefineFam`: **and this refinement does not cover in
   the sense the refining condition asks**, because a proper open is not the whole member. It is a
   statement about the condition and not about any morphism.
+- `ComplexAnalytic.not_surjective_base_lineRefineToBase`: **and the morphism down really is not
+  surjective**, which is the other question and does not follow from the one above — the origin of
+  the first chart is in the image of neither refined member.
 
 ## What is not here
 
@@ -114,13 +141,14 @@ below.
 * **Nothing about the refined overlaps being the geometric ones**, which is
   `Oka/Analytification/CrossMemberDatumGlue.lean`'s absence and is about the construction rather
   than about any input to it.
-* **Nothing about the morphism down, and in particular no surjectivity.**
-  `ComplexAnalytic.refineDatumToBase` is not spelled at this refinement — at the unit family it
-  would take the four choices of `Oka/Analytification/RefineDatumUnitFamily.lean` and the two range
-  conditions explicitly, and nothing in `Oka/` shortens that — so whether this refinement's space
-  maps **onto** the glued space is untouched here in both directions. The theorem about
-  `ComplexAnalytic.RefineDatumCovers` below is not evidence either way, for the reason its own
-  paragraph gives.
+* **Nothing about the morphism down beyond its image missing one point.** The refined space does
+  not map onto the space it refines, and that is all: **no fibre, no injectivity, no claim that the
+  image is exactly the complement of two points**, and nothing about the refined members forming an
+  open cover of anything. `ComplexAnalytic.lineRefineToBase` is spelled here at fifteen arguments
+  because nothing in `Oka/` names the morphism at the unit family; a `refineDatumUnitFamToBase`
+  there would be the better shape and would cost `Oka/Analytification/RefineDatumUnitFamily.lean`
+  and `Oka/Analytification/RefineDatumToBase.lean` an import edge between two files that are
+  currently siblings.
 * **No axiom guards.** Declarations of the test library carry none —
   `ComplexAnalytic.nodeCoverObj` and `ComplexAnalytic.lineCoverObj` are the precedent — and
   `OkaTest/Axioms.lean`'s placement rule is about `Oka/`.
@@ -233,7 +261,7 @@ theorem not_isConstant_id_pair :
     ¬ ∃ j : pair.{u}, ∀ b : pair.{u}, (id : pair.{u} → pair.{u}) b = j :=
   not_isConstant_id.{u}
 
-/-! ### And it does not cover -/
+/-! ### And it does not meet the covering condition -/
 
 /-- **This refinement does not meet the refining condition.**
 
@@ -251,6 +279,95 @@ theorem not_refineDatumCovers_lineRefineFam :
     ¬ RefineDatumCovers.{u} lineCoverObj.{u} (id : pair.{u} → pair.{u}) lineRefineFam.{u} :=
   not_refineDatumCovers_id_of_ne_top.{u} lineCoverObj.{u} lineRefineFam.{u} (ULift.up 0)
     (localisationOpen_lineRefineFam_ne_top.{u} (ULift.up 0))
+
+/-! ### And it does not cover: the morphism down is not surjective -/
+
+/-- **The morphism down to the cover this refinement refines.**
+
+`ComplexAnalytic.refineDatumToBase` at this refinement, which is fifteen explicit arguments because
+nothing in `Oka/` names the morphism at a family that is a unit on each overlap — the four choices
+are `Oka/Analytification/RefineDatumUnitFamily.lean`'s and the two range conditions are
+`ComplexAnalytic.refineDatumRangeCross_poly` and `ComplexAnalytic.refineDatumRangeEq_of_injective`,
+the second at `Function.injective_id`.
+
+**A `def` and not a `have` inside the theorem below**, because the statement of that theorem would
+otherwise carry all fifteen and be unreadable, and because the source and target are worth being
+able to name: the source is the refined analytification `ComplexAnalytic.lineRefinement` is built
+from and the target is `ComplexAnalytic.projectiveLineSpace`'s gluing. -/
+def lineRefineToBase :
+    refineDatumAnalytificationOfLaws.{u} lineCoverObj.{u} lineCoverPoly.{u}
+        (id : pair.{u} → pair.{u}) lineRefineFam.{u}
+        (fun x y ↦ lineCoverPoly.{u} (id x) (id y)) lineSwapIso.{u}
+        (refineDatumUnitFamR.{u} lineCoverObj.{u} lineCoverPoly.{u} id lineRefineFam.{u}
+          lineSwapIso.{u} isUnit_lineRefineFam.{u})
+        (refineDatumUnitFamU.{u} lineCoverObj.{u} lineCoverPoly.{u} id lineRefineFam.{u}
+          lineSwapIso.{u} isUnit_lineRefineFam.{u})
+        (refineDatumUnitFamCrossEq.{u} lineCoverObj.{u} lineCoverPoly.{u} id lineRefineFam.{u}
+          lineSwapIso.{u} isUnit_lineRefineFam.{u})
+        (refineDatumUnitFamCrossUnit.{u} lineCoverObj.{u} lineCoverPoly.{u} id lineRefineFam.{u}
+          lineSwapIso.{u} isUnit_lineRefineFam.{u})
+        hrange_lineCover.{u}
+        (refineDatumRangeCross_poly.{u} lineCoverObj.{u} lineCoverPoly.{u} id lineRefineFam.{u}
+          lineSwapIso.{u} _ _ _ _ hrange_lineCover.{u})
+        (refineDatumRangeEq_of_injective.{u} lineCoverObj.{u} lineCoverPoly.{u} id
+          lineRefineFam.{u} _ lineSwapIso.{u} _ _ _ _ Function.injective_id)
+        hsymm_lineCover.{u} hcocycle_lineCover.{u} ⟶
+      coverAnalytification.{u} lineCoverObj.{u} lineCoverPoly.{u} lineSwapIso.{u}
+        hrange_lineCover.{u} hsymm_lineCover.{u} hcocycle_lineCover.{u} :=
+  refineDatumToBase.{u} lineCoverObj.{u} lineCoverPoly.{u} id lineRefineFam.{u}
+    (fun x y ↦ lineCoverPoly.{u} (id x) (id y)) lineSwapIso.{u}
+    (refineDatumUnitFamR.{u} lineCoverObj.{u} lineCoverPoly.{u} id lineRefineFam.{u}
+      lineSwapIso.{u} isUnit_lineRefineFam.{u})
+    (refineDatumUnitFamU.{u} lineCoverObj.{u} lineCoverPoly.{u} id lineRefineFam.{u}
+      lineSwapIso.{u} isUnit_lineRefineFam.{u})
+    (refineDatumUnitFamCrossEq.{u} lineCoverObj.{u} lineCoverPoly.{u} id lineRefineFam.{u}
+      lineSwapIso.{u} isUnit_lineRefineFam.{u})
+    (refineDatumUnitFamCrossUnit.{u} lineCoverObj.{u} lineCoverPoly.{u} id lineRefineFam.{u}
+      lineSwapIso.{u} isUnit_lineRefineFam.{u})
+    hsymm_lineCover.{u} hrange_lineCover.{u}
+    (refineDatumRangeCross_poly.{u} lineCoverObj.{u} lineCoverPoly.{u} id lineRefineFam.{u}
+      lineSwapIso.{u} _ _ _ _ hrange_lineCover.{u})
+    (refineDatumRangeEq_of_injective.{u} lineCoverObj.{u} lineCoverPoly.{u} id lineRefineFam.{u}
+      _ lineSwapIso.{u} _ _ _ _ Function.injective_id)
+    hcocycle_lineCover.{u}
+
+/-- **The refined space does not map onto the space it refines.**
+
+`ComplexAnalytic.surjective_base_refineDatumToBase_iff` in the negative direction — the direction
+`Oka/Analytification/RefineDatumCover.lean` says a caller arguing the other way has, and which had
+no consumer until this one. The point that is missed is **the origin of the first chart**, in the
+glued space, and the two cases are the two members it could have been reached through:
+
+* through the first, where `ComplexAnalytic.isOpenImmersion_lineIota`'s open embedding is injective
+  — `LocallyRingedSpace.IsOpenImmersion` unfolds to a structure whose `base_open` field is an
+  `IsOpenEmbedding`, and `exact?` does not find this — so the point of `D(z)` mapping to it would
+  *be* the origin, which `ComplexAnalytic.lineOrigin_notMem_localisationOpen` forbids;
+* through the second, which is `ComplexAnalytic.lineOrigin_notMem_range_ι` with the point of the
+  first member left arbitrary, so `D(z)` being a subset of the chart costs nothing.
+
+`ComplexAnalytic.toLRSHom_coverIota` is `rfl`, so no bridge between the analytic space and the glue
+datum's gluing appears in the term.
+
+**This does not follow from `ComplexAnalytic.not_refineDatumCovers_lineRefineFam` and is not
+implied by it**: `ComplexAnalytic.dupStrict` is the theorem that the condition can fail where the
+surjectivity holds. The two are measured separately and agree. -/
+theorem not_surjective_base_lineRefineToBase :
+    ¬ Function.Surjective lineRefineToBase.{u}.toLRSHom.base := by
+  intro hsurj
+  have hcon := (surjective_base_refineDatumToBase_iff.{u} _ _ _ _ _ _ _ _ _ _ _ _ _ _ _).1 hsurj
+  have hmem : (lineIota.{u} (ULift.up 0)).toLRSHom.base lineOrigin.{u} ∈
+      ⋃ b : pair.{u}, (coverIota.{u} lineCoverObj.{u} lineCoverPoly.{u} lineSwapIso.{u}
+          hrange_lineCover.{u} hsymm_lineCover.{u} hcocycle_lineCover.{u} (id b)).toLRSHom.base ''
+        (localisationOpen.{u} (lineCoverObj.{u} (id b)).g (lineRefineFam.{u} b) :
+          Set (AnalyticSpace.analytification.{u} (lineCoverObj.{u} (id b)).g)) := by
+    rw [hcon]
+    trivial
+  obtain ⟨b, z, hz, hbz⟩ := Set.mem_iUnion.1 hmem
+  obtain ⟨b⟩ := b
+  fin_cases b
+  · exact lineOrigin_notMem_localisationOpen.{u}
+      ((isOpenImmersion_lineIota.{u} (ULift.up 0)).base_open.injective hbz ▸ hz)
+  · exact lineOrigin_notMem_range_ι.{u} (ULift.up 1) (ULift.up 0) (by decide) ⟨z, hbz⟩
 
 end
 
