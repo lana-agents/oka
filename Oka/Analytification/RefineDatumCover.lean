@@ -197,11 +197,15 @@ The tie is broken by what each candidate is for:
   `ComplexAnalytic.not_refineDatumCovers_id_of_ne_top` applies and that refinement does **not**
   meet `ComplexAnalytic.RefineDatumCovers`. `OkaTest/RefineDatumUnitFamily.lean` is where that is
   instantiated, and nothing here mentions it.
-  **Whether that refinement's `ComplexAnalytic.refineDatumToBase` is surjective is untouched, and
-  the paragraph above is not evidence about it in either direction**:
+  **Whether that refinement's `ComplexAnalytic.refineDatumToBase` is surjective is a second
+  question and the paragraph above is not evidence about it in either direction** —
   `ComplexAnalytic.dupStrict` is exactly the theorem that the condition is not necessary, so a
-  datum that fails it may still have a surjection down. That is the obvious next question and it is
-  a separate subject.
+  datum that fails it may still have a surjection down. `OkaTest/RefineDatumUnitFamily.lean`
+  answers that one too, separately and negatively, through
+  `ComplexAnalytic.surjective_base_refineDatumToBase_iff` and a point of the glued space that is in
+  the image of neither refined member. **Neither answer is derived from the other**, and nothing
+  here is a statement about that refinement in either direction: what this file supplies is the
+  general theorem the instance spends.
 * **No open cover out of the refined members.** `ComplexAnalytic.coverAnalytificationOpenCover`
   presents the *original* datum's members as an
   `AlgebraicGeometry.LocallyRingedSpace.OpenCover`; the same for the images of the refined members
