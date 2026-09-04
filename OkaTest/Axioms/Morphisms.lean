@@ -22,7 +22,11 @@ target, and to subspaces cut out by a family of global sections and by its pullb
 `### And a local isomorphism restricted to subspaces cut out by a family and by its pullbacks`.
 And one section is of a fourth kind, named here for the same reason: statements about the class
 of **isomorphisms**, which are not built from a topological criterion and are not transported from
-anywhere — `### An isomorphism of analytic spaces is bijective on points`.
+anywhere — `### An isomorphism of analytic spaces is bijective on points`. And one is of a fifth:
+statements about a topological property of a cover's **total space** rather than about any class
+of morphisms — that preconnectedness passes along a morphism surjective on points, and the
+separation of two covers of equal degree that buys —
+`### Connectedness of the total space separates two covers of the same degree`.
 
 **Named rather than counted from the end**, which is the repair and not the description. **The
 sentence this replaces called them *the last two***; they stopped being that when two further
@@ -1826,3 +1830,66 @@ info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_eq_of_iso_trivial' dep
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_eq_of_iso_trivial
+
+/-! ### Connectedness of the total space separates two covers of the same degree
+
+`Oka/AnalyticSpace/Basic.lean`'s transport of preconnectedness along a morphism surjective on
+points, and the four statements of `Oka/AnalyticSpace/FiniteEtaleOver.lean` it buys: that
+preconnectedness of the total space is an invariant of an object, the contrapositive that
+separates two objects by it, that a trivial cover with two distinct sheets is disconnected, and
+the two composed.
+
+**Appended as its own section rather than added to either of the two it draws from**, for the
+reason the sections above give — a section moved is a conflict for somebody else — and because
+the subject is neither of theirs. `### An isomorphism of analytic spaces is bijective on points`
+is about the class of isomorphisms and the first declaration below is stated at a surjection;
+`### The degree does not see a change of source, and is an invariant of a cover` is about
+`ComplexAnalytic.AnalyticSpace.degree`, and the whole point of this section is the separation that
+degree cannot make.
+
+**Named by file rather than counted**, as the section above says and for the reason it gives.
+
+**`ComplexAnalytic.AnalyticSpace.not_preconnectedSpace_sigma`, which is what the third statement
+below reads, is guarded in `OkaTest/Axioms/AnalyticSpace.lean`** beside the disjoint union's other
+statements, and so is `ComplexAnalytic.AnalyticSpace.isClopen_range_sigmaι_base` under it — a
+disjoint union is a space and not a morphism, which is the topic table's split.
+`OkaTest/FiniteEtaleOver.lean`'s `not_iso_trivial_sqOver`, the witness at the punctured line, is a
+test declaration and so is **not** guarded here: this file imports `Oka` and not `OkaTest`, the
+same reason the `### Cancellation of finiteness and of finite étaleness` section gives for its own
+omission. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.preconnectedSpace_of_surjective_base' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.preconnectedSpace_of_surjective_base
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preconnectedSpace_of_iso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preconnectedSpace_of_iso
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_iso_of_preconnectedSpace' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_iso_of_preconnectedSpace
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.not_preconnectedSpace_trivial' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.not_preconnectedSpace_trivial
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_iso_trivial_of_preconnectedSpace'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_iso_trivial_of_preconnectedSpace

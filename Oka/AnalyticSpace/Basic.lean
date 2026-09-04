@@ -87,6 +87,10 @@ constants.
   surjective on points**, which is what turns a non-surjectivity into a `¬ IsIso`. It says nothing
   about whether the two spaces are isomorphic by some *other* morphism, and every consumer of it
   owes that caveat.
+- `ComplexAnalytic.AnalyticSpace.preconnectedSpace_of_surjective_base`: **preconnectedness of the
+  underlying space passes along a morphism that is surjective on points**, so an isomorphism
+  transports it in either direction. This is the invariant that separates two covers of the same
+  degree, which the degree cannot.
 
 ## References
 
@@ -543,6 +547,33 @@ are doing. -/
 theorem surjective_base_of_isIso {X Y : AnalyticSpace.{u}} (f : X ⟶ Y) [IsIso f] :
     Function.Surjective (f.toLRSHom.base : X → Y) :=
   (bijective_base_of_isIso f).surjective
+
+/-- **Preconnectedness passes along a morphism that is surjective on points.**
+
+A continuous map with dense range carries a preconnected source to a preconnected target
+(`DenseRange.preconnectedSpace`), and a surjection has dense range; the continuity is the base
+map's own, the `base` field of a morphism of locally ringed spaces being a map in `TopCat`.
+**Nothing analytic is used and nothing about the structure sheaves is read here** — this is the
+topological statement, spelled at a morphism of analytic spaces because that is where its
+consumers are.
+
+**Stated at a surjection rather than at an `[IsIso f]`**, although every consumer so far supplies
+the surjection by `ComplexAnalytic.AnalyticSpace.surjective_base_of_isIso` above. The hypothesis
+the proof uses is dense range, of which surjectivity is the first weakening anyone reaches for;
+asking for an isomorphism would put an invertible morphism in a statement that never inverts one.
+
+**What this buys is an invariant of a cover that the degree is not.**
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_eq_of_iso`
+(`Oka/AnalyticSpace/FiniteEtaleOver.lean`) separates covers by a number, and two covers of the
+same degree are beyond it — at the punctured line the squaring map and the trivial two-sheeted
+cover both have degree `2`. Preconnectedness of the *total space* is the classical separator, and
+this is the transport that makes it one: an isomorphism of covers is in particular a morphism of
+analytic spaces surjective on points, so a preconnected total space cannot be isomorphic to a
+disconnected one. -/
+theorem preconnectedSpace_of_surjective_base {X Y : AnalyticSpace.{u}} [PreconnectedSpace X]
+    (f : X ⟶ Y) (hf : Function.Surjective (f.toLRSHom.base : X → Y)) :
+    PreconnectedSpace Y :=
+  hf.denseRange.preconnectedSpace f.toLRSHom.base.hom.continuous
 
 end AnalyticSpace
 

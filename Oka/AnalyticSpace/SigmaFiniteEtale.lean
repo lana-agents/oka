@@ -93,9 +93,13 @@ blocker of the Riemann existence theorem and is untouched.
   finite étale** for a finite `ι`.
 - `ComplexAnalytic.AnalyticSpace.card_fiber_sigmaFold`: **every fibre of it has `Nat.card ι`
   points**, at every point of the base and with no connectedness hypothesis.
-- `ComplexAnalytic.AnalyticSpace.isClosed_range_sigmaι_base`: **the image of a member of a
+- `ComplexAnalytic.AnalyticSpace.isClosed_range_sigmaι_base` and
+  `ComplexAnalytic.AnalyticSpace.isClopen_range_sigmaι_base`: **the image of a member of a
   disjoint union is closed**, and so clopen — the members are disjoint, so one image's complement
   is a union of the others'.
+- `ComplexAnalytic.AnalyticSpace.not_preconnectedSpace_sigma`: **a disjoint union with two
+  distinct inhabited members is not preconnected**, which is the clopen image read as a
+  separation.
 - `ComplexAnalytic.AnalyticSpace.isFinite_sigmaι`,
   `ComplexAnalytic.AnalyticSpace.isLocalIso_sigmaι` and
   `ComplexAnalytic.AnalyticSpace.isFiniteEtale_sigmaι`: **the inclusion of a member is finite, a
@@ -207,6 +211,59 @@ theorem isClosed_range_sigmaι_base (j : ι) :
   · rw [Set.subset_compl_iff_disjoint_right]
     exact disjoint_range_sigmaι _ hij
   · exact (sigmaι_isOpenImmersion _ i).base_open.isOpen_range
+
+/-- **The image of a member of a disjoint union is clopen.**
+
+The word the theorem above argues for and does not spell: its own statement paired with the
+inclusion being an *open* immersion,
+`AlgebraicGeometry.LocallyRingedSpace.sigmaι_isOpenImmersion`. Nothing is proved here that is not
+already proved above, and it is a separate name because `IsClopen` is the hypothesis
+`isClopen_iff` wants and a caller assembling the pair at each use site is the shape that goes
+stale.
+
+**`IsClopen` is a conjunction and not a structure, and the consumer below is written the way it
+is because of that.** `IsClopen s` reduces to `IsClosed s ∧ IsOpen s`, so this term is an
+anonymous constructor and, in the other direction, `(isClopen_range_sigmaι_base F i).…` projects
+fields of `And` — an `eq_empty_or_univ` reached that way resolves against `And` and does not
+exist, and Mathlib spells the step as the standalone `isClopen_iff`, which is what the proof below
+calls. Measured here, both spellings. -/
+theorem isClopen_range_sigmaι_base (j : ι) :
+    IsClopen (Set.range (sigmaι F j).toLRSHom.base) :=
+  ⟨isClosed_range_sigmaι_base F j,
+    (sigmaι_isOpenImmersion (fun i ↦ (F i).toLocallyRingedSpace) j).base_open.isOpen_range⟩
+
+/-- **A disjoint union with two distinct inhabited members is not preconnected.**
+
+The image of the `i`-th member is clopen by
+`ComplexAnalytic.AnalyticSpace.isClopen_range_sigmaι_base`, so over a preconnected space it is
+empty or everything (`isClopen_iff`); the point `x` keeps it from being empty and the point `y`,
+in a *different* member, keeps it from being everything —
+`AlgebraicGeometry.LocallyRingedSpace.eq_of_sigmaι_base_eq` is what turns *"`y`'s image is in the
+`i`-th member's image"* into `i = j`.
+
+**Both hypotheses are needed and neither is decorative.** At a one-member family, or at a family
+whose other members are empty, the disjoint union *is* the member and can perfectly well be
+preconnected — `ComplexAnalytic.AnalyticSpace.not_surjective_sigmaι_base`
+(`Oka/AnalyticSpace/Sigma.lean`) is the same pair of hypotheses for the same reason, and the
+empty disjoint union of `ComplexAnalytic.AnalyticSpace.isEmpty_sigma` is preconnected vacuously.
+
+**This is the second `¬ PreconnectedSpace` in the repository and the first about a construction.**
+The other is in `OkaTest/OpenSubspace.lean` — not nameable from here, the test library not being
+in this file's import closure — and is about one particular space, the node with a point removed;
+this is about every disjoint union at once, and it is what
+`Oka/AnalyticSpace/FiniteEtaleOver.lean` reads to separate a connected cover from a trivial one of
+the same degree. Note which way round the file's headline runs:
+`ComplexAnalytic.AnalyticSpace.sigmaFold` was already called *"the first `IsFiniteEtale` witness
+with a disconnected source"* in the module docstring above — **an assertion this theorem is the
+first proof of.** -/
+theorem not_preconnectedSpace_sigma {i j : ι} (hij : i ≠ j) (x : F i) (y : F j) :
+    ¬ PreconnectedSpace (sigma F) := by
+  intro _
+  rcases isClopen_iff.mp (isClopen_range_sigmaι_base F i) with he | hu
+  · exact (he ▸ Set.mem_range_self x : ((sigmaι F i).toLRSHom.base x) ∈ (∅ : Set (sigma F)))
+  · obtain ⟨z, hz⟩ : ((sigmaι F j).toLRSHom.base y) ∈
+        Set.range ((sigmaι F i).toLRSHom.base : F i → sigma F) := hu ▸ Set.mem_univ _
+    exact hij (eq_of_sigmaι_base_eq _ hz)
 
 /-- **The inclusion of a member of a disjoint union is finite**, for every family and with no
 hypothesis on the other members.
