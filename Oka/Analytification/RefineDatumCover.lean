@@ -344,8 +344,8 @@ declarations across two files and pays two edges instead of one.
   the image of neither refined member. **Neither answer is derived from the other**, and nothing
   here is a statement about that refinement in either direction: what this file supplies is the
   general theorem the instance spends.
-* **Neither of the two covers is `AlgebraicGeometry.LocallyRingedSpace.OpenCover.fromGlued` of the
-  other.** **This bullet said the open cover here was of `X^an` and not of the refined space, and
+* **No morphism here is `AlgebraicGeometry.LocallyRingedSpace.OpenCover.fromGlued` of either
+  cover.** **This bullet said the open cover here was of `X^an` and not of the refined space, and
   that nothing presented the members of the *refined* datum as a cover of the space they glue to**;
   the second half is `ComplexAnalytic.refineDatumGluedOpenCover` and the first is now a distinction
   between two definitions rather than an absence. What is still absent is the identification:
@@ -1153,11 +1153,13 @@ unless it is spelled again.
 
 **What this is not.** It is a cover of `X^an` by the *refined members*, which are opens of the
 original members; it says nothing about the refined analytic space
-`ComplexAnalytic.refineDatumAnalytificationOfLaws`, and in particular it is not
-`AlgebraicGeometry.LocallyRingedSpace.OpenCover.fromGlued` of anything. What relates the two are
-`ComplexAnalytic.range_base_refineDatumToBase_eq_iUnion_range` and
-`ComplexAnalytic.refineDatumOpenCover_map_eq_comp` below — the first through the ranges and the
-second map by map. -/
+`ComplexAnalytic.refineDatumAnalytificationOfLaws`, and in particular
+`ComplexAnalytic.refineDatumToBase` is not
+`AlgebraicGeometry.LocallyRingedSpace.OpenCover.fromGlued` of this cover. What relates the two are
+`ComplexAnalytic.range_base_refineDatumToBase_eq_iUnion_range`,
+`ComplexAnalytic.surjective_base_refineDatumToBase_iff_iUnion_range` and
+`ComplexAnalytic.refineDatumOpenCover_map_eq_comp` below — the first through the ranges, the
+second at this definition's own hypothesis, and the third map by map. -/
 def refineDatumOpenCover
     (hcov : ⋃ b : B, Set.range (refineDatumMemberIota.{u} obj poly σ fam glue hsym hrange
       hcocycle b).toLRSHom.base = Set.univ) :
