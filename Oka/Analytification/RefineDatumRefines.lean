@@ -64,7 +64,10 @@ the variables of `obj (σ b)` where the formula needs one over `obj (σ a)`; the
 `ComplexAnalytic.coverIota_image_inter_of_eq` states the set identity at two *free* indices with an
 equation between them, where `subst` applies. That is the same manoeuvre
 `Oka/Analytification/CrossMemberDatumGlue.lean` describes for the equal branch of the glue, and it
-is why nothing above the lemma mentions a `▸`.
+is why the `subst` is performed once in this file and by nothing that consumes that lemma. A
+consumer still *carries* the transport where the formula wants `fam b` over the `a`-th member —
+`ComplexAnalytic.refineDatumPoly_of_eq` is **stated** with an `h ▸ fam b` — and carries none where
+it hands `fam b` to this lemma at its own free index, which is what the free indices are for.
 
 **The caller's `q` is not read at these pairs**, which is `ComplexAnalytic.refineDatumFactor`'s
 shape and not a hypothesis discharged here.
@@ -104,7 +107,7 @@ geometric reading of a condition currently stated in an algebra.
 
 - `ComplexAnalytic.coverIota_image_inter_of_eq`: **two refining polynomials over one member give
   two subsets of `X^an` whose intersection is the image of their intersection** — the transport and
-  the injectivity, in one lemma so that nothing above it carries a `▸`.
+  the injectivity, in one lemma, so that the `subst` is paid there and by no consumer of it.
 - `ComplexAnalytic.refineDatumMemberIota_image_coverOpen_of_eq`: **the refined datum refines, at
   every pair of refined members lying over one member of the original.** The equality, on no
   hypothesis about the caller's extra factor.
@@ -128,9 +131,12 @@ geometric reading of a condition currently stated in an algebra.
   cross-member equality would be built from, and none of its three steps is in the tree.
 * **No injectivity and no isomorphism.** `Oka/Analytification/RefineDatumCover.lean`'s *"No
   injectivity, and no claim that anything is an isomorphism"* is untouched in both halves: an
-  equality of images is a statement about sets and says nothing about fibres, and every statement
-  here is about `ComplexAnalytic.refineDatumMemberIota`, which is a composite of two open
-  immersions and is not `ComplexAnalytic.refineDatumToBase`.
+  equality of images is a statement about sets and says nothing about fibres, and **nothing here is
+  about `ComplexAnalytic.refineDatumToBase`**. The statements about the refined members are about
+  `ComplexAnalytic.refineDatumMemberIota`, which is a composite of two open immersions;
+  `ComplexAnalytic.coverIota_image_inter_of_eq` is about `ComplexAnalytic.coverIota` and
+  `ComplexAnalytic.localisationOpen`, at two free indices of `J` and with no refining family in its
+  statement at all.
 * **No statement about the refined datum's own space.** `ComplexAnalytic.refineDatumMemberIota`
   reads no refined datum — that is the property `Oka/Analytification/RefineDatumCover.lean` builds
   its open cover on — so nothing here needs the three refined laws, and nothing here says a word
