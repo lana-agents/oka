@@ -77,6 +77,14 @@ different files until it was collected here.
   in. `Oka/AnalyticSpace/LocalModel.lean` restates it for an open subset of `ℂ^n` and the
   constants there, which is a different spelling of the same fact and not a second result.
 
+And one statement about the category of analytic spaces itself, rather than about linearity over
+the constants.
+
+- `ComplexAnalytic.AnalyticSpace.surjective_base_of_isIso`: **an isomorphism of analytic spaces is
+  surjective on points**, which is what turns a non-surjectivity into a `¬ IsIso`. It says nothing
+  about whether the two spaces are isomorphic by some *other* morphism, and every consumer of it
+  owes that caveat.
+
 ## References
 
 - [Hans Grauert and Reinhold Remmert, *Coherent analytic sheaves*][grauert-remmert1984]
@@ -484,6 +492,35 @@ theorem mono_of_isCutOutBy {B C : AnalyticSpace.{u}} (j : B ⟶ C) {k : ℕ}
     {f : Fin k → C.toLocallyRingedSpace.presheaf.obj (op ⊤)}
     (hcut : IsCutOutBy j.toLRSHom f) : Mono j :=
   forgetToLocallyRingedSpace.mono_of_mono_map hcut.mono
+
+/-- **An isomorphism of analytic spaces is surjective on points.**
+
+`CategoryTheory.IsIso.inv_hom_id` says `inv f ≫ f = 𝟙 Y`, and the base of a composite is the
+composite of the bases definitionally, so the inverse's base is a right inverse of `f`'s.
+**A `congrArg` down to the underlying function and a `congrFun` at the point, and not a `rw`**: the
+hypothesis is an equality of *morphisms* and the goal an equality of *points*, and the projection
+has to go all the way to `.toFun`, since `.base` is a `TopCat` hom and `.base.hom` a
+`ContinuousMap` — neither is a function, and `congrFun` needs one.
+
+**This is not `AlgebraicGeometry.LocallyRingedSpace.homeoOfIso`**, which
+`ComplexAnalytic.IsCutOutBy.comp_iso` above spends: that one is about an isomorphism of *locally
+ringed* spaces, and `ComplexAnalytic.AnalyticSpace.Hom` is a structure over
+`AlgebraicGeometry.LocallyRingedSpace.Hom` carrying an `ComplexAnalytic.IsCLinearHom` field, so an
+`IsIso` here is not an `IsIso` there and that site cannot quote this. Going the other way — through
+`ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace` — would need that functor to reflect or
+preserve isomorphisms, which nothing in this file establishes; it is recorded as faithful and
+nothing more.
+
+**What it does not say.** `¬ IsIso f` for one morphism `f` is not a statement that `X` and `Y` are
+non-isomorphic: two spaces can be isomorphic by a morphism other than the one in hand.
+`ComplexAnalytic.AnalyticSpace.not_surjective_sigmaι_base`
+(`Oka/AnalyticSpace/Sigma.lean`) already writes that caveat for its own statement, and every
+consumer of this one inherits it. -/
+theorem surjective_base_of_isIso {X Y : AnalyticSpace.{u}} (f : X ⟶ Y) [IsIso f] :
+    Function.Surjective (f.toLRSHom.base : X → Y) := fun y ↦
+  ⟨(inv f).toLRSHom.base y,
+    congrFun (congrArg (fun g : Y ⟶ Y ↦ (AnalyticSpace.Hom.toLRSHom g).base.hom.toFun)
+      (IsIso.inv_hom_id f)) y⟩
 
 end AnalyticSpace
 

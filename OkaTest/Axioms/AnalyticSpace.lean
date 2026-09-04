@@ -25,13 +25,13 @@ space the construction produces; the *classes* of morphisms are `OkaTest/Axioms/
 **That is a description and not a list, and the eighteen headings below are the record**: each
 names the statement its assertions defend, and the recipe beside `OkaTest/Axioms.lean`'s routing
 table resolves them to modules. The stance is `OkaTest/Axioms/Sheaves.lean`'s and
-`OkaTest/Axioms/LocalOkaRing.lean`'s, and it is taken here because 129 guards over nineteen
+`OkaTest/Axioms/LocalOkaRing.lean`'s, and it is taken here because 130 guards over nineteen
 modules is past the size at which a list stays true.
 
 **The sentence this replaces named local models, the node and the value of a section**, which at
 `27c185a` was at most 19 of the 102 guards there and four of the sixteen headings there. Gluing
 alone — **the five headings named above**, from the `ℂ`-algebra structure of a glued space to
-gluing a morphism — is 51 of the 129 here and the coproduct 23, and neither appeared in it. **Six
+gluing a morphism — is 51 of the 130 here and the coproduct 24, and neither appeared in it. **Six
 of the nineteen modules are not `Oka/AnalyticSpace/`'s**, and contribute 29 guards:
 `Oka/CategoryTheory/GlueData.lean` ten, four modules of `Oka/Geometry/RingedSpace/` fifteen, and
 `Oka/AlgebraicGeometry/GammaSpecAdjunction.lean` four — most of them under the gluing headings,
@@ -110,8 +110,9 @@ per-heading recipe beside the table now; it matches a heading in either form, an
 is told to recheck.** The heading count, because a heading the instrument cannot see is not one
 the author is warned they added: *sixteen* at `a4f3a81` where the file held seventeen, hence the
 ledger row above reading *seventeen* where it should read **eighteen**. And the coproduct, whose
-three headings hold `8 + 11 + 4 = 23` and which was read as *29*. Both are repaired here; the
-guard total 129 does not move, and that it does not is the check that no guard was touched.
+three headings held `8 + 11 + 4 = 23` at that repair — they hold `9 + 11 + 4 = 24` now — and which
+was read as *29*. Both were repaired there; the guard total did not move, which is the check that
+no guard was touched, and it stood at *129* until the disjoint union's `¬ IsIso` was added.
 
 **So this is not the defect lana-agents/oka#358 repaired at `4c91029`, though it was filed as a
 recurrence of it.** That one was a guard appended past a heading. `3177e67` appended a heading
@@ -831,8 +832,8 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.GlueData.hom_ext' depends on axioms:
 
 /-! ### The disjoint union of a family of analytic spaces
 
-`Oka/AnalyticSpace/Sigma.lean`. The object, its inclusions, the descent map, and the two
-non-vacuity statements at the two ends of the index type. -/
+`Oka/AnalyticSpace/Sigma.lean`. The object, its inclusions, the descent map, the two non-vacuity
+statements at the two ends of the index type, and that an inclusion is not an isomorphism. -/
 
 /--
 info: 'ComplexAnalytic.AnalyticSpace.sigma' depends on axioms:
@@ -882,6 +883,13 @@ info: 'ComplexAnalytic.AnalyticSpace.not_surjective_sigmaι_base' depends on axi
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.not_surjective_sigmaι_base
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.not_isIso_sigmaι' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.not_isIso_sigmaι
 
 /--
 info: 'ComplexAnalytic.AnalyticSpace.sigmaι_sigmaDesc' depends on axioms:

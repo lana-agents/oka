@@ -44,6 +44,10 @@ are the same map. There is no analysis and no sheaf argument in it.
 - `ComplexAnalytic.AnalyticSpace.isEmpty_sigma` and
   `ComplexAnalytic.AnalyticSpace.not_surjective_sigmaι_base`: the two non-vacuity statements, at
   the two ends.
+- `ComplexAnalytic.AnalyticSpace.not_isIso_sigmaι`: **so an inclusion is not an isomorphism**,
+  under the same two hypotheses. **This is still not a statement that the disjoint union and the
+  member are non-isomorphic** — that would be a statement about an invariant, and the caveat on
+  the item above applies here word for word.
 
 ## Why the descent map needs a lemma at all
 
@@ -277,6 +281,21 @@ theorem not_surjective_sigmaι_base {i j : ι} (hij : i ≠ j) (y : (F j).toLoca
   intro hs
   obtain ⟨x, hx⟩ := hs ((Sigma.ι (fun i ↦ (F i).toLocallyRingedSpace) j).base y)
   exact hij (eq_of_sigmaι_base_eq _ hx)
+
+/-- **So under the same two hypotheses an inclusion is not an isomorphism.**
+
+`ComplexAnalytic.AnalyticSpace.surjective_base_of_isIso` (`Oka/AnalyticSpace/Basic.lean`) against
+the theorem above: an isomorphism is surjective on points and this inclusion is not. Both
+hypotheses are still needed, for the reasons that theorem gives, and no import is added — that
+lemma sits in a module this file already reaches.
+
+**The caveat above is unchanged and this does not weaken it.** It says nothing about
+`ComplexAnalytic.AnalyticSpace.sigma F` being non-isomorphic to `F i`: this refutes `IsIso` for
+*this* morphism, and two spaces with different carriers can still be isomorphic by some other
+one. The statement about an invariant is still the statement nothing here computes. -/
+theorem not_isIso_sigmaι {i j : ι} (hij : i ≠ j) (y : (F j).toLocallyRingedSpace) :
+    ¬ IsIso (sigmaι F i) := fun _ ↦
+  not_surjective_sigmaι_base F hij y (surjective_base_of_isIso _)
 
 end AnalyticSpace
 
