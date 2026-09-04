@@ -5373,12 +5373,31 @@ is the one that makes the counterexample unconditional.
 forces the index map to hit every index whose member has a point, which the glued-space form does
 not ask, and which is why `ComplexAnalytic.refineDatumOneCovers` takes a surjectivity hypothesis.
 
-**The datum's own six pieces are not guarded and that is deliberate.**
-`ComplexAnalytic.dupObj`, `ComplexAnalytic.dupPoly`, `ComplexAnalytic.dupGlue`,
-`ComplexAnalytic.dupSigma` and the two law proofs are the witness's plumbing, and
-`Oka/Analytification/GlueShape.lean`'s counterexample sets the convention this follows: it guards
-`ComplexAnalytic.GlueShape.not_ctHRange` and advertises none of the `ct` definitions that produce
-it.
+**Nineteen declarations land in that section, six of them guarded, and the split is deliberate.**
+The guarded six are the two general lemmas and the four statements of the witness, all six named in
+the paragraphs above and each guarded immediately below. **The other thirteen are the witness's
+plumbing** and are listed here in full, because a sentence that says what is deliberately unguarded
+is worth nothing if a reader cannot check it against the section: the index type
+`ComplexAnalytic.dupIdx` and `ComplexAnalytic.dup_no_three`; the cover datum's own six pieces —
+`ComplexAnalytic.dupObj`, `ComplexAnalytic.dupPoly`, `ComplexAnalytic.dupGlue` and the **three**
+law proofs
+`ComplexAnalytic.dupHsymm`, `ComplexAnalytic.dupHrange`, `ComplexAnalytic.dupHcocycle`; the index
+map `ComplexAnalytic.dupSigma`, which is the one that misses the second member; the two steps
+`ComplexAnalytic.dupCoverOpen_eq_top` and `ComplexAnalytic.dupSurjective_coverIota` that carry the
+redundancy argument; and `ComplexAnalytic.dupPtPres` with `ComplexAnalytic.dupPtPoint`, the
+presentation of a point and the point itself. `Oka/Analytification/GlueShape.lean`'s counterexample
+sets the convention this follows: it guards `ComplexAnalytic.GlueShape.not_ctHRange` and advertises
+none of the `ct` definitions that produce it.
+
+**Three laws are proved and two of them are vacuous, which are different counts and the ones the
+prose above must not collapse.** `ComplexAnalytic.dup_no_three` makes the two *triple-overlap*
+hypotheses vacuous — `ComplexAnalytic.GlueShape.HRange` and `ComplexAnalytic.GlueShape.HCocycle`,
+through `ComplexAnalytic.GlueShape.hRange_of_no_three` and
+`ComplexAnalytic.GlueShape.hCocycle_of_no_three`. `ComplexAnalytic.dupHsymm` is not one of them: it
+is the symmetry law, it is proved outright rather than vacuously, and the reason is that a
+reflexive isomorphism is its own inverse. So *"three laws are proved here"* and *"two of this
+datum's laws are vacuous"* are both true and count different sets; a sentence that says **two law
+proofs** has collapsed them and has dropped `ComplexAnalytic.dupHsymm` on the way.
 
 **`Classical.choice` is in all six lists for the reason the section on the rest of that file
 gives** — the refined glue data is built from two `choose`n witnesses — and not because anything
