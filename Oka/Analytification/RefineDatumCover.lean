@@ -267,11 +267,14 @@ declarations across two files and pays two edges instead of one.
   `Oka/Analytification/CrossMemberDatum.lean`'s remaining half — that the refined overlaps are cut
   out where `ComplexAnalytic.refineDatumPoly` says they are — is a statement about that definition
   and is not this one; a surjection down is not a refinement of covers.
-* **No instance of `### The instance at a family that is a unit on each overlap`.**
-  `ComplexAnalytic.refineDatumUnitFamToBase` and its
-  equivalence are stated for every cover datum and are spent here at none;
-  `OkaTest/RefineDatumUnitFamily.lean` still spells the morphism at fifteen arguments and re-writing
-  it through this definition is a separate branch, for the reason the section header gives.
+* **No instance in `Oka/` of `### The instance at a family that is a unit on each overlap`.**
+  `ComplexAnalytic.refineDatumUnitFamToBase` and its equivalence are stated for every cover datum
+  and are spent in this library at none. **This bullet said `OkaTest/RefineDatumUnitFamily.lean`
+  still spelled the morphism at fifteen arguments and that re-writing it through this definition
+  was a separate branch**; that branch has happened, so the one instance either has is a test
+  declaration — `ComplexAnalytic.lineRefineToBase` is this definition at ten arguments and
+  `ComplexAnalytic.not_surjective_base_lineRefineToBase` spends the equivalence — and what is still
+  absent is a consumer inside `Oka/`.
 * **Nothing about `ComplexAnalytic.refineDatumUnitFamGlueData`.** That same section names the
   morphism and not the gluing; that the space sits over that glue data is
   `ComplexAnalytic.refineDatumUnitFamAnalytification_toLocallyRingedSpace`, which is stated where
@@ -815,7 +818,9 @@ needed. Its target is `ComplexAnalytic.coverAnalytification`, which is the cover
 **The equivalence is what pays for the filing.** Without
 `ComplexAnalytic.surjective_base_refineDatumUnitFamToBase_iff` a caller asking whether a proper
 refinement covers has to spell fifteen arguments to state the question, and the first instance to
-ask it did exactly that.
+ask it did exactly that until this was named. `OkaTest/RefineDatumUnitFamily.lean`'s
+`ComplexAnalytic.not_surjective_base_lineRefineToBase` now asks it at ten placeholders instead, and
+proves the same statement — which is the measurement the readability claim was owed.
 -/
 
 noncomputable section
