@@ -903,8 +903,10 @@ info: 'ComplexAnalytic.AnalyticSpace.sigmaι_sigmaDesc' depends on axioms:
 `Oka/AnalyticSpace/SigmaFiniteEtale.lean`. That finiteness and being a local isomorphism pass
 from the members of a disjoint union to a descent map out of it; the trivial `ι`-sheeted cover
 `∐_{i : ι} X ⟶ X` with its count of sheets; and the same two properties of the **inclusion** of a
-member, which hold for every family and are the other direction. The header names the subjects
-rather than counting the guards, so appending one does not falsify it. -/
+member, which hold for every family and are the other direction — together with what that
+inclusion's image being **clopen** gives: a disjoint union with two distinct inhabited members is
+not preconnected. The header names the subjects rather than counting the guards, so appending one
+does not falsify it. -/
 
 /--
 info: 'ComplexAnalytic.AnalyticSpace.toLRSHom_sigmaDesc' depends on axioms:
@@ -982,6 +984,20 @@ info: 'ComplexAnalytic.AnalyticSpace.isFiniteEtale_sigmaι' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.isFiniteEtale_sigmaι
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isClopen_range_sigmaι_base' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isClopen_range_sigmaι_base
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.not_preconnectedSpace_sigma' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.not_preconnectedSpace_sigma
 
 
 /-! ### The sheet comparison is `ℂ`-linear

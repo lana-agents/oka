@@ -92,6 +92,15 @@ docstring, because `scripts/guard_coverage.py` reads every backticked repository
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_eq_of_iso_trivial`: **the trivial covers of a
   non-empty base are pairwise non-isomorphic**, indexed by `Nat.card`, so the category there has
   as many isomorphism classes as there are values of that.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preconnectedSpace_of_iso` and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_iso_of_preconnectedSpace`:
+  **preconnectedness of the total space is an invariant of an object**, and separates objects the
+  degree cannot.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.not_preconnectedSpace_trivial` and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_iso_trivial_of_preconnectedSpace`: **the
+  total space of a trivial cover with two distinct sheets is disconnected**, so **a cover with a
+  preconnected total space is not a trivial one** — the separation that
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree` is too coarse to make.
 
 ## What is not here
 
@@ -161,17 +170,31 @@ docstring, because `scripts/guard_coverage.py` reads every backticked repository
   `CategoryTheory.MorphismProperty.IsStableUnderBaseChange`
   is not even statable for `isFiniteEtale` here, and the pullback of a cover along a morphism of
   the base — which is how a Galois category's fibre functor is usually built — does not exist.
-* **The degree on objects is here now, and what it does not do is separate a connected cover from
-  a disconnected one.** This bullet said `ComplexAnalytic.AnalyticSpace.degree` is a function of a
-  morphism and nothing below reads it off an object;
+* **The degree on objects is here, it is coarse, and the second invariant that repairs that is
+  here too.** This bullet said `ComplexAnalytic.AnalyticSpace.degree` is a function of a morphism
+  and nothing below reads it off an object;
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree` does, and
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_eq_of_iso` is what makes that well defined
-  on isomorphism classes. **The invariant is coarse, and where that shows is recorded rather
-  than hidden**: at the punctured line `OkaTest/FiniteEtaleOver.lean`'s `z ↦ z²` and the trivial
-  two-sheeted cover both have degree `2`, so **nothing below can tell them apart**, and neither
-  file claims they are non-isomorphic. The classical separation is by connectedness of the total
-  space; `OkaTest/FiniteEtaleOver.lean` records which half of that this repository has and which
-  it does not.
+  on isomorphism classes. It said next that the invariant is coarse and that **nothing below can
+  tell apart** the two degree-`2` covers of the punctured line — `OkaTest/FiniteEtaleOver.lean`'s
+  `z ↦ z²` and the trivial two-sheeted cover — and that the classical separation, connectedness of
+  the total space, was half present in this repository.
+
+  **Both halves are present now and the separation is below.**
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_iso_trivial_of_preconnectedSpace` is the
+  statement, and what it needed was not a construction: the missing half was
+  `ComplexAnalytic.AnalyticSpace.not_preconnectedSpace_sigma`
+  (`Oka/AnalyticSpace/SigmaFiniteEtale.lean`), which is the clopen image of a member read as a
+  separation, and the transport
+  `ComplexAnalytic.AnalyticSpace.preconnectedSpace_of_surjective_base`
+  (`Oka/AnalyticSpace/Basic.lean`), which is `DenseRange.preconnectedSpace` at a surjection.
+  **The degree bullet's own claim is unchanged and is the point**: the degree still cannot
+  separate those two objects, and it is a second invariant rather than a sharper first one that
+  does.
+
+  **What is still not here is any invariant that separates two *connected* covers**, which is
+  where a fibre functor and a monodromy action would be needed and where the two bullets below
+  say this category has nothing.
 * **No scheme side and no comparison functor.** Taxis #1113 wants a functor from finite étale
   covers of a presented affine `ℂ`-scheme to these; the source of that functor is
   `(@AlgebraicGeometry.IsFinite ⊓ @AlgebraicGeometry.IsEtale).Over ⊤ X` and is available in
@@ -409,6 +432,93 @@ theorem FiniteEtaleOver.card_eq_of_iso_trivial {ι κ : Type u} [Finite ι] [Fin
     Nat.card ι = Nat.card κ := by
   rw [← FiniteEtaleOver.degree_trivial ι X, ← FiniteEtaleOver.degree_trivial κ X]
   exact FiniteEtaleOver.degree_eq_of_iso.{u} e
+
+/-! ### Connectedness of the total space, which the degree does not see -/
+
+/-- **Isomorphic covers have homeomorphic total spaces, so preconnectedness passes between
+them.**
+
+The same triangle `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_eq_of_iso` reads, and the
+same first step: the two forgetful functors carry `e` to an isomorphism of analytic spaces whose
+morphism is `e.hom.left`, so it is surjective on points and
+`ComplexAnalytic.AnalyticSpace.preconnectedSpace_of_surjective_base`
+(`Oka/AnalyticSpace/Basic.lean`) applies. **The triangle itself is not used here**, unlike in the
+degree statement — nothing about the structure maps is read, only that the total spaces are
+isomorphic, so this would hold in `CategoryTheory.Over X` with no property at all.
+
+**Stated in one direction and used in both.** An isomorphism has a symm, so a caller wanting the
+other direction applies this at `e.symm`;
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_iso_of_preconnectedSpace` below is the
+contrapositive and is the form the separations are written in. -/
+theorem FiniteEtaleOver.preconnectedSpace_of_iso {X : AnalyticSpace.{u}}
+    {A B : FiniteEtaleOver.{u} X} (e : A ≅ B) [PreconnectedSpace A.left] :
+    PreconnectedSpace B.left := by
+  haveI : IsIso e.hom.left :=
+    ((MorphismProperty.Over.forget _ ⊤ X ⋙ CategoryTheory.Over.forget X).mapIso e).isIso_hom
+  exact preconnectedSpace_of_surjective_base e.hom.left (surjective_base_of_isIso _)
+
+/-- **A cover with a preconnected total space is not isomorphic to one without.**
+
+The contrapositive of `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preconnectedSpace_of_iso`, in
+the `IsEmpty` shape `OkaTest/FiniteEtaleOver.lean`'s separations are written in. **This is the
+second invariant on this category**, and the first that is not a number:
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_iso_of_degree_ne` separates by a
+computation and is blind to any two objects of equal degree, which the punctured line supplies at
+degree `2`.
+
+**The hypothesis is instance-implicit on `A` and explicit on `B`**, which is not a symmetry the
+statement has to break and is where the two sides are actually used: the connected side is the one
+a caller has an instance for — `ComplexAnalytic.preconnectedSpace_restrict_punctured` is one — and
+the disconnected side is the one a caller has a *theorem* for, since `¬ PreconnectedSpace` is not
+a class. -/
+theorem FiniteEtaleOver.isEmpty_iso_of_preconnectedSpace {X : AnalyticSpace.{u}}
+    {A B : FiniteEtaleOver.{u} X} [PreconnectedSpace A.left] (h : ¬ PreconnectedSpace B.left) :
+    IsEmpty (A ≅ B) :=
+  ⟨fun e ↦ h (FiniteEtaleOver.preconnectedSpace_of_iso.{u} e)⟩
+
+/-- **The total space of a trivial cover with two distinct sheets is not preconnected.**
+
+`ComplexAnalytic.AnalyticSpace.not_preconnectedSpace_sigma`
+(`Oka/AnalyticSpace/SigmaFiniteEtale.lean`) at the constant family, whose members are all `X`, so
+the two points it asks for are both `Classical.arbitrary X` and `[Nonempty X]` supplies them.
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.trivial`'s total space is that disjoint union by
+definition, and no lemma is needed to say so.
+
+**`i ≠ j` and not `1 < Nat.card ι`.** The two are equivalent at a finite `ι`, and the numeral
+version is what a degree statement would be phrased in — but the proof consumes two indices, and
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_trivial` is the place where this file turns
+an index type into a number. Asking for the indices keeps the cardinality arithmetic out of a
+statement that does no counting. -/
+theorem FiniteEtaleOver.not_preconnectedSpace_trivial (ι : Type u) [Finite ι]
+    (X : AnalyticSpace.{u}) [Nonempty X] {i j : ι} (hij : i ≠ j) :
+    ¬ PreconnectedSpace (FiniteEtaleOver.trivial.{u} ι X).left :=
+  not_preconnectedSpace_sigma (fun _ : ι ↦ X) hij (Classical.arbitrary X) (Classical.arbitrary X)
+
+/-- **A cover with a preconnected total space is not a trivial cover with two distinct sheets.**
+
+The two statements above composed, and **the separation
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree` cannot make**: at the punctured line
+`OkaTest/FiniteEtaleOver.lean`'s `z ↦ z²` and
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.trivial` at a two-element index type both have
+degree `2` — `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_trivial` and that file's
+`degree_sqOver` — so `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_iso_of_degree_ne` says
+nothing about the pair. `OkaTest/FiniteEtaleOver.lean` instantiates this at exactly that pair.
+
+**Nothing here is finite étale and nothing here is analytic.** Every step is topology — a clopen
+image, a continuous surjection, and `isClopen_iff` — which is why the statement holds of any two
+objects of `CategoryTheory.Over X` of these shapes and asks the property for nothing but the right
+to say "cover".
+
+**What it does not say.** A trivial cover with `Nat.card ι ≤ 1` is not covered, and correctly so:
+at one sheet the fold map is a bijection on points and the total space is a copy of `X`, which may
+perfectly well be preconnected. The hypothesis is two *distinct* indices and there is no weaker
+one. -/
+theorem FiniteEtaleOver.isEmpty_iso_trivial_of_preconnectedSpace {X : AnalyticSpace.{u}}
+    (A : FiniteEtaleOver.{u} X) [PreconnectedSpace A.left] (ι : Type u) [Finite ι] [Nonempty X]
+    {i j : ι} (hij : i ≠ j) :
+    IsEmpty (A ≅ FiniteEtaleOver.trivial.{u} ι X) :=
+  FiniteEtaleOver.isEmpty_iso_of_preconnectedSpace.{u}
+    (FiniteEtaleOver.not_preconnectedSpace_trivial.{u} ι X hij)
 
 /-! ### The restriction over `⊤` -/
 

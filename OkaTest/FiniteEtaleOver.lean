@@ -31,6 +31,12 @@ line are pairwise non-isomorphic, one class for every `n`, by
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_eq_of_iso_trivial`. `degree_sqOver` records
 what the degree of the first witness is, and it is `2`.
 
+**And the two isomorphism classes of degree `2` are separated**, which is the third part of this
+file and is the first separation here that no number makes: `not_iso_trivial_sqOver` says `sqOver`
+is not the trivial two-sheeted cover, by
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_iso_trivial_of_preconnectedSpace` — the
+total space of one is connected and of the other is not.
+
 ## What this does not witness
 
 **Nothing about morphisms.** The category's morphisms are all morphisms over the base, and this
@@ -67,17 +73,23 @@ as the thing that led nowhere.** What was missing was not a `¬ IsIso` but the s
 degree is constant on isomorphism classes,
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_eq_of_iso`.
 
-**What is still not here is a separation of `sqOver` from the trivial two-sheeted cover.** They
+**`sqOver` and the trivial two-sheeted cover are separated now, and not by the degree.** They
 have the same degree — `degree_sqOver` is `2` and
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_trivial` at a two-element index type is `2`
-— so the invariant below cannot tell them apart. The classical argument is that one total space
-is connected and the other is not, and **this repository has one half of it**:
-`ComplexAnalytic.preconnectedSpace_restrict_punctured` (`OkaTest/FiniteMorphism.lean`) is an
-instance, so the source of `sqOver` is preconnected, while nothing anywhere says the disjoint
-union of two copies of it is not — `not_preconnectedSpace_puncturedNodeSpace`
-(`OkaTest/OpenSubspace.lean`) is this repository's only `¬ PreconnectedSpace` and is about a
-different space. **This file does not claim the two objects are non-isomorphic**, and no sentence
-in it should be read as though it did.
+— so the invariant this paragraph used to end at cannot tell them apart, and that is unchanged.
+`not_iso_trivial_sqOver` below is the separation, by the classical argument: one total space is
+connected and the other is not.
+
+**Of the two halves that argument needs, this repository had one and now has both.**
+`ComplexAnalytic.preconnectedSpace_restrict_punctured` (`OkaTest/FiniteMorphism.lean`) was already
+an instance, so the source of `sqOver` is preconnected; what was missing —
+`not_preconnectedSpace_puncturedNodeSpace` (`OkaTest/OpenSubspace.lean`) being about a different
+space, and the only `¬ PreconnectedSpace` here — is now
+`ComplexAnalytic.AnalyticSpace.not_preconnectedSpace_sigma`
+(`Oka/AnalyticSpace/SigmaFiniteEtale.lean`), which says it of *every* disjoint union with two
+distinct inhabited members rather than of one space. **The missing half was a theorem about a
+construction and not a second witness**, which is why the paragraph that priced it as the latter
+was looking for the wrong thing.
 -/
 
 open CategoryTheory ComplexAnalytic ComplexAnalytic.AnalyticSpace
@@ -134,6 +146,54 @@ theorem pairwise_not_iso_trivial {m n : ℕ} (h : m ≠ n) :
   ⟨fun e ↦ h (by
     have := AnalyticSpace.FiniteEtaleOver.card_eq_of_iso_trivial.{u} e
     simpa using this)⟩
+
+/-- **The total space of `sqOver` is preconnected**, which is
+`ComplexAnalytic.preconnectedSpace_restrict_punctured` (`OkaTest/FiniteMorphism.lean`) at a second
+spelling of the same space.
+
+**It is declared because instance search does not find the first one through `.left`.** `sqOver`
+is a `CategoryTheory.MorphismProperty.Over.mk`, so `sqOver.left` is definitionally the restriction
+of `ℂ¹` to `ComplexAnalytic.punctured` — `rfl` proves them equal — but instance search unfolds
+only at reducible transparency and reports
+*"failed to synthesize `PreconnectedSpace ↑↑sqOver.left.toPresheafedSpace`"*, measured here. This
+instance is that `rfl` given a head the search can match, and it proves nothing new.
+
+**An `instance` and not a `theorem`** because the consumer is a hypothesis
+`[PreconnectedSpace A.left]` on
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_iso_trivial_of_preconnectedSpace`; its head
+is this one object, so it cannot fire anywhere it is not wanted, which is the reason
+`OkaTest/FiniteMorphism.lean` gives for the instance it is quoting. -/
+instance preconnectedSpace_left_sqOver : PreconnectedSpace (sqOver.{u}).left :=
+  ComplexAnalytic.preconnectedSpace_restrict_punctured.{u}
+
+/-- **`z ↦ z²` on the punctured line is not the trivial two-sheeted cover**, although the two have
+the same degree.
+
+This is the first separation in this file that no number makes.
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_iso_of_degree_ne` is blind to this pair —
+`degree_sqOver` above is `2` and
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_trivial` at `ULift (Fin 2)` is `2` — and
+`not_iso_id_sqOver` above is a different statement, about the *one*-sheeted cover, which the
+degree does separate. What settles this one is
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_iso_trivial_of_preconnectedSpace`: the
+total space of `sqOver` is the punctured line and is preconnected, and the total space of the
+trivial cover is two disjoint copies of it and is not.
+
+**The two indices are supplied by name.** The general statement asks for `i ≠ j` in the index
+type rather than for `1 < Nat.card ι`, so the instantiation names `⟨0⟩` and `⟨1⟩` of
+`ULift (Fin 2)` and discharges the inequality by `decide`; there is nothing to choose here, and
+the alternative would be a cardinality computation this file does not otherwise do.
+
+**This is a witness and not a classification.** It says the two objects are non-isomorphic; it
+says nothing about there being no *third* object of degree `2`, and the invariant behind it —
+preconnectedness of the total space — separates no two connected covers from each other. That is
+the gap `Oka/AnalyticSpace/FiniteEtaleOver.lean`'s `## What is not here` records against the fibre
+functor. -/
+theorem not_iso_trivial_sqOver :
+    IsEmpty (sqOver.{u} ≅ AnalyticSpace.FiniteEtaleOver.trivial.{u} (ULift.{u} (Fin 2))
+      ((AnalyticSpace.complexAffineSpace.{u} 1).restrict ComplexAnalytic.punctured.{u})) :=
+  AnalyticSpace.FiniteEtaleOver.isEmpty_iso_trivial_of_preconnectedSpace.{u}
+    sqOver.{u} (ULift.{u} (Fin 2)) (i := ⟨0⟩) (j := ⟨1⟩) (by decide)
 
 end OkaTest.FiniteEtaleOver
 
