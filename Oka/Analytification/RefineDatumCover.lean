@@ -127,10 +127,10 @@ cross-member equations are what taxis #1287 spent a fortnight on and what
 
 ## And the refined space has a cover of its own, which the morphism down carries to that one
 
-`ComplexAnalytic.refineDatumGluedOpenCover` is the other cover the bullet above kept apart from
-the first: the refined members covering **the space they glue to** rather than the space they
-refine. It is the general cover's own open cover at the refined datum, so nothing is built for it
-— what makes it worth a name is that it is the cover at which the restriction law
+`ComplexAnalytic.refineDatumGluedOpenCover` is the other cover this file's `## What is not here`
+kept apart from the first: the refined members covering **the space they glue to** rather than the
+space they refine. It is the general cover's own open cover at the refined datum, so nothing is
+built for it — what makes it worth a name is that it is the cover at which the restriction law
 `ComplexAnalytic.coverIota_comp_refineDatumToBase` becomes a statement about two covers.
 
 **That is `ComplexAnalytic.refineDatumOpenCover_map_eq_comp`, and it is more than the ranges.**

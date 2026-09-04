@@ -5756,7 +5756,7 @@ declaration about the wrong space.
 **`Classical.choice` in all five, and the `idx` field is again why.** The cover is
 `ComplexAnalytic.coverAnalytificationOpenCover` at the refined datum, and
 `AlgebraicGeometry.LocallyRingedSpace.GlueData.openCover` chooses an index for each point of the
-gluing; the three `rfl` results inherit it through the definition they are about.
+gluing; the theorems inherit it through the definition they are about.
 
 **No sentence here names a neighbouring section, and none says how much of that module this
 section covers** — the two properties this file can actually hold itself to, and an append
