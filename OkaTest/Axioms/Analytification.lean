@@ -5842,7 +5842,7 @@ which are guarded here although they live in the two files that own their subjec
 else in this file guards them. Appended as its own section rather than merged into another: moving
 or reordering a section of this file is a conflict for every branch that has appended to it.
 
-**Seven guards, and what they are a check of is one lemma and one `subst`.**
+**What the guards below are a check of is one lemma and one `subst`.**
 `ComplexAnalytic.image_base_localisationProj_localisationOpen_rename` is
 `ComplexAnalytic.localisationOpen_rename` read forwards, and it spends
 `ComplexAnalytic.range_base_localisationProj` — the equality — rather than
@@ -5852,11 +5852,11 @@ met with the *range* and the containment would give one inclusion of the two.
 `subst` at two free indices, and it is the only consumer of
 `ComplexAnalytic.injective_base_coverIota`.
 
-**`Classical.choice` is in all seven and is not a surprise**: `ComplexAnalytic.polyDiagOne` and
-`ComplexAnalytic.refineDatumFactor` are both `open Classical` case splits, and the analytification
-of a presentation runs through a gluing. The guards this file carries for
-`ComplexAnalytic.refineDatumToBase` and `ComplexAnalytic.range_base_refineDatumToBase` record the
-same three.
+**`Classical.choice` is in every guard below and is not a surprise**:
+`ComplexAnalytic.polyDiagOne` and `ComplexAnalytic.refineDatumFactor` are both `open Classical`
+case splits, and the analytification of a presentation runs through a gluing. The guards this file
+carries for `ComplexAnalytic.refineDatumToBase` and
+`ComplexAnalytic.range_base_refineDatumToBase` record the same three.
 
 **Named and not located.** No sentence here says which section precedes or follows it.
 -/

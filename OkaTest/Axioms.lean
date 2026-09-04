@@ -79,11 +79,14 @@ lean` reads the oleans, so a dump taken across a branch switch is the other bran
       sort | uniq -c | sort -rn
 
 **The `perl` is not decoration.** The obvious `grep -oP '(?<=#print axioms ).*'` misses a guard
-whose name is wrapped onto the next line, and there is one such guard today, in
-`OkaTest/Axioms/SheafOfModules.lean`; a census taken that way comes out one short of
-`scripts/guard_coverage.py`'s, which is where the regular expression above is from. A row is
-wrong when some module's guards are covered by no row at all — that is the failure this table
-exists to prevent — and not merely when its phrase is shorter than the file.
+whose name is wrapped onto the next line, and this directory has such guards today; a census
+taken that way comes out short of `scripts/guard_coverage.py`'s by one for each of them, and that
+script is where the regular expression above is from. **This clause read *"there is one such
+guard today, in `OkaTest/Axioms/SheafOfModules.lean`"* and on 2026-09-04 there were four of them
+in three files**, so it had stopped being true — exactly what the *name rather than count* rule
+below forbids, in the paragraph that states the recipe. A row is wrong when some module's guards
+are covered by no row at all — that is the failure this table exists to prevent — and not merely
+when its phrase is shorter than the file.
 
 **A second recipe, for the other question the rule above raises: which *heading* a guard sits
 under.** The one above resolves a guard to its module; this one counts guards per section, which
@@ -99,8 +102,10 @@ itself a doc comment and Lean's block comments nest, so spelling the opening del
 here would open a comment that never closes; at a shell you would type it without the brackets.
 **Neither of the two oddities that are awk's is optional and both were paid for.** The trailing
 space in the first pattern is what stops a `####` sub-heading opening a section of its own —
-there are two today — and without it `OkaTest/Axioms/Morphisms.lean` comes out as 28 sections
-where it has 27, with five guards under a heading that holds three. The second pattern, matching
+there are two today — and without it `OkaTest/Axioms/Morphisms.lean` comes out with one section
+too many: the sub-heading gets a row of its own and its guards are subtracted from the `###`
+section that contains them, so two rows are wrong and the total is right, which is the shape
+that survives an append and is why no numeral is given here. The second pattern, matching
 a heading on a line of its own, is what sees one whose author opened the doc comment on one line
 and wrote the `###` on the next: that form elaborates identically, and a recipe blind to it
 charges the heading's guards to the *previous* one and reports a wrong partition from there to
@@ -111,8 +116,33 @@ rather than a licence, and the check there says why it is a `grep` and not a com
 counts.
 
 **The worked example is `OkaTest/Axioms/AnalyticSpace.lean`**, the only file here whose
-per-heading distribution has been checked against its own prose: eighteen rows summing to 129,
-four guards under the sheet comparison and six under the open subspace at `⊤`.
+per-heading distribution has been checked against its own prose — and checked more than once,
+because each reconciliation had gone stale before the next was taken. Run the `awk` above to get
+today's partition; that file's docstring carries the ledger of those recounts and says in terms
+which of its numerals are records pinned to a commit and which are undated claims about the tree
+that go stale. The two rows worth knowing before you run it are the sheet comparison
+and the open subspace at `⊤`: while the second heading stood in the two-line form `3177e67`
+wrote it in, every count of that file charged its guards to the first, because no instrument then
+in use could see it.
+
+**Prose about a section should name rather than count, and this file is not exempt.** A clause
+that counts the declarations of a file or the guards of a section is falsified by the next append
+to either, and nothing in `scripts/` can tell such a clause from a sentence that happens to
+contain a number, so the only defence is how the sentence is written. A section's opening should
+name the file whose declarations are guarded and the files the rest were written in; a reader who
+wants the arithmetic can run `grep -c '#print axioms'` over the section and get an answer that is
+right on the day they run it. **Two spellings are exempt because they cannot rot.** A figure
+pinned to a commit or a date is a record — which is what the measurements further down are, and
+they say so — and so is a numeral about a repair that has already landed, since falsifying either
+means rewriting history rather than appending. **The rule was first written into the guard
+section that carried the defect** — `OkaTest/Axioms/Analytification.lean`'s *The refined datum
+refines across members, and the two members meet in nothing else*, whose opening names the files
+its guards were written in and counts none of them, and which is the spelling to copy. It is
+repeated here because
+this is the file every author of a new guard section reads, and because when it was written this
+file was carrying counts of the class itself, one of them already false; the paragraph above
+records which. **Do not answer this with a checker** — it would have to guess which numbers in a
+docstring are censuses, and `scripts/` has no way to tell.
 
 **Most mirror-tree material is routed by a row, and a small tail of it is deliberately routed by
 none.** `README.md`'s *Layout: the Mathlib mirror tree* defines a mirror-tree file by its path — a
