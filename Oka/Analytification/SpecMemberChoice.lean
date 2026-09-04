@@ -44,10 +44,15 @@ two chosen opens sitting inside the **same** member the overlap is a chosen open
 again, at the product of the two polynomials —
 `ComplexAnalytic.opensRange_presentationRefinedIota_inf`, which is
 `AlgebraicGeometry.Scheme.basicOpen_mul` and needs nothing else. **That is a statement about the
-member the two sit inside, and it is not yet the condition at either of them**: the condition asks
+member the two sit inside, and it is not the condition at either of them**: the condition asks
 for a polynomial in each chosen open's *own* variables, of which a chosen open has one more than
 the member does, and the map that carries a polynomial across is the one
-`ComplexAnalytic.localisationIncl` names. **No statement on this line carries one across it.**
+`ComplexAnalytic.localisationIncl` names. **A statement on this line does carry one across it** —
+`ComplexAnalytic.opensRange_presentationRefinedIota_rename`
+(`Oka/Analytification/SpecRefinedMemberSection.lean`) says the overlap is the chosen open of the
+first at the second's polynomial renamed along that map, and at the exchanged pair it is the
+condition at the second. **So at a same-member pair the condition holds**; what is still absent
+there is a `poly` — a function of two *indices* — and the three laws, and not the geometry.
 
 At two sitting inside **different** members the two sections live over different opens,
 `AlgebraicGeometry.Scheme.basicOpen_mul` does not typecheck, and what is available is the
