@@ -5300,7 +5300,7 @@ construction. This file's guards for `ComplexAnalytic.refineDatumToBase` and
 
 **Named and not located, and this section holds itself to that.** No sentence in it says which
 section precedes or follows it — including the placement sentence, which gives its reason instead
-of citing a neighbour's — so an append anywhere leaves every sentence here true.
+of citing a neighbour's; the next branch appends between them.
 -/
 
 /--
@@ -5355,9 +5355,9 @@ info: 'ComplexAnalytic.surjective_base_refineDatumOneToBase' depends on axioms:
 /-! ### The refining condition is strictly stronger than the surjectivity it gives
 
 `Oka/Analytification/RefineDatumCover.lean`'s counterexample section, and the two general lemmas
-that explain it. Appended as its own section rather than merged into the one that guards the rest
-of that file, and the reason is stated here rather than cited: moving or reordering a section of
-this file is a conflict for every branch that has appended to it.
+that explain it. Appended as its own section rather than merged into an existing one, and the
+reason is stated here rather than cited: moving or reordering a section of this file is a conflict
+for every branch that has appended to it.
 
 **Six guards, and what they are a check of is a non-implication.**
 `ComplexAnalytic.dupStrict` exhibits a cover datum, an index map and a refining family at which
@@ -5400,12 +5400,12 @@ reflexive isomorphism is its own inverse. So *"three laws are proved here"* and 
 datum's laws are vacuous"* are both true and count different sets; a sentence that says **two law
 proofs** has collapsed them and has dropped `ComplexAnalytic.dupHsymm` on the way.
 
-**`Classical.choice` is in all six lists for the reason the section on the rest of that file
-gives** — the refined glue data is built from two `choose`n witnesses — and not because anything
+**`Classical.choice` is in all six lists for the reason the sections on the rest of that file
+give** — the refined glue data is built from two `choose`n witnesses — and not because anything
 here is a choice.
 
-**Named and not located.** No sentence in this section says which section precedes or follows it,
-so an append anywhere leaves every sentence here true.
+**Named and not located.** No sentence in this section says which section precedes or follows it;
+the next branch appends between them.
 -/
 
 /--
@@ -5456,9 +5456,9 @@ info: 'ComplexAnalytic.dupPtStrict' depends on axioms:
 `### The condition at an index map that is the identity`, which reads
 `ComplexAnalytic.RefineDatumCovers` at `σ = id` — where the index a point must be reached through
 is forced, the identification of two members is the identity, and the condition is left saying that
-each `D(fam i)` is the whole of its member. Appended as its own section rather than merged into
-either of that file's two above, and the reason is stated here rather than cited: moving or
-reordering a section of this file is a conflict for every branch that has appended to it.
+each `D(fam i)` is the whole of its member. Appended as its own section rather than merged into an
+existing one, and the reason is stated here rather than cited: moving or reordering a section of
+this file is a conflict for every branch that has appended to it.
 
 **Three guards, and what they are a check of is a collapse and not a new geometry.** All three
 proofs are the identification being disposed of by `ComplexAnalytic.coverSpaceHomOfEq_self`, so
@@ -5476,8 +5476,8 @@ condition.
 than the surjectivity of `ComplexAnalytic.refineDatumToBase`, so refuting the condition at a datum
 decides nothing about that morphism there.
 
-**Named and not located.** No sentence in this section says which section precedes or follows it,
-so an append anywhere leaves every sentence here true.
+**Named and not located.** No sentence in this section says which section precedes or follows it;
+the next branch appends between them.
 -/
 
 /--
@@ -5521,8 +5521,8 @@ a term with no tactic in it.
 refined glue data is built from two `choose`n witnesses — and not because anything here is a
 choice.
 
-**Named and not located.** No sentence in this section says which section precedes or follows it,
-so an append anywhere leaves every sentence here true.
+**Named and not located.** No sentence in this section says which section precedes or follows it;
+the next branch appends between them.
 -/
 
 /--
@@ -5559,8 +5559,8 @@ choices and the theorem is the general equivalence read at them, so `Classical.c
 lists for the reason the other sections of this file give — the refined glue data is built from two
 `choose`n witnesses — and not because anything here is a choice.
 
-**Named and not located.** No sentence in this section says which section precedes or follows it,
-so an append anywhere leaves every sentence here true.
+**Named and not located.** No sentence in this section says which section precedes or follows it;
+the next branch appends between them.
 -/
 
 /--
@@ -5652,7 +5652,7 @@ construction inside
 declaration of that module records the same three.
 
 **Named and not located, and this section holds itself to that.** No sentence in it says which
-section precedes or follows it, so an append anywhere leaves every sentence here true.
+section precedes or follows it; the next branch appends between them.
 -/
 
 /--
