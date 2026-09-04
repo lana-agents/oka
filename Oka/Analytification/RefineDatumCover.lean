@@ -1154,8 +1154,10 @@ unless it is spelled again.
 **What this is not.** It is a cover of `X^an` by the *refined members*, which are opens of the
 original members; it says nothing about the refined analytic space
 `ComplexAnalytic.refineDatumAnalytificationOfLaws`, and in particular it is not
-`AlgebraicGeometry.LocallyRingedSpace.OpenCover.fromGlued` of anything. What relates the two is
-`ComplexAnalytic.range_base_refineDatumToBase_eq_iUnion_range` below. -/
+`AlgebraicGeometry.LocallyRingedSpace.OpenCover.fromGlued` of anything. What relates the two are
+`ComplexAnalytic.range_base_refineDatumToBase_eq_iUnion_range` and
+`ComplexAnalytic.refineDatumOpenCover_map_eq_comp` below — the first through the ranges and the
+second map by map. -/
 def refineDatumOpenCover
     (hcov : ⋃ b : B, Set.range (refineDatumMemberIota.{u} obj poly σ fam glue hsym hrange
       hcocycle b).toLRSHom.base = Set.univ) :
