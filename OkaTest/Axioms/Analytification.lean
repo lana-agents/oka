@@ -5581,9 +5581,9 @@ info: 'ComplexAnalytic.surjective_base_refineDatumUnitFamToBase_iff' depends on 
 
 The five declarations under `Oka/Analytification/SpecRefinedMemberSection.lean`'s own overlap
 heading, plus the one declaration `Oka/Analytification/SpecDistinguishedOpen.lean` gained for them
-— the same shape as `### A distinguished open of a member, as an affine open of the glued scheme`
-above, and for the same reason. Appended as its own section for the reason the sections above
-give: a section moved is a conflict for somebody else.
+— the same shape as `### A distinguished open of a member, as an affine open of the glued scheme`,
+and for the same reason. Appended as its own section for the reason the sections above give: a
+section moved is a conflict for somebody else.
 
 **Its own section rather than an insertion under either of that file's two headings here, and the
 reason is the subject and not the file.** `### The refined member, at an arbitrary open immersion`
