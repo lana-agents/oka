@@ -20,9 +20,9 @@ local-isomorphism class along a change of source and target** — over an open s
 target, and to subspaces cut out by a family of global sections and by its pullbacks. Those are
 `### And a local isomorphism restricted over an open of the target is one` and
 `### And a local isomorphism restricted to subspaces cut out by a family and by its pullbacks`.
-And one section is of a fourth kind, named here for the same reason: a statement about the class
-of **isomorphisms**, which is not built from a topological criterion and is not transported from
-anywhere — `### An isomorphism of analytic spaces is surjective on points`.
+And one section is of a fourth kind, named here for the same reason: statements about the class
+of **isomorphisms**, which are not built from a topological criterion and are not transported from
+anywhere — `### An isomorphism of analytic spaces is bijective on points`.
 
 **Named rather than counted from the end**, which is the repair and not the description. **The
 sentence this replaces called them *the last two***; they stopped being that when two further
@@ -32,6 +32,17 @@ find. **That
 is the best argument for the heading check `.orchestra/validation.sh` now runs**: not a wrong
 number, which a recount repairs, but a positional claim in an append-at-end file that nothing
 was able to contradict.
+
+**Naming a section does not protect the name against being rewritten.** The fourth-kind pointer
+above said `### An isomorphism of analytic spaces is surjective on points` until the branch that
+renamed that heading to its present form — the same file and the same push — left the pointer
+behind, and the same sentence said *a* statement where the section holds two. **Nothing mechanical
+sees either half**: the heading check above asks that a heading be written on the line that opens
+its doc comment and not that anything cite it, and `scripts/check_docstring_names.py` resolves
+backticked *declaration* names, which a heading is not. So this is a third failure mode of the
+same sentence — not stale by position and not stale by count, but naming something that no longer
+exists — and the repair for it is the one the sections themselves use: quote the heading as it is
+written.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -1729,10 +1740,18 @@ of `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver` that they buy
 sections above give: a section moved is a conflict for somebody else.
 
 **Guarded here and not with the `### The finite étale covers of a fixed base, as a category`
-section above, although four of the seven declarations are that file's.** The subject of all seven
-is `ComplexAnalytic.AnalyticSpace.degree`, which is a function of a *morphism* and belongs to this
-file by the topic table's `morphisms of analytic spaces` row; the category section above is about
-the objects and their separation by `¬ IsIso`, and none of its guards reads a fibre.
+section above, although the declarations below are drawn from that section's own file
+(`Oka/AnalyticSpace/FiniteEtaleOver.lean`) as well as from `Oka/AnalyticSpace/Degree.lean`.** The
+subject of every one of them is `ComplexAnalytic.AnalyticSpace.degree`, which is a function of a
+*morphism* and belongs to this file by the topic table's `morphisms of analytic spaces` row; the
+category section above is about the objects and their separation by `¬ IsIso`, and none of its
+guards reads a fibre.
+
+**Named by file rather than counted**, and this paragraph said *"four of the seven declarations
+are that file's"* instead — both numerals wrong of the section as it stands. The repair is not a
+recount: a census of an append-at-end section goes stale on the next append and nothing mechanical
+reads it, which is the same reason this file's module docstring names its sections rather than
+counting them from the end.
 
 **`Oka/AnalyticSpace/Degree.lean`'s older advertised results are still unguarded**, exactly as
 they were before this section existed — `ComplexAnalytic.AnalyticSpace.degree_eq_card_fiber`,
