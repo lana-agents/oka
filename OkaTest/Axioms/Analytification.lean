@@ -5451,7 +5451,8 @@ info: 'ComplexAnalytic.dupPtStrict' depends on axioms:
 
 /-! ### The refining condition at an index map that is the identity
 
-`Oka/Analytification/RefineDatumCover.lean`'s last section, which reads
+`Oka/Analytification/RefineDatumCover.lean`'s
+`### The condition at an index map that is the identity`, which reads
 `ComplexAnalytic.RefineDatumCovers` at `σ = id` — where the index a point must be reached through
 is forced, the identification of two members is the identity, and the condition is left saying that
 each `D(fam i)` is the whole of its member. Appended as its own section rather than merged into
@@ -5501,7 +5502,8 @@ info: 'ComplexAnalytic.not_refineDatumCovers_id_of_ne_top' depends on axioms:
 
 /-! ### The refining condition at an identity index map is that equation, and not merely implies it
 
-The converse half of `Oka/Analytification/RefineDatumCover.lean`'s last section, and the `Iff` that
+The converse half of `Oka/Analytification/RefineDatumCover.lean`'s
+`### The condition at an index map that is the identity`, and the `Iff` that
 joins the two. **Appended as its own section rather than merged into the one that guards the
 forward half**, for the reason this file gives everywhere: moving or reordering a section is a
 conflict for every branch that has appended to it, and a section that counts only its own guards
@@ -5538,7 +5540,8 @@ info: 'ComplexAnalytic.refineDatumCovers_id_iff' depends on axioms:
 
 /-! ### The morphism down at a family that is a unit on each overlap
 
-`Oka/Analytification/RefineDatumCover.lean`'s last section, which names
+`Oka/Analytification/RefineDatumCover.lean`'s
+`### The instance at a family that is a unit on each overlap`, which names
 `ComplexAnalytic.refineDatumToBase` at an injective index map and a family that is a unit on each
 overlap, and reads the surjectivity equivalence at those arguments. Appended as its own section
 rather than merged into any above it, and the reason is stated here rather than cited: moving or

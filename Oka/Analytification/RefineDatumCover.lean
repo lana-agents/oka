@@ -131,12 +131,13 @@ is the argument's and not this file's, and the argument is unchanged by what has
 since.
 
 **What this file's closure is *now* is a different number and it had gone stale twice.** The
-strictness counterexample added two import lines and the last section below adds one more, so the
+strictness counterexample added two import lines and
+`### The instance at a family that is a unit on each overlap` below adds one more, so the
 figure today is **100** `Oka` modules and **73** Mathlib roots. Both columns had
 drifted — the paragraph above read 97 and 71 while the tree read 99 and 73 — and the Mathlib
 column is *roots* and not the transitive closure, which is why 73 appears here where a branch
 counting transitively wrote 3362. **Say which you are counting or the number means nothing**, and
-re-measure rather than adding to what is written: the last section's import cost **`+1` `Oka`
+re-measure rather than adding to what is written: that section's import cost **`+1` `Oka`
 module and `+0` Mathlib roots** measured on the branch that added it, with
 `Oka/Analytification/AffineCover.lean` — already in the closure — quoted as a control reading
 `+0` on both columns, as it must.
@@ -241,7 +242,9 @@ declarations across two files and pays two edges instead of one.
   reason that file gives.
 * **Nothing about a refining family that is not a unit, beyond the reading at `σ = id`.**
   `Oka/Analytification/RefineDatumUnitFamily.lean` builds the only refinement in this repository
-  that cuts its members down. The last section below settles **one** of the two questions about it:
+  that cuts its members down. `### The condition at an index map that is the identity` below
+  settles **one** of the two questions about it — it was the last section of this file when that
+  sentence was written and is no longer, so it is named here rather than counted:
   its index map is the identity and its `D(z)` is a proper open of its chart, so
   `ComplexAnalytic.not_refineDatumCovers_id_of_ne_top` applies and that refinement does **not**
   meet `ComplexAnalytic.RefineDatumCovers`. `OkaTest/RefineDatumUnitFamily.lean` is where that is
@@ -264,11 +267,12 @@ declarations across two files and pays two edges instead of one.
   `Oka/Analytification/CrossMemberDatum.lean`'s remaining half — that the refined overlaps are cut
   out where `ComplexAnalytic.refineDatumPoly` says they are — is a statement about that definition
   and is not this one; a surjection down is not a refinement of covers.
-* **No instance of the last section.** `ComplexAnalytic.refineDatumUnitFamToBase` and its
+* **No instance of `### The instance at a family that is a unit on each overlap`.**
+  `ComplexAnalytic.refineDatumUnitFamToBase` and its
   equivalence are stated for every cover datum and are spent here at none;
   `OkaTest/RefineDatumUnitFamily.lean` still spells the morphism at fifteen arguments and re-writing
   it through this definition is a separate branch, for the reason the section header gives.
-* **Nothing about `ComplexAnalytic.refineDatumUnitFamGlueData`.** The last section names the
+* **Nothing about `ComplexAnalytic.refineDatumUnitFamGlueData`.** That same section names the
   morphism and not the gluing; that the space sits over that glue data is
   `ComplexAnalytic.refineDatumUnitFamAnalytification_toLocallyRingedSpace`, which is stated where
   the space is and is quoted here rather than restated.
@@ -793,7 +797,13 @@ index map and a family that is a unit on each overlap, and stops at its glue dat
 **it does not name the morphism down**, because that morphism is
 `ComplexAnalytic.refineDatumToBase` and this file, not that one, is where the trivial family's
 counterpart already lives. `ComplexAnalytic.surjective_base_refineDatumOneToBase` is that
-counterpart and it is the section above.
+counterpart and it is under this file's `### The instance at the trivial refining family`.
+
+**Named and not located**, and deliberately. Every sentence in this section that points at another
+part of this file **names its heading** rather than counting positions, so a section appended past
+or reordered cannot falsify this paragraph silently and a heading renamed leaves a citation a
+`grep` can find. Counting was the defect this subtree has spent several branches on, and the
+sentences above were written the counting way first.
 
 **The type of `ComplexAnalytic.refineDatumUnitFamToBase` is the whole point of naming it.** Its
 source is written as `ComplexAnalytic.refineDatumUnitFamAnalytification` rather than as the
@@ -836,9 +846,10 @@ variable {J B : Type u} (obj : J → Presentation.{u})
 so**, which is the reason this definition exists at all. That space is
 `ComplexAnalytic.refineDatumAnalytificationOfLaws` at these arguments by definition, so the
 ascription costs nothing and no transport appears — the same argument
-`ComplexAnalytic.surjective_base_refineDatumOneToBase` makes for the trivial family one section
-above. Without it a caller states the morphism at fifteen arguments and ends up with a well-typed
-term that nothing ties to the space it comes out of, which is the defect
+`ComplexAnalytic.surjective_base_refineDatumOneToBase` makes for the trivial family, under this
+file's `### The instance at the trivial refining family`. Without it a caller states the morphism
+at fifteen arguments and ends up with a well-typed term that nothing ties to the space it comes
+out of, which is the defect
 `ComplexAnalytic.refineDatumUnitFamAnalytification_toLocallyRingedSpace` was written to close on
 the other side. -/
 def refineDatumUnitFamToBase (hσ : Function.Injective σ)
