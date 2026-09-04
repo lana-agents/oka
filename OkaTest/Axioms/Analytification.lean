@@ -5350,3 +5350,82 @@ info: 'ComplexAnalytic.surjective_base_refineDatumOneToBase' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.surjective_base_refineDatumOneToBase
+
+/-! ### The refining condition is strictly stronger than the surjectivity it gives
+
+`Oka/Analytification/RefineDatumCover.lean`'s counterexample section, and the two general lemmas
+that explain it. Appended as its own section rather than merged into the one that guards the rest
+of that file, and the reason is stated here rather than cited: moving or reordering a section of
+this file is a conflict for every branch that has appended to it.
+
+**Six guards, and what they are a check of is a non-implication.**
+`ComplexAnalytic.dupStrict` exhibits a cover datum, an index map and a refining family at which
+`ComplexAnalytic.refineDatumToBase` is surjective on bases and `ComplexAnalytic.RefineDatumCovers`
+is false — so the sufficient condition guarded above is not necessary, and the three sentences of
+`Oka/Analytification/RefineDatumCover.lean` that say *strictly* now have a theorem under them.
+`ComplexAnalytic.dupSurjective_refine` and `ComplexAnalytic.dupNot_refineDatumCovers` are its two
+halves and are guarded separately because each is quotable on its own;
+`ComplexAnalytic.dupPtStrict` is the same statement with the point hypothesis discharged, and it
+is the one that makes the counterexample unconditional.
+
+`ComplexAnalytic.mem_range_of_refineDatumCovers` and
+`ComplexAnalytic.not_refineDatumCovers_of_notMem_range` are the general reason: the condition
+forces the index map to hit every index whose member has a point, which the glued-space form does
+not ask, and which is why `ComplexAnalytic.refineDatumOneCovers` takes a surjectivity hypothesis.
+
+**The datum's own six pieces are not guarded and that is deliberate.**
+`ComplexAnalytic.dupObj`, `ComplexAnalytic.dupPoly`, `ComplexAnalytic.dupGlue`,
+`ComplexAnalytic.dupSigma` and the two law proofs are the witness's plumbing, and
+`Oka/Analytification/GlueShape.lean`'s counterexample sets the convention this follows: it guards
+`ComplexAnalytic.GlueShape.not_ctHRange` and advertises none of the `ct` definitions that produce
+it.
+
+**`Classical.choice` is in all six lists for the reason the section on the rest of that file
+gives** — the refined glue data is built from two `choose`n witnesses — and not because anything
+here is a choice.
+
+**Named and not located.** No sentence in this section says which section precedes or follows it,
+so an append anywhere leaves every sentence here true.
+-/
+
+/--
+info: 'ComplexAnalytic.mem_range_of_refineDatumCovers' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.mem_range_of_refineDatumCovers
+
+/--
+info: 'ComplexAnalytic.not_refineDatumCovers_of_notMem_range' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.not_refineDatumCovers_of_notMem_range
+
+/--
+info: 'ComplexAnalytic.dupSurjective_refine' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.dupSurjective_refine
+
+/--
+info: 'ComplexAnalytic.dupNot_refineDatumCovers' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.dupNot_refineDatumCovers
+
+/--
+info: 'ComplexAnalytic.dupStrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.dupStrict
+
+/--
+info: 'ComplexAnalytic.dupPtStrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.dupPtStrict
