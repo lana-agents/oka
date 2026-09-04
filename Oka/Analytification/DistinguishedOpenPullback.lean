@@ -74,10 +74,13 @@ algebraically. **Three existentials did not have to be instantiated; one did, an
 `ComplexAnalytic.exists_mk_rename_eq`** — that is `Oka/Analytification/CrossMemberDatumGlue.lean`'s
 own wording for the correction, and `ComplexAnalytic.exists_refineDatumCrossFactor` is where
 `Oka/Analytification/CrossMemberChoice.lean` spends it. The two it does not spend are the two that
-produce an equality of *opens*, which is why what it does not supply is a reason to think the
-overlap so refined is the geometric one: an equality of opens does not give an associate. That is
-where the caller still comes in, and `Oka/Analytification/DistinguishedOpen.lean` has said as much
-since the same push; this file had not been opened.
+produce an equality of *opens*, and an equality of opens does not give an associate — so the
+implication that was missing runs the other way, and **it is the one the theorem above supplies**:
+`Oka/Analytification/RefineDatumRefinesCross.lean` reads the choice's rule, an identity between
+classes, as an equality of opens, by this file's theorem and by the unit lemma beside it in
+`Oka/Analytification/DistinguishedOpen.lean`, and concludes that the overlap so refined **is** the
+geometric one. This paragraph ended *"that is where the caller still comes in, and this file had
+not been opened"*; it has been, and by the consumer it was written for.
 
 **And the two geometric laws no longer stand or fall together.** This paragraph ended *"`hrange`
 and `hcocycle` are as untouched as the two laws are"*, which said of both what is now true of only

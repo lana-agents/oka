@@ -21,8 +21,10 @@ overlaps together with the morphisms out of the space it glues to and the same g
 `Spec` side, the image of the analytification in `ℂ^n`, and the family of
 monic polynomials of a polynomial monic in the last variable, with the finiteness over `ℂ^n`
 that it supplies, the glue of a refined overlap that meets two different members of the
-original cover with the symmetry law it satisfies, and the square saying that the refined
-transition lies over the original cover's own transition.
+original cover with the symmetry law it satisfies, the square saying that the refined
+transition lies over the original cover's own transition, and that the refined datum refines the
+space it refines — at the pairs whose refined members lie over one member of the original, at the
+pairs where they lie over two, and at a family of extra factors at which both hold at once.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -5906,3 +5908,113 @@ info: 'ComplexAnalytic.refineDatumMemberIota_image_coverOpen_subset_of_ne' depen
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.refineDatumMemberIota_image_coverOpen_subset_of_ne
+
+/-! ### The refined datum refines across members, and the two members meet in nothing else
+
+`Oka/Analytification/RefineDatumRefinesCross.lean`'s equality at a pair of refined members lying
+over two different members of the original cover, and the family of extra factors at which it
+holds at every ordered pair — together with the six lemmas the two are built from, which are
+guarded here although four of them live in `Oka/Analytification/AffineCover.lean` and two in the
+files that own evaluation and the non-vanishing locus, since nothing else in this file guards
+them. Appended as its own section rather than merged into the one above, for the reason that
+section gives: moving or reordering a section of this file is a conflict for every branch that
+has appended to it.
+
+**What the guards are a check of is two things and neither is analytic.**
+`ComplexAnalytic.localisationOpen_eq_of_isUnit_mul` is the whole of the passage from an identity
+between classes in a presented algebra to an equality of non-vanishing loci — evaluation at a
+point kills the presentation ideal, and a unit does not vanish — and
+`ComplexAnalytic.preimage_range_coverIota` is the whole of the passage from the glue data's
+description of when two points of two members become one to the statement that the two members
+meet in the overlap and in nothing else. Everything else here is bookkeeping between the two.
+
+**`Classical.choice` is in all twelve and is expected**: `ComplexAnalytic.refineDatumFactor` is an
+`open Classical` case split, the analytification of a presentation runs through a gluing, and the
+last guard's statement is an existential produced by `choose` from another one.
+
+**Named and not located.** No sentence here says which section precedes or follows it.
+-/
+
+/--
+info: 'ComplexAnalytic.quotientEval_mk' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.quotientEval_mk
+
+/--
+info: 'ComplexAnalytic.localisationOpen_eq_of_isUnit_mul' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.localisationOpen_eq_of_isUnit_mul
+
+/--
+info: 'ComplexAnalytic.range_coverTransitionHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.range_coverTransitionHom
+
+/--
+info: 'ComplexAnalytic.preimage_range_coverIota' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.preimage_range_coverIota
+
+/--
+info: 'ComplexAnalytic.range_coverIota_inter' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.range_coverIota_inter
+
+/--
+info: 'ComplexAnalytic.coverOverlapIso_hom_coverTransitionHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverOverlapIso_hom_coverTransitionHom
+
+/--
+info: 'ComplexAnalytic.base_coverIota_localisationProj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.base_coverIota_localisationProj
+
+/--
+info: 'ComplexAnalytic.image_localisationOpen_localisationProj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.image_localisationOpen_localisationProj
+
+/--
+info: 'ComplexAnalytic.localisationOpen_rename_eq_comap_coverGlueIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.localisationOpen_rename_eq_comap_coverGlueIso
+
+/--
+info: 'ComplexAnalytic.coverIota_image_localisationOpen_of_ne' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverIota_image_localisationOpen_of_ne
+
+/--
+info: 'ComplexAnalytic.refineDatumMemberIota_image_coverOpen_of_ne' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumMemberIota_image_coverOpen_of_ne
+
+/--
+info: 'ComplexAnalytic.exists_refineDatumMemberIota_image_coverOpen' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.exists_refineDatumMemberIota_image_coverOpen

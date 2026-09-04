@@ -152,10 +152,13 @@ goal.
   `ComplexAnalytic.exists_refineDatumCrossFactor` (`Oka/Analytification/CrossMemberChoice.lean`)
   supplies a `q` at every ordered pair, and it is **not** a producer in the sense this bullet
   means: what it supplies obeys `ComplexAnalytic.RefineDatumCrossFactor`, a rule about classes in
-  an overlap algebra, and nothing says the polynomial it supplies is one under which the chain
-  above cuts out the refined overlap. **On the literal reading this bullet would now be false and
-  on the one it is written under it stands; the second is the reading, and the heading above says
-  so rather than leaving it to be inferred.**
+  an overlap algebra. **This bullet then said nothing says the polynomial it supplies is one under
+  which the chain above cuts out the refined overlap, and something does**:
+  `Oka/Analytification/RefineDatumRefinesCross.lean` reads that rule as an equality of opens and
+  proves the refined overlaps are cut out where this file's field says they are, at a family that
+  same existential supplies. What is still true is the sentence this bullet is written under —
+  the extra factor is an *argument* of the definition below, which imposes no condition on it —
+  and that is the reading, as the heading above says rather than leaving it to be inferred.
 * **No statement that the refined data cover anything.** Two of the three things this bullet has
   meant are now retired and the third is retired at the pairs whose two refined members lie over
   one member, so the three are kept apart here rather than left to a reader to separate.
@@ -173,10 +176,12 @@ goal.
   equality wherever the two refined members lie over one member — where the field is
   `ComplexAnalytic.refineDatumPoly_of_eq` and the caller's extra factor is not read — and where
   they lie over two proves only that the refined overlap lands in the `a`-th refined member and in
-  the part of the member `σ b` that meets the member `σ a`. **The cross-member equality is
-  untouched there in both directions**, and the gap is the one the bullet above names in an
-  algebra: `D(fam b)` is what the containment does not reach, and nothing reads
-  `ComplexAnalytic.RefineDatumCrossFactor` as a statement about opens.
+  the part of the member `σ b` that meets the member `σ a`. **This sentence then said the
+  cross-member equality was untouched in both directions and that nothing read
+  `ComplexAnalytic.RefineDatumCrossFactor` as a statement about opens**;
+  `Oka/Analytification/RefineDatumRefinesCross.lean` does both, so what the two files leave open
+  between them is no longer this. The gap the containment leaves is `D(fam b)`, and the rule on
+  the caller's factor read geometrically is exactly what closes it.
 * **No witness at a concrete cover datum *here*.** This bullet said there was none anywhere:
   *"its refining family is constantly `1`, so it is not a witness at a concrete datum with a
   `poly` field of its own either"*. There is one — `OkaTest/RefineDatumWitness.lean` instantiates

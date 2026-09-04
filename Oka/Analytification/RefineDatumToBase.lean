@@ -170,10 +170,12 @@ figure to check a branch on this file by.
   `Oka/Analytification/CrossMemberDatum.lean`'s *"No statement that the refined data cover
   anything"* is narrowed there too, and its remaining half — that the refined overlaps are cut out
   where `ComplexAnalytic.refineDatumPoly` says they are — is a statement about that definition and
-  is untouched by any of it. It is settled elsewhere and only in part:
+  is untouched by any of it. It is settled elsewhere and, since 2026-09-04, outright:
   `Oka/Analytification/RefineDatumRefines.lean` proves it wherever the two refined members lie
-  over one member of the original cover and proves a containment where they lie over two. **That
-  bears on this bullet in neither half**: it is about `ComplexAnalytic.refineDatumMemberIota`,
+  over one member of the original cover, and `Oka/Analytification/RefineDatumRefinesCross.lean`
+  proves it where they lie over two, at a family of extra factors it produces — this sentence read
+  *"only in part"* and named the containment that was all the second case had. **That bears on
+  this bullet in neither half**: it is about `ComplexAnalytic.refineDatumMemberIota`,
   which reads no refined datum, and an equality of images says nothing about the morphism below or
   about its fibres.
 * **No general form taking the refined cocycle law as an argument**, unlike

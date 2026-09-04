@@ -77,6 +77,12 @@ polynomial is required to cut anything out**: every statement below is an identi
 elements of an overlap algebra, and the geometry never enters. That is why the file is short,
 and it is also the reason to be careful about what it does *not* claim — see below.
 
+**What the rule below means geometrically is not stated here and is stated**:
+`Oka/Analytification/RefineDatumRefinesCross.lean` reads `ComplexAnalytic.RefineDatumCrossFactor`
+as an equality of non-vanishing loci and proves that a refined datum built at a family obeying it
+refines the space it refines. Nothing below is changed by that, and the division is the point —
+the condition is chosen and checked in an algebra, and what it buys is geometric.
+
 ## Main definitions
 
 - `ComplexAnalytic.coverOverlapClass`: **the class of a member's polynomial in an overlap

@@ -115,6 +115,7 @@ import Oka.Analytification.RefineDatumCover
 import Oka.Analytification.RefineDatumGlueData
 import Oka.Analytification.RefineDatumRange
 import Oka.Analytification.RefineDatumRefines
+import Oka.Analytification.RefineDatumRefinesCross
 import Oka.Analytification.RefineDatumSymm
 import Oka.Analytification.RefineDatumToBase
 import Oka.Analytification.RefineDatumTransition
