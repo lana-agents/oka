@@ -5300,7 +5300,7 @@ construction. This file's guards for `ComplexAnalytic.refineDatumToBase` and
 
 **Named and not located, and this section holds itself to that.** No sentence in it says which
 section precedes or follows it — including the placement sentence, which gives its reason instead
-of citing a neighbour's — so an append anywhere leaves every sentence here true.
+of citing a neighbour's; the next branch appends between them.
 -/
 
 /--
@@ -5355,9 +5355,9 @@ info: 'ComplexAnalytic.surjective_base_refineDatumOneToBase' depends on axioms:
 /-! ### The refining condition is strictly stronger than the surjectivity it gives
 
 `Oka/Analytification/RefineDatumCover.lean`'s counterexample section, and the two general lemmas
-that explain it. Appended as its own section rather than merged into the one that guards the rest
-of that file, and the reason is stated here rather than cited: moving or reordering a section of
-this file is a conflict for every branch that has appended to it.
+that explain it. Appended as its own section rather than merged into an existing one, and the
+reason is stated here rather than cited: moving or reordering a section of this file is a conflict
+for every branch that has appended to it.
 
 **Six guards, and what they are a check of is a non-implication.**
 `ComplexAnalytic.dupStrict` exhibits a cover datum, an index map and a refining family at which
@@ -5400,12 +5400,12 @@ reflexive isomorphism is its own inverse. So *"three laws are proved here"* and 
 datum's laws are vacuous"* are both true and count different sets; a sentence that says **two law
 proofs** has collapsed them and has dropped `ComplexAnalytic.dupHsymm` on the way.
 
-**`Classical.choice` is in all six lists for the reason the section on the rest of that file
-gives** — the refined glue data is built from two `choose`n witnesses — and not because anything
+**`Classical.choice` is in all six lists for the reason the sections on the rest of that file
+give** — the refined glue data is built from two `choose`n witnesses — and not because anything
 here is a choice.
 
-**Named and not located.** No sentence in this section says which section precedes or follows it,
-so an append anywhere leaves every sentence here true.
+**Named and not located.** No sentence in this section says which section precedes or follows it;
+the next branch appends between them.
 -/
 
 /--
@@ -5456,9 +5456,9 @@ info: 'ComplexAnalytic.dupPtStrict' depends on axioms:
 `### The condition at an index map that is the identity`, which reads
 `ComplexAnalytic.RefineDatumCovers` at `σ = id` — where the index a point must be reached through
 is forced, the identification of two members is the identity, and the condition is left saying that
-each `D(fam i)` is the whole of its member. Appended as its own section rather than merged into
-either of that file's two above, and the reason is stated here rather than cited: moving or
-reordering a section of this file is a conflict for every branch that has appended to it.
+each `D(fam i)` is the whole of its member. Appended as its own section rather than merged into an
+existing one, and the reason is stated here rather than cited: moving or reordering a section of
+this file is a conflict for every branch that has appended to it.
 
 **Three guards, and what they are a check of is a collapse and not a new geometry.** All three
 proofs are the identification being disposed of by `ComplexAnalytic.coverSpaceHomOfEq_self`, so
@@ -5476,8 +5476,8 @@ condition.
 than the surjectivity of `ComplexAnalytic.refineDatumToBase`, so refuting the condition at a datum
 decides nothing about that morphism there.
 
-**Named and not located.** No sentence in this section says which section precedes or follows it,
-so an append anywhere leaves every sentence here true.
+**Named and not located.** No sentence in this section says which section precedes or follows it;
+the next branch appends between them.
 -/
 
 /--
@@ -5521,8 +5521,8 @@ a term with no tactic in it.
 refined glue data is built from two `choose`n witnesses — and not because anything here is a
 choice.
 
-**Named and not located.** No sentence in this section says which section precedes or follows it,
-so an append anywhere leaves every sentence here true.
+**Named and not located.** No sentence in this section says which section precedes or follows it;
+the next branch appends between them.
 -/
 
 /--
@@ -5559,8 +5559,8 @@ choices and the theorem is the general equivalence read at them, so `Classical.c
 lists for the reason the other sections of this file give — the refined glue data is built from two
 `choose`n witnesses — and not because anything here is a choice.
 
-**Named and not located.** No sentence in this section says which section precedes or follows it,
-so an append anywhere leaves every sentence here true.
+**Named and not located.** No sentence in this section says which section precedes or follows it;
+the next branch appends between them.
 -/
 
 /--
@@ -5579,30 +5579,41 @@ info: 'ComplexAnalytic.surjective_base_refineDatumUnitFamToBase_iff' depends on 
 
 /-! ### The overlap of two refined members at one immersion
 
-`Oka/Analytification/SpecRefinedMemberSection.lean`'s last three declarations. Appended as its own
-section for the reason the sections above give: a section moved is a conflict for somebody else.
+The five declarations under `Oka/Analytification/SpecRefinedMemberSection.lean`'s own overlap
+heading, plus the one declaration `Oka/Analytification/SpecDistinguishedOpen.lean` gained for them
+— the same shape as `### A distinguished open of a member, as an affine open of the glued scheme`,
+and for the same reason. Appended as its own section for the reason the sections above give: a
+section moved is a conflict for somebody else.
 
 **Its own section rather than an insertion under either of that file's two headings here, and the
 reason is the subject and not the file.** `### The refined member, at an arbitrary open immersion`
 covers the general level of `Oka/Analytification/SpecRefinedMember.lean` and of that file, and it
 pairs **six** general declarations with six member-level ones, saying in terms that the two sets
-are not independent; these three have no member-level counterpart, so inserting them there would
+are not independent; these have no member-level counterpart, so inserting them there would
 falsify that pairing while stating nothing about it. `### The refined member's range, in the
 section vocabulary` is about one member's range, and these are about two members' overlap.
 
-**Three guards and what each is a check of.** `ComplexAnalytic.presentationSection_mul` is two
+**Six guards and what each is a check of.** `ComplexAnalytic.presentationSection_mul` is two
 `map_mul`s and is here because it is a declaration and not because anything about it is
 surprising. `ComplexAnalytic.opensRange_presentationRefinedIota_inf` is
-`AlgebraicGeometry.Scheme.basicOpen_mul` read through the general range theorem, and
+`AlgebraicGeometry.Scheme.basicOpen_mul` read through the general range theorem;
 `ComplexAnalytic.basicOpen_res_presentationSection` is `AlgebraicGeometry.Scheme.basicOpen_res`
-with no affineness hypothesis; **`Classical.choice` is in all three lists for the reason the
+with no affineness hypothesis and `ComplexAnalytic.basicOpen_res_presentationSection'` is that
+theorem at the exchanged pair and one `inf_comm`.
+`ComplexAnalytic.image_basicOpen_rename_Spec_map_localisationRingHom` is the one that carries
+content — an image of a preimage under an open immersion, on `Spec` and with no section in
+sight — and `ComplexAnalytic.opensRange_presentationRefinedIota_rename` is that theorem transported
+up along the caller's immersion. **`Classical.choice` is in all six lists for the reason the
 sections on the rest of that file give** — the scheme structure underneath is built from chosen
 witnesses — and not because anything here is a choice.
 
 **What these do not assert, said here because a guard file is where a reader checks a claim against
-a list.** None of the three is a `poly`, none quantifies over two indices, and none says anything
+a list.** None of the six is a `poly`, none quantifies over two indices, and none says anything
 about two members of a cover datum chosen inside *different* members — which is the half of the
-doubly-distinguished condition that file's own prose says is not supplied.
+doubly-distinguished condition that file's own prose says is not supplied. **What they now do
+assert is that half's complement**: at two refined members of the *same* immersion the overlap is a
+refined member of each of them at a polynomial in that member's own variables, which is the
+doubly-distinguished condition there and is not the same claim as being a `poly`.
 
 **Named and not located.** No sentence here says which section is above or below it. -/
 
@@ -5626,6 +5637,27 @@ info: 'ComplexAnalytic.basicOpen_res_presentationSection' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.basicOpen_res_presentationSection
+
+/--
+info: 'ComplexAnalytic.basicOpen_res_presentationSection'' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.basicOpen_res_presentationSection'
+
+/--
+info: 'ComplexAnalytic.image_basicOpen_rename_Spec_map_localisationRingHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.image_basicOpen_rename_Spec_map_localisationRingHom
+
+/--
+info: 'ComplexAnalytic.opensRange_presentationRefinedIota_rename' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.opensRange_presentationRefinedIota_rename
 
 /-! ### The refined members as an open cover of the space they refine
 
@@ -5652,7 +5684,7 @@ construction inside
 declaration of that module records the same three.
 
 **Named and not located, and this section holds itself to that.** No sentence in it says which
-section precedes or follows it, so an append anywhere leaves every sentence here true.
+section precedes or follows it; the next branch appends between them.
 -/
 
 /--
