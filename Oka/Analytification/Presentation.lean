@@ -99,6 +99,10 @@ flatness is still open.
   `ComplexAnalytic.analytificationToSpec_base_asIdeal`: **the point of `Spec (ℂ[x]/I)`
   underneath `z` is the ideal of functions vanishing at `z`**, i.e. the kernel of
   `ComplexAnalytic.quotientEval`.
+- `ComplexAnalytic.quotientEval_mk`: **evaluating the class of a polynomial is evaluating the
+  polynomial**, which is `rfl` and is stated because Mathlib's rewrite for a quotient lift does
+  not fire through the definition — named at the declaration, since a backticked name under this
+  heading is read as a result of this file.
 - `ComplexAnalytic.isMaximal_analytificationToSpec_base_asIdeal` and
   `ComplexAnalytic.analytificationToSpec_base_injective`: the comparison morphism lands in the
   closed points and is injective on points.
@@ -347,6 +351,20 @@ def quotientEval (y : AnalyticSpace.analytification.{u} g) :
   Ideal.Quotient.lift _ (MvPolynomial.eval (y.1.1 : ULift.{u} (Fin n) → ℂ))
     fun _ ha ↦ Ideal.span_le.2
       (Set.range_subset_iff.2 fun j ↦ RingHom.mem_ker.2 (eval_eq_zero_of_mem g y j)) ha
+
+/-- **Evaluating the class of a polynomial is evaluating the polynomial**, by `rfl` and by
+construction: `ComplexAnalytic.quotientEval` is `Ideal.Quotient.lift` of `MvPolynomial.eval`.
+
+Stated because `Ideal.Quotient.lift_mk` will not fire through the definition — a `rw` looks for
+the head symbol `Ideal.Quotient.lift` and finds `ComplexAnalytic.quotientEval` — so a caller
+holding an equation between *classes* and wanting one between *values* has nothing to rewrite
+with. It is the bridge `ComplexAnalytic.localisationOpen_eq_of_isUnit_mul`
+(`Oka/Analytification/DistinguishedOpen.lean`) crosses. -/
+theorem quotientEval_mk (y : AnalyticSpace.analytification.{u} g)
+    (p : MvPolynomial (ULift.{u} (Fin n)) ℂ) :
+    quotientEval.{u} g y (Ideal.Quotient.mk (presentationIdeal.{u} g) p) =
+      MvPolynomial.eval (y.1.1 : ULift.{u} (Fin n) → ℂ) p :=
+  rfl
 
 /-- `ComplexAnalytic.mem_analytificationToSpec_base_asIdeal_iff` as an equality of ideals: the
 point underneath `y` is the kernel of evaluation at `y`. -/

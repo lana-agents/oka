@@ -100,8 +100,10 @@ is a statement about the caller's `q`, and
 
 **Nothing here is evidence that the equality fails at a cross-member pair**, and this file does not
 claim it does: what it claims is that the two halves of the pair statement are `poly (σ a) (σ b)`
-and `q a b`, that the first is discharged and the second is not, and that the missing step is a
-geometric reading of a condition currently stated in an algebra.
+and `q a b`, and that the first is discharged here and the second is not. **The missing step is a
+geometric reading of a condition stated in an algebra, and it is taken in
+`Oka/Analytification/RefineDatumRefinesCross.lean`** — this paragraph ended *"a condition
+currently stated in an algebra"* while that was the whole of what anything said about it.
 
 ## Main results
 
@@ -119,16 +121,25 @@ geometric reading of a condition currently stated in an algebra.
 
 ## What is not here
 
-* **No equality at a cross-member pair, in either direction.** Neither the statement that
-  `ComplexAnalytic.refineDatumPoly` cuts out the intersection there nor a counterexample to it is
-  here, and the containment above is not evidence for either: it is the half that needs no
-  hypothesis, and the half it omits is exactly the one a condition on `q` would supply.
-* **Nothing about `ComplexAnalytic.RefineDatumCrossFactor`.** The rule
+* **No equality at a cross-member pair, in either direction, *below*.** Neither the statement
+  that `ComplexAnalytic.refineDatumPoly` cuts out the intersection there nor a counterexample to
+  it is in this file, and the containment above is not evidence for either: it is the half that
+  needs no hypothesis, and the half it omits is exactly the one a condition on `q` supplies.
+  **This bullet stood for the tree until 2026-09-04**, when
+  `Oka/Analytification/RefineDatumRefinesCross.lean` proved the equality on
+  `ComplexAnalytic.RefineDatumCrossFactor` and then at a family obeying it at every ordered pair;
+  what remains here is the statement about this file, and the reason the two are separate files is
+  that the cross-member proof reads the datum's own `glue` and nothing above does.
+* **Nothing about `ComplexAnalytic.RefineDatumCrossFactor` *here*.** The rule
   `Oka/Analytification/CrossMemberChoice.lean` produces a factor under is an identity between
-  classes in an overlap algebra; **no statement anywhere reads it geometrically**, and this file
-  does not open it. That reading — a class equal to a unit multiple of another has the same
-  non-vanishing locus, and the analytified glue carries one locus to the other — is what a
-  cross-member equality would be built from, and none of its three steps is in the tree.
+  classes in an overlap algebra, and this file does not open it. **This bullet said no statement
+  anywhere read it geometrically and that none of the three steps of such a reading was in the
+  tree**; `Oka/Analytification/RefineDatumRefinesCross.lean` reads it, and the three steps — a
+  class equal to a unit multiple of another has the same non-vanishing locus, the analytified glue
+  carries one locus to the other, and the two members' inclusions agree on the overlap — are the
+  three that file names. What is still true of *this* file is the first clause: no statement below
+  mentions the rule, and the equality above holds at pairs where the caller's factor is not read
+  at all.
 * **No injectivity and no isomorphism.** `Oka/Analytification/RefineDatumCover.lean`'s *"No
   injectivity, and no claim that anything is an isomorphism"* is untouched in both halves: an
   equality of images is a statement about sets and says nothing about fibres, and **nothing here is

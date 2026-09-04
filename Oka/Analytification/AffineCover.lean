@@ -190,6 +190,8 @@ a much larger tax than one unused value per index.
   second of the two. The mirrors on the `Spec` side are
   `ComplexAnalytic.range_specTransitionHom_subset` and
   `ComplexAnalytic.range_comp_specTransitionHom_subset`.
+- `ComplexAnalytic.range_coverTransitionHom`: **and it is onto `D(f_ji)`**, which is the first of
+  the two that a statement about *which* points of the `j`-th member are reached can use.
 - `ComplexAnalytic.comm_coverGlueData`: **agreement over the overlaps is the glue datum's
   compatibility condition**, which is what makes `ComplexAnalytic.coverGlueMorphisms` statable —
   `ComplexAnalytic.AnalyticSpace.glueMorphisms` asks for agreement over a categorical pullback
@@ -209,8 +211,26 @@ a much larger tax than one unused value per index.
 - `ComplexAnalytic.injective_base_coverIota`: **each member's inclusion is injective on points**,
   which an intersection of two members' images has to be told.
 - `ComplexAnalytic.coverIota_image_coverOpen`: **the two members meet where the datum says they
-  do** — `D(f_ij)` and `D(f_ji)` have the same image in `X^an`. Not a statement that they meet in
-  nothing else; that is about the gluing and is not here.
+  do** — `D(f_ij)` and `D(f_ji)` have the same image in `X^an`. A fact about the two composites
+  out of the overlap as an open subspace of a member, and not by itself a statement that the two
+  members meet in nothing else; **that one is the next bullet**, and it was absent until
+  2026-09-04.
+- `ComplexAnalytic.preimage_range_coverIota` and `ComplexAnalytic.range_coverIota_inter`: **and
+  they meet in nothing else** — what of the `j`-th member lies in the `i`-th is exactly `D(f_ji)`,
+  so the intersection of the two members inside `X^an` is the image of the overlap the datum
+  names. This is a statement about the *gluing* rather than about the two composites, and what
+  settles it is the mirror tree's description of when two points of two members become one point
+  of `X^an` — cited at the declarations, since a backticked name under this heading is read as a
+  result of this file. Both are at `i ≠ j`, where the glue datum's overlap is the one the input
+  supplied.
+- `ComplexAnalytic.coverOverlapIso_hom_coverTransitionHom` and
+  `ComplexAnalytic.base_coverIota_localisationProj`: **the overlap's own space maps into `X^an` by
+  two routes and they agree** — down into the `i`-th member and in, or across by the analytified
+  glue and down into the `j`-th member and in. The first is the equation of morphisms and the
+  second is it at a point, which is the form a computation with images of sets consumes.
+- `ComplexAnalytic.image_localisationOpen_localisationProj`: **a distinguished open of the
+  overlap's own space, pushed down into the member it lies over** — `D(f_ij) ⊓ D(x)`, for `x` a
+  polynomial of that member read in the localisation's extra variable.
 
 ## What is not here
 
@@ -1018,10 +1038,13 @@ morphisms: the range of `ComplexAnalytic.coverIncl` is the open it restricts to
 out of `ComplexAnalytic.coverPart`, and the transition between the two composites is an
 isomorphism, whose base is therefore surjective.
 
-**This is not the statement that the two members meet in *nothing else***, which would say
+**This is not the statement that the two members meet in *nothing else***, which says
 `Set.range` of the two inclusions intersect in exactly this set and is a statement about the
-gluing rather than about the two composites; nothing here is evidence about it in either
-direction. -/
+gluing rather than about the two composites. That one is
+`ComplexAnalytic.range_coverIota_inter` below, proved from
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.ι_eq_iff` and not from anything here; this
+docstring read *"nothing here is evidence about it in either direction"* until it was proved, and
+that clause was true of this proof and is not a description of the tree. -/
 theorem coverIota_image_coverOpen (i j : J) (hij : i ≠ j) :
     (coverIota.{u} obj poly glue hrange hsymm hcocycle i).toLRSHom.base ''
         (coverOpen.{u} obj poly i j : Set (coverSpace.{u} obj i)) =
@@ -1061,6 +1084,188 @@ theorem coverGlueMorphisms_coverIota :
         (coverIncl_comp_coverIota.{u} obj poly glue hrange hsymm hcocycle) = 𝟙 _ :=
   coverAnalytification_hom_ext.{u} obj poly glue hrange hsymm hcocycle _ _ fun i ↦ by
     rw [coverIota_comp_coverGlueMorphisms, Category.comp_id]
+
+/-! ### The two members meet in the overlap and in nothing else -/
+
+/-- **The transition into the ambient member is onto `D(f_ji)`**, and not merely into it.
+
+`ComplexAnalytic.range_coverTransitionHom_subset` is the containment, which is all
+`ComplexAnalytic.coverTriple` needs; this is the equality, and it is what a statement about *which*
+points of the `j`-th member are reached asks for. The extra step is that the first factor of
+`ComplexAnalytic.coverTransitionHom` is an isomorphism, hence surjective on points
+(`AlgebraicGeometry.LocallyRingedSpace.homeoOfIso`), so the range of the composite is the range of
+`ComplexAnalytic.coverIncl`, which is
+`AlgebraicGeometry.LocallyRingedSpace.range_ofRestrict`. **Nothing about the input enters here
+either** — the containment and the equality are both true of every `glue`. -/
+theorem range_coverTransitionHom (i j : J) :
+    Set.range (coverTransitionHom.{u} obj poly glue i j).base =
+      (coverOpen.{u} obj poly j i : Set (coverSpace.{u} obj j)) := by
+  rw [coverTransitionHom, LocallyRingedSpace.comp_base, TopCat.coe_comp, Set.range_comp]
+  have hs : Set.range ⇑(coverTransition.{u} obj poly glue i j).hom.base = Set.univ :=
+    Set.range_eq_univ.2
+      (LocallyRingedSpace.homeoOfIso (coverTransition.{u} obj poly glue i j)).surjective
+  rw [hs, Set.image_univ]
+  exact ((coverSpace.{u} obj j).range_ofRestrict (coverOpen.{u} obj poly j i))
+
+/-- **What of the `j`-th member lies in the `i`-th is exactly `D(f_ji)`**: the preimage along the
+`j`-th member's inclusion of where the `i`-th member sits is the open the datum says the two meet
+in.
+
+This is the statement `ComplexAnalytic.coverIota_image_coverOpen`'s docstring records as *not*
+being it: that one compares two composites out of `ComplexAnalytic.coverPart` and holds because
+the transition between them is an isomorphism, and it is silent about points of the two members
+that are identified for some *other* reason. This one is about the gluing, and what settles it is
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.ι_eq_iff` — the description of when two points of
+two members become one point of `X^an`, which says they do exactly when a point of the overlap
+carries one to the other.
+
+The unfolding is the two `eqToHom`s `CategoryTheory.GlueData.ofGlueData'` inserts:
+`CategoryTheory.GlueData.ofGlueData'_t_comp_f_of_ne` puts the glue datum's `t i j ≫ f j i` at
+`ComplexAnalytic.coverTransitionHom` after one of them, and an `eqToHom` is an isomorphism, so
+the two have the same range — which `ComplexAnalytic.range_coverTransitionHom` computes.
+
+**The hypothesis `i ≠ j` is not removable**, and not for a bookkeeping reason: at `i = j` the glue
+datum's `V (i, i)` is the member itself and the statement would read `D(f_ii) = ⊤`, which the
+input does not supply. -/
+theorem preimage_range_coverIota (i j : J) (hij : i ≠ j) :
+    (coverIota.{u} obj poly glue hrange hsymm hcocycle j).toLRSHom.base ⁻¹'
+        Set.range (coverIota.{u} obj poly glue hrange hsymm hcocycle i).toLRSHom.base =
+      (coverOpen.{u} obj poly j i : Set (coverSpace.{u} obj j)) := by
+  have hcomp : (coverGlueData.{u} obj poly glue hrange hsymm hcocycle).toGlueData.t i j ≫
+      (coverGlueData.{u} obj poly glue hrange hsymm hcocycle).toGlueData.f j i =
+      eqToHom (dif_neg hij) ≫ coverTransitionHom.{u} obj poly glue i j :=
+    CategoryTheory.GlueData.ofGlueData'_t_comp_f_of_ne
+      (coverGlueData'.{u} obj poly glue hrange hsymm hcocycle) hij
+  have hrangeeq : Set.range ⇑((coverGlueData.{u} obj poly glue hrange hsymm hcocycle).toGlueData.t
+        i j ≫ (coverGlueData.{u} obj poly glue hrange hsymm hcocycle).toGlueData.f j i).base =
+      Set.range (coverTransitionHom.{u} obj poly glue i j).base := by
+    rw [hcomp, LocallyRingedSpace.comp_base]
+    have hs : Set.range ⇑(eqToHom (dif_neg hij) :
+        (coverGlueData.{u} obj poly glue hrange hsymm hcocycle).toGlueData.V (i, j) ⟶
+          coverPart.{u} obj poly i j).base = Set.univ :=
+      Set.range_eq_univ.2 (LocallyRingedSpace.homeoOfIso
+        (asIso (eqToHom (dif_neg hij) :
+          (coverGlueData.{u} obj poly glue hrange hsymm hcocycle).toGlueData.V (i, j) ⟶
+            coverPart.{u} obj poly i j))).surjective
+    change Set.range (⇑(coverTransitionHom.{u} obj poly glue i j).base ∘
+      ⇑(eqToHom (dif_neg hij) :
+        (coverGlueData.{u} obj poly glue hrange hsymm hcocycle).toGlueData.V (i, j) ⟶
+          coverPart.{u} obj poly i j).base) = _
+    rw [Set.range_comp, hs, Set.image_univ]
+  rw [← range_coverTransitionHom.{u} obj poly glue i j, ← hrangeeq]
+  ext x
+  simp only [Set.mem_preimage, Set.mem_range]
+  constructor
+  · rintro ⟨y, hy⟩
+    obtain ⟨z, hz1, hz2⟩ :=
+      ((coverGlueData.{u} obj poly glue hrange hsymm hcocycle).ι_eq_iff i j y x).1 hy
+    exact ⟨z, hz2⟩
+  · rintro ⟨z, hz⟩
+    refine ⟨((coverGlueData.{u} obj poly glue hrange hsymm hcocycle).toGlueData.f i j).base z, ?_⟩
+    exact ((coverGlueData.{u} obj poly glue hrange hsymm hcocycle).ι_eq_iff i j _ x).2
+      ⟨z, rfl, hz⟩
+
+/-- **The two members meet in nothing else**: where they meet in `X^an` is the image of the open
+the datum says they meet in.
+
+`ComplexAnalytic.preimage_range_coverIota` read as an image —
+`Set.image_preimage_eq_inter_range` — and then carried from the `j`-th member to the `i`-th by
+`ComplexAnalytic.coverIota_image_coverOpen`.
+
+**This is the statement whose absence that lemma's docstring recorded**, and the two are worth
+keeping apart: it says `D(f_ij)` and `D(f_ji)` have the same image, which is a fact about the two
+composites, and this says that image is the *whole* of the intersection of the two members, which
+is a fact about the gluing. -/
+theorem range_coverIota_inter (i j : J) (hij : i ≠ j) :
+    Set.range (coverIota.{u} obj poly glue hrange hsymm hcocycle i).toLRSHom.base ∩
+        Set.range (coverIota.{u} obj poly glue hrange hsymm hcocycle j).toLRSHom.base =
+      (coverIota.{u} obj poly glue hrange hsymm hcocycle i).toLRSHom.base ''
+        (coverOpen.{u} obj poly i j : Set (coverSpace.{u} obj i)) := by
+  rw [coverIota_image_coverOpen.{u} obj poly glue hrange hsymm hcocycle i j hij,
+    ← preimage_range_coverIota.{u} obj poly glue hrange hsymm hcocycle i j hij,
+    Set.image_preimage_eq_inter_range]
+
+/-- **The transition, read on the overlap's own space, is the analytified glue followed by the
+projection into the other member.**
+
+`ComplexAnalytic.coverTransition` is the analytified glue conjugated by
+`ComplexAnalytic.coverOverlapIso` at each end; precomposing with that isomorphism cancels the
+first conjugating factor, and `ComplexAnalytic.coverOverlapIso_hom_coverIncl` turns the second
+into `ComplexAnalytic.localisationProj`. Nothing is proved here that is not in those two — what
+the lemma supplies is the *spelling*, in which both sides are morphisms out of
+`(A_i)_{f_ij}^an` and the algebra is on the right of the equation.
+
+**This is what makes a statement about the two members' opens computable.** The overlap's own
+space is where a polynomial of either member is read as a class in the overlap algebra, and this
+says the two readings differ by the analytified glue and by nothing else. -/
+theorem coverOverlapIso_hom_coverTransitionHom (i j : J) :
+    (coverOverlapIso.{u} obj poly i j).hom ≫ coverTransitionHom.{u} obj poly glue i j =
+      (coverGlueIso.{u} obj poly glue i j).hom ≫
+        (localisationProj.{u} (obj j).g (poly j i)).toLRSHom := by
+  rw [coverTransitionHom, coverTransition, Iso.trans_hom, Iso.trans_hom, Iso.symm_hom,
+    ← Category.assoc, ← Category.assoc, Iso.hom_inv_id, Category.id_comp, Category.assoc,
+    coverOverlapIso_hom_coverIncl]
+
+/-- **A point of the overlap has one image in `X^an`, computed on either side.**
+
+The previous lemma and `ComplexAnalytic.coverIncl_comp_coverIota` composed and read at a point:
+going down into the `i`-th member and including that, or crossing by the analytified glue and
+going down into the `j`-th member and including that, give the same point.
+
+Stated pointwise rather than as an equation of morphisms because its consumers are computations
+with images of *sets*, where `Set.image_congr'` wants a function equality and a categorical one
+would have to be pushed through `AlgebraicGeometry.LocallyRingedSpace.comp_base` at each use. -/
+theorem base_coverIota_localisationProj (i j : J) (hij : i ≠ j)
+    (w : AnalyticSpace.analytification.{u}
+      (localisationPresentation.{u} (obj i).g (poly i j))) :
+    (coverIota.{u} obj poly glue hrange hsymm hcocycle i).toLRSHom.base
+        ((localisationProj.{u} (obj i).g (poly i j)).toLRSHom.base w) =
+      (coverIota.{u} obj poly glue hrange hsymm hcocycle j).toLRSHom.base
+        ((localisationProj.{u} (obj j).g (poly j i)).toLRSHom.base
+          ((coverGlueIso.{u} obj poly glue i j).hom.base w)) := by
+  have e : (localisationProj.{u} (obj i).g (poly i j)).toLRSHom ≫
+      (coverIota.{u} obj poly glue hrange hsymm hcocycle i).toLRSHom =
+      (coverGlueIso.{u} obj poly glue i j).hom ≫
+        (localisationProj.{u} (obj j).g (poly j i)).toLRSHom ≫
+          (coverIota.{u} obj poly glue hrange hsymm hcocycle j).toLRSHom := by
+    have e2 : (coverTransition.{u} obj poly glue i j).hom ≫ coverIncl.{u} obj poly j i =
+        coverTransitionHom.{u} obj poly glue i j := rfl
+    rw [← coverOverlapIso_hom_coverIncl.{u} obj poly i j, Category.assoc,
+      coverIncl_comp_coverIota.{u} obj poly glue hrange hsymm hcocycle i j hij,
+      ← Category.assoc ((coverTransition.{u} obj poly glue i j).hom), e2, ← Category.assoc,
+      coverOverlapIso_hom_coverTransitionHom.{u} obj poly glue i j, Category.assoc]
+  exact congrArg (fun m ↦ (ConcreteCategory.hom m.base) w) e
+
+/-- **A distinguished open of the overlap's own space, pushed down into the member it lies over.**
+
+For a polynomial of the `i`-th member read in the localisation's extra variable, the image under
+the projection of the open it cuts out of `(A_i)_{f_ij}^an` is `D(f_ij) ⊓ D(x)` inside `A_i^an`.
+
+`ComplexAnalytic.localisationOpen_rename` says the open upstairs is the preimage of `D(x)`, and
+`ComplexAnalytic.range_base_localisationProj` — the **equality**, not the containment — says the
+range of the projection is `D(f_ij)`; the image of a preimage is the set met with the range. -/
+theorem image_localisationOpen_localisationProj (i j : J)
+    (x : MvPolynomial (ULift.{u} (Fin (obj i).n)) ℂ) :
+    (localisationProj.{u} (obj i).g (poly i j)).toLRSHom.base ''
+        (localisationOpen.{u} (localisationPresentation.{u} (obj i).g (poly i j))
+          (MvPolynomial.rename (localisationIncl.{u} (obj i).n) x) :
+          Set (AnalyticSpace.analytification.{u}
+            (localisationPresentation.{u} (obj i).g (poly i j)))) =
+      (coverOpen.{u} obj poly i j : Set (coverSpace.{u} obj i)) ∩
+        (localisationOpen.{u} (obj i).g x :
+          Set (AnalyticSpace.analytification.{u} (obj i).g)) := by
+  have hpre : (localisationOpen.{u} (localisationPresentation.{u} (obj i).g (poly i j))
+      (MvPolynomial.rename (localisationIncl.{u} (obj i).n) x) :
+      Set (AnalyticSpace.analytification.{u}
+        (localisationPresentation.{u} (obj i).g (poly i j)))) =
+      ⇑(localisationProj.{u} (obj i).g (poly i j)).toLRSHom.base ⁻¹'
+        (localisationOpen.{u} (obj i).g x :
+          Set (AnalyticSpace.analytification.{u} (obj i).g)) := by
+    rw [localisationOpen_rename.{u} (obj i).g (poly i j) x]
+    rfl
+  rw [hpre, Set.image_preimage_eq_inter_range,
+    range_base_localisationProj.{u} (obj i).g (poly i j)]
+  exact Set.inter_comm _ _
 
 end
 

@@ -101,6 +101,9 @@ coordinate down, which is why it was affordable there.
   zero on `X^an`.
 - `ComplexAnalytic.localisationOpen_mul`: **`D(f · f') = D(f) ⊓ D(f')`** — the triple overlap of
   an affine cover, as one of the opens this file is about rather than an intersection of two.
+- `ComplexAnalytic.localisationOpen_eq_of_isUnit_mul`: **associates cut out the same open** —
+  a hypothesis on the classes in `ℂ[x]/I`, since that is the form a caller holds it in. The
+  converse is false, and which statement it would be is at the declaration.
 - `ComplexAnalytic.localisationOpen_rename`: **the open cut out upstairs by a renamed polynomial
   is the preimage of the one it cuts out downstairs.** Where the lemma above relates two opens of
   one space, this relates opens of two, which is what a refinement of a cover needs in order to
@@ -668,6 +671,43 @@ theorem localisationOpen_mul (f' : MvPolynomial (ULift.{u} (Fin n)) ℂ) :
     localisationOpen.{u} g (f * f') =
       localisationOpen.{u} g f ⊓ localisationOpen.{u} g f' := by
   rw [localisationOpen, map_mul, AnalyticSpace.nonvanishing_mul]
+
+/-- **Associates cut out the same open**: if the class of `p` in `ℂ[x]/I` is a unit multiple of
+the class of `p'`, then `D(p) = D(p')`.
+
+The hypothesis is on the *classes* and not on the polynomials, which is the form in which a
+caller holds it — an identity in a presented algebra — and it is why the proof runs through
+`ComplexAnalytic.quotientEval` rather than through `MvPolynomial.eval` directly: evaluation at a
+point of `X^an` kills the presentation ideal, so it factors through the quotient, and
+`ComplexAnalytic.quotientEval_mk` is the equation saying the two agree on a representative. The
+image of a unit under a ring map into `ℂ` is a unit and hence nonzero, so the two values differ by
+a nonzero factor and `ComplexAnalytic.mem_localisationOpen_iff` decides both memberships by the
+same condition.
+
+**The converse is false and `Oka/Analytification/LocalisationIndependence.lean` says so.** An
+equality of non-vanishing loci does not give an associate over a general presented `ℂ`-algebra —
+`ComplexAnalytic.exists_mk_rename_eq`'s docstring calls that implication a Nullstellensatz
+statement nothing here proves — so the two directions are different facts and only this one is a
+theorem. That is the whole reason the geometric consumers of an associate condition read it in
+this direction: `ComplexAnalytic.RefineDatumCrossFactor` is stated as a unit multiple of classes,
+and what a refinement needs of it is an equality of opens. -/
+theorem localisationOpen_eq_of_isUnit_mul (p p' : MvPolynomial (ULift.{u} (Fin n)) ℂ)
+    (u : (PresentedAlgebra.{u} n k g)ˣ)
+    (h : Ideal.Quotient.mk (presentationIdeal.{u} g) p =
+      (u : PresentedAlgebra.{u} n k g) * Ideal.Quotient.mk (presentationIdeal.{u} g) p') :
+    localisationOpen.{u} g p = localisationOpen.{u} g p' := by
+  refine Opens.ext (Set.ext fun y ↦ ?_)
+  change y ∈ localisationOpen.{u} g p ↔ y ∈ localisationOpen.{u} g p'
+  rw [mem_localisationOpen_iff, mem_localisationOpen_iff]
+  have he : MvPolynomial.eval (y.1.1 : ULift.{u} (Fin n) → ℂ) p =
+      quotientEval.{u} g y (u : PresentedAlgebra.{u} n k g) *
+        MvPolynomial.eval (y.1.1 : ULift.{u} (Fin n) → ℂ) p' := by
+    have hq := congrArg (quotientEval.{u} g y) h
+    rwa [map_mul, quotientEval_mk, quotientEval_mk] at hq
+  have hu : quotientEval.{u} g y (u : PresentedAlgebra.{u} n k g) ≠ 0 :=
+    (u.isUnit.map (quotientEval.{u} g y)).ne_zero
+  rw [he, mul_ne_zero_iff]
+  exact ⟨fun h' ↦ h'.2, fun h' ↦ ⟨hu, h'⟩⟩
 
 /-- **`D(f')` upstairs is the preimage of `D(f')` downstairs**, along the projection.
 
