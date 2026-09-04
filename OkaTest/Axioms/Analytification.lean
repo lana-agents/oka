@@ -5738,3 +5738,62 @@ info: 'ComplexAnalytic.refineDatumOneOpenCover' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.refineDatumOneOpenCover
+
+/-! ### The refined space's own cover, and the factorisation through the morphism down
+
+`Oka/Analytification/RefineDatumCover.lean`'s cover of the space a cross-member refinement glues
+to, and the two statements that carry each of its maps down to a member of the cover of `X^an`.
+Appended as its own section rather than merged into an existing one, and the reason is stated
+rather than cited: moving or reordering a section of this file is a conflict for every branch that
+has appended to it, and several have.
+
+**What these are a check of is the opposite of what the section above them checks**, which is why
+they are guarded apart: every declaration here reads the whole refined datum — the caller's `q`,
+the cross-member choices `rr` and `uu` and the two adopted conditions — because the space it covers
+is the gluing those produce. A declaration here that elaborated without them would be a
+declaration about the wrong space.
+
+**`Classical.choice` in all five, and the `idx` field is again why.** The cover is
+`ComplexAnalytic.coverAnalytificationOpenCover` at the refined datum, and
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.openCover` chooses an index for each point of the
+gluing; the three `rfl` results inherit it through the definition they are about.
+
+**No sentence here names a neighbouring section, and none says how much of that module this
+section covers** — the two properties this file can actually hold itself to, and an append
+elsewhere leaves both of them true.
+-/
+
+/--
+info: 'ComplexAnalytic.refineDatumGluedOpenCover' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumGluedOpenCover
+
+/--
+info: 'ComplexAnalytic.refineDatumGluedOpenCover_obj' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumGluedOpenCover_obj
+
+/--
+info: 'ComplexAnalytic.refineDatumGluedOpenCover_map' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumGluedOpenCover_map
+
+/--
+info: 'ComplexAnalytic.refineDatumGluedOpenCover_map_comp_refineDatumToBase' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumGluedOpenCover_map_comp_refineDatumToBase
+
+/--
+info: 'ComplexAnalytic.refineDatumOpenCover_map_eq_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.refineDatumOpenCover_map_eq_comp
