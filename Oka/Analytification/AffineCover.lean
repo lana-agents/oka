@@ -206,6 +206,11 @@ a much larger tax than one unused value per index.
   readable instance of `ComplexAnalytic.coverIota_comp_coverGlueMorphisms` at the members' own
   inclusions, and a corollary of it in one rewrite — which is worth saying, because the statement
   that rules out a definition ignoring its family is that one and not this one.
+- `ComplexAnalytic.injective_base_coverIota`: **each member's inclusion is injective on points**,
+  which an intersection of two members' images has to be told.
+- `ComplexAnalytic.coverIota_image_coverOpen`: **the two members meet where the datum says they
+  do** — `D(f_ij)` and `D(f_ji)` have the same image in `X^an`. Not a statement that they meet in
+  nothing else; that is about the gluing and is not here.
 
 ## What is not here
 
@@ -988,6 +993,58 @@ theorem coverIncl_comp_coverIota (i j : J) (hij : i ≠ j) :
     (fun i ↦ (coverGlueData.{u} obj poly glue hrange hsymm hcocycle).toGlueData.ι i)
     (fun i j ↦ ((coverGlueData.{u} obj poly glue hrange hsymm hcocycle).toGlueData.glue_condition
       i j).symm) hij
+
+/-- **The members are subspaces of `X^an` and not merely mapped into it**: the inclusion of the
+`i`-th is injective on points.
+
+`ComplexAnalytic.isOpenImmersion_coverIota` and nothing else — an open immersion of locally ringed
+spaces is one whose base is an `IsOpenEmbedding`, and an open embedding is injective. Stated
+because the consumers below want the *set* the `i`-th member occupies and want to intersect two of
+them, and `Set.image_inter` is where an injectivity hypothesis is asked for. -/
+theorem injective_base_coverIota (i : J) :
+    Function.Injective
+      (coverIota.{u} obj poly glue hrange hsymm hcocycle i).toLRSHom.base := by
+  haveI := isOpenImmersion_coverIota.{u} obj poly glue hrange hsymm hcocycle i
+  exact (PresheafedSpace.IsOpenImmersion.base_open
+    (f := (coverIota.{u} obj poly glue hrange hsymm hcocycle i).toLRSHom.toShHom.hom)).injective
+
+/-- **The two members meet where the datum says they do**, as one subset of `X^an`: the part of
+the `i`-th member that meets the `j`-th and the part of the `j`-th that meets the `i`-th have the
+same image.
+
+`ComplexAnalytic.coverIncl_comp_coverIota` is the whole content, read on ranges rather than on
+morphisms: the range of `ComplexAnalytic.coverIncl` is the open it restricts to
+(`AlgebraicGeometry.LocallyRingedSpace.range_ofRestrict`), so each side is the range of a composite
+out of `ComplexAnalytic.coverPart`, and the transition between the two composites is an
+isomorphism, whose base is therefore surjective.
+
+**This is not the statement that the two members meet in *nothing else***, which would say
+`Set.range` of the two inclusions intersect in exactly this set and is a statement about the
+gluing rather than about the two composites; nothing here is evidence about it in either
+direction. -/
+theorem coverIota_image_coverOpen (i j : J) (hij : i ≠ j) :
+    (coverIota.{u} obj poly glue hrange hsymm hcocycle i).toLRSHom.base ''
+        (coverOpen.{u} obj poly i j : Set (coverSpace.{u} obj i)) =
+      (coverIota.{u} obj poly glue hrange hsymm hcocycle j).toLRSHom.base ''
+        (coverOpen.{u} obj poly j i : Set (coverSpace.{u} obj j)) := by
+  have hrangei : Set.range ⇑(coverIncl.{u} obj poly i j).base =
+      (coverOpen.{u} obj poly i j : Set (coverSpace.{u} obj i)) :=
+    (coverSpace.{u} obj i).range_ofRestrict (coverOpen.{u} obj poly i j)
+  have hrangej : Set.range ⇑(coverIncl.{u} obj poly j i).base =
+      (coverOpen.{u} obj poly j i : Set (coverSpace.{u} obj j)) :=
+    (coverSpace.{u} obj j).range_ofRestrict (coverOpen.{u} obj poly j i)
+  rw [← hrangei, ← hrangej, ← Set.range_comp, ← Set.range_comp]
+  change Set.range ⇑(coverIncl.{u} obj poly i j ≫
+      (coverIota.{u} obj poly glue hrange hsymm hcocycle i).toLRSHom).base = _
+  rw [coverIncl_comp_coverIota.{u} obj poly glue hrange hsymm hcocycle i j hij]
+  change Set.range (⇑(coverIncl.{u} obj poly j i ≫
+      (coverIota.{u} obj poly glue hrange hsymm hcocycle j).toLRSHom).base ∘
+      ⇑(coverTransition.{u} obj poly glue i j).hom.base) = _
+  have hsurj : Set.range ⇑(coverTransition.{u} obj poly glue i j).hom.base = Set.univ :=
+    Set.range_eq_univ.2
+      (LocallyRingedSpace.homeoOfIso (coverTransition.{u} obj poly glue i j)).surjective
+  rw [Set.range_comp, hsurj, Set.image_univ]
+  rfl
 
 /-- **Gluing the members' own inclusions returns the identity of `X^an`.**
 

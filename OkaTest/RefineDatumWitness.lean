@@ -192,9 +192,12 @@ need, says which part of that is now a theorem elsewhere, and compiles none of i
   `OkaTest.RefineDatumWitness.surjective_base_localisationProj_one`'s fact one level up — so it is
   no evidence about a refinement that cuts a member down.
   `Oka/Analytification/CrossMemberDatum.lean`'s *"No statement that the refined data cover
-  anything"* is narrowed there by the same branch, and the half of it that survives — that the
-  refined datum *refines* the original space, which is a statement about
+  anything"* is narrowed there by the same branch, and the half of it that survived that branch —
+  that the refined datum *refines* the original space, which is a statement about
   `ComplexAnalytic.refineDatumPoly` — is untouched here and by this.
+  `Oka/Analytification/RefineDatumRefines.lean` has since settled that half wherever two refined
+  members lie over one member of the original, which at `σ = id` is only the diagonal, so nothing
+  in it is a statement about the refinement below either.
 * **No `admissible`, no scheme and no comparison functor**, as in the files this one sits beside.
 
 ## Main definitions

@@ -105,6 +105,9 @@ coordinate down, which is why it was affordable there.
   is the preimage of the one it cuts out downstairs.** Where the lemma above relates two opens of
   one space, this relates opens of two, which is what a refinement of a cover needs in order to
   say where a point of an overlap lies.
+- `ComplexAnalytic.image_base_localisationProj_localisationOpen_rename`: **and its image
+  downstairs is `D(f) ⊓ D(f')`** — the same relation read forwards, for a consumer that has a
+  subset of `(A_f)^an` and has to say where it lands.
 - `ComplexAnalytic.exists_localisationOpen_eq_rename` and
   `ComplexAnalytic.exists_localisationOpen_eq_comap`: **the converse of the lemma above, for all
   distinguished opens at once** — every distinguished open of `(A_f)^an` is cut out by a renamed
@@ -995,6 +998,34 @@ theorem range_base_localisationProj :
     hs, Set.image_univ]
   exact (AnalyticSpace.analytification.{u} g).toLocallyRingedSpace.range_ofRestrict
     (localisationOpen.{u} g f)
+
+/-- **And its image downstairs is `D(f) ⊓ D(f')`.**
+
+`ComplexAnalytic.localisationOpen_rename` says the open upstairs is a *preimage*; a consumer that
+has to say where a subset of `(A_f)^an` lands in `X^an` needs the image, and the image of a
+preimage is the set met with the range. So this is that lemma and
+`ComplexAnalytic.range_base_localisationProj` — **the equality and not
+`ComplexAnalytic.range_base_localisationProj_subset`**, because the containment gives one
+inclusion of the two sets and the other has to produce a point of `(A_f)^an` over a point of
+`D(f) ⊓ D(f')`.
+
+Stated as an image of a set rather than as an `Opens`: `Set.image_preimage_eq_inter_range` is what
+it is, the two lemmas it composes are already stated at that level, and every consumer on the
+refinement line is asking where a *subset* goes. -/
+theorem image_base_localisationProj_localisationOpen_rename
+    (f' : MvPolynomial (ULift.{u} (Fin n)) ℂ) :
+    (localisationProj.{u} g f).toLRSHom.base ''
+        (localisationOpen.{u} (localisationPresentation.{u} g f)
+          (MvPolynomial.rename (localisationIncl.{u} n) f') :
+          Set (AnalyticSpace.analytification.{u} (localisationPresentation.{u} g f))) =
+      ((localisationOpen.{u} g f ⊓ localisationOpen.{u} g f' : Opens _) :
+        Set (AnalyticSpace.analytification.{u} g)) := by
+  rw [localisationOpen_rename.{u} g f f']
+  change (localisationProj.{u} g f).toLRSHom.base ''
+      ((localisationProj.{u} g f).toLRSHom.base ⁻¹'
+        (localisationOpen.{u} g f' : Set (AnalyticSpace.analytification.{u} g))) = _
+  rw [Set.image_preimage_eq_inter_range, range_base_localisationProj.{u} g f]
+  exact Set.inter_comm _ _
 
 /-! ### The presented algebra is the localisation
 

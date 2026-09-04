@@ -168,9 +168,14 @@ on this file by.
   surjective when the refining family covers, with an instance at
   `Oka/Analytification/RefineDatumWitness.lean`'s trivial family and a concrete one at the node.
   `Oka/Analytification/CrossMemberDatum.lean`'s *"No statement that the refined data cover
-  anything"* is narrowed there too and its remaining half — that the refined overlaps are cut out
+  anything"* is narrowed there too, and its remaining half — that the refined overlaps are cut out
   where `ComplexAnalytic.refineDatumPoly` says they are — is a statement about that definition and
-  is untouched by any of it.
+  is untouched by any of it. It is settled elsewhere and only in part:
+  `Oka/Analytification/RefineDatumRefines.lean` proves it wherever the two refined members lie
+  over one member of the original cover and proves a containment where they lie over two. **That
+  bears on this bullet in neither half**: it is about `ComplexAnalytic.refineDatumMemberIota`,
+  which reads no refined datum, and an equality of images says nothing about the morphism below or
+  about its fibres.
 * **No general form taking the refined cocycle law as an argument**, unlike
   `ComplexAnalytic.refineDatumGlueData` beside
   `ComplexAnalytic.refineDatumGlueDataOfLaws`. There would be no such thing to state: the
