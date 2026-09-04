@@ -157,18 +157,26 @@ goal.
   on the one it is written under it stands; the second is the reading, and the heading above says
   so rather than leaving it to be inferred.**
 * **No statement that the refined data cover anything.** Two of the three things this bullet has
-  meant are now retired and the third is what is left, so the three are kept apart here rather
-  than left to a reader to separate. `ComplexAnalytic.coverAnalytification_polyDiagOne` says the
-  diagonal normalisation preserves the glued space, and this file's `## Why normalising the
-  diagonal is allowed` section cites it. And
+  meant are now retired and the third is retired at the pairs whose two refined members lie over
+  one member, so the three are kept apart here rather than left to a reader to separate.
+  `ComplexAnalytic.coverAnalytification_polyDiagOne` says the diagonal normalisation preserves the
+  glued space, and this file's `## Why normalising the diagonal is allowed` section cites it. And
   `Oka/Analytification/RefineDatumCover.lean` says the refined datum's space maps **onto** the one
   it refines when the refining family covers — with the image computed outright and no hypothesis,
   in `ComplexAnalytic.range_base_refineDatumToBase` — so a covering statement about the refined
   data now exists. **What neither of them says is that the refined datum *refines* the original
   space**, which is a statement about `ComplexAnalytic.refineDatumPoly` — that the refined
   overlaps are cut out where it says they are — and is about neither
-  `ComplexAnalytic.polyDiagOne` nor a surjection downstairs; nothing on this line states it, and
-  a morphism that is onto is not a refinement of covers.
+  `ComplexAnalytic.polyDiagOne` nor a surjection downstairs, since a morphism that is onto is not
+  a refinement of covers. **That one is now stated, and it splits along the case split this
+  file's field is written around**: `Oka/Analytification/RefineDatumRefines.lean` proves the
+  equality wherever the two refined members lie over one member — where the field is
+  `ComplexAnalytic.refineDatumPoly_of_eq` and the caller's extra factor is not read — and where
+  they lie over two proves only that the refined overlap lands in the `a`-th refined member and in
+  the part of the member `σ b` that meets the member `σ a`. **The cross-member equality is
+  untouched there in both directions**, and the gap is the one the bullet above names in an
+  algebra: `D(fam b)` is what the containment does not reach, and nothing reads
+  `ComplexAnalytic.RefineDatumCrossFactor` as a statement about opens.
 * **No witness at a concrete cover datum *here*.** This bullet said there was none anywhere:
   *"its refining family is constantly `1`, so it is not a witness at a concrete datum with a
   `poly` field of its own either"*. There is one — `OkaTest/RefineDatumWitness.lean` instantiates

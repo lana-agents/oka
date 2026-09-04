@@ -354,10 +354,16 @@ declarations across two files and pays two edges instead of one.
   `ComplexAnalytic.refineDatumOpenCover`, and nothing here says the refined space is the gluing of
   that cover — `ComplexAnalytic.refineDatumOpenCover_map_eq_comp` says the maps factor, which is a
   statement about each member and not about the two spaces.
-* **Nothing that says the refined datum *refines* the original space.**
+* **Nothing *here* that says the refined datum *refines* the original space.**
   `Oka/Analytification/CrossMemberDatum.lean`'s remaining half — that the refined overlaps are cut
   out where `ComplexAnalytic.refineDatumPoly` says they are — is a statement about that definition
-  and is not this one; a surjection down is not a refinement of covers.
+  and is not this one; a surjection down is not a refinement of covers, and nothing below is
+  evidence about it in either direction. **This bullet said nothing anywhere did**:
+  `Oka/Analytification/RefineDatumRefines.lean` says it at the pairs whose two refined members lie
+  over one member, and at the other pairs says only that the refined overlap lands in the `a`-th
+  refined member and in the part of the member `σ b` that meets the member `σ a`. It is built on
+  `ComplexAnalytic.refineDatumMemberIota` and on the two range statements about it below, and it
+  reopens nothing here.
 * **No instance in `Oka/` of `### The instance at a family that is a unit on each overlap`.**
   `ComplexAnalytic.refineDatumUnitFamToBase` and its equivalence are stated for every cover datum
   and are spent in this library at none. **This bullet said `OkaTest/RefineDatumUnitFamily.lean`
