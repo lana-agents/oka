@@ -202,8 +202,8 @@ measured.
 * **Nothing indexed by the points of `X`.**
   `ComplexAnalytic.exists_family_mvPolynomial_basicOpen_specSchemeIotaMap`
   (`Oka/Analytification/SpecMemberChoice.lean`) is a family and it is indexed by points, which is
-  not a cover datum's index type; the theorems below are at one immersion and one polynomial and
-  neither is a refinement of that family.
+  not a cover datum's index type; the theorems below take polynomials and not points, and none of
+  them is a refinement of that family.
 * **No second cover datum.** `ComplexAnalytic.specSchemeIotaMap` and
   `Oka/Analytification/SpecTwoData.lean`'s two-datum vocabulary do not appear, even though the
   import above makes them reachable. **What the general theorem changes is that such a morphism is
