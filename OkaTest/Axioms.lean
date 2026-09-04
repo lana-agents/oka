@@ -134,14 +134,18 @@ wants the arithmetic can run `grep -c '#print axioms'` over the section and get 
 right on the day they run it. **Two spellings are exempt because they cannot rot.** A figure
 pinned to a commit or a date is a record — which is what the measurements further down are, and
 they say so — and so is a numeral about a repair that has already landed, since falsifying either
-means rewriting history rather than appending. **The rule was first written into the guard
-section that carried the defect** — `OkaTest/Axioms/Analytification.lean`'s *The refined datum
-refines across members, and the two members meet in nothing else*, whose opening names the files
-its guards were written in and counts none of them, and which is the spelling to copy. It is
-repeated here because
-this is the file every author of a new guard section reads, and because when it was written this
-file was carrying counts of the class itself, one of them already false; the paragraph above
-records which. **Do not answer this with a checker** — it would have to guess which numbers in a
+means rewriting history rather than appending. **The rule was first written into the guard section
+next to the one that carried the defect** — `OkaTest/Axioms/Analytification.lean`'s *The refined
+datum refines across members, and the two members meet in nothing else*, which was created already
+in the naming form and whose opening names the files its guards were written in and counts none of
+them. The section that carried the defect is the one immediately above it, whose clause enumerating
+six of its seven guards had been repaired by a separate branch the same day. **That opening is the
+spelling to copy.** The rule is repeated here because this is the file every author of a new guard
+section reads, and because when it was written this file was itself carrying counts of the class —
+the wrapped-guard clause in the `perl` paragraph, the section count in the `awk` paragraph, and the
+row total in the worked example — and **on 2026-09-04 all three were false**. Only the first leaves
+a record, quoted and dated where it stood; the other two sentences were rewritten to carry no
+figure at all. **Do not answer this with a checker** — it would have to guess which numbers in a
 docstring are censuses, and `scripts/` has no way to tell.
 
 **Most mirror-tree material is routed by a row, and a small tail of it is deliberately routed by
