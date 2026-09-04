@@ -31,7 +31,7 @@ line are pairwise non-isomorphic, one class for every `n`, by
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_eq_of_iso_trivial`. `degree_sqOver` records
 what the degree of the first witness is, and it is `2`.
 
-**And the two isomorphism classes of degree `2` are separated**, which is the third part of this
+**And two of the degree-`2` objects are separated from each other**, which is the third part of this
 file and is the first separation here that no number makes: `not_iso_trivial_sqOver` says `sqOver`
 is not the trivial two-sheeted cover, by
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_iso_trivial_of_preconnectedSpace` — the

@@ -247,12 +247,15 @@ preconnected — `ComplexAnalytic.AnalyticSpace.not_surjective_sigmaι_base`
 (`Oka/AnalyticSpace/Sigma.lean`) is the same pair of hypotheses for the same reason, and the
 empty disjoint union of `ComplexAnalytic.AnalyticSpace.isEmpty_sigma` is preconnected vacuously.
 
-**This is the second `¬ PreconnectedSpace` in the repository and the first about a construction.**
-The other is in `OkaTest/OpenSubspace.lean` — not nameable from here, the test library not being
-in this file's import closure — and is about one particular space, the node with a point removed;
-this is about every disjoint union at once, and it is what
-`Oka/AnalyticSpace/FiniteEtaleOver.lean` reads to separate a connected cover from a trivial one of
-the same degree. Note which way round the file's headline runs:
+**The other `¬ PreconnectedSpace` statements here are narrower than this one.**
+`not_preconnectedSpace_puncturedNodeSpace` (`OkaTest/OpenSubspace.lean`) — not nameable from here,
+the test library not being in this file's import closure — is about one particular space, the node
+with a point removed, and
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.not_preconnectedSpace_trivial`
+(`Oka/AnalyticSpace/FiniteEtaleOver.lean`) is this theorem read at the constant family. **This is
+about every disjoint union at once**, and it is what `Oka/AnalyticSpace/FiniteEtaleOver.lean`
+reads to separate a connected cover from a trivial one of the same degree. Note which way round
+the file's headline runs:
 `ComplexAnalytic.AnalyticSpace.sigmaFold` was already called *"the first `IsFiniteEtale` witness
 with a disconnected source"* in the module docstring above — **an assertion this theorem is the
 first proof of.** -/

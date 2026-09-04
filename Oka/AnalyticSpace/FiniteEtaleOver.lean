@@ -99,7 +99,7 @@ docstring, because `scripts/guard_coverage.py` reads every backticked repository
 - `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.not_preconnectedSpace_trivial` and
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_iso_trivial_of_preconnectedSpace`: **the
   total space of a trivial cover with two distinct sheets is disconnected**, so **a cover with a
-  preconnected total space is not a trivial one** — the separation that
+  preconnected total space is not a trivial one with two distinct sheets** — the separation that
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree` is too coarse to make.
 
 ## What is not here
@@ -193,8 +193,9 @@ docstring, because `scripts/guard_coverage.py` reads every backticked repository
   does.
 
   **What is still not here is any invariant that separates two *connected* covers**, which is
-  where a fibre functor and a monodromy action would be needed and where the two bullets below
-  say this category has nothing.
+  where a fibre functor and a monodromy action would be needed and where the
+  **No fibre functor and no Galois category** and **No pullbacks, so no base change** bullets
+  above say this category has nothing.
 * **No scheme side and no comparison functor.** Taxis #1113 wants a functor from finite étale
   covers of a presented affine `ℂ`-scheme to these; the source of that functor is
   `(@AlgebraicGeometry.IsFinite ⊓ @AlgebraicGeometry.IsEtale).Over ⊤ X` and is available in

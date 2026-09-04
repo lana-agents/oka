@@ -1834,7 +1834,7 @@ info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_eq_of_iso_trivial' dep
 /-! ### Connectedness of the total space separates two covers of the same degree
 
 `Oka/AnalyticSpace/Basic.lean`'s transport of preconnectedness along a morphism surjective on
-points, and the four statements of `Oka/AnalyticSpace/FiniteEtaleOver.lean` it buys: that
+points, and the statements of `Oka/AnalyticSpace/FiniteEtaleOver.lean` it buys: that
 preconnectedness of the total space is an invariant of an object, the contrapositive that
 separates two objects by it, that a trivial cover with two distinct sheets is disconnected, and
 the two composed.
