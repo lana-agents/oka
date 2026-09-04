@@ -3,6 +3,8 @@ Copyright (c) 2026 Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten. All righ
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
+import Oka.Analytification.CoverGlueTop
+import Oka.Analytification.GlueShape
 import Oka.Analytification.RefineDatumToBase
 import Oka.Analytification.RefineDatumWitness
 
@@ -51,6 +53,34 @@ vacuous**, since the members are glued along their overlaps and a point of the `
 reached through a different one. What the union in `range_base_refineDatumToBase` being everything
 says is the weak form; that is the equivalence, and it is why the sufficient condition is stated
 separately rather than being read off the iff.
+
+**That the two differ is a theorem here and not a design note**, and the section below is the
+witness. This paragraph asserted the strictness with nothing behind it when the file landed, and a
+non-implication asserted flatly is exactly what this line of files asks a branch not to do.
+
+## The strictness, and the shape of the counterexample
+
+`ComplexAnalytic.dupStrict`: **a cover datum, an index map and a refining family for which the
+morphism down is surjective and `ComplexAnalytic.RefineDatumCovers` is false.** So the sufficient
+condition is not necessary, and what surjectivity is equivalent to really is the weaker statement.
+
+The mechanism is the one the paragraph above names, at its extreme: `ComplexAnalytic.dupObj` is
+**two copies of one presentation glued along the whole of each**, so either member alone is the
+whole gluing and the second is redundant, and `ComplexAnalytic.dupSigma` misses it. The general
+reason is `ComplexAnalytic.mem_range_of_refineDatumCovers` — **the per-member condition forces the
+index map to hit every index whose member has a point**, which is a demand the glued-space form
+does not make, and it is why `ComplexAnalytic.refineDatumOneCovers` needs `Function.Surjective σ`
+at all.
+
+**Two of the three things this needed were already in the tree**, and grepping for them cost less
+than the two lemmas it saved. `ComplexAnalytic.surjective_ι_coverGlueData` is the redundancy
+argument, in the exact hypothesis shape a constant `poly` produces;
+`ComplexAnalytic.GlueShape.hRange_of_no_three` and
+`ComplexAnalytic.GlueShape.hCocycle_of_no_three` make two of the three cover-datum laws free below
+three members. So the datum itself costs an `Iso.refl` and one `Iso.refl_symm`.
+
+**Nothing in that section bears on `ComplexAnalytic.lineRefinement`**, in either direction: its
+family is `fam ≡ 1`, which refines nothing.
 
 The per-member form is also the one `Oka/Analytification/CoverRefinement.lean` names, in the
 sentence `Oka/Analytification/RefineDatumToBase.lean` quotes when it declines to state it: *"what
@@ -136,6 +166,16 @@ The tie is broken by what each candidate is for:
   index map**, for every cover datum.
 - `ComplexAnalytic.surjective_base_refineDatumOneToBase`: **so the trivial family's witness maps
   onto the cover it refines.**
+- `ComplexAnalytic.mem_range_of_refineDatumCovers` and
+  `ComplexAnalytic.not_refineDatumCovers_of_notMem_range`: **the condition forces the index map to
+  hit every index whose member has a point**, and the contrapositive the witness spends.
+- `ComplexAnalytic.dupSurjective_refine` and `ComplexAnalytic.dupNot_refineDatumCovers`: **at two
+  copies of one presentation glued along the whole of each, the morphism down is surjective and the
+  condition fails.**
+- `ComplexAnalytic.dupStrict`: **so the condition is strictly stronger than surjectivity**, the two
+  halves at one refining family.
+- `ComplexAnalytic.dupPtStrict`: **and the witness is not vacuous** — at the presentation of a
+  point, whose analytification has one.
 
 ## What is not here
 
@@ -184,7 +224,9 @@ refined member lying over that member.
 **Per member and not per point of the glued space**, which is the design decision this file's
 header argues: the members are glued along their overlaps, so a point of the `i`-th member can be
 reached through a different member and the glued-space form is strictly weaker. What that weaker
-form is equivalent to is `ComplexAnalytic.surjective_base_refineDatumToBase_iff`.
+form is equivalent to is `ComplexAnalytic.surjective_base_refineDatumToBase_iff`, and
+**`ComplexAnalytic.dupStrict` is the datum at which the two come apart** — so *strictly* is proved
+here and not asserted.
 
 **`ComplexAnalytic.coverSpaceHomOfEq` is why no transport appears.** `fam b` is a polynomial in the
 variables of `obj (σ b)` and the point is in the `i`-th member, so the containment cannot be stated
@@ -195,6 +237,23 @@ def RefineDatumCovers : Prop :=
     (z : coverSpace.{u} obj (σ b)),
       z ∈ localisationOpen.{u} (obj (σ b)).g (fam b) ∧
         (coverSpaceHomOfEq.{u} obj h).base z = y
+
+/-- **The condition forces the index map to hit every index whose member has a point.**
+
+This is the whole of what the per-member form asks beyond the glued-space one, and it is why
+`ComplexAnalytic.refineDatumOneCovers` takes `Function.Surjective σ`: a point of the `i`-th member
+has to be reached through a refined member lying over `i` itself, and the glued-space form is free
+to reach it through any member at all. `ComplexAnalytic.dupStrict` is the datum where that
+difference is realised. -/
+theorem mem_range_of_refineDatumCovers (h : RefineDatumCovers.{u} obj σ fam) (i : J)
+    (y : coverSpace.{u} obj i) : i ∈ Set.range σ :=
+  (h i y).imp fun _ hb ↦ hb.fst
+
+/-- **So a missed index with a nonempty member refutes the condition**, which is the form the
+witness below spends. -/
+theorem not_refineDatumCovers_of_notMem_range (i : J) (y : coverSpace.{u} obj i)
+    (hi : i ∉ Set.range σ) : ¬ RefineDatumCovers.{u} obj σ fam :=
+  fun h ↦ hi (mem_range_of_refineDatumCovers.{u} obj σ fam h i y)
 
 variable (q : ∀ a : B, B → MvPolynomial (ULift.{u} (Fin (obj (σ a)).n)) ℂ)
   (glue : ∀ i j : J, coverOverlap.{u} obj poly i j ≅ coverOverlap.{u} obj poly j i)
@@ -313,7 +372,8 @@ is `Set.range_eq_univ` at the image computation.
 difference is the point.** `ComplexAnalytic.RefineDatumCovers` is a statement about each member of
 the original cover; what
 surjectivity is *equivalent* to is the same statement about the glued space, where a point of one
-member may be reached through another. So the implication above is strict as stated and this
+member may be reached through another. So the implication above is strict as stated — that is
+`ComplexAnalytic.dupStrict`, and this equivalence is that theorem's first consumer — and this
 equivalence is what a caller arguing in the other direction has. -/
 theorem surjective_base_refineDatumToBase_iff :
     Function.Surjective
@@ -382,6 +442,162 @@ theorem surjective_base_refineDatumOneToBase (hs : Function.Surjective σ) :
         (refineDatumOneRangeEq.{u} obj poly σ glue) hcocycle).toLRSHom.base :=
   surjective_base_refineDatumToBase.{u} obj poly σ _ _ glue _ _ _ _ hsym hrange _ _ hcocycle
     (refineDatumOneCovers.{u} obj σ hs)
+
+/-! ### The condition is strictly stronger, and the datum that shows it
+
+Two copies of one presentation, glued along the whole of each. Every off-diagonal overlap is
+`D(1)`, so each member is already the whole gluing and the second one is redundant; an index map
+that misses it still gives a surjection and no longer meets the per-member condition.
+
+**The two triple-overlap laws are vacuous here rather than proved.** A two-element index type has
+no three pairwise distinct members, which is `ComplexAnalytic.GlueShape.hRange_of_no_three` and
+`ComplexAnalytic.GlueShape.hCocycle_of_no_three` — so nothing below is evidence that either law
+holds of anything, and a reader should not take this datum as an instance of them. It is a datum
+because they cannot be tested at this size, which is the honest reason and is the same one
+`OkaTest/ProjectiveLine.lean` gives for its own two-member cover.
+-/
+
+section Dup
+
+/-- **A two-element index type**: the smallest one on which a member can be redundant. -/
+abbrev dupIdx : Type u := ULift.{u} (Fin 2)
+
+/-- Two of any three of its elements coincide, which is what makes the two triple-overlap
+hypotheses vacuous. -/
+theorem dup_no_three (i j k : dupIdx.{u}) : i = j ∨ i = k ∨ j = k := by
+  obtain ⟨i⟩ := i; obtain ⟨j⟩ := j; obtain ⟨k⟩ := k
+  simp only [ULift.up.injEq]
+  omega
+
+variable (P : Presentation.{u})
+
+/-- **Both members are `P`.** -/
+abbrev dupObj : dupIdx.{u} → Presentation.{u} := fun _ ↦ P
+
+/-- **Every overlap is the whole member**, `D(1)`. This is what makes each member redundant. -/
+abbrev dupPoly : ∀ i : dupIdx.{u}, dupIdx.{u} →
+    MvPolynomial (ULift.{u} (Fin (dupObj.{u} P i).n)) ℂ := fun _ _ ↦ 1
+
+/-- **The transition is the identity**, the two overlap presentations being the same term. -/
+abbrev dupGlue : ∀ i j : dupIdx.{u},
+    coverOverlap.{u} (dupObj.{u} P) (dupPoly.{u} P) i j ≅
+      coverOverlap.{u} (dupObj.{u} P) (dupPoly.{u} P) j i := fun _ _ ↦ Iso.refl _
+
+theorem dupHsymm (i j : dupIdx.{u}) : dupGlue.{u} P j i = (dupGlue.{u} P i j).symm :=
+  (Iso.refl_symm _).symm
+
+theorem dupHrange : GlueShape.HRange.{u} (dupObj.{u} P) (dupPoly.{u} P) (dupGlue.{u} P) :=
+  GlueShape.hRange_of_no_three.{u} _ _ _ dup_no_three.{u}
+
+theorem dupHcocycle :
+    GlueShape.HCocycle.{u} (dupObj.{u} P) (dupPoly.{u} P) (dupGlue.{u} P) (dupHrange.{u} P) :=
+  GlueShape.hCocycle_of_no_three.{u} _ _ _ _ dup_no_three.{u}
+
+/-- **The index map that misses the second member.** -/
+def dupSigma : dupIdx.{u} → dupIdx.{u} := fun _ ↦ ULift.up 0
+
+theorem dupCoverOpen_eq_top (i j : dupIdx.{u}) (_h : i ≠ j) :
+    coverOpen.{u} (dupObj.{u} P) (dupPoly.{u} P) i j = ⊤ :=
+  localisationOpen_one.{u} _
+
+/-- **Each member is already the whole gluing.**
+
+`ComplexAnalytic.surjective_ι_coverGlueData` at `ComplexAnalytic.dupCoverOpen_eq_top`, read through
+`ComplexAnalytic.toLRSHom_coverIota`. -/
+theorem dupSurjective_coverIota (i : dupIdx.{u}) :
+    Function.Surjective
+      (coverIota.{u} (dupObj.{u} P) (dupPoly.{u} P) (dupGlue.{u} P) (dupHrange.{u} P)
+        (dupHsymm.{u} P) (dupHcocycle.{u} P) i).toLRSHom.base :=
+  surjective_ι_coverGlueData.{u} _ _ _ _ _ _ (dupCoverOpen_eq_top.{u} P) i
+
+/-- **The morphism down is surjective at the constant index map.**
+
+`ComplexAnalytic.surjective_base_refineDatumToBase_iff`'s first consumer, spent in the direction
+that file says a caller arguing the other way would want: the union of the images is everything
+because the single member `ComplexAnalytic.dupSigma` does hit is already everything. -/
+theorem dupSurjective_refine :
+    Function.Surjective
+      (refineDatumToBase.{u} (dupObj.{u} P) (dupPoly.{u} P) dupSigma.{u} (fun _ ↦ 1)
+        (fun x y ↦ dupPoly.{u} P (dupSigma.{u} x) (dupSigma.{u} y)) (dupGlue.{u} P)
+        (refineDatumOneR.{u} (dupObj.{u} P) (dupPoly.{u} P) dupSigma.{u} (dupGlue.{u} P))
+        (refineDatumOneU.{u} (dupObj.{u} P) (dupPoly.{u} P) dupSigma.{u} (dupGlue.{u} P))
+        (refineDatumOneCrossEq.{u} (dupObj.{u} P) (dupPoly.{u} P) dupSigma.{u} (dupGlue.{u} P))
+        (refineDatumOneCrossUnit.{u} (dupObj.{u} P) (dupPoly.{u} P) dupSigma.{u} (dupGlue.{u} P))
+        (dupHsymm.{u} P) (dupHrange.{u} P)
+        (refineDatumOneRangeCross.{u} (dupObj.{u} P) (dupPoly.{u} P) dupSigma.{u} (dupGlue.{u} P)
+          (dupHrange.{u} P))
+        (refineDatumOneRangeEq.{u} (dupObj.{u} P) (dupPoly.{u} P) dupSigma.{u} (dupGlue.{u} P))
+        (dupHcocycle.{u} P)).toLRSHom.base := by
+  rw [surjective_base_refineDatumToBase_iff.{u}]
+  refine Set.eq_univ_of_forall fun x ↦ ?_
+  obtain ⟨y, hy⟩ := dupSurjective_coverIota.{u} P (ULift.up 0) x
+  refine Set.mem_iUnion.2 ⟨ULift.up 0, ⟨y, ?_, hy⟩⟩
+  rw [localisationOpen_one.{u}]
+  trivial
+
+/-- **And the condition fails**, at the index the map misses, as soon as that member has a point.
+
+`ComplexAnalytic.not_refineDatumCovers_of_notMem_range` and nothing else. -/
+theorem dupNot_refineDatumCovers (y : coverSpace.{u} (dupObj.{u} P) (ULift.up 1)) :
+    ¬ RefineDatumCovers.{u} (dupObj.{u} P) dupSigma.{u}
+      (fun _ ↦ (1 : MvPolynomial (ULift.{u} (Fin (dupObj.{u} P (dupSigma.{u} _)).n)) ℂ)) := by
+  refine not_refineDatumCovers_of_notMem_range.{u} _ _ _ _ y ?_
+  rintro ⟨b, hb⟩
+  have h : (0 : Fin 2) = 1 := congrArg ULift.down hb
+  exact absurd h (by decide)
+
+/-- **So `ComplexAnalytic.RefineDatumCovers` is strictly stronger than surjectivity.**
+
+The two halves **at one refining family**, which is what makes this a statement about the
+implication rather than two statements about two families; it is an `And` for that reason and
+should stay one. -/
+theorem dupStrict (y : coverSpace.{u} (dupObj.{u} P) (ULift.up 1)) :
+    Function.Surjective
+      (refineDatumToBase.{u} (dupObj.{u} P) (dupPoly.{u} P) dupSigma.{u} (fun _ ↦ 1)
+        (fun x y ↦ dupPoly.{u} P (dupSigma.{u} x) (dupSigma.{u} y)) (dupGlue.{u} P)
+        (refineDatumOneR.{u} (dupObj.{u} P) (dupPoly.{u} P) dupSigma.{u} (dupGlue.{u} P))
+        (refineDatumOneU.{u} (dupObj.{u} P) (dupPoly.{u} P) dupSigma.{u} (dupGlue.{u} P))
+        (refineDatumOneCrossEq.{u} (dupObj.{u} P) (dupPoly.{u} P) dupSigma.{u} (dupGlue.{u} P))
+        (refineDatumOneCrossUnit.{u} (dupObj.{u} P) (dupPoly.{u} P) dupSigma.{u} (dupGlue.{u} P))
+        (dupHsymm.{u} P) (dupHrange.{u} P)
+        (refineDatumOneRangeCross.{u} (dupObj.{u} P) (dupPoly.{u} P) dupSigma.{u} (dupGlue.{u} P)
+          (dupHrange.{u} P))
+        (refineDatumOneRangeEq.{u} (dupObj.{u} P) (dupPoly.{u} P) dupSigma.{u} (dupGlue.{u} P))
+        (dupHcocycle.{u} P)).toLRSHom.base ∧
+      ¬ RefineDatumCovers.{u} (dupObj.{u} P) dupSigma.{u} (fun _ ↦ 1) :=
+  ⟨dupSurjective_refine.{u} P, dupNot_refineDatumCovers.{u} P y⟩
+
+/-- **The presentation of a point**: no variables and no relations. -/
+abbrev dupPtPres : Presentation.{u} := ⟨0, 0, Fin.elim0⟩
+
+/-- **Its point**, so that `ComplexAnalytic.dupStrict`'s hypothesis is discharged rather than
+carried. The construction is `Oka/Analytification/GlueShape.lean`'s `ctPt` at this presentation:
+the empty tuple of coordinates satisfies the empty family of relations. -/
+def dupPtPoint : coverSpace.{u} (dupObj.{u} dupPtPres.{u}) (ULift.up 1) :=
+  ⟨⟨(fun _ ↦ 0 : ULift.{u} (Fin 0) → ℂ), trivial⟩,
+    (mem_zeroLocus_polySection_iff.{u} (dupObj.{u} dupPtPres.{u} (ULift.up 1)).g _).2
+      (fun j ↦ j.elim0)⟩
+
+/-- **The strictness on no hypothesis at all**, which is what makes the counterexample a
+counterexample rather than a conditional one. -/
+theorem dupPtStrict :
+    Function.Surjective
+      (refineDatumToBase.{u} (dupObj.{u} dupPtPres.{u}) (dupPoly.{u} dupPtPres.{u}) dupSigma.{u}
+        (fun _ ↦ 1) (fun x y ↦ dupPoly.{u} dupPtPres.{u} (dupSigma.{u} x) (dupSigma.{u} y))
+        (dupGlue.{u} dupPtPres.{u})
+        (refineDatumOneR.{u} _ _ dupSigma.{u} (dupGlue.{u} dupPtPres.{u}))
+        (refineDatumOneU.{u} _ _ dupSigma.{u} (dupGlue.{u} dupPtPres.{u}))
+        (refineDatumOneCrossEq.{u} _ _ dupSigma.{u} (dupGlue.{u} dupPtPres.{u}))
+        (refineDatumOneCrossUnit.{u} _ _ dupSigma.{u} (dupGlue.{u} dupPtPres.{u}))
+        (dupHsymm.{u} dupPtPres.{u}) (dupHrange.{u} dupPtPres.{u})
+        (refineDatumOneRangeCross.{u} _ _ dupSigma.{u} (dupGlue.{u} dupPtPres.{u})
+          (dupHrange.{u} dupPtPres.{u}))
+        (refineDatumOneRangeEq.{u} _ _ dupSigma.{u} (dupGlue.{u} dupPtPres.{u}))
+        (dupHcocycle.{u} dupPtPres.{u})).toLRSHom.base ∧
+      ¬ RefineDatumCovers.{u} (dupObj.{u} dupPtPres.{u}) dupSigma.{u} (fun _ ↦ 1) :=
+  dupStrict.{u} dupPtPres.{u} dupPtPoint.{u}
+
+end Dup
 
 end
 
