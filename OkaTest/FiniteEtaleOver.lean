@@ -227,9 +227,9 @@ statement is one term long.
 **It is the first consumer of that decision outside the file that made it, and the first at a
 named morphism.** `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_fiber` already reads
 `ComplexAnalytic.AnalyticSpace.degree_eq_card_fiber` backwards across the same defeq, so the
-spelling was exercised on arrival — but there and here are both general statements in `Oka/`,
-where this is a fibre of a morphism this repository exhibits and a count proved by an argument
-about roots in `ℂ`. -/
+spelling was exercised on arrival — but both of those are general statements in `Oka/`, where this
+one is a fibre of a morphism this repository exhibits and a count proved by an argument about
+roots in `ℂ`. -/
 theorem card_fiber_sqOver (y : ((AnalyticSpace.complexAffineSpace.{u} 1).restrict
     ComplexAnalytic.punctured.{u} : Type u)) :
     Nat.card (AnalyticSpace.FiniteEtaleOver.fiber.{u} y sqOver.{u}) = 2 :=
@@ -248,8 +248,8 @@ statement about the *object* `not_iso_trivial_sqOver` is stated against, reached
 functor as `card_fiber_sqOver` above. Taking the two counts by two different routes would make the
 comparison below a coincidence of arithmetic rather than a fact about one functor.
 
-**The index type is `ULift (Fin 2)` and it has to be.** `not_iso_trivial_sqOver` below — the
-separation this pairs with — is stated at that index type, and
+**The index type is `ULift (Fin 2)` and it has to be.** `not_iso_trivial_sqOver` — the separation
+this pairs with — is stated at that index type, and
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.trivial` at a different two-element type is a
 different term of this category: nothing here states the two to be isomorphic, and a witness about
 an object the separation is not about would prove nothing about the pair. -/
@@ -285,8 +285,10 @@ record. A `def` returning an `Equiv` here would assert a choice this repository 
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.finite_fiber` asks nothing of the base, of the
 point or of the total space, so `Finite.card_eq` applies with no separation axiom and no
 connectedness. The second is not merely unassumed here: `[PreconnectedSpace]` is **false** of the
-trivial cover's total space, by the theorem that separates the pair, so a comparison of fibres
-that needed it could not be stated at this pair at all. -/
+trivial cover's total space, by
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.not_preconnectedSpace_trivial` — which is what
+`not_iso_trivial_sqOver` reads and not what it proves — so a comparison of fibres that needed it
+could not be stated at this pair at all. -/
 theorem nonempty_fiber_equiv_trivial_sqOver (y : ((AnalyticSpace.complexAffineSpace.{u} 1).restrict
     ComplexAnalytic.punctured.{u} : Type u)) :
     Nonempty (AnalyticSpace.FiniteEtaleOver.fiber.{u} y sqOver.{u} ≃
