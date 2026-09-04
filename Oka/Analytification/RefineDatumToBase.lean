@@ -127,8 +127,8 @@ record the same hazard by two other routes, a `simp only` naming nothing and
 `CategoryTheory.reassoc_of%`; **this is the third route and the one hardest to avoid by taste,
 because naming the definition is what the proof is *about*.** What replaces it is `congrArg` and
 `Eq.trans` at the definition's own unfolding, which go through definitional unfolding and generate
-nothing. `Δdump` is `+7` for seven declarations, and that equality is the figure to check a branch
-on this file by.
+nothing. `Δdump` is the number of declarations a branch adds and no more, and that equality is the
+figure to check a branch on this file by.
 
 ## Main definitions
 
