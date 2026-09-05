@@ -830,11 +830,11 @@ info: 'ComplexAnalytic.localisationOpen_ne_top' depends on axioms:
 
 `Oka/Analytification/SheafCoherent.lean`, whose title this header now matches: it used to read
 *the analytification of a finitely presented sheaf*, which was that file's title until the
-coherent statement was added, and which under-described the last of the four guards below.
+coherent statement was added, and which under-described the last of the guards below.
 
-`ComplexAnalytic.AnalyticSpace.isCoherent_free` is the one of the four that lives elsewhere
-(`Oka/AnalyticSpace/Coherent.lean`); it is Oka's theorem in every finite rank, and the other
-three rest on it. -/
+`ComplexAnalytic.AnalyticSpace.isCoherent_free` is the one of them that lives elsewhere
+(`Oka/AnalyticSpace/Coherent.lean`); it is Oka's theorem in every finite rank, and the others
+rest on it. -/
 
 /--
 info: 'ComplexAnalytic.AnalyticSpace.isCoherent_free' depends on axioms:
@@ -2823,7 +2823,7 @@ unequal branch's coherence triangle analytified.
 
 They are guarded in their own section rather than folded into the one above because the section
 above enumerates what that branch had when it was written, and the file's `## What is not here`
-said at the time that the analytified triangle was absent. All three are theorems, so none of them
+said at the time that the analytified triangle was absent. They are all theorems, so none of them
 is the `abbrev` case that section records.
 -/
 
@@ -3028,7 +3028,7 @@ info: 'ComplexAnalytic.towerPresHom_two' depends on axioms:
 
 /-! ### The hypersurface over an open subset of the base
 
-`Oka/Analytification/OpenBaseFiniteness.lean`, **all ten of it**, in the order they are guarded:
+`Oka/Analytification/OpenBaseFiniteness.lean`, **the whole of it**, in the order they are guarded:
 the image in `ℂ^n` of the points of a hypersurface at which a second polynomial vanishes, its
 closedness, the vacuity of that vanishing above the complement, the finiteness of the hypersurface
 over the cylinder, the two witnesses bounding the complement at `ℂ^n` and at `∅`, the monicity of
@@ -3049,8 +3049,7 @@ section over.
 
 The first is a `def` and is guarded for that reason: the convention here is every declaration and
 not every theorem, and `scripts/guard_coverage.py` cannot report a missing guard on a name
-advertised under `## Main definitions`, which it does not read. **It is the only `def` of the
-ten.**
+advertised under `## Main definitions`, which it does not read. **It is that file's only `def`.**
 -/
 
 /--
@@ -3328,8 +3327,8 @@ info: 'ComplexAnalytic.hypersurfacePresHom_comp_hypersurfacePresHom'' depends on
 /-! ### The cut-out datum of an analytification, and the standard étale local isomorphism
 
 `ComplexAnalytic.isCutOutBy_analytificationInclHom` is the datum every consumer of
-`ComplexAnalytic.IsCutOutBy` on the projection line asks for, and the five below it are
-`Oka/Analytification/StandardEtaleLocalIso.lean` in order. All six are theorems.
+`ComplexAnalytic.IsCutOutBy` on the projection line asks for, and the guards below it are
+`Oka/Analytification/StandardEtaleLocalIso.lean` in order. Every one of them is a theorem.
 
 Appended as its own section for the reason the sections above give: a section moved is a conflict
 for somebody else.
@@ -3798,7 +3797,7 @@ guards stayed.
 `ComplexAnalytic.refineDatumAnalytificationOfLaws` — and are guarded for the reason the
 `Oka/Analytification/RefineDatumRange.lean` section gives: the convention here is every
 declaration and not every theorem. **This clause read *six*, and it read six at the commit that
-wrote it**, where the section already had these twenty-seven guards and these four `def`s. The
+wrote it**, where the section already had twenty-seven guards and the four `def`s named above. The
 section below on a refined cover datum at a family that is not `1` says why a count of this kind
 is the one nothing catches.
 
@@ -4133,11 +4132,11 @@ statement at the largest such `V`, the complement of
 **A fifth was appended after that sentence was written and it named nothing**:
 `ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp_parabola`, the instance
 at the parabola with its last coordinate inverted — the first pair on this line for which that
-open subset of the base is both proper and non-empty. So this section guards **six**: the spelling
-bridge named above, and all five declarations of
-`Oka/Analytification/StandardEtaleFiniteness.lean`. *"The last of the four"* was true of the four
-listed and false of the section, and which of the two a numeral in a header means is settled here
-by enumerating the section.
+open subset of the base is both proper and non-empty. So this section guards the spelling bridge
+named above **and every declaration of** `Oka/Analytification/StandardEtaleFiniteness.lean`, which
+is one more than that file has. *"The last of the four"* was true of the four listed and false of
+the section, and which of the two a numeral in a header means is settled here by enumerating the
+section.
 
 **No `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` is guarded *in this section*, and two of the
 three clauses that used to follow are no longer true.** The sentence read *"none is stated, … and
@@ -4303,16 +4302,16 @@ info: 'ComplexAnalytic.refineDatumUnitFamAnalytification' depends on axioms:
 
 /-! ### A cover glued along the whole of each member
 
-`Oka/Analytification/CoverGlueTop.lean`, all five of it: the general form of the member inclusion
+`Oka/Analytification/CoverGlueTop.lean`, the whole of it: the general form of the member inclusion
 off the diagonal, its surjectivity when the overlap is `⊤`, the surjectivity of the member's
 inclusion into the gluing, the isomorphism that follows, and the `eqToHom` helper the first of
 them produces.
 
-**One of the five is a `def`**, `ComplexAnalytic.isoCoverGlued`, and it is guarded for the reason
+**One of them is a `def`**, `ComplexAnalytic.isoCoverGlued`, and it is guarded for the reason
 the `Oka/Analytification/RefineDatumRange.lean` section gives: the convention here is every
 declaration and not every theorem. **This clause read *two*, and it read two at the commit that
-wrote it**, where `Oka/Analytification/CoverGlueTop.lean` already held the four theorems and the
-one `def` it holds now.
+wrote it**, where `Oka/Analytification/CoverGlueTop.lean` already held the theorems and the `def`
+it holds now.
 
 **The instance that consumes them is `ComplexAnalytic.isoNodeRefineGlued` in
 `OkaTest/RefineDatumUnitFamilyNode.lean`, which carries no guard**, as no declaration of the test
@@ -4425,7 +4424,7 @@ info: 'ComplexAnalytic.refineDatumUnitFamAnalytification_toLocallyRingedSpace' d
 
 /-! ### The local isomorphism over a presented base
 
-`Oka/Analytification/StandardEtaleLocalIsoBase.lean`, all fourteen of it, in the order they are
+`Oka/Analytification/StandardEtaleLocalIsoBase.lean`, the whole of it, in the order they are
 declared. **Two are a `def`** — `ComplexAnalytic.hypersurfaceOnly` and
 `ComplexAnalytic.hypersurfaceCompare`, both `abbrev` — and the rest are theorems.
 
@@ -4544,9 +4543,9 @@ info: 'ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom' depends on ax
 
 /-! ### The glued `Spec`s, as a scheme
 
-`Oka/Analytification/SpecScheme.lean`, all six of it, in the order they are declared. **Two are a
-`def`** — `ComplexAnalytic.specScheme` and `ComplexAnalytic.specSchemeIota` — one is an
-`instance`, and the remaining three are theorems.
+`Oka/Analytification/SpecScheme.lean`, the whole of it, in the order they are declared. **Two are
+a `def`** — `ComplexAnalytic.specScheme` and `ComplexAnalytic.specSchemeIota` — one is an
+`instance`, and the rest are theorems.
 
 The section exists because the `Spec`-side section above guards a gluing of locally ringed spaces
 and says nothing about a scheme: `ComplexAnalytic.specGlued` is guarded there, and that its
@@ -4713,8 +4712,8 @@ info: 'ComplexAnalytic.refineDatumToBase_unique' depends on axioms:
 
 /-! ### Two cover data over one scheme
 
-`Oka/Analytification/SpecTwoData.lean`, all six of it, in the order they are declared. **One is a
-`def`** — `ComplexAnalytic.specSchemeIotaMap` — one is an `instance`, and the remaining four are
+`Oka/Analytification/SpecTwoData.lean`, the whole of it, in the order they are declared. **One is
+a `def`** — `ComplexAnalytic.specSchemeIotaMap` — one is an `instance`, and the rest are
 theorems.
 
 The section exists because the scheme section above guards statements about **one** cover datum
@@ -4816,11 +4815,11 @@ sections above give: a section moved is a conflict for somebody else.
 
 **The continuation of `ComplexAnalytic.exists_basicOpen_specSchemeIota_inter` and
 `ComplexAnalytic.exists_index_basicOpen_specSchemeIotaMap`, both guarded above, into the vocabulary
-a cover datum is written in.** Those theorems produce *sections*; the last three guards here are
-the same statements with *polynomials* in the members' own variables, and the six before them are
-what carries one to the other — every section over the range of an open immersion out of a
-presented algebra's spectrum is such a polynomial, and the open it cuts out in the glued scheme is
-the image of `D(p)` under that immersion.
+a cover datum is written in.** Those theorems produce *sections*; the guards at the foot of this
+section are the same statements with *polynomials* in the members' own variables, and the ones
+before them are what carries one to the other — every section over the range of an open immersion
+out of a presented algebra's spectrum is such a polynomial, and the open it cuts out in the glued
+scheme is the image of `D(p)` under that immersion.
 
 **The first three are stated at an arbitrary open immersion and the next three are them at
 `ComplexAnalytic.specSchemeIota`.** The generality is what the cross-datum guards need: a carried
@@ -4898,7 +4897,7 @@ info: 'ComplexAnalytic.exists_index_mvPolynomial_basicOpen_specSchemeIotaMap' de
 `Oka/Analytification/SpecMemberChoice.lean`, appended as its own section for the reason the
 sections above give: a section moved is a conflict for somebody else.
 
-**One guard, and the axiom list is the content.** The theorem is
+**The axiom list below is the content, and that is what the guard is a check of.** The theorem is
 `ComplexAnalytic.exists_index_mvPolynomial_basicOpen_specSchemeIotaMap` — guarded elsewhere in
 this file — with `choose` applied to it, so `Classical.choice` is what the step *is* rather than
 something the proof happens to use. The two lists are identical, which is the honest reading here:
@@ -4978,7 +4977,7 @@ than deleted: the five declarations stated at an arbitrary open immersion are gu
 heading that names the general level, and the five here are those five at
 `ComplexAnalytic.specSchemeIota`.
 
-**All six here are guarded, including the two that are data.**
+**Every declaration here is guarded, including the two that are data.**
 `ComplexAnalytic.refinedPres` and `ComplexAnalytic.refinedIota` are a presentation and a morphism
 of schemes, so nothing else would notice if either started resting on a fourth axiom, and the
 three statements below them are exactly the statements *about* them.
@@ -5143,7 +5142,7 @@ info: 'ComplexAnalytic.opensRange_presentationRefinedIota_eq_basicOpen' depends 
 `Oka/Analytification/SpecRefinedChoice.lean`, which is the whole file. Appended as its own section
 for the reason the sections above give: a section moved is a conflict for somebody else.
 
-**One guard, and what it is a check of is the composition of two lists this file already
+**What the guard below is a check of is the composition of two lists this file already
 records.** The theorem is
 `ComplexAnalytic.exists_family_mvPolynomial_basicOpen_specSchemeIotaMap` — guarded here — rewritten
 three times at `ComplexAnalytic.opensRange_presentationRefinedIota_eq_basicOpen`, also guarded
@@ -5167,12 +5166,12 @@ info: 'ComplexAnalytic.exists_family_opensRange_presentationRefinedIota_eq' depe
 
 /-! ### The analytification is Hausdorff, and the standard étale cover is a covering map
 
-`Oka/Analytification/Hausdorff.lean`, all three of it, appended as its own section for the reason
+`Oka/Analytification/Hausdorff.lean`, the whole of it, appended as its own section for the reason
 the sections above give: a section moved is a conflict for somebody else.
 
-**The instance is one `inferInstanceAs` and the two theorems are one `haveI` each**, so all three
-axiom lists are unions of lists this file and `OkaTest/Axioms/AnalyticSpace.lean` already record —
-`ComplexAnalytic.t2Space_zeroLocus` for the first, and
+**The instance is one `inferInstanceAs` and the two theorems are one `haveI` each**, so every one
+of those axiom lists is a union of lists this file and `OkaTest/Axioms/AnalyticSpace.lean` already
+record — `ComplexAnalytic.t2Space_zeroLocus` for the first, and
 `ComplexAnalytic.isFiniteEtale_restrictHom_analytificationMap_etalePresHom_comp` together with
 `ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale` for the other two. The guards
 are a check that the third rung introduced nothing, which is what a corollary of a theorem in
@@ -5210,7 +5209,7 @@ The containment half of `Oka/Analytification/SpecRefinedMember.lean`, at both of
 levels. Appended as its own section for the reason the sections above give: a section moved is a
 conflict for somebody else.
 
-**Two guards, and they are a check on one Mathlib name reaching this shape.** Each is the
+**What the guards below are a check of is one Mathlib name reaching this shape.** Each is the
 corresponding `opensRange` equation in that file followed by
 `AlgebraicGeometry.Scheme.Hom.image_le_opensRange`, and the member-level one is the general one
 applied — so what the pair records is that the containment costs no axiom the equations did not
@@ -5245,15 +5244,15 @@ info: 'ComplexAnalytic.opensRange_refinedIota_le' depends on axioms:
 `Oka/Analytification/SpecRefinedCover.lean`, which is the whole file. Appended as its own section
 for the reason the sections above give: a section moved is a conflict for somebody else.
 
-**Two guards, and the second is the first applied twice.** The first assembles the four functions
+**The second guard below is the first applied twice.** The first assembles the four functions
 `ComplexAnalytic.exists_family_mvPolynomial_basicOpen_specSchemeIotaMap` chooses into an
 `AlgebraicGeometry.Scheme.AffineOpenCover` whose index type is the points of the glued scheme; the
 second is that theorem with `ComplexAnalytic.opensRange_presentationRefinedIota_le` at each of its
 two conjuncts.
 
-**`Classical.choice` is in both lists and is not a surprise**: the theorem they descend from is a
-`choose` over the points of a scheme, and its own guard in this file records the same three axioms.
-**What these two check that the guards on
+**`Classical.choice` is in every guard below and is not a surprise**: the theorem they descend
+from is a `choose` over the points of a scheme, and its own guard in this file records the same
+three axioms. **What these two check that the guards on
 `ComplexAnalytic.exists_family_mvPolynomial_basicOpen_specSchemeIotaMap` and
 `ComplexAnalytic.exists_family_opensRange_presentationRefinedIota_eq` do not is that building the
 structure introduced nothing** — the covering field is the choice step's own second conjunct after
@@ -5285,16 +5284,16 @@ refining family. Appended as its own section rather than merged into an existing
 reason is stated here rather than cited: moving or reordering a section of this file is a conflict
 for every branch that has appended to it, and several appended to it on the day this was written.
 
-**Seven guards, and what they are a check of is the one place on this line that needs an equality
+**What the guards below are a check of is the one place on this line that needs an equality
 of ranges rather than a containment.** `ComplexAnalytic.range_base_refineDatumToBase` computes the
 image of `ComplexAnalytic.refineDatumToBase` — guarded here — and its `⊇` half spends
 `ComplexAnalytic.range_base_localisationProj`, the equality, where every other consumer on this
-line of files spends `ComplexAnalytic.range_base_localisationProj_subset`. The other six are
+line of files spends `ComplexAnalytic.range_base_localisationProj_subset`. The others are
 corollaries of it, of `Oka/Analytification/RefineDatumWitness.lean`'s trivial-family witness, or
 of the condition `ComplexAnalytic.RefineDatumCovers`, which is a `Prop`-valued definition and is
 guarded because every hypothesis on this line is.
 
-**`Classical.choice` is in all seven lists and is not a surprise**: the source's own glue data is
+**`Classical.choice` is in every guard below and is not a surprise**: the source's own glue data is
 built by `ComplexAnalytic.refineDatumOneR` and `ComplexAnalytic.refineDatumOneU`, both `choose`n,
 and `AlgebraicGeometry.LocallyRingedSpace.GlueData.ι_jointly_surjective` runs through the gluing's
 construction. This file's guards for `ComplexAnalytic.refineDatumToBase` and
@@ -5361,7 +5360,7 @@ that explain it. Appended as its own section rather than merged into an existing
 reason is stated here rather than cited: moving or reordering a section of this file is a conflict
 for every branch that has appended to it.
 
-**Six guards, and what they are a check of is a non-implication.**
+**What the guards below are a check of is a non-implication.**
 `ComplexAnalytic.dupStrict` exhibits a cover datum, an index map and a refining family at which
 `ComplexAnalytic.refineDatumToBase` is surjective on bases and `ComplexAnalytic.RefineDatumCovers`
 is false — so the sufficient condition guarded above is not necessary, and the three sentences of
@@ -5402,7 +5401,7 @@ reflexive isomorphism is its own inverse. So *"three laws are proved here"* and 
 datum's laws are vacuous"* are both true and count different sets; a sentence that says **two law
 proofs** has collapsed them and has dropped `ComplexAnalytic.dupHsymm` on the way.
 
-**`Classical.choice` is in all six lists for the reason the sections on the rest of that file
+**`Classical.choice` is in every guard below for the reason the sections on the rest of that file
 give** — the refined glue data is built from two `choose`n witnesses — and not because anything
 here is a choice.
 
@@ -5462,9 +5461,9 @@ each `D(fam i)` is the whole of its member. Appended as its own section rather t
 existing one, and the reason is stated here rather than cited: moving or reordering a section of
 this file is a conflict for every branch that has appended to it.
 
-**Three guards, and what they are a check of is a collapse and not a new geometry.** All three
-proofs are the identification being disposed of by `ComplexAnalytic.coverSpaceHomOfEq_self`, so
-`Classical.choice` is in all three lists for the reason the sections above it give — the refined
+**What the guards below are a check of is a collapse and not a new geometry.** Every one of those
+proofs is the identification being disposed of by `ComplexAnalytic.coverSpaceHomOfEq_self`, so
+`Classical.choice` is in every guard below for the reason the sections above it give — the refined
 glue data is built from two `choose`n witnesses — and not because anything here is a choice.
 
 **The consumer is in the test library and carries no guard**, which is that library's convention
@@ -5512,16 +5511,16 @@ forward half**, for the reason this file gives everywhere: moving or reordering 
 conflict for every branch that has appended to it, and a section that counts only its own guards
 cannot be made stale by an append.
 
-**Two guards, and what they are a check of is that five sentences became true.** The branch that
+**What the guards below are a check of is that five sentences became true.** The branch that
 built the forward direction said at five sites that the condition at `σ = id` *is* `∀ i, D(fam i) =
 ⊤`, and proved `→`; `ComplexAnalytic.refineDatumCovers_id_iff` is the biconditional those sentences
 assert, so they are now statements of a theorem rather than of a reading.
 `ComplexAnalytic.refineDatumCovers_id_of_forall_eq_top` is the direction that was missing and it is
 a term with no tactic in it.
 
-**`Classical.choice` is in both lists for the reason the other sections of this file give** — the
-refined glue data is built from two `choose`n witnesses — and not because anything here is a
-choice.
+**`Classical.choice` is in every guard below for the reason the other sections of this file
+give** — the refined glue data is built from two `choose`n witnesses — and not because anything
+here is a choice.
 
 **Named and not located.** No sentence in this section says which section precedes or follows it;
 the next branch appends between them.
@@ -5550,16 +5549,16 @@ overlap, and reads the surjectivity equivalence at those arguments. Appended as 
 rather than merged into any above it, and the reason is stated here rather than cited: moving or
 reordering a section of this file is a conflict for every branch that has appended to it.
 
-**Two guards, one of them for a definition.** `ComplexAnalytic.refineDatumUnitFamToBase` is a
+**One of the guards below is for a definition.** `ComplexAnalytic.refineDatumUnitFamToBase` is a
 `def` and is advertised under `## Main definitions` rather than `## Main results`, so
 `scripts/guard_coverage.py` counts it as guarded and advertised nowhere — which is that script's
 own recorded behaviour for a definition and not a gap.
 `ComplexAnalytic.surjective_base_refineDatumUnitFamToBase_iff` is the theorem and is advertised.
 
 **Neither is a new construction.** The definition is the general morphism at the unit family's own
-choices and the theorem is the general equivalence read at them, so `Classical.choice` is in both
-lists for the reason the other sections of this file give — the refined glue data is built from two
-`choose`n witnesses — and not because anything here is a choice.
+choices and the theorem is the general equivalence read at them, so `Classical.choice` is in every
+guard below for the reason the other sections of this file give — the refined glue data is built
+from two `choose`n witnesses — and not because anything here is a choice.
 
 **Named and not located.** No sentence in this section says which section precedes or follows it;
 the next branch appends between them.
@@ -5595,7 +5594,7 @@ are not independent; these have no member-level counterpart, so inserting them t
 falsify that pairing while stating nothing about it. `### The refined member's range, in the
 section vocabulary` is about one member's range, and these are about two members' overlap.
 
-**Six guards and what each is a check of.** `ComplexAnalytic.presentationSection_mul` is two
+**What each of the guards below is a check of.** `ComplexAnalytic.presentationSection_mul` is two
 `map_mul`s and is here because it is a declaration and not because anything about it is
 surprising. `ComplexAnalytic.opensRange_presentationRefinedIota_inf` is
 `AlgebraicGeometry.Scheme.basicOpen_mul` read through the general range theorem;
@@ -5605,7 +5604,7 @@ theorem at the exchanged pair and one `inf_comm`.
 `ComplexAnalytic.image_basicOpen_rename_Spec_map_localisationRingHom` is the one that carries
 content — an image of a preimage under an open immersion, on `Spec` and with no section in
 sight — and `ComplexAnalytic.opensRange_presentationRefinedIota_rename` is that theorem transported
-up along the caller's immersion. **`Classical.choice` is in all six lists for the reason the
+up along the caller's immersion. **`Classical.choice` is in every guard below for the reason the
 sections on the rest of that file give** — the scheme structure underneath is built from chosen
 witnesses — and not because anything here is a choice.
 
@@ -5668,16 +5667,16 @@ section moved the refining condition into. Appended as its own section rather th
 existing one, and the reason is stated rather than cited: moving or reordering a section of this
 file is a conflict for every branch that has appended to it, and several have.
 
-**Twelve guards, and what they are a check of is that a cover of `X^an` by the refined members
-needs no refined datum.** Nine of the twelve are stated at an index map and a refining family
-alone — `ComplexAnalytic.refineDatumMemberIota` is
-`ComplexAnalytic.localisationProj` followed by `ComplexAnalytic.coverIota`, and no cross-member
-choice, no `q` and none of the three refined laws appears in any of them. The other three are
+**What the guards below are a check of is that a cover of `X^an` by the refined members needs no
+refined datum.** Every one of them but three is stated at an index map and a refining family alone
+— `ComplexAnalytic.refineDatumMemberIota` is `ComplexAnalytic.localisationProj` followed by
+`ComplexAnalytic.coverIota`, and no cross-member choice, no `q` and none of the three refined
+laws appears in any of them. The other three are
 `ComplexAnalytic.range_base_refineDatumToBase_eq_iUnion_range`,
 `ComplexAnalytic.surjective_base_refineDatumToBase_iff_iUnion_range` and
 `ComplexAnalytic.refineDatumOneOpenCover`, and the first two are the bridge to the morphism down.
 
-**`Classical.choice` is in all twelve and two of them are why.**
+**`Classical.choice` is in every guard below and two declarations are why.**
 `ComplexAnalytic.refineDatumOpenCover`'s `idx` field chooses an index for each point, which is
 what makes that definition `noncomputable`, and
 `AlgebraicGeometry.LocallyRingedSpace.GlueData.ι_jointly_surjective` runs through the gluing's
@@ -5787,7 +5786,7 @@ the cross-member choices `rr` and `uu` and the two adopted conditions — becaus
 is the gluing those produce. A declaration here that elaborated without them would be a
 declaration about the wrong space.
 
-**`Classical.choice` in all five, and the `idx` field is again why.** The cover is
+**`Classical.choice` in every guard below, and the `idx` field is again why.** The cover is
 `ComplexAnalytic.coverAnalytificationOpenCover` at the refined datum, and
 `AlgebraicGeometry.LocallyRingedSpace.GlueData.openCover` chooses an index for each point of the
 gluing; the theorems inherit it through the definition they are about.
