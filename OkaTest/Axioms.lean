@@ -134,12 +134,22 @@ wants the arithmetic can run `grep -c '#print axioms'` over the section and get 
 right on the day they run it. **A spelling is exempt when it cannot rot.** A figure
 pinned to a commit or a date is a record — which is what the measurements further down are, and
 they say so — and so is a numeral about a repair that has already landed, since falsifying either
-means rewriting history rather than appending. **The rule was first written into the guard section
-next to the one that carried the defect** — `OkaTest/Axioms/Analytification.lean`'s *The refined
-datum refines across members, and the two members meet in nothing else*, which was created already
-in the naming form and whose opening names the files its guards were written in and counts none of
-them. The section that carried the defect is the one immediately above it, whose clause enumerating
-six of its seven guards had been repaired by a separate branch the same day. **That opening is the
+means rewriting history rather than appending. **Rotting slowly is not the same as not rotting**,
+and a *proportion* is the shape that tests the difference. *Most of them*, *the bulk of*, *the
+largest member* name no member and give no total, so the append that falsifies one is usually not
+the next one — which is why the mechanism above does not reach it — and when it comes it is as
+silent as a count's, with nothing in `scripts/` to answer it, since the population has to be
+classified by hand before it can be measured. **A proportion is therefore not exempt, and it is
+not one of the objects above either**, which count; what it is owed is the naming form, for the
+reason the redundancy exemption below gives. **Argued at taxis #1721**, which measured the shape
+under the guard files and under `Oka/` and found it live in both; the comparative spelling read as
+absent from the tree until the second of those was scanned, which is the fence and not the tree.
+**The rule was first written into the guard section next to the one that carried the defect** —
+`OkaTest/Axioms/Analytification.lean`'s *The refined datum refines across members, and the two
+members meet in nothing else*, which was created already in the naming form and whose opening
+names the files its guards were written in and counts none of them. The section that carried the
+defect is the one immediately above it, whose clause enumerating six of its seven guards had been
+repaired by a separate branch the same day. **That opening is the
 spelling to copy.** The rule is repeated here because this is the file every author of a new guard
 section reads, and because when it was written this file was itself carrying counts of the class —
 the wrapped-guard clause in the `perl` paragraph, the section count in the `awk` paragraph, and the
@@ -176,7 +186,10 @@ headings *hold now*; and all four were already false when the sweep that reached
 the block rather than touching it, so the rechecking the paragraph asked for is what did not
 happen. **A paragraph whose subject is rot gets no licence to carry it.** The way to keep such a
 record is to pin every figure in it to the commit it was measured at, which is what that file now
-does, and the two rules then agree instead of having to be ranked.
+does, and the two rules then agree instead of having to be ranked. **The exemption attaches to a
+figure and not to the paragraph around it**, so a pinned opening does not reach a present-tense
+clause further down; that is what left the `Δdump` sentence below contested until taxis #1721
+measured its population.
 
 **The rule has a third object and the two named above are not the whole of it: a clause that counts
 or quotes rows — of the table above, or of the declaration dump — is in the class too.** It is not
@@ -198,8 +211,10 @@ the pinning spelling and not the naming one**, and reading it under the naming o
 the first draft of this paragraph made. Whether it names every row it counts varies, and that is
 the question the naming exemption would turn on; here it does not arise, because a figure about
 an abandoned draft is falsified by rewriting history rather than by an append. The `Δdump` notes
-written in the present tense are the ones the rule reaches, and most of them give the figure
-against the same file's declaration count, which the first object above already reached.
+written in the present tense are the ones the rule reaches, and where such a note gives its figure
+against the same file's declaration count, the first object above already reached it;
+`Oka/Analytification/CrossMemberDatumGlue.lean`'s gives it against that count *and* the planted
+rows the file keeps deliberately, says so in the same breath, and is reached by this object alone.
 
 **The widening is not free, and at `c8e77d0` it cost two repairs.** At that commit
 `Oka/Analytification/CrossMemberGlue.lean` said its module adds its own declarations to the dump
