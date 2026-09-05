@@ -2398,3 +2398,84 @@ info: 'ComplexAnalytic.AnalyticSpace.isIso_of_degree_eq_one' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.isIso_of_degree_eq_one
+
+/-! ### The terminal object of the category of covers, and the two fibre functors preserve it
+
+`Oka/AnalyticSpace/FiniteEtaleOver.lean`: the base over itself as a terminal object of the
+category and of the full subcategory of preconnected Hausdorff covers, the two
+`CategoryTheory.Limits.HasTerminal` instances that bundle those, the preservation of the terminal
+object by the inclusion of that subcategory and by both fibre functors, and the value of the
+`FintypeCat`-valued one at that object.
+
+Appended as its own section rather than merged into another, for the reason the sections in this
+file give for that: a section appended at the end cannot say which section is above it and stay
+true, since the next branch appends between them.
+
+**`Classical.choice` is in every guard below** and is not introduced by any of them. It arrives
+through the covering-map rung, exactly as the sections about the fibre functor record, and is
+present even in the `CategoryTheory.ObjectProperty` that names the subcategory.
+
+**`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_fiberFunctor` and
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_fintypeFiberFunctor`
+are guarded with the name on a line of its own**, being too long to follow `#print axioms` inside
+the character limit. That is the spelling `OkaTest/Axioms.lean` warns about in its own instrument
+paragraph — a line-based `#print axioms\s+(\S+)` scan does not see a wrapped name — and the `perl`
+recipe there is what reads them. Both are long because the head symbol of what they state is
+`CategoryTheory.Limits.PreservesLimitsOfShape`, and naming a declaration after its conclusion is
+worth a wrapped line.
+
+**Named by file rather than counted**, as the sections above say and for the reason they give.
+
+**Named and not located.** No sentence here says which section is above or below it. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isTerminalId' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isTerminalId
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasTerminal' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasTerminal
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isTerminalIdSubcategory' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isTerminalIdSubcategory
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasTerminalSubcategory' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasTerminalSubcategory
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_ι' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_ι
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isTerminalFintypeFiberId' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isTerminalFintypeFiberId
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_fiberFunctor'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_fiberFunctor
+/--
+info:
+  'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_fintypeFiberFunctor'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_fintypeFiberFunctor
