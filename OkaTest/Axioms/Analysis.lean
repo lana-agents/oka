@@ -19,7 +19,7 @@ Results that mention nothing sheaf-theoretic, from four modules:
 
 **The last is the bulk of the file and it is not complex analysis.** The sentence this replaces
 said *"the material of `Oka/Analytic/`"*, which at `27c185a` covered three of the guards below;
-**seven of the sixteen are the fourth module's**, whose parameter space is any topological space
+**the fourth module's are guarded below as well**, whose parameter space is any topological space
 and whose statements never mention `ℂ`. `OkaTest/Axioms.lean`'s row for this file was widened on
 that measurement, and this paragraph is the other half of the same repair — the routing table and
 the file's own description had drifted apart in opposite directions. **The third module is not
