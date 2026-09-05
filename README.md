@@ -226,13 +226,22 @@ coherence statement for arbitrary complex analytic spaces:
   as degrees — `ComplexAnalytic.degree_sq` is `2` and
   `ComplexAnalytic.AnalyticSpace.degree_sigmaFold` is `Nat.card ι` — and
   `ComplexAnalytic.not_bijective_base_sq` is the one application of the equivalence, at the
-  squaring map. **The conclusion is topological, and that is the live limitation**: `…IsLocalIso`
-  carries an isomorphism on every stalk too, and a homeomorphism together with stalkwise
-  isomorphisms ought to give an isomorphism of analytic spaces, but the step from the two to one is
-  a comparison of the structure sheaves across a homeomorphism which is not here. So the degree is
-  at present an invariant of the underlying map: `ComplexAnalytic.not_isIso_sq` is **not** reproved
-  from it. **Multiplicativity in a composite stood in that sentence as unproved and is proved
-  now** — `ComplexAnalytic.AnalyticSpace.degree_comp` — and it is an invariant of the underlying
+  squaring map. **The conclusion used to stop at the topology and that used to be the live
+  limitation**: `…IsLocalIso` carries an isomorphism on every stalk too, and this paragraph said
+  that the step from a homeomorphism together with stalkwise isomorphisms to an isomorphism of
+  analytic spaces was a comparison of the structure sheaves across a homeomorphism which is not
+  here. **The comparison was in Mathlib the whole time** —
+  `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.of_stalk_iso`, an open embedding with
+  stalkwise isomorphisms is an open immersion — and the only repository-side obligation was that
+  the inverse be `ℂ`-linear, which is
+  `ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace_reflectsIsomorphisms`
+  (`Oka/AnalyticSpace/Basic.lean`). So `ComplexAnalytic.AnalyticSpace.isIso_of_degree_eq_one` is
+  the consumer that goes the whole way, and the degree is no longer an invariant of the underlying
+  map alone. **`ComplexAnalytic.not_isIso_sq` is still not reproved from it**, and that clause was
+  never the same claim: `ComplexAnalytic.degree_sq` puts the squaring map's degree at `2`, so the
+  hypothesis fails at it and this adds no route to that refutation. **Multiplicativity in a
+  composite stood in that sentence as unproved and is proved now** —
+  `ComplexAnalytic.AnalyticSpace.degree_comp` — and it is an invariant of the underlying
   map in the same sense as everything else here: the fibrewise count over the intermediate space
   is elementary and lives in the mirror tree
   (`Nat.card_preimage_singleton_comp` in `Oka/SetTheory/Cardinal/Finite.lean`), while every
@@ -244,8 +253,10 @@ coherence statement for arbitrary complex analytic spaces:
   morphism of covers, so `…FiniteEtaleOver.degree_dvd_degree` says the degree of the target
   divides the degree of the source and `…FiniteEtaleOver.degree_left_eq_one` says a morphism
   between covers of equal non-zero degree has degree one. **That is the degree half of
-  conservativity of the fibre functor and not the isomorphism half**, which is the step from
-  degree one to invertibility and is the same missing comparison of sheaves as above.
+  conservativity of the fibre functor, and the isomorphism half is no longer a missing theorem**:
+  what still separates the two is that `…isIso_of_degree_eq_one` asks its target to be non-empty
+  and concludes an invertibility of the underlying morphism rather than of the morphism of covers.
+  Neither of the two pushes that supplied the halves composed them.
   `ComplexAnalytic.isCoveringMap_base_sq` applies the rung to the
   squaring map, and is a test of the rung rather than new information about `z ↦ z²`, which
   Mathlib already covers. **There is still no notion of a covering *of analytic spaces***: this is
