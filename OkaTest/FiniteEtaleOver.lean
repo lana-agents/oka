@@ -188,11 +188,13 @@ instance preconnectedSpace_left_sqOver : PreconnectedSpace (sqOver.{u}).left :=
 /-- **The total space of `sqOver` is Hausdorff**, and this is declared for the same reason the
 instance above is: search does not find it through `.left`.
 
-`T2Space` of the punctured line is found by `inferInstance` on its own — the restriction of `ℂ¹`
-to an open set, through `ComplexAnalytic.t2Space_restrict` and
-`ComplexAnalytic.t2Space_complexAffineSpace` (`Oka/AnalyticSpace/Hausdorff.lean`) — and the same
-search at `sqOver.left` reports *"failed to synthesize `T2Space ↑↑sqOver.left.toPresheafedSpace`"*,
-measured here. `CategoryTheory.MorphismProperty.Over.mk` puts the total space behind
+`T2Space` of the punctured line is found by `inferInstance` on its own — `#synth` there returns
+`ComplexAnalytic.t2Space_restrict_punctured` (`OkaTest/FiniteMorphism.lean`), the bespoke
+instance that `ComplexAnalytic.t2Space_restrict` and `ComplexAnalytic.t2Space_complexAffineSpace`
+subsume without displacing, which is what that instance's own docstring measures and why it is
+kept — and the same search at `sqOver.left` reports
+*"failed to synthesize `T2Space ↑↑sqOver.left.toPresheafedSpace`"*, measured here.
+`CategoryTheory.MorphismProperty.Over.mk` puts the total space behind
 `CategoryTheory.Functor.id`, which is the space by `rfl` and not reducibly so, and instance search
 unfolds only at reducible transparency. `inferInstanceAs` is that `rfl` given a head the search can
 match; nothing is proved.
