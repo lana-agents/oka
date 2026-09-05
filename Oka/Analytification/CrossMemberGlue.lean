@@ -64,10 +64,16 @@ side ends in the original glue.
 
 All four coherence triangles have to see through the `Iso.trans` their definition is, and a `rw`
 at the definition would generate an auto-generated equation lemma under its own name, as
-`Oka/Analytification/CoverRefinement.lean` records itself doing twice. The declaration dump is
+`Oka/Analytification/CoverRefinement.lean` records itself doing at `ComplexAnalytic.refineMul` and
+at `ComplexAnalytic.refineGlue`, which is how that file states it too. The declaration dump is
 what shows such a lemma and the build is not, which is why `change` is worth the extra lines: with
-it this file adds its own declarations to the dump and nothing else, apart from two `congr_simp`
-lemmas that the `simp only` in the last proof generates.
+it this file adds its own declarations to the dump and nothing else, apart from the `congr_simp`
+companions of `ComplexAnalytic.localisationPresentationIsoOfMulEq` and
+`ComplexAnalytic.localisationPresentationIsoOfAlgEquivUnitMul` — both take a proof argument, and
+the `simp only` in the last proof needs a congruence lemma to traverse them. **Named rather than
+counted**: a numeral here is a claim about this module's dump rows that the next `simp only`
+anyone adds to this file falsifies, and by this paragraph's own argument the dump is the only
+thing that would show it.
 
 ## Where the two general statements would live if one lemma moved
 
