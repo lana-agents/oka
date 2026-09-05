@@ -16,14 +16,15 @@ See `OkaTest/Axioms.lean` for what these assertions are for and how to update on
 
 ## Why all of `Oka/Weierstrass.lean` is routed here, and not by namespace
 
-Twelve of the fourteen results `Oka/Weierstrass.lean` advertises were guarded by nothing until
-this file grew the headings below, and their names span four namespaces — `LocalOkaRing`,
-`OkaRing`, `MvPowerSeries` and `Polynomial` — three of which have a row of their own in
-`OkaTest/Axioms.lean`'s table. **They are all here anyway, because that table routes by the module
-a declaration lives in and not by the namespace it is declared into**, and its own
-re-measurement recipe says so: resolve every `#print axioms` name to its module and ask whether
-some module's guards are covered by no row. All twelve resolve to `Oka.Weierstrass`, whose guards
-this row already covered.
+Until `47c2e82` grew the headings below, the only results `Oka/Weierstrass.lean` then advertised
+that were guarded anywhere were `localweierstrass_division` and `localweierstrass_preparation`,
+which this file already pinned. The names `47c2e82` added span the root namespace and four
+others — `LocalOkaRing`, `OkaRing`, `MvPowerSeries` and `Polynomial` — three of which have a row
+of their own in `OkaTest/Axioms.lean`'s table. **They are all here anyway, because that table
+routes by the module a declaration lives in and not by the namespace it is declared into**, and
+its own re-measurement recipe says so: resolve every `#print axioms` name to its module and ask
+whether some module's guards are covered by no row. Every one of them resolves to
+`Oka.Weierstrass`, whose guards this row already covered.
 
 `exists_analyticAt_implicit` is the one where topic and module pull apart, and it stays here too.
 It is the analytic implicit function theorem, so `OkaTest/Axioms/Analysis.lean` is arguable on
@@ -104,15 +105,21 @@ info: 'OkaRing.exists_isUnit_restrict' depends on axioms:
 
 /-! ### Realizing germ polynomials by polynomials over a neighbourhood
 
-`LocalOkaRing.exists_isWeierstrassPolynomial_realize` is the one of the twelve with live
-consumers: `LocalOkaRing.exists_monic_realize_congr`, `LocalOkaRing.exists_monic_realize_ulift`
-and `LocalOkaRing.exists_congr_monic_realize_of_ne_zero` in `Oka/UliftCoord.lean` all rest on it,
-and all three are guarded — so `#print axioms` already covered it *transitively*. **A transitive
-guard is not a guard**: it fails the moment the consumer is restated or removed, and it says
-nothing about this lemma on its own. Its two neighbours in the preparation chain,
-`localweierstrass_preparation` above and `LocalOkaRing.exists_congr_localweierstrass_preparation`
-in `OkaTest/Axioms/LocalOkaRing.lean`, were pinned and it was not, so the chain was held at both
-ends and not in the middle. -/
+`LocalOkaRing.exists_isWeierstrassPolynomial_realize` was covered before this heading only
+through its consumers: `LocalOkaRing.exists_monic_realize_congr`,
+`LocalOkaRing.exists_monic_realize_ulift` and `LocalOkaRing.exists_congr_monic_realize_of_ne_zero`
+in `Oka/UliftCoord.lean` all rest on it, and all three are guarded — so `#print axioms` already
+covered it *transitively*. **A transitive guard is not a guard**: it fails the moment the consumer
+is restated or removed, and it says nothing about this lemma on its own. Its two neighbours in the
+preparation chain, `localweierstrass_preparation` above and
+`LocalOkaRing.exists_congr_localweierstrass_preparation` in `OkaTest/Axioms/LocalOkaRing.lean`,
+were pinned and it was not, so the chain was held at both ends and not in the middle.
+
+An earlier version of the first sentence called this lemma *the one of the twelve with live
+consumers*, and that was false when it was written rather than rotted since:
+`MvPowerSeries.exists_direction` and `lineEquiv`, both guarded below in this file, are consumed in
+the proof of `LocalOkaRing.exists_congr_isGeneralIn`, which `OkaTest/Axioms/LocalOkaRing.lean`
+already pinned at `47c2e82`. Only the sentence changed; no guard moved. -/
 
 /--
 info: 'LocalOkaRing.exists_isWeierstrassPolynomial_realize' depends on axioms:
