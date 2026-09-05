@@ -278,7 +278,18 @@ info: 'ComplexAnalytic.okaStalk_ringHom_ext' depends on axioms:
 `AlgebraicGeometry.LocallyRingedSpace.hom_stalk_ext` is general locally-ringed-space material
 with no row of its own in the topic table of `OkaTest/Axioms.lean`; it sits here because the
 only thing that uses it is the rigidity statement below. If a reviewer prefers it in
-`OkaTest/Axioms/Sheaves.lean` that is a two-line change. -/
+`OkaTest/Axioms/Sheaves.lean` that is a two-line change.
+
+**The clause *the only thing that uses it* has stopped being true, and the sentence is left
+standing rather than repaired because `OkaTest/Axioms.lean` quotes it verbatim** — its routing
+paragraph cites this heading as one of the two precedents for guarding a mirror-tree declaration
+beside its consumer, and editing a quoted sentence silently breaks the quotation at the other
+end. What falsifies it is `AlgebraicGeometry.LocallyRingedSpace.hom_ext_of_comp_eq`, declared in
+the same mirror-tree file and proved from
+`AlgebraicGeometry.LocallyRingedSpace.hom_stalk_ext`; it is guarded in
+`OkaTest/Axioms/Morphisms.lean`, beside the statements about covers that are its only consumers,
+which is this same practice rather than a departure from it. **The placement of the guard below
+is unchanged** and its reason now reads *the only thing in this file's subject that uses it*. -/
 
 /--
 info: 'ComplexAnalytic.eval_complexAffineSpace' depends on axioms:
