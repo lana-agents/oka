@@ -2927,8 +2927,9 @@ Appended as their own section rather than folded into the two above because thos
 enumerate what their files had when they were written, and because every branch on this board adds
 a section at the end of this file — a section moved is a conflict for somebody else.
 
-**And then six more were appended into this one, so it now guards ten and the enumeration above
-is four of them.** The other six are `Oka/Analytification/HypersurfaceFinite.lean`'s tower block:
+**And then six more were appended into this one, so the enumeration above is four of what it now
+guards and not all of them.** The other six are
+`Oka/Analytification/HypersurfaceFinite.lean`'s tower block:
 `ComplexAnalytic.towerPresentation` and `ComplexAnalytic.towerPresHom`, the `m`-step
 generalisation of the two-step extension named above, with
 `ComplexAnalytic.isFinite_analytificationMap_towerPresHom` and the three `rfl` identifications
@@ -2940,9 +2941,9 @@ name is spelled out because two of the four are two-step theorems and only this 
 subsumed**: the other, `ComplexAnalytic.hypersurfacePresHom_comp_hypersurfacePresHom`, is an
 equation of presentation morphisms, and nothing states `ComplexAnalytic.towerPresHom` as a
 `ComplexAnalytic.PresHom.ofRename`, so on the tower line there is nothing for it to be subsumed
-by. **Two of the ten are a `def`** — `towerPresentation` and `towerPresHom` — and the rest are
-theorems; this clause read *"All four are theorems"*, which was true of the four and said nothing
-about the six.
+by. **The `def`s here are `towerPresentation` and `towerPresHom`**, and the rest are theorems;
+this clause read *"All four are theorems"*, which was true of the four and said nothing about the
+six.
 
 **Widened rather than split**, and the alternative was real: this file's rule is that a guard goes
 in the section of the push that added it, so a tower section of its own at the end would have been
@@ -3130,9 +3131,9 @@ cross-member projection that follow, and the three consequences for the refined 
 `glue` — that the coherence triangle determines it, that it does not depend on the caller's
 choice, and that it is symmetric.
 
-Three of the eight are `instance`s and are guarded for the same reason the rest are: the
-convention here is every declaration and not every theorem, and `scripts/guard_coverage.py`
-reports nothing about a name it does not find under `## Main results`.
+The `instance`s here are guarded for the same reason the rest are: the convention here is every
+declaration and not every theorem, and `scripts/guard_coverage.py` reports nothing about a name
+it does not find under `## Main results`.
 -/
 
 /--
@@ -3198,8 +3199,8 @@ with the original overlap it lies over, on a double overlap and on a triple one,
 that the refined transition lies over the original datum's own transition, and what that makes of
 `hrange`: the half the original law supplies, and the equivalence saying it is the only half.
 
-Three of the fourteen are `def`s and are guarded for the same reason the rest are: the convention
-here is every declaration and not every theorem.
+The `def`s here are guarded for the same reason the rest are: the convention here is every
+declaration and not every theorem.
 -/
 
 /--
@@ -3384,8 +3385,8 @@ lying over one, the equal branch's transition over its member on a double overla
 one, `hrange` at an all-equal triple, the free half at the two mixed triples that have one, and
 what is left at each of the three shapes with a residue.
 
-One of the fifteen is a `def` and is guarded for the same reason the rest are: the convention
-here is every declaration and not every theorem.
+`ComplexAnalytic.coverSpaceHomOfEq` is a `def` and is guarded for the same reason the rest are:
+the convention here is every declaration and not every theorem.
 
 Appended as its own section for the reason the two sections above give: a section moved is a
 conflict for somebody else.
@@ -3542,7 +3543,7 @@ equivalence saying the two conditions are exactly what it asks, the cocycle law 
 once the range law is a single proof — and the glue data and analytic space that take it as their
 one hypothesis.
 
-Five of the eight are a `def` or an `abbrev` and are guarded for the reason the
+The `def`s and `abbrev`s here are guarded for the reason the
 `Oka/Analytification/RefineDatumRange.lean` section above gives: the convention here is every
 declaration and not every theorem.
 
@@ -3792,9 +3793,9 @@ three were declared in `Oka/Analytification/RefineDatumCocycle.lean` when this s
 written and were moved to the file that owns `ComplexAnalytic.coverSpaceHomOfEq` afterwards; the
 guards stayed.
 
-**Four of the twenty-seven are a `def`** — `ComplexAnalytic.refineDatumTripleProj`,
+**The `def`s here are `ComplexAnalytic.refineDatumTripleProj`,
 `ComplexAnalytic.refineDatumTripleCross`, `ComplexAnalytic.refineDatumGlueDataOfLaws` and
-`ComplexAnalytic.refineDatumAnalytificationOfLaws` — and are guarded for the reason the
+`ComplexAnalytic.refineDatumAnalytificationOfLaws`**, and are guarded for the reason the
 `Oka/Analytification/RefineDatumRange.lean` section gives: the convention here is every
 declaration and not every theorem. **This clause read *six*, and it read six at the commit that
 wrote it**, where the section already had twenty-seven guards and the four `def`s named above. The
@@ -4011,9 +4012,8 @@ sentence that makes the index map non-constant.
 `Oka/Analytification/CrossMemberDatumGlue.lean` sections above, for the reason every section here
 gives: a section moved is a conflict for somebody else, and so is a guard inserted into one.
 
-Four of the thirteen are a `def` and are guarded for the reason the
-`Oka/Analytification/RefineDatumRange.lean` section gives: the convention here is every
-declaration and not every theorem.
+The `def`s here are guarded for the reason the `Oka/Analytification/RefineDatumRange.lean`
+section gives: the convention here is every declaration and not every theorem.
 
 **`ComplexAnalytic.not_isConstant_id` is the one guard in this section with an empty axiom list**,
 and it is worth one line of explanation rather than being read as an anomaly: it is a statement
@@ -4198,10 +4198,12 @@ info: 'ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp
 
 /-! ### A refined cover datum at a family that is not `1`, and the two conditions again
 
-`Oka/Analytification/RefineDatumUnitFamily.lean`, nine of its ten: the second adopted condition at
-an injective index map, the first at the original datum's own cutting polynomial and at *every*
-refining family, the choice at a family that is a unit on each overlap, the caller's `r` and `u`
-and the two laws they satisfy, and the glue data and the analytic space they assemble to.
+`Oka/Analytification/RefineDatumUnitFamily.lean`, all of it but
+`ComplexAnalytic.refineDatumUnitFamAnalytification_toLocallyRingedSpace`: the second adopted
+condition at an injective index map, the first at the original datum's own cutting polynomial and
+at *every* refining family, the choice at a family that is a unit on each overlap, the caller's
+`r` and `u` and the two laws they satisfy, and the glue data and the analytic space they assemble
+to.
 
 **This header read "all nine of it" and the file has ten**, since
 `ComplexAnalytic.refineDatumUnitFamAnalytification_toLocallyRingedSpace` was added to it. That
@@ -4210,9 +4212,9 @@ file's standing convention that a section moved is a conflict for somebody else 
 above is corrected rather than left to be recomputed, because a section header that enumerates
 what is under it goes false silently.
 
-**Four of the nine are a `def`** — the caller's `ComplexAnalytic.refineDatumUnitFamR` and
+**The `def`s here are the caller's `ComplexAnalytic.refineDatumUnitFamR` and
 `ComplexAnalytic.refineDatumUnitFamU`, and the `ComplexAnalytic.refineDatumUnitFamGlueData` and
-`ComplexAnalytic.refineDatumUnitFamAnalytification` they assemble to — and are guarded for the
+`ComplexAnalytic.refineDatumUnitFamAnalytification` they assemble to**, and are guarded for the
 reason the `Oka/Analytification/RefineDatumRange.lean` section gives: the convention here is every
 declaration and not every theorem.
 
@@ -4223,10 +4225,11 @@ a declaration was added, so a writer thinks to re-check it, while the *three* co
 made wrong by any later change and only a reading of the sentence against
 `Oka/Analytification/RefineDatumUnitFamily.lean` catches it. **The two look identical in the file
 and are found by opposite habits**, and it is why the four are now named rather than counted: a
-name a reader can check beats a number they have to recount. The tenth declaration is a `theorem`,
-so this is four of the ten as well and the correction above does not move it.
+name a reader can check beats a number they have to recount.
+`ComplexAnalytic.refineDatumUnitFamAnalytification_toLocallyRingedSpace` is a `theorem`, so those
+are the file's `def`s as well and the correction above does not move them.
 
-**Every one of the nine has the same three axioms, including the two that discharge a condition.**
+**Every guard below has the same three axioms, including the two that discharge a condition.**
 `ComplexAnalytic.refineDatumRangeEq_of_injective` is a one-line term and carries `Classical.choice`
 only through `ComplexAnalytic.RefineDatumRangeEq`'s own statement, which mentions
 `ComplexAnalytic.refineDatumGlue`; that is worth saying because the section above it records the
@@ -5213,11 +5216,11 @@ conflict for somebody else.
 corresponding `opensRange` equation in that file followed by
 `AlgebraicGeometry.Scheme.Hom.image_le_opensRange`, and the member-level one is the general one
 applied — so what they record together is that the containment costs no axiom the equations did
-not already cost, both of which are guarded here.
+not already cost, and those are guarded here too.
 
 **The guards below are the reason a count elsewhere in this file is written the way it is.**
 `ComplexAnalytic.opensRange_refinedIota_le` is a member-level guard on an application of
-`ComplexAnalytic.opensRange_presentationRefinedIota_le`, and neither is among the six declarations
+`ComplexAnalytic.opensRange_presentationRefinedIota_le`, and neither is among the declarations
 the section named *The refined member, at an arbitrary open immersion* enumerates; that section's
 sentence about the member-level guards is scoped to the guards it was written against and says so.
 
@@ -5595,9 +5598,9 @@ guarded under `### The refined member's range, in the section vocabulary` instea
 **Its own section rather than an insertion under either of that file's two headings here, and the
 reason is the subject and not the file.** `### The refined member, at an arbitrary open immersion`
 covers the general level of `Oka/Analytification/SpecRefinedMember.lean` and of that file, and it
-pairs **six** general declarations with six member-level ones, saying in terms that the two sets
-are not independent; these have no member-level counterpart, so inserting them there would
-falsify that pairing while stating nothing about it. `### The refined member's range, in the
+pairs its general declarations with member-level ones, saying in terms that the two sets are not
+independent; these have no member-level counterpart, so inserting them there would falsify that
+pairing while stating nothing about it. `### The refined member's range, in the
 section vocabulary` is about one member's range, and these are about two members' overlap.
 
 **What each of the guards below is a check of.** `ComplexAnalytic.presentationSection_mul` is two
