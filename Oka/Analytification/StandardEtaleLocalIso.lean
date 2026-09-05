@@ -204,10 +204,17 @@ anywhere. A reader comparing the two signatures will otherwise go looking for on
   `ComplexAnalytic.isCutOutBy_id_restrict_top` gives the isomorphism of *locally ringed* spaces,
   and `ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace` is faithful but not full, so the
   inverse would still have to be shown `ℂ`-linear before the conclusion could be moved to
-  `ComplexAnalytic.AnalyticSpace.analytification g`. **It is not built here because nothing
-  consumes it**: the last theorem below is a complete statement with `ℂ^n` as its target, and the
-  thing that would want the other spelling is the assembly of the Riemann existence theorem, not
-  this file.
+  `ComplexAnalytic.AnalyticSpace.analytification g`. **This bullet used to offer that as the
+  price, and it is no longer one**:
+  `ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace_reflectsIsomorphisms`
+  (`Oka/AnalyticSpace/Basic.lean`) is that linearity for the inverse of any morphism of analytic
+  spaces, so an isomorphism of locally ringed spaces between two of them is one of analytic
+  spaces without further work. The functor is still faithful and not full — reflecting
+  isomorphisms is neither — and it is still the reason the two conclusions are different
+  statements. **It is not built here because nothing consumes it**, which is unchanged and is the
+  reason that stands: the last theorem below is a complete statement with `ℂ^n` as its target, and
+  the thing that would want the other spelling is the assembly of the Riemann existence theorem,
+  not this file.
 * **No `StandardEtalePair` is constructed *here*, and this bullet's own count of what is
   constructed elsewhere was wrong in both of its halves.** It said *"no `StandardEtalePair` is
   constructed anywhere"* and that `ComplexAnalytic.eval_pderiv_ne_zero_of_mem` *"has been on

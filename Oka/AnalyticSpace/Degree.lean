@@ -44,17 +44,43 @@ map theory enters any of them except `ComplexAnalytic.AnalyticSpace.degree_eq_ca
 is the only statement here that needs the fibres to be *related* to each other rather than
 computed one at a time.
 
-## What is *not* proved, and it is the interesting half
+## What was recorded as not proved, and the reason given for it was not the obstruction
 
 `ComplexAnalytic.AnalyticSpace.isHomeomorph_base_of_degree_eq_one` concludes a homeomorphism of
 the **underlying spaces** and not an isomorphism of analytic spaces, although
-`ComplexAnalytic.AnalyticSpace.IsLocalIso` also carries an isomorphism on every stalk. The two
-together ought to give an isomorphism, and the step from them to one is a comparison of sheaves
-across a homeomorphism which this development does not have; `Oka/AnalyticSpace/LocalIso.lean`
-records the same gap from the other side. So `ComplexAnalytic.not_isIso_sq` is *not* reproved
-here, and the degree of a morphism is at present a topological invariant of it.
+`ComplexAnalytic.AnalyticSpace.IsLocalIso` also carries an isomorphism on every stalk. This
+section used to say that the two together ought to give an isomorphism and that **the step from
+them to one is a comparison of sheaves across a homeomorphism which this development does not
+have**. That step is now `ComplexAnalytic.AnalyticSpace.isIso_of_degree_eq_one`, and **the reason
+recorded for its absence was wrong rather than out of date**.
 
-Multiplicativity in a composite is not proved either. It is true, and the proof is a fibrewise
+* The comparison of sheaves is
+  `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.of_stalk_iso` — an open embedding whose
+  stalk maps are isomorphisms is an open immersion — which has been in Mathlib, at exactly the
+  generality wanted, the whole time. Nothing had to be written by hand and nothing was.
+* What *is* repository-side is a single obligation and it is not about sheaves: the inverse has to
+  be shown `ℂ`-linear before an isomorphism of locally ringed spaces is one of analytic spaces.
+  That is `ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace_reflectsIsomorphisms`
+  (`Oka/AnalyticSpace/Basic.lean`), whose proof is one application of
+  `ComplexAnalytic.IsCLinearHom.of_comp`.
+
+**This section also said that `Oka/AnalyticSpace/LocalIso.lean` records the same gap from the
+other side, and that file records no such thing** — its `## What is not here` names the Riemann
+existence theorem, the analytification of a finite étale morphism, Grauert's finite mapping
+theorem, and two absences it records as since retired, a `degree` function and cancellation for
+finite étale morphisms; none of them is this gap. The nearest sentence there is
+`ComplexAnalytic.AnalyticSpace.surjective_base_of_isLocalIso_of_isFinite`'s *the same gap from
+opposite sides*, which is about surjectivity and the empty index type and is a different sentence
+about a different gap. The pointer is dropped rather than repaired.
+
+**One clause of that paragraph was true and stays true.** `ComplexAnalytic.not_isIso_sq` is still
+not reproved here: `ComplexAnalytic.degree_sq` (`OkaTest/FiniteMorphism.lean`) puts that
+morphism's degree at `2`, so `ComplexAnalytic.AnalyticSpace.isIso_of_degree_eq_one`'s hypothesis
+fails at it and no route to that refutation is added. What is retired is the clause that **the
+degree of a morphism is at present a topological invariant of it** — degree one now decides an
+isomorphism of analytic spaces and not only of the underlying spaces.
+
+Multiplicativity in a composite is not proved. It is true, and the proof is a fibrewise
 count over the intermediate space that has nothing to do with the material below.
 
 ## Main definitions
@@ -71,6 +97,10 @@ count over the intermediate space that has nothing to do with the material below
 - `ComplexAnalytic.AnalyticSpace.bijective_base_iff_degree_eq_one` and
   `ComplexAnalytic.AnalyticSpace.isHomeomorph_base_of_degree_eq_one`: **degree one means the
   underlying map is a homeomorphism.**
+- `ComplexAnalytic.AnalyticSpace.isIso_of_degree_eq_one`: **degree one means the morphism is an
+  isomorphism of analytic spaces**, at the same hypotheses as the homeomorphism. The step from
+  the one to the other is `ComplexAnalytic.AnalyticSpace.isIso_of_isLocalIso_of_bijective`
+  (`Oka/AnalyticSpace/LocalIso.lean`), and this file supplies it the bijectivity.
 - `ComplexAnalytic.AnalyticSpace.degree_comp_of_bijective_base` and
   `ComplexAnalytic.AnalyticSpace.degree_isIso_comp`: **the degree does not see a change of source**
   — precomposing with a morphism that is bijective on points, in particular with an isomorphism,
@@ -261,23 +291,58 @@ continuity a `TopCat` morphism carries with it, the closedness field of
 of `ComplexAnalytic.AnalyticSpace.IsLocalIso` is not used**, and neither is the covering-map
 theorem: a closed continuous bijection is a homeomorphism whether or not it is a local one.
 
-**The conclusion is topological and is weaker than the expected one.** `IsLocalIso` also gives an
-isomorphism on every stalk, and a homeomorphism together with stalkwise isomorphisms ought to give
-an isomorphism of analytic spaces; the missing step is a comparison of the two structure sheaves
-across the homeomorphism, which this development does not have. So this does not reprove
-`ComplexAnalytic.not_isIso_sq`, and it is not the converse of anything stated here.
+**The conclusion is topological and is weaker than the statement with the same hypotheses.**
+`IsLocalIso` also gives an isomorphism on every stalk, and the two together do give an isomorphism
+of analytic spaces: that is `ComplexAnalytic.AnalyticSpace.isIso_of_degree_eq_one`, at the same
+hypotheses as this. **This paragraph used to say the step was a comparison of the two structure
+sheaves across the homeomorphism which this development does not have**, and the module docstring
+records why that was the wrong reason. This statement is kept because a caller wanting a
+homeomorphism should not have to build an isomorphism and forget it, and because its proof reads
+no stalk: it does not use the local-homeomorphism field either, so it is a statement about a
+closed continuous bijection and nothing more.
 
-**One morphism of degree one is known to be an isomorphism, and it is not got this way.** The
-trivial cover at one sheet is, by `ComplexAnalytic.AnalyticSpace.isIso_sigmaFold`
+It still does not reprove `ComplexAnalytic.not_isIso_sq`, whose degree is not one, and it is still
+not the converse of anything stated here.
+
+**One morphism of degree one was known to be an isomorphism before any of this, and it is still
+not got this way.** The trivial cover at one sheet is, by
+`ComplexAnalytic.AnalyticSpace.isIso_sigmaFold`
 (`Oka/AnalyticSpace/SigmaFiniteEtale.lean`), whose proof is the universal property of the disjoint
 union and reads no sheaf and no fibre — and it needs neither `[T2Space]` nor `[PreconnectedSpace]`
-nor a degree. That is a fact about that one morphism and not about degree one; the missing step
-above is still missing. -/
+nor a degree. **That is still worth its paragraph**: it is a fact about that one morphism, got
+with no hypothesis at all, where `ComplexAnalytic.AnalyticSpace.isIso_of_degree_eq_one` asks for
+all three. -/
 theorem isHomeomorph_base_of_degree_eq_one (f : X ⟶ Y) [IsFiniteEtale f] [T2Space X]
     [PreconnectedSpace Y] [Nonempty Y] (h : degree f = 1) :
     IsHomeomorph (f.toLRSHom.base : X → Y) :=
   isHomeomorph_iff_continuous_isClosedMap_bijective.mpr
     ⟨f.toLRSHom.base.hom.continuous, IsFinite.isClosedMap,
       (bijective_base_iff_degree_eq_one f).mpr h⟩
+
+/-- **A finite étale morphism of degree one is an isomorphism of analytic spaces.**
+
+This is `ComplexAnalytic.AnalyticSpace.bijective_base_iff_degree_eq_one` fed to
+`ComplexAnalytic.AnalyticSpace.isIso_of_isLocalIso_of_bijective`
+(`Oka/AnalyticSpace/LocalIso.lean`). **The bijectivity was already here and only its topological
+consequence had a consumer**: `ComplexAnalytic.AnalyticSpace.isHomeomorph_base_of_degree_eq_one`
+reads the same equivalence and stops at the underlying spaces.
+
+**The hypotheses are exactly the ones the degree needs**, and none of them is spent by the step to
+an isomorphism. `[T2Space X]` and `[PreconnectedSpace Y]` are what make the fibre count constant,
+`[Nonempty Y]` is what
+`ComplexAnalytic.AnalyticSpace.bijective_base_iff_degree_eq_one` needs to read a degree off it,
+and `ComplexAnalytic.AnalyticSpace.isIso_of_isLocalIso_of_bijective` asks for no separation axiom
+and no connectedness. The hypothesis-free form is
+`ComplexAnalytic.AnalyticSpace.isIso_of_isFiniteEtale_of_injective`, which takes injectivity
+instead of a degree and asks nothing of `X` beyond being non-empty.
+
+**This does not reprove `ComplexAnalytic.not_isIso_sq`.** `ComplexAnalytic.degree_sq`
+(`OkaTest/FiniteMorphism.lean`) puts that morphism's degree at `2`, so the hypothesis fails and
+this statement says nothing about it. Refuting an `IsIso` is a different shape and its general
+form is `ComplexAnalytic.AnalyticSpace.surjective_base_of_isIso`
+(`Oka/AnalyticSpace/Basic.lean`). -/
+theorem isIso_of_degree_eq_one (f : X ⟶ Y) [IsFiniteEtale f] [T2Space X] [PreconnectedSpace Y]
+    [Nonempty Y] (h : degree f = 1) : IsIso f :=
+  isIso_of_isLocalIso_of_bijective f ((bijective_base_iff_degree_eq_one f).mpr h)
 
 end ComplexAnalytic.AnalyticSpace

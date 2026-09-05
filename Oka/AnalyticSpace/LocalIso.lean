@@ -133,6 +133,15 @@ the rung.
 - `ComplexAnalytic.AnalyticSpace.not_isFinite_of_isLocalIso_of_not_surjective`: **the
   contrapositive**, which is the form a non-example is stated in — it refutes finiteness from a
   missing point rather than from a non-closed set exhibited by hand.
+- `ComplexAnalytic.AnalyticSpace.isIso_of_isLocalIso_of_bijective`: **a local isomorphism whose
+  underlying map is bijective is an isomorphism**, which is the converse of
+  `ComplexAnalytic.AnalyticSpace.isLocalIso_of_isIso` under that one extra hypothesis. The sheaf
+  comparison it needs is `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.of_stalk_iso` and
+  the only repository-side step is the `ℂ`-linearity of the inverse.
+- `ComplexAnalytic.AnalyticSpace.isIso_of_isFiniteEtale_of_injective`: **an injective finite étale
+  morphism out of a non-empty space onto a preconnected base is an isomorphism** —
+  `ComplexAnalytic.AnalyticSpace.isIso_of_isLocalIso_of_bijective` with the surjective half
+  supplied by the clopen dichotomy, so that only injectivity is asked of the caller.
 
 ## References
 
@@ -449,5 +458,76 @@ theorem not_isFinite_of_isLocalIso_of_not_surjective {X Y : AnalyticSpace.{u}} (
     [IsLocalIso f] [Nonempty X] [PreconnectedSpace Y]
     (hf : ¬ Function.Surjective (f.toLRSHom.base : X → Y)) : ¬ IsFinite f :=
   fun _ ↦ hf (surjective_base_of_isLocalIso_of_isFinite f)
+
+/-! ### From a local isomorphism to an isomorphism -/
+
+/-- **A local isomorphism whose underlying map is bijective is an isomorphism.**
+
+This is the converse direction to `ComplexAnalytic.AnalyticSpace.isLocalIso_of_isIso`, and it is
+the step `Oka/AnalyticSpace/Degree.lean` recorded as missing. **The reason recorded there was that
+it needs a comparison of the two structure sheaves across the homeomorphism, and it does not**:
+the comparison exists, for locally ringed spaces, at the generality this file needs, and the whole
+of the proof is three Mathlib statements and one instance of this repository's.
+
+* `IsLocalHomeomorph.isOpenEmbedding_of_injective` turns the topological field of
+  `ComplexAnalytic.AnalyticSpace.IsLocalIso` plus injectivity into an open embedding;
+* `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.of_stalk_iso` turns an open embedding
+  whose stalk maps are isomorphisms into an open immersion — **this is the sheaf comparison, and
+  it was in Mathlib the whole time**; the stalk maps it asks for are
+  `ComplexAnalytic.AnalyticSpace.IsLocalIso.isIso_stalkMap`, which is an instance;
+* `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.to_iso` turns an open immersion with epi
+  base into an isomorphism, `TopCat.epi_iff_surjective` supplying the epi from surjectivity;
+* and `ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace_reflectsIsomorphisms`
+  (`Oka/AnalyticSpace/Basic.lean`) carries the resulting isomorphism of locally ringed spaces back
+  to one of analytic spaces. That is the only repository-side obligation and it is the
+  `ℂ`-linearity of the inverse.
+
+**Surjectivity is a hypothesis here and is not deduced.** The bijectivity asked for is of the
+underlying map and both halves of it are used: injectivity for the open embedding, surjectivity
+for the epi. Neither field of `ComplexAnalytic.AnalyticSpace.IsLocalIso` supplies either — a local
+homeomorphism can miss most of the target and can identify points.
+
+**The `haveI` at the functor spelling is load-bearing**, for the reason
+`ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace_reflectsIsomorphisms`'s docstring gives:
+`AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.to_iso` produces
+`IsIso f.toLRSHom` and `CategoryTheory.isIso_of_reflects_iso` consumes
+`IsIso (forgetToLocallyRingedSpace.map f)`, the two are `rfl`-equal, and they are different
+discrimination-tree keys. -/
+theorem isIso_of_isLocalIso_of_bijective {X Y : AnalyticSpace.{u}} (f : X ⟶ Y)
+    [hf : IsLocalIso f] (hb : Function.Bijective (f.toLRSHom.base : X → Y)) : IsIso f := by
+  have hoe : IsOpenEmbedding (f.toLRSHom.base : X → Y) :=
+    hf.isLocalHomeomorph.isOpenEmbedding_of_injective hb.injective
+  haveI : LocallyRingedSpace.IsOpenImmersion f.toLRSHom :=
+    LocallyRingedSpace.IsOpenImmersion.of_stalk_iso f.toLRSHom hoe
+  haveI : Epi f.toLRSHom.base := (TopCat.epi_iff_surjective _).2 hb.surjective
+  haveI : IsIso (forgetToLocallyRingedSpace.map f) :=
+    LocallyRingedSpace.IsOpenImmersion.to_iso f.toLRSHom
+  exact isIso_of_reflects_iso f forgetToLocallyRingedSpace
+
+/-- **An injective finite étale morphism out of a non-empty space onto a preconnected base is an
+isomorphism.**
+
+`ComplexAnalytic.AnalyticSpace.isIso_of_isLocalIso_of_bijective` wants bijectivity and this
+supplies the surjective half from
+`ComplexAnalytic.AnalyticSpace.surjective_base_or_isEmpty_of_isFiniteEtale`, whose empty branch
+`[Nonempty X]` rules out. **No fibre is counted and no degree appears**, which is why this is
+stated here and not with the degree: the hypothesis is injectivity of a map, not a number.
+
+**`[Nonempty X]` and not `[Nonempty Y]`**, because that is what the dichotomy's other branch
+refutes; a point of the target says nothing about whether the source is empty, and over an empty
+source the unique morphism to a non-empty base is injective and is not an isomorphism.
+
+The degree form of the hypothesis is
+`ComplexAnalytic.AnalyticSpace.isIso_of_degree_eq_one` (`Oka/AnalyticSpace/Degree.lean`), which
+asks `[T2Space X]` in exchange for the covering-map theory that identifies the degree with a fibre
+count; **this asks for no separation axiom at all**, and the two are therefore not the same
+statement with the hypothesis rewritten. -/
+theorem isIso_of_isFiniteEtale_of_injective {X Y : AnalyticSpace.{u}} (f : X ⟶ Y)
+    [IsFiniteEtale f] [PreconnectedSpace (Y : Type u)] [Nonempty (X : Type u)]
+    (hi : Function.Injective (f.toLRSHom.base : X → Y)) : IsIso f := by
+  refine isIso_of_isLocalIso_of_bijective f ⟨hi, ?_⟩
+  rcases surjective_base_or_isEmpty_of_isFiniteEtale f with h | h
+  · exact h
+  · exact absurd h (not_isEmpty_of_nonempty _)
 
 end ComplexAnalytic.AnalyticSpace
