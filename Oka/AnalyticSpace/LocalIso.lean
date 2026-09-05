@@ -124,6 +124,12 @@ the rung.
   out of a non-empty space onto a preconnected base is surjective** — the image is open because the
   morphism is a local isomorphism and closed because it is finite, and a preconnected base has no
   other clopen set than `∅` and itself.
+- `ComplexAnalytic.AnalyticSpace.surjective_base_or_isEmpty_of_isFiniteEtale`: **the same
+  dichotomy with `[Nonempty]` moved out of the hypotheses and into the conclusion** — over a
+  preconnected base a finite étale morphism is surjective or its source is empty. The clopen
+  argument is the one above and this adds none of its own; what it adds is that a caller who does
+  not know the source is inhabited still gets an answer, which is what a statement quantifying
+  over all objects of a category of covers needs.
 - `ComplexAnalytic.AnalyticSpace.not_isFinite_of_isLocalIso_of_not_surjective`: **the
   contrapositive**, which is the form a non-example is stated in — it refutes finiteness from a
   missing point rather than from a non-closed set exhibited by hand.
@@ -391,6 +397,32 @@ theorem surjective_base_of_isFiniteEtale {X Y : AnalyticSpace.{u}} (f : X ⟶ Y)
     [IsFiniteEtale f] [Nonempty X] [PreconnectedSpace Y] :
     Function.Surjective (f.toLRSHom.base : X → Y) :=
   surjective_base_of_isLocalIso_of_isFinite f
+
+/-- **A finite étale morphism onto a preconnected base is surjective, or its source is empty.**
+
+The same clopen dichotomy as
+`ComplexAnalytic.AnalyticSpace.surjective_base_of_isFiniteEtale`, with `[Nonempty X]` read as the
+other branch instead of as a hypothesis: a preconnected base has no clopen set but `∅` and itself,
+and the range is empty exactly when the source is. **The proof is a case split and the theorem
+above; no topology is done here that is not done there.**
+
+**Why the weaker-looking form is the useful one.** The theorem above cannot be applied to an
+object of a category of covers without first knowing that its total space is inhabited, which is
+a fact about the object and not about the category; the disjunction can, and the empty branch is
+then discharged by whatever the caller can say about maps out of an empty space. That is exactly
+how `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hom_ext_of_forall_fiberMap_eq`
+(`Oka/AnalyticSpace/FiniteEtaleOver.lean`) removes the *point of the fibre* hypothesis from
+faithfulness of the fibre functor.
+
+**`[PreconnectedSpace Y]` and not `[ConnectedSpace Y]`**, following the theorem above; at an empty
+base both branches hold and the statement says nothing, which is what a vacuous case ought to look
+like rather than a defect. -/
+theorem surjective_base_or_isEmpty_of_isFiniteEtale {X Y : AnalyticSpace.{u}} (f : X ⟶ Y)
+    [IsFiniteEtale f] [PreconnectedSpace Y] :
+    Function.Surjective (f.toLRSHom.base : X → Y) ∨ IsEmpty (X : Type u) := by
+  rcases isEmpty_or_nonempty (X : Type u) with h | h
+  · exact Or.inr h
+  · exact Or.inl (surjective_base_of_isFiniteEtale f)
 
 /-- **A local isomorphism out of a non-empty space onto a preconnected base that misses a point
 is not finite** — the contrapositive of

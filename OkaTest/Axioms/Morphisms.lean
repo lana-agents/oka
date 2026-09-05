@@ -2143,3 +2143,89 @@ info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.eq_id_of_apply_eq' depends 
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.eq_id_of_apply_eq
+
+/-! ### The fibre functor is faithful, as a class, on the connected Hausdorff covers
+
+`Oka/AnalyticSpace/FiniteEtaleOver.lean` and `Oka/AnalyticSpace/LocalIso.lean`: the clopen
+dichotomy with `Nonempty` moved into the conclusion, the fibre it produces over a preconnected
+base, the extensionality statement that needs no point of that fibre, the two injectivity
+statements this gives for the two fibre functors, the full subcategory they are faithful on, the
+two objects of it named in `Oka/`, and the two `CategoryTheory.Functor.Faithful` instances
+themselves.
+
+**`ComplexAnalytic.AnalyticSpace.surjective_base_or_isEmpty_of_isFiniteEtale` is guarded here and
+not with the surjectivity statements it is a corollary of.** This file's rule is that a guard goes
+in the section of the push that added it, and the whole reason that disjunction exists is the
+faithfulness statements below — the surjectivity theorem it calls was already here and already
+guarded. **A later seat who prefers it beside its own line moves one guard**, and no sentence here
+depends on where it sits.
+
+**`Classical.choice` is in every guard below** and is not introduced by any of them: it arrives
+through the covering-map rung, exactly as the section above records, and is present even in the
+`CategoryTheory.ObjectProperty` that names the subcategory.
+
+**Named by file rather than counted**, as the sections above say and for the reason they give.
+
+**Named and not located.** No sentence here says which section is above or below it. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.surjective_base_or_isEmpty_of_isFiniteEtale' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.surjective_base_or_isEmpty_of_isFiniteEtale
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.nonempty_fiber' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.nonempty_fiber
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hom_ext_of_forall_fiberMap_eq' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hom_ext_of_forall_fiberMap_eq
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberFunctor_map_injective' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberFunctor_map_injective
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fintypeFiberFunctor_map_injective' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fintypeFiberFunctor_map_injective
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_id' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_id
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_trivial_of_isEmpty' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_trivial_of_isEmpty
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.faithful_fiberFunctor' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.faithful_fiberFunctor
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.faithful_fintypeFiberFunctor' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.faithful_fintypeFiberFunctor
