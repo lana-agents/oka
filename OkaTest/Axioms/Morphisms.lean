@@ -2019,3 +2019,55 @@ info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.nonempty_iso_trivial_id_iff
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.nonempty_iso_trivial_id_iff
+
+/-! ### Unique lifting for morphisms of covers
+
+The rigidity statements of `Oka/AnalyticSpace/FiniteEtaleOver.lean`: that two morphisms of covers
+agreeing at one point of a preconnected source agree on points, the same conclusion from a point
+of a fibre and from the fibre functor's action, and the endomorphism corollary.
+
+**Appended as its own section rather than added to the section above**, for the reason the
+sections above give — a section moved is a conflict for somebody else — and because the subject is
+not that one's: `### The fibre functor` is about the fibre and the functors it assembles into,
+where these are about what a morphism of covers is pinned down by, and only two of the four
+mention a fibre at all.
+
+**Named by file rather than counted**, as the sections above say and for the reason they give.
+
+**`IsCoveringMap.eq_of_comp_eq` is Mathlib's and is not guarded here**, nothing in this repository
+declaring it; what the guards below check is that composing it with
+`ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale` — guarded in
+`OkaTest/Axioms/AnalyticSpace.lean` — introduces nothing, which is the same thing the sections
+above check of their own compositions. `Classical.choice` is in every guard below and arrives with
+the covering-map rung, not with anything stated here.
+
+**Named and not located.** No sentence here says which section is above or below it; the next
+branch appends between them. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.base_eq_of_apply_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.base_eq_of_apply_eq
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.base_eq_of_fiberMap_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.base_eq_of_fiberMap_eq
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.base_eq_of_fiberFunctor_map_eq' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.base_eq_of_fiberFunctor_map_eq
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.base_eq_id_of_apply_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.base_eq_id_of_apply_eq
