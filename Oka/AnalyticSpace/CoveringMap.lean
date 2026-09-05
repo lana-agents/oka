@@ -89,9 +89,16 @@ base being nonempty is never used.
   `Oka/AnalyticSpace/Degree.lean`: `ComplexAnalytic.AnalyticSpace.degree_eq_card_fiber` is the
   obligation, and it is `ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale` — the
   theorem below — read at the definition, so this file is where its content lives; and
-  `ComplexAnalytic.AnalyticSpace.isHomeomorph_base_of_degree_eq_one` is the consumer. What is
-  still absent is multiplicativity of the degree in a composite, and any consequence of the degree
-  that sees the structure sheaves rather than the underlying map.
+  `ComplexAnalytic.AnalyticSpace.isHomeomorph_base_of_degree_eq_one` is the consumer.
+
+  **Multiplicativity of the degree in a composite stood in this sentence as absent and is not
+  absent any more**: `ComplexAnalytic.AnalyticSpace.degree_comp` is in that same file, and the
+  theorem below is again where its content lives — the fibrewise count is elementary and what
+  costs the hypotheses is `ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale` applied
+  at each factor, so the `[T2Space]` and `[PreconnectedSpace]` it carries are this file's and not
+  the count's. **What is still absent is any consequence of the degree that sees the structure
+  sheaves rather than the underlying map**, which is the other half of the sentence this paragraph
+  replaces and is untouched by that theorem.
 * **The converse for a *given* morphism.** `IsCoveringMap.isLocalHomeomorph` returns the
   topological field of `IsLocalIso`, but no topological hypothesis can return the stalk field of a
   morphism whose structure sheaves are already fixed, so there is no `↔` and none is stated.

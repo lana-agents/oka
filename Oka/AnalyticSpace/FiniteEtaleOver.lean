@@ -108,6 +108,18 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
 - `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_id` and
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_trivial`: the two objects above have
   degrees `1` and `Nat.card ι`, over a non-empty base.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_eq_mul`: **the degree of a cover is the
+  degree of a morphism out of it times the degree of that morphism's target**, over a preconnected
+  base with both total spaces Hausdorff and the target's preconnected. This is
+  `ComplexAnalytic.AnalyticSpace.degree_comp` (`Oka/AnalyticSpace/Degree.lean`) read at the
+  triangle, and it is what makes the degree of a morphism *of covers* a quantity rather than a
+  spelling.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_dvd_degree`: **the degree of the target of
+  a morphism of covers divides the degree of its source** — the first statement here that relates
+  the degrees of two objects the category does not identify.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_left_eq_one`: **a morphism between covers
+  of equal, non-zero degree has degree one**. What that does *not* give is that the morphism is an
+  isomorphism; see `## What is not here`.
 - `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_iso_trivial_id` and
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_eq_of_iso_trivial`: **the trivial covers of a
   non-empty base are pairwise non-isomorphic**, indexed by `Nat.card`, so the category there has
@@ -281,6 +293,19 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   over a preconnected source and a Hausdorff total space of the target. **Conservativity is
   untouched by that** — nothing turns an equivalence of fibres into an isomorphism of covers —
   and nothing exhibits the functor as an equivalence onto anything.
+
+  **What this file supplies towards conservativity is the degree and not the isomorphism, and the
+  split is worth naming because the two halves live in different files.**
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_fiber` turns an equivalence of fibres at one
+  point of a preconnected base into an equality of the two objects' degrees, and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_left_eq_one` turns that equality — when
+  the common degree is not `0` — into `AnalyticSpace.degree f.left = 1`. **The remaining step is
+  from degree one to invertibility**, which is a statement about
+  `Oka/AnalyticSpace/Degree.lean`'s material and about the structure sheaves rather than about
+  this category: `ComplexAnalytic.AnalyticSpace.isHomeomorph_base_of_degree_eq_one` concludes a
+  homeomorphism of the underlying spaces. **Taxis #1734 is the live filing against that step and
+  this file does not take it**; the sentence above about conservativity is written of the whole
+  passage and stays as it is until that step exists.
 
   **`CategoryTheory.Functor.Faithful` is here now, on a full subcategory** —
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.faithful_fiberFunctor` and
@@ -1430,5 +1455,97 @@ instance FiniteEtaleOver.faithful_fintypeFiberFunctor {X : AnalyticSpace.{u}}
     ObjectProperty.hom_ext _
       (@FiniteEtaleOver.fintypeFiberFunctor_map_injective X ‹_› x A.obj B.obj
         A.property.1 B.property.2 _ _ h)
+
+/-! ### The degree of a morphism of covers, and the divisibility it gives -/
+
+/-- **The degree of a cover factors through the degree of any morphism out of it.**
+
+A morphism `f : A ⟶ B` of covers is a triangle over the base:
+`CategoryTheory.MorphismProperty.Over.w` says `f.left ≫ B.hom = A.hom`, so the structure map of
+`A` *is* a composite, and
+`ComplexAnalytic.AnalyticSpace.degree_comp` (`Oka/AnalyticSpace/Degree.lean`) reads it.
+
+**Where the hypotheses go.** `[T2Space A.left]` and `[PreconnectedSpace B.left]` are what
+`degree_comp` needs of its first factor, `[T2Space B.left]` and `[PreconnectedSpace X]` are what
+it needs of its second, and there is nothing else. In particular `[PreconnectedSpace A.left]` is
+**not** asked for and would be the wrong hypothesis: the cover upstairs may be disconnected and
+the statement still holds, which is what the trivial cover exhibits.
+
+**`ComplexAnalytic.AnalyticSpace.IsFiniteEtale f.left` is not a hypothesis and is not free
+either.** It is `ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp`
+(`Oka/AnalyticSpace/LocalIso.lean`) at the triangle — the cancellation whose `[T2Space]` on the
+middle space is `[T2Space B.left]` here — and it is the reason that hypothesis appears twice over
+in the discussion of this file's `## What is not here`: a morphism of covers is finite étale
+because the *target* cover's total space is separated, not because the category asks it to be.
+
+**The instance seam bites in the direction opposite to
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_fiber`'s, and both directions are now needed
+in this file.** There, `[T2Space]` and `[PreconnectedSpace]` are restated at the comma category's
+spelling of a space, because `ComplexAnalytic.AnalyticSpace.degree_eq_card_fiber` asks for them at
+the bare one. Here it is the other way round: `f.left` has target `B.left` on the nose, so
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp` asks for `IsLocalIso B.hom` with `B.left`
+as its source, while the instance an object carries in its `prop` field has
+`(CategoryTheory.Functor.id _).obj B.left` there. The two are `rfl`-equal and are different
+discrimination-tree keys, so `B.prop` is in context and the synthesis still fails — with a goal
+that prints identically to the hypothesis, which is what makes it expensive to read. The named
+argument `(X := B.left)` on the two `haveI`s below is the whole of the repair; taxis #1681 is the
+filing about this seam. -/
+theorem FiniteEtaleOver.degree_eq_mul {X : AnalyticSpace.{u}} {A B : FiniteEtaleOver.{u} X}
+    (f : A ⟶ B) [T2Space A.left] [T2Space B.left] [PreconnectedSpace B.left]
+    [PreconnectedSpace (X : Type u)] :
+    A.degree = AnalyticSpace.degree f.left * B.degree := by
+  have hw : f.left ≫ B.hom = A.hom := MorphismProperty.Over.w f
+  haveI : IsFiniteEtale (X := B.left) B.hom := B.prop
+  haveI : IsLocalIso (X := B.left) B.hom := IsFiniteEtale.isLocalIso
+  haveI : IsFiniteEtale (f.left ≫ B.hom) := hw ▸ (A.prop : IsFiniteEtale A.hom)
+  haveI : IsFiniteEtale f.left := isFiniteEtale_of_comp f.left B.hom
+  haveI : PreconnectedSpace
+      (((Functor.fromPUnit.{0} X).obj B.right : AnalyticSpace.{u}) : Type u) :=
+    inferInstanceAs (PreconnectedSpace (X : Type u))
+  calc A.degree = AnalyticSpace.degree (f.left ≫ B.hom) := by rw [hw]; rfl
+    _ = AnalyticSpace.degree f.left * B.degree := degree_comp f.left B.hom
+
+/-- **The degree of the target of a morphism of covers divides the degree of its source.**
+
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_eq_mul` with the witness read off, and the
+witness is the degree of the morphism itself rather than an anonymous natural number.
+
+**This is the first statement in this file relating the degrees of two objects that are not
+isomorphic.** `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_eq_of_iso` says isomorphic
+covers have equal degrees and says nothing about anything else; a bare morphism is much weaker
+than an isomorphism and still constrains the two numbers.
+
+**It is not vacuous and it is not sharp.** Over an empty base every degree is `0` and every
+divisibility holds, which is the degenerate reading; over a non-empty base the trivial cover at
+`ι` maps to the base over itself, and `Nat.card ι` is divisible by `1` — the statement in that
+instance says exactly that the base over itself has degree one. What it does not do is produce a
+morphism from a divisibility, and nothing here does. -/
+theorem FiniteEtaleOver.degree_dvd_degree {X : AnalyticSpace.{u}} {A B : FiniteEtaleOver.{u} X}
+    (f : A ⟶ B) [T2Space A.left] [T2Space B.left] [PreconnectedSpace B.left]
+    [PreconnectedSpace (X : Type u)] :
+    B.degree ∣ A.degree :=
+  ⟨AnalyticSpace.degree f.left, by rw [FiniteEtaleOver.degree_eq_mul.{u} f, mul_comm]⟩
+
+/-- **A morphism between covers of the same non-zero degree has degree one.**
+
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_eq_mul` gives
+`B.degree = AnalyticSpace.degree f.left * B.degree` once the two degrees are identified, and
+`Nat.mul_eq_right` cancels the non-zero factor.
+
+**The non-vanishing hypothesis is not decoration.** Over an empty base both degrees are `0` and
+`f.left` may have any degree at all; `0 = d * 0` says nothing. Stating it as `B.degree ≠ 0` rather
+than as `[Nonempty X]` is deliberate — non-emptiness of the base does not by itself make a
+cover's degree non-zero, since the empty cover of a non-empty base is finite étale and has degree
+`0`, and it is the cover being non-empty over each point that the hypothesis really wants.
+
+**What this does not say is that `f` is an isomorphism.** Degree one is a statement about the
+fibres of `f.left` and the step from it to invertibility is the one
+`Oka/AnalyticSpace/Degree.lean`'s `## What is *not* proved` section is about; see
+`## What is not here` below. -/
+theorem FiniteEtaleOver.degree_left_eq_one {X : AnalyticSpace.{u}} {A B : FiniteEtaleOver.{u} X}
+    (f : A ⟶ B) [T2Space A.left] [T2Space B.left] [PreconnectedSpace B.left]
+    [PreconnectedSpace (X : Type u)] (h : A.degree = B.degree) (hB : B.degree ≠ 0) :
+    AnalyticSpace.degree f.left = 1 :=
+  (Nat.mul_eq_right hB).mp ((FiniteEtaleOver.degree_eq_mul.{u} f).symm.trans h)
 
 end ComplexAnalytic.AnalyticSpace
