@@ -197,28 +197,35 @@ measured here. `CategoryTheory.MorphismProperty.Over.mk` puts the total space be
 unfolds only at reducible transparency. `inferInstanceAs` is that `rfl` given a head the search can
 match; nothing is proved.
 
-**What it buys is that the two *space-level* hypotheses on this line are now found at one
-object**, and it is worth being exact about which those are.
-`ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale` asks `[T2Space]` of the source
-and `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_fiber` asks it of a cover's total space
-together with `[PreconnectedSpace]`; before this, every use of either at an object this repository
-exhibits had to open with an `inferInstanceAs` of its own, and the general statements say so —
-`card_fiber`'s docstring documents the two `haveI`s it needs for exactly this reason, from the
-other side of the seam.
+**What it buys, measured: two theorems of this line now elaborate at `sqOver` with no `haveI` at
+all.** `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_fiber` there, whose `[T2Space A.left]`
+is this instance and whose `[PreconnectedSpace X]` is the punctured line's own; and
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.base_eq_of_apply_eq` at `A = B = sqOver`, which asks
+for this instance and for the `PreconnectedSpace` one above it. The second is the first use of the
+unique-lifting statement at a cover this repository exhibits rather than at a variable. Before this
+instance both opened with an `inferInstanceAs`, which is why
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_fiber`'s own docstring documents the `haveI`s
+it writes internally — the same seam from the other side.
 
-**The class hypothesis is a different seam and is not closed here.** `IsFiniteEtale sqOver.hom` is
-**not** found by instance search either — an object of this category carries it in its `prop`
-field, which search does not unfold — so a caller still writes `haveI : IsFiniteEtale A.hom :=
-A.prop`, as the proofs in `Oka/AnalyticSpace/FiniteEtaleOver.lean` do. Measured: with both
-instances above in place, `isCoveringMap_base_of_isFiniteEtale` at `sqOver.hom` still fails to
-elaborate, and it fails on that class and not on a space.
+**The class hypothesis is a different seam, and it is not the only thing left.**
+`IsFiniteEtale sqOver.hom` is **not** found by instance search — an object of this category carries
+it in its `prop` field, which search does not unfold — so a caller writes
+`haveI : IsFiniteEtale A.hom := A.prop`, as the proofs in `Oka/AnalyticSpace/FiniteEtaleOver.lean`
+do. **That alone is not enough**, and this is the measurement rather than the first error message:
+with the class supplied that way,
+`ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale` at `sqOver.hom` still fails,
+and it fails on a *space* — `T2Space ↑↑((𝟭 AnalyticSpace).obj sqOver.left).toPresheafedSpace`,
+which is the seam of the paragraph above at its wrapped spelling: that statement asks `[T2Space]`
+of the **source of the morphism**, and the head of the instance here is `sqOver.left` bare. So a
+caller at an object's `hom` writes **both** `haveI`s, which is character-for-character the pair
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_fiber` writes in its own proof; with both, it
+elaborates.
 
 **`sqOver` and not the general case.** `T2Space A.left` does not follow from `T2Space X` for an
 arbitrary object of `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver X` — a total space carries no
-separation axiom this development imposes — so there is nothing here to state in general, and an
-instance on a `CategoryTheory.MorphismProperty.Over` projection would be paid for by every search
-in this file's import closure. The head of this one is a single object and it cannot fire where it
-is not wanted, which is the argument the instance above makes for itself. -/
+separation axiom this development imposes — so there is nothing here to state in general. The head
+of this one is a single object and it cannot fire where it is not wanted, which is the argument the
+instance above makes for itself. -/
 instance t2Space_left_sqOver : T2Space ((sqOver.{u}).left : Type u) :=
   inferInstanceAs (T2Space (((AnalyticSpace.complexAffineSpace.{u} 1).restrict
     ComplexAnalytic.punctured.{u} : AnalyticSpace.{u}) : Type u))
