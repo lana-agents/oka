@@ -1420,11 +1420,11 @@ info: 'ComplexAnalytic.isLocalIso_comp_proj_of_pderiv' depends on axioms:
 
 /-! #### The same after restricting the source to an open subspace
 
-These five are the transport of the two halves across an open subspace of the *hypersurface*,
-which three module docstrings recorded as absent until taxis #1112. They are guarded together and
-apart from the unrestricted ones above because the asymmetry is the content: the stalk half is
-already quantified one point at a time and transports by composition, while the topological one
-is not reached from its own unrestricted form and goes through
+The restricted statements below are the transport of the two halves across an open subspace of the
+*hypersurface*, which three module docstrings recorded as absent until taxis #1112. They are
+guarded together and apart from the unrestricted ones above because the asymmetry is the content:
+the stalk half is already quantified one point at a time and transports by composition, while the
+topological one is not reached from its own unrestricted form and goes through
 `isLocalHomeomorph_coordProj_comp_of_isEmbedding_inter` above — which is itself a corollary of
 the theorem guarded above it, so **nothing here rests on a statement the tree did not already
 have**. -/
@@ -1619,9 +1619,9 @@ info: 'ComplexAnalytic.AnalyticSpace.isLocalIso_of_isCutOutBy_pullbackΓ' depend
 `Oka/AnalyticSpace/LocalIso.lean`, appended as its own section for the reason the sections above
 give: a section moved is a conflict for somebody else.
 
-The three read the two rungs against each other and nothing else — a local isomorphism is an open
-map and a finite morphism is a closed one, so over a preconnected base the image of a non-empty
-source is everything. The contrapositive is the one with a consumer:
+The guards below read the two rungs against each other and nothing else — a local isomorphism is
+an open map and a finite morphism is a closed one, so over a preconnected base the image of a
+non-empty source is everything. The contrapositive is the one with a consumer:
 `ComplexAnalytic.not_isFinite_condEtaleProj` (`OkaTest/StandardEtaleNotFinite.lean`) is where the
 unrestricted standard étale morphism is refuted by a missing point, and that consumer is a test
 declaration and so is **not** guarded here — this file imports `Oka` and not `OkaTest`, which is
