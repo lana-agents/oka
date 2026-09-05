@@ -291,8 +291,8 @@ every family would satisfy everything above. Every point of a coproduct is in th
 member (`AlgebraicGeometry.LocallyRingedSpace.exists_sigma_ι_base_eq`) and there are no members,
 so the carrier is empty. **Emptiness is a property of a space built some other way, and nothing in
 the library is defined as the empty analytic space**: that is as true of the sibling below and of
-`ComplexAnalytic.isEmpty_refineAnalytification` — the same statement for a refinement with no
-members — as it is of this one. `OkaTest/` instantiates this one, and
+`ComplexAnalytic.isEmpty_refineAnalytification` — the same statement for a refinement at an empty
+index type — as it is of this one. `OkaTest/` instantiates this one, and
 `Oka/AnalyticSpace/LocalModel.lean` uses the phrase only to say that the node is *not* it.
 
 The sentence this replaces said that this was *the only declaration in the library that names the
