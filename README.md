@@ -1167,12 +1167,12 @@ lemmas** — those two rows are why "irreducible" is the right word.
 So the job is **389 docstrings**, and **24 findings that no docstring can remove**: only
 `@[nolint docBlameThm]` or dropping the attribute.
 
-**That last row is the reason the linter stays off.** Turning it on means landing all 389 first —
-CI is red in between, and that is many pull requests across 54 files — and then carrying a
-`nolint` list for the 24, which grows with every new `@[simps]`. And the argument from upstreaming
-is not available: **`Mathlib/` mentions `docBlameThm` nowhere at all**, and its only `docBlame`
-mentions are `nolint` attributes, so Mathlib would accept all 428 as they stand. Whatever
-this repository does here is a house convention and has to be argued as one.
+**The `@[simps]` and `@[mk_iff]` row is the reason the linter stays off.** Turning it on means
+landing all 389 first — CI is red in between, and that is many pull requests across 54 files — and
+then carrying a `nolint` list for the 24, which grows with every new `@[simps]`. And the argument
+from upstreaming is not available: **`Mathlib/` mentions `docBlameThm` nowhere at all**, and its
+only `docBlame` mentions are `nolint` attributes, so Mathlib would accept all 428 as they stand.
+Whatever this repository does here is a house convention and has to be argued as one.
 
 **A narrower alternative exists and is recorded rather than proposed.** Of the **40** files under
 `Oka/` with a Mathlib file at their mirror path, **11 have at least one finding and 94 between
