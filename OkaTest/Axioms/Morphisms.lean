@@ -730,9 +730,16 @@ info: 'ComplexAnalytic.AnalyticSpace.card_fiber_eq_of_isFiniteEtale' depends on 
 `Oka/AnalyticSpace/SimpleZeroStalk.lean`. The stalk half of *the analytification of a standard
 étale morphism is a local isomorphism*: the two headings above supply what a stalk map of a
 projection *is* and when a stalk map is an isomorphism, and these join them to
-`LocalOkaRing.quotientSimpleZeroEquiv`. The first is the kernel of a one-section cut-out, the
-second is the whole proof with both identifications taken as arguments, and the four after it are
-its two instances — `Fin` and `ULift (Fin _)` — each as a bijection and as an `IsIso`. -/
+`LocalOkaRing.quotientSimpleZeroEquiv`. `ComplexAnalytic.IsCutOutBy.mem_ker_stalkMap_iff` is the
+kernel of a one-section cut-out and `ComplexAnalytic.bijective_stalkMap_comp_of_incl` is the whole
+proof with both identifications taken as arguments;
+`ComplexAnalytic.bijective_stalkMap_comp_projCoords` and
+`ComplexAnalytic.bijective_stalkMap_comp_uliftProj` are its `Fin` and `ULift (Fin _)` instances,
+each with its `IsIso` form beside it. `ComplexAnalytic.IsCutOutBy.evalHom_eq_zero` is that every
+cutting section vanishes at every point of the subspace it cuts out, which is what makes the
+vanishing half of the hypothesis below free rather than asked for, and the `…_of_coeff` results
+after it are the same conclusion from one Taylor coefficient of the germ rather than from the
+order. -/
 
 /--
 info: 'ComplexAnalytic.IsCutOutBy.mem_ker_stalkMap_iff' depends on axioms:
@@ -813,9 +820,10 @@ info: 'ComplexAnalytic.isIso_stalkMap_comp_uliftProj_of_coeff' depends on axioms
 
 /-! ### The same hypothesis as a partial derivative, for a polynomial cutting section
 
-`Oka/AnalyticSpace/SimpleZeroPolynomial.lean`. The four above take one Taylor coefficient of the
-germ of the cutting section; these four take `MvPolynomial.pderiv` of the polynomial the section
-comes from, evaluated at the point, which is the form a standard étale presentation supplies.
+`Oka/AnalyticSpace/SimpleZeroPolynomial.lean`. The `…_of_coeff` results above take one Taylor
+coefficient of the germ of the cutting section; the `…_of_pderiv` results here take
+`MvPolynomial.pderiv` of the polynomial the section comes from, evaluated at the point, which is
+the form a standard étale presentation supplies.
 They are guarded under this heading rather than the one above because they are results of a
 different file, and beside it because each is one rewrite away from its neighbour there. -/
 
