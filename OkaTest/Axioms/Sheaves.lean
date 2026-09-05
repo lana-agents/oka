@@ -23,8 +23,9 @@ eighty-seven guards below, and `Oka/CategoryTheory/`, which accounted for none o
 
 **One file and not two, and the reason is not inertia.** Locally-ringed-space material is the
 bulk of what is here, which is what the heading above says. The obvious cut — sheaves off from
-ringed spaces — is clean at the section boundary and would put three sections against sixteen,
-leaving the side that actually grows undivided; it therefore buys none of the
+ringed spaces — is clean at the section boundary, but what it cuts off is the sections whose
+module is under `Oka/Topology/Sheaves/`, leaving the locally-ringed-space material — the side
+that actually grows — undivided; it therefore buys none of the
 concurrent-pull-request relief that `OkaTest/Axioms.lean` gives as the whole point of splitting.
 The cut that would buy it is by module *within* `Oka/Geometry/RingedSpace/`, and that is a
 larger proposal than a wrong docstring: it moves every `#guard_msgs` block in the file at once
@@ -760,8 +761,10 @@ info: 'IsLocalHomeomorph.sSup_sheetOpens' depends on axioms:
 
 `Oka/Geometry/RingedSpace/LocallyRingedSpace/InverseImageSheet.lean`, which builds on the
 inverse-image group directly above. The three definitions — the sheet mapped to the base, the
-open it lies over, and the comparison between them — and the three results, of which
-`AlgebraicGeometry.LocallyRingedSpace.coe_sheetImage` is what pins the open to `p '' V`. -/
+open it lies over, and the comparison between them — and the results that file advertises:
+`AlgebraicGeometry.LocallyRingedSpace.coe_sheetImage`, which pins the open to `p '' V`,
+`AlgebraicGeometry.LocallyRingedSpace.isIso_sheetHom`, and
+`AlgebraicGeometry.LocallyRingedSpace.sheetIso`. -/
 
 /--
 info: 'AlgebraicGeometry.LocallyRingedSpace.sheetToBase' depends on axioms:
