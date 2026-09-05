@@ -39,15 +39,33 @@ this file pays **0**; and
 destination claim costs **0** in that direction too. Neither figure holds for the other Mathlib
 file this statement is near: hosting it in `Mathlib/Logic/Equiv/Sum.lean`, where
 `Equiv.sigmaFiberEquiv` is, would cost that file **6** modules for `Mathlib.Data.Set.Operations`
-and **46** for `Mathlib.Data.Set.Basic`, since it has no `Set` theory at all.
+and **46** for `Mathlib.Data.Set.Basic`.
+
+**What that file cannot reach is `Set.preimage`, and not sets.** This paragraph used to give the
+reason as *"it has no `Set` theory at all"*, and
+`python3 scripts/import_cost.py --target Mathlib.Logic.Equiv.Sum Mathlib.Data.Set.Defs` refutes
+that in one line — *1 already in that closure -> cost 0*. `Mathlib/Data/Set/Defs.lean` declares
+`Set`, `setOf`, membership, `Set.univ` and `Set.image`, and is inside that closure of 90 already;
+under `import Mathlib.Logic.Equiv.Sum` alone `#check @Set.image`, `#check @setOf` and
+`#check @Set.univ` all elaborate, while `#check @Set.preimage` reports an unknown constant. So
+what the **6** buys is `Set.preimage` together with its `f ⁻¹' s` notation, which
+`Mathlib/Data/Set/Operations.lean` declares — and lacking the notation
+`Set.preimageCompEquivSigma` does not fail to typecheck, it fails to lex, since the apostrophe
+opens a character literal. **Both costs were measured and the reason offered under them was
+not.**
 
 ## Deriving it from Mathlib, and the measurement that was on record was wrong
 
 `Oka/SetTheory/Cardinal/Finite.lean` used to say that getting this statement out of
 `Equiv.sigmaFiberEquiv` — by restricting along the inclusion of `(g ∘ f) ⁻¹' {z}` and then
 reconciling a subtype of a subtype at each point — **is *longer than writing the equivalence
-out*. It is not: the two spellings are the same length**, ten non-blank lines each including the
-shared signature, and both were elaborated before this sentence was written.
+out*. It is not: at `a8c2f63` the two spellings were the same length**, ten non-blank lines
+each, counting the shared two-line signature into both. **That figure is a record of a
+measurement at a named commit rather than a count of `Set.preimageCompEquivSigma`'s proof as it
+stands today**: an edit to that proof moves the count and leaves this sentence true, which is the
+exemption `OkaTest/Axioms.lean` grants a figure pinned to a commit. Striking the numeral and
+keeping the comparison would have gone the wrong way — the comparison is the part that rots, and
+the figure is what a reader can check it against.
 
 What the derivation does not do is avoid building an equivalence by hand: the
 subtype-of-a-subtype step is itself a four-field `Equiv` passed to `Equiv.sigmaCongrRight`. So
