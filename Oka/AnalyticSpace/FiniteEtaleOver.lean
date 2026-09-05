@@ -134,6 +134,17 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   `ι`-sheeted cover, both as equivalences rather than as counts.
 - `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberEquivOfIso`: **isomorphic covers have
   equinumerous fibres**, which is `CategoryTheory.Functor.mapIso` at that functor.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.base_eq_of_apply_eq`: **unique lifting** — two
+  morphisms of covers that agree at one point of a preconnected source have the same map on
+  points, over a Hausdorff total space of the target.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.base_eq_of_fiberMap_eq` and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.base_eq_of_fiberFunctor_map_eq`: **what the fibre
+  functor's action determines is the base map**, at a point whose fibre is inhabited. This is not
+  faithfulness of that functor: the conclusion is an equality of maps on points and not of
+  morphisms, and `## What is not here` says what is between them.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.base_eq_id_of_apply_eq`: **an endomorphism of a
+  connected cover that fixes a point is the identity on points** — the rigidity a deck
+  transformation has, as far as this category can state it.
 
 ## What is not here
 
@@ -210,9 +221,38 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   functor does not.
 
   **What is absent is the Galois category itself**, whose axioms need the base change the
-  **No pullbacks, so no base change** bullet below says this category has not, **and every
-  statement about the functor beyond its two laws**: nothing proves it faithful or conservative,
-  and nothing exhibits it as an equivalence onto anything.
+  **No pullbacks, so no base change** bullet below says this category has not. **Of the rest,
+  what is here is the base-map half of faithfulness and no more.**
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.base_eq_of_fiberFunctor_map_eq` says that two
+  morphisms of covers whose images under the functor agree at one point of a fibre have the same
+  map on points, over a preconnected source and a Hausdorff total space of the target. **That is
+  not the functor being faithful, and the difference is not a technicality**: a morphism of
+  `ComplexAnalytic.AnalyticSpace` is a morphism of locally ringed spaces, so two morphisms of
+  covers with the same base map differ, if they differ at all, in their maps of structure sheaves,
+  and nothing here says they cannot. **Conservativity is untouched by any of it** — nothing turns
+  an equivalence of fibres into an isomorphism of covers — and nothing exhibits the functor as an
+  equivalence onto anything.
+
+  **The route to the rest of faithfulness is two statements this repository already has, and
+  nobody has composed them.** With the base maps equal the two stalk maps are related by the
+  triangle — `AlgebraicGeometry.LocallyRingedSpace.stalkMap_comp` at
+  `CategoryTheory.MorphismProperty.Over.w` expressing each of them through the two structure maps,
+  and the target's stalk maps being isomorphisms by
+  `ComplexAnalytic.AnalyticSpace.IsLocalIso.isIso_stalkMap`, which an object of this category
+  carries in its `prop` field. What turns that into an equality of *morphisms* is
+  `AlgebraicGeometry.LocallyRingedSpace.hom_stalk_ext`
+  (`Oka/Geometry/RingedSpace/LocallyRingedSpace.lean`): two morphisms with the same base map and
+  the same stalk maps are equal. It is in this file's import closure, and it is Mathlib's
+  `AlgebraicGeometry.SheafedSpace.hom_stalk_ext` reflected along the forgetful functor.
+
+  **An earlier version of this paragraph said that statement was in neither this repository nor
+  Mathlib, and both halves were false** — the search behind it asked for `stalk` before `hom_ext`
+  and the name has them the other way round, which is why the file that declares it says in its
+  own docstring that Mathlib has the `SheafedSpace` form and not the `LocallyRingedSpace` one.
+  **What is true is that nothing composes them here**: `hom_stalk_ext` leaves an equality of stalk
+  maps up to a `TopCat.Presheaf.stalkCongr` transport, and no statement in this file or under
+  `OkaTest/` discharges it for a morphism of covers. **This paragraph does not say what that
+  costs.**
 * **No pullbacks, so no base change.** `ComplexAnalytic.AnalyticSpace` has no `HasPullback`
   instance anywhere in this repository, so
   `CategoryTheory.MorphismProperty.IsStableUnderBaseChange`
@@ -259,8 +299,8 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   much is compiled rather than argued. **It needs neither `[T2Space]` nor `[PreconnectedSpace]`**,
   the finiteness of a fibre being unconditional.
 
-  **What it does not settle is the sentence above, and the reason is the second member of its
-  pair.** The trivial two-sheeted cover's total space is disconnected —
+  **What it does not settle is the connected-covers sentence above, and the reason is the second
+  member of its pair.** The trivial two-sheeted cover's total space is disconnected —
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.not_preconnectedSpace_trivial`, which is what
   `OkaTest.FiniteEtaleOver.not_iso_trivial_sqOver` reads and not what it proves — so the pair is a
   connected cover and a disconnected one, and a claim quantified over pairs of *connected* covers
@@ -272,9 +312,9 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   `OkaTest.FiniteEtaleOver.card_fiber_sqOver` and
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.uniqueFiberId`. **That separation is the degree
   again** and is no evidence that the fibre sees more, which is the paragraph above read at an
-  instance. So the sentence above stays an argument, and what would compile it is a pair of
-  connected covers of the same degree — which is what the missing monodromy action would be
-  needed to tell apart.
+  instance. So the connected-covers sentence above stays an argument, and what would
+  compile it is a pair of *non-isomorphic* connected covers of the same degree — which is what
+  the missing monodromy action would be needed to tell apart.
 * **No scheme side and no comparison functor.** Taxis #1113 wants a functor from finite étale
   covers of a presented affine `ℂ`-scheme to these; the source of that functor is
   `(@AlgebraicGeometry.IsFinite ⊓ @AlgebraicGeometry.IsEtale).Over ⊤ X` and is available in
@@ -889,5 +929,98 @@ theorem FiniteEtaleOver.nonempty_iso_trivial_id_iff (ι : Type u) [Finite ι]
   haveI : Nonempty ι := ⟨j⟩
   haveI : Subsingleton ι := ⟨fun a b ↦ (hj a).trans (hj b).symm⟩
   exact ⟨FiniteEtaleOver.trivialIsoId ι X⟩
+
+/-! ### Unique lifting, and what the fibre functor's action determines -/
+
+/-- **Two morphisms of covers that agree at one point of a preconnected source agree on points.**
+
+Hatcher's Proposition 1.34 — `IsCoveringMap.eq_of_comp_eq` — at the covering map
+`ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale` gives of the target's
+structure map. The hypothesis that theorem asks for, that the two maps agree after composing with
+the covering map, is `CategoryTheory.MorphismProperty.Over.w` read at each point: both composites
+are the source's own structure map.
+
+**Neither hypothesis is free and they come from different places.** `[PreconnectedSpace A.left]`
+is what the lifting argument consumes and is a hypothesis on the *source*; `[T2Space B.left]` is
+what `ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale` asks in order to be a
+covering map at all, and `Oka/AnalyticSpace/CoveringMap.lean` says in terms that it is Mathlib's
+hypothesis and not free here, this development imposing no separation axiom on an analytic space.
+
+**The conclusion is an equality of maps on points and not of morphisms**, which is the whole of
+what separates this from faithfulness of the fibre functor; see `## What is not here`.
+
+The `haveI` restating `[T2Space]` carries no content: in the type of an object's structure map the
+total space appears through `CategoryTheory.Functor.id`, which is the space by `rfl` but not
+reducibly so, so instance search does not reach the hypothesis written above. That is the same
+seam `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_fiber` documents. -/
+theorem FiniteEtaleOver.base_eq_of_apply_eq {X : AnalyticSpace.{u}} {A B : FiniteEtaleOver.{u} X}
+    [PreconnectedSpace (A.left : Type u)] [T2Space (B.left : Type u)] (f g : A ⟶ B)
+    (a : (A.left : Type u)) (h : f.left.toLRSHom.base a = g.left.toLRSHom.base a) :
+    (f.left.toLRSHom.base : A.left → B.left) = g.left.toLRSHom.base := by
+  haveI : IsFiniteEtale B.hom := B.prop
+  haveI : T2Space (((𝟭 AnalyticSpace.{u}).obj B.left : AnalyticSpace.{u}) : Type u) :=
+    inferInstanceAs (T2Space (B.left : Type u))
+  refine (isCoveringMap_base_of_isFiniteEtale.{u} B.hom).eq_of_comp_eq
+    f.left.toLRSHom.base.hom.continuous g.left.toLRSHom.base.hom.continuous ?_ a h
+  funext b
+  exact (congrArg (fun k ↦ (k.toLRSHom.base : A.left → X) b) (MorphismProperty.Over.w f)).trans
+    (congrArg (fun k ↦ (k.toLRSHom.base : A.left → X) b) (MorphismProperty.Over.w g)).symm
+
+/-- **The same, from a point of a fibre.**
+
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiber` is a set of the total space, so a point of it
+is a point of the source with a proof attached, and
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberMap` is the base map on the underlying point by
+definition. So the hypothesis here is the one above with a `Subtype.val` in front of it, and the
+statement is worth having only because it is the shape the fibre functor produces. -/
+theorem FiniteEtaleOver.base_eq_of_fiberMap_eq {X : AnalyticSpace.{u}}
+    {A B : FiniteEtaleOver.{u} X} [PreconnectedSpace (A.left : Type u)]
+    [T2Space (B.left : Type u)] {x : X} (f g : A ⟶ B) (a : FiniteEtaleOver.fiber.{u} x A)
+    (h : FiniteEtaleOver.fiberMap.{u} x f a = FiniteEtaleOver.fiberMap.{u} x g a) :
+    (f.left.toLRSHom.base : A.left → B.left) = g.left.toLRSHom.base :=
+  FiniteEtaleOver.base_eq_of_apply_eq.{u} f g a.1 (congrArg Subtype.val h)
+
+/-- **What the fibre functor's action determines is the base map**: two morphisms of covers whose
+images under `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberFunctor` at a point are equal have
+the same map on points, provided the fibre there has a point.
+
+**A fibre is asked for and is not free.** The equality of maps of fibres says nothing whatever when
+the fibre is empty, and a cover with an empty fibre over a point exists here — the trivial cover at
+an empty index type. So the point `a` is a hypothesis and not an artefact of the proof.
+
+**The `congrArg` lands in the functor's value and is carried across by a defeq check**, which is
+worth a sentence because one obvious tactic will not do it. `congrArg (fun k ↦ TypeCat.Hom.hom k a)`
+produces an equation in `(fiberFunctor x).obj B`, and reaching
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiber x B` from there is definitional: an argument
+position performs that check, so the term needs no `by` at all, and `exact` performs it too.
+**`simpa using` the same term fails**, reporting the two sides as equalities in different types.
+
+**Pointwise and not at the map.** `congrArg TypeCat.Hom.hom h` — the same step without the point —
+does *not* ascribe to an equation between the two
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberMap`s, so a proof that goes through the map and
+applies it afterwards does not elaborate. All four spellings were run before this one was
+chosen. -/
+theorem FiniteEtaleOver.base_eq_of_fiberFunctor_map_eq {X : AnalyticSpace.{u}}
+    {A B : FiniteEtaleOver.{u} X} [PreconnectedSpace (A.left : Type u)]
+    [T2Space (B.left : Type u)] {x : X} (f g : A ⟶ B) (a : FiniteEtaleOver.fiber.{u} x A)
+    (h : (FiniteEtaleOver.fiberFunctor.{u} x).map f = (FiniteEtaleOver.fiberFunctor.{u} x).map g) :
+    (f.left.toLRSHom.base : A.left → B.left) = g.left.toLRSHom.base :=
+  FiniteEtaleOver.base_eq_of_fiberMap_eq.{u} f g a (congrArg (fun k ↦ TypeCat.Hom.hom k a) h)
+
+/-- **An endomorphism of a connected cover that fixes a point is the identity on points.**
+
+The theorem above at `g = 𝟙 A`, whose base map is `id` by `rfl` — the same `rfl` that
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.uniqueFiberId` and
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberTrivialEquiv` are built on.
+
+**This is the rigidity a deck transformation has**, at the one place this category can state it:
+the automorphisms of a connected cover act freely on each fibre, so far as points are concerned.
+What it is not is a statement that `f` **is** the identity morphism, for the reason the theorem
+above stops where it does. -/
+theorem FiniteEtaleOver.base_eq_id_of_apply_eq {X : AnalyticSpace.{u}} {A : FiniteEtaleOver.{u} X}
+    [PreconnectedSpace (A.left : Type u)] [T2Space (A.left : Type u)] (f : A ⟶ A)
+    (a : (A.left : Type u)) (h : f.left.toLRSHom.base a = a) :
+    (f.left.toLRSHom.base : A.left → A.left) = _root_.id :=
+  FiniteEtaleOver.base_eq_of_apply_eq.{u} f (𝟙 A) a h
 
 end ComplexAnalytic.AnalyticSpace
