@@ -1110,22 +1110,22 @@ info: 'ComplexAnalytic.AnalyticSpace.liftTop_comp_restrictHom_top' depends on ax
 
 /-! ### The analytic spaces this development constructs are Hausdorff
 
-`Oka/AnalyticSpace/Hausdorff.lean`, all seven of it, appended as its own heading rather than under
-one above: none of the seventeen names a separation property. **The clause that stood here said a
+`Oka/AnalyticSpace/Hausdorff.lean`, the whole of it, appended as its own heading rather than under
+one above: no heading above it names a separation property. **The clause that stood here said a
 guard appended past the end of the file would have landed under the sheet comparison, and that
 this is what had happened to the six guards below.** It had not; they have a heading of their own
 and always did. See the last paragraph of the module docstring for what actually went wrong and
 why this file's own counts could not see it.
 
-**Every one of the seven is one `inferInstanceAs`**, so a guard here is a weak check by design —
+**Every guard below is one `inferInstanceAs`**, so a guard here is a weak check by design —
 what it defends is that no route to `T2Space` of a construction ever acquires an axiom, which is
 exactly the failure a `sorry` in a subtype instance would produce.
 `ComplexAnalytic.t2Space_analytification` is not here: it is `Oka/Analytification/Hausdorff.lean`'s
 and is guarded in `OkaTest/Axioms/Analytification.lean` with the covering-map corollaries it exists
-for. **That sentence called it *"the seventh"*, which the two sentences before it falsify** — all
-seven of `Oka/AnalyticSpace/Hausdorff.lean` are guarded here, and that instance is an eighth in a
-different file; the ordinal is dropped rather than incremented, since no ordinal was doing any work
-in it. It is a leftover from a six-instance draft.
+for. **That sentence called it *"the seventh"*, which the two sentences before it falsify** — the
+whole of `Oka/AnalyticSpace/Hausdorff.lean` is guarded here and that instance is not in it, so the
+ordinal counted a set it does not belong to; it is dropped rather than incremented, since no
+ordinal was doing any work in it. It is a leftover from a six-instance draft.
 -/
 
 /--

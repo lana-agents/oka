@@ -229,13 +229,13 @@ info: 'ComplexAnalytic.isClosedEmbedding_base_restrictHom_of_subset_range' depen
 
 /-! ### Cancelling a cut-out datum: cutting out inside a subspace
 
-`Oka/AnalyticSpace/CutOutCancel.lean`, all three of it, in the order they are declared. Appended
+`Oka/AnalyticSpace/CutOutCancel.lean`, the whole of it, in the order they are declared. Appended
 as its own section rather than into the one above, which is about
 `ComplexAnalytic.restrictHom` and would be falsified by an addition it does not describe — the
 same reason that section gives for being its own.
 
-**None of the three is about complex analytic spaces**, and the one general `Fin` fact the last
-of them consumes, `Fin.range_append`, is in the mirror tree
+**None of the guards below is about complex analytic spaces**, and the one general `Fin` fact the
+last of them consumes, `Fin.range_append`, is in the mirror tree
 (`Oka/Data/Fin/Tuple/Basic.lean`) and is **deliberately not guarded here**: no guard file in this
 repository guards a `Fin` lemma, and `Fin.init_zero`, the file's only other declaration, is not
 guarded either.
