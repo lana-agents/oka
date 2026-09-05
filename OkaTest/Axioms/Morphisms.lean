@@ -20,9 +20,15 @@ local-isomorphism class along a change of source and target** — over an open s
 target, and to subspaces cut out by a family of global sections and by its pullbacks. Those are
 `### And a local isomorphism restricted over an open of the target is one` and
 `### And a local isomorphism restricted to subspaces cut out by a family and by its pullbacks`.
-And one section is of a fourth kind, named here for the same reason: statements about the class
-of **isomorphisms**, which are not built from a topological criterion and are not transported from
-anywhere — `### An isomorphism of analytic spaces is bijective on points`. And one is of a fifth:
+And a fourth kind is statements about the class of **isomorphisms**, which is not one of the
+classes above; its sections are named here for the same reason.
+`### An isomorphism of analytic spaces is bijective on points` reads a topological consequence
+off an isomorphism and is built from no criterion and transported from nowhere;
+`### A bijective base, or degree one, makes a local isomorphism an isomorphism` goes the other
+way and is where a criterion concludes `CategoryTheory.IsIso`. **The sentence this replaces said
+that one section was of this kind and that no section of it is built from a topological
+criterion**, and `### A bijective base, or degree one, makes a local isomorphism an isomorphism`
+is both — which is what retired the clause, rather than a recount. And one is of a fifth:
 statements about a topological property of a cover's **total space** rather than about any class
 of morphisms — that preconnectedness passes along a morphism surjective on points, and the
 separation of two covers of equal degree that buys —
@@ -37,8 +43,9 @@ is the best argument for the heading check `.orchestra/validation.sh` now runs**
 number, which a recount repairs, but a positional claim in an append-at-end file that nothing
 was able to contradict.
 
-**Naming a section does not protect the name against being rewritten.** The fourth-kind pointer
-above said `### An isomorphism of analytic spaces is surjective on points` until the branch that
+**Naming a section does not protect the name against being rewritten.** The fourth kind's pointer
+at `### An isomorphism of analytic spaces is bijective on points` said
+`### An isomorphism of analytic spaces is surjective on points` until the branch that
 renamed that heading to its present form — the same file and the same push — left the pointer
 behind, and the same sentence said *a* statement where the section holds two. **Nothing mechanical
 sees either half**: the heading check above asks that a heading be written on the line that opens
@@ -2242,3 +2249,84 @@ info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.faithful_fintypeFiberFuncto
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.faithful_fintypeFiberFunctor
+
+/-! ### A bijective base, or degree one, makes a local isomorphism an isomorphism
+
+`Oka/AnalyticSpace/Basic.lean`, `Oka/AnalyticSpace/LocalIso.lean` and
+`Oka/AnalyticSpace/Degree.lean`: that the forgetful functor to locally ringed spaces reflects
+isomorphisms, the criterion that turns a local isomorphism with bijective base into an
+isomorphism, and the two hypotheses this repository can feed that criterion — injectivity over a
+preconnected base, and degree one.
+
+**Guarded here rather than in `OkaTest/Axioms/AnalyticSpace.lean`, for the reason the section
+`### An isomorphism of analytic spaces is bijective on points` gives**: the subject is a class of
+morphisms and `CategoryTheory.IsIso` is one, whatever module the declaration is written in. That
+file's `Oka/AnalyticSpace/Basic.lean` guards are `ComplexAnalytic.IsCLinearHom` statements under
+its gluing heading, and the reflection instance is neither. **A later seat who disagrees moves one
+guard**, and nothing in this section's prose depends on where it sits.
+
+**The reflection instance is named in `Oka/` rather than anonymous, and that is what makes it
+guardable at all.** An anonymous instance is given a machine-made name derived from its type, so a
+`#print axioms` at one is as stable as the elaborator's spelling of that type and not as stable as
+the statement. The `CategoryTheory.Functor.Faithful` instance for the same functor is anonymous
+and is guarded nowhere.
+
+**`ComplexAnalytic.IsCLinearHom.of_comp` is guarded here although it is a `ℂ`-linearity
+statement.** It is the whole content of the reflection instance, and the push that wrote that
+instance is what made it *advertised*: `Oka/AnalyticSpace/Basic.lean`'s `## Main results` names it
+in the bullet announcing the instance and did not name it before, so `scripts/guard_coverage.py`
+counts it where it did not. **A guard of a corollary does not guard what it is a corollary of** —
+the axioms of the ingredient could in principle be a strict subset — which is the reason the
+section `### An isomorphism of analytic spaces is bijective on points` gives for guarding a
+statement and its projection separately.
+
+**A reader looking for it elsewhere would be looking in more than one place, and that is measured
+rather than assumed.** `OkaTest/Axioms/AnalyticSpace.lean` guards
+`ComplexAnalytic.IsCLinearHom.eq` and `ComplexAnalytic.IsCLinearHom.of_openCover`; this file
+already guards `ComplexAnalytic.IsCutOutBy.isCLinearHom_lift`; and `OkaTest/Axioms/CutOut.lean`
+guards `ComplexAnalytic.isCLinearHom_restrictHom`. **A later seat who prefers this one beside a
+particular sibling moves one guard**, and nothing here depends on where it sits.
+
+**`Classical.choice` is in every guard below and none of them introduces it.** The reflection
+instance is `ComplexAnalytic.IsCLinearHom.of_comp` together with faithfulness, neither of which
+chooses anything; the criteria inherit it through the local-isomorphism rung, and the degree form
+through the covering-map theory that identifies a degree with a fibre count.
+
+**Named by file rather than counted**, as the sections above say and for the reason they give.
+
+**Named and not located.** No sentence here says which section is above or below it. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace_reflectsIsomorphisms' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace_reflectsIsomorphisms
+
+/--
+info: 'ComplexAnalytic.IsCLinearHom.of_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.IsCLinearHom.of_comp
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isIso_of_isLocalIso_of_bijective' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isIso_of_isLocalIso_of_bijective
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isIso_of_isFiniteEtale_of_injective' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isIso_of_isFiniteEtale_of_injective
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isIso_of_degree_eq_one' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isIso_of_degree_eq_one

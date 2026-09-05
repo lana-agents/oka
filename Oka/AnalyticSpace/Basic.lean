@@ -91,6 +91,12 @@ constants.
   underlying space passes along a morphism that is surjective on points**, so an isomorphism
   transports it in either direction. This is the invariant that separates two covers of the same
   degree, which the degree cannot.
+- `ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace_reflectsIsomorphisms`: **the
+  forgetful functor to locally ringed spaces reflects isomorphisms**, so a morphism of analytic
+  spaces whose underlying morphism is invertible is invertible. The functor is faithful and not
+  full, and this is neither of those: the `ℂ`-linearity of the inverse is
+  `ComplexAnalytic.IsCLinearHom.of_comp` at the factorisation of an identity, and nothing else is
+  needed.
 
 ## References
 
@@ -458,6 +464,56 @@ instance : forgetToLocallyRingedSpace.Faithful where
     cases h
     rfl
 
+/-- **The forgetful functor to locally ringed spaces reflects isomorphisms**: a morphism of
+analytic spaces whose underlying morphism of locally ringed spaces is invertible is itself
+invertible.
+
+`ComplexAnalytic.AnalyticSpace.bijective_base_of_isIso`'s docstring records that *preservation* is
+free — `CategoryTheory.Functor.map_isIso` is an instance and every functor preserves isomorphisms
+— and that reflection is the direction which needs an argument, because
+`ComplexAnalytic.AnalyticSpace.Hom` is a structure over
+`AlgebraicGeometry.LocallyRingedSpace.Hom` carrying a `ComplexAnalytic.IsCLinearHom` field.
+**This is that argument, and the whole of it is one application of
+`ComplexAnalytic.IsCLinearHom.of_comp`** at the factorisation of the identity of `Y` through the
+inverse: the inverse is a morphism over `Y` composing with `f.toLRSHom` to the identity, and
+`of_comp` at that factorisation is exactly the `ℂ`-linearity that the inverse needs to be a
+morphism of analytic spaces. Faithfulness then discharges the two inverse laws, because a
+morphism of analytic spaces is determined by its underlying morphism.
+
+**This does not make the functor full**, and the gap between the two is not small.
+`Oka/Analytification/StandardEtaleLocalIso.lean` records the same functor as faithful and not
+full, and asks for the `ℂ`-linearity of an inverse in consequence; what this instance says is
+that an inverse of an analytic morphism has that linearity for free. Fullness would produce a
+morphism of analytic spaces under *every* morphism of locally ringed spaces between them, which
+is a different and false statement — antiholomorphic maps are morphisms of locally ringed spaces,
+which is the reason `ComplexAnalytic.IsCLinearHom` is a field of
+`ComplexAnalytic.AnalyticSpace.Hom` in the first place.
+
+**Both spellings of the hypothesis occur and instance search crosses between them in neither
+direction.** `IsIso (forgetToLocallyRingedSpace.map f)` and `IsIso f.toLRSHom` are `rfl`-equal and
+are different discrimination-tree keys, so the `haveI` in the proof below is load-bearing: the
+hypothesis arrives at the functor spelling and `inv f.toLRSHom` is stated at the other. A caller
+in the mirror-image situation has to insert the mirror-image `haveI`, which
+`ComplexAnalytic.AnalyticSpace.isIso_of_isLocalIso_of_bijective`
+(`Oka/AnalyticSpace/LocalIso.lean`) does. The same seam is recorded by the docstrings of
+`ComplexAnalytic.AnalyticSpace.isLocalIso_of_isIso` and
+`ComplexAnalytic.AnalyticSpace.mono_ofRestrict`, each from one side of it; what is new here is
+that a single proof needs it in both directions at once.
+
+**Named rather than anonymous**, unlike the `CategoryTheory.Functor.Faithful` instance for the
+same functor, so that `OkaTest/Axioms/Morphisms.lean` can name it in a `#print axioms`. -/
+instance forgetToLocallyRingedSpace_reflectsIsomorphisms :
+    forgetToLocallyRingedSpace.{u}.ReflectsIsomorphisms where
+  reflects f h := by
+    haveI : IsIso f.toLRSHom := h
+    have hlin : IsCLinearHom (inv f.toLRSHom) _ _ :=
+      IsCLinearHom.of_comp (by simp) (IsCLinearHom.id _) f.isCLinear
+    exact ⟨⟨⟨inv f.toLRSHom, hlin⟩,
+      forgetToLocallyRingedSpace.map_injective
+        (show f.toLRSHom ≫ inv f.toLRSHom = 𝟙 _ from IsIso.hom_inv_id _),
+      forgetToLocallyRingedSpace.map_injective
+        (show inv f.toLRSHom ≫ f.toLRSHom = 𝟙 _ from IsIso.inv_hom_id _)⟩⟩
+
 /-- **The pullback of a global section of `𝒪_Y` along `φ : X ⟶ Y`.**
 
 This is `AlgebraicGeometry.LocallyRingedSpace.Γ.map φ.toLRSHom.op` with its target written as
@@ -514,12 +570,21 @@ bridge gives and surjectivity is a projection of it**, which is why
 instance: *every* functor preserves isomorphisms, so `forgetToLocallyRingedSpace.map f` is an
 isomorphism of locally ringed spaces for free and `CategoryTheory.asIso` packages it. What would
 need an argument is **reflection** — that a morphism of analytic spaces whose underlying morphism is
-invertible is itself invertible — and that is *not* the direction this proof uses and is not claimed
-anywhere here. `ComplexAnalytic.AnalyticSpace.Hom` is a structure over
+invertible is itself invertible — and that is *not* the direction this proof uses.
+`ComplexAnalytic.AnalyticSpace.Hom` is a structure over
 `AlgebraicGeometry.LocallyRingedSpace.Hom` carrying an `ComplexAnalytic.IsCLinearHom` field, so an
 `IsIso` in the ambient category is not on its face an `IsIso` here, and
 `ComplexAnalytic.IsCutOutBy.comp_iso` — whose isomorphism is one of locally ringed spaces — cannot
 quote this statement in the other direction.
+
+**This paragraph also said that reflection is *not claimed anywhere here*, and that clause is now
+false.** Reflection is
+`ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace_reflectsIsomorphisms`, in this file, and
+the argument it wanted turned out to be one application of `ComplexAnalytic.IsCLinearHom.of_comp`.
+**What the clause was right about is everything except its own scope**: reflection is still not
+the direction this proof uses, and this statement is still no route to it, because a bijection of
+underlying points does not produce an inverse morphism — the instance takes its inverse from
+`CategoryTheory.inv` in the ambient category and reads no map of sets at all.
 
 **What it does not say.** `¬ IsIso f` for one morphism `f` is not a statement that `X` and `Y` are
 non-isomorphic: two spaces can be isomorphic by a morphism other than the one in hand.
