@@ -1984,3 +1984,38 @@ info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberTrivialEquiv' depends 
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberTrivialEquiv
+
+/-! ### The trivial cover at one sheet is the base over itself
+
+`Oka/AnalyticSpace/FiniteEtaleOver.lean`'s isomorphism of objects at an inhabited subsingleton
+index type, and the two-directional statement over a non-empty base that it and
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_iso_trivial_id` make together. Appended as
+its own section rather than merged into the degree sections above: moving or reordering a section
+of this file is a conflict for every branch that has appended to it.
+
+**What the guards below are a check of is that the two directions are proved by different means.**
+The forward one goes through `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree`, which
+separates isomorphism classes and never produces an isomorphism; the backward one goes through
+`ComplexAnalytic.AnalyticSpace.sigmaFoldIso` and the universal property of the disjoint union,
+which reads no structure sheaf and no fibre. Neither is the other read backwards.
+
+**`Classical.choice` is in every guard below and is not a surprise**: both statements mention
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.trivial`, which is built out of a gluing, and the
+forward direction spends `Nat.card`.
+
+**Named and not located.** No sentence here says which section precedes or follows it.
+-/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.trivialIsoId' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.trivialIsoId
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.nonempty_iso_trivial_id_iff' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.nonempty_iso_trivial_id_iff

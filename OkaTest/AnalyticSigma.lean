@@ -145,12 +145,33 @@ theorem isEmpty_sigmaFold_line_zero :
 /-- **At `n = 1` the fibres are singletons.**
 
 Recorded beside `n = 0` and `n = 2` because it is the case in which the fold map is a bijection on
-points; **it is not stated to be an isomorphism**, which would be a claim about the structure
-sheaves and is not proved anywhere. -/
+points. **This bullet said it "is not stated to be an isomorphism", which "would be a claim about
+the structure sheaves and is not proved anywhere"**, and both halves have moved:
+`isIso_sigmaFold_line_one` below states it at this very morphism, and its proof reads no structure
+sheaf — `ComplexAnalytic.AnalyticSpace.isIso_sigmaFold` is the universal property of the disjoint
+union and nothing else. The count and the isomorphism are still independent of each other, which
+is why both are here: nothing in this file derives either from the other. -/
 theorem card_fiber_sigmaFold_line_one (x : line.{u}) :
     Nat.card ((AnalyticSpace.sigmaFold.{u} (ULift.{u} (Fin 1)) line.{u}).toLRSHom.base ⁻¹' {x})
       = 1 :=
   card_fiber_sigmaFold_line.{u} 1 x
+
+/-- **And at `n = 1` the fold map is an isomorphism**, so the one-sheeted disjoint union of the
+punctured line is the punctured line.
+
+The non-vacuous instance of `ComplexAnalytic.AnalyticSpace.isIso_sigmaFold` at a space this
+repository exhibits, and the `ULift` bookkeeping between `Fin 1` and the `Type u` index closed at
+the end that carries an instance rather than a numeral: `ULift (Fin 1)` is inhabited and a
+subsingleton, which is what that instance asks for, where the theorem above is stated at
+`Nat.card`.
+
+**Nothing here is about `line` and the same proof runs at any analytic space** — it is recorded at
+this one because that is what makes the general statement non-vacuous, which is the reading the
+`## The trivial cover, and what the count is a test of` paragraph above gives of every instance in
+this section. -/
+theorem isIso_sigmaFold_line_one :
+    IsIso (AnalyticSpace.sigmaFold.{u} (ULift.{u} (Fin 1)) line.{u}) :=
+  inferInstance
 
 /-- **At `n = 2` the fibres have two points**, which is the value
 `ComplexAnalytic.card_fiber_base_sq` reaches for the squaring map of the punctured line by a

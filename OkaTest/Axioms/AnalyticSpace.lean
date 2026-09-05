@@ -1176,3 +1176,70 @@ info: 'ComplexAnalytic.t2Space_node' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.t2Space_node
+
+/-! ### The one-sheeted disjoint union is the space itself
+
+`Oka/AnalyticSpace/Sigma.lean`'s uniqueness half of the universal property and the isomorphism it
+buys at a subsingleton index type, together with `Oka/AnalyticSpace/SigmaFiniteEtale.lean`'s
+reading of that at the fold map — the statement, its packaging as an isomorphism, the `simp` lemma
+that lets the general round trip fire through a `def`, and the projection of the packaging.
+Appended as its own section rather than merged into the disjoint-union sections above: moving or
+reordering a section of this file is a conflict for every branch that has appended to it.
+
+**What the guards below are a check of is one universal property.**
+`ComplexAnalytic.AnalyticSpace.hom_ext_sigma` is
+`CategoryTheory.Limits.Sigma.hom_ext` carried across
+`ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace`, and everything else here is that
+lemma with `ComplexAnalytic.AnalyticSpace.sigmaι_sigmaDesc` and two-out-of-three for isomorphisms.
+No structure sheaf is read anywhere in the section, which is the point of it:
+`Oka/AnalyticSpace/SigmaFiniteEtale.lean` had recorded the fold map's case as absent and priced it
+as a statement about the structure sheaves.
+
+**`Classical.choice` is in every guard below and is not a surprise**: the disjoint union is built
+by `ComplexAnalytic.AnalyticSpace.ofOpenCover` out of a gluing, and every statement here mentions
+`ComplexAnalytic.AnalyticSpace.sigma`.
+
+**Named and not located.** No sentence here says which section precedes or follows it.
+-/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hom_ext_sigma' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hom_ext_sigma
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isIso_sigmaι' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isIso_sigmaι
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.sigmaι_sigmaFold' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.sigmaι_sigmaFold
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isIso_sigmaFold' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isIso_sigmaFold
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.sigmaFoldIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.sigmaFoldIso
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.sigmaFoldIso_hom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.sigmaFoldIso_hom

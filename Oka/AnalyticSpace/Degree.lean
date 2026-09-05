@@ -265,7 +265,14 @@ theorem: a closed continuous bijection is a homeomorphism whether or not it is a
 isomorphism on every stalk, and a homeomorphism together with stalkwise isomorphisms ought to give
 an isomorphism of analytic spaces; the missing step is a comparison of the two structure sheaves
 across the homeomorphism, which this development does not have. So this does not reprove
-`ComplexAnalytic.not_isIso_sq`, and it is not the converse of anything stated here. -/
+`ComplexAnalytic.not_isIso_sq`, and it is not the converse of anything stated here.
+
+**One morphism of degree one is known to be an isomorphism, and it is not got this way.** The
+trivial cover at one sheet is, by `ComplexAnalytic.AnalyticSpace.isIso_sigmaFold`
+(`Oka/AnalyticSpace/SigmaFiniteEtale.lean`), whose proof is the universal property of the disjoint
+union and reads no sheaf and no fibre — and it needs neither `[T2Space]` nor `[PreconnectedSpace]`
+nor a degree. That is a fact about that one morphism and not about degree one; the missing step
+above is still missing. -/
 theorem isHomeomorph_base_of_degree_eq_one (f : X ⟶ Y) [IsFiniteEtale f] [T2Space X]
     [PreconnectedSpace Y] [Nonempty Y] (h : degree f = 1) :
     IsHomeomorph (f.toLRSHom.base : X → Y) :=
