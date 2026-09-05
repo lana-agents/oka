@@ -185,6 +185,44 @@ is this one object, so it cannot fire anywhere it is not wanted, which is the re
 instance preconnectedSpace_left_sqOver : PreconnectedSpace (sqOver.{u}).left :=
   ComplexAnalytic.preconnectedSpace_restrict_punctured.{u}
 
+/-- **The total space of `sqOver` is Hausdorff**, and this is declared for the same reason the
+instance above is: search does not find it through `.left`.
+
+`T2Space` of the punctured line is found by `inferInstance` on its own — the restriction of `ℂ¹`
+to an open set, through `ComplexAnalytic.t2Space_restrict` and
+`ComplexAnalytic.t2Space_complexAffineSpace` (`Oka/AnalyticSpace/Hausdorff.lean`) — and the same
+search at `sqOver.left` reports *"failed to synthesize `T2Space ↑↑sqOver.left.toPresheafedSpace`"*,
+measured here. `CategoryTheory.MorphismProperty.Over.mk` puts the total space behind
+`CategoryTheory.Functor.id`, which is the space by `rfl` and not reducibly so, and instance search
+unfolds only at reducible transparency. `inferInstanceAs` is that `rfl` given a head the search can
+match; nothing is proved.
+
+**What it buys is that the two *space-level* hypotheses on this line are now found at one
+object**, and it is worth being exact about which those are.
+`ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale` asks `[T2Space]` of the source
+and `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_fiber` asks it of a cover's total space
+together with `[PreconnectedSpace]`; before this, every use of either at an object this repository
+exhibits had to open with an `inferInstanceAs` of its own, and the general statements say so —
+`card_fiber`'s docstring documents the two `haveI`s it needs for exactly this reason, from the
+other side of the seam.
+
+**The class hypothesis is a different seam and is not closed here.** `IsFiniteEtale sqOver.hom` is
+**not** found by instance search either — an object of this category carries it in its `prop`
+field, which search does not unfold — so a caller still writes `haveI : IsFiniteEtale A.hom :=
+A.prop`, as the proofs in `Oka/AnalyticSpace/FiniteEtaleOver.lean` do. Measured: with both
+instances above in place, `isCoveringMap_base_of_isFiniteEtale` at `sqOver.hom` still fails to
+elaborate, and it fails on that class and not on a space.
+
+**`sqOver` and not the general case.** `T2Space A.left` does not follow from `T2Space X` for an
+arbitrary object of `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver X` — a total space carries no
+separation axiom this development imposes — so there is nothing here to state in general, and an
+instance on a `CategoryTheory.MorphismProperty.Over` projection would be paid for by every search
+in this file's import closure. The head of this one is a single object and it cannot fire where it
+is not wanted, which is the argument the instance above makes for itself. -/
+instance t2Space_left_sqOver : T2Space ((sqOver.{u}).left : Type u) :=
+  inferInstanceAs (T2Space (((AnalyticSpace.complexAffineSpace.{u} 1).restrict
+    ComplexAnalytic.punctured.{u} : AnalyticSpace.{u}) : Type u))
+
 /-- **`z ↦ z²` on the punctured line is not the trivial two-sheeted cover**, although the two have
 the same degree.
 
