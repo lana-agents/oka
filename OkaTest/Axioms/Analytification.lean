@@ -5212,10 +5212,10 @@ conflict for somebody else.
 **What the guards below are a check of is one Mathlib name reaching this shape.** Each is the
 corresponding `opensRange` equation in that file followed by
 `AlgebraicGeometry.Scheme.Hom.image_le_opensRange`, and the member-level one is the general one
-applied — so what the pair records is that the containment costs no axiom the equations did not
-already cost, both of which are guarded here.
+applied — so what they record together is that the containment costs no axiom the equations did
+not already cost, both of which are guarded here.
 
-**These two are the reason a count elsewhere in this file is written the way it is.**
+**The guards below are the reason a count elsewhere in this file is written the way it is.**
 `ComplexAnalytic.opensRange_refinedIota_le` is a member-level guard on an application of
 `ComplexAnalytic.opensRange_presentationRefinedIota_le`, and neither is among the six declarations
 the section named *The refined member, at an arbitrary open immersion* enumerates; that section's
@@ -5252,7 +5252,7 @@ two conjuncts.
 
 **`Classical.choice` is in every guard below and is not a surprise**: the theorem they descend
 from is a `choose` over the points of a scheme, and its own guard in this file records the same
-three axioms. **What these two check that the guards on
+three axioms. **What they check that the guards on
 `ComplexAnalytic.exists_family_mvPolynomial_basicOpen_specSchemeIotaMap` and
 `ComplexAnalytic.exists_family_opensRange_presentationRefinedIota_eq` do not is that building the
 structure introduced nothing** — the covering field is the choice step's own second conjunct after
@@ -5472,7 +5472,7 @@ rather than an omission: `OkaTest/RefineDatumUnitFamily.lean` applies
 concludes that the one refinement in this repository that cuts its members down does not meet the
 condition.
 
-**What none of the three says is anything about surjectivity.**
+**What none of the guards below says is anything about surjectivity.**
 `ComplexAnalytic.dupStrict`, guarded above, is the theorem that the condition is strictly stronger
 than the surjectivity of `ComplexAnalytic.refineDatumToBase`, so refuting the condition at a datum
 decides nothing about that morphism there.
@@ -5580,11 +5580,17 @@ info: 'ComplexAnalytic.surjective_base_refineDatumUnitFamToBase_iff' depends on 
 
 /-! ### The overlap of two refined members at one immersion
 
-The five declarations under `Oka/Analytification/SpecRefinedMemberSection.lean`'s own overlap
-heading, plus the one declaration `Oka/Analytification/SpecDistinguishedOpen.lean` gained for them
-— the same shape as `### A distinguished open of a member, as an affine open of the glued scheme`,
-and for the same reason. Appended as its own section for the reason the sections above give: a
-section moved is a conflict for somebody else.
+The declarations under `Oka/Analytification/SpecRefinedMemberSection.lean`'s own overlap heading
+that are stated at an arbitrary open immersion, together with the declaration
+`Oka/Analytification/SpecDistinguishedOpen.lean` gained for them — the same shape as
+`### A distinguished open of a member, as an affine open of the glued scheme`, and for the same
+reason. Appended as its own section for the reason the sections above give: a section moved is a
+conflict for somebody else.
+
+**That qualifier is not decoration and it replaces a count that read low.** This clause read *"the
+five declarations"* under that heading, and the heading also holds one that this section does not
+guard: `ComplexAnalytic.opensRange_refinedIota_eq_basicOpen`, the member-level range statement,
+guarded under `### The refined member's range, in the section vocabulary` instead.
 
 **Its own section rather than an insertion under either of that file's two headings here, and the
 reason is the subject and not the file.** `### The refined member, at an arbitrary open immersion`
@@ -5609,8 +5615,8 @@ sections on the rest of that file give** — the scheme structure underneath is 
 witnesses — and not because anything here is a choice.
 
 **What these do not assert, said here because a guard file is where a reader checks a claim against
-a list.** None of the six is a `poly`, none quantifies over two indices, and none says anything
-about two members of a cover datum chosen inside *different* members — which is the half of the
+a list.** None of them is a `poly`, none quantifies over two indices, and none says anything about
+two members of a cover datum chosen inside *different* members — which is the half of the
 doubly-distinguished condition that file's own prose says is not supplied. **What they now do
 assert is that half's complement**: at two refined members of the *same* immersion the overlap is a
 refined member of each of them at a polynomial in that member's own variables, which is the
