@@ -178,6 +178,30 @@ happen. **A paragraph whose subject is rot gets no licence to carry it.** The wa
 record is to pin every figure in it to the commit it was measured at, which is what that file now
 does, and the two rules then agree instead of having to be ranked.
 
+**The rule has a third object and the two named above are not the whole of it: a clause that counts
+or quotes the rows of the table above is in the class too.** It is not falsified by an append to
+any guard section, so no scan built on that line can see it — the noun after the numeral is
+*rows*, and not *declarations* or *guards*. The worked case is
+`OkaTest/Axioms/Weierstrass.lean`'s routing paragraph, which carried one of each and they failed
+differently: *"three of which have a row of their own"* was **wrong at the commit that wrote it**,
+two of the four namespaces it lists being named by a row and no more, while a **quotation** of the
+`OkaTest/Axioms/Analysis.lean` row beside it was exact when written and went wrong when that row
+was reworded. **A quotation is in the class for the same reason a count is**: it asserts something
+about a structure the clause does not own, and the owner changes it without looking.
+
+**Swept at `0b09e45`, and the widening costs no second repair.** The tree's other clauses counting
+the rows of a table or a dump — the *two rows exist to route almost nothing else* below, the *two
+rows worth knowing before you run it* above, `README.md`'s docstring-linter table,
+`Oka/Analytification/ModuleFiniteAnalytification.lean`'s dump-versus-declaration figure and
+`Oka/AnalyticSpace/OpenSubspace.lean`'s two planted rows — **each name their members**, which is
+the exemption already stated above. **What the sweep asked of each is that and only that.** The
+last of the five carries a figure the dump can check and it is exact at that commit; the other
+figures those sentences carry are in the two classes named above and were not re-asked here, which
+is what a sweep of one class is and is not. **The record of the sweep is what makes this paragraph
+cheap to have installed**, not the rule: a rule that grows and is not swept is the failure this
+file exists to prevent, and `scripts/` cannot do this one either, for the reason the checker
+sentence above gives.
+
 **Most mirror-tree material is routed by a row, and a small tail of it is deliberately routed by
 none.** `README.md`'s *Layout: the Mathlib mirror tree* defines a mirror-tree file by its path — a
 file under `Oka/` mirroring a path under `Mathlib/`, holding no complex-analytic mathematics and

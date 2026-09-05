@@ -19,18 +19,35 @@ See `OkaTest/Axioms.lean` for what these assertions are for and how to update on
 Until `47c2e82` grew the headings below, the only results `Oka/Weierstrass.lean` then advertised
 that were guarded anywhere were `localweierstrass_division` and `localweierstrass_preparation`,
 which this file already pinned. The names `47c2e82` added span the root namespace and four
-others — `LocalOkaRing`, `OkaRing`, `MvPowerSeries` and `Polynomial` — three of which have a row
-of their own in `OkaTest/Axioms.lean`'s table. **They are all here anyway, because that table
-routes by the module a declaration lives in and not by the namespace it is declared into**, and
-its own re-measurement recipe says so: resolve every `#print axioms` name to its module and ask
-whether some module's guards are covered by no row. Every one of them resolves to
-`Oka.Weierstrass`, whose guards this row already covered.
+others — `LocalOkaRing`, `OkaRing`, `MvPowerSeries` and `Polynomial`. **`LocalOkaRing` and
+`OkaRing` are each named by a row of `OkaTest/Axioms.lean`'s table; `MvPowerSeries` and
+`Polynomial` are named by none.** **They are all here anyway, because that table routes by the
+module a declaration lives in and not by the namespace it is declared into**, and its own
+re-measurement recipe says so: resolve every `#print axioms` name to its module and ask whether
+some module's guards are covered by no row. Every one of them resolves to `Oka.Weierstrass`,
+whose guards this row already covered.
 
 `exists_analyticAt_implicit` is the one where topic and module pull apart, and it stays here too.
 It is the analytic implicit function theorem, so `OkaTest/Axioms/Analysis.lean` is arguable on
-topic — that row reads *"complex analysis, and the topology of polynomial zero loci"*. **The module
-rule above is what settles it**: the theorem is declared in `Oka/Weierstrass.lean`, and its own
-docstring states it *"in the form needed for the Weierstrass preparation theorem"*.
+topic — **complex analysis** is the first thing that row names. **The module rule above is what
+settles it**: the theorem is declared in `Oka/Weierstrass.lean`, and its own docstring states it
+*"in the form needed for the Weierstrass preparation theorem"*.
+
+**Two clauses of the two paragraphs above were repaired together, they are about the same object —
+`OkaTest/Axioms.lean`'s table — and they had failed in two different ways.** *"three of which have
+a row of their own"* was **wrong on the day it was written**: `47c2e82` wrote it, and the table
+**at `47c2e82`** already named two of the four namespaces that same sentence lists and no more.
+The table's twelve rows at `47c2e82` and its twelve at `0b09e45` differ in one row's wording and
+in nothing else, so nothing about that count rotted. The clause that replaces it names all four
+namespaces and their status, which is the enumeration `OkaTest/Axioms.lean`'s rule paragraph
+exempts.
+
+**The other clause did rot, and it was a quotation rather than a count.** `f6a5fa9` wrote *that
+row reads «complex analysis, and the topology of polynomial zero loci»*, which was exact at
+`f6a5fa9`; `ca56617` reworded that row and the quotation has been wrong since, with nothing in
+`scripts/` able to see it. **A quotation of another file's row is falsified by the next rewording
+of that row exactly as a count of its rows is falsified by the next row**, so what is left here is
+the word the argument needs and not the sentence it was cut from.
 
 An earlier draft of this paragraph settled it the same way for a different and false reason: that
 `OkaTest/Axioms/Analysis.lean` guards only mirror-tree modules. That file guards
