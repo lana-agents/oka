@@ -2148,10 +2148,9 @@ info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.eq_id_of_apply_eq' depends 
 
 `Oka/AnalyticSpace/FiniteEtaleOver.lean` and `Oka/AnalyticSpace/LocalIso.lean`: the clopen
 dichotomy with `Nonempty` moved into the conclusion, the fibre it produces over a preconnected
-base, the extensionality statement that needs no point of that fibre, the two injectivity
-statements this gives for the two fibre functors, the full subcategory they are faithful on, the
-two objects of it named in `Oka/`, and the two `CategoryTheory.Functor.Faithful` instances
-themselves.
+base, the extensionality statement that needs no point of that fibre, the injectivity statements
+it gives for the fibre functors, the full subcategory they are faithful on, the objects of it
+named in `Oka/`, and the `CategoryTheory.Functor.Faithful` instances themselves.
 
 **`ComplexAnalytic.AnalyticSpace.surjective_base_or_isEmpty_of_isFiniteEtale` is guarded here and
 not with the surjectivity statements it is a corollary of.** This file's rule is that a guard goes
