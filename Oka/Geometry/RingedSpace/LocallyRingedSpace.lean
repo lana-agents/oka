@@ -213,9 +213,10 @@ of the local ring of the affine line over `ℂ` at a closed point to that line. 
 points and both its stalk maps are identities — of that local ring at the closed point, of the
 function field at the generic one — so every one of them is an isomorphism. Its image is those
 two points of the line, and no set of that shape is open there, the complement of a non-empty
-open set being finite. The two conditions *do* coincide over the complex analytic spaces this
-development is otherwise about, which is what makes the implication tempting and is the reason
-for saying here that it is not available.
+open set being finite. What makes the implication tempting is downstream: the complex analytic
+development this mirror file serves bundles the two conditions into a single class. That
+bundling is a definition and neither implication between its fields is proved there either, so
+it is not a source for the direction this paragraph says is unavailable.
 
 **The two transports are `AlgebraicGeometry.LocallyRingedSpace.stalkMap_congr_point` and
 `AlgebraicGeometry.LocallyRingedSpace.stalkMap_congr_hom`, and they are what keeps the proof to
