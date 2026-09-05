@@ -148,6 +148,18 @@ a record, quoted and dated where it stood; the other two sentences were rewritte
 figure at all. **Do not answer this with a checker** — it would have to guess which numbers in a
 docstring are censuses, and `scripts/` has no way to tell.
 
+**An audit paragraph is exempt through the pinning spelling and not because it is an audit**, and
+the case that settled it is `OkaTest/Axioms/AnalyticSpace.lean`'s module docstring. That block is
+a ledger of numerals that had gone false — which commit falsified each, and the instrument bug
+that made a whole partition wrong — and it argued in terms for its own undated counts, telling a
+reader that the list to recheck after adding a guard was every one of them. **At `883b62f` those
+counts had rotted in four places**, one of them inside the ledger itself, written as what three
+headings *hold now*; and all four were already false when the sweep that reached that file fenced
+the block rather than touching it, so the rechecking the paragraph asked for is what did not
+happen. **A paragraph whose subject is rot gets no licence to carry it.** The way to keep such a
+record is to pin every figure in it to the commit it was measured at, which is what that file now
+does, and the two rules then agree instead of having to be ranked.
+
 **Most mirror-tree material is routed by a row, and a small tail of it is deliberately routed by
 none.** `README.md`'s *Layout: the Mathlib mirror tree* defines a mirror-tree file by its path — a
 file under `Oka/` mirroring a path under `Mathlib/`, holding no complex-analytic mathematics and
