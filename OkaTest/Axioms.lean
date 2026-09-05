@@ -179,9 +179,9 @@ record is to pin every figure in it to the commit it was measured at, which is w
 does, and the two rules then agree instead of having to be ranked.
 
 **The rule has a third object and the two named above are not the whole of it: a clause that counts
-or quotes the rows of the table above is in the class too.** It is not falsified by an append to
-any guard section, so no scan built on that line can see it — the noun after the numeral is
-*rows*, and not *declarations* or *guards*. The worked case is
+or quotes rows — of the table above, or of the declaration dump — is in the class too.** It is not
+falsified by an append to any guard section, so no scan built on that line can see it — the noun
+after the numeral is *rows*, and not *declarations* or *guards*. The worked case is
 `OkaTest/Axioms/Weierstrass.lean`'s routing paragraph, which carried one of each and they failed
 differently: *"three of which have a row of their own"* was **wrong at the commit that wrote it**,
 two of the four namespaces it lists being named by a row and no more, while a **quotation** of the
@@ -189,18 +189,38 @@ two of the four namespaces it lists being named by a row and no more, while a **
 was reworded. **A quotation is in the class for the same reason a count is**: it asserts something
 about a structure the clause does not own, and the owner changes it without looking.
 
-**Swept at `0b09e45`, and the widening costs no second repair.** The tree's other clauses counting
-the rows of a table or a dump — the *two rows exist to route almost nothing else* below, the *two
-rows worth knowing before you run it* above, `README.md`'s docstring-linter table,
-`Oka/Analytification/ModuleFiniteAnalytification.lean`'s dump-versus-declaration figure and
-`Oka/AnalyticSpace/OpenSubspace.lean`'s two planted rows — **each name their members**, which is
-the exemption already stated above. **What the sweep asked of each is that and only that.** The
-last of the five carries a figure the dump can check and it is exact at that commit; the other
-figures those sentences carry are in the two classes named above and were not re-asked here, which
-is what a sweep of one class is and is not. **The record of the sweep is what makes this paragraph
-cheap to have installed**, not the rule: a rule that grows and is not swept is the failure this
-file exists to prevent, and `scripts/` cannot do this one either, for the reason the checker
-sentence above gives.
+**Swept at `c8e77d0`, and what the sweep found is a shape rather than a list.** The class has two
+populations. Clauses about the table above are few, and each is exempt on its face — by naming
+the rows it counts, or by pinning the figure to the commit it was taken at. Clauses about
+`scripts/DumpOkaDecls.lean`'s rows are many, and nearly all of them are one shape: the `Δdump`
+note recording what a draft the file did not take would have cost. **Such a note is exempt under
+the pinning spelling and not the naming one**, and reading it under the naming one is the mistake
+the first draft of this paragraph made. Whether it names every row it counts varies, and that is
+the question the naming exemption would turn on; here it does not arise, because a figure about
+an abandoned draft is falsified by rewriting history rather than by an append. The `Δdump` notes
+written in the present tense are the ones the rule reaches, and most of them give the figure
+against the same file's declaration count, which the first object above already reached.
+
+**The widening is not free, and at `c8e77d0` it cost two repairs.** At that commit
+`Oka/Analytification/CrossMemberGlue.lean` said its module adds its own declarations to the dump
+*"and nothing else, apart from two `congr_simp` lemmas"*, and
+`Oka/Analytification/CrossMemberDatumGlue.lean` said that file *"carries two of exactly this
+shape"* — a live count of planted rows naming none of them, the second of them about a file the
+clause does not own. **Both were exact when measured**, the dump carrying two such rows under
+that module and no more, **and both are one `simp only` from being silently wrong.** They are
+left to a push of their own: they are under `Oka/`, and the subject of this one is the rule and
+the routing paragraph that motivated it.
+
+**What the sweep asked of each clause is that and only that**: which population it is in, and
+under which spelling it is exempt. Whether the other figures those sentences carry are still
+exact is a question in the objects named above and was not re-asked here, which is what a sweep of
+one class is and is not. **The membership is recorded as a shape and not as a list of sites** —
+a list of where a class is instantiated goes stale on the next `Δdump` note anyone writes, and
+the draft of this paragraph that carried one named a small part of the tree's sites and reached a
+verdict that fails at a site it had not named. **The record of the sweep is what makes this
+paragraph cheap to have installed**, not the rule: a rule that grows and is not swept is the
+failure this file exists to prevent, and `scripts/` cannot do this one either, for the reason the
+checker sentence above gives.
 
 **Most mirror-tree material is routed by a row, and a small tail of it is deliberately routed by
 none.** `README.md`'s *Layout: the Mathlib mirror tree* defines a mirror-tree file by its path — a
