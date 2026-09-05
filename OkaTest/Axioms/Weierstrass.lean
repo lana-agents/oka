@@ -32,9 +32,9 @@ rule above is what settles it**: the theorem is declared in `Oka/Weierstrass.lea
 docstring states it *"in the form needed for the Weierstrass preparation theorem"*.
 
 An earlier draft of this paragraph settled it the same way for a different and false reason: that
-`OkaTest/Axioms/Analysis.lean` guards only mirror-tree modules. Three of that file's twelve guards
-are `Oka.Analytic.DividedDifference`'s, and `README.md` puts that directory **outside** the mirror
-tree — its worked example of a general file with no single Mathlib counterpart is
+`OkaTest/Axioms/Analysis.lean` guards only mirror-tree modules. That file guards
+`Oka.Analytic.DividedDifference` declarations, and `README.md` puts that directory **outside** the
+mirror tree — its worked example of a general file with no single Mathlib counterpart is
 `Oka/Analytic/ParametricCircleIntegral.lean`, the neighbour in the same directory, and Mathlib has
 no Analytic directory for either to mirror. Only the argument changed; no guard moved.
 -/
