@@ -294,18 +294,24 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   untouched by that** — nothing turns an equivalence of fibres into an isomorphism of covers —
   and nothing exhibits the functor as an equivalence onto anything.
 
-  **What this file supplies towards conservativity is the degree and not the isomorphism, and the
-  split is worth naming because the two halves live in different files.**
+  **What this file supplies towards conservativity is the degree, and the pieces of the argument
+  it is not the whole of live in different files.**
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_fiber` turns an equivalence of fibres at one
   point of a preconnected base into an equality of the two objects' degrees, and
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_left_eq_one` turns that equality — when
-  the common degree is not `0` — into `AnalyticSpace.degree f.left = 1`. **The remaining step is
-  from degree one to invertibility**, which is a statement about
-  `Oka/AnalyticSpace/Degree.lean`'s material and about the structure sheaves rather than about
-  this category: `ComplexAnalytic.AnalyticSpace.isHomeomorph_base_of_degree_eq_one` concludes a
-  homeomorphism of the underlying spaces. **Taxis #1734 is the live filing against that step and
-  this file does not take it**; the sentence above about conservativity is written of the whole
-  passage and stays as it is until that step exists.
+  the common degree is not `0` — into `AnalyticSpace.degree f.left = 1`.
+
+  **The step from degree one to invertibility was recorded here as absent and is not absent any
+  more.** `ComplexAnalytic.AnalyticSpace.isIso_of_degree_eq_one` (`Oka/AnalyticSpace/Degree.lean`)
+  concludes an isomorphism of analytic spaces, where
+  `ComplexAnalytic.AnalyticSpace.isHomeomorph_base_of_degree_eq_one` stops at a homeomorphism of
+  the underlying spaces. **What separates the chain above from conservativity is therefore no
+  longer a missing theorem, and it is not nothing either.** Two obligations remain and neither is
+  discharged anywhere in this development: `ComplexAnalytic.AnalyticSpace.isIso_of_degree_eq_one`
+  asks its target to be non-empty, which nothing in the chain supplies; and its conclusion is an
+  invertibility of `f.left`, the underlying morphism, where conservativity wants one of `f`, and
+  carrying the first to the second is a statement about the comma category that **is not measured
+  here**. So the sentence above about conservativity stands as it is written.
 
   **`CategoryTheory.Functor.Faithful` is here now, on a full subcategory** —
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.faithful_fiberFunctor` and
@@ -1538,10 +1544,12 @@ than as `[Nonempty X]` is deliberate — non-emptiness of the base does not by i
 cover's degree non-zero, since the empty cover of a non-empty base is finite étale and has degree
 `0`, and it is the cover being non-empty over each point that the hypothesis really wants.
 
-**What this does not say is that `f` is an isomorphism.** Degree one is a statement about the
-fibres of `f.left` and the step from it to invertibility is the one
-`Oka/AnalyticSpace/Degree.lean`'s `## What is *not* proved` section is about; see
-`## What is not here` below. -/
+**What this does not say is that `f` is an isomorphism**, and the reason is no longer that the
+step from degree one to invertibility is missing:
+`ComplexAnalytic.AnalyticSpace.isIso_of_degree_eq_one` (`Oka/AnalyticSpace/Degree.lean`) is that
+step. What is missing is smaller and is still missing — that theorem asks its target to be
+non-empty, which nothing here supplies, and it would conclude an invertibility of `f.left` and not
+of `f`. This file's `## What is not here` says which of the two is which. -/
 theorem FiniteEtaleOver.degree_left_eq_one {X : AnalyticSpace.{u}} {A B : FiniteEtaleOver.{u} X}
     (f : A ⟶ B) [T2Space A.left] [T2Space B.left] [PreconnectedSpace B.left]
     [PreconnectedSpace (X : Type u)] (h : A.degree = B.degree) (hB : B.degree ≠ 0) :
