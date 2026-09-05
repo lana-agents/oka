@@ -1306,7 +1306,7 @@ carry both of them at every object.
 `PreconnectedSpace` is preconnectedness of `Set.univ` and does not ask for a point, `Nonempty`
 being `ConnectedSpace`'s extra field.
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_trivial_of_isEmpty` below is that
-case at the one object this repository can exhibit it at, **and it is precisely the object at
+case at the one object this file exhibits it at, **and it is precisely the object at
 which the point-of-the-fibre hypothesis could say nothing.**
 
 **Over a non-empty base**, what the subcategory does **not** contain is a trivial cover with two
@@ -1317,8 +1317,11 @@ puts no condition on the base at all, so over an *empty* base the trivial cover 
 type has an empty total space, and the paragraph above then puts it inside. What this file proves
 is the empty total space at an empty *index type*, where
 `ComplexAnalytic.AnalyticSpace.isEmpty_sigma` applies; the empty-base case needs the **members**
-of the disjoint union to be empty rather than its index type, and no declaration here states
-that. -/
+of the disjoint union to be empty rather than its index type, which is
+`ComplexAnalytic.AnalyticSpace.isEmpty_sigma_of_members`. **What is missing is now the object and
+no longer the lemma**: no cover of an empty base is exhibited below, and one would be that lemma
+at `fun _ ↦ X` against `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.trivial`, with both fields
+of the property by `inferInstance` from there. -/
 def FiniteEtaleOver.isPreconnectedT2 (X : AnalyticSpace.{u}) :
     ObjectProperty (FiniteEtaleOver.{u} X) :=
   fun A ↦ PreconnectedSpace (A.left : Type u) ∧ T2Space (A.left : Type u)

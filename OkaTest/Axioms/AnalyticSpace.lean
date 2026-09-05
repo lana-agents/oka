@@ -864,8 +864,9 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.GlueData.hom_ext' depends on axioms:
 
 /-! ### The disjoint union of a family of analytic spaces
 
-`Oka/AnalyticSpace/Sigma.lean`. The object, its inclusions, the descent map, the two non-vacuity
-statements at the two ends of the index type, and that an inclusion is not an isomorphism. -/
+`Oka/AnalyticSpace/Sigma.lean`. The object, its inclusions, the descent map, the non-vacuity
+statements — the disjoint union is empty at an empty index type and at empty members, and an
+inclusion is not surjective — and that an inclusion is not an isomorphism. -/
 
 /--
 info: 'ComplexAnalytic.AnalyticSpace.sigma' depends on axioms:
@@ -908,6 +909,13 @@ info: 'ComplexAnalytic.AnalyticSpace.isEmpty_sigma' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.isEmpty_sigma
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isEmpty_sigma_of_members' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isEmpty_sigma_of_members
 
 /--
 info: 'ComplexAnalytic.AnalyticSpace.not_surjective_sigmaι_base' depends on axioms:

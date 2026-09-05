@@ -44,9 +44,11 @@ are the same map. There is no analysis and no sheaf argument in it.
 - `ComplexAnalytic.AnalyticSpace.hom_ext_sigma`: **and a morphism out of a disjoint union is
   determined by those restrictions**, which is its uniqueness half. No agreement of the
   restrictions is asked for anywhere, in either direction.
-- `ComplexAnalytic.AnalyticSpace.isEmpty_sigma` and
-  `ComplexAnalytic.AnalyticSpace.not_surjective_sigmaι_base`: the two non-vacuity statements, at
-  the two ends.
+- `ComplexAnalytic.AnalyticSpace.isEmpty_sigma`,
+  `ComplexAnalytic.AnalyticSpace.isEmpty_sigma_of_members` and
+  `ComplexAnalytic.AnalyticSpace.not_surjective_sigmaι_base`: the non-vacuity statements, at
+  either end — the disjoint union is empty when the index type is empty and when the members are,
+  and an inclusion is not surjective when a second member has a point.
 - `ComplexAnalytic.AnalyticSpace.not_isIso_sigmaι`: **so an inclusion is not an isomorphism**,
   under the same two hypotheses. **This is still not a statement that the disjoint union and the
   member are non-isomorphic** — that would be a statement about an invariant, and the caveat on
@@ -287,14 +289,42 @@ theorem hom_ext_sigma {Y : AnalyticSpace.{u}} {f g : sigma F ⟶ Y}
 The reading this closes is at the bottom end: a construction that returned some fixed space for
 every family would satisfy everything above. Every point of a coproduct is in the image of some
 member (`AlgebraicGeometry.LocallyRingedSpace.exists_sigma_ι_base_eq`) and there are no members,
-so the carrier is empty. **This is the only declaration in the library that names the empty
-analytic space**, and it names it as a property rather than as a definition — `OkaTest/`
-instantiates it, and `Oka/AnalyticSpace/LocalModel.lean` uses the phrase only to say that the node
-is *not* it. -/
+so the carrier is empty. **Emptiness is a property of a space built some other way, and nothing in
+the library is defined as the empty analytic space**: that is as true of the sibling below and of
+`ComplexAnalytic.isEmpty_refineAnalytification` — the same statement for a refinement with no
+members — as it is of this one. `OkaTest/` instantiates this one, and
+`Oka/AnalyticSpace/LocalModel.lean` uses the phrase only to say that the node is *not* it.
+
+The sentence this replaces said that this was *the only declaration in the library that names the
+empty analytic space*. That was exact at `0b19eb1`, which wrote it, and **`9ce75e2` falsified it
+six days later** by adding `ComplexAnalytic.isEmpty_refineAnalytification` and sweeping nothing
+here; `ComplexAnalytic.AnalyticSpace.surjective_base_or_isEmpty_of_isFiniteEtale` names the same
+property of an arbitrary analytic space in its second branch. -/
 theorem isEmpty_sigma [IsEmpty ι] : IsEmpty (sigma F) := by
   refine ⟨fun x ↦ ?_⟩
   obtain ⟨i, _, _⟩ := exists_sigma_ι_base_eq (fun i ↦ (F i).toLocallyRingedSpace) x
   exact IsEmpty.elim ‹IsEmpty ι› i
+
+/-- **And so is the disjoint union of a family whose members are all empty**, which is the same
+reading of the same lemma at the other quantifier.
+
+`AlgebraicGeometry.LocallyRingedSpace.exists_sigma_ι_base_eq` again — every point of a coproduct
+is in the image of some member — with the emptiness discharged at the point of the member rather
+than at the index. It is the proof above with `y` in place of `i`.
+
+**It implies the theorem above and does not replace it.** At an empty index type
+`∀ i, IsEmpty (F i)` holds vacuously, so that statement follows from this one; what does not
+follow is its *use*: instance search does not find the members' instance from `[IsEmpty ι]`, and
+a caller would have to write the vacuous one out by hand. The hypothesis is
+an instance rather than an explicit argument for the same reason the one above is: the callers
+that want it have it that way, a trivial cover over an empty base being `fun _ ↦ X` at an empty
+`X`. `AlgebraicGeometry.LocallyRingedSpace.hom_ext_of_isEmpty` takes the explicit form and its
+docstring gives the reason, which is that the carrier of a `restrict` is not something instance
+search finds; no `restrict` is involved here. -/
+theorem isEmpty_sigma_of_members [∀ i, IsEmpty (F i : Type u)] : IsEmpty (sigma F) := by
+  refine ⟨fun x ↦ ?_⟩
+  obtain ⟨i, y, _⟩ := exists_sigma_ι_base_eq (fun i ↦ (F i).toLocallyRingedSpace) x
+  exact IsEmpty.elim (‹∀ i, IsEmpty (F i : Type u)› i) y
 
 /-- **With a second member that has a point, an inclusion is not surjective**, so the disjoint
 union is not the member in disguise.
