@@ -2073,3 +2073,73 @@ info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.base_eq_id_of_apply_eq' dep
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.base_eq_id_of_apply_eq
+
+/-! ### Faithfulness for morphisms of covers
+
+`Oka/AnalyticSpace/FiniteEtaleOver.lean` and `Oka/Geometry/RingedSpace/LocallyRingedSpace.lean`:
+that a morphism of covers is determined by its base map, the unique-lifting statements guarded
+above with an equality of *morphisms* rather than of maps as their conclusion, the endomorphism
+corollary, and the general locally-ringed-space lemma the first of those runs on.
+
+**`AlgebraicGeometry.LocallyRingedSpace.hom_ext_of_comp_eq` is mirror-tree material guarded here
+rather than in `OkaTest/Axioms/Sheaves.lean`, which is the row that routes its file** and which
+already holds `AlgebraicGeometry.LocallyRingedSpace.hom_ext_of_isEmpty` from that same file. This
+is consumer-placement, which `OkaTest/Axioms.lean` records as a practice with two precedents and
+which `OkaTest/Axioms/AnalyticSpace.lean` reaches for
+`AlgebraicGeometry.LocallyRingedSpace.hom_stalk_ext` — a declaration of the same file and the one
+this lemma is built from. The reason to prefer it here is that the statements below are the whole
+of why that lemma exists, and `OkaTest/Axioms/Sheaves.lean` would separate it from them. **A
+later seat who disagrees moves one guard**, and nothing in this section's prose depends on where
+it sits.
+
+**`Classical.choice` is in every guard below.** It is not introduced here: it arrives with the
+covering-map rung through the statements guarded above, and it is present even in
+`AlgebraicGeometry.LocallyRingedSpace.hom_ext_of_comp_eq` and
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hom_ext_of_base_eq`, whose statements ask for no
+separation axiom and no connectedness at all.
+
+**Named by file rather than counted**, as the sections above say and for the reason they give.
+
+**Named and not located.** No sentence here says which section is above or below it. -/
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.hom_ext_of_comp_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.hom_ext_of_comp_eq
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hom_ext_of_base_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hom_ext_of_base_eq
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hom_ext_of_apply_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hom_ext_of_apply_eq
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hom_ext_of_fiberMap_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hom_ext_of_fiberMap_eq
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hom_ext_of_fiberFunctor_map_eq' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hom_ext_of_fiberFunctor_map_eq
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.eq_id_of_apply_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.eq_id_of_apply_eq

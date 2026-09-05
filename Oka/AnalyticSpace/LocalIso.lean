@@ -326,8 +326,14 @@ local isomorphism, so it does not settle the question.
 **It does not make the category Galois**, and `Oka/AnalyticSpace/FiniteEtaleOver.lean` says what
 else is wanted: no fibre products, hence no base change. **The fibre functor is no longer among
 it** — `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fintypeFiberFunctor` is in that file, and its
-fibres are finite with no hypothesis — so what is missing there is base change and every statement
-about that functor beyond its two laws. -/
+fibres are finite with no hypothesis. **This sentence used to add *and every statement about that
+functor beyond its two laws*, and it had already stopped being true before the branch that
+removed it**: `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.base_eq_of_fiberFunctor_map_eq`
+falsified it — a statement about that functor, and neither of its laws — and nothing swept this
+file when it landed. What retires the clause outright rather than narrowing it is
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hom_ext_of_fiberFunctor_map_eq`, which is
+faithfulness wherever its hypotheses hold. What is missing there is base change, and
+`CategoryTheory.Functor.Faithful` as a class. -/
 theorem isFiniteEtale_of_comp {X Y Z : AnalyticSpace.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
     [T2Space Y] [IsFiniteEtale (f ≫ g)] [IsLocalIso g] : IsFiniteEtale f where
   isFinite := isFinite_of_comp_of_t2Space f g

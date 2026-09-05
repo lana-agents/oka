@@ -81,6 +81,11 @@ here costs their destination no new import at all.
   computing either direction.
 - `AlgebraicGeometry.LocallyRingedSpace.hom_stalk_ext`: two morphisms with the same base map and
   the same maps on stalks are equal.
+- `AlgebraicGeometry.LocallyRingedSpace.hom_ext_of_comp_eq`: **a morphism all of whose stalk maps
+  are isomorphisms cancels on the right against two morphisms that have the same base map.** It
+  is not a monomorphism statement — invertibility on germs says nothing about which point a
+  competing morphism lands on — and the equality of base maps is a hypothesis and not a
+  consequence.
 - `AlgebraicGeometry.LocallyRingedSpace.resAlgMap_glueAlgMap`: restricting a glued algebra
   structure to a member of the cover returns the given one, across the
   `functor.obj ⊤`-versus-`U` seam.
@@ -189,6 +194,48 @@ lemma hom_stalk_ext (f g : X ⟶ Y) (h : f.base = g.base)
     (h' : ∀ x, f.stalkMap x = (Y.presheaf.stalkCongr (h ▸ rfl)).hom ≫ g.stalkMap x) :
     f = g :=
   forgetToSheafedSpace.map_injective (SheafedSpace.hom_stalk_ext _ _ h h')
+
+/-- **A morphism whose stalk maps are all isomorphisms cancels on the right, once the base maps
+are known to agree**: if `f ≫ p = g ≫ p` and `f` and `g` have the same base map, then `f = g`.
+
+**This is not `p` being a monomorphism**, and the difference is the whole of the base-map
+hypothesis. What the stalk hypothesis gives is that `p` is invertible on germs, and germs at a
+point say nothing about which point a competing morphism lands on — so the base maps have to be
+compared separately, and this statement asks for that comparison rather than deriving it. A
+covering map of positive degree is the standard example of a morphism this applies to and is not
+monic; that example is a reason for the hypothesis and is not compiled anywhere here.
+
+**The hypothesis is not that `p` is a local isomorphism, and at this generality it does not imply
+one.** Being a local isomorphism is two conditions — a local homeomorphism of base spaces, and
+invertible stalk maps — and only the second is assumed here. Over an arbitrary locally ringed
+space the first does not follow, and the standard witness is the canonical morphism from `Spec`
+of the local ring of the affine line over `ℂ` at a closed point to that line. Its source has two
+points and both its stalk maps are identities — of that local ring at the closed point, of the
+function field at the generic one — so every one of them is an isomorphism. Its image is those
+two points of the line, and no set of that shape is open there, the complement of a non-empty
+open set being finite. What makes the implication tempting is downstream: the complex analytic
+development this mirror file serves bundles the two conditions into a single class. That
+bundling is a definition and neither implication between its fields is proved there either, so
+it is not a source for the direction this paragraph says is unavailable.
+
+**The two transports are `AlgebraicGeometry.LocallyRingedSpace.stalkMap_congr_point` and
+`AlgebraicGeometry.LocallyRingedSpace.stalkMap_congr_hom`, and they are what keeps the proof to
+a rewrite rather than a `subst` argument.** `hom_stalk_ext` leaves a goal comparing
+`f.stalkMap x` with `g.stalkMap x`, whose sources are the stalks of `Y` at `f.base x` and at
+`g.base x` — propositionally equal points, so a `TopCat.Presheaf.stalkCongr` stands between them.
+Composing with the isomorphism `p.stalkMap (f.base x)` on the left turns each side into a stalk
+map of a composite: `stalkMap_congr_point` moves that isomorphism past the transport, and
+`stalkMap_congr_hom` at `hcomp` closes what is left. Neither transport is discharged by hand and
+neither point is substituted. -/
+lemma hom_ext_of_comp_eq {Z : LocallyRingedSpace.{u}} (p : Y ⟶ Z)
+    [∀ y, IsIso (p.stalkMap y)] (f g : X ⟶ Y) (hb : f.base = g.base)
+    (hcomp : f ≫ p = g ≫ p) : f = g := by
+  refine hom_stalk_ext f g hb fun x ↦ ?_
+  have hpt : f.base x = g.base x := by rw [hb]
+  rw [← cancel_epi (p.stalkMap (f.base x)), ← stalkMap_comp]
+  simp only [TopCat.Presheaf.stalkCongr_hom]
+  rw [← Category.assoc, stalkMap_congr_point p _ _ hpt, Category.assoc, ← stalkMap_comp]
+  exact stalkMap_congr_hom _ _ hcomp x
 
 /-- The underlying homeomorphism of an isomorphism of locally ringed spaces. -/
 noncomputable def homeoOfIso (e : X ≅ Y) : X ≃ₜ Y :=
