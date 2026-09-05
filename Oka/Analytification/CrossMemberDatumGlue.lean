@@ -147,7 +147,11 @@ the unequal branch was added, **and two things neither file describes fired as w
   one-member file's analytified triangle uses the same tactic and plants nothing, and the
   difference is that all three definitions here take a proof argument, so simp needs a congruence
   lemma to traverse them. They belong to this module and are the benign kind;
-  `Oka/Analytification/CrossMemberGlue.lean` carries two of exactly this shape.
+  `Oka/Analytification/CrossMemberGlue.lean` carries the same shape, at the `congr_simp`
+  companions of `ComplexAnalytic.localisationPresentationIsoOfMulEq` and
+  `ComplexAnalytic.localisationPresentationIsoOfAlgEquivUnitMul`. **Named and not counted**, and
+  the reason is sharper here than it is there: a numeral in this sentence counts *another
+  module's* dump rows, so the edit that falsifies it is one nobody reading this file would open.
   **Recorded rather than removed**, because removing them means giving up `simp only … at` on a
   hypothesis that mentions a definition with a proof argument, and nothing here is worth that.
   **The arithmetic this makes**: three declarations and `Δdump = +5`, which is the figure to check
