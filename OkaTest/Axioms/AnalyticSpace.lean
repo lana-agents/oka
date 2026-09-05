@@ -63,9 +63,11 @@ that stood here was written the coproduct read *19* and the sentence carrying it
 *"has simply not moved yet"*. The **very next commit to touch this file** falsified it —
 `d58c85d`, four guards under the trivial cover — and it then stood wrong for **23 commits**,
 because it was the one numeral nobody rechecked. A reader who wants today's arithmetic runs the
-per-heading recipe beside `OkaTest/Axioms.lean`'s routing table, which is the instrument; every
-number here is a record of one run of it, and the reason to prefer a member a reader can check to
-a cardinal they have to recount is `OkaTest/Axioms/Analytification.lean`'s tower section's.
+**two** recipes beside `OkaTest/Axioms.lean`'s routing table — the one that resolves a guard name
+to its module, and the one that attributes a guard to the heading above it. **The counts in the
+paragraphs above are what those two returned at the commit each is pinned to**, and the reason to
+prefer a member a reader can check to a cardinal they have to recount is
+`OkaTest/Axioms/Analytification.lean`'s tower section's.
 
 **The ledger of what has moved, in two rounds, because the second round found the first one's
 values already stale.** Counted as `#print axioms` **names**, which here equals the command count,
@@ -130,8 +132,8 @@ the author is warned they added: *sixteen* at `a4f3a81` where the file held seve
 ledger row above reading *seventeen* where it should read **eighteen**. And the coproduct, whose
 three headings held `8 + 11 + 4 = 23` at that repair, and `9 + 11 + 4 = 24` at `4853cc2` where
 that clause was written — and which was read as *29*. Both were repaired there; the guard total
-did not move, which is the check that
-no guard was touched, and it stood at *129* until the disjoint union's `¬ IsIso` was added.
+did not move, which is the check that no guard was touched, and it stood at *129* until the
+disjoint union's `¬ IsIso` was added.
 
 **So this is not the defect lana-agents/oka#358 repaired at `4c91029`, though it was filed as a
 recurrence of it.** That one was a guard appended past a heading. `3177e67` appended a heading
