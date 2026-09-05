@@ -48,6 +48,14 @@ action on it, which nothing here has. **This is what makes the third part's inva
 than merely available**: preconnectedness of the total space separates a pair that the degree and
 the fibre both miss, and that pair is exhibited here rather than described.
 
+**And the same object is what makes the faithfulness instance non-vacuous**, which is the fifth
+part of this file. `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.faithful_fiberFunctor` holds on
+the full subcategory of covers whose total space is preconnected and Hausdorff;
+`isPreconnectedT2_sqOver` puts `sqOver` in it and `not_iso_id_sqOver` says it is not the base over
+itself, so that subcategory has at least two isomorphism classes here rather than only the one
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_id` supplies in general.
+`faithful_fiberFunctor_punctured` is the instance itself, found by search at this base.
+
 ## What this does not witness
 
 **Nothing here is guarded, and that is forced rather than chosen.** Every file under
@@ -343,6 +351,55 @@ theorem nonempty_fiber_equiv_trivial_sqOver (y : ((AnalyticSpace.complexAffineSp
         (AnalyticSpace.FiniteEtaleOver.trivial.{u} (ULift.{u} (Fin 2))
           ((AnalyticSpace.complexAffineSpace.{u} 1).restrict ComplexAnalytic.punctured.{u}))) :=
   Finite.card_eq.mp ((card_fiber_sqOver.{u} y).trans (card_fiber_trivial_two.{u} y).symm)
+
+/-- **`sqOver` is an object of the full subcategory the fibre functor is faithful on**, so that
+subcategory is not the trivial one.
+
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2` asks that the total space be
+preconnected and Hausdorff, and both are the instances declared above at exactly this object.
+
+**What this buys is that the faithfulness instance is about something.**
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_id` already puts the base over
+itself in the subcategory, and a subcategory whose only exhibited object is a terminal-looking one
+would be weak evidence; `not_iso_id_sqOver` above says this object is **not** that one, so the
+subcategory has at least two isomorphism classes at this base. **What is not claimed is that the
+trivial two-sheeted cover is outside it** — it is, by
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.not_preconnectedSpace_trivial`, and
+`not_iso_trivial_sqOver` above is the separation; that is a statement about the subcategory's
+complement and is not restated here. -/
+theorem isPreconnectedT2_sqOver :
+    AnalyticSpace.FiniteEtaleOver.isPreconnectedT2.{u}
+      ((AnalyticSpace.complexAffineSpace.{u} 1).restrict ComplexAnalytic.punctured.{u})
+      sqOver.{u} :=
+  ⟨inferInstance, inferInstance⟩
+
+/-- **And the faithfulness instance is found at this base, by instance search and not by hand.**
+
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.faithful_fiberFunctor` asks
+`[PreconnectedSpace X]` of the base; the punctured line has it through
+`ComplexAnalytic.preconnectedSpace_restrict_punctured` (`OkaTest/FiniteMorphism.lean`), which is
+the same instance `preconnectedSpace_left_sqOver` above is a second spelling of. So `inferInstance`
+closes this, and what it measures is that the base hypothesis is reachable at the one base this
+repository exhibits covers over — the seam the two instances above exist to bridge is on the
+*total space* and does not recur on the base.
+
+**The point of the base is universally quantified, and the family it quantifies over is not
+empty.** `ComplexAnalytic.nonempty_restrict_punctured` (`OkaTest/FiniteMorphism.lean`, imported
+above) is an `instance`, and its witness is explicit rather than a choice principle — `1` carried
+back across `ComplexAnalytic.puncturedHomeo` — so what is producible here is a **point** of this
+base and not merely a `Nonempty`; `degree_sqOver` above already spends that instance, through
+`ComplexAnalytic.degree_sq`, whose docstring says it is the only hypothesis that result costs.
+**It is also what lets the complement clause of `isPreconnectedT2_sqOver` above reach**
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.not_preconnectedSpace_trivial`, which asks
+`[Nonempty X]` of the base. What is not done here is fixing a *particular* point: the statement is
+about every point there is. -/
+theorem faithful_fiberFunctor_punctured
+    (x : ((AnalyticSpace.complexAffineSpace.{u} 1).restrict
+      ComplexAnalytic.punctured.{u} : Type u)) :
+    ((AnalyticSpace.FiniteEtaleOver.isPreconnectedT2.{u}
+        ((AnalyticSpace.complexAffineSpace.{u} 1).restrict ComplexAnalytic.punctured.{u})).ι
+      ⋙ AnalyticSpace.FiniteEtaleOver.fiberFunctor.{u} x).Faithful :=
+  inferInstance
 
 end OkaTest.FiniteEtaleOver
 

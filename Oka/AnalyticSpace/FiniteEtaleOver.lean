@@ -87,6 +87,9 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fintypeFiberFunctor`: **the fibre functor at a
   point**, into `Type u` and into `FintypeCat` — the first functors out of this category declared
   here, and the second is the shape a Galois category asks for.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2`: **the covers whose total space
+  is preconnected and Hausdorff**, as a `CategoryTheory.ObjectProperty` and hence as a full
+  subcategory — the one the fibre functor is `CategoryTheory.Functor.Faithful` on.
 
 ## Main results
 
@@ -157,12 +160,38 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hom_ext_of_fiberFunctor_map_eq`: **the base-map
   statements above, with equality of morphisms as their conclusion.** The last is faithfulness
   of the fibre functor wherever its hypotheses hold — a preconnected source, a Hausdorff total
-  space of the target, and a point of the fibre — and is **not**
-  `CategoryTheory.Functor.Faithful`, which quantifies over all objects and no point; see
-  `## What is not here`.
+  space of the target, and a point of the fibre. **The third of those is dischargeable and the
+  other two are not**: over a preconnected base
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hom_ext_of_forall_fiberMap_eq` below asks for no
+  point, and `CategoryTheory.Functor.Faithful` follows on the subcategory the first two cut out.
 - `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.eq_id_of_apply_eq`: **an endomorphism of a
   connected cover that fixes a point is the identity morphism**, so the automorphisms of such a
   cover act freely on each fibre as automorphisms and not only as self-maps.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.nonempty_fiber`: **over a preconnected base a
+  cover with a non-empty total space has a non-empty fibre at every point** — the structure map is
+  surjective there, by `ComplexAnalytic.AnalyticSpace.surjective_base_of_isFiniteEtale`.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hom_ext_of_forall_fiberMap_eq`: **two morphisms
+  of covers agreeing on the whole fibre over a point of a preconnected base are equal, with no
+  point of that fibre assumed.** This is the statement that removes the third hypothesis of
+  faithfulness, and the empty case closes through
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hom_ext_of_base_eq` rather than through a fibre.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberFunctor_map_injective` and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fintypeFiberFunctor_map_injective`: **the two
+  fibre functors are injective on morphisms** out of a preconnected cover into a Hausdorff one,
+  over a preconnected base.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.faithful_fiberFunctor` and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.faithful_fintypeFiberFunctor`:
+  **`CategoryTheory.Functor.Faithful` for both fibre functors**, on the full subcategory
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2` and over a preconnected base.
+  This is the class rather than a statement quantified by hand, and it is what `## What is not
+  here` used to say no subcategory had been exhibited for.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_id` and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_trivial_of_isEmpty`: **two
+  objects of that subcategory** — the base over itself, when the base is preconnected and
+  Hausdorff, and the trivial cover at an empty index type, with no hypothesis at all. The second
+  is the object whose empty fibre the `## What is not here` paragraph gave as its reason for
+  keeping the point hypothesis, and it is inside the subcategory rather than outside it;
+  `OkaTest/FiniteEtaleOver.lean` exhibits a third that is not isomorphic to the first.
 
 ## What is not here
 
@@ -247,13 +276,31 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   untouched by that** — nothing turns an equivalence of fibres into an isomorphism of covers —
   and nothing exhibits the functor as an equivalence onto anything.
 
-  **What is still not here is `CategoryTheory.Functor.Faithful` itself**, and the three
-  hypotheses are the reason rather than an excuse for one. That class quantifies over every pair
-  of objects and asks for no point of a fibre, while each of `[PreconnectedSpace A.left]`,
-  `[T2Space B.left]` and the point restricts which pairs the statement above reaches. The point
-  is not a technicality: the trivial cover at an empty index type has an empty fibre, and there
-  the functor's value determines nothing whatever. **No full subcategory on which the instance
-  would hold is exhibited here**, and finding one is not the same problem.
+  **`CategoryTheory.Functor.Faithful` is here now, on a full subcategory** —
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.faithful_fiberFunctor` and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.faithful_fintypeFiberFunctor`, on
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2` and over a preconnected base.
+  **What this paragraph used to say, and got wrong, is which of the three hypotheses was the
+  obstruction.** It said the point of the fibre was *not a technicality*, on the ground that the
+  trivial cover at an empty index type has an empty fibre and the functor's value there determines
+  nothing. **That much is true** —
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberTrivialEquiv` puts that fibre in bijection
+  with the index type — **and it is not a counterexample to faithfulness**: over a **preconnected
+  base** an empty fibre forces the total space itself to be empty, by
+  `ComplexAnalytic.AnalyticSpace.surjective_base_or_isEmpty_of_isFiniteEtale`, and a morphism out
+  of an empty cover is determined by
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hom_ext_of_base_eq` with no fibre read at all.
+  **That object is inside the subcategory and not outside it**, by
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_trivial_of_isEmpty`.
+  **The point is the hypothesis that drops; the other two are the ones that stay**, and they stay
+  as the conditions the subcategory is cut out by rather than as quantifiers written by hand.
+
+  **What preconnectedness of the base costs is a hypothesis on the statement and not on an
+  object**, so it does not enter the subcategory; and the subcategory is not empty —
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_id` puts the base over itself in
+  it, `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_trivial_of_isEmpty` puts the
+  empty cover in it, and `OkaTest/FiniteEtaleOver.lean`'s `sqOver` is a third object of it, not
+  isomorphic to the first.
 
   **What closed the gap was one general lemma, and the statements the previous version of this
   paragraph named — `AlgebraicGeometry.LocallyRingedSpace.stalkMap_comp` and
@@ -1118,14 +1165,20 @@ and gives the base maps;
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hom_ext_of_base_eq` turns that into an equality of
 morphisms.
 
-**It is still not `CategoryTheory.Functor.Faithful`**, and the three hypotheses are why. Faithful
-would quantify over *all* objects of `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver X`; each of
-`[PreconnectedSpace A.left]`, `[T2Space B.left]` and the point `a` genuinely restricts which ones
-this applies to. The last is not a technicality — the trivial cover at an empty index type has an
-empty fibre, and there the functor's value determines nothing at all;
-`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.base_eq_of_fiberFunctor_map_eq` says the same and
-says why. **Nothing here exhibits a full subcategory on which the instance holds**, and nothing
-here bears on conservativity. -/
+**It is not itself `CategoryTheory.Functor.Faithful`**, which would quantify over *all* objects
+of `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver X` and ask for no point; each of
+`[PreconnectedSpace A.left]`, `[T2Space B.left]` and the point `a` restricts which pairs this
+reaches. **Of the three it is the point that comes off**, and it comes off at the cost of a
+hypothesis on the base:
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hom_ext_of_forall_fiberMap_eq` below asks for the
+whole fibre and no point of it, over a preconnected base, and the class then holds on the full
+subcategory the other two hypotheses cut out. **Nothing here or there bears on conservativity.**
+
+**The empty fibre is not the obstruction it was read as.** This docstring used to give the trivial
+cover at an empty index type as the reason the point is *not a technicality*; the fibre there is
+indeed empty and the functor's value determines nothing, but over a preconnected base that case
+forces the total space to be empty and closes through
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hom_ext_of_base_eq` instead. -/
 theorem FiniteEtaleOver.hom_ext_of_fiberFunctor_map_eq {X : AnalyticSpace.{u}}
     {A B : FiniteEtaleOver.{u} X} [PreconnectedSpace (A.left : Type u)]
     [T2Space (B.left : Type u)] {x : X} (f g : A ⟶ B) (a : FiniteEtaleOver.fiber.{u} x A)
@@ -1144,5 +1197,203 @@ theorem FiniteEtaleOver.eq_id_of_apply_eq {X : AnalyticSpace.{u}} {A : FiniteEta
     [PreconnectedSpace (A.left : Type u)] [T2Space (A.left : Type u)] (f : A ⟶ A)
     (a : (A.left : Type u)) (h : f.left.toLRSHom.base a = a) : f = 𝟙 A :=
   FiniteEtaleOver.hom_ext_of_apply_eq.{u} f (𝟙 A) a h
+
+/-! ### Faithfulness of the fibre functor, on the covers whose total space is connected and
+Hausdorff -/
+
+/-- **Over a preconnected base, a cover with a non-empty total space has a non-empty fibre at
+every point.**
+
+`ComplexAnalytic.AnalyticSpace.surjective_base_of_isFiniteEtale` at the structure map, which is
+finite étale because the object carries the class in its `prop` field. **This is where
+preconnectedness of the *base* is spent, and it is the only place below that spends it.**
+
+**The two `inferInstanceAs` lines are the comma category's and not this statement's**, exactly as
+in `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_fiber` above and for the same reason: an
+object's structure map has its total space behind `CategoryTheory.Functor.id` and its base behind
+`CategoryTheory.Functor.fromPUnit`, both the space itself by `rfl` but not reducibly so, and
+instance search unfolds only at reducible transparency. Neither line has mathematical content. -/
+theorem FiniteEtaleOver.nonempty_fiber {X : AnalyticSpace.{u}} [PreconnectedSpace (X : Type u)]
+    (A : FiniteEtaleOver.{u} X) [Nonempty (A.left : Type u)] (x : X) :
+    Nonempty (FiniteEtaleOver.fiber.{u} x A) :=
+  haveI : IsFiniteEtale A.hom := A.prop
+  haveI : Nonempty (((𝟭 AnalyticSpace.{u}).obj A.left : AnalyticSpace.{u}) : Type u) :=
+    inferInstanceAs (Nonempty (A.left : Type u))
+  haveI : PreconnectedSpace
+      (((Functor.fromPUnit.{0} X).obj A.right : AnalyticSpace.{u}) : Type u) :=
+    inferInstanceAs (PreconnectedSpace (X : Type u))
+  ⟨⟨_, (surjective_base_of_isFiniteEtale A.hom x).choose_spec⟩⟩
+
+/-- **Two morphisms of covers that agree on the whole fibre over a point of a preconnected base
+are equal — and no point of that fibre is assumed.**
+
+This is `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hom_ext_of_fiberMap_eq` with its point
+hypothesis discharged rather than weakened, and `[PreconnectedSpace X]` on the **base** is what
+pays for it. The proof is the dichotomy
+`ComplexAnalytic.AnalyticSpace.surjective_base_or_isEmpty_of_isFiniteEtale`
+(`Oka/AnalyticSpace/LocalIso.lean`) read at the structure map, in two cases:
+
+* the total space is non-empty, and then
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.nonempty_fiber` above produces a point of the
+  fibre and the hypothesis is applied at it;
+* the total space is empty, and then the two base maps are equal because there is nothing to
+  compare, and `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hom_ext_of_base_eq` closes it with
+  no fibre in sight.
+
+**The empty case is why the `## What is not here` paragraph that priced the point hypothesis as
+*not a technicality* was reading it the wrong way round.** That paragraph's witness was the
+trivial cover at an empty index type, whose fibre is empty by
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberTrivialEquiv` and over which the functor's
+value determines nothing; but over a *preconnected* base an empty fibre forces the total space
+itself to be empty, and there a morphism of covers is determined with no information about fibres
+at all.
+**The empty fibre is not a counterexample to faithfulness; it is a case that closes for a
+different reason.**
+
+**The three hypotheses that remain are not shown necessary here.** `[PreconnectedSpace A.left]`
+and `[T2Space B.left]` are what
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.base_eq_of_apply_eq` reads and buy exactly the base
+maps, which is lana-agents/oka#436's finding and is unchanged;
+`[PreconnectedSpace X]` is what the dichotomy reads. No witness against dropping any of the three
+is exhibited or claimed. -/
+theorem FiniteEtaleOver.hom_ext_of_forall_fiberMap_eq {X : AnalyticSpace.{u}}
+    [PreconnectedSpace (X : Type u)] {A B : FiniteEtaleOver.{u} X}
+    [PreconnectedSpace (A.left : Type u)] [T2Space (B.left : Type u)] {x : X} (f g : A ⟶ B)
+    (h : ∀ a : FiniteEtaleOver.fiber.{u} x A,
+      FiniteEtaleOver.fiberMap.{u} x f a = FiniteEtaleOver.fiberMap.{u} x g a) : f = g := by
+  rcases isEmpty_or_nonempty (A.left : Type u) with hA | hA
+  · exact FiniteEtaleOver.hom_ext_of_base_eq.{u} f g (funext fun a ↦ isEmptyElim a)
+  · obtain ⟨a⟩ := FiniteEtaleOver.nonempty_fiber.{u} A x
+    exact FiniteEtaleOver.hom_ext_of_fiberMap_eq.{u} f g a (h a)
+
+/-- **The fibre functor is injective on morphisms out of a connected cover into a Hausdorff one,
+over a preconnected base**, with no point of the fibre assumed.
+
+The theorem above with the hypothesis read off an equality of the functor's values. The step from
+that equality to a pointwise one is the `congrArg` that
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.base_eq_of_fiberFunctor_map_eq` documents, and it
+is taken pointwise for the reason recorded there. -/
+theorem FiniteEtaleOver.fiberFunctor_map_injective {X : AnalyticSpace.{u}}
+    [PreconnectedSpace (X : Type u)] (x : X) {A B : FiniteEtaleOver.{u} X}
+    [PreconnectedSpace (A.left : Type u)] [T2Space (B.left : Type u)] :
+    Function.Injective ((FiniteEtaleOver.fiberFunctor.{u} x).map (X := A) (Y := B)) :=
+  fun _ _ h ↦ FiniteEtaleOver.hom_ext_of_forall_fiberMap_eq.{u} _ _
+    fun a ↦ congrArg (fun k ↦ TypeCat.Hom.hom k a) h
+
+/-- **The same for the `FintypeCat`-valued fibre functor**, which is the shape a Galois category
+asks for.
+
+The two functors have the same `map` field up to the bundling their targets ask for —
+`TypeCat.ofHom` there and `FintypeCat.homMk` here — so the only difference from the theorem above
+is which projection the `congrArg` takes. **Neither is derived from the other**, because the
+bundling is not the same map. -/
+theorem FiniteEtaleOver.fintypeFiberFunctor_map_injective {X : AnalyticSpace.{u}}
+    [PreconnectedSpace (X : Type u)] (x : X) {A B : FiniteEtaleOver.{u} X}
+    [PreconnectedSpace (A.left : Type u)] [T2Space (B.left : Type u)] :
+    Function.Injective ((FiniteEtaleOver.fintypeFiberFunctor.{u} x).map (X := A) (Y := B)) :=
+  fun _ _ h ↦ FiniteEtaleOver.hom_ext_of_forall_fiberMap_eq.{u} _ _
+    fun a ↦ congrArg (fun k ↦ k a) h
+
+/-- **The covers whose total space is preconnected and Hausdorff**, as an
+`CategoryTheory.ObjectProperty` and hence as a full subcategory.
+
+Both conditions are on the **total space of the object itself**, and that is forced rather than
+chosen: the injectivity statements above ask `[PreconnectedSpace A.left]` of the source and
+`[T2Space B.left]` of the target, so a property that a full subcategory can be cut out by has to
+carry both of them at every object.
+
+**A cover with an empty total space satisfies this**, and that is not an accident of spelling:
+`PreconnectedSpace` is preconnectedness of `Set.univ` and does not ask for a point, `Nonempty`
+being `ConnectedSpace`'s extra field.
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_trivial_of_isEmpty` below is that
+case at the one object this repository can exhibit it at, **and it is precisely the object at
+which the point-of-the-fibre hypothesis could say nothing.**
+
+**Over a non-empty base**, what the subcategory does **not** contain is a trivial cover with two
+distinct sheets, by
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.not_preconnectedSpace_trivial`, which reads
+`[Nonempty X]`. **That hypothesis is this property's blind spot and not decoration**: the property
+puts no condition on the base at all, so over an *empty* base the trivial cover at **any** index
+type has an empty total space, and the paragraph above then puts it inside. What this file proves
+is the empty total space at an empty *index type*, where
+`ComplexAnalytic.AnalyticSpace.isEmpty_sigma` applies; the empty-base case needs the **members**
+of the disjoint union to be empty rather than its index type, and no declaration here states
+that. -/
+def FiniteEtaleOver.isPreconnectedT2 (X : AnalyticSpace.{u}) :
+    ObjectProperty (FiniteEtaleOver.{u} X) :=
+  fun A ↦ PreconnectedSpace (A.left : Type u) ∧ T2Space (A.left : Type u)
+
+/-- **The base over itself is an object of that subcategory**, when the base is preconnected and
+Hausdorff.
+
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.id`'s total space is the base on the nose, so this
+is two `inferInstanceAs` and no proof. It is here so that the subcategory is known to be non-empty
+from inside this file; `OkaTest/FiniteEtaleOver.lean` exhibits an object of it that is **not**
+isomorphic to this one. -/
+theorem FiniteEtaleOver.isPreconnectedT2_id (X : AnalyticSpace.{u})
+    [PreconnectedSpace (X : Type u)] [T2Space (X : Type u)] :
+    FiniteEtaleOver.isPreconnectedT2.{u} X (FiniteEtaleOver.id.{u} X) :=
+  ⟨inferInstanceAs (PreconnectedSpace (X : Type u)), inferInstanceAs (T2Space (X : Type u))⟩
+
+/-- **And so is the trivial cover at an empty index type**, with no hypothesis on the base at all.
+
+Its total space is empty by `ComplexAnalytic.AnalyticSpace.isEmpty_sigma`, and an empty space is
+both preconnected and Hausdorff because a subsingleton is.
+
+**This is the object the `## What is not here` paragraph used as its reason for keeping the point
+of the fibre**, and it is an object of the subcategory the fibre functor is faithful on. Its
+fibre at every point of the base is empty —
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberTrivialEquiv` puts that fibre in bijection
+with the index type — so the functor's value there really does determine nothing, and
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hom_ext_of_forall_fiberMap_eq` reaches it anyway,
+by the branch that reads no fibre. **The witness against the hypothesis is an object of the
+statement that drops it.** -/
+theorem FiniteEtaleOver.isPreconnectedT2_trivial_of_isEmpty (ι : Type u) [Finite ι] [IsEmpty ι]
+    (X : AnalyticSpace.{u}) :
+    FiniteEtaleOver.isPreconnectedT2.{u} X (FiniteEtaleOver.trivial.{u} ι X) :=
+  haveI : IsEmpty ((FiniteEtaleOver.trivial.{u} ι X).left : Type u) :=
+    isEmpty_sigma (F := fun _ : ι ↦ X)
+  ⟨inferInstance, inferInstance⟩
+
+/-- **`CategoryTheory.Functor.Faithful` for the fibre functor**, on the full subcategory of covers
+whose total space is preconnected and Hausdorff, over a preconnected base.
+
+**This is the class, and the statement `## What is not here` said was missing.** What the
+paragraph there said was missing was a *full subcategory on which the instance holds*; the
+`## What is not here` reading that the point of the fibre is the obstruction is what turned out to
+be wrong, and `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hom_ext_of_forall_fiberMap_eq` above
+says why. **The other two hypotheses do not drop out and are not meant to**: they are what the
+covering-map rung is for, and they are exactly the two conditions the subcategory is cut out by.
+
+**`[PreconnectedSpace X]` on the base stays a hypothesis of the statement rather than joining the
+subcategory**, because it is a condition on the base and not on an object.
+
+**The explicit instance arguments are the comma category's seam again.** `A.property.1` is
+`PreconnectedSpace A.obj.left` and the goal wants it at
+`((FiniteEtaleOver.isPreconnectedT2 X).ι.obj A).left`, which is the same by `rfl` and not
+reducibly so; passing the two fields positionally is what avoids restating them. -/
+instance FiniteEtaleOver.faithful_fiberFunctor {X : AnalyticSpace.{u}}
+    [PreconnectedSpace (X : Type u)] (x : X) :
+    ((FiniteEtaleOver.isPreconnectedT2.{u} X).ι
+      ⋙ FiniteEtaleOver.fiberFunctor.{u} x).Faithful where
+  map_injective {A B} {f g} h :=
+    ObjectProperty.hom_ext _
+      (@FiniteEtaleOver.fiberFunctor_map_injective X ‹_› x A.obj B.obj
+        A.property.1 B.property.2 _ _ h)
+
+/-- **The same for the `FintypeCat`-valued fibre functor.**
+
+This is the one a Galois category would want, that definition asking for a functor into
+`FintypeCat`. **It is not a Galois category** and this instance does not bring one closer than the
+`## No pullbacks, so no base change` bullet says: faithfulness is one of the axioms and base change
+is another, and nothing here bears on the second. -/
+instance FiniteEtaleOver.faithful_fintypeFiberFunctor {X : AnalyticSpace.{u}}
+    [PreconnectedSpace (X : Type u)] (x : X) :
+    ((FiniteEtaleOver.isPreconnectedT2.{u} X).ι
+      ⋙ FiniteEtaleOver.fintypeFiberFunctor.{u} x).Faithful where
+  map_injective {A B} {f g} h :=
+    ObjectProperty.hom_ext _
+      (@FiniteEtaleOver.fintypeFiberFunctor_map_injective X ‹_› x A.obj B.obj
+        A.property.1 B.property.2 _ _ h)
 
 end ComplexAnalytic.AnalyticSpace
