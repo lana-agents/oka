@@ -1307,9 +1307,18 @@ carry both of them at every object.
 being `ConnectedSpace`'s extra field.
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_trivial_of_isEmpty` below is that
 case at the one object this repository can exhibit it at, **and it is precisely the object at
-which the point-of-the-fibre hypothesis could say nothing.** What the subcategory does **not**
-contain is a trivial cover with two distinct sheets, by
-`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.not_preconnectedSpace_trivial`. -/
+which the point-of-the-fibre hypothesis could say nothing.**
+
+**Over a non-empty base**, what the subcategory does **not** contain is a trivial cover with two
+distinct sheets, by
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.not_preconnectedSpace_trivial`, which reads
+`[Nonempty X]`. **That hypothesis is this property's blind spot and not decoration**: the property
+puts no condition on the base at all, so over an *empty* base the trivial cover at **any** index
+type has an empty total space, and the paragraph above then puts it inside. What this file proves
+is the empty total space at an empty *index type*, where
+`ComplexAnalytic.AnalyticSpace.isEmpty_sigma` applies; the empty-base case needs the **members**
+of the disjoint union to be empty rather than its index type, and no declaration here states
+that. -/
 def FiniteEtaleOver.isPreconnectedT2 (X : AnalyticSpace.{u}) :
     ObjectProperty (FiniteEtaleOver.{u} X) :=
   fun A ↦ PreconnectedSpace (A.left : Type u) ∧ T2Space (A.left : Type u)

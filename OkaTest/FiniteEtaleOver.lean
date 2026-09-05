@@ -383,9 +383,16 @@ closes this, and what it measures is that the base hypothesis is reachable at th
 repository exhibits covers over — the seam the two instances above exist to bridge is on the
 *total space* and does not recur on the base.
 
-**The point of the base is universally quantified and no point is exhibited.** Whether
-`ComplexAnalytic.punctured` is inhabited in a form this file can produce is a separate question
-and nothing here answers it; the statement is about every point there is. -/
+**The point of the base is universally quantified, and the family it quantifies over is not
+empty.** `ComplexAnalytic.nonempty_restrict_punctured` (`OkaTest/FiniteMorphism.lean`, imported
+above) is an `instance`, and its witness is explicit rather than a choice principle — `1` carried
+back across `ComplexAnalytic.puncturedHomeo` — so what is producible here is a **point** of this
+base and not merely a `Nonempty`; `degree_sqOver` above already spends that instance, through
+`ComplexAnalytic.degree_sq`, whose docstring says it is the only hypothesis that result costs.
+**It is also what lets the complement clause of `isPreconnectedT2_sqOver` above reach**
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.not_preconnectedSpace_trivial`, which asks
+`[Nonempty X]` of the base. What is not done here is fixing a *particular* point: the statement is
+about every point there is. -/
 theorem faithful_fiberFunctor_punctured
     (x : ((AnalyticSpace.complexAffineSpace.{u} 1).restrict
       ComplexAnalytic.punctured.{u} : Type u)) :
