@@ -237,6 +237,46 @@ paragraph cheap to have installed**, not the rule: a rule that grows and is not 
 failure this file exists to prevent, and `scripts/` cannot do this one either, for the reason the
 checker sentence above gives.
 
+**The rule has a fourth object, and where the counting three — declarations of a file, guards of a
+section, rows of a table or of the dump — all turn on a numeral, this one carries none: a pointer
+that reaches a member of a list by its position, *the last row* or *the first bullet* or *the
+third of those*, is falsified by the next append or reorder exactly as a count is falsified by the
+next append.** Nothing in it matches on a digit or on a number word standing for one, so no scan
+written for the counting objects can see it; and unlike them it is not greppable even in
+principle, because *the last row*, *the bullet above* and *the section below* are ordinary
+English, and an occurrence has to be read to tell whether the thing it points into is one that
+grows.
+
+**The asymmetry with the enumeration exemption is what makes this an object of its own rather than
+a case of a counting one.** That exemption acquits a numeral by redundancy: the passage names what
+it counts, so striking the numeral leaves the same passage stale in the same place, saying the
+same wrong thing. **A positional pointer has no naming to be redundant with** — it *is* the
+reference, and striking it leaves the sentence with no subject. So the exemption that acquits the
+counting objects cannot reach this one, and the repair is not to add a figure but to put the name
+where the position was.
+
+**The rot is not hypothetical and this tree records an instance of it.**
+`Oka/Analytification/RefineDatumCover.lean`'s `## What is not here` says of a section it points
+at that *"it was the last section of this file when that sentence was written and is no longer, so
+it is named here rather than counted"* — a pointer that went wrong under an append, repaired by
+naming the section it meant, `### The condition at an index map that is the identity`. **That
+repair is the spelling to copy**, and it was written before the shape had a name.
+
+**This file was carrying one of these, in its own account of the mirror-tree tail**, where *"read
+a consumer off the imports, not off a name grep"* reached a bullet of that account by position; it
+now names `Oka/CategoryTheory/GlueData.lean`, which is that bullet's subject. `README.md`'s
+account of why the `docBlameThm` linter stays off carried another, pointing into the table of what
+generates findings; it now names the `@[simps]` and `@[mk_iff]` row. **Both were true when they
+were written and neither was pinned to anything**, which is the whole of the difference between
+this object and a record.
+
+**The sweep is owed and is not in this push; taxis #1709 carries it**, with a scan that narrows
+the tree to the clauses worth reading and an account of what that scan does and does not reach.
+What no scan can do is decide membership, which turns on whether the thing pointed into grows, and
+that has to be read. **Do not answer this one with a checker either**: the refusal recorded for
+the counting objects applies unchanged, and here it is stronger, since there is not even a numeral
+to anchor a pattern on.
+
 **Most mirror-tree material is routed by a row, and a small tail of it is deliberately routed by
 none.** `README.md`'s *Layout: the Mathlib mirror tree* defines a mirror-tree file by its path — a
 file under `Oka/` mirroring a path under `Mathlib/`, holding no complex-analytic mathematics and
@@ -283,10 +323,10 @@ that record enumerates, these sit apart from their consumers' guards:
   repository does not guard. There is no analytic result to place it beside.
 
 **Read a consumer off the imports, not off a name grep.** All three were got wrong that way
-before they were measured, and the first was got wrong in the draft of this very paragraph:
-`ofGlueData'` is Mathlib's name and several files mention it, only one imports the module that
-proves things about it. Moving any of them is a tidy-up nobody has done and not a defect in the
-table.
+before they were measured, and `Oka/CategoryTheory/GlueData.lean` was got wrong in the draft of
+this very paragraph: `ofGlueData'` is Mathlib's name and several files mention it, only one
+imports the module that proves things about it. Moving any of them is a tidy-up nobody has done
+and not a defect in the table.
 **The figure is here so that a later sweep can tell growth from noise**: a tail that stays near
 this size is the expected one, and a tail that doubles means a row really is missing.
 
