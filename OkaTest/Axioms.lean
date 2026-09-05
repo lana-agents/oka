@@ -265,11 +265,11 @@ At `27c185a` that tail is **18 guards in six modules**, against 645 in all: seve
 `Oka/CategoryTheory/Limits/Shapes/KernelBiprod.lean` (in `OkaTest/Axioms/SheafOfModules.lean`),
 `Oka/Topology/Category/TopCat/Opens.lean` (in `OkaTest/Axioms/Analytification.lean`) and
 `Oka/FieldTheory/IsAlgClosed/Basic.lean` (in `OkaTest/Axioms/RingTheory.lean`). **The rule above
-is being written down for the first time and the tail does not yet follow it**: three of the six
-modules sit in a file holding some of their consumer's guards and three do not, and by guards the
-minority is the larger — **7 of the 18 conform and 11 do not.** The three that do not:
+was being written down for the first time when that tail was measured, and the tail did not
+follow it**, and the members that do not are named here rather than counted. Of the six modules
+that record enumerates, these sit apart from their consumers' guards:
 
-* **`Oka/CategoryTheory/GlueData.lean`**, the largest member at seven. Its only importer is
+* **`Oka/CategoryTheory/GlueData.lean`**, the largest member. Its only importer is
   `Oka/Analytification/AffineCover.lean`, whose guards are all in
   `OkaTest/Axioms/Analytification.lean`; and its guards sit under a heading of their own rather
   than under an analytic result's, so it fails both halves of the rule.
@@ -289,6 +289,29 @@ proves things about it. Moving any of them is a tidy-up nobody has done and not 
 table.
 **The figure is here so that a later sweep can tell growth from noise**: a tail that stays near
 this size is the expected one, and a tail that doubles means a row really is missing.
+
+**That test has been run at `a8c2f63` and it does not answer on its own terms.** Re-counting the
+six modules that record enumerates gives **22** guards there against the 18 recorded, with
+`Oka/CategoryTheory/GlueData.lean`, `Oka/Topology/IsLocalHomeomorph.lean` and
+`Oka/FieldTheory/IsAlgClosed/Basic.lean` the larger side at **14** to 8 — growth the doubling
+criterion reads as noise. But the tail is what the routing table leaves unrouted and not that
+record's list, and at `a8c2f63` three further mirror-tree modules carry guards and are routed by
+no row of it: `Oka/Analysis/Calculus/Implicit.lean`, whose guards are the level-set and
+local-homeomorphism criteria that put `Oka/Topology/IsLocalHomeomorph.lean` in the tail already,
+with six in `OkaTest/Axioms/Morphisms.lean`; and `Oka/SetTheory/Cardinal/Finite.lean` and
+`Oka/Logic/Equiv/Set.lean`, which no row names at all, with one each in
+`OkaTest/Axioms/Morphisms.lean` too and both beside the degree results that consume them — which
+is this rule being followed. Read that way the tail is **30 guards in nine modules** at
+`a8c2f63`, and every module that joined it is one the `27c185a` record does not name.
+**Re-counting the modules a record enumerates answers a question about those modules, and this
+test is about the tail**: a missing row shows up as a new member and not as a bigger one.
+
+**Two modules look like that case and are not**, and the difference is the whole of the criterion.
+`Oka/Algebra/MvPolynomial/PDeriv.lean` and `Oka/Algebra/MvPolynomial/Taylor.lean` are mirror-tree
+and are guarded in `OkaTest/Axioms/Analytification.lean`, but the general commutative ring theory
+row does name their subject — `Oka/Algebra/MvPolynomial/Equiv.lean` and
+`Oka/Algebra/MvPolynomial/Funext.lean` are guarded under it. **A routed module guarded elsewhere
+is a different question from a module no row routes**, and this paragraph does not take it.
 
 ## What these guards cover, and what they do not
 
