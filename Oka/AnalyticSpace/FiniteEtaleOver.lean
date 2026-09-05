@@ -118,8 +118,10 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   a morphism of covers divides the degree of its source** — the first statement here that relates
   the degrees of two objects the category does not identify.
 - `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_left_eq_one`: **a morphism between covers
-  of equal, non-zero degree has degree one**. What that does *not* give is that the morphism is an
-  isomorphism; see `## What is not here`.
+  of equal, non-zero degree has degree one**. **This bullet used to say that what it does not give
+  is that the morphism is an isomorphism, and that the reader should see `## What is not here` for
+  why**; it is still what *this* theorem does not give, and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isIso_of_bijective_fiberMap` gives it.
 - `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_iso_trivial_id` and
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_eq_of_iso_trivial`: **the trivial covers of a
   non-empty base are pairwise non-isomorphic**, indexed by `Nat.card`, so the category there has
@@ -197,6 +199,23 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2` and over a preconnected base.
   This is the class rather than a statement quantified by hand, and it is what `## What is not
   here` used to say no subcategory had been exhibited for.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isIso_of_bijective_fiberMap`: **a morphism of
+  covers whose fibre map at one point of the base is bijective is an isomorphism** — the
+  statement `## What is not here` recorded as the thing nothing supplied, with no hypothesis of
+  non-emptiness on either object.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.reflectsIsomorphisms_fiberFunctor` and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.reflectsIsomorphisms_fintypeFiberFunctor`:
+  **`CategoryTheory.Functor.ReflectsIsomorphisms` for both fibre functors** — conservativity — on
+  the same full subcategory and over the same preconnected base as the faithfulness above, so the
+  two are read as a pair.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isIso_of_isIso_left` and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_left_of_isEmpty_fiber`: **what
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isIso_of_bijective_fiberMap` is built out of**,
+  and neither is about covers in particular —
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isIso_of_isIso_left` reflects an isomorphism
+  along the two forgetful functors of the comma category, and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_left_of_isEmpty_fiber` reads
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.nonempty_fiber` backwards.
 - `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isTerminalId` and
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasTerminal`: **the base over itself is a terminal
   object of the category, and so the category has one** — with no hypothesis on the base, the
@@ -326,28 +345,35 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   no longer among the absences, and this paragraph used to be mostly about it.**
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hom_ext_of_fiberFunctor_map_eq` says that two
   morphisms of covers whose images under the functor agree at one point of a fibre are **equal**,
-  over a preconnected source and a Hausdorff total space of the target. **Conservativity is
-  untouched by that** — nothing turns an equivalence of fibres into an isomorphism of covers —
-  and nothing exhibits the functor as an equivalence onto anything.
+  over a preconnected source and a Hausdorff total space of the target. **Conservativity is no
+  longer among the absences either** —
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.reflectsIsomorphisms_fiberFunctor` is it, on the
+  same subcategory and at the same hypothesis on the base — but **nothing exhibits the functor as
+  an equivalence onto anything**, and that clause of this bullet is untouched by any of it.
 
-  **What this file supplies towards conservativity is the degree, and the pieces of the argument
-  it is not the whole of live in different files.**
+  **This bullet said that nothing turns an equivalence of fibres into an isomorphism of covers,
+  and what made that false arrived in pieces, each from a different push.**
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_fiber` turns an equivalence of fibres at one
-  point of a preconnected base into an equality of the two objects' degrees, and
+  point of a preconnected base into an equality of the two objects' degrees;
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_left_eq_one` turns that equality — when
-  the common degree is not `0` — into `AnalyticSpace.degree f.left = 1`.
-
-  **The step from degree one to invertibility was recorded here as absent and is not absent any
-  more.** `ComplexAnalytic.AnalyticSpace.isIso_of_degree_eq_one` (`Oka/AnalyticSpace/Degree.lean`)
-  concludes an isomorphism of analytic spaces, where
+  the common degree is not `0` — into `AnalyticSpace.degree f.left = 1`; and
+  `ComplexAnalytic.AnalyticSpace.isIso_of_degree_eq_one` (`Oka/AnalyticSpace/Degree.lean`) turns
+  *that* into an isomorphism of analytic spaces, where
   `ComplexAnalytic.AnalyticSpace.isHomeomorph_base_of_degree_eq_one` stops at a homeomorphism of
-  the underlying spaces. **What separates the chain above from conservativity is therefore no
-  longer a missing theorem, and it is not nothing either.** Two obligations remain and neither is
-  discharged anywhere in this development: `ComplexAnalytic.AnalyticSpace.isIso_of_degree_eq_one`
-  asks its target to be non-empty, which nothing in the chain supplies; and its conclusion is an
-  invertibility of `f.left`, the underlying morphism, where conservativity wants one of `f`, and
-  carrying the first to the second is a statement about the comma category that **is not measured
-  here**. So the sentence above about conservativity stands as it is written.
+  the underlying spaces.
+
+  **Two obligations were recorded here as separating that chain from conservativity, and both
+  turned out to be cheap.** The first is that `isIso_of_degree_eq_one` asks its target to be
+  non-empty and nothing in the chain supplies it: that is not paid but **removed**, by
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_left_of_isEmpty_fiber`, which closes the
+  empty branch without a degree in it. The second is that the conclusion is an invertibility of
+  `f.left` where conservativity wants one of `f`: that is
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isIso_of_isIso_left`, and it was two Mathlib
+  reflections composed rather than a statement anybody had to prove about this category.
+  **What made the first look like a price is that it is one for the theorem and not for the
+  statement**: a `[Nonempty]` hypothesis would have been discharged by no object of
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2`, so paying it would have cost
+  the `CategoryTheory.Functor.ReflectsIsomorphisms` instance and not only a line.
 
   **`CategoryTheory.Functor.Faithful` is here now, on a full subcategory** —
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.faithful_fiberFunctor` and
@@ -559,6 +585,29 @@ theorem isIso_hom_of_iso_id {X : AnalyticSpace.{u}} {A : FiniteEtaleOver.{u} X}
       CategoryTheory.Over.w ((MorphismProperty.Over.forget _ ⊤ X).map e.hom)
     exact (Category.comp_id _).symm.trans hw
   rwa [h2] at h1
+
+/-- **A morphism of covers whose underlying morphism is invertible is invertible.**
+
+The category is `CategoryTheory.MorphismProperty.Over isFiniteEtale ⊤ X`, whose morphisms carry
+no condition, so this ought to be free — and it is, twice over, but **neither reflection alone
+has `f.left` as its `map` and that is why the composite has to be written out**.
+`CategoryTheory.MorphismProperty.Comma.forget` reflects isomorphisms at
+`[Q.RespectsIso] [W.RespectsIso]`, which `⊤` supplies, and it lands in
+`CategoryTheory.Over X`; `CategoryTheory.Over.forget` reflects them too and lands in
+`ComplexAnalytic.AnalyticSpace`. `CategoryTheory.MorphismProperty.Over.forget_comp_forget_map`
+says the composite's action on a morphism **is** `f.left`, by `rfl`, and that is the functor
+`CategoryTheory.isIso_of_reflects_iso` has to be handed.
+
+**The same composite is what `ComplexAnalytic.AnalyticSpace.isIso_hom_of_iso_id`
+above transports an isomorphism along**, in the preservation direction where every functor works;
+this is the reflection, and it needs the two `ReflectsIsomorphisms` instances that direction does
+not. -/
+theorem FiniteEtaleOver.isIso_of_isIso_left {X : AnalyticSpace.{u}}
+    {A B : FiniteEtaleOver.{u} X} (f : A ⟶ B) (h : IsIso f.left) : IsIso f := by
+  haveI : IsIso ((MorphismProperty.Over.forget isFiniteEtale.{u} ⊤ X ⋙
+      CategoryTheory.Over.forget X).map f) := h
+  exact isIso_of_reflects_iso f
+    (MorphismProperty.Over.forget isFiniteEtale.{u} ⊤ X ⋙ CategoryTheory.Over.forget X)
 
 /-! ### The terminal object -/
 
@@ -1304,7 +1353,10 @@ reaches. **Of the three it is the point that comes off**, and it comes off at th
 hypothesis on the base:
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hom_ext_of_forall_fiberMap_eq` below asks for the
 whole fibre and no point of it, over a preconnected base, and the class then holds on the full
-subcategory the other two hypotheses cut out. **Nothing here or there bears on conservativity.**
+subcategory the other two hypotheses cut out. **Neither of those two theorems bears on
+conservativity**, which is a statement about one morphism and not about a pair of them; what does
+is `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.reflectsIsomorphisms_fiberFunctor` at the foot
+of this file, and it holds on that same full subcategory.
 
 **The empty fibre is not the obstruction it was read as.** This docstring used to give the trivial
 cover at an empty index type as the reason the point is *not a technicality*; the fibre there is
@@ -1355,6 +1407,23 @@ theorem FiniteEtaleOver.nonempty_fiber {X : AnalyticSpace.{u}} [PreconnectedSpac
       (((Functor.fromPUnit.{0} X).obj A.right : AnalyticSpace.{u}) : Type u) :=
     inferInstanceAs (PreconnectedSpace (X : Type u))
   ⟨⟨_, (surjective_base_of_isFiniteEtale A.hom x).choose_spec⟩⟩
+
+/-- **An empty fibre over a preconnected base forces the total space to be empty.**
+
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.nonempty_fiber` above read backwards, and it is
+the direction a caller wants when it has a fibre in hand and no point of the total space:
+over a preconnected base a cover with a point has a point over *every* point of the base, so a
+fibre that is empty anywhere leaves nothing in the total space at all.
+
+**No hypothesis on the point and none on the total space.** The `[Nonempty A.left]` that
+`nonempty_fiber` asks for is what this concludes the negation of, so it cannot be assumed here;
+the instance is introduced inside the proof, in the branch where it is being refuted. -/
+theorem FiniteEtaleOver.isEmpty_left_of_isEmpty_fiber {X : AnalyticSpace.{u}}
+    [PreconnectedSpace (X : Type u)] (A : FiniteEtaleOver.{u} X) (x : X)
+    (h : IsEmpty (FiniteEtaleOver.fiber.{u} x A)) : IsEmpty (A.left : Type u) := by
+  by_contra hc
+  haveI : Nonempty (A.left : Type u) := not_isEmpty_iff.mp hc
+  exact (FiniteEtaleOver.nonempty_fiber.{u} A x).elim h.elim
 
 /-- **Two morphisms of covers that agree on the whole fibre over a point of a preconnected base
 are equal — and no point of that fibre is assumed.**
@@ -1817,16 +1886,143 @@ than as `[Nonempty X]` is deliberate — non-emptiness of the base does not by i
 cover's degree non-zero, since the empty cover of a non-empty base is finite étale and has degree
 `0`, and it is the cover being non-empty over each point that the hypothesis really wants.
 
-**What this does not say is that `f` is an isomorphism**, and the reason is no longer that the
-step from degree one to invertibility is missing:
-`ComplexAnalytic.AnalyticSpace.isIso_of_degree_eq_one` (`Oka/AnalyticSpace/Degree.lean`) is that
-step. What is missing is smaller and is still missing — that theorem asks its target to be
-non-empty, which nothing here supplies, and it would conclude an invertibility of `f.left` and not
-of `f`. This file's `## What is not here` says which of the two is which. -/
+**What this does not say is that `f` is an isomorphism**, and that is now a fact about this
+statement rather than about the tree:
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isIso_of_bijective_fiberMap` below says it, from a
+bijection of fibres rather than from an equality of degrees, and this theorem is the middle step
+of its proof. Degree one is a statement about the fibres of `f.left`; getting from it to
+invertibility is `ComplexAnalytic.AnalyticSpace.isIso_of_degree_eq_one`
+(`Oka/AnalyticSpace/Degree.lean`) followed by
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isIso_of_isIso_left`. -/
 theorem FiniteEtaleOver.degree_left_eq_one {X : AnalyticSpace.{u}} {A B : FiniteEtaleOver.{u} X}
     (f : A ⟶ B) [T2Space A.left] [T2Space B.left] [PreconnectedSpace B.left]
     [PreconnectedSpace (X : Type u)] (h : A.degree = B.degree) (hB : B.degree ≠ 0) :
     AnalyticSpace.degree f.left = 1 :=
   (Nat.mul_eq_right hB).mp ((FiniteEtaleOver.degree_eq_mul.{u} f).symm.trans h)
+
+/-! ### Conservativity of the fibre functor -/
+
+/-- **A morphism of covers whose fibre map at one point of the base is bijective is an
+isomorphism.**
+
+This is the chain the `## What is not here` bullet describes, closed. `card_fiber` turns the
+bijection into an equality of the two degrees, `degree_left_eq_one` turns that equality into
+`AnalyticSpace.degree f.left = 1`, `ComplexAnalytic.AnalyticSpace.isIso_of_degree_eq_one`
+(`Oka/AnalyticSpace/Degree.lean`) turns *that* into an isomorphism of analytic spaces, and
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isIso_of_isIso_left` carries it back to this
+category. **The bijection is used at one point of the base and nothing is assumed at any other.**
+
+**There is no `[Nonempty]` hypothesis, and its absence is the whole reason the instances below
+are instances.** `isIso_of_degree_eq_one` asks its target to be non-empty and nothing in the
+chain supplies that; `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2` does not
+carry it either, since `PreconnectedSpace` is preconnectedness of `Set.univ` and does not ask for
+a point. **So the empty case is closed rather than assumed away**, and it closes without a
+degree: a bijective fibre map into an empty total space empties the source's fibre,
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_left_of_isEmpty_fiber` empties the source,
+and a morphism between two empty spaces is bijective on points for want of points, so
+`ComplexAnalytic.AnalyticSpace.isIso_of_isLocalIso_of_bijective`
+(`Oka/AnalyticSpace/LocalIso.lean`) applies directly. **A `[Nonempty B.left]` hypothesis would
+have made this a theorem the subcategory below cannot discharge.**
+
+**Where the hypotheses go.** `[T2Space A.left]` and `[PreconnectedSpace B.left]` are what
+`degree_left_eq_one` needs of the first factor of the triangle, `[T2Space B.left]` and
+`[PreconnectedSpace X]` are what it needs of the second, and `[PreconnectedSpace X]` is also what
+`isEmpty_left_of_isEmpty_fiber` spends. In particular `[PreconnectedSpace A.left]` is **not**
+asked for, so this is not a statement about the connected covers only.
+
+**`IsFiniteEtale f.left` is derived and not assumed.** A morphism of this category carries no
+condition — the second `⊤` in its definition says so — and the class comes back from
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp` at the triangle, which is the same
+opening `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_eq_mul` above has, and it needs
+the named binder `(X := B.left)` for the same reason. -/
+theorem FiniteEtaleOver.isIso_of_bijective_fiberMap {X : AnalyticSpace.{u}}
+    {A B : FiniteEtaleOver.{u} X} (f : A ⟶ B)
+    [T2Space (A.left : Type u)] [T2Space (B.left : Type u)]
+    [PreconnectedSpace (B.left : Type u)] [PreconnectedSpace (X : Type u)] (x : X)
+    (hf : Function.Bijective (FiniteEtaleOver.fiberMap.{u} x f)) : IsIso f := by
+  have hw : f.left ≫ B.hom = A.hom := MorphismProperty.Over.w f
+  haveI : IsFiniteEtale (X := B.left) B.hom := B.prop
+  haveI : IsLocalIso (X := B.left) B.hom := IsFiniteEtale.isLocalIso
+  haveI : IsFiniteEtale (f.left ≫ B.hom) := hw ▸ (A.prop : IsFiniteEtale A.hom)
+  haveI : IsFiniteEtale f.left := isFiniteEtale_of_comp f.left B.hom
+  refine FiniteEtaleOver.isIso_of_isIso_left f ?_
+  rcases isEmpty_or_nonempty (B.left : Type u) with hB | hB
+  · haveI : IsEmpty (FiniteEtaleOver.fiber.{u} x B) := ⟨fun a ↦ isEmptyElim a.1⟩
+    haveI : IsEmpty (FiniteEtaleOver.fiber.{u} x A) :=
+      Function.isEmpty (FiniteEtaleOver.fiberMap.{u} x f)
+    haveI := FiniteEtaleOver.isEmpty_left_of_isEmpty_fiber.{u} A x this
+    exact isIso_of_isLocalIso_of_bijective f.left
+      ⟨fun a _ _ ↦ isEmptyElim a, fun b ↦ isEmptyElim b⟩
+  · have hdeg : A.degree = B.degree := by
+      rw [← FiniteEtaleOver.card_fiber A x, ← FiniteEtaleOver.card_fiber B x]
+      exact Nat.card_eq_of_bijective _ hf
+    have hne : B.degree ≠ 0 := by
+      rw [← FiniteEtaleOver.card_fiber B x]
+      haveI := FiniteEtaleOver.nonempty_fiber.{u} B x
+      exact Nat.card_pos.ne'
+    exact isIso_of_degree_eq_one f.left (FiniteEtaleOver.degree_left_eq_one.{u} f hdeg hne)
+
+/-- **The fibre functor is conservative** on the covers whose total space is preconnected and
+Hausdorff, over a preconnected base.
+
+`CategoryTheory.Functor.ReflectsIsomorphisms` on exactly the subcategory and at exactly the
+hypothesis on the base that
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.faithful_fiberFunctor` asks for, so the two read
+as a pair. What it says is that a morphism of covers carried to a bijection of fibres over one
+point **is** an isomorphism, where faithfulness says only that two morphisms agreeing there are
+equal.
+
+**Being an isomorphism in `Type u` is bijectivity of the underlying map**, by
+`CategoryTheory.isIso_iff_bijective`, which is what connects the functor's conclusion to
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isIso_of_bijective_fiberMap` above.
+
+**The explicit instance arguments are the comma category's seam**, exactly as
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.faithful_fiberFunctor`'s docstring records:
+`A.property.2` is `T2Space A.obj.left` and the goal wants it at
+`((FiniteEtaleOver.isPreconnectedT2 X).ι.obj A).left`, the same by `rfl` and not reducibly so, so
+instance search does not cross between them. **A `haveI` does not repair it and passing the
+fields positionally does.** -/
+instance FiniteEtaleOver.reflectsIsomorphisms_fiberFunctor {X : AnalyticSpace.{u}}
+    [PreconnectedSpace (X : Type u)] (x : X) :
+    ((FiniteEtaleOver.isPreconnectedT2.{u} X).ι
+      ⋙ FiniteEtaleOver.fiberFunctor.{u} x).ReflectsIsomorphisms where
+  reflects {A B} f h := by
+    haveI : IsIso ((FiniteEtaleOver.fiberFunctor.{u} x).map
+      ((FiniteEtaleOver.isPreconnectedT2 X).ι.map f)) := h
+    have hb : Function.Bijective (FiniteEtaleOver.fiberMap.{u} x
+        ((FiniteEtaleOver.isPreconnectedT2 X).ι.map f)) :=
+      (isIso_iff_bijective (X := FiniteEtaleOver.fiber.{u} x A.obj) _).mp this
+    haveI : IsIso ((FiniteEtaleOver.isPreconnectedT2.{u} X).ι.map f) :=
+      @FiniteEtaleOver.isIso_of_bijective_fiberMap X A.obj B.obj _
+        A.property.2 B.property.2 B.property.1 ‹_› x hb
+    exact isIso_of_reflects_iso f (FiniteEtaleOver.isPreconnectedT2.{u} X).ι
+
+/-- **The same for the `FintypeCat`-valued fibre functor**, which is the one a Galois category
+asks for.
+
+**Not derived from the `Type u`-valued instance above and not a restatement of it**, for the
+reason `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fintypeFiberFunctor_map_injective` gives
+about its own pair: the two functors have the same `map` up to the bundling their targets ask for
+— `TypeCat.ofHom` there and `FintypeCat.homMk` here — so `IsIso` of one is not `IsIso` of the
+other, and the bijectivity has to be read off through the concrete-category forgetful functor,
+`CategoryTheory.ConcreteCategory.isIso_iff_bijective`, rather than through
+`CategoryTheory.isIso_iff_bijective`. **`FintypeCat` has no forgetful functor in its own
+namespace** — `CategoryTheory.forget` is the one, through the `CategoryTheory.ConcreteCategory`
+instance, and `FintypeCat.incl` lands in `Type*` without being it. -/
+instance FiniteEtaleOver.reflectsIsomorphisms_fintypeFiberFunctor {X : AnalyticSpace.{u}}
+    [PreconnectedSpace (X : Type u)] (x : X) :
+    ((FiniteEtaleOver.isPreconnectedT2.{u} X).ι
+      ⋙ FiniteEtaleOver.fintypeFiberFunctor.{u} x).ReflectsIsomorphisms where
+  reflects {A B} f h := by
+    haveI : IsIso ((FiniteEtaleOver.fintypeFiberFunctor.{u} x).map
+        ((FiniteEtaleOver.isPreconnectedT2 X).ι.map f)) := h
+    have hb : Function.Bijective (FiniteEtaleOver.fiberMap.{u} x
+        ((FiniteEtaleOver.isPreconnectedT2 X).ι.map f)) :=
+      (ConcreteCategory.isIso_iff_bijective ((FiniteEtaleOver.fintypeFiberFunctor.{u} x).map
+        ((FiniteEtaleOver.isPreconnectedT2 X).ι.map f))).mp this
+    haveI : IsIso ((FiniteEtaleOver.isPreconnectedT2.{u} X).ι.map f) :=
+      @FiniteEtaleOver.isIso_of_bijective_fiberMap X A.obj B.obj _
+        A.property.2 B.property.2 B.property.1 ‹_› x hb
+    exact isIso_of_reflects_iso f (FiniteEtaleOver.isPreconnectedT2.{u} X).ι
 
 end ComplexAnalytic.AnalyticSpace

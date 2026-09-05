@@ -2479,3 +2479,69 @@ info:
 #guard_msgs (whitespace := lax) in
 #print axioms
   ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_fintypeFiberFunctor
+
+/-! ### The fibre functor is conservative, on the same covers it is faithful on
+
+`Oka/AnalyticSpace/FiniteEtaleOver.lean`: a morphism of covers whose fibre map at one point of the
+base is bijective, the two general steps that make that statable, and the
+`CategoryTheory.Functor.ReflectsIsomorphisms` instances for both fibre functors. Appended as its
+own section rather than merged into
+`### The fibre functor is faithful, as a class, on the connected Hausdorff covers`, for the reason
+that section itself gives about a guard going in the section of the push that added it.
+
+**Conservativity and faithfulness hold on the same full subcategory and under the same hypothesis
+on the base**, which is what makes the pairing worth stating: the objects named in
+`Oka/AnalyticSpace/FiniteEtaleOver.lean` for the one are objects for the other, and no new
+subcategory is cut out here.
+
+**`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isIso_of_isIso_left` is guarded although it says
+nothing about fibres and nothing about finiteness.** It reflects an isomorphism along the two
+forgetful functors of the comma category and would make sense at every
+`CategoryTheory.MorphismProperty.Over`; it is guarded here because this push is what added it and
+because a guard of a corollary does not guard what it is a corollary of, which is the reason the
+sections above give for guarding a statement and its consumer separately.
+
+**`Classical.choice` is in every guard below and none of them introduces it.** It arrives through
+the covering-map rung, as the faithfulness section records, and reaches even the statement that
+reads no fibre: `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_left_of_isEmpty_fiber`
+goes through the clopen dichotomy. **The `[propext]`-only guard on this line is
+`Set.preimageCompEquivSigma`**, in the degree section, and nothing below joins it.
+
+**Named by file rather than counted**, as the sections above say and for the reason they give.
+
+**Named and not located.** No sentence here says which section is above or below it. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isIso_of_isIso_left' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isIso_of_isIso_left
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_left_of_isEmpty_fiber' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_left_of_isEmpty_fiber
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isIso_of_bijective_fiberMap' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isIso_of_bijective_fiberMap
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.reflectsIsomorphisms_fiberFunctor' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.reflectsIsomorphisms_fiberFunctor
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.reflectsIsomorphisms_fintypeFiberFunctor'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.reflectsIsomorphisms_fintypeFiberFunctor

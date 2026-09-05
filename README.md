@@ -253,10 +253,16 @@ coherence statement for arbitrary complex analytic spaces:
   morphism of covers, so `…FiniteEtaleOver.degree_dvd_degree` says the degree of the target
   divides the degree of the source and `…FiniteEtaleOver.degree_left_eq_one` says a morphism
   between covers of equal non-zero degree has degree one. **That is the degree half of
-  conservativity of the fibre functor, and the isomorphism half is no longer a missing theorem**:
-  what still separates the two is that `…isIso_of_degree_eq_one` asks its target to be non-empty
-  and concludes an invertibility of the underlying morphism rather than of the morphism of covers.
-  Neither of the two pushes that supplied the halves composed them.
+  conservativity of the fibre functor, and the two halves are composed now**:
+  `…FiniteEtaleOver.isIso_of_bijective_fiberMap` says a morphism of covers whose fibre map at one
+  point is bijective is an isomorphism, and `…FiniteEtaleOver.reflectsIsomorphisms_fiberFunctor`
+  is that as `CategoryTheory.Functor.ReflectsIsomorphisms`, on the same subcategory as the
+  faithfulness beside it. **This paragraph priced the gap at two obligations — a non-empty target
+  and an invertibility of the underlying morphism rather than of the morphism of covers — and
+  neither was a price**: the first is removed by closing the empty case rather than paid, and the
+  second is two Mathlib reflections composed. **What is still absent is base change**, for want
+  of pullbacks of analytic spaces, so this is two of a Galois category's axioms and not the
+  structure.
   `ComplexAnalytic.isCoveringMap_base_sq` applies the rung to the
   squaring map, and is a test of the rung rather than new information about `z ↦ z²`, which
   Mathlib already covers. **There is still no notion of a covering *of analytic spaces***: this is
