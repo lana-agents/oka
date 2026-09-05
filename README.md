@@ -231,7 +231,21 @@ coherence statement for arbitrary complex analytic spaces:
   isomorphisms ought to give an isomorphism of analytic spaces, but the step from the two to one is
   a comparison of the structure sheaves across a homeomorphism which is not here. So the degree is
   at present an invariant of the underlying map: `ComplexAnalytic.not_isIso_sq` is **not** reproved
-  from it, and multiplicativity in a composite is not proved either.
+  from it. **Multiplicativity in a composite stood in that sentence as unproved and is proved
+  now** — `ComplexAnalytic.AnalyticSpace.degree_comp` — and it is an invariant of the underlying
+  map in the same sense as everything else here: the fibrewise count over the intermediate space
+  is elementary and lives in the mirror tree
+  (`Nat.card_preimage_singleton_comp` in `Oka/SetTheory/Cardinal/Finite.lean`), while every
+  hypothesis it is stated under comes from applying
+  `ComplexAnalytic.AnalyticSpace.degree_eq_card_fiber` at each of the two factors, which is why
+  the intermediate space has to be Hausdorff and preconnected and not only the target. **What that
+  buys on the category of covers is a relation between two objects that are not isomorphic**:
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_eq_mul` reads it at the triangle of a
+  morphism of covers, so `…FiniteEtaleOver.degree_dvd_degree` says the degree of the target
+  divides the degree of the source and `…FiniteEtaleOver.degree_left_eq_one` says a morphism
+  between covers of equal non-zero degree has degree one. **That is the degree half of
+  conservativity of the fibre functor and not the isomorphism half**, which is the step from
+  degree one to invertibility and is the same missing comparison of sheaves as above.
   `ComplexAnalytic.isCoveringMap_base_sq` applies the rung to the
   squaring map, and is a test of the rung rather than new information about `z ↦ z²`, which
   Mathlib already covers. **There is still no notion of a covering *of analytic spaces***: this is

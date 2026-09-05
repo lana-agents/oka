@@ -54,8 +54,32 @@ across a homeomorphism which this development does not have; `Oka/AnalyticSpace/
 records the same gap from the other side. So `ComplexAnalytic.not_isIso_sq` is *not* reproved
 here, and the degree of a morphism is at present a topological invariant of it.
 
-Multiplicativity in a composite is not proved either. It is true, and the proof is a fibrewise
-count over the intermediate space that has nothing to do with the material below.
+## Multiplicativity in a composite, and what the count actually costs
+
+The paragraph that stood here said multiplicativity was *not proved either*, that it is true, and
+that *the proof is a fibrewise count over the intermediate space that has nothing to do with the
+material below*. **The prediction was right and `ComplexAnalytic.AnalyticSpace.degree_comp` is
+it.** The count is `Nat.card_preimage_singleton_comp` (`Oka/SetTheory/Cardinal/Finite.lean`), a
+statement about three bare functions with no topology and no analytic content in it, and it does
+have nothing to do with the material above.
+
+**What the count does not supply is the hypotheses, and they all come from one place.** The fibre
+of the composite over a point of the target has to be counted as the fibres of the first map over
+the fibre of the second, so *both* of those counts have to be known to be independent of the point
+they are taken at, and that is `ComplexAnalytic.AnalyticSpace.degree_eq_card_fiber` applied twice
+— once at each factor. Its `[T2Space]` and `[PreconnectedSpace]` are why `degree_comp` asks for a
+Hausdorff source, a Hausdorff *and* preconnected intermediate space and a preconnected target,
+where the count itself asks for nothing but finiteness. **Whether the separation axioms can be
+weakened is not measured here.**
+
+**Preconnectedness of the intermediate space is the hypothesis a reader should look at twice.** It
+is not a hypothesis about the composite at all: it says the *middle* of the factorisation is
+connected, and the trivial cover of a connected base already fails it at more than one sheet. So
+`degree_comp` is not a statement about arbitrary factorisations of a finite étale morphism, and
+the consumer it was written for —
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_eq_mul`
+(`Oka/AnalyticSpace/FiniteEtaleOver.lean`) — carries it as a hypothesis on the target cover rather
+than discharging it.
 
 ## Main definitions
 
@@ -71,6 +95,10 @@ count over the intermediate space that has nothing to do with the material below
 - `ComplexAnalytic.AnalyticSpace.bijective_base_iff_degree_eq_one` and
   `ComplexAnalytic.AnalyticSpace.isHomeomorph_base_of_degree_eq_one`: **degree one means the
   underlying map is a homeomorphism.**
+- `ComplexAnalytic.AnalyticSpace.degree_comp`: **the degree is multiplicative in a composite**,
+  over a preconnected target and a Hausdorff, preconnected intermediate space. The empty target is
+  not excluded: both sides are `0` there and the case is closed separately rather than by a
+  `[Nonempty _]` on the statement.
 - `ComplexAnalytic.AnalyticSpace.degree_comp_of_bijective_base` and
   `ComplexAnalytic.AnalyticSpace.degree_isIso_comp`: **the degree does not see a change of source**
   — precomposing with a morphism that is bijective on points, in particular with an isomorphism,
@@ -279,5 +307,49 @@ theorem isHomeomorph_base_of_degree_eq_one (f : X ⟶ Y) [IsFiniteEtale f] [T2Sp
   isHomeomorph_iff_continuous_isClosedMap_bijective.mpr
     ⟨f.toLRSHom.base.hom.continuous, IsFinite.isClosedMap,
       (bijective_base_iff_degree_eq_one f).mpr h⟩
+
+/-! ### Multiplicativity in a composite -/
+
+/-- **The degree is multiplicative in a composite.**
+
+The fibre of `f ≫ g` over a point `z` of the target is the union of the fibres of `f` over the
+points of the fibre of `g` over `z`, and `Nat.card_preimage_singleton_comp`
+(`Oka/SetTheory/Cardinal/Finite.lean`) is that as a count. The two applications of
+`ComplexAnalytic.AnalyticSpace.degree_eq_card_fiber` around it are what make the two counts
+independent of the points they are taken at, and they are where every hypothesis comes from: the
+`[T2Space X]` and `[PreconnectedSpace Y]` of the first, the `[T2Space Y]` and
+`[PreconnectedSpace Z]` of the second.
+
+**The empty target is handled and not excluded.** `ComplexAnalytic.AnalyticSpace.degree` is an
+`iSup`, so over an empty target it is `0` on the left and `degree g` is `0` on the right; the case
+split is `isEmpty_or_nonempty` and it is what lets this statement avoid the `[Nonempty Z]` that
+`ComplexAnalytic.AnalyticSpace.degree_eq_of_forall_card_fiber_eq` needs.
+
+**`[PreconnectedSpace Y]` is a hypothesis about the middle of the factorisation** and is not
+implied by anything about `f ≫ g`; the module docstring says what that costs a caller. The
+finiteness of the fibres is not a hypothesis: it is a field of
+`ComplexAnalytic.AnalyticSpace.IsFinite`, reached through
+`ComplexAnalytic.AnalyticSpace.IsFiniteEtale.isFinite`, and the two `haveI`s below are that
+projection at the two maps rather than an assumption.
+
+**The `rw [hb, …]` names the base map of the composite as a composite of base maps and the proof
+of that is `rfl`**, which is the step
+`ComplexAnalytic.AnalyticSpace.degree_comp_of_bijective_base` above takes and the one
+`ComplexAnalytic.AnalyticSpace.isFinite_comp` (`Oka/AnalyticSpace/Finite.lean`) takes in each of
+its fields. -/
+theorem degree_comp {X Y Z : AnalyticSpace.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
+    [IsFiniteEtale f] [IsFiniteEtale g] [T2Space X] [T2Space Y]
+    [PreconnectedSpace Y] [PreconnectedSpace Z] :
+    degree (f ≫ g) = degree f * degree g := by
+  rcases isEmpty_or_nonempty Z with hZ | hZ
+  · simp [degree, ciSup_of_empty]
+  · refine degree_eq_of_forall_card_fiber_eq _ fun z ↦ ?_
+    have hb : ((f ≫ g).toLRSHom.base : X → Z)
+        = (g.toLRSHom.base : Y → Z) ∘ (f.toLRSHom.base : X → Y) := rfl
+    haveI : Finite (((g.toLRSHom.base : Y → Z) ⁻¹' {z}) : Set Y) := IsFinite.finite_fiber z
+    haveI : ∀ y : Y, Finite (((f.toLRSHom.base : X → Y) ⁻¹' {y}) : Set X) :=
+      fun y ↦ IsFinite.finite_fiber y
+    rw [hb, Nat.card_preimage_singleton_comp _ _ _ (d := degree f)
+      (fun y ↦ (degree_eq_card_fiber f y).symm), ← degree_eq_card_fiber g z, mul_comm]
 
 end ComplexAnalytic.AnalyticSpace
