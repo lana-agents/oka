@@ -917,12 +917,23 @@ cross-member overlap of a refinement: the isomorphism at a **unit multiple** and
 that the inverted polynomial is a unit upstairs, and that every polynomial of a localisation is a
 unit multiple of a renamed one.
 
-**That file's other four declarations are unguarded and this heading does not retrofit them.**
-They are unguarded because the file has no `## Main results` heading — its list of statements
-sits under the title — so `scripts/guard_coverage.py` reads nothing from it in either direction,
-and the four below land in *guarded and advertised nowhere* rather than in the overlap. Guarding
-what a branch adds is this project's practice; guarding four declarations a branch does not touch
-is another branch's business. -/
+**That file's `…OfDvdPow` block is unguarded and this heading does not retrofit it** —
+`ComplexAnalytic.localisationPresentedAlgebraEquivOfDvdPow`,
+`ComplexAnalytic.localisationPresentationIsoOfDvdPow`,
+`ComplexAnalytic.localisationPresentedAlgebraEquivOfDvdPow_localisationRingHom` and
+`ComplexAnalytic.localisationPresentationIsoOfDvdPow_hom_comp`, together with
+`ComplexAnalytic.localisationRenameEquiv_localisationRingHom` and
+`ComplexAnalytic.localisationPresentedAlgebraEquiv_localisationRingHom` above them. They are
+unguarded because the file has no `## Main results` heading — its list of statements sits under
+the title — so `scripts/guard_coverage.py` reads nothing from it in either direction, and the
+guards below land in *guarded and advertised nowhere* rather than in the overlap. Guarding what a
+branch adds is this project's practice; guarding declarations a branch does not touch is another
+branch's business.
+
+**The clause this replaces counted, and which set it counted was the whole question.** It read
+*"That file's other four declarations are unguarded"*, written at `900c9d7`: true of that file's
+*advertised* statements at that commit and false of its declarations, which were already more.
+The names above are of the declarations, which is the reading a reader can check. -/
 
 /--
 info: 'ComplexAnalytic.localisationPresentationIsoOfUnitMul' depends on axioms:
@@ -960,9 +971,12 @@ other identifies the two localisations, and the identification is one over that 
 Everything in the block above keeps the base fixed and varies the polynomial; these vary the base.
 
 The same sentence as that heading applies to the coverage figures: that file still has no
-`## Main results` heading, so both land in *guarded and advertised nowhere* rather than in the
-overlap, and the four declarations of the block above stay guarded while the file's original
-eight stay unguarded. -/
+`## Main results` heading, so these land in *guarded and advertised nowhere* rather than in the
+overlap, and the declarations the heading above names as unguarded are still unguarded.
+
+**The clause this replaces was false at the commit that wrote it.** It read *"the file's original
+eight stay unguarded"*, written at `e54b1c3`; at that commit eight of that file's declarations
+were guarded and six were not, and the six are the ones named one heading up. -/
 
 /--
 info: 'ComplexAnalytic.localisationPresentedAlgebraEquivOfAlgEquiv' depends on axioms:
@@ -994,10 +1008,13 @@ info: 'ComplexAnalytic.localisationPresentationIsoOfAlgEquiv_hom_comp' depends o
 
 /-! ### The same distinguished open on the `Spec` side
 
-`Oka/Analytification/SpecDistinguishedOpen.lean`, the mirror of the two above. The triangle is
-guarded beside the two open-immersion statements because it is the only thing either of them
-uses, and the isomorphism is guarded because a triangle over an identification nobody can name
-is inert.
+`Oka/Analytification/SpecDistinguishedOpen.lean`, the mirror of
+`### Two polynomials cutting out the same distinguished open, up to a unit` and
+`### The same distinguished open of two *different* members`. The triangle is guarded beside
+`ComplexAnalytic.isOpenImmersion_Spec_map_localisationRingHom` and
+`ComplexAnalytic.isOpenImmersion_specFunctor_map_localisationHom` because it is the only thing
+either of them uses, and the isomorphism is guarded because a triangle over an identification
+nobody can name is inert.
 
 The range and the isomorphism with the open subspace are under the same heading rather than one
 of their own: they are the same distinguished open, and the open immersion is what makes both of
@@ -1074,10 +1091,19 @@ The `ComplexAnalytic.localisationOpen` lemmas are guarded under this heading rat
 `ComplexAnalytic.localisationOpen_rename` is the overlap of a refined member read upstairs; and
 `ComplexAnalytic.exists_localisationOpen_eq_rename`, the converse of that one for every
 distinguished open at once, is what says an overlap cut out of a *localisation* still needs only
-one polynomial — the arity a cover datum asks for. Its three auxiliaries and its `Opens.map` form
-are guarded beside it.
+one polynomial — the arity a cover datum asks for.
+`ComplexAnalytic.exists_pow_mul_eq_rename` and
+`ComplexAnalytic.eval_rename_localisationIncl_ne_zero` are what its proof calls,
+`ComplexAnalytic.eq_localisationVar_or_exists_localisationIncl` is what
+`ComplexAnalytic.exists_pow_mul_eq_rename` calls in turn, and
+`ComplexAnalytic.exists_localisationOpen_eq_comap` is its `Opens.map` form; they are guarded
+beside it.
 
-The four after those are `Oka/Analytification/DistinguishedOpenPullback.lean`, and they belong
+`Oka/Analytification/DistinguishedOpenPullback.lean`'s advertised results are guarded next —
+`ComplexAnalytic.pullbackΓ_analytificationMap_polyToGlobal`,
+`ComplexAnalytic.localisationOpen_eq_comap_analytificationMap`,
+`ComplexAnalytic.exists_localisationOpen_eq_comap_analytificationMap` and
+`ComplexAnalytic.exists_comap_analytificationMap_eq_comap_localisationProj` — and they belong
 under this heading for the same reason: a distinguished open pulls back along
 `ComplexAnalytic.analytificationMap` to a distinguished open, which is what says the overlap an
 overlap is *transported* to is still one of the opens a cover datum can name.
@@ -1282,8 +1308,13 @@ info: 'ComplexAnalytic.coverAnalytificationOpenCover_map' depends on axioms:
 
 /-! #### Morphisms out of `X^an`
 
-`ComplexAnalytic.coverGlueMorphisms` and the four statements that make it usable, plus the round
-trip. They belong with the block above rather than in one of their own: the cover is what
+`ComplexAnalytic.coverGlueMorphisms`, the statements that make it usable and the ones that record
+its round trip: `ComplexAnalytic.comm_coverGlueData`,
+`ComplexAnalytic.toLRSHom_coverGlueMorphisms`,
+`ComplexAnalytic.coverIota_comp_coverGlueMorphisms`,
+`ComplexAnalytic.coverAnalytification_hom_ext`, `ComplexAnalytic.coverIncl_comp_coverIota` and
+`ComplexAnalytic.coverGlueMorphisms_coverIota`.
+They belong with the block above rather than in one of their own: the cover is what
 `ComplexAnalytic.AnalyticSpace.glueMorphisms` consumes and these are what supply its hypothesis,
 so `ComplexAnalytic.coverAnalytificationOpenCover_obj` and `…_map` directly above are the same
 line of statements one step earlier.
@@ -1485,7 +1516,7 @@ info: 'ComplexAnalytic.specGluedOpenCover_map' depends on axioms:
 
 /-! ### A morphism of covered schemes analytifies
 
-The two definitions and six results of `Oka/Analytification/CoverFunctoriality.lean`, which is the
+The definitions and results of `Oka/Analytification/CoverFunctoriality.lean`, which is the
 morphism *between* two gluings of the kind `### The glue data of an affine cover with distinguished
 overlaps` builds. A heading of its own rather than a `####` under that one, because its subject is
 a morphism of two covers where everything there is one cover; under this file's topic heading at
@@ -1558,17 +1589,25 @@ info: 'ComplexAnalytic.coverMap_comp' depends on axioms:
 
 /-! ### The comparison morphism `X^an ⟶ X`
 
-The three definitions and five results of `Oka/Analytification/CoverComparison.lean`, the
-morphism from the gluing `### The glue data of an affine cover with distinguished overlaps`
-builds to the gluing `### The glue data of the members' `Spec`s` builds. It is a heading of its
-own rather than a `####` under either because it is about neither cover on its own: its input is
-one datum and its content is that the affine comparison morphism is natural enough to descend to
-it. Placed after both blocks it consumes, and **named by heading rather than by position**, which
-is what the blocks above cannot be revised into cheaply: `"the block above"` occurs three times up
-there, twice in the `Spec` block and once in `#### Morphisms out of \`X^an\``, and **all three are
-true** — each of the two blocks really does sit under the one it means. That is the hazard, not a
+The definitions and results of `Oka/Analytification/CoverComparison.lean`, together with
+`ComplexAnalytic.toLRSHom_localisationProj_comp_analytificationToSpec`, which that file declares
+and does not advertise: the morphism from the gluing
+`### The glue data of an affine cover with distinguished overlaps` builds to the gluing
+`### The glue data of the members' `Spec`s` builds. It is a heading of its own rather than a
+`####` under either because it is about neither cover on its own: its input is one datum and its
+content is that the affine comparison morphism is natural enough to descend to it. Placed after
+both blocks it consumes, and **named by heading rather than by position**, which is what the
+blocks above cannot be revised into cheaply: `"the block above"` points at a block in
+`### The same distinguished open of two *different* members`, in
+`#### Morphisms out of `X^an`` and in `### The glue data of the members' `Spec`s`, and every
+one of them is true — each really does sit under the block it names. That is the hazard, not a
 contradiction: a pointer is true only relative to a position, so every one of them constrains what
 may be inserted where, and a name constrains nothing.
+
+**The figure this replaces was exact when written and is not now.** It read *"occurs three times
+up there"*, written at `dd7e70e`, when three was the number of them; the localisation-independence
+blocks were appended above afterwards, carry pointers of their own, and nothing swept this
+sentence.
 -/
 
 /--
@@ -1636,8 +1675,8 @@ info: 'ComplexAnalytic.analytificationToSpecGlued_unique' depends on axioms:
 
 /-! ### Two cover data with isomorphic members give the same `X^an`
 
-The three definitions and four results of `Oka/Analytification/CoverIndependence.lean`, the first
-two instalments of taxis #1107. It is a heading of its own rather than a `####` under
+The definitions and results of `Oka/Analytification/CoverIndependence.lean`, the first two
+instalments of taxis #1107. It is a heading of its own rather than a `####` under
 `### A morphism of covered schemes analytifies`, whose `ComplexAnalytic.coverMap` it is built
 from, because its subject is two data for *one* gluing where that block's is a morphism between
 two gluings — and it is placed after the blocks it consumes for the same reason that one gives,
@@ -1701,7 +1740,7 @@ info: 'ComplexAnalytic.coverAnalytificationReindexIso' depends on axioms:
 
 /-! ### A morphism of covered schemes on the `Spec` side
 
-The two definitions and seven results of `Oka/Analytification/SpecFunctoriality.lean`, which is to
+The definitions and results of `Oka/Analytification/SpecFunctoriality.lean`, which is to
 `### The glue data of the members' `Spec`s` what `### A morphism of covered schemes analytifies` is
 to `### The glue data of an affine cover with distinguished overlaps`. A heading of its own for the
 reason that block gives about itself: its subject is a morphism of two covers where the glue-data
@@ -1778,9 +1817,11 @@ info: 'ComplexAnalytic.specMap_comp' depends on axioms:
 
 /-! ### The comparison morphism commutes with a morphism of covered schemes
 
-The two results of `Oka/Analytification/ComparisonSquare.lean`, the only statement in the tree
-that needs `### The comparison morphism `X^an ⟶ X``, `### A morphism of covered schemes
-analytifies` and `### A morphism of covered schemes on the `Spec` side` at once — which is why it
+`Oka/Analytification/ComparisonSquare.lean` —
+`ComplexAnalytic.toLRSHom_map_comp_analytificationToSpec` and
+`ComplexAnalytic.toLRSHom_coverMap_comp_analytificationToSpecGlued` — the only statement in the
+tree that needs `### The comparison morphism `X^an ⟶ X``, `### A morphism of covered schemes
+analytifies` and `### A morphism of covered schemes on the `Spec` side` at once, which is why it
 is a fourth heading rather than an addition to any of the three, and why it is placed after all of
 them.
 
@@ -1806,7 +1847,7 @@ info: 'ComplexAnalytic.toLRSHom_coverMap_comp_analytificationToSpecGlued' depend
 
 /-! ### The two-level index category of a glue data
 
-The five advertised results of `Oka/Analytification/GlueShape.lean`, which arrived under `Oka/`
+The advertised results of `Oka/Analytification/GlueShape.lean`, which arrived under `Oka/`
 when `ComplexAnalytic.coverAnalytification` gave the shape a consumer. They sit here rather than
 in a file of their own because the module is `Oka.Analytification.GlueShape` and
 `OkaTest/Axioms.lean`'s table routes `Oka/Analytification/` here — the same row that carries
@@ -1818,10 +1859,15 @@ rather than pointed at for the reason `### The comparison morphism `X^an ⟶ X``
 between them is deliberately not stated**: it was four when this was repaired and more by the end
 of the same afternoon, which is the whole argument for naming.
 
-The first says the shape has no morphisms a glue-data diagram does not account for; the second
-that `hsymm` is a consequence of its one law; the third that `hrange` is **not** a consequence of
-the diagram, which is the file's negative result; the last two that neither triple-overlap
-hypothesis has content below three members.
+`ComplexAnalytic.GlueShape.lift_uniq` says the shape has no morphisms a glue-data diagram does
+not account for; `ComplexAnalytic.GlueShape.hsymm_of_hglue` that `hsymm` is a consequence of its
+one law; `ComplexAnalytic.GlueShape.not_ctHRange` that `hrange` is **not** a consequence of the
+diagram, which is the file's negative result; and
+`ComplexAnalytic.GlueShape.hRange_of_no_three` and
+`ComplexAnalytic.GlueShape.hCocycle_of_no_three` that neither triple-overlap hypothesis has
+content below three members. **Named rather than pointed at from the front**, for the reason the
+paragraph above gives about `"directly above"`: an ordinal into a list is a pointer, and the list
+is what an append moves.
 -/
 
 /--
@@ -1861,12 +1907,20 @@ info: 'ComplexAnalytic.GlueShape.hCocycle_of_no_three' depends on axioms:
 
 /-! ### A standard étale algebra over a presented `ℂ`-algebra is presented
 
-The six advertised results of `Oka/Analytification/StandardEtale.lean`. The two operations —
-adjoin a variable, add a relation — the three forms of the identification with
+The results `Oka/Analytification/StandardEtale.lean` advertises about the two operations —
+adjoin a variable, add a relation — about the forms of the identification with
 `StandardEtalePair.Ring` (the one that names the quotient, the one that names `P.Ring`, and the
-one that quantifies the polynomial lifts of `f` and `g` away), and the bridge from
+one that quantifies the polynomial lifts of `f` and `g` away), and about the bridge from
 `Polynomial.derivative` to `MvPolynomial.pderiv` that a consumer of `StandardEtalePair.cond` has
-to come through.
+to come through. **This heading is not all of what that file advertises**: the rest of its
+`## Main results` is guarded under `### `StandardEtalePair.cond` at a point`.
+
+**The clause this replaces was exact when written and was falsified by the next push to the file
+it counts.** It read *"The six advertised results of `Oka/Analytification/StandardEtale.lean`"*,
+written at `1bb563e`, when that file advertised those and no more; `5ae9ed5` appended
+`ComplexAnalytic.exists_mk_pderiv_mul_add_eq_mk_pow` and
+`ComplexAnalytic.eval_pderiv_ne_zero` to the same `## Main results`, guarded them under the
+heading below, and swept nothing.
 
 **The bridge is one declaration and it needed no helpers**, which is worth recording because the
 obvious proof needs two: a crossing lemma for `MvPolynomial.optionEquivLeft` that Mathlib has
