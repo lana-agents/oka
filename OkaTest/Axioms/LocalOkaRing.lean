@@ -256,10 +256,11 @@ info: 'LocalOkaRing.quotientSimpleZeroEquiv' depends on axioms:
 /-! ### Changing coordinates
 
 `Oka/ChangeOfCoordinates.lean`. `LocalOkaRing.congr` transports a germ along a linear change of
-the variables; the first six below are its characterisation and its functoriality, and the last
-three are what it exists for — every finite family of nonzero germs becomes general in the last
-variable after one common change, which is Weierstrass preparation without a genericity
-hypothesis. -/
+the variables. Under this heading, the `LocalOkaRing.congr_…` guards are its characterisation, its
+compatibility with taking germs and its functoriality; `LocalOkaRing.congrEquiv` is `congr` at a
+bijection of the index type; and the `LocalOkaRing.exists_congr_…` guards are what it exists for —
+every finite family of nonzero germs becomes general in the last variable after one common change,
+which is Weierstrass preparation without a genericity hypothesis. -/
 
 /--
 info: 'LocalOkaRing.congr_represents' depends on axioms:
@@ -334,10 +335,13 @@ info: 'LocalOkaRing.exists_congr_localweierstrass_preparation' depends on axioms
 /-! ### Relabelling the variables along an embedding of index types
 
 `Oka/RenameIndex.lean`. `LocalOkaRing.incl` and `LocalOkaRing.congrEquiv` are the same
-construction — renaming the variables — at an embedding and at a bijection respectively, and the
-last two say what that buys: relabelling `ULift ι` as `ι` commutes with it, which is how a
-statement about `ComplexAnalytic.AnalyticSpace`, whose coordinates are indexed by
-`ULift (Fin n)`, reaches one about `LocalOkaRing.incl`, whose are indexed by `Fin n`. -/
+construction — renaming the variables — at an embedding and at a bijection respectively, and
+`LocalOkaRing.uliftEquiv_renameEmb` and `LocalOkaRing.uliftEquiv_renameEmb_incl` say what that
+buys: relabelling `ULift ι` as `ι` commutes with it, which is how a statement about
+`ComplexAnalytic.AnalyticSpace`, whose coordinates are indexed by `ULift (Fin n)`, reaches one
+about `LocalOkaRing.incl`, whose are indexed by `Fin n`. `LocalOkaRing.coeff_uliftEquiv` and
+`LocalOkaRing.constantCoeff_uliftEquiv` say what that relabelling does to a coefficient: it moves
+each to the relabelled exponent, and fixes the constant term. -/
 
 /--
 info: 'MvPowerSeries.Represents.renameEmb' depends on axioms:
