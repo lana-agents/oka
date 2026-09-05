@@ -1267,9 +1267,9 @@ info: 'ComplexAnalytic.isFinite_comp_projRestrict_of_monic' depends on axioms:
 `CategoryTheory.MorphismProperty`, the category it cuts out of `CategoryTheory.Over X`, two
 objects of that category, and the lemma that separates an object from the base over itself.
 
-The four `CategoryTheory.MorphismProperty` instances of that file are anonymous and are not
-guarded here; each is a quotation of one of the three instances guarded above, whose guards cover
-the axioms they are built from.
+The `CategoryTheory.MorphismProperty` instances of that file are anonymous and are not guarded
+here; each is a quotation of one of the instances guarded above, whose guards cover the axioms
+they are built from.
 -/
 
 /--
@@ -1543,7 +1543,7 @@ since they assert the state of the repository and a sweep over `Oka/` does not r
 above**: that one needs `V` inside the image because finiteness is not local on the target, and
 this one needs nothing at all because both fields of
 `ComplexAnalytic.AnalyticSpace.IsLocalIso` are conditions at a point. It is the second field of
-`Oka/Analytification/StandardEtaleFiniteEtale.lean`'s `IsFiniteEtale`, whose two guards are in
+`Oka/Analytification/StandardEtaleFiniteEtale.lean`'s `IsFiniteEtale`, whose guards are in
 `OkaTest/Axioms/Analytification.lean`.
 
 Appended as its own section for the reason the sections above give: a section moved is a conflict
@@ -1559,17 +1559,17 @@ info: 'ComplexAnalytic.AnalyticSpace.isLocalIso_restrictHom' depends on axioms:
 
 /-! ### And a local isomorphism restricted to subspaces cut out by a family and by its pullbacks
 
-`Oka/AnalyticSpace/CutOutLocalIso.lean`, all six of it, in the order they are declared. The
+`Oka/AnalyticSpace/CutOutLocalIso.lean`, the whole of it, in the order they are declared. The
 sibling of the section directly above and appended as its own for the same reason that one gives:
 that header enumerates what its file had when it was written, and a guard appended into it would
 make it false silently.
 
-**Two of the six ask nothing of the morphism the class is transported along.**
+**Two of the guards below ask nothing of the morphism the class is transported along.**
 `ComplexAnalytic.AnalyticSpace.stalkMap_Γgerm_pullbackΓ` and
 `ComplexAnalytic.AnalyticSpace.range_base_of_isCutOutBy_pullbackΓ` hold for an arbitrary morphism
 of analytic spaces; `ComplexAnalytic.AnalyticSpace.isOpenMap_base_of_isCutOutBy_pullbackΓ` asks
 only that its base map is open. The `ComplexAnalytic.AnalyticSpace.IsLocalIso` hypothesis is
-spent by the last three alone. **All six are theorems.**
+spent by the last three alone. **Every guard below is a theorem.**
 -/
 
 /--
@@ -1708,7 +1708,7 @@ the reason the `### Cancellation of finiteness and of finite étaleness` section
 omission.
 
 **Guarded here rather than in `OkaTest/Axioms/AnalyticSpace.lean`, and the reason is the subject
-and not the module.** That file holds three `Oka/AnalyticSpace/Basic.lean` guards and all three are
+and not the module.** That file's `Oka/AnalyticSpace/Basic.lean` guards are all
 `ComplexAnalytic.IsCLinearHom` statements sitting under its gluing heading; its own docstring sends
 the *classes* of morphisms here, and `CategoryTheory.IsIso` is one. The sibling above,
 `ComplexAnalytic.AnalyticSpace.surjective_base_of_isLocalIso_of_isFinite`, is guarded here for the
@@ -2029,8 +2029,10 @@ of a fibre and from the fibre functor's action, and the endomorphism corollary.
 **Appended as its own section rather than added to the section above**, for the reason the
 sections above give — a section moved is a conflict for somebody else — and because the subject is
 not that one's: `### The fibre functor` is about the fibre and the functors it assembles into,
-where these are about what a morphism of covers is pinned down by, and only two of the four
-mention a fibre at all.
+where these are about what a morphism of covers is pinned down by, and only
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.base_eq_of_fiberMap_eq` and
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.base_eq_of_fiberFunctor_map_eq` mention a fibre at
+all.
 
 **Named by file rather than counted**, as the sections above say and for the reason they give.
 
