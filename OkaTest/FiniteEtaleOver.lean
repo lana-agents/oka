@@ -37,7 +37,26 @@ is not the trivial two-sheeted cover, by
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_iso_trivial_of_preconnectedSpace` — the
 total space of one is connected and of the other is not.
 
+**And the fibre functor does not separate that same pair**, which is the fourth part of this file
+and is the only one that says an invariant **fails**. `card_fiber_sqOver` and
+`card_fiber_trivial_two` put both fibres at two points over every point of the base, and
+`nonempty_fiber_equiv_trivial_sqOver` reads the two counts as an equivalence. So the objects the
+third part separates are objects `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiber` cannot tell
+apart, and `Oka/AnalyticSpace/FiniteEtaleOver.lean`'s `## What is not here` says why in general —
+a bare finite fibre carries nothing the degree does not, and what would separate is the monodromy
+action on it, which nothing here has. **This is what makes the third part's invariant sharp rather
+than merely available**: preconnectedness of the total space separates a pair that the degree and
+the fibre both miss, and that pair is exhibited here rather than described.
+
 ## What this does not witness
+
+**Nothing here is guarded, and that is forced rather than chosen.** Every file under
+`OkaTest/Axioms/` imports `Oka` and not `OkaTest`, so a `#print axioms` naming a declaration of
+this file does not elaborate there; `OkaTest/Axioms/Morphisms.lean` gives that reason for leaving
+`not_iso_trivial_sqOver` unguarded, and it is the reason for every declaration in this file rather
+than for that one. **The repair is not an `import OkaTest`** — that would put every test
+declaration in the axiom guards' import closure to buy a handful of lines — and the axioms these
+witnesses rest on are guarded at the general statements in `Oka/` that they instantiate.
 
 **Nothing about morphisms.** The category's morphisms are all morphisms over the base, and this
 file exhibits none of them and computes no hom-set. In particular it says nothing about whether a
@@ -194,6 +213,89 @@ theorem not_iso_trivial_sqOver :
       ((AnalyticSpace.complexAffineSpace.{u} 1).restrict ComplexAnalytic.punctured.{u})) :=
   AnalyticSpace.FiniteEtaleOver.isEmpty_iso_trivial_of_preconnectedSpace.{u}
     sqOver.{u} (ULift.{u} (Fin 2)) (i := ⟨0⟩) (j := ⟨1⟩) (by decide)
+
+/-- **The fibre of `z ↦ z²` over any point of the punctured line has two elements**, and the proof
+is the count this repository already had, applied without a transport.
+
+`ComplexAnalytic.card_fiber_base_sq` (`OkaTest/FiniteMorphism.lean`) is stated about the preimage
+set `ComplexAnalytic.sq.toLRSHom.base ⁻¹' {y}`, and
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiber` is **defined** as that preimage set rather
+than as the subtype `{a // …}` it is definitionally equal to. So this is that theorem applied to
+`y` and nothing else — no `Equiv`, no `Nat.card_eq_of_bijective`, no rewriting, which is why the
+statement is one term long.
+
+**It is the first consumer of that decision outside the file that made it, and the first at a
+named morphism.** `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_fiber` already reads
+`ComplexAnalytic.AnalyticSpace.degree_eq_card_fiber` backwards across the same defeq, so the
+spelling was exercised on arrival — but both of those are general statements in `Oka/`, where this
+one is a fibre of a morphism this repository exhibits and a count proved by an argument about
+roots in `ℂ`. -/
+theorem card_fiber_sqOver (y : ((AnalyticSpace.complexAffineSpace.{u} 1).restrict
+    ComplexAnalytic.punctured.{u} : Type u)) :
+    Nat.card (AnalyticSpace.FiniteEtaleOver.fiber.{u} y sqOver.{u}) = 2 :=
+  ComplexAnalytic.card_fiber_base_sq.{u} y
+
+/-- **The fibre of the trivial two-sheeted cover over any point has two elements**, through the
+equivalence rather than through a second count.
+
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberTrivialEquiv` exhibits the fibre of
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.trivial ι X` as `ι` itself, at every point and with
+no hypothesis on `X`; the count is then `Nat.card (ULift (Fin 2))`, which `simp` evaluates.
+
+**`ComplexAnalytic.AnalyticSpace.card_fiber_sigmaFold` would give the same number and is not what
+is used**, deliberately: that theorem is about the fold map, and what this file needs is a
+statement about the *object* `not_iso_trivial_sqOver` is stated against, reached through the same
+functor as `card_fiber_sqOver` above. Taking the two counts by two different routes would make the
+comparison below a coincidence of arithmetic rather than a fact about one functor.
+
+**The index type is `ULift (Fin 2)` and it has to be.** `not_iso_trivial_sqOver` — the separation
+this pairs with — is stated at that index type, and
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.trivial` at a different two-element type is a
+different term of this category: nothing here states the two to be isomorphic, and a witness about
+an object the separation is not about would prove nothing about the pair. -/
+theorem card_fiber_trivial_two (y : ((AnalyticSpace.complexAffineSpace.{u} 1).restrict
+    ComplexAnalytic.punctured.{u} : Type u)) :
+    Nat.card (AnalyticSpace.FiniteEtaleOver.fiber.{u} y
+      (AnalyticSpace.FiniteEtaleOver.trivial.{u} (ULift.{u} (Fin 2))
+        ((AnalyticSpace.complexAffineSpace.{u} 1).restrict
+          ComplexAnalytic.punctured.{u}))) = 2 := by
+  rw [Nat.card_eq_of_bijective _
+    (AnalyticSpace.FiniteEtaleOver.fiberTrivialEquiv.{u} (ULift.{u} (Fin 2))
+      ((AnalyticSpace.complexAffineSpace.{u} 1).restrict
+        ComplexAnalytic.punctured.{u}) y).bijective]
+  simp
+
+/-- **So the fibre functor does not separate the two objects that `not_iso_trivial_sqOver`
+separates**: at every point of the base their fibres are in bijection.
+
+This is the fourth part of this file and it is the only one that says an invariant **fails**.
+`not_iso_trivial_sqOver` above says `sqOver` and the trivial two-sheeted cover are not isomorphic;
+the two theorems above say `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiber` sends them to
+sets of the same size, and `Finite.card_eq` turns that into an equivalence. **So the pair is a
+witness that the fibre functor's values are too coarse**, and not merely an argument that they
+ought to be.
+
+**`Nonempty` of an equivalence and not an equivalence**, which is the honest shape and not a
+weakening. There is no canonical bijection between the two roots of `y` and the two sheets of a
+trivial cover — choosing one is choosing a branch of the square root, which does not exist
+globally on the punctured line, and that is exactly the phenomenon the missing monodromy would
+record. A `def` returning an `Equiv` here would assert a choice this repository does not have.
+
+**The `Finite` instances are unconditional and that is what makes this one line.**
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.finite_fiber` asks nothing of the base, of the
+point or of the total space, so `Finite.card_eq` applies with no separation axiom and no
+connectedness. The second is not merely unassumed here: `[PreconnectedSpace]` is **false** of the
+trivial cover's total space, by
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.not_preconnectedSpace_trivial` — which is what
+`not_iso_trivial_sqOver` reads and not what it proves — so a comparison of fibres that needed it
+could not be stated at this pair at all. -/
+theorem nonempty_fiber_equiv_trivial_sqOver (y : ((AnalyticSpace.complexAffineSpace.{u} 1).restrict
+    ComplexAnalytic.punctured.{u} : Type u)) :
+    Nonempty (AnalyticSpace.FiniteEtaleOver.fiber.{u} y sqOver.{u} ≃
+      AnalyticSpace.FiniteEtaleOver.fiber.{u} y
+        (AnalyticSpace.FiniteEtaleOver.trivial.{u} (ULift.{u} (Fin 2))
+          ((AnalyticSpace.complexAffineSpace.{u} 1).restrict ComplexAnalytic.punctured.{u}))) :=
+  Finite.card_eq.mp ((card_fiber_sqOver.{u} y).trans (card_fiber_trivial_two.{u} y).symm)
 
 end OkaTest.FiniteEtaleOver
 
