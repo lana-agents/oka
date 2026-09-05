@@ -15,39 +15,57 @@ non-vanishing locus; that being a complex analytic space is a local condition; *
 `ℂ`-algebra structure of a glued space, a cover by abstract spaces, the analytic structure on
 the gluing, the fields of
 `CategoryTheory.GlueData.ofGlueData'`, and gluing a morphism; and the
-**coproduct** — the disjoint union of a family, the trivial `n`-sheeted cover, and the sheet
-comparison; and that the spaces this development **constructs** are **Hausdorff**, which is the
-one heading below naming a property of a space rather than a construction of one. **Two of the
-eighteen headings below are about morphisms after all** — gluing one, and that a morphism to
-`ℂ^n` is determined by the pullbacks of the coordinates — because each is a statement about the
-space the construction produces; the *classes* of morphisms are `OkaTest/Axioms/Morphisms.lean`'s.
+**coproduct** — the disjoint union of a family, the trivial `n`-sheeted cover, the sheet
+comparison, and the one-sheeted disjoint union; and that the spaces this development
+**constructs** are **Hausdorff**, which is the one heading below naming a property of a space
+rather than a construction of one. **Two of the headings below are about morphisms after all** —
+gluing one, and that a morphism to `ℂ^n` is determined by the pullbacks of the coordinates —
+because each is a statement about the space the construction produces; the *classes* of
+morphisms are `OkaTest/Axioms/Morphisms.lean`'s.
 
-**That is a description and not a list, and the eighteen headings below are the record**: each
-names the statement its assertions defend, and the recipe beside `OkaTest/Axioms.lean`'s routing
-table resolves them to modules. The stance is `OkaTest/Axioms/Sheaves.lean`'s and
-`OkaTest/Axioms/LocalOkaRing.lean`'s, and it is taken here because 130 guards over nineteen
-modules is past the size at which a list stays true.
+**That is a description and not a list, and the headings below are the record**: each names the
+statement its assertions defend, and the recipe beside `OkaTest/Axioms.lean`'s routing table
+resolves them to modules. The stance is `OkaTest/Axioms/Sheaves.lean`'s and
+`OkaTest/Axioms/LocalOkaRing.lean`'s, and it is taken here because this file is past the size at
+which a list stays true: at `883b62f` it held 138 guards under nineteen headings over nineteen
+modules.
 
 **The sentence this replaces named local models, the node and the value of a section**, which at
-`27c185a` was at most 19 of the 102 guards there and four of the sixteen headings there. Gluing
-alone — **the five headings named above**, from the `ℂ`-algebra structure of a glued space to
-gluing a morphism — is 51 of the 130 here and the coproduct 24, and neither appeared in it. **Six
-of the nineteen modules are not `Oka/AnalyticSpace/`'s**, and contribute 29 guards:
+`27c185a` was at most 19 of the 102 guards there and four of the sixteen headings there. At
+`883b62f` gluing alone — **the five headings named above**, from the `ℂ`-algebra structure of a
+glued space to gluing a morphism — was 51 of those 138 and **the four coproduct headings named
+above** 32, and neither appeared in it. **Six of the nineteen modules are not
+`Oka/AnalyticSpace/`'s** and contributed 29 guards there:
 `Oka/CategoryTheory/GlueData.lean` ten, four modules of `Oka/Geometry/RingedSpace/` fifteen, and
 `Oka/AlgebraicGeometry/GammaSpecAdjunction.lean` four — most of them under the gluing headings,
 beside the analytic statements they serve. See `OkaTest/Axioms.lean` on why a mirror-tree module
 such as the first has no row of its own.
 
-**Every undated count in the two paragraphs above is a claim about the tree and goes stale; the
-`27c185a` ones are records and do not.** *Every* one, including the ones a given repair does not
-touch — **and the coproduct subtotal is the proof of it.** When that warning was written the
-coproduct read *19* and the sentence carrying it said the number *"has simply not moved yet"*. The
-**very next commit to touch this file** falsified it — `d58c85d`, four guards under the trivial
-cover — and it then stood wrong for **23 commits**, because it was the one numeral nobody
-rechecked. **So the list to recheck after adding a guard is every undated numeral above and not
-the list of the ones some earlier branch repaired.** It is deliberately not given as a count here,
-for the reason `OkaTest/Axioms/Analytification.lean`'s tower section states: a member a reader
-can check beats a cardinal they have to recount, and a census of a paragraph is the second.
+**Every figure above is pinned to the commit it was measured at, and this file used to take that
+decision the other way.** The paragraphs above carried undated counts and said in terms that the
+list to recheck after adding a guard was every one of them; `OkaTest/Axioms.lean`'s rule that
+prose about a section should name rather than count says instead that a numeral a reader has to
+recheck should not be written, and the two cannot both be followed. **What settles it is that the
+rechecking did not happen**, measured at `883b62f`, before this paragraph was rewritten:
+*eighteen headings* was false in both sentences carrying it, falsified by `a6dcf31`, which
+appended a nineteenth; *130 guards* was false in both places, falsified by `1a7cd87`; the
+coproduct *24* was false, falsified by that same commit, which put two guards under the trivial
+cover, and moved again by `a6dcf31`, which appended a fourth coproduct heading, so the partition
+the number was of changed as well as its value; and the ledger below carried that same number
+once more, as what the three coproduct headings *hold now*, where it is pinned to `4853cc2`
+instead. **All four were already false when the sweep that reached this file fenced this block**
+(`5d45345`), which left them standing on the ground that the conflict of rules had to be settled
+before anything here was touched. The gluing *51*, the *29* outside `Oka/AnalyticSpace/` and the
+module count are what happened to survive.
+
+**The same numeral had done it once before, and that record is the sharper one.** When the warning
+that stood here was written the coproduct read *19* and the sentence carrying it said the number
+*"has simply not moved yet"*. The **very next commit to touch this file** falsified it —
+`d58c85d`, four guards under the trivial cover — and it then stood wrong for **23 commits**,
+because it was the one numeral nobody rechecked. A reader who wants today's arithmetic runs the
+per-heading recipe beside `OkaTest/Axioms.lean`'s routing table, which is the instrument; every
+number here is a record of one run of it, and the reason to prefer a member a reader can check to
+a cardinal they have to recount is `OkaTest/Axioms/Analytification.lean`'s tower section's.
 
 **The ledger of what has moved, in two rounds, because the second round found the first one's
 values already stale.** Counted as `#print axioms` **names**, which here equals the command count,
@@ -110,8 +128,9 @@ per-heading recipe beside the table now; it matches a heading in either form, an
 is told to recheck.** The heading count, because a heading the instrument cannot see is not one
 the author is warned they added: *sixteen* at `a4f3a81` where the file held seventeen, hence the
 ledger row above reading *seventeen* where it should read **eighteen**. And the coproduct, whose
-three headings held `8 + 11 + 4 = 23` at that repair — they hold `9 + 11 + 4 = 24` now — and which
-was read as *29*. Both were repaired there; the guard total did not move, which is the check that
+three headings held `8 + 11 + 4 = 23` at that repair, and `9 + 11 + 4 = 24` at `4853cc2` where
+that clause was written — and which was read as *29*. Both were repaired there; the guard total
+did not move, which is the check that
 no guard was touched, and it stood at *129* until the disjoint union's `¬ IsIso` was added.
 
 **So this is not the defect lana-agents/oka#358 repaired at `4c91029`, though it was filed as a
