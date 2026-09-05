@@ -244,15 +244,31 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   monodromy *action* on it, which needs a fundamental group nothing here connects to a cover and
   the base change the **No pullbacks, so no base change** bullet above says this category has not.
 
-  **That the functor is not one is a witness here and not only an argument.**
-  `OkaTest.FiniteEtaleOver.nonempty_fiber_equiv_trivial_sqOver` puts the fibres of `z ↦ z²` and of
-  the trivial two-sheeted cover of the punctured line in bijection at every point of the base —
-  the same pair that `OkaTest.FiniteEtaleOver.not_iso_trivial_sqOver` proves non-isomorphic. So
-  two objects this category distinguishes have fibres it does not, at a base this repository
-  exhibits, and the paragraph above is priced by an instance rather than by a general principle.
-  **The witness needs neither `[T2Space]` nor `[PreconnectedSpace]`**, the finiteness of a fibre
-  being unconditional; the trivial cover's total space is disconnected, which is what the
-  separation reads and what no hypothesis on the fibre could see.
+  **What the witness in `OkaTest/FiniteEtaleOver.lean` settles is that the functor's values are
+  not a complete invariant.** `OkaTest.FiniteEtaleOver.nonempty_fiber_equiv_trivial_sqOver` puts
+  the fibres of `z ↦ z²` and of the trivial two-sheeted cover of the punctured line in bijection
+  at every point of the base — the same pair that
+  `OkaTest.FiniteEtaleOver.not_iso_trivial_sqOver` proves non-isomorphic. So two objects this
+  category distinguishes have fibres it does not, at a base this repository exhibits, and that
+  much is compiled rather than argued. **It needs neither `[T2Space]` nor `[PreconnectedSpace]`**,
+  the finiteness of a fibre being unconditional.
+
+  **What it does not settle is the sentence above, and the reason is the second member of its
+  pair.** The trivial two-sheeted cover's total space is disconnected —
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.not_preconnectedSpace_trivial`, which is what
+  `OkaTest.FiniteEtaleOver.not_iso_trivial_sqOver` reads and not what it proves — so the pair is a
+  connected cover and a disconnected one, and a claim quantified over pairs of *connected* covers
+  is untouched by it. **At a pair of connected covers this repository does exhibit, the values do
+  separate**: `OkaTest.FiniteEtaleOver.sqOver` and the base over itself at the punctured line are
+  both preconnected (`OkaTest.FiniteEtaleOver.preconnectedSpace_left_sqOver` and
+  `ComplexAnalytic.preconnectedSpace_restrict_punctured`) and non-isomorphic
+  (`OkaTest.FiniteEtaleOver.not_iso_id_sqOver`), and their fibres have two points and one —
+  `OkaTest.FiniteEtaleOver.card_fiber_sqOver` and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.uniqueFiberId`. **That separation is the degree
+  again** and is no evidence that the fibre sees more, which is the paragraph above read at an
+  instance. So the sentence above stays an argument, and what would compile it is a pair of
+  connected covers of the same degree — which is what the missing monodromy action would be
+  needed to tell apart.
 * **No scheme side and no comparison functor.** Taxis #1113 wants a functor from finite étale
   covers of a presented affine `ℂ`-scheme to these; the source of that functor is
   `(@AlgebraicGeometry.IsFinite ⊓ @AlgebraicGeometry.IsEtale).Over ⊤ X` and is available in
