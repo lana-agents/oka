@@ -131,7 +131,7 @@ to either, and nothing in `scripts/` can tell such a clause from a sentence that
 contain a number, so the only defence is how the sentence is written. A section's opening should
 name the file whose declarations are guarded and the files the rest were written in; a reader who
 wants the arithmetic can run `grep -c '#print axioms'` over the section and get an answer that is
-right on the day they run it. **Two spellings are exempt because they cannot rot.** A figure
+right on the day they run it. **A spelling is exempt when it cannot rot.** A figure
 pinned to a commit or a date is a record — which is what the measurements further down are, and
 they say so — and so is a numeral about a repair that has already landed, since falsifying either
 means rewriting history rather than appending. **The rule was first written into the guard section
@@ -147,6 +147,24 @@ row total in the worked example — and **on 2026-09-04 all three were false**. 
 a record, quoted and dated where it stood; the other two sentences were rewritten to carry no
 figure at all. **Do not answer this with a checker** — it would have to guess which numbers in a
 docstring are censuses, and `scripts/` has no way to tell.
+
+**A numeral that totals a naming the same passage gives is exempt too, and by a mechanism
+different from the ones above.** Those work by being about the past. This one works by being
+redundant: *the four results of such-and-such a module*, with the four then named or described in
+the same breath, adds nothing to the naming beside it — and naming is what the rule asks for in
+the first place. Strike the numeral and the same append leaves the same passage stale, in the same
+place, saying the same wrong thing; so the numeral is a way of writing the list and not a second
+claim about the section. **What this is not is a promise that such a clause stays true.** It goes
+false exactly when the naming goes false, and a naming that has gone false is a sentence that is
+wrong about *what is there* — which is the failure this rule is content to have, and the opposite
+of a count that goes wrong while every word around it still reads.
+
+**The corollary is the one that costs triage time.** A *the two*, *both* or *the pair* is out of
+class only when the passage accounts for both. Where it instead counts a section's contents by
+kind and names none of them — *the definition is guarded and not only the two theorems* — a third
+theorem appended falsifies it in silence, and it is a census clause like any other. **Which kind a
+clause is has to be read and cannot be matched**, so the refusal of a checker above covers this
+exemption as much as the rule it qualifies.
 
 **An audit paragraph is exempt through the pinning spelling and not because it is an audit**, and
 the case that settled it is `OkaTest/Axioms/AnalyticSpace.lean`'s module docstring. That block is

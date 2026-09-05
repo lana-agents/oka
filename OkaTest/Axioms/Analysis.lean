@@ -17,14 +17,23 @@ Results that mention nothing sheaf-theoretic, from four modules:
 * `Oka/Topology/Algebra/Polynomial.lean`, the zero locus of a continuous family of monic
   polynomials over an arbitrary topological parameter space.
 
-**The last is the bulk of the file and it is not complex analysis.** The sentence this replaces
-said *"the material of `Oka/Analytic/`"*, which at `27c185a` covered three of the guards below;
-**the fourth module's are guarded below as well**, whose parameter space is any topological space
-and whose statements never mention `ℂ`. `OkaTest/Axioms.lean`'s row for this file was widened on
-that measurement, and this paragraph is the other half of the same repair — the routing table and
-the file's own description had drifted apart in opposite directions. **The third module is not
-complex analysis either**, and the same care applies to it: `ℂ ∖ {0}` appears in it as a
-topological space, and what is computed is a fundamental group.
+**The last is not complex analysis.** The sentence this replaces said *"the material of
+`Oka/Analytic/`"*, which at `27c185a` covered three of the guards below; **the fourth module's are
+guarded below as well**, whose parameter space is any topological space and whose statements never
+mention `ℂ`. `OkaTest/Axioms.lean`'s row for this file was widened on that finding — that this
+file guards a module with no `ℂ` in its statements at all — and this paragraph is the other half
+of the same repair: the routing table and the file's own description had drifted apart in opposite
+directions. **The third module is not complex analysis either**, and the same care applies to it:
+`ℂ ∖ {0}` appears in it as a topological space, and what is computed is a fundamental group.
+
+**The sentence that now reads *"The last is not complex analysis"* used to read *"The last is the
+bulk of the file and it is not complex analysis"*; the figure that supported the difference — a
+count of this file's guards — was removed at `ad7a8ff` as a live census clause.** *The bulk* is
+ambiguous between *the largest share* and *the greater part*, and the removed figure was what let
+a reader decide between them. With no figure available a size claim here is unfalsifiable in
+place, and the sentence does not need one: what it needs from the fourth module is that it is not
+complex analysis, which its parameter space and the absence of `ℂ` from its statements establish
+above, and which the third module's sentence already says in the same words.
 
 **A list is affordable here because four modules is the whole file.**
 `OkaTest/Axioms/Sheaves.lean` declines to enumerate in terms — *"That is a description and not a
