@@ -168,6 +168,7 @@ import Oka.Geometry.RingedSpace.PresheafedSpace.Gluing
 import Oka.Geometry.RingedSpace.ZeroLocus
 import Oka.GermDerivative
 import Oka.LocalOkaRing
+import Oka.Logic.Equiv.Set
 import Oka.MaximalIdeal
 import Oka.Noetherian
 import Oka.Nullstellensatz

@@ -2253,19 +2253,21 @@ info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.faithful_fintypeFiberFuncto
 /-! ### Multiplicativity of the degree, and the divisibility it gives on covers
 
 `ComplexAnalytic.AnalyticSpace.degree_comp` (`Oka/AnalyticSpace/Degree.lean`), the elementary
-count under it (`Oka/SetTheory/Cardinal/Finite.lean`), and what reading it at the triangle of a
+count under it and the equivalence under that (`Oka/SetTheory/Cardinal/Finite.lean` and
+`Oka/Logic/Equiv/Set.lean`), and what reading it at the triangle of a
 morphism of covers buys (`Oka/AnalyticSpace/FiniteEtaleOver.lean`). Appended as its own section
 rather than merged into `### The degree does not see a change of source, and is an invariant of a
 cover` above, for the reason that section itself gives: moving or reordering a section of this
 file is a conflict for every branch that has appended to it.
 
 **The mirror-tree declarations are guarded here and not in a file of their own.**
-`Set.preimageCompEquivSigma` and `Nat.card_preimage_singleton_comp` are declared by
-`Oka/SetTheory/Cardinal/Finite.lean`, which has no complex-analytic content and no
-`## Main results` heading of its own; the precedent for guarding such a declaration under the
-topic of the statement that consumes it is the `IsCoveringMap` guards earlier in this file, which
-are `Oka/Topology/Covering/Basic.lean`'s. The subject of everything below is
-`ComplexAnalytic.AnalyticSpace.degree`, a function of a *morphism*, which is the topic table's
+`Set.preimageCompEquivSigma` is declared by `Oka/Logic/Equiv/Set.lean` and
+`Nat.card_preimage_singleton_comp` by `Oka/SetTheory/Cardinal/Finite.lean`, neither of which has
+any complex-analytic content or a `## Main results` heading of its own; the precedent for
+guarding such a declaration under the topic of the statement that consumes it is the
+`IsCoveringMap` guards earlier in this file, which are `Oka/Topology/Covering/Basic.lean`'s. The
+subject of everything below is `ComplexAnalytic.AnalyticSpace.degree`, a function of a
+*morphism*, which is the topic table's
 `morphisms of analytic spaces` row.
 
 **`Set.preimageCompEquivSigma` is the only guard below that is not `Classical.choice`**, and that
