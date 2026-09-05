@@ -185,13 +185,19 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2` and over a preconnected base.
   This is the class rather than a statement quantified by hand, and it is what `## What is not
   here` used to say no subcategory had been exhibited for.
-- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_id` and
-  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_trivial_of_isEmpty`: **two
-  objects of that subcategory** — the base over itself, when the base is preconnected and
-  Hausdorff, and the trivial cover at an empty index type, with no hypothesis at all. The second
-  is the object whose empty fibre the `## What is not here` paragraph gave as its reason for
-  keeping the point hypothesis, and it is inside the subcategory rather than outside it;
-  `OkaTest/FiniteEtaleOver.lean` exhibits a third that is not isomorphic to the first.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_id`,
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_trivial_of_isEmpty` and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_trivial_of_isEmpty_base`:
+  **objects of that subcategory** — the base over itself, when the base is preconnected and
+  Hausdorff; the trivial cover at an empty index type, with no hypothesis at all; and the trivial
+  cover over an empty base, at any finite index type at all.
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_trivial_of_isEmpty` is the
+  object whose empty fibre the `## What is not here` paragraph gave as its reason for keeping the
+  point hypothesis, and it is inside the subcategory rather than outside it;
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_trivial_of_isEmpty_base` is the
+  witness that the `[Nonempty X]` of
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.not_preconnectedSpace_trivial` is doing work.
+  `OkaTest/FiniteEtaleOver.lean` exhibits one that is not isomorphic to the base over itself.
 
 ## What is not here
 
@@ -299,8 +305,11 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   object**, so it does not enter the subcategory; and the subcategory is not empty —
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_id` puts the base over itself in
   it, `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_trivial_of_isEmpty` puts the
-  empty cover in it, and `OkaTest/FiniteEtaleOver.lean`'s `sqOver` is a third object of it, not
-  isomorphic to the first.
+  trivial cover at an empty index type in it,
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_trivial_of_isEmpty_base` puts
+  the trivial cover over an empty base in it at any finite index type at all, and
+  `OkaTest/FiniteEtaleOver.lean`'s `sqOver` is in it as well, not isomorphic to the base over
+  itself.
 
   **What closed the gap was one general lemma, and the statements the previous version of this
   paragraph named — `AlgebraicGeometry.LocallyRingedSpace.stalkMap_comp` and
@@ -1305,23 +1314,25 @@ carry both of them at every object.
 **A cover with an empty total space satisfies this**, and that is not an accident of spelling:
 `PreconnectedSpace` is preconnectedness of `Set.univ` and does not ask for a point, `Nonempty`
 being `ConnectedSpace`'s extra field.
-`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_trivial_of_isEmpty` below is that
-case at the one object this file exhibits it at, **and it is precisely the object at
-which the point-of-the-fibre hypothesis could say nothing.**
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_trivial_of_isEmpty` and
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_trivial_of_isEmpty_base` below are
+that case, at an empty index type and over an empty base, **and each of them is an object at which
+the point-of-the-fibre hypothesis could say nothing.**
 
 **Over a non-empty base**, what the subcategory does **not** contain is a trivial cover with two
 distinct sheets, by
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.not_preconnectedSpace_trivial`, which reads
 `[Nonempty X]`. **That hypothesis is this property's blind spot and not decoration**: the property
 puts no condition on the base at all, so over an *empty* base the trivial cover at **any** index
-type has an empty total space, and the paragraph above then puts it inside. What this file proves
-is the empty total space at an empty *index type*, where
-`ComplexAnalytic.AnalyticSpace.isEmpty_sigma` applies; the empty-base case needs the **members**
-of the disjoint union to be empty rather than its index type, which is
-`ComplexAnalytic.AnalyticSpace.isEmpty_sigma_of_members`. **What is missing is now the object and
-no longer the lemma**: no cover of an empty base is exhibited below, and one would be that lemma
-at `fun _ ↦ X` against `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.trivial`, with both fields
-of the property by `inferInstance` from there. -/
+type has an empty total space, and the paragraph above then puts it inside.
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_trivial_of_isEmpty_base` below is
+that, with the index type left free: give it two distinct elements and the very cover
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.not_preconnectedSpace_trivial` excludes is an
+object here. **What that took was the other emptiness lemma**, the one asking that the **members**
+of the disjoint union be empty rather than its index type —
+`ComplexAnalytic.AnalyticSpace.isEmpty_sigma_of_members` and not
+`ComplexAnalytic.AnalyticSpace.isEmpty_sigma`, which is what the cover at an empty index type
+uses. -/
 def FiniteEtaleOver.isPreconnectedT2 (X : AnalyticSpace.{u}) :
     ObjectProperty (FiniteEtaleOver.{u} X) :=
   fun A ↦ PreconnectedSpace (A.left : Type u) ∧ T2Space (A.left : Type u)
@@ -1356,6 +1367,27 @@ theorem FiniteEtaleOver.isPreconnectedT2_trivial_of_isEmpty (ι : Type u) [Finit
     FiniteEtaleOver.isPreconnectedT2.{u} X (FiniteEtaleOver.trivial.{u} ι X) :=
   haveI : IsEmpty ((FiniteEtaleOver.trivial.{u} ι X).left : Type u) :=
     isEmpty_sigma (F := fun _ : ι ↦ X)
+  ⟨inferInstance, inferInstance⟩
+
+/-- **And so is the trivial cover over an empty base**, at any finite index type at all.
+
+Its total space is empty by `ComplexAnalytic.AnalyticSpace.isEmpty_sigma_of_members`, the members
+of the disjoint union being the base itself. That is the theorem above at the other quantifier:
+there the emptiness is discharged at the index type, here at a point of a member, and here the
+index type is left free.
+
+**Leaving it free is what this is for.**
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.not_preconnectedSpace_trivial` says a trivial cover
+with two distinct sheets is *outside* the subcategory, and it reads `[Nonempty X]`; give `ι` two
+distinct elements here and the same cover is inside it. **So that hypothesis is doing work rather
+than decorating the statement**, which is a thing the docstring of
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2` argued in prose and nothing in
+the tree witnessed. -/
+theorem FiniteEtaleOver.isPreconnectedT2_trivial_of_isEmpty_base (ι : Type u) [Finite ι]
+    (X : AnalyticSpace.{u}) [IsEmpty (X : Type u)] :
+    FiniteEtaleOver.isPreconnectedT2.{u} X (FiniteEtaleOver.trivial.{u} ι X) :=
+  haveI : IsEmpty ((FiniteEtaleOver.trivial.{u} ι X).left : Type u) :=
+    isEmpty_sigma_of_members (F := fun _ : ι ↦ X)
   ⟨inferInstance, inferInstance⟩
 
 /-- **`CategoryTheory.Functor.Faithful` for the fibre functor**, on the full subcategory of covers
