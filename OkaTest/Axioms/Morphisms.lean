@@ -2603,3 +2603,83 @@ info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasFiniteCoproducts' depend
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasFiniteCoproducts
+
+/-! ### The fibre functors and finite coproducts
+
+`Oka/AnalyticSpace/FiniteEtaleOver.lean`: the equivalence between the fibre of a disjoint union of
+covers and the disjoint union of the fibres, the two `rfl` lemmas identifying its forward map with
+each fibre functor's action on the inclusion of a member, the colimit statement for each of those
+functors, the colimit-of-shape statement each is deduced to at an index type of the category's own
+universe, and the `CategoryTheory.Limits.PreservesFiniteCoproducts` instance for each, which is the
+Galois-category axiom on a fibre functor.
+
+Appended as its own section rather than merged into another, for the reason the sections in this
+file give for that: a section appended at the end cannot say which section is above it and stay
+true, since the next branch appends between them.
+
+**`Classical.choice` is in every guard below** and is not introduced by any of them. It arrives
+through `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.sigma` and through the covering-map rung,
+and `Equiv.ofBijective` — which is what makes
+`AlgebraicGeometry.LocallyRingedSpace.fiberSigmaDescEquiv` noncomputable — adds none of the three.
+
+**Named by file rather than counted**, as the sections above say and for the reason they give.
+
+**Named and not located.** No sentence here says which section is above or below it. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberSigmaEquiv' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberSigmaEquiv
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberSigmaEquiv_apply' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberSigmaEquiv_apply
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberSigmaEquiv_apply_fintypeFiberFunctor'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberSigmaEquiv_apply_fintypeFiberFunctor
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitFiberCofanSigma' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitFiberCofanSigma
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitFintypeFiberCofanSigma' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitFintypeFiberCofanSigma
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesColimitsOfShape_fiberFunctor'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesColimitsOfShape_fiberFunctor
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesColimitsOfShape_fintypeFiberFunctor'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesColimitsOfShape_fintypeFiberFunctor
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesFiniteCoproducts_fiberFunctor'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesFiniteCoproducts_fiberFunctor
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesFiniteCoproducts_fintypeFiberFunctor'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesFiniteCoproducts_fintypeFiberFunctor
