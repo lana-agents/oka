@@ -1594,6 +1594,89 @@ info: 'ComplexAnalytic.AnalyticSpace.isLocalIso_restrictHom' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.isLocalIso_restrictHom
 
+/-! ### That restriction is a pullback square, and the base change it gives
+
+`Oka/AnalyticSpace/PullbackOpen.lean`. `ComplexAnalytic.AnalyticSpace.restrictHom` is guarded in
+this file as a *construction* — at
+`ComplexAnalytic.AnalyticSpace.isFinite_restrictHom_of_subset_range` and at
+`ComplexAnalytic.AnalyticSpace.isLocalIso_restrictHom`, each a transport of a class along a change
+of source and target. This section guards the statement that the square that restriction sits in
+is a **pullback**, which is a claim about a limit and not about a class, and appended as its own
+section because a section moved is a conflict for somebody else.
+
+**`ComplexAnalytic.AnalyticSpace.isFiniteEtale_pullback_snd_ofRestrict` is guarded here as a test
+of an instance and not only of a theorem's axioms**, which is worth saying because a
+`#print axioms` line does not usually carry that. Its statement mentions
+`CategoryTheory.Limits.pullback` at `ComplexAnalytic.AnalyticSpace`, which does not elaborate at
+all unless `ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict` is found by instance search — so
+an instance that existed at a discrimination-tree key search does not reach would leave the guard
+for it unbuildable rather than green. That seam is a recorded hazard in this corner of the
+tree: `ComplexAnalytic.AnalyticSpace.isIso_stalkMap_ofRestrict`'s docstring exists for one
+instance of it.
+
+**`ComplexAnalytic.AnalyticSpace.isFinite_restrictHom` is not the sibling it looks like.**
+`ComplexAnalytic.AnalyticSpace.isFinite_restrictHom_of_subset_range` hypothesises an embedding and
+an open subset inside the image, and concludes about a morphism that is not finite; this one
+hypothesises finiteness and asks nothing of the open subset. `Oka/AnalyticSpace/PullbackOpen.lean`'s
+header says why neither implies the other.
+-/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.base_restrictHom_eq_restrictPreimage' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.base_restrictHom_eq_restrictPreimage
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.range_subset_preimage_of_pullbackCone' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.range_subset_preimage_of_pullbackCone
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isPullback_ofRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isPullback_ofRestrict
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict'' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict'
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isFinite_restrictHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFinite_restrictHom
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isFiniteEtale_restrictHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFiniteEtale_restrictHom
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isFiniteEtale_pullback_snd_ofRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFiniteEtale_pullback_snd_ofRestrict
+
 /-! ### And a local isomorphism restricted to subspaces cut out by a family and by its pullbacks
 
 `Oka/AnalyticSpace/CutOutLocalIso.lean`, the whole of it, in the order they are declared. The
