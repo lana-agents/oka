@@ -260,7 +260,8 @@ along a morphism of complex analytic spaces `ℂ^n|V ⟶ ℂ^m`.**
 
 This is one line because `ComplexAnalytic.AnalyticSpace.okaMapOpen` is already `m`-fold: a
 family of holomorphic functions on `V` *is* a map to `ℂ^m`, with no product structure on
-analytic spaces needed and none available. Only the statement was ever one-dimensional. -/
+analytic spaces needed here and none reachable from this file, which is upstream of
+`Oka/AnalyticSpace/AffineProduct.lean`. Only the statement was ever one-dimensional. -/
 theorem AnalyticSpace.exists_hom_complexAffineSpace_restrict
     (g : ULift.{u} (Fin m) →
       ((AnalyticSpace.complexAffineSpace.{u} n).restrict V).presheaf.obj (op ⊤)) :

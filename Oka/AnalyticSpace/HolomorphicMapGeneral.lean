@@ -26,15 +26,24 @@ previously known `m`-fold only for `Z = ℂ^n`, and for a general `Z` only at `m
 
 ## `ℂ^m` is not built as a product, and could not be
 
-**Nothing in the development gives products of complex analytic spaces, and nothing here needs
-them.** `ℂ^m` is a concrete space and `ComplexAnalytic.AnalyticSpace.okaMapOpen` maps into it
-directly from a family of holomorphic functions on an open subset of `ℂ^n`, so the `m` sections
-travel together through one chart and one local morphism from beginning to end. The route that
-*would* need a product — take the `m` morphisms `Z ⟶ ℂ` that the `m = 1` statement gives and
-assemble them — is not available and is not used. `ComplexAnalytic.nodeToLine_ne` is what makes
-that concrete: the node's two coordinate functions give two different morphisms `node ⟶ ℂ`, and
-no operation in the development combines them into the single morphism `node ⟶ ℂ²` that
-`OkaTest/HolomorphicMapGeneral.lean` obtains from the theorem below.
+**Nothing here needs a product of complex analytic spaces, and nothing below uses one.** `ℂ^m`
+is a concrete space and `ComplexAnalytic.AnalyticSpace.okaMapOpen` maps into it directly from a
+family of holomorphic functions on an open subset of `ℂ^n`, so the `m` sections travel together
+through one chart and one local morphism from beginning to end. The route that *would* need a
+product — take the `m` morphisms `Z ⟶ ℂ` that the `m = 1` statement gives and assemble them — is
+not taken. `ComplexAnalytic.nodeToLine_ne` is what makes that concrete: the node's two coordinate
+functions give two different morphisms `node ⟶ ℂ`, and nothing below combines them into the
+single morphism `node ⟶ ℂ²` that `OkaTest/HolomorphicMapGeneral.lean` obtains from the theorem
+below.
+
+**The heading says *could not be*, and the reason is circularity rather than absence.**
+`Oka/AnalyticSpace/AffineProduct.lean` reads a binary product off this file's bijection —
+`ComplexAnalytic.AnalyticSpace.isLimitBinaryFanAffineProd` makes `ℂ^(n+m)` the product of `ℂ^n`
+and `ℂ^m`, and `ComplexAnalytic.AnalyticSpace.isTerminalComplexAffineSpaceZero` makes `ℂ^0`
+terminal. That file imports this one, so the product is a consequence of the bijection below and
+could not have been an ingredient of it. **This paragraph read *nothing in the development gives
+products of complex analytic spaces* until that file landed**, and the sentence it is replaced by
+is the one that was doing the work all along.
 
 Consequently **`m` enters the proof in exactly two places**: the family version of the local
 lift, and one `section_ext_of_cover` per coordinate in the gluing. Everything else — the chart,
@@ -276,7 +285,8 @@ immersion, and no cut-out data enters.
 **One chart carries all `m` sections**, which is the whole reason
 `ComplexAnalytic.AnalyticSpace.exists_chartLift` is stated for a family rather than applied `m`
 times: `m` separate charts could not be composed into a single morphism to `ℂ^m` without a
-product of analytic spaces, which the development does not have. -/
+product of analytic spaces, and no product is available to this file, which is upstream of
+`Oka/AnalyticSpace/AffineProduct.lean`. -/
 theorem exists_local_hom_of_chartLift (Z : AnalyticSpace.{u}) {m : ℕ}
     (g : ULift.{u} (Fin m) → Z.presheaf.obj (op ⊤))
     {W : Z.Opens} {n : ℕ} {V : TopologicalSpace.Opens (complexAffineSpace.{u} n)}
@@ -394,8 +404,9 @@ This is the existence half of taxis #610, and the last of it that was open.
 Note what does *not* appear in the proof: any product of analytic spaces. `ℂ^m` is a concrete
 space and `ComplexAnalytic.AnalyticSpace.okaMapOpen` maps into it directly from a family of
 holomorphic functions, so the `m` sections are carried by one chart and one local morphism
-throughout. Assembling `m` separate morphisms `Z ⟶ ℂ` into one `Z ⟶ ℂ^m` would need a product
-and is never done. -/
+throughout. Assembling `m` separate morphisms `Z ⟶ ℂ` into one `Z ⟶ ℂ^m` would need a product,
+and the product that `Oka/AnalyticSpace/AffineProduct.lean` builds is built out of this theorem
+rather than the other way round. -/
 theorem exists_hom_complexAffineSpace_general (Z : AnalyticSpace.{u}) {m : ℕ}
     (g : ULift.{u} (Fin m) → Z.presheaf.obj (op ⊤)) :
     ∃ φ : Z ⟶ AnalyticSpace.complexAffineSpace.{u} m,
