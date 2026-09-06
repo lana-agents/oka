@@ -72,8 +72,10 @@ now compiled**: `TwoIndiscrete.not_isClosedMap_pt_of_isClosedMap_comp`
 (`OkaTest/FiniteEtaleCancel.lean`) exhibits a `g` that is continuous, closed and has finite
 fibres, an `f` that is continuous, a
 closed `f ≫ g` and a non-closed `f`. It is a two-point indiscrete space and not the line with two
-origins, so it is the weaker witness in one respect — its `g` is not a local homeomorphism — and
-the line with two origins is still compiled nowhere.
+origins, so it is the weaker witness — its `g` is not a local homeomorphism and its middle space
+is not T1. **The line with two origins itself is compiled beside it**, as
+`LineTwoOrigins.not_isClosedMap_inc_of_isClosedMap_comp`, with a `g` that *is* a local
+homeomorphism, so the paragraph above is now a theorem at the space it argues with.
 
 That paragraph does not collide with `ComplexAnalytic.AnalyticSpace.isFinite_of_isFinite_comp`,
 which is this file's older cancellation lemma and asks the second factor to be injective: the `g`
