@@ -90,6 +90,10 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
 - `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2`: **the covers whose total space
   is preconnected and Hausdorff**, as a `CategoryTheory.ObjectProperty` and hence as a full
   subcategory — the one the fibre functor is `CategoryTheory.Functor.Faithful` on.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.sigma`: **the disjoint union of a finite family
+  of covers**, as an object of the same category, with
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.sigmaι` for the inclusion of a member and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.cofanSigma` for the cocone they make.
 
 ## Main results
 
@@ -252,6 +256,17 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   witness that the `[Nonempty X]` of
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.not_preconnectedSpace_trivial` is doing work.
   `OkaTest/FiniteEtaleOver.lean` exhibits one that is not isomorphic to the base over itself.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitCofanSigma` and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasFiniteCoproducts`: **the disjoint union of
+  finitely many covers is their coproduct, so the category has finite coproducts** — with no
+  hypothesis on the base, exactly as for the terminal object. **This is another Galois-category
+  axiom on the category**, as
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasTerminal` is. The mathematics is
+  `Oka/AnalyticSpace/Sigma.lean`'s and `Oka/AnalyticSpace/SigmaFiniteEtale.lean`'s, and what is
+  done here is the transport of it across the comma category;
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasColimitsOfShape_discrete` is the statement at
+  an index type of this category's own universe that the class is deduced from, and
+  `## What is not here` says which axioms remain absent.
 
 ## What is not here
 
@@ -337,9 +352,13 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   subcategory below over a preconnected and Hausdorff base, and
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_fiberFunctor` and
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_fintypeFiberFunctor`
-  say the two fibre functors preserve it. **What that discharges is the terminal-object obligation
-  and no other**: base change is untouched by all of it, and so are quotients by finite group
-  actions and the axiom that a monomorphism induces an isomorphism onto a direct summand.
+  say the two fibre functors preserve it. **Finite coproducts are another axiom and are here
+  now too:** `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasFiniteCoproducts` puts the disjoint
+  union of finitely many covers in the category as their coproduct, again with no hypothesis on
+  the base at all. **What the terminal object and the finite coproducts discharge is those two
+  obligations and no other**: base change is untouched by all of it, and so are quotients by
+  finite group actions and the axiom that a monomorphism induces an isomorphism onto a direct
+  summand.
 
   **Faithfulness is
   no longer among the absences, and this paragraph used to be mostly about it.**
@@ -2037,5 +2056,161 @@ instance FiniteEtaleOver.reflectsIsomorphisms_fintypeFiberFunctor {X : AnalyticS
       @FiniteEtaleOver.isIso_of_bijective_fiberMap X A.obj B.obj _
         A.property.2 B.property.2 B.property.1 ‹_› x hb
     exact isIso_of_reflects_iso f (FiniteEtaleOver.isPreconnectedT2.{u} X).ι
+
+/-! ### Finite coproducts of covers -/
+
+/-- **The disjoint union of a finite family of covers, as a cover of the same base.**
+
+`ComplexAnalytic.AnalyticSpace.sigmaDesc` of the members' structure maps, which is finite étale by
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_sigmaDesc`. That instance asks the index type to be
+finite, and asks each member's structure map to be finite étale — which is what an object of this
+category carries in its `prop` field.
+
+**The `prop` fields are passed positionally with `@`, and that is not decoration.** Introducing
+them as `haveI : ∀ i, IsFiniteEtale (A i).hom := fun i ↦ (A i).prop` and then leaving
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_sigmaDesc`'s instance argument to be synthesised
+fails with *"failed to synthesize instance of type class `∀ (i : ι), IsFiniteEtale (A i).hom`"* —
+on the hypothesis introduced one line above it. That is the seam
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.faithful_fiberFunctor` records, cured the same way.
+
+**And `inferInstance` cannot be asked for the `prop` field either**, for an independent reason:
+the object property of this comma category is `ComplexAnalytic.AnalyticSpace.isFiniteEtale`, the
+`def` that exists to carry a head symbol, so what the field states is not a class application at
+all — the elaborator answers `type class instance expected` — however much
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_iff` makes it `Iff.rfl` to one. -/
+noncomputable def FiniteEtaleOver.sigma {X : AnalyticSpace.{u}} {ι : Type u} [Finite ι]
+    (A : ι → FiniteEtaleOver.{u} X) : FiniteEtaleOver.{u} X :=
+  MorphismProperty.Over.mk _
+    (AnalyticSpace.sigmaDesc (fun i ↦ (A i).left) fun i ↦ (A i).hom)
+    (@isFiniteEtale_sigmaDesc ι (fun i ↦ (A i).left) X (fun i ↦ (A i).hom) ‹_›
+      fun i ↦ (A i).prop)
+
+/-- **The inclusion of a member into the disjoint union**, as a morphism of covers.
+
+`ComplexAnalytic.AnalyticSpace.sigmaι` underneath, and the triangle over the base is
+`ComplexAnalytic.AnalyticSpace.sigmaι_sigmaDesc`: what the descent map restricts to on a member is
+that member's structure map. A morphism of this category is asked for nothing beyond the triangle,
+`Q` being `⊤`, so `ComplexAnalytic.AnalyticSpace.isFiniteEtale_sigmaι` is **not** read here — that
+lemma is what would make an inclusion an object of a comma category over the disjoint union, which
+is a different statement about a different base.
+
+**The `⊤` argument is left to its autoParam rather than written out.** Spelling it `trivial` does
+not compile: inside a declaration whose name begins
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver`, that identifier resolves to
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.trivial`, and the error message names that
+declaration's type rather than `True`. -/
+noncomputable def FiniteEtaleOver.sigmaι {X : AnalyticSpace.{u}} {ι : Type u} [Finite ι]
+    (A : ι → FiniteEtaleOver.{u} X) (j : ι) : A j ⟶ FiniteEtaleOver.sigma A :=
+  MorphismProperty.Over.homMk (AnalyticSpace.sigmaι (fun i ↦ (A i).left) j)
+    (AnalyticSpace.sigmaι_sigmaDesc _ _ j)
+
+/-- **The inclusions of the members, read as a cofan on the disjoint union of covers.**
+
+There is no content: the declaration exists because
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitCofanSigma` has to name the cocone it says
+is a colimit, and because `CategoryTheory.Limits.Cofan.inj` is how that statement presents the
+inclusions. It is `ComplexAnalytic.AnalyticSpace.cofanSigma` one level up. -/
+noncomputable def FiniteEtaleOver.cofanSigma {X : AnalyticSpace.{u}} {ι : Type u} [Finite ι]
+    (A : ι → FiniteEtaleOver.{u} X) : Limits.Cofan A :=
+  Limits.Cofan.mk (FiniteEtaleOver.sigma A) (FiniteEtaleOver.sigmaι A)
+
+/-- **The disjoint union of finitely many covers is their coproduct in the category of covers.**
+
+**The mathematics is `Oka/AnalyticSpace/Sigma.lean`'s and this adds none of it.**
+`ComplexAnalytic.AnalyticSpace.sigmaDesc` supplies the descent map,
+`ComplexAnalytic.AnalyticSpace.sigmaι_sigmaDesc` is the factorisation field and
+`ComplexAnalytic.AnalyticSpace.hom_ext_sigma` is the uniqueness field. What is done here is
+re-reading each of those as a statement about morphisms **over the base**, which is
+`CategoryTheory.MorphismProperty.Over.homMk` for the descent map,
+`CategoryTheory.MorphismProperty.Over.Hom.ext` for an equality of morphisms of covers and
+`CategoryTheory.MorphismProperty.Over.w` for the triangle a morphism of covers commutes.
+
+**`ComplexAnalytic.AnalyticSpace.isColimitCofanSigma` is not read here**, although it is this
+statement one level down. The descent map has to be re-wrapped as a morphism over the base in any
+case, and once it is there is nothing left for that bundle to carry;
+`ComplexAnalytic.AnalyticSpace.sigmaι_sigmaDesc` and
+`ComplexAnalytic.AnalyticSpace.hom_ext_sigma` are what this proof reads instead.
+
+**Every field is a term and none is a tactic**, and some citations of
+`ComplexAnalytic.AnalyticSpace.sigmaι_sigmaDesc` have their arguments written out where the rest
+leave them to unification. Where they are written out, the unifier would otherwise have to see
+through `CategoryTheory.MorphismProperty.Over.homMk`'s underlying morphism, or through the cofan's
+apex, to a `ComplexAnalytic.AnalyticSpace.sigmaDesc`, and it reports the mismatch with its
+metavariables still in it. This is the seam `Oka/AnalyticSpace/Sigma.lean`'s
+`## One seam, and it is not the one it looks like` describes, at one more layer of wrapping. -/
+noncomputable def FiniteEtaleOver.isColimitCofanSigma {X : AnalyticSpace.{u}} {ι : Type u}
+    [Finite ι] (A : ι → FiniteEtaleOver.{u} X) :
+    Limits.IsColimit (FiniteEtaleOver.cofanSigma A) :=
+  Limits.Cofan.IsColimit.mk _
+    (fun t ↦ MorphismProperty.Over.homMk
+      (AnalyticSpace.sigmaDesc (fun i ↦ (A i).left) fun i ↦ (t.inj i).left)
+      (AnalyticSpace.hom_ext_sigma _ fun i ↦
+        (Category.assoc _ _ _).symm.trans
+          (((congrArg (· ≫ t.pt.hom) (AnalyticSpace.sigmaι_sigmaDesc _ _ i)).trans
+            (MorphismProperty.Over.w (t.inj i))).trans
+            (AnalyticSpace.sigmaι_sigmaDesc (fun i ↦ (A i).left)
+              (fun i ↦ (A i).hom) i).symm)))
+    (fun _ i ↦ MorphismProperty.Over.Hom.ext (AnalyticSpace.sigmaι_sigmaDesc _ _ i))
+    (fun t _ h ↦ MorphismProperty.Over.Hom.ext <|
+      AnalyticSpace.hom_ext_sigma _ fun i ↦
+        (congrArg (fun f : A i ⟶ t.pt ↦ f.left) (h i)).trans
+          (AnalyticSpace.sigmaι_sigmaDesc (fun i ↦ (A i).left)
+            (fun i ↦ (t.inj i).left) i).symm)
+
+/-- **So the category of covers has colimits of every discrete shape indexed by a finite type of
+its own universe.**
+
+`CategoryTheory.Limits.hasCoproducts_of_colimit_cofans` is what does this at
+`ComplexAnalytic.AnalyticSpace`, and it is unavailable here: it asks for a cofan and a colimit
+proof at **every** index type of a universe, and a disjoint union of covers is a cover only at a
+finite one. What is written out instead is that converter's own body at one index type —
+`CategoryTheory.Limits.Cocone.precompose` at `CategoryTheory.Discrete.natIsoFunctor`, which is
+what turns an arbitrary functor out of a discrete category into the family of objects it is
+determined by.
+
+**A `theorem` and not an `instance`, and that was measured rather than argued.**
+`Mathlib/CategoryTheory/Limits/Shapes/FiniteProducts.lean` derives
+`CategoryTheory.Limits.HasColimitsOfShape` at a discrete shape on a finite index type from
+`CategoryTheory.Limits.HasFiniteCoproducts`, at every universe rather than only at this
+category's own, so declaring this an instance too would add nothing that instance search cannot
+already do once
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasFiniteCoproducts` is in scope. Checked by
+elaborating `inferInstance` at that statement with this declaration left a `theorem`, rather than
+read off the shapes. -/
+theorem FiniteEtaleOver.hasColimitsOfShape_discrete (ι : Type u) [Finite ι]
+    (X : AnalyticSpace.{u}) :
+    Limits.HasColimitsOfShape (Discrete ι) (FiniteEtaleOver.{u} X) where
+  has_colimit F := Limits.HasColimit.mk
+    ⟨(Limits.Cocone.precompose Discrete.natIsoFunctor.hom).obj
+      (FiniteEtaleOver.cofanSigma fun j ↦ F.obj ⟨j⟩),
+      (Limits.IsColimit.precomposeHomEquiv _ _).symm (FiniteEtaleOver.isColimitCofanSigma _)⟩
+
+/-- **The category of finite étale covers has finite coproducts**, with no hypothesis on the base.
+
+**This is a Galois-category axiom on the category**, as
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasTerminal` is: the definition in
+`Mathlib/CategoryTheory/Galois/Basic.lean`, whose namespace is not in this repository's import
+closure and so cannot be cited by name here, carries a field of exactly this class at exactly this
+category. `Oka/AnalyticSpace/Sigma.lean` states the same class of
+`ComplexAnalytic.AnalyticSpace` itself and says there that what it holds is the ingredient the
+axiom would be built from; this is where that ingredient is built into one.
+
+**The universe crossing is the whole of the step and it is not free.**
+`CategoryTheory.Limits.HasFiniteCoproducts` quantifies over `Fin n`, which lives in `Type 0`,
+while `ComplexAnalytic.AnalyticSpace.sigma` takes its index type from `Type u`.
+`CategoryTheory.Discrete.equivalence` at `Equiv.ulift` is what crosses between them, and it is the
+step `CategoryTheory.Limits.hasFiniteCoproducts_of_hasCoproducts` also takes — that converter
+itself being unusable here for the reason
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasColimitsOfShape_discrete` gives.
+
+**What this does not say is that the category is a Galois category.** Base change is absent, and
+so are quotients by finite group actions and the axiom that a monomorphism induces an isomorphism
+onto a direct summand; `## What is not here` says so, and this instance shortens that list by a
+member rather than emptying it. -/
+instance FiniteEtaleOver.hasFiniteCoproducts (X : AnalyticSpace.{u}) :
+    Limits.HasFiniteCoproducts (FiniteEtaleOver.{u} X) :=
+  ⟨fun n ↦
+    haveI := FiniteEtaleOver.hasColimitsOfShape_discrete (ULift.{u} (Fin n)) X
+    Limits.hasColimitsOfShape_of_equivalence (Discrete.equivalence Equiv.ulift.{u})⟩
 
 end ComplexAnalytic.AnalyticSpace
