@@ -261,8 +261,11 @@ coherence statement for arbitrary complex analytic spaces:
   and an invertibility of the underlying morphism rather than of the morphism of covers — and
   neither was a price**: the first is removed by closing the empty case rather than paid, and the
   second is two Mathlib reflections composed. **What is still absent is base change**, for want
-  of pullbacks of analytic spaces, so this is two of a Galois category's axioms and not the
-  structure.
+  of pullbacks of analytic spaces. **Conservativity is one of the axioms a Galois category asks
+  of a fibre functor, and faithfulness is not one of them**: at the Mathlib revision
+  `lakefile.toml` pins, the class there asks the functor to reflect isomorphisms and *derives*
+  faithfulness from the axioms rather than assuming it. So what is here is that axiom and
+  something such a structure hands back, and not the structure.
   `ComplexAnalytic.isCoveringMap_base_sq` applies the rung to the
   squaring map, and is a test of the rung rather than new information about `z ↦ z²`, which
   Mathlib already covers. **There is still no notion of a covering *of analytic spaces***: this is

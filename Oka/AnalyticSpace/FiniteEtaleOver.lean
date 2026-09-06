@@ -330,7 +330,7 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   **What is absent is the Galois category itself.** Its axioms need the base change the
   **No pullbacks, so no base change** bullet below says this category has not — **and this
   sentence used to stop there, which read as though base change were the whole of what they
-  need.** It is not. **One of the axioms is here now, and it is the terminal object:**
+  need.** It is not. **The terminal object is one of the axioms and it is here now:**
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasTerminal` puts the base over itself at the top
   of the category with no hypothesis on the base at all,
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasTerminalSubcategory` does the same for the
@@ -348,8 +348,12 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   over a preconnected source and a Hausdorff total space of the target. **Conservativity is no
   longer among the absences either** —
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.reflectsIsomorphisms_fiberFunctor` is it, on the
-  same subcategory and at the same hypothesis on the base — but **nothing exhibits the functor as
-  an equivalence onto anything**, and that clause of this bullet is untouched by any of it.
+  same subcategory and at the same hypothesis on the base, and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.reflectsIsomorphisms_fintypeFiberFunctor` says it
+  of the functor a Galois category asks for. **Reflecting isomorphisms is one of that definition's
+  axioms and faithfulness is not**, which is why the two sit differently here although they hold
+  on the same subcategory — but **nothing exhibits the functor as an equivalence onto
+  anything**, and that clause of this bullet is untouched by any of it.
 
   **This bullet said that nothing turns an equivalence of fibres into an isomorphism of covers,
   and what made that false arrived in pieces, each from a different push.**
@@ -1624,7 +1628,10 @@ discharges none of that structure's obligations.
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_fintypeFiberFunctor`
 below**, composed with
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_ι` to reach this same
-restricted functor. **Base change is still absent**, for the reason the
+restricted functor, **and so does
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.reflectsIsomorphisms_fintypeFiberFunctor` below**,
+which is conservativity — the axiom that class asks of a fibre functor where faithfulness is the
+thing it hands back. **Base change is still absent**, for the reason the
 `## No pullbacks, so no base change` bullet gives, and nothing here bears on it. -/
 instance FiniteEtaleOver.faithful_fintypeFiberFunctor {X : AnalyticSpace.{u}}
     [PreconnectedSpace (X : Type u)] (x : X) :
@@ -2006,9 +2013,15 @@ about its own pair: the two functors have the same `map` up to the bundling thei
 — `TypeCat.ofHom` there and `FintypeCat.homMk` here — so `IsIso` of one is not `IsIso` of the
 other, and the bijectivity has to be read off through the concrete-category forgetful functor,
 `CategoryTheory.ConcreteCategory.isIso_iff_bijective`, rather than through
-`CategoryTheory.isIso_iff_bijective`. **`FintypeCat` has no forgetful functor in its own
-namespace** — `CategoryTheory.forget` is the one, through the `CategoryTheory.ConcreteCategory`
-instance, and `FintypeCat.incl` lands in `Type*` without being it. -/
+`CategoryTheory.isIso_iff_bijective`. **The forgetful functor that reads it off and
+`FintypeCat.incl` are the same functor and not two**: at the Mathlib revision `lakefile.toml`
+pins, `FintypeCat.incl` is `CategoryTheory.forget FintypeCat` by `rfl` at every universe, which
+is why `Mathlib/CategoryTheory/FintypeCat.lean` can hand the forgetful functor its
+`CategoryTheory.Functor.Full` instance by `inferInstanceAs` from `FintypeCat.incl`'s. **What
+those two spellings do not make interchangeable is
+`CategoryTheory.ConcreteCategory.isIso_iff_bijective` and `CategoryTheory.isIso_iff_bijective`**,
+which differ in which category's `CategoryTheory.IsIso` they read and not in which functor
+forgets. -/
 instance FiniteEtaleOver.reflectsIsomorphisms_fintypeFiberFunctor {X : AnalyticSpace.{u}}
     [PreconnectedSpace (X : Type u)] (x : X) :
     ((FiniteEtaleOver.isPreconnectedT2.{u} X).ι
