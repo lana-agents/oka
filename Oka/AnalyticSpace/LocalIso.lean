@@ -119,11 +119,14 @@ the rung.
 - `ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp`: **finite étale morphisms cancel** — if
   `f ≫ g` is finite étale and `g` is a local isomorphism then so is `f`, for a Hausdorff middle
   space. That separation axiom is the whole cost of it and is spent entirely in the finite rung.
+- `ComplexAnalytic.AnalyticSpace.isClopen_range_of_isLocalIso_of_isFinite` and
+  `ComplexAnalytic.AnalyticSpace.isClopen_range_of_isFiniteEtale`: **the image of a finite local
+  isomorphism is clopen** — open because the morphism is a local isomorphism and closed because it
+  is finite. No separation axiom, no connectedness, nothing about the source being inhabited.
 - `ComplexAnalytic.AnalyticSpace.surjective_base_of_isLocalIso_of_isFinite` and
   `ComplexAnalytic.AnalyticSpace.surjective_base_of_isFiniteEtale`: **a finite local isomorphism
-  out of a non-empty space onto a preconnected base is surjective** — the image is open because the
-  morphism is a local isomorphism and closed because it is finite, and a preconnected base has no
-  other clopen set than `∅` and itself.
+  out of a non-empty space onto a preconnected base is surjective** — the clopen image above, and a
+  preconnected base has no other clopen set than `∅` and itself.
 - `ComplexAnalytic.AnalyticSpace.surjective_base_or_isEmpty_of_isFiniteEtale`: **the same
   dichotomy with `[Nonempty]` moved out of the hypotheses and into the conclusion** — over a
   preconnected base a finite étale morphism is surjective or its source is empty. The clopen
@@ -354,16 +357,45 @@ theorem isFiniteEtale_of_comp {X Y Z : AnalyticSpace.{u}} (f : X ⟶ Y) (g : Y �
   isFinite := isFinite_of_comp_of_t2Space f g
   isLocalIso := isLocalIso_of_comp f g
 
-/-! ### Surjectivity over a preconnected base -/
+/-! ### The image of a finite local isomorphism, and surjectivity over a preconnected base -/
+
+/-- **The image of a finite local isomorphism is clopen.**
+
+The two rungs pull the image in opposite directions: a local isomorphism is a local
+homeomorphism, hence an open map, so its image is **open** (`IsLocalHomeomorph.isOpenMap`); a
+finite morphism has `IsClosedMap` as its first field, so the image of the whole source is
+**closed**. Nothing else is used, and in particular no separation axiom and no connectedness.
+
+**This was the first two lines of
+`ComplexAnalytic.AnalyticSpace.surjective_base_of_isLocalIso_of_isFinite`'s proof and is stated
+here because it has a consumer that is not about surjectivity.** That theorem hands the clopen set
+to `IsClopen.eq_univ`, which is where its `[PreconnectedSpace Y]` and `[Nonempty X]` are spent;
+a caller that wants to *restrict the target to the image* — which is what a direct-summand
+statement does — needs the clopen set and neither hypothesis. Splitting it costs the surjectivity
+proof nothing: it now names this instead of repeating it.
+
+**`[IsLocalIso f]` and `[IsFinite f]` rather than `[IsFiniteEtale f]`**, because that is what the
+argument reads; the class form is
+`ComplexAnalytic.AnalyticSpace.isClopen_range_of_isFiniteEtale` below. -/
+theorem isClopen_range_of_isLocalIso_of_isFinite {X Y : AnalyticSpace.{u}} (f : X ⟶ Y)
+    [IsLocalIso f] [IsFinite f] : IsClopen (Set.range (f.toLRSHom.base : X → Y)) :=
+  ⟨by simpa [Set.image_univ] using IsFinite.isClosedMap (f := f) Set.univ isClosed_univ,
+    (IsLocalIso.isLocalHomeomorph (f := f)).isOpenMap.isOpen_range⟩
+
+/-- **The image of a finite étale morphism is clopen**:
+`ComplexAnalytic.AnalyticSpace.isClopen_range_of_isLocalIso_of_isFinite` at a caller holding the
+class, whose two fields are instances. -/
+theorem isClopen_range_of_isFiniteEtale {X Y : AnalyticSpace.{u}} (f : X ⟶ Y) [IsFiniteEtale f] :
+    IsClopen (Set.range (f.toLRSHom.base : X → Y)) :=
+  isClopen_range_of_isLocalIso_of_isFinite f
 
 /-- **A finite local isomorphism out of a non-empty space onto a preconnected base is
 surjective.**
 
-The two rungs pull the image in opposite directions and connectedness closes the gap: a local
-isomorphism is a local homeomorphism, hence an open map, so its image is **open**
-(`IsLocalHomeomorph.isOpenMap`); a finite morphism has `IsClosedMap` as its first field, so the
-image of the whole source is **closed**. On a preconnected base a clopen set is empty or
-everything, and a non-empty source rules out empty.
+Connectedness closes the gap the two rungs leave:
+`ComplexAnalytic.AnalyticSpace.isClopen_range_of_isLocalIso_of_isFinite` says the image is clopen,
+on a preconnected base a clopen set is empty or everything, and a non-empty source rules out
+empty.
 
 **`[PreconnectedSpace Y]` and not `[ConnectedSpace Y]`**, because that is what the argument reads;
 under `[Nonempty X]` the two coincide here, a point of `X` giving a point of `Y`. This headline
@@ -394,10 +426,8 @@ form is `ComplexAnalytic.AnalyticSpace.surjective_base_of_isFiniteEtale` below. 
 theorem surjective_base_of_isLocalIso_of_isFinite {X Y : AnalyticSpace.{u}} (f : X ⟶ Y)
     [IsLocalIso f] [IsFinite f] [Nonempty X] [PreconnectedSpace Y] :
     Function.Surjective (f.toLRSHom.base : X → Y) :=
-  Set.range_eq_univ.1 (IsClopen.eq_univ
-    ⟨by simpa [Set.image_univ] using IsFinite.isClosedMap (f := f) Set.univ isClosed_univ,
-      (IsLocalIso.isLocalHomeomorph (f := f)).isOpenMap.isOpen_range⟩
-    (Set.range_nonempty _))
+  Set.range_eq_univ.1
+    (IsClopen.eq_univ (isClopen_range_of_isLocalIso_of_isFinite f) (Set.range_nonempty _))
 
 /-- **A finite étale morphism out of a non-empty space onto a preconnected base is surjective**:
 `ComplexAnalytic.AnalyticSpace.surjective_base_of_isLocalIso_of_isFinite` at a caller holding the

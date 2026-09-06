@@ -46,6 +46,7 @@ import Oka.AnalyticSpace.CoveringSpace
 import Oka.AnalyticSpace.CutOutCancel
 import Oka.AnalyticSpace.CutOutLocalIso
 import Oka.AnalyticSpace.Degree
+import Oka.AnalyticSpace.DirectSummand
 import Oka.AnalyticSpace.Evaluation
 import Oka.AnalyticSpace.Factorisation
 import Oka.AnalyticSpace.Finite
