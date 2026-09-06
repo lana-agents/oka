@@ -5,6 +5,7 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 -/
 import Mathlib.CategoryTheory.FintypeCat
 import Mathlib.CategoryTheory.MorphismProperty.Comma
+import Oka.AnalyticSpace.Clopen
 import Oka.AnalyticSpace.Degree
 
 /-!
@@ -113,6 +114,13 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
 - `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopenCompl`: **the complementary clopen
   part**, which is `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen` at
   `ComplexAnalytic.AnalyticSpace.clopenCompl`.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopenComplι`: **the complementary part's
+  own inclusion**, which is
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopenι` at the complementary open and
+  exists so that the cocone below can name it without unfolding.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.binaryCofanRestrictClopen`: **the two inclusions
+  read as a `CategoryTheory.Limits.BinaryCofan` on the cover they came from**, which is the shape
+  the direct-summand axiom asks its coproduct in.
 
 ## Main results
 
@@ -306,24 +314,29 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   and it stands to
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasFiniteCoproducts` as that one stands to
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasTerminal`.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitBinaryCofanRestrictClopen`: **a cover is
+  the coproduct of a clopen part of its total space and the complementary part.** No hypothesis on
+  the base, on the cover or on the subset beyond that its carrier is closed. **This is the
+  right-hand side of the direct-summand axiom and not the axiom**: what it does not supply is that
+  a monomorphism's image is one of these subsets, which needs an injectivity statement that this
+  repository does not have. `## What is not here` says which obstructions are left.
 
 ## What is not here
 
-* **A cover has clopen parts and it is not said that they decompose it.**
-  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen` puts the part of a cover over a
-  clopen subset of its total space in the category, and
-  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopenCompl` puts the complementary part
-  there beside it. **What is absent is that the cover is the coproduct of the two**, which is the
-  statement `Mathlib/CategoryTheory/Galois/Basic.lean`'s direct-summand axiom would consume: that
-  axiom asks, of a monomorphism `i : A ⟶ B`, for an object and a morphism exhibiting `B` as the
-  binary coproduct of `A` and it, and these two definitions supply the object without supplying
-  the coproduct.
+* **The clopen parts of a cover do decompose it, and that still is not the direct-summand
+  axiom.** `Mathlib/CategoryTheory/Galois/Basic.lean`'s axiom asks, of a monomorphism
+  `i : A ⟶ B`, for an object and a morphism exhibiting `B` as the binary coproduct of `A` and it.
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitBinaryCofanRestrictClopen` supplies that
+  coproduct **once the monomorphism's image is known to be a clopen subset of `B`'s total space**,
+  and this bullet used to say the coproduct itself was what was absent. It is not, and what is
+  absent is the hypothesis it runs on.
 
-  **Two further things separate them from that axiom and neither is here.** Nothing in this
-  repository says that a monomorphism of covers has injective underlying map, so nothing puts a
-  monomorphism's image among the clopen subsets in the first place; and the cancellation that
-  makes a morphism of covers finite étale asks `[T2Space]` of the target's total space while the
-  axiom asks nothing at all. taxis #1772 is the filing that measures both.
+  **Nothing in this repository says that a monomorphism of covers has injective underlying map**,
+  so nothing puts a monomorphism's image among the clopen subsets in the first place — and the
+  cancellation that makes a morphism of covers finite étale asks `[T2Space]` of the target's total
+  space while the axiom asks nothing at all. taxis #1772 is the filing that measures both, and
+  `OkaTest/FiniteEtaleCancel.lean` compiles the counterexample that makes the separation axiom a
+  theorem rather than an artefact of a proof.
 
 * **Cancellation — this is no longer absent, and it is not in this file.** *"If `g` and `f ≫ g`
   are finite étale then `f` is"* is `ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp` in
@@ -2555,11 +2568,114 @@ image is a clopen subset of `B`'s total space, this is that `Z`. **That definiti
 by name here**, being outside this file's import closure, which is the spelling this file already
 uses for it.
 
-**What is not said here is that the two together are that coproduct**, and it is not said because
-it is not proved: `## What is not here` records what a decomposition statement would still owe. -/
+**That the two together are that coproduct is
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitBinaryCofanRestrictClopen`**, below. This
+paragraph used to say the statement was absent, and `## What is not here` records which of the
+axiom's obligations are still open once it is there. -/
 noncomputable def FiniteEtaleOver.restrictClopenCompl {X : AnalyticSpace.{u}}
     (A : FiniteEtaleOver.{u} X) (U : A.left.Opens) (hU : IsClosed (U : Set A.left)) :
     FiniteEtaleOver.{u} X :=
   A.restrictClopen (clopenCompl U hU) (isClosed_clopenCompl U hU)
+
+/-- **The inclusion of the complementary clopen part of a cover.**
+
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopenι` at
+`ComplexAnalytic.AnalyticSpace.clopenCompl`, exactly as
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopenCompl` is
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen` there. It carries no content and
+exists so that `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.binaryCofanRestrictClopen` can name
+its second injection, and so that a caller can cite it without writing out the closedness of the
+complement each time. -/
+noncomputable def FiniteEtaleOver.restrictClopenComplι {X : AnalyticSpace.{u}}
+    (A : FiniteEtaleOver.{u} X) (U : A.left.Opens) (hU : IsClosed (U : Set A.left)) :
+    A.restrictClopenCompl U hU ⟶ A :=
+  A.restrictClopenι (clopenCompl U hU) (isClosed_clopenCompl U hU)
+
+/-- **The two inclusions, read as a cocone on the pair of clopen parts.**
+
+There is no content: the declaration exists because
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitBinaryCofanRestrictClopen` has to name the
+cocone it says is a colimit, and because `CategoryTheory.Limits.BinaryCofan.inl` and
+`CategoryTheory.Limits.BinaryCofan.inr` are how that statement presents the two injections. It
+stands to that theorem as `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.cofanSigma` stands to
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitCofanSigma`. -/
+noncomputable def FiniteEtaleOver.binaryCofanRestrictClopen {X : AnalyticSpace.{u}}
+    (A : FiniteEtaleOver.{u} X) (U : A.left.Opens) (hU : IsClosed (U : Set A.left)) :
+    Limits.BinaryCofan (A.restrictClopen U hU) (A.restrictClopenCompl U hU) :=
+  Limits.BinaryCofan.mk (A.restrictClopenι U hU) (A.restrictClopenComplι U hU)
+
+/-- **A cover is the coproduct of a clopen part of its total space and the complementary part.**
+
+**The mathematics is `Oka/AnalyticSpace/Clopen.lean`'s and this adds none of it.**
+`ComplexAnalytic.AnalyticSpace.descClopen` supplies the descent map,
+`ComplexAnalytic.AnalyticSpace.ofRestrict_descClopen` and
+`ComplexAnalytic.AnalyticSpace.ofRestrict_clopenCompl_descClopen` are the two factorisation fields
+and `ComplexAnalytic.AnalyticSpace.hom_ext_of_clopen` is the uniqueness field. What is done here is
+re-reading each of those as a statement about morphisms **over the base**, which is
+`CategoryTheory.MorphismProperty.Over.homMk` for the descent map,
+`CategoryTheory.MorphismProperty.Over.Hom.ext` for an equality of morphisms of covers and
+`CategoryTheory.MorphismProperty.Over.w` for the triangle a morphism of covers commutes.
+
+**The triangle the descent map has to commute is itself an instance of the gluing**, and that is
+the one step here that is not transcription: `ComplexAnalytic.AnalyticSpace.hom_ext_of_clopen`
+compares the descent map followed by the target's structure map against this cover's own structure
+map, and each half of that comparison reduces to
+`CategoryTheory.MorphismProperty.Over.w` at the corresponding injection of the cocone.
+
+**The remaining side of each half is closed by `exact` and not by `rw`, and that was measured.**
+After `rw [← Category.assoc, ofRestrict_descClopen]` the goal is
+`s.inl.left ≫ s.pt.hom = A.left.ofRestrict U ≫ A.hom`, while
+`CategoryTheory.MorphismProperty.Over.w` at that injection proves
+`s.inl.left ≫ s.pt.hom = (A.restrictClopen U hU).hom`. **The two right-hand sides are `rfl`-equal
+and that equation is `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen_hom`**, so
+`exact` at default transparency crosses the gap.
+
+**Continuing the `rw` with that lemma rather than closing with `exact` fails**, and the failure is
+worth recording because it is not about the mathematics. Planted at this declaration and read
+back, replacing the first half's `exact` by a third rewrite step —
+`rw [← Category.assoc, ofRestrict_descClopen, MorphismProperty.Over.w s.inl]` — reports
+
+```
+Did not find an occurrence of the pattern
+  s.inl.left ≫ (((Functor.const (Discrete Limits.WalkingPair)).obj s.pt).obj
+    { as := Limits.WalkingPair.left }).hom
+in the target expression
+  s.inl.left ≫ s.pt.hom = A.left.ofRestrict U ≫ A.hom
+```
+
+with the pattern on one line in the real message and wrapped here to fit. **The two sides of that
+report are the same morphism spelled two ways**: `CategoryTheory.MorphismProperty.Over.w` states
+its source through the diagram `CategoryTheory.Limits.pair` read at
+`CategoryTheory.Limits.WalkingPair` and its target through `CategoryTheory.Functor.const` at the
+cocone's point, while the goal states both through the projections of `s`. Under the failure Lean
+adds that the target is not type-correct at `instances` transparency, and prints the application
+type mismatch those two spellings make. `exact` at default transparency crosses that gap; `rw`,
+which matches its pattern at `instances` transparency, does not.
+
+**No hypothesis on the base, on the cover or on the subset beyond that its carrier is closed**, and
+**no `[T2Space]` anywhere**: the gluing this reads is about open subspaces of an analytic space and
+knows nothing about covers, and the separation axiom in this development belongs to
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp`, which nothing here reaches. -/
+noncomputable def FiniteEtaleOver.isColimitBinaryCofanRestrictClopen {X : AnalyticSpace.{u}}
+    (A : FiniteEtaleOver.{u} X) (U : A.left.Opens) (hU : IsClosed (U : Set A.left)) :
+    Limits.IsColimit (A.binaryCofanRestrictClopen U hU) :=
+  Limits.BinaryCofan.isColimitMk
+    (fun s ↦ MorphismProperty.Over.homMk
+      (descClopen U hU s.inl.left s.inr.left)
+      (hom_ext_of_clopen U hU
+        (by
+          rw [← Category.assoc, ofRestrict_descClopen]
+          exact MorphismProperty.Over.w s.inl)
+        (by
+          rw [← Category.assoc, ofRestrict_clopenCompl_descClopen]
+          exact MorphismProperty.Over.w s.inr)))
+    (fun _ ↦ MorphismProperty.Over.Hom.ext (ofRestrict_descClopen U hU _ _))
+    (fun _ ↦ MorphismProperty.Over.Hom.ext (ofRestrict_clopenCompl_descClopen U hU _ _))
+    (fun s _ h₁ h₂ ↦ MorphismProperty.Over.Hom.ext
+      (hom_ext_of_clopen U hU
+        ((congrArg (fun f : A.restrictClopen U hU ⟶ s.pt ↦ f.left) h₁).trans
+          (ofRestrict_descClopen U hU _ _).symm)
+        ((congrArg (fun f : A.restrictClopenCompl U hU ⟶ s.pt ↦ f.left) h₂).trans
+          (ofRestrict_clopenCompl_descClopen U hU _ _).symm)))
 
 end ComplexAnalytic.AnalyticSpace
