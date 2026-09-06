@@ -94,6 +94,11 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   of covers**, as an object of the same category, with
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.sigmaι` for the inclusion of a member and
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.cofanSigma` for the cocone they make.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberSigmaEquiv`: **the fibre of a disjoint union
+  of covers is the disjoint union of the fibres**, as an equivalence of types, with
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberSigmaEquiv_apply` and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberSigmaEquiv_apply_fintypeFiberFunctor` saying
+  that its forward map is what each fibre functor does to the inclusion of a member.
 
 ## Main results
 
@@ -267,6 +272,26 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasColimitsOfShape_discrete` is the statement at
   an index type of this category's own universe that the class is deduced from, and
   `## What is not here` says which axioms remain absent.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitFiberCofanSigma` and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitFintypeFiberCofanSigma`: **each fibre
+  functor carries the cofan of the inclusions to a colimit cofan**, in `Type u` and in
+  `FintypeCat` — the fibre of a disjoint union is the disjoint union of the fibres, read as a
+  statement about cocones.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesColimitsOfShape_fiberFunctor` and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesColimitsOfShape_fintypeFiberFunctor`:
+  **the same at every functor out of a discrete category on a finite index type of this category's
+  own universe**, which is what the statements above become once the family a discrete diagram is
+  determined by is put back. The shape is `CategoryTheory.Discrete` and the names do not say so,
+  which is forced: a fully qualified name here is forty-five characters before its own, and a
+  citation of it in prose has to fit on a line.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesFiniteCoproducts_fiberFunctor` and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesFiniteCoproducts_fintypeFiberFunctor`:
+  **both fibre functors preserve finite coproducts**, with no hypothesis on the base and none on
+  the point. **This is a Galois-category axiom on the fibre functor**, as
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_fiberFunctor` is,
+  and it stands to
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasFiniteCoproducts` as that one stands to
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasTerminal`.
 
 ## What is not here
 
@@ -355,10 +380,26 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   say the two fibre functors preserve it. **Finite coproducts are another axiom and are here
   now too:** `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasFiniteCoproducts` puts the disjoint
   union of finitely many covers in the category as their coproduct, again with no hypothesis on
-  the base at all. **What the terminal object and the finite coproducts discharge is those two
-  obligations and no other**: base change is untouched by all of it, and so are quotients by
-  finite group actions and the axiom that a monomorphism induces an isomorphism onto a direct
-  summand.
+  the base at all, and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesFiniteCoproducts_fiberFunctor` and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesFiniteCoproducts_fintypeFiberFunctor`
+  say the two fibre functors preserve that as well. **What the terminal object and the finite
+  coproducts discharge is the obligations named in this paragraph and no other**: base change is
+  untouched by all of it, and so are quotients by finite group actions, the axiom that a
+  monomorphism induces an isomorphism onto a direct summand, and the preservation of epimorphisms
+  by a fibre functor.
+
+  **And none of the coproduct statements has a version on the subcategory
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2`, which is a fact about that
+  subcategory rather than an omission.** The disjoint union of covers whose total spaces are
+  preconnected is not one:
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.not_preconnectedSpace_trivial` is that at the
+  trivial cover, whose total space is the disjoint union of copies of the base. So the subcategory
+  is not closed under the coproduct and there is nothing there to restrict —
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_ι` has no analogue
+  here, and the reason it exists at all is that the terminal object *is* an object of the
+  subcategory by
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_id`.
 
   **Faithfulness is
   no longer among the absences, and this paragraph used to be mostly about it.**
@@ -2212,5 +2253,207 @@ instance FiniteEtaleOver.hasFiniteCoproducts (X : AnalyticSpace.{u}) :
   ⟨fun n ↦
     haveI := FiniteEtaleOver.hasColimitsOfShape_discrete (ULift.{u} (Fin n)) X
     Limits.hasColimitsOfShape_of_equivalence (Discrete.equivalence Equiv.ulift.{u})⟩
+
+/-! ### The fibre functors preserve finite coproducts -/
+
+/-- **The fibre of a disjoint union of covers is the disjoint union of the fibres**, as an
+equivalence of types.
+
+**This is where the mathematics of the section is, and none of it is written here.**
+`AlgebraicGeometry.LocallyRingedSpace.fiberSigmaDescEquiv`
+(`Oka/Geometry/RingedSpace/LocallyRingedSpace/HasColimits.lean`) is the statement for a descent map
+of locally ringed spaces, and `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.sigma`'s structure map
+is `ComplexAnalytic.AnalyticSpace.sigmaDesc`, whose underlying morphism is that descent map. So the
+declaration is that equivalence read at this comma category, and the finite étale property is not
+consulted: the equivalence holds at every object of `CategoryTheory.MorphismProperty.Over` whatever
+the property is, exactly as `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiber` does.
+
+**The target of the family has to be written as `(Y := X.toLocallyRingedSpace)`.** Left to
+unification the elaborator has no way to see through
+`ComplexAnalytic.AnalyticSpace.Hom.toLRSHom` to a target before it has the family, and reports a
+type mismatch with the family's own metavariable still standing in the statement it prints. -/
+noncomputable def FiniteEtaleOver.fiberSigmaEquiv {X : AnalyticSpace.{u}} {ι : Type u} [Finite ι]
+    (A : ι → FiniteEtaleOver.{u} X) (x : X) :
+    (Σ i, FiniteEtaleOver.fiber.{u} x (A i)) ≃
+      FiniteEtaleOver.fiber.{u} x (FiniteEtaleOver.sigma A) :=
+  AlgebraicGeometry.LocallyRingedSpace.fiberSigmaDescEquiv
+    (fun i ↦ (A i).left.toLocallyRingedSpace)
+    (Y := X.toLocallyRingedSpace) (fun i ↦ (A i).hom.toLRSHom) x
+
+/-- **What the equivalence does to a point of a member's fibre is what the fibre functor does to
+it along the inclusion of that member.**
+
+`rfl`, and it is the compatibility the colimit statement below is made of: the forward map of
+`AlgebraicGeometry.LocallyRingedSpace.fiberSigmaDescEquiv` is composition with the coproduct
+inclusion, `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.sigmaι`'s underlying morphism is that
+inclusion, and `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberMap` is composition with the
+underlying morphism.
+
+**Stated at the functor rather than at
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberMap`**, because that is the spelling the
+colimit fields present: `CategoryTheory.Limits.Cofan.inj` of the mapped cofan is
+`CategoryTheory.Functor.map` and a lemma about the underlying map does not rewrite there. -/
+theorem FiniteEtaleOver.fiberSigmaEquiv_apply {X : AnalyticSpace.{u}} {ι : Type u} [Finite ι]
+    (A : ι → FiniteEtaleOver.{u} X) (x : X) (i : ι) (a : FiniteEtaleOver.fiber.{u} x (A i)) :
+    FiniteEtaleOver.fiberSigmaEquiv A x ⟨i, a⟩
+      = (FiniteEtaleOver.fiberFunctor.{u} x).map (FiniteEtaleOver.sigmaι A i) a := rfl
+
+/-- **The same compatibility for the `FintypeCat`-valued fibre functor.**
+
+`rfl` again, and it is a separate declaration rather than a corollary because the two statements
+are equalities in types that are the same only up to `FintypeCat.of`: the value of
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fintypeFiberFunctor` is a bundled finite type and
+the value of `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberFunctor` is the type itself, so a
+rewrite by one of them inside a cofan over the other does not fire. -/
+theorem FiniteEtaleOver.fiberSigmaEquiv_apply_fintypeFiberFunctor {X : AnalyticSpace.{u}}
+    {ι : Type u} [Finite ι] (A : ι → FiniteEtaleOver.{u} X) (x : X) (i : ι)
+    (a : FiniteEtaleOver.fiber.{u} x (A i)) :
+    FiniteEtaleOver.fiberSigmaEquiv A x ⟨i, a⟩
+      = (FiniteEtaleOver.fintypeFiberFunctor.{u} x).map (FiniteEtaleOver.sigmaι A i) a := rfl
+
+/-- **The fibre functor carries the cofan of the inclusions to a colimit cofan in `Type u`.**
+
+The apex is the fibre of the disjoint union, the inclusions are the fibre functor's action on
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.sigmaι`, and the content is that
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberSigmaEquiv` is a bijection whose forward map is
+that action.
+
+**Both fields other than the descent map are `congrArg` at
+`fun q ↦ t.inj q.1 q.2`, and that is not a stylistic choice.** The obvious proof rewrites by the
+equivalence in the goal, and **the redex is not in the goal to rewrite**: it sits inside
+`ConcreteCategory.hom (↾fun p ↦ …)`, and in the factorisation field under a `≫` as well, so `rw`
+reports *did not find an occurrence of the pattern* and prints the goal back with the coercion
+still around it. **Unfolding the coercion does not expose it either** — after
+`dsimp only [TypeCat.ofHom, ConcreteCategory.hom]` the target is no longer type-correct at
+instance transparency and `simp` then makes no progress. `congrArg` builds the equality where the
+redex is, in the argument, and then the whole of each field is one term.
+
+**What is not the obstruction is that `q.2`'s type depends on `q.1`, and this paragraph used to
+say it was.** Written out at the field's own shape, with both projections taken of one subterm,
+`rw [Equiv.symm_apply_apply]` closes the goal and reports nothing: `rw` generalises the whole
+subterm, so the motive is `fun z ↦ t.inj z.1 z.2 = …` and is perfectly constructible. The
+dependency is real and it is not what stops the tactic; the coercion is. -/
+noncomputable def FiniteEtaleOver.isColimitFiberCofanSigma {X : AnalyticSpace.{u}} {ι : Type u}
+    [Finite ι] (A : ι → FiniteEtaleOver.{u} X) (x : X) :
+    Limits.IsColimit
+      (Limits.Cofan.mk ((FiniteEtaleOver.fiberFunctor.{u} x).obj (FiniteEtaleOver.sigma A))
+        (fun i ↦ (FiniteEtaleOver.fiberFunctor.{u} x).map (FiniteEtaleOver.sigmaι A i)) :
+          Limits.Cofan fun i ↦ (FiniteEtaleOver.fiberFunctor.{u} x).obj (A i)) := by
+  refine Limits.Cofan.IsColimit.mk _
+    (fun t ↦ TypeCat.ofHom fun p ↦ t.inj ((FiniteEtaleOver.fiberSigmaEquiv A x).symm p).1
+      ((FiniteEtaleOver.fiberSigmaEquiv A x).symm p).2) (fun t i ↦ ?_) (fun t m hm ↦ ?_)
+  · ext a
+    exact congrArg (fun q : Σ i, FiniteEtaleOver.fiber.{u} x (A i) ↦ t.inj q.1 q.2)
+      ((Equiv.symm_apply_eq _).2 (FiniteEtaleOver.fiberSigmaEquiv_apply A x i a).symm)
+  · ext p
+    obtain ⟨⟨i, a⟩, rfl⟩ := (FiniteEtaleOver.fiberSigmaEquiv A x).surjective p
+    refine Eq.trans ?_ (congrArg (fun q : Σ i, FiniteEtaleOver.fiber.{u} x (A i) ↦ t.inj q.1 q.2)
+      ((FiniteEtaleOver.fiberSigmaEquiv A x).symm_apply_apply ⟨i, a⟩)).symm
+    exact congrArg (fun f : (FiniteEtaleOver.fiberFunctor.{u} x).obj (A i) ⟶ t.pt ↦ f a) (hm i)
+
+/-- **The same statement for the `FintypeCat`-valued fibre functor.**
+
+`FintypeCat.homMk` in place of `TypeCat.ofHom` and
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberSigmaEquiv_apply_fintypeFiberFunctor` in place
+of `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberSigmaEquiv_apply`; the rest of the proof is
+the same term, since `FintypeCat.homMk_apply` and `TypeCat.ofHom`'s application are both `rfl` and
+neither field ever looks at the bundling.
+
+**No finiteness is checked and none has to be.** The cofan's apex is
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fintypeFiberFunctor`'s value, whose finiteness is
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.finite_fiber` and is already discharged in the
+functor. -/
+noncomputable def FiniteEtaleOver.isColimitFintypeFiberCofanSigma {X : AnalyticSpace.{u}}
+    {ι : Type u} [Finite ι] (A : ι → FiniteEtaleOver.{u} X) (x : X) :
+    Limits.IsColimit
+      (Limits.Cofan.mk ((FiniteEtaleOver.fintypeFiberFunctor.{u} x).obj (FiniteEtaleOver.sigma A))
+        (fun i ↦ (FiniteEtaleOver.fintypeFiberFunctor.{u} x).map (FiniteEtaleOver.sigmaι A i)) :
+          Limits.Cofan fun i ↦ (FiniteEtaleOver.fintypeFiberFunctor.{u} x).obj (A i)) := by
+  refine Limits.Cofan.IsColimit.mk _
+    (fun t ↦ FintypeCat.homMk fun p ↦ t.inj ((FiniteEtaleOver.fiberSigmaEquiv A x).symm p).1
+      ((FiniteEtaleOver.fiberSigmaEquiv A x).symm p).2) (fun t i ↦ ?_) (fun t m hm ↦ ?_)
+  · ext a
+    exact congrArg (fun q : Σ i, FiniteEtaleOver.fiber.{u} x (A i) ↦ t.inj q.1 q.2)
+      ((Equiv.symm_apply_eq _).2
+        (FiniteEtaleOver.fiberSigmaEquiv_apply_fintypeFiberFunctor A x i a).symm)
+  · ext p
+    obtain ⟨⟨i, a⟩, rfl⟩ := (FiniteEtaleOver.fiberSigmaEquiv A x).surjective p
+    refine Eq.trans ?_ (congrArg (fun q : Σ i, FiniteEtaleOver.fiber.{u} x (A i) ↦ t.inj q.1 q.2)
+      ((FiniteEtaleOver.fiberSigmaEquiv A x).symm_apply_apply ⟨i, a⟩)).symm
+    exact congrArg (fun f : (FiniteEtaleOver.fintypeFiberFunctor.{u} x).obj (A i) ⟶ t.pt ↦ f a)
+      (hm i)
+
+/-- **So the fibre functor preserves colimits of every discrete shape indexed by a finite type of
+this category's own universe.**
+
+The colimit statement above is about one cocone on one family, and
+`CategoryTheory.Limits.PreservesColimitsOfShape` is about every functor out of the discrete
+category. `CategoryTheory.Limits.preservesColimit_of_preserves_colimit_cocone` at
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitCofanSigma` is the first step, with
+`CategoryTheory.Limits.isColimitMapCoconeCofanMkEquiv` the bridge between a mapped cocone and a
+cofan on the mapped family; `CategoryTheory.Discrete.natIsoFunctor` and
+`CategoryTheory.Limits.preservesColimit_of_iso_diagram` are the second, carrying it from the family
+`K` is determined by to `K` itself. -/
+instance FiniteEtaleOver.preservesColimitsOfShape_fiberFunctor (ι : Type u) [Finite ι]
+    {X : AnalyticSpace.{u}} (x : X) :
+    Limits.PreservesColimitsOfShape (Discrete ι) (FiniteEtaleOver.fiberFunctor.{u} x) where
+  preservesColimit {K} := by
+    haveI : Limits.PreservesColimit (Discrete.functor (K.obj ∘ Discrete.mk))
+        (FiniteEtaleOver.fiberFunctor.{u} x) :=
+      Limits.preservesColimit_of_preserves_colimit_cocone
+        (FiniteEtaleOver.isColimitCofanSigma (K.obj ∘ Discrete.mk))
+        ((Limits.isColimitMapCoconeCofanMkEquiv _ _ _).symm
+          (FiniteEtaleOver.isColimitFiberCofanSigma (K.obj ∘ Discrete.mk) x))
+    exact Limits.preservesColimit_of_iso_diagram _ Discrete.natIsoFunctor.symm
+
+/-- **The same for the `FintypeCat`-valued fibre functor**, by the same two steps at
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitFintypeFiberCofanSigma`. -/
+instance FiniteEtaleOver.preservesColimitsOfShape_fintypeFiberFunctor (ι : Type u)
+    [Finite ι] {X : AnalyticSpace.{u}} (x : X) :
+    Limits.PreservesColimitsOfShape (Discrete ι) (FiniteEtaleOver.fintypeFiberFunctor.{u} x) where
+  preservesColimit {K} := by
+    haveI : Limits.PreservesColimit (Discrete.functor (K.obj ∘ Discrete.mk))
+        (FiniteEtaleOver.fintypeFiberFunctor.{u} x) :=
+      Limits.preservesColimit_of_preserves_colimit_cocone
+        (FiniteEtaleOver.isColimitCofanSigma (K.obj ∘ Discrete.mk))
+        ((Limits.isColimitMapCoconeCofanMkEquiv _ _ _).symm
+          (FiniteEtaleOver.isColimitFintypeFiberCofanSigma (K.obj ∘ Discrete.mk) x))
+    exact Limits.preservesColimit_of_iso_diagram _ Discrete.natIsoFunctor.symm
+
+/-- **The fibre functor preserves finite coproducts**, with no hypothesis on the base and none on
+the point.
+
+**This is a Galois-category axiom on the fibre functor**, as
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_fiberFunctor` is: the
+class of a fibre functor in `Mathlib/CategoryTheory/Galois/Basic.lean`, whose namespace is not in
+this repository's import closure and so cannot be cited by name here, carries a field of exactly
+this class.
+
+**The universe crossing is the same one
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasFiniteCoproducts` takes and it is there for the
+same reason.** `CategoryTheory.Limits.PreservesFiniteCoproducts` quantifies over `Fin n`, which
+lives in `Type 0`, and the instance above is at an index type of this category's own universe;
+`CategoryTheory.Discrete.equivalence` at `Equiv.ulift` and
+`CategoryTheory.Limits.preservesColimitsOfShape_of_equiv` cross between them. -/
+instance FiniteEtaleOver.preservesFiniteCoproducts_fiberFunctor {X : AnalyticSpace.{u}} (x : X) :
+    Limits.PreservesFiniteCoproducts (FiniteEtaleOver.fiberFunctor.{u} x) where
+  preserves n :=
+    haveI := FiniteEtaleOver.preservesColimitsOfShape_fiberFunctor (ULift.{u} (Fin n)) x
+    Limits.preservesColimitsOfShape_of_equiv (Discrete.equivalence Equiv.ulift.{u}) _
+
+/-- **And the `FintypeCat`-valued fibre functor preserves finite coproducts**, which is the axiom
+at the functor a Galois category asks for.
+
+**What this does not say is that the category is a Galois category and this functor a fibre
+functor for it.** Base change is absent, and so are quotients by finite group actions, the axiom
+that a monomorphism induces an isomorphism onto a direct summand, and the preservation of
+epimorphisms; `## What is not here` says so, and what this instance takes out of the set of
+absent axioms is the preservation of finite coproducts. -/
+instance FiniteEtaleOver.preservesFiniteCoproducts_fintypeFiberFunctor {X : AnalyticSpace.{u}}
+    (x : X) : Limits.PreservesFiniteCoproducts (FiniteEtaleOver.fintypeFiberFunctor.{u} x) where
+  preserves n :=
+    haveI := FiniteEtaleOver.preservesColimitsOfShape_fintypeFiberFunctor
+      (ULift.{u} (Fin n)) x
+    Limits.preservesColimitsOfShape_of_equiv (Discrete.equivalence Equiv.ulift.{u}) _
 
 end ComplexAnalytic.AnalyticSpace
