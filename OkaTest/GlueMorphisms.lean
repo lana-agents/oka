@@ -83,8 +83,10 @@ The last section carries the construction across to
 `ComplexAnalytic.AnalyticSpace.glueMorphisms`, whose extra content over the locally-ringed-space
 version is the `ℂ`-linearity of the result. What it checks is weaker than either section above
 it and its own docstring says so: the family glued is the restrictions of a single morphism, so
-the `ℂ`-linearity hypothesis is automatic and **no independent pair of analytic morphisms is
-glued anywhere**.
+the `ℂ`-linearity hypothesis is exercised there only where it is automatic. An independent pair
+of analytic morphisms is glued over a cover with empty overlaps by
+`ComplexAnalytic.AnalyticSpace.existsUnique_hom_of_clopen`, and that construction is not in this
+file.
 
 ## A note on the imports of `OkaTest.OpenSubspace` and `OkaTest.HolomorphicMap`
 
@@ -356,9 +358,9 @@ theorem exists_glue_pn_ne_nodeToLine :
 form beside it, is what the hypothesis of
 `AlgebraicGeometry.LocallyRingedSpace.OpenCover.existsUnique_glueMorphisms` needs — the
 categorical pullback being a space that is not a `restrict` of anything, which is the whole
-reason that hypothesis went unmet for as long as it did. This is that claim, at the one pair of
-opens in the development known to be disjoint: `hom_ext_restrict_of_isEmpty` does not typecheck
-against this goal and the general form does.
+reason that hypothesis went unmet for as long as it did. This is that claim, at the axes of `PN`
+— a pair of opens of a named space whose disjointness is computed rather than definitional.
+`hom_ext_restrict_of_isEmpty` does not typecheck against this goal and the general form does.
 
 The emptiness is not assumed. It is computed from `pnAxis_inf_carrier_eq_empty` through
 `range_pullback_to_base_of_left`, which is the lemma that made the pullback's carrier knowable
@@ -392,9 +394,12 @@ came from. That is the same shape as the `punctureCover` tests above and it esta
 hypotheses are satisfiable at a two-member cover neither of whose members is `⊤`, and that the
 output is the intended one. **It does not glue two independent morphisms of analytic spaces**: the
 disjoint-overlap witness that does that for locally ringed spaces, in the section above, is at the
-`existsUnique_glueMorphisms_of_opens` API rather than at `OpenCover`, and no analytic pair has been
-built at a cover with disconnected overlaps. So the `ℂ`-linearity hypothesis is exercised here only
-where it is automatic.
+`existsUnique_glueMorphisms_of_opens` API rather than at `OpenCover`. An independent analytic pair
+is glued over a cover with empty overlaps by
+`ComplexAnalytic.AnalyticSpace.existsUnique_hom_of_clopen`, at
+`ComplexAnalytic.AnalyticSpace.clopenCover`, whose distinct members meet in the empty set by
+`ComplexAnalytic.AnalyticSpace.clopenCover_inf_of_ne`; that construction is not in this file. So
+the `ℂ`-linearity hypothesis is exercised here only where it is automatic.
 
 `okaMap_sq_ne_id`, from `OkaTest/HolomorphicMap.lean`, is what keeps the round trip from being
 vacuous: the morphism recovered is **not** the identity, so the construction is not returning
