@@ -331,12 +331,12 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   and this bullet used to say the coproduct itself was what was absent. It is not, and what is
   absent is the hypothesis it runs on.
 
-  **Nothing in this repository says that a monomorphism of covers has injective underlying map**,
-  so nothing puts a monomorphism's image among the clopen subsets in the first place — and the
-  cancellation that makes a morphism of covers finite étale asks `[T2Space]` of the target's total
-  space while the axiom asks nothing at all. taxis #1772 is the filing that measures both, and
-  `OkaTest/FiniteEtaleCancel.lean` compiles the counterexample that makes the separation axiom a
-  theorem rather than an artefact of a proof.
+  **What it runs on is that a monomorphism of covers has injective underlying map, and that is not
+  proved or claimed here**: without it a monomorphism's image is not known to be among the clopen
+  subsets in the first place — and the cancellation that makes a morphism of covers finite étale
+  asks `[T2Space]` of the target's total space while the axiom asks nothing at all. taxis #1772 is
+  the filing that measures both, and `OkaTest/FiniteEtaleCancel.lean` compiles the counterexample
+  that makes the separation axiom a theorem rather than an artefact of a proof.
 
 * **Cancellation — this is no longer absent, and it is not in this file.** *"If `g` and `f ≫ g`
   are finite étale then `f` is"* is `ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp` in
@@ -455,8 +455,8 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.reflectsIsomorphisms_fintypeFiberFunctor` says it
   of the functor a Galois category asks for. **Reflecting isomorphisms is one of that definition's
   axioms and faithfulness is not**, which is why the two sit differently here although they hold
-  on the same subcategory — but **nothing exhibits the functor as an equivalence onto
-  anything**, and that clause of this bullet is untouched by any of it.
+  on the same subcategory — but **the functor is not exhibited as an equivalence onto
+  anything, or claimed to be**, and that clause of this bullet is untouched by any of it.
 
   **This bullet said that nothing turns an equivalence of fibres into an isomorphism of covers,
   and what made that false arrived in pieces, each from a different push.**
@@ -607,8 +607,8 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   names the `Oka/Analytification/` line, since that is where those sections are, and
   `Oka/Analytification/SpecScheme.lean` put `ComplexAnalytic.specScheme` on it; and there are
   **two** of them, not three — `Oka/Analytification/Comparison.lean`'s, which is about that file's
-  own statements, and `Oka/Analytification/AffineCover.lean`'s, which is about its input. No file
-  under `Oka/AnalyticSpace/`, where this one lives, has such a section.
+  own statements, and `Oka/Analytification/AffineCover.lean`'s, which is about its input. At
+  `3e6e87d` no file under `Oka/AnalyticSpace/`, where this one lives, had such a section.
   **What survives is the shape of the obstruction and not its price**: `ComplexAnalytic.specScheme`
   is glued *from* a cover datum and is an output of one, where the functor above wants a scheme as
   its *input*, and nothing on either line passes from a scheme to a cover.
@@ -1035,8 +1035,8 @@ not derive it: `IsFinite` is not a `CategoryTheory.MorphismProperty` here, so it
 `ComplexAnalytic.AnalyticSpace.isFinite_comp` twice instead of through `RespectsIso`.
 
 **What is not here is the converse.** `IsFiniteEtale f → IsFiniteEtale (restrictHom f ⊤)` follows
-from the same conjugation read the other way and is not stated, because nothing asks for it; it is
-the same three lines. Nor is anything said about `restrictHom f V` at a proper `V` — the whole
+from the same conjugation read the other way and is not stated, because nothing here asks for it;
+it is the same three lines. Nor is anything said about `restrictHom f V` at a proper `V` — the whole
 argument is that `⊤` makes the inclusions invertible, and at a proper `V` neither is. -/
 theorem isFiniteEtale_of_restrictHom_top {A B : AnalyticSpace.{u}} (f : A ⟶ B)
     (hfe : IsFiniteEtale (restrictHom f (⊤ : B.Opens))) : IsFiniteEtale f := by

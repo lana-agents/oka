@@ -277,6 +277,54 @@ that has to be read. **Do not answer this one with a checker either**: the refus
 the counting objects applies unchanged, and here it is stronger, since there is not even a numeral
 to anchor a pattern on.
 
+**The rule has a fifth object, and it is the counting rule with the numeral struck out.** A clause
+that says what the tree does or does not *contain* — *nothing in this repository says that …*, *no
+file under such-and-such a directory has such a section*, *the only consumer of it in the library*
+— is falsified by the next push that adds the thing, in exactly the way a count is falsified by
+the next append. **The numeral was never what made a count rot.** What makes it rot is that it
+quantifies over a population the sentence does not own, and a universal quantifies over the same
+population with the arithmetic left out. So the counting objects and this one fail by one
+mechanism, and the defence is the one they already share: name what you mean, and say where the
+boundary is.
+
+**Membership turns on ownership and not on truth.** A clause is in the class when it quantifies
+over something it does not own — the repository, the library, a directory, another file, *the
+tree* — and it is in the class whether or not it holds today, since holding today is the normal
+state of one of these and is exactly what makes it invisible. The exempt spellings are these, and
+each is exempt by the mechanism that acquits its counterpart among the counting objects:
+
+* **pinned** — an absence attributed to a commit or a date, which is a record and is falsified by
+  rewriting history rather than by an append, as a pinned figure is;
+* **self-limiting** — *is exhibited **or claimed***, *is not proved or claimed here*, *so far* — a
+  claim about the writer's own scope rather than about the tree, which an append cannot reach.
+  `Oka/AnalyticSpace/FiniteEtaleOver.lean`'s *"No witness against dropping any of the three is
+  exhibited or claimed"* is the spelling to copy;
+* **bounded to what the file owns** — *nothing below in this file*, *nothing here does*, *the only
+  place in this file where* — since whoever would falsify it is appending to this same module, and
+  reading its docstring is part of that append.
+
+**The exemption attaches to the clause and not to the paragraph around it**, as it does for the
+pinning spelling among the counting objects: a paragraph that opens with an absence pinned to a
+date does not thereby acquit a flat universal further down. **A `## What is not here` section is
+not exempt as a section either** — that discipline is what this rule is for rather than what it is
+against, and a bullet of one is written in the self-limiting spelling or the pinned one like any
+other sentence.
+
+**Do not answer this one with a checker either, and here the refusal is at its strongest.** A
+pattern can be written, and taxis #1727 carries one over a whitespace-normalised read of each file
+— a clause that wraps across two source lines is invisible to a line-oriented scan, which is the
+mistake taxis #1712 found in a published regex on this line. What no pattern can do is tell a claim
+about the tree from a description of method (*there is no mathematical content in either*) or from
+a pointer (*the only place in this file where*), and it returns those alongside what is in the
+class. The scan narrows the tree to what is worth reading; the reading is the work.
+
+**The standing rule, which is the whole of the remedy.** No sentence about what the tree does or
+does not contain goes into a `.lean` file unless it was checked at the head being pushed from —
+and for a claim about what instance search finds, *checked* means compiled, not grepped and not
+read. **taxis #1720**'s subject was false at the commit that wrote it, and it landed in the push
+that was repairing **taxis #1713**'s, which was of this class too; **taxis #1727** is the filing
+that made them one.
+
 **Most mirror-tree material is routed by a row, and a small tail of it is deliberately routed by
 none.** `README.md`'s *Layout: the Mathlib mirror tree* defines a mirror-tree file by its path — a
 file under `Oka/` mirroring a path under `Mathlib/`, holding no complex-analytic mathematics and
