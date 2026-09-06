@@ -312,11 +312,15 @@ other sentence.
 
 **Do not answer this one with a checker either, and here the refusal is at its strongest.** A
 pattern can be written, and taxis #1727 carries one over a whitespace-normalised read of each file
-— a clause that wraps across two source lines is invisible to a line-oriented scan, which is the
-mistake taxis #1712 found in a published regex on this line. What no pattern can do is tell a claim
-about the tree from a description of method (*there is no mathematical content in either*) or from
-a pointer (*the only place in this file where*), and it returns those alongside what is in the
-class. The scan narrows the tree to what is worth reading; the reading is the work.
+— a clause that wraps across two source lines is invisible to a line-oriented scan, which is why
+**taxis #1712** tells a worker to read each file as one string. **That issue's own finding is a
+different failure of the same instrument and is the sharper warning**: the regex taxis #1685
+published to define a spelling could not match the example that issue quoted to define it, so a
+published pattern is worth what it scores against its own examples and no more. What no pattern
+can do is tell a claim about the tree from a description of method (*there is no mathematical
+content in either*) or from a pointer (*the only place in this file where*), and it returns those
+alongside what is in the class. The scan narrows the tree to what is worth reading; the reading is
+the work.
 
 **The standing rule, which is the whole of the remedy.** No sentence about what the tree does or
 does not contain goes into a `.lean` file unless it was checked at the head being pushed from —
