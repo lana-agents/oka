@@ -92,10 +92,13 @@ of the pair is one separation axiom on `Y`.
 
 **The classical repair is not needed, and this file used to imply that it was the only route.**
 Factoring `f` through its graph and asking `Y` to be separated over the base needs a separatedness
-notion and fibre products, and neither exists here — that absence is real and is recorded in the
-base-change paragraph below. It is not what was obstructing this: `isProperMap_of_comp_of_t2` is
-Mathlib's cancellation for proper maps at `[T2Space Y]` and asks nothing of the second factor
-beyond continuity, and a finite morphism is proper
+notion and a fibre product over a cospan neither of whose legs is the inclusion of an open
+subspace, and neither of those is here — that absence is real and is recorded in the base-change
+paragraph below. **This sentence read *needs a separatedness notion and fibre products, and
+neither exists here* until `Oka/AnalyticSpace/PullbackOpen.lean` landed**, which builds the one
+shape the graph construction cannot use. It is not what was obstructing this:
+`isProperMap_of_comp_of_t2` is Mathlib's cancellation for proper maps at `[T2Space Y]` and asks
+nothing of the second factor beyond continuity, and a finite morphism is proper
 (`ComplexAnalytic.AnalyticSpace.isProperMap_base_of_isFinite`), so the closed half is those two
 lemmas and no new topology at all. **`[T2Space Y]` is a genuine hypothesis and not an instance
 that will be found** — `Oka/AnalyticSpace/Basic.lean` imposes no separation axiom, as
@@ -113,9 +116,19 @@ stand beside it does not, and is now the section above.
 is about finite *étale* covers — finite together with being a local isomorphism — and that is a
 second notion resting on this one.
 
-**There is no base change.** `AlgebraicGeometry.IsFinite`'s `IsStableUnderBaseChange` has no
-analogue below because this repository has no fibre products of analytic spaces; the absence is
-stated here rather than left to be discovered.
+**Base change along a general morphism is absent, and along the inclusion of an open subspace it
+is here.** `AlgebraicGeometry.IsFinite`'s `IsStableUnderBaseChange` quantifies over every cospan
+and has no analogue below, because a fibre product over a general cospan is what
+`Oka/AnalyticSpace/PullbackOpen.lean`'s header prices and does not build. What that file does
+build is the pullback along the inclusion of an open subspace, and
+`ComplexAnalytic.AnalyticSpace.isFinite_restrictHom` there is finiteness carried across it, with
+no hypothesis on the open subset.
+
+**This paragraph said flatly that there is no base change and that this repository has no fibre
+products of analytic spaces.** Both were exact at `e8c5f03`, the commit
+`Oka/AnalyticSpace/PullbackOpen.lean`'s header pins its `#synth` failures to, and the push that
+added that file falsified them. The absence that is left is stated here rather than left to be
+discovered.
 
 ## Main definitions
 

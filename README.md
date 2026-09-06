@@ -145,7 +145,11 @@ coherence statement for arbitrary complex analytic spaces:
   sides (`…isFinite_iff_isProperMap_base_and_finite_fiber`). There is no `IsProper` class, and
   properness is not shown of anything except by way of finiteness. **What makes finiteness useful
   is Grauert's finite mapping theorem, that `f_*𝒪_X` is coherent for finite `f`, and that is not
-  proved here**, nor are there fibre products to base-change along.
+  proved here**, nor is there a fibre product over a general cospan to base-change along. **This
+  clause read *nor are there fibre products to base-change along* until
+  `Oka/AnalyticSpace/PullbackOpen.lean` landed the pullback along the inclusion of an open
+  subspace**, over which `ComplexAnalytic.AnalyticSpace.isFinite_restrictHom` does base-change
+  finiteness.
 
 * **Local isomorphisms and finite étale morphisms** (`Oka/AnalyticSpace/LocalIso.lean`), the
   second rung of the Riemann existence theorem's analytic side.
@@ -265,8 +269,11 @@ coherence statement for arbitrary complex analytic spaces:
   faithfulness beside it. **This paragraph priced the gap at two obligations — a non-empty target
   and an invertibility of the underlying morphism rather than of the morphism of covers — and
   neither was a price**: the first is removed by closing the empty case rather than paid, and the
-  second is two Mathlib reflections composed. **What is still absent is base change**, for want
-  of pullbacks of analytic spaces. **Conservativity is one of the axioms a Galois category asks
+  second is two Mathlib reflections composed. **What is still absent is base change over a general
+  cospan**, for want of a fibre product of analytic spaces over one; the pullback along the
+  inclusion of an open subspace is in `Oka/AnalyticSpace/PullbackOpen.lean` and is not enough for
+  an axiom that quantifies over every cospan. **This clause read *for want of pullbacks of analytic
+  spaces*** until that file landed. **Conservativity is one of the axioms a Galois category asks
   of a fibre functor, and faithfulness is not one of them**: at the Mathlib revision
   `lakefile.toml` pins, the class there asks the functor to reflect isomorphisms and *derives*
   faithfulness from the axioms rather than assuming it. So what is here is that axiom and

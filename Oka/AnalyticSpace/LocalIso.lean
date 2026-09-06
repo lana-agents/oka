@@ -93,9 +93,13 @@ the rung.
   arbitrary second factor, by `isProperMap_of_comp_of_t2` and the properness of a finite morphism,
   and no separatedness notion and no fibre product is needed at any point.
 
-  This repository still has neither a separatedness notion for `ComplexAnalytic.AnalyticSpace` nor
-  fibre products, which is the same absence `Oka/AnalyticSpace/FiniteEtaleOver.lean` records as
-  the reason base change is not statable there. **Neither was ever what obstructed this**; a
+  This repository still has no separatedness notion for `ComplexAnalytic.AnalyticSpace`, and no
+  fibre product over a cospan neither of whose legs is the inclusion of an open subspace —
+  `Oka/AnalyticSpace/PullbackOpen.lean` builds that one shape and prices the rest. **This sentence
+  read *neither a separatedness notion … nor fibre products* until that file landed, and the second
+  half of it is what the file falsified.** The remaining absence is the one
+  `Oka/AnalyticSpace/FiniteEtaleOver.lean` records as the reason base change is not statable there.
+  **Neither was ever what obstructed this**; a
   separation axiom on `Y` is a hypothesis and not a construction, and it is the whole of what was
   missing.
 * **Grauert's finite mapping theorem**, which `Oka/AnalyticSpace/Finite.lean` already records as
@@ -342,16 +346,17 @@ additionally *finite* étale is not asked here — that witness has a second fac
 local isomorphism, so it does not settle the question.
 
 **It does not make the category Galois**, and `Oka/AnalyticSpace/FiniteEtaleOver.lean` says what
-else is wanted: no fibre products, hence no base change. **The fibre functor is no longer among
-it** — `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fintypeFiberFunctor` is in that file, and its
+else is wanted: no fibre product over a general cospan, hence no base change. **The fibre functor
+is no longer among it** — `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fintypeFiberFunctor` is in
+that file, and its
 fibres are finite with no hypothesis. **This sentence used to add *and every statement about that
 functor beyond its two laws*, and it had already stopped being true before the branch that
 removed it**: `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.base_eq_of_fiberFunctor_map_eq`
 falsified it — a statement about that functor, and neither of its laws — and nothing swept this
 file when it landed. What retires the clause outright rather than narrowing it is
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hom_ext_of_fiberFunctor_map_eq`, which is
-faithfulness wherever its hypotheses hold. What is missing there is base change, and
-`CategoryTheory.Functor.Faithful` as a class. -/
+faithfulness wherever its hypotheses hold. What is missing there is base change over a general
+cospan, and `CategoryTheory.Functor.Faithful` as a class. -/
 theorem isFiniteEtale_of_comp {X Y Z : AnalyticSpace.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
     [T2Space Y] [IsFiniteEtale (f ≫ g)] [IsLocalIso g] : IsFiniteEtale f where
   isFinite := isFinite_of_comp_of_t2Space f g

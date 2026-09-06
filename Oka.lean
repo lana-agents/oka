@@ -72,6 +72,7 @@ import Oka.AnalyticSpace.OpenBaseProjectionPolynomial
 import Oka.AnalyticSpace.OpenSubspace
 import Oka.AnalyticSpace.ProjectionStalk
 import Oka.AnalyticSpace.PullbackModulesStalk
+import Oka.AnalyticSpace.PullbackOpen
 import Oka.AnalyticSpace.Relations
 import Oka.AnalyticSpace.Restrict
 import Oka.AnalyticSpace.Sigma

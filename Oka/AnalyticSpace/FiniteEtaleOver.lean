@@ -268,8 +268,8 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   **both fibre functors preserve the terminal object**, with no hypothesis on the base or on the
   point. **This is a Galois-category axiom on the fibre functor**, as
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasTerminal` is one on the category;
-  `## What is not here` says which of the others are absent, and base change is still among
-  them.
+  `## What is not here` says which of the others are absent, and base change over a general cospan
+  is still among them.
 - `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_id`,
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_trivial_of_isEmpty` and
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_trivial_of_isEmpty_base`:
@@ -381,11 +381,14 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
     thing.** `Oka/AnalyticSpace/Finite.lean`'s cancellation section and
     `Oka/AnalyticSpace/LocalIso.lean`'s `## What is not here` both gave the real line with two
     origins as the shape, and both said the classical repair needs a separatedness notion and
-    fibre products — which this category cannot state, for the same reason as the base-change
-    bullet below. **What that example exhibits is a middle space with two points no open set
-    separates, and the second factor is not what makes it work**: at a Hausdorff middle space the
-    closed half cancels along an arbitrary second factor, by Mathlib's `isProperMap_of_comp_of_t2`
-    and the properness of a finite morphism, which is
+    fibre products — neither of which this category has at the cospan that repair forms, for the
+    same reason as the base-change bullet below. **That clause read *which this category cannot
+    state* until `Oka/AnalyticSpace/PullbackOpen.lean` landed the pullback along the inclusion of
+    an open subspace**, which is not the cospan the graph construction forms, so the absence is
+    narrowed rather than struck. **What that example exhibits is a middle space with two points no
+    open set separates, and the second factor is not what makes it work**: at a Hausdorff middle
+    space the closed half cancels along an arbitrary second factor, by Mathlib's
+    `isProperMap_of_comp_of_t2` and the properness of a finite morphism, which is
     `ComplexAnalytic.AnalyticSpace.isFinite_of_comp_of_t2Space` in
     `Oka/AnalyticSpace/Finite.lean`. So no separatedness notion and no fibre product was ever
     needed, and the hypothesis that was missing is a separation axiom rather than a construction.
@@ -411,7 +414,8 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   functor does not.
 
   **What is absent is the Galois category itself.** Its axioms need the base change the
-  **No pullbacks, so no base change** bullet below says this category has not — **and this
+  **No pullback over a general cospan, so no base change** bullet below says this category has
+  not — **and this
   sentence used to stop there, which read as though base change were the whole of what they
   need.** It is not. **The terminal object is one of the axioms and it is here now:**
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasTerminal` puts the base over itself at the top
@@ -427,10 +431,10 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesFiniteCoproducts_fiberFunctor` and
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesFiniteCoproducts_fintypeFiberFunctor`
   say the two fibre functors preserve that as well. **What the terminal object and the finite
-  coproducts discharge is the obligations named in this paragraph and no other**: base change is
-  untouched by all of it, and so are quotients by finite group actions, the axiom that a
-  monomorphism induces an isomorphism onto a direct summand, and the preservation of epimorphisms
-  by a fibre functor.
+  coproducts discharge is the obligations named in this paragraph and no other**: base change over
+  a general cospan is untouched by all of it, and so are quotients by finite group actions, the
+  axiom that a monomorphism induces an isomorphism onto a direct summand, and the preservation of
+  epimorphisms by a fibre functor.
 
   **And none of the coproduct statements has a version on the subcategory
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2`, which is a fact about that
@@ -536,11 +540,23 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   composes them here — which was true — and **declined to say what composing them would cost**.
   Declining was right, and the answer was one lemma about locally ringed spaces that mentions
   neither covers nor analytic spaces.
-* **No pullbacks, so no base change.** No `HasPullback` instance for
-  `ComplexAnalytic.AnalyticSpace` is available here, and none is exhibited or claimed, so
-  `CategoryTheory.MorphismProperty.IsStableUnderBaseChange` is not even statable for
-  `isFiniteEtale` here, and the pullback of a cover along a morphism of the base — which is how a
-  Galois category's fibre functor is usually built — is not available to it.
+* **No pullback over a general cospan, so no base change.**
+  `CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` does not synthesise, so
+  `CategoryTheory.MorphismProperty.IsStableUnderBaseChange` — which quantifies over every cospan —
+  is not statable for `isFiniteEtale`, and the pullback of a cover along an arbitrary morphism of
+  the base, which is how a Galois category's fibre functor is usually built, is not available to
+  it.
+
+  **This bullet read *No pullbacks, so no base change* and said that no `HasPullback` instance for
+  analytic spaces is available and that none is exhibited or claimed.** That was exact until
+  `Oka/AnalyticSpace/PullbackOpen.lean`, which exhibits
+  `ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict` — the pullback along the inclusion of an
+  open subspace — and carries `isFiniteEtale` across it at
+  `ComplexAnalytic.AnalyticSpace.isFiniteEtale_pullback_snd_ofRestrict`. **What that buys for a
+  Galois category is nothing**, since the axioms quantify over cospans whose legs are arbitrary
+  morphisms of covers, and it is named here so that the absence is stated at the strength it
+  actually has.
+
   **The functor above is not built that way and is not evidence that this absence is harmless**:
   it reads the structure map at one point of the base directly, which is enough to *have* a fibre
   and is not enough to say anything about how it varies.
@@ -571,7 +587,8 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   already carry — over a preconnected base and a Hausdorff total space its size *is* the degree,
   by `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_fiber` — and what separates is the
   monodromy *action* on it, which needs a fundamental group nothing here connects to a cover and
-  the base change the **No pullbacks, so no base change** bullet above says this category has not.
+  the base change the **No pullback over a general cospan, so no base change** bullet above says
+  this category has not.
 
   **What the witness in `OkaTest/FiniteEtaleOver.lean` settles is that the functor's values are
   not a complete invariant.** `OkaTest.FiniteEtaleOver.nonempty_fiber_equiv_trivial_sqOver` puts
@@ -1140,11 +1157,14 @@ what it wants and no `Fintype.ofFinite` and no `noncomputable` appears.
 module**: the transitive closure of this file was 3463 modules before and is 3464 after, the new
 module being that one and nothing it depends on.
 
-**What this does not make is a Galois category.** The axioms need base change and no
-`CategoryTheory.Limits.HasPullback` instance for `ComplexAnalytic.AnalyticSpace` is available
-here; see `## What is not here`. **Base change is not the only axiom they need, and the reader who
-meets this sentence first should not infer that it is** — the terminal-object axiom is separately
-in hand, at
+**What this does not make is a Galois category.** The axioms need base change over an arbitrary
+cospan and `CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` does not synthesise;
+see `## What is not here`, whose bullet on this now says which cospans do have a pullback and what
+carrying `isFiniteEtale` across that one buys. **This sentence said that no
+`CategoryTheory.Limits.HasPullback` instance for analytic spaces is available here at all**, and
+`Oka/AnalyticSpace/PullbackOpen.lean` falsified it. **Base change is not the only axiom they need,
+and the reader who meets this sentence first should not infer that it is** — the terminal-object
+axiom is separately in hand, at
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_fintypeFiberFunctor`
 for this functor. -/
 def FiniteEtaleOver.fintypeFiberFunctor {X : AnalyticSpace.{u}} (x : X) :
@@ -1733,8 +1753,9 @@ below**, composed with
 restricted functor, **and so does
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.reflectsIsomorphisms_fintypeFiberFunctor` below**,
 which is conservativity — the axiom that class asks of a fibre functor where faithfulness is the
-thing it hands back. **Base change is still absent**, for the reason the
-`## No pullbacks, so no base change` bullet gives, and nothing here bears on it. -/
+thing it hands back. **Base change over a general cospan is still absent**, for the reason the
+`## No pullback over a general cospan, so no base change` bullet gives, and nothing here bears on
+it. -/
 instance FiniteEtaleOver.faithful_fintypeFiberFunctor {X : AnalyticSpace.{u}}
     [PreconnectedSpace (X : Type u)] (x : X) :
     ((FiniteEtaleOver.isPreconnectedT2.{u} X).ι
@@ -1863,9 +1884,13 @@ point by `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.uniqueFiberId`, and
 **Preservation of the terminal object is a Galois-category axiom on the fibre functor**, in
 `Mathlib/CategoryTheory/Galois/Basic.lean`, whose namespace is not in this repository's import
 closure and so cannot be cited by name here. **It is one field of that structure and this instance
-does not supply the others**; `## What is not here`'s **No pullbacks, so no base change** bullet
-is still exactly true, and this instance bears on neither quotients by finite group actions nor
-the axiom that a monomorphism induces an isomorphism onto a direct summand.
+does not supply the others**; `## What is not here`'s **No pullback over a general cospan, so no
+base change** bullet is still exactly true of the cospans a Galois category quantifies over, and
+this instance bears on neither quotients by finite group actions nor the axiom that a monomorphism
+induces an isomorphism onto a direct summand. **That bullet was titled *No pullbacks, so no base
+change* and this sentence called it exactly true**, which stopped being so when
+`Oka/AnalyticSpace/PullbackOpen.lean` exhibited the pullback along the inclusion of an open
+subspace; the bullet is narrowed and so is this citation of it.
 
 **The conclusion is `CategoryTheory.Limits.PreservesLimitsOfShape` at the empty shape and not
 `CategoryTheory.Limits.PreservesLimit` at
@@ -2286,10 +2311,13 @@ step `CategoryTheory.Limits.hasFiniteCoproducts_of_hasCoproducts` also takes —
 itself being unusable here for the reason
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasColimitsOfShape_discrete` gives.
 
-**What this does not say is that the category is a Galois category.** Base change is absent, and
-so are quotients by finite group actions and the axiom that a monomorphism induces an isomorphism
-onto a direct summand; `## What is not here` says so, and this instance shortens that list by a
-member rather than emptying it. -/
+**What this does not say is that the category is a Galois category.** Base change over a general
+cospan is absent, and so are quotients by finite group actions and the axiom that a monomorphism
+induces an isomorphism onto a direct summand; `## What is not here` says so, and this instance
+shortens that list by a member rather than emptying it. **This sentence read *Base change is
+absent* until `Oka/AnalyticSpace/PullbackOpen.lean` exhibited the pullback along the inclusion of
+an open subspace and carried `isFiniteEtale` across it**; that is not a cospan a Galois category
+quantifies over, so the bullet cited here is narrowed rather than struck, and so is this. -/
 instance FiniteEtaleOver.hasFiniteCoproducts (X : AnalyticSpace.{u}) :
     Limits.HasFiniteCoproducts (FiniteEtaleOver.{u} X) :=
   ⟨fun n ↦
@@ -2487,10 +2515,13 @@ instance FiniteEtaleOver.preservesFiniteCoproducts_fiberFunctor {X : AnalyticSpa
 at the functor a Galois category asks for.
 
 **What this does not say is that the category is a Galois category and this functor a fibre
-functor for it.** Base change is absent, and so are quotients by finite group actions, the axiom
-that a monomorphism induces an isomorphism onto a direct summand, and the preservation of
-epimorphisms; `## What is not here` says so, and what this instance takes out of the set of
-absent axioms is the preservation of finite coproducts. -/
+functor for it.** Base change over a general cospan is absent, and so are quotients by finite group
+actions, the axiom that a monomorphism induces an isomorphism onto a direct summand, and the
+preservation of epimorphisms; `## What is not here` says so, and what this instance takes out of
+the set of absent axioms is the preservation of finite coproducts. **This sentence read *Base
+change is absent* until `Oka/AnalyticSpace/PullbackOpen.lean` exhibited the pullback along the
+inclusion of an open subspace**, which is not a cospan a Galois category quantifies over; the
+narrowing is the same one the bullet took. -/
 instance FiniteEtaleOver.preservesFiniteCoproducts_fintypeFiberFunctor {X : AnalyticSpace.{u}}
     (x : X) : Limits.PreservesFiniteCoproducts (FiniteEtaleOver.fintypeFiberFunctor.{u} x) where
   preserves n :=
