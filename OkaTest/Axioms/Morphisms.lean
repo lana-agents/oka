@@ -38,6 +38,12 @@ about no class of morphisms and no statement at all: it guards the structure
 and its own docstring says which paragraphs of this file rest on it —
 `### The axiom is already in the structure and in the type of a morphism`.
 
+And a sixth kind is about the **category** rather than about any morphism in it: that
+`ComplexAnalytic.AnalyticSpace` has a terminal object, and that a pair of complex affine spaces
+has a product — `### The terminal object and the product of two complex affine spaces`. **That
+clause was added by the push that added that section**, which is what this paragraph's own history
+says a description owes a section it does not reach.
+
 **Named rather than counted from the end**, which is the repair and not the description. **The
 sentence this replaces called them *the last two***; they stopped being that when two further
 sections were appended past them — and one of those two was written across two lines, so no
@@ -3116,3 +3122,128 @@ info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.inducesIsoOnDirectSummand_o
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.inducesIsoOnDirectSummand_of_injective
+
+
+/-! ### The terminal object and the product of two complex affine spaces
+
+`Oka/AnalyticSpace/AffineProduct.lean`: that `ℂ^0` is terminal in `ComplexAnalytic.AnalyticSpace`,
+that `ℂ^(n+m)` with its two coordinate projections is the binary product of `ℂ^n` and `ℂ^m`, and
+the pair, the two triangles and the uniqueness that make it one.
+
+**`Classical.choice` is in every guard of this section and none of it is this section's
+subject.**
+`ComplexAnalytic.AnalyticSpace.homComplexAffineSpaceEquivGeneral` is `Equiv.ofBijective`, so its
+inverse is a choice term, and every construction guarded here is built through that inverse; the
+axiom also reaches `ComplexAnalytic.AnalyticSpace` itself, for the reason the section
+`### The clopen part of a cover` gives. **What the guards record is that nothing in that file adds
+an axiom of its own**, and in particular that neither limit is obtained by choosing a witness that
+the universal property does not name.
+
+**`CategoryTheory.Limits.HasTerminal ComplexAnalytic.AnalyticSpace` is a synthesis result this
+push changes**, which is why the instance is guarded here beside the `IsTerminal` term it is built
+from: the term says which object is terminal and the instance says only that one is, and a guard
+on one is not a guard on the other.
+
+Appended as its own section rather than merged into another, for the reason the sections in this
+file give for that: a section appended at the end cannot say which section is above it and stay
+true, since the next branch appends between them.
+
+**Named by file rather than counted**, for the reason this file's other sections give. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.affineProdFst' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.affineProdFst
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.affineProdSnd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.affineProdSnd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.coordPullback_affineProdFst' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.coordPullback_affineProdFst
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.coordPullback_affineProdSnd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.coordPullback_affineProdSnd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.affineProdLift' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.affineProdLift
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.coordPullback_affineProdLift' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.coordPullback_affineProdLift
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.affineProdLift_fst' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.affineProdLift_fst
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.affineProdLift_snd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.affineProdLift_snd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hom_ext_affineProd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hom_ext_affineProd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.binaryFanAffineProd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.binaryFanAffineProd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isLimitBinaryFanAffineProd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isLimitBinaryFanAffineProd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hasBinaryProduct_complexAffineSpace' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hasBinaryProduct_complexAffineSpace
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isTerminalComplexAffineSpaceZero' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isTerminalComplexAffineSpaceZero
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hasTerminal_analyticSpace' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hasTerminal_analyticSpace
