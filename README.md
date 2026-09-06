@@ -33,7 +33,8 @@ coherence statement for arbitrary complex analytic spaces:
   finitely many variables is Noetherian (`Oka/Noetherian.lean`), deduced from Weierstrass
   division by the classical induction on the number of variables.
 * **Unique factorisation.** The germ ring is a unique factorisation domain
-  (`Oka/UFD.lean`), the second algebraic consequence of Weierstrass preparation.
+  (`Oka/UFD.lean`), an algebraic consequence of Weierstrass preparation, as the Rückert basis
+  theorem is.
 * **The completion of the germ ring.** The `𝔪`-adic completion of the ring of convergent power
   series is the ring of **formal** power series, by the isomorphism induced by the inclusion
   (`Oka/Completion.lean`). The analytic content is the agreement of the truncations, the
@@ -42,9 +43,11 @@ coherence statement for arbitrary complex analytic spaces:
   `LocalOkaRing ι` — so a germ that lies **formally** in an ideal of germs lies in it already, and
   a germ formally divisible by a coordinate is divisible by it with a convergent cofactor. This is
   *not* the flatness of `𝒪_{𝔸^n, z} → 𝒪_{ℂ^n, z}`, the input to GAGA; it is one of the two
-  ingredients that item is deduced from below.
+  ingredients `Oka/Analytification/Flatness.lean` builds that flatness at the origin from, the
+  other being flatness of the same completion over the local ring `ℂ[x]_{(x)}` of `𝔸^ι_ℂ`.
 * **Regularity and dimension.** The germ ring in `n` variables is a regular local ring of Krull
-  dimension `n` (`Oka/Regular.lean`), the third. The dimension is computed by cutting with one
+  dimension `n` (`Oka/Regular.lean`), another such consequence, beside the Rückert basis theorem
+  and unique factorisation. The dimension is computed by cutting with one
   coordinate at a time; the induction step is the isomorphism
   `𝒪_n ≃+* 𝒪_{n+1} ⧸ (X_n)`, which is Weierstrass division by a degree-one Weierstrass
   polynomial together with its uniqueness half.
@@ -91,8 +94,10 @@ coherence statement for arbitrary complex analytic spaces:
   node to `ℂ`, which are surjective on points. The same statement for a **general** analytic
   space is not proved: a section of `𝒪_Z` lifts to a holomorphic function only locally, so the
   construction runs on an open cover of `Z` and stops. Assembling the pieces needs the gluing of
-  the next item, which is now available, together with independence of the local construction of
-  the two choices it makes — the chart and the local lift — which is not.
+  morphisms out of the members of an open cover
+  (`Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean`), which is now available, together with
+  independence of the local construction of the two choices it makes — the chart and the local
+  lift — which is not.
 
 * **Open subspaces.** An open subspace of a complex analytic space is a complex analytic space
   (`ComplexAnalytic.AnalyticSpace.restrict` in `Oka/AnalyticSpace/OpenSubspace.lean`), and its
@@ -309,7 +314,8 @@ coherence statement for arbitrary complex analytic spaces:
   `AlgebraicGeometry.isQuasicoherent_iff_isIso_fromTildeΓ` then gives
   `AlgebraicGeometry.Scheme.Modules.isIso_fromTildeΓ_of_isCoherent`: **a coherent
   `𝒪_{Spec R}`-module is the sheaf associated with its own global sections.** It **is** exercised,
-  by the bullet below; the sentence that used to stand here said it was not, and gave as the
+  by `OkaTest/SpecCoherent.lean`, at a nonzero proper quotient of the structure sheaf of
+  `Spec (ℂ[x, y] ⧸ (xy))`; the sentence that used to stand here said it was not, and gave as the
   reason that this repository proved no sheaf on a `Spec` to be coherent, every coherent sheaf it
   exhibited living on an analytic space.
 
@@ -328,13 +334,15 @@ coherence statement for arbitrary complex analytic spaces:
   any flatness. The general statement is about locally noetherian schemes because the argument
   never uses affineness of the ambient space, only of a neighbourhood. `OkaTest/SpecCoherent.lean`
   instantiates it at `A = ℂ[x, y] ⧸ (xy)`, at `𝒪_{Spec A}`, at a free sheaf of rank two, and at
-  the nonzero proper quotient `𝒪_{Spec A} ⧸ (x)`, and with the last of those instantiates the
-  affine dictionary of the bullet above. **This does not make GAGA's "coherent implies
-  analytification coherent" available**: that gap is at the sheaf level and is described in
+  the nonzero proper quotient `𝒪_{Spec A} ⧸ (x)`, and with that quotient instantiates the affine
+  dictionary `AlgebraicGeometry.Scheme.Modules.isIso_fromTildeΓ_of_isCoherent`. **This does not
+  make GAGA's "coherent implies analytification coherent" available**: that gap is at the sheaf
+  level and is described in
   `Oka/Analytification/SheafCoherent.lean`, and it is untouched.
 
 * **The affine-locality argument, and its conclusion: `Γ M` is a finite `R`-module**
-  (`Oka/AlgebraicGeometry/Modules/Tilde.lean`). What the bullet above leaves open is anything at
+  (`Oka/AlgebraicGeometry/Modules/Tilde.lean`). What
+  `AlgebraicGeometry.Scheme.Modules.isIso_fromTildeΓ_of_isCoherent` leaves open is anything at
   all about `Γ M` as an `R`-module, and getting it is the quasi-compactness argument on `Spec R`.
   Its first step is
   `AlgebraicGeometry.Scheme.Modules.exists_finset_basicOpen_generatingSections`: a sheaf of
@@ -493,8 +501,8 @@ coherence statement for arbitrary complex analytic spaces:
   the node along the punctured axis — the smallest cover with a triple of distinct indices, so
   the smallest one that exercises `t'` at all — and checks that the three copies are **distinct**
   points of the gluing over the origin, which is what stops the construction from quietly
-  returning one member. The analytic structure on the gluing is a further step, and is the bullet
-  below rather than this one.
+  returning one member. The analytic structure on the gluing is a further step, and belongs to
+  `Oka/AnalyticSpace/Glue.lean` rather than to this item.
 
 * **The analytic structure on a gluing** (`Oka/AnalyticSpace/Glue.lean`).
   `ComplexAnalytic.AnalyticSpace.ofGlueData` already turned an
@@ -600,7 +608,8 @@ coherence statement for arbitrary complex analytic spaces:
 * **The analytic input to GAGA, at every point, and for the stalk map itself.** The stalk map of
   the comparison morphism `ℂ^ι ⟶ 𝔸^ι_ℂ` is **faithfully flat at every point** of `ℂ^ι`
   (`Oka/Analytification/FlatnessAtAPoint.lean`) — the statement about the morphism, not about a
-  pair of rings chosen to be comparable. Both of the previous item's restrictions come off by
+  pair of rings chosen to be comparable. Both of `Oka/Analytification/Flatness.lean`'s
+  restrictions — to the origin, and to a pair of rings rather than to the stalk map — come off by
   translating rather than by re-running the argument. On the algebraic side translation is the
   automorphism `xᵢ ↦ xᵢ + zᵢ` of `ℂ[x]`, which carries the polynomials vanishing at `z` onto
   those vanishing at the origin; on the analytic side there is nothing to translate, because the
@@ -609,15 +618,16 @@ coherence statement for arbitrary complex analytic spaces:
   polynomial `p(x + z)`, which is `LocalOkaRing.ofMvPolynomial_taylorAlgHom`, proved from
   `OkaRing.germ_shift`. Crossing from honest rings to the stalk map is then the identification of
   the stalk of `Spec ℂ[x]` under `z` with the local ring at `z` — both are localisations of
-  `ℂ[x]` at the same submonoid — together with the characterisation of the stalk map that the
-  previous comparison item already proved.
+  `ℂ[x]` at the same submonoid — together with the characterisation of the stalk map proved in
+  `Oka/Analytification/AffineSpace.lean`.
 
 * **Comparison with algebraic geometry.** The canonical morphism of locally ringed spaces from
   `ℂ^ι` to `Spec (MvPolynomial ι ℂ)`, with its point map identified as `z ↦ ker (eval z)`, shown
   injective and landing in the closed points, and its stalk map identified as the
   localisation-to-germs map — a rational function regular at `z` is the germ there of the
   holomorphic function it defines (`Oka/Analytification/AffineSpace.lean`). This is the base case
-  of analytification; **flatness** of that stalk map is proved in the item above.
+  of analytification; **flatness** of that stalk map is proved in
+  `Oka/Analytification/FlatnessAtAPoint.lean`.
 * **Analytification of a presented affine `ℂ`-algebra.** For polynomials `g₁, …, g_k`, the
   analytic space `{z ∈ ℂ^n | g₁ z = ⋯ = g_k z = 0}` together with a comparison morphism of
   locally ringed spaces to `Spec (ℂ[x₁, …, x_n]/(g₁, …, g_k))`, whose point map is identified —
@@ -632,8 +642,9 @@ coherence statement for arbitrary complex analytic spaces:
   function it defines"*, a class having invertible germ exactly when it does not vanish at `y`
   (`Oka/Analytification/PresentationStalk.lean`). This is the presented analogue of the stalk-map
   identification for `ℂ^ι` above, and it is what a GAGA argument for an affine scheme other than
-  `𝔸^ι` meets; its flatness is the item below. The worked instance is the node: the germ of `y`
-  at `(1, 0)` is **zero**, because near that point the node is the `x`-axis — a statement `ℂ²`
+  `𝔸^ι` meets; its flatness is `Oka/Analytification/PresentationFlatness.lean`'s. The worked
+  instance is the node: the germ of `y` at `(1, 0)` is **zero**, because near that point the node
+  is the `x`-axis — a statement `ℂ²`
   cannot make.
 * **The analytic input to GAGA, for a presented affine `ℂ`-algebra.** The stalk map of
   `X^an ⟶ Spec (ℂ[x] ⧸ I)` is **faithfully flat at every point of `X^an`, for every
@@ -647,8 +658,9 @@ coherence statement for arbitrary complex analytic spaces:
   zero locus construction's own stalk computation transported across the restriction of `ℂ^n` to
   `⊤`. A corollary worth naming on its own: **a nonzero polynomial has nonzero germ at every
   point**, because a faithfully flat ring map is injective. The worked instance is again the
-  node, and it is the statement the previous item could not make: **the stalk of its structure
-  sheaf at the origin has zero divisors** — the germs of `x` and of `y` are both nonzero there
+  node, and it is the statement `Oka/Analytification/PresentationStalk.lean` could not make:
+  **the stalk of its structure sheaf at the origin has zero divisors** — the germs of `x` and of
+  `y` are both nonzero there
   and their product vanishes, which on `ℂ²` is impossible. **This is still the input to GAGA and
   not GAGA.**
 * **The universal property of that analytification.** For every complex analytic space `Z`,
@@ -872,7 +884,7 @@ Lean knows about, and the check takes about ten seconds, nine of them spent impo
 deliberately permissive — a name resolves if *any* declaration in the environment ends with it,
 or it is a module, or a file in this repository, or field notation — because a checker that cries
 wolf is worse than none on a project whose pull request bodies quote its figures as evidence.
-**It reads the `.lean` files under `Oka/`, `OkaTest/` and `scripts/`** — the last of those since
+**It reads the `.lean` files under `Oka/`, `OkaTest/` and `scripts/`** — `scripts/` since
 2026-08-31 and taxis #1337, which found that the two Lean helpers describing this check were the
 only Lean prose here it did not read; the `.py` files under `scripts/`, this checker's own
 docstring included, are still read by nothing.
