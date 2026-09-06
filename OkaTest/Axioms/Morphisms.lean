@@ -2804,3 +2804,115 @@ info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopenCompl'
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopenCompl
+/-! ### Gluing along a clopen pair, and the decomposition of a cover it gives
+
+`Oka/AnalyticSpace/Clopen.lean` and `Oka/AnalyticSpace/FiniteEtaleOver.lean`: the two-member cover
+of an analytic space by a clopen open subspace and its complement, that its members cover and do
+not meet, that a morphism out of each member glues to a unique morphism out of the space, the
+glued morphism with its two factorisations and the extensionality lemma that is the other half of
+its uniqueness, and then — over a base — the complementary part's inclusion, the cocone the two
+inclusions make, and that a cover is the coproduct of a clopen part of its total space and the
+complementary part.
+
+`ComplexAnalytic.AnalyticSpace.isLocalIso_ofRestrict` and
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen` are guarded in this file, and the
+gluing half is guarded here beside them rather than beside
+`ComplexAnalytic.AnalyticSpace.ofRestrict` for the same reason the clopen-part half is.
+
+Appended as its own section rather than merged into another, for the reason the sections in this
+file give for that: a section appended at the end cannot say which section is above it and stay
+true, since the next branch appends between them.
+
+**`Classical.choice` is in every guard below and is introduced by none of them.** It arrives
+through `ComplexAnalytic.AnalyticSpace.restrict`, which is noncomputable — and, for
+`ComplexAnalytic.AnalyticSpace.descClopen`, through the choice from
+`ComplexAnalytic.AnalyticSpace.existsUnique_hom_of_clopen` that defines it, which is why that
+declaration is noncomputable for a second reason as well as for the first.
+
+**Named by file rather than counted**, for the reason this file's other sections give.
+
+**Named and not located.** No sentence here says which section is above or below it. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.clopenCover'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.clopenCover
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.clopenCover_covers'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.clopenCover_covers
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.clopenCover_inf_of_ne'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.clopenCover_inf_of_ne
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.clopenCoverHom'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.clopenCoverHom
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.existsUnique_hom_of_clopen'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.existsUnique_hom_of_clopen
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.descClopen'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.descClopen
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.ofRestrict_descClopen'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.ofRestrict_descClopen
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.ofRestrict_clopenCompl_descClopen'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.ofRestrict_clopenCompl_descClopen
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hom_ext_of_clopen'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hom_ext_of_clopen
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopenComplι'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopenComplι
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.binaryCofanRestrictClopen'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.binaryCofanRestrictClopen
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitBinaryCofanRestrictClopen'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitBinaryCofanRestrictClopen
