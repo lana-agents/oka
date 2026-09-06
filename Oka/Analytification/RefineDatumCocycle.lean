@@ -64,9 +64,10 @@ sentence those four files carry — that the obstruction is one cancellation aga
 ## No `CategoryTheory.reassoc_of%` below, and that is not a style choice
 
 Every proof here walks a three-fold composite one factor at a time, which is what `reassoc_of%` is
-for; **it is not used, because it plants congruence lemmas.** Measured on this file: with the four
-`reassoc_of%`s the obvious draft has, `scripts/DumpOkaDecls.lean` reports `Δdump` of `+31` for 27
-declarations, and the four extra rows are the `congr_simp` companions of
+for; **it is not used, because it plants congruence lemmas.** Measured at `1915807`, the push that
+created this file: with the four `reassoc_of%`s the obvious draft has,
+`scripts/DumpOkaDecls.lean` reports `Δdump` of `+31` where that push declares 27 things, and the
+four extra rows are the `congr_simp` companions of
 `ComplexAnalytic.coverSpaceHomOfEq`, `ComplexAnalytic.refineDatumGlue`,
 `ComplexAnalytic.refineDatumCrossTriple` and `ComplexAnalytic.refineDatumTripleCross` — three of
 them on *other files'* definitions.
@@ -79,7 +80,20 @@ statement built as a *term* out of `CategoryTheory.eq_whisker` and associativity
 simp set and normalises nothing. The cost is that its right-hand side is left as the equation's
 own, so each use is followed by a `Category.assoc` the elaborated form would have done — that, and
 nothing else, is why the rewrite chains below are longer than they look as though they need to be.
-`Δdump` is `+27` and `comm -23` is empty.
+`Δdump` for that push was `+27` — the 27 declarations it adds, 26 here and
+`ComplexAnalytic.coverTransition_hom_comp` in `Oka/Analytification/AffineCover.lean`, with its
+`comm -23` empty so that nothing was displaced against them; `+31` is those 27 plus the four
+companion rows. **That figure is derived from the declaration count and the empty `comm -23`, not
+read off a dump built at `1915807`.** **It is that push's and not a count of this file**, which
+has since lost `ComplexAnalytic.coverSpaceHomOfEq_self`,
+`ComplexAnalytic.coverSpaceHomOfEq_trans` and `ComplexAnalytic.coverSpaceHomOfEq_comp_symm` to
+`Oka/Analytification/RefineDatumRange.lean`, the file that owns their definition — **a move that
+made `6de872c`'s own `comm -23` non-empty, which is that check reporting and not that check
+failing.** **What a branch on this file owes is a `comm -23` that is empty or accounted for row
+by row, and no `congr_simp`, `.eq_1` or `match_` row among the ones it adds**: both are questions
+about the push being made rather than figures about the file, so neither goes stale the way a
+`Δdump` written in the present tense does. `Oka/Analytification/RefineDatumRange.lean` writes its
+own figure this way, for the same reason and about the same construction.
 
 ## The transports, and why they are stated at abstract indices
 
