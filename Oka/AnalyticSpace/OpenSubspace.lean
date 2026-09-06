@@ -66,6 +66,9 @@ transport of algebra structures along an isomorphism is needed anywhere.
   everything**, which is `ComplexAnalytic.AnalyticSpace.liftRestrict` at the identity.
 - `ComplexAnalytic.AnalyticSpace.resΓ`: the restriction of a global section of `𝒪_X` to an open
   subspace.
+- `ComplexAnalytic.AnalyticSpace.clopenCompl`: **the complement of an open subspace whose carrier
+  is closed**, as an open subspace, with `ComplexAnalytic.AnalyticSpace.coe_clopenCompl` for its
+  carrier. The closedness is what makes the complement open, so this cannot be written without it.
 
 ## Main results
 
@@ -96,6 +99,22 @@ transport of algebra structures along an isomorphism is needed anywhere.
 - `ComplexAnalytic.AnalyticSpace.isFinite_of_restrictHom_top`: **a morphism whose restriction over
   `⊤` is finite is finite**, which is that transfer at the one property two `## What is not here`
   bullets elsewhere were asking about.
+- `ComplexAnalytic.AnalyticSpace.isClosedEmbedding_ofRestrict_of_isClosed`: **the inclusion of an
+  open subspace whose carrier is closed is a closed embedding**, which is
+  `IsClosed.isClosedEmbedding_subtypeVal` at a base map that is `Subtype.val` by `rfl`.
+- `ComplexAnalytic.AnalyticSpace.isFinite_ofRestrict_of_isClosed`: **and it is finite.** The
+  closedness is the whole of the content: the base map is injective, so the fibre half holds for
+  any open at all, and it is the closed half that fails for a general one.
+- `ComplexAnalytic.AnalyticSpace.isFiniteEtale_ofRestrict_of_isClosed`: **and finite étale**, the
+  second field being `ComplexAnalytic.AnalyticSpace.isLocalIso_ofRestrict`, which asks nothing.
+- `ComplexAnalytic.AnalyticSpace.isFiniteEtale_ofRestrict_comp`: **that inclusion followed by a
+  finite étale morphism is finite étale.** The mathematics is composition and the binders are the
+  point: the property is an explicit argument because its consumer holds it at a spelling instance
+  search cannot match.
+- `ComplexAnalytic.AnalyticSpace.isClosed_clopenCompl`: **the complement of an open subspace is
+  closed**, so the complement of a clopen one is clopen and
+  `ComplexAnalytic.AnalyticSpace.isFinite_ofRestrict_of_isClosed` and
+  `ComplexAnalytic.AnalyticSpace.isFiniteEtale_ofRestrict_of_isClosed` apply to it.
 
 ## Why `Oka/AnalyticSpace/LocalIso.lean` is imported here, when no import was forced
 
@@ -668,6 +687,114 @@ theorem isFinite_of_restrictHom_top {A B : AnalyticSpace.{u}} (f : A ⟶ B)
   haveI : IsFinite (liftTop A U h) := isFinite_of_isIso _
   have hp : IsFinite (liftTop A U h ≫ restrictHom f ⊤ ≫ B.ofRestrict ⊤) := inferInstance
   rwa [liftTop_comp_restrictHom_top] at hp
+
+/-- **The inclusion of an open subspace whose carrier is closed is a closed embedding.**
+
+The base map of `ComplexAnalytic.AnalyticSpace.ofRestrict` *is* `Subtype.val` — that is what
+`ComplexAnalytic.AnalyticSpace.base_ofRestrict` records, and it holds by `rfl` — so the whole of
+this is `IsClosed.isClosedEmbedding_subtypeVal`.
+
+**The hypothesis is on the carrier as a set and not on `U` as an element of the lattice of
+opens**, because that is the form `IsClosed` is stated in and the form
+`ComplexAnalytic.AnalyticSpace.isClopen_range_sigmaι_base` supplies. Nothing here asks `U` to be
+non-empty or proper, and the two extreme opens are both allowed: at `⊥` the source is empty and
+at `⊤` the inclusion is an isomorphism
+(`ComplexAnalytic.AnalyticSpace.isIso_ofRestrict_of_eq_univ`). -/
+theorem isClosedEmbedding_ofRestrict_of_isClosed (X : AnalyticSpace.{u}) (U : X.Opens)
+    (hU : IsClosed (U : Set X)) :
+    IsClosedEmbedding ((X.ofRestrict U).toLRSHom.base : X.restrict U → X) :=
+  hU.isClosedEmbedding_subtypeVal
+
+/-- **The inclusion of an open subspace whose carrier is closed is finite.**
+
+The closedness is the content and the fibres are not: the base map is injective, so a fibre is a
+subsingleton and `Set.Finite.to_subtype` finishes it from the preimage of a singleton. The closed
+half is what fails for a general open subspace, and this repository has the witness —
+`ComplexAnalytic.not_isFinite_puncturedInclCoveringSpaceHom` in `OkaTest/CoveringSpace.lean` is
+the inclusion of the punctured line into the line, whose image is open and not closed.
+
+**Both fields are stated at the `ComplexAnalytic.AnalyticSpace.IsFinite` spelling and neither goes
+through `ComplexAnalytic.AnalyticSpace.isFinite_comp_of_isClosedEmbedding`**, which asks for a
+second morphism this statement does not have. -/
+theorem isFinite_ofRestrict_of_isClosed (X : AnalyticSpace.{u}) (U : X.Opens)
+    (hU : IsClosed (U : Set X)) : IsFinite (X.ofRestrict U) where
+  isClosedMap := (isClosedEmbedding_ofRestrict_of_isClosed X U hU).isClosedMap
+  finite_fiber y :=
+    Set.Finite.to_subtype ((Set.finite_singleton y).preimage
+      (isClosedEmbedding_ofRestrict_of_isClosed X U hU).injective.injOn)
+
+/-- **The inclusion of a clopen subspace is finite étale.**
+
+The two fields are `ComplexAnalytic.AnalyticSpace.isFinite_ofRestrict_of_isClosed` and
+`ComplexAnalytic.AnalyticSpace.isLocalIso_ofRestrict`,
+which asks nothing at all. So the hypothesis of this statement is the closedness alone: an open
+subspace is always a local isomorphism over the ambient space, and what a clopen carrier buys is
+the finiteness.
+
+**This is where `⊥` and `⊤` stop being the interesting opens.** A cover with a disconnected
+total space has clopen subsets that are neither empty nor everything —
+`ComplexAnalytic.AnalyticSpace.isClopen_range_sigmaι_base` says the image of a member of a
+disjoint union is one — and it is at those that the consumer in
+`Oka/AnalyticSpace/FiniteEtaleOver.lean` has content. -/
+theorem isFiniteEtale_ofRestrict_of_isClosed (X : AnalyticSpace.{u}) (U : X.Opens)
+    (hU : IsClosed (U : Set X)) : IsFiniteEtale (X.ofRestrict U) where
+  isFinite := isFinite_ofRestrict_of_isClosed X U hU
+  isLocalIso := inferInstance
+
+/-- **A clopen subspace inclusion followed by a finite étale morphism is finite étale.**
+
+Mathematically this is `ComplexAnalytic.AnalyticSpace.isFiniteEtale_comp` at
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_ofRestrict_of_isClosed` and nothing else. **It is a
+named declaration because of how its consumer holds the finite étale hypothesis on `g`, and the
+shape of the binders is the whole point of it.**
+
+`Oka/AnalyticSpace/FiniteEtaleOver.lean`'s objects live in a comma category, where a structure map
+has type `(𝟭 AnalyticSpace).obj A.left ⟶ (CategoryTheory.Functor.fromPUnit X).obj A.right`. The
+`ComplexAnalytic.AnalyticSpace.IsFiniteEtale` an object carries therefore has those two terms in
+its implicit arguments; they are `rfl`-equal to `A.left` and to `X` and are **different
+discrimination-tree keys**, so putting that hypothesis in scope with a `haveI` does not answer the
+search `ComplexAnalytic.AnalyticSpace.isFiniteEtale_comp` runs. Taking it as an **explicit
+argument** does, because unification discharges the defeq that search will not look through.
+
+**This is the seam `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_eq_mul`'s docstring
+describes from the other side, and the repair it names does not work here.** Fixing the source
+with a named argument leaves the failure unchanged, reported as a synthesis failure against a goal
+that prints identically to the hypothesis; fixing the target as well leaves it unchanged too.
+Moving the hypothesis out of the instance binders is what removes it. -/
+theorem isFiniteEtale_ofRestrict_comp {X Y : AnalyticSpace.{u}} (U : X.Opens)
+    (hU : IsClosed (U : Set X)) (g : X ⟶ Y) (hg : IsFiniteEtale g) :
+    IsFiniteEtale (X.ofRestrict U ≫ g) :=
+  haveI := hg
+  haveI := isFiniteEtale_ofRestrict_of_isClosed X U hU
+  isFiniteEtale_comp _ _
+
+/-- **The complement of a clopen subspace, as an open subspace.**
+
+`ComplexAnalytic.AnalyticSpace.clopenCompl U hU` is the open whose carrier is the complement of
+`U`'s. **The hypothesis is what makes it open**, so it cannot be built from `U` alone; and it is
+again clopen, by `ComplexAnalytic.AnalyticSpace.isClosed_clopenCompl`, which needs no
+hypothesis because the complement of an open set is closed.
+
+So the pair `U`, `clopenCompl U hU` is a partition of the ambient space into two clopen opens, and
+that is the shape the direct-summand axiom of a Galois category asks a monomorphism's image to sit
+in. -/
+def clopenCompl {X : AnalyticSpace.{u}} (U : X.Opens) (hU : IsClosed (U : Set X)) : X.Opens :=
+  ⟨(U : Set X)ᶜ, hU.isOpen_compl⟩
+
+/-- The carrier of `ComplexAnalytic.AnalyticSpace.clopenCompl`. -/
+@[simp]
+lemma coe_clopenCompl {X : AnalyticSpace.{u}} (U : X.Opens) (hU : IsClosed (U : Set X)) :
+    ((clopenCompl U hU : X.Opens) : Set X) = (U : Set X)ᶜ :=
+  rfl
+
+/-- **The complement of a clopen subspace is closed**, so it is clopen too.
+
+`U.isOpen.isClosed_compl`, and it reads no hypothesis: the complement of an *open* set is closed
+whatever else is true of it. The `hU` in the binders is there only because
+`ComplexAnalytic.AnalyticSpace.clopenCompl` cannot be written without it. -/
+theorem isClosed_clopenCompl {X : AnalyticSpace.{u}} (U : X.Opens) (hU : IsClosed (U : Set X)) :
+    IsClosed ((clopenCompl U hU : X.Opens) : Set X) :=
+  U.isOpen.isClosed_compl
 
 end AnalyticSpace
 

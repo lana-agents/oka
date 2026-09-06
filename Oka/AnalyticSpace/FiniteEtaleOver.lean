@@ -99,6 +99,20 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberSigmaEquiv_apply` and
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberSigmaEquiv_apply_fintypeFiberFunctor` saying
   that its forward map is what each fibre functor does to the inclusion of a member.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen`: **a cover restricted to a clopen
+  subset of its total space**, as an object of the same category, with
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen_left` and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen_hom` for its total space and its
+  structure map, both by `rfl`. No hypothesis on the base, on the cover or on the subset beyond
+  that its carrier is closed, and **no `[T2Space]` anywhere**: the structure map is built by
+  composition, and it is cancellation and not composition that costs a separation axiom here.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopenι`: **its inclusion into the cover
+  it came from**, as a morphism of covers, with
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopenι_left` for the underlying morphism
+  of analytic spaces. The triangle over the base holds by `rfl`.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopenCompl`: **the complementary clopen
+  part**, which is `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen` at
+  `ComplexAnalytic.AnalyticSpace.clopenCompl`.
 
 ## Main results
 
@@ -294,6 +308,22 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasTerminal`.
 
 ## What is not here
+
+* **A cover has clopen parts and it is not said that they decompose it.**
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen` puts the part of a cover over a
+  clopen subset of its total space in the category, and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopenCompl` puts the complementary part
+  there beside it. **What is absent is that the cover is the coproduct of the two**, which is the
+  statement `Mathlib/CategoryTheory/Galois/Basic.lean`'s direct-summand axiom would consume: that
+  axiom asks, of a monomorphism `i : A ⟶ B`, for an object and a morphism exhibiting `B` as the
+  binary coproduct of `A` and it, and these two definitions supply the object without supplying
+  the coproduct.
+
+  **Two further things separate them from that axiom and neither is here.** Nothing in this
+  repository says that a monomorphism of covers has injective underlying map, so nothing puts a
+  monomorphism's image among the clopen subsets in the first place; and the cancellation that
+  makes a morphism of covers finite étale asks `[T2Space]` of the target's total space while the
+  axiom asks nothing at all. taxis #1772 is the filing that measures both.
 
 * **Cancellation — this is no longer absent, and it is not in this file.** *"If `g` and `f ≫ g`
   are finite étale then `f` is"* is `ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp` in
@@ -2455,5 +2485,81 @@ instance FiniteEtaleOver.preservesFiniteCoproducts_fintypeFiberFunctor {X : Anal
     haveI := FiniteEtaleOver.preservesColimitsOfShape_fintypeFiberFunctor
       (ULift.{u} (Fin n)) x
     Limits.preservesColimitsOfShape_of_equiv (Discrete.equivalence Equiv.ulift.{u}) _
+
+/-- **A cover restricted to a clopen subset of its total space is again a cover**, with no
+hypothesis on the base, on the cover, or on the subset beyond that its carrier is closed.
+
+The structure map is the inclusion of the open subspace followed by the cover's own, and
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_ofRestrict_comp` is what makes the composite finite
+étale. **Nothing is cancelled anywhere**, which is why no `[T2Space]` appears: the Hausdorff
+hypothesis in this development belongs to
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp`, and going the composition way never asks
+for it.
+
+**Why the property is passed as an explicit argument rather than found.** `A.hom`'s type is
+spelled `(CategoryTheory.Functor.id _).obj A.left ⟶ (CategoryTheory.Functor.fromPUnit X).obj
+A.right`, so the `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` in `A.prop` carries those terms in
+its implicit arguments; they are `rfl`-equal to the readable spellings and are different
+discrimination-tree keys. Instance search therefore cannot use a hypothesis that prints exactly
+like the goal, and the cited lemma exists in the shape it does so that `A.prop` can be handed to
+it by unification instead. -/
+noncomputable def FiniteEtaleOver.restrictClopen {X : AnalyticSpace.{u}}
+    (A : FiniteEtaleOver.{u} X) (U : A.left.Opens) (hU : IsClosed (U : Set A.left)) :
+    FiniteEtaleOver.{u} X :=
+  MorphismProperty.Over.mk _ (A.left.ofRestrict U ≫ A.hom)
+    (isFiniteEtale_ofRestrict_comp U hU A.hom A.prop)
+
+/-- The total space of `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen` is the open
+subspace itself. -/
+@[simp]
+lemma FiniteEtaleOver.restrictClopen_left {X : AnalyticSpace.{u}} (A : FiniteEtaleOver.{u} X)
+    (U : A.left.Opens) (hU : IsClosed (U : Set A.left)) :
+    (A.restrictClopen U hU).left = A.left.restrict U :=
+  rfl
+
+/-- The structure map of `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen` is the
+inclusion followed by the original structure map. -/
+lemma FiniteEtaleOver.restrictClopen_hom {X : AnalyticSpace.{u}} (A : FiniteEtaleOver.{u} X)
+    (U : A.left.Opens) (hU : IsClosed (U : Set A.left)) :
+    (A.restrictClopen U hU).hom = A.left.ofRestrict U ≫ A.hom :=
+  rfl
+
+/-- **The inclusion of a clopen part of a cover, as a morphism of covers.**
+
+The triangle over the base is `rfl`, and that is the whole reason
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen`'s structure map was written as
+that composite in that order rather than assembled any other way: a morphism of covers is a
+morphism of total spaces together with the commuting triangle, and here the triangle is the
+definition of the target's structure map read backwards. -/
+noncomputable def FiniteEtaleOver.restrictClopenι {X : AnalyticSpace.{u}}
+    (A : FiniteEtaleOver.{u} X) (U : A.left.Opens) (hU : IsClosed (U : Set A.left)) :
+    A.restrictClopen U hU ⟶ A :=
+  MorphismProperty.Over.homMk (A.left.ofRestrict U) rfl
+
+/-- The underlying morphism of
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopenι` is the open-subspace inclusion. -/
+@[simp]
+lemma FiniteEtaleOver.restrictClopenι_left {X : AnalyticSpace.{u}} (A : FiniteEtaleOver.{u} X)
+    (U : A.left.Opens) (hU : IsClosed (U : Set A.left)) :
+    (A.restrictClopenι U hU).left = A.left.ofRestrict U :=
+  rfl
+
+/-- **The complementary clopen part of a cover**, which is
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen` at
+`ComplexAnalytic.AnalyticSpace.clopenCompl`.
+
+**This is the object a direct-summand statement would need as its complement.** The Galois-category
+definition in `Mathlib/CategoryTheory/Galois/Basic.lean` asks, of a monomorphism `i : A ⟶ B`, for an
+object `Z` and a morphism `Z ⟶ B` exhibiting `B` as the binary coproduct of the two; when `i`'s
+image is a clopen subset of `B`'s total space, this is that `Z`. **That definition cannot be cited
+by name here**, being outside this file's import closure, which is the spelling this file already
+uses for it.
+
+**What is not said here is that the two together are that coproduct**, and it is not said because
+it is not proved: `## What is not here` records what a decomposition statement would still owe. -/
+noncomputable def FiniteEtaleOver.restrictClopenCompl {X : AnalyticSpace.{u}}
+    (A : FiniteEtaleOver.{u} X) (U : A.left.Opens) (hU : IsClosed (U : Set A.left)) :
+    FiniteEtaleOver.{u} X :=
+  A.restrictClopen (clopenCompl U hU) (isClosed_clopenCompl U hU)
 
 end ComplexAnalytic.AnalyticSpace
