@@ -2545,3 +2545,61 @@ info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.reflectsIsomorphisms_fintyp
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.reflectsIsomorphisms_fintypeFiberFunctor
+
+/-! ### Finite coproducts of the category of covers
+
+`Oka/AnalyticSpace/FiniteEtaleOver.lean`: the disjoint union of a finite family of covers as an
+object of the same category, the inclusion of a member, the cofan they make, the colimit statement
+that the cofan is the coproduct, the colimit-of-shape statement at an index type of the category's
+own universe, and the `CategoryTheory.Limits.HasFiniteCoproducts` instance that is the
+Galois-category axiom.
+
+Appended as its own section rather than merged into another, for the reason the sections in this
+file give for that: a section appended at the end cannot say which section is above it and stay
+true, since the next branch appends between them.
+
+**`Classical.choice` is in every guard below** and is not introduced by any of them. It arrives
+through the covering-map rung, exactly as the sections about the fibre functor record, and is
+present already in `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.sigma`, which states no
+condition of its own beyond being an object.
+
+**Named by file rather than counted**, as the sections above say and for the reason they give.
+
+**Named and not located.** No sentence here says which section is above or below it. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.sigma' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.sigma
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.sigmaι' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.sigmaι
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.cofanSigma' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.cofanSigma
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitCofanSigma' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitCofanSigma
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasColimitsOfShape_discrete' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasColimitsOfShape_discrete
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasFiniteCoproducts' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasFiniteCoproducts

@@ -122,7 +122,16 @@ coproducts of the *category of finite étale covers of a fixed base*, which is
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver`; the instances below are about
 `ComplexAnalytic.AnalyticSpace`, and carrying a colimit from the one to the other is a statement
 about that comma category which this file does not make. So the reading to avoid is that the
-axiom is in hand: what is in hand is the ingredient it would be built from.
+axiom is stated here: what is here is the ingredient it would be built from.
+
+**That statement is made in `Oka/AnalyticSpace/FiniteEtaleOver.lean`**, as
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasFiniteCoproducts`, and its proof reads
+`ComplexAnalytic.AnalyticSpace.sigmaι_sigmaDesc` and
+`ComplexAnalytic.AnalyticSpace.hom_ext_sigma` rather than
+`ComplexAnalytic.AnalyticSpace.isColimitCofanSigma`: the descent map has to be re-wrapped as a
+morphism over the base in any case, and once it is there is nothing left for the bundle to carry.
+**So this file's own claim — that it does not make that statement — stays exact**, and what would
+go stale is a reading of it as a claim that no file makes it.
 
 **Nothing about `ComplexAnalytic.AnalyticSpace.IsFinite` or
 `ComplexAnalytic.AnalyticSpace.IsLocalIso`** for the inclusions or for `∐_{Fin n} X ⟶ X`, and no
