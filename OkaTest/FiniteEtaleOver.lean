@@ -438,16 +438,29 @@ def sheetOpens (j : ULift.{u} (Fin 2)) :
 member is the base. The point is written out rather than taken from
 `ComplexAnalytic.nonempty_restrict_punctured` through a choice principle: it is `1` carried back
 across `ComplexAnalytic.puncturedHomeo`, which is the witness that instance is built from, and
-naming it keeps `Classical.choice` out of this statement. -/
+writing it down is what makes the witness readable at this site.
+
+**What it does not do is change which axioms this statement rests on**, and an earlier draft of
+this paragraph said it did. `#print axioms` on this theorem reports
+`[propext, Classical.choice, Quot.sound]`, and so does the same theorem proved with
+`Classical.arbitrary` in place of the named point: `Classical.choice` arrives through
+`ComplexAnalytic.AnalyticSpace.sigma`, which is noncomputable, and no choice of witness here can
+remove it. Nothing in this file is guarded, so an axiom claim in it is checked by nothing, which
+is the reason this correction is recorded rather than made silently. -/
 theorem sheetOpens_ne_bot (j : ULift.{u} (Fin 2)) : sheetOpens.{u} j ≠ ⊥ :=
   AnalyticSpace.sigmaιOpens_ne_bot _ (ComplexAnalytic.puncturedHomeo.{u}.symm ⟨1, one_ne_zero⟩)
 
 /-- **A sheet is not everything.**
 
 `ComplexAnalytic.AnalyticSpace.sigmaιOpens_ne_top` needs a point of a *different* member, and the
-index type having two elements is what supplies one — which is why this is stated at a named sheet
-rather than at every `j`: the other index has to be produced, and at a one-element index type
-there is none and the statement is false.
+index type having two elements is what supplies one. **That hypothesis is why the general lemma
+carries `i ≠ j` and a point of `F i`**: at a one-element index type the disjoint union is the
+member and its image really is everything.
+
+**It is not why this is stated at a named sheet rather than at every `j`**, and an earlier draft of
+this paragraph said it was. Here the index type has two elements, so the other index exists for
+either sheet and the universally quantified form is reachable by `fin_cases` on the index. It is
+stated at one sheet because one sheet is what `restrictSheet` below restricts to.
 
 **Together with `sheetOpens_ne_bot` this is what makes the restriction below more than a
 typecheck.** `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen` asks only for an open

@@ -278,10 +278,16 @@ lemma coe_sigmaιOpens (j : ι) :
 /-- **The member image, read off the bundled open, is closed.**
 
 `ComplexAnalytic.AnalyticSpace.isClosed_range_sigmaι_base` says the same thing about
-`Set.range (sigmaι F j).toLRSHom.base`, and the two are `rfl`-equal. This is a separate name
-because the consumer asks for the property of the *coercion of the bundled open*: those are
-different discrimination-tree keys, and it is the second that
-`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen` takes as its argument. -/
+`Set.range (sigmaι F j).toLRSHom.base`, and the two are `rfl`-equal.
+
+**This is a convenience and not a necessity, and an earlier draft of this paragraph claimed the
+second.** That draft argued that the coercion of the bundled open and the bare range are different
+discrimination-tree keys, which they are — but
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen` takes the closedness as an
+**explicit argument**, so all that is ever asked of it is `exact`-level definitional equality, and
+`ComplexAnalytic.AnalyticSpace.isClosed_range_sigmaι_base` discharges the bundled statement
+directly. Discrimination-tree keys govern `simp` and instance search, and neither runs here. What
+this name buys is that the subject of the statement is the open a caller is holding. -/
 theorem isClosed_sigmaιOpens (j : ι) :
     IsClosed ((sigmaιOpens F j : (sigma F).Opens) : Set (sigma F)) :=
   (isClopen_range_sigmaι_base F j).1
