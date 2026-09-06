@@ -25,32 +25,31 @@ The witness below closes that at the punctured line, on the cover `z ↦ z²` th
 So the category at that base has at least two isomorphism classes, and the object separating them
 is a genuine two-sheeted cover rather than a formal one.
 
-**And it has infinitely many**, which is the second half of this file and does not go through a
-`¬ IsIso` at all: `pairwise_not_iso_trivial` says the trivial `n`-sheeted covers of the punctured
-line are pairwise non-isomorphic, one class for every `n`, by
+**And it has infinitely many**, which does not go through a `¬ IsIso` at all:
+`pairwise_not_iso_trivial` says the trivial `n`-sheeted covers of the punctured line are pairwise
+non-isomorphic, one class for every `n`, by
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_eq_of_iso_trivial`. `degree_sqOver` records
-what the degree of the first witness is, and it is `2`.
+what the degree of `sqOver` is, and it is `2`.
 
-**And two of the degree-`2` objects are separated from each other**, which is the third part of this
-file and is the first separation here that no number makes: `not_iso_trivial_sqOver` says `sqOver`
-is not the trivial two-sheeted cover, by
+**And two of the degree-`2` objects are separated from each other**, which is a separation no
+number makes: `not_iso_trivial_sqOver` says `sqOver` is not the trivial two-sheeted cover, by
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_iso_trivial_of_preconnectedSpace` — the
 total space of one is connected and of the other is not.
 
-**And the fibre functor does not separate that same pair**, which is the fourth part of this file
-and is the only one that says an invariant **fails**. `card_fiber_sqOver` and
-`card_fiber_trivial_two` put both fibres at two points over every point of the base, and
-`nonempty_fiber_equiv_trivial_sqOver` reads the two counts as an equivalence. So the objects the
-third part separates are objects `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiber` cannot tell
-apart, and `Oka/AnalyticSpace/FiniteEtaleOver.lean`'s `## What is not here` says why in general —
-a bare finite fibre carries nothing the degree does not, and what would separate is the monodromy
-action on it, which nothing here has. **This is what makes the third part's invariant sharp rather
-than merely available**: preconnectedness of the total space separates a pair that the degree and
-the fibre both miss, and that pair is exhibited here rather than described.
+**And the fibre functor does not separate that same pair**, which is the only claim here that
+says an invariant **fails**. `card_fiber_sqOver` and `card_fiber_trivial_two` put both fibres at
+two points over every point of the base, and `nonempty_fiber_equiv_trivial_sqOver` reads the two
+counts as an equivalence. So the objects `not_iso_trivial_sqOver` separates are objects
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiber` cannot tell apart, and
+`Oka/AnalyticSpace/FiniteEtaleOver.lean`'s `## What is not here` says why in general — a bare
+finite fibre carries nothing the degree does not, and what would separate is the monodromy action
+on it, which nothing here has. **This is what makes `not_iso_trivial_sqOver`'s invariant sharp
+rather than merely available**: preconnectedness of the total space separates a pair that the
+degree and the fibre both miss, and that pair is exhibited here rather than described.
 
-**And the same object is what makes the faithfulness instance non-vacuous**, which is the fifth
-part of this file. `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.faithful_fiberFunctor` holds on
-the full subcategory of covers whose total space is preconnected and Hausdorff;
+**And the same object is what makes the faithfulness instance non-vacuous.**
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.faithful_fiberFunctor` holds on the full
+subcategory of covers whose total space is preconnected and Hausdorff;
 `isPreconnectedT2_sqOver` puts `sqOver` in it and `not_iso_id_sqOver` says it is not the base over
 itself, so that subcategory has at least two isomorphism classes here rather than only the one
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_id` supplies in general.
@@ -161,7 +160,7 @@ theorem not_iso_id_sqOver :
       ((AnalyticSpace.complexAffineSpace.{u} 1).restrict ComplexAnalytic.punctured.{u})) :=
   ⟨fun e ↦ ComplexAnalytic.not_isIso_sq.{u} (AnalyticSpace.isIso_hom_of_iso_id.{u} e)⟩
 
-/-- **The first witness has degree two.**
+/-- **`sqOver` has degree two.**
 
 `ComplexAnalytic.degree_sq` (`OkaTest/FiniteMorphism.lean`) read through
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree`, which is that degree by definition. It is
@@ -261,7 +260,7 @@ instance t2Space_left_sqOver : T2Space ((sqOver.{u}).left : Type u) :=
 /-- **`z ↦ z²` on the punctured line is not the trivial two-sheeted cover**, although the two have
 the same degree.
 
-This is the first separation in this file that no number makes.
+No number makes this separation.
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isEmpty_iso_of_degree_ne` is blind to this pair —
 `degree_sqOver` above is `2` and
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_trivial` at `ULift (Fin 2)` is `2` — and
@@ -341,7 +340,7 @@ theorem card_fiber_trivial_two (y : ((AnalyticSpace.complexAffineSpace.{u} 1).re
 /-- **So the fibre functor does not separate the two objects that `not_iso_trivial_sqOver`
 separates**: at every point of the base their fibres are in bijection.
 
-This is the fourth part of this file and it is the only one that says an invariant **fails**.
+This is the only claim in this file that says an invariant **fails**.
 `not_iso_trivial_sqOver` above says `sqOver` and the trivial two-sheeted cover are not isomorphic;
 the two theorems above say `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiber` sends them to
 sets of the same size, and `Finite.card_eq` turns that into an equivalence. **So the pair is a
