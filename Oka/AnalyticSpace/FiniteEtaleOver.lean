@@ -331,12 +331,12 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   and this bullet used to say the coproduct itself was what was absent. It is not, and what is
   absent is the hypothesis it runs on.
 
-  **Nothing in this repository says that a monomorphism of covers has injective underlying map**,
-  so nothing puts a monomorphism's image among the clopen subsets in the first place — and the
-  cancellation that makes a morphism of covers finite étale asks `[T2Space]` of the target's total
-  space while the axiom asks nothing at all. taxis #1772 is the filing that measures both, and
-  `OkaTest/FiniteEtaleCancel.lean` compiles the counterexample that makes the separation axiom a
-  theorem rather than an artefact of a proof.
+  **What it runs on is that a monomorphism of covers has injective underlying map, and that is not
+  proved or claimed here**: without it a monomorphism's image is not known to be among the clopen
+  subsets in the first place — and the cancellation that makes a morphism of covers finite étale
+  asks `[T2Space]` of the target's total space while the axiom asks nothing at all. taxis #1772 is
+  the filing that measures both, and `OkaTest/FiniteEtaleCancel.lean` compiles the counterexample
+  that makes the separation axiom a theorem rather than an artefact of a proof.
 
 * **Cancellation — this is no longer absent, and it is not in this file.** *"If `g` and `f ≫ g`
   are finite étale then `f` is"* is `ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp` in
@@ -348,7 +348,7 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   **What it does not do is make a morphism of `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver X`
   carry a condition.** `Q` is `⊤` in the definition above and stays `⊤`; the cancellation says
   that the underlying morphism of every such morphism *is* finite étale, not that the category
-  asks it to be. Nothing below reads it that way and nothing needs to.
+  asks it to be. Nothing below reads it that way, and nothing below needs to.
 
   **The bullet was retired in three steps and the last one is the interesting one.** It first said
   the two classes are stated as stability under composition only and that Mathlib is in the same
@@ -455,8 +455,8 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.reflectsIsomorphisms_fintypeFiberFunctor` says it
   of the functor a Galois category asks for. **Reflecting isomorphisms is one of that definition's
   axioms and faithfulness is not**, which is why the two sit differently here although they hold
-  on the same subcategory — but **nothing exhibits the functor as an equivalence onto
-  anything**, and that clause of this bullet is untouched by any of it.
+  on the same subcategory — but **the functor is not exhibited as an equivalence onto
+  anything, or claimed to be**, and that clause of this bullet is untouched by any of it.
 
   **This bullet said that nothing turns an equivalence of fibres into an isomorphism of covers,
   and what made that false arrived in pieces, each from a different push.**
@@ -536,11 +536,11 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   composes them here — which was true — and **declined to say what composing them would cost**.
   Declining was right, and the answer was one lemma about locally ringed spaces that mentions
   neither covers nor analytic spaces.
-* **No pullbacks, so no base change.** `ComplexAnalytic.AnalyticSpace` has no `HasPullback`
-  instance anywhere in this repository, so
-  `CategoryTheory.MorphismProperty.IsStableUnderBaseChange`
-  is not even statable for `isFiniteEtale` here, and the pullback of a cover along a morphism of
-  the base — which is how a Galois category's fibre functor is usually built — does not exist.
+* **No pullbacks, so no base change.** No `HasPullback` instance for
+  `ComplexAnalytic.AnalyticSpace` is available here, and none is exhibited or claimed, so
+  `CategoryTheory.MorphismProperty.IsStableUnderBaseChange` is not even statable for
+  `isFiniteEtale` here, and the pullback of a cover along a morphism of the base — which is how a
+  Galois category's fibre functor is usually built — is not available to it.
   **The functor above is not built that way and is not evidence that this absence is harmless**:
   it reads the structure map at one point of the base directly, which is enough to *have* a fibre
   and is not enough to say anything about how it varies.
@@ -607,11 +607,11 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   names the `Oka/Analytification/` line, since that is where those sections are, and
   `Oka/Analytification/SpecScheme.lean` put `ComplexAnalytic.specScheme` on it; and there are
   **two** of them, not three — `Oka/Analytification/Comparison.lean`'s, which is about that file's
-  own statements, and `Oka/Analytification/AffineCover.lean`'s, which is about its input. No file
-  under `Oka/AnalyticSpace/`, where this one lives, has such a section.
+  own statements, and `Oka/Analytification/AffineCover.lean`'s, which is about its input. At
+  `3e6e87d` no file under `Oka/AnalyticSpace/`, where this one lives, had such a section.
   **What survives is the shape of the obstruction and not its price**: `ComplexAnalytic.specScheme`
   is glued *from* a cover datum and is an output of one, where the functor above wants a scheme as
-  its *input*, and nothing on either line passes from a scheme to a cover.
+  its *input*, and no passage in that direction is exhibited or claimed here.
   `Oka/AnalyticSpace/Glue.lean`'s first bullet makes the same distinction for the same reason.
   **Nothing below mentions a scheme.**
 -/
@@ -816,11 +816,10 @@ and the name here is a reader's convenience.
 in first, and naming a definition as a rewrite rule asks Lean to generate its equation lemma:
 `scripts/DumpOkaDecls.lean` on that draft reports one extra row, the `.eq_1` of
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree`, measured rather than expected — and it is
-a row this definition alone pays, because no other proof anywhere names it. (The cost is per
-definition and not per proof: `Oka/AnalyticSpace/Degree.lean`'s
-`ComplexAnalytic.AnalyticSpace.degree_comp_of_bijective_base` does write
-`rw [degree, degree]` and adds nothing, `ComplexAnalytic.AnalyticSpace.degree.eq_1` having been
-generated by that file already.) What
+one row however many proofs name it. (The cost is per definition and not per proof:
+`Oka/AnalyticSpace/Degree.lean`'s `ComplexAnalytic.AnalyticSpace.degree_comp_of_bijective_base`
+does write `rw [degree, degree]` and adds nothing,
+`ComplexAnalytic.AnalyticSpace.degree.eq_1` having been generated by that file already.) What
 replaces it is `congrArg` and `Eq.trans` at the definition's own unfolding, which go through
 definitional unfolding and generate nothing — the same cure, for the same defect, that
 `Oka/Analytification/RefineDatumToBase.lean` states as a rule for its own file, and the reason
@@ -1035,8 +1034,8 @@ not derive it: `IsFinite` is not a `CategoryTheory.MorphismProperty` here, so it
 `ComplexAnalytic.AnalyticSpace.isFinite_comp` twice instead of through `RespectsIso`.
 
 **What is not here is the converse.** `IsFiniteEtale f → IsFiniteEtale (restrictHom f ⊤)` follows
-from the same conjugation read the other way and is not stated, because nothing asks for it; it is
-the same three lines. Nor is anything said about `restrictHom f V` at a proper `V` — the whole
+from the same conjugation read the other way and is not stated, because nothing here asks for it;
+it is the same three lines. Nor is anything said about `restrictHom f V` at a proper `V` — the whole
 argument is that `⊤` makes the inclusions invertible, and at a proper `V` neither is. -/
 theorem isFiniteEtale_of_restrictHom_top {A B : AnalyticSpace.{u}} (f : A ⟶ B)
     (hfe : IsFiniteEtale (restrictHom f (⊤ : B.Opens))) : IsFiniteEtale f := by
@@ -1141,11 +1140,11 @@ what it wants and no `Fintype.ofFinite` and no `noncomputable` appears.
 module**: the transitive closure of this file was 3463 modules before and is 3464 after, the new
 module being that one and nothing it depends on.
 
-**What this does not make is a Galois category.** The axioms need base change and this repository
-has no `CategoryTheory.Limits.HasPullback` instance for `ComplexAnalytic.AnalyticSpace`; see
-`## What is not here`. **Base change is not the only axiom they need, and the reader who meets
-this sentence first should not infer that it is** — the terminal-object axiom is separately in
-hand, at
+**What this does not make is a Galois category.** The axioms need base change and no
+`CategoryTheory.Limits.HasPullback` instance for `ComplexAnalytic.AnalyticSpace` is available
+here; see `## What is not here`. **Base change is not the only axiom they need, and the reader who
+meets this sentence first should not infer that it is** — the terminal-object axiom is separately
+in hand, at
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_fintypeFiberFunctor`
 for this functor. -/
 def FiniteEtaleOver.fintypeFiberFunctor {X : AnalyticSpace.{u}} (x : X) :
