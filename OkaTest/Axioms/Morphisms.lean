@@ -671,10 +671,22 @@ info: 'ComplexAnalytic.AnalyticSpace.proj' depends on axioms:
 
 /-! ### The third rung: a finite étale morphism is a covering map
 
-The first two are mirror-tree topological criteria in `Oka/Topology/Covering/Basic.lean` and say
-nothing about analytic spaces; they are guarded here rather than apart from their consumers. They
-are converse to one another, and only the second is used by the heading at the foot of this
-file. -/
+`IsClosedMap.isCoveringMap_of_isLocalHomeomorph` and `IsCoveringMap.isClosedMap` are mirror-tree
+topological criteria in `Oka/Topology/Covering/Basic.lean` and say nothing about analytic spaces;
+they are guarded here rather than apart from their consumers. They are converse to one another,
+and `IsCoveringMap.isClosedMap` is the one
+`### A covering space of a complex analytic space is a complex analytic space` uses — that
+section's own docstring names it and says which half of its statement it supplies.
+
+**`4025f01` wrote both clauses this replaces, and they have not aged the same way.** *"The first
+two"* selected the two criteria named above, was exact when written and is exact now, so it is
+replaced rather than deleted. *"only the second is used by the heading at the foot of this
+file"* was also exact at `4025f01`, where
+`### A covering space of a complex analytic space is a complex analytic space` **was** the last
+heading of this file and consumes `IsCoveringMap.isClosedMap` and not its converse; headings have
+been appended past it since, so the clause is false today. **A positional pointer can go false
+while every numeral in the sentence beside it stays exact**, which is why the repair names the
+section rather than moving the pointer. -/
 
 /--
 info: 'IsClosedMap.isCoveringMap_of_isLocalHomeomorph' depends on axioms:
@@ -1588,7 +1600,27 @@ make it false silently.
 `ComplexAnalytic.AnalyticSpace.range_base_of_isCutOutBy_pullbackΓ` hold for an arbitrary morphism
 of analytic spaces; `ComplexAnalytic.AnalyticSpace.isOpenMap_base_of_isCutOutBy_pullbackΓ` asks
 only that its base map is open. The `ComplexAnalytic.AnalyticSpace.IsLocalIso` hypothesis is
-spent by the last three alone. **Every guard below is a theorem.**
+spent by `ComplexAnalytic.AnalyticSpace.isLocalHomeomorph_base_of_isCutOutBy_pullbackΓ`,
+`ComplexAnalytic.AnalyticSpace.bijective_stalkMap_of_isCutOutBy_pullbackΓ` and
+`ComplexAnalytic.AnalyticSpace.isLocalIso_of_isCutOutBy_pullbackΓ` alone. **Every guard below is
+a theorem.**
+
+**That clause read *the last three*, and the paragraph directly above it is the argument against
+writing one.** This section exists apart from its sibling because that sibling's header
+*"enumerates what its file had when it was written, and a guard appended into it would make it
+false silently"* — and a selector reaching this section's own guards from the end fails on the
+same append, one paragraph after the sentence that says so. `2b2591e` wrote it, and this section
+held the same guards in the same order then, so it was exact at birth and has stayed exact; it
+selects, so it is replaced by the names rather than deleted.
+
+**`git log -S` could not date that clause, and quoting it on one line here is what makes it
+findable.** Before this commit the string *is spent by the last three alone* occurred in no blob
+of this file: it wrapped a source line, and a fixed-string search does not span the newline, so
+the search reports a clause that has been present since `2b2591e` as never having existed. **A
+revision walk that whitespace-normalises each blob before searching is what dates one.** And the
+quotation above is the first time the phrase sits on a single line, so the search that returned
+nothing will now return this commit and nothing earlier — the opposite of a provenance, and worth
+knowing before anyone quotes its output.
 -/
 
 /--
@@ -1757,8 +1789,9 @@ info: 'ComplexAnalytic.AnalyticSpace.surjective_base_of_isIso' depends on axioms
 
 /-! ### The degree does not see a change of source, and is an invariant of a cover
 
-`Oka/AnalyticSpace/Degree.lean`'s two statements about precomposition, and the degree of an object
-of `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver` that they buy
+`ComplexAnalytic.AnalyticSpace.degree_comp_of_bijective_base` and
+`ComplexAnalytic.AnalyticSpace.degree_isIso_comp` (`Oka/AnalyticSpace/Degree.lean`), and the
+degree of an object of `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver` that they buy
 (`Oka/AnalyticSpace/FiniteEtaleOver.lean`), appended as their own section for the reason the
 sections above give: a section moved is a conflict for somebody else.
 
@@ -1775,6 +1808,20 @@ are that file's"* instead — both numerals wrong of the section as it stands. T
 recount: a census of an append-at-end section goes stale on the next append and nothing mechanical
 reads it, which is the same reason this file's module docstring names its sections rather than
 counting them from the end.
+
+**And this section's opening sentence went on counting after that repair landed**, which is worth
+recording because of *why* nothing caught it. It read *"`Oka/AnalyticSpace/Degree.lean`'s two
+statements about precomposition"* — a **genitive** rather than an article and a numeral, so the
+sweeps that reached the paragraph above reached past it: an article-and-numeral pattern does not
+match a possessive, and this shape is what taxis #1712 filed. `2ba7cb6` wrote it, and that file's
+`## Main results` advertised exactly the two now named under a single bullet then and does now, so
+the numeral selected rather than totalled and the names replace it.
+
+**Which set that numeral was of is `Oka/AnalyticSpace/Degree.lean`'s *advertised* results, and
+naming the set matters because a near neighbour of it gives a different answer.** That file also
+advertises `ComplexAnalytic.AnalyticSpace.degree_comp`, the multiplicativity of the degree in a
+composite, so a reader counting its advertised results **about composition** rather than about
+*pre*composition would not arrive at the pair now named.
 
 **`Oka/AnalyticSpace/Degree.lean`'s older advertised results are still unguarded**, exactly as
 they were before this section existed — `ComplexAnalytic.AnalyticSpace.degree_eq_card_fiber`,
