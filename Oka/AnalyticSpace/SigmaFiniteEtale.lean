@@ -109,6 +109,14 @@ blocker of the Riemann existence theorem and is untouched.
   `ComplexAnalytic.AnalyticSpace.isClopen_range_sigmaι_base`: **the image of a member of a
   disjoint union is closed**, and so clopen — the members are disjoint, so one image's complement
   is a union of the others'.
+- `ComplexAnalytic.AnalyticSpace.sigmaιOpens`: **that image as a bundled open**, with
+  `ComplexAnalytic.AnalyticSpace.coe_sigmaιOpens` for its carrier and
+  `ComplexAnalytic.AnalyticSpace.isClosed_sigmaιOpens` for the closedness in the spelling a
+  restriction to a clopen part asks for.
+- `ComplexAnalytic.AnalyticSpace.sigmaιOpens_ne_bot` and
+  `ComplexAnalytic.AnalyticSpace.sigmaιOpens_ne_top`: **that open is neither `⊥` nor `⊤`**, given
+  a point of the member and a point of a different one — so it is a proper clopen part, which is
+  what makes restricting a cover to one say anything.
 - `ComplexAnalytic.AnalyticSpace.not_preconnectedSpace_sigma`: **a disjoint union with two
   distinct inhabited members is not preconnected**, which is the clopen image read as a
   separation.
@@ -243,6 +251,71 @@ theorem isClopen_range_sigmaι_base (j : ι) :
     IsClopen (Set.range (sigmaι F j).toLRSHom.base) :=
   ⟨isClosed_range_sigmaι_base F j,
     (sigmaι_isOpenImmersion (fun i ↦ (F i).toLocallyRingedSpace) j).base_open.isOpen_range⟩
+
+/-- **The image of a member of a disjoint union, as an open of the disjoint union.**
+
+`ComplexAnalytic.AnalyticSpace.isClopen_range_sigmaι_base` proves the carrier is clopen; this
+carries it as a bundled `TopologicalSpace.Opens`, which is the type a restriction consumes.
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen` asks for an
+`Opens` of the total space together with a proof that its coercion is closed, and the clopen
+lemma hands back a bare `Set` and a conjunction — so without this a caller has to build the
+bundled open at each use site, which is the shape the lemma above already declines to leave to a
+caller.
+
+**Only the openness half is consumed here.** The closedness travels separately, as
+`ComplexAnalytic.AnalyticSpace.isClosed_sigmaιOpens`, because it is a hypothesis of the
+restriction rather than part of its subject. -/
+def sigmaιOpens (j : ι) : (sigma F).Opens :=
+  ⟨Set.range (sigmaι F j).toLRSHom.base, (isClopen_range_sigmaι_base F j).2⟩
+
+/-- The carrier of `ComplexAnalytic.AnalyticSpace.sigmaιOpens`. -/
+@[simp]
+lemma coe_sigmaιOpens (j : ι) :
+    ((sigmaιOpens F j : (sigma F).Opens) : Set (sigma F))
+      = Set.range (sigmaι F j).toLRSHom.base :=
+  rfl
+
+/-- **The member image, read off the bundled open, is closed.**
+
+`ComplexAnalytic.AnalyticSpace.isClosed_range_sigmaι_base` says the same thing about
+`Set.range (sigmaι F j).toLRSHom.base`, and the two are `rfl`-equal. This is a separate name
+because the consumer asks for the property of the *coercion of the bundled open*: those are
+different discrimination-tree keys, and it is the second that
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen` takes as its argument. -/
+theorem isClosed_sigmaιOpens (j : ι) :
+    IsClosed ((sigmaιOpens F j : (sigma F).Opens) : Set (sigma F)) :=
+  (isClopen_range_sigmaι_base F j).1
+
+/-- **A member's image is not the empty open**, as soon as that member has a point.
+
+The point is all that is asked: no hypothesis on the index type, and none on the other members.
+Without it the statement is false, an empty member having empty image. -/
+theorem sigmaιOpens_ne_bot {j : ι} (x : F j) : sigmaιOpens F j ≠ ⊥ := by
+  intro h
+  have hx : (sigmaι F j).toLRSHom.base x ∈ (sigmaιOpens F j : Set (sigma F)) :=
+    Set.mem_range_self x
+  rw [h] at hx
+  exact hx
+
+/-- **A member's image is not everything**, as soon as a *different* member has a point.
+
+`AlgebraicGeometry.LocallyRingedSpace.eq_of_sigmaι_base_eq` is what turns *"the point's image
+lies in the `j`-th member's image"* into `i = j`, which the hypothesis then refutes. These are the
+hypotheses `ComplexAnalytic.AnalyticSpace.not_preconnectedSpace_sigma` carries and for the same
+reason: at a one-member family, or at one whose other members are empty, the disjoint union **is**
+the member and its image really is everything.
+
+**Together with `ComplexAnalytic.AnalyticSpace.sigmaιOpens_ne_bot` this is what makes a
+restriction to a clopen part say something.**
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen` accepts `⊥` and `⊤` as readily as
+anything else, so a cover restricted to a clopen part is only informative at a clopen part that
+is neither, and this pair is what exhibits one. -/
+theorem sigmaιOpens_ne_top {i j : ι} (hij : i ≠ j) (y : F i) : sigmaιOpens F j ≠ ⊤ := by
+  intro h
+  have hy : (sigmaι F i).toLRSHom.base y ∈ (sigmaιOpens F j : Set (sigma F)) := by
+    rw [h]; trivial
+  obtain ⟨z, hz⟩ := hy
+  exact hij (eq_of_sigmaι_base_eq _ hz).symm
 
 /-- **A disjoint union with two distinct inhabited members is not preconnected.**
 
