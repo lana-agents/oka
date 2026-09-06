@@ -615,11 +615,13 @@ nothing: on the diagonal `f'` is an `eqToHom`, hence an isomorphism, hence an op
 it, it is an `eqToHom` followed by the given morphism.
 
 **Worth stating because `CategoryTheory.GlueData.ofGlueData'` has no call sites in Mathlib at
-all** — `grep` finds it only in its own defining file — so it has no projection or `simp` lemmas
-and a caller has no way to know in advance which of its fields are cheap to use. This one is; the
-`V`, `t` and `t'` fields are not, and nothing in this repository looks at them, since
-`AlgebraicGeometry.LocallyRingedSpace.GlueData.openCover` and hence
-`ComplexAnalytic.AnalyticSpace.ofGlueData` read only `U`, `ι` and `glued`. -/
+all** — `grep` finds it only in its own defining file — so Mathlib supplies no projection or
+`simp` lemma for any of its fields, and a caller with only Mathlib to read has no way to know in
+advance which of them are cheap to use. This one is, and the route out of here does not ask about
+the rest: `AlgebraicGeometry.LocallyRingedSpace.GlueData.openCover` and hence
+`ComplexAnalytic.AnalyticSpace.ofGlueData` read only `U`, `ι` and `glued`. A caller that does ask
+about `t` has a dependent `dite` to unfold, and `CategoryTheory.GlueData.ofGlueData'_t_of_ne` is
+that unfolding off the diagonal, `CategoryTheory.GlueData.ofGlueData'_t_self` on it. -/
 theorem isOpenImmersion_f' (D : CategoryTheory.GlueData' LocallyRingedSpace.{u})
     (h : ∀ i j hij, IsOpenImmersion (D.f i j hij)) (i j : D.J) :
     IsOpenImmersion (D.f' i j) := by
