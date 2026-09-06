@@ -566,8 +566,13 @@ with the compatibility phrased on the *categorical pullback* of the two inclusio
 is opaque: to discharge the hypothesis one has to know what its points are, and the tools that
 would discharge it — anything of the form "two morphisms out of this space with the same
 so-and-so are equal" — are statements about spaces one can name. **So the hypothesis there is
-not checkable by the machinery meant to check it**, which is why nothing has consumed that
-theorem since it was proved.
+not checkable by the machinery meant to check it**, and paying that cost once, here, is what this
+spelling is for. `AlgebraicGeometry.LocallyRingedSpace.GlueData.isCompatible_restrictAlgMap` is
+what paying it directly looks like: its members are the members of a glue data rather than opens
+of one space, so the identification it uses is
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.vIsoPullback`, the chosen overlap `V (i, j)` as the
+categorical pullback, and it builds the pullback equation out of that and hands it to
+`AlgebraicGeometry.LocallyRingedSpace.OpenCover.existsUnique_glueMorphisms` itself.
 
 Here the compatibility is an equation of morphisms out of `X.restrict (U i ⊓ U j)`, which is an
 open subspace of `X` and therefore something the caller already understands — for a complex
