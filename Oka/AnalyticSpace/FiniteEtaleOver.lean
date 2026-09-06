@@ -197,6 +197,29 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2` and over a preconnected base.
   This is the class rather than a statement quantified by hand, and it is what `## What is not
   here` used to say no subcategory had been exhibited for.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isTerminalId` and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasTerminal`: **the base over itself is a terminal
+  object of the category, and so the category has one** — with no hypothesis on the base, the
+  unique morphism out of a cover being its own structure map.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isTerminalIdSubcategory`,
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasTerminalSubcategory` and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_ι`: **the same
+  object is terminal in the subcategory
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2` too**, over a preconnected and
+  Hausdorff base, and the inclusion carries the one to the other.
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_ι` is what makes
+  the preservation statements below hold of the *restricted* fibre functors by instance search, so
+  neither of them is stated twice.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isTerminalFintypeFiberId`: **the value of the
+  `FintypeCat`-valued fibre functor at the base over itself is terminal**, which is
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.uniqueFiberId` read in that category.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_fiberFunctor` and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_fintypeFiberFunctor`:
+  **both fibre functors preserve the terminal object**, with no hypothesis on the base or on the
+  point. **This is a Galois-category axiom on the fibre functor**, as
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasTerminal` is one on the category;
+  `## What is not here` says which of the others are absent, and base change is still among
+  them.
 - `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_id`,
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_trivial_of_isEmpty` and
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_trivial_of_isEmpty_base`:
@@ -285,8 +308,21 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_fiber` needs and what a `FintypeCat`-valued
   functor does not.
 
-  **What is absent is the Galois category itself**, whose axioms need the base change the
-  **No pullbacks, so no base change** bullet below says this category has not. **Faithfulness is
+  **What is absent is the Galois category itself.** Its axioms need the base change the
+  **No pullbacks, so no base change** bullet below says this category has not — **and this
+  sentence used to stop there, which read as though base change were the whole of what they
+  need.** It is not. **One of the axioms is here now, and it is the terminal object:**
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasTerminal` puts the base over itself at the top
+  of the category with no hypothesis on the base at all,
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasTerminalSubcategory` does the same for the
+  subcategory below over a preconnected and Hausdorff base, and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_fiberFunctor` and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_fintypeFiberFunctor`
+  say the two fibre functors preserve it. **What that discharges is the terminal-object obligation
+  and no other**: base change is untouched by all of it, and so are quotients by finite group
+  actions and the axiom that a monomorphism induces an isomorphism onto a direct summand.
+
+  **Faithfulness is
   no longer among the absences, and this paragraph used to be mostly about it.**
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hom_ext_of_fiberFunctor_map_eq` says that two
   morphisms of covers whose images under the functor agree at one point of a fibre are **equal**,
@@ -523,6 +559,58 @@ theorem isIso_hom_of_iso_id {X : AnalyticSpace.{u}} {A : FiniteEtaleOver.{u} X}
       CategoryTheory.Over.w ((MorphismProperty.Over.forget _ ⊤ X).map e.hom)
     exact (Category.comp_id _).symm.trans hw
   rwa [h2] at h1
+
+/-! ### The terminal object -/
+
+/-- **The base over itself is a terminal object of the category of finite étale covers.**
+
+The unique morphism out of a cover `A` is its own structure map, read as a morphism over `X`: a
+morphism of this category is a morphism of analytic spaces commuting with the two structure maps
+and nothing more — `Q` is `⊤`, as the docstring of
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver` says — and the triangle asked of `A.hom` here is
+`A.hom ≫ 𝟙 X = A.hom`. Uniqueness is the same equation run backwards at an arbitrary `f`.
+
+**Both halves are terms and neither is a `rw [Category.comp_id]`, for the reason
+`ComplexAnalytic.AnalyticSpace.isIso_hom_of_iso_id` gives.** The identity in
+`(ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.id X).hom` is `𝟙 X` only after the `def` is
+unfolded, which `rw` will not do at `instances` transparency — it reports the target as not
+type-correct there — and `simpa` reports the two sides as equalities in different types.
+`(Category.comp_id _).symm.trans` is the same step at default transparency.
+
+**This asks nothing of `X`.** Not Hausdorff, not connected, not non-empty; the object exists
+because `ComplexAnalytic.AnalyticSpace.isFiniteEtale_id` does. -/
+def FiniteEtaleOver.isTerminalId (X : AnalyticSpace.{u}) :
+    Limits.IsTerminal (FiniteEtaleOver.id.{u} X) :=
+  Limits.IsTerminal.ofUniqueHom
+    (fun A ↦ MorphismProperty.Over.homMk (B := FiniteEtaleOver.id.{u} X) A.hom
+      (Category.comp_id A.hom))
+    fun _ f ↦ MorphismProperty.Over.Hom.ext
+      ((Category.comp_id f.left).symm.trans (MorphismProperty.Over.w f))
+
+/-- **The category of finite étale covers has a terminal object**, with no hypothesis on the base.
+
+Stated as the class and not only as the witness above, because that is the form a
+`CategoryTheory.Limits.HasTerminal` consumer asks for — `⊤_ (FiniteEtaleOver X)` is notation for
+it — and because the Galois-category definition in `Mathlib/CategoryTheory/Galois/Basic.lean`,
+whose namespace is not in this repository's import closure and so cannot be cited by name here,
+carries this field as an instance.
+
+**It is an `instance` deliberately, and the choice was not free.** *Measured at `59f0ba2`, and
+recorded rather than left live*: scanning the `instance` declarations under `Oka/AnalyticSpace/`
+with block comments stripped, no statement among them mentioned the `Limits` namespace, a `Has…`
+class or a `Preserves…` class.
+`AlgebraicGeometry.LocallyRingedSpace.Hom.preservesFiniteLimits_pullbackModules`
+(`Oka/AnalyticSpace/PullbackModulesStalk.lean`) is the nearest thing there and it is a `theorem`
+about locally ringed spaces. So declaring this an instance changes what instance search can do in
+a directory where nothing had yet asked for a limit, and the alternative — leaving
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isTerminalId` unbundled and making each caller
+bundle it — was real. It was rejected because the terminal object here is canonical rather than a
+choice, it being the base over itself; because `CategoryTheory.Limits.HasTerminal` is `Prop`-valued
+and so carries no data a second instance could disagree with; and because the Galois-category
+field it answers to is itself an instance field. -/
+instance FiniteEtaleOver.hasTerminal (X : AnalyticSpace.{u}) :
+    Limits.HasTerminal (FiniteEtaleOver.{u} X) :=
+  (FiniteEtaleOver.isTerminalId.{u} X).hasTerminal
 
 /-! ### The degree of a cover -/
 
@@ -899,7 +987,11 @@ module being that one and nothing it depends on.
 
 **What this does not make is a Galois category.** The axioms need base change and this repository
 has no `CategoryTheory.Limits.HasPullback` instance for `ComplexAnalytic.AnalyticSpace`; see
-`## What is not here`. -/
+`## What is not here`. **Base change is not the only axiom they need, and the reader who meets
+this sentence first should not infer that it is** — the terminal-object axiom is separately in
+hand, at
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_fintypeFiberFunctor`
+for this functor. -/
 def FiniteEtaleOver.fintypeFiberFunctor {X : AnalyticSpace.{u}} (x : X) :
     FiniteEtaleOver.{u} X ⥤ FintypeCat.{u} where
   obj A := FintypeCat.of (FiniteEtaleOver.fiber.{u} x A)
@@ -1450,9 +1542,21 @@ instance FiniteEtaleOver.faithful_fiberFunctor {X : AnalyticSpace.{u}}
 /-- **The same for the `FintypeCat`-valued fibre functor.**
 
 This is the one a Galois category would want, that definition asking for a functor into
-`FintypeCat`. **It is not a Galois category** and this instance does not bring one closer than the
-`## No pullbacks, so no base change` bullet says: faithfulness is one of the axioms and base change
-is another, and nothing here bears on the second. -/
+`FintypeCat`. **It is not a Galois category**, and the reason this docstring used to give was
+wrong: it said that *faithfulness is one of the axioms and base change is another*.
+**`CategoryTheory.Functor.Faithful` is not one of the axioms.** At the Mathlib revision
+`lakefile.toml` pins, `Mathlib/CategoryTheory/Galois/Basic.lean` — whose namespace is not in this
+repository's import closure and so cannot be cited by name here — carries faithfulness of a fibre
+functor as an `instance` *derived* from the axioms rather than as a field of the class asking for
+them. So this instance proves something such a structure would hand back for free, and it
+discharges none of that structure's obligations.
+
+**What does discharge one is
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_fintypeFiberFunctor`
+below**, composed with
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_ι` to reach this same
+restricted functor. **Base change is still absent**, for the reason the
+`## No pullbacks, so no base change` bullet gives, and nothing here bears on it. -/
 instance FiniteEtaleOver.faithful_fintypeFiberFunctor {X : AnalyticSpace.{u}}
     [PreconnectedSpace (X : Type u)] (x : X) :
     ((FiniteEtaleOver.isPreconnectedT2.{u} X).ι
@@ -1461,6 +1565,175 @@ instance FiniteEtaleOver.faithful_fintypeFiberFunctor {X : AnalyticSpace.{u}}
     ObjectProperty.hom_ext _
       (@FiniteEtaleOver.fintypeFiberFunctor_map_injective X ‹_› x A.obj B.obj
         A.property.1 B.property.2 _ _ h)
+
+/-! ### The terminal object of that subcategory, and the two fibre functors preserve it -/
+
+/-- **The base over itself is terminal in the preconnected–Hausdorff subcategory too**, when the
+base is preconnected and Hausdorff.
+
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_id` is the membership proof, and
+it was written so that the subcategory is known to be non-empty from inside this file; it turns
+out to be the terminal object's admission ticket as well, which is why `[PreconnectedSpace X]` and
+`[T2Space X]` are hypotheses of this statement rather than conditions on an object.
+
+**A full subcategory's morphisms are the ambient category's, and they are so by a definitional
+equality that instance search and unification do not cross on their own.**
+`CategoryTheory.ObjectProperty.homMk` and `CategoryTheory.ObjectProperty.hom_ext` are the two
+functions that cross it, and they are the same pair
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.faithful_fiberFunctor` already uses. **Going
+through them keeps this computable**: the other route across the seam is
+`CategoryTheory.Functor.preimage` at `CategoryTheory.ObjectProperty.ι`, which is data extracted
+from a `CategoryTheory.Functor.Full` instance and would force a `noncomputable` here for no
+mathematical reason. -/
+def FiniteEtaleOver.isTerminalIdSubcategory (X : AnalyticSpace.{u})
+    [PreconnectedSpace (X : Type u)] [T2Space (X : Type u)] :
+    Limits.IsTerminal (⟨FiniteEtaleOver.id.{u} X, FiniteEtaleOver.isPreconnectedT2_id.{u} X⟩ :
+      (FiniteEtaleOver.isPreconnectedT2.{u} X).FullSubcategory) :=
+  Limits.IsTerminal.ofUniqueHom
+    (fun A ↦ ObjectProperty.homMk ((FiniteEtaleOver.isTerminalId.{u} X).from A.obj))
+    fun _ _ ↦ ObjectProperty.hom_ext _ ((FiniteEtaleOver.isTerminalId.{u} X).hom_ext _ _)
+
+/-- **And so that subcategory has a terminal object.**
+
+The class, for the same reason
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasTerminal` gives above. **This is the one a
+Galois category would consume**, the fibre functor's faithfulness and the conservativity question
+both being stated on this subcategory and not on the whole of
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver`. -/
+instance FiniteEtaleOver.hasTerminalSubcategory (X : AnalyticSpace.{u})
+    [PreconnectedSpace (X : Type u)] [T2Space (X : Type u)] :
+    Limits.HasTerminal (FiniteEtaleOver.isPreconnectedT2.{u} X).FullSubcategory :=
+  (FiniteEtaleOver.isTerminalIdSubcategory.{u} X).hasTerminal
+
+/-- **The inclusion of that subcategory preserves the terminal object.**
+
+Both categories have a terminal object and the inclusion carries the subcategory's to the ambient
+one, which is the whole content:
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isTerminalIdSubcategory` is the cone and
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isTerminalId` is its image, and the two are the
+same object of `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver X` by `rfl`.
+
+**This is what makes preservation hold of the *restricted* fibre functors and not only of the
+unrestricted ones, and it is why neither is stated twice.**
+`CategoryTheory.Limits.comp_preservesLimitsOfShape` composes this with
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_fiberFunctor` or with
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_fintypeFiberFunctor`
+to give the restricted functor's preservation by instance search, and `infer_instance` closes both
+composite goals — measured.
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.faithful_fiberFunctor` and
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.faithful_fintypeFiberFunctor` are stated for the
+composite and not for the functor on the whole category, so the composite is the shape a
+Galois-category structure would consume.
+
+**A subcategory inclusion does not preserve limits in general** — a full subcategory closed under
+nothing need not contain the ambient limit — and what makes it do so here is that the ambient
+terminal object lies in the subcategory, which is
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_id` and is where `[T2Space X]`
+enters. -/
+instance FiniteEtaleOver.preservesLimitsOfShape_pempty_ι (X : AnalyticSpace.{u})
+    [PreconnectedSpace (X : Type u)] [T2Space (X : Type u)] :
+    Limits.PreservesLimitsOfShape (Discrete PEmpty.{1})
+      (FiniteEtaleOver.isPreconnectedT2.{u} X).ι :=
+  haveI : Limits.PreservesLimit
+      (Functor.empty.{0} (FiniteEtaleOver.isPreconnectedT2.{u} X).FullSubcategory)
+      (FiniteEtaleOver.isPreconnectedT2.{u} X).ι :=
+    Limits.preservesLimit_of_preserves_limit_cone
+      (FiniteEtaleOver.isTerminalIdSubcategory.{u} X)
+      ((Limits.isLimitMapConeEmptyConeEquiv _ _).symm (FiniteEtaleOver.isTerminalId.{u} X))
+  Limits.preservesLimitsOfShape_pempty_of_preservesTerminal _
+
+/-- **The value of the `FintypeCat`-valued fibre functor at the base over itself is a terminal
+object of `FintypeCat`.**
+
+The mathematical content is
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.uniqueFiberId` and nothing else: the fibre of the
+base over itself at `x` is the one-point set `{x}`, so a map into it from anywhere exists and is
+unique.
+
+**The `Type u`-valued functor needs no companion to this**, because
+`CategoryTheory.Limits.Types.isTerminalEquivUnique` converts a `Unique` into a
+`CategoryTheory.Limits.IsTerminal` in `Type u` directly, and
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_fiberFunctor` uses it
+inline. `FintypeCat` has no such equivalence, which is why this one is written out — the same
+asymmetry between the two functors that
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fintypeFiberFunctor_map_injective` records, and for
+the same reason: the two categories' morphisms are different structures.
+
+**The `haveI` is the `FintypeCat` bundling seam and not a mathematical step.** `FintypeCat.of`
+wraps the fibre, and the `Unique` instance above is not found through that wrapper by instance
+search, which works up to reducible unfolding; `inferInstanceAs` restates it at the wrapped type
+and there is no content in the restatement. -/
+def FiniteEtaleOver.isTerminalFintypeFiberId {X : AnalyticSpace.{u}} (x : X) :
+    Limits.IsTerminal
+      ((FiniteEtaleOver.fintypeFiberFunctor.{u} x).obj (FiniteEtaleOver.id.{u} X)) :=
+  haveI : Unique (((FiniteEtaleOver.fintypeFiberFunctor.{u} x).obj
+      (FiniteEtaleOver.id.{u} X) : FintypeCat.{u}) : Type u) :=
+    inferInstanceAs (Unique (FiniteEtaleOver.fiber.{u} x (FiniteEtaleOver.id.{u} X)))
+  Limits.IsTerminal.ofUniqueHom (fun _ ↦ FintypeCat.homMk fun _ ↦ default)
+    fun _ _ ↦ FintypeCat.hom_ext _ _ fun _ ↦ Subsingleton.elim _ _
+
+/-- **The `Type u`-valued fibre functor preserves the terminal object**, with no hypothesis on the
+base or on the point.
+
+`CategoryTheory.Limits.preservesLimit_of_preserves_limit_cone` at the cone
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isTerminalId` is, with
+`CategoryTheory.Limits.isLimitMapConeEmptyConeEquiv` turning *the image cone is a limit* into
+*the image object is terminal*. The image object is the fibre of the base over itself, which is a
+point by `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.uniqueFiberId`, and
+`CategoryTheory.Limits.Types.isTerminalEquivUnique` is the conversion.
+
+**Preservation of the terminal object is a Galois-category axiom on the fibre functor**, in
+`Mathlib/CategoryTheory/Galois/Basic.lean`, whose namespace is not in this repository's import
+closure and so cannot be cited by name here. **It is one field of that structure and this instance
+does not supply the others**; `## What is not here`'s **No pullbacks, so no base change** bullet
+is still exactly true, and this instance bears on neither quotients by finite group actions nor
+the axiom that a monomorphism induces an isomorphism onto a direct summand.
+
+**The conclusion is `CategoryTheory.Limits.PreservesLimitsOfShape` at the empty shape and not
+`CategoryTheory.Limits.PreservesLimit` at
+`CategoryTheory.Functor.empty`, and the choice is load-bearing.** The two say the same thing:
+`CategoryTheory.Limits.PreservesLimitsOfShape` at the empty shape is the spelling that structure's
+field is written in, `CategoryTheory.Limits.PreservesLimit` at `CategoryTheory.Functor.empty` is
+the spelling the proof is naturally in, and
+`CategoryTheory.Limits.preservesLimitsOfShape_pempty_of_preservesTerminal` converts the second into
+the first. **That converter is a `lemma` and not an instance**, so a consumer holding only
+`CategoryTheory.Limits.PreservesLimit` would have to apply it by hand — while
+`CategoryTheory.Limits.PreservesLimitsOfShape` hands back
+`CategoryTheory.Limits.PreservesLimit` through
+`CategoryTheory.Limits.PreservesLimitsOfShape.preservesLimit`, which *is* an instance. Stating the
+stronger one costs one line here and saves the conversion at every use. -/
+instance FiniteEtaleOver.preservesLimitsOfShape_pempty_fiberFunctor {X : AnalyticSpace.{u}}
+    (x : X) :
+    Limits.PreservesLimitsOfShape (Discrete PEmpty.{1}) (FiniteEtaleOver.fiberFunctor.{u} x) :=
+  haveI : Limits.PreservesLimit (Functor.empty.{0} (FiniteEtaleOver.{u} X))
+      (FiniteEtaleOver.fiberFunctor.{u} x) :=
+    Limits.preservesLimit_of_preserves_limit_cone (FiniteEtaleOver.isTerminalId.{u} X)
+      ((Limits.isLimitMapConeEmptyConeEquiv _ _).symm
+        ((Limits.Types.isTerminalEquivUnique _).symm (FiniteEtaleOver.uniqueFiberId.{u} x)))
+  Limits.preservesLimitsOfShape_pempty_of_preservesTerminal _
+
+/-- **The same for the `FintypeCat`-valued fibre functor**, which is the shape a Galois category
+asks for.
+
+The same proof with
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isTerminalFintypeFiberId` in place of the inline
+conversion, for the reason that declaration's docstring gives, and in the same
+`CategoryTheory.Limits.PreservesLimitsOfShape` spelling, for the reason
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_fiberFunctor` gives.
+**Composed with
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_ι` this is the
+instance a Galois-category structure would consume**, that structure asking for a functor into
+`FintypeCat`. -/
+instance FiniteEtaleOver.preservesLimitsOfShape_pempty_fintypeFiberFunctor {X : AnalyticSpace.{u}}
+    (x : X) :
+    Limits.PreservesLimitsOfShape (Discrete PEmpty.{1})
+      (FiniteEtaleOver.fintypeFiberFunctor.{u} x) :=
+  haveI : Limits.PreservesLimit (Functor.empty.{0} (FiniteEtaleOver.{u} X))
+      (FiniteEtaleOver.fintypeFiberFunctor.{u} x) :=
+    Limits.preservesLimit_of_preserves_limit_cone (FiniteEtaleOver.isTerminalId.{u} X)
+      ((Limits.isLimitMapConeEmptyConeEquiv _ _).symm
+        (FiniteEtaleOver.isTerminalFintypeFiberId.{u} x))
+  Limits.preservesLimitsOfShape_pempty_of_preservesTerminal _
 
 /-! ### The degree of a morphism of covers, and the divisibility it gives -/
 
