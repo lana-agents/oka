@@ -41,18 +41,39 @@ file this statement is near: hosting it in `Mathlib/Logic/Equiv/Sum.lean`, where
 `Equiv.sigmaFiberEquiv` is, would cost that file **6** modules for `Mathlib.Data.Set.Operations`
 and **46** for `Mathlib.Data.Set.Basic`.
 
-**What that file cannot reach is `Set.preimage`, and not sets.** This paragraph used to give the
-reason as *"it has no `Set` theory at all"*, and
+**What that file cannot reach is `Set.preimage` and the coercion that reads a `Set` as a type,
+and not `Set` itself.** This paragraph used to give the reason as *"it has no `Set` theory at
+all"*, and
 `python3 scripts/import_cost.py --target Mathlib.Logic.Equiv.Sum Mathlib.Data.Set.Defs` refutes
 that in one line — *1 already in that closure -> cost 0*. `Mathlib/Data/Set/Defs.lean` declares
 `Set`, `setOf`, membership, `Set.univ` and `Set.image`, and is inside that closure of 90 already;
 under `import Mathlib.Logic.Equiv.Sum` alone `#check @Set.image`, `#check @setOf` and
 `#check @Set.univ` all elaborate, while `#check @Set.preimage` reports an unknown constant. So
-what the **6** buys is `Set.preimage` together with its `f ⁻¹' s` notation, which
+part of what the **6** buys is `Set.preimage` together with its `f ⁻¹' s` notation, which
 `Mathlib/Data/Set/Operations.lean` declares — and lacking the notation
 `Set.preimageCompEquivSigma` does not fail to typecheck, it fails to lex, since the apostrophe
-opens a character literal. **Both costs were measured and the reason offered under them was
-not.**
+opens a character literal.
+
+**That is the failure a reader meets first and it is not the only one behind it.** Running
+`python3 scripts/import_cost.py --target Mathlib.Logic.Equiv.Sum Mathlib.Data.Set.Operations`
+prints `Mathlib.Data.Set.CoeSort` on that same list, and, at the Mathlib revision `lakefile.toml`
+pins, `Mathlib/Data/Set/CoeSort.lean:40` is `instance : CoeSort (Set α) (Type u) := ⟨Elem⟩` — the
+coercion that reads a `Set` as the subtype of its members. `Set.preimageCompEquivSigma` is an
+equivalence between two sets read that way, so it needs that instance as much as it needs the
+preimage, and **the two obstructions have separate causes, which an added import shows in one
+direction and no added import could show in the other**. With `import Mathlib.Data.Set.CoeSort`
+beside it the coercion is repaired and the lexing is not: `(f ⁻¹' {z} : Set α)` still reports
+*missing end of character literal*. The other direction takes the notation out of the expression
+rather than putting an import in — under `import Mathlib.Logic.Equiv.Sum` alone
+`example (s t : Set Nat) : Type := s ≃ t`, which carries no `⁻¹'` at all, reports *Application type
+mismatch … has type `Set Nat` but is expected to have type `Prop`*, a typecheck failure with the
+lexing out of the picture — **and no import stands in for that deletion**, because the notation is
+declared at `Mathlib/Data/Set/Operations.lean:127` and that file's ninth line is
+`public import Mathlib.Data.Set.CoeSort`, so whatever reaches the notation reaches the instance.
+`import Mathlib.Data.Set.Operations` therefore clears both at once; the **6** is the price under
+either account, and `Mathlib/Logic/Equiv/Sum.lean` is the wrong host for
+`Set.preimageCompEquivSigma` on two counts rather than one. **Both costs were measured and the
+reason offered under them was not.**
 
 ## Deriving it from Mathlib, and the measurement that was on record was wrong
 
