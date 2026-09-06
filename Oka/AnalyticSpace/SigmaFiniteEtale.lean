@@ -259,8 +259,8 @@ carries it as a bundled `TopologicalSpace.Opens`, which is the type a restrictio
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen` asks for an
 `Opens` of the total space together with a proof that its coercion is closed, and the clopen
 lemma hands back a bare `Set` and a conjunction — so without this a caller has to build the
-bundled open at each use site, which is the shape the lemma above already declines to leave to a
-caller.
+bundled open at each use site, which is the shape
+`ComplexAnalytic.AnalyticSpace.isClopen_range_sigmaι_base` already declines to leave to a caller.
 
 **Only the openness half is consumed here.** The closedness travels separately, as
 `ComplexAnalytic.AnalyticSpace.isClosed_sigmaιOpens`, because it is a hypothesis of the
@@ -306,10 +306,11 @@ theorem sigmaιOpens_ne_bot {j : ι} (x : F j) : sigmaιOpens F j ≠ ⊥ := by
 /-- **A member's image is not everything**, as soon as a *different* member has a point.
 
 `AlgebraicGeometry.LocallyRingedSpace.eq_of_sigmaι_base_eq` is what turns *"the point's image
-lies in the `j`-th member's image"* into `i = j`, which the hypothesis then refutes. These are the
-hypotheses `ComplexAnalytic.AnalyticSpace.not_preconnectedSpace_sigma` carries and for the same
-reason: at a one-member family, or at one whose other members are empty, the disjoint union **is**
-the member and its image really is everything.
+lies in the `j`-th member's image"* into `i = j`, which the hypothesis then refutes.
+`ComplexAnalytic.AnalyticSpace.not_preconnectedSpace_sigma` asks for the hypotheses stated here
+and for a point of `F j` besides, and it asks for `i ≠ j` and a point of `F i` for the reason
+given here: at a one-member family, or at one whose other members are empty, the disjoint union
+**is** the member and its image really is everything.
 
 **Together with `ComplexAnalytic.AnalyticSpace.sigmaιOpens_ne_bot` this is what makes a
 restriction to a clopen part say something.**

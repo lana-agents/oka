@@ -65,12 +65,14 @@ it returns the empty cover and a cover isomorphic to its own input. The clopen p
 is one sheet of the trivial two-sheeted cover, through
 `ComplexAnalytic.AnalyticSpace.sigmaιOpens` — the total space of that cover being a disjoint union
 of copies of the base, and the image of a member of a disjoint union being clopen by
-`ComplexAnalytic.AnalyticSpace.isClopen_range_sigmaι_base`. **What is not claimed is a
-decomposition**: this file does not say that the sheet and its complement exhibit the trivial
-cover as their coproduct.
-`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitBinaryCofanRestrictClopen` is that
-statement at an arbitrary clopen part, and instantiating it at this sheet is a step nothing here
-takes.
+`ComplexAnalytic.AnalyticSpace.isClopen_range_sigmaι_base`. **And that sheet and its complement
+are exhibited as a decomposition of the cover**: `restrictSheetCompl` is the complementary part
+here and `isColimitBinaryCofanRestrictSheet` reads
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitBinaryCofanRestrictClopen` at this sheet,
+so the trivial two-sheeted cover of the punctured line is the coproduct of one sheet and the rest
+of its total space. **What that is not is a decomposition into *named* summands**: neither summand
+is identified with anything here, and in particular the sheet is not stated here to be the base
+over itself. This paragraph used to say the instantiation was a step nothing here took.
 
 ## What this does not witness
 
@@ -476,17 +478,22 @@ theorem sheetOpens_ne_top : sheetOpens.{u} ⟨0⟩ ≠ ⊤ :=
 
 This is the first application of
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen` at an open that `sheetOpens_ne_bot`
-and `sheetOpens_ne_top` show is neither `⊥` nor `⊤`, and it turns that construction's docstring —
-which
-says the complementary part is the object a direct-summand statement would need — from a claim
-about what could be built into one about what is built.
+and `sheetOpens_ne_top` show is neither `⊥` nor `⊤`.
+
+**What it does not do is instantiate the complementary part**, and an earlier draft of this
+paragraph said it did and credited the wrong docstring with the sentence it said was thereby
+discharged. *"This is the object a direct-summand statement would need as its complement"* is
+written above `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopenCompl`;
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen`'s own docstring says that a cover
+restricted to a clopen subset is again a cover, that nothing is cancelled anywhere so no
+`[T2Space]` appears, and why the finite-étale property is an explicit argument rather than found
+by instance search. `restrictSheetCompl` below is what applies `restrictClopenCompl` here.
 
 **It says nothing about what this cover *is*.** In particular it is not stated here to be
-isomorphic to the base over itself, which is what a decomposition of the trivial cover would have
-to prove.
-`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitBinaryCofanRestrictClopen` exhibits the
-*trivial* cover as the coproduct of this sheet and the complementary part without identifying
-either summand, and identifying them is the step that would need this cover's own structure. -/
+isomorphic to the base over itself, which is what a decomposition into named summands would have
+to prove. `isColimitBinaryCofanRestrictSheet` below exhibits the *trivial* cover as the coproduct
+of this sheet and the complementary part without identifying either summand, and identifying them
+is the step that would need this cover's own structure. -/
 def restrictSheet : AnalyticSpace.FiniteEtaleOver.{u}
     ((AnalyticSpace.complexAffineSpace.{u} 1).restrict ComplexAnalytic.punctured.{u}) :=
   AnalyticSpace.FiniteEtaleOver.restrictClopen
@@ -496,6 +503,62 @@ def restrictSheet : AnalyticSpace.FiniteEtaleOver.{u}
     (AnalyticSpace.isClosed_sigmaιOpens
       (fun _ : ULift.{u} (Fin 2) ↦
         (AnalyticSpace.complexAffineSpace.{u} 1).restrict ComplexAnalytic.punctured.{u}) ⟨0⟩)
+
+/-- **The complementary part of that sheet.**
+
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopenCompl` takes the same three arguments
+as `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen` — in particular the closedness
+it asks for is that of the open itself and not of the complement — so this is `restrictSheet`'s
+own argument list unchanged, and `ComplexAnalytic.AnalyticSpace.isClosed_clopenCompl` supplies the
+other half inside the construction.
+
+**What this settles is the object and not the role.** `restrictClopenCompl`'s docstring says the
+complementary part is what a direct-summand statement would need as its complement, and the
+statement it means is the one `Mathlib/CategoryTheory/Galois/Basic.lean` asks for, which is about
+an arbitrary monomorphism of covers rather than about a clopen part.
+`Oka/AnalyticSpace/FiniteEtaleOver.lean`'s `## What is not here` records which of that axiom's
+obligations are open, and building this object moves none of them. -/
+def restrictSheetCompl : AnalyticSpace.FiniteEtaleOver.{u}
+    ((AnalyticSpace.complexAffineSpace.{u} 1).restrict ComplexAnalytic.punctured.{u}) :=
+  AnalyticSpace.FiniteEtaleOver.restrictClopenCompl
+    (AnalyticSpace.FiniteEtaleOver.trivial.{u} (ULift.{u} (Fin 2))
+      ((AnalyticSpace.complexAffineSpace.{u} 1).restrict ComplexAnalytic.punctured.{u}))
+    (sheetOpens.{u} ⟨0⟩)
+    (AnalyticSpace.isClosed_sigmaιOpens
+      (fun _ : ULift.{u} (Fin 2) ↦
+        (AnalyticSpace.complexAffineSpace.{u} 1).restrict ComplexAnalytic.punctured.{u}) ⟨0⟩)
+
+/-- **The trivial two-sheeted cover of the punctured line is the coproduct of one sheet and the
+rest of its total space.**
+
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitBinaryCofanRestrictClopen` read at this
+sheet. The cocone is
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.binaryCofanRestrictClopen` at the same three
+arguments, so its two summands are `restrictSheet` and `restrictSheetCompl` — each `rfl`-equal to
+the way the cocone's type spells it, since each is that spelling — and its two injections are
+their inclusions.
+
+**No mathematics is added here and the instantiation is the whole content.** The general statement
+holds at `⊥` and at `⊤` as readily as at any other clopen part, both carriers being closed, and
+the module docstring above says what
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen` returns at those two. What makes
+this reading say something is that `sheetOpens_ne_bot` and `sheetOpens_ne_top` show the part it is
+read at is neither.
+
+**The summands are not identified.** That this sheet is the base over itself, and that its
+complement is the other sheet, are not stated here — the statement is that the two exhibit the
+cover as a coproduct, not what the two are. -/
+def isColimitBinaryCofanRestrictSheet :
+    Limits.IsColimit
+      ((AnalyticSpace.FiniteEtaleOver.trivial.{u} (ULift.{u} (Fin 2))
+            ((AnalyticSpace.complexAffineSpace.{u} 1).restrict
+              ComplexAnalytic.punctured.{u})).binaryCofanRestrictClopen
+        (sheetOpens.{u} ⟨0⟩)
+        (AnalyticSpace.isClosed_sigmaιOpens
+          (fun _ : ULift.{u} (Fin 2) ↦
+            (AnalyticSpace.complexAffineSpace.{u} 1).restrict ComplexAnalytic.punctured.{u})
+          ⟨0⟩)) :=
+  AnalyticSpace.FiniteEtaleOver.isColimitBinaryCofanRestrictClopen _ _ _
 
 end OkaTest.FiniteEtaleOver
 
