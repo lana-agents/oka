@@ -90,7 +90,9 @@ when its phrase is shorter than the file.
 
 **A second recipe, for the other question the rule above raises: which *heading* a guard sits
 under.** The one above resolves a guard to its module; this one counts guards per section, which
-is what a module docstring's subtotals are of and what nothing in `scripts/` reads:
+is what a module docstring's subtotals are of and what nothing in `scripts/` read at `c48bf8a`,
+where `scripts/guard_coverage.py` is the only file there that lifts a `#print axioms` out of a
+guard file and it resolves each to a declaration name rather than to the heading above it:
 
     awk '/^\/[-]! ### /{if(h!="")print n"\t"h; h=$0; n=0; next}
          /^### /        {if(h!="")print n"\t"h; h=$0; n=0; next}
@@ -115,12 +117,12 @@ to give a coproduct subtotal of *29* for a partition holding 23.**
 rather than a licence, and the check there says why it is a `grep` and not a comparison of these
 counts.
 
-**The worked example is `OkaTest/Axioms/AnalyticSpace.lean`**, the only file here whose
-per-heading distribution has been checked against its own prose — and checked more than once,
-because each reconciliation had gone stale before the next was taken. Run the `awk` above to get
-today's partition; that file's docstring carries the ledger of those recounts and says in terms
-which of its numerals are records pinned to a commit and which are undated claims about the tree
-that go stale. The two rows worth knowing before you run it are the sheet comparison
+**The worked example is `OkaTest/Axioms/AnalyticSpace.lean`**, the one file whose per-heading
+distribution this account works through — and it has been checked against its own prose more than
+once, because each reconciliation had gone stale before the next was taken. Run the `awk` above
+to get today's partition; that file's docstring carries the ledger of those recounts and says in
+terms which of its numerals are records pinned to a commit and which are undated claims about the
+tree that go stale. The two rows worth knowing before you run it are the sheet comparison
 and the open subspace at `⊤`: while the second heading stood in the two-line form `3177e67`
 wrote it in, every count of that file charged its guards to the first, because no instrument then
 in use could see it.
@@ -222,9 +224,24 @@ rows the file keeps deliberately, says so in the same breath, and is reached by 
 `Oka/Analytification/CrossMemberDatumGlue.lean` said that file *"carries two of exactly this
 shape"* — a live count of planted rows naming none of them, the second of them about a file the
 clause does not own. **Both were exact when measured**, the dump carrying two such rows under
-that module and no more, **and both are one `simp only` from being silently wrong.** They are
-left to a push of their own: they are under `Oka/`, and the subject of this one is the rule and
-the routing paragraph that motivated it.
+that module and no more, **and both were one `simp only` from being silently wrong.** They were
+left to a push of their own — *they are under `Oka/`, and the subject of this one is the rule and
+the routing paragraph that motivated it* — and that push is `bcfee65` (lana-agents/oka#443),
+which put both clauses into the naming form.
+
+**That deferral is the record this file keeps of the fifth object below catching the rule file
+itself.** *They are left to a push of their own* asserts that no push has taken those two sites,
+which is a claim about the tree with the arithmetic left out; `6c37417` wrote it at
+2026-09-05T10:34:27Z and `bcfee65` falsified it at 2026-09-05T12:27:25Z, so it stood for under
+two hours and then read as an open invitation to work already done. **None of the seven patterns
+taxis #1727 published matches it**: the sentence is affirmative and carries no negative word at
+all, while what it asserts is a negative about every push there has been — so the scan that found
+the sites either side of it in this file could not have found this one, and reading is what did.
+It is pinned here rather than struck, because a clause that
+has gone false is worth more as a dated record than as a repair nobody can see.
+`Oka/AnalyticSpace/Sigma.lean`'s account of *the only declaration in the library that names
+the empty analytic space* names its writing commit and its falsifying commit for the same reason,
+and is the spelling copied here.
 
 **What the sweep asked of each clause is that and only that**: which population it is in, and
 under which spelling it is exempt. Whether the other figures those sentences carry are still
@@ -361,24 +378,37 @@ was being written down for the first time when that tail was measured, and the t
 follow it**, and the members that do not are named here rather than counted. Of the six modules
 that record enumerates, these sit apart from their consumers' guards:
 
-* **`Oka/CategoryTheory/GlueData.lean`**, the largest member. Its only importer is
-  `Oka/Analytification/AffineCover.lean`, whose guards are all in
+* **`Oka/CategoryTheory/GlueData.lean`**, the largest member. At `c48bf8a` the one module under
+  `Oka/` that imports it is `Oka/Analytification/AffineCover.lean`, whose guards are all in
   `OkaTest/Axioms/Analytification.lean`; and its guards sit under a heading of their own rather
   than under an analytic result's, so it fails both halves of the rule.
-* **`Oka/Topology/IsLocalHomeomorph.lean`**, whose only user is
-  `Oka/AnalyticSpace/CoveringSpace.lean`, guarded in `OkaTest/Axioms/Morphisms.lean`. It was
+* **`Oka/Topology/IsLocalHomeomorph.lean`**, whose one importer under `Oka/` at that same commit
+  is `Oka/AnalyticSpace/CoveringSpace.lean`, guarded in `OkaTest/Axioms/Morphisms.lean`. It was
   placed beside the file it was *written for*, which **deliberately does not import it** for the
   import-cost reason that file gives, and `OkaTest/Axioms/Sheaves.lean`'s heading for it says so.
-* **`Oka/FieldTheory/IsAlgClosed/Basic.lean`**, which has **no user under `Oka/` at all**:
-  `Oka/AnalyticSpace/CoveringMap.lean` names its one theorem in a docstring and does not import
-  it, and the only use in the repository is inside `OkaTest/FiniteMorphism.lean`, which this
-  repository does not guard. There is no analytic result to place it beside.
+* **`Oka/FieldTheory/IsAlgClosed/Basic.lean`**, which at that commit **no module under `Oka/`
+  imports**: `Oka/AnalyticSpace/CoveringMap.lean` names its one theorem in a docstring and does
+  not import it, and at that commit the one proof term in the repository that consumes
+  `IsAlgClosed.card_setOf_pow_eq` is in `OkaTest/FiniteMorphism.lean`, a file this repository does
+  not guard although `OkaTest/Axioms/RingTheory.lean` guards that theorem. **So** there is no
+  analytic result to place it beside — the conclusion of the measurement above it and not a second
+  claim, and it goes false exactly when that measurement does.
 
 **Read a consumer off the imports, not off a name grep.** All three were got wrong that way
 before they were measured, and `Oka/CategoryTheory/GlueData.lean` was got wrong in the draft of
-this very paragraph: `ofGlueData'` is Mathlib's name and several files mention it, only one
-imports the module that proves things about it. Moving any of them is a tidy-up nobody has done
-and not a defect in the table.
+this very paragraph: `ofGlueData'` is Mathlib's name and several files mention it, and at
+`c48bf8a` one module under `Oka/` imports the module that proves things about it.
+
+**The instrument is `git grep -l -E '^import <module>$'`, and the population the three figures
+above are taken over is `Oka/` — not the repository.** Saying which is not pedantry, because the
+grep answers differently on either side of that line. `Oka.lean` is the aggregator `mk_all`
+generates; it imports every module of the library, so it is a hit for all three and is excluded
+above. And at `c48bf8a` **70 of the 93 files under `OkaTest/` import that aggregator** rather than
+any module of it, so under `OkaTest/` an import grep separates no consumers at all — which is why
+the third bullet reaches that side by a name grep instead, and says so. **Moving any of them is a
+tidy-up and not a defect in the table**, and none of the three had been moved when this paragraph
+was pinned at `c48bf8a`.
+
 **The figure is here so that a later sweep can tell growth from noise**: a tail that stays near
 this size is the expected one, and a tail that doubles means a row really is missing.
 
