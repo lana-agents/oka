@@ -67,8 +67,10 @@ are the same map. There is no analysis and no sheaf argument in it.
   member are non-isomorphic** — that would be a statement about an invariant, and the caveat on
   the item above applies here word for word.
 - `ComplexAnalytic.AnalyticSpace.isIso_sigmaι`: **at a subsingleton index type it is one**, which
-  is the case the hypotheses of the two items above exclude. Its inverse is a descent map, so
-  nothing about the structure sheaves is computed on the way.
+  is the case `ComplexAnalytic.AnalyticSpace.not_surjective_sigmaι_base` and
+  `ComplexAnalytic.AnalyticSpace.not_isIso_sigmaι` exclude by asking for a second index with an
+  inhabited member. Its inverse is a descent map, so nothing about the structure sheaves is
+  computed on the way.
 
 ## Why the descent map needs a lemma at all
 
@@ -112,8 +114,9 @@ is it, and **the mathematics is still the two lemmas**:
 `ComplexAnalytic.AnalyticSpace.sigmaι_sigmaDesc` is existence and
 `ComplexAnalytic.AnalyticSpace.hom_ext_sigma` is uniqueness, and the bundle passes each of them to
 one field of `CategoryTheory.Limits.Cofan.IsColimit.mk` and proves nothing of its own. What it
-adds is the interface — the cofan, the two `Has…` instances, and `∐` and `⨿` becoming writable for
-these objects.
+adds is the interface — the cofan, `ComplexAnalytic.AnalyticSpace.hasCoproducts` and
+`ComplexAnalytic.AnalyticSpace.hasFiniteCoproducts`, and `∐` and `⨿` becoming writable for these
+objects.
 
 **What asks for that interface is `Mathlib/CategoryTheory/Galois/Basic.lean`'s definition of a
 Galois category**, whose namespace is not in this repository's import closure and so cannot be
@@ -463,8 +466,10 @@ theorem not_isIso_sigmaι {i j : ι} (hij : i ≠ j) (y : (F j).toLocallyRingedS
     ¬ IsIso (sigmaι F i) := fun _ ↦
   not_surjective_sigmaι_base F hij y (surjective_base_of_isIso _)
 
-/-- **At a one-member family the inclusion is an isomorphism**, which is the converse case the two
-theorems above leave open and the reason both of their hypotheses are there.
+/-- **At a one-member family the inclusion is an isomorphism**, which is the converse case
+`ComplexAnalytic.AnalyticSpace.not_surjective_sigmaι_base` and
+`ComplexAnalytic.AnalyticSpace.not_isIso_sigmaι` leave open, and the reason each of them asks for
+a second index as well as for a point of a member.
 
 `ComplexAnalytic.AnalyticSpace.not_isIso_sigmaι` needs a second index with an inhabited member;
 this is what happens when there is no second index at all. `[Subsingleton ι]` and not `[Unique ι]`
