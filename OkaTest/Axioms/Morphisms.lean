@@ -32,7 +32,11 @@ is both — which is what retired the clause, rather than a recount. And one is 
 statements about a topological property of a cover's **total space** rather than about any class
 of morphisms — that preconnectedness passes along a morphism surjective on points, and the
 separation of two covers of equal degree that buys —
-`### Connectedness of the total space separates two covers of the same degree`.
+`### Connectedness of the total space separates two covers of the same degree`. And one section is
+about no class of morphisms and no statement at all: it guards the structure
+`ComplexAnalytic.AnalyticSpace` and the structure `ComplexAnalytic.AnalyticSpace.Hom` themselves,
+and its own docstring says which paragraphs of this file rest on it —
+`### The axiom is already in the structure and in the type of a morphism`.
 
 **Named rather than counted from the end**, which is the repair and not the description. **The
 sentence this replaces called them *the last two***; they stopped being that when two further
@@ -2618,16 +2622,17 @@ file give for that: a section appended at the end cannot say which section is ab
 true, since the next branch appends between them.
 
 **`Classical.choice` is in every guard below** and is not introduced by any of them. It is there
-before any of them builds anything: `#print axioms` at `ComplexAnalytic.AnalyticSpace` itself
-lists it, and so does a definition whose body is a bare analytic space read as a type. So it
-reaches every statement about an analytic space without passing through a construction, and a
-construction named as the route it arrives by explains nothing a guard can check — this paragraph
-used to name `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.sigma`. **What the guards below record
-is that nothing here adds an axiom of its own.**
-`AlgebraicGeometry.LocallyRingedSpace.fiberSigmaDescEquiv` is where that could have gone wrong: it
-is noncomputable because `Equiv.ofBijective` is — planted without the modifier, the elaborator
-names `Equiv.ofBijective` — and `Equiv.ofBijective` carries `Classical.choice` and nothing else,
-which is an axiom the guards below print anyway.
+before any of them builds anything: `#print axioms` at `ComplexAnalytic.AnalyticSpace` itself lists
+it, which the section `### The axiom is already in the structure and in the type of a morphism`
+guards. So it reaches every statement about an analytic space without passing through a
+construction, and a construction named as the route it arrives by explains nothing a guard can check
+— this paragraph used to name `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.sigma`, and used to add
+that a definition whose body is a bare analytic space read as a type lists the axiom too, which
+named no declaration. **What the guards below record is that nothing here adds an axiom of its
+own.** `AlgebraicGeometry.LocallyRingedSpace.fiberSigmaDescEquiv` is where that could have gone
+wrong: it is noncomputable because `Equiv.ofBijective` is — planted without the modifier, the
+elaborator names `Equiv.ofBijective` — and `Equiv.ofBijective` carries `Classical.choice` and
+nothing else, which is an axiom the guards below print anyway.
 
 **Named by file rather than counted**, as the sections above say and for the reason they give.
 
@@ -2709,14 +2714,15 @@ file give for that: a section appended at the end cannot say which section is ab
 true, since the next branch appends between them.
 
 **`Classical.choice` is in every guard below and is introduced by none of them**, and it is there
-before any of them builds anything: `#print axioms` at `ComplexAnalytic.AnalyticSpace` itself
-lists it, and so does a definition whose body is a bare analytic space read as a type. So it
-reaches every statement about an analytic space without passing through a construction, and no
-route named here would be *the* route — this paragraph used to name
-`ComplexAnalytic.AnalyticSpace.restrict`. The sharp case among the guards below is
-`ComplexAnalytic.AnalyticSpace.clopenCompl`, whose body is the complement of a carrier and
-mentions no `ComplexAnalytic.AnalyticSpace.restrict` at all. **What the guards below record is
-that nothing here adds an axiom of its own.**
+before any of them builds anything: `#print axioms` at `ComplexAnalytic.AnalyticSpace` itself lists
+it, which the section `### The axiom is already in the structure and in the type of a morphism`
+guards. So it reaches every statement about an analytic space without passing through a
+construction, and no route named here would be *the* route — this paragraph used to name
+`ComplexAnalytic.AnalyticSpace.restrict`, and used to add that a definition whose body is a bare
+analytic space read as a type lists the axiom too, which named no declaration. The sharp case among
+the guards below is `ComplexAnalytic.AnalyticSpace.clopenCompl`, whose body is the complement of a
+carrier and mentions no `ComplexAnalytic.AnalyticSpace.restrict` at all. **What the guards below
+record is that nothing here adds an axiom of its own.**
 
 **Noncomputability is a different claim from axiom provenance, and the elaborator does not answer
 it with one name.** Planted without the modifier,
@@ -2842,15 +2848,17 @@ Appended as its own section rather than merged into another, for the reason the 
 file give for that: a section appended at the end cannot say which section is above it and stay
 true, since the next branch appends between them.
 
-**`Classical.choice` is in every guard below and is introduced by none of them**, and it is
-already present before any of them builds anything: `#print axioms` at
-`ComplexAnalytic.AnalyticSpace` itself lists it, and so does a `def` whose body is a bare analytic
-space read as a type. It therefore reaches every declaration stated about an analytic space
-without passing through any construction, and no route named here would be *the* route. The sharp
-case is `ComplexAnalytic.AnalyticSpace.clopenCover`, whose body is a `cond` on two opens and
-mentions no construction at all. **What the guards below record is that nothing here adds an axiom
-of its own** — `ComplexAnalytic.AnalyticSpace.descClopen` in particular, which is defined by a
-choice from `ComplexAnalytic.AnalyticSpace.existsUnique_hom_of_clopen` and could have.
+**`Classical.choice` is in every guard below and is introduced by none of them**, and it is already
+present before any of them builds anything: `#print axioms` at `ComplexAnalytic.AnalyticSpace`
+itself lists it, which the section
+`### The axiom is already in the structure and in the type of a morphism` guards. It therefore
+reaches every declaration stated about an analytic space without passing through any construction,
+and no route named here would be *the* route. This paragraph used to add that a `def` whose body is
+a bare analytic space read as a type lists the axiom too, which named no declaration. The sharp case
+is `ComplexAnalytic.AnalyticSpace.clopenCover`, whose body is a `cond` on two opens and mentions no
+construction at all. **What the guards below record is that nothing here adds an axiom of its own**
+— `ComplexAnalytic.AnalyticSpace.descClopen` in particular, which is defined by a choice from
+`ComplexAnalytic.AnalyticSpace.existsUnique_hom_of_clopen` and could have.
 
 **Named by file rather than counted**, for the reason this file's other sections give.
 
@@ -2939,3 +2947,68 @@ info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitBinaryCofanRestric
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitBinaryCofanRestrictClopen
+
+/-! ### The axiom is already in the structure and in the type of a morphism
+
+`Oka/AnalyticSpace/Basic.lean`: the structure `ComplexAnalytic.AnalyticSpace` and the structure
+`ComplexAnalytic.AnalyticSpace.Hom`, guarded as declarations in their own right rather than as the
+subjects of statements about them.
+
+**The sections `### The fibre functors and finite coproducts`, `### The clopen part of a cover`
+and `### Gluing along a clopen pair, and the decomposition of a cover it gives` rest on this, and
+until taxis #1800 they rested on prose.** Each says that `Classical.choice` is in every guard below
+it and is introduced by none of them, and each gives as its reason that `#print axioms` at
+`ComplexAnalytic.AnalyticSpace` already lists it, and each cites this section by heading, so a
+rewording of one has this section in front of it. That reason is the whole content of the repair
+taxis #1795 made to the sections naming `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.sigma` and
+`ComplexAnalytic.AnalyticSpace.restrict` — it is why a construction named as the route the axiom
+arrives by explains nothing — and at `c32b4c2` no file in this repository printed the axioms of the
+structure, so the claim those paragraphs were rebuilt on was carried by prose in the file whose
+instrument could have pinned it.
+
+**The structure guard settles the claim on its own.** `#print axioms` reports the axioms reached
+through a declaration's transitive dependencies, so a declaration whose type or body mentions
+`ComplexAnalytic.AnalyticSpace` cannot list fewer axioms than the structure does. A guard stated
+about an analytic space therefore inherits the axiom rather than introducing it, which makes those
+paragraphs' claim a consequence of the guard below rather than a second measurement.
+
+**`ComplexAnalytic.AnalyticSpace.Hom` is guarded beside it, and it is why this section is here
+rather than in `OkaTest/Axioms/AnalyticSpace.lean`.** This file's subject is the classes of
+morphisms, and the type a morphism of analytic spaces belongs to is where the same transitivity
+reaches every statement in it. **A later seat who reads a guard at the structure as belonging with
+the objects moves one guard**, and nothing in this section's prose depends on where it sits; the
+formula and the reason are the section `### A bijective base, or degree one, makes a local
+isomorphism an isomorphism`'s.
+
+**What was dropped rather than pinned.** Those paragraphs also said the axiom is listed by a
+definition whose body is a bare analytic space read as a type. That named no declaration. The
+nearest thing to one in `Oka/AnalyticSpace/Basic.lean` is the anonymous `CoeSort` instance, whose
+machine-made name `ComplexAnalytic.AnalyticSpace.instCoeSortType` is derived from its type, which
+is the reason the section `### A bijective base, or degree one, makes a local isomorphism an
+isomorphism` gives for not guarding an anonymous instance. Writing a `def` of that shape
+into `OkaTest/` for a guard to point at was the other option; it buys nothing the structure guard
+does not already give, by the transitivity above, and it would add a declaration to this
+repository for a docstring's sake. So the clause is gone from those paragraphs rather than
+pinned, and what they now assert is what is guarded.
+
+Appended as its own section rather than merged into another, for the reason the sections in this
+file give for that: a section appended at the end cannot say which section is above it and stay
+true, since the next branch appends between them.
+
+**Named by file rather than counted**, for the reason this file's other sections give.
+
+**Named and not located.** No sentence here says which section is above or below it. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Hom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Hom
