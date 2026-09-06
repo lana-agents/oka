@@ -587,9 +587,13 @@ coherence statement for arbitrary complex analytic spaces:
   (`Oka/AnalyticSpace/HolomorphicMapGeneral.lean`). The uniqueness half is the rigidity above;
   the existence half is proved by lifting the sections through a chart supplied by the local
   model of `Z`, gluing the resulting local morphisms, and discharging compatibility on overlaps
-  by uniqueness rather than by computing it. **No product of analytic spaces is used or
-  available**: `ℂ^m` is a concrete space and a family of holomorphic functions maps into it
-  directly, so the `m` sections travel together through one chart throughout. Applied to the
+  by uniqueness rather than by computing it. **No product of analytic spaces is used**: `ℂ^m` is
+  a concrete space and a family of holomorphic functions maps into it directly, so the `m`
+  sections travel together through one chart throughout. `Oka/AnalyticSpace/AffineProduct.lean`
+  does make `ℂ^(n+m)` the binary product of `ℂ^n` and `ℂ^m`, and `ℂ^0` terminal, but it reads both
+  off this bijection and imports `Oka/AnalyticSpace/HolomorphicMapGeneral.lean`, so that product
+  is a consequence of this result rather than an ingredient of it. **This bullet read *"No product
+  of analytic spaces is used or available"* until that file landed.** Applied to the
   node's two coordinate functions the theorem returns the closed immersion of the node into
   `ℂ²` — a morphism produced by a general theorem and then recognised as one that was
   constructed by hand.
