@@ -11,8 +11,9 @@ import Oka
 Results that mention nothing analytic: presheaves and sheaves on a topological space, and the
 presheaved, ringed and locally ringed spaces built out of them — gluing, open immersions, global
 sections and germs, algebra structures over a cover, stalk maps and colimits, inverse images and
-sheets, and the `Γ`-`Spec` adjunction. Almost all of it is the mirror-tree material of
-`Oka/Geometry/RingedSpace/`; the remainder is from `Oka/Topology/` and `Oka/AlgebraicGeometry/`.
+sheets, and the `Γ`-`Spec` adjunction. What is guarded here is mirror-tree material of
+`Oka/Geometry/RingedSpace/`, together with material from `Oka/Topology/` and
+`Oka/AlgebraicGeometry/`.
 
 **That is a description and not a list, and the headings below are the record**: every one of
 them names the module, or all the modules, that its assertions defend, so that mapping lives
@@ -21,11 +22,10 @@ next to the assertions and not in this paragraph. The stance is
 this replaces named `Oka/Topology/Sheaves/`, which on 2026-08-28 accounted for four of the
 eighty-seven guards below, and `Oka/CategoryTheory/`, which accounted for none of them.
 
-**One file and not two, and the reason is not inertia.** Locally-ringed-space material is the
-bulk of what is here, which is what the heading above says. The obvious cut — sheaves off from
+**One file and not two, and the reason is not inertia.** The obvious cut — sheaves off from
 ringed spaces — is clean at the section boundary, but what it cuts off is the sections whose
-module is under `Oka/Topology/Sheaves/`, leaving the locally-ringed-space material — the side
-that actually grows — undivided; it therefore buys none of the
+module is under `Oka/Topology/Sheaves/`, and what it leaves undivided is the
+locally-ringed-space material, the side that actually grows; it therefore buys none of the
 concurrent-pull-request relief that `OkaTest/Axioms.lean` gives as the whole point of splitting.
 The cut that would buy it is by module *within* `Oka/Geometry/RingedSpace/`, and that is a
 larger proposal than a wrong docstring: it moves every `#guard_msgs` block in the file at once
