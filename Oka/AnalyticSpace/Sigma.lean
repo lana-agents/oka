@@ -109,7 +109,7 @@ costs anything.
 **This section used to open by saying that no `CategoryTheory.Limits.IsColimit` was here, that the
 two halves of the universal property were here as separate lemmas, and that what the bundle would
 additionally buy was an interface nothing consumed. The bundle is here now and the reason it was
-worth building is the last of those three.** `ComplexAnalytic.AnalyticSpace.isColimitCofanSigma`
+worth building is the interface it buys.** `ComplexAnalytic.AnalyticSpace.isColimitCofanSigma`
 is it, and **the mathematics is still the two lemmas**:
 `ComplexAnalytic.AnalyticSpace.sigmaι_sigmaDesc` is existence and
 `ComplexAnalytic.AnalyticSpace.hom_ext_sigma` is uniqueness, and the bundle passes each of them to

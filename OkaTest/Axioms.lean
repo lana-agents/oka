@@ -212,7 +212,7 @@ the first draft of this paragraph made. Whether it names every row it counts var
 the question the naming exemption would turn on; here it does not arise, because a figure about
 an abandoned draft is falsified by rewriting history rather than by an append. The `Δdump` notes
 written in the present tense are the ones the rule reaches, and where such a note gives its figure
-against the same file's declaration count, the first object above already reached it;
+against the same file's declaration count, the declaration-count object already reached it;
 `Oka/Analytification/CrossMemberDatumGlue.lean`'s gives it against that count *and* the planted
 rows the file keeps deliberately, says so in the same breath, and is reached by this object alone.
 
