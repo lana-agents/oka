@@ -63,8 +63,21 @@ the morphism the inverse produces is surjective on points.
 
 Everything above is at `m = 1`, and **none of it tests the `m`-fold theorem.** A statement that
 produced the `m` coordinates by `m` independent applications of the one-dimensional theorem
-would satisfy every `m = 1` check and could not exist, because assembling `m` morphisms `Z ⟶ ℂ`
-into one `Z ⟶ ℂ^m` needs a product of analytic spaces which the development does not have.
+would satisfy every `m = 1` check and could not exist, because **assembling `m` morphisms
+`Z ⟶ ℂ` into one `Z ⟶ ℂ^m` with the prescribed coordinate pullbacks, for an arbitrary `Z`, *is*
+the `m`-fold theorem's conclusion** rather than a step towards it. The assembly is written down:
+`ComplexAnalytic.AnalyticSpace.affineProdLift` in `Oka/AnalyticSpace/AffineProduct.lean` combines
+a morphism to `ℂ^n` and one to `ℂ^m` into one to `ℂ^(n+m)`. It is defined by applying the inverse
+of `ComplexAnalytic.AnalyticSpace.homComplexAffineSpaceEquivGeneral`, whose surjectivity half is
+`ComplexAnalytic.AnalyticSpace.exists_hom_complexAffineSpace_general` — the theorem under test —
+and `Oka/AnalyticSpace/AffineProduct.lean` imports
+`Oka/AnalyticSpace/HolomorphicMapGeneral.lean`, where that theorem is proved. So the assembly is
+a consequence of what is being tested and not an independent route to it.
+
+**This paragraph read *"needs a product of analytic spaces which the development does not have"*
+until `Oka/AnalyticSpace/AffineProduct.lean` landed**, and the reason it gives instead is the one
+that was doing the work all along: it is a claim about the theorem rather than about what the
+tree contains, and a product proved downstream of the theorem does not touch it.
 
 So the last section is at `m = 2`: `exists_hom_complexAffineSpace_node_general` feeds the node's
 **two** coordinate functions to
@@ -295,7 +308,12 @@ theorem homComplexLineEquivGeneral_node_not_subsingleton :
 The `m = 1` results above are not a test of the `m`-fold theorem: a statement that produced the
 `m` coordinates independently, by `m` separate applications of the one-dimensional theorem,
 would satisfy every one of them and could not exist, because assembling `m` morphisms `Z ⟶ ℂ`
-into one `Z ⟶ ℂ^m` needs a product of analytic spaces that the development does not have.
+into one `Z ⟶ ℂ^m` for an arbitrary `Z` **is** the `m`-fold theorem's conclusion. The assembly
+does exist, as `ComplexAnalytic.AnalyticSpace.affineProdLift`, and it applies the inverse of
+`ComplexAnalytic.AnalyticSpace.homComplexAffineSpaceEquivGeneral`, so it is proved from
+`ComplexAnalytic.AnalyticSpace.exists_hom_complexAffineSpace_general` rather than available
+before it. **This sentence read *"needs a product of analytic spaces that the development does
+not have"* until `Oka/AnalyticSpace/AffineProduct.lean` landed.**
 
 The check that discriminates is at `m = 2`: feed the node's **two** coordinate functions to
 `ComplexAnalytic.AnalyticSpace.exists_hom_complexAffineSpace_general` and identify what comes
@@ -304,9 +322,15 @@ produced by a general theorem and then recognised as one that was constructed by
 
 That the two coordinates cannot be handled separately is `ComplexAnalytic.nodeToLine_ne`, which
 is already in the library: `exists_hom_complexLine_general` applied to `nodeCoord 0` and to
-`nodeCoord 1` gives two *different* morphisms `node ⟶ ℂ`, and nothing in the development
-combines them. It is not restated here — a test file restating a library theorem is a duplicate
-waiting to diverge. -/
+`nodeCoord 1` gives two *different* morphisms `node ⟶ ℂ`, so neither of them is the morphism
+this section obtains. Combining the two into a single `node ⟶ ℂ^(1 + 1)` is what
+`ComplexAnalytic.AnalyticSpace.affineProdLift` does, and it does it by applying the inverse of
+`ComplexAnalytic.AnalyticSpace.homComplexAffineSpaceEquivGeneral` at `m = 2` — so that route
+runs through the theorem this section checks rather than around it. `ComplexAnalytic.nodeToLine_ne`
+is not restated here — a test file restating a library theorem is a duplicate waiting to diverge.
+
+**This sentence read *"and nothing in the development combines them"* until
+`Oka/AnalyticSpace/AffineProduct.lean` landed**, which is the file that combines them. -/
 
 /-- **The `m`-fold theorem at the node produces its closed immersion into `ℂ²`.**
 
