@@ -2617,10 +2617,17 @@ Appended as its own section rather than merged into another, for the reason the 
 file give for that: a section appended at the end cannot say which section is above it and stay
 true, since the next branch appends between them.
 
-**`Classical.choice` is in every guard below** and is not introduced by any of them. It arrives
-through `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.sigma` and through the covering-map rung,
-and `Equiv.ofBijective` — which is what makes
-`AlgebraicGeometry.LocallyRingedSpace.fiberSigmaDescEquiv` noncomputable — adds none of the three.
+**`Classical.choice` is in every guard below** and is not introduced by any of them. It is there
+before any of them builds anything: `#print axioms` at `ComplexAnalytic.AnalyticSpace` itself
+lists it, and so does a definition whose body is a bare analytic space read as a type. So it
+reaches every statement about an analytic space without passing through a construction, and a
+construction named as the route it arrives by explains nothing a guard can check — this paragraph
+used to name `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.sigma`. **What the guards below record
+is that nothing here adds an axiom of its own.**
+`AlgebraicGeometry.LocallyRingedSpace.fiberSigmaDescEquiv` is where that could have gone wrong: it
+is noncomputable because `Equiv.ofBijective` is — planted without the modifier, the elaborator
+names `Equiv.ofBijective` — and `Equiv.ofBijective` carries `Classical.choice` and nothing else,
+which is an axiom the guards below print anyway.
 
 **Named by file rather than counted**, as the sections above say and for the reason they give.
 
@@ -2701,13 +2708,25 @@ Appended as its own section rather than merged into another, for the reason the 
 file give for that: a section appended at the end cannot say which section is above it and stay
 true, since the next branch appends between them.
 
-**`Classical.choice` is in every guard below and is introduced by none of them.** It arrives
-through `ComplexAnalytic.AnalyticSpace.restrict`, which is noncomputable, and
-`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen`,
+**`Classical.choice` is in every guard below and is introduced by none of them**, and it is there
+before any of them builds anything: `#print axioms` at `ComplexAnalytic.AnalyticSpace` itself
+lists it, and so does a definition whose body is a bare analytic space read as a type. So it
+reaches every statement about an analytic space without passing through a construction, and no
+route named here would be *the* route — this paragraph used to name
+`ComplexAnalytic.AnalyticSpace.restrict`. The sharp case among the guards below is
+`ComplexAnalytic.AnalyticSpace.clopenCompl`, whose body is the complement of a carrier and
+mentions no `ComplexAnalytic.AnalyticSpace.restrict` at all. **What the guards below record is
+that nothing here adds an axiom of its own.**
+
+**Noncomputability is a different claim from axiom provenance, and the elaborator does not answer
+it with one name.** Planted without the modifier,
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen` reports that it depends on
+`ComplexAnalytic.AnalyticSpace.restrict`, while
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopenι` and
-`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopenCompl` are noncomputable for that
-reason and for no other — the elaborator names `restrict` in the message it gives when they are
-not.
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopenCompl` report that they depend on
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen`, which is where
+`ComplexAnalytic.AnalyticSpace.restrict` reaches them. This paragraph used to say the elaborator
+names `ComplexAnalytic.AnalyticSpace.restrict` for each of them.
 
 **Named by file rather than counted**, for the reason this file's other sections give.
 
