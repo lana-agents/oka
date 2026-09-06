@@ -3059,3 +3059,60 @@ info: 'ComplexAnalytic.AnalyticSpace.Hom' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.Hom
+
+
+/-! ### The clopen image of a finite local isomorphism, and the direct summand it cuts out
+
+`Oka/AnalyticSpace/LocalIso.lean` and `Oka/AnalyticSpace/DirectSummand.lean`: that the image of a
+finite local isomorphism is clopen, in both the two-field and the class spelling; that the
+underlying morphism of a morphism of covers is finite étale over a Hausdorff total space; and the
+direct-summand statement that reads a morphism of covers injective on points as one leg of a binary
+coproduct.
+
+`ComplexAnalytic.AnalyticSpace.isClopen_range_of_isLocalIso_of_isFinite` was the anonymous
+`IsClopen` constructor that `IsClopen.eq_univ` was applied to inside
+`ComplexAnalytic.AnalyticSpace.surjective_base_of_isLocalIso_of_isFinite`'s proof and is now a
+statement of its own; that theorem is guarded in the section
+`### Surjectivity of a finite local isomorphism over a connected base`, and the two are guarded in
+different sections.
+
+**`Classical.choice` is in every guard below for the reason the section
+`### The clopen part of a cover` gives** — `#print axioms` at `ComplexAnalytic.AnalyticSpace`
+itself lists it, so it reaches every statement about an analytic space without passing through any
+construction — and not because anything here chooses a witness. **What the guards below record is
+that nothing here adds an axiom of its own**, and in particular that the direct-summand statement
+introduces none, its existential being witnessed by a named construction rather than by a choice.
+
+Appended as its own section rather than merged into another, for the reason the sections in this
+file give for that: a section appended at the end cannot say which section is above it and stay
+true, since the next branch appends between them.
+
+**Named by file rather than counted**, for the reason this file's other sections give. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isClopen_range_of_isLocalIso_of_isFinite' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isClopen_range_of_isLocalIso_of_isFinite
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isClopen_range_of_isFiniteEtale' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isClopen_range_of_isFiniteEtale
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isFiniteEtale_left' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isFiniteEtale_left
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.inducesIsoOnDirectSummand_of_injective'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.inducesIsoOnDirectSummand_of_injective
