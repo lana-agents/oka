@@ -60,15 +60,18 @@ prints `Mathlib.Data.Set.CoeSort` on that same list, and, at the Mathlib revisio
 pins, `Mathlib/Data/Set/CoeSort.lean:40` is `instance : CoeSort (Set α) (Type u) := ⟨Elem⟩` — the
 coercion that reads a `Set` as the subtype of its members. `Set.preimageCompEquivSigma` is an
 equivalence between two sets read that way, so it needs that instance as much as it needs the
-preimage, and **each of the two obstructions survives the other's repair**. One added import
-apiece is the check: with `import Mathlib.Data.Set.CoeSort` beside it, `(f ⁻¹' {z} : Set α)`
-still reports *missing end of character literal*, and under
-`import Mathlib.Logic.Equiv.Sum` alone `example (s t : Set Nat) : Type := s ≃ t`, which carries no
-`⁻¹'` at all, reports *Application type mismatch … has type `Set Nat` but is expected to have type
-`Prop`* — a typecheck failure with the lexing out of the picture. Adding
-`import Mathlib.Data.Set.Operations` clears both at once, since
-`Mathlib/Data/Set/Operations.lean:9` is `public import Mathlib.Data.Set.CoeSort`; so the **6** is
-the price under either account, and `Mathlib/Logic/Equiv/Sum.lean` is the wrong host for
+preimage, and **the two obstructions have separate causes, which an added import shows in one
+direction and no added import could show in the other**. With `import Mathlib.Data.Set.CoeSort`
+beside it the coercion is repaired and the lexing is not: `(f ⁻¹' {z} : Set α)` still reports
+*missing end of character literal*. The other direction takes the notation out of the expression
+rather than putting an import in — under `import Mathlib.Logic.Equiv.Sum` alone
+`example (s t : Set Nat) : Type := s ≃ t`, which carries no `⁻¹'` at all, reports *Application type
+mismatch … has type `Set Nat` but is expected to have type `Prop`*, a typecheck failure with the
+lexing out of the picture — **and no import stands in for that deletion**, because the notation is
+declared at `Mathlib/Data/Set/Operations.lean:127` and that file's ninth line is
+`public import Mathlib.Data.Set.CoeSort`, so whatever reaches the notation reaches the instance.
+`import Mathlib.Data.Set.Operations` therefore clears both at once; the **6** is the price under
+either account, and `Mathlib/Logic/Equiv/Sum.lean` is the wrong host for
 `Set.preimageCompEquivSigma` on two counts rather than one. **Both costs were measured and the
 reason offered under them was not.**
 
