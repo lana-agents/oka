@@ -56,6 +56,20 @@ itself, so that subcategory has at least two isomorphism classes here rather tha
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isPreconnectedT2_id` supplies in general.
 `faithful_fiberFunctor_punctured` is the instance itself, found by search at this base.
 
+**And the restriction of a cover to a clopen part of its total space is applied here at a part
+that is neither the empty open nor everything**, which is what `sheetOpens_ne_bot` and
+`sheetOpens_ne_top` say and what `restrictSheet` then uses.
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen` asks for an open whose carrier is
+closed and asks nothing else, so `⊥` and `⊤` are both admissible arguments to it and at those two
+it returns the empty cover and a cover isomorphic to its own input. The clopen part exhibited here
+is one sheet of the trivial two-sheeted cover, through
+`ComplexAnalytic.AnalyticSpace.sigmaιOpens` — the total space of that cover being a disjoint union
+of copies of the base, and the image of a member of a disjoint union being clopen by
+`ComplexAnalytic.AnalyticSpace.isClopen_range_sigmaι_base`. **What is not claimed is a
+decomposition**: this file does not say that the sheet and its complement exhibit the trivial
+cover as their coproduct, and `Oka/AnalyticSpace/FiniteEtaleOver.lean` records what such a
+statement would owe.
+
 ## What this does not witness
 
 **Nothing here is guarded, and that is forced rather than chosen.** Every file under
@@ -400,6 +414,71 @@ theorem faithful_fiberFunctor_punctured
         ((AnalyticSpace.complexAffineSpace.{u} 1).restrict ComplexAnalytic.punctured.{u})).ι
       ⋙ AnalyticSpace.FiniteEtaleOver.fiberFunctor.{u} x).Faithful :=
   inferInstance
+
+/-! ### A cover restricted to a proper clopen part of its total space -/
+
+/-- **One sheet of the trivial two-sheeted cover of the punctured line, as an open of its total
+space.**
+
+`ComplexAnalytic.AnalyticSpace.sigmaιOpens` at the constant family: the total space of
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.trivial` is the disjoint union of copies of the
+base, so a sheet is a member of that union and its image is an open of it. This adds no
+mathematics: `sheetOpens_ne_bot` and `sheetOpens_ne_top` are what it exists to state. -/
+def sheetOpens (j : ULift.{u} (Fin 2)) :
+    (AnalyticSpace.FiniteEtaleOver.trivial.{u} (ULift.{u} (Fin 2))
+      ((AnalyticSpace.complexAffineSpace.{u} 1).restrict
+        ComplexAnalytic.punctured.{u})).left.Opens :=
+  AnalyticSpace.sigmaιOpens
+    (fun _ : ULift.{u} (Fin 2) ↦
+      (AnalyticSpace.complexAffineSpace.{u} 1).restrict ComplexAnalytic.punctured.{u}) j
+
+/-- **A sheet is not the empty open.**
+
+`ComplexAnalytic.AnalyticSpace.sigmaιOpens_ne_bot` needs a point of the member, and here the
+member is the base. The point is written out rather than taken from
+`ComplexAnalytic.nonempty_restrict_punctured` through a choice principle: it is `1` carried back
+across `ComplexAnalytic.puncturedHomeo`, which is the witness that instance is built from, and
+naming it keeps `Classical.choice` out of this statement. -/
+theorem sheetOpens_ne_bot (j : ULift.{u} (Fin 2)) : sheetOpens.{u} j ≠ ⊥ :=
+  AnalyticSpace.sigmaιOpens_ne_bot _ (ComplexAnalytic.puncturedHomeo.{u}.symm ⟨1, one_ne_zero⟩)
+
+/-- **A sheet is not everything.**
+
+`ComplexAnalytic.AnalyticSpace.sigmaιOpens_ne_top` needs a point of a *different* member, and the
+index type having two elements is what supplies one — which is why this is stated at a named sheet
+rather than at every `j`: the other index has to be produced, and at a one-element index type
+there is none and the statement is false.
+
+**Together with `sheetOpens_ne_bot` this is what makes the restriction below more than a
+typecheck.** `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen` asks only for an open
+whose carrier is closed, which `⊥` and `⊤` both satisfy; at those two it returns the empty cover
+and a cover isomorphic to the one it started from, and says nothing about either. -/
+theorem sheetOpens_ne_top : sheetOpens.{u} ⟨0⟩ ≠ ⊤ :=
+  AnalyticSpace.sigmaιOpens_ne_top (i := ⟨1⟩) _ (by simp)
+    (ComplexAnalytic.puncturedHomeo.{u}.symm ⟨1, one_ne_zero⟩)
+
+/-- **The trivial two-sheeted cover of the punctured line, restricted to one of its two sheets.**
+
+This is the first application of
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen` at an open that `sheetOpens_ne_bot`
+and `sheetOpens_ne_top` show is neither `⊥` nor `⊤`, and it turns that construction's docstring —
+which
+says the complementary part is the object a direct-summand statement would need — from a claim
+about what could be built into one about what is built.
+
+**It says nothing about what this cover *is*.** In particular it is not stated here to be
+isomorphic to the base over itself, which is what a decomposition of the trivial cover would have
+to prove; `Oka/AnalyticSpace/FiniteEtaleOver.lean`'s `## What is not here` records what such a
+statement would owe. -/
+def restrictSheet : AnalyticSpace.FiniteEtaleOver.{u}
+    ((AnalyticSpace.complexAffineSpace.{u} 1).restrict ComplexAnalytic.punctured.{u}) :=
+  AnalyticSpace.FiniteEtaleOver.restrictClopen
+    (AnalyticSpace.FiniteEtaleOver.trivial.{u} (ULift.{u} (Fin 2))
+      ((AnalyticSpace.complexAffineSpace.{u} 1).restrict ComplexAnalytic.punctured.{u}))
+    (sheetOpens.{u} ⟨0⟩)
+    (AnalyticSpace.isClosed_sigmaιOpens
+      (fun _ : ULift.{u} (Fin 2) ↦
+        (AnalyticSpace.complexAffineSpace.{u} 1).restrict ComplexAnalytic.punctured.{u}) ⟨0⟩)
 
 end OkaTest.FiniteEtaleOver
 
