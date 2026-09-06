@@ -1033,6 +1033,41 @@ info: 'ComplexAnalytic.AnalyticSpace.isClopen_range_sigmaι_base' depends on axi
 #print axioms ComplexAnalytic.AnalyticSpace.isClopen_range_sigmaι_base
 
 /--
+info: 'ComplexAnalytic.AnalyticSpace.sigmaιOpens' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.sigmaιOpens
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.coe_sigmaιOpens' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.coe_sigmaιOpens
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isClosed_sigmaιOpens' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isClosed_sigmaιOpens
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.sigmaιOpens_ne_bot' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.sigmaιOpens_ne_bot
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.sigmaιOpens_ne_top' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.sigmaιOpens_ne_top
+
+/--
 info: 'ComplexAnalytic.AnalyticSpace.not_preconnectedSpace_sigma' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
