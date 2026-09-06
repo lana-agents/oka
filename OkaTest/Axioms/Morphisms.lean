@@ -3022,11 +3022,12 @@ underlying morphism of a morphism of covers is finite étale over a Hausdorff to
 direct-summand statement that reads a morphism of covers injective on points as one leg of a binary
 coproduct.
 
-`ComplexAnalytic.AnalyticSpace.isClopen_range_of_isLocalIso_of_isFinite` was the opening of
+`ComplexAnalytic.AnalyticSpace.isClopen_range_of_isLocalIso_of_isFinite` was the anonymous
+`IsClopen` constructor that `IsClopen.eq_univ` was applied to inside
 `ComplexAnalytic.AnalyticSpace.surjective_base_of_isLocalIso_of_isFinite`'s proof and is now a
 statement of its own; that theorem is guarded in the section
 `### Surjectivity of a finite local isomorphism over a connected base`, and the two are guarded in
-different sections because they are in different files.
+different sections.
 
 **`Classical.choice` is in every guard below for the reason the section
 `### The clopen part of a cover` gives** — `#print axioms` at `ComplexAnalytic.AnalyticSpace`

@@ -37,20 +37,27 @@ already says a cover is the coproduct of a clopen part and its complement.
 
 * **The `PreGaloisCategory` field.** That field asks for the summand at every monomorphism and
   under no hypothesis on the base, on the source or on the target. This statement asks for
-  `[T2Space B.left]` and for injectivity, and neither is available from `Mono i` in this
-  repository. **Saying so is the point of this paragraph**: the gap is named rather than hidden
+  `[T2Space B.left]` and for injectivity, and **nothing below derives either of them from
+  `Mono i`**. **Saying so is the point of this paragraph**: the gap is named rather than hidden
   behind a statement that reads like the field.
 * **A proof that a monomorphism of covers is injective on points.** That is the remaining
   obligation, and it is a theorem rather than a formality — the classical argument makes the
-  diagonal `A ⟶ A ×_B A` an isomorphism and needs the fibre product, which
-  `ComplexAnalytic.AnalyticSpace` does not have. `Oka/AnalyticSpace/Basic.lean`'s
-  `ComplexAnalytic.AnalyticSpace.mono_ofRestrict` and its neighbours run the other way, from an
-  open immersion to a monomorphism.
+  diagonal `A ⟶ A ×_B A` an isomorphism and needs the fibre product. At `c48bf8a`,
+  **`#synth CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` fails** — a record
+  pinned to that commit and elaborated rather than grepped, not a claim about what the tree will
+  hold. The monomorphism results this file could have reached for run the other way, from an
+  immersion to a monomorphism: `ComplexAnalytic.AnalyticSpace.mono_ofRestrict`
+  (`Oka/AnalyticSpace/OpenSubspace.lean`) makes the inclusion of an open subspace a monomorphism,
+  and `ComplexAnalytic.IsCutOutBy.mono` together with
+  `ComplexAnalytic.AnalyticSpace.mono_of_isCutOutBy` (`Oka/AnalyticSpace/Basic.lean`) do the same
+  for a morphism that cuts out a subspace.
 * **Any claim that `[T2Space B.left]` can be dropped.** It is the cost of
   `ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp`, which is where a morphism of covers gets
   its own finite étale property from, and `Oka/AnalyticSpace/Finite.lean` argues in its module
   docstring that a separation axiom on the middle space is what the closed half of the finite rung
-  actually needs. `OkaTest/FiniteEtaleCancel.lean` compiles two witnesses for that paragraph.
+  actually needs. `OkaTest/FiniteEtaleCancel.lean` compiles that paragraph as
+  `TwoIndiscrete.not_isClosedMap_pt_of_isClosedMap_comp` and, at a second factor that *is* a local
+  homeomorphism, `LineTwoOrigins.not_isClosedMap_inc_of_isClosedMap_comp`.
 * **The isomorphism onto the clopen part, as a named declaration.** It is built inside the proof
   below and is not exposed. Exposing it would put the source of
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isFiniteEtale_left` — a theorem and not an
@@ -80,14 +87,19 @@ axiom is that cancellation's and none of it is spent here** — a morphism of co
 what that file does not assume.
 
 **The named arguments `(X := B.left)` on the two `haveI`s are load-bearing** and the reason is
-recorded at `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_eq_mul`, which runs the same
-four lines inline: `f.left` has target `B.left` on the nose, while the instance an object carries
-in its `prop` field has `(CategoryTheory.Functor.id _).obj B.left` there, and the two are
+recorded at `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_eq_mul`, whose proof opens by
+running this one inline: `f.left` has target `B.left` on the nose, while the instance an object
+carries in its `prop` field has `(CategoryTheory.Functor.id _).obj B.left` there, and the two are
 `rfl`-equal with different discrimination-tree keys. taxis #1681 is the filing about that seam.
 
 **`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_eq_mul` and
-`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_left_eq_one` cannot cite this**, since they
-are in the file this one imports; extracting their copies would have to happen there. -/
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isIso_of_bijective_fiberMap` cannot cite this**,
+since they are in the file this one imports; extracting their copies would have to happen there.
+That pair is `Oka/AnalyticSpace/FiniteEtaleOver.lean`'s own reading and not this file's: the
+docstring above the second of them already says *"the class comes back from
+`…isFiniteEtale_of_comp` at the triangle, which is the same opening `…degree_eq_mul` above has"*.
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.degree_left_eq_one` is not one of them and has no
+copy to extract — its proof is a single term handing its hypotheses to `degree_eq_mul`. -/
 theorem FiniteEtaleOver.isFiniteEtale_left {X : AnalyticSpace.{u}} {A B : FiniteEtaleOver.{u} X}
     (f : A ⟶ B) [T2Space (B.left : Type u)] : IsFiniteEtale f.left := by
   have hw : f.left ≫ B.hom = A.hom := MorphismProperty.Over.w f
@@ -106,8 +118,8 @@ colimit.
 `Mathlib/CategoryTheory/Galois/Basic.lean`'s pre-Galois-category class is written in, and it is not
 that field.** That field asks the same of every monomorphism and under
 no hypothesis at all; this asks for `[T2Space B.left]` and for `hinj`. The module docstring's
-`## What is not here` says what stands between the two and why neither hypothesis is available
-from `Mono i` here.
+`## What is not here` says what stands between the two and why nothing below derives either of
+them from `Mono i`.
 
 **The proof, in the order the steps are taken.**
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isFiniteEtale_left` makes `i.left` finite étale, so

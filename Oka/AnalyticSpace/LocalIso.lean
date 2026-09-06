@@ -366,8 +366,8 @@ homeomorphism, hence an open map, so its image is **open** (`IsLocalHomeomorph.i
 finite morphism has `IsClosedMap` as its first field, so the image of the whole source is
 **closed**. Nothing else is used, and in particular no separation axiom and no connectedness.
 
-**This was the first two lines of
-`ComplexAnalytic.AnalyticSpace.surjective_base_of_isLocalIso_of_isFinite`'s proof and is stated
+**This was the anonymous `IsClopen` constructor that `IsClopen.eq_univ` was applied to inside
+`ComplexAnalytic.AnalyticSpace.surjective_base_of_isLocalIso_of_isFinite`'s proof, and is stated
 here because it has a consumer that is not about surjectivity.** That theorem hands the clopen set
 to `IsClopen.eq_univ`, which is where its `[PreconnectedSpace Y]` and `[Nonempty X]` are spent;
 a caller that wants to *restrict the target to the image* — which is what a direct-summand
