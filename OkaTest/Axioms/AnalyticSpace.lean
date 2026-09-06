@@ -1283,3 +1283,57 @@ info: 'ComplexAnalytic.AnalyticSpace.sigmaFoldIso_hom' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.sigmaFoldIso_hom
+
+/-! ### The disjoint union is the coproduct
+
+`Oka/AnalyticSpace/Sigma.lean`: the inclusions read as a cofan, the colimit proof that bundles the
+two halves of the universal property already guarded above, and the two `Has…` instances that
+follow from it. Appended as its own section rather than merged into another, for the reason the
+sections of this file give for that: moving or reordering a section is a conflict for every branch
+that has appended to it.
+
+**The two `Has…` instances are guarded although neither has a proof of its own.**
+`ComplexAnalytic.AnalyticSpace.hasCoproducts` is a Mathlib converter at the colimit below and
+`ComplexAnalytic.AnalyticSpace.hasFiniteCoproducts` is a second converter at the first, so a
+reader might expect the axioms of the colimit to settle both. They are guarded because a guard of
+a corollary does not guard what it is a corollary of and the converse fails the same way, and
+because an instance is consumed by instance search rather than by name, which is the harder thing
+to notice going wrong.
+
+**`Classical.choice` is in every guard below and is not a surprise**, for the reason the
+disjoint-union sections of this file already give: the object is built by
+`ComplexAnalytic.AnalyticSpace.ofOpenCover` out of a gluing, and every statement here mentions
+`ComplexAnalytic.AnalyticSpace.sigma`.
+
+**Named by file rather than counted**, as the sections above say and for the reason they give.
+
+**Named and not located.** No sentence here says which section precedes or follows it.
+-/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.cofanSigma' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.cofanSigma
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isColimitCofanSigma' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isColimitCofanSigma
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hasCoproducts' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hasCoproducts
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hasFiniteCoproducts' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hasFiniteCoproducts

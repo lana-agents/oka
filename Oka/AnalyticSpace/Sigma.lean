@@ -30,6 +30,9 @@ are the same map. There is no analysis and no sheaf argument in it.
   spaces.
 - `ComplexAnalytic.AnalyticSpace.sigmaDesc`: the morphism out of a disjoint union determined by a
   morphism out of each member.
+- `ComplexAnalytic.AnalyticSpace.cofanSigma`: the inclusions read as a
+  `CategoryTheory.Limits.Cofan` on the disjoint union, which is the shape the colimit interface
+  presents them in.
 
 ## Main results
 
@@ -44,6 +47,16 @@ are the same map. There is no analysis and no sheaf argument in it.
 - `ComplexAnalytic.AnalyticSpace.hom_ext_sigma`: **and a morphism out of a disjoint union is
   determined by those restrictions**, which is its uniqueness half. No agreement of the
   restrictions is asked for anywhere, in either direction.
+- `ComplexAnalytic.AnalyticSpace.isColimitCofanSigma`: **the two halves above, bundled — the
+  disjoint union is the coproduct.** `## What is not here` used to say this bundle was absent and
+  that nothing consumed one.
+- `ComplexAnalytic.AnalyticSpace.hasCoproducts` and
+  `ComplexAnalytic.AnalyticSpace.hasFiniteCoproducts`: **the category of analytic spaces has
+  coproducts of families indexed by any type of its own universe, and finite ones**, which is
+  what lets `∐` and `⨿` be written for these objects. The second is
+  `CategoryTheory.Limits.hasFiniteCoproducts_of_hasCoproducts` at the first and adds no
+  mathematics; the finite index types it quantifies over live in `Type 0` and are reached by
+  `CategoryTheory.Discrete.equivalence`.
 - `ComplexAnalytic.AnalyticSpace.isEmpty_sigma`,
   `ComplexAnalytic.AnalyticSpace.isEmpty_sigma_of_members` and
   `ComplexAnalytic.AnalyticSpace.not_surjective_sigmaι_base`: the non-vacuity statements, at
@@ -91,13 +104,25 @@ costs anything.
 
 ## What is not here
 
-**No `CategoryTheory.Limits.IsColimit`, and the two halves of the universal property are
-here as separate lemmas.** `ComplexAnalytic.AnalyticSpace.sigmaDesc` with
+**This section used to open by saying that no `CategoryTheory.Limits.IsColimit` was here, that the
+two halves of the universal property were here as separate lemmas, and that what the bundle would
+additionally buy was an interface nothing consumed. The bundle is here now and the reason it was
+worth building is the last of those three.** `ComplexAnalytic.AnalyticSpace.isColimitCofanSigma`
+is it, and **the mathematics is still the two lemmas**:
 `ComplexAnalytic.AnalyticSpace.sigmaι_sigmaDesc` is existence and
-`ComplexAnalytic.AnalyticSpace.hom_ext_sigma` is uniqueness, which is what every consumer here
-has needed. **What the bundle would additionally buy is not a proof but an interface** — the
-`CategoryTheory.Limits.Cocone`, the transport of colimits along the forgetful functor, and the
-`HasCoproduct` instance that lets `∐` be written for this object — and nothing consumes one.
+`ComplexAnalytic.AnalyticSpace.hom_ext_sigma` is uniqueness, and the bundle passes each of them to
+one field of `CategoryTheory.Limits.Cofan.IsColimit.mk` and proves nothing of its own. What it
+adds is the interface — the cofan, the two `Has…` instances, and `∐` and `⨿` becoming writable for
+these objects.
+
+**What asks for that interface is `Mathlib/CategoryTheory/Galois/Basic.lean`'s definition of a
+Galois category**, whose namespace is not in this repository's import closure and so cannot be
+cited by name here. **What is here does not satisfy it.** That definition asks for finite
+coproducts of the *category of finite étale covers of a fixed base*, which is
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver`; the instances below are about
+`ComplexAnalytic.AnalyticSpace`, and carrying a colimit from the one to the other is a statement
+about that comma category which this file does not make. So the reading to avoid is that the
+axiom is in hand: what is in hand is the ingredient it would be built from.
 
 **Nothing about `ComplexAnalytic.AnalyticSpace.IsFinite` or
 `ComplexAnalytic.AnalyticSpace.IsLocalIso`** for the inclusions or for `∐_{Fin n} X ⟶ X`, and no
@@ -267,8 +292,11 @@ no agreement condition to check: the members are disjoint and there are no overl
 This is the uniqueness half of the universal property, of which
 `ComplexAnalytic.AnalyticSpace.sigmaDesc` and
 `ComplexAnalytic.AnalyticSpace.sigmaι_sigmaDesc` are the existence half. Together they are what a
-consumer of a colimit would use; the bundled `CategoryTheory.Limits.IsColimit` is still not here,
-and `## What is not here` says what that would additionally cost.
+consumer of a colimit would use, and
+`ComplexAnalytic.AnalyticSpace.isColimitCofanSigma` below is the two of them bundled as
+`CategoryTheory.Limits.IsColimit` — **this docstring used to say that bundle was not here**. That
+declaration hands this theorem to one field of `CategoryTheory.Limits.Cofan.IsColimit.mk` and
+proves nothing further, so what is written out below is still the whole of the uniqueness.
 
 **The proof is the coproduct's own `hom_ext` and nothing else.** A morphism of analytic spaces is
 determined by its morphism of locally ringed spaces
@@ -281,6 +309,73 @@ theorem hom_ext_sigma {Y : AnalyticSpace.{u}} {f g : sigma F ⟶ Y}
     (h : ∀ i, sigmaι F i ≫ f = sigmaι F i ≫ g) : f = g :=
   forgetToLocallyRingedSpace.map_injective <|
     Limits.Sigma.hom_ext _ _ fun i ↦ forgetToLocallyRingedSpace.congr_map (h i)
+
+/-! ### The disjoint union is the coproduct -/
+
+/-- **The inclusions of the members, read as a cofan on the disjoint union.**
+
+A `CategoryTheory.Limits.Cofan` is a cocone over a family, and this is
+`ComplexAnalytic.AnalyticSpace.sigma` with `ComplexAnalytic.AnalyticSpace.sigmaι` in the two
+slots. There is no content: the declaration exists because
+`ComplexAnalytic.AnalyticSpace.isColimitCofanSigma` has to name the cocone it is a colimit of, and
+because that cocone is what `CategoryTheory.Limits.Cofan.inj` presents the inclusions as. -/
+def cofanSigma : Limits.Cofan F := Limits.Cofan.mk (sigma F) (sigmaι F)
+
+/-- **The disjoint union is the coproduct of its members**: the cofan of the inclusions is a
+colimit.
+
+**The mathematics is the two lemmas above and this adds none of it.**
+`ComplexAnalytic.AnalyticSpace.sigmaDesc` supplies the descent map,
+`ComplexAnalytic.AnalyticSpace.sigmaι_sigmaDesc` is the factorisation field and
+`ComplexAnalytic.AnalyticSpace.hom_ext_sigma` is the uniqueness field, each handed to
+`CategoryTheory.Limits.Cofan.IsColimit.mk` as it stands.
+
+**The uniqueness field is a term and not a `rw`, and the reason is the seam this file already
+records.** `## One seam, and it is not the one it looks like` says that
+`(sigmaCover F).map j` and `Sigma.ι _ j` are equal by `rfl` and **not** reducibly; the same holds
+of `(cofanSigma F).inj i` and `sigmaι F i`, and it is what makes `rw [h i]` report the target as
+not type-correct under the `instances` transparency level. Composing the hypothesis with
+`ComplexAnalytic.AnalyticSpace.sigmaι_sigmaDesc` by `Eq.trans` is the same step at default
+transparency, where term elaboration performs the check the rewrite refuses. -/
+def isColimitCofanSigma : Limits.IsColimit (cofanSigma F) :=
+  Limits.Cofan.IsColimit.mk _ (fun t ↦ sigmaDesc F fun i ↦ t.inj i)
+    (fun _ i ↦ sigmaι_sigmaDesc F _ i)
+    (fun _ _ h ↦ hom_ext_sigma F fun i ↦ (h i).trans (sigmaι_sigmaDesc F _ i).symm)
+
+/-- **`ComplexAnalytic.AnalyticSpace` has coproducts of families indexed by any type of its own
+universe.**
+
+`CategoryTheory.Limits.hasCoproducts_of_colimit_cofans` at
+`ComplexAnalytic.AnalyticSpace.cofanSigma` and
+`ComplexAnalytic.AnalyticSpace.isColimitCofanSigma`, which is a cofan and a colimit proof for
+*every* family at once rather than for the one this section's `variable` names. It is stated at
+`Type u` because that is the universe `ComplexAnalytic.AnalyticSpace.sigma` accepts an index type
+from.
+
+**Stating it for every index type is what makes it subsume
+`CategoryTheory.Limits.HasCoproduct` at the family `F` this section's `variable` names**, so that
+`∐ F` is writable with no second instance beside it — checked by elaborating `∐ F` rather than
+argued from the shapes. -/
+instance hasCoproducts : Limits.HasCoproducts.{u} AnalyticSpace.{u} :=
+  Limits.hasCoproducts_of_colimit_cofans (fun f ↦ cofanSigma f) (fun f ↦ isColimitCofanSigma f)
+
+/-- **And so it has finite coproducts**, which is the form a consumer that quantifies over `Fin n`
+asks for.
+
+`CategoryTheory.Limits.hasFiniteCoproducts_of_hasCoproducts` at
+`ComplexAnalytic.AnalyticSpace.hasCoproducts`, and there is no mathematics in the step:
+`CategoryTheory.Limits.HasFiniteCoproducts` quantifies over `Fin n`, which lives in `Type 0`,
+and the converter crosses to the universe above by `CategoryTheory.Discrete.equivalence` at
+`Equiv.ulift`.
+
+**Its universe arguments are left to unification, and that is worth doing rather than writing them
+out.** `CategoryTheory.Limits.hasFiniteCoproducts_of_hasCoproducts` takes them in the order
+*coproduct index, morphisms, objects*, which for `ComplexAnalytic.AnalyticSpace.{u}` is
+`u, u, u+1` — the object universe being one above the one the space's points live in, and the
+`u` in `CategoryTheory.Limits.HasCoproducts.{u}` above being the first of the three and not the
+last. -/
+instance hasFiniteCoproducts : Limits.HasFiniteCoproducts AnalyticSpace.{u} :=
+  Limits.hasFiniteCoproducts_of_hasCoproducts AnalyticSpace.{u}
 
 /-! ### Non-vacuity, at the two ends -/
 
