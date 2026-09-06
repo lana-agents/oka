@@ -38,6 +38,7 @@ import Oka.Analysis.Complex.FundamentalGroup
 import Oka.Analytic.DividedDifference
 import Oka.Analytic.ParametricCircleIntegral
 import Oka.AnalyticSpace.Basic
+import Oka.AnalyticSpace.Clopen
 import Oka.AnalyticSpace.Coherent
 import Oka.AnalyticSpace.Continuity
 import Oka.AnalyticSpace.CoveringMap

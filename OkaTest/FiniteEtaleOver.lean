@@ -67,8 +67,10 @@ is one sheet of the trivial two-sheeted cover, through
 of copies of the base, and the image of a member of a disjoint union being clopen by
 `ComplexAnalytic.AnalyticSpace.isClopen_range_sigmaι_base`. **What is not claimed is a
 decomposition**: this file does not say that the sheet and its complement exhibit the trivial
-cover as their coproduct, and `Oka/AnalyticSpace/FiniteEtaleOver.lean` records what such a
-statement would owe.
+cover as their coproduct.
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitBinaryCofanRestrictClopen` is that
+statement at an arbitrary clopen part, and instantiating it at this sheet is a step nothing here
+takes.
 
 ## What this does not witness
 
@@ -481,8 +483,10 @@ about what could be built into one about what is built.
 
 **It says nothing about what this cover *is*.** In particular it is not stated here to be
 isomorphic to the base over itself, which is what a decomposition of the trivial cover would have
-to prove; `Oka/AnalyticSpace/FiniteEtaleOver.lean`'s `## What is not here` records what such a
-statement would owe. -/
+to prove.
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitBinaryCofanRestrictClopen` exhibits the
+*trivial* cover as the coproduct of this sheet and the complementary part without identifying
+either summand, and identifying them is the step that would need this cover's own structure. -/
 def restrictSheet : AnalyticSpace.FiniteEtaleOver.{u}
     ((AnalyticSpace.complexAffineSpace.{u} 1).restrict ComplexAnalytic.punctured.{u}) :=
   AnalyticSpace.FiniteEtaleOver.restrictClopen
