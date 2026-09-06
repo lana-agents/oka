@@ -3181,9 +3181,21 @@ info: 'ComplexAnalytic.hypersurfaceCommonZeroImage_parabola_ne_univ' depends on 
 
 `Oka/Analytification/RefineDatumSymm.lean`. The universal property of a localisation at a
 distinguished open, the monomorphism it makes of the structure map, the two monomorphisms of the
-cross-member projection that follow, and the three consequences for the refined cover datum's
-`glue` — that the coherence triangle determines it, that it does not depend on the caller's
-choice, and that it is symmetric.
+cross-member projection that follow, and what they buy for the refined cover datum's `glue`:
+`ComplexAnalytic.refineDatumGlueNe_unique`, that the coherence triangle determines the
+cross-member branch; `ComplexAnalytic.refineDatumGlueNe_congr`, that that branch does not depend
+on the caller's choice; `ComplexAnalytic.refineDatumGlueNe_symm`, that it is symmetric; and
+`ComplexAnalytic.refineDatumGlue_symm`, the symmetry law of the refined cover datum itself, at
+every ordered pair.
+
+**That clause read *the three consequences for the refined cover datum's `glue`*, and it was short
+of its own section on the day it was written.** `ComplexAnalytic.refineDatumGlue_symm` was guarded
+by `46525e6`, the commit that wrote the clause, and no clause of it described that declaration;
+each subject the clause did list was exact, which is why re-reading the numeral against them never
+caught it. That is an enumeration stopping early rather than a count rotting, so
+`OkaTest/Axioms.lean`'s *falsified by the next append to either* does not reach it — and it is why
+the subjects are named here instead: a name a reader can look up is checkable against the section
+in a way that a numeral agreeing with a list is not.
 
 The `instance`s here are guarded for the same reason the rest are: the convention here is every
 declaration and not every theorem, and `scripts/guard_coverage.py` reports nothing about a name
@@ -3664,16 +3676,19 @@ info: 'ComplexAnalytic.refineDatumAnalytification_toLocallyRingedSpace' depends 
 
 /-! ### A module-finite map of presented algebras analytifies to a finite morphism
 
-`Oka/Analytification/ModuleFiniteAnalytification.lean`, together with the three lemmas about
-`ComplexAnalytic.lastVarPolyEquiv` that it needs and that live in
-`Oka/Analytification/MonicHypersurface.lean`. The values of the tower's variables and the
-evaluation at them, the compatibility of that evaluation with each inclusion of variables the
-tower uses and with the one-variable reading of the last one, the tower's relations dying, the
-tower's structure map as one renaming, every ideal of the polynomial ring being a presentation
-ideal, an isomorphism of presentations being finite, the join of the surjection with the tower,
-and the general theorem.
+`Oka/Analytification/ModuleFiniteAnalytification.lean`, together with
+`ComplexAnalytic.lastVarPolyEquiv_rename_localisationIncl`,
+`ComplexAnalytic.lastVarPolyEquiv_symm_C` and `ComplexAnalytic.lastVarPolyEquiv_symm_X`, which it
+needs and which live in `Oka/Analytification/MonicHypersurface.lean`. That file declares further
+`ComplexAnalytic.lastVarPolyEquiv` lemmas this one does not read, so the naming above selects
+rather than totals, and it is what makes *which* of them are here checkable at all. The values of
+the tower's variables and the evaluation at them, the compatibility of that evaluation with each
+inclusion of variables the tower uses and with the one-variable reading of the last one, the
+tower's relations dying, the tower's structure map as one renaming, every ideal of the polynomial
+ring being a presentation ideal, an isomorphism of presentations being finite, the join of the
+surjection with the tower, and the general theorem.
 
-**The three `ComplexAnalytic.lastVarPolyEquiv` lemmas are guarded here and not in
+**The `ComplexAnalytic.lastVarPolyEquiv` lemmas named above are guarded here and not in
 `### The monic-hypersurface family of a polynomial` above**, where their file's other guards are,
 for the reason the sections above give: a section moved is a conflict for somebody else, and so
 is one grown in the middle.
@@ -4259,12 +4274,12 @@ at *every* refining family, the choice at a family that is a unit on each overla
 `r` and `u` and the two laws they satisfy, and the glue data and the analytic space they assemble
 to.
 
-**This header read "all nine of it" and the file has ten**, since
-`ComplexAnalytic.refineDatumUnitFamAnalytification_toLocallyRingedSpace` was added to it. That
-guard is in a **section of its own at the end of this file** rather than appended here, on this
-file's standing convention that a section moved is a conflict for somebody else — and the count
-above is corrected rather than left to be recomputed, because a section header that enumerates
-what is under it goes false silently.
+**This header read "all nine of it", and it went false when
+`ComplexAnalytic.refineDatumUnitFamAnalytification_toLocallyRingedSpace` was added to that file.**
+That guard is in a **section of its own at the end of this file** rather than appended here, on
+this file's standing convention that a section moved is a conflict for somebody else — and the
+header now names the one declaration it leaves out rather than counting the rest, because a
+section header that counts what is under it goes false silently.
 
 **The `def`s here are the caller's `ComplexAnalytic.refineDatumUnitFamR` and
 `ComplexAnalytic.refineDatumUnitFamU`, and the `ComplexAnalytic.refineDatumUnitFamGlueData` and
