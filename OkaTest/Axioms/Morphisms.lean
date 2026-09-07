@@ -42,16 +42,18 @@ And a sixth kind is about the **category** rather than about any morphism in it:
 `ComplexAnalytic.AnalyticSpace` has a terminal object, and that a pair of complex affine spaces
 has a product — `### The terminal object and the product of two complex affine spaces`. **That
 clause was added by the push that added that section**, which is what this paragraph's own history
-says a description owes a section it does not reach. **Four further sections are of that kind
+says a description owes a section it does not reach. **Five further sections are of that kind
 and are named here for the same reason**: that the square a restriction over an open of the target
 sits in is a pullback, `### That restriction is a pullback square, and the base change it gives`;
 that a pair of open subspaces of complex affine spaces has a product,
 `### The product of two open subspaces of complex affine spaces`; that a pair of local models has
-one, `### The binary product of two local models`; and that a cospan one of whose legs is finite
+one, `### The binary product of two local models`; that a cospan one of whose legs is finite
 étale with Hausdorff source has a **fibre product**,
-`### Base change of a finite étale morphism, and the fibre product it is the projection of`.
+`### Base change of a finite étale morphism, and the fibre product it is the projection of`; and
+that a cospan of local models presented by cut-out data has one,
+`### The fibre product of two local models over a third`.
 
-**Two of those four hold statements of the *first* kind as well, and are named here for the limit
+**Two of those five hold statements of the *first* kind as well, and are named here for the limit
 and not for those.** `### Base change of a finite étale morphism, and the fibre product it is the
 projection of` holds the base change of `isFiniteEtale`, in the two spellings
 `ComplexAnalytic.AnalyticSpace.isFiniteEtale_baseChangeSnd` and
@@ -62,10 +64,12 @@ projection of` holds the base change of `isFiniteEtale`, in the two spellings
 `ComplexAnalytic.AnalyticSpace.isFiniteEtale_pullback_snd_ofRestrict`. The description above does
 reach each of those five; what it does not reach is
 `ComplexAnalytic.AnalyticSpace.isPullback_baseChange` and
-`ComplexAnalytic.AnalyticSpace.isPullback_ofRestrict`, together with the three `HasPullback`
+`ComplexAnalytic.AnalyticSpace.isPullback_ofRestrict` and
+`ComplexAnalytic.AnalyticSpace.isPullback_fibreProdCutOut`, together with the four `HasPullback`
 guards `ComplexAnalytic.AnalyticSpace.hasPullback_of_isFiniteEtale`,
-`ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict` and
-`ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict'`, each of which is
+`ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict`,
+`ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict'` and
+`ComplexAnalytic.AnalyticSpace.hasPullback_ofCutOut`, each of which is
 *a claim about a limit and not about a class* in the words
 `### That restriction is a pullback square, and the base change it gives` uses of itself.
 
@@ -79,6 +83,15 @@ gives` out, which was false when written rather than falsified later** — that 
 push by which this paragraph acquired the sentence, and the sentence's own criterion reaches it,
 since the section calls itself a claim about a limit and the new one borrowed that phrase to place
 itself. So this is a correction and not one of this repository's dated records.
+
+**The sentence said *Four* and named four sections, and the sentence opening *Two of those five
+hold statements of the first kind as well* said *those four* and *the three `HasPullback`
+guards*, until 2026-09-07**, when
+`Oka/AnalyticSpace/CutOutFibreProduct.lean` added
+`### The fibre product of two local models over a third` — a fifth section of this kind, a second
+`CategoryTheory.IsPullback` statement the description does not reach, and a fourth `HasPullback`
+guard. The three figures were exact when written and are the ordinary shape of a count over the
+sections of this file, which any push adding one falsifies.
 
 And a seventh kind is of the **mirror tree**, and is a kind of routing rather than a kind of
 subject: two statements of pure topology, in neither of which an analytic space occurs — that a
@@ -4115,3 +4128,281 @@ info: 'ComplexAnalytic.AnalyticSpace.isFiniteEtale_pullback_snd_of_isFiniteEtale
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.isFiniteEtale_pullback_snd_of_isFiniteEtale
+
+
+/-! ### The fibre product of two local models over a third
+
+`Oka/AnalyticSpace/CutOutFibreProduct.lean`: that the zero locus, inside the binary product of two
+local models, of the `p` differences of the two composites to `ℂ^p` is their fibre product over a
+third — the object, the two projections, the induced morphism, the two triangles and the
+uniqueness that make it one — together with the mapping property of
+`ComplexAnalytic.AnalyticSpace.zeroLocusSubspace` in the shape a morphism of analytic spaces has
+it. **A limit and not a class**, in the sense
+`### That restriction is a pullback square, and the base change it gives` uses of itself: no
+statement guarded below carries any class of morphisms across the square.
+
+**Which clause of the description at the head of that file reaches which guard below**, said
+rather than left to a reader. *Two mapping properties* reaches
+`ComplexAnalytic.AnalyticSpace.hom_ext_restrict_complexAffineSpace`,
+`ComplexAnalytic.AnalyticSpace.zeroLocusSubspaceLift`,
+`ComplexAnalytic.AnalyticSpace.zeroLocusSubspaceLift_comp` and
+`ComplexAnalytic.AnalyticSpace.hom_ext_zeroLocusSubspace`; *the two composites to `ℂ^p`* and *the
+cutting family* reach `ComplexAnalytic.AnalyticSpace.toAffineOfCutOut` and
+`ComplexAnalytic.AnalyticSpace.eqCutFamily`; *the object* reaches
+`ComplexAnalytic.AnalyticSpace.fibreProdCutOut`,
+`ComplexAnalytic.AnalyticSpace.fibreProdCutOutι`,
+`ComplexAnalytic.AnalyticSpace.fibreProdCutOutFst`,
+`ComplexAnalytic.AnalyticSpace.fibreProdCutOutSnd`,
+`ComplexAnalytic.AnalyticSpace.fibreProdCutOutFst_eq` and
+`ComplexAnalytic.AnalyticSpace.fibreProdCutOutSnd_eq`; *the square commutes* reaches
+`ComplexAnalytic.AnalyticSpace.pullbackΓ_eqCutFamily_fibreProdCutOutι` and
+`ComplexAnalytic.AnalyticSpace.fibreProdCutOut_condition`; *the lift* reaches
+`ComplexAnalytic.AnalyticSpace.pullbackΓ_prodCutOutLift_eqCutFamily`,
+`ComplexAnalytic.AnalyticSpace.fibreProdCutOutLift`,
+`ComplexAnalytic.AnalyticSpace.fibreProdCutOutLift_ι`,
+`ComplexAnalytic.AnalyticSpace.fibreProdCutOutLift_fst` and
+`ComplexAnalytic.AnalyticSpace.fibreProdCutOutLift_snd`; *uniqueness* reaches
+`ComplexAnalytic.AnalyticSpace.hom_ext_fibreProdCutOutι` and
+`ComplexAnalytic.AnalyticSpace.hom_ext_fibreProdCutOut`; and the limit itself reaches
+`ComplexAnalytic.AnalyticSpace.pullbackConeFibreProdCutOut`,
+`ComplexAnalytic.AnalyticSpace.isLimitPullbackConeFibreProdCutOut`,
+`ComplexAnalytic.AnalyticSpace.isPullback_fibreProdCutOut`,
+`ComplexAnalytic.AnalyticSpace.hasPullback_ofCutOut` and
+`ComplexAnalytic.AnalyticSpace.fibreProdCutOutIsoPullback`. Four plus two plus six plus two plus
+five plus two plus five is twenty-six, and twenty-six is what is below.
+
+**`Classical.choice` is in every guard of this section and none of it is this section's
+subject**, for the reason `### The binary product of two local models` gives of its own guards:
+`ComplexAnalytic.IsCutOutBy.lift`, which the mapping properties and the induced morphism are all
+built through, chooses a point out of `ComplexAnalytic.IsCutOutBy.mem_range_base`, and the axiom
+also reaches `ComplexAnalytic.AnalyticSpace` itself. What the guards record is that nothing in
+that file adds an axiom of its own.
+
+**The guard on `ComplexAnalytic.AnalyticSpace.fibreProdCutOutIsoPullback` tests instance search
+and not only axiom provenance**, for the reason `### The binary product of two local models`
+gives of `ComplexAnalytic.AnalyticSpace.prodCutOutIsoProd`: the statement is written against
+`CategoryTheory.Limits.pullback`, which is a `CategoryTheory.Limits.limit` and does not elaborate
+at all unless `ComplexAnalytic.AnalyticSpace.hasPullback_ofCutOut` is found by search. **A scratch
+importing `Oka.AnalyticSpace.CutOutProduct`, `Oka.AnalyticSpace.ZeroLocus` and
+`Oka.AnalyticSpace.HomToComplex` — the modules that file is built on — and asking for
+`CategoryTheory.Limits.pullback a b` at the same cospan reports `failed to synthesize instance of
+type class HasPullback a b`**, which is the negative half of that test and was run rather than
+assumed.
+
+**`ComplexAnalytic.AnalyticSpace.hom_ext_restrict_complexAffineSpace` is guarded here although it
+mentions no product, no zero locus and no fibre product**, because it is declared in that module
+and `OkaTest/Axioms.lean`'s routing table sends a module by what declares it. Its natural home is
+`Oka/AnalyticSpace/HomToComplex.lean`, beside
+`ComplexAnalytic.AnalyticSpace.hom_ext_complexAffineSpace`, which is guarded in
+`OkaTest/Axioms/AnalyticSpace.lean`; that file's docstring says why it is not there yet, and a
+push that moves it should move this guard with it.
+
+This section is appended as its own section because a section moved is a conflict for somebody
+else. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hom_ext_restrict_complexAffineSpace' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hom_ext_restrict_complexAffineSpace
+
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.zeroLocusSubspaceLift' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.zeroLocusSubspaceLift
+
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.zeroLocusSubspaceLift_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.zeroLocusSubspaceLift_comp
+
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hom_ext_zeroLocusSubspace' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hom_ext_zeroLocusSubspace
+
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.toAffineOfCutOut' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.toAffineOfCutOut
+
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.eqCutFamily' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.eqCutFamily
+
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.fibreProdCutOut' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.fibreProdCutOut
+
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.fibreProdCutOutι' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.fibreProdCutOutι
+
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.fibreProdCutOutFst' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.fibreProdCutOutFst
+
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.fibreProdCutOutSnd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.fibreProdCutOutSnd
+
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.fibreProdCutOutFst_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.fibreProdCutOutFst_eq
+
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.fibreProdCutOutSnd_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.fibreProdCutOutSnd_eq
+
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.pullbackΓ_eqCutFamily_fibreProdCutOutι' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.pullbackΓ_eqCutFamily_fibreProdCutOutι
+
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.fibreProdCutOut_condition' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.fibreProdCutOut_condition
+
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.pullbackΓ_prodCutOutLift_eqCutFamily' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.pullbackΓ_prodCutOutLift_eqCutFamily
+
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.fibreProdCutOutLift' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.fibreProdCutOutLift
+
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.fibreProdCutOutLift_ι' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.fibreProdCutOutLift_ι
+
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.fibreProdCutOutLift_fst' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.fibreProdCutOutLift_fst
+
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.fibreProdCutOutLift_snd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.fibreProdCutOutLift_snd
+
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hom_ext_fibreProdCutOutι' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hom_ext_fibreProdCutOutι
+
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hom_ext_fibreProdCutOut' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hom_ext_fibreProdCutOut
+
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.pullbackConeFibreProdCutOut' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.pullbackConeFibreProdCutOut
+
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isLimitPullbackConeFibreProdCutOut' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isLimitPullbackConeFibreProdCutOut
+
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isPullback_fibreProdCutOut' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isPullback_fibreProdCutOut
+
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hasPullback_ofCutOut' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hasPullback_ofCutOut
+
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.fibreProdCutOutIsoPullback' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.fibreProdCutOutIsoPullback
