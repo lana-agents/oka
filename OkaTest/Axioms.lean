@@ -366,11 +366,17 @@ lana-agents/oka#492, where a reviewer verified the cited declaration through
 beside it.
 
 **The two failure modes, and each has cost this repository a push.** The first is **inferring the
-relation from the file names or from `Oka.lean`'s ordering**:
-`Oka/AnalyticSpace/CutOutCompose.lean` and `Oka/AnalyticSpace/CutOutProduct.lean` differ by four
-letters and sit two lines apart in that aggregator's alphabetical list, and
-`Oka/AnalyticSpace/CutOutCompose.lean` was written calling
-`Oka/AnalyticSpace/CutOutProduct.lean` *downstream* of it when the two are incomparable. The
+relation from the file names or from `Oka.lean`'s ordering**, and that ordering is not the graph:
+the list is alphabetical, and at `ca96745` **117 of its 214 adjacent pairs are
+incomparable** — among them `Oka/Analytification/StandardEtaleFiniteness.lean` and
+`Oka/Analytification/StandardEtaleLocalIso.lean`, whose final components agree in their first
+thirteen letters and which sit on consecutive lines of it. **The worked instance is in this
+push**: `Oka/Analytification/LocalisationFunctor.lean` explained its own existence by saying the
+analytification functor *lives two files further on* from
+`Oka/Analytification/DistinguishedOpen.lean`, when `Oka/Analytification/Functor.lean`, which
+declares that functor, and `Oka/Analytification/ChangeOfVariables.lean`, which declares its action
+on maps, are both **incomparable** with that file — not further on at any distance, in either
+direction. That clause is quoted in that file today with the walk that retired it. The
 second is **taking an import as a reason without checking which way the reason runs**:
 lana-agents/oka#491 is a whole pull request spent on one clause of
 `Oka/AnalyticSpace/CutOutProduct.lean` that gave an import as the reason a declaration had no
@@ -385,13 +391,20 @@ questions of a pair: is `b` in the closure of `a`, is `a` in the closure of `b`,
 edge distance. That settles *upstream*, *downstream*, *incomparable* and every *N modules
 downstream* numeral in one run. **The obvious parser is wrong here twice over.**
 `^import\s+([\w.]+)` over the raw file text follows an `import` line written inside a comment, and
-it matches neither the keyword nor the module of a `public import` — which this tree writes, in
-**27** files carrying **30** of the **786** repository-internal import edges at `5a525bc`. Use
-`scripts/import_cost.py`'s `IMPORT` pattern over its nesting-aware `strip_comments`, which is the
-parser that script's own published figures are computed with, or say what you used instead.
-**Checking the *delta* is not a check on the parser**: on the `CutOutCompose`/`CutOutProduct` pair
-the naive regex understates both closures by exactly 14 and returns the two marginal costs, 25 and
-2, unchanged.
+it matches neither the keyword nor the module of a `public import`, which **27** files of this
+tree write. **Say which population a figure of this kind is over, because two reasonable ones
+differ here.** Over the **309** modules under `Oka/` and `OkaTest/` together with `Oka.lean` and
+`OkaTest.lean`, at `ca96745`: **30** of the **787** repository-internal import edges are written
+`public import`, and they sit in **13** files; the remaining ones of the 27 write `public import`
+on Mathlib modules only. Counting `scripts/DumpOkaDecls.lean` and `scripts/DumpEnvNames.lean`,
+which import `Oka` and `OkaTest` as well, gives **791** edges for the same 30. Use
+`scripts/import_cost.py`'s `IMPORT` pattern over its nesting-aware `strip_comments`, which is
+the parser that script's own published figures are computed with, or say what you used instead.
+**Checking the *delta* is not a check on the parser**: on the
+`Oka/Analytification/StandardEtaleFiniteness.lean` and
+`Oka/Analytification/StandardEtaleLocalIso.lean` pair the naive regex understates both closures by
+exactly 14 — **74** and **76** against **88** and **90** — and returns the two marginal costs,
+**5** and **3**, unchanged.
 
 **The compiled instrument is decisive and is cheaper to write than the walk**: a scratch file
 that `import`s both modules
@@ -416,14 +429,38 @@ one, together with a *further on* that named an incomparable pair; and
 `Oka/Analytification/StandardEtaleLocalIso.lean`'s *"imports this one's imports"*, true of one of
 the two imports. Each is repaired with its retired wording kept as a dated record.
 
+**`5a525bc` is a pin and not the head, so the delta to `ca96745` was read rather than assumed.**
+Over the comment lines that range adds, **five** sentences carry a dependency token. Four are
+`Oka/AnalyticSpace/CutOutCompose.lean`'s account of its own relation to
+`Oka/AnalyticSpace/CutOutProduct.lean` — *incomparable*, closures of **42** and **65** modules
+under `Oka/`, **25** the cost of the import it declines, and a dated record of the *downstream*
+that was there before — and all four hold at `ca96745` on a walk of mine. The fifth is
+`OkaTest/Axioms/Morphisms.lean`'s *"this file imports `Oka` and not `OkaTest`, so no declaration
+of a test file is in its environment"*, and that file's one import line is `import Oka`. A sweep
+pinned to a commit says nothing about the commits after it, and the cost of carrying the pin
+forward is this paragraph.
+
 **What the sweep did not reach, so that a later one knows where to start.** The **240** sentences
-that carry a dependency token and name **no** second module are not decidable by the walk — *"no
-statement downstream of here consumes it"*, *"reachable from everything downstream of
-`OkaTest/FiniteMorphism.lean`"* — because they quantify over a downstream *set* and over what its
-declarations *use*, which wants the reverse closure and a grep over it. And **closure-size figures
-against Mathlib** are a different graph and are not in this class at all: `scripts/import_cost.py`
-is the instrument for those and its own docstring is where that hazard is written down. **Neither
-column was checked and this paragraph does not claim it was.**
+that carry a dependency token and name **no** second module **were not read.** The column was
+dropped for the instrument it wants rather than for its size, and **how many of the 240 want that
+instrument was not counted**: a sentence like *"no statement downstream of here consumes it"*
+(`Oka/UliftCoord.lean`) or *"Nothing downstream of this file needs any of it yet"*
+(`Oka/Analytification/AffineCover.lean`) quantifies over a downstream *set* and over what its
+declarations *use*, which wants the reverse closure and a grep over it. **Do not read that as
+saying the column is out of reach, because one of its cheapest members was false.** A clause about
+a file's own *importers* is one reverse edge and no grep at all, and
+`Oka/AnalyticSpace/Factorisation.lean`'s *"nothing imports this file except the root module"* had
+**three** importers, two of them not the root module. It was true at the commit that wrote it and
+went false the next day; it is repaired in this push, with the retired wording kept there as a
+dated record. **It was found by this branch's reviewer and not by the sweep**, and nothing about
+it needed the instrument this column was dropped for. Its own sentence names no module of this
+repository, which is the criterion this paragraph splits on and puts it here; a splitter that
+joined it to the sentence before it, which names one, would put it in the **158** instead and make
+*three of the 158* an undercount by one. The sweep did not report it, which says which side its
+splitter put it on. And **closure-size figures against Mathlib** are a different graph and are
+not in this class at all: `scripts/import_cost.py` is the instrument for those and its own
+docstring is where that hazard is written down. **Neither
+column was swept and this paragraph does not claim it was.**
 
 **Most mirror-tree material is routed by a row, and a small tail of it is deliberately routed by
 none.** `README.md`'s *Layout: the Mathlib mirror tree* defines a mirror-tree file by its path — a
