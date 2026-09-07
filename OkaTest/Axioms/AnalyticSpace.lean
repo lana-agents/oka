@@ -1379,3 +1379,72 @@ info: 'ComplexAnalytic.AnalyticSpace.hasFiniteCoproducts' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.hasFiniteCoproducts
+
+/-! ### The open subspace on a chart is the local model that chart presents
+
+`Oka/AnalyticSpace/Basic.lean` and `Oka/AnalyticSpace/OpenSubspace.lean`: that two analytic
+spaces with the same underlying locally ringed space and the same `ℂ`-algebra structure are
+equal, and the two statements that consequence was written for — that an open subspace carrying a
+chart on the whole of itself **is** the `ComplexAnalytic.AnalyticSpace.ofCutOut` that chart
+presents, and that every point has such a neighbourhood. Appended as its own section rather than
+merged into another, because moving or reordering a section is a conflict for every branch that
+has appended to it.
+
+**Two modules under one heading, and the routing table sends both here.**
+`OkaTest/Axioms.lean`'s row *analytic spaces, local models, the node* is where a module is sent by
+what declares it, and `ComplexAnalytic.AnalyticSpace.ext'` is declared in
+`Oka/AnalyticSpace/Basic.lean` while the other two are declared in
+`Oka/AnalyticSpace/OpenSubspace.lean`. They are under one heading because the first exists only
+for the second, and the spelling that shows it is not the spelling the proof uses. **Every figure
+in this paragraph is at the commit that adds this section.** `git grep "AnalyticSpace\.ext'" --
+Oka/ OkaTest/` returns 8 lines in 3 files, of which **exactly one is a use site**: the proof of
+`ComplexAnalytic.restrict_eq_ofCutOut` in `Oka/AnalyticSpace/OpenSubspace.lean`, which does not
+spell the name in full. The other 7 are 3 prose citations under `Oka/` — 2 in
+`Oka/AnalyticSpace/Basic.lean` and 1 in `Oka/AnalyticSpace/OpenSubspace.lean` — and 4 lines of
+this section: 2 in its prose, and 2 in its guard on that name, the `#print axioms` command and
+its expected output. Grepping the fully-qualified name instead returns 6 of those 8 and **not**
+the use site, because the proof is not among them. **The bare `git grep "ext'" -- Oka/ OkaTest/`
+is the wrong instrument for this question, and its own output is why.** It returns 27 lines in 11
+files: the 8 above; the line that *declares* the name, which writes it bare inside its namespace
+as `theorem ext'`; 4 lines of code using a different name that really does end in a prime,
+`SetLike.ext'` and `AlgebraicGeometry.LocallyRingedSpace.Hom.ext'` among them; 4 further lines of
+this paragraph; and **10 `#print axioms` guard outputs in which the apostrophe is the closing
+quote of a name that does not end in one at all**, such as the guard on
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.hom_ext`.
+
+**`Classical.choice` is in all three guards and none of it is this section's subject.** The axiom
+reaches `ComplexAnalytic.AnalyticSpace` itself, so every statement mentioning an analytic space
+carries it whatever its own proof does; what these guards record is that neither the equality of
+two analytic spaces nor the chart identification adds an axiom of its own. In particular
+`ComplexAnalytic.AnalyticSpace.ext'` is four `cases` and an `rfl` and
+`ComplexAnalytic.restrict_eq_ofCutOut` is a `RingHom.ext` over the `ℂ`-linearity hypothesis, and
+the axiom list would look the same if either had been an argument of real weight.
+
+**Named by file rather than counted**, in the spelling `### The disjoint union is the coproduct`
+uses of itself and for the reason this file gives for that: a numeral over the sections of this
+file is one a reader has to recheck, and the record at the head of this file is of four such
+numerals standing false.
+
+**Named and not located.** No sentence here says which section precedes or follows it.
+-/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.ext'' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.ext'
+
+/--
+info: 'ComplexAnalytic.restrict_eq_ofCutOut' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.restrict_eq_ofCutOut
+
+/--
+info: 'ComplexAnalytic.exists_restrict_eq_ofCutOut' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.exists_restrict_eq_ofCutOut

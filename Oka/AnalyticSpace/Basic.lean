@@ -101,6 +101,14 @@ constants.
   full, and this is neither of those: the `ℂ`-linearity of the inverse is
   `ComplexAnalytic.IsCLinearHom.of_comp` at the factorisation of an identity, and nothing else is
   needed.
+- `ComplexAnalytic.AnalyticSpace.ext'`: **two analytic spaces with the same underlying locally
+  ringed space and the same `ℂ`-algebra structure are equal**, the third field being a `Prop`.
+  **Its only use site at the commit that adds it is `ComplexAnalytic.restrict_eq_ofCutOut`** in
+  `Oka/AnalyticSpace/OpenSubspace.lean`, where the proof spells the name `AnalyticSpace.ext'` and
+  not in full; a `git grep` for the fully-qualified name reaches the prose that cites it and not
+  the proof that uses it, which is why this bullet names the site rather than a command.
+  `OkaTest/Axioms/AnalyticSpace.lean`'s section on these declarations gives both greps and what
+  each returns.
 
 ## References
 
@@ -440,6 +448,33 @@ instance : CoeSort AnalyticSpace (Type u) where
 
 /-- The type of open sets of a complex analytic space. -/
 abbrev Opens (X : AnalyticSpace.{u}) : Type u := TopologicalSpace.Opens X
+
+/-- **Two complex analytic spaces with the same underlying locally ringed space and the same
+`ℂ`-algebra structure are equal.**
+
+A term of `ComplexAnalytic.AnalyticSpace` is a locally ringed space, a `ℂ`-algebra structure on
+its global sections and a proof of `ComplexAnalytic.AnalyticSpace.local_model`, and the last is a
+`Prop`, so it is carried by `cases` and never has to be compared. The type of `algebraMap`
+mentions the locally ringed space, which is why the hypothesis about it is a `HEq` and not an
+equality.
+
+**This is not marked `@[ext]`**, and the unprimed name is deliberately left free. The `ext` tactic
+closes a goal by applying an extensionality lemma and then working on its hypotheses; a `HEq`
+hypothesis is not one it can usefully work on, so the attribute would put a lemma in `ext`'s table
+that leaves the caller worse off than the `refine` they would have written. A future unprimed
+`ext` taking an equality of algebra maps transported along the first hypothesis would be the one
+to mark, and nothing here needs it.
+
+`ComplexAnalytic.restrict_eq_ofCutOut` in `Oka/AnalyticSpace/OpenSubspace.lean` is the consumer
+this was written for, and its only use site at the commit that adds it. -/
+theorem ext' {X Y : AnalyticSpace.{u}}
+    (hlrs : X.toLocallyRingedSpace = Y.toLocallyRingedSpace)
+    (halg : HEq X.algebraMap Y.algebraMap) : X = Y := by
+  cases X
+  cases Y
+  cases hlrs
+  cases halg
+  rfl
 
 /-- A morphism of complex analytic spaces is a morphism of the underlying locally ringed
 spaces which is `ℂ`-linear, i.e. compatible with the `ℂ`-algebra structures on the structure
