@@ -675,6 +675,13 @@ info: 'ComplexAnalytic.glueDataCLinear_comapAlgMap' depends on axioms:
 #print axioms ComplexAnalytic.glueDataCLinear_comapAlgMap
 
 /--
+info: 'ComplexAnalytic.glueDataCLinear_of_isCLinearHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.glueDataCLinear_of_isCLinearHom
+
+/--
 info: 'ComplexAnalytic.isCompatible_of_glueDataCLinear' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
@@ -790,13 +797,29 @@ info: 'ComplexAnalytic.AnalyticSpace.comapAlgMap_toLRSHom' depends on axioms:
 
 /-! ### Gluing a morphism
 
-Two levels, and the second is not a special case of the first.
 `ComplexAnalytic.AnalyticSpace.glueMorphisms` glues out of an **open cover** and asks for
-agreement over a categorical pullback;
+agreement over a categorical pullback.
 `AlgebraicGeometry.LocallyRingedSpace.GlueData.glueMorphisms` glues out of a **gluing** and asks
 for agreement over the glue datum's own overlaps, which is the only form a caller who built the
-datum can state. `…GlueData.pullback_condition_of_comm` is the transport between them, through
+datum can state; **it is not a special case of `ComplexAnalytic.AnalyticSpace.glueMorphisms`**,
+and
+`…GlueData.pullback_condition_of_comm` is the transport between them, through
 `…GlueData.vIsoPullback` under the heading above.
+`ComplexAnalytic.AnalyticSpace.glueMorphismsOfGlueData` is those two composed rather than an idea
+of its own: it glues a morphism of **analytic spaces** out of a gluing, taking its pullback
+hypothesis from `…GlueData.pullback_condition_of_comm` and its `ℂ`-linearity
+hypothesis over the structures the members were given, which
+`ComplexAnalytic.AnalyticSpace.comapAlgMap_ofGlueDataCLinear_algebraMap` identifies with the one
+the gluing induces. **That composition was already being made, at one datum**:
+`ComplexAnalytic.coverGlueMorphisms` is an instance of it by
+`ComplexAnalytic.coverGlueMorphisms_eq_glueMorphismsOfGlueData`, and both are guarded in
+`OkaTest/Axioms/Analytification.lean` under that file's cover heading rather than here.
+
+**This description opened *Two levels, and the second is not a special case of the first* until
+2026-09-07**, when the analytic gluing out of a datum was added and the opening sentence became a
+count of what the heading held. It was exact when written, and the clause it made survives on
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.glueMorphisms`, which is the declaration it was
+about.
 -/
 
 /--
@@ -868,6 +891,20 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.GlueData.hom_ext' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.GlueData.hom_ext
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.glueMorphismsOfGlueData' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.glueMorphismsOfGlueData
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.ι_glueMorphismsOfGlueData' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.ι_glueMorphismsOfGlueData
 
 /-! ### The disjoint union of a family of analytic spaces
 

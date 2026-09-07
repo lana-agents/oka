@@ -63,6 +63,10 @@ carry the three together, bundle then.
   `ℂ`-linear morphisms out of the members of an open cover.** The object-level constructions above
   build the source; this is the morphism-level statement, and it is the first thing a space glued
   out of more than one piece needs.
+- `ComplexAnalytic.AnalyticSpace.glueMorphismsOfGlueData`: **the same out of the gluing of a glue
+  datum**, with both of `ComplexAnalytic.AnalyticSpace.glueMorphisms`' hypotheses spelled in the
+  datum's own vocabulary — no categorical pullback, and the `ℂ`-linearity stated over the
+  structures the members were given.
 
 ## Main results
 
@@ -94,6 +98,14 @@ carry the three together, bundle then.
   previous item at `AlgebraicGeometry.LocallyRingedSpace.OpenCover.glueMorphisms` — and
   `ComplexAnalytic.AnalyticSpace.glueMorphisms_map_comp`: the hypotheses are automatic for the
   restrictions of a single morphism, and the construction returns it.
+- `ComplexAnalytic.glueDataCLinear_of_isCLinearHom`: **a datum whose legs and transitions are
+  `ℂ`-linear morphisms satisfies `ComplexAnalytic.GlueDataCLinear`** — the hypothesis of
+  `ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear`, from the data a datum assembled out of
+  morphisms of analytic spaces already carries.
+- `ComplexAnalytic.AnalyticSpace.ι_glueMorphismsOfGlueData`: the glued morphism restricts to the
+  given one on each member, which with
+  `AlgebraicGeometry.LocallyRingedSpace.GlueData.hom_ext` is the universal property in the form a
+  caller uses it.
 
 ## What is not here
 
@@ -228,6 +240,42 @@ theorem glueDataCLinear_iff (D : LocallyRingedSpace.GlueData.{u})
   rw [LocallyRingedSpace.comapAlgMap_comp]
   exact ⟨fun h c ↦ congrArg (fun m : ℂ →+* _ ↦ m c) h.symm,
     fun h ↦ RingHom.ext fun c ↦ (h c).symm⟩
+
+/-- **The transitions of a glue datum are `ℂ`-linear as soon as every leg and every transition is
+a `ℂ`-linear morphism for one family of structures on the overlaps**, which is what a datum
+assembled out of morphisms of analytic spaces carries and `ComplexAnalytic.GlueDataCLinear` is
+not, being an equation between pulled-back structures rather than a statement about the maps.
+
+**This is a corollary of `ComplexAnalytic.glueDataCLinear_iff` and the proof says so.** That
+theorem turns the conclusion into `ℂ`-linearity of `D.t i j` for the two structures the overlap
+inherits through the legs, and what is left is to recognise those two as `β (i, j)` and `β (j, i)`:
+`ComplexAnalytic.IsCLinearHom.eq` says a structure recognised as `ℂ`-linear over `α i` *is* the
+pullback of `α i` along `D.f i j`, so `hf` identifies each of them, and `ht` is then the goal on
+the nose. `β` is not determined by the datum — it is determined by `hf`, and that is why it can be
+a parameter of a theorem whose conclusion does not mention it.
+
+**Two neighbours, and neither is *the* other route.**
+`ComplexAnalytic.glueDataCLinear_iff` is the nearer one and is what this theorem is proved from,
+so the difference is only that it asks for linearity over the pulled-back structures while this
+asks for it over structures the caller already holds. `ComplexAnalytic.glueDataCLinear_comapAlgMap`
+is the further one and asks something genuinely different: there the structures all come from one
+on the glued space, here they come from the pieces.
+
+**Where the hypotheses come from.** A morphism of `ComplexAnalytic.AnalyticSpace` carries its
+`ℂ`-linearity in the `isCLinear` field of `ComplexAnalytic.AnalyticSpace.Hom`, so a datum whose
+`D.f i j` and `D.t i j` are the underlying morphisms of analytic ones — with `α` and `β` the
+`algebraMap`s of the pieces — discharges both by projection and this lemma costs the caller
+nothing. -/
+theorem glueDataCLinear_of_isCLinearHom (D : LocallyRingedSpace.GlueData.{u})
+    (α : ∀ j, ℂ →+* (D.U j).presheaf.obj (op ⊤))
+    (β : ∀ p : D.J × D.J, ℂ →+* (D.V p).presheaf.obj (op ⊤))
+    (hf : ∀ i j, IsCLinearHom (D.f i j) (β (i, j)) (α i))
+    (ht : ∀ i j, IsCLinearHom (D.t i j) (β (i, j)) (β (j, i))) :
+    GlueDataCLinear D α :=
+  (glueDataCLinear_iff D α).mpr fun i j ↦ by
+    rw [(isCLinearHom_comapAlgMap (D.f i j) (α i)).eq (hf i j),
+      (isCLinearHom_comapAlgMap (D.f j i) (α j)).eq (hf j i)]
+    exact ht i j
 
 /-- **`ℂ`-linear transitions give a compatible family on the gluing.**
 
@@ -558,6 +606,55 @@ theorem glueMorphisms_map_comp {X Y : AnalyticSpace.{u}}
     glueMorphisms 𝒰 (fun j ↦ 𝒰.map j ≫ φ.toLRSHom) hf (isCLinearHom_map_comp 𝒰 φ) = φ :=
   forgetToLocallyRingedSpace.map_injective
     (𝒰.hom_ext _ _ fun j ↦ 𝒰.ι_glueMorphisms _ hf j)
+
+/-- **A morphism of analytic spaces out of the gluing of a glue datum**, from `ℂ`-linear morphisms
+out of the members which agree over the datum's own overlaps.
+
+`ComplexAnalytic.AnalyticSpace.glueMorphisms` asks for agreement over the *categorical pullback*
+of two members' inclusions and for `ℂ`-linearity over the structure the glued space induces on a
+member; a caller who built a glue datum has neither in that spelling. Both are supplied here:
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.pullback_condition_of_comm` turns the datum's own
+compatibility into the pullback one, and
+`ComplexAnalytic.AnalyticSpace.comapAlgMap_ofGlueDataCLinear_algebraMap` says the induced
+structure on the `j`-th member is `α j`, which is what the caller's linearity is stated over.
+**So the content is the two hypotheses and not the definition**, which is the same shape
+`AlgebraicGeometry.LocallyRingedSpace.GlueData.glueMorphisms` has one category down.
+
+The hypothesis `hf` is spelled with `D.f`, `D.t` and no pullback, and `hlin` with the structures
+`α` the pieces were given rather than with anything read off the gluing.
+
+**The tree already composed these two, at one datum, and this is that composition with the datum
+abstracted.** `ComplexAnalytic.coverGlueMorphisms` glues a morphism of analytic spaces out of the
+analytification of a cover by putting the same two ingredients in the same two roles, and
+`ComplexAnalytic.coverGlueMorphisms_eq_glueMorphismsOfGlueData` says the two agree there by `rfl`.
+So that construction is an instance of this one rather than a sibling of it, and what was missing
+before this declaration was not the analytic level but the *general* datum. -/
+def glueMorphismsOfGlueData (D : LocallyRingedSpace.GlueData.{u})
+    (α : ∀ j, ℂ →+* (D.U j).presheaf.obj (op ⊤)) (hα : GlueDataCLinear D α)
+    (hlm : ∀ j, HasLocalModels (D.U j) (α j)) {Y : AnalyticSpace.{u}}
+    (f : ∀ j, D.U j ⟶ Y.toLocallyRingedSpace)
+    (hf : ∀ i j, D.f i j ≫ f i = D.t i j ≫ D.f j i ≫ f j)
+    (hlin : ∀ j, IsCLinearHom (f j) (α j) Y.algebraMap) :
+    ofGlueDataCLinear D α hα hlm ⟶ Y :=
+  glueMorphisms D.openCover f (D.pullback_condition_of_comm f hf) fun j ↦
+    comapAlgMap_ofGlueDataCLinear_algebraMap D α hα hlm j ▸ hlin j
+
+/-- **It restricts to the given morphism on each member.**
+
+`AlgebraicGeometry.LocallyRingedSpace.OpenCover.ι_glueMorphisms` at the datum's cover. The
+statement is about the underlying morphism of locally ringed spaces because that is where the
+member inclusion `ι j` lives: the members of a glue datum are locally ringed spaces carrying
+`ℂ`-algebra structures and are not objects of `ComplexAnalytic.AnalyticSpace`, so there is no
+morphism of analytic spaces here to compose with. -/
+@[reassoc (attr := simp)]
+theorem ι_glueMorphismsOfGlueData (D : LocallyRingedSpace.GlueData.{u})
+    (α : ∀ j, ℂ →+* (D.U j).presheaf.obj (op ⊤)) (hα : GlueDataCLinear D α)
+    (hlm : ∀ j, HasLocalModels (D.U j) (α j)) {Y : AnalyticSpace.{u}}
+    (f : ∀ j, D.U j ⟶ Y.toLocallyRingedSpace)
+    (hf : ∀ i j, D.f i j ≫ f i = D.t i j ≫ D.f j i ≫ f j)
+    (hlin : ∀ j, IsCLinearHom (f j) (α j) Y.algebraMap) (j : D.J) :
+    D.toGlueData.ι j ≫ (glueMorphismsOfGlueData D α hα hlm f hf hlin).toLRSHom = f j :=
+  D.openCover.ι_glueMorphisms f (D.pullback_condition_of_comm f hf) j
 
 end AnalyticSpace
 

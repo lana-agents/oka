@@ -202,6 +202,10 @@ a much larger tax than one unused value per index.
   on each member, and it is the only one that does** — the universal property in the form a
   caller uses it. `ComplexAnalytic.toLRSHom_coverGlueMorphisms` puts the first at the
   locally-ringed-space level.
+- `ComplexAnalytic.coverGlueMorphisms_eq_glueMorphismsOfGlueData`: **the construction is
+  `ComplexAnalytic.AnalyticSpace.glueMorphismsOfGlueData` at this file's glue datum**, by `rfl`,
+  so it is an instance of the general one and not a sibling of it. The general declaration was
+  written afterwards, out of the two ingredients this one had already put together.
 - `ComplexAnalytic.coverIncl_comp_coverIota`: **the members' own inclusions agree over the
   overlaps**, the glue datum's `glue_condition` read back into this file's vocabulary, and
 - `ComplexAnalytic.coverGlueMorphisms_coverIota`: **gluing them returns the identity.** The
@@ -953,6 +957,36 @@ def coverGlueMorphisms {Y : AnalyticSpace.{u}}
         (glueDataCLinear_coverGlueData.{u} obj poly glue hrange hsymm hcocycle)
         (fun i ↦ (AnalyticSpace.analytification.{u} (obj i).g).local_model) i
       exact hc ▸ (f i).isCLinear)
+
+/-- **It is `ComplexAnalytic.AnalyticSpace.glueMorphismsOfGlueData` at this file's glue datum**, on
+the nose.
+
+`ComplexAnalytic.coverGlueMorphisms` composes `AlgebraicGeometry.LocallyRingedSpace.GlueData`'s
+`pullback_condition_of_comm` for one hypothesis with
+`ComplexAnalytic.AnalyticSpace.comapAlgMap_ofGlueDataCLinear_algebraMap` for the other, which is
+what `ComplexAnalytic.AnalyticSpace.glueMorphismsOfGlueData` does for an arbitrary datum. So this
+construction is an instance of that one and not a sibling of it, and the general declaration was
+written after this one rather than the other way round.
+
+It is `rfl` because `ComplexAnalytic.coverAnalytification` *is*
+`ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear` at `ComplexAnalytic.coverGlueData` and
+`ComplexAnalytic.coverAnalytificationOpenCover` *is* that datum's own cover, which is the same
+reason `ComplexAnalytic.toLRSHom_coverGlueMorphisms` is `rfl`. -/
+theorem coverGlueMorphisms_eq_glueMorphismsOfGlueData {Y : AnalyticSpace.{u}}
+    (f : ∀ i, AnalyticSpace.analytification.{u} (obj i).g ⟶ Y)
+    (h : ∀ i j : J, i ≠ j → coverIncl.{u} obj poly i j ≫ (f i).toLRSHom =
+      (coverTransition.{u} obj poly glue i j).hom ≫
+        coverIncl.{u} obj poly j i ≫ (f j).toLRSHom) :
+    coverGlueMorphisms.{u} obj poly glue hrange hsymm hcocycle f h =
+      AnalyticSpace.glueMorphismsOfGlueData
+        (coverGlueData.{u} obj poly glue hrange hsymm hcocycle)
+        (fun i ↦ (AnalyticSpace.analytification.{u} (obj i).g).algebraMap)
+        (glueDataCLinear_coverGlueData.{u} obj poly glue hrange hsymm hcocycle)
+        (fun i ↦ (AnalyticSpace.analytification.{u} (obj i).g).local_model)
+        (fun i ↦ (f i).toLRSHom)
+        (comm_coverGlueData.{u} obj poly glue hrange hsymm hcocycle (fun i ↦ (f i).toLRSHom) h)
+        (fun i ↦ (f i).isCLinear) :=
+  rfl
 
 /-- **Its underlying morphism is the glue datum's**, by `rfl` — the same three `rfl`s that make
 `ComplexAnalytic.coverAnalytificationOpenCover` a cover of `X^an` on the nose. -/
