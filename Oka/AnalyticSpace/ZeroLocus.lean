@@ -40,17 +40,30 @@ would have to say.
 
 **The clause replaced here read `ComplexAnalytic.AnalyticSpace.zeroLocusSubspace` `is a local
 model only when X is` until 2026-09-07, and it was false when written rather than falsified later,
-so this is a correction and not one of this repository's dated records.** Neither direction of it
-holds and neither is in the tree. The structure `ComplexAnalytic.AnalyticSpace` has two fields,
-`ComplexAnalytic.AnalyticSpace.algebraMap` and `ComplexAnalytic.AnalyticSpace.local_model`, and
-neither is a separation hypothesis, while a local model is closed in an open subspace of `ℂ^n` and
-so is Hausdorff; a zero locus of an `X` that is not Hausdorff can therefore be a local model while
-`X` is not one, which kills *only when*. In the other direction a global section of a local model
-need not lift to its ambient `ℂ^n|V` — the observation the paragraph ending `beyond a
-neighbourhood of the point` makes — so `X` being a local model does not by itself present its zero
-loci either. **The repair is to say what the file has**, which is charts and not a local-model
-statement, and neither half of the retired biconditional is filed as a thing to prove: they are
-statements about spaces this file constructs nothing for.
+so this is a correction and not one of this repository's dated records.** *Only when* is the
+single implication *the zero locus is a local model, therefore so is `X`*, **that implication is
+false**, and its converse is **not settled here**; nothing below states either. The structure
+`ComplexAnalytic.AnalyticSpace` has two fields, `ComplexAnalytic.AnalyticSpace.algebraMap` and
+`ComplexAnalytic.AnalyticSpace.local_model`, and neither is a separation hypothesis, while a local
+model is closed in an open subspace of `ℂ^n` and so is Hausdorff; a zero locus of an `X` that is
+not Hausdorff can therefore be a local model while `X` is not one, which kills *only when* — and
+that is the whole of what retiring the clause needs, because the retired clause is that one
+implication.
+
+**The converse is where this record used to say more than it shows.** A global section of a local
+model need not lift to its ambient `ℂ^n|V` — the observation the paragraph ending `beyond a
+neighbourhood of the point` makes — so `X` being a local model does not *by that route* present
+its zero loci. **That is the failure of an argument and not a counterexample**: it exhibits no
+space, and deciding the converse either way wants either a theorem extending global sections of
+`X` to the ambient or a witness admitting no such extension, and this file has neither.
+**This paragraph read *Neither direction of it holds and neither is in the tree* and called the
+retired clause *the retired biconditional* until 2026-09-07.** *Only when* is one implication and
+not two, and the summary said the converse was false where the sentence beginning *A global
+section of a local model need not lift* gives a route that fails and no space.
+
+**The repair is to say what the file has**, which is charts and not a local-model statement, and
+neither direction is filed as a thing to prove: they are statements about spaces this file
+constructs nothing for.
 
 ## The route
 
