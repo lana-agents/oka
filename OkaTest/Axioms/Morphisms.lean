@@ -42,19 +42,43 @@ And a sixth kind is about the **category** rather than about any morphism in it:
 `ComplexAnalytic.AnalyticSpace` has a terminal object, and that a pair of complex affine spaces
 has a product — `### The terminal object and the product of two complex affine spaces`. **That
 clause was added by the push that added that section**, which is what this paragraph's own history
-says a description owes a section it does not reach. **Three further sections are of that kind
-and are named here for the same reason**: that a pair of open subspaces of complex affine spaces
-has a product, `### The product of two open subspaces of complex affine spaces`; that a pair of
-local models has one, `### The binary product of two local models`; and that a cospan one of whose
-legs is finite étale with Hausdorff source has a **fibre product**,
-`### Base change of a finite étale morphism, and the fibre product it is the projection of`. That
-third section also holds two statements of the *first* kind — the base change of `isFiniteEtale`,
-in the two spellings `ComplexAnalytic.AnalyticSpace.isFiniteEtale_baseChangeSnd` and
-`ComplexAnalytic.AnalyticSpace.isFiniteEtale_pullback_snd_of_isFiniteEtale` — which the
-description above does reach; the limit is what it does not, and is why the section is named here.
+says a description owes a section it does not reach. **Four further sections are of that kind
+and are named here for the same reason**: that the square a restriction over an open of the target
+sits in is a pullback, `### That restriction is a pullback square, and the base change it gives`;
+that a pair of open subspaces of complex affine spaces has a product,
+`### The product of two open subspaces of complex affine spaces`; that a pair of local models has
+one, `### The binary product of two local models`; and that a cospan one of whose legs is finite
+étale with Hausdorff source has a **fibre product**,
+`### Base change of a finite étale morphism, and the fibre product it is the projection of`.
+
+**Two of those four hold statements of the *first* kind as well, and are named here for the limit
+and not for those.** `### Base change of a finite étale morphism, and the fibre product it is the
+projection of` holds the base change of `isFiniteEtale`, in the two spellings
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_baseChangeSnd` and
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_pullback_snd_of_isFiniteEtale`, and
+`### That restriction is a pullback square, and the base change it gives` holds
+`ComplexAnalytic.AnalyticSpace.isFinite_restrictHom`,
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_restrictHom` and
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_pullback_snd_ofRestrict`. The description above does
+reach each of those five; what it does not reach is
+`ComplexAnalytic.AnalyticSpace.isPullback_baseChange` and
+`ComplexAnalytic.AnalyticSpace.isPullback_ofRestrict`, together with the three `HasPullback`
+guards `ComplexAnalytic.AnalyticSpace.hasPullback_of_isFiniteEtale`,
+`ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict` and
+`ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict'`, each of which is
+*a claim about a limit and not about a class* in the words
+`### That restriction is a pullback square, and the base change it gives` uses of itself.
+
 **This sentence was added by the push that added
 `### Base change of a finite étale morphism, and the fibre product it is the projection of`**,
-2026-09-07, and the other two sections it names went unnamed in this paragraph until then.
+2026-09-07, and `### That restriction is a pullback square, and the base change it gives`,
+`### The product of two open subspaces of complex affine spaces` and
+`### The binary product of two local models` went unnamed in this paragraph until then.
+**It said *three* and left `### That restriction is a pullback square, and the base change it
+gives` out, which was false when written rather than falsified later** — that section predates the
+push by which this paragraph acquired the sentence, and the sentence's own criterion reaches it,
+since the section calls itself a claim about a limit and the new one borrowed that phrase to place
+itself. So this is a correction and not one of this repository's dated records.
 
 And a seventh kind is of the **mirror tree**, and is a kind of routing rather than a kind of
 subject: two statements of pure topology, in neither of which an analytic space occurs — that a

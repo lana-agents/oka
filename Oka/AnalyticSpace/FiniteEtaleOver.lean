@@ -561,8 +561,21 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   itself"* and the one saying that what separates two connected covers is the monodromy *action* —
   and two are in the docstrings of
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.faithful_fintypeFiberFunctor` and of
-  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_fintypeFiberFunctor`.
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_fiberFunctor`.
   Each of the four cites it for the absence over a general cospan, which is what it still asserts.
+  **This paragraph named
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_fintypeFiberFunctor`
+  where it now names
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_fiberFunctor`,
+  until 2026-09-07, and was false when written, so this is a correction and not one of this
+  repository's dated records**: the citation sits in the docstring that ends at the `Type u`-valued
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_fiberFunctor`, and
+  the docstring of
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.preservesLimitsOfShape_pempty_fintypeFiberFunctor`
+  cites this bullet by no heading — it cites the `Type u`-valued instance instead, for the
+  spelling of its conclusion. Both are declarations, so `scripts/check_docstring_names.py`
+  resolves either name and only a read of the two docstrings separates them; the count of four is
+  unaffected, since the citation is the same sentence under either name.
   The heading is unchanged for the same reason.
 
   **This bullet read *No pullbacks, so no base change* and said that no `HasPullback` instance for
