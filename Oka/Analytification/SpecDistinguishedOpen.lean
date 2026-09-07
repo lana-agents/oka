@@ -42,8 +42,8 @@ it, so the sentence had a counterexample two screens above itself at the commit 
 **The argument it was making survives the repair and only its scope was wrong.** Measured at
 `5a525bc` over the repository's own import graph, with `scripts/import_cost.py`'s `IMPORT` pattern
 read through its nesting-aware `strip_comments`: **thirteen** modules under `Oka/` have both
-`Oka.Analytification.Comparison` and `Oka.Analytification.LocalisationIndependence` in their
-import closure — the aggregator `Oka.lean`, which imports every module of the library, is
+`Oka.Analytification.Comparison` and `Oka.Analytification.LocalisationIndependence` in their import
+closure — the aggregator `Oka.lean`, which imports every module of the library, is
 excluded throughout, as `OkaTest/Axioms.lean` excludes it from the same kind of grep — and
 **twelve of the thirteen reach this file**, at edge distances one to five —
 `Oka/Analytification/SpecAffineCover.lean` and `Oka/Analytification/SpecRefinedMember.lean` at
