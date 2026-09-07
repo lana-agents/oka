@@ -40,13 +40,29 @@ already says a cover is the coproduct of a clopen part and its complement.
   `[T2Space B.left]` and for injectivity, and **nothing below derives either of them from
   `Mono i`**. **Saying so is the point of this paragraph**: the gap is named rather than hidden
   behind a statement that reads like the field.
-* **A proof that a monomorphism of covers is injective on points.** That is the remaining
-  obligation, and it is a theorem rather than a formality — the classical argument makes the
-  diagonal `A ⟶ A ×_B A` an isomorphism and needs the fibre product. At `c48bf8a`,
+* **A proof that a monomorphism of covers is injective on points, which is not below and is no
+  longer absent from the repository.** **This bullet opened *"A proof that a monomorphism of
+  covers is injective on points. That is the remaining obligation"* until 2026-09-07**, when
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.injective_base_left_of_mono`
+  (`Oka/AnalyticSpace/MonoDirectSummand.lean`) proved it for a monomorphism of covers both of
+  whose total spaces are Hausdorff, and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.inducesIsoOnDirectSummand_of_mono` fed it to the
+  theorem below. **Nothing below moved and nothing below derives injectivity from `Mono i`**;
+  what changed is that a file this one does not import does.
+
+  **The route was not the one this bullet predicted, and the prediction is kept because the
+  correction is the interesting part.** It read: *"it is a theorem rather than a formality — the
+  classical argument makes the diagonal `A ⟶ A ×_B A` an isomorphism and needs the fibre
+  product."* The fibre product is what it needed and is now
+  `ComplexAnalytic.AnalyticSpace.baseChange`, at a cospan whose legs are both `i`; **the diagonal
+  is not built and no isomorphism is proved**, because the two projections being equal — which is
+  what `CategoryTheory.cancel_mono` gives directly — already reads off as injectivity at a point
+  of the carrier. At `c48bf8a`,
   **`#synth CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` fails** — a record
   pinned to that commit and elaborated rather than grepped, not a claim about what the tree will
-  hold. The monomorphism results this file could have reached for run the other way, from an
-  immersion to a monomorphism: `ComplexAnalytic.AnalyticSpace.mono_ofRestrict`
+  hold, and it is still not what supplies the fibre product above. The monomorphism results this
+  file could have reached for run the other way, from an immersion to a monomorphism:
+  `ComplexAnalytic.AnalyticSpace.mono_ofRestrict`
   (`Oka/AnalyticSpace/OpenSubspace.lean`) makes the inclusion of an open subspace a monomorphism,
   and `ComplexAnalytic.IsCutOutBy.mono` together with
   `ComplexAnalytic.AnalyticSpace.mono_of_isCutOutBy` (`Oka/AnalyticSpace/Basic.lean`) do the same
