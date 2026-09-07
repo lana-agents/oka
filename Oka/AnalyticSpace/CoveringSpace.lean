@@ -150,13 +150,22 @@ from a point, which is the entire question.
 
 ## What is not here
 
-* **No uniqueness of the comparison morphism, and none of the isomorphism.**
+* **No uniqueness of the comparison morphism stated *here*, though it is available.**
   `ComplexAnalytic.AnalyticSpace.exists_iso_coveringSpace` says an isomorphism over `X` exists and
   exhibits one; nothing below says it is the *only* morphism over `X` whose base map is the
-  identity. `CategoryTheory.sheafifyLift_unique` is where that would come from, and
-  `Oka/Geometry/RingedSpace/LocallyRingedSpace/InverseImage.lean`'s own `## What is not here` says
-  so at the rung the argument would be run on. Naturality in `q` is missing for the same reason
-  and is not stated either.
+  identity. **That is now an absence in this file alone and not in the tree**:
+  `AlgebraicGeometry.LocallyRingedSpace.inverseImage_hom_ext` says a morphism into an inverse
+  image is determined by its base map together with its composite to the base, of which the
+  statement above is the case where the base map is the identity, and
+  `Oka/AnalyticSpace/FiniteEtaleBaseChange.lean` is what consumes it. **Until 2026-09-07 this
+  bullet ended with a sentence saying that `CategoryTheory.sheafifyLift_unique` was where the
+  uniqueness *would* come from and that
+  `Oka/Geometry/RingedSpace/LocallyRingedSpace/InverseImage.lean`'s own section of absences said
+  so at the rung the argument would be run on**, and both halves stopped being true at once: that
+  file now records the uniqueness as present, and the lemma it is proved from is
+  `CategoryTheory.sheafify_hom_ext` rather than `CategoryTheory.sheafifyLift_unique`. Naturality
+  in `q` is still missing and is still not stated here, and
+  `Oka/Geometry/RingedSpace/LocallyRingedSpace/InverseImage.lean` does not state it either.
 * **No statement for a `q` whose base map is *equal to* a given `p`.** The uniqueness above is
   read at `q`'s own base map, which is exactly what frees it of transport — see the module
   docstring. A consumer who arrives holding `p`, a proof that `q`'s base map equals it, and a

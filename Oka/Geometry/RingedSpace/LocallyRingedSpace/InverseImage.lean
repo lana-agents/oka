@@ -90,6 +90,12 @@ literally a map `p⁻¹𝒪_Y ⟶ 𝒪_Z`.
   underlying map is `p` on the nose.
 - `AlgebraicGeometry.LocallyRingedSpace.toInverseImage`: **the comparison morphism `Z ⟶ q.base⁻¹Y`
   attached to a morphism `q : Z ⟶ Y`**, whose underlying map is the identity on the nose.
+- `AlgebraicGeometry.LocallyRingedSpace.inverseImageMap`: **the morphism `Y⁻¹(h ≫ p) ⟶ Y⁻¹p` over
+  `Y` attached to a continuous `h : E' ⟶ E`**, whose underlying map is `h`, together with
+  `AlgebraicGeometry.LocallyRingedSpace.inverseImageMapOfEq`, the same at a factorisation given as
+  a hypothesis. This is what a morphism *out of* an inverse image is built from, as
+  `AlgebraicGeometry.LocallyRingedSpace.toInverseImage` is what one *into* an inverse image is
+  built from.
 
 ## Main results
 
@@ -107,6 +113,18 @@ literally a map `p⁻¹𝒪_Y ⟶ 𝒪_Z`.
 - `AlgebraicGeometry.LocallyRingedSpace.isIso_toInverseImage`: **and it is an isomorphism outright
   when every stalk map of `q` is one**, by
   `AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.of_stalk_iso` at the identity base map.
+- `AlgebraicGeometry.LocallyRingedSpace.inverseImage_hom_ext`: **a morphism into `p⁻¹Y` is
+  determined by its base map together with its composite to `Y`** — the uniqueness half of the
+  universal property, whose absence this file used to record. It rests on
+  `AlgebraicGeometry.LocallyRingedSpace.inverseImageSheaf_hom_ext`, the sheafification's own
+  uniqueness in the form `AlgebraicGeometry.LocallyRingedSpace.inverseImageHom` is built to
+  consume.
+- `AlgebraicGeometry.LocallyRingedSpace.isIso_toInverseImage_compHom`: **taking the inverse image
+  twice is taking it once along the composite**, and it costs no sheaf theory — both projections
+  of the iterated inverse image are stalkwise isomorphisms already.
+- `AlgebraicGeometry.LocallyRingedSpace.inverseImageMap_base` and
+  `AlgebraicGeometry.LocallyRingedSpace.inverseImageMap_comp`: the base map of that functoriality
+  is `h`, and it is a morphism over `Y`.
 
 ## What is not here
 
@@ -119,15 +137,22 @@ literally a map `p⁻¹𝒪_Y ⟶ 𝒪_Z`.
   sheaf condition asks for a pair of sections and the presheaf offers one. So the sheafification
   is doing real work and no formula for it is stated. Identifying the restriction of `p⁻¹𝒪_Y` to
   a sheet with `𝒪_Y` on its image is the next step and is a different issue.
-* **No universal property, though its existence half is now here.**
+* **The universal property is here, and what is left is naturality and the adjunction.**
   `AlgebraicGeometry.LocallyRingedSpace.toInverseImage` produces the factorisation of a morphism
-  `q : Z ⟶ Y` through `q.base⁻¹Y` that a universal property would produce, and
-  `AlgebraicGeometry.LocallyRingedSpace.toInverseImage_comp` is that it is a factorisation.
-  **Uniqueness is not stated**: nothing below says that it is the only morphism over `Y` with
-  identity base, although `CategoryTheory.sheafifyLift_unique` is what would prove it. Neither is
-  naturality in `q`, and `AlgebraicGeometry.LocallyRingedSpace.inverseImage` is still not shown to
-  be a left adjoint to anything — for which `TopCat.Sheaf.pullbackPushforwardAdjunction`, and not
-  the presheaf adjunction used above, is where one would start.
+  `q : Z ⟶ Y` through `q.base⁻¹Y`, `AlgebraicGeometry.LocallyRingedSpace.toInverseImage_comp` is
+  that it is a factorisation, and `AlgebraicGeometry.LocallyRingedSpace.inverseImage_hom_ext` is
+  the uniqueness — a morphism into `p⁻¹Y` is determined by its base map together with its
+  composite to `Y`, from which the comparison morphism being the only one over `Y` with identity
+  base is the case `p = q.base`. **This bullet read `"No universal property, though its existence
+  half is now here"`, and said `"Uniqueness is not stated: nothing below says that it is the only
+  morphism over `Y` with identity base, although `CategoryTheory.sheafifyLift_unique` is what
+  would prove it"`, until 2026-09-07.** That prediction was right in substance and wrong in the
+  name: the usable form is `CategoryTheory.sheafify_hom_ext`, which takes the two maps as given,
+  where `CategoryTheory.sheafifyLift_unique` wants the extension exhibited first.
+  **Naturality in `q` is still not stated**, and
+  `AlgebraicGeometry.LocallyRingedSpace.inverseImage` is still not shown to be a left adjoint to
+  anything — for which `TopCat.Sheaf.pullbackPushforwardAdjunction`, and not the presheaf
+  adjunction used above, is where one would start.
 * **No comparison with `AlgebraicGeometry.LocallyRingedSpace.restrict`.** For `p` the inclusion of
   an open subset both constructions are available and they should agree; that is not proved.
 -/
@@ -464,5 +489,191 @@ theorem isIso_toInverseImage (h : ∀ z, IsIso (q.stalkMap z)) : IsIso (toInvers
   exact IsOpenImmersion.to_iso _
 
 end
+
+section Uniqueness
+
+variable (Y : LocallyRingedSpace.{u}) {E : TopCat.{u}} (p : E ⟶ Y.toTopCat)
+
+/-- **A map out of `p⁻¹𝒪_Y` into a sheaf is determined by its restriction along
+`AlgebraicGeometry.LocallyRingedSpace.toInverseImageSheaf`.**
+
+This is the uniqueness half of the sheafification's universal property, in the one form the
+morphism below is built to consume. `toInverseImageSheaf` is the sheafification map followed by
+an *isomorphism*, so the isomorphism cancels by `CategoryTheory.cancel_epi` and what is left is
+`CategoryTheory.sheafify_hom_ext` — the `η γ` form, not `CategoryTheory.sheafifyLift_unique`,
+which would need the extension exhibited first.
+
+**Nothing about `p⁻¹𝒪_Y`'s sections is used or produced.** The module docstring records that no
+formula for them is stated here, and this statement is why that costs nothing twice over. -/
+theorem inverseImageSheaf_hom_ext {G : TopCat.Presheaf CommRingCat.{u} E}
+    (hG : TopCat.Presheaf.IsSheaf G) (α β : (inverseImageSheaf Y p).presheaf ⟶ G)
+    (h : toInverseImageSheaf Y p ≫ α = toInverseImageSheaf Y p ≫ β) : α = β := by
+  haveI : IsIso ((TopCat.Sheaf.forget CommRingCat.{u} E).map
+      ((TopCat.Sheaf.pullbackIso CommRingCat.{u} p).app Y.toSheafedSpace.sheaf).inv) :=
+    inferInstance
+  refine (cancel_epi ((TopCat.Sheaf.forget CommRingCat.{u} E).map
+      ((TopCat.Sheaf.pullbackIso CommRingCat.{u} p).app Y.toSheafedSpace.sheaf).inv)).mp ?_
+  refine CategoryTheory.sheafify_hom_ext _ _ _ hG ?_
+  simp only [toInverseImageSheaf, Category.assoc] at h
+  exact h
+
+/-- **A morphism into `p⁻¹Y` is determined by its base map together with its composite to `Y`.**
+
+This is the uniqueness the module docstring records as absent, in the form a consumer wants: not
+*"the comparison morphism is the only one with identity base"* but the statement that implies it,
+for an arbitrary base map. `AlgebraicGeometry.LocallyRingedSpace.toInverseImage_comp` is the
+existence half; the two together are the universal property of `p⁻¹Y` as an object over `Y`
+whose base map is prescribed.
+
+**The two hypotheses are both needed and neither implies the other.** Dropping the base
+hypothesis leaves two morphisms with different carriers-level maps agreeing over `Y`, which the
+fibres of `p` allow whenever `p` is not injective; dropping the second leaves the `c` fields
+wholly unconstrained.
+
+## How the proof gets past the dependent type of `c`
+
+`AlgebraicGeometry.PresheafedSpace.Hom.c`'s type mentions `base`, so `congrArg (fun m ↦ m.c)`
+does not typecheck and `rw` at an equation of morphisms fails with *"motive is not type
+correct"*. Two moves get around it, and both are worth naming because neither is the first thing
+one tries:
+
+* **`u` and `v` are destructured and the base equation is `subst`ed.** After
+  `obtain ⟨⟨ub, uc⟩, uprop⟩ := u` the field `u.base` is the local variable `ub`, so `hbase` is an
+  equation between variables and every `eqToHom` in `AlgebraicGeometry.PresheafedSpace.ext` is at
+  `rfl`. Carrying a propositional base equality through that `Functor.whiskerRight (eqToHom _)`
+  instead is the expensive route.
+* **`AlgebraicGeometry.LocallyRingedSpace.Hom.toHom` is not dependent**, so `congrArg` survives
+  it; `AlgebraicGeometry.PresheafedSpace.Hom.mk.injEq` then turns the equation into a conjunction
+  whose second half is a `HEq` between two `c` fields of the same type, and `eq_of_heq` lands it.
+
+The rest is the adjunction: the resulting equation is the image of
+`toInverseImageSheaf Y p ≫ uc` and of `toInverseImageSheaf Y p ≫ vc` under
+`TopCat.Presheaf.pullbackPushforwardAdjunction`'s `homEquiv`, so those two are equal, and
+`AlgebraicGeometry.LocallyRingedSpace.inverseImageSheaf_hom_ext` finishes. **The presheaf
+adjunction and not `TopCat.Sheaf.pullbackPushforwardAdjunction`**, for the reason the module
+docstring gives about `inverseImageHom`. -/
+theorem inverseImage_hom_ext {Z : LocallyRingedSpace.{u}} {u v : Z ⟶ inverseImage Y p}
+    (hbase : u.base = v.base)
+    (h : u ≫ inverseImageHom Y p = v ≫ inverseImageHom Y p) : u = v := by
+  obtain ⟨⟨ub, uc⟩, uprop⟩ := u
+  obtain ⟨⟨vb, vc⟩, vprop⟩ := v
+  dsimp only [PresheafedSpace.Hom.base] at hbase
+  subst hbase
+  have h2 : ({ base := ub, c := uc, prop := uprop } ≫ Y.inverseImageHom p : Z ⟶ Y).toHom
+      = ({ base := ub, c := vc, prop := vprop } ≫ Y.inverseImageHom p : Z ⟶ Y).toHom :=
+    congrArg Hom.toHom h
+  rw [PresheafedSpace.Hom.mk.injEq] at h2
+  have hc : ((TopCat.Presheaf.pullbackPushforwardAdjunction CommRingCat.{u} p).unit.app Y.presheaf ≫
+        (TopCat.Presheaf.pushforward CommRingCat.{u} p).map (toInverseImageSheaf Y p)) ≫
+        (TopCat.Presheaf.pushforward CommRingCat.{u} p).map uc
+      = ((TopCat.Presheaf.pullbackPushforwardAdjunction CommRingCat.{u} p).unit.app Y.presheaf ≫
+        (TopCat.Presheaf.pushforward CommRingCat.{u} p).map (toInverseImageSheaf Y p)) ≫
+        (TopCat.Presheaf.pushforward CommRingCat.{u} p).map vc := eq_of_heq h2.2
+  have key : toInverseImageSheaf Y p ≫ uc = toInverseImageSheaf Y p ≫ vc := by
+    refine ((TopCat.Presheaf.pullbackPushforwardAdjunction CommRingCat.{u} p).homEquiv
+      Y.presheaf ((TopCat.Presheaf.pushforward CommRingCat.{u} ub).obj Z.presheaf)).injective ?_
+    simp only [Adjunction.homEquiv_unit, Functor.map_comp]
+    exact hc
+  have hfin : uc = vc := inverseImageSheaf_hom_ext Y p
+    (TopCat.Sheaf.pushforward_sheaf_of_sheaf ub Z.IsSheaf) uc vc key
+  refine Hom.ext' (PresheafedSpace.ext _ _ rfl ?_)
+  simp only [hfin, eqToHom_refl, Functor.whiskerRight_id']
+  exact Category.comp_id _
+
+end Uniqueness
+
+noncomputable section Functoriality
+
+variable {Y : LocallyRingedSpace.{u}} {E E' : TopCat.{u}} (p : E ⟶ Y.toTopCat) (h : E' ⟶ E)
+
+/-- **The composite `p⁻¹Y ⟶ Y` of the two projections of an iterated inverse image**, whose base
+map is `h ≫ p` **on the nose** — which is the whole reason this is given a name rather than
+written out. -/
+def compHom : inverseImage (inverseImage Y p) h ⟶ Y :=
+  inverseImageHom (inverseImage Y p) h ≫ inverseImageHom Y p
+
+@[simp]
+theorem compHom_base : (compHom p h).base = h ≫ p := rfl
+
+set_option backward.isDefEq.respectTransparency false in
+/-- **Taking the inverse image twice is taking it once along the composite.**
+
+`AlgebraicGeometry.LocallyRingedSpace.isIso_toInverseImage` asks that every stalk map of
+`AlgebraicGeometry.LocallyRingedSpace.compHom` be an isomorphism, and that is free: the composite
+is two `AlgebraicGeometry.LocallyRingedSpace.inverseImageHom`s, whose stalk maps are instances by
+`AlgebraicGeometry.LocallyRingedSpace.isIso_stalkMap_inverseImageHom`. **No sheaf theory is spent
+here at all**, which is worth saying because the statement looks like it should cost some.
+
+The `set_option` is not decoration. `AlgebraicGeometry.LocallyRingedSpace.inverseImage_toTopCat`
+is `rfl` and is not reducible, so the point at which the outer stalk map is taken has type
+`(inverseImage Y p).toTopCat` where the instance is stated at `E`; instance search runs at
+reducible transparency and fails on that seam with a message that reads as a missing instance. -/
+theorem isIso_toInverseImage_compHom : IsIso (toInverseImage (compHom p h)) := by
+  refine isIso_toInverseImage _ fun z ↦ ?_
+  rw [compHom, LocallyRingedSpace.stalkMap_comp]
+  infer_instance
+
+/-- **The isomorphism `(p⁻¹Y)⁻¹` along `h` is `Y⁻¹` along `h ≫ p`**, as an
+`CategoryTheory.Iso`. -/
+def inverseImageIso : inverseImage (inverseImage Y p) h ≅ inverseImage Y (h ≫ p) :=
+  @asIso _ _ _ _ _ (isIso_toInverseImage_compHom p h)
+
+@[simp]
+theorem inverseImageIso_hom_base : (inverseImageIso p h).hom.base = 𝟙 _ := rfl
+
+/-- **The inverse of that isomorphism is the identity on points.**
+
+`AlgebraicGeometry.LocallyRingedSpace.iso_hom_base_inv_base_apply` at an isomorphism whose `hom`
+has identity base reads as this with no rewriting, which is why the statement is pointwise rather
+than an equation of morphisms: the equation of morphisms is at two spellings of the same carrier
+and needs a `TopCat` extensionality step that this form does not. -/
+theorem inverseImageIso_inv_base_apply (z : E') : (inverseImageIso p h).inv.base z = z :=
+  iso_hom_base_inv_base_apply (inverseImageIso p h) z
+
+/-- **The inverse image is functorial in the space over `Y`**: a continuous `h : E' ⟶ E` gives a
+morphism `Y⁻¹(h ≫ p) ⟶ Y⁻¹p` over `Y`, whose base map is `h`.
+
+This is what a morphism *out of* an inverse image is built from, in the same way that
+`AlgebraicGeometry.LocallyRingedSpace.toInverseImage` is what a morphism *into* one is built
+from. Neither is a projection of the other. -/
+def inverseImageMap : inverseImage Y (h ≫ p) ⟶ inverseImage Y p :=
+  (inverseImageIso p h).inv ≫ inverseImageHom (inverseImage Y p) h
+
+@[simp]
+theorem inverseImageMap_base : (inverseImageMap p h).base = h := by
+  ext z
+  exact congrArg (fun x ↦ h x) (inverseImageIso_inv_base_apply p h z)
+
+/-- **And it is a morphism over `Y`.** -/
+theorem inverseImageMap_comp :
+    inverseImageMap p h ≫ inverseImageHom Y p = inverseImageHom Y (h ≫ p) := by
+  have hc : compHom p h = (inverseImageIso p h).hom ≫ inverseImageHom Y (h ≫ p) :=
+    (toInverseImage_comp (compHom p h)).symm
+  rw [inverseImageMap, Category.assoc]
+  change (inverseImageIso p h).inv ≫ compHom p h = _
+  rw [hc, Iso.inv_hom_id_assoc]
+
+variable (p' : E' ⟶ Y.toTopCat)
+
+/-- **`AlgebraicGeometry.LocallyRingedSpace.inverseImageMap` at a factorisation given as a
+hypothesis rather than as the shape of the type.**
+
+A caller arrives holding two maps to `Y.toTopCat` and a proof that one is the other composed with
+`h` — a commuting square of spaces — and not holding a term whose head is `≫`. **`subst` is what
+makes this free**, and taking the equation as a hypothesis rather than transporting along it with
+`eqToHom` afterwards is what keeps the base computation below a rewrite instead of a transport. -/
+def inverseImageMapOfEq (hcomm : p' = h ≫ p) : inverseImage Y p' ⟶ inverseImage Y p := by
+  subst hcomm; exact inverseImageMap p h
+
+@[simp]
+theorem inverseImageMapOfEq_base (hcomm : p' = h ≫ p) :
+    (inverseImageMapOfEq p h p' hcomm).base = h := by
+  subst hcomm; exact inverseImageMap_base p h
+
+theorem inverseImageMapOfEq_comp (hcomm : p' = h ≫ p) :
+    inverseImageMapOfEq p h p' hcomm ≫ inverseImageHom Y p = inverseImageHom Y p' := by
+  subst hcomm; exact inverseImageMap_comp p h
+
+end Functoriality
 
 end AlgebraicGeometry.LocallyRingedSpace

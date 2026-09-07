@@ -53,6 +53,7 @@ import Oka.AnalyticSpace.DirectSummand
 import Oka.AnalyticSpace.Evaluation
 import Oka.AnalyticSpace.Factorisation
 import Oka.AnalyticSpace.Finite
+import Oka.AnalyticSpace.FiniteEtaleBaseChange
 import Oka.AnalyticSpace.FiniteEtaleOver
 import Oka.AnalyticSpace.Glue
 import Oka.AnalyticSpace.Hausdorff
