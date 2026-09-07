@@ -67,6 +67,18 @@ equation of morphisms out of `CategoryTheory.Limits.pullback` of two members of 
 - `ComplexAnalytic.AnalyticSpace.pullback_condition_pullbackFst_ofRestrict`: that instance's
   commuting square, stated so that the tree fails to build rather than to guard green if instance
   search stops reaching it.
+- `ComplexAnalytic.AnalyticSpace.isPullback_map_ofRestrict` and
+  `ComplexAnalytic.AnalyticSpace.toLRSIsoPullbackMap`: **the same square, and the same pullback,
+  one category down** — the forgetful functor to `AlgebraicGeometry.LocallyRingedSpace` carries
+  the restriction square to a pullback square there, and the underlying locally ringed space of
+  the analytic pullback is the pullback taken there.
+- `ComplexAnalytic.AnalyticSpace.hasPullback_map_ofRestrict`: the instance that makes the second
+  of those two statable, which is Mathlib's fact at the spelling a caller who has applied that
+  functor holds.
+- `ComplexAnalytic.AnalyticSpace.pullbackFst_eq_inv_comp_ofRestrict` and
+  `ComplexAnalytic.AnalyticSpace.isOpenImmersion_map_pullbackFst_ofRestrict`: **the first
+  projection *is* an open-subspace inclusion up to an isomorphism**, so its image downstairs is an
+  open immersion of locally ringed spaces.
 - `ComplexAnalytic.AnalyticSpace.isFinite_restrictHom`: **a finite morphism restricted over an open
   subset of its target is finite**, with no hypothesis on the open subset.
 - `ComplexAnalytic.AnalyticSpace.isFiniteEtale_restrictHom`: the same for finite étale.
@@ -274,6 +286,121 @@ theorem pullback_condition_pullbackFst_ofRestrict {T : AnalyticSpace.{u}} (k : T
     pullback.fst (pullback.fst f (Y.ofRestrict V)) k ≫ pullback.fst f (Y.ofRestrict V) =
       pullback.snd (pullback.fst f (Y.ofRestrict V)) k ≫ k :=
   pullback.condition
+
+/-! ### The same square one category down, and what a glue datum can take from it -/
+
+/-- **The pullback of a morphism of locally ringed spaces along the inclusion of an open subspace,
+at the spelling a caller of `ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace` holds.**
+
+The mathematics is Mathlib's: the second leg is an open immersion and
+`AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.hasPullback_of_right` supplies the limit.
+What is added is a discrimination-tree key. Instance search reaches Mathlib's instance at
+`AlgebraicGeometry.LocallyRingedSpace.ofRestrict` and does not reach it at
+`ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace.map`, although the two terms are
+`rfl`-equal — measured at `upstream/master` = `ebba2ce`, where the statement below is `failed to
+synthesize` and its `ofRestrict`-spelled twin closes by `inferInstance`. That is the seam
+`AlgebraicGeometry.LocallyRingedSpace.isOpenImmersion_ofRestrict`'s docstring is about, and its
+prescription — an ascribed `haveI` at the spelling the goal uses — is the proof below.
+
+**Why a global instance here and a `haveI` there.** That docstring argues against repairing the
+instance graph and this declaration does repair it, at exactly one key and one class up. The
+reason is `ComplexAnalytic.AnalyticSpace.toLRSIsoPullbackMap`, whose *type* names the pullback:
+a call-site `haveI` cannot be reached during the elaboration of a type, so the instance a `def`
+of that shape needs has to be global or the `def` cannot be stated. -/
+instance hasPullback_map_ofRestrict :
+    Limits.HasPullback (forgetToLocallyRingedSpace.map f)
+      (forgetToLocallyRingedSpace.map (Y.ofRestrict V)) := by
+  haveI : AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion
+      (forgetToLocallyRingedSpace.map (Y.ofRestrict V)) :=
+    AlgebraicGeometry.LocallyRingedSpace.isOpenImmersion_ofRestrict Y.toLocallyRingedSpace V
+  infer_instance
+
+/-- **The forgetful functor carries the restriction square to a pullback square of locally ringed
+spaces.**
+
+This is `AlgebraicGeometry.LocallyRingedSpace.isPullback_ofRestrict` at `f.toLRSHom`, with
+`ComplexAnalytic.AnalyticSpace.restrictHom_fac` mapped down as the factorisation that theorem
+takes as a hypothesis. Every `ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace.map` in the
+statement is `rfl`-equal to a `ComplexAnalytic.AnalyticSpace.Hom.toLRSHom`, and the square is
+`rfl`-equal to the one that theorem is about; what the spelling buys is that the statement is
+about the *image* of this file's square rather than about a square that happens to look like it.
+
+**It does not follow from `ComplexAnalytic.AnalyticSpace.isPullback_ofRestrict` and does not imply
+it.** `ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace` is faithful and not full — a
+morphism of locally ringed spaces between analytic spaces need not be `ℂ`-linear, which is what
+`ComplexAnalytic.IsCLinearHom` is in the definition of a morphism for — so a cone downstairs has
+test objects and test morphisms the analytic statement never sees, and the analytic one is a
+statement about a category this one says nothing about. **No claim is made here that the functor
+preserves pullbacks**; what is proved is one square. -/
+theorem isPullback_map_ofRestrict :
+    CategoryTheory.IsPullback
+      (forgetToLocallyRingedSpace.map (X.ofRestrict ((Opens.map f.toLRSHom.base).obj V)))
+      (forgetToLocallyRingedSpace.map (restrictHom f V))
+      (forgetToLocallyRingedSpace.map f)
+      (forgetToLocallyRingedSpace.map (Y.ofRestrict V)) :=
+  AlgebraicGeometry.LocallyRingedSpace.isPullback_ofRestrict f.toLRSHom V _
+    (forgetToLocallyRingedSpace.congr_map (restrictHom_fac f V))
+
+/-- **The underlying locally ringed space of the analytic pullback *is* the locally-ringed-space
+pullback.**
+
+Two comparisons composed, and neither is new:
+`ComplexAnalytic.AnalyticSpace.restrictIsoPullbackOfRestrict` identifies the analytic pullback
+with `X|f⁻¹V` upstairs, that identification is carried down by a
+functor, and `ComplexAnalytic.AnalyticSpace.isPullback_map_ofRestrict` identifies `X|f⁻¹V` with
+the pullback downstairs. **The content is that the second identification exists at all**, which is
+`ComplexAnalytic.AnalyticSpace.isPullback_map_ofRestrict`.
+
+**This is what a glue datum built out of analytic pieces needs.**
+`Oka/AnalyticSpace/Glue.lean`'s entry points take an
+`AlgebraicGeometry.LocallyRingedSpace.GlueData`, whose fields are locally ringed spaces and whose
+`t'` is a morphism out of a pullback taken *there*; a pullback taken in
+`ComplexAnalytic.AnalyticSpace` is not that object, and this isomorphism is what carries one to
+the other. **It reaches one cospan and not every cospan**: the leg here is
+`ComplexAnalytic.AnalyticSpace.ofRestrict`, and the cospan a glue datum's `t'` opens over has a
+`CategoryTheory.Limits.pullback.fst` on each leg. Whether the comparison is available there is not
+settled here and nothing below claims it is. -/
+noncomputable def toLRSIsoPullbackMap :
+    (Limits.pullback f (Y.ofRestrict V)).toLocallyRingedSpace ≅
+      Limits.pullback (forgetToLocallyRingedSpace.map f)
+        (forgetToLocallyRingedSpace.map (Y.ofRestrict V)) :=
+  (forgetToLocallyRingedSpace.mapIso (restrictIsoPullbackOfRestrict f V)).symm ≪≫
+    (isPullback_map_ofRestrict f V).isoPullback
+
+/-- **The first projection out of the pullback along an open-subspace inclusion is that inclusion
+of the preimage, precomposed with an isomorphism.**
+
+`ComplexAnalytic.AnalyticSpace.restrictIsoPullbackOfRestrict_hom_fst` says this with the
+isomorphism on the other side; this is that equation solved for
+`CategoryTheory.Limits.pullback.fst`, which is the form
+`ComplexAnalytic.AnalyticSpace.isOpenImmersion_map_pullbackFst_ofRestrict` consumes and the form a
+reader asking *what is this projection* wants. -/
+theorem pullbackFst_eq_inv_comp_ofRestrict :
+    Limits.pullback.fst f (Y.ofRestrict V) =
+      (restrictIsoPullbackOfRestrict f V).inv ≫
+        X.ofRestrict ((Opens.map f.toLRSHom.base).obj V) := by
+  rw [← restrictIsoPullbackOfRestrict_hom_fst f V, Iso.inv_hom_id_assoc]
+
+/-- **The image of that projection is an open immersion of locally ringed spaces.**
+
+An isomorphism followed by the inclusion of an open subspace, by
+`ComplexAnalytic.AnalyticSpace.pullbackFst_eq_inv_comp_ofRestrict`, and both survive
+`ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace`.
+
+**Stated as a theorem and not as an instance**, and the reason is
+`AlgebraicGeometry.LocallyRingedSpace.isOpenImmersion_ofRestrict`'s: the remedy that file
+prescribes for this seam is to wrap the fact and let a caller ascribe it in a `haveI` at the
+spelling its goal uses, rather than to add a key to the instance graph. A caller who wants
+`AlgebraicGeometry.LocallyRingedSpace.GlueData`'s open-immersion field at this leg does exactly
+that. -/
+theorem isOpenImmersion_map_pullbackFst_ofRestrict :
+    AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion
+      (forgetToLocallyRingedSpace.map (Limits.pullback.fst f (Y.ofRestrict V))) := by
+  haveI : AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion
+      (forgetToLocallyRingedSpace.map (X.ofRestrict ((Opens.map f.toLRSHom.base).obj V))) :=
+    AlgebraicGeometry.LocallyRingedSpace.isOpenImmersion_ofRestrict X.toLocallyRingedSpace _
+  rw [pullbackFst_eq_inv_comp_ofRestrict f V, forgetToLocallyRingedSpace.map_comp]
+  infer_instance
 
 /-! ### Base change along an open immersion -/
 
