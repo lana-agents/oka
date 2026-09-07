@@ -133,6 +133,15 @@ below.
   local models over a third: the differences of the two composites to `ℂ^p` are sections of the
   product and not of the product's ambient space, and cutting a space down by *its own* sections
   is what is below.
+
+  **The fibre product itself is in `Oka/AnalyticSpace/CutOutFibreProduct.lean`**, which imports
+  this file — one edge, measured — and which is the first
+  `CategoryTheory.Limits.HasPullback` instance in this repository over a cospan neither of whose
+  legs is the inclusion of an open subspace or is finite étale. **This bullet is unchanged by
+  that**: the `#synth` above is pinned to the commit that adds *this* file, and
+  `CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` still fails at the commit
+  that adds that one, since a general analytic space is only locally a local model. This paragraph
+  was added on 2026-09-07 by the push that added that file.
 * **No comparison with `ComplexAnalytic.AnalyticSpace.zeroLocus`.** At an ambient which is an open
   subspace of `ℂ^n`, `ComplexAnalytic.AnalyticSpace.zeroLocus` and
   `ComplexAnalytic.AnalyticSpace.zeroLocusSubspace` have the same underlying locally ringed space,
@@ -157,6 +166,16 @@ below.
   the uniqueness — which is the recipe `ComplexAnalytic.IsCutOutBy.existsUnique_liftHom`'s own
   docstring gives, and `ComplexAnalytic.AnalyticSpace.liftHom` is the named analytic-space
   morphism that recipe produces for a local model. Nothing below is that morphism for this space.
+
+  **It is `ComplexAnalytic.AnalyticSpace.zeroLocusSubspaceLift`, in
+  `Oka/AnalyticSpace/CutOutFibreProduct.lean`, and it could not have been here**:
+  `Oka.AnalyticSpace.Factorisation`, which declares `ComplexAnalytic.IsCutOutBy.lift` and
+  `ComplexAnalytic.IsCutOutBy.isCLinearHom_lift`, is **not** in this module's import closure —
+  measured with `scripts/import_cost.py`'s `IMPORT` pattern over its nesting-aware
+  `strip_comments`, and confirmed by a scratch importing this module alone, which reports
+  `Unknown constant 'ComplexAnalytic.IsCutOutBy.lift'`. **The bullet is unchanged and nothing is
+  retired**: *below* is this file, and the two halves are still not composed in it. This paragraph
+  was added on 2026-09-07 by the push that added that file.
 
   **This bullet read `ComplexAnalytic.IsCutOutBy.existsUnique_liftHom` `would give one from the
   datum below` until 2026-09-07. It was false when written rather than true and falsified, so this

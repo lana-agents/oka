@@ -129,6 +129,14 @@ is rejected, which is the seam
   common base is an equaliser inside such a product; no construction below builds an equaliser or
   bears on `CategoryTheory.Limits.HasPullback`, and `#synth
   CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` fails at that same commit.
+
+  **It is in `Oka/AnalyticSpace/CutOutFibreProduct.lean`**, which imports this file — one edge,
+  measured — and which cuts the product below down by the `p` differences of the two composites to
+  `ℂ^p`, giving `CategoryTheory.Limits.HasPullback` at a cospan of local models. **The bullet is
+  unchanged by that and nothing here is retired**: *below* is this file, which still builds no
+  equaliser, and `#synth CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` still
+  fails at the commit that adds that file. This paragraph was added on 2026-09-07 by the push that
+  added it.
 * **Any description of the product on points.** The underlying set of
   `ComplexAnalytic.AnalyticSpace.prodCutOut` is the zero locus of the appended family, and no
   statement below identifies it with a set of pairs or computes the base map of either projection.

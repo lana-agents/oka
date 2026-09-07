@@ -92,9 +92,9 @@ of the pair is one separation axiom on `Y`.
 
 **The classical repair is not needed, and this file used to imply that it was the only route.**
 Factoring `f` through its graph and asking `Y` to be separated over the base needs a separatedness
-notion and a fibre product over a cospan neither of whose legs is the inclusion of an open
-subspace, and neither of those is here — that absence is real and is recorded in the base-change
-paragraph below. **This sentence read *needs a separatedness notion and fibre products, and
+notion and a fibre product `Y ×_S Y` at an arbitrary analytic space `Y`, and neither of those is
+here — that absence is real and is recorded in the base-change paragraph
+below. **This sentence read *needs a separatedness notion and fibre products, and
 neither exists here* until `Oka/AnalyticSpace/PullbackOpen.lean` landed**, which builds the one
 shape the graph construction cannot use. It is not what was obstructing this:
 `isProperMap_of_comp_of_t2` is Mathlib's cancellation for proper maps at `[T2Space Y]` and asks
@@ -104,6 +104,18 @@ lemmas and no new topology at all. **`[T2Space Y]` is a genuine hypothesis and n
 that will be found** — `Oka/AnalyticSpace/Basic.lean` imposes no separation axiom, as
 `AlgebraicGeometry.Scheme` does not — and the counterexample above is exactly the witness that it
 cannot be dropped.
+
+**The clause repaired above read *a fibre product over a cospan neither of whose legs is the
+inclusion of an open subspace* until 2026-09-07**, when
+`Oka/AnalyticSpace/CutOutFibreProduct.lean` built a fibre product over exactly such a cospan:
+`ComplexAnalytic.AnalyticSpace.hasPullback_ofCutOut` is a `CategoryTheory.Limits.HasPullback`
+instance at a cospan of two *local models* over a third, and neither of its legs is the inclusion
+of an open subspace or is finite étale. **What that file does not reach is the cospan the graph
+construction forms**, whose two legs are the same morphism out of an arbitrary analytic space `Y`
+— and an arbitrary `Y` need not be a local model, which is why the repaired clause names the
+object it wants rather than the shape of the legs. `CategoryTheory.Limits.HasPullbacks
+ComplexAnalytic.AnalyticSpace` still does not synthesise, on a run at the commit carrying this
+record, so the absence is narrowed and not struck.
 
 ## What is not here, and it is the whole of the subject
 
