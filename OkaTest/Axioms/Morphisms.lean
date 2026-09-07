@@ -775,7 +775,20 @@ file"* was also exact at `4025f01`, where
 heading of this file and consumes `IsCoveringMap.isClosedMap` and not its converse; headings have
 been appended past it since, so the clause is false today. **A positional pointer can go false
 while every numeral in the sentence beside it stays exact**, which is why the repair names the
-section rather than moving the pointer. -/
+section rather than moving the pointer.
+
+**`IsSeparatedMap.t2Space` is a third mirror-tree statement guarded here, and it is routed by
+this heading rather than by a row of `OkaTest/Axioms.lean`'s topic table.** It is in
+`Oka/Topology/SeparatedMap.lean`, whose subject — separated maps — no row of that table names, so
+it falls under the tail that file describes: *"Guard one in the file of the analytic result that
+motivated it, under that result's heading."* What motivated it is
+`IsClosedMap.isCoveringMap_of_isLocalHomeomorph`'s `[T2Space E]`: composed with Mathlib's
+`IsCoveringMap.isSeparatedMap` it is what turns a non-Hausdorff total space into a refutation of
+that criterion, which is `LineTwoOrigins.not_isCoveringMap_fold_of_not_t2Space` in
+`OkaTest/FiniteEtaleCancel.lean`. **The witness itself is not guarded**, for the reason this file
+already gives about `TwoIndiscrete.not_isCoveringMap_pullback_snd_of_not_continuous` — *"a
+declaration of a test file, which the guards of this repository's library do not reach"*. What is
+guarded here is the library lemma that witness consumes. -/
 
 /--
 info: 'IsClosedMap.isCoveringMap_of_isLocalHomeomorph' depends on axioms:
@@ -783,6 +796,12 @@ info: 'IsClosedMap.isCoveringMap_of_isLocalHomeomorph' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms IsClosedMap.isCoveringMap_of_isLocalHomeomorph
+
+/--
+info: 'IsSeparatedMap.t2Space' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms IsSeparatedMap.t2Space
 
 /--
 info: 'IsCoveringMap.isClosedMap' depends on axioms: [propext, Classical.choice, Quot.sound]

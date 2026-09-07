@@ -210,6 +210,7 @@ import Oka.Topology.Algebra.Polynomial
 import Oka.Topology.Category.TopCat.Opens
 import Oka.Topology.Covering.Basic
 import Oka.Topology.IsLocalHomeomorph
+import Oka.Topology.SeparatedMap
 import Oka.Topology.Sheaves.Functors
 import Oka.Topology.Sheaves.Presheaf
 import Oka.Topology.Sheaves.QuotientPresheaf
