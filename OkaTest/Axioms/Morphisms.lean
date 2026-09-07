@@ -3748,3 +3748,44 @@ info: 'ComplexAnalytic.AnalyticSpace.prodCutOutIsoProd' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.prodCutOutIsoProd
+
+/-! ### Base change of a covering map, and of its finite fibres
+
+`Oka/Topology/Covering/Basic.lean`'s two statements about `Function.Pullback`:
+`IsCoveringMap.pullback_snd`, that a covering map stays one under base change along a *continuous*
+map, and `Function.Pullback.finite_fiber_snd`, that the fibres stay finite with no covering
+hypothesis and no topology.
+
+**They are mirror-tree topology, and at the commit that adds them no file under `Oka/` outside the
+one that declares them names either**, which is the footing `IsCoveringMap.isClosedMap_of_comp` is
+already on in the section `### Cancellation of finiteness and of finite étaleness` above, and the
+reason both are guarded here: a declaration no other guard reaches through a consumer is the one
+whose disappearance nothing else would catch. `Function.Pullback.finite_fiber_snd` is consumed at
+that commit by `TwoIndiscrete.not_isCoveringMap_pullback_snd_of_not_continuous`, which is a
+declaration of a test file and so is not in this file's environment either. The placement is the
+one `OkaTest/Axioms.lean` prescribes for a mirror-tree module whose subject no row of its topic
+table names — guard it with the analytic topic it serves — and that file names
+`Oka/Topology/Covering/Basic.lean` as its own precedent for the practice. The topic here is
+`ComplexAnalytic.AnalyticSpace.isFinite_coveringSpaceHom`, the `morphisms of analytic spaces` row.
+
+**The witness that `IsCoveringMap.pullback_snd`'s continuity hypothesis cannot be dropped is
+`TwoIndiscrete.not_isCoveringMap_pullback_snd_of_not_continuous` (`OkaTest/CoveringBaseChange.lean`)
+and is not guarded here**, for the reason the section
+`### Cancellation of finiteness and of finite étaleness` gives of its own witness: this file imports
+`Oka` and not `OkaTest`, so no declaration of a test file is in its environment.
+
+This section is appended as its own section because a section moved is a conflict for somebody
+else. -/
+
+/--
+info: 'IsCoveringMap.pullback_snd' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms IsCoveringMap.pullback_snd
+
+/--
+info: 'Function.Pullback.finite_fiber_snd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms Function.Pullback.finite_fiber_snd
