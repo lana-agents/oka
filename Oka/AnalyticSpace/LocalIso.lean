@@ -94,10 +94,15 @@ the rung.
   and no separatedness notion and no fibre product is needed at any point.
 
   This repository still has no separatedness notion for `ComplexAnalytic.AnalyticSpace`, and no
-  fibre product over a cospan neither of whose legs is the inclusion of an open subspace —
-  `Oka/AnalyticSpace/PullbackOpen.lean` builds that one shape and prices the rest. **This sentence
-  read *neither a separatedness notion … nor fibre products* until that file landed, and the second
-  half of it is what the file falsified.** The remaining absence is the one
+  fibre product over a cospan neither of whose legs is the inclusion of an open subspace or is
+  finite étale with Hausdorff source — `Oka/AnalyticSpace/PullbackOpen.lean` builds the first of
+  those two shapes and `Oka/AnalyticSpace/FiniteEtaleBaseChange.lean` the second, and the first of
+  those two files prices the rest. **This sentence read *neither a separatedness notion … nor fibre
+  products* until `Oka/AnalyticSpace/PullbackOpen.lean` landed, and the second half of it is what
+  that file falsified; it then read *no fibre product over a cospan neither of whose legs is the
+  inclusion of an open subspace — `Oka/AnalyticSpace/PullbackOpen.lean` builds that one shape and
+  prices the rest* until 2026-09-07, when the second file added the second shape.** The remaining
+  absence is the one
   `Oka/AnalyticSpace/FiniteEtaleOver.lean` records as the reason base change is not statable there.
   **Neither was ever what obstructed this**; a
   separation axiom on `Y` is a hypothesis and not a construction, and it is the whole of what was
