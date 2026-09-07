@@ -12,6 +12,15 @@ The zero locus of a family of global sections of the structure sheaf of a locall
 space, the closed immersion cutting it out, the mapping property of that immersion, how
 such a datum is transported, and the complex analytic space one presents.
 
+**And the same for an ambient which is an arbitrary complex analytic space** —
+`### The zero locus of global sections of an analytic space, as an analytic space`, whose guards
+are named here rather than left to be found. The clause *and the complex analytic space one
+presents* was written for an ambient which is a *local model*, and a reader checking it against
+this file's sections should not have to decide whether it stretches to one that carries only
+charts.
+**This sentence was added by the push that added that section**, 2026-09-07, and it does not say
+that *and the complex analytic space one presents* fails to reach it.
+
 **The description above ended at *"and how such a datum is transported"* until 2026-09-07**, when
 `ComplexAnalytic.AnalyticSpace.ofCutOutZeroLocus` was guarded here: that declaration is an object
 of `ComplexAnalytic.AnalyticSpace` and no clause about a datum reaches it.
@@ -358,3 +367,122 @@ info: 'ComplexAnalytic.AnalyticSpace.ofCutOutZeroLocus_toLocallyRingedSpace' dep
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.ofCutOutZeroLocus_toLocallyRingedSpace
+
+
+/-! ### The zero locus of global sections of an analytic space, as an analytic space
+
+`Oka/AnalyticSpace/ZeroLocus.lean`, the whole of it, in the order they are declared. Appended as
+its own section rather than into the section headed *Composing cut-out data*, which is about
+`Oka/AnalyticSpace/CutOutCompose.lean` and says so, and because a section moved is a conflict for
+somebody else.
+
+**Which clause of the description at the head of this file reaches which guard below**, said
+rather than left to a reader. *The complex analytic space one presents* reaches
+`ComplexAnalytic.AnalyticSpace.zeroLocusSubspace`,
+`ComplexAnalytic.AnalyticSpace.zeroLocusSubspace_toLocallyRingedSpace` and
+`ComplexAnalytic.AnalyticSpace.zeroLocusSubspace_algebraMap`; *the closed immersion cutting it
+out* reaches
+`ComplexAnalytic.AnalyticSpace.zeroLocusSubspaceι`,
+`ComplexAnalytic.AnalyticSpace.toLRSHom_zeroLocusSubspaceι`,
+`ComplexAnalytic.AnalyticSpace.isCutOutBy_zeroLocusSubspaceι` and
+`ComplexAnalytic.AnalyticSpace.pullbackΓ_zeroLocusSubspaceι_eq_zero` — the second says which
+locally-ringed-space morphism the first carries, and
+`ComplexAnalytic.AnalyticSpace.isCutOutBy_zeroLocusSubspaceι` is *cutting it out* itself with
+`ComplexAnalytic.AnalyticSpace.pullbackΓ_zeroLocusSubspaceι_eq_zero` its one-line consequence,
+which is why those two are under that clause and not under *how such a datum is transported*,
+which is about carrying a datum along an isomorphism and no guard of this section does that;
+*the mapping property of that immersion* reaches
+`ComplexAnalytic.AnalyticSpace.mono_zeroLocusSubspaceι`, beside
+`ComplexAnalytic.AnalyticSpace.mono_of_isCutOutBy`, which it is an instance of and which is
+guarded in this file already.
+**That sentence accounted for seven of the nine guards below until 2026-09-07**, leaving
+`ComplexAnalytic.AnalyticSpace.isCutOutBy_zeroLocusSubspaceι` and
+`ComplexAnalytic.AnalyticSpace.pullbackΓ_zeroLocusSubspaceι_eq_zero` under no clause and in no
+sentence, **while promising the map was complete; it was false when written rather than falsified
+later, so this is a correction and not one of this repository's dated records.** Three plus four
+plus one is eight, and `ComplexAnalytic.hasLocalModels_zeroLocusSubspace` is the ninth, which the
+paragraph opening `ComplexAnalytic.hasLocalModels_zeroLocusSubspace is of the same kind as` places.
+
+**`ComplexAnalytic.hasLocalModels_zeroLocusSubspace` is of the same kind as
+`ComplexAnalytic.isLocalModel_zeroLocusSubspace_of_isCutOutBy`**, guarded in the section headed
+*Composing cut-out data* — a statement that a zero locus has the charts that make it an object of
+`ComplexAnalytic.AnalyticSpace`, rather than a statement about a datum. That earlier guard is why
+no clause of the description is owed to this one.
+
+**`ComplexAnalytic.AnalyticSpace.zeroLocusSubspaceι` and
+`AlgebraicGeometry.LocallyRingedSpace.zeroLocusSubspaceι` are two declarations and both are
+guarded in this file**, the second under *The closed subspace cut out by a family of global
+sections*. They differ by their category and not by their content:
+`ComplexAnalytic.AnalyticSpace.toLRSHom_zeroLocusSubspaceι` says the first carries the second, by
+`rfl`.
+
+**Neither `def` below generates an auto-generated equation lemma**, so the question of guarding
+one does not arise: `scripts/DumpOkaDecls.lean` gives
+`Oka.AnalyticSpace.ZeroLocus` exactly the nine rows guarded below and no other. That is read off
+the dump and not from the shape of the definitions. **No guard file names an auto-generated
+equation lemma anywhere**, either: `grep -rE "#print axioms .*\.eq_(1|2|3|def)\b" OkaTest/`
+returns 0 lines at the commit that adds this section.
+-/
+
+/--
+info: 'ComplexAnalytic.hasLocalModels_zeroLocusSubspace' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.hasLocalModels_zeroLocusSubspace
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.zeroLocusSubspace' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.zeroLocusSubspace
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.zeroLocusSubspace_toLocallyRingedSpace' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.zeroLocusSubspace_toLocallyRingedSpace
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.zeroLocusSubspace_algebraMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.zeroLocusSubspace_algebraMap
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.zeroLocusSubspaceι' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.zeroLocusSubspaceι
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.toLRSHom_zeroLocusSubspaceι' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.toLRSHom_zeroLocusSubspaceι
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isCutOutBy_zeroLocusSubspaceι' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isCutOutBy_zeroLocusSubspaceι
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.pullbackΓ_zeroLocusSubspaceι_eq_zero' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.pullbackΓ_zeroLocusSubspaceι_eq_zero
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.mono_zeroLocusSubspaceι' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.mono_zeroLocusSubspaceι
