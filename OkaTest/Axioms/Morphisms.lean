@@ -44,6 +44,25 @@ has a product — `### The terminal object and the product of two complex affine
 clause was added by the push that added that section**, which is what this paragraph's own history
 says a description owes a section it does not reach.
 
+And a seventh kind is of the **mirror tree**, and is a kind of routing rather than a kind of
+subject: two statements of pure topology, in neither of which an analytic space occurs — that a
+covering map stays a covering map under base change along a *continuous* map, and that the fibres
+of the base-changed map stay finite — under
+`### Base change of a covering map, and of its finite fibres`. `OkaTest/Axioms.lean` routes a
+mirror-tree module whose subject no row of its topic table names to the file of the analytic
+result that motivated it; that result here is
+`ComplexAnalytic.AnalyticSpace.isFinite_coveringSpaceHom`, which asks for a covering map and for
+finite fibres as two separate hypotheses, and the section's own docstring gives that routing and
+says what does and does not consume the two statements. **The guards this file carried from
+`Oka/Topology/Covering/Basic.lean` before that section arrive by the same routing and needed no
+clause of their own**: each of them shares a section with a `ComplexAnalytic` guard and sits under
+that statement's heading — `### The third rung: a finite étale morphism is a covering map`,
+`### The number of sheets, constant over a preconnected base` and
+`### Cancellation of finiteness and of finite étaleness`. This one shares its section with no
+`ComplexAnalytic` guard and its heading names no analytic object, so no clause above reaches it.
+**This clause was added by the push that added that section**, 2026-09-07, for the reason the
+clause naming `### The terminal object and the product of two complex affine spaces` gives.
+
 **Named rather than counted from the end**, which is the repair and not the description. **The
 sentence this replaces called them *the last two***; they stopped being that when two further
 sections were appended past them — and one of those two was written across two lines, so no
