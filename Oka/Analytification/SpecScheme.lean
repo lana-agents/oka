@@ -41,8 +41,24 @@ Appending the six declarations below to `Oka/Analytification/SpecAffineCover.lea
 and would falsify the subject of that file's own bullet — which is to say it would move a
 statement ten other files point at. **Putting them here leaves every one of those ten true
 verbatim**, and it makes the property they assert enforced by the import graph rather than by
-prose: a file that wants a scheme has to import `Oka.Analytification.SpecScheme`, and nothing in
-`Oka/Analytification/` does. The four claims that were about the *line of files* rather than about
+prose: a file that wants a scheme has to import `Oka.Analytification.SpecScheme`, and at
+`3187978` **two** modules under `Oka/Analytification/` do —
+`Oka/Analytification/SpecTwoData.lean` and `Oka/Analytification/SpecRefinedMember.lean` — beside
+the aggregator `Oka.lean`, which imports every module of the library and is excluded from every
+question of this shape.
+
+**That clause ended *"and nothing in `Oka/Analytification/` does"* until 2026-09-07.** It was true
+at `a421e49`, the commit that wrote it, where `Oka.lean` was this file's only importer, and it has
+been false since `41b78dc` the next day, which gave `Oka/Analytification/SpecTwoData.lean` an import
+of this file; `a711e47`, the same day, added `Oka/Analytification/SpecRefinedMember.lean` as a
+second. **What the sentence got wrong is the count of importers and not the argument**, which
+is about where the six declarations below *live*: they are here, and a file that wants the scheme
+still has to take the edge. The instrument is one reverse edge of the import graph, read with
+`scripts/import_cost.py`'s `IMPORT` pattern over its nesting-aware `strip_comments`;
+`OkaTest/Axioms.lean` states the rule this repairs, and this clause is one of the cheap cases it
+names — no closure walk and no grep.
+
+The four claims that were about the *line of files* rather than about
 one file are falsified either way, and have been repaired in this same change.
 
 **The numeral is scoped to this line and a fifth claim of the same shape sat outside it.**

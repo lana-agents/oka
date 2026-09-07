@@ -459,8 +459,39 @@ joined it to the sentence before it, which names one, would put it in the **158*
 *three of the 158* an undercount by one. The sweep did not report it, which says which side its
 splitter put it on. And **closure-size figures against Mathlib** are a different graph and are
 not in this class at all: `scripts/import_cost.py` is the instrument for those and its own
-docstring is where that hazard is written down. **Neither
-column was swept and this paragraph does not claim it was.**
+docstring is where that hazard is written down. **That sentence ended *"Neither column was swept
+and this paragraph does not claim it was"* until 2026-09-07**, and it was exact at `ca96745`, the
+commit that wrote it, and what retires it is the sweep recorded in the paragraph opening *The
+second sweep, at `3187978`*.
+
+**The second sweep, at `3187978`, read the half of that column whose referent is in the sentence
+beside it.** Over the same population — the **312** tracked `.lean` files under `Oka/` and
+`OkaTest/` together with `Oka.lean` and `OkaTest.lean`, comment content alone, whitespace-normalised
+and cut into sentences — the splitter of the push that wrote this paragraph gives **402** sentences
+carrying a dependency token, **180** naming a second module of this repository **in the sentence**,
+and **222** naming none. **Of those 222, 90 name one in the neighbouring sentence** and were all
+read; **73 of the 90 assert a relation inside this repository** and are decidable by the walk,
+and the other **17** are closure figures against `Mathlib/`, which *"closure-size figures against
+Mathlib are a different graph and are not in this class at all"* puts outside it. **The remaining
+132 name none in either and are still unread**: they are the ones that want the reverse closure
+and a grep over it, and nothing here decides one of them.
+
+**Two of the 90 were false** and are repaired in this push, each with its
+retired wording kept as a dated record: `Oka/Analytification/SpecScheme.lean`'s *"and nothing in
+`Oka/Analytification/` does"*, which `Oka/Analytification/SpecTwoData.lean` and
+`Oka/Analytification/SpecRefinedMember.lean` have falsified since the day after it was written, and
+`Oka/Analytification/CoverGlueTop.lean`'s downstream counts **175** and **86**, each exact at the
+commit it was taken at, neither pinned, and now **210** and **95**.
+
+**The two splitters do not agree and neither is wrong.** `bda9e42`'s reports 398 / 158 / 240 at
+`5a525bc` and this one 402 / 180 / 222 at `3187978`, five commits later; a partition of prose into
+sentences is an artefact of where the splitter cuts, so the three figures of a run are comparable
+with each other and not across runs. **What is not an artefact is that the column has decidable
+members** — the count of those found by reading it is now two, against one found by a reviewer
+looking at a file for another reason. **A third sweep still owes the 132**, and the cheapest thing
+it can do first is what this one did: carry the neighbouring sentence, since a clause whose
+referent is one sentence away is a pair claim that a splitter, and not the prose, put in this
+column.
 
 **Most mirror-tree material is routed by a row, and a small tail of it is deliberately routed by
 none.** `README.md`'s *Layout: the Mathlib mirror tree* defines a mirror-tree file by its path — a
