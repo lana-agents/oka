@@ -20,9 +20,25 @@ This file supplies that link: `ComplexAnalytic.analytificationMap_localisationPr
 `localisationProj` is `ComplexAnalytic.analytificationMap` of the structure map `A ⟶ A_f`.
 
 It is a separate file rather than a section of `Oka/Analytification/DistinguishedOpen.lean`
-because that file imports only `Oka/AnalyticSpace/Nonvanishing.lean` and
-`Oka/Analytification/UniversalProperty.lean`, and the functor lives two files further on; the
-theorem below is the only thing there that needs it.
+because **neither `ComplexAnalytic.analytificationFunctor` nor
+`ComplexAnalytic.analytificationMap` is in that file's import closure**: the first is declared in
+`Oka/Analytification/Functor.lean` and the second in `Oka/Analytification/ChangeOfVariables.lean`,
+and `Oka/Analytification/DistinguishedOpen.lean` reaches neither. This file is where the two sides
+first meet, its two imports being that file and `Oka/Analytification/Functor.lean`; the theorem
+below is the only thing in `Oka/Analytification/DistinguishedOpen.lean` that needs them.
+
+**That sentence read *"because that file imports only `Oka/AnalyticSpace/Nonvanishing.lean` and
+`Oka/Analytification/UniversalProperty.lean`, and the functor lives two files further on"* until
+2026-09-07, and both halves of it were wrong.** `Oka/Analytification/DistinguishedOpen.lean` has a
+**third** import, `Oka/RingTheory/MvPolynomial/Localization.lean`, so the enumeration was short by
+one; and *further on* asserts an order that does not hold — `Oka/Analytification/Functor.lean` and
+`Oka/Analytification/ChangeOfVariables.lean` are **incomparable** with
+`Oka/Analytification/DistinguishedOpen.lean`, neither being in the other's import closure, so the
+functor is not downstream of that file at any distance. What the argument needed all along is the
+weaker and checkable statement now written above, and the two false halves were both reached by
+reading the import block rather than the graph. Measured at `5a525bc` with
+`scripts/import_cost.py`'s `IMPORT` pattern over its nesting-aware `strip_comments`;
+`OkaTest/Axioms.lean` states the rule this repairs.
 
 ## Which way the arrows go
 

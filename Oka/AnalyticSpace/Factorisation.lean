@@ -73,8 +73,18 @@ nothing on top:
   so it reduces to `ComplexAnalytic.IsCutOutBy.hom_ext`.
 
 The `Oka.AnalyticSpace.LocalModel` import exists only for `AnalyticSpace.ofCutOut`, which is
-what supplies the analytic-space structure on the subspace. Nothing else in this file needs it,
-and nothing imports this file except the root module.
+what supplies the analytic-space structure on the subspace. Nothing else in this file needs it.
+
+**That sentence ended *"and nothing imports this file except the root module"* until 2026-09-07.**
+It was true at `8c790c4`, the commit that wrote it on 2026-08-20, where `Oka.lean` was this file's
+only importer. It has been false since `c5db26c` the following day, which gave
+`Oka/Analytification/UniversalProperty.lean` an import of this file, and `8bfb421` added
+`Oka/AnalyticSpace/CutOutProduct.lean` as a second one on 2026-09-07. **Three modules import this
+one** at that date and two of them are not the root module. The retired wording is kept and is not
+struck, because what it records is how long a claim of this shape survives unnoticed: seventeen
+days and two falsifying pushes, neither of which opened this file. `OkaTest/Axioms.lean` states
+the rule this repairs, and this clause is one of the cheap cases: a claim about a file's
+*importers* is one reverse edge of the import graph and no grep at all.
 
 ## Main results
 
