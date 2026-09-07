@@ -47,6 +47,7 @@ import Oka.AnalyticSpace.CoveringMap
 import Oka.AnalyticSpace.CoveringSpace
 import Oka.AnalyticSpace.CutOutCancel
 import Oka.AnalyticSpace.CutOutCompose
+import Oka.AnalyticSpace.CutOutFibreProduct
 import Oka.AnalyticSpace.CutOutLocalIso
 import Oka.AnalyticSpace.CutOutProduct
 import Oka.AnalyticSpace.Degree
