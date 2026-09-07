@@ -27,7 +27,26 @@ the relative form and not this one. The companion global statement it does have,
 and is therefore not applicable to a non-compact source such as the punctured line.
 
 The Hausdorff hypothesis on the source is Mathlib's and is used to separate the finitely many
-points of a fibre; it is not removable.
+points of a fibre; it is not removable, and
+`LineTwoOrigins.not_isCoveringMap_fold_of_not_t2Space` (`OkaTest/FiniteEtaleCancel.lean`) is a
+compiled witness that it is not. It is the line with two origins folded onto `ℝ`: a closed local
+homeomorphism with finite fibres onto a Hausdorff space, which is every hypothesis of
+`IsClosedMap.isCoveringMap_of_isLocalHomeomorph` except the separation axiom, and not a covering
+map. The route to that last conjunct is `IsCoveringMap.isSeparatedMap`, which is Mathlib's, and
+`IsSeparatedMap.t2Space` in `Oka/Topology/SeparatedMap.lean`, which is not.
+
+**That clause ended at *it is not removable* until 2026-09-07**, asserting the non-removability
+and citing nothing — where the paragraph on `IsCoveringMap.pullback_snd` cites
+`TwoIndiscrete.not_isCoveringMap_pullback_snd` for its own hypothesis, and has since `24e9179`,
+the push that added both. **The assertion was true and this
+repair adds the citation rather than changing the claim**; the clause is retired as a dated
+record because the sentence around it is rewritten, not because it was wrong.
+
+The same non-removability is asserted a second time, in
+`## A covering map with finite fibres is a closed map`, and **that clause is deliberately
+left as it stands**: its subject is *the criterion above*, so it reaches the witness by naming the
+statement this paragraph is about, and a citation copied to a second site is a second thing to
+keep true.
 
 ## A covering map with finite fibres is a closed map
 
@@ -184,7 +203,15 @@ map.**
 
 This is `IsClosedMap.isCoveringMapOn_of_isLocalHomeomorphOn` at `Set.univ`. No connectedness of
 the target is needed: a point outside the range is evenly covered by the empty index type, which
-is how that proof treats it. -/
+is how that proof treats it.
+
+**`[T2Space E]` cannot be dropped**, and the witness is
+`LineTwoOrigins.not_isCoveringMap_fold_of_not_t2Space` (`OkaTest/FiniteEtaleCancel.lean`): the
+line with two origins folded onto `ℝ` is closed, has finite fibres and is a local homeomorphism —
+`hf`, `hfin` and `h` here — onto a Hausdorff target, and is not a covering map. **The separation
+axiom is on the *source* and there is none on the target beyond what the witness happens to
+have** — `ℝ` is Hausdorff there because
+that is the space the witness is built over, not because this statement asks it. -/
 theorem IsClosedMap.isCoveringMap_of_isLocalHomeomorph [T2Space E] (hf : IsClosedMap f)
     (hfin : ∀ x, (f ⁻¹' {x}).Finite) (h : IsLocalHomeomorph f) : IsCoveringMap f := by
   rw [isCoveringMap_iff_isCoveringMapOn_univ]

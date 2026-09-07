@@ -6,11 +6,23 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 import OkaTest.FiniteMorphism
 
 /-!
-# Finite étale cancellation: a non-vacuity, and the separation axiom that cannot be dropped
+# Finite étale cancellation: a non-vacuity, a separation axiom that cannot be dropped, and the
+same axiom one rung down
 
-Two unrelated things about `ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp`
-(`Oka/AnalyticSpace/LocalIso.lean`): that its hypotheses are satisfiable outside the isomorphisms,
-and that the one hypothesis it costs — `[T2Space]` on the middle space — is not removable.
+Statements about `ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp`
+(`Oka/AnalyticSpace/LocalIso.lean`) — that its hypotheses are satisfiable outside the
+isomorphisms, and that the one hypothesis it costs, `[T2Space]` on the middle space, is not
+removable — together with the same kind of statement about the criterion that rung is proved
+from, `IsClosedMap.isCoveringMap_of_isLocalHomeomorph` in `Oka/Topology/Covering/Basic.lean`,
+whose `[T2Space E]` is refuted by the same space.
+
+**The heading above read *Finite étale cancellation: a non-vacuity, and the separation axiom that
+cannot be dropped*, and the sentence beside it opened *Two unrelated things about
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp`*, until 2026-09-07**, when
+`LineTwoOrigins.not_isCoveringMap_fold` was added and the second of those became false: the
+material below is no longer all about that one theorem. The enumeration replaces the numeral
+rather than raising it, for the reason `Oka/Topology/Covering/Basic.lean`'s own heading gives — a
+count of a file's contents goes false on the next append and an enumeration does not.
 
 ## The non-vacuity, and what it is not
 
@@ -114,13 +126,24 @@ root.
 * **Nothing about the second factor.** The cancellation asks nothing of it, so there is no
   hypothesis there to attack and none is attacked.
 * **Nothing about the local-isomorphism rung.** `ComplexAnalytic.AnalyticSpace.isLocalIso_of_comp`
-  needs no separation axiom, so the witness below bears on the finite rung only, which is where
-  the whole cost of `ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp` sits.
+  needs no separation axiom, so of the two halves of
+  `ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp` the witness below bears on the finite one
+  only, which is where that theorem's whole cost sits. **This bullet read *so the witness below
+  bears on the finite rung only, which is where the whole cost of
+  `ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp` sits* until 2026-09-07**, when
+  `LineTwoOrigins.not_isCoveringMap_fold` was added and gave the same space a bearing on a
+  theorem that is neither rung, `IsClosedMap.isCoveringMap_of_isLocalHomeomorph`. It was exact
+  when written — nothing below then said anything about that criterion — and the push that
+  falsified it is the one that rewrote it, which is what a dated record is for. The repair
+  narrows the scope to the two halves of the cancellation rather than raising a count.
 * **No analytic counterexample.** Both witnesses are topological, and neither is or becomes a
   complex analytic space: the line with two origins is not Hausdorff, so it is not one, and
   nothing below builds a morphism of complex analytic spaces. What they establish is that the
   separation axiom cannot be dropped from the *topological* cancellation the analytic one is
-  proved from.
+  proved from, and — through `LineTwoOrigins.not_isCoveringMap_fold` — that it cannot be dropped
+  from `IsClosedMap.isCoveringMap_of_isLocalHomeomorph` either.
+  **This bullet ended at *proved from* until 2026-09-07**; the clause is appended and the
+  sentence before it is unchanged.
 * **No second non-vacuity.** `ComplexAnalytic.sq` is the only non-isomorphism available, so the
   cancellation is exercised at one morphism, composed with itself.
 -/
@@ -612,6 +635,43 @@ theorem not_isClosedMap_inc_of_isClosedMap_comp :
   ⟨not_t2Space, t1Space, continuous_inc, continuous_fold, isLocalHomeomorph_fold, isClosedMap_fold,
     finite_fibre_fold, fun C hC ↦ by simpa [Function.comp_def, Set.image_image] using hC,
     not_isClosedMap_inc⟩
+
+/-! #### The same space, one rung down: the separation axiom of the covering criterion -/
+
+/-- **The fold is not a covering map**, although it is a closed local homeomorphism with finite
+fibres onto a Hausdorff space.
+
+`IsCoveringMap.isSeparatedMap` is Mathlib's, in `Mathlib/Topology/Covering/Basic.lean`, and
+`IsSeparatedMap.t2Space` (`Oka/Topology/SeparatedMap.lean`) turns it into Hausdorffness of the
+source over a Hausdorff base — which `LineTwoOrigins.not_t2Space` refutes. So the argument runs
+through separatedness and not through the trivialisation: nothing here inspects an evenly covered
+neighbourhood. -/
+theorem not_isCoveringMap_fold : ¬ IsCoveringMap fold := fun h ↦
+  not_t2Space (h.isSeparatedMap.t2Space continuous_fold)
+
+/-- **The `[T2Space E]` of `IsClosedMap.isCoveringMap_of_isLocalHomeomorph` cannot be dropped.**
+
+`¬ T2Space LineTwoOrigins` is the hypothesis that fails and `¬ IsCoveringMap LineTwoOrigins.fold`
+is the conclusion that fails with it. The conjuncts beside them say how little else is wrong:
+`LineTwoOrigins.fold` is a closed map, a local homeomorphism and has finite fibres, which is
+everything that criterion asks for other than the separation axiom, and its target is `ℝ`, which
+is Hausdorff — so the criterion is one instance argument away from applying and its conclusion is
+false.
+
+**This is a different hypothesis of a different theorem from the one
+`LineTwoOrigins.not_isClosedMap_inc_of_isClosedMap_comp` attacks**, at the same space and out of
+the same four facts: that one is `[T2Space Y]` on the middle space of
+`ComplexAnalytic.AnalyticSpace.isFinite_of_comp_of_t2Space`, this one is `[T2Space E]` on the
+source of the covering criterion. `Oka/Topology/Covering/Basic.lean` asserted that this one is not
+removable and named no witness until 2026-09-07; this is that witness.
+
+Stated as one conjunction rather than as separate theorems for the reason
+`LineTwoOrigins.not_isClosedMap_inc_of_isClosedMap_comp` gives. -/
+theorem not_isCoveringMap_fold_of_not_t2Space :
+    IsClosedMap fold ∧ (∀ x, (fold ⁻¹' {x}).Finite) ∧ IsLocalHomeomorph fold ∧
+      T2Space ℝ ∧ ¬ T2Space LineTwoOrigins ∧ ¬ IsCoveringMap fold :=
+  ⟨isClosedMap_fold, finite_fibre_fold, isLocalHomeomorph_fold, inferInstance, not_t2Space,
+    not_isCoveringMap_fold⟩
 
 end LineTwoOrigins
 
