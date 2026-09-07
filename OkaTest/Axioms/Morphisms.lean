@@ -1745,17 +1745,45 @@ green, and that statement was measured `failed to synthesize` at `a84398c`, the 
 one that adds the instance.
 
 **Two declarations of `AlgebraicGeometry.LocallyRingedSpace` are guarded here, and the routing is
-`OkaTest/Axioms.lean`'s and not this section's description.** That file's rule for a mirror-tree
-module whose subject no row of its topic table names is *"Guard one in the file of the analytic
-result that motivated it, under that result's heading."*
+`OkaTest/Axioms.lean`'s — but not that file's rule for a module its topic table leaves unrouted,
+whose premise fails here.** `Oka/Geometry/RingedSpace/OpenImmersion.lean` *is* routed: the row
+`general presheaf and sheaf theory, and ringed spaces` names its subject, and
+`OkaTest/Axioms/Sheaves.lean` guards
+`AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.isoOfRangeEq`,
+`AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.range_pullback_to_base_of_left` and
+`AlgebraicGeometry.LocallyRingedSpace.restrictLE` out of it, under headings that name the module
+by path. So the tail rule is the wrong citation and the module is not in that tail.
+
+**What places them is the practice `OkaTest/Axioms.lean` states as *"Guard one in the file of the
+analytic result that motivated it, under that result's heading"*, which that file records as
+having two independent precedents — one of them `OkaTest/Axioms/AnalyticSpace.lean` reaching that
+placement for a module the sheaves row *does* route.** This module is that case and was before
+this push: `OkaTest/Axioms/AnalyticSpace.lean` guards
+`AlgebraicGeometry.LocallyRingedSpace.liftRestrict`,
+`AlgebraicGeometry.LocallyRingedSpace.liftRestrict_uniq`,
+`AlgebraicGeometry.LocallyRingedSpace.hom_ext_restrict`,
+`AlgebraicGeometry.LocallyRingedSpace.isOpenImmersion_ofRestrict` and
+`AlgebraicGeometry.LocallyRingedSpace.restrictInfIsoPullback` out of it beside the analytic
+statements they serve, and this file already guards
+`AlgebraicGeometry.LocallyRingedSpace.isIso_stalkMap_liftRestrict`. Guarding
+`AlgebraicGeometry.LocallyRingedSpace.isPullback_ofRestrict` and
+`AlgebraicGeometry.LocallyRingedSpace.range_subset_preimage_of_pullbackCone` here is that same
+practice at that same module, one heading over.
+
 `AlgebraicGeometry.LocallyRingedSpace.isPullback_ofRestrict` and its cone lemma
-`AlgebraicGeometry.LocallyRingedSpace.range_subset_preimage_of_pullbackCone` are in
-`Oka/Geometry/RingedSpace/OpenImmersion.lean`, they say nothing about analytic spaces, and what
-motivated them is `ComplexAnalytic.AnalyticSpace.isPullback_map_ofRestrict` — the statement that
+`AlgebraicGeometry.LocallyRingedSpace.range_subset_preimage_of_pullbackCone` say nothing about
+analytic spaces, and what motivated them is
+`ComplexAnalytic.AnalyticSpace.isPullback_map_ofRestrict` — the statement that
 the square this section is about stays a pullback square after
 `ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace`. That statement is guarded here, so
 they are guarded here. The section's own description — *a claim about a limit and not about a
 class* — reaches them as well, but it is not what places them.
+
+**What this paragraph does not take.** `OkaTest/Axioms.lean` says of a routed module guarded
+elsewhere that it *"is a different question from a module no row routes"*, and that its own
+paragraph does not take that question. Neither does this one: nothing here says whether guards
+placed this way belong in the unrouted-tail figure that file measures, and the guards this push
+adds from that module are offered to no tally of it.
 
 **`ComplexAnalytic.AnalyticSpace.toLRSIsoPullbackMap` is the second guard in this section that
 tests an instance and not only a theorem's axioms.** Its *type* names
