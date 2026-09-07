@@ -180,8 +180,8 @@ anywhere. A reader comparing the two signatures will otherwise go looking for on
   of one job here: one of them is a theorem and the other is a false statement waiting for a base
   restriction that nothing below constructs.
 
-  **The base restriction is now constructed, in a file that imports this one's imports and not
-  this one**: `ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp`
+  **The base restriction is now constructed, in a file incomparable with this one**:
+  `ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp`
   (`Oka/Analytification/StandardEtaleFiniteness.lean`) makes the étale analytification finite over
   an open `V ⊆ ℂ^n` on which the inversion is vacuous. **And the step that paragraph named as
   missing has since been taken.** It said the class
@@ -196,6 +196,18 @@ anywhere. A reader comparing the two signatures will otherwise go looking for on
   (`Oka/Analytification/StandardEtaleFiniteEtale.lean`). **The last theorem below is its second
   field and is read unrestricted** — the restriction is asked for by the first field alone,
   because unrestricted finiteness is false and unrestricted local-isomorphy is not.
+
+  **The words *incomparable with this one* above read *"that imports this one's imports and not
+  this one"* until 2026-09-07.** The *and not this one* half was exact and the *imports this one's
+  imports* half was not:
+  `Oka/Analytification/StandardEtaleFiniteness.lean` takes **one** of this file's two imports,
+  `Oka/Analytification/HypersurfaceFinite.lean`, and takes
+  `Oka/Analytification/OpenBaseFiniteness.lean` where this file takes
+  `Oka/AnalyticSpace/SimpleZeroTopology.lean`, which is not in its import closure at all. So
+  neither file is in the other's closure and the relation between them is incomparability, which
+  is what the sentence was reaching for. Measured at `5a525bc` over this repository's import
+  graph with `scripts/import_cost.py`'s `IMPORT` pattern read through its nesting-aware
+  `strip_comments`; `OkaTest/Axioms.lean` states the rule this repairs.
 * **Nothing at `k ≥ 1`**, for the reason at the top of this docstring: not a gap but a different
   statement.
 * **Nothing saying `ComplexAnalytic.analytificationInclHom g` is an isomorphism when `g` is the

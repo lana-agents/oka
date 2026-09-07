@@ -9,15 +9,27 @@ import Oka
 # Axiom regression tests: Subspaces cut out by global sections
 
 The zero locus of a family of global sections of the structure sheaf of a locally ringed
-space, the closed immersion cutting it out, the mapping property of that immersion, and how
-such a datum is transported.
+space, the closed immersion cutting it out, the mapping property of that immersion, how
+such a datum is transported, and the complex analytic space one presents.
 
-The last clause is here because the description above did not reach the sections whose subject
-is neither a zero locus nor a mapping property. It says **how** and not *which*, and that is
-deliberate: this file already guards transport along an isomorphism of the target
+**The description above ended at *"and how such a datum is transported"* until 2026-09-07**, when
+`ComplexAnalytic.AnalyticSpace.ofCutOutZeroLocus` was guarded here: that declaration is an object
+of `ComplexAnalytic.AnalyticSpace` and no clause about a datum reaches it.
+
+The transport clause is here because the description above did not reach the sections whose
+subject is neither a zero locus nor a mapping property. It says **how** and not *which*, and that
+is deliberate: this file already guards transport along an isomorphism of the target
 (`ComplexAnalytic.IsCutOutBy.iso_comp`), to an open of the ambient space, to another family with
 the same range, and against a datum for an intermediate subspace, so a clause naming *two* ways
 a datum moves would have been false of this file the day it was written.
+
+**That paragraph opened *"The last clause is here because"* until 2026-09-07**, and the push that
+appended *"and the complex analytic space one presents"* to the description above is the push that
+made it false: the transport clause stopped being the last one, while every word the paragraph
+spends — *how* and not *which*, and the ways a datum moves that it goes on to list — is about
+transport and about nothing else. A pointer that reaches a clause by position goes stale from an
+edit that does not touch the line it is written on, and a scan over a push's *added* lines cannot
+see it, which is why the replacement names the clause instead of counting to it. taxis #1709.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
@@ -60,6 +72,13 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.zeroLocusStalkQuotientEquiv' depends
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.zeroLocusStalkQuotientEquiv
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.zeroLocusSubspaceι' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.zeroLocusSubspaceι
 
 /--
 info: 'AlgebraicGeometry.LocallyRingedSpace.isCutOutBy_zeroLocusSubspaceι' depends on axioms:
@@ -234,11 +253,19 @@ as its own section rather than into the one above, which is about
 `ComplexAnalytic.restrictHom` and would be falsified by an addition it does not describe — the
 same reason that section gives for being its own.
 
-**None of the guards below is about complex analytic spaces**, and the one general `Fin` fact the
-last of them consumes, `Fin.range_append`, is in the mirror tree
+**None of `ComplexAnalytic.IsCutOutBy.of_range_eq`, `ComplexAnalytic.IsCutOutBy.of_comp_append`
+and `ComplexAnalytic.IsCutOutBy.of_comp_of_range_eq` is about complex analytic spaces**, and the
+one general `Fin` fact `ComplexAnalytic.IsCutOutBy.of_comp_of_range_eq` consumes,
+`Fin.range_append`, is in the mirror tree
 (`Oka/Data/Fin/Tuple/Basic.lean`) and is **deliberately not guarded here**: no guard file in this
 repository guards a `Fin` lemma, and `Fin.init_zero`, the file's only other declaration, is not
 guarded either.
+
+**This paragraph opened *"None of the guards below is about complex analytic spaces"* until
+2026-09-07**, and a section was appended after it in which
+`ComplexAnalytic.AnalyticSpace.ofCutOutZeroLocus` and
+`ComplexAnalytic.AnalyticSpace.ofCutOutZeroLocus_toLocallyRingedSpace` are about one; the three
+this section guards are named above instead, which is what the clause was always about.
 -/
 
 /--
@@ -261,3 +288,73 @@ info: 'ComplexAnalytic.IsCutOutBy.of_comp_of_range_eq' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.IsCutOutBy.of_comp_of_range_eq
+
+/-! ### Composing cut-out data: cutting a subspace down further
+
+`Oka/AnalyticSpace/CutOutCompose.lean`, the whole of it, in the order they are declared. Appended
+as its own section rather than into the section headed *Cancelling a cut-out datum*, which is
+about `Oka/AnalyticSpace/CutOutCancel.lean` and says so.
+
+`ComplexAnalytic.IsCutOutBy.comp_append` and `ComplexAnalytic.IsCutOutBy.comp_of_range_eq` are
+statements about morphisms of locally ringed spaces;
+`ComplexAnalytic.AnalyticSpace.ofCutOutZeroLocus` and
+`ComplexAnalytic.AnalyticSpace.ofCutOutZeroLocus_toLocallyRingedSpace` are about complex analytic
+spaces, which is why the description at the head of this file has a clause for them.
+
+**`AlgebraicGeometry.LocallyRingedSpace.zeroLocusSubspaceι` is guarded under *The closed subspace
+cut out by a family of global sections* above and not here**, beside
+`AlgebraicGeometry.LocallyRingedSpace.isCutOutBy_zeroLocusSubspaceι`, which is the cut-out datum
+it carries. It had no guard at all until 2026-09-07, when
+`Oka/AnalyticSpace/CutOutCompose.lean`'s `## Main results` became the first to advertise it and
+`scripts/guard_coverage.py` reported the gap.
+
+**`ComplexAnalytic.AnalyticSpace.ofCutOutZeroLocus` is what makes
+`ComplexAnalytic.IsCutOutBy.comp_append` and `ComplexAnalytic.IsCutOutBy.comp_of_range_eq`
+non-vacuous.**
+A composition lemma whose hypotheses nothing supplies is consistent with being about nothing;
+`ComplexAnalytic.IsCutOutBy.zeroLocusSubspaceι_comp` supplies them from
+`AlgebraicGeometry.LocallyRingedSpace.isCutOutBy_zeroLocusSubspaceι`, which is guarded above and
+holds for every locally ringed space and every finite family.
+-/
+
+/--
+info: 'ComplexAnalytic.IsCutOutBy.comp_append' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.IsCutOutBy.comp_append
+
+/--
+info: 'ComplexAnalytic.IsCutOutBy.comp_of_range_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.IsCutOutBy.comp_of_range_eq
+
+/--
+info: 'ComplexAnalytic.IsCutOutBy.zeroLocusSubspaceι_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.IsCutOutBy.zeroLocusSubspaceι_comp
+
+/--
+info: 'ComplexAnalytic.isLocalModel_zeroLocusSubspace_of_isCutOutBy' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.isLocalModel_zeroLocusSubspace_of_isCutOutBy
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.ofCutOutZeroLocus' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.ofCutOutZeroLocus
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.ofCutOutZeroLocus_toLocallyRingedSpace' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.ofCutOutZeroLocus_toLocallyRingedSpace

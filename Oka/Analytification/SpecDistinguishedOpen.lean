@@ -33,8 +33,28 @@ the localisation's own `algebraMap`. Mathlib knows `Spec` of that `algebraMap` i
 immersion. So the content here is one commuting triangle and one rewrite, and everything else is
 where the two halves live: `ComplexAnalytic.specFunctor` is in
 `Oka/Analytification/Comparison.lean` and the compatibility is in
-`Oka/Analytification/LocalisationIndependence.lean`, and **no file in this repository imports
-both**. Hence a file rather than a section.
+`Oka/Analytification/LocalisationIndependence.lean`, and **this file is the only module under
+`Oka/` that imports both directly**. Hence a file rather than a section.
+
+**That clause read *"and no file in this repository imports both"* until 2026-09-07**, and what
+falsifies it is the import block at the head of this same file: those two lines are the whole of
+it, so the sentence had a counterexample two screens above itself at the commit that wrote it.
+**The argument it was making survives the repair and only its scope was wrong.** Measured at
+`5a525bc` over the repository's own import graph, with `scripts/import_cost.py`'s `IMPORT` pattern
+read through its nesting-aware `strip_comments`: **thirteen** modules under `Oka/` have both
+`Oka.Analytification.Comparison` and `Oka.Analytification.LocalisationIndependence` in their
+import closure — the aggregator `Oka.lean`, which imports every module of the library, is
+excluded throughout, as `OkaTest/Axioms.lean` excludes it from the same kind of grep — and
+**twelve of the thirteen reach this file**, at edge distances one to five —
+`Oka/Analytification/SpecAffineCover.lean` and `Oka/Analytification/SpecRefinedMember.lean` at
+one, `Oka/Analytification/CoverComparison.lean`, `Oka/Analytification/SpecFunctoriality.lean`,
+`Oka/Analytification/SpecRefinedMemberSection.lean` and `Oka/Analytification/SpecScheme.lean` at
+two, `Oka/Analytification/ComparisonSquare.lean`, `Oka/Analytification/SpecRefinedChoice.lean` and
+`Oka/Analytification/SpecTwoData.lean` at three,
+`Oka/Analytification/SpecMemberSections.lean` and `Oka/Analytification/SpecRefinedCover.lean` at
+four, and `Oka/Analytification/SpecMemberChoice.lean` at five. **So at `5a525bc` every module
+with both in closure is this file or one of its own descendants**, and no module that could have
+hosted the section had both, which is what the clause meant.
 
 ## Mathlib's scheme-level open immersions are available to this repository's glue data, and that
 is worth more than the lemma
