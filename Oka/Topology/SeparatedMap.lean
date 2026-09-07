@@ -52,10 +52,17 @@ spent once, in the second case, on the two preimages being open.
 
 ## What is not here
 
-* **No converse and no biconditional.** The converse is Mathlib's `T2Space.isSeparatedMap` and is
-  not restated; a biconditional would be false, since a separated map into a non-Hausdorff space
-  can have Hausdorff source — the identity of a Hausdorff space along any map to a point is
-  separated — and nothing below claims otherwise.
+* **No converse, and no biconditional — although one holds.** The converse is Mathlib's
+  `T2Space.isSeparatedMap`: it asks `T2Space` of the *source*, gives `IsSeparatedMap f` for any
+  target, and asks neither `[T2Space X]` nor `Continuous f`. Paired with `IsSeparatedMap.t2Space`,
+  whose proof spends both, it gives `IsSeparatedMap f ↔ T2Space E` under those two hypotheses.
+  That `Iff` is not stated here: each direction is what a caller uses, and its right-hand side is
+  a class, which an `Iff` cannot present to instance search.
+* **The biconditional that fails is the one with `[T2Space X]` dropped, and it fails forwards.**
+  `Function.Injective.isSeparatedMap` is Mathlib's and makes an injective map separated whatever
+  its source, so the identity of a space that is not Hausdorff is a separated map whose source is
+  not Hausdorff. `LineTwoOrigins.not_t2Space` (`OkaTest/FiniteEtaleCancel.lean`) is such a space
+  at the commit that adds this file.
 * **Nothing about `IsLocallyInjective`**, the dual notion `Mathlib/Topology/SeparatedMap.lean`
   introduces alongside `IsSeparatedMap`, and nothing about the covering maps that satisfy both.
   The one application in this repository composes this with `IsCoveringMap.isSeparatedMap`, which

@@ -42,6 +42,12 @@ the push that added both. **The assertion was true and this
 repair adds the citation rather than changing the claim**; the clause is retired as a dated
 record because the sentence around it is rewritten, not because it was wrong.
 
+The same non-removability is asserted a second time, in
+`## A covering map with finite fibres is a closed map`, and **that clause is deliberately
+left as it stands**: its subject is *the criterion above*, so it reaches the witness by naming the
+statement this paragraph is about, and a citation copied to a second site is a second thing to
+keep true.
+
 ## A covering map with finite fibres is a closed map
 
 The converse of the criterion above, and the direction Mathlib does not have in any form: across

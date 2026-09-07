@@ -785,10 +785,11 @@ motivated it, under that result's heading."* What motivated it is
 `IsClosedMap.isCoveringMap_of_isLocalHomeomorph`'s `[T2Space E]`: composed with Mathlib's
 `IsCoveringMap.isSeparatedMap` it is what turns a non-Hausdorff total space into a refutation of
 that criterion, which is `LineTwoOrigins.not_isCoveringMap_fold_of_not_t2Space` in
-`OkaTest/FiniteEtaleCancel.lean`. **The witness itself is not guarded**, for the reason this file
-already gives about `TwoIndiscrete.not_isCoveringMap_pullback_snd_of_not_continuous` — *"a
-declaration of a test file, which the guards of this repository's library do not reach"*. What is
-guarded here is the library lemma that witness consumes. -/
+`OkaTest/FiniteEtaleCancel.lean`. **The witness itself is not guarded**, for the reason the
+section `### Base change of a covering map, and of its finite fibres` gives of
+`TwoIndiscrete.not_isCoveringMap_pullback_snd_of_not_continuous` — *"this file imports `Oka` and
+not `OkaTest`, so no declaration of a test file is in its environment"*. What is guarded here is
+the library lemma that witness consumes. -/
 
 /--
 info: 'IsClosedMap.isCoveringMap_of_isLocalHomeomorph' depends on axioms:
