@@ -65,13 +65,36 @@ projection of` holds the base change of `isFiniteEtale`, in the two spellings
 reach each of those five; what it does not reach is
 `ComplexAnalytic.AnalyticSpace.isPullback_baseChange` and
 `ComplexAnalytic.AnalyticSpace.isPullback_ofRestrict` and
-`ComplexAnalytic.AnalyticSpace.isPullback_fibreProdCutOut`, together with the four `HasPullback`
-guards `ComplexAnalytic.AnalyticSpace.hasPullback_of_isFiniteEtale`,
+`ComplexAnalytic.AnalyticSpace.isPullback_fibreProdCutOut`, together with the seven guards whose
+conclusion is a `CategoryTheory.Limits.HasPullback`:
+`ComplexAnalytic.AnalyticSpace.hasPullback_of_isFiniteEtale`,
 `ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict`,
-`ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict'` and
-`ComplexAnalytic.AnalyticSpace.hasPullback_ofCutOut`, each of which is
+`ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict'`,
+`ComplexAnalytic.AnalyticSpace.hasPullback_ofCutOut`,
+`ComplexAnalytic.AnalyticSpace.hasPullback_pullbackFst_ofRestrict`,
+`ComplexAnalytic.AnalyticSpace.hasPullback_pullbackFst_ofRestrict'` and
+`ComplexAnalytic.AnalyticSpace.hasPullback_pullbackFst_pullbackFst`, each of which is
 *a claim about a limit and not about a class* in the words
 `### That restriction is a pullback square, and the base change it gives` uses of itself.
+
+**That clause read *the four `HasPullback` guards* and named four of them, until 2026-09-07**, when
+`Oka/AnalyticSpace/PullbackOpen.lean` gained the two instances at a leg that is a base change of an
+open-subspace inclusion and the theorem that states them at the cospan they exist for.
+`ComplexAnalytic.AnalyticSpace.hasPullback_pullbackFst_pullbackFst` is a theorem and not an
+instance, which is why the clause now says *whose conclusion is a
+`CategoryTheory.Limits.HasPullback`* rather than *`HasPullback` guards*.
+
+**The boundary of that sentence, said rather than left to be discovered.** It names the
+`isPullback_` guards and the guards whose conclusion is a `CategoryTheory.Limits.HasPullback`, and
+it does not name the guards that *identify* such a limit with the object presenting it. Those are
+the guards in this file whose name carries `IsoProd` or `IsoPullback`:
+`ComplexAnalytic.AnalyticSpace.affineProdOpensIsoProd`,
+`ComplexAnalytic.AnalyticSpace.prodCutOutIsoProd`,
+`ComplexAnalytic.AnalyticSpace.fibreProdCutOutIsoPullback` and, since 2026-09-07,
+`ComplexAnalytic.AnalyticSpace.restrictIsoPullbackOfRestrict` with its `_hom_fst`. Those are claims
+about a limit too and the description at the head of this file does not reach them either; the
+sentence above is about two families of names and not about that property, and widening it is a
+push of its own.
 
 **This sentence was added by the push that added
 `### Base change of a finite étale morphism, and the fibre product it is the projection of`**,
@@ -1687,6 +1710,28 @@ instance of it.
 an open subset inside the image, and concludes about a morphism that is not finite; this one
 hypothesises finiteness and asks nothing of the open subset. `Oka/AnalyticSpace/PullbackOpen.lean`'s
 header says why neither implies the other.
+
+**That square read as an isomorphism, and the cospans it makes legal, are guarded here rather than
+in a section of their own**, because the sentence above — *the statement that the square that
+restriction sits in is a pullback, which is a claim about a limit and not about a class* — reaches
+them as written, and a section appended for guards an existing description already covers buys a
+heading and nothing else. `ComplexAnalytic.AnalyticSpace.restrictIsoPullbackOfRestrict` is that
+square's pullback property read as an identification of the limit;
+`ComplexAnalytic.AnalyticSpace.hasPullback_pullbackFst_ofRestrict` and its primed partner are the
+instances that identification gives, at a cospan whose leg is a base change of an open-subspace
+inclusion rather than one.
+
+**`ComplexAnalytic.AnalyticSpace.hasPullback_pullbackFst_pullbackFst` is guarded here as a test of
+an instance and not only of a theorem's axioms**, which is the same double duty
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_pullback_snd_ofRestrict` carries and it is worth
+saying for the same reason. Its statement mentions
+`CategoryTheory.Limits.pullback.fst` at two legs neither of which is spelled `ofRestrict`, so it
+does not elaborate at all unless
+`ComplexAnalytic.AnalyticSpace.hasPullback_pullbackFst_ofRestrict` is found by instance search —
+an instance that existed at a discrimination-tree key search does not reach would leave this guard
+unbuildable rather than green. **That cospan is the one
+`Mathlib/AlgebraicGeometry/Pullbacks.lean`'s `AlgebraicGeometry.Scheme.Pullback.t'` opens over**,
+which is why the shape is worth pinning here and not only in `Oka/`.
 -/
 
 /--
@@ -1744,6 +1789,41 @@ info: 'ComplexAnalytic.AnalyticSpace.isFiniteEtale_pullback_snd_ofRestrict' depe
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.isFiniteEtale_pullback_snd_ofRestrict
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.restrictIsoPullbackOfRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.restrictIsoPullbackOfRestrict
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.restrictIsoPullbackOfRestrict_hom_fst' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.restrictIsoPullbackOfRestrict_hom_fst
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hasPullback_pullbackFst_ofRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hasPullback_pullbackFst_ofRestrict
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hasPullback_pullbackFst_ofRestrict'' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hasPullback_pullbackFst_ofRestrict'
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hasPullback_pullbackFst_pullbackFst' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hasPullback_pullbackFst_pullbackFst
 
 /-! ### And a local isomorphism restricted to subspaces cut out by a family and by its pullbacks
 

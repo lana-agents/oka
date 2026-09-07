@@ -54,14 +54,29 @@ equation of morphisms out of `CategoryTheory.Limits.pullback` of two members of 
 - `ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict` and
   `ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict'`: the two instances it gives, one for each
   order of the cospan.
+- `ComplexAnalytic.AnalyticSpace.restrictIsoPullbackOfRestrict`: **that square read as an
+  isomorphism** — the pullback of `f` along the inclusion of `V` *is* the open subspace `X|f⁻¹V`,
+  and not merely a limit over the same cospan.
+- `ComplexAnalytic.AnalyticSpace.hasPullback_pullbackFst_ofRestrict` and
+  `ComplexAnalytic.AnalyticSpace.hasPullback_pullbackFst_ofRestrict'`: **a base change of an
+  open-subspace inclusion is one too**, so a cospan carrying
+  `CategoryTheory.Limits.pullback.fst f (Y.ofRestrict V)` on a leg has a pullback although that leg
+  is not spelled `ofRestrict`.
+- `ComplexAnalytic.AnalyticSpace.hasPullback_pullbackFst_pullbackFst`: those two instances at the
+  cospan they exist for, which is the one
+  `Mathlib/AlgebraicGeometry/Pullbacks.lean`'s `AlgebraicGeometry.Scheme.Pullback.t'` opens over.
 - `ComplexAnalytic.AnalyticSpace.isFinite_restrictHom`: **a finite morphism restricted over an open
   subset of its target is finite**, with no hypothesis on the open subset.
 - `ComplexAnalytic.AnalyticSpace.isFiniteEtale_restrictHom`: the same for finite étale.
 - `ComplexAnalytic.AnalyticSpace.isFiniteEtale_pullback_snd_ofRestrict`:
   `ComplexAnalytic.AnalyticSpace.isFiniteEtale_restrictHom` at the
   `CategoryTheory.Limits.pullback` spelling, which is
-  `CategoryTheory.MorphismProperty.IsStableUnderBaseChange`'s conclusion at the one cospan this
-  category has a pullback over.
+  `CategoryTheory.MorphismProperty.IsStableUnderBaseChange`'s conclusion at this cospan.
+  **This entry read *at the one cospan this category has a pullback over* until 2026-09-07**, when
+  `Oka/AnalyticSpace/FiniteEtaleBaseChange.lean` and then
+  `Oka/AnalyticSpace/CutOutFibreProduct.lean` gave the category further shapes; it was a claim
+  about the tree standing in an entry about this file, and the entries added above it are more of
+  the same shape.
 
 ## What this does not do
 
@@ -73,6 +88,17 @@ first half of that is false as a universal and the second is false at this one l
 sentences there are narrowed to the general cospan rather than struck. The diagonal `A ⟶ A ×_B A`
 that a monomorphism argument wants is over a cospan neither of whose legs is an open immersion, so
 nothing here reaches it.
+
+**And `ComplexAnalytic.AnalyticSpace.hasPullback_pullbackFst_ofRestrict` and its primed partner do
+not add a shape to that accounting.** `Oka/AnalyticSpace/LocalIso.lean`,
+`Oka/AnalyticSpace/ZeroLocus.lean` and `Oka/AnalyticSpace/CutOutFibreProduct.lean` each quantify
+over cospans by whether a leg *is* the inclusion of an open subspace, is finite étale with
+Hausdorff source, or is a morphism between local models presented by cut-out data.
+`ComplexAnalytic.AnalyticSpace.restrictIsoPullbackOfRestrict` is the statement that a base change
+of the first kind of leg is again one, so those sentences are read up to that isomorphism and this
+file supplies no cospan outside their three shapes — it supplies more spellings of the first.
+`ComplexAnalytic.AnalyticSpace.isPullback_ofRestrict` implies that identification and does not
+state it, which is why it is stated here.
 
 ## The finiteness lemma and the one already here are not the same statement
 
@@ -162,6 +188,95 @@ square; the instance is stated separately because instance search matches the co
 not its transpose. -/
 instance hasPullback_ofRestrict' : HasPullback (Y.ofRestrict V) f :=
   (isPullback_ofRestrict f V).flip.hasPullback
+
+/-! ### That square read as an isomorphism, and the cospans it makes legal -/
+
+/-- **The pullback of `f` along the inclusion of `V` *is* the open subspace `X|f⁻¹V`**, as an
+isomorphism against the `CategoryTheory.Limits.pullback` notation.
+
+`ComplexAnalytic.AnalyticSpace.isPullback_ofRestrict` says the restriction square is a pullback
+square, and two limits over one cospan are uniquely isomorphic, so this is
+`CategoryTheory.IsPullback.isoPullback` at it and there is nothing else in the proof. The move is
+the one `ComplexAnalytic.AnalyticSpace.fibreProdCutOutIsoPullback` makes at the fibre product of
+local models, in a different spelling: there the two limits are compared by
+`CategoryTheory.Limits.IsLimit.conePointUniqueUpToIso`, here by
+`CategoryTheory.IsPullback.isoPullback`, which is that comparison packaged for a square already
+known to be a pullback. `CategoryTheory.Limits.HasPullback` is `Prop`-valued and so loses the
+identification of the limit with the object presenting it, and an isomorphism against the notation
+is what keeps it.
+
+**What this buys that `ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict` does not** is
+`ComplexAnalytic.AnalyticSpace.hasPullback_pullbackFst_ofRestrict` and its primed partner.
+Instance search matches the cospan syntactically, so
+`ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict` is found at a leg spelled `Y.ofRestrict V`
+and at no other, and a base change of such a leg is spelled
+`CategoryTheory.Limits.pullback.fst`. This isomorphism is the statement that the two are the same
+morphism up to the canonical identification. -/
+noncomputable def restrictIsoPullbackOfRestrict :
+    X.restrict ((Opens.map f.toLRSHom.base).obj V) ≅ pullback f (Y.ofRestrict V) :=
+  (isPullback_ofRestrict f V).isoPullback
+
+/-- **The isomorphism carries the open-subspace inclusion to `CategoryTheory.Limits.pullback.fst`**,
+which is the half of it `ComplexAnalytic.AnalyticSpace.hasPullback_pullbackFst_ofRestrict` and
+`ComplexAnalytic.AnalyticSpace.hasPullback_pullbackFst_ofRestrict'` consume. -/
+@[simp]
+theorem restrictIsoPullbackOfRestrict_hom_fst :
+    (restrictIsoPullbackOfRestrict f V).hom ≫ pullback.fst f (Y.ofRestrict V) =
+      X.ofRestrict ((Opens.map f.toLRSHom.base).obj V) :=
+  (isPullback_ofRestrict f V).isoPullback_hom_fst
+
+/-- **A morphism of complex analytic spaces has a pullback along the base change of an
+open-subspace inclusion**, and not only along an open-subspace inclusion itself.
+
+`CategoryTheory.Limits.pullback.fst f (Y.ofRestrict V)` is an open-subspace inclusion in disguise —
+that is `ComplexAnalytic.AnalyticSpace.restrictIsoPullbackOfRestrict` — and the cospan of `k` with
+it is carried to the cospan of `k` with `X.ofRestrict (f⁻¹V)` by `CategoryTheory.Limits.cospanExt`,
+whose two commutation hypotheses are `CategoryTheory.Category.id_comp` and
+`ComplexAnalytic.AnalyticSpace.restrictIsoPullbackOfRestrict_hom_fst`. The limit is then transported
+by `CategoryTheory.Limits.hasLimit_of_iso`. **No new limit is constructed**: the pullback is the one
+`ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict` already gives, seen over a cospan whose
+spelling instance search could not match.
+
+**The consumer is the fibre product over a general cospan**, which is built by gluing the fibre
+products over the members of an open cover, following
+`Mathlib/AlgebraicGeometry/Pullbacks.lean`. The transition map `t'` of that glue datum is a morphism
+out of a pullback of two of its `fV`s, each of which is a
+`CategoryTheory.Limits.pullback.fst` at an `ofRestrict` leg, so **that object does not elaborate
+without this instance**. **Measured at the commit that adds this declaration**, by transcribing
+that file's block from `AlgebraicGeometry.Scheme.Pullback.v` to
+`AlgebraicGeometry.Scheme.Pullback.t'` into this category: it is the only obligation in that block
+which instance search could not discharge. Nothing past `t'` was transcribed and this says nothing
+about it. -/
+instance hasPullback_pullbackFst_ofRestrict {T : AnalyticSpace.{u}} (k : T ⟶ X) :
+    HasPullback k (pullback.fst f (Y.ofRestrict V)) :=
+  hasLimit_of_iso (F := cospan k (X.ofRestrict ((Opens.map f.toLRSHom.base).obj V)))
+    (cospanExt (Iso.refl T) (restrictIsoPullbackOfRestrict f V) (Iso.refl X) (by simp) (by simp))
+
+/-- **The same cospan the other way round**, stated separately for the reason
+`ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict'` is: instance search matches the cospan's
+order and not its transpose. -/
+instance hasPullback_pullbackFst_ofRestrict' {T : AnalyticSpace.{u}} (k : T ⟶ X) :
+    HasPullback (pullback.fst f (Y.ofRestrict V)) k :=
+  hasPullback_symmetry _ _
+
+/-- **Two base changes of open-subspace inclusions, along the same morphism, have a pullback.**
+
+This is the cospan `Mathlib/AlgebraicGeometry/Pullbacks.lean`'s
+`AlgebraicGeometry.Scheme.Pullback.t'` opens over, with the two open subsets the two cover members
+it compares, and it is the shape this category was missing: neither leg is spelled `ofRestrict`, so
+`ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict` is not found at it.
+
+**It is stated rather than left to instance search, so that the guard on it tests that
+`ComplexAnalytic.AnalyticSpace.hasPullback_pullbackFst_ofRestrict` is *found* and not only that it
+exists.** A `#print axioms` line on an instance does not do that — an instance sitting at a
+discrimination-tree key search does not reach passes it and fails every use site — and that seam is
+a recorded hazard in this corner of the tree, which
+`ComplexAnalytic.AnalyticSpace.isIso_stalkMap_ofRestrict`'s docstring exists for one instance of.
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_pullback_snd_ofRestrict` below carries the same double
+duty for `ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict`. -/
+theorem hasPullback_pullbackFst_pullbackFst (V' : Y.Opens) :
+    HasPullback (pullback.fst f (Y.ofRestrict V)) (pullback.fst f (Y.ofRestrict V')) :=
+  inferInstance
 
 /-! ### Base change along an open immersion -/
 
