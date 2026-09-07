@@ -42,7 +42,43 @@ And a sixth kind is about the **category** rather than about any morphism in it:
 `ComplexAnalytic.AnalyticSpace` has a terminal object, and that a pair of complex affine spaces
 has a product — `### The terminal object and the product of two complex affine spaces`. **That
 clause was added by the push that added that section**, which is what this paragraph's own history
-says a description owes a section it does not reach.
+says a description owes a section it does not reach. **Four further sections are of that kind
+and are named here for the same reason**: that the square a restriction over an open of the target
+sits in is a pullback, `### That restriction is a pullback square, and the base change it gives`;
+that a pair of open subspaces of complex affine spaces has a product,
+`### The product of two open subspaces of complex affine spaces`; that a pair of local models has
+one, `### The binary product of two local models`; and that a cospan one of whose legs is finite
+étale with Hausdorff source has a **fibre product**,
+`### Base change of a finite étale morphism, and the fibre product it is the projection of`.
+
+**Two of those four hold statements of the *first* kind as well, and are named here for the limit
+and not for those.** `### Base change of a finite étale morphism, and the fibre product it is the
+projection of` holds the base change of `isFiniteEtale`, in the two spellings
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_baseChangeSnd` and
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_pullback_snd_of_isFiniteEtale`, and
+`### That restriction is a pullback square, and the base change it gives` holds
+`ComplexAnalytic.AnalyticSpace.isFinite_restrictHom`,
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_restrictHom` and
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_pullback_snd_ofRestrict`. The description above does
+reach each of those five; what it does not reach is
+`ComplexAnalytic.AnalyticSpace.isPullback_baseChange` and
+`ComplexAnalytic.AnalyticSpace.isPullback_ofRestrict`, together with the three `HasPullback`
+guards `ComplexAnalytic.AnalyticSpace.hasPullback_of_isFiniteEtale`,
+`ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict` and
+`ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict'`, each of which is
+*a claim about a limit and not about a class* in the words
+`### That restriction is a pullback square, and the base change it gives` uses of itself.
+
+**This sentence was added by the push that added
+`### Base change of a finite étale morphism, and the fibre product it is the projection of`**,
+2026-09-07, and `### That restriction is a pullback square, and the base change it gives`,
+`### The product of two open subspaces of complex affine spaces` and
+`### The binary product of two local models` went unnamed in this paragraph until then.
+**It said *three* and left `### That restriction is a pullback square, and the base change it
+gives` out, which was false when written rather than falsified later** — that section predates the
+push by which this paragraph acquired the sentence, and the sentence's own criterion reaches it,
+since the section calls itself a claim about a limit and the new one borrowed that phrase to place
+itself. So this is a correction and not one of this repository's dated records.
 
 And a seventh kind is of the **mirror tree**, and is a kind of routing rather than a kind of
 subject: two statements of pure topology, in neither of which an analytic space occurs — that a
@@ -3808,3 +3844,274 @@ info: 'Function.Pullback.finite_fiber_snd' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms Function.Pullback.finite_fiber_snd
+
+
+/-! ### Base change of a finite étale morphism, and the fibre product it is the projection of
+
+`Oka/AnalyticSpace/FiniteEtaleBaseChange.lean`. **A limit and not a class**, in the sense
+`### That restriction is a pullback square, and the base change it gives` uses of itself: what is
+guarded here is that a particular square is a pullback in `ComplexAnalytic.AnalyticSpace`, and the
+one statement about a class — `ComplexAnalytic.AnalyticSpace.isFiniteEtale_baseChangeSnd`, with
+its `CategoryTheory.Limits.pullback` spelling
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_pullback_snd_of_isFiniteEtale` — is a base change of
+`isFiniteEtale` and is reached by this file's opening description.
+
+**Three of the guards below are of the mirror tree's shape and are here rather than in
+`OkaTest/Axioms/Sheaves.lean`**: `ComplexAnalytic.AnalyticSpace.isIso_toInverseImage_of_isLocalIso`,
+`ComplexAnalytic.AnalyticSpace.inverseImageIsoOfIsLocalIso` and
+`ComplexAnalytic.AnalyticSpace.inverseImageIsoOfIsLocalIso_inv_base_apply` are about
+`AlgebraicGeometry.LocallyRingedSpace.inverseImage`, but they hypothesise
+`ComplexAnalytic.AnalyticSpace.IsLocalIso` and are declared in
+`Oka/AnalyticSpace/FiniteEtaleBaseChange.lean`, so `OkaTest/Axioms.lean`'s rule routes them by the
+module that declares them and that module is analytic.
+
+**`ComplexAnalytic.AnalyticSpace.hasPullback_of_isFiniteEtale` is guarded here as a test of an
+instance and not only of a theorem's axioms**, for the reason
+`### That restriction is a pullback square, and the base change it gives` gives of
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_pullback_snd_ofRestrict`: the statement of
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_pullback_snd_of_isFiniteEtale` mentions
+`CategoryTheory.Limits.pullback` at `ComplexAnalytic.AnalyticSpace` and does not elaborate at all
+unless that instance is found by search.
+
+**The two equation lemmas generated by
+`ComplexAnalytic.AnalyticSpace.baseChangeFstLRS` and by
+`ComplexAnalytic.AnalyticSpace.baseChangeLiftLRS` are not guarded**, which follows this
+repository's convention for equation lemmas rather than being an omission — the section of
+`OkaTest/Axioms/Sheaves.lean` that guards
+`AlgebraicGeometry.LocallyRingedSpace.inverseImage_hom_ext` names the equation lemmas that
+`Oka/Geometry/RingedSpace/LocallyRingedSpace/InverseImage.lean` carries and says that `git grep`
+finds a `#print axioms` for none of them.
+
+This section is appended as its own section because a section moved is a conflict for somebody
+else. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.baseChangeCarrier' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.baseChangeCarrier
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.baseChangeFstBase' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.baseChangeFstBase
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.baseChangeSndBase' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.baseChangeSndBase
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.baseChange_base_square' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.baseChange_base_square
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isCoveringMap_baseChangeSndBase' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isCoveringMap_baseChangeSndBase
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.finite_fiber_baseChangeSndBase' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.finite_fiber_baseChangeSndBase
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.baseChange' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.baseChange
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.baseChangeSnd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.baseChangeSnd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.base_baseChangeSnd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.base_baseChangeSnd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isFiniteEtale_baseChangeSnd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFiniteEtale_baseChangeSnd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isIso_toInverseImage_of_isLocalIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isIso_toInverseImage_of_isLocalIso
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.inverseImageIsoOfIsLocalIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.inverseImageIsoOfIsLocalIso
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.inverseImageIsoOfIsLocalIso_inv_base_apply' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.inverseImageIsoOfIsLocalIso_inv_base_apply
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.baseChangeToBase' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.baseChangeToBase
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.baseChangeFstLRS' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.baseChangeFstLRS
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.baseChangeFstLRS_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.baseChangeFstLRS_comp
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isCLinearHom_baseChangeFstLRS' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isCLinearHom_baseChangeFstLRS
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.baseChangeFst' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.baseChangeFst
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.base_baseChangeFst' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.base_baseChangeFst
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.baseChange_square' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.baseChange_square
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.baseChangeLiftBase' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.baseChangeLiftBase
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.baseChangeLiftBase_snd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.baseChangeLiftBase_snd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.baseChangeLiftBase_fst' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.baseChangeLiftBase_fst
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.baseChangeLiftLRS' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.baseChangeLiftLRS
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.baseChangeLiftLRS_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.baseChangeLiftLRS_comp
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.baseChangeLift' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.baseChangeLift
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.baseChangeLift_snd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.baseChangeLift_snd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.base_baseChangeLift' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.base_baseChangeLift
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.baseChangeLift_fst' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.baseChangeLift_fst
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.baseChange_hom_ext' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.baseChange_hom_ext
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isPullback_baseChange' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isPullback_baseChange
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hasPullback_of_isFiniteEtale' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hasPullback_of_isFiniteEtale
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isFiniteEtale_pullback_snd_of_isFiniteEtale' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFiniteEtale_pullback_snd_of_isFiniteEtale
