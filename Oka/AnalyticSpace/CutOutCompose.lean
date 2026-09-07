@@ -73,11 +73,52 @@ than in the mirror tree because `ComplexAnalytic.IsCutOutBy` is declared in this
 ## Why the hypothesis is the pullbacks and not an arbitrary family
 
 `ComplexAnalytic.IsCutOutBy.comp_append` asks that the inner subspace be cut out by the pullbacks
-`iW.pullbackΓ (f₂ r)` of sections of the **ambient** space, and not by an arbitrary family on `W`.
-That is not a convenience: the conclusion presents the composite inside `Z`, and a family on `W`
-with no ambient preimage names no ideal of `𝒪_Z`. It is also the exact hypothesis
+of `f₂` along `iW` — sections of the **ambient** space, carried to `W` — and not by an arbitrary
+family on `W`. That is not a convenience: the conclusion presents the composite inside `Z`, and a
+family on `W` with no ambient preimage names no ideal of `𝒪_Z`. It is also the exact hypothesis
 `ComplexAnalytic.IsCutOutBy.of_comp_append` *concludes*, so the two are inverse to each other on
 the nose and neither needs a compatibility lemma to be read against the other.
+
+**Those pullbacks were spelled `iW.pullbackΓ (f₂ r)` here until 2026-09-07**, which is not a term.
+`pullbackΓ` is declared for morphisms of *analytic* spaces
+(`ComplexAnalytic.AnalyticSpace.Hom.pullbackΓ`, an `abbrev` in `Oka/AnalyticSpace/Basic.lean`),
+and `iW` is a morphism of locally ringed spaces; the statement below writes its action on global
+sections out through `AlgebraicGeometry.LocallyRingedSpace.Γ` instead.
+
+**`scripts/check_docstring_names.py` was silent on it twice over, and the two reasons are
+different.** Its candidates are backticked spans with no whitespace in them, so a spelling
+carrying an argument was never a candidate at all; and written bare it would have been a
+candidate and would still have *resolved*, because the head of such a token is a bound variable
+of the theorem, leaving the checker no type to consult, and a declaration ending in that
+component existing anywhere in the environment is enough. The second reason is the one that also
+covers `hY.range_base` and `hY.ker_stalkMap` in the section above, which happen to be right.
+Neither reason is a defect in the checker: what it settles is whether a name exists, not whether
+it exists at the type it is written at.
+
+## An import relation that was inferred rather than measured
+
+The `ComplexAnalytic.AnalyticSpace.ofCutOutZeroLocus` bullet read *"that declaration arriving in
+`Oka/AnalyticSpace/CutOutProduct.lean`, which is downstream of this file"* until 2026-09-07.
+**The two files are incomparable.** Neither is in the other's import closure, and on that date
+`Oka.lean` was the only module importing either. The figures that replaced the word are a run of
+2026-09-07 over this checkout: closures of **42** and **65** modules under `Oka/`, each counting
+the file itself, so importing that file here costs **25** and importing this one there costs
+**2**.
+
+**The instrument is worth naming, because the obvious one gets both totals wrong.** A `^import`
+regex over the raw file text follows an `import` written inside a comment, and in this tree it
+also misses every `public import` line; `scripts/import_cost.py`'s parser masks and matches both,
+and it is that parser and that pattern, rather than the script's command line, which produced the
+four figures above — the script prices a mirror file against a Mathlib target and does not take
+these two module names as arguments. Against the naive regex the same two closures come out at
+**28** and **51**, each **14** modules short, all fourteen behind a `public import` under
+`Oka/Algebra/Category/ModuleCat/Sheaf/`: the modules the naive closure does reach that carry such
+an import are `Oka/Algebra/Category/ModuleCat/Sheaf/Coherent/Criterion.lean` and
+`Oka/Algebra/Category/ModuleCat/Sheaf/Coherent/Free.lean`.
+At this commit the tree holds eight comment-embedded `import` matches across seven files and every
+one of them names a module that does not exist, so it is the `public import` and not the comment
+that costs here. **The two costs survive the naive regex unchanged**, 25 and 2 either way, so a
+delta that agrees is not evidence that either closure was computed correctly.
 
 ## Main results
 
@@ -96,10 +137,12 @@ the nose and neither needs a compatibility lemma to be read against the other.
   further sections of its ambient `ℂ^n|V` is a complex analytic space.** Its closed immersion
   into that `ℂ^n|V` as a morphism of *analytic* spaces is
   `ComplexAnalytic.AnalyticSpace.ofCutOutHom` at the same datum and is not restated here, that
-  declaration arriving in `Oka/AnalyticSpace/CutOutProduct.lean`, which is downstream of this
-  file; the immersion of locally ringed spaces is
-  `AlgebraicGeometry.LocallyRingedSpace.zeroLocusSubspaceι` composed with `i`, and it is what the
-  cut-out datum below is stated about.
+  declaration being in `Oka/AnalyticSpace/CutOutProduct.lean`, which this file does not import and
+  which importing would add 25 modules to an import closure of 42; the immersion of locally
+  ringed spaces is `AlgebraicGeometry.LocallyRingedSpace.zeroLocusSubspaceι` composed with `i`,
+  and it is what the cut-out datum below is stated about. **This bullet gave that file as being
+  downstream of this one until 2026-09-07**, when the relation was measured and the two came out
+  incomparable; *An import relation that was inferred rather than measured* says with what.
 - `ComplexAnalytic.isLocalModel_zeroLocusSubspace_of_isCutOutBy`: the same conclusion as the
   property rather than as an object.
 -/

@@ -16,12 +16,20 @@ such a datum is transported, and the complex analytic space one presents.
 `ComplexAnalytic.AnalyticSpace.ofCutOutZeroLocus` was guarded here: that declaration is an object
 of `ComplexAnalytic.AnalyticSpace` and no clause about a datum reaches it.
 
-The last clause is here because the description above did not reach the sections whose subject
-is neither a zero locus nor a mapping property. It says **how** and not *which*, and that is
-deliberate: this file already guards transport along an isomorphism of the target
+The transport clause is here because the description above did not reach the sections whose
+subject is neither a zero locus nor a mapping property. It says **how** and not *which*, and that
+is deliberate: this file already guards transport along an isomorphism of the target
 (`ComplexAnalytic.IsCutOutBy.iso_comp`), to an open of the ambient space, to another family with
 the same range, and against a datum for an intermediate subspace, so a clause naming *two* ways
 a datum moves would have been false of this file the day it was written.
+
+**That paragraph opened *"The last clause is here because"* until 2026-09-07**, and the push that
+appended *"and the complex analytic space one presents"* to the description above is the push that
+made it false: the transport clause stopped being the last one, while every word the paragraph
+spends — *how* and not *which*, and the ways a datum moves that it goes on to list — is about
+transport and about nothing else. A pointer that reaches a clause by position goes stale from an
+edit that does not touch the line it is written on, and a scan over a push's *added* lines cannot
+see it, which is why the replacement names the clause instead of counting to it. taxis #1709.
 
 See `OkaTest/Axioms.lean` for what these assertions are for and how to update one.
 -/
