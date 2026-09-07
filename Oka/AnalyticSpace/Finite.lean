@@ -116,13 +116,19 @@ stand beside it does not, and is now the section above.
 is about finite *étale* covers — finite together with being a local isomorphism — and that is a
 second notion resting on this one.
 
-**Base change along a general morphism is absent, and along the inclusion of an open subspace it
-is here.** `AlgebraicGeometry.IsFinite`'s `IsStableUnderBaseChange` quantifies over every cospan
-and has no analogue below, because a fibre product over a general cospan is what
-`Oka/AnalyticSpace/PullbackOpen.lean`'s header prices and does not build. What that file does
-build is the pullback along the inclusion of an open subspace, and
+**Base change along a general morphism is absent, and along two particular shapes of leg it is
+elsewhere in this repository.** `AlgebraicGeometry.IsFinite`'s `IsStableUnderBaseChange`
+quantifies over every cospan and has no analogue below, because a fibre product over a general
+cospan is what `Oka/AnalyticSpace/PullbackOpen.lean`'s header prices and does not build. What that
+file does build is the pullback along the inclusion of an open subspace, and
 `ComplexAnalytic.AnalyticSpace.isFinite_restrictHom` there is finiteness carried across it, with
-no hypothesis on the open subset.
+no hypothesis on the open subset. **The words `and along the inclusion of an open subspace it is
+here` closed the sentence above until 2026-09-07**, when
+`Oka/AnalyticSpace/FiniteEtaleBaseChange.lean` gave a second shape:
+`ComplexAnalytic.AnalyticSpace.baseChangeSnd` is the projection of a fibre product over a cospan
+whose other leg is finite étale with Hausdorff source, and it is finite étale — hence finite —
+with no hypothesis on the leg it is a base change of. Neither shape is a general morphism and
+neither is below.
 
 **This paragraph said flatly that there is no base change and that this repository has no fibre
 products of analytic spaces.** Both were exact at `e8c5f03`, the commit
