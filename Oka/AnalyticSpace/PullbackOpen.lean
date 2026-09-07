@@ -79,6 +79,14 @@ equation of morphisms out of `CategoryTheory.Limits.pullback` of two members of 
   `ComplexAnalytic.AnalyticSpace.isOpenImmersion_map_pullbackFst_ofRestrict`: **the first
   projection *is* an open-subspace inclusion up to an isomorphism**, so its image downstairs is an
   open immersion of locally ringed spaces.
+- `ComplexAnalytic.AnalyticSpace.isPullback_pullbackFst_ofRestrict`,
+  `ComplexAnalytic.AnalyticSpace.isPullback_map_pullbackFst_ofRestrict` and
+  `ComplexAnalytic.AnalyticSpace.isPullback_map_pullback_pullbackFst_ofRestrict`: **the bridge at
+  the cospan a glue datum's `t'` opens over**, whose two legs are
+  `CategoryTheory.Limits.pullback.fst` at open-subspace inclusions rather than open-subspace
+  inclusions themselves. The square there is a pullback square upstairs and downstairs with an
+  *open subspace* as its apex, and the image of the analytic pullback square at that cospan is a
+  pullback square too.
 - `ComplexAnalytic.AnalyticSpace.isFinite_restrictHom`: **a finite morphism restricted over an open
   subset of its target is finite**, with no hypothesis on the open subset.
 - `ComplexAnalytic.AnalyticSpace.isFiniteEtale_restrictHom`: the same for finite étale.
@@ -358,8 +366,17 @@ the pullback downstairs. **The content is that the second identification exists 
 `ComplexAnalytic.AnalyticSpace` is not that object, and this isomorphism is what carries one to
 the other. **It reaches one cospan and not every cospan**: the leg here is
 `ComplexAnalytic.AnalyticSpace.ofRestrict`, and the cospan a glue datum's `t'` opens over has a
-`CategoryTheory.Limits.pullback.fst` on each leg. Whether the comparison is available there is not
-settled here and nothing below claims it is. -/
+`CategoryTheory.Limits.pullback.fst` on each leg.
+`ComplexAnalytic.AnalyticSpace.isPullback_map_pullback_pullbackFst_ofRestrict` at the foot of this
+section reaches that cospan, as a `CategoryTheory.IsPullback` and not as an isomorphism: this file
+states no `CategoryTheory.Limits.HasPullback` there, so a caller who wants the comparison supplies
+that and applies `CategoryTheory.IsPullback.isoPullback`. **The cospan of two local models
+presented by cut-out data is reached by neither**, and nothing in this file is about it.
+
+**This paragraph closed *Whether the comparison is available there is not settled here and nothing
+below claims it is* until 2026-09-07**, when
+`ComplexAnalytic.AnalyticSpace.isPullback_map_pullback_pullbackFst_ofRestrict` settled that
+cospan. It was exact when written. -/
 noncomputable def toLRSIsoPullbackMap :
     (Limits.pullback f (Y.ofRestrict V)).toLocallyRingedSpace ≅
       Limits.pullback (forgetToLocallyRingedSpace.map f)
@@ -401,6 +418,117 @@ theorem isOpenImmersion_map_pullbackFst_ofRestrict :
     AlgebraicGeometry.LocallyRingedSpace.isOpenImmersion_ofRestrict X.toLocallyRingedSpace _
   rw [pullbackFst_eq_inv_comp_ofRestrict f V, forgetToLocallyRingedSpace.map_comp]
   infer_instance
+
+/-- **The `t'` cospan's square, with an open subspace as its apex.**
+
+A glue datum's `t'` is a morphism out of a pullback over the cospan whose two legs are
+`CategoryTheory.Limits.pullback.fst f (Y.ofRestrict V)` and
+`CategoryTheory.Limits.pullback.fst f (Y.ofRestrict V')`, and
+`ComplexAnalytic.AnalyticSpace.isPullback_ofRestrict` does not reach it: neither leg is an
+`ComplexAnalytic.AnalyticSpace.ofRestrict`. **What makes it reachable is that each leg *is* one up
+to an isomorphism**, which is `ComplexAnalytic.AnalyticSpace.pullbackFst_eq_inv_comp_ofRestrict`,
+so the cospan is an `ofRestrict` cospan transported along
+`ComplexAnalytic.AnalyticSpace.restrictIsoPullbackOfRestrict` and `CategoryTheory.IsPullback` is
+stable under that transport.
+
+**Read the apex.** It is `X ×_Y V'` restricted to the preimage of `f ⁻¹ V` — an open subspace of
+the object the second leg comes out of, and not a chosen limit, which is what a
+`AlgebraicGeometry.LocallyRingedSpace.GlueData`'s `V (i, j)` has to be if a hypothesis about it is
+to be discharged by the tools that discharge hypotheses about spaces one can name.
+`AlgebraicGeometry.LocallyRingedSpace.restrictInfIsoPullback`'s docstring gives that reason for
+its own existence. -/
+theorem isPullback_pullbackFst_ofRestrict (V' : Y.Opens) :
+    IsPullback
+      (restrictHom (Limits.pullback.fst f (Y.ofRestrict V'))
+          ((Opens.map f.toLRSHom.base).obj V) ≫ (restrictIsoPullbackOfRestrict f V).hom)
+      ((Limits.pullback f (Y.ofRestrict V')).ofRestrict
+        ((Opens.map (Limits.pullback.fst f (Y.ofRestrict V')).toLRSHom.base).obj
+          ((Opens.map f.toLRSHom.base).obj V)))
+      (Limits.pullback.fst f (Y.ofRestrict V)) (Limits.pullback.fst f (Y.ofRestrict V')) := by
+  rw [pullbackFst_eq_inv_comp_ofRestrict f V]
+  exact (isPullback_ofRestrict (Limits.pullback.fst f (Y.ofRestrict V'))
+      ((Opens.map f.toLRSHom.base).obj V)).flip.of_iso (Iso.refl _)
+    (restrictIsoPullbackOfRestrict f V) (Iso.refl _) (Iso.refl _)
+    (by simp) (by simp) (by simp) (by simp)
+
+/-- **The same square one category down**, with the same open subspace as its apex.
+
+The proof is `ComplexAnalytic.AnalyticSpace.isPullback_pullbackFst_ofRestrict`'s read one category
+down, with `ComplexAnalytic.AnalyticSpace.isPullback_map_ofRestrict` in place of the analytic
+square. It does **not** follow from the analytic statement — nothing here says
+`ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace` preserves this or any limit, and the
+paragraph on `ComplexAnalytic.AnalyticSpace.isPullback_map_ofRestrict` says why it cannot be
+assumed to.
+
+**No lemma of this repository is used for the transport.** `CategoryTheory.IsPullback.of_iso` is
+Mathlib's, at the pinned revision, and it takes isomorphisms of all four objects; the three
+identities and one isomorphism it is applied to here are what specialise it to replacing the
+source of a single leg. -/
+theorem isPullback_map_pullbackFst_ofRestrict (V' : Y.Opens) :
+    IsPullback
+      (forgetToLocallyRingedSpace.map
+        (restrictHom (Limits.pullback.fst f (Y.ofRestrict V'))
+            ((Opens.map f.toLRSHom.base).obj V) ≫ (restrictIsoPullbackOfRestrict f V).hom))
+      (forgetToLocallyRingedSpace.map
+        ((Limits.pullback f (Y.ofRestrict V')).ofRestrict
+          ((Opens.map (Limits.pullback.fst f (Y.ofRestrict V')).toLRSHom.base).obj
+            ((Opens.map f.toLRSHom.base).obj V))))
+      (forgetToLocallyRingedSpace.map (Limits.pullback.fst f (Y.ofRestrict V)))
+      (forgetToLocallyRingedSpace.map (Limits.pullback.fst f (Y.ofRestrict V'))) := by
+  rw [forgetToLocallyRingedSpace.map_comp,
+    show forgetToLocallyRingedSpace.map (Limits.pullback.fst f (Y.ofRestrict V)) =
+      (forgetToLocallyRingedSpace.mapIso (restrictIsoPullbackOfRestrict f V)).inv ≫
+        forgetToLocallyRingedSpace.map (X.ofRestrict ((Opens.map f.toLRSHom.base).obj V)) from by
+      rw [Functor.mapIso_inv, ← forgetToLocallyRingedSpace.map_comp,
+        ← pullbackFst_eq_inv_comp_ofRestrict f V]]
+  exact (isPullback_map_ofRestrict (Limits.pullback.fst f (Y.ofRestrict V'))
+      ((Opens.map f.toLRSHom.base).obj V)).flip.of_iso (Iso.refl _)
+    (forgetToLocallyRingedSpace.mapIso (restrictIsoPullbackOfRestrict f V))
+    (Iso.refl _) (Iso.refl _) (by simp) (by simp) (by simp) (by simp)
+
+/-- **The forgetful functor carries the analytic pullback square at the `t'` cospan to a pullback
+square.**
+
+`ComplexAnalytic.AnalyticSpace.isPullback_pullbackFst_ofRestrict` and
+`ComplexAnalytic.AnalyticSpace.isPullback_map_pullbackFst_ofRestrict` are about a square whose
+apex is an open subspace; this is the same square with that apex replaced by
+`CategoryTheory.Limits.pullback` of the two legs, which exists
+by `ComplexAnalytic.AnalyticSpace.hasPullback_pullbackFst_ofRestrict'`. The isomorphism between
+them is the analytic square's own
+`CategoryTheory.IsPullback.isoPullback`, carried down by the functor, and
+`CategoryTheory.IsPullback.of_iso` transports the statement along it.
+
+**This is what taxis #1871's second obstruction asked for.** A glue datum's `t'` maps between
+pullbacks taken in the datum's own category, and the analytic pullback at this cospan is not that
+object; this says the image of the analytic one *is* a pullback there, so a caller holding
+`CategoryTheory.Limits.HasPullback` downstairs gets the comparison from
+`CategoryTheory.IsPullback.isoPullback`. **This file adds no instance at that key** — the seam
+`ComplexAnalytic.AnalyticSpace.isOpenImmersion_map_pullbackFst_ofRestrict`'s docstring is about,
+one class up, and the remedy it prescribes is an ascribed `haveI` at the caller.
+
+**It does not reach taxis #1871's first obstruction**, which is the larger one: the ambient pieces
+of Mathlib's glue datum are pullbacks over a cospan of local models presented by cut-out data,
+neither of whose legs is an `ComplexAnalytic.AnalyticSpace.ofRestrict`, and no declaration of
+`Oka/AnalyticSpace/PullbackOpen.lean` says anything about them. -/
+theorem isPullback_map_pullback_pullbackFst_ofRestrict (V' : Y.Opens) :
+    IsPullback
+      (forgetToLocallyRingedSpace.map
+        (Limits.pullback.fst (Limits.pullback.fst f (Y.ofRestrict V))
+          (Limits.pullback.fst f (Y.ofRestrict V'))))
+      (forgetToLocallyRingedSpace.map
+        (Limits.pullback.snd (Limits.pullback.fst f (Y.ofRestrict V))
+          (Limits.pullback.fst f (Y.ofRestrict V'))))
+      (forgetToLocallyRingedSpace.map (Limits.pullback.fst f (Y.ofRestrict V)))
+      (forgetToLocallyRingedSpace.map (Limits.pullback.fst f (Y.ofRestrict V'))) := by
+  refine (isPullback_map_pullbackFst_ofRestrict f V V').of_iso
+    (forgetToLocallyRingedSpace.mapIso (isPullback_pullbackFst_ofRestrict f V V').isoPullback)
+    (Iso.refl _) (Iso.refl _) (Iso.refl _) ?_ ?_ (by simp) (by simp)
+  · simp only [Functor.mapIso_hom, Iso.refl_hom, Category.comp_id,
+      ← forgetToLocallyRingedSpace.map_comp]
+    exact congrArg _ (isPullback_pullbackFst_ofRestrict f V V').isoPullback_hom_fst.symm
+  · simp only [Functor.mapIso_hom, Iso.refl_hom, Category.comp_id,
+      ← forgetToLocallyRingedSpace.map_comp]
+    exact congrArg _ (isPullback_pullbackFst_ofRestrict f V V').isoPullback_hom_snd.symm
 
 /-! ### Base change along an open immersion -/
 
