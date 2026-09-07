@@ -42,15 +42,33 @@ ambient one pulled back along the immersion, so the `ℂ`-linearity of `ofCutOut
 and the one of `liftHom` is `ComplexAnalytic.IsCutOutBy.isCLinearHom_lift` at the nose.
 
 Those three are stated for an arbitrary closed immersion into an arbitrary `ℂ^n|V` and do not
-mention the product. It is here rather than earlier because it needs both
-`ComplexAnalytic.AnalyticSpace.ofCutOut`, which arrives in `Oka/AnalyticSpace/LocalModel.lean`,
-and `ComplexAnalytic.AnalyticSpace.restrict`, which arrives in
-`Oka/AnalyticSpace/OpenSubspace.lean` — and `Oka/AnalyticSpace/OpenSubspace.lean` imports
-`Oka/AnalyticSpace/LocalModel.lean`, so neither of those two files has both.
-`Oka/AnalyticSpace/Factorisation.lean` does not have `restrict` either. A reader who would rather
-see it in `Oka/AnalyticSpace/OpenSubspace.lean` is making a reasonable call; the reason it is not
-there is that that file's subject is the open subspace and this is the mapping property of a
-closed one.
+mention the product. **Exactly one of those three has no earlier home, and it is
+`ComplexAnalytic.AnalyticSpace.liftHom`**: it is built from
+`ComplexAnalytic.IsCutOutBy.lift` and `ComplexAnalytic.IsCutOutBy.isCLinearHom_lift`, which arrive
+in `Oka/AnalyticSpace/Factorisation.lean`, and it lands in a
+`ComplexAnalytic.AnalyticSpace.restrict`, which arrives in
+`Oka/AnalyticSpace/OpenSubspace.lean`. **Neither of those two files is in the other's import
+closure**, so neither has both, and `ComplexAnalytic.AnalyticSpace.liftHom_comp` is forced with it.
+
+**The section's other declarations are not forced, and their placement is a preference, which is
+checkable and was checked rather than argued.** A file importing
+`Oka/AnalyticSpace/OpenSubspace.lean` and nothing else takes
+`ComplexAnalytic.AnalyticSpace.ofCutOutHom`,
+`ComplexAnalytic.AnalyticSpace.toLRSHom_ofCutOutHom`,
+`ComplexAnalytic.AnalyticSpace.pullbackΓ_ofCutOutHom_eq_zero`,
+`ComplexAnalytic.AnalyticSpace.mono_ofCutOutHom` and
+`ComplexAnalytic.AnalyticSpace.hom_ext_ofCutOut`, bodies unchanged, with no output at all:
+`ComplexAnalytic.AnalyticSpace.ofCutOut` arrives in `Oka/AnalyticSpace/LocalModel.lean`, which
+`Oka/AnalyticSpace/OpenSubspace.lean` imports, so that file has
+`ComplexAnalytic.AnalyticSpace.ofCutOut` and `ComplexAnalytic.AnalyticSpace.restrict` alike, which
+is all any of those names asks for. They are here so that the mapping property is stated in one
+place, and because that file's subject is the open subspace where this is the mapping property of
+a closed one. **That is a reason of taste and is given as one.**
+
+**This paragraph read *"`Oka/AnalyticSpace/OpenSubspace.lean` imports
+`Oka/AnalyticSpace/LocalModel.lean`, so neither of those two files has both"* until 2026-09-07.**
+That import is what gives `Oka/AnalyticSpace/OpenSubspace.lean` both, so the clause was false and
+the import it cited was the reason it was false.
 
 ## The vanishing condition, which is the step this file was expected to fight
 
@@ -100,13 +118,17 @@ is rejected, which is the seam
 * **`CategoryTheory.Limits.HasBinaryProducts ComplexAnalytic.AnalyticSpace`.** What lands here is
   the product of two objects presented as `ComplexAnalytic.AnalyticSpace.ofCutOut` — that is, of
   two *local models* — and nothing wider. A general analytic space is only locally a local model,
-  and gluing the local products is a separate rung. At `bbbc91f`, which is this file's base, with
-  this file added to the tree, `#synth CategoryTheory.Limits.HasBinaryProducts
-  ComplexAnalytic.AnalyticSpace` fails — elaborated rather than grepped.
+  and gluing the local products is a separate rung. At `8bfb421`, the commit this file first
+  reached `master` in, `#synth CategoryTheory.Limits.HasBinaryProducts
+  ComplexAnalytic.AnalyticSpace` fails — elaborated rather than grepped. **That clause named
+  `bbbc91f` and called it this file's base until 2026-09-07.** `bbbc91f` is the base of
+  `Oka/AnalyticSpace/AffineProductOpen.lean`, where it is exact; this file imports that one and
+  `bbbc91f` predates it, so this file cannot be put in that tree at all and the probe cannot be
+  run there.
 * **Anything over a base.** Both statements here are absolute products. The fibre product over a
   common base is an equaliser inside such a product; no construction below builds an equaliser or
   bears on `CategoryTheory.Limits.HasPullback`, and `#synth
-  CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` fails at the same head.
+  CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` fails at that same commit.
 * **Any description of the product on points.** The underlying set of
   `ComplexAnalytic.AnalyticSpace.prodCutOut` is the zero locus of the appended family, and no
   statement below identifies it with a set of pairs or computes the base map of either projection.
