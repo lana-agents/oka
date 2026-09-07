@@ -48,13 +48,63 @@ one equation between two morphisms, evaluated at one point.
   nothing is assumed of `i` beyond `Mono`.
 
 **Neither hypothesis is derived from the other here, and neither is derived from a hypothesis on
-the base.** A cover of a Hausdorff space has Hausdorff total space; that is a topological
-statement, and this repository's `T2Space` instances for analytic spaces are the seven of
-`Oka/AnalyticSpace/Hausdorff.lean` — `ℂ^ι` and `ℂ^n`, an open subspace of `ℂ^n` and an open
-subspace of an arbitrary Hausdorff analytic space, a zero locus in each of the two spellings, and
-the node — none of which concludes anything about the total space of a cover.
-So both hypotheses are asked for, and `Oka/AnalyticSpace/Hausdorff.lean` is where a later seat
-would put the instance that removes one.
+the base — and at this file's meaning of *cover* neither can be.** The classical sentence *a cover
+of a Hausdorff space has Hausdorff total space* is about `IsCoveringMap`, and a cover here is an
+object of `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver`, whose structure morphism is
+`ComplexAnalytic.AnalyticSpace.IsFiniteEtale`. **That class is not `IsCoveringMap`** and its own
+docstring says so: unfolded it is `ComplexAnalytic.AnalyticSpace.IsFinite` — a closed underlying
+map with finite fibres — together with `ComplexAnalytic.AnalyticSpace.IsLocalIso` — a local
+homeomorphism whose stalk maps are isomorphisms — and the first three of those four conditions
+are the whole of its topological content, the fourth saying nothing about points.
+`LineTwoOrigins.fold` in `OkaTest/FiniteEtaleCancel.lean` has all three onto `ℝ`, which is
+Hausdorff, and its total space is not: `LineTwoOrigins.isClosedMap_fold`,
+`LineTwoOrigins.finite_fibre_fold`, `LineTwoOrigins.isLocalHomeomorph_fold` and
+`LineTwoOrigins.not_t2Space` are all four in this repository already. **So no argument from the
+topological content of `IsFiniteEtale` reaches `[T2Space A.left]` from a hypothesis on `X`**, and
+both hypotheses below are asked for because at this reading they have to be.
+
+**Under `IsCoveringMap` the classical sentence is true, and every route to `IsCoveringMap` from
+finite étale data here asks the hypothesis it would discharge.** Its ingredient is Mathlib's
+`IsCoveringMap.isSeparatedMap`, and its home would be `Oka/Topology/Covering/Basic.lean` beside
+`IsCoveringMap.isClosedMap` rather than a file about analytic spaces. But of the declarations
+under `Oka/` whose conclusion is `IsCoveringMap` — a comment-stripping walk over every one of
+them, not a `grep` — the two that take an arbitrary finite étale morphism are
+`ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale`, which asks `[T2Space X]` of
+its source, and `ComplexAnalytic.AnalyticSpace.isCoveringMap_baseChangeSndBase`, which asks
+`[T2Space E]` of its; both are proved from `IsClosedMap.isCoveringMap_of_isLocalHomeomorph`, whose
+own `[T2Space E]` is the hypothesis `LineTwoOrigins.fold` shows cannot be dropped. **So that
+lemma's separation hypothesis has a witness too**, and its docstring — which reads *A closed local
+homeomorphism with finite fibres out of a Hausdorff space is a covering map* and gives the reason
+no connectedness of the target is needed — names none.
+
+`Oka/AnalyticSpace/Hausdorff.lean` declares seven `T2Space` instances — `ℂ^ι` and `ℂ^n`, an open
+subspace of `ℂ^n` and an open subspace of an arbitrary Hausdorff analytic space, a zero locus in
+each of the two spellings, and the node — **and it is not the only file that declares one.**
+Walking every tracked `.lean` with the same comment stripper, taking each `instance` head whose
+conclusion is `T2Space` and reading the declaring module off `scripts/DumpOkaDecls.lean`'s rows
+rather than off a path, three more turn up: `ComplexAnalytic.t2Space_analytification`
+(`Oka/Analytification/Hausdorff.lean`, in the library), `ComplexAnalytic.t2Space_restrict_punctured`
+(`OkaTest/FiniteMorphism.lean`) and `OkaTest.FiniteEtaleOver.t2Space_left_sqOver`
+(`OkaTest/FiniteEtaleOver.lean`). **The last of those is a cover's total space**, at one concrete
+cover and not in general: its own docstring opens *`sqOver` and not the general case* and says
+that `T2Space A.left` does not follow from `T2Space X` for an arbitrary object of
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver X`, which is the argument this paragraph makes.
+`Oka/AnalyticSpace/Hausdorff.lean` names one of the three in its own docstring, saying that
+`ComplexAnalytic.t2Space_complexAffineSpace` *Together with* `ComplexAnalytic.t2Space_restrict`
+*subsumes* `ComplexAnalytic.t2Space_restrict_punctured`.
+**So none of the ten — the seven of that file and these three — removes either hypothesis
+below**, and an instance that did would have to state at `IsFiniteEtale` what
+`LineTwoOrigins.fold` refutes.
+
+**This paragraph read *A cover of a Hausdorff space has Hausdorff total space; that is a
+topological statement, and this repository's `T2Space` instances for analytic spaces are the seven
+of `Oka/AnalyticSpace/Hausdorff.lean`*, said of those seven *none of which concludes anything
+about the total space of a cover*, and ended *So both hypotheses are asked for, and
+`Oka/AnalyticSpace/Hausdorff.lean` is where a later seat would put the instance that removes one*,
+until 2026-09-07. Each of those three was false when written rather than falsified later, so this
+is a correction and not one of this repository's dated records**: the first is false at
+`IsFiniteEtale` and true at `IsCoveringMap`, which are not the same class; three of the instances
+are declared outside the file named; and one of those three is a cover's total space.
 
 ## Main definitions
 
@@ -89,7 +139,12 @@ would put the instance that removes one.
   preservation of epimorphisms by a fibre functor are each untouched.
 * **Nothing about Hausdorffness.** That a cover of a Hausdorff analytic space has Hausdorff total
   space is a topological statement this repository does not make, and deriving either hypothesis
-  below from a hypothesis on `X` would need it.
+  below from a hypothesis on `X` would need it. **Nothing is added here because at this file's
+  meaning of *cover* that statement is false**, as `## Where each hypothesis is spent` argues from
+  `LineTwoOrigins.fold`; what is true is its `IsCoveringMap` form, and that is a statement about
+  topological spaces whose home is `Oka/Topology/Covering/Basic.lean` and which this file does not
+  prove either. **This sentence is unchanged and nothing in it is retired** — the clause added is
+  the one that says why the gap will not be closed in the shape the sentence suggests.
 * **No diagonal and no isomorphism `A ≅ A ×_B A`.** The classical argument's object is not built,
   so nothing below says the fibre product of a monomorphism with itself is its source.
 * **Nothing about a general mono of analytic spaces.**
