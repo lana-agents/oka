@@ -6,10 +6,16 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 import Mathlib.Topology.Covering.Basic
 
 /-!
-# Four statements about covering maps: two criteria, a cancellation, and constancy of the fibre
+# Covering maps: a criterion and its converse, a cancellation, constant fibres, and a base change
 
-Material for `Mathlib/Topology/Covering/Basic.lean`; see `README.md` on the mirror tree. Four
-independent statements, sharing only their destination.
+Material for `Mathlib/Topology/Covering/Basic.lean`; see `README.md` on the mirror tree. The
+statements below are independent of one another, sharing only their destination.
+
+**Until 2026-09-07 the heading above read *Four statements about covering maps: two criteria, a
+cancellation, and constancy of the fibre*, and the sentence beside it read *Four independent
+statements, sharing only their destination*.** The section appended below moves whichever set
+those two numerals were of, so they are replaced by the enumeration rather than raised by one: a
+count of a file's own contents goes false on the next append and an enumeration does not.
 
 ## A closed local homeomorphism with finite fibres is a covering map
 
@@ -107,6 +113,46 @@ Two details of the clopen step are worth stating because each cost a failed atte
 **`PreconnectedSpace`, not `ConnectedSpace`.** Nonemptiness of the base plays no part, and asking
 for it would make the statement fail on the empty space for no reason.
 
+## A covering map stays one under base change along a continuous map
+
+`Function.Pullback f g` is Mathlib's set-theoretic fibre product (`Mathlib/Data/Set/Prod.lean`), a
+subtype of `E × Y`, so it carries the subspace topology of the product and
+`IsCoveringMap.pullback_snd` constructs no type and no instance: it is a statement about
+`Function.Pullback.snd` at the topology that is already there.
+
+Being evenly covered is a condition on the base and the witness transports unchanged. Over an open
+`U ∋ g y` with `H : f ⁻¹' U ≃ₜ U × I`, the set `g ⁻¹' U` is an open neighbourhood of `y`, and the
+part of the pullback lying over it goes to `(g ⁻¹' U) × I` by `(e, y') ↦ (y', (H e).2)`. **The index
+type is the same `I`**, which is what leaves the fibre of the base change one application of
+`IsEvenlyCovered.to_isEvenlyCovered_preimage` away and what makes the companion statement about
+fibres independent of the trivialisation.
+
+**`Continuous g` is a hypothesis of `IsCoveringMap.pullback_snd` and it cannot be dropped.** The
+underlying map of sets needs nothing — that is why `Function.Pullback.finite_fiber_snd` below asks
+for no topology at all — but `g ⁻¹' U` being open is what makes the trivialisation above a
+trivialisation, and the conclusion is false without it:
+`TwoIndiscrete.not_isCoveringMap_pullback_snd` (`OkaTest/CoveringBaseChange.lean`) compiles a
+witness, at the identity of a two-element discrete space base-changed along the identity out of the
+same two points carrying the indiscrete topology, where `Function.Pullback.snd` is a continuous
+bijection and not an open map.
+
+`Function.Pullback.finite_fiber_snd` is the fibre half and carries neither a covering hypothesis
+nor a topology: `Function.Pullback.fst` is injective on the fibre of `Function.Pullback.snd` over
+`y` and lands it inside `f ⁻¹' {g y}`. It is stated apart from `IsCoveringMap.pullback_snd` rather
+than conjoined with it because `ComplexAnalytic.AnalyticSpace.isFinite_coveringSpaceHom`
+(`Oka/AnalyticSpace/CoveringSpace.lean`) asks for a covering map and for finite fibres as two
+hypotheses.
+
+**Both are statements about continuous maps of topological spaces, and the word *topological* is
+doing work in that sentence.** The `ComplexAnalytic.AnalyticSpace.isFinite_coveringSpaceHom` just
+cited reads a covering map of underlying spaces as a finiteness statement about a morphism of
+complex analytic spaces, and neither statement below is composed with it in this file. Both are
+guarded in `OkaTest/Axioms/Morphisms.lean` rather than beside a consumer, which is where
+`IsCoveringMap.isClosedMap_of_comp` is guarded and for the reason that section gives; what consumes
+`Function.Pullback.finite_fiber_snd` at the commit that adds it is
+`TwoIndiscrete.not_isCoveringMap_pullback_snd_of_not_continuous`, a declaration of a test file,
+which the guards of this repository's library do not reach.
+
 ## Main results
 
 - `IsClosedMap.isCoveringMap_of_isLocalHomeomorph`: a closed local homeomorphism with finite
@@ -122,6 +168,10 @@ for it would make the statement fail on the empty space for no reason.
   constant up to homeomorphism.
 - `IsCoveringMap.nonempty_homeomorph_fiber`: **over a preconnected base, any two fibres of a
   covering map are homeomorphic.**
+- `IsCoveringMap.pullback_snd`: **a covering map stays a covering map under base change along a
+  continuous map**, at Mathlib's `Function.Pullback`.
+- `Function.Pullback.finite_fiber_snd`: the fibres of `Function.Pullback.snd` are finite when the
+  fibres of the map being base-changed are, with no covering hypothesis and no topology.
 -/
 
 open Topology
@@ -339,3 +389,101 @@ theorem IsCoveringMap.nonempty_homeomorph_fiber [PreconnectedSpace X] (hf : IsCo
   have huniv : S = Set.univ :=
     IsClopen.eq_univ ⟨⟨hcompl⟩, hopen⟩ ⟨x, ⟨Homeomorph.refl _⟩⟩
   exact ⟨(Set.eq_univ_iff_forall.mp huniv y).some.symm⟩
+
+section BaseChange
+
+variable {Y : Type*} [TopologicalSpace Y] {g : Y → X}
+
+/-- **A covering map stays a covering map under base change along a continuous map.**
+
+`Function.Pullback f g` is Mathlib's set-theoretic fibre product, a subtype of `E × Y`; the
+topology on it is the subspace topology of the product, so nothing is constructed here beyond the
+trivialisation itself.
+
+Being evenly covered is a condition on the base and the witness for `g y` transports to `y`
+unchanged: over an open `U ∋ g y` with `H : f ⁻¹' U ≃ₜ U × I`, the set `g ⁻¹' U` is an open
+neighbourhood of `y`, and the part of the pullback lying over it goes to `(g ⁻¹' U) × I` by
+`(e, y') ↦ (y', (H e).2)`. **The index type is the same `I`**, so
+`IsEvenlyCovered.to_isEvenlyCovered_preimage` is all that is left to do.
+
+**`Continuous g` cannot be dropped.** It is used once, for `g ⁻¹' U` to be open, and that one use
+is not removable: `TwoIndiscrete.not_isCoveringMap_pullback_snd` (`OkaTest/CoveringBaseChange.lean`)
+compiles a witness with `f` the identity of a two-element discrete space and `g` the identity out of
+the same two points carrying the indiscrete topology, where `Function.Pullback.snd` is a continuous
+bijection and not an open map. -/
+theorem IsCoveringMap.pullback_snd (hf : IsCoveringMap f) (hg : Continuous g) :
+    IsCoveringMap (Function.Pullback.snd : f.Pullback g → Y) := by
+  intro y
+  obtain ⟨inst, U, hyU, hU, hfU, H, hH⟩ := hf (g y)
+  refine IsEvenlyCovered.to_isEvenlyCovered_preimage (I := f ⁻¹' {g y}) ?_
+  have hsnd : Continuous (Function.Pullback.snd : f.Pullback g → Y) :=
+    continuous_snd.comp continuous_subtype_val
+  have hmemU : ∀ v : (g ⁻¹' U : Set Y), g (v : Y) ∈ U := fun v ↦ v.2
+  have hmemV : ∀ p : (Function.Pullback.snd : f.Pullback g → Y) ⁻¹' (g ⁻¹' U),
+      (p : f.Pullback g).1.2 ∈ g ⁻¹' U := fun p ↦ p.2
+  -- the first component of a point of the pullback lying over `g ⁻¹' U` lies over `U`
+  have hfst : ∀ p : (Function.Pullback.snd : f.Pullback g → Y) ⁻¹' (g ⁻¹' U),
+      (p : f.Pullback g).1.1 ∈ f ⁻¹' U := fun p ↦ by
+    change f (p : f.Pullback g).1.1 ∈ U
+    rw [(p : f.Pullback g).2]; exact hmemV p
+  -- the point of `E` the trivialisation produces lies over the right point of `X`
+  have key : ∀ (v : (g ⁻¹' U : Set Y)) (i : (f ⁻¹' {g y} : Set E)),
+      f ((H.symm (⟨g (v : Y), hmemU v⟩, i) : (f ⁻¹' U : Set E)) : E) = g (v : Y) := by
+    intro v i
+    have h := hH (H.symm (⟨g (v : Y), hmemU v⟩, i))
+    rw [H.apply_symm_apply] at h
+    exact h.symm
+  have hleft : ∀ p : (Function.Pullback.snd : f.Pullback g → Y) ⁻¹' (g ⁻¹' U),
+      ((H.symm (⟨g (p : f.Pullback g).1.2, hmemU ⟨_, hmemV p⟩⟩,
+        (H ⟨(p : f.Pullback g).1.1, hfst p⟩).2) : (f ⁻¹' U : Set E)) : E)
+        = (p : f.Pullback g).1.1 := by
+    intro p
+    have h : H ⟨(p : f.Pullback g).1.1, hfst p⟩
+        = (⟨g (p : f.Pullback g).1.2, hmemU ⟨_, hmemV p⟩⟩,
+          (H ⟨(p : f.Pullback g).1.1, hfst p⟩).2) := by
+      refine Prod.ext (Subtype.ext ?_) rfl
+      rw [hH]; exact (p : f.Pullback g).2
+    rw [← h, H.symm_apply_apply]
+  have hright : ∀ (v : (g ⁻¹' U : Set Y)) (i : (f ⁻¹' {g y} : Set E))
+      (hw : ((H.symm (⟨g (v : Y), hmemU v⟩, i) : (f ⁻¹' U : Set E)) : E) ∈ f ⁻¹' U),
+      (H ⟨((H.symm (⟨g (v : Y), hmemU v⟩, i) : (f ⁻¹' U : Set E)) : E), hw⟩).2 = i :=
+    fun v i _ ↦ congrArg Prod.snd (H.apply_symm_apply (⟨g (v : Y), hmemU v⟩, i))
+  exact ⟨inst, g ⁻¹' U, hyU, hU.preimage hg, hsnd.isOpen_preimage _ (hU.preimage hg),
+    { toFun p := (⟨(p : f.Pullback g).1.2, hmemV p⟩, (H ⟨(p : f.Pullback g).1.1, hfst p⟩).2)
+      invFun z := ⟨⟨⟨((H.symm (⟨g (z.1 : Y), hmemU z.1⟩, z.2) : (f ⁻¹' U : Set E)) : E),
+        (z.1 : Y)⟩, key z.1 z.2⟩, z.1.2⟩
+      left_inv p := Subtype.ext (Subtype.ext (Prod.ext (hleft p) rfl))
+      right_inv z := Prod.ext rfl (hright z.1 z.2 _)
+      continuous_toFun := Continuous.prodMk
+        (Continuous.subtype_mk (continuous_snd.comp (continuous_subtype_val.comp
+          continuous_subtype_val)) _)
+        (continuous_snd.comp (H.continuous.comp (Continuous.subtype_mk (continuous_fst.comp
+          (continuous_subtype_val.comp continuous_subtype_val)) _)))
+      continuous_invFun := Continuous.subtype_mk (Continuous.subtype_mk (Continuous.prodMk
+        (continuous_subtype_val.comp (H.symm.continuous.comp (Continuous.prodMk
+          (Continuous.subtype_mk (hg.comp (continuous_subtype_val.comp continuous_fst)) _)
+          continuous_snd)))
+        (continuous_subtype_val.comp continuous_fst)) _) _ }, fun _ ↦ rfl⟩
+
+omit [TopologicalSpace E] [TopologicalSpace X] [TopologicalSpace Y] in
+/-- **Finite fibres base-change**: if every fibre of `f` is finite then so is every fibre of
+`Function.Pullback.snd`.
+
+`Function.Pullback.fst` sends the fibre of `Function.Pullback.snd` over `y` into `f ⁻¹' {g y}`, and
+it is injective there because the second components agree by assumption. **Neither a covering
+hypothesis nor a topology is used**, which is why the `TopologicalSpace` instances of this file are
+omitted rather than left to be included and unused; and it is stated apart from
+`IsCoveringMap.pullback_snd` because `ComplexAnalytic.AnalyticSpace.isFinite_coveringSpaceHom` asks
+for a covering map and for finite fibres as two hypotheses rather than one. -/
+theorem Function.Pullback.finite_fiber_snd (hfin : ∀ x, (f ⁻¹' {x}).Finite) (y : Y) :
+    ((Function.Pullback.snd : f.Pullback g → Y) ⁻¹' {y}).Finite := by
+  refine Set.Finite.of_finite_image (f := Function.Pullback.fst) ?_ ?_
+  · refine (hfin (g y)).subset ?_
+    rintro _ ⟨p, hp, rfl⟩
+    change f (p : E × Y).1 ∈ ({g y} : Set X)
+    rw [p.2]
+    exact congrArg g hp
+  · rintro p hp p' hp' h
+    exact Subtype.ext (Prod.ext h (hp.trans hp'.symm))
+
+end BaseChange

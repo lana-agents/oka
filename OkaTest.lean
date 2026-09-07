@@ -34,6 +34,7 @@ import OkaTest.CoherentPresentation
 import OkaTest.Completion
 import OkaTest.CondFiniteEtale
 import OkaTest.CoverRefinement
+import OkaTest.CoveringBaseChange
 import OkaTest.CoveringSpace
 import OkaTest.CrossMemberGlue
 import OkaTest.CutOutQuotient
