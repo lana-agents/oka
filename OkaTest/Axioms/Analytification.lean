@@ -1312,8 +1312,9 @@ info: 'ComplexAnalytic.coverAnalytificationOpenCover_map' depends on axioms:
 its round trip: `ComplexAnalytic.comm_coverGlueData`,
 `ComplexAnalytic.toLRSHom_coverGlueMorphisms`,
 `ComplexAnalytic.coverIota_comp_coverGlueMorphisms`,
-`ComplexAnalytic.coverAnalytification_hom_ext`, `ComplexAnalytic.coverIncl_comp_coverIota` and
-`ComplexAnalytic.coverGlueMorphisms_coverIota`.
+`ComplexAnalytic.coverAnalytification_hom_ext`, `ComplexAnalytic.coverIncl_comp_coverIota`,
+`ComplexAnalytic.coverGlueMorphisms_coverIota` and
+`ComplexAnalytic.coverGlueMorphisms_eq_glueMorphismsOfGlueData`.
 They belong with the block above rather than in one of their own: the cover is what
 `ComplexAnalytic.AnalyticSpace.glueMorphisms` consumes and these are what supply its hypothesis,
 so `ComplexAnalytic.coverAnalytificationOpenCover_obj` and `…_map` directly above are the same
@@ -1368,6 +1369,13 @@ info: 'ComplexAnalytic.coverGlueMorphisms_coverIota' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.coverGlueMorphisms_coverIota
+
+/--
+info: 'ComplexAnalytic.coverGlueMorphisms_eq_glueMorphismsOfGlueData' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.coverGlueMorphisms_eq_glueMorphismsOfGlueData
 
 /-! ### The glue data of the members' `Spec`s
 
