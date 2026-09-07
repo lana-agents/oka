@@ -4444,9 +4444,10 @@ info: 'ComplexAnalytic.coverIncl' depends on axioms: [propext, Classical.choice,
 
 /-! ### Finite étale over an open subset of the base, which is both halves at once
 
-`Oka/Analytification/StandardEtaleFiniteEtale.lean`. Two declarations, and neither adds an axiom
-to the two halves it conjoins. The finiteness half is
-`ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp`, the
+`Oka/Analytification/StandardEtaleFiniteEtale.lean`.
+`ComplexAnalytic.isFiniteEtale_restrictHom_analytificationMap_etalePresHom_comp` and its `_compl`
+companion are the guards below, and neither adds an axiom to the two halves it conjoins. The
+finiteness half is `ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom_comp`, the
 local-isomorphism half is
 `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_comp`, both guarded above, and the
 transport that joins them is `ComplexAnalytic.AnalyticSpace.isLocalIso_restrictHom`, guarded in
@@ -4806,9 +4807,11 @@ nothing matches them up: the only relation is a single morphism between what the
 every pair of members is admissible, and the last theorem produces its two indices rather than
 taking them.
 
-The last two are the ones that ask for `CategoryTheory.IsIso` on the morphism between the two
-gluings; the four before them hold at an open immersion. **None of them is a common refinement**,
-and `Oka/Analytification/SpecTwoData.lean`'s own `## What is not here` says which piece of one is
+`ComplexAnalytic.mem_opensRange_specSchemeIotaMap` and
+`ComplexAnalytic.exists_index_basicOpen_specSchemeIotaMap` are the ones that ask for
+`CategoryTheory.IsIso` on the morphism between the two gluings; the rest hold at an open
+immersion. **None of them is a common refinement**, and
+`Oka/Analytification/SpecTwoData.lean`'s own `## What is not here` says which piece of one is
 still missing and what the two steps after it were measured to cost.
 
 Appended as its own section rather than folded into the section above, for the reason those
@@ -4893,7 +4896,10 @@ before them are what carries one to the other — every section over the range o
 out of a presented algebra's spectrum is such a polynomial, and the open it cuts out in the glued
 scheme is the image of `D(p)` under that immersion.
 
-**The first three are stated at an arbitrary open immersion and the next three are them at
+**`ComplexAnalytic.presentationSection`, `ComplexAnalytic.surjective_presentationSection` and
+`ComplexAnalytic.basicOpen_presentationSection` are stated at an arbitrary open immersion, and
+`ComplexAnalytic.specSchemeIotaSection`, `ComplexAnalytic.surjective_specSchemeIotaSection` and
+`ComplexAnalytic.basicOpen_specSchemeIotaSection` are them at
 `ComplexAnalytic.specSchemeIota`.** The generality is what the cross-datum guards need: a carried
 member is `ComplexAnalytic.specSchemeIotaMap` and is not `ComplexAnalytic.specSchemeIota` of
 anything in the first datum, so the second side of those statements has no one-datum spelling.
@@ -5243,12 +5249,14 @@ the sections above give: a section moved is a conflict for somebody else.
 
 **The instance is one `inferInstanceAs` and the two theorems are one `haveI` each**, so every one
 of those axiom lists is a union of lists this file and `OkaTest/Axioms/AnalyticSpace.lean` already
-record — `ComplexAnalytic.t2Space_zeroLocus` for the first, and
+record — `ComplexAnalytic.t2Space_zeroLocus` for `ComplexAnalytic.t2Space_analytification`, and
 `ComplexAnalytic.isFiniteEtale_restrictHom_analytificationMap_etalePresHom_comp` together with
-`ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale` for the other two. The guards
-are a check that the third rung introduced nothing, which is what a corollary of a theorem in
-another file most plausibly could. **Named and not located**: a section appended at the end of
-this file cannot say which section is above it and stay true, since the next branch appends between
+`ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale` for
+`ComplexAnalytic.isCoveringMap_base_restrictHom_analytificationMap_etalePresHom_comp` and its
+`_compl` companion. The guards are a check that the third rung introduced nothing, which is what a
+corollary of a theorem in another file most plausibly could. **Named and not located**: a section
+appended at the end of this file cannot say which section is above it and stay true, since the next
+branch appends between
 them. Said in full rather than by pointing at a neighbouring section that says it — that citation
 was itself the species it names, and it survived this branch's rebase only because the section that
 landed in between happens to carry the same sentence. -/
@@ -5447,21 +5455,38 @@ is the one that makes the counterexample unconditional.
 forces the index map to hit every index whose member has a point, which the glued-space form does
 not ask, and which is why `ComplexAnalytic.refineDatumOneCovers` takes a surjectivity hypothesis.
 
-**Nineteen declarations land in that section, six of them guarded, and the split is deliberate.**
-The guarded six are the two general lemmas and the four statements of the witness, all six named in
-the paragraphs above and each guarded immediately below. **The other thirteen are the witness's
-plumbing** and are listed here in full, because a sentence that says what is deliberately unguarded
-is worth nothing if a reader cannot check it against the section: the index type
-`ComplexAnalytic.dupIdx` and `ComplexAnalytic.dup_no_three`; the cover datum's own six pieces —
-`ComplexAnalytic.dupObj`, `ComplexAnalytic.dupPoly`, `ComplexAnalytic.dupGlue` and the **three**
-law proofs
-`ComplexAnalytic.dupHsymm`, `ComplexAnalytic.dupHrange`, `ComplexAnalytic.dupHcocycle`; the index
-map `ComplexAnalytic.dupSigma`, which is the one that misses the second member; the two steps
-`ComplexAnalytic.dupCoverOpen_eq_top` and `ComplexAnalytic.dupSurjective_coverIota` that carry the
-redundancy argument; and `ComplexAnalytic.dupPtPres` with `ComplexAnalytic.dupPtPoint`, the
-presentation of a point and the point itself. `Oka/Analytification/GlueShape.lean`'s counterexample
+**The split between what this section guards and what it deliberately leaves unguarded is named on
+both sides, and the two sides are not one section of that file.** Guarded are the general lemmas
+`ComplexAnalytic.mem_range_of_refineDatumCovers` and
+`ComplexAnalytic.not_refineDatumCovers_of_notMem_range`, which are under that file's
+`### The condition` and not under its counterexample section, together with the statements of the
+witness `ComplexAnalytic.dupSurjective_refine`, `ComplexAnalytic.dupNot_refineDatumCovers`,
+`ComplexAnalytic.dupStrict` and `ComplexAnalytic.dupPtStrict`, each guarded immediately below.
+**What the counterexample section adds beyond those is the witness's plumbing**, and it is listed
+here in full, because a sentence that says what is
+deliberately unguarded is worth nothing if a reader cannot check it against the section: the
+index type `ComplexAnalytic.dupIdx` and `ComplexAnalytic.dup_no_three`; the cover datum's own six
+pieces — `ComplexAnalytic.dupObj`, `ComplexAnalytic.dupPoly`, `ComplexAnalytic.dupGlue` and the
+**three** law proofs `ComplexAnalytic.dupHsymm`, `ComplexAnalytic.dupHrange`,
+`ComplexAnalytic.dupHcocycle`; the index map `ComplexAnalytic.dupSigma`, which is the one that
+misses the second member; the two steps `ComplexAnalytic.dupCoverOpen_eq_top` and
+`ComplexAnalytic.dupSurjective_coverIota` that carry the redundancy argument; and
+`ComplexAnalytic.dupPtPres` with `ComplexAnalytic.dupPtPoint`, the presentation of a point and the
+point itself. `Oka/Analytification/GlueShape.lean`'s counterexample
 sets the convention this follows: it guards `ComplexAnalytic.GlueShape.not_ctHRange` and advertises
 none of the `ct` definitions that produce it.
+
+**This account of the split read *"Nineteen declarations land in that section, six of them
+guarded"* before it was swept, and the numeral was exact for a set the sentence did not name.**
+`2de5583` wrote it and says it measured on `e2ba53b`, and nineteen is what `e2ba53b` *adds* to
+`Oka/Analytification/RefineDatumCover.lean` — a count of a push, and `e2ba53b` is where it is
+exact. What that file's counterexample section holds is seventeen declarations, four of them
+guarded, at `e2ba53b` and at `c367aa8` alike: `ComplexAnalytic.mem_range_of_refineDatumCovers` and
+`ComplexAnalytic.not_refineDatumCovers_of_notMem_range` went in under `### The condition` in the
+same push, which is why this section's opening sentence lists them separately from it. **A count
+of a commit is not a count of a section**, and the thirteen that went with the nineteen was exact
+for the counterexample section under either reading, which is why nothing in the enumeration
+moved.
 
 **Three laws are proved and two of them are vacuous, which are different counts and the ones the
 prose above must not collapse.** `ComplexAnalytic.dup_no_three` makes the two *triple-overlap*
