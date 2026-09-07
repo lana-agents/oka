@@ -3330,3 +3330,159 @@ info: 'ComplexAnalytic.AnalyticSpace.hasTerminal_analyticSpace' depends on axiom
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.hasTerminal_analyticSpace
+
+
+/-! ### The product of two open subspaces of complex affine spaces
+
+`Oka/AnalyticSpace/AffineProductOpen.lean`: that the open subspace of `ℂ^(n+m)` at
+`ComplexAnalytic.AnalyticSpace.affineProdOpens` is the binary product of an open subspace of
+`ℂ^n` and one of `ℂ^m`, the two legs, the pair, the two triangles and the uniqueness that make it
+one, and the base maps of the two coordinate projections of `ℂ^(n+m)` and of the pair into it.
+
+**`Classical.choice` is in every guard of this section and none of it is this section's
+subject.** Every construction here is built through
+`ComplexAnalytic.AnalyticSpace.liftRestrict` over
+`ComplexAnalytic.AnalyticSpace.affineProdLift`, and the latter goes through the inverse of
+`ComplexAnalytic.AnalyticSpace.homComplexAffineSpaceEquivGeneral`, which is `Equiv.ofBijective`
+and so a choice term; the axiom also reaches `ComplexAnalytic.AnalyticSpace` itself, for the
+reason the section `### The clopen part of a cover` gives. What the guards record is that nothing
+in that file adds an axiom of its own.
+
+**The guard on `ComplexAnalytic.AnalyticSpace.affineProdOpensIsoProd` tests instance search and
+not only axiom provenance.** That declaration's statement is written against the `⨯` notation,
+which is a `CategoryTheory.Limits.limit` and does not elaborate at all unless
+`ComplexAnalytic.AnalyticSpace.hasBinaryProduct_restrict_complexAffineSpace` is found; so the
+guard fails to build if the instance exists and is not reachable by search. That an instance of
+this corner of the tree can exist and not be found is not hypothetical:
+`ComplexAnalytic.AnalyticSpace.isIso_stalkMap_ofRestrict`'s docstring records a Mathlib instance
+that is `rfl`-equal to the one wanted and sits at a different discrimination-tree key, and exists
+to close exactly that gap.
+
+This section is appended as its own section because a section moved is a conflict for somebody
+else. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.base_affineProdFst' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.base_affineProdFst
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.base_affineProdSnd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.base_affineProdSnd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.base_affineProdLift' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.base_affineProdLift
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.affineProdOpens' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.affineProdOpens
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.mem_affineProdOpens_iff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.mem_affineProdOpens_iff
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.affineProdOpensFst' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.affineProdOpensFst
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.affineProdOpensSnd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.affineProdOpensSnd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.affineProdOpensFst_fac' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.affineProdOpensFst_fac
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.affineProdOpensSnd_fac' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.affineProdOpensSnd_fac
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.affineProdOpensLift' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.affineProdOpensLift
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.affineProdOpensLift_ofRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.affineProdOpensLift_ofRestrict
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.affineProdOpensLift_fst' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.affineProdOpensLift_fst
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.affineProdOpensLift_snd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.affineProdOpensLift_snd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hom_ext_affineProdOpens' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hom_ext_affineProdOpens
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.binaryFanAffineProdOpens' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.binaryFanAffineProdOpens
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isLimitBinaryFanAffineProdOpens' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isLimitBinaryFanAffineProdOpens
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hasBinaryProduct_restrict_complexAffineSpace'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hasBinaryProduct_restrict_complexAffineSpace
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.affineProdOpensIsoProd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.affineProdOpensIsoProd
