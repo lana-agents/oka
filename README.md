@@ -148,8 +148,15 @@ coherence statement for arbitrary complex analytic spaces:
   proved here**, nor is there a fibre product over a general cospan to base-change along. **This
   clause read *nor are there fibre products to base-change along* until
   `Oka/AnalyticSpace/PullbackOpen.lean` landed the pullback along the inclusion of an open
-  subspace**, over which `ComplexAnalytic.AnalyticSpace.isFinite_restrictHom` does base-change
-  finiteness.
+  subspace**, over which `ComplexAnalytic.AnalyticSpace.isFinite_restrictHom` carries finiteness
+  with no hypothesis on the open subset; `Oka/AnalyticSpace/FiniteEtaleBaseChange.lean` added a
+  second shape on 2026-09-07, the pullback along a morphism that is finite étale with Hausdorff
+  source, over which `ComplexAnalytic.AnalyticSpace.baseChangeSnd` is finite étale and hence
+  finite — finiteness of the finite étale leg itself and not of an arbitrary finite morphism, so a
+  second shape rather than a generalisation of the first. `Oka/AnalyticSpace/Finite.lean`'s
+  `## What is not here, and it is the whole of the subject` states both at length. **This bullet
+  ended *over which `ComplexAnalytic.AnalyticSpace.isFinite_restrictHom` does base-change
+  finiteness* until 2026-09-07.**
 
 * **Local isomorphisms and finite étale morphisms** (`Oka/AnalyticSpace/LocalIso.lean`), the
   second rung of the Riemann existence theorem's analytic side.
@@ -271,9 +278,15 @@ coherence statement for arbitrary complex analytic spaces:
   neither was a price**: the first is removed by closing the empty case rather than paid, and the
   second is two Mathlib reflections composed. **What is still absent is base change over a general
   cospan**, for want of a fibre product of analytic spaces over one; the pullback along the
-  inclusion of an open subspace is in `Oka/AnalyticSpace/PullbackOpen.lean` and is not enough for
-  an axiom that quantifies over every cospan. **This clause read *for want of pullbacks of analytic
-  spaces*** until that file landed. **Conservativity is one of the axioms a Galois category asks
+  inclusion of an open subspace is in `Oka/AnalyticSpace/PullbackOpen.lean`, the pullback along a
+  morphism that is finite étale with Hausdorff source is in
+  `Oka/AnalyticSpace/FiniteEtaleBaseChange.lean`, and neither is enough for an axiom that
+  quantifies over every cospan. **This clause read *for want of pullbacks of analytic
+  spaces*** until `Oka/AnalyticSpace/PullbackOpen.lean` landed, and it then named that one shape,
+  in the words *the pullback along the inclusion of an open subspace is in
+  `Oka/AnalyticSpace/PullbackOpen.lean` and is not enough for an axiom that quantifies over every
+  cospan*, until 2026-09-07, when `Oka/AnalyticSpace/FiniteEtaleBaseChange.lean` added the
+  second. **Conservativity is one of the axioms a Galois category asks
   of a fibre functor, and faithfulness is not one of them**: at the Mathlib revision
   `lakefile.toml` pins, the class there asks the functor to reflect isomorphisms and *derives*
   faithfulness from the axioms rather than assuming it. So what is here is that axiom and
