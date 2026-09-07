@@ -62,9 +62,11 @@ first.
 ## What is not here
 
 * **No converse.** Nothing below says that a datum for `j : Y ⟶ W` and one for `iW` compose to a
-  datum for `j ≫ iW`. That direction is true and is a different proof — the kernel computation
-  runs the other way and needs `Ideal.comap` of a span rather than `Ideal.map` — and nothing in
-  the tree wants it yet.
+  datum for `j ≫ iW`. That direction is `ComplexAnalytic.IsCutOutBy.comp_append` in
+  `Oka/AnalyticSpace/CutOutCompose.lean`, and it is a different proof, the kernel computation
+  running the other way and needing `Ideal.comap` of a span where this one needs `Ideal.map`.
+  **This bullet ended *"and nothing in the tree wants it yet"* until 2026-09-07**, by which date
+  the construction of a subspace of a local model wanted it.
 * **No analytification and no `ℂ^n`.** The consumer this was written for is the local-isomorphism
   half of a standard étale analytification over a presented base, but no statement here mentions
   a polynomial, a presentation, or `ComplexAnalytic.AnalyticSpace`.
