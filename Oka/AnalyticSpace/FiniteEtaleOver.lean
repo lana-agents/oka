@@ -318,8 +318,13 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   the coproduct of a clopen part of its total space and the complementary part.** No hypothesis on
   the base, on the cover or on the subset beyond that its carrier is closed. **This is the
   right-hand side of the direct-summand axiom and not the axiom**: what it does not supply is that
-  a monomorphism's image is one of these subsets, which needs an injectivity statement that this
-  repository does not have. `## What is not here` says which obstructions are left.
+  a monomorphism's image is one of these subsets, which needs an injectivity statement.
+  **That clause ended *"which needs an injectivity statement that this repository does not have"*
+  until 2026-09-07**, when
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.injective_base_left_of_mono`
+  (`Oka/AnalyticSpace/MonoDirectSummand.lean`) proved one, for a monomorphism of covers both of
+  whose total spaces are Hausdorff. **What is still absent is the axiom**, which asks under no
+  hypothesis at all. `## What is not here` says which obstructions are left.
 
 ## What is not here
 
@@ -337,6 +342,15 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   asks `[T2Space]` of the target's total space while the axiom asks nothing at all. taxis #1772 is
   the filing that measures both, and `OkaTest/FiniteEtaleCancel.lean` compiles the counterexample
   that makes the separation axiom a theorem rather than an artefact of a proof.
+
+  **It is proved elsewhere as of 2026-09-07, and under two hypotheses rather than none.**
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.injective_base_left_of_mono`
+  (`Oka/AnalyticSpace/MonoDirectSummand.lean`) is the injectivity, for a monomorphism of covers
+  both of whose total spaces are Hausdorff, and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.inducesIsoOnDirectSummand_of_mono` is the
+  direct-summand statement it yields. **The sentence opening *What it runs on is that a monomorphism
+  of covers has injective underlying map* stays true of this file**, which proves neither and
+  states neither; what changes is that the obligation is no longer the repository's.
 
 * **Cancellation — this is no longer absent, and it is not in this file.** *"If `g` and `f ≫ g`
   are finite étale then `f` is"* is `ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp` in
