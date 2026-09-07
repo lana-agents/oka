@@ -675,6 +675,13 @@ info: 'ComplexAnalytic.glueDataCLinear_comapAlgMap' depends on axioms:
 #print axioms ComplexAnalytic.glueDataCLinear_comapAlgMap
 
 /--
+info: 'ComplexAnalytic.glueDataCLinear_of_isCLinearHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.glueDataCLinear_of_isCLinearHom
+
+/--
 info: 'ComplexAnalytic.isCompatible_of_glueDataCLinear' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
@@ -797,6 +804,16 @@ agreement over a categorical pullback;
 for agreement over the glue datum's own overlaps, which is the only form a caller who built the
 datum can state. `…GlueData.pullback_condition_of_comm` is the transport between them, through
 `…GlueData.vIsoPullback` under the heading above.
+`ComplexAnalytic.AnalyticSpace.glueMorphismsOfGlueData` is the third, and it is the first two
+composed rather than a fourth idea: it glues a morphism of **analytic spaces** out of a gluing,
+taking its pullback hypothesis from `…GlueData.pullback_condition_of_comm` and its `ℂ`-linearity
+hypothesis over the structures the members were given, which
+`ComplexAnalytic.AnalyticSpace.comapAlgMap_ofGlueDataCLinear_algebraMap` identifies with the one
+the gluing induces.
+
+**This description opened *Two levels, and the second is not a special case of the first* until
+2026-09-07**, when the third was added. It was exact when written; the sentence retired here is a
+count of what the heading held and not a claim that went wrong.
 -/
 
 /--
@@ -868,6 +885,20 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.GlueData.hom_ext' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.GlueData.hom_ext
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.glueMorphismsOfGlueData' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.glueMorphismsOfGlueData
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.ι_glueMorphismsOfGlueData' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.ι_glueMorphismsOfGlueData
 
 /-! ### The disjoint union of a family of analytic spaces
 
