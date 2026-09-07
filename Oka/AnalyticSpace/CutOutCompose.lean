@@ -88,12 +88,41 @@ sections out through `AlgebraicGeometry.LocallyRingedSpace.Γ` instead.
 **`scripts/check_docstring_names.py` was silent on it twice over, and the two reasons are
 different.** Its candidates are backticked spans with no whitespace in them, so a spelling
 carrying an argument was never a candidate at all; and written bare it would have been a
-candidate and would still have *resolved*, because the head of such a token is a bound variable
-of the theorem, leaving the checker no type to consult, and a declaration ending in that
-component existing anywhere in the environment is enough. The second reason is the one that also
-covers `hY.range_base` and `hY.ker_stalkMap` in the section above, which happen to be right.
-Neither reason is a defect in the checker: what it settles is whether a name exists, not whether
-it exists at the type it is written at.
+candidate and would have passed — not by resolving, but by that script's **short-head rule**.
+`MAX_LOCAL_HEAD` is 2 in that script, and `is_local_binder` accepts a candidate whose head
+component is at most two characters and is not a root namespace, as field notation on a local
+binder; that test is tried before the field-notation rule and **the tail is not consulted at
+all**. `iW` is two characters and is not a root namespace. The same rule is what covers
+`hY.range_base` and `hY.ker_stalkMap` in the section above, which happen to be right.
+
+**Four plantings in this checkout on 2026-09-07 say which rule fires, rather than a reading of the
+script.** Put a candidate in this paragraph and run the checker. `iW.pullbackΓ` passes at
+*0 unresolved*. `iW.zzzBogusNotAName`, whose tail names nothing whatever, passes at *0 unresolved*
+too. The same tail under a head one character longer is **reported** at *1 unresolved*, *"names
+nothing in the environment"* — and that control is written here as *iWx.pullbackΓ* without
+backticks, because backticking it is what would make the checker report it, which is the point.
+*Eq.symmm* is reported too, and it is the *not a root namespace* half of the rule that reports
+it — a head of two characters is not on its own enough. The head decides and the tail is not
+read.
+
+**The second reason was given here as resolution until 2026-09-07** — *"it would still have
+resolved, because the head of such a token is a bound variable of the theorem, leaving the checker
+no type to consult, and a declaration ending in that component existing anywhere in the
+environment is enough"* — and that was inferred rather than run, and is false. It is kept as this
+paragraph's dated record and nothing is struck. `scripts/DumpEnvNames.lean` wrote **336927** rows
+on that date, **331311** of them declarations and **5616** modules, and among them the constants
+named `iW` number **0**, those whose last component is `iW` number **0**, and those with `iW` at
+the root number **0**. The field-notation rule needs a proper prefix of the candidate to resolve
+to a declaration, which for a two-component name is the head, so it cannot fire here; and the
+suffix rule matches whole components, of which `iW.pullbackΓ` is not a run in
+`ComplexAnalytic.AnalyticSpace.Hom.pullbackΓ`.
+
+**Neither reason is a defect in the checker — and what a green run settles is narrower than this
+paragraph said until 2026-09-07** (*"what it settles is whether a name exists, not whether it
+exists at the type it is written at"*, kept here as a dated record). For a citation the short-head
+rule accepts, it settles nothing about the tail, not even that the tail names something. So a run
+reporting 0 unresolved is not evidence about a spelling whose head is one or two characters and is
+not a root namespace.
 
 ## An import relation that was inferred rather than measured
 
