@@ -3486,3 +3486,265 @@ info: 'ComplexAnalytic.AnalyticSpace.affineProdOpensIsoProd' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.affineProdOpensIsoProd
+
+
+/-! ### The binary product of two local models
+
+`Oka/AnalyticSpace/CutOutProduct.lean`: that the zero locus, inside
+`ℂ^(n+m)|affineProdOpens V W`, of two families of holomorphic functions pulled back along the two
+legs is the binary product of the two local models they cut out — the object, the two
+projections, the pair, the two triangles and the uniqueness that make it one — together with the
+mapping property of `ComplexAnalytic.AnalyticSpace.ofCutOut` in the shape a morphism of analytic
+spaces has it.
+
+**Two guards of this section are not on declarations of that file.**
+`ComplexAnalytic.AnalyticSpace.Hom.pullbackΓ_comp` lives in `Oka/AnalyticSpace/Basic.lean`,
+beside the `ComplexAnalytic.AnalyticSpace.Hom.pullbackΓ` it is about, because it is a statement
+about pulling a global section back along a composite and mentions neither a product nor a cut
+out; and `ComplexAnalytic.AnalyticSpace.Hom.pullbackΓ` itself is guarded because naming it in
+that file's `## Main results` is what put it in `scripts/guard_coverage.py`'s advertised list,
+where an unguarded name is a gap. Both are morphisms of analytic spaces, which is the
+row `OkaTest/Axioms.lean`'s routing table sends to this file.
+
+**`Classical.choice` is in every guard of this section and none of it is this section's
+subject.** `ComplexAnalytic.IsCutOutBy.lift`, which the projections and the pair are all built
+through, goes through `ComplexAnalytic.IsCutOutBy.baseLift`, whose underlying map is chosen point
+by point out of `ComplexAnalytic.IsCutOutBy.mem_range_base`; the ambient legs go through
+`ComplexAnalytic.AnalyticSpace.affineProdLift` and so through `Equiv.ofBijective`; and the axiom
+also reaches `ComplexAnalytic.AnalyticSpace` itself, for the reason the section
+`### The clopen part of a cover` gives. What the guards record is that nothing in that file adds
+an axiom of its own.
+
+**The guard on `ComplexAnalytic.AnalyticSpace.prodCutOutIsoProd` tests instance search and not
+only axiom provenance**, for the reason the section
+`### The product of two open subspaces of complex affine spaces` gives of
+`ComplexAnalytic.AnalyticSpace.affineProdOpensIsoProd`: the statement is written against the `⨯`
+notation, which is a `CategoryTheory.Limits.limit` and does not elaborate at all unless
+`ComplexAnalytic.AnalyticSpace.hasBinaryProduct_ofCutOut` is found.
+
+This section is appended as its own section because a section moved is a conflict for somebody
+else. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Hom.pullbackΓ' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Hom.pullbackΓ
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Hom.pullbackΓ_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Hom.pullbackΓ_comp
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.ofCutOutHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.ofCutOutHom
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.toLRSHom_ofCutOutHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.toLRSHom_ofCutOutHom
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.pullbackΓ_ofCutOutHom_eq_zero' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.pullbackΓ_ofCutOutHom_eq_zero
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.mono_ofCutOutHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.mono_ofCutOutHom
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.liftHom' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.liftHom
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.liftHom_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.liftHom_comp
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hom_ext_ofCutOut' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hom_ext_ofCutOut
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.prodCutFamily' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.prodCutFamily
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.prodCutFamily_castAdd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.prodCutFamily_castAdd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.prodCutFamily_natAdd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.prodCutFamily_natAdd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isCutOutBy_prodCutFamily' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isCutOutBy_prodCutFamily
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.prodCutOut' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.prodCutOut
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.prodCutOutι' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.prodCutOutι
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.pullbackΓ_prodCutOutι_fst' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.pullbackΓ_prodCutOutι_fst
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.pullbackΓ_prodCutOutι_snd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.pullbackΓ_prodCutOutι_snd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.prodCutOutFst' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.prodCutOutFst
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.prodCutOutSnd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.prodCutOutSnd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.prodCutOutFst_fac' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.prodCutOutFst_fac
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.prodCutOutSnd_fac' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.prodCutOutSnd_fac
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.pullbackΓ_affineProdOpensLift_prodCutFamily'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.pullbackΓ_affineProdOpensLift_prodCutFamily
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.prodCutOutLift' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.prodCutOutLift
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.prodCutOutLift_ι' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.prodCutOutLift_ι
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.prodCutOutLift_fst' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.prodCutOutLift_fst
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.prodCutOutLift_snd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.prodCutOutLift_snd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hom_ext_prodCutOutι' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hom_ext_prodCutOutι
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hom_ext_prodCutOut' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hom_ext_prodCutOut
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.binaryFanProdCutOut' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.binaryFanProdCutOut
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isLimitBinaryFanProdCutOut' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isLimitBinaryFanProdCutOut
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hasBinaryProduct_ofCutOut' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hasBinaryProduct_ofCutOut
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.prodCutOutIsoProd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.prodCutOutIsoProd

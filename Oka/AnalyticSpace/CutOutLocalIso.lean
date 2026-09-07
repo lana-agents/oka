@@ -21,13 +21,27 @@ nothing in the statement mentions a polynomial, a presentation or an étale morp
 
 ## Why the hypothesis is `q ≫ iX = iY ≫ p` and not the existence of a factorisation
 
-`ComplexAnalytic.IsCutOutBy` does **not** produce the morphism `q`. Its mapping property is
-`ComplexAnalytic.IsCutOutBy.baseLift` on underlying spaces and
-`ComplexAnalytic.IsCutOutBy.hom_ext` for uniqueness; `Oka/AnalyticSpace/Basic.lean` says in terms
-that *"existence of the map on structure sheaves is not proved here"*. So `q` is a hypothesis and
-the square is a hypothesis, which is what a caller holding an analytified structure map already
-has. Uniqueness is free from `ComplexAnalytic.IsCutOutBy.hom_ext`, so there is no ambiguity about
+**Under this file's own two hypotheses, `q` and its square are derivable as a morphism of
+locally ringed spaces, and are therefore not independent data.**
+`ComplexAnalytic.IsCutOutBy.existsUnique_lift` in `Oka/AnalyticSpace/Factorisation.lean` factors
+any morphism into `B` that kills the `f j`, and `iY ≫ p` does kill them:
+`ComplexAnalytic.AnalyticSpace.Hom.pullbackΓ_comp` turns its pullback of `f j` into `iY`'s
+pullback of `p`'s, which is zero by `hY`. Taking `q` and `hq` as hypotheses is therefore a choice
+rather than a necessity — a harmless one, since it is what a caller holding an analytified
+structure map already has and since `ComplexAnalytic.IsCutOutBy.hom_ext` leaves no ambiguity about
 which `q` the conclusion is about.
+
+**What is not free is `q` as a morphism of *analytic* spaces**, which is what this file's
+statement quantifies over: `ComplexAnalytic.IsCutOutBy.isCLinearHom_lift` gives the factorisation
+its `ℂ`-linearity only against the structure obtained by pulling back along `iX`, and `X` here
+carries its own.
+
+**This paragraph read *"`ComplexAnalytic.IsCutOutBy` does not produce the morphism `q`. Its
+mapping property is `ComplexAnalytic.IsCutOutBy.baseLift` on underlying spaces and
+`ComplexAnalytic.IsCutOutBy.hom_ext` for uniqueness"* until 2026-09-07**, and quoted
+`Oka/AnalyticSpace/Basic.lean`'s *"existence of the map on structure sheaves is not proved here"*
+in support — a sentence bounded to that file, and so not evidence for a claim about
+`ComplexAnalytic.IsCutOutBy` as such.
 
 ## What each field costs
 

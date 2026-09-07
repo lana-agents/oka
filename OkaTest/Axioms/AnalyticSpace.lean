@@ -156,6 +156,13 @@ See `OkaTest/Axioms.lean` for what these assertions are for and how to update on
 /-! ### Local models, and the node as a complex analytic space -/
 
 /--
+info: 'ComplexAnalytic.AnalyticSpace.ofCutOut' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.ofCutOut
+
+/--
 info: 'ComplexAnalytic.isLocalModel_zeroLocus' depends on axioms:
   [propext, Classical.choice, Quot.sound]
 -/
