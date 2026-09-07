@@ -91,6 +91,10 @@ constants.
   underlying space passes along a morphism that is surjective on points**, so an isomorphism
   transports it in either direction. This is the invariant that separates two covers of the same
   degree, which the degree cannot.
+- `ComplexAnalytic.AnalyticSpace.Hom.pullbackΓ_comp`: **pulling a global section back along a
+  composite is pulling it back twice**, stated in the `ComplexAnalytic.AnalyticSpace.Hom.pullbackΓ`
+  spelling rather than in `AlgebraicGeometry.LocallyRingedSpace.Γ.map`, for the reason that
+  declaration exists.
 - `ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace_reflectsIsomorphisms`: **the
   forgetful functor to locally ringed spaces reflects isomorphisms**, so a morphism of analytic
   spaces whose underlying morphism is invertible is invertible. The functor is faithful and not
@@ -222,7 +226,13 @@ continuous as soon as its composite with `i` is, and that composite is `φ` itse
 
 This is only the topological half. Producing an actual morphism of locally ringed spaces
 additionally needs the map on structure sheaves, which the stalkwise conditions of `IsCutOutBy`
-do not by themselves assemble; see the tracking issue. -/
+do not by themselves assemble. **They do not, and it is nevertheless produced**:
+`ComplexAnalytic.IsCutOutBy.lift` in `Oka/AnalyticSpace/Factorisation.lean` builds it from
+`ComplexAnalytic.IsCutOutBy.pushforwardIso` and the full faithfulness of pushing forward along an
+embedding, which is a different route and not this family of stalk maps assembled. **This
+paragraph ended *"see the tracking issue"* until 2026-09-07**, by which date that file had been
+in the tree for some time and the clause read as though the map on structure sheaves were still
+open. -/
 noncomputable def IsCutOutBy.baseLift {i : X ⟶ Y} {k : ℕ} {f : Fin k → Y.presheaf.obj (op ⊤)}
     (hcut : IsCutOutBy i f) (φ : Z ⟶ Y) (hφ : ∀ j, φ.c.app (op ⊤) (f j) = 0) : C(Z, X) where
   toFun z := (hcut.mem_range_base φ hφ z).choose
@@ -543,6 +553,18 @@ other. -/
 abbrev Hom.pullbackΓ {X Y : AnalyticSpace.{u}} (φ : X ⟶ Y) (s : Y.presheaf.obj (op ⊤)) :
     X.presheaf.obj (op ⊤) :=
   (LocallyRingedSpace.Γ.map φ.toLRSHom.op).hom s
+
+/-- **Pulling a global section back along a composite is pulling it back twice.**
+
+`AlgebraicGeometry.LocallyRingedSpace.Γ_map_comp_apply` in the spelling
+`ComplexAnalytic.AnalyticSpace.Hom.pullbackΓ` exists for. Stating it here rather than unfolding to
+`AlgebraicGeometry.LocallyRingedSpace.Γ.map` at the use site is what
+`ComplexAnalytic.AnalyticSpace.Hom.pullbackΓ`'s own docstring is about: a goal carrying a raw
+`Γ.map … |>.hom` term is not type-correct under the `instances` transparency level, and the
+rewrite *after* the one that introduced it is the one that fails. -/
+theorem Hom.pullbackΓ_comp {X Y Z : AnalyticSpace.{u}} (a : X ⟶ Y) (b : Y ⟶ Z)
+    (s : Z.presheaf.obj (op ⊤)) : (a ≫ b).pullbackΓ s = a.pullbackΓ (b.pullbackΓ s) :=
+  LocallyRingedSpace.Γ_map_comp_apply a.toLRSHom b.toLRSHom s
 
 /-- **A morphism of analytic spaces whose underlying morphism cuts out its source is a
 monomorphism**, hence the factorisation through it is unique when it exists
