@@ -382,11 +382,26 @@ rather than left to a reader. *The complex analytic space one presents* reaches
 `ComplexAnalytic.AnalyticSpace.zeroLocusSubspace_toLocallyRingedSpace` and
 `ComplexAnalytic.AnalyticSpace.zeroLocusSubspace_algebraMap`; *the closed immersion cutting it
 out* reaches
-`ComplexAnalytic.AnalyticSpace.zeroLocusSubspaceι` and
-`ComplexAnalytic.AnalyticSpace.toLRSHom_zeroLocusSubspaceι`; *the mapping property of that
-immersion* reaches `ComplexAnalytic.AnalyticSpace.mono_zeroLocusSubspaceι`, beside
+`ComplexAnalytic.AnalyticSpace.zeroLocusSubspaceι`,
+`ComplexAnalytic.AnalyticSpace.toLRSHom_zeroLocusSubspaceι`,
+`ComplexAnalytic.AnalyticSpace.isCutOutBy_zeroLocusSubspaceι` and
+`ComplexAnalytic.AnalyticSpace.pullbackΓ_zeroLocusSubspaceι_eq_zero` — the second says which
+locally-ringed-space morphism the first carries, and
+`ComplexAnalytic.AnalyticSpace.isCutOutBy_zeroLocusSubspaceι` is *cutting it out* itself with
+`ComplexAnalytic.AnalyticSpace.pullbackΓ_zeroLocusSubspaceι_eq_zero` its one-line consequence,
+which is why those two are under that clause and not under *how such a datum is transported*,
+which is about carrying a datum along an isomorphism and no guard of this section does that;
+*the mapping property of that immersion* reaches
+`ComplexAnalytic.AnalyticSpace.mono_zeroLocusSubspaceι`, beside
 `ComplexAnalytic.AnalyticSpace.mono_of_isCutOutBy`, which it is an instance of and which is
 guarded in this file already.
+**That sentence accounted for seven of the nine guards below until 2026-09-07**, leaving
+`ComplexAnalytic.AnalyticSpace.isCutOutBy_zeroLocusSubspaceι` and
+`ComplexAnalytic.AnalyticSpace.pullbackΓ_zeroLocusSubspaceι_eq_zero` under no clause and in no
+sentence, **while promising the map was complete; it was false when written rather than falsified
+later, so this is a correction and not one of this repository's dated records.** Three plus four
+plus one is eight, and `ComplexAnalytic.hasLocalModels_zeroLocusSubspace` is the ninth, which the
+paragraph opening `ComplexAnalytic.hasLocalModels_zeroLocusSubspace is of the same kind as` places.
 
 **`ComplexAnalytic.hasLocalModels_zeroLocusSubspace` is of the same kind as
 `ComplexAnalytic.isLocalModel_zeroLocusSubspace_of_isCutOutBy`**, guarded in the section headed

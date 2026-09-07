@@ -44,12 +44,27 @@ stalk maps are surjective, which every cut-out datum's is. Assembling that into 
 and which runs that assembly for the zero locus of finitely many global sections of an *arbitrary*
 complex analytic space. **The sentence ending `nothing here manufactures a lift` and the one
 ending `and it is not here` are about this file and are unchanged by it**:
-`ComplexAnalytic.IsCutOutBy.comp_append` is still what that assembly's last step calls, and the
+`ComplexAnalytic.IsCutOutBy.comp_append` is still what that assembly calls, and the
 lift is still not manufactured below. **What that file supplies is an ingredient of the fibre
 product of two local models and not the fibre product**: it cuts a space down by *its own* global
-sections, where the paragraph above needs the `p` differences of two composites to `ℂ^p`, which
-are sections of `ComplexAnalytic.AnalyticSpace.prodCutOut` and are exactly that. This paragraph
+sections, where the paragraph ending `nothing here manufactures a lift` needs the `p` differences
+of two composites to `ℂ^p`, which are sections of
+`ComplexAnalytic.AnalyticSpace.prodCutOut` and are exactly that. This paragraph
 was added on 2026-09-07 by the push that added that file.
+
+**That sentence read `is still what that assembly's last step calls` until 2026-09-07, and it was
+false when written rather than falsified later, so this is a correction and not one of this
+repository's dated records.** `Oka/AnalyticSpace/ZeroLocus.lean`'s `## The route` numbers five
+steps and `ComplexAnalytic.IsCutOutBy.comp_append` is the fourth; the fifth is the two changes of
+chart, which call `ComplexAnalytic.IsCutOutBy.comp_iso` and
+`ComplexAnalytic.IsCutOutBy.iso_comp`, and the proof there reads the same way round — the datum
+the existential is handed is the one those two produce. **The clause the sentence was making its
+point with is true without the numeral**, which is why the numeral is gone rather than corrected
+to *fourth*: what matters is that the assembly still calls this file's lemma.
+**The sister sentence read `where the paragraph above needs the p differences of two composites`
+until the same date and now names that paragraph by the words it ends with**, for taxis #1709's
+reason: a pointer that reaches a paragraph by position cannot survive a paragraph being inserted
+between the two, and a quotation can.
 
 ## What each of the four conditions costs
 

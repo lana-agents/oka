@@ -31,10 +31,26 @@ into some `ℂ^n|V`, and there is no reason for `s r` to be the pullback of anyt
 Its ambient is fixed by its signature to an open subset of some `ℂ^n`, and it is what
 `ComplexAnalytic.AnalyticSpace.analytification` is defined from. The two names are kept apart
 because the constructions are: `ComplexAnalytic.AnalyticSpace.zeroLocus` is a local model by
-`ComplexAnalytic.isLocalModel_zeroLocus`, and
-`ComplexAnalytic.AnalyticSpace.zeroLocusSubspace` is a local model only when `X` is.
+`ComplexAnalytic.isLocalModel_zeroLocus`, and **nothing below makes
+`ComplexAnalytic.AnalyticSpace.zeroLocusSubspace` a local model** — what is proved of it here is
+that it has charts, `ComplexAnalytic.hasLocalModels_zeroLocusSubspace`, which is what an object of
+`ComplexAnalytic.AnalyticSpace` needs and is strictly weaker.
 No statement here relates them, and `## What is not here` says what a statement relating them
 would have to say.
+
+**The clause replaced here read `ComplexAnalytic.AnalyticSpace.zeroLocusSubspace` `is a local
+model only when X is` until 2026-09-07, and it was false when written rather than falsified later,
+so this is a correction and not one of this repository's dated records.** Neither direction of it
+holds and neither is in the tree. The structure `ComplexAnalytic.AnalyticSpace` has two fields,
+`ComplexAnalytic.AnalyticSpace.algebraMap` and `ComplexAnalytic.AnalyticSpace.local_model`, and
+neither is a separation hypothesis, while a local model is closed in an open subspace of `ℂ^n` and
+so is Hausdorff; a zero locus of an `X` that is not Hausdorff can therefore be a local model while
+`X` is not one, which kills *only when*. In the other direction a global section of a local model
+need not lift to its ambient `ℂ^n|V` — the observation the paragraph ending `beyond a
+neighbourhood of the point` makes — so `X` being a local model does not by itself present its zero
+loci either. **The repair is to say what the file has**, which is charts and not a local-model
+statement, and neither half of the retired biconditional is filed as a thing to prove: they are
+statements about spaces this file constructs nothing for.
 
 ## The route
 
@@ -117,9 +133,28 @@ below.
   the structure sheaf of the space here to the quotient of `𝒪_X` by that subsheaf, and the
   quotient the space *is* built from is the inverse image of the sheafified quotient presheaf,
   which is how `AlgebraicGeometry.LocallyRingedSpace.zeroLocusSubspace` is defined.
-* **No mapping property.** `ComplexAnalytic.IsCutOutBy.existsUnique_liftHom` would give one from
-  the datum below, and `ComplexAnalytic.AnalyticSpace.liftHom` is the named analytic-space
-  morphism it produces for a local model. Nothing below is that morphism for this space.
+* **No mapping property.** The two halves of one are available and nothing below composes them.
+  `ComplexAnalytic.IsCutOutBy.existsUnique_lift` applies to the datum below — it is stated at an
+  arbitrary ambient locally ringed space — and gives the unique factorisation through
+  `ComplexAnalytic.AnalyticSpace.zeroLocusSubspaceι` as a morphism of *locally ringed spaces*;
+  `ComplexAnalytic.IsCutOutBy.isCLinearHom_lift` applies too, and the `ℂ`-algebra structure in its
+  conclusion is this space's on the nose, which is what
+  `ComplexAnalytic.AnalyticSpace.zeroLocusSubspace_algebraMap` says. What is missing is those two
+  together with the faithfulness of `ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace` for
+  the uniqueness — which is the recipe `ComplexAnalytic.IsCutOutBy.existsUnique_liftHom`'s own
+  docstring gives, and `ComplexAnalytic.AnalyticSpace.liftHom` is the named analytic-space
+  morphism that recipe produces for a local model. Nothing below is that morphism for this space.
+
+  **This bullet read `ComplexAnalytic.IsCutOutBy.existsUnique_liftHom` `would give one from the
+  datum below` until 2026-09-07. It was false when written rather than true and falsified, so this
+  is a correction and not one of this repository's dated records**: that lemma fixes its ambient by
+  its signature to `(complexAffineSpace n).restrict V.isOpenEmbedding`, which is the same
+  observation `## The name to be careful with` makes above about
+  `ComplexAnalytic.AnalyticSpace.zeroLocus`, and handing it the datum below is an application type
+  mismatch — the elaborator reports `IsCutOutBy (X.zeroLocusSubspaceι s) s` against an expected
+  `IsCutOutBy ?m ?m`. **Both names resolve, so `scripts/check_docstring_names.py` is green either
+  way**: what separates them is elaborating the application, and a claim that a named lemma
+  *applies* is not a claim any name checker on this board can see.
 * **Nothing about coherence, Hausdorffness or finiteness of the immersion.** Coherence of the
   structure sheaf, Hausdorffness of the space, and finiteness of
   `ComplexAnalytic.AnalyticSpace.zeroLocusSubspaceι` are each a statement about the zero locus
