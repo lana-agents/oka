@@ -85,7 +85,7 @@ whose name carries `IsoProd`, `IsoPullback`, or, since the same push,
 claims about a limit too and the description at the head of this file does not reach them either;
 widening the sentence to cover them is a push of its own.
 
-**It read *the five `HasPullback` guards* and named five of them, until 2026-09-08**, when
+**It read *the five `HasPullback` guards* and named five of them, until 2026-09-07**, when
 `Oka/AnalyticSpace/PullbackOpen.lean` gained an instance stating that pullback in
 `AlgebraicGeometry.LocallyRingedSpace` rather than in `ComplexAnalytic.AnalyticSpace`. The clause
 is about the guards of this file and not about the category they are stated in, so the sixth

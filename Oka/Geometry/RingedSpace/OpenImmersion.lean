@@ -396,10 +396,19 @@ because a morphism into `Y|V` is determined by its composite with that monomorph
 
 **The morphism `X|f⁻¹V ⟶ Y|V` is a hypothesis and not a construction, and that is what keeps this
 theorem here.** The construction is `ComplexAnalytic.restrictHom` in
-`Oka/AnalyticSpace/Restrict.lean`, which is downstream of this file — it imports
-`Oka/AnalyticSpace/Basic.lean` — so a statement naming it could not sit on this mirror path.
-Hypothesising the leg costs the caller one argument it already holds and buys the destination
-`README.md`'s mirror-tree section asks for.
+`Oka/AnalyticSpace/Restrict.lean`, and it is analytic-side content: `README.md`'s mirror-tree
+section says a file on a mirror path takes **nothing from the analytic side of this development**,
+and both of the tests it gives — does the statement mention anything defined in this repository,
+would it make sense to a reader who had never heard of Oka's theorem — fail for a statement naming
+that morphism. **What rules it out is that, and not a dependency between the two files**, which
+would be the wrong relation to appeal to: measured over transitive `import` lines on 2026-09-07,
+neither file is in the other's closure, the closures being 8 and 3 modules under `Oka/` with each
+counting the file itself. The cost of the edge that does not exist is the other half of the same
+measurement, and it is what the mirror path is really protecting: the six `Oka/` modules that
+importing `Oka/AnalyticSpace/Restrict.lean` here would bring in add **440** Mathlib modules to
+this file's upstream target's closure of 1689, which it costs **0** today
+(`scripts/import_cost.py`, same date). Hypothesising the leg costs the caller one argument it
+already holds and buys the destination `README.md`'s mirror-tree section asks for.
 
 **Mathlib has the limit and not the square.**
 `LocallyRingedSpace.IsOpenImmersion.hasPullback_of_right` gives
