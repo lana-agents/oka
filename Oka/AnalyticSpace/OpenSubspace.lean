@@ -74,6 +74,13 @@ transport of algebra structures along an isomorphism is needed anywhere.
 
 - `ComplexAnalytic.exists_local_model_restrict`: the chart of `X|U` at a point, which is the
   `local_model` field of `AnalyticSpace.restrict`.
+- `ComplexAnalytic.restrict_eq_ofCutOut`: **an open subspace carrying a chart on the whole of
+  itself is, on the nose, the `ComplexAnalytic.AnalyticSpace.ofCutOut` that chart presents** — an
+  equality of analytic spaces and not an isomorphism, so a statement about local models applies to
+  it with nothing to transport.
+- `ComplexAnalytic.exists_restrict_eq_ofCutOut`: **every point has an open neighbourhood on which
+  the space is a local model in that sense**, which is `ComplexAnalytic.restrict_eq_ofCutOut` at
+  the chart the `local_model` field supplies.
 - `ComplexAnalytic.AnalyticSpace.isIso_stalkMap_ofRestrict`: **the inclusion of an open subspace
   is an isomorphism on stalks**, at the spelling a caller of `ofRestrict` holds. Mathlib has the
   statement; what this adds is a discrimination-tree key, exactly as
@@ -797,6 +804,66 @@ theorem isClosed_clopenCompl {X : AnalyticSpace.{u}} (U : X.Opens) (hU : IsClose
   U.isOpen.isClosed_compl
 
 end AnalyticSpace
+
+/-! ### The open subspace on a chart *is* the local model that chart presents -/
+
+variable {n k : ℕ} {X : AnalyticSpace.{u}} {U : X.Opens}
+  {V : Opens (complexAffineSpace.{u} n)}
+  {i : X.toLocallyRingedSpace.restrict U.isOpenEmbedding ⟶
+    (complexAffineSpace.{u} n).restrict V.isOpenEmbedding}
+  {f : Fin k → ((complexAffineSpace.{u} n).restrict V.isOpenEmbedding).presheaf.obj (op ⊤)}
+
+/-- **An open subspace carrying a chart on the whole of itself is, on the nose, the local model
+that chart presents.**
+
+The two locally ringed spaces are the same by `rfl`:
+`ComplexAnalytic.AnalyticSpace.restrict`'s is `X|U` and
+`ComplexAnalytic.AnalyticSpace.ofCutOut`'s is the source of the chart, which is that space. The
+two `ℂ`-algebra structures are the same **because that is what `hlin` says**:
+`ComplexAnalytic.IsCLinearHom i α β` is `∀ c, Γ.map i.op (β c) = α c`, `ofCutOut`'s structure is
+`Γ.map i.op` composed with the constants and `restrict`'s is the ambient structure restricted, so
+the hypothesis is the equation of the two read pointwise. The only remaining component of an
+analytic space is `ComplexAnalytic.AnalyticSpace.local_model`, which is a `Prop`;
+`ComplexAnalytic.AnalyticSpace.ext'` is what carries it.
+
+**It is an equality and not an isomorphism, and that is the point.** A statement whose subject is
+a `ComplexAnalytic.AnalyticSpace.ofCutOut` applies to `X.restrict U` with nothing to transport
+across. The consumer this was written for is the fibre product of two local models, taxis #1830,
+whose pull request is approved and **unmerged** at the commit that adds this paragraph — so no
+declaration of it is cited here, and the sentence that will cite one belongs to the push that
+uses it.
+
+The hypotheses are exactly the two conjuncts the `local_model` field of
+`ComplexAnalytic.AnalyticSpace` carries, which is what makes
+`ComplexAnalytic.exists_restrict_eq_ofCutOut` below one `obtain`. -/
+theorem restrict_eq_ofCutOut (hcut : IsCutOutBy i f)
+    (hlin : IsCLinearHom i (X.toLocallyRingedSpace.resAlgMap X.algebraMap U)
+      (constantsAlgMap n V)) :
+    X.restrict U = AnalyticSpace.ofCutOut hcut :=
+  AnalyticSpace.ext' rfl (heq_of_eq (RingHom.ext fun c ↦ (hlin c).symm))
+
+/-- **Every point of a complex analytic space has an open neighbourhood on which the space is a
+local model, on the nose.**
+
+`ComplexAnalytic.AnalyticSpace.local_model` unfolded and fed to
+`ComplexAnalytic.restrict_eq_ofCutOut`. What the field gives is a chart *datum*; what this adds
+is the identification of the space that datum presents with the open subspace it is a chart of,
+which is the half `ComplexAnalytic.exists_local_model_restrict` above discards.
+
+**This is stated in the `ComplexAnalytic` namespace and not in `ComplexAnalytic.AnalyticSpace`**,
+as `ComplexAnalytic.exists_local_model_restrict` is: inside a declaration whose name begins
+`AnalyticSpace.` the tokens `complexAffineSpace` and `Opens` resolve to
+`ComplexAnalytic.AnalyticSpace.complexAffineSpace` and `ComplexAnalytic.AnalyticSpace.Opens`
+rather than to the locally ringed space and to `TopologicalSpace.Opens`, and the statement below
+would then be about a different `ℂ^n`. -/
+theorem exists_restrict_eq_ofCutOut (X : AnalyticSpace.{u}) (x : X) :
+    ∃ (U : X.Opens) (_ : x ∈ U) (n k : ℕ) (V : Opens (complexAffineSpace.{u} n))
+      (i : X.toLocallyRingedSpace.restrict U.isOpenEmbedding ⟶
+        (complexAffineSpace.{u} n).restrict V.isOpenEmbedding)
+      (f : Fin k → ((complexAffineSpace.{u} n).restrict V.isOpenEmbedding).presheaf.obj (op ⊤))
+      (hcut : IsCutOutBy i f), X.restrict U = AnalyticSpace.ofCutOut hcut := by
+  obtain ⟨U, n, k, V, i, f, hcut, hlin⟩ := X.local_model x
+  exact ⟨U.1, U.2, n, k, V, i, f, hcut, restrict_eq_ofCutOut hcut hlin⟩
 
 end ComplexAnalytic
 
