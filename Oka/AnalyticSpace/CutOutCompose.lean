@@ -40,6 +40,17 @@ product rather than of the product's ambient space and nothing here manufactures
 stalk maps are surjective, which every cut-out datum's is. Assembling that into a chart is a
 `ComplexAnalytic.HasLocalModels` argument over a restriction of a restriction, and it is not here.
 
+**It is in `Oka/AnalyticSpace/ZeroLocus.lean`**, which imports this file — one edge, measured —
+and which runs that assembly for the zero locus of finitely many global sections of an *arbitrary*
+complex analytic space. **The sentence ending `nothing here manufactures a lift` and the one
+ending `and it is not here` are about this file and are unchanged by it**:
+`ComplexAnalytic.IsCutOutBy.comp_append` is still what that assembly's last step calls, and the
+lift is still not manufactured below. **What that file supplies is an ingredient of the fibre
+product of two local models and not the fibre product**: it cuts a space down by *its own* global
+sections, where the paragraph above needs the `p` differences of two composites to `ℂ^p`, which
+are sections of `ComplexAnalytic.AnalyticSpace.prodCutOut` and are exactly that. This paragraph
+was added on 2026-09-07 by the push that added that file.
+
 ## What each of the four conditions costs
 
 **Nothing here is analysis**; `ComplexAnalytic.IsCutOutBy.comp_append` is four statements about a

@@ -84,6 +84,7 @@ import Oka.AnalyticSpace.SimpleZeroPolynomial
 import Oka.AnalyticSpace.SimpleZeroStalk
 import Oka.AnalyticSpace.SimpleZeroTopology
 import Oka.AnalyticSpace.StalkLocalInverse
+import Oka.AnalyticSpace.ZeroLocus
 import Oka.Analytification.AffineCover
 import Oka.Analytification.AffineSpace
 import Oka.Analytification.ChangeOfVariables
