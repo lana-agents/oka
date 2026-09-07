@@ -1379,3 +1379,59 @@ info: 'ComplexAnalytic.AnalyticSpace.hasFiniteCoproducts' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.hasFiniteCoproducts
+
+
+/-! ### The open subspace on a chart is the local model that chart presents
+
+`Oka/AnalyticSpace/Basic.lean` and `Oka/AnalyticSpace/OpenSubspace.lean`: that two analytic
+spaces with the same underlying locally ringed space and the same `ℂ`-algebra structure are
+equal, and the two statements that consequence was written for — that an open subspace carrying a
+chart on the whole of itself **is** the `ComplexAnalytic.AnalyticSpace.ofCutOut` that chart
+presents, and that every point has such a neighbourhood. Appended as its own section rather than
+merged into another, because moving or reordering a section is a conflict for every branch that
+has appended to it.
+
+**Two modules under one heading, and the routing table sends both here.**
+`OkaTest/Axioms.lean`'s row *analytic spaces, local models, the node* is where a module is sent by
+what declares it, and `ComplexAnalytic.AnalyticSpace.ext'` is declared in
+`Oka/AnalyticSpace/Basic.lean` while the other two are declared in
+`Oka/AnalyticSpace/OpenSubspace.lean`. They are under one heading because the first exists only
+for the second: `git grep` for `ext'` over `Oka/` and `OkaTest/` at the commit that adds it
+returns that one consumer and this section's guard.
+
+**`Classical.choice` is in all three guards and none of it is this section's subject.** The axiom
+reaches `ComplexAnalytic.AnalyticSpace` itself, so every statement mentioning an analytic space
+carries it whatever its own proof does; what these guards record is that neither the equality of
+two analytic spaces nor the chart identification adds an axiom of its own. In particular
+`ComplexAnalytic.AnalyticSpace.ext'` is four `cases` and an `rfl` and
+`ComplexAnalytic.restrict_eq_ofCutOut` is a `RingHom.ext` over the `ℂ`-linearity hypothesis, and
+the axiom list would look the same if either had been an argument of real weight.
+
+**Named by file rather than counted**, in the spelling `### The disjoint union is the coproduct`
+uses of itself and for the reason it gives: a numeral over the sections of this file is one a
+reader has to recheck, and the record at the head of this file is of four such numerals standing
+false.
+
+**Named and not located.** No sentence here says which section precedes or follows it.
+-/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.ext'' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.ext'
+
+/--
+info: 'ComplexAnalytic.restrict_eq_ofCutOut' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.restrict_eq_ofCutOut
+
+/--
+info: 'ComplexAnalytic.exists_restrict_eq_ofCutOut' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.exists_restrict_eq_ofCutOut
