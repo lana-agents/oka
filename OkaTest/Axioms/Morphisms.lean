@@ -80,6 +80,18 @@ push by which this paragraph acquired the sentence, and the sentence's own crite
 since the section calls itself a claim about a limit and the new one borrowed that phrase to place
 itself. So this is a correction and not one of this repository's dated records.
 
+**The fourth kind has a second class, and it is the monomorphisms.**
+`### A monomorphism of covers is injective on points, and the summand that follows` reads a
+topological consequence off a class of morphisms which is not one of the classes the opening
+description lists, exactly as the two isomorphism sections do, and the class it reads it off is
+`CategoryTheory.Mono` rather than `CategoryTheory.IsIso`. **That clause was added by the push that
+added that section**, 2026-09-07, for the reason the clause naming
+`### The terminal object and the product of two complex affine spaces` gives. Its three
+non-`Prop` guards — the fibre product of a morphism of covers with itself and that object's two
+projections — are of the **first** kind instead, by the description's clause *the category the
+finite étale ones form over a fixed base*, and the limit they come from is guarded under
+`### Base change of a finite étale morphism, and the fibre product it is the projection of`.
+
 And a seventh kind is of the **mirror tree**, and is a kind of routing rather than a kind of
 subject: two statements of pure topology, in neither of which an analytic space occurs — that a
 covering map stays a covering map under base change along a *continuous* map, and that the fibres
@@ -4115,3 +4127,82 @@ info: 'ComplexAnalytic.AnalyticSpace.isFiniteEtale_pullback_snd_of_isFiniteEtale
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.isFiniteEtale_pullback_snd_of_isFiniteEtale
+
+
+/-! ### A monomorphism of covers is injective on points, and the summand that follows
+
+`Oka/AnalyticSpace/MonoDirectSummand.lean`: that a monomorphism which is finite étale with
+Hausdorff source is injective on points, in the two spellings — of a morphism of analytic spaces
+and of a morphism of covers — the fibre product of a morphism of covers with itself and its two
+projections, and the direct-summand statement with its injectivity hypothesis discharged.
+
+**Which clause of this file's description reaches which guard below**, said rather than left to a
+reader. The four statements about a monomorphism are of the **fourth** kind and are reached by the
+clause this file's description acquired in the same push — the one opening *The fourth kind has a
+second class, and it is the monomorphisms*. The other three —
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.selfProd` and its two projections — are an object
+of the category of covers and two morphisms of it, and are reached by the description's clause
+*the category the finite étale ones form over a fixed base*; the limit that object comes from is
+guarded under `### Base change of a finite étale morphism, and the fibre product it is the
+projection of` and is not restated here.
+
+**`Classical.choice` is in every guard below** for the reason
+`### The clopen part of a cover` gives, and not because anything here chooses a witness: the
+existential in the last guard is the one
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.inducesIsoOnDirectSummand_of_injective` already
+produces, in the section `### The clopen image of a finite local isomorphism, and the direct
+summand it cuts out`, and this statement only supplies its hypothesis.
+
+Appended as its own section rather than merged into that one, for the reason the sections in this
+file give: a section appended at the end cannot say which section is above it and stay true.
+
+**Named by file rather than counted**, for the reason this file's other sections give. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.injective_base_of_baseChangeFst_eq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.injective_base_of_baseChangeFst_eq
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.injective_base_of_mono' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.injective_base_of_mono
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.selfProd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.selfProd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.selfProdSnd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.selfProdSnd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.selfProdFst' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.selfProdFst
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.injective_base_left_of_mono' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.injective_base_left_of_mono
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.inducesIsoOnDirectSummand_of_mono' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.inducesIsoOnDirectSummand_of_mono
