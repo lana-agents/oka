@@ -75,11 +75,24 @@ be named.
 * **`ComplexAnalytic.surjective_base_eqToHom` is in the wrong file and is here on a price.** It is
   a fact about `AlgebraicGeometry.LocallyRingedSpace` and nothing else, and belongs beside
   `AlgebraicGeometry.LocallyRingedSpace.homeoOfIso` in
-  `Oka/Geometry/RingedSpace/LocallyRingedSpace.lean`. That file has **175 downstream modules** in
-  this repository against **86** for a new module under `Oka/Analytification/`, measured by a
-  reverse walk of the `import` lines, so putting a three-line helper there costs about ninety
-  extra module rebuilds. Moving it is a follow-up and this docstring is the record that it is
-  owed.
+  `Oka/Geometry/RingedSpace/LocallyRingedSpace.lean`. **At `3187978`** that file has **210**
+  downstream modules in this repository against **95** for this one — a reverse walk of the
+  `import` lines with `scripts/import_cost.py`'s `IMPORT` pattern over its nesting-aware
+  `strip_comments`, over the 312 tracked `.lean` files under `Oka/` and `OkaTest/` together with
+  `OkaTest.lean`, and excluding the aggregator `Oka.lean`, which imports every module of the
+  library — so putting a three-line helper there costs about a hundred and fifteen extra module
+  rebuilds. Moving it is a follow-up and this docstring is the record that it is owed.
+
+  **That clause read *"That file has **175 downstream modules** in this repository against **86**
+  for a new module under `Oka/Analytification/`, measured by a reverse walk of the `import` lines,
+  so putting a three-line helper there costs about ninety extra module rebuilds"* until
+  2026-09-07**, and both figures were exact when they were taken: **175** at `1b13678`, the commit
+  `8f1b040` was written on top of, and **86** at `8f1b040` itself, which is the commit that added
+  this file — the first measured at that push's base and the second at its head, and the sentence
+  pinned neither. **An unpinned count over
+  the whole import graph is falsifiable by any push that adds a module**, which is what happened;
+  what does not move is the ordering the argument rests on, and that is the reason the helper stays
+  here rather than the numeral. `OkaTest/Axioms.lean` states the rule this repairs.
 * **No scheme, no `admissible`, and no comparison functor**, as in the files this one sits beside.
 -/
 
