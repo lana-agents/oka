@@ -63,6 +63,12 @@ of a complex analytic space is compared with a chart of the ambient space
 - `AlgebraicGeometry.LocallyRingedSpace.isIso_stalkMap_liftRestrict`: **factoring through an open
   subspace does not change the stalk maps.** The inclusion is an isomorphism on stalks, so the
   stalk map of the lift is invertible as soon as the stalk map of the morphism it factors is.
+- `AlgebraicGeometry.LocallyRingedSpace.isPullback_ofRestrict`: **the restriction square is a
+  pullback square**, with the morphism `X|f⁻¹V ⟶ Y|V` and its factorisation as hypotheses rather
+  than as a named construction. Mathlib has the *existence* of this limit — the cospan's second
+  leg is an open immersion — and does not have the square: `IsPullback` occurs nowhere under
+  `Mathlib/Geometry/RingedSpace/`, which is a `git grep` of that directory at the pinned revision
+  and not a claim about Mathlib as a whole.
 -/
 
 open CategoryTheory Limits
@@ -360,5 +366,80 @@ theorem restrictInfIsoPullback_hom_snd :
   rw [restrictInfIsoPullback_hom, pullback.lift_snd]
 
 end RestrictInf
+
+
+section RestrictPullback
+
+variable {X Y : LocallyRingedSpace.{u}} (f : X ⟶ Y) (V : TopologicalSpace.Opens Y)
+
+/-- **The first leg of a cone over `f` and the inclusion of `V` lands in `f ⁻¹' V`.**
+
+The second leg lands in `V` because that is what a morphism into `Y|V` is, and the square
+commutes, so the image under `f` of a point of the cone's first leg is a point of `V`. Split out
+of `AlgebraicGeometry.LocallyRingedSpace.isPullback_ofRestrict` below because the lift there is a
+term whose proof argument would otherwise be a tactic block inside a `refine`. -/
+theorem range_subset_preimage_of_pullbackCone
+    (s : PullbackCone f (Y.ofRestrict V.isOpenEmbedding)) :
+    Set.range (s.fst.base : s.pt → X) ⊆ ↑((TopologicalSpace.Opens.map f.base).obj V) := by
+  rintro _ ⟨w, rfl⟩
+  have h : (f.base : X → Y) ((s.fst.base : s.pt → X) w) =
+      ((s.snd.base : s.pt → Y.restrict V.isOpenEmbedding) w).1 :=
+    congrArg (fun (φ : s.pt ⟶ Y) ↦ (φ.base : s.pt → Y) w) s.condition
+  simp only [TopologicalSpace.Opens.map_coe, Set.mem_preimage, h]
+  exact ((s.snd.base : s.pt → Y.restrict V.isOpenEmbedding) w).2
+
+/-- **The restriction square is a pullback square in `LocallyRingedSpace`.**
+
+`liftRestrict` is the lift, `liftRestrict_fac` its factorisation, and both halves of uniqueness
+are cancellation against the monomorphism `ofRestrict`; the second factorisation is not computed,
+because a morphism into `Y|V` is determined by its composite with that monomorphism.
+
+**The morphism `X|f⁻¹V ⟶ Y|V` is a hypothesis and not a construction, and that is what keeps this
+theorem here.** The construction is `ComplexAnalytic.restrictHom` in
+`Oka/AnalyticSpace/Restrict.lean`, which is downstream of this file — it imports
+`Oka/AnalyticSpace/Basic.lean` — so a statement naming it could not sit on this mirror path.
+Hypothesising the leg costs the caller one argument it already holds and buys the destination
+`README.md`'s mirror-tree section asks for.
+
+**Mathlib has the limit and not the square.**
+`LocallyRingedSpace.IsOpenImmersion.hasPullback_of_right` gives
+`HasPullback f (Y.ofRestrict V.isOpenEmbedding)`, because the second leg is an open
+immersion, and `pullbackConeOfLeftIsLimit` builds a limiting cone for it — but that cone's apex is
+the restriction of `X` to the preimage of `Set.range (Y.ofRestrict V.isOpenEmbedding)`, not to
+`(Opens.map f.base).obj V`, and comparing the two is `isoOfRangeEq` and a transport. This theorem
+is the square a caller holding a preimage already has, and no `HasPullback` instance is added
+beside it, because Mathlib's is found: `example : HasPullback f (Y.ofRestrict V.isOpenEmbedding)
+:= inferInstance` closes at `upstream/master` = `ebba2ce`.
+
+**The analytic statement does not follow from this one and this one does not follow from it.**
+`ComplexAnalytic.AnalyticSpace.isPullback_ofRestrict` is the same square one category up, and
+`ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace` is faithful and not full — a morphism
+of locally ringed spaces between analytic spaces need not be `ℂ`-linear — so each is a statement
+about test objects the other does not see. The proof below is that one's, transcribed.
+
+**Two of its `rw` steps do not transcribe** and are written as terms instead. For `f : X ⟶ Y` of
+locally ringed spaces `f.base` is a morphism of `X.toPresheafedSpace`, while
+`TopologicalSpace.Opens Y` is opens of `Y.toTopCat`; the two are definitionally equal, so
+`(Opens.map f.base).obj V` elaborates, and then `rw` and `simp only` both fail on any lemma about
+it, reporting that the target is not type-correct under the `instances` transparency level.
+Letting the goal drive elaboration — `congrArg` against `liftRestrict_fac`, and
+`liftRestrict_uniq` applied rather than rewritten — is what crosses it. This is the seam
+`AlgebraicGeometry.LocallyRingedSpace.liftRestrict`'s own docstring records, at a different
+symptom. -/
+theorem isPullback_ofRestrict
+    (l : X.restrict ((TopologicalSpace.Opens.map f.base).obj V).isOpenEmbedding ⟶
+      Y.restrict V.isOpenEmbedding)
+    (hl : l ≫ Y.ofRestrict V.isOpenEmbedding =
+      X.ofRestrict ((TopologicalSpace.Opens.map f.base).obj V).isOpenEmbedding ≫ f) :
+    IsPullback (X.ofRestrict ((TopologicalSpace.Opens.map f.base).obj V).isOpenEmbedding) l f
+      (Y.ofRestrict V.isOpenEmbedding) := by
+  refine IsPullback.of_isLimit (PullbackCone.IsLimit.mk hl.symm
+    (fun s ↦ liftRestrict s.fst _ (range_subset_preimage_of_pullbackCone f V s))
+    (fun s ↦ liftRestrict_fac _ _ _) (fun s ↦ ?_) (fun s m hm _ ↦ ?_))
+  · rw [← cancel_mono (Y.ofRestrict V.isOpenEmbedding), Category.assoc, hl, ← Category.assoc]
+    exact (congrArg (· ≫ f) (liftRestrict_fac _ _ _)).trans s.condition
+  · exact liftRestrict_uniq _ _ _ m hm
+
+end RestrictPullback
 
 end AlgebraicGeometry.LocallyRingedSpace

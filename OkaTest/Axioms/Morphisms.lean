@@ -65,12 +65,13 @@ projection of` holds the base change of `isFiniteEtale`, in the two spellings
 reach each of those five; what it does not reach is
 `ComplexAnalytic.AnalyticSpace.isPullback_baseChange` and
 `ComplexAnalytic.AnalyticSpace.isPullback_ofRestrict` and
-`ComplexAnalytic.AnalyticSpace.isPullback_fibreProdCutOut`, together with the five `HasPullback`
+`ComplexAnalytic.AnalyticSpace.isPullback_fibreProdCutOut`, together with the six `HasPullback`
 guards `ComplexAnalytic.AnalyticSpace.hasPullback_of_isFiniteEtale`,
 `ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict`,
 `ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict'`,
-`ComplexAnalytic.AnalyticSpace.hasPullback_ofCutOut` and
-`ComplexAnalytic.AnalyticSpace.hasPullback_pullbackFst_ofRestrict'`, each of which is
+`ComplexAnalytic.AnalyticSpace.hasPullback_ofCutOut`,
+`ComplexAnalytic.AnalyticSpace.hasPullback_pullbackFst_ofRestrict'` and
+`ComplexAnalytic.AnalyticSpace.hasPullback_map_ofRestrict`, each of which is
 *a claim about a limit and not about a class* in the words
 `### That restriction is a pullback square, and the base change it gives` uses of itself.
 
@@ -83,6 +84,13 @@ whose name carries `IsoProd`, `IsoPullback`, or, since the same push,
 `ComplexAnalytic.AnalyticSpace.restrictIsoPullbackOfRestrict` with its `_hom_fst`. Those are
 claims about a limit too and the description at the head of this file does not reach them either;
 widening the sentence to cover them is a push of its own.
+
+**It read *the five `HasPullback` guards* and named five of them, until 2026-09-08**, when
+`Oka/AnalyticSpace/PullbackOpen.lean` gained an instance stating that pullback in
+`AlgebraicGeometry.LocallyRingedSpace` rather than in `ComplexAnalytic.AnalyticSpace`. The clause
+is about the guards of this file and not about the category they are stated in, so the sixth
+belongs in it; the boundary drawn for the guards whose name carries `IsoProd` or `IsoPullback` is
+unchanged by that push.
 
 **This sentence was added by the push that added
 `### Base change of a finite étale morphism, and the fibre product it is the projection of`**,
@@ -1735,6 +1743,28 @@ does not elaborate unless
 an instance sitting at a key search does not visit would leave this guard unbuildable rather than
 green, and that statement was measured `failed to synthesize` at `a84398c`, the commit before the
 one that adds the instance.
+
+**Two declarations of `AlgebraicGeometry.LocallyRingedSpace` are guarded here, and the routing is
+`OkaTest/Axioms.lean`'s and not this section's description.** That file's rule for a mirror-tree
+module whose subject no row of its topic table names is *"Guard one in the file of the analytic
+result that motivated it, under that result's heading."*
+`AlgebraicGeometry.LocallyRingedSpace.isPullback_ofRestrict` and its cone lemma
+`AlgebraicGeometry.LocallyRingedSpace.range_subset_preimage_of_pullbackCone` are in
+`Oka/Geometry/RingedSpace/OpenImmersion.lean`, they say nothing about analytic spaces, and what
+motivated them is `ComplexAnalytic.AnalyticSpace.isPullback_map_ofRestrict` — the statement that
+the square this section is about stays a pullback square after
+`ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace`. That statement is guarded here, so
+they are guarded here. The section's own description — *a claim about a limit and not about a
+class* — reaches them as well, but it is not what places them.
+
+**`ComplexAnalytic.AnalyticSpace.toLRSIsoPullbackMap` is the second guard in this section that
+tests an instance and not only a theorem's axioms.** Its *type* names
+`CategoryTheory.Limits.pullback (ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace.map f)
+(ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace.map (Y.ofRestrict V))`, so it does not
+elaborate unless `ComplexAnalytic.AnalyticSpace.hasPullback_map_ofRestrict` is **found**; that
+statement was measured `failed to synthesize` at `ebba2ce`, the commit before the one that adds
+the instance, and green at the commit that adds it. A `def` is the one shape for which this test
+is not optional, since a call-site `haveI` cannot be reached while a type is being elaborated.
 -/
 
 /--
@@ -1820,6 +1850,55 @@ info: 'ComplexAnalytic.AnalyticSpace.isFiniteEtale_pullback_snd_ofRestrict' depe
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.isFiniteEtale_pullback_snd_ofRestrict
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.range_subset_preimage_of_pullbackCone' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.range_subset_preimage_of_pullbackCone
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.isPullback_ofRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.isPullback_ofRestrict
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hasPullback_map_ofRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hasPullback_map_ofRestrict
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isPullback_map_ofRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isPullback_map_ofRestrict
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.toLRSIsoPullbackMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.toLRSIsoPullbackMap
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.pullbackFst_eq_inv_comp_ofRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.pullbackFst_eq_inv_comp_ofRestrict
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isOpenImmersion_map_pullbackFst_ofRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isOpenImmersion_map_pullbackFst_ofRestrict
 
 /-! ### And a local isomorphism restricted to subspaces cut out by a family and by its pullbacks
 
