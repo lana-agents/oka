@@ -4952,13 +4952,37 @@ analytic result that motivated it, under that result's heading"*. Nothing below 
 of a module that row routes.
 
 **Another is *analytic spaces, local models, the node***, which routes `Oka/AnalyticSpace/Glue.lean`
-to `OkaTest/Axioms/AnalyticSpace.lean`; that row is about building an analytic space, and nothing
-below builds one. **The join that decides it** is
+to `OkaTest/Axioms/AnalyticSpace.lean`. That row's own subject line is *Complex analytic spaces as
+objects, and the constructions that build one*, and **nothing below is such a construction**.
+`ComplexAnalytic.AnalyticSpace.Pullback.v` is the one declaration below whose result type is
+`ComplexAnalytic.AnalyticSpace`, and the sentence enumerating the kinds excepts it from the
+morphisms as *an object*. But it puts no structure on anything: it names a limit, and **both of
+the pullbacks nested in it are supplied from outside this module**. The outer one is
+`ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict`, an instance of
+`Oka/AnalyticSpace/PullbackOpen.lean`, because its second leg is a
+`ComplexAnalytic.AnalyticSpace.ofRestrict`; the inner one is this file's own hypothesis
+`[∀ i, HasPullback (X.ofRestrict (U i) ≫ f) g]`, which nothing in the module discharges.
+`ComplexAnalytic.AnalyticSpace.ofGlueData`, guarded under that row, is what a construction that
+builds one looks like. **The join that decides it** is
 that the two declarations this module consumes as proof terms,
 `ComplexAnalytic.AnalyticSpace.isOpenImmersion_map_pullbackFst_ofRestrict` and
 `ComplexAnalytic.AnalyticSpace.isPullback_map_pullback_pullbackFst_ofRestrict`, are both guarded in
 this file, under the heading
 *That restriction is a pullback square, and the base change it gives*.
+
+**That row's answer read *that row is about building an analytic space, and nothing below builds
+one* until 2026-09-08.** lana-agents/oka#513's verdict recorded that on the plain reading the same
+section's own concession that `ComplexAnalytic.AnalyticSpace.Pullback.v` **is an object** supplies
+a counterexample to it — `v` is a `noncomputable def … : AnalyticSpace.{u}` — declined to reject
+on it, and supplied the replacement above. Two things were added to that replacement in landing
+it. **The instrument is named**: the module has twenty-seven declarations and `v` is the only one
+whose result type is an analytic space, which is what makes the negative half checkable rather
+than asserted. And **the two nestings are named separately**, because the verdict's parenthetical
+had them the other way round — it is the **outer** pullback that
+`Oka/AnalyticSpace/PullbackOpen.lean` supplies and the **inner** one that this file hypothesises.
+**Nothing about the conclusion moved**: the row does not route this module, and what decides that
+is the join through `ComplexAnalytic.AnalyticSpace.isOpenImmersion_map_pullbackFst_ofRestrict` and
+`ComplexAnalytic.AnalyticSpace.isPullback_map_pullback_pullbackFst_ofRestrict`, not this sentence.
 
 **Nothing generated is guarded, which is this file's convention and not a decision made here**:
 `git grep -c '^#print axioms .*_assoc$'` and the same for `.eq_1` both return nothing over
