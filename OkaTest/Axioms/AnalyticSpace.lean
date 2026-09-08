@@ -1528,7 +1528,7 @@ so every statement here carries it whatever its own proof does; what these guard
 none of the constructions adds an axiom of its own — not the gluing, not the promotion to an
 analytic space, and not the two-origin witness.
 
-**The two `_assoc` lemmas the `reassoc` attribute generates are not guarded**, which is this
+**The `_assoc` lemma the `reassoc` attribute generates is not guarded**, which is this
 repository's standing arrangement: at the commit that adds this section the declaration dump
 holds thirty-five names ending in `_assoc` — thirty-four of them at `d2ae161` and this section's
 one — and no `#print axioms` in `OkaTest/Axioms/` names any of them.
