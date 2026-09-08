@@ -4806,8 +4806,12 @@ first kind — it is `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isFiniteEtal
 cancellations the opening description names, with its `[T2Space]` supplied — and
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.injective_base_left_of_mono_of_isSeparatedMap` and
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.inducesIsoOnDirectSummand_of_mono_of_isSeparatedMap`
-are of the fourth kind's second class, carrying `CategoryTheory.Mono` as the three guards of
-`### A monomorphism of covers is injective on points, and the summand that follows` do.
+are of the fourth kind's second class, carrying `CategoryTheory.Mono` as three of the four
+`Prop` guards of
+`### A monomorphism of covers is injective on points, and the summand that follows` do. **That
+is the spelling the clause opening *The fourth kind has a second class* uses of the same three**,
+and it is used here rather than a count of that section's guards, which are not all of them
+`Prop` and not all of them about a monomorphism.
 
 **`Classical.choice` is in every guard below and none of it is this section's subject**, for the
 reason `### The clopen part of a cover` gives: the axiom reaches

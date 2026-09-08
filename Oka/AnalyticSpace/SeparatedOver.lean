@@ -76,6 +76,25 @@ that a descent map out of a coproduct inherits separatedness from its pieces —
 space, in the way `ComplexAnalytic.AnalyticSpace.isFinite_sigmaDesc` and
 `ComplexAnalytic.AnalyticSpace.isLocalIso_sigmaDesc` read that lemma's two siblings.
 
+**The two it is named beside are in `Oka/AnalyticSpace/SigmaFiniteEtale.lean` and it is not, and
+that is a choice rather than an accident.** It is not the import that decides it: that file's
+`Oka`-side import closure already contains
+`Oka/Geometry/RingedSpace/LocallyRingedSpace/HasColimits.lean`, where that lemma sits beside
+`AlgebraicGeometry.LocallyRingedSpace.isClosedMap_base_sigmaDesc` and
+`AlgebraicGeometry.LocallyRingedSpace.isLocalHomeomorph_base_sigmaDesc`, so hosting this one would
+cost it no import — **52** modules at `f59e304` and still 52 — and this file has that module in its
+own closure, so the edge would run the way the existing ones already run. **What decides it is the
+subject.** `Oka/AnalyticSpace/SigmaFiniteEtale.lean` says that being finite and being a local
+isomorphism pass from the members of a disjoint union to the descent map, and those two are the two
+fields of `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` in `Oka/AnalyticSpace/LocalIso.lean`.
+`IsSeparatedMap` is no field of it, and a morphism can be finite étale without it — which is what
+`ComplexAnalytic.AnalyticSpace.not_isSeparatedMap_doubledLineOver` below says — so the parallel with
+`ComplexAnalytic.AnalyticSpace.isFinite_sigmaDesc` and
+`ComplexAnalytic.AnalyticSpace.isLocalIso_sigmaDesc` is one of proof and not one of subject. **A
+reader who thinks the parallel should win can move it**: it is one theorem, it costs that file no
+import, and the only proof that consumes it is
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isSeparatedMap_sigma`'s below.
+
 The rest is a **new file rather than an addition to
 `Oka/AnalyticSpace/MonoDirectSummand.lean`**, and the reason is the subject rather than the
 import: that file is about one theorem — a monomorphism of covers is injective on points — and
@@ -86,6 +105,40 @@ needs and that file does not is `Oka/Topology/SeparatedMap.lean`: at `07b6670` t
 `import Oka.Topology.SeparatedMap` is the root `Oka.lean`, measured with
 `git grep -l 'import Oka.Topology.SeparatedMap' -- '*.lean'`, so this is that module's first
 consumer under `Oka/`.
+
+**`Oka/AnalyticSpace/DirectSummand.lean` is the sharper competitor, and for two of the statements
+below the answer there is not a preference but a cycle.** That file holds
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isFiniteEtale_left`, which
+`…FiniteEtaleOver.isFiniteEtale_left_of_isSeparatedMap` wraps, and
+`…FiniteEtaleOver.inducesIsoOnDirectSummand_of_injective`, which
+`…FiniteEtaleOver.isSeparatedMap_restrictClopenCompl` cites for the complement it is about; and its
+own header argues about the hypotheses of the direct-summand statement, which is the subject this
+header argues about too. So the reason given for `Oka/AnalyticSpace/MonoDirectSummand.lean`
+transfers — everything below is about a condition on objects and consumes those theorems without
+touching them — but it is not the whole answer.
+
+**`…FiniteEtaleOver.injective_base_left_of_mono_of_isSeparatedMap` and
+`…FiniteEtaleOver.inducesIsoOnDirectSummand_of_mono_of_isSeparatedMap` cannot be in that file at
+all.** They consume `…FiniteEtaleOver.injective_base_left_of_mono` and
+`…FiniteEtaleOver.inducesIsoOnDirectSummand_of_mono`, which are in
+`Oka/AnalyticSpace/MonoDirectSummand.lean`, and that file imports
+`Oka/AnalyticSpace/DirectSummand.lean` directly — the line `import Oka.AnalyticSpace.DirectSummand`
+is in it. The edge those two would need is the reverse of one that is already there.
+
+For the rest it is a measurement rather than a cycle, and it is given with its instrument because a
+dependency relation asserted between two named files is a claim that has to be measured. Over the
+**320** tracked `.lean` files under `Oka/` and `OkaTest/` together with `Oka.lean` and
+`OkaTest.lean` at `f59e304`, walked with `scripts/import_cost.py`'s `IMPORT` pattern over its
+nesting-aware `strip_comments` and closed transitively, the `Oka`-side import closure of
+`Oka/AnalyticSpace/DirectSummand.lean` is **58** modules and this file's is **71**. Neither
+`Oka/AnalyticSpace/Double.lean`, which
+`ComplexAnalytic.AnalyticSpace.not_isSeparatedMap_doubledLineOver` needs, nor
+`Oka/Topology/SeparatedMap.lean`, which `ComplexAnalytic.AnalyticSpace.t2Space_of_isSeparatedMap`
+needs, is in that closure, and neither of those two files and `Oka/AnalyticSpace/DirectSummand.lean`
+has the other in its closure either way. Adding the two would take that file from 58 to **63**, to
+carry statements nothing in it uses. **Note that the `IMPORT` pattern matches `public import` and a
+walk of `^import` alone does not**: at `f59e304` the two disagree on this file's closure by fourteen
+modules, and the figures here are the former's.
 
 ## Main results
 
