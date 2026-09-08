@@ -4907,12 +4907,26 @@ info: 'ComplexAnalytic.AnalyticSpace.not_isSeparatedMap_doubledLineOver' depends
 Twenty-seven names.
 
 **The routing, argued rather than assumed, because the module is new.** The topic table at the
-head of `OkaTest/Axioms.lean` routes *morphisms of analytic spaces* here, and every declaration
-below is a morphism of analytic spaces, an equation between two such, or — in the three cases
-`ComplexAnalytic.AnalyticSpace.Pullback.v`,
-`ComplexAnalytic.AnalyticSpace.Pullback.isoPullbackFV` and
-`ComplexAnalytic.AnalyticSpace.Pullback.toBase` — an object or an isomorphism named only so that
-the morphisms can be stated. The alternative row is *analytic spaces, local models, the node*,
+head of `OkaTest/Axioms.lean` routes *morphisms of analytic spaces* here. Every declaration below
+is a morphism, an equation between two morphisms, or a statement that a morphism is an open
+immersion, save for `ComplexAnalytic.AnalyticSpace.Pullback.v`, which is an object, and
+`ComplexAnalytic.AnalyticSpace.Pullback.isoPullbackFV`, which is an isomorphism — both named only
+so that those morphisms can be stated. **All of them are of analytic spaces except the five the
+clause at the head of this file names**, which are of `AlgebraicGeometry.LocallyRingedSpace`:
+`ComplexAnalytic.AnalyticSpace.Pullback.isOpenImmersion_map_fV`,
+`ComplexAnalytic.AnalyticSpace.Pullback.isoPullbackFV`,
+`ComplexAnalytic.AnalyticSpace.Pullback.t'Map`,
+`ComplexAnalytic.AnalyticSpace.Pullback.t'Map_cocycle` and
+`ComplexAnalytic.AnalyticSpace.Pullback.t'Map_snd`. **Those five do not route the module
+elsewhere**: each is stated about images under
+`ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace` of what is declared above it, they
+exist for nothing but to carry `ComplexAnalytic.AnalyticSpace.Pullback.t'` into the category a
+glue datum is stated over, and no row of that topic table is about morphisms of locally ringed
+spaces. **`ComplexAnalytic.AnalyticSpace.Pullback.toBase` is not among them and is a morphism of
+analytic spaces**, which is what the sentence this replaces got wrong: it named `toBase` as an
+object or an isomorphism and swept the other four of the five into *a morphism of analytic
+spaces, an equation between two such*, contradicting the clause at the head of this file that the
+same push wrote. The alternative row is *analytic spaces, local models, the node*,
 which routes `Oka/AnalyticSpace/Glue.lean` to `OkaTest/Axioms/AnalyticSpace.lean`; that row is
 about building an analytic space, and nothing below builds one. **The join that decides it** is
 that the two declarations this module consumes as proof terms,
