@@ -177,7 +177,7 @@ the clause opening *The fourth kind has a second class, and it is the monomorphi
 clause was added by the push that added that section**, for the reason the clause naming
 `### The terminal object and the product of two complex affine spaces` gives.
 
-And an eighth kind is the **transition data** of a construction over this category: not a class of
+And another kind is the **transition data** of a construction over this category: not a class of
 morphisms, not a statement that a cospan has a fibre product, and not a statement about a class at
 all, but the objects and morphisms a gluing of fibre products is assembled from and the laws they
 satisfy — `### The transition data of a fibre product glued over a family of opens`. **The sixth
@@ -4918,17 +4918,38 @@ clause at the head of this file names**, which are of `AlgebraicGeometry.Locally
 `ComplexAnalytic.AnalyticSpace.Pullback.t'Map`,
 `ComplexAnalytic.AnalyticSpace.Pullback.t'Map_cocycle` and
 `ComplexAnalytic.AnalyticSpace.Pullback.t'Map_snd`. **Those five do not route the module
-elsewhere**: each is stated about images under
-`ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace` of what is declared above it, they
+elsewhere, and what says so is the recipe rather than any reading of the table's phrases.** The
+recipe `OkaTest/Axioms.lean` gives for measuring a row resolves each `#print axioms` name *to the
+module the declaration lives in* and asks whether the row's phrase covers what comes back; every
+name below resolves to `Oka/AnalyticSpace/PullbackBlock.lean`, so the five raise no routing
+question separate from the other twenty-two. Inside that module they are stated about images under
+`ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace` of what is declared above them, and
 exist for nothing but to carry `ComplexAnalytic.AnalyticSpace.Pullback.t'` into the category a
-glue datum is stated over, and no row of that topic table is about morphisms of locally ringed
-spaces. **`ComplexAnalytic.AnalyticSpace.Pullback.toBase` is not among them and is a morphism of
-analytic spaces**, which is what the sentence this replaces got wrong: it named `toBase` as an
-object or an isomorphism and swept the other four of the five into *a morphism of analytic
-spaces, an equation between two such*, contradicting the clause at the head of this file that the
-same push wrote. The alternative row is *analytic spaces, local models, the node*,
-which routes `Oka/AnalyticSpace/Glue.lean` to `OkaTest/Axioms/AnalyticSpace.lean`; that row is
-about building an analytic space, and nothing below builds one. **The join that decides it** is
+glue datum is stated over. **`ComplexAnalytic.AnalyticSpace.Pullback.toBase` is not among them and
+is a morphism of analytic spaces**, which is what the sentence this replaces got wrong: it named
+`toBase` as an object or an isomorphism and swept the other four of the five into *a morphism of
+analytic spaces, an equation between two such*, contradicting the clause at the head of this file
+that the same push wrote.
+
+**One row worth weighing against it is *general presheaf and sheaf theory, and ringed spaces*,
+and it is not answered by reading its phrase.** That row routes `OkaTest/Axioms/Sheaves.lean`,
+which gives its own subject as *the presheaved, ringed and locally ringed spaces built out of
+them — gluing, open immersions, global sections and germs, …* and which guards statements of kinds
+the five are also of: `AlgebraicGeometry.LocallyRingedSpace.sigma_ι_isOpenImmersion` says that a
+morphism of locally ringed spaces is an open immersion, as
+`ComplexAnalytic.AnalyticSpace.Pullback.isOpenImmersion_map_fV` does, and
+`AlgebraicGeometry.LocallyRingedSpace.toInverseImage_comp` is an equation between two such. **What
+answers it is the module the recipe resolves to**, which is an analytic one and belongs to no
+mirror-tree directory. The paragraph in this file headed *Two declarations of
+`AlgebraicGeometry.LocallyRingedSpace` are guarded here* is the harder form of the same question
+and its answer covers this one: there, declarations of a module that row *does* route are guarded
+here anyway, under the practice `OkaTest/Axioms.lean` states as *"Guard one in the file of the
+analytic result that motivated it, under that result's heading"*. Nothing below is a declaration
+of a module that row routes.
+
+**Another is *analytic spaces, local models, the node***, which routes `Oka/AnalyticSpace/Glue.lean`
+to `OkaTest/Axioms/AnalyticSpace.lean`; that row is about building an analytic space, and nothing
+below builds one. **The join that decides it** is
 that the two declarations this module consumes as proof terms,
 `ComplexAnalytic.AnalyticSpace.isOpenImmersion_map_pullbackFst_ofRestrict` and
 `ComplexAnalytic.AnalyticSpace.isPullback_map_pullback_pullbackFst_ofRestrict`, are both guarded in
