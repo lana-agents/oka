@@ -194,6 +194,23 @@ against the topic table of `OkaTest/Axioms.lean` rather than assuming it. **This
 by the push that added that section**, 2026-09-08, for the reason the clause naming
 `### The terminal object and the product of two complex affine spaces` gives.
 
+**The sixth kind has a second category, and it is a subcategory of the first.**
+`### The category of separated covers, and separatedness as a morphism property` guards
+`Oka/AnalyticSpace/SeparatedFiniteEtale.lean`, which cuts the covers separated over the base out
+of the covers by intersecting `ComplexAnalytic.AnalyticSpace.isFiniteEtale` with a second morphism
+property. **Five of that section's twenty-one guards are of this kind** — about the category
+rather than about any morphism in it — and they are
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver` itself, its inclusion into the covers
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.toFiniteEtaleOver`, the base over itself
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.id`, and that object's terminality in the
+two forms `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isTerminalId` and
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.hasTerminal`. **The other sixteen are of
+kinds this description already has and none needs a clause of its own**; that section's docstring
+assigns every one of them by name, and the split is seven of the kind opening *And one kind more*,
+five of the first, two of the fourth and two of the mirror tree. **This clause was added by the
+push that added that section**, 2026-09-08, for the reason the clause naming
+`### The terminal object and the product of two complex affine spaces` gives.
+
 And a further kind, next to the separated-map one and distinct from it: statements about the
 **image** of a morphism's underlying map — where that map lands as a set, and not which class the
 morphism is in. `### The image of an open-subspace inclusion, and of a base change of one` holds
@@ -4966,13 +4983,37 @@ analytic result that motivated it, under that result's heading"*. Nothing below 
 of a module that row routes.
 
 **Another is *analytic spaces, local models, the node***, which routes `Oka/AnalyticSpace/Glue.lean`
-to `OkaTest/Axioms/AnalyticSpace.lean`; that row is about building an analytic space, and nothing
-below builds one. **The join that decides it** is
+to `OkaTest/Axioms/AnalyticSpace.lean`. That row's own subject line is *Complex analytic spaces as
+objects, and the constructions that build one*, and **nothing below is such a construction**.
+`ComplexAnalytic.AnalyticSpace.Pullback.v` is the one declaration below whose result type is
+`ComplexAnalytic.AnalyticSpace`, and the sentence enumerating the kinds excepts it from the
+morphisms as *an object*. But it puts no structure on anything: it names a limit, and **both of
+the pullbacks nested in it are supplied from outside this module**. The outer one is
+`ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict`, an instance of
+`Oka/AnalyticSpace/PullbackOpen.lean`, because its second leg is a
+`ComplexAnalytic.AnalyticSpace.ofRestrict`; the inner one is this file's own hypothesis
+`[∀ i, HasPullback (X.ofRestrict (U i) ≫ f) g]`, which nothing in the module discharges.
+`ComplexAnalytic.AnalyticSpace.ofGlueData`, guarded under that row, is what a construction that
+builds one looks like. **The join that decides it** is
 that the two declarations this module consumes as proof terms,
 `ComplexAnalytic.AnalyticSpace.isOpenImmersion_map_pullbackFst_ofRestrict` and
 `ComplexAnalytic.AnalyticSpace.isPullback_map_pullback_pullbackFst_ofRestrict`, are both guarded in
 this file, under the heading
 *That restriction is a pullback square, and the base change it gives*.
+
+**That row's answer read *that row is about building an analytic space, and nothing below builds
+one* until 2026-09-08.** lana-agents/oka#513's verdict recorded that on the plain reading the same
+section's own concession that `ComplexAnalytic.AnalyticSpace.Pullback.v` **is an object** supplies
+a counterexample to it — `v` is a `noncomputable def … : AnalyticSpace.{u}` — declined to reject
+on it, and supplied the replacement above. Two things were added to that replacement in landing
+it. **The instrument is named**: the module has twenty-seven declarations and `v` is the only one
+whose result type is an analytic space, which is what makes the negative half checkable rather
+than asserted. And **the two nestings are named separately**, because the verdict's parenthetical
+had them the other way round — it is the **outer** pullback that
+`Oka/AnalyticSpace/PullbackOpen.lean` supplies and the **inner** one that this file hypothesises.
+**Nothing about the conclusion moved**: the row does not route this module, and what decides that
+is the join through `ComplexAnalytic.AnalyticSpace.isOpenImmersion_map_pullbackFst_ofRestrict` and
+`ComplexAnalytic.AnalyticSpace.isPullback_map_pullback_pullbackFst_ofRestrict`, not this sentence.
 
 **Nothing generated is guarded, which is this file's convention and not a decision made here**:
 `git grep -c '^#print axioms .*_assoc$'` and the same for `.eq_1` both return nothing over
@@ -5186,6 +5227,269 @@ info: 'ComplexAnalytic.AnalyticSpace.Pullback.t'Map_snd' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.Pullback.t'Map_snd
+
+/-! ### The category of separated covers, and separatedness as a morphism property
+
+`Oka/AnalyticSpace/SeparatedFiniteEtale.lean`, the whole of it save the four instances named
+below, together with the two composition statements `Oka/Topology/SeparatedMap.lean` gained in the
+same push. **Twenty-one names**: separatedness as a `CategoryTheory.MorphismProperty` and the two
+readings of that definition, the category the property cuts out with `isFiniteEtale`, its
+inclusion into the covers, the two projections of an object's defining pair, its terminal object
+in both the witness form and the class form, the object this repository already had that the
+category throws out, and — over a Hausdorff base — the Hausdorffness of a total space, the two
+properties of the underlying morphism of a morphism of the category, the fibre product of a
+morphism with itself with its two projections, and the two consequences at a monomorphism **of
+this category**.
+
+**The routing, argued rather than assumed, because the module is new.** The topic table at the
+head of `OkaTest/Axioms.lean` routes *morphisms of analytic spaces* here, and that is the row.
+Every analytic guard below is a property of a morphism of analytic spaces, a morphism of the
+category the finite étale ones form over a fixed base, or an object of that category named so that
+those morphisms can be stated; the recipe that file gives resolves each of them to
+`Oka/AnalyticSpace/SeparatedFiniteEtale.lean` and the row's phrase covers what comes back. **The
+competing row is *analytic spaces, local models, the node*, `OkaTest/Axioms/AnalyticSpace.lean`,
+and it loses on the same reading `### Separatedness of a cover's structure morphism, and the
+summand it makes free` won on**: nothing below is a local model, a chart or a node, and the
+subject of every one of them is a morphism or a category of morphisms.
+
+**`IsSeparatedMap.comp` and `IsSeparatedMap.of_comp` are of the mirror tree**, and they arrive by
+the same routing as `IsSeparatedMap.t2Space`, the third statement of
+`Oka/Topology/SeparatedMap.lean`, which is guarded in this file under
+`### The third rung: a finite étale morphism is a covering map`. That section's own docstring
+states the rule and it is `OkaTest/Axioms.lean`'s tail: *"Guard one in the file of the analytic
+result that motivated it, under that result's heading."* What motivated these two is the module
+below, so this is the heading, and they share a section with the analytic statements that consume
+them rather than taking one of their own — which is what the head of this file says the guards
+carried from `Oka/Topology/Covering/Basic.lean` do. **What consumes each of them is named and
+neither is unconsumed**:
+`ComplexAnalytic.AnalyticSpace.isSeparatedMap_of_comp` is `IsSeparatedMap.of_comp` at a morphism of
+analytic spaces, and the composition statement is spent twice — once in the
+`CategoryTheory.MorphismProperty.IsStableUnderComposition` instance and once on the structure
+morphism of `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.selfProd`.
+
+**Four declarations of that module are guarded nowhere and that is this repository's practice for
+the `CategoryTheory.MorphismProperty` closure instances, not an omission.** They are the four
+instances that make separatedness a `CategoryTheory.MorphismProperty.IsMultiplicative` property
+closed under isomorphism — `instIsStableUnderCompositionIsSeparatedMap`,
+`instContainsIdentitiesIsSeparatedMap`, `instIsMultiplicativeIsSeparatedMap` and
+`instRespectsIsoIsSeparatedMap` in the `ComplexAnalytic.AnalyticSpace` namespace, none of them
+written with a name. **The precedent is exact and is the property this one is defined beside**:
+`Oka/AnalyticSpace/FiniteEtaleOver.lean` declares the same four instances for
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale`, they appear in `scripts/DumpOkaDecls.lean`'s output
+as `instIsStableUnderCompositionIsFiniteEtale`, `instContainsIdentitiesIsFiniteEtale`,
+`instIsMultiplicativeIsFiniteEtale` and `instRespectsIsoIsFiniteEtale`, and **no `#print axioms`
+line in `OkaTest/` names any of the four**: `git grep -nE '^#print axioms .*inst.*IsFiniteEtale$'
+-- OkaTest/` is empty, and its pattern matches a superset of the four, so an empty result covers
+every one of them. **It is anchored at `^#print axioms` and not run against the bare names
+precisely so that this paragraph cannot falsify it**: a bare-name grep over `OkaTest/` matches the
+two lines above that spell the names out — lines this section adds — and would report the opposite
+of what it was asked, while a line of a `/-! -/` block cannot begin at column 0 with
+`#print axioms`.
+
+**What that practice is bounded by is the shape and not anonymity**, because of anonymous
+instances in general it is false: `OkaTest/Axioms/LocalOkaRing.lean` guards five —
+`LocalOkaRing.instIsNoetherianRing`, `ComplexAnalytic.AnalyticSpace.instIsNoetherianRingStalk`,
+`LocalOkaRing.instUniqueFactorizationMonoid`, `LocalOkaRing.instIsRegularLocalRing` and
+`LocalOkaRing.instFaithfullyFlat`. Those instantiate algebraic structure on a ring, which is the
+subject the file guarding them is about; the four here assert closure of a
+`CategoryTheory.MorphismProperty` under composition and identities, which is a property of the
+property whose named consequences this section already guards.
+
+So the module's dump contributes twenty-three rows and this section guards **nineteen** of them,
+and the four are the whole of the difference; the section's other two guards are
+`IsSeparatedMap.comp` and `IsSeparatedMap.of_comp`, which are of the mirror tree and are rows of
+`Oka.Topology.SeparatedMap`, as the paragraph above says.
+
+**Which kind each guard is, against the description at the head of this file. All twenty-one are
+named and the five counts sum to twenty-one.**
+
+**Seven** are of the kind the head's clause opens with *And one kind more* — a morphism's
+underlying map being, or failing to be, a separated map, and the separation axiom on its source
+that a separated map into a Hausdorff target gives:
+`ComplexAnalytic.AnalyticSpace.isSeparatedMap`,
+`ComplexAnalytic.AnalyticSpace.isSeparatedMap_iff`,
+`ComplexAnalytic.AnalyticSpace.isSeparatedMap_of_comp`,
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isSeparatedMap_hom`,
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isSeparatedMap_left`,
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.t2Space_left` — which is that clause's
+second half, the separation axiom the hypothesis gives — and
+`ComplexAnalytic.AnalyticSpace.not_inf_isSeparatedMap_doubledLineOver`, which is its *failing to
+be* half at a named object.
+
+**Two** are of the **seventh**, the mirror tree: `IsSeparatedMap.comp` and
+`IsSeparatedMap.of_comp`. **By subject they are of the kind above as well**, and they are counted
+here and not there because the seventh kind is *a kind of routing rather than a kind of subject*
+in the head's own words, and routing is the question a guard file's placement answers; the
+paragraph above argues that routing.
+
+**Five** are of the **first**, by the description's clause naming the category the finite étale
+ones form over a fixed base together with the cancellations that make a morphism of it finite
+étale: `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isFiniteEtale_hom`,
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isFiniteEtale_left`, and the fibre product
+of a morphism with itself together with its two projections,
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.selfProd`,
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.selfProdFst` and
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.selfProdSnd` — which is where
+`### A monomorphism of covers is injective on points, and the summand that follows` puts the three
+of that shape it holds, and the head of this file says so of them.
+
+**Two** are of the **fourth**, by the clause opening *The fourth kind has a second class, and it is
+the monomorphisms*:
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.injective_base_left_of_mono` and
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.inducesIsoOnDirectSummand_of_mono`. **Their
+`CategoryTheory.Mono` is in this category and not in the covers**, which is what they are for.
+
+**Five** are of the **sixth**, about the category rather than about any morphism in it, and the
+head of this file names all five.
+-/
+
+/--
+info: 'IsSeparatedMap.comp' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms IsSeparatedMap.comp
+
+/--
+info: 'IsSeparatedMap.of_comp' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms IsSeparatedMap.of_comp
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isSeparatedMap' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isSeparatedMap
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isSeparatedMap_iff' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isSeparatedMap_iff
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isSeparatedMap_of_comp' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isSeparatedMap_of_comp
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.toFiniteEtaleOver' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.toFiniteEtaleOver
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isFiniteEtale_hom' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isFiniteEtale_hom
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isSeparatedMap_hom' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isSeparatedMap_hom
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.id' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.id
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isTerminalId' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isTerminalId
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.hasTerminal' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.hasTerminal
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.not_inf_isSeparatedMap_doubledLineOver' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.not_inf_isSeparatedMap_doubledLineOver
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.t2Space_left' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.t2Space_left
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isFiniteEtale_left' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isFiniteEtale_left
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isSeparatedMap_left' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isSeparatedMap_left
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.selfProd' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.selfProd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.selfProdSnd' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.selfProdSnd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.selfProdFst' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.selfProdFst
+
+/--
+info:
+'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.injective_base_left_of_mono'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.injective_base_left_of_mono
+
+/--
+info:
+'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.inducesIsoOnDirectSummand_of_mono'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.inducesIsoOnDirectSummand_of_mono
 
 
 /-! ### The image of an open-subspace inclusion, and of a base change of one
