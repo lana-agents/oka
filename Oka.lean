@@ -52,6 +52,7 @@ import Oka.AnalyticSpace.CutOutLocalIso
 import Oka.AnalyticSpace.CutOutProduct
 import Oka.AnalyticSpace.Degree
 import Oka.AnalyticSpace.DirectSummand
+import Oka.AnalyticSpace.Double
 import Oka.AnalyticSpace.Evaluation
 import Oka.AnalyticSpace.Factorisation
 import Oka.AnalyticSpace.Finite
@@ -175,6 +176,7 @@ import Oka.Geometry.RingedSpace.LocallyRingedSpace.InverseImage
 import Oka.Geometry.RingedSpace.LocallyRingedSpace.InverseImageSheet
 import Oka.Geometry.RingedSpace.LocallyRingedSpace.Modules
 import Oka.Geometry.RingedSpace.OpenImmersion
+import Oka.Geometry.RingedSpace.PresheafedSpace.Double
 import Oka.Geometry.RingedSpace.PresheafedSpace.Gluing
 import Oka.Geometry.RingedSpace.ZeroLocus
 import Oka.GermDerivative

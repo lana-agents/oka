@@ -145,6 +145,18 @@ are declared outside the file named; and one of those three is a cover's total s
   topological spaces whose home is `Oka/Topology/Covering/Basic.lean` and which this file does not
   prove either. **This sentence is unchanged and nothing in it is retired** — the clause added is
   the one that says why the gap will not be closed in the shape the sentence suggests.
+* **The refutation is now inside the category, and the *Nothing about Hausdorffness* bullet is
+  still exact.**
+  `ComplexAnalytic.AnalyticSpace.exists_finiteEtaleOver_not_t2Space` exhibits an object of
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver` over
+  `ComplexAnalytic.AnalyticSpace.complexAffineSpace 1` whose total space is not Hausdorff, over a
+  base that is; it is the complex line with two origins, glued from two copies of `ℂ¹` along the
+  complement of the origin. **Nothing in that bullet is retired and nothing here weakens it**:
+  this repository still does not *make* the statement it names, and what changes is
+  only the evidence against it — the argument from `LineTwoOrigins.fold` is about a topological
+  space that is not an analytic space, and this one is about an object of the category the two
+  hypotheses below quantify over. **Neither hypothesis below is removed or weakened by it**, and
+  no declaration of this file is touched.
 * **No diagonal and no isomorphism `A ≅ A ×_B A`.** The classical argument's object is not built,
   so nothing below says the fibre product of a monomorphism with itself is its source.
 * **Nothing about a general mono of analytic spaces.**
