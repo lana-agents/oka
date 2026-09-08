@@ -509,13 +509,17 @@ a factor of two, so a figure from one run does not subtract from a figure of ano
 
 **The 21 is `d2ae161`'s and this paragraph falsifies it as prose, which is said here rather than
 left to be discovered.** `OkaTest/Axioms.lean` is in the population the pattern runs over, and a
-sweep that quotes what it swept is matched by its own pattern: at the commit that writes this the
-figure is **30**, the nine extra being this paragraph's own quotations of the sites below. **That
+sweep that quotes what it swept is matched by its own pattern: at the head that writes this the
+figure is **31**, the ten extra being this paragraph's own quotations of the sites below. **That
 is the shape taxis #1727's second round was rejected for** — repairing into a spelling the rule
 itself scans raises the raw count — and the remedy here is the one this file already uses for the
 sweeps above, which is to pin the figure to a commit and say what moved it, not to choose a
-paraphrase that dodges the pattern. **A later sweep should take 21 as `d2ae161`'s and re-derive its
-own at its own head**, and should expect every sweep of this class to inflate the count it reports.
+paraphrase that dodges the pattern. **This branch's review round demonstrated that rather than only
+predicting it**: `829c4e7`, the head as first delivered, gave **30**, and repairing the paragraph
+below — which quoted two shapes as strings with counts beside them, into prose that names their
+sites instead — raised it to **31**. **A later sweep should take 21 as `d2ae161`'s and re-derive
+its own at its own head**, and should expect every sweep of this class to inflate the count it
+reports.
 
 **All six that were decided hold, and the list is what was found rather than a claim about the
 other fifteen.**
@@ -544,10 +548,10 @@ other fifteen.**
   true more strongly than it says**: that theorem has **no** users at all in the environment, at
   any index type.
 * `OkaTest/CoherentFree.lean`'s *"everything downstream is at the locally ringed space spelling"* —
-  **true and vacuous**, which is worth separating from the four above: its **3** downstream modules
-  mention **neither** spelling in code, so the universal holds over an empty set. **A vacuous
-  member of this class is not a confirmation of anything** and a later sweep should not count it
-  as one.
+  **true and vacuous**, which is worth separating from the confirmations above: its **3**
+  downstream modules mention **neither** spelling in code, so the universal holds over an empty
+  set. **A vacuous member of this class is not a confirmation of anything** and a later sweep
+  should not count it as one.
 
 **Every downstream figure above excludes `Oka.lean` and `OkaTest.lean`**, the two aggregators, for
 the reason this paragraph's own carve-out gives — and here that exclusion changes no verdict rather
@@ -581,16 +585,23 @@ unaffected, because they are downstream counts with `Oka` excluded from the tall
 population is the graph the walk runs over, and **separating those two is the repair** — conflating
 them is what let an enumeration disagree with its own numeral in a sentence three reviewers read.
 
-**Two shapes in the 21 are not import-graph claims at all and no walk decides them.** *"the index of
-a point is chosen, and nothing downstream depends on which"* occurs four times — in
-`Oka/Analytification/AffineCover.lean`, `Oka/Analytification/RefineDatumCover.lean`,
-`Oka/Analytification/SpecAffineCover.lean` and
-`Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean` — and is a claim that a choice is immaterial,
-not that a set is empty; and *"no term downstream can meet a stuck `Eq.mpr`"* occurs three times and
-is a consequence of the transported thing being a `Prop`. **Both are true for reasons a reverse
-closure cannot supply**, and a sweep that reported them as measured would be claiming more than it
-ran. The remaining members of the 21 were read and not decided, and this paragraph does not say
-they hold.
+**Two shapes in the 21 are not import-graph claims at all and no walk decides them, and each is
+given by its sites rather than as a quotation with a count.** The first says that the index of a
+point is *chosen* and that nothing downstream depends on which; it is a claim that a choice is
+immaterial and not that a set is empty, and its sites are `Oka/Analytification/AffineCover.lean`,
+`Oka/Analytification/RefineDatumCover.lean`, `Oka/Analytification/SpecAffineCover.lean` and
+`Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean`. The second says that no term downstream can
+meet a stuck `Eq.mpr`; it is a consequence of the transported thing being a `Prop`, and its sites
+are `Oka/AlgebraicGeometry/Modules/Tilde.lean`, twice, and `OkaTest/FiniteMorphism.lean`. **The
+sites of a shape do not all spell it the same way**, which is why neither is given here as a quoted
+string with a number beside it: `Oka/Analytification/RefineDatumCover.lean` writes the first as
+*`idx` is a choice*, `Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean` as *depends on which
+index is picked*, and `OkaTest/FiniteMorphism.lean` writes the second with *nothing* where the
+others write *no term*. **A count beside a quoted string is a claim about that string and `git
+grep -c` is what decides it**; a sweep that means the shape owes the sites instead, which is what
+this paragraph gives. **Both shapes are true for reasons a reverse closure cannot supply**, and a
+sweep that reported them as measured would be claiming more than it ran. The remaining members of
+the 21 were read and not decided, and this paragraph does not say they hold.
 
 **Most mirror-tree material is routed by a row, and a small tail of it is deliberately routed by
 none.** `README.md`'s *Layout: the Mathlib mirror tree* defines a mirror-tree file by its path — a
