@@ -493,6 +493,116 @@ it can do first is what this one did: carry the neighbouring sentence, since a c
 referent is one sentence away is a pair claim that a splitter, and not the prose, put in this
 column.
 
+**The third sweep, at `d2ae161`, decided six of the column that wants the reverse closure — and
+two of them needed an instrument this rule did not name.** It did **not** partition the 132: it
+ran a narrower pattern for the shape that column is made of, a quantifier over a *downstream set*:
+one of `nothing`, `anything`, `everything`, `nobody`, or `no`/`any`/`every`/`all` with a noun after
+it, immediately before `downstream`; or `downstream` immediately before one of `has`, `have`,
+`needs`, `depends`, `consumes`, `can`, `reads`, `uses`, `wants`. Over the same population, now
+**316** tracked `.lean` files under `Oka/` and `OkaTest/` together with `Oka.lean` and
+`OkaTest.lean`, comment content alone, whitespace-normalised and cut into sentences, it returns
+**21**. That pattern is a choice like any splitter and the figure is a fact about it as much as
+about the tree. **Which of the 21 the splitter of the sweep recorded in the paragraph opening *The
+second sweep, at `3187978`* puts in its 132 was not checked and is not claimed**, for the reason the
+paragraph opening *The two splitters do not agree* gives: the two splitters already differ by about
+a factor of two, so a figure from one run does not subtract from a figure of another.
+
+**The 21 is `d2ae161`'s and this paragraph falsifies it as prose, which is said here rather than
+left to be discovered.** `OkaTest/Axioms.lean` is in the population the pattern runs over, and a
+sweep that quotes what it swept is matched by its own pattern: at the head that writes this the
+figure is **31**, the ten extra being this paragraph's own quotations of the sites below. **That
+is the shape taxis #1727's second round was rejected for** — repairing into a spelling the rule
+itself scans raises the raw count — and the remedy here is the one this file already uses for the
+sweeps above, which is to pin the figure to a commit and say what moved it, not to choose a
+paraphrase that dodges the pattern. **This branch's review round demonstrated that rather than only
+predicting it**: `829c4e7`, the head as first delivered, gave **30**, and repairing the paragraph
+below — which quoted two shapes as strings with counts beside them, into prose that names their
+sites instead — raised it to **31**. **A later sweep should take 21 as `d2ae161`'s and re-derive
+its own at its own head**, and should expect every sweep of this class to inflate the count it
+reports.
+
+**All six that were decided hold, and the list is what was found rather than a claim about the
+other fifteen.**
+
+* `OkaTest/HolomorphicMapOpen.lean`'s *"reachable from everything downstream of
+  `OkaTest/FiniteMorphism.lean`"* — **true, and by a forward edge rather than by a reverse walk**:
+  `OkaTest/FiniteMorphism.lean` imports it at distance **1**, so the **9** modules downstream of
+  that file are a subset of the **10** downstream of this one. **A downstream-set claim whose
+  subject is the file making it is a pair claim in disguise** and costs one edge.
+* `Oka/Analytification/AffineCover.lean`'s *"Nothing downstream of this file needs any of it yet"*,
+  of the locally directed cover API — **true**: the four tokens grepped for — the dotted module
+  name of `Mathlib/AlgebraicGeometry/Cover/Directed.lean`, together with `SmallAffineZariski`,
+  `LocallyDirected` and `directedCover` — occur in the code of **none** of its **124** downstream
+  modules.
+* `Oka/UliftCoord.lean`'s *"no statement downstream of here consumes it"*, of
+  `IsWeierstrassPolynomial`'s vanishing condition — **true, and the reverse closure was not what
+  decided it**: that predicate occurs in the code of exactly two modules of this repository,
+  `Oka/Weierstrass.lean` and `Oka/Statement.lean`, and neither is downstream of
+  `Oka/UliftCoord.lean`. **Locating the subject can be cheaper than enumerating the set**, and it
+  is the first thing to try.
+* `OkaTest/AffineSections.lean`'s *"without using `OkaTest.AffineSections.specXPresentation` or
+  anything downstream of it"* — **true**, and this one is decided outright rather than
+  grepped. See the instrument below.
+* `Oka/AnalyticSpace/SigmaFiniteEtale.lean`'s *"nothing downstream reads it there"*, of
+  `ComplexAnalytic.AnalyticSpace.card_fiber_sigmaFold` at an infinite index type — **true, and
+  true more strongly than it says**: that theorem has **no** users at all in the environment, at
+  any index type.
+* `OkaTest/CoherentFree.lean`'s *"everything downstream is at the locally ringed space spelling"* —
+  **true and vacuous**, which is worth separating from the confirmations above: its **3**
+  downstream modules mention **neither** spelling in code, so the universal holds over an empty
+  set. **A vacuous member of this class is not a confirmation of anything** and a later sweep
+  should not count it as one.
+
+**Every downstream figure above excludes `Oka.lean` and `OkaTest.lean`**, the two aggregators, for
+the reason this paragraph's own carve-out gives — and here that exclusion changes no verdict rather
+than being taken on trust: neither root module mentions any of the subjects grepped for, so counting
+them would have moved the four downstream figures to **10**, **11**, **126** and **4** and left
+every hit count at **0**.
+
+**The instrument this rule did not name, and it decides a shape the other two cannot.** A clause of
+the form *"proved without using `X`, or anything downstream of `X`"* is about **declarations** and
+not about modules, so neither the import walk nor the compiled scratch file reaches it. The
+environment does: walk `ConstantInfo`'s value and type through `Expr.getUsedConstants`,
+transitively,
+and ask whether `X` is in the set. On `OkaTest.AffineSections.isCoherent_cokernel_specXHom` that set
+has **4352** constants and `OkaTest.AffineSections.specXPresentation` is **not** among them, with
+`OkaTest.AffineSections.specXHom`, which is, as the positive control. **Because the set is
+transitively closed, the same run settles the *or anything downstream of it* half**, which is why
+this is a decision and not a sample. **Run backwards it decides the *nothing reads it* shape too**:
+scan `env.constants` for those whose value or type mentions the target, which is what returned **0**
+for `ComplexAnalytic.AnalyticSpace.card_fiber_sigmaFold`. **Put a deliberate control error at the
+foot of the file**, since an `#eval` that never runs and an `#eval` that prints nothing are the same
+on the terminal.
+
+**One repair lands with this sweep and it is not one of the 21.**
+`Oka/Analytification/CoverGlueTop.lean`'s population enumeration named **311** files for its own
+numeral of **312** — *"together with
+`OkaTest.lean`, and excluding the aggregator `Oka.lean`"*, where the tracked `.lean` files under
+`Oka/` and `OkaTest/` are 310 at `3187978` and 312 needs both root modules. **The reviewer of
+lana-agents/oka#498 found it, declined to reject on it and left it for a later seat**, and this is
+that seat; the retired wording is kept there as a dated record. Its **210** and **95** are
+unaffected, because they are downstream counts with `Oka` excluded from the tally while the
+population is the graph the walk runs over, and **separating those two is the repair** — conflating
+them is what let an enumeration disagree with its own numeral in a sentence three reviewers read.
+
+**Two shapes in the 21 are not import-graph claims at all and no walk decides them, and each is
+given by its sites rather than as a quotation with a count.** The first says that the index of a
+point is *chosen* and that nothing downstream depends on which; it is a claim that a choice is
+immaterial and not that a set is empty, and its sites are `Oka/Analytification/AffineCover.lean`,
+`Oka/Analytification/RefineDatumCover.lean`, `Oka/Analytification/SpecAffineCover.lean` and
+`Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean`. The second says that no term downstream can
+meet a stuck `Eq.mpr`; it is a consequence of the transported thing being a `Prop`, and its sites
+are `Oka/AlgebraicGeometry/Modules/Tilde.lean`, twice, and `OkaTest/FiniteMorphism.lean`. **The
+sites of a shape do not all spell it the same way**, which is why neither is given here as a quoted
+string with a number beside it: `Oka/Analytification/RefineDatumCover.lean` writes the first as
+*`idx` is a choice*, `Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean` as *depends on which
+index is picked*, and `OkaTest/FiniteMorphism.lean` writes the second with *nothing* where the
+others write *no term*. **A count beside a quoted string is a claim about that string and `git
+grep -c` is what decides it**; a sweep that means the shape owes the sites instead, which is what
+this paragraph gives. **Both shapes are true for reasons a reverse closure cannot supply**, and a
+sweep that reported them as measured would be claiming more than it ran. The remaining members of
+the 21 were read and not decided, and this paragraph does not say they hold.
+
 **Most mirror-tree material is routed by a row, and a small tail of it is deliberately routed by
 none.** `README.md`'s *Layout: the Mathlib mirror tree* defines a mirror-tree file by its path — a
 file under `Oka/` mirroring a path under `Mathlib/`, holding no complex-analytic mathematics and

@@ -79,9 +79,21 @@ be named.
   downstream modules in this repository against **95** for this one — a reverse walk of the
   `import` lines with `scripts/import_cost.py`'s `IMPORT` pattern over its nesting-aware
   `strip_comments`, over the 312 tracked `.lean` files under `Oka/` and `OkaTest/` together with
-  `OkaTest.lean`, and excluding the aggregator `Oka.lean`, which imports every module of the
-  library — so putting a three-line helper there costs about a hundred and fifteen extra module
-  rebuilds. Moving it is a follow-up and this docstring is the record that it is owed.
+  `Oka.lean` and `OkaTest.lean`, with the aggregator `Oka.lean` — which imports every module of
+  the library, and so is downstream of every one of them — excluded from the two counts rather
+  than from the graph — so putting a three-line helper there costs about a hundred and fifteen
+  extra module rebuilds. Moving it is a follow-up and this docstring is the record that it is owed.
+
+  **That enumeration read *"together with `OkaTest.lean`, and excluding the aggregator
+  `Oka.lean`"* until 2026-09-08**, which named 311 files for its own numeral of 312: the tracked
+  `.lean` files under `Oka/` and `OkaTest/` are **310** at `3187978`, and 312 needs **both** root
+  modules and not one. It was a transcription slip and not a misunderstanding — the same push's
+  sentence in `OkaTest/Axioms.lean` says *"together with `Oka.lean` and `OkaTest.lean`"*, which is
+  the spelling the rule file uses — and **210** and **95** are what the walk returns either way,
+  since they are downstream counts with `Oka` excluded and the population is the graph the walk
+  runs over. **The reviewer of lana-agents/oka#498 found it, did not reject on it, and left it for
+  a later seat**; the repair is the sentence opening *At `3187978`*, and it separates the
+  population from the tally because conflating them is what made the slip invisible.
 
   **That clause read *"That file has **175 downstream modules** in this repository against **86**
   for a new module under `Oka/Analytification/`, measured by a reverse walk of the `import` lines,
