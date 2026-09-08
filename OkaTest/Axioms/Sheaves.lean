@@ -551,7 +551,10 @@ info: 'AlgebraicGeometry.StructureSheaf.germ_algebraMap_mem_maximalIdeal_iff'' d
 `Oka/Geometry/RingedSpace/LocallyRingedSpace.lean` and
 `Oka/Geometry/RingedSpace/LocallyRingedSpace/HasColimits.lean`. Two out of three for stalk maps,
 the coproduct's cover and the injectivity of its inclusions, and the four properties of a descent
-map out of it that a finite étale morphism is built from.
+map out of it that a finite étale morphism is built from, together with one that it is not built
+from: `AlgebraicGeometry.LocallyRingedSpace.isSeparatedMap_base_sigmaDesc`, since
+`IsSeparatedMap` is no part of `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` and a descent map can
+be finite étale without it.
 
 **Every declaration that second file lists under `## Main results` is asserted here, and that is
 still not a complete guard of it.** The sentence that stood here named `sigmaOpenCover` among the
@@ -587,6 +590,13 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.isClosedMap_base_sigmaDesc' depends 
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.isClosedMap_base_sigmaDesc
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.isSeparatedMap_base_sigmaDesc' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.isSeparatedMap_base_sigmaDesc
 
 /--
 info: 'AlgebraicGeometry.LocallyRingedSpace.fiberSigmaDescEquiv' depends on axioms:
