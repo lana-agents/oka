@@ -1953,17 +1953,33 @@ demanded. **No `.eq_1` and no match lemma at either commit.** Equation lemmas ar
 demand, so both sentences are statements about the environment at the commit each names and
 neither is a prediction about later ones.
 
-**What is guarded here still does not include a fibre product**, and the lift does not change
-that. `ComplexAnalytic.AnalyticSpace.Pullback.gluedLift` says a competing cone *factors* through
-the gluing and `…gluedLift_p1` and `…gluedLift_p2` say through which legs; **no declaration below
-says the factorisation is unique**, and `CategoryTheory.Limits.IsLimit` needs that. So no
-declaration below says any cospan of analytic spaces has a fibre product, and
+**What is guarded under *this heading* still does not include a fibre product**, and the lift did
+not change that. `ComplexAnalytic.AnalyticSpace.Pullback.gluedLift` says a competing cone
+*factors* through the gluing and `…gluedLift_p1` and `…gluedLift_p2` say through which legs; **no
+guard of this section says the factorisation is unique**, and `CategoryTheory.Limits.IsLimit`
+needs that.
+
+**This paragraph said *no declaration below* and *below* reached past this section, so it is
+retired and rescoped rather than recounted.** It was written when this heading was the last in the
+file and it was exact then, at `a401c63` and at the commit that added the lift. It is not exact
+now: the heading that follows this one, *The gluing is the fibre product: uniqueness of the lift,
+the limit cone, and `HasPullback`*, guards
+`ComplexAnalytic.AnalyticSpace.Pullback.gluedLift_uniq`, `…gluedIsLimit` and
+`…hasPullback_of_cover`, which say exactly the three things this paragraph denied of everything
+below it. **The claim survives with *below* replaced by *in this section*, and it is checked that
+way**: none of the thirty-three names under this heading mentions uniqueness, a limit or a
+`CategoryTheory.Limits.HasPullback`.
+
+**What did not move is the synthesis probe.**
 `CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` still does not synthesise —
-re-run at the commit that adds the lift and not carried over. The probe is
+re-run at the commit that adds the section below and not carried over, as it was re-run at the
+commit that added the lift. The probe is
 `#synth CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace`, run rather than
 grepped, with the category **positional** — the form
 `Oka/AnalyticSpace/AffineProductOpen.lean` uses, and the form that asks about the class rather
-than about an object. -/
+than about an object. `…hasPullback_of_cover` does not make it synthesise because it asks for a
+covering family along which the base change is already known, and nothing produces one for a
+general cospan. -/
 
 /--
 info: 'ComplexAnalytic.AnalyticSpace.Pullback.t'_fac' depends on axioms:
@@ -2195,3 +2211,134 @@ info: 'ComplexAnalytic.AnalyticSpace.Pullback.gluedLift_p2' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.Pullback.gluedLift_p2
+
+
+/-! ### The gluing is the fibre product: uniqueness of the lift, the limit cone, and `HasPullback`
+
+`Oka/AnalyticSpace/PullbackLimit.lean`, the whole of it, in the order the declarations are made.
+**Nine names**, and the module is new.
+
+The image of a member of the gluing, the factorisation of a morphism through a member that image
+computation makes available, the uniqueness of the lift out of a competing cone, the limit cone
+that uniqueness completes, and the fibre product it gives.
+
+**The routing, argued rather than assumed, because the module is new.** Every `#print axioms` name
+below resolves to `Oka/AnalyticSpace/PullbackLimit.lean`, so the recipe beside
+`OkaTest/Axioms.lean`'s routing table asks one question and not one per name: does *analytic
+spaces, local models, the node* cover that module. It does, and **for the reason the section above
+gives for the lift**: `ComplexAnalytic.AnalyticSpace.Pullback.gluedIsLimit` is the universal
+property of `ComplexAnalytic.AnalyticSpace.Pullback.glued`, the analytic space that section's
+module builds, and `…hasPullback_of_cover` asserts that an analytic space with that property
+exists. A statement that a named space is a limit is a statement about that space in the way
+`ComplexAnalytic.AnalyticSpace.Pullback.p1` and `…p2` are — it names no class of morphisms and
+introduces no morphism whose subject is not `…glued`.
+
+**This is not a third heading about morphisms.** The module docstring at the head of this file
+says **two** of the headings here are about morphisms after all and names them; the section above
+argued it was not a third and this is not a fourth, on the same criterion. The four names below
+that are morphisms or about morphisms —
+`ComplexAnalytic.AnalyticSpace.Pullback.liftι`, `…liftι_fac`, `…liftι_eq_liftMember` and
+`…isOpenImmersion_toLRSHom_ι` — are all about
+`ComplexAnalytic.AnalyticSpace.Pullback.ι`, whose own guards are under the section above and for
+whose placement that section already argues. **A guard here on
+`ComplexAnalytic.AnalyticSpace.IsFiniteEtale` or on any other *class* of morphisms would belong in
+`OkaTest/Axioms/Morphisms.lean`, and there is none.**
+
+**Two declarations of this push are guarded in `OkaTest/Axioms/Morphisms.lean` and not here**, and
+they are not declarations of this module: `ComplexAnalytic.AnalyticSpace.range_base_ofRestrict` is
+`Oka/AnalyticSpace/OpenSubspace.lean`'s and `…range_base_pullbackFst_ofRestrict` is
+`Oka/AnalyticSpace/PullbackOpen.lean`'s, and every other guard of that second module is in that
+file already. The recipe asks what a module *is*: those two are about the underlying map of a
+morphism, which is that file's subject, and this module's headline declaration is a limit.
+**Nothing below is a declaration of either of those modules**, so no name is guarded twice.
+
+**One `info:` line below is 101 characters and cannot be wrapped**, which is
+`ComplexAnalytic.AnalyticSpace.Pullback.range_base_ofRestrict_comp_subset_ι`'s: `#guard_msgs`
+compares the message and the name is most of the message. **Thirteen such lines already stand
+under `OkaTest/`** — two in this file's neighbours' `OkaTest/Axioms/SheafOfModules.lean`, three in
+`OkaTest/Axioms/Sheaves.lean`, six in `OkaTest/Axioms/Morphisms.lean`, one in
+`OkaTest/Axioms/Analytification.lean` and one already in this file — and every one of them is an
+`info:` line of a long name. This is the fourteenth and there are no others: **its own
+`#print axioms` line is *not* wrapped**, the name fitting after the command, so the line-based
+`#print axioms\s+(\S+)` scan `OkaTest/Axioms.lean` warns about reads all nine of this section's
+guards and not eight.
+
+**Nothing generated is guarded and here there is nothing generated.** The module's tab-anchored
+row count in `scripts/DumpOkaDecls.lean`'s output is **nine** against nine guards: no `_assoc`
+lemma, no `.eq_1` equation lemma, no match lemma and no congruence lemma. **One match lemma was
+avoided rather than absent** — `ComplexAnalytic.AnalyticSpace.range_base_ofRestrict`, in the other
+file, was first written with a destructuring `fun ⟨y, hy⟩ ↦ …` and generated one; its own
+docstring records why it is `Subtype.range_val` instead. Equation lemmas are generated on demand,
+so this is a statement about the environment at the commit that adds this section and not a
+prediction about later ones.
+
+**What is guarded here does include a fibre product, and it is the first heading in this file of
+which that is true.** `ComplexAnalytic.AnalyticSpace.Pullback.hasPullback_of_cover` says a cospan
+has one — under two hypotheses, that the `U i` cover `X` and that the base change of `g` along
+each `U i ⟶ X ⟶ Z` already exists. **Neither hypothesis is discharged anywhere in this
+repository for a general cospan**, so
+`CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` still does not synthesise; the
+section above records the probe and it was re-run at this commit. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.range_base_ι' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.range_base_ι
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.isOpenImmersion_toLRSHom_ι' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.isOpenImmersion_toLRSHom_ι
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.liftι' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.liftι
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.liftι_fac' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.liftι_fac
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.range_base_ofRestrict_comp_subset_ι' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.range_base_ofRestrict_comp_subset_ι
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.liftι_eq_liftMember' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.liftι_eq_liftMember
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.gluedLift_uniq' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.gluedLift_uniq
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.gluedIsLimit' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.gluedIsLimit
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.hasPullback_of_cover' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.hasPullback_of_cover

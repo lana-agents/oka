@@ -136,7 +136,9 @@ opening paragraph.
 
 **Joint surjectivity is still not enough to make `…glued` the fibre product**, and nothing below
 claims that it is: `CategoryTheory.Limits.IsLimit` needs the *uniqueness* of the lift as well, and
-that is not here — the section headed *What this does not do* says what it would take.
+that is not in this file. **It is in `Oka/AnalyticSpace/PullbackLimit.lean`**, which imports this
+one and proves it there; the section headed *What this does not do* says what that took and what
+it did not close.
 
 ## Main results
 
@@ -170,29 +172,46 @@ that is not here — the section headed *What this does not do* says what it wou
 - `ComplexAnalytic.AnalyticSpace.Pullback.gluedLift`, `…gluedLift_p1` and `…gluedLift_p2`:
   **Mathlib's `AlgebraicGeometry.Scheme.Pullback.gluedLift` and its two factorisations, over
   `ComplexAnalytic.AnalyticSpace`** — a competing cone factors through the gluing. The
-  *uniqueness* of the factorisation is not here.
+  *uniqueness* of the factorisation is not in this file; it is
+  `ComplexAnalytic.AnalyticSpace.Pullback.gluedLift_uniq` in
+  `Oka/AnalyticSpace/PullbackLimit.lean`.
 
 ## What this does not do
 
 **It does not make `ComplexAnalytic.AnalyticSpace` a category with pullbacks, and nothing below
 claims it does.** `CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` does not
-synthesise at the commit that adds this file. What is missing, in Mathlib's order:
+synthesise at the commit that adds this file, and **it still does not at the commit that adds
+`Oka/AnalyticSpace/PullbackLimit.lean`**, where the probe was re-run rather than carried over.
+What is missing here, in Mathlib's order, with the three items that have since been supplied
+elsewhere marked as such:
 
 * **The uniqueness of the lift.** `ComplexAnalytic.AnalyticSpace.Pullback.gluedLift` and its two
-  factorisations are now below, so a competing cone *factors*; that the factorisation is unique is
-  not here. **This bullet said until 2026-09-08 that the lift itself was absent and unpriced, and
-  that is what the lift retired.** Mathlib gets uniqueness from `pullbackP1Iso`, which identifies
-  `W ×_X U i` with `U i ×_Z Y` and needs `pullbackFstιToV` and `lift_comp_ι` before it; **none of
-  those three is transcribed and none is priced here.** `gluedLiftPullbackMap` is a different
-  matter: the route below does not use it and will not need it, because the pieces of the lift are
-  open subspaces of the cone's apex rather than categorical pullbacks.
-* **`gluedIsLimit`**, which needs the uniqueness above and nothing else that is missing.
-  `CategoryTheory.Limits.PullbackCone.IsLimit.mk` takes five explicit arguments;
-  `ComplexAnalytic.AnalyticSpace.Pullback.p_comm`, `…gluedLift`, `…gluedLift_p1` and
-  `…gluedLift_p2` are four of them, and the uniqueness is the fifth.
-* **`hasPullback_of_cover`**, and then the reduction of an arbitrary cospan to one where the base
-  change is known — which needs covering `Y` and `Z` as well, and whose length is not measured
-  anywhere in this repository.
+  factorisations are below, so a competing cone *factors*; that the factorisation is unique is not
+  in this file. **This bullet said until 2026-09-08 that the lift itself was absent and unpriced,
+  and that is what the lift retired; on the same day it said of `pullbackP1Iso`, `pullbackFstιToV`
+  and `lift_comp_ι` that none of the three is transcribed and none is priced, and
+  `Oka/AnalyticSpace/PullbackLimit.lean` retired that too.** None of the three is transcribed
+  there either, and the price is that none of them is needed: what an isomorphism onto `W ×_X U i`
+  would be used for is to factor a morphism through
+  `ComplexAnalytic.AnalyticSpace.Pullback.ι`, and a morphism whose image lies in the image of an
+  open immersion factors through it without an object being named.
+  `ComplexAnalytic.AnalyticSpace.Pullback.range_base_ι` is the image computation that replaces the
+  isomorphism. `gluedLiftPullbackMap` was a different matter already: the route below does not use
+  it and does not need it, because the pieces of the lift are open subspaces of the cone's apex
+  rather than categorical pullbacks — **and the same reason turned out to dispose of the other
+  three, which this bullet did not predict.**
+* **`gluedIsLimit`**, which needs the uniqueness above and nothing else that is missing. It is
+  `ComplexAnalytic.AnalyticSpace.Pullback.gluedIsLimit` in `Oka/AnalyticSpace/PullbackLimit.lean`,
+  and it is built by `CategoryTheory.Limits.PullbackCone.isLimitAux'` rather than by
+  `CategoryTheory.Limits.PullbackCone.IsLimit.mk`, which this bullet named; the five things it
+  takes are the ones this bullet listed —
+  `ComplexAnalytic.AnalyticSpace.Pullback.p_comm`, `…gluedLift`, `…gluedLift_p1`, `…gluedLift_p2`
+  and the uniqueness.
+* **`hasPullback_of_cover`** is `ComplexAnalytic.AnalyticSpace.Pullback.hasPullback_of_cover`
+  there, **and the reduction of an arbitrary cospan to one where the base change is known is
+  not** — it needs covering `Y` and `Z` as well, and its length is still not measured anywhere in
+  this repository. That item is the one of the four this file named which nothing has yet
+  supplied.
 
 `Oka/AnalyticSpace/FiniteEtaleOver.lean`'s bullet on base change is **not** falsified by this
 file: base change of the class `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` across a general

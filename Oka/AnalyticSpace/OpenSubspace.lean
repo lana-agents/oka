@@ -81,6 +81,12 @@ transport of algebra structures along an isomorphism is needed anywhere.
 - `ComplexAnalytic.exists_restrict_eq_ofCutOut`: **every point has an open neighbourhood on which
   the space is a local model in that sense**, which is `ComplexAnalytic.restrict_eq_ofCutOut` at
   the chart the `local_model` field supplies.
+- `ComplexAnalytic.AnalyticSpace.range_base_ofRestrict`: **the image of the inclusion of an open
+  subspace is that open subset**, which is the form a factorisation asks its range hypothesis in;
+  that declaration's own docstring names the two constructions which ask for it. **The two names
+  are deliberately not repeated here**: `scripts/guard_coverage.py` reads every backticked
+  repository name under this heading as a result this file advertises, and one of them is a
+  definition of this file already advertised under `## Main definitions`.
 - `ComplexAnalytic.AnalyticSpace.isIso_stalkMap_ofRestrict`: **the inclusion of an open subspace
   is an isomorphism on stalks**, at the spelling a caller of `ofRestrict` holds. Mathlib has the
   statement; what this adds is a discrimination-tree key, exactly as
@@ -305,6 +311,27 @@ def ofRestrict (X : AnalyticSpace.{u}) (U : X.Opens) : X.restrict U ⟶ X :=
 lemma base_ofRestrict (X : AnalyticSpace.{u}) (U : X.Opens) (x : X.restrict U) :
     (X.ofRestrict U).toLRSHom.base x = x.1 :=
   rfl
+
+/-- **The image of the inclusion of an open subspace is that open subset.**
+
+`ComplexAnalytic.AnalyticSpace.base_ofRestrict` says what the underlying map does to a point and
+this says what it does to the whole of the source, which is the form a factorisation hypothesis
+takes: `ComplexAnalytic.AnalyticSpace.liftRestrict` asks for a range containment and
+`AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.lift` asks for one against exactly this
+range.
+
+**The proof is `Subtype.range_val` and not a rewrite of `…base_ofRestrict`**, because the
+underlying map *is* `Subtype.val` definitionally rather than up to that lemma — which is why
+`…base_ofRestrict` itself is `rfl`. Stating it through the point lemma would elaborate the same
+term and generate a match lemma for the destructuring; this way the module's contribution to
+`scripts/DumpOkaDecls.lean` is one row and not two.
+
+**The coercion on the right is `(U : Set X)` and not `U`**, which is the same spelling
+`ComplexAnalytic.AnalyticSpace.liftRestrict` uses for its hypothesis, so a caller chaining the two
+needs no rewriting between them. -/
+lemma range_base_ofRestrict (X : AnalyticSpace.{u}) (U : X.Opens) :
+    Set.range ((X.ofRestrict U).toLRSHom.base : X.restrict U → X) = (U : Set X) :=
+  Subtype.range_val
 
 /-- **The inclusion of an open subspace is an isomorphism on stalks**, at the spelling a caller
 who built the morphism with `ComplexAnalytic.AnalyticSpace.ofRestrict` actually holds.
