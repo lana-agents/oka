@@ -603,6 +603,118 @@ this paragraph gives. **Both shapes are true for reasons a reverse closure canno
 sweep that reported them as measured would be claiming more than it ran. The remaining members of
 the 21 were read and not decided, and this paragraph does not say they hold.
 
+**The fourth sweep, at `7a99bfc`, read the seven the third left undecided, and one of them is
+false.** Same population rule and same published pattern, re-implemented rather than reused: the
+tracked `.lean` files under `Oka/` and `OkaTest/` together with `Oka.lean` and `OkaTest.lean` are
+now **323**, comment content alone, whitespace-normalised and cut into sentences, and the pattern
+returns **31**, of which **11** are in this file. Those two figures are what the third sweep's
+reviewer reported at its own head, reproduced here on a further implementation; **the set behind
+them was not compared and is not claimed to be the same set**, for the reason the paragraph opening
+*The two splitters do not agree* gives. Of the **20** outside this file, six are decided in the
+paragraph opening *All six that were decided hold*, four are the index-of-a-point shape and three
+the stuck-`Eq.mpr` shape, and the remaining **seven** are these.
+`Oka/Analytification/AffineCover.lean` holds three of the 20 — one among the six, one of the
+index-of-a-point shape, and one of these seven.
+
+* `Oka/AnalyticSpace/FiniteEtaleOver.lean`'s *"the downstream uses of the property — a
+  Galois-category structure, the comparison functor taxis #1113 wants — ask for them"*, of the four
+  anonymous `CategoryTheory.MorphismProperty` instances on
+  `ComplexAnalytic.AnalyticSpace.isFiniteEtale` — **false, and repaired in this push with the
+  retired wording kept there as a dated record.** Neither named use exists: there is no
+  `PreGaloisCategory` instance in this repository, which three files say of themselves in those
+  words, and taxis #1113 is open. The one consumption of any of the four is in
+  that same file, at `ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_restrictHom_top`.
+* `Oka/Analytification/UniversalProperty.lean`'s *"Everything downstream is stated in the second
+  spelling"*, of the two spellings of a factorisation that
+  `ComplexAnalytic.comp_zeroLocusSubspaceι_iff` identifies — **true, and the token that decides it
+  is not the one the sentence names first.** `zeroLocusSubspaceι` occurs in the code of **7** of the
+  **147** modules downstream, and `restrictTopIso` in **3**; neither is a counterexample, because
+  the spelling being denied is that pair *through* `ComplexAnalytic.toAmbient`, and that name
+  occurs in the code of **none** of the 147. **One** of those **7** states a factorisation through
+  `zeroLocusSubspaceι` — `OkaTest/Factorisation.lean`, in `existsUnique_liftHom_node`,
+  `eq_id_of_comp_zeroLocusSubspaceι` and `exists_liftHom` — and it is about a cut-out ambient space
+  and not about an analytification, at which the second spelling does not typecheck. Of the other
+  six, five use the name for a cut-out datum, a pushforward or an `IsIso`; the sixth is
+  `OkaTest/Axioms/CutOut.lean`, whose eight occurrences in code are all `#print axioms` guard
+  lines, which is none of those three uses. **None of the six states a factorisation** — a guard
+  line states nothing at all — and that is what the verdict rests on.
+* `Oka/Algebra/Category/ModuleCat/Sheaf/Quasicoherent.lean`'s *"Anything downstream has to spell it
+  the same way"*, of the map a presentation is built out of — **true, and no longer vacuous.** The
+  pinned Mathlib names that composite nowhere: `relations.s ≫` matches **one** line under
+  `Mathlib/`, and it is inside the *type* of `SheafOfModules.Presentation.isColimit`. Of the **95**
+  modules downstream, one uses it — `Oka/Analytification/SheafCoherent.lean` — and it spells it
+  `(SheafOfModules.freeHomEquiv _).symm P.relations.s ≫ kernel.ι P.generators.π`, which is the
+  quoted composite with the namespace the quotation drops. **The two strings are not equal**: they
+  differ by exactly the fifteen characters `SheafOfModules.`, because the docstring quotes the
+  spelling `SheafOfModules.Presentation.cokernelIso` is stated with, inside
+  `namespace SheafOfModules`, while its one consumer is inside `namespace ComplexAnalytic` and has
+  to carry the prefix. **What *the same way* asks for is the term and not the characters**, and
+  Mathlib settles that it has to be: its own source spells the composite
+  `(freeHomEquiv _).symm P.relations.s ≫ (kernel.ι _)`, leaving `kernel.ι`'s argument to be
+  inferred, so this docstring's quotation is already a normalisation of Mathlib and not a
+  transcription of it.
+* `Oka/AnalyticSpace/Finite.lean`'s *"nothing here or downstream consumes one"*, of an `IsProper`
+  class — **true and vacuous**, in the sense the `OkaTest/CoherentFree.lean` bullet above separates
+  out: `IsProper` as a whole word occurs in the code of **no** module of this repository, so there
+  is no such class for anything to consume.
+* `Oka/Analytification/AffineCover.lean`'s *"Neither is needed by anything downstream"*, of a
+  comparison theorem and of a choice among Mathlib's cover APIs — **true, and decided by the build
+  and not by a grep.** The comparison theorem is described rather than named, so there is no token
+  to grep for at all; the three tokens of Mathlib's cover API that the bullet about this same file
+  greps for occur in the code of none of its **124** downstream modules, which reproduces. What
+  settles the claim is neither of those: every module downstream is proved without either subject,
+  which the build establishes and a grep cannot.
+* `Oka/Analytification/CoverIndependence.lean`'s *"everything downstream of a presentation"* —
+  **not a claim of this class.** Its *downstream* is of a datum and not of the import graph, and the
+  sentence enumerates its own members in its own words. The pattern matches the word; no walk is
+  owed.
+* `Oka/Regular.lean`'s *"a corollary is only a de-duplication if nothing downstream can tell"* —
+  **not a claim of this class either.** It states the condition under which a design choice counts
+  as de-duplication; it does not assert that the condition holds here. The consumer claim in the
+  clause beside it — that the three results are what the Krull-dimension induction and
+  `LocalOkaRing.span_fromPolynomial_X_sub_C_ne_span_lastVar` consume — is checkable and holds:
+  both named consumers are in `Oka/Regular.lean` itself, and outside it the three results are named
+  only by `OkaTest/Axioms/LocalOkaRing.lean` and `OkaTest/GermQuotientDegreeOne.lean`.
+
+**Two instruments this rule still did not name, and one warning about which token to reach for.**
+Each of the two decides a shape the three instruments this rule already names cannot.
+
+**The local-instance rebuild, for an anonymous instance.** An `instance` declared with no name has
+nothing to grep for, nothing a `#print axioms` line can guard, and no constant an environment walk
+can key on — so all three instruments this rule names go past it, and a claim about who consumes it
+looks undecidable. It is not. Leave the declarations in place and put them behind
+`attribute [local instance]`, so the module that declares them still sees them and no other module
+does, then build the library: **a green build is a proof that nothing outside that file consumes
+one**, and the errors of a red one name the consumers. On
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale`'s four that is `lake build` exit 0 over 4153 jobs.
+**Deleting them outright is the weaker run and it is worth saying why**: the build stops at the
+first module that fails, which is the declaring one, so a deletion answers *who at all* and then
+tells you nothing about anything past the failure. The local-instance run answers *who outside*
+and reaches every module. A sweep should say which of the two it ran.
+
+**When the subject of the claim does not exist, the build decides it and a grep cannot.** *"Nothing
+downstream needs `X`"* has two shapes. If `X` is in the tree, the reverse closure and a grep for `X`
+decide it, which is what the `Oka/Analytification/AffineCover.lean` bullet above about the locally
+directed cover API did. If `X` is *not* in the tree — a theorem nobody has stated, an API nobody has
+chosen — a grep returns zero from both a true claim and a mis-spelled one, and the honest instrument
+is that every module downstream is proved without `X`, which the build already establishes. **Say
+which of the two a verdict rests on**, because the second is the weaker statement and reads exactly
+like the first.
+
+**And pick the token that is unique to the spelling being denied.** A claim that everything
+downstream uses one of two spellings is decided by whatever the *other* spelling has and this one
+does not, which is rarely the token the sentence puts first: on
+`Oka/Analytification/UniversalProperty.lean` above, grepping `zeroLocusSubspaceι` reports seven
+downstream modules and every one of them is a false positive, while `ComplexAnalytic.toAmbient` —
+which is where the discarded spelling's `restrictTopIso` enters — reports none and settles it.
+
+**This block is matched by the pattern it reports on**, as the paragraph opening *The 21 is
+`d2ae161`'s* says of the third sweep's. The **31** it reports is `7a99bfc`'s and does not include
+what is written here; at the head that writes this the pattern returns **42**, and the whole of the
+difference is in this file, whose own count goes **11 → 22** while no other file's moves — the
+eleven added are this block's quotations of the sentences it decides. A fifth sweep should
+re-derive its own figure at its own head and should expect to have raised it again.
+
 **Most mirror-tree material is routed by a row, and a small tail of it is deliberately routed by
 none.** `README.md`'s *Layout: the Mathlib mirror tree* defines a mirror-tree file by its path — a
 file under `Oka/` mirroring a path under `Mathlib/`, holding no complex-analytic mathematics and

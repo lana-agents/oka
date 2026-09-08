@@ -52,17 +52,41 @@ object of it carries no condition to discharge on its morphisms. See `## What is
 ## The four instances, and none of them is needed to form the category
 
 `CategoryTheory.MorphismProperty.Over P Q X` asks its conditions of `Q`, and `Q` is `⊤` here, so
-the category below would exist with no instance on `P` at all. The four are stated because the
-downstream uses of the property — a Galois-category structure, the comparison functor taxis #1113
-wants — ask for them, and because *finite étale morphisms compose and contain the identities* is a
-single statement worth having under one name rather than as two instances elaborated separately.
+the category below would exist with no instance on `P` at all. **The one consumption of any of the
+four in this repository is in this file**:
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_restrictHom_top` applies
+`CategoryTheory.MorphismProperty.comp_mem` twice, and that is
+`CategoryTheory.MorphismProperty.IsStableUnderComposition`'s field — which
+`CategoryTheory.MorphismProperty.IsMultiplicative` would supply as well, since it extends it, so
+that use does not say which of the four is the one being consumed. The rest are stated in
+anticipation, and because *finite étale morphisms compose and contain the identities* is a single
+statement worth having under one name rather than as two instances elaborated separately.
+
+**That sentence read *The four are stated because the downstream uses of the property — a
+Galois-category structure, the comparison functor taxis #1113 wants — ask for them*, until
+2026-09-08**, when it was measured rather than read, and **neither use it named exists.** No
+`PreGaloisCategory` instance is in this repository, and the measurement is immune to being
+written down: the name occurs in the **comment-stripped code** of no module of this repository, so
+no declaration can mention it, while a plain grep for it is matched by this sentence.
+`Oka/AnalyticSpace/MonoDirectSummand.lean`, `Oka/AnalyticSpace/SeparatedOver.lean` and
+`Oka/AnalyticSpace/SeparatedFiniteEtale.lean` each say so of themselves in those words, and
+`Oka/AnalyticSpace/SeparatedFiniteEtale.lean` adds that the namespace is not in this repository's
+import closure at all; the comparison functor is taxis #1113 and is open. **Neither a grep nor a
+guard can decide who consumes these four**, because they carry no names — there is nothing to grep
+for and no `#print axioms` line can reach them. **The build decides it.** Left declared but made
+`attribute [local instance]`, so that no module but this one sees them, the library still reaches
+`lake build` exit 0 over **4153** jobs, which is a proof that nothing outside this file consumes
+one; removed outright they leave exactly **two** synthesis failures, both at
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_restrictHom_top`'s two `comp_mem` applications.
+Both runs are at `7a99bfc` with nothing altered but those four declarations, and the instrument
+is recorded as the sixth object of `OkaTest/Axioms.lean`.
 
 Each is a quotation of a declaration that was already on `master`; nothing is proved here. (Those
 three are named in the instances' own vicinity rather than in this docstring, because
 `scripts/guard_coverage.py` reads every backticked repository name under a `## Main results`
 heading as a result this file advertises, and they are another file's.)
 
-**That list named a fibre functor, and that is now measurably wrong.**
+**An earlier form of that list named a fibre functor, and that is now measurably wrong.**
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiberFunctor` below reads the structure map of an
 object and the triangle of a morphism, and **none of the four instances**;
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fintypeFiberFunctor` reads one thing more — the
