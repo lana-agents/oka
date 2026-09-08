@@ -280,17 +280,27 @@ coherence statement for arbitrary complex analytic spaces:
   faithfulness beside it. **This paragraph priced the gap at two obligations — a non-empty target
   and an invertibility of the underlying morphism rather than of the morphism of covers — and
   neither was a price**: the first is removed by closing the empty case rather than paid, and the
-  second is two Mathlib reflections composed. **What is still absent is base change over a general
-  cospan**, for want of a fibre product of analytic spaces over one; the pullback along the
-  inclusion of an open subspace is in `Oka/AnalyticSpace/PullbackOpen.lean`, the pullback along a
-  morphism that is finite étale with Hausdorff source is in
-  `Oka/AnalyticSpace/FiniteEtaleBaseChange.lean`, the fibre product of two local models presented
-  by cut-out data over a third such is in `Oka/AnalyticSpace/CutOutFibreProduct.lean`, and none of
-  those three is enough for an axiom that quantifies over every cospan. **This clause read *for
-  want of pullbacks of analytic spaces*** until `Oka/AnalyticSpace/PullbackOpen.lean` landed, and
-  it then named that one shape, in the words *the pullback along the inclusion of an open subspace
-  is in `Oka/AnalyticSpace/PullbackOpen.lean` and is not enough for an axiom that quantifies over
-  every cospan*, until 2026-09-07, when `Oka/AnalyticSpace/FiniteEtaleBaseChange.lean` added the
+  second is two Mathlib reflections composed. **What is still absent is base change of the *class*
+  `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` over a general cospan**, and no longer the fibre
+  product to base-change along: `Oka/AnalyticSpace/PullbackReduction.lean` gives
+  `ComplexAnalytic.AnalyticSpace.hasPullbacks`, so every cospan of analytic spaces has one, and
+  what is left absent is the class carried across a general square — the absence
+  `Oka/AnalyticSpace/FiniteEtaleOver.lean`'s `## No base change of the class over a general cospan`
+  bullet states, and `Oka/AnalyticSpace/FiniteEtaleBaseChange.lean` carries the class across the
+  square it builds itself and across no other. **The clause read
+  *What is still absent is base change over a general cospan, for want of a fibre product of
+  analytic spaces over one*, and then named three shapes** — the pullback along the inclusion of an
+  open subspace in `Oka/AnalyticSpace/PullbackOpen.lean`, the pullback along a morphism that is
+  finite étale with Hausdorff source in `Oka/AnalyticSpace/FiniteEtaleBaseChange.lean`, and the
+  fibre product of two local models presented by cut-out data over a third such in
+  `Oka/AnalyticSpace/CutOutFibreProduct.lean`, *none of those three enough for an axiom that
+  quantifies over every cospan* — **until 2026-09-08**, when the fourth shape arrived and is over
+  every cospan, so the want the clause named stopped existing and the enumeration stopped being
+  the whole of what the tree has. **It read *for want of pullbacks of analytic spaces*** until
+  `Oka/AnalyticSpace/PullbackOpen.lean` landed, and it then named that one shape, in the words
+  *the pullback along the inclusion of an open subspace is in
+  `Oka/AnalyticSpace/PullbackOpen.lean` and is not enough for an axiom that quantifies over every
+  cospan*, until 2026-09-07, when `Oka/AnalyticSpace/FiniteEtaleBaseChange.lean` added the
   second; it then named those two and no third, in the words *the pullback along the inclusion of
   an open subspace is in `Oka/AnalyticSpace/PullbackOpen.lean`, the pullback along a morphism that
   is finite étale with Hausdorff source is in `Oka/AnalyticSpace/FiniteEtaleBaseChange.lean`, and

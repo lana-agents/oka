@@ -2390,13 +2390,16 @@ step `CategoryTheory.Limits.hasFiniteCoproducts_of_hasCoproducts` also takes —
 itself being unusable here for the reason
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hasColimitsOfShape_discrete` gives.
 
-**What this does not say is that the category is a Galois category.** Base change over a general
-cospan is absent, and so are quotients by finite group actions and the axiom that a monomorphism
-induces an isomorphism onto a direct summand; `## What is not here` says so, and this instance
-shortens that list by a member rather than emptying it. **This sentence read *Base change is
-absent* until `Oka/AnalyticSpace/PullbackOpen.lean` exhibited the pullback along the inclusion of
-an open subspace and carried `isFiniteEtale` across it**; that is not a cospan a Galois category
-quantifies over, so the bullet cited here is narrowed rather than struck, and so is this. -/
+**What this does not say is that the category is a Galois category.** Base change of the class
+over a general cospan is absent, and so are quotients by finite group actions and the axiom that a
+monomorphism induces an isomorphism onto a direct summand; `## What is not here` says so, and this
+instance shortens that list by a member rather than emptying it. **This sentence read *Base change
+is absent* until `Oka/AnalyticSpace/PullbackOpen.lean` exhibited the pullback along the inclusion
+of an open subspace and carried `isFiniteEtale` across it**; that is not a cospan a Galois category
+quantifies over, so the bullet cited here is narrowed rather than struck, and so is this. **And it
+read *Base change over a general cospan is absent* until 2026-09-08**, when
+`Oka/AnalyticSpace/PullbackReduction.lean` supplied the fibre product over exactly such a cospan
+and not the class across it. Both narrowings are the ones the bullet took. -/
 instance FiniteEtaleOver.hasFiniteCoproducts (X : AnalyticSpace.{u}) :
     Limits.HasFiniteCoproducts (FiniteEtaleOver.{u} X) :=
   ⟨fun n ↦

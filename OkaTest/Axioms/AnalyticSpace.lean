@@ -20,11 +20,15 @@ comparison, and the one-sheeted disjoint union; and that the spaces this develop
 **constructs** are **Hausdorff**, which is the one heading below naming a property of a space
 rather than a construction of one; and the **fibre product** — the gluing of the ambient pullbacks
 over a covering family, the limit cone it presents, the reduction of a general cospan to that
-shape, and `CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` itself, which is
-this file's one guard about the category rather than about an object or a morphism and whose own
-heading says why it is guarded here. **Two of the headings below are about morphisms after all** —
-gluing one, and that a morphism to `ℂ^n` is determined by the pullbacks of the coordinates —
-because each is a statement about the space the construction produces; the *classes* of
+shape, and `CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` itself, whose own
+heading says why it is guarded here. **Guards about the category rather than about an object or a
+morphism in it are `ComplexAnalytic.AnalyticSpace.hasCoproducts`, `…hasFiniteCoproducts` and
+`…hasPullbacks`**, the first two under `### The disjoint union is the coproduct`, whose own
+paragraph calls them *the two `Has…` instances*; so the last is the third of three and not the
+only one, and a category-level guard in this file is not an exception the routing recipe had to
+swallow. **Two of the headings below are about morphisms after all** — gluing one, and that a
+morphism to `ℂ^n` is determined by the pullbacks of the coordinates — because each is a statement
+about the space the construction produces; the *classes* of
 morphisms are `OkaTest/Axioms/Morphisms.lean`'s.
 
 **That is a description and not a list, and the headings below are the record**: each names the
@@ -2405,7 +2409,12 @@ one module's eight guards across two files to follow a kind would put a name in
 `OkaTest/Axioms/Morphisms.lean` whose module has no other guard there, which is the shape the
 section headed *The gluing is the fibre product: uniqueness of the lift, the limit cone, and
 `HasPullback`* declined for the opposite reason — it kept two names *out* of this file because
-their modules' other guards were already elsewhere. **A reader looking for
+their modules' other guards were already elsewhere. **And a category-level guard here is not a
+first**: `ComplexAnalytic.AnalyticSpace.hasCoproducts` and `…hasFiniteCoproducts`, under the
+section headed *The disjoint union is the coproduct*, are `CategoryTheory.Limits.HasCoproducts`
+and `CategoryTheory.Limits.HasFiniteCoproducts` of this same category and are guarded in this
+file, by the same module rule and with no tension recorded there. So this section is the third of
+three and the module rule has already decided the question twice. **A reader looking for
 `CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` in that file will not find it,
 and this paragraph is the pointer that stops the search there.**
 
