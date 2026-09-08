@@ -27,11 +27,28 @@ exactly what is still missing.
 ## Why the datum is stated one category down
 
 `ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear` takes an
-`AlgebraicGeometry.LocallyRingedSpace.GlueData`, and **this repository declares no glue-datum
-structure over `ComplexAnalytic.AnalyticSpace`** — `git grep -n 'structure GlueData'` over `Oka/`
-returns nothing, and the only `GlueData` names it declares are
-`ComplexAnalytic.GlueDataCLinear`, a condition **on** a locally-ringed-space datum, and
-`AlgebraicGeometry.LocallyRingedSpace.GlueData.openCover`. So the datum here has
+`AlgebraicGeometry.LocallyRingedSpace.GlueData`, and **this repository declares no glue-datum type
+— not over `ComplexAnalytic.AnalyticSpace` and not over anything else — while every glue datum it
+builds is a term of one of Mathlib's.** Both halves are one walk of the environment at `487ea43`,
+over the declarations whose declaring module begins `Oka`, taking the head of the codomain under
+`Lean.Meta.forallTelescopeReducing`: of the **sixteen** inductive types declared, not one is a glue
+datum, and of the **twenty-one** declarations whose codomain is one, **thirteen** are under `Oka/` —
+ten into `AlgebraicGeometry.LocallyRingedSpace.GlueData`, this file's own
+`ComplexAnalytic.AnalyticSpace.Pullback.gluing` among them, and three into
+`CategoryTheory.GlueData'` — with the other eight under `OkaTest/`.
+`ComplexAnalytic.GlueDataCLinear` is a `def` into `Prop` **on** a locally-ringed-space datum and
+not a datum of its own.
+
+**The instrument is the codomain and not the name**, because a `GlueData` in a declaration's name
+says nothing about what that declaration is. `scripts/DumpOkaDecls.lean` at `487ea43` attributes
+**seventy-five** names containing `GlueData` to modules under `Oka/`, spread over fourteen of
+them — twenty in `Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean`, twelve in
+`Oka/AnalyticSpace/Glue.lean`, eleven in
+`Oka/Geometry/RingedSpace/PresheafedSpace/Double.lean` and ten in
+`Oka/CategoryTheory/GlueData.lean`, which is named for a glue datum and declares ten theorems and
+no type — and every one of the seventy-five is a theorem or a definition. Which of them *build* a
+datum, and into which type, is a question about codomains, and that is the question
+`Lean.Meta.forallTelescopeReducing` was pointed at. So the datum here has
 `AlgebraicGeometry.LocallyRingedSpace` objects and morphisms throughout, and every field of it is
 the image under `ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace` of something the block
 already built:

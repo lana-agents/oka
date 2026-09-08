@@ -1863,11 +1863,12 @@ this file.
 
 **Why this is not a third heading about morphisms.** The module docstring above says **two** of
 the headings below are about morphisms after all, and names them. This is not a third, for the
-reason the section headed *The double of an analytic space along an open* gives for itself: the
-heading is about a space, and `ComplexAnalytic.AnalyticSpace.Pullback.p1`, `…p2` and `…p_comm` are
-part of the construction of that space in the way
-`ComplexAnalytic.AnalyticSpace.doubleFold` is part of the double's — not statements whose subject
-is a morphism and which name no new space, which is what the two it does name have in common.
+reason the section headed *The double of an analytic space along an open, and the complex line
+with two origins* gives for itself: the heading is about a space, and
+`ComplexAnalytic.AnalyticSpace.Pullback.p1`, `…p2` and `…p_comm` are part of the construction of
+that space in the way `ComplexAnalytic.AnalyticSpace.doubleFold` is part of the double's — not
+statements whose subject is a morphism and which name no new space, which is what the two it does
+name have in common.
 A guard here on `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` or on any other *class* of
 morphisms would belong in `OkaTest/Axioms/Morphisms.lean`, and there is none.
 
