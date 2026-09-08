@@ -67,6 +67,15 @@ carry the three together, bundle then.
   datum**, with both of `ComplexAnalytic.AnalyticSpace.glueMorphisms`' hypotheses spelled in the
   datum's own vocabulary — no categorical pullback, and the `ℂ`-linearity stated over the
   structures the members were given.
+- `ComplexAnalytic.AnalyticSpace.glueMorphismsOfOpens`: **the same out of a covering family of
+  *opens* of the source**, where the overlap is `U i ⊓ U j` and the compatibility is an equation
+  between morphisms out of the open subspace on it. This is the third of the three shapes and the
+  one a caller who cut a space into open pieces holds; the other two take an abstract cover and a
+  glue datum.
+- `ComplexAnalytic.AnalyticSpace.ιCLinear`: **the inclusion of a member of a glue datum into the
+  gluing, as a morphism of analytic spaces** — the member being its locally ringed space together
+  with the `ℂ`-algebra structure and the charts the caller already supplied. This is the direction
+  into the gluing; `ComplexAnalytic.AnalyticSpace.glueMorphismsOfGlueData` is the one out of it.
 
 ## Main results
 
@@ -106,6 +115,15 @@ carry the three together, bundle then.
   given one on each member, which with
   `AlgebraicGeometry.LocallyRingedSpace.GlueData.hom_ext` is the universal property in the form a
   caller uses it.
+- `ComplexAnalytic.AnalyticSpace.pullback_compat_of_restrictLE`: **the compatibility
+  `ComplexAnalytic.AnalyticSpace.glueMorphisms` asks for, from the one a caller with a family of
+  opens has** — the categorical pullback of two open-subspace inclusions identified with the
+  subspace on the intersection, which is
+  `AlgebraicGeometry.LocallyRingedSpace.restrictInfIsoPullback`.
+- `ComplexAnalytic.AnalyticSpace.hom_ext_of_opens` and
+  `ComplexAnalytic.AnalyticSpace.existsUnique_glueMorphismsOfOpens`: **two morphisms agreeing on
+  every member of a covering family of opens are equal**, and the universal property that gives
+  with `ComplexAnalytic.AnalyticSpace.ofRestrict_comp_glueMorphismsOfOpens`.
 
 ## What is not here
 
@@ -643,9 +661,16 @@ def glueMorphismsOfGlueData (D : LocallyRingedSpace.GlueData.{u})
 
 `AlgebraicGeometry.LocallyRingedSpace.OpenCover.ι_glueMorphisms` at the datum's cover. The
 statement is about the underlying morphism of locally ringed spaces because that is where the
-member inclusion `ι j` lives: the members of a glue datum are locally ringed spaces carrying
-`ℂ`-algebra structures and are not objects of `ComplexAnalytic.AnalyticSpace`, so there is no
-morphism of analytic spaces here to compose with. -/
+member inclusion `ι j` lives: the members of a glue datum are locally ringed spaces and the datum
+carries no analytic structure on them.
+
+**Until this file gained `ComplexAnalytic.AnalyticSpace.ιCLinear` the sentence above ended
+*"and are not objects of `ComplexAnalytic.AnalyticSpace`, so there is no morphism of analytic
+spaces here to compose with"*, and that is now too strong.** A member *together with* the `α j`
+and `hlm j` a caller of `ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear` already supplied is an
+object of `ComplexAnalytic.AnalyticSpace`, and `ComplexAnalytic.AnalyticSpace.ιCLinear` is the
+inclusion at that object. What stays true is the reason this statement is where it is: `D.f j` is
+given as a morphism of locally ringed spaces and nothing here promotes it. -/
 @[reassoc (attr := simp)]
 theorem ι_glueMorphismsOfGlueData (D : LocallyRingedSpace.GlueData.{u})
     (α : ∀ j, ℂ →+* (D.U j).presheaf.obj (op ⊤)) (hα : GlueDataCLinear D α)
@@ -655,6 +680,126 @@ theorem ι_glueMorphismsOfGlueData (D : LocallyRingedSpace.GlueData.{u})
     (hlin : ∀ j, IsCLinearHom (f j) (α j) Y.algebraMap) (j : D.J) :
     D.toGlueData.ι j ≫ (glueMorphismsOfGlueData D α hα hlm f hf hlin).toLRSHom = f j :=
   D.openCover.ι_glueMorphisms f (D.pullback_condition_of_comm f hf) j
+
+/-! ### Gluing a morphism out of a covering family of opens -/
+
+/-- **The compatibility `ComplexAnalytic.AnalyticSpace.glueMorphisms` asks for, from the one a
+caller holding a family of opens actually has.**
+
+`ComplexAnalytic.AnalyticSpace.glueMorphisms` states agreement over the categorical pullback of
+two members. When the members are open subspaces of `X` that pullback is `X|(Uᵢ ⊓ Uⱼ)`, which is
+an open subspace and therefore something the caller already understands, and
+`AlgebraicGeometry.LocallyRingedSpace.restrictInfIsoPullback` is the identification. This converts
+one to the other, and it is the compatibility step inside
+`AlgebraicGeometry.LocallyRingedSpace.existsUnique_glueMorphisms_of_opens`, with the morphisms
+analytic.
+
+**The proof is a term and not a `rw` chain, deliberately.** `U i : X.Opens` is
+`TopologicalSpace.Opens ↑X.toPresheafedSpace` while
+`AlgebraicGeometry.LocallyRingedSpace.restrictInfIsoPullback` asks for
+`TopologicalSpace.Opens ↑X.toTopCat`; the two are definitionally equal, so the statement
+elaborates, and `rw` then fails on every lemma about the subterm with *the target expression is
+not type-correct under the `instances` transparency level*. That is the seam
+`AlgebraicGeometry.LocallyRingedSpace.liftRestrict`'s docstring records, and the remedy is the
+same: let the goal drive elaboration. -/
+theorem pullback_compat_of_restrictLE {X Y : AnalyticSpace.{u}} {ι : Type u} (U : ι → X.Opens)
+    (φ : ∀ i, X.restrict (U i) ⟶ Y)
+    (hφ : ∀ i j, X.restrictLE (inf_le_left : U i ⊓ U j ≤ U i) ≫ φ i =
+      X.restrictLE (inf_le_right : U i ⊓ U j ≤ U j) ≫ φ j) (i j : ι) :
+    Limits.pullback.fst (X.toLocallyRingedSpace.ofRestrict (U i).isOpenEmbedding)
+        (X.toLocallyRingedSpace.ofRestrict (U j).isOpenEmbedding) ≫ (φ i).toLRSHom =
+      Limits.pullback.snd (X.toLocallyRingedSpace.ofRestrict (U i).isOpenEmbedding)
+        (X.toLocallyRingedSpace.ofRestrict (U j).isOpenEmbedding) ≫ (φ j).toLRSHom :=
+  (cancel_epi (X.toLocallyRingedSpace.restrictInfIsoPullback (U i) (U j)).hom).mp
+    ((LocallyRingedSpace.restrictInfIsoPullback_hom_fst_assoc _ _ _ _).trans
+      ((congrArg AnalyticSpace.Hom.toLRSHom (hφ i j)).trans
+        (LocallyRingedSpace.restrictInfIsoPullback_hom_snd_assoc _ _ _ _).symm))
+
+variable {X Y : AnalyticSpace.{u}} {ι : Type u} (U : ι → X.Opens) (hU : ∀ x : X, ∃ i, x ∈ U i)
+
+/-- **A morphism of analytic spaces glued from morphisms out of the members of a covering family
+of opens.**
+
+`ComplexAnalytic.AnalyticSpace.glueMorphisms` at
+`AlgebraicGeometry.LocallyRingedSpace.openCoverOfOpens`, with the compatibility in the form
+`ComplexAnalytic.AnalyticSpace.pullback_compat_of_restrictLE` supplies and the `ℂ`-linearity by
+projection: each `φ i` is already a morphism of analytic spaces, and the structure
+`ComplexAnalytic.AnalyticSpace.restrict` puts on `X|(U i)` is the one the cover's member carries,
+so `(φ i).isCLinear` is the hypothesis on the nose.
+
+**This is the shape a caller with an open cover of a space has**, as against
+`ComplexAnalytic.AnalyticSpace.glueMorphismsOfGlueData`, which is the shape a caller with a glue
+datum has. Neither is a special case of the other: there the members are abstract spaces and the
+overlaps are the datum's own `V`, here they are subspaces of `X` and the overlap is `U i ⊓ U j`.
+
+The locally-ringed-space statement is
+`AlgebraicGeometry.LocallyRingedSpace.existsUnique_glueMorphisms_of_opens`, which returns the
+morphism and its uniqueness together because nothing downstairs needed the two apart; here they
+are apart because `ComplexAnalytic.AnalyticSpace.Pullback.gluedLift` consumes the construction
+and `ComplexAnalytic.AnalyticSpace.hom_ext_of_opens` separately. -/
+def glueMorphismsOfOpens (φ : ∀ i, X.restrict (U i) ⟶ Y)
+    (hφ : ∀ i j, X.restrictLE (inf_le_left : U i ⊓ U j ≤ U i) ≫ φ i =
+      X.restrictLE (inf_le_right : U i ⊓ U j ≤ U j) ≫ φ j) : X ⟶ Y :=
+  glueMorphisms (LocallyRingedSpace.openCoverOfOpens U hU) (fun i ↦ (φ i).toLRSHom)
+    (fun i j ↦ pullback_compat_of_restrictLE U φ hφ i j) (fun i ↦ (φ i).isCLinear)
+
+/-- **It restricts to the given morphism on each member**, which is what a caller consumes. -/
+@[simp]
+theorem ofRestrict_comp_glueMorphismsOfOpens (φ : ∀ i, X.restrict (U i) ⟶ Y)
+    (hφ : ∀ i j, X.restrictLE (inf_le_left : U i ⊓ U j ≤ U i) ≫ φ i =
+      X.restrictLE (inf_le_right : U i ⊓ U j ≤ U j) ≫ φ j) (i : ι) :
+    X.ofRestrict (U i) ≫ glueMorphismsOfOpens U hU φ hφ = φ i :=
+  forgetToLocallyRingedSpace.map_injective
+    (ι_glueMorphisms (LocallyRingedSpace.openCoverOfOpens U hU) _ _ _ i)
+
+include hU in
+/-- **Two morphisms of analytic spaces agreeing on each member of a covering family of opens are
+equal.**
+
+`AlgebraicGeometry.LocallyRingedSpace.OpenCover.hom_ext` at
+`AlgebraicGeometry.LocallyRingedSpace.openCoverOfOpens`, reflected along the faithful
+`ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace` — the `ℂ`-linearity field is a
+proposition, so equality of the two underlying morphisms is equality of the two. -/
+theorem hom_ext_of_opens {φ ψ : X ⟶ Y}
+    (h : ∀ i, X.ofRestrict (U i) ≫ φ = X.ofRestrict (U i) ≫ ψ) : φ = ψ :=
+  forgetToLocallyRingedSpace.map_injective
+    ((LocallyRingedSpace.openCoverOfOpens U hU).hom_ext _ _
+      (fun i ↦ congrArg AnalyticSpace.Hom.toLRSHom (h i)))
+
+include hU in
+/-- **The universal property**, the two above put together. -/
+theorem existsUnique_glueMorphismsOfOpens (φ : ∀ i, X.restrict (U i) ⟶ Y)
+    (hφ : ∀ i j, X.restrictLE (inf_le_left : U i ⊓ U j ≤ U i) ≫ φ i =
+      X.restrictLE (inf_le_right : U i ⊓ U j ≤ U j) ≫ φ j) :
+    ∃! ψ : X ⟶ Y, ∀ i, X.ofRestrict (U i) ≫ ψ = φ i :=
+  ⟨glueMorphismsOfOpens U hU φ hφ, ofRestrict_comp_glueMorphismsOfOpens U hU φ hφ,
+    fun _ hψ ↦ hom_ext_of_opens U hU
+      (fun i ↦ (hψ i).trans (ofRestrict_comp_glueMorphismsOfOpens U hU φ hφ i).symm)⟩
+
+/-! ### The members of a gluing, as analytic spaces -/
+
+/-- **The `j`-th member of a glue datum includes into the gluing as a morphism of analytic
+spaces.**
+
+The member is `D.U j` carrying the structure `α j` and the charts `hlm j` — which is an object of
+`ComplexAnalytic.AnalyticSpace` and is written as the anonymous constructor rather than through a
+name, since the three fields are exactly the three arguments already in hand. `ℂ`-linearity of
+`ι j` for that structure and the glued one **is**
+`ComplexAnalytic.AnalyticSpace.comapAlgMap_ofGlueDataCLinear_algebraMap`, read pointwise: that
+lemma says the glued structure pulls back along `ι j` to `α j`, and
+`ComplexAnalytic.IsCLinearHom` is that equation stated one constant at a time.
+
+**This is the direction `ComplexAnalytic.AnalyticSpace.glueMorphismsOfGlueData` does not give.**
+That one maps *out of* the gluing and its `ι_…` lemma is stated one category down because the
+composite it names has a locally-ringed-space morphism in the middle. This maps *into* the
+gluing, so a caller can compose analytically on both sides — which is what a lift into a glued
+space needs. -/
+def ιCLinear (D : LocallyRingedSpace.GlueData.{u})
+    (α : ∀ j, ℂ →+* (D.U j).presheaf.obj (op ⊤)) (hα : GlueDataCLinear D α)
+    (hlm : ∀ j, HasLocalModels (D.U j) (α j)) (j : D.J) :
+    (⟨D.U j, α j, hlm j⟩ : AnalyticSpace.{u}) ⟶ ofGlueDataCLinear D α hα hlm :=
+  ⟨D.toGlueData.ι j,
+    fun c ↦ RingHom.congr_fun (comapAlgMap_ofGlueDataCLinear_algebraMap D α hα hlm j) c⟩
 
 end AnalyticSpace
 

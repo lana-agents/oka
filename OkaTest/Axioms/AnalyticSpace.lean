@@ -815,6 +815,18 @@ the gluing induces. **That composition was already being made, at one datum**:
 `ComplexAnalytic.coverGlueMorphisms_eq_glueMorphismsOfGlueData`, and both are guarded in
 `OkaTest/Axioms/Analytification.lean` under that file's cover heading rather than here.
 
+**`ComplexAnalytic.AnalyticSpace.glueMorphismsOfOpens` is the third shape and is not a case of
+either.** It glues out of a covering family of **opens of the source**, where the overlap is
+`U i ⊓ U j` and the compatibility is an equation between morphisms out of the open subspace on it.
+`ComplexAnalytic.AnalyticSpace.pullback_compat_of_restrictLE` is the transport from that form to
+the categorical one, through
+`AlgebraicGeometry.LocallyRingedSpace.restrictInfIsoPullback` under the heading above, and it is
+the analytic reading of the compatibility step inside
+`AlgebraicGeometry.LocallyRingedSpace.existsUnique_glueMorphisms_of_opens`, which is guarded in
+`OkaTest/Axioms/Sheaves.lean`. `ComplexAnalytic.AnalyticSpace.ιCLinear` is guarded here rather
+than under a heading of its own because it is the same file and the same subject read the other
+way round: a morphism **into** a gluing rather than out of one.
+
 **This description opened *Two levels, and the second is not a special case of the first* until
 2026-09-07**, when the analytic gluing out of a datum was added and the opening sentence became a
 count of what the heading held. It was exact when written, and the clause it made survives on
@@ -905,6 +917,48 @@ info: 'ComplexAnalytic.AnalyticSpace.ι_glueMorphismsOfGlueData' depends on axio
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.ι_glueMorphismsOfGlueData
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.pullback_compat_of_restrictLE' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.pullback_compat_of_restrictLE
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.glueMorphismsOfOpens' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.glueMorphismsOfOpens
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.ofRestrict_comp_glueMorphismsOfOpens' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.ofRestrict_comp_glueMorphismsOfOpens
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hom_ext_of_opens' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hom_ext_of_opens
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.existsUnique_glueMorphismsOfOpens' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.existsUnique_glueMorphismsOfOpens
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.ιCLinear' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.ιCLinear
 
 /-! ### The disjoint union of a family of analytic spaces
 
@@ -1843,17 +1897,17 @@ info: 'ComplexAnalytic.AnalyticSpace.toLRSHom_doubleFold' depends on axioms:
 /-! ### The fibre product glued out of a family of opens, and its two projections
 
 `Oka/AnalyticSpace/PullbackGlue.lean`, the whole of it, in the order the declarations are made.
-Fourteen names.
+**Thirty-three names**, of which fourteen are the ones the section opened with at `a401c63`.
 
 The glue datum assembled out of `Oka/AnalyticSpace/PullbackBlock.lean`'s transition data, the
 `ℂ`-linearity that lets it be promoted, the analytic space it glues to, the two projections and
 the square they make commute — together with the two forms of the `t_fac` law the datum's field
 asks for and the two overlap compatibilities the projections are glued from.
 
-**The routing, argued rather than assumed, because the module is new.** All fourteen
-`#print axioms` names below resolve to `Oka/AnalyticSpace/PullbackGlue.lean`, so the recipe beside
-`OkaTest/Axioms.lean`'s routing table asks one question and not fourteen: does *analytic spaces,
-local models, the node* cover that module. It does — the module builds an analytic space,
+**The routing, argued rather than assumed, because the module is new.** Every
+`#print axioms` name below resolves to `Oka/AnalyticSpace/PullbackGlue.lean`, so the recipe beside
+`OkaTest/Axioms.lean`'s routing table asks one question and not one per name: does *analytic
+spaces, local models, the node* cover that module. It does — the module builds an analytic space,
 `ComplexAnalytic.AnalyticSpace.Pullback.glued`, by
 `ComplexAnalytic.AnalyticSpace.ofGlueDataCLinear`, which is the construction the module docstring
 above names when it says *the analytic structure on the gluing*. **The arrangement is
@@ -1870,7 +1924,11 @@ that space in the way `ComplexAnalytic.AnalyticSpace.doubleFold` is part of the 
 statements whose subject is a morphism and which name no new space, which is what the two it does
 name have in common.
 A guard here on `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` or on any other *class* of
-morphisms would belong in `OkaTest/Axioms/Morphisms.lean`, and there is none.
+morphisms would belong in `OkaTest/Axioms/Morphisms.lean`, and there is none. **The lift is tested
+against the same criterion and passes it for the same reason**:
+`ComplexAnalytic.AnalyticSpace.Pullback.gluedLift` is a morphism, and it names
+`ComplexAnalytic.AnalyticSpace.Pullback.glued` — it is the universal property of that space, in
+the same way `…p1` and `…p2` are its projections.
 
 **And it is not `OkaTest/Axioms/Morphisms.lean`'s, even though the module sits on top of one that
 is.** `Oka/AnalyticSpace/PullbackBlock.lean` is guarded there, under
@@ -1881,16 +1939,27 @@ what a module *is*, not what it imports: that one is transition data and states 
 declaration is an analytic space. **Nothing below is a declaration of
 `Oka/AnalyticSpace/PullbackBlock.lean`**, so no name is guarded twice.
 
-**Nothing generated is guarded, and here there is nothing generated to guard.** The push that adds
-these fourteen adds **no** `_assoc` lemma, **no** `.eq_1` equation lemma and **no** match lemma:
-the module's tab-anchored row count in the declaration dump is fourteen, which is the fourteen
-below. Four of them are `def`s — `ComplexAnalytic.AnalyticSpace.Pullback.gluing`, `…glued`,
-`…p1` and `…p2` — and equation lemmas are generated on demand, so this is a statement about the
-environment at this commit and not a prediction about later ones.
+**Nothing generated is guarded, which is this repository's standing arrangement, and here there
+now is something generated.** The push that added the first fourteen added **no** `_assoc` lemma,
+**no** `.eq_1` equation lemma and **no** match lemma, and that sentence is pinned to it: at
+`a401c63` the module's tab-anchored row count in the declaration dump was fourteen, four of them
+`def`s — `ComplexAnalytic.AnalyticSpace.Pullback.gluing`, `…glued`, `…p1` and `…p2`. **The push
+that adds the lift makes the row count thirty-six against thirty-three guards, and the three that
+are not guarded are generated**: `…Pullback.overlapLift_fV_assoc` and `…overlapLift_t_fV_assoc`,
+which the `reassoc` attribute produces from two of the names below, and
+`ComplexAnalytic.AnalyticSpace.restrictLE.congr_simp`, which is a congruence lemma for a
+declaration of `Oka/AnalyticSpace/OpenSubspace.lean` that this module is merely where it was first
+demanded. **No `.eq_1` and no match lemma at either commit.** Equation lemmas are generated on
+demand, so both sentences are statements about the environment at the commit each names and
+neither is a prediction about later ones.
 
-**What is guarded here does not include a fibre product.** No declaration below says any cospan
-of analytic spaces has one, and `CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace`
-does not synthesise at the commit that adds this section. The probe is
+**What is guarded here still does not include a fibre product**, and the lift does not change
+that. `ComplexAnalytic.AnalyticSpace.Pullback.gluedLift` says a competing cone *factors* through
+the gluing and `…gluedLift_p1` and `…gluedLift_p2` say through which legs; **no declaration below
+says the factorisation is unique**, and `CategoryTheory.Limits.IsLimit` needs that. So no
+declaration below says any cospan of analytic spaces has a fibre product, and
+`CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` still does not synthesise —
+re-run at the commit that adds the lift and not carried over. The probe is
 `#synth CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace`, run rather than
 grepped, with the category **positional** — the form
 `Oka/AnalyticSpace/AffineProductOpen.lean` uses, and the form that asks about the class rather
@@ -1993,3 +2062,136 @@ info: 'ComplexAnalytic.AnalyticSpace.Pullback.p_comm' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.Pullback.p_comm
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.ι' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.ι
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.toLRSHom_ι' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.toLRSHom_ι
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.fV_comp_ι' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.fV_comp_ι
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.ι_comp_p1' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.ι_comp_p1
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.ι_comp_p2' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.ι_comp_p2
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.conePreimage' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.conePreimage
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.liftMember' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.liftMember
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.liftMember_fst' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.liftMember_fst
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.liftMember_snd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.liftMember_snd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.overlapLift' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.overlapLift
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.overlapLift_fV' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.overlapLift_fV
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.overlapLift_snd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.overlapLift_snd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.overlapLift_t_fV' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.overlapLift_t_fV
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.conePreimage_covers' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.conePreimage_covers
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.restrictLE_comp_liftMember_comp_ι' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.restrictLE_comp_liftMember_comp_ι
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.gluedLift' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.gluedLift
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.ofRestrict_comp_gluedLift' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.ofRestrict_comp_gluedLift
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.gluedLift_p1' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.gluedLift_p1
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.gluedLift_p2' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.gluedLift_p2

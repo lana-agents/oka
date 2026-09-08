@@ -115,12 +115,28 @@ from linearity of the legs and of the transitions, and both are field projection
 morphisms — `ComplexAnalytic.AnalyticSpace.Hom` carries `ComplexAnalytic.IsCLinearHom` in a field.
 This is the use `Oka/AnalyticSpace/Glue.lean` states that lemma for.
 
-## The index is a family of opens and not a cover
+## Where the covering hypothesis enters, and it is one declaration deep
 
-**No declaration below asks the `U i` to cover `X`**, and that is inherited from the block rather
-than decided here: the gluing of a family of opens is an analytic space whatever the family is.
-Joint surjectivity is what would make `ComplexAnalytic.AnalyticSpace.Pullback.glued` the fibre
-product, and nothing below claims that it is.
+**Everything through `ComplexAnalytic.AnalyticSpace.Pullback.overlapLift_t_fV` is about an
+arbitrary family of opens** — that much is inherited from
+`Oka/AnalyticSpace/PullbackBlock.lean` rather than decided here, since the gluing of a family of
+opens is an analytic space whatever the family is.
+
+**From `ComplexAnalytic.AnalyticSpace.Pullback.conePreimage_covers` on, the `U i` are asked to
+cover `X`**, as the hypothesis `hU`. A lift out of a competing cone has to be defined at every
+point of the cone's apex, and only a cover gives that.
+`ComplexAnalytic.AnalyticSpace.Pullback.conePreimage_covers` is **the only declaration in this
+file that turns `hU` into a cover**; `ComplexAnalytic.AnalyticSpace.Pullback.gluedLift`,
+`…ofRestrict_comp_gluedLift`, `…gluedLift_p1` and `…gluedLift_p2` take `hU` and hand it to that
+one, and nothing else in the file mentions it. **This section said until 2026-09-08 that *no
+declaration below asks the `U i` to cover `X`*, and the lift retired it**; what survives of it is
+the claim about the declarations through
+`ComplexAnalytic.AnalyticSpace.Pullback.overlapLift_t_fV`, which is stated in this section's
+opening paragraph.
+
+**Joint surjectivity is still not enough to make `…glued` the fibre product**, and nothing below
+claims that it is: `CategoryTheory.Limits.IsLimit` needs the *uniqueness* of the lift as well, and
+that is not here — the section headed *What this does not do* says what it would take.
 
 ## Main results
 
@@ -142,6 +158,19 @@ product, and nothing below claims that it is.
   commutation, which is `CategoryTheory.Limits.pullback.condition` at the cospan the family
   presents.
 - `ComplexAnalytic.AnalyticSpace.Pullback.p_comm`: **the square commutes** — `p1 ≫ f = p2 ≫ g`.
+- `ComplexAnalytic.AnalyticSpace.Pullback.ι`: **the `i`-th ambient pullback included in the
+  gluing, as a morphism of analytic spaces**, with `…ι_comp_p1` and `…ι_comp_p2` reading the two
+  projections along it. These are `…ι_p1` and `…ι_p2` with both sides analytic, which
+  `ComplexAnalytic.AnalyticSpace.ιCLinear` is what makes possible.
+- `ComplexAnalytic.AnalyticSpace.Pullback.fV_comp_ι`: **the glue condition with every morphism in
+  it analytic.**
+- `ComplexAnalytic.AnalyticSpace.Pullback.liftMember` and `…overlapLift`: **the pieces of a lift
+  out of a competing cone, and their agreement over a double overlap** — `…liftMember_fst`,
+  `…liftMember_snd`, `…overlapLift_fV`, `…overlapLift_snd` and `…overlapLift_t_fV`.
+- `ComplexAnalytic.AnalyticSpace.Pullback.gluedLift`, `…gluedLift_p1` and `…gluedLift_p2`:
+  **Mathlib's `AlgebraicGeometry.Scheme.Pullback.gluedLift` and its two factorisations, over
+  `ComplexAnalytic.AnalyticSpace`** — a competing cone factors through the gluing. The
+  *uniqueness* of the factorisation is not here.
 
 ## What this does not do
 
@@ -149,10 +178,18 @@ product, and nothing below claims that it is.
 claims it does.** `CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` does not
 synthesise at the commit that adds this file. What is missing, in Mathlib's order:
 
-* **The lift.** `gluedLiftPullbackMap`, `gluedLift` and `pullbackP1Iso`, which take a competing
-  cone and factor it through the gluing. None of it is here and none of it is priced here.
-* **`gluedIsLimit`**, which needs the lift and the uniqueness, and needs the `U i` to **cover**
-  `X`: the family below is not asked to.
+* **The uniqueness of the lift.** `ComplexAnalytic.AnalyticSpace.Pullback.gluedLift` and its two
+  factorisations are now below, so a competing cone *factors*; that the factorisation is unique is
+  not here. **This bullet said until 2026-09-08 that the lift itself was absent and unpriced, and
+  that is what the lift retired.** Mathlib gets uniqueness from `pullbackP1Iso`, which identifies
+  `W ×_X U i` with `U i ×_Z Y` and needs `pullbackFstιToV` and `lift_comp_ι` before it; **none of
+  those three is transcribed and none is priced here.** `gluedLiftPullbackMap` is a different
+  matter: the route below does not use it and will not need it, because the pieces of the lift are
+  open subspaces of the cone's apex rather than categorical pullbacks.
+* **`gluedIsLimit`**, which needs the uniqueness above and nothing else that is missing.
+  `CategoryTheory.Limits.PullbackCone.IsLimit.mk` takes five explicit arguments;
+  `ComplexAnalytic.AnalyticSpace.Pullback.p_comm`, `…gluedLift`, `…gluedLift_p1` and
+  `…gluedLift_p2` are four of them, and the uniqueness is the fifth.
 * **`hasPullback_of_cover`**, and then the reduction of an arbitrary cospan to one where the base
   change is known — which needs covering `Y` and `Z` as well, and whose length is not measured
   anywhere in this repository.
@@ -313,10 +350,16 @@ theorem toBase_comp (j : I) :
 
 /-- **The first projection restricts to `…toBase` on the `j`-th member.**
 
-The statement is about the underlying morphism of locally ringed spaces because that is where the
-member inclusion `ι j` lives — the members of a glue datum are locally ringed spaces and are not
-objects of `ComplexAnalytic.AnalyticSpace`, which is the reason
-`ComplexAnalytic.AnalyticSpace.ι_glueMorphismsOfGlueData` is stated there. -/
+The statement is about the underlying morphism of locally ringed spaces because that is where
+`ComplexAnalytic.AnalyticSpace.ι_glueMorphismsOfGlueData`, which proves it, is stated.
+
+**The reason given here until 2026-09-08 was that the members of a glue datum *are not objects of
+`ComplexAnalytic.AnalyticSpace`*, and that is now too strong** — a member together with the
+structure and charts this datum's caller supplied is one, and
+`ComplexAnalytic.AnalyticSpace.Pullback.ι_comp_p1` below is this statement with both sides
+analytic. This one is kept because it is what
+`ComplexAnalytic.AnalyticSpace.ι_glueMorphismsOfGlueData` gives directly and what
+`ComplexAnalytic.AnalyticSpace.Pullback.p_comm` consumes. -/
 theorem ι_p1 (j : I) :
     (gluing U f g).toGlueData.ι j ≫ (p1 U f g).toLRSHom =
       forgetToLocallyRingedSpace.map (toBase U f g j) :=
@@ -346,5 +389,221 @@ theorem p_comm : p1 U f g ≫ f = p2 U f g ≫ g := by
   have h := congrArg forgetToLocallyRingedSpace.map (toBase_comp U f g j)
   simp only [Functor.map_comp] at h
   exact h
+
+/-! ### The members of the gluing, as analytic morphisms -/
+
+/-- **The `i`-th ambient pullback includes into the gluing, as a morphism of analytic spaces.**
+
+`ComplexAnalytic.AnalyticSpace.ιCLinear` at this datum. The member of the datum at `i` is
+`ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace.obj` of the ambient pullback and the
+structure it is given is that pullback's own, so the object `…ιCLinear` returns is the pullback
+itself and the statement below needs no transport.
+
+**This is what `…ι_p1` and `…ι_p2` could not say.** Those are equations one category down because
+the composite in them has `ι j` in it and `ι j` was only a morphism of locally ringed spaces;
+with this it is a morphism of analytic spaces and
+`ComplexAnalytic.AnalyticSpace.Pullback.ι_comp_p1` says the same thing upstairs. -/
+noncomputable def ι (i : I) : pullback (X.ofRestrict (U i) ≫ f) g ⟶ glued U f g :=
+  ιCLinear (gluing U f g) _ (glueDataCLinear_gluing U f g)
+    (fun j ↦ (pullback (X.ofRestrict (U j) ≫ f) g).hasLocalModels) i
+
+/-- Its underlying morphism of locally ringed spaces is the datum's own inclusion, by `rfl`. -/
+@[simp]
+theorem toLRSHom_ι (i : I) : (ι U f g i).toLRSHom = (gluing U f g).toGlueData.ι i := rfl
+
+/-- **The glue condition, upstairs**: the two ways of including the overlap `V i j` into the
+gluing agree.
+
+`CategoryTheory.GlueData.glue_condition` at this datum, reflected along the
+faithful `ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace`. Every morphism named here is
+analytic, which is the whole point of stating it: it is the hypothesis
+`ComplexAnalytic.AnalyticSpace.glueMorphismsOfOpens` needs when the pieces of a lift are composed
+with `ComplexAnalytic.AnalyticSpace.Pullback.ι`. -/
+theorem fV_comp_ι (i j : I) :
+    fV U f g i j ≫ ι U f g i = t U f g i j ≫ fV U f g j i ≫ ι U f g j := by
+  apply forgetToLocallyRingedSpace.map_injective
+  simp only [Functor.map_comp]
+  exact ((gluing U f g).toGlueData.glue_condition i j).symm
+
+/-- **`ComplexAnalytic.AnalyticSpace.Pullback.ι_p1` with both sides analytic.** -/
+@[simp]
+theorem ι_comp_p1 (i : I) : ι U f g i ≫ p1 U f g = toBase U f g i := by
+  apply forgetToLocallyRingedSpace.map_injective
+  simp only [Functor.map_comp]
+  exact ι_p1 U f g i
+
+/-- **`ComplexAnalytic.AnalyticSpace.Pullback.ι_p2` with both sides analytic.** -/
+@[simp]
+theorem ι_comp_p2 (i : I) :
+    ι U f g i ≫ p2 U f g = pullback.snd (X.ofRestrict (U i) ≫ f) g := by
+  apply forgetToLocallyRingedSpace.map_injective
+  simp only [Functor.map_comp]
+  exact ι_p2 U f g i
+
+/-! ### The lift of a competing cone -/
+
+variable (s : PullbackCone f g)
+
+/-- **The preimage of `U i` under the cone's first leg**, which is the family of opens the lift is
+glued over. -/
+noncomputable abbrev conePreimage (i : I) : (s.pt : AnalyticSpace.{u}).Opens :=
+  (TopologicalSpace.Opens.map (s.fst : s.pt ⟶ X).toLRSHom.base).obj (U i)
+
+/-- **The `i`-th piece of the lift**, `s.pt|(s.fst ⁻¹' U i) ⟶ U i ×_Z Y`.
+
+The two legs are `ComplexAnalytic.AnalyticSpace.restrictHom` — the cone's own first leg restricted
+to the preimage, which is where the *shape* of this construction differs from Mathlib's — and the
+cone's second leg. The square commutes by
+`ComplexAnalytic.AnalyticSpace.restrictHom_fac` and the cone's own condition.
+
+**Mathlib reaches the same morphism through `gluedLiftPullbackMap`, a
+`pullbackRightPullbackFstIso` and a `pullbackSymmetry`.** It has to, because there the pieces of
+the source are the members of `𝒰.pullback₁ s.fst`, which are categorical pullbacks; here they are
+open subspaces of `s.pt` and `…restrictHom` is the map into `U i` on the nose. Nothing in this
+file transcribes `gluedLiftPullbackMap` and nothing needs it. -/
+noncomputable def liftMember (i : I) :
+    s.pt.restrict (conePreimage U f g s i) ⟶ pullback (X.ofRestrict (U i) ≫ f) g :=
+  pullback.lift (restrictHom s.fst (U i))
+    (s.pt.ofRestrict (conePreimage U f g s i) ≫ s.snd)
+    (by rw [← Category.assoc, restrictHom_fac, Category.assoc, Category.assoc, s.condition])
+
+/-- Its first component. -/
+@[simp]
+theorem liftMember_fst (i : I) :
+    liftMember U f g s i ≫ pullback.fst (X.ofRestrict (U i) ≫ f) g = restrictHom s.fst (U i) :=
+  pullback.lift_fst _ _ _
+
+/-- Its second component. -/
+@[simp]
+theorem liftMember_snd (i : I) :
+    liftMember U f g s i ≫ pullback.snd (X.ofRestrict (U i) ≫ f) g =
+      s.pt.ofRestrict (conePreimage U f g s i) ≫ s.snd :=
+  pullback.lift_snd _ _ _
+
+/-- **The double overlap of the lift's pieces, mapped into the block's overlap object.**
+
+`ComplexAnalytic.AnalyticSpace.Pullback.v` at `i j` is `(U i ×_Z Y) ×_X U j`, so a morphism into
+it is a pair: the `i`-th piece of the lift restricted to the overlap, and the cone's first leg
+restricted into `U j`. The square commutes because both composites are the inclusion of the
+double overlap into `s.pt` followed by `s.fst`. -/
+noncomputable def overlapLift (i j : I) :
+    s.pt.restrict (conePreimage U f g s i ⊓ conePreimage U f g s j) ⟶ v U f g i j :=
+  pullback.lift
+    (s.pt.restrictLE (inf_le_left : conePreimage U f g s i ⊓ conePreimage U f g s j ≤ _) ≫
+      liftMember U f g s i)
+    (s.pt.restrictLE (inf_le_right : conePreimage U f g s i ⊓ conePreimage U f g s j ≤ _) ≫
+      restrictHom s.fst (U j))
+    (by
+      rw [Category.assoc, Category.assoc, ← Category.assoc (liftMember U f g s i),
+        liftMember_fst, restrictHom_fac, restrictHom_fac, ← Category.assoc, ← Category.assoc,
+        restrictLE_fac, restrictLE_fac])
+
+/-- **Composed with the member map of the datum it is the `i`-th piece**, by construction. -/
+@[reassoc]
+theorem overlapLift_fV (i j : I) :
+    overlapLift U f g s i j ≫ fV U f g i j =
+      s.pt.restrictLE (inf_le_left : conePreimage U f g s i ⊓ conePreimage U f g s j ≤ _) ≫
+        liftMember U f g s i :=
+  pullback.lift_fst _ _ _
+
+/-- **Its second component**, by construction. -/
+theorem overlapLift_snd (i j : I) :
+    overlapLift U f g s i j ≫ pullback.snd _ _ =
+      s.pt.restrictLE (inf_le_right : conePreimage U f g s i ⊓ conePreimage U f g s j ≤ _) ≫
+        restrictHom s.fst (U j) :=
+  pullback.lift_snd _ _ _
+
+/-- **Composed with the *other* member map, across the transition, it is the `j`-th piece.**
+
+This is the one statement about `ComplexAnalytic.AnalyticSpace.Pullback.overlapLift` that is not
+one of its two components, and it is where
+`ComplexAnalytic.AnalyticSpace.Pullback.t_fst_fst` and `…t_fst_snd` are used:
+the first says the transition sends the `i`-side's `U j`-component to the `j`-side's
+`U j`-component, the second that it leaves the `Y`-component alone. Both components then reduce
+to the inclusion of the double overlap, by
+`ComplexAnalytic.AnalyticSpace.restrictLE_fac` on each side. -/
+@[reassoc]
+theorem overlapLift_t_fV (i j : I) :
+    overlapLift U f g s i j ≫ t U f g i j ≫ fV U f g j i =
+      s.pt.restrictLE (inf_le_right : conePreimage U f g s i ⊓ conePreimage U f g s j ≤ _) ≫
+        liftMember U f g s j := by
+  apply pullback.hom_ext
+  · rw [Category.assoc, Category.assoc, t_fst_fst, overlapLift_snd, Category.assoc,
+      liftMember_fst]
+  · rw [Category.assoc, Category.assoc, t_fst_snd, overlapLift_fV_assoc, Category.assoc,
+      liftMember_snd, liftMember_snd, ← Category.assoc, ← Category.assoc, restrictLE_fac,
+      restrictLE_fac]
+
+variable (hU : ∀ x : X, ∃ i, x ∈ U i)
+
+omit [∀ i, HasPullback (X.ofRestrict (U i) ≫ f) g] in
+include hU in
+/-- **The preimages of a covering family cover.** The only place the hypothesis that the `U i`
+cover `X` is turned into a cover; the module docstring's section
+*Where the covering hypothesis enters, and it is one declaration deep* says which declarations
+take it and where it goes. -/
+theorem conePreimage_covers : ∀ p : s.pt, ∃ i, p ∈ conePreimage U f g s i :=
+  fun p ↦ (hU ((s.fst : s.pt ⟶ X).toLRSHom.base p)).imp fun _ h ↦ h
+
+/-- **The pieces of the lift agree on the double overlaps**, which is the hypothesis
+`ComplexAnalytic.AnalyticSpace.glueMorphismsOfOpens` asks for.
+
+Both sides factor through `ComplexAnalytic.AnalyticSpace.Pullback.overlapLift`, by
+`…overlapLift_fV` and `…overlapLift_t_fV`, and there the two are the two sides of
+`ComplexAnalytic.AnalyticSpace.Pullback.fV_comp_ι` — the glue condition of the datum. **No
+computation with `t'` is involved**: the cocycle law is the datum's business and was discharged
+when it was built. -/
+theorem restrictLE_comp_liftMember_comp_ι (i j : I) :
+    s.pt.restrictLE (inf_le_left : conePreimage U f g s i ⊓ conePreimage U f g s j ≤ _) ≫
+        (liftMember U f g s i ≫ ι U f g i) =
+      s.pt.restrictLE (inf_le_right : conePreimage U f g s i ⊓ conePreimage U f g s j ≤ _) ≫
+        (liftMember U f g s j ≫ ι U f g j) := by
+  rw [← overlapLift_fV_assoc, fV_comp_ι, overlapLift_t_fV_assoc]
+
+/-- **The lift of a competing cone into the gluing** — Mathlib's
+`AlgebraicGeometry.Scheme.Pullback.gluedLift`, over `ComplexAnalytic.AnalyticSpace`.
+
+`ComplexAnalytic.AnalyticSpace.glueMorphismsOfOpens` at the preimage family, whose pieces are
+`ComplexAnalytic.AnalyticSpace.Pullback.liftMember` followed by
+`ComplexAnalytic.AnalyticSpace.Pullback.ι` and whose compatibility is
+`ComplexAnalytic.AnalyticSpace.Pullback.restrictLE_comp_liftMember_comp_ι`.
+
+**This is where the `U i` are first asked to cover `X`.** Everything before it in this file and in
+`Oka/AnalyticSpace/PullbackBlock.lean` is about an arbitrary family of opens; a lift out of `s.pt`
+has to be defined at every point of `s.pt`, and only a cover gives that. -/
+noncomputable def gluedLift : s.pt ⟶ glued U f g :=
+  glueMorphismsOfOpens (conePreimage U f g s) (conePreimage_covers U f g s hU)
+    (fun i ↦ liftMember U f g s i ≫ ι U f g i)
+    (restrictLE_comp_liftMember_comp_ι U f g s)
+
+/-- **The lift restricts to its `i`-th piece**, which is what the two factorisations below
+consume. -/
+@[simp]
+theorem ofRestrict_comp_gluedLift (i : I) :
+    s.pt.ofRestrict (conePreimage U f g s i) ≫ gluedLift U f g s hU =
+      liftMember U f g s i ≫ ι U f g i :=
+  ofRestrict_comp_glueMorphismsOfOpens _ _ _ _ i
+
+/-- **The lift factors the cone's first leg** — Mathlib's
+`AlgebraicGeometry.Scheme.Pullback.gluedLift_p1`.
+
+Checked on each member of the preimage family by
+`ComplexAnalytic.AnalyticSpace.hom_ext_of_opens`: there the lift is its `i`-th piece, `p1` reads
+it by `ComplexAnalytic.AnalyticSpace.Pullback.ι_comp_p1`, and what is left is
+`ComplexAnalytic.AnalyticSpace.restrictHom_fac`. -/
+theorem gluedLift_p1 : gluedLift U f g s hU ≫ p1 U f g = s.fst := by
+  refine hom_ext_of_opens (conePreimage U f g s) (conePreimage_covers U f g s hU) fun i ↦ ?_
+  have h : liftMember U f g s i ≫ pullback.fst (X.ofRestrict (U i) ≫ f) g ≫
+      X.ofRestrict (U i) = s.pt.ofRestrict (conePreimage U f g s i) ≫ s.fst := by
+    rw [← Category.assoc, liftMember_fst, restrictHom_fac]
+  rw [← Category.assoc, ofRestrict_comp_gluedLift, Category.assoc, ι_comp_p1]
+  exact h
+
+/-- **The lift factors the cone's second leg** — Mathlib's
+`AlgebraicGeometry.Scheme.Pullback.gluedLift_p2`. The same check, ending in
+`ComplexAnalytic.AnalyticSpace.Pullback.liftMember_snd` rather than in a restriction square. -/
+theorem gluedLift_p2 : gluedLift U f g s hU ≫ p2 U f g = s.snd := by
+  refine hom_ext_of_opens (conePreimage U f g s) (conePreimage_covers U f g s hU) fun i ↦ ?_
+  rw [← Category.assoc, ofRestrict_comp_gluedLift, Category.assoc, ι_comp_p2, liftMember_snd]
 
 end ComplexAnalytic.AnalyticSpace.Pullback
