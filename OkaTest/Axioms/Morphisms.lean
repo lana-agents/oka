@@ -160,6 +160,23 @@ that statement's heading — `### The third rung: a finite étale morphism is a 
 **This clause was added by the push that added that section**, 2026-09-07, for the reason the
 clause naming `### The terminal object and the product of two complex affine spaces` gives.
 
+And one kind more, and it is neither a class of morphisms nor a routing: statements about a
+morphism's underlying map being — or failing to be — a **separated map**, and about the separation
+axiom on its source that a separated map into a Hausdorff target gives. `IsSeparatedMap` is
+`Mathlib/Topology/SeparatedMap.lean`'s and is none of the classes the opening description lists;
+it is not a field of `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` and a morphism can be finite
+étale without it, which is what
+`ComplexAnalytic.AnalyticSpace.not_isSeparatedMap_doubledLineOver` says. The section is
+`### Separatedness of a cover's structure morphism, and the summand it makes free`, and the clause
+reaches all of its guards except three: `…FiniteEtaleOver.isFiniteEtale_left_of_isSeparatedMap` is
+of the **first** kind, by the opening description's clause naming the cancellations that make a
+morphism of the category of covers finite étale, and
+`…FiniteEtaleOver.injective_base_left_of_mono_of_isSeparatedMap` together with
+`…FiniteEtaleOver.inducesIsoOnDirectSummand_of_mono_of_isSeparatedMap` are of the **fourth**, by
+the clause opening *The fourth kind has a second class, and it is the monomorphisms*. **This
+clause was added by the push that added that section**, for the reason the clause naming
+`### The terminal object and the product of two complex affine spaces` gives.
+
 **Named rather than counted from the end**, which is the repair and not the description. **The
 sentence this replaces called them *the last two***; they stopped being that when two further
 sections were appended past them — and one of those two was written across two lines, so no
@@ -4754,3 +4771,115 @@ info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.inducesIsoOnDirectSummand_o
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.inducesIsoOnDirectSummand_of_mono
+
+/-! ### Separatedness of a cover's structure morphism, and the summand it makes free
+
+`Oka/AnalyticSpace/SeparatedOver.lean`: that a separated morphism into a Hausdorff analytic space
+has Hausdorff source, that a descent map out of a disjoint union is separated as soon as each of
+its restrictions is, the two consequences of `Oka/AnalyticSpace/MonoDirectSummand.lean` with their
+separation axioms supplied by the condition rather than assumed, the direct-summand statement
+itself, the three constructions of the category of covers that stay inside the condition, and the
+object that does not.
+
+**Which clause of this file's description reaches which guard below.** All but three are reached
+by the clause opening *And one kind more*, which is about `IsSeparatedMap` and about the
+separation axiom a separated map into a Hausdorff target gives its source.
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isFiniteEtale_left_of_isSeparatedMap` is of the
+first kind — it is `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isFiniteEtale_left`, one of the
+cancellations the opening description names, with its `[T2Space]` supplied — and
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.injective_base_left_of_mono_of_isSeparatedMap` and
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.inducesIsoOnDirectSummand_of_mono_of_isSeparatedMap`
+are of the fourth kind's second class, carrying `CategoryTheory.Mono` as the three guards of
+`### A monomorphism of covers is injective on points, and the summand that follows` do.
+
+**`Classical.choice` is in every guard below and none of it is this section's subject**, for the
+reason `### The clopen part of a cover` gives: the axiom reaches
+`ComplexAnalytic.AnalyticSpace` itself, so every statement here carries it whatever its own proof
+does.
+
+**`ComplexAnalytic.AnalyticSpace.not_isSeparatedMap_doubledLineOver` is a negation, and it is
+what keeps the rest of this section from being about nothing.**
+`ComplexAnalytic.AnalyticSpace.not_isSeparatedMap_doubledLineOver` says the line with two origins
+over `ℂ¹` — the object `Oka/AnalyticSpace/Double.lean` built — fails the condition every other
+statement here assumes, so the condition is a restriction on the objects of
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver` and not a property they all have. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.t2Space_of_isSeparatedMap' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.t2Space_of_isSeparatedMap
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isSeparatedMap_sigmaDesc' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isSeparatedMap_sigmaDesc
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.t2Space_left_of_isSeparatedMap' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.t2Space_left_of_isSeparatedMap
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isFiniteEtale_left_of_isSeparatedMap' depends
+  on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isFiniteEtale_left_of_isSeparatedMap
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.injective_base_left_of_mono_of_isSeparatedMap'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.injective_base_left_of_mono_of_isSeparatedMap
+
+/--
+info:
+'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.inducesIsoOnDirectSummand_of_mono_of_isSeparatedMap'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.inducesIsoOnDirectSummand_of_mono_of_isSeparatedMap
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isSeparatedMap_id' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isSeparatedMap_id
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isSeparatedMap_sigma' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isSeparatedMap_sigma
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isSeparatedMap_restrictClopen' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isSeparatedMap_restrictClopen
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isSeparatedMap_restrictClopenCompl' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isSeparatedMap_restrictClopenCompl
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.not_isSeparatedMap_doubledLineOver' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.not_isSeparatedMap_doubledLineOver

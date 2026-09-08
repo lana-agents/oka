@@ -82,6 +82,10 @@ fails to synthesise. Everything here is the transport across
 - `AlgebraicGeometry.LocallyRingedSpace.isClosedMap_base_sigmaDesc`: **a descent map out of a
   coproduct of finitely many members is closed as soon as each of them is.** Finiteness of the
   index is used exactly once, to make the union above a finite one.
+- `AlgebraicGeometry.LocallyRingedSpace.isSeparatedMap_base_sigmaDesc`: **a descent map out of a
+  coproduct is separated as soon as each of its restrictions is**, for any index type — two points
+  of one member are separated by that member's hypothesis, and two points of different members by
+  the ranges of their inclusions.
 - `AlgebraicGeometry.LocallyRingedSpace.fiberSigmaDescEquiv`: **the fibre of a descent map is the
   disjoint union of the fibres of the pieces**, as an equivalence rather than as a cardinality —
   so that both finiteness and the count follow from one object.
@@ -409,6 +413,50 @@ theorem isClosedMap_base_sigmaDesc [Finite ι] (h : ∀ i, IsClosedMap (g i).bas
   intro C hC
   rw [image_base_sigmaDesc]
   exact isClosed_iUnion_of_finite fun i ↦ h i _ (hC.preimage (Sigma.ι f i).base.hom.continuous)
+
+/-- **A descent map out of a coproduct is separated as soon as each of its restrictions is.**
+
+`IsSeparatedMap` asks that two *distinct* points with the same image be separated by opens, so the
+proof is the case split on whether the two points come from the same member. Within one member the
+member's own hypothesis separates them downstairs and the inclusion carries the separation up: it
+is an open map and it is injective, which is what keeps the two images open and disjoint. Across
+two members nothing has to be separated at all — the ranges of the two inclusions are already open
+and already disjoint, and that is
+`AlgebraicGeometry.LocallyRingedSpace.eq_of_sigmaι_base_eq`.
+
+**The index type is not asked to be finite**, and neither point of the statement is about all the
+members at once.
+
+`IsSeparatedMap` is available here without a new import: `Mathlib/Topology/IsLocalHomeomorph.lean`,
+which this file already imports, publicly imports `Mathlib/Topology/SeparatedMap.lean`. Upstreaming
+this statement to `Mathlib/Geometry/RingedSpace/LocallyRingedSpace/HasColimits.lean` would cost
+that file **one** module, measured with `scripts/import_cost.py`'s `--target` at that Mathlib
+module and `Mathlib.Topology.SeparatedMap`. -/
+theorem isSeparatedMap_base_sigmaDesc (h : ∀ i, IsSeparatedMap ⇑(g i).base) :
+    IsSeparatedMap ⇑(Sigma.desc g).base := by
+  intro x y hxy hne
+  obtain ⟨i, a, rfl⟩ := exists_sigma_ι_base_eq f x
+  obtain ⟨j, b, rfl⟩ := exists_sigma_ι_base_eq f y
+  by_cases hij : i = j
+  · subst hij
+    have hab : (g i).base a = (g i).base b := by
+      rw [← base_sigmaι_sigmaDesc f g i a, ← base_sigmaι_sigmaDesc f g i b]
+      exact hxy
+    obtain ⟨u, v, hu, hv, hau, hbv, huv⟩ := h i a b hab fun hab' ↦ hne (by rw [hab'])
+    refine ⟨(Sigma.ι f i).base '' u, (Sigma.ι f i).base '' v,
+      (sigmaι_isOpenImmersion f i).base_open.isOpenMap _ hu,
+      (sigmaι_isOpenImmersion f i).base_open.isOpenMap _ hv,
+      ⟨a, hau, rfl⟩, ⟨b, hbv, rfl⟩, ?_⟩
+    rw [Set.disjoint_left]
+    rintro _ ⟨p, hp, rfl⟩ ⟨q, hq, hqp⟩
+    obtain rfl := sigmaι_base_injective f i hqp
+    exact Set.disjoint_left.1 huv hp hq
+  · refine ⟨Set.range ⇑(Sigma.ι f i).base, Set.range ⇑(Sigma.ι f j).base,
+      (sigmaι_isOpenImmersion f i).base_open.isOpen_range,
+      (sigmaι_isOpenImmersion f j).base_open.isOpen_range, ⟨a, rfl⟩, ⟨b, rfl⟩, ?_⟩
+    rw [Set.disjoint_left]
+    rintro _ ⟨p, rfl⟩ ⟨q, hq⟩
+    exact hij (eq_of_sigmaι_base_eq f hq).symm
 
 /-- **The fibre of a descent map is the disjoint union of the fibres of the pieces.**
 
