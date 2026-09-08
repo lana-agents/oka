@@ -109,13 +109,20 @@ ascribes it in a `haveI` rather than a key being added to the instance graph.
   `[∀ i, HasPullback (X.ofRestrict (U i) ≫ f) g]`, inherited from
   `Oka/AnalyticSpace/PullbackBlock.lean` — and nothing here produces such a family for a general
   `f` and `g`. `#synth CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` fails at
-  the commit that adds this file, run with the category positional and not grepped.
-* **It does not do the reduction of a general cospan**, which is what would produce that family:
-  Mathlib covers `X` by affines, then `Y`, then `Z`, and takes three theorems and two symmetry
-  arguments to do it. The analytic analogue would cover by local models, and its length is not
-  measured anywhere in this repository. **The three declarations named as still owed by
-  `Oka/AnalyticSpace/PullbackGlue.lean`'s *What this does not do* are the ones below; the fourth
-  item, the reduction, is untouched by this file and stays owed.**
+  the commit that adds this file, run with the category positional and not grepped. **It succeeds
+  from 2026-09-08**, at `Oka/AnalyticSpace/PullbackReduction.lean`, which is what produces the
+  family; the record above is a statement about the commit it names and this file still produces
+  none.
+* **It does not do the reduction of a general cospan**, which is what would produce that family.
+  **This bullet said that Mathlib covers `X` by affines, then `Y`, then `Z`, taking three theorems
+  and two symmetry arguments, that the analytic analogue would cover by local models, and that its
+  length is not measured anywhere in this repository; and it said that the fourth item
+  `Oka/AnalyticSpace/PullbackGlue.lean`'s *What this does not do* names — the reduction — stays
+  owed. That stood until 2026-09-08.** `Oka/AnalyticSpace/PullbackReduction.lean` is the
+  reduction and it is neither three theorems nor two symmetries: **six** declarations answering to
+  Mathlib's six, plus `ComplexAnalytic.IsPresentedLocalModel` and the lemma producing one at every
+  point. **The three declarations named as still owed by that section are the ones below**, and
+  the fourth is owed no longer.
 * **It states no `CategoryTheory.IsPullback`.** `…gluedIsLimit` is a
   `CategoryTheory.Limits.IsLimit` of the cone `…p_comm` presents, which is what
   `CategoryTheory.Limits.HasPullback` consumes; the `CategoryTheory.IsPullback` spelling would be
@@ -345,10 +352,16 @@ include hU in
 
 **The hypotheses are the point and they are two.** The `U i` cover `X`, which is `hU`; and the
 base change of `g` along each `Uᵢ ⟶ X ⟶ Z` already exists, which is the instance hypothesis this
-file inherits from `Oka/AnalyticSpace/PullbackBlock.lean`. **Neither is discharged anywhere in
-this repository for a general cospan**, so this does not give
-`CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` and the module docstring's
-*What this does not do* says what would. -/
+file inherits from `Oka/AnalyticSpace/PullbackBlock.lean`. **Neither is discharged in this file**,
+so this does not on its own give
+`CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace`.
+
+**This paragraph said *Neither is discharged anywhere in this repository for a general cospan*
+until 2026-09-08**, when `Oka/AnalyticSpace/PullbackReduction.lean` discharged both — the family
+being the preimages of a covering family of opens of the base, and the instance hypothesis being
+`ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict_comp`. That file is this theorem's first and
+only consumer, and it is what the module docstring's *What this does not do* said would give the
+class. -/
 theorem hasPullback_of_cover : HasPullback f g :=
   ⟨⟨⟨_, gluedIsLimit U f g hU⟩⟩⟩
 

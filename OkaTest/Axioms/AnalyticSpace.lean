@@ -23,6 +23,25 @@ gluing one, and that a morphism to `ℂ^n` is determined by the pullbacks of the
 because each is a statement about the space the construction produces; the *classes* of
 morphisms are `OkaTest/Axioms/Morphisms.lean`'s.
 
+**The fibre product is this file's newest kind of construction and it has two headings, the last
+two below.** The first, *The gluing is the fibre product: uniqueness of the lift, the limit cone,
+and `HasPullback`*, glues the ambient pullbacks over a covering family and makes the limit cone;
+the second, *The reduction to local models: every cospan has a fibre product*, reduces an
+arbitrary cospan to local models and ends at
+`CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace`. **The second heading's eight
+guards partition into four kinds**: **two** are the local-model vocabulary
+`ComplexAnalytic.IsPresentedLocalModel` and
+`ComplexAnalytic.exists_isPresentedLocalModel_restrict`; **three** are the existence of a fibre
+product under a hypothesis on how many of the cospan's three objects are local models; **one** is
+the instance hypothesis the covering theorem asks for at a member of a cover of the base; and
+**two** are `ComplexAnalytic.AnalyticSpace.hasPullback` and
+`ComplexAnalytic.AnalyticSpace.hasPullbacks`. Two, three, one and two is eight, each name in
+exactly one kind, and eight is that section's guard count. **Neither heading is about morphisms**
+— every guard under them is the existence of a limit or a property of a space, and a guard on a
+*class* of morphisms would belong in `OkaTest/Axioms/Morphisms.lean` — so the *two of the headings
+below are about morphisms after all* above is unmoved by either. This clause was added by the push
+that added the second heading.
+
 **That is a description and not a list, and the headings below are the record**: each names the
 statement its assertions defend, and the recipe beside `OkaTest/Axioms.lean`'s routing table
 resolves them to modules. The stance is `OkaTest/Axioms/Sheaves.lean`'s and
@@ -1979,7 +1998,14 @@ grepped, with the category **positional** — the form
 `Oka/AnalyticSpace/AffineProductOpen.lean` uses, and the form that asks about the class rather
 than about an object. `…hasPullback_of_cover` does not make it synthesise because it asks for a
 covering family along which the base change is already known, and nothing produces one for a
-general cospan. -/
+general cospan.
+
+**The probe moved on 2026-09-08 and this paragraph is pinned rather than retired.** It succeeds at
+the commit that adds the last heading of this file, *The reduction to local models: every cospan
+has a fibre product*, whose section records the run and the control; the sentence above is a
+statement about the two commits it names and both records stand. What made it move is the family
+this paragraph says nothing produces: `ComplexAnalytic.AnalyticSpace.hasPullback` takes the
+preimages of a covering family of opens of the base. -/
 
 /--
 info: 'ComplexAnalytic.AnalyticSpace.Pullback.t'_fac' depends on axioms:
@@ -2275,10 +2301,17 @@ prediction about later ones.
 **What is guarded here does include a fibre product, and it is the first heading in this file of
 which that is true.** `ComplexAnalytic.AnalyticSpace.Pullback.hasPullback_of_cover` says a cospan
 has one — under two hypotheses, that the `U i` cover `X` and that the base change of `g` along
-each `U i ⟶ X ⟶ Z` already exists. **Neither hypothesis is discharged anywhere in this
-repository for a general cospan**, so
-`CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` still does not synthesise; the
-section above records the probe and it was re-run at this commit. -/
+each `U i ⟶ X ⟶ Z` already exists. **Neither hypothesis is discharged by this section**, so
+nothing here gives `CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace`; the
+section above records the probe and it was re-run at this commit.
+
+**This paragraph said *Neither hypothesis is discharged anywhere in this repository for a general
+cospan* and that the class *still does not synthesise*, until 2026-09-08**, when the section below
+discharged both and the class became an instance. It is rescoped to this section rather than
+recounted, and checked that way: none of the nine names above produces a covering family, and the
+two that would need one — `…gluedIsLimit` and `…hasPullback_of_cover` — take it as a hypothesis.
+**It is still true that this section's own heading is the first in this file under which a fibre
+product is guarded**; the section below is the second and the last. -/
 
 /--
 info: 'ComplexAnalytic.AnalyticSpace.Pullback.range_base_ι' depends on axioms:
@@ -2342,3 +2375,140 @@ info: 'ComplexAnalytic.AnalyticSpace.Pullback.hasPullback_of_cover' depends on a
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.Pullback.hasPullback_of_cover
+
+
+/-! ### The reduction to local models: every cospan has a fibre product
+
+`Oka/AnalyticSpace/PullbackReduction.lean`, the whole of it, in the order the declarations are
+made. **Eight names**, and the module is new.
+
+The predicate saying an analytic space **is** the space a cut-out datum presents, the lemma
+producing one at every point, the three covering steps, the instance hypothesis the covering
+theorem asks for at one member of a cover of the base, and the two instances that make the
+category one with pullbacks.
+
+**The synthesis probe moved and this is the section that records it.**
+`#synth CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` **succeeds** at the
+commit that adds this section and returns `ComplexAnalytic.AnalyticSpace.hasPullbacks`, run rather
+than grepped, with the category **positional** — the form that asks about the class and not about
+an object, which is the false alarm taxis #1821 records — and with `example : False := trivial` at
+the foot of the probe file, which **errored**, so the green result cannot have come from a file
+that never elaborated. Every section of this file that says the probe fails is pinned to the
+commit it names; the two nearest are rescoped by this push and neither is struck.
+
+**The routing, argued rather than assumed, because the module is new.** Every `#print axioms` name
+below resolves to `Oka/AnalyticSpace/PullbackReduction.lean`, so the recipe beside
+`OkaTest/Axioms.lean`'s routing table asks one question and not one per name: does *analytic
+spaces, local models, the node* cover that module. It does, and on the criterion the two sections
+above use. `ComplexAnalytic.IsPresentedLocalModel` is a property of an analytic *space* and its
+content is that the space is a local model on the nose; the six statements after it assert that a
+fibre product — an analytic space — exists over a given cospan. **None of the eight is a morphism
+or a statement about a class of morphisms**, so this is not a third heading about morphisms, on
+the criterion the module docstring at the head of this file states and the two sections above
+apply. A guard on `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` or on any other class of morphisms
+would belong in `OkaTest/Axioms/Morphisms.lean`, and there is none here — nor does this push add
+one there, or anywhere: `OkaTest/Axioms/Morphisms.lean` is untouched by it.
+
+**The eight guards partition into four kinds, and the counts are of a partition and not of a
+sum.** Two are the local-model vocabulary — `ComplexAnalytic.IsPresentedLocalModel` and
+`ComplexAnalytic.exists_isPresentedLocalModel_restrict`. Three are the existence of a fibre
+product under a hypothesis on how many of the cospan's three objects are local models —
+`ComplexAnalytic.AnalyticSpace.hasPullback_of_isPresentedLocalModel` at all three,
+`…hasPullback_of_isPresentedLocalModel_right` at two, and
+`…hasPullback_of_isPresentedLocalModel_base` at one. One is the instance hypothesis
+`ComplexAnalytic.AnalyticSpace.Pullback.hasPullback_of_cover` asks for, at one member of a
+covering family of the base — `ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict_comp`. Two are
+the instances — `ComplexAnalytic.AnalyticSpace.hasPullback` and
+`ComplexAnalytic.AnalyticSpace.hasPullbacks`. **Two, three, one and two is eight**, each name in
+exactly one kind, and eight is the number of `#print axioms` commands below.
+
+**Both instances are named, and Mathlib's two counterparts are not.** Lean gives Mathlib's
+`AlgebraicGeometry.Scheme.Pullback.instHasPullback` and
+`AlgebraicGeometry.Scheme.Pullback.instHasPullbacks`; an anonymous instance cannot be guarded by
+the name its author chose, and the four anonymous `MorphismProperty` instances
+`OkaTest/Axioms/Morphisms.lean` records are the precedent for what that costs. **Nothing of this
+push is unguarded for that reason**, and the check is anchored at `^#print axioms` rather than run
+against the bare names, for the reason `OkaTest/Axioms/Morphisms.lean`'s own `_assoc` paragraph
+gives: prose quoting a name would match a bare-name grep and does not match an anchored one.
+
+**Nothing generated is guarded and here there is nothing generated.** The module's tab-anchored
+row count in `scripts/DumpOkaDecls.lean`'s output is **eight** against eight guards: no `_assoc`
+lemma, no `.eq_1` equation lemma, no match lemma and no congruence lemma —
+`ComplexAnalytic.IsPresentedLocalModel` is a `def` and its equation lemma is generated on demand,
+so this is a statement about the environment at the commit that adds this section and not a
+prediction about later ones. **The eight rows and the eight guards range over the same set**,
+every guarded name being declared in that module, so the difference of the two counts is nought
+and is a difference of comparable things.
+
+**No `info:` line below is longer than a hundred columns**, the longest being
+`ComplexAnalytic.AnalyticSpace.hasPullback_of_isPresentedLocalModel_right`'s at ninety-nine, so
+none of the eight is wrapped and the line-based `#print axioms\s+(\S+)` scan `OkaTest/Axioms.lean`
+warns about reads all eight of this section's guards. The section above had to record one such
+line; this one has none, and the naming of
+`ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict_comp` is where that was decided — its own
+docstring says so.
+
+**What is guarded here is the last thing between this repository and a category with pullbacks,
+and after it that absence is gone.** What is *not* here is any identification of the fibre
+product: `CategoryTheory.Limits.HasPullback` is `Prop`-valued, the two instances below are proofs
+of it, and no guard here says what the carrier or the structure sheaf of
+`CategoryTheory.Limits.pullback f g` is. Nor is base change of a class anywhere below —
+`ComplexAnalytic.AnalyticSpace.IsFiniteEtale` surviving a general base change does not follow from
+a square existing, and `Oka/AnalyticSpace/FiniteEtaleOver.lean`'s **No base change over a general
+cospan** bullet is what still records it. -/
+
+/--
+info: 'ComplexAnalytic.IsPresentedLocalModel' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.IsPresentedLocalModel
+
+/--
+info: 'ComplexAnalytic.exists_isPresentedLocalModel_restrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.exists_isPresentedLocalModel_restrict
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hasPullback_of_isPresentedLocalModel' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hasPullback_of_isPresentedLocalModel
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hasPullback_of_isPresentedLocalModel_right' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hasPullback_of_isPresentedLocalModel_right
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hasPullback_of_isPresentedLocalModel_base' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hasPullback_of_isPresentedLocalModel_base
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict_comp
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hasPullback' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hasPullback
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hasPullbacks' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hasPullbacks

@@ -130,9 +130,13 @@ second notion resting on this one.
 
 **Base change along a general morphism is absent, and along two particular shapes of leg it is
 elsewhere in this repository.** `AlgebraicGeometry.IsFinite`'s `IsStableUnderBaseChange`
-quantifies over every cospan and has no analogue below, because a fibre product over a general
-cospan is what `Oka/AnalyticSpace/PullbackOpen.lean`'s header prices and does not build. What that
-file does build is the pullback along the inclusion of an open subspace, and
+quantifies over every cospan and has no analogue below. **The reason given here was that a fibre
+product over a general cospan is what `Oka/AnalyticSpace/PullbackOpen.lean`'s header prices and
+does not build, and that reason is retired: on 2026-09-08
+`Oka/AnalyticSpace/PullbackReduction.lean` built one**, so the absence below is an absence of a
+proof that finiteness survives a base change and not of the square to carry it across. What
+`Oka/AnalyticSpace/PullbackOpen.lean` does build is the pullback along the inclusion of an open
+subspace, and
 `ComplexAnalytic.AnalyticSpace.isFinite_restrictHom` there is finiteness carried across it, with
 no hypothesis on the open subset. **The words `and along the inclusion of an open subspace it is
 here` closed the sentence above until 2026-09-07**, when

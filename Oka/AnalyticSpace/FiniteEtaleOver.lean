@@ -428,7 +428,7 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   functor does not.
 
   **What is absent is the Galois category itself.** Its axioms need the base change the
-  **No pullback over a general cospan, so no base change** bullet below says this category has
+  **No base change over a general cospan** bullet below says this category has
   not — **and this
   sentence used to stop there, which read as though base change were the whole of what they
   need.** It is not. **The terminal object is one of the axioms and it is here now:**
@@ -554,22 +554,48 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   composes them here — which was true — and **declined to say what composing them would cost**.
   Declining was right, and the answer was one lemma about locally ringed spaces that mentions
   neither covers nor analytic spaces.
-* **No pullback over a general cospan, so no base change.**
-  `CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` does not synthesise, so
+* **No base change over a general cospan.**
   `CategoryTheory.MorphismProperty.IsStableUnderBaseChange` — which quantifies over every cospan —
-  is not statable for `isFiniteEtale`.
+  is not proved for `ComplexAnalytic.AnalyticSpace.isFiniteEtale`, and nothing in this repository
+  carries the class across a square both of whose legs are arbitrary.
 
-  **The last clause of the sentence above read `"and the pullback of a cover along an arbitrary
-  morphism of the base, which is how a Galois category's fibre functor is usually built, is not
-  available to it"` until 2026-09-07**, when `Oka/AnalyticSpace/FiniteEtaleBaseChange.lean`
-  supplied exactly that: `ComplexAnalytic.AnalyticSpace.hasPullback_of_isFiniteEtale` is a
+  **This bullet was titled *No pullback over a general cospan, so no base change* and its opening
+  sentence said that `CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` does not
+  synthesise, and hence that `CategoryTheory.MorphismProperty.IsStableUnderBaseChange` — which
+  quantifies over every cospan — is *not statable* for
+  `ComplexAnalytic.AnalyticSpace.isFiniteEtale`, until 2026-09-08**, when
+  `Oka/AnalyticSpace/PullbackReduction.lean` reduced a general cospan to local models and made that
+  class synthesise: `ComplexAnalytic.AnalyticSpace.hasPullbacks` is the instance and
+  `ComplexAnalytic.AnalyticSpace.hasPullback` the fibre product under it. The premise is retired
+  and the title with it. **The inference the retired sentence drew is separately wrong, and that is
+  a correction rather than one of this repository's dated records**: at the Mathlib revision this
+  repository pins, `CategoryTheory.MorphismProperty.IsStableUnderBaseChange` is a class over
+  `CategoryTheory.IsPullback` squares and asks for no
+  `CategoryTheory.Limits.HasPullback` instance at all, which is why
+  `Oka/AnalyticSpace/FiniteEtaleBaseChange.lean` can say of
+  `ComplexAnalytic.AnalyticSpace.isFiniteEtale_pullback_snd_of_isFiniteEtale` that it writes the
+  base-change statement *in that spelling* while this bullet called the spelling unstatable. Two
+  sentences of this repository disagreeing about the same class is what the retitle settles.
+  **What survives is the absence itself, and it is now an absence of a proof and not of a
+  statement.** The **five** sentences that cite this bullet by its heading — the four in this file
+  enumerated in the paragraph below and one in `Oka/AnalyticSpace/FiniteEtaleBaseChange.lean` — are
+  re-quoted to the new title by the same push and are otherwise unchanged; each cites the bullet
+  for the absence of base change, which is what it still asserts, and none of them cited it for the
+  absence of a fibre product.
+
+  **The last clause of the retired sentence quoted above read `"and the pullback of a cover along
+  an arbitrary morphism of the base, which is how a Galois category's fibre functor is usually
+  built, is not available to it"` until 2026-09-07**, when
+  `Oka/AnalyticSpace/FiniteEtaleBaseChange.lean` supplied exactly that:
+  `ComplexAnalytic.AnalyticSpace.hasPullback_of_isFiniteEtale` is a
   `CategoryTheory.Limits.HasPullback` instance at every cospan whose first leg is finite étale
   with Hausdorff source, and
   `ComplexAnalytic.AnalyticSpace.isFiniteEtale_pullback_snd_of_isFiniteEtale` carries the class
-  across it. **What that does not reach is this bullet's subject, and the heading is unchanged
-  because of it**: `IsStableUnderBaseChange` quantifies over cospans whose finite étale leg has an
-  arbitrary source, and a morphism of `FiniteEtaleOver X` is not known to be finite étale without
-  `[T2Space]` of its target — which is taxis #1772's remaining half and is not this bullet's.
+  across it. **What that does not reach is this bullet's subject, and that push left the heading
+  alone because of it**: `IsStableUnderBaseChange` quantifies over cospans whose finite étale leg
+  has an arbitrary source, and a morphism of `FiniteEtaleOver X` is not known to be finite étale
+  without `[T2Space]` of its target — which is taxis #1772's remaining half and is not this
+  bullet's.
   **The four sentences in this file that cite this bullet by its heading are unaffected.** Two
   are elsewhere in this module docstring — the one opening *"What is absent is the Galois category
   itself"* and the one saying that what separates two connected covers is the monodromy *action* —
@@ -590,7 +616,7 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   spelling of its conclusion. Both are declarations, so `scripts/check_docstring_names.py`
   resolves either name and only a read of the two docstrings separates them; the count of four is
   unaffected, since the citation is the same sentence under either name.
-  The heading is unchanged for the same reason.
+  That push left the heading alone for the same reason.
 
   **This bullet read *No pullbacks, so no base change* and said that no `HasPullback` instance for
   analytic spaces is available and that none is exhibited or claimed.** That was exact until
@@ -632,7 +658,7 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   already carry — over a preconnected base and a Hausdorff total space its size *is* the degree,
   by `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.card_fiber` — and what separates is the
   monodromy *action* on it, which needs a fundamental group nothing here connects to a cover and
-  the base change the **No pullback over a general cospan, so no base change** bullet above says
+  the base change the **No base change over a general cospan** bullet above says
   this category has not.
 
   **What the witness in `OkaTest/FiniteEtaleOver.lean` settles is that the functor's values are
@@ -1802,7 +1828,7 @@ restricted functor, **and so does
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.reflectsIsomorphisms_fintypeFiberFunctor` below**,
 which is conservativity — the axiom that class asks of a fibre functor where faithfulness is the
 thing it hands back. **Base change over a general cospan is still absent**, for the reason the
-`## No pullback over a general cospan, so no base change` bullet gives, and nothing here bears on
+`## No base change over a general cospan` bullet gives, and nothing here bears on
 it. -/
 instance FiniteEtaleOver.faithful_fintypeFiberFunctor {X : AnalyticSpace.{u}}
     [PreconnectedSpace (X : Type u)] (x : X) :
@@ -1932,8 +1958,8 @@ point by `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.uniqueFiberId`, and
 **Preservation of the terminal object is a Galois-category axiom on the fibre functor**, in
 `Mathlib/CategoryTheory/Galois/Basic.lean`, whose namespace is not in this repository's import
 closure and so cannot be cited by name here. **It is one field of that structure and this instance
-does not supply the others**; `## What is not here`'s **No pullback over a general cospan, so no
-base change** bullet is still exactly true of the cospans a Galois category quantifies over, and
+does not supply the others**; `## What is not here`'s **No base change over a general cospan**
+bullet is still exactly true of the cospans a Galois category quantifies over, and
 this instance bears on neither quotients by finite group actions nor the axiom that a monomorphism
 induces an isomorphism onto a direct summand. **That bullet was titled *No pullbacks, so no base
 change* and this sentence called it exactly true**, which stopped being so when

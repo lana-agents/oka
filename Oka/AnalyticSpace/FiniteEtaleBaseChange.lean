@@ -14,7 +14,7 @@ complex analytic spaces. Then the fibre product `E ×_B B'` exists, its projecti
 finite étale again, and the square is a pullback in `ComplexAnalytic.AnalyticSpace`.
 
 `Oka/AnalyticSpace/FiniteEtaleOver.lean` records the absence of this base change in its
-`## What is not here` bullet **No pullback over a general cospan, so no base change**, and again in
+`## What is not here` bullet **No base change over a general cospan**, and again in
 the docstring of `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fintypeFiberFunctor`. **The bullet
 is narrowed by this file and is not narrowed to nothing, and this file does not make that category
 a Galois category.** Those axioms quantify over cospans of morphisms *of covers*, and a morphism of
@@ -98,6 +98,14 @@ for the square to be a pullback, because the space is built out of the covering 
   commit that adds this file, on my own run, with the category positional so that it is fixed by
   the statement and not by a named argument. Gluing — taxis #1820's rung 3 — is what would close
   that, and this file goes around it rather than through it.
+
+  **The probe above is pinned to the commit that adds this file and is not a prediction about
+  later ones; from 2026-09-08 it succeeds**, `Oka/AnalyticSpace/PullbackReduction.lean` having
+  closed the rung this bullet names and made `ComplexAnalytic.AnalyticSpace.hasPullbacks` an
+  instance. **The bullet itself is unchanged and nothing in it is retired**: no statement below is
+  that instance, every one of them still has a finite étale leg in its cospan, and the sentence
+  citing `Oka/AnalyticSpace/FiniteEtaleOver.lean`'s bullet at the head of this file is re-quoted to
+  that bullet's new title by the same push and says the same thing.
 * **`[T2Space E]` is not removed and nothing here tries.** It is Mathlib's hypothesis in the
   criterion that turns a proper local homeomorphism into a covering map, and
   `Oka/AnalyticSpace/CoveringMap.lean` records why.

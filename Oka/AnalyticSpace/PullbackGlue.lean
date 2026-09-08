@@ -182,7 +182,11 @@ it did not close.
 claims it does.** `CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` does not
 synthesise at the commit that adds this file, and **it still does not at the commit that adds
 `Oka/AnalyticSpace/PullbackLimit.lean`**, where the probe was re-run rather than carried over.
-What is missing here, in Mathlib's order, with the three items that have since been supplied
+**It does at the commit that adds `Oka/AnalyticSpace/PullbackReduction.lean`, 2026-09-08**, where
+it was re-run a third time and found `ComplexAnalytic.AnalyticSpace.hasPullbacks`. The sentence
+opening this paragraph is not retired by that — *below* is this file, and nothing below it claims
+the instance — and the two dated records above are statements about the commits they name.
+What is missing here, in Mathlib's order, with the four items that have since been supplied
 elsewhere marked as such:
 
 * **The uniqueness of the lift.** `ComplexAnalytic.AnalyticSpace.Pullback.gluedLift` and its two
@@ -208,10 +212,15 @@ elsewhere marked as such:
   `ComplexAnalytic.AnalyticSpace.Pullback.p_comm`, `…gluedLift`, `…gluedLift_p1`, `…gluedLift_p2`
   and the uniqueness.
 * **`hasPullback_of_cover`** is `ComplexAnalytic.AnalyticSpace.Pullback.hasPullback_of_cover`
-  there, **and the reduction of an arbitrary cospan to one where the base change is known is
-  not** — it needs covering `Y` and `Z` as well, and its length is still not measured anywhere in
-  this repository. That item is the one of the four this file named which nothing has yet
-  supplied.
+  there, and the reduction of an arbitrary cospan to one where the base change is known is
+  `Oka/AnalyticSpace/PullbackReduction.lean`. **This bullet said until 2026-09-08 that the
+  reduction is *not* supplied, that it needs covering `Y` and `Z` as well, that its length is
+  still not measured anywhere in this repository, and that it is the one of the four items this
+  file named which nothing has yet supplied.** The first and the last are retired. **The middle
+  clause was right and is now answered**: the reduction covers `X`, then `Y`, then the base, and
+  it is eight declarations — six matching Mathlib's six, plus
+  `ComplexAnalytic.IsPresentedLocalModel` and the lemma that produces one at every point.
+  **All four items this file named are supplied.**
 
 `Oka/AnalyticSpace/FiniteEtaleOver.lean`'s bullet on base change is **not** falsified by this
 file: base change of the class `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` across a general

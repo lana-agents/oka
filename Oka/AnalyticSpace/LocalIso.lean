@@ -93,26 +93,35 @@ the rung.
   arbitrary second factor, by `isProperMap_of_comp_of_t2` and the properness of a finite morphism,
   and no separatedness notion and no fibre product is needed at any point.
 
-  This repository still has no separatedness notion for `ComplexAnalytic.AnalyticSpace`, and no
-  fibre product over a cospan neither of whose legs is the inclusion of an open subspace, is
-  finite étale with Hausdorff source, or is a morphism between local models presented by cut-out
-  data — `Oka/AnalyticSpace/PullbackOpen.lean` builds the first of those three shapes,
-  `Oka/AnalyticSpace/FiniteEtaleBaseChange.lean` the second and
-  `Oka/AnalyticSpace/CutOutFibreProduct.lean` the third, and the first of those three files prices
-  the rest. **This sentence read *neither a separatedness notion … nor fibre
-  products* until `Oka/AnalyticSpace/PullbackOpen.lean` landed, and the second half of it is what
-  that file falsified; it then read *no fibre product over a cospan neither of whose legs is the
-  inclusion of an open subspace — `Oka/AnalyticSpace/PullbackOpen.lean` builds that one shape and
-  prices the rest* until 2026-09-07, when the second file added the second shape; and it named
-  those two shapes and no third until later the same day, when the third file added one.** The
-  remaining absence is the one
-  `Oka/AnalyticSpace/FiniteEtaleOver.lean` records as the reason base change is not statable
-  there. **None of the three shapes is the one this bullet is about**: the graph construction's
-  cospan has both legs out of an arbitrary analytic space, which need not be a local model and is
-  not an open subspace of one.
-  **Neither was ever what obstructed this**; a
-  separation axiom on `Y` is a hypothesis and not a construction, and it is the whole of what was
-  missing.
+  **A sentence stood here saying that this repository has neither of those two things, and both
+  halves of it are now false — for different reasons and by different pushes, which is why it is
+  retired rather than narrowed.** It read *This repository still has no separatedness notion for
+  `ComplexAnalytic.AnalyticSpace`, and no fibre product over a cospan neither of whose legs is the
+  inclusion of an open subspace, is finite étale with Hausdorff source, or is a morphism between
+  local models presented by cut-out data*, and named
+  `Oka/AnalyticSpace/PullbackOpen.lean`, `Oka/AnalyticSpace/FiniteEtaleBaseChange.lean` and
+  `Oka/AnalyticSpace/CutOutFibreProduct.lean` as building the three shapes; it carried three
+  further dated records of its own, of what it read before each of those three files landed. All
+  of that goes with it.
+
+  * **The separatedness half was already false before the push that retires the sentence, and not
+    by that push's doing.** `Oka/AnalyticSpace/SeparatedOver.lean` asks the structure morphism of
+    a cover to be a separated map and `Oka/AnalyticSpace/SeparatedFiniteEtale.lean` cuts out the
+    full subcategory of the covers that satisfy it,
+    `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver`. That is a notion of separatedness
+    for a *morphism* of analytic spaces; a separation axiom on an object is still not imposed, and
+    `Oka/AnalyticSpace/Basic.lean` is where that decision is recorded.
+  * **The fibre-product half is what the push retiring this sentence falsifies, and it falsifies
+    it outright rather than narrowing it a fourth time.**
+    `Oka/AnalyticSpace/PullbackReduction.lean` reduces an arbitrary cospan to local models, so
+    `ComplexAnalytic.AnalyticSpace.hasPullback` is a fibre product at *every* cospan and there is
+    no list of shapes left to keep. The three files named above still build the three shapes they
+    built; what has gone is the enumeration, because it is no longer an enumeration of anything.
+
+  **The graph construction's cospan is reached by that, its two legs being the same morphism out of
+  an arbitrary analytic space — and this bullet is unaffected**, because neither a separatedness
+  notion nor a fibre product was ever what obstructed the cancellation: a separation axiom on `Y`
+  is a hypothesis and not a construction, and it is the whole of what was missing.
 * **Grauert's finite mapping theorem**, which `Oka/AnalyticSpace/Finite.lean` already records as
   absent.
 
@@ -357,7 +366,12 @@ additionally *finite* étale is not asked here — that witness has a second fac
 local isomorphism, so it does not settle the question.
 
 **It does not make the category Galois**, and `Oka/AnalyticSpace/FiniteEtaleOver.lean` says what
-else is wanted: no fibre product over a general cospan, hence no base change. **The fibre functor
+else is wanted, base change over a general cospan among it. **This clause read *no fibre product
+over a general cospan, hence no base change* until 2026-09-08**, when
+`Oka/AnalyticSpace/PullbackReduction.lean` made
+`CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` an instance: the premise and
+the *hence* are retired and the absence of base change is not, a fibre product existing being no
+statement about a class of morphisms. **The fibre functor
 is no longer among it** — `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fintypeFiberFunctor` is in
 that file, and its
 fibres are finite with no hypothesis. **This sentence used to add *and every statement about that

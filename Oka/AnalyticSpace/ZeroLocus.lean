@@ -142,6 +142,13 @@ below.
   `CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` still fails at the commit
   that adds that one, since a general analytic space is only locally a local model. This paragraph
   was added on 2026-09-07 by the push that added that file.
+
+  **The `#synth` is pinned twice over and both pins hold; what has changed is the present tense.**
+  From 2026-09-08 the probe succeeds, `Oka/AnalyticSpace/PullbackReduction.lean` having glued the
+  local fibre products of `Oka/AnalyticSpace/CutOutFibreProduct.lean` up over a covering family and
+  reduced a general cospan to them; `ComplexAnalytic.AnalyticSpace.hasPullbacks` is the instance.
+  **The bullet's own claim is unchanged**: *here* is this file, which still builds no fibre
+  product, and both dated `#synth` records above are statements about the commits they name.
 * **No comparison with `ComplexAnalytic.AnalyticSpace.zeroLocus`.** At an ambient which is an open
   subspace of `ℂ^n`, `ComplexAnalytic.AnalyticSpace.zeroLocus` and
   `ComplexAnalytic.AnalyticSpace.zeroLocusSubspace` have the same underlying locally ringed space,

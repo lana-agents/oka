@@ -111,7 +111,19 @@ base change along a general morphism.** `Oka/AnalyticSpace/FiniteEtaleOver.lean`
 `## What is not here` says that no `CategoryTheory.Limits.HasPullback` instance for analytic spaces
 is available and that base change is therefore unstatable for `isFiniteEtale`; after this file the
 first half of that is false as a universal and the second is false at this one leg, and the
-sentences there are narrowed to the general cospan rather than struck. The diagonal `A ⟶ A ×_B A`
+sentences there are narrowed to the general cospan rather than struck.
+
+**That report is a statement about that file as it stood, and it has moved twice since.** On
+2026-09-08 `Oka/AnalyticSpace/PullbackReduction.lean` made
+`CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` an instance, so the first half
+is now false outright and not merely as a universal; that file's bullet is retitled
+**No base change over a general cospan** and its *therefore* is retired, base change in the
+`CategoryTheory.MorphismProperty.IsStableUnderBaseChange` spelling having needed no
+`CategoryTheory.Limits.HasPullback` instance to be *stated*. **The sentence opening this paragraph
+is unchanged and nothing here is retired**: this file still gives neither the class nor base
+change along a general morphism.
+
+The diagonal `A ⟶ A ×_B A`
 that a monomorphism argument wants is over a cospan neither of whose legs is an open immersion, so
 nothing here reaches it.
 
@@ -127,6 +139,14 @@ source, so the leg this file's new instance sits at is a leg of the **first** of
 shapes up to that isomorphism, and no fourth shape appears. Those three sentences are left alone
 for that reason, and this paragraph is here rather than in them because it is a fact about
 declarations in this file.
+
+**The accounting is two files and not three from 2026-09-08**, when
+`Oka/AnalyticSpace/PullbackReduction.lean` gave the category a fibre product at *every* cospan and
+`Oka/AnalyticSpace/LocalIso.lean` retired its enumeration outright rather than adding a shape to
+it; `Oka/AnalyticSpace/ZeroLocus.lean` and `Oka/AnalyticSpace/CutOutFibreProduct.lean` keep
+theirs, each pinned to the commit that adds its own file. **Nothing above is retired by that**:
+this file's instance still adds no shape, which is all this paragraph asserts, and there is now no
+shape it could add.
 
 ## The finiteness lemma and the one already here are not the same statement
 

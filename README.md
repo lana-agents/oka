@@ -145,8 +145,13 @@ coherence statement for arbitrary complex analytic spaces:
   sides (`…isFinite_iff_isProperMap_base_and_finite_fiber`). There is no `IsProper` class, and
   properness is not shown of anything except by way of finiteness. **What makes finiteness useful
   is Grauert's finite mapping theorem, that `f_*𝒪_X` is coherent for finite `f`, and that is not
-  proved here**, nor is there a fibre product over a general cospan to base-change along. **This
-  clause read *nor are there fibre products to base-change along* until
+  proved here**, and the fibre product over a general cospan there now is to base-change along
+  carries no finiteness with it. **This clause read *nor is there a fibre product over a general
+  cospan to base-change along* until 2026-09-08**, when
+  `Oka/AnalyticSpace/PullbackReduction.lean` reduced a general cospan to local models and made
+  `CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` an instance; what is absent
+  after it is the statement that finiteness survives that base change, and no shape of leg is
+  absent any longer. **It read *nor are there fibre products to base-change along* until
   `Oka/AnalyticSpace/PullbackOpen.lean` landed the pullback along the inclusion of an open
   subspace**, over which `ComplexAnalytic.AnalyticSpace.isFinite_restrictHom` carries finiteness
   with no hypothesis on the open subset; `Oka/AnalyticSpace/FiniteEtaleBaseChange.lean` added a
@@ -154,7 +159,8 @@ coherence statement for arbitrary complex analytic spaces:
   source, over which `ComplexAnalytic.AnalyticSpace.baseChangeSnd` is finite étale and hence
   finite — finiteness of the finite étale leg itself and not of an arbitrary finite morphism, so a
   second shape rather than a generalisation of the first. `Oka/AnalyticSpace/Finite.lean`'s
-  `## What is not here, and it is the whole of the subject` states both at length. **This bullet
+  `## What is not here, and it is the whole of the subject` states both at length, and its own
+  clause pricing the general cospan is retired by the same push. **This bullet
   ended *over which `ComplexAnalytic.AnalyticSpace.isFinite_restrictHom` does base-change
   finiteness* until 2026-09-07.**
 
@@ -277,12 +283,19 @@ coherence statement for arbitrary complex analytic spaces:
   and an invertibility of the underlying morphism rather than of the morphism of covers — and
   neither was a price**: the first is removed by closing the empty case rather than paid, and the
   second is two Mathlib reflections composed. **What is still absent is base change over a general
-  cospan**, for want of a fibre product of analytic spaces over one; the pullback along the
-  inclusion of an open subspace is in `Oka/AnalyticSpace/PullbackOpen.lean`, the pullback along a
-  morphism that is finite étale with Hausdorff source is in
-  `Oka/AnalyticSpace/FiniteEtaleBaseChange.lean`, the fibre product of two local models presented
-  by cut-out data over a third such is in `Oka/AnalyticSpace/CutOutFibreProduct.lean`, and none of
-  those three is enough for an axiom that quantifies over every cospan. **This clause read *for
+  cospan, and from 2026-09-08 it is no longer for want of a fibre product over one.**
+  `Oka/AnalyticSpace/PullbackReduction.lean` reduces an arbitrary cospan to local models and makes
+  `CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` an instance; what is absent
+  after it is that `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` survives such a base change,
+  which is a claim about a class of morphisms and does not follow from the square existing.
+  **This clause read *for want of a fibre product of analytic spaces over one*, and then named
+  three shapes — the pullback along the inclusion of an open subspace in
+  `Oka/AnalyticSpace/PullbackOpen.lean`, the pullback along a morphism that is finite étale with
+  Hausdorff source in `Oka/AnalyticSpace/FiniteEtaleBaseChange.lean`, and the fibre product of two
+  local models presented by cut-out data over a third such in
+  `Oka/AnalyticSpace/CutOutFibreProduct.lean` — saying that none of the three is enough for an
+  axiom that quantifies over every cospan.** Those three files still build those three shapes; the
+  enumeration goes because there is no longer a shape outside it. **The clause read *for
   want of pullbacks of analytic spaces*** until `Oka/AnalyticSpace/PullbackOpen.lean` landed, and
   it then named that one shape, in the words *the pullback along the inclusion of an open subspace
   is in `Oka/AnalyticSpace/PullbackOpen.lean` and is not enough for an axiom that quantifies over
