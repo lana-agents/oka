@@ -177,6 +177,23 @@ the clause opening *The fourth kind has a second class, and it is the monomorphi
 clause was added by the push that added that section**, for the reason the clause naming
 `### The terminal object and the product of two complex affine spaces` gives.
 
+And another kind is the **transition data** of a construction over this category: not a class of
+morphisms, not a statement that a cospan has a fibre product, and not a statement about a class at
+all, but the objects and morphisms a gluing of fibre products is assembled from and the laws they
+satisfy — `### The transition data of a fibre product glued over a family of opens`. **The sixth
+kind's criterion does not reach it**: that kind is *a cospan has a fibre product*, and no guard of
+this section says any cospan has one; every one of them takes the fibre products it names as a
+hypothesis. **Five** of its twenty-seven guards are of a further kind again — statements about
+**morphisms of locally ringed spaces** rather than about morphisms of analytic spaces, between the
+images of analytic ones: `ComplexAnalytic.AnalyticSpace.Pullback.isOpenImmersion_map_fV`,
+`ComplexAnalytic.AnalyticSpace.Pullback.isoPullbackFV`,
+`ComplexAnalytic.AnalyticSpace.Pullback.t'Map`,
+`ComplexAnalytic.AnalyticSpace.Pullback.t'Map_cocycle` and
+`ComplexAnalytic.AnalyticSpace.Pullback.t'Map_snd`. The section's own docstring argues that routing
+against the topic table of `OkaTest/Axioms.lean` rather than assuming it. **This clause was added
+by the push that added that section**, 2026-09-08, for the reason the clause naming
+`### The terminal object and the product of two complex affine spaces` gives.
+
 **Named rather than counted from the end**, which is the repair and not the description. **The
 sentence this replaces called them *the last two***; they stopped being that when two further
 sections were appended past them — and one of those two was written across two lines, so no
@@ -4883,3 +4900,272 @@ info: 'ComplexAnalytic.AnalyticSpace.not_isSeparatedMap_doubledLineOver' depends
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.not_isSeparatedMap_doubledLineOver
+
+/-! ### The transition data of a fibre product glued over a family of opens
+
+`Oka/AnalyticSpace/PullbackBlock.lean`, the whole of it, in the order the declarations are made.
+Twenty-seven names.
+
+**The routing, argued rather than assumed, because the module is new.** The topic table at the
+head of `OkaTest/Axioms.lean` routes *morphisms of analytic spaces* here. Every declaration below
+is a morphism, an equation between two morphisms, or a statement that a morphism is an open
+immersion, save for `ComplexAnalytic.AnalyticSpace.Pullback.v`, which is an object, and
+`ComplexAnalytic.AnalyticSpace.Pullback.isoPullbackFV`, which is an isomorphism — both named only
+so that those morphisms can be stated. **All of them are of analytic spaces except the five the
+clause at the head of this file names**, which are of `AlgebraicGeometry.LocallyRingedSpace`:
+`ComplexAnalytic.AnalyticSpace.Pullback.isOpenImmersion_map_fV`,
+`ComplexAnalytic.AnalyticSpace.Pullback.isoPullbackFV`,
+`ComplexAnalytic.AnalyticSpace.Pullback.t'Map`,
+`ComplexAnalytic.AnalyticSpace.Pullback.t'Map_cocycle` and
+`ComplexAnalytic.AnalyticSpace.Pullback.t'Map_snd`. **Those five do not route the module
+elsewhere, and what says so is the recipe rather than any reading of the table's phrases.** The
+recipe `OkaTest/Axioms.lean` gives for measuring a row resolves each `#print axioms` name *to the
+module the declaration lives in* and asks whether the row's phrase covers what comes back; every
+name below resolves to `Oka/AnalyticSpace/PullbackBlock.lean`, so the five raise no routing
+question separate from the other twenty-two. Inside that module they are stated about images under
+`ComplexAnalytic.AnalyticSpace.forgetToLocallyRingedSpace` of what is declared above them, and
+exist for nothing but to carry `ComplexAnalytic.AnalyticSpace.Pullback.t'` into the category a
+glue datum is stated over. **`ComplexAnalytic.AnalyticSpace.Pullback.toBase` is not among them and
+is a morphism of analytic spaces**, which is what the sentence this replaces got wrong: it named
+`toBase` as an object or an isomorphism and swept the other four of the five into *a morphism of
+analytic spaces, an equation between two such*, contradicting the clause at the head of this file
+that the same push wrote.
+
+**One row worth weighing against it is *general presheaf and sheaf theory, and ringed spaces*,
+and it is not answered by reading its phrase.** That row routes `OkaTest/Axioms/Sheaves.lean`,
+which gives its own subject as *the presheaved, ringed and locally ringed spaces built out of
+them — gluing, open immersions, global sections and germs, …* and which guards statements of kinds
+the five are also of: `AlgebraicGeometry.LocallyRingedSpace.sigma_ι_isOpenImmersion` says that a
+morphism of locally ringed spaces is an open immersion, as
+`ComplexAnalytic.AnalyticSpace.Pullback.isOpenImmersion_map_fV` does, and
+`AlgebraicGeometry.LocallyRingedSpace.toInverseImage_comp` is an equation between two such. **What
+answers it is the module the recipe resolves to**, which is an analytic one and belongs to no
+mirror-tree directory. The paragraph in this file headed *Two declarations of
+`AlgebraicGeometry.LocallyRingedSpace` are guarded here* is the harder form of the same question
+and its answer covers this one: there, declarations of a module that row *does* route are guarded
+here anyway, under the practice `OkaTest/Axioms.lean` states as *"Guard one in the file of the
+analytic result that motivated it, under that result's heading"*. Nothing below is a declaration
+of a module that row routes.
+
+**Another is *analytic spaces, local models, the node***, which routes `Oka/AnalyticSpace/Glue.lean`
+to `OkaTest/Axioms/AnalyticSpace.lean`; that row is about building an analytic space, and nothing
+below builds one. **The join that decides it** is
+that the two declarations this module consumes as proof terms,
+`ComplexAnalytic.AnalyticSpace.isOpenImmersion_map_pullbackFst_ofRestrict` and
+`ComplexAnalytic.AnalyticSpace.isPullback_map_pullback_pullbackFst_ofRestrict`, are both guarded in
+this file, under the heading
+*That restriction is a pullback square, and the base change it gives*.
+
+**Nothing generated is guarded, which is this file's convention and not a decision made here**:
+`git grep -c '^#print axioms .*_assoc$'` and the same for `.eq_1` both return nothing over
+`OkaTest/Axioms/`. The push that adds these twenty-seven adds **thirteen** generated declarations
+beside them — nine `_assoc` lemmas from the `@[reassoc]` attributes that Mathlib's copies of these
+statements also carry, and four `.eq_1` equation lemmas, for
+`ComplexAnalytic.AnalyticSpace.Pullback.t`, `ComplexAnalytic.AnalyticSpace.Pullback.t'`,
+`ComplexAnalytic.AnalyticSpace.Pullback.isoPullbackFV` and
+`ComplexAnalytic.AnalyticSpace.Pullback.t'Map`. **Which four is read off the declaration dump and
+not inferred from the shape of the definitions**: `ComplexAnalytic.AnalyticSpace.Pullback.v`,
+`ComplexAnalytic.AnalyticSpace.Pullback.fV` and `ComplexAnalytic.AnalyticSpace.Pullback.toBase`
+produce none, and 27 + 9 + 4 is the module's whole tab-anchored row count. **No match lemma
+appears.**
+
+**Six of the twenty-seven are the only ones that are not Mathlib's text**, and they are
+`ComplexAnalytic.AnalyticSpace.Pullback.toBase`,
+`ComplexAnalytic.AnalyticSpace.Pullback.isOpenImmersion_map_fV`,
+`ComplexAnalytic.AnalyticSpace.Pullback.isoPullbackFV`,
+`ComplexAnalytic.AnalyticSpace.Pullback.t'Map`,
+`ComplexAnalytic.AnalyticSpace.Pullback.t'Map_cocycle` and
+`ComplexAnalytic.AnalyticSpace.Pullback.t'Map_snd` — what carries the transition map into the
+category `AlgebraicGeometry.LocallyRingedSpace.GlueData` is stated over. The other twenty-one are
+`Mathlib/AlgebraicGeometry/Pullbacks.lean`'s block with `𝒰.f i` replaced by
+`ComplexAnalytic.AnalyticSpace.ofRestrict` and the proofs unchanged. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.v' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.v
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.t' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.t
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.t_fst_fst' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.t_fst_fst
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.t_fst_snd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.t_fst_snd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.t_snd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.t_snd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.t_id' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.t_id
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.fV' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.fV
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.t'' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.t'
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.t'_fst_fst_fst' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.t'_fst_fst_fst
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.t'_fst_fst_snd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.t'_fst_fst_snd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.t'_fst_snd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.t'_fst_snd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.t'_snd_fst_fst' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.t'_snd_fst_fst
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.t'_snd_fst_snd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.t'_snd_fst_snd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.t'_snd_snd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.t'_snd_snd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.cocycle_fst_fst_fst' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.cocycle_fst_fst_fst
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.cocycle_fst_fst_snd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.cocycle_fst_fst_snd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.cocycle_fst_snd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.cocycle_fst_snd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.cocycle_snd_fst_fst' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.cocycle_snd_fst_fst
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.cocycle_snd_fst_snd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.cocycle_snd_fst_snd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.cocycle_snd_snd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.cocycle_snd_snd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.cocycle' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.cocycle
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.toBase' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.toBase
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.isOpenImmersion_map_fV' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.isOpenImmersion_map_fV
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.isoPullbackFV' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.isoPullbackFV
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.t'Map' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.t'Map
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.t'Map_cocycle' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.t'Map_cocycle
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.Pullback.t'Map_snd' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.Pullback.t'Map_snd
+
