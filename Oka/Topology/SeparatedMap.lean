@@ -95,8 +95,11 @@ the points. Continuity of `f` is spent in exactly the one place it is spent abov
   introduces alongside `IsSeparatedMap`, and nothing about the covering maps that satisfy both.
   The one application in this repository composes this with `IsCoveringMap.isSeparatedMap`, which
   is Mathlib's and is in `Mathlib/Topology/Covering/Basic.lean`.
-* **No `instance`.** The hypotheses of all three are explicit arguments and none is a class, so
-  instance search could not fire on any of them; a caller supplies them.
+* **No `instance`.** The *named* hypotheses of all three are explicit arguments and none is a
+  class, so instance search could not fire on any of them; a caller supplies them.
+  `IsSeparatedMap.t2Space` does carry an instance argument, `[T2Space X]` on the target, and it is
+  not one of them: what blocks the `instance` attribute is `hsep` and `hf`, which nothing can
+  synthesise.
 * **No converse of `IsSeparatedMap.of_comp`, and `IsSeparatedMap.comp` cannot drop `hg`.**
   Separatedness of `f` alone does not give separatedness of `g ∘ f`: take `f` the identity of a
   space that is **not** Hausdorff — separated, because `Function.Injective.isSeparatedMap` asks

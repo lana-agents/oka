@@ -5230,19 +5230,37 @@ analytic spaces, and the composition statement is spent twice — once in the
 morphism of `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.selfProd`.
 
 **Four declarations of that module are guarded nowhere and that is this repository's practice for
-their shape, not an omission.** They are the four instances that make separatedness a
-`CategoryTheory.MorphismProperty.IsMultiplicative` property closed under isomorphism —
-`instIsStableUnderCompositionIsSeparatedMap`, `instContainsIdentitiesIsSeparatedMap`,
-`instIsMultiplicativeIsSeparatedMap` and `instRespectsIsoIsSeparatedMap` in the
-`ComplexAnalytic.AnalyticSpace` namespace, none of them written with a name. **The precedent is
-exact and is the property this one is defined beside**: `Oka/AnalyticSpace/FiniteEtaleOver.lean`
-declares the same four instances for `ComplexAnalytic.AnalyticSpace.isFiniteEtale`, they appear in
-`scripts/DumpOkaDecls.lean`'s output as `instIsStableUnderCompositionIsFiniteEtale`,
-`instContainsIdentitiesIsFiniteEtale`, `instIsMultiplicativeIsFiniteEtale` and
-`instRespectsIsoIsFiniteEtale`, and a `git grep` for any of those four names over `OkaTest/`
-returns nothing at the commit this section is added. So the module's dump contributes
-twenty-three rows and this section twenty-one guards, and the four are the whole of the
-difference.
+the `CategoryTheory.MorphismProperty` closure instances, not an omission.** They are the four
+instances that make separatedness a `CategoryTheory.MorphismProperty.IsMultiplicative` property
+closed under isomorphism — `instIsStableUnderCompositionIsSeparatedMap`,
+`instContainsIdentitiesIsSeparatedMap`, `instIsMultiplicativeIsSeparatedMap` and
+`instRespectsIsoIsSeparatedMap` in the `ComplexAnalytic.AnalyticSpace` namespace, none of them
+written with a name. **The precedent is exact and is the property this one is defined beside**:
+`Oka/AnalyticSpace/FiniteEtaleOver.lean` declares the same four instances for
+`ComplexAnalytic.AnalyticSpace.isFiniteEtale`, they appear in `scripts/DumpOkaDecls.lean`'s output
+as `instIsStableUnderCompositionIsFiniteEtale`, `instContainsIdentitiesIsFiniteEtale`,
+`instIsMultiplicativeIsFiniteEtale` and `instRespectsIsoIsFiniteEtale`, and **no `#print axioms`
+line in `OkaTest/` names any of the four**: `git grep -nE '^#print axioms .*inst.*IsFiniteEtale$'
+-- OkaTest/` is empty, and its pattern matches a superset of the four, so an empty result covers
+every one of them. **It is anchored at `^#print axioms` and not run against the bare names
+precisely so that this paragraph cannot falsify it**: a bare-name grep over `OkaTest/` matches the
+two lines above that spell the names out — lines this section adds — and would report the opposite
+of what it was asked, while a line of a `/-! -/` block cannot begin at column 0 with
+`#print axioms`.
+
+**What that practice is bounded by is the shape and not anonymity**, because of anonymous
+instances in general it is false: `OkaTest/Axioms/LocalOkaRing.lean` guards five —
+`LocalOkaRing.instIsNoetherianRing`, `ComplexAnalytic.AnalyticSpace.instIsNoetherianRingStalk`,
+`LocalOkaRing.instUniqueFactorizationMonoid`, `LocalOkaRing.instIsRegularLocalRing` and
+`LocalOkaRing.instFaithfullyFlat`. Those instantiate algebraic structure on a ring, which is the
+subject the file guarding them is about; the four here assert closure of a
+`CategoryTheory.MorphismProperty` under composition and identities, which is a property of the
+property whose named consequences this section already guards.
+
+So the module's dump contributes twenty-three rows and this section guards **nineteen** of them,
+and the four are the whole of the difference; the section's other two guards are
+`IsSeparatedMap.comp` and `IsSeparatedMap.of_comp`, which are of the mirror tree and are rows of
+`Oka.Topology.SeparatedMap`, as the paragraph above says.
 
 **Which kind each guard is, against the description at the head of this file. All twenty-one are
 named and the five counts sum to twenty-one.**
