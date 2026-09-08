@@ -79,6 +79,10 @@ equation of morphisms out of `CategoryTheory.Limits.pullback` of two members of 
   `ComplexAnalytic.AnalyticSpace.isOpenImmersion_map_pullbackFst_ofRestrict`: **the first
   projection *is* an open-subspace inclusion up to an isomorphism**, so its image downstairs is an
   open immersion of locally ringed spaces.
+- `ComplexAnalytic.AnalyticSpace.range_base_pullbackFst_ofRestrict`: **and its image is the
+  preimage of `V`.** The pair with the entry above is what a caller factoring a morphism through
+  that projection needs — the first for a lift to exist, this for the range hypothesis that lift
+  asks for.
 - `ComplexAnalytic.AnalyticSpace.isPullback_pullbackFst_ofRestrict`,
   `ComplexAnalytic.AnalyticSpace.isPullback_map_pullbackFst_ofRestrict` and
   `ComplexAnalytic.AnalyticSpace.isPullback_map_pullback_pullbackFst_ofRestrict`: **the bridge at
@@ -418,6 +422,38 @@ theorem isOpenImmersion_map_pullbackFst_ofRestrict :
     AlgebraicGeometry.LocallyRingedSpace.isOpenImmersion_ofRestrict X.toLocallyRingedSpace _
   rw [pullbackFst_eq_inv_comp_ofRestrict f V, forgetToLocallyRingedSpace.map_comp]
   infer_instance
+
+/-- **And its image is the preimage of `V`.**
+
+`ComplexAnalytic.AnalyticSpace.isOpenImmersion_map_pullbackFst_ofRestrict` says *that* the
+projection is an open immersion; this says *where* it lands, and the two are the pair a caller
+factoring a morphism through this projection needs — the first to have a lift at all, the second to
+discharge the range hypothesis that lift asks for.
+
+Both come off `ComplexAnalytic.AnalyticSpace.pullbackFst_eq_inv_comp_ofRestrict` and neither
+recomputes anything: the isomorphism there is an isomorphism, so its underlying map is surjective
+and contributes nothing to the image, and what is left is
+`ComplexAnalytic.AnalyticSpace.range_base_ofRestrict`.
+
+**The surjectivity is taken from `CategoryTheory.Iso.hom_inv_id` and not from an instance.** There
+is no `Function.Surjective` instance on the base map of an isomorphism of analytic spaces at this
+head, and the one line that produces it — evaluate `e.hom ≫ e.inv = 𝟙` at a point — is shorter
+than the search for one would be. -/
+theorem range_base_pullbackFst_ofRestrict :
+    Set.range ((Limits.pullback.fst f (Y.ofRestrict V)).toLRSHom.base) =
+      (f.toLRSHom.base : X → Y) ⁻¹' (V : Set Y) := by
+  set e := restrictIsoPullbackOfRestrict f V with he
+  have hsurj : Function.Surjective (e.inv.toLRSHom.base) :=
+    fun y ↦ ⟨(e.hom.toLRSHom.base : _ → _) y,
+      congrArg (fun (ψ : X.restrict ((Opens.map f.toLRSHom.base).obj V) ⟶
+        X.restrict ((Opens.map f.toLRSHom.base).obj V)) ↦ (ψ.toLRSHom.base : _ → _) y) e.hom_inv_id⟩
+  have hcomp : ((e.inv ≫ X.ofRestrict ((Opens.map f.toLRSHom.base).obj V)).toLRSHom.base :
+        _ → X) =
+      ((X.ofRestrict ((Opens.map f.toLRSHom.base).obj V)).toLRSHom.base : _ → X) ∘
+        (e.inv.toLRSHom.base : _ → _) := rfl
+  rw [pullbackFst_eq_inv_comp_ofRestrict f V, ← he, hcomp, Set.range_comp, hsurj.range_eq,
+    Set.image_univ, range_base_ofRestrict]
+  rfl
 
 /-- **The `t'` cospan's square, with an open subspace as its apex.**
 

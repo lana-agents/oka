@@ -194,6 +194,20 @@ against the topic table of `OkaTest/Axioms.lean` rather than assuming it. **This
 by the push that added that section**, 2026-09-08, for the reason the clause naming
 `### The terminal object and the product of two complex affine spaces` gives.
 
+And a further kind, next to the separated-map one and distinct from it: statements about the
+**image** of a morphism's underlying map — where that map lands as a set, and not which class the
+morphism is in. `### The image of an open-subspace inclusion, and of a base change of one` holds
+both of this file's, and they are declarations of two different modules:
+`ComplexAnalytic.AnalyticSpace.range_base_ofRestrict`, of `Oka/AnalyticSpace/OpenSubspace.lean`,
+and `ComplexAnalytic.AnalyticSpace.range_base_pullbackFst_ofRestrict`, of
+`Oka/AnalyticSpace/PullbackOpen.lean`. **The sixth kind's criterion does not reach the second of
+them**, even though its subject is a projection out of a fibre product: that kind is *a cospan has
+a fibre product*, and this says where a projection out of one lands rather than that the limit
+exists — the limit it is about is `ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict`'s, which
+that clause already names. **This clause was added by the push that added that section**,
+2026-09-08, for the reason the clause naming
+`### The terminal object and the product of two complex affine spaces` gives.
+
 **Named rather than counted from the end**, which is the repair and not the description. **The
 sentence this replaces called them *the last two***; they stopped being that when two further
 sections were appended past them — and one of those two was written across two lines, so no
@@ -5173,3 +5187,67 @@ info: 'ComplexAnalytic.AnalyticSpace.Pullback.t'Map_snd' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.Pullback.t'Map_snd
 
+
+/-! ### The image of an open-subspace inclusion, and of a base change of one
+
+**Two names, of two modules**: `ComplexAnalytic.AnalyticSpace.range_base_ofRestrict` is
+`Oka/AnalyticSpace/OpenSubspace.lean`'s and
+`ComplexAnalytic.AnalyticSpace.range_base_pullbackFst_ofRestrict` is
+`Oka/AnalyticSpace/PullbackOpen.lean`'s. The first says the image of the inclusion of an open
+subspace is that open subset; the second says the image of the first projection out of the
+pullback along such an inclusion is the preimage of the open subset, which is the second half of
+what `Oka/AnalyticSpace/PullbackOpen.lean` says about that projection — the first half being
+`ComplexAnalytic.AnalyticSpace.isOpenImmersion_map_pullbackFst_ofRestrict`, guarded above under
+`### That restriction is a pullback square, and the base change it gives`.
+
+**The routing, argued rather than assumed.** The topic table at the head of `OkaTest/Axioms.lean`
+routes *morphisms of analytic spaces* here, and the subject of both is the underlying map of a
+morphism — where it lands. **The competing row is *analytic spaces, local models, the node*,
+`OkaTest/Axioms/AnalyticSpace.lean`**, which is where `ComplexAnalytic.AnalyticSpace.restrict` and
+`ComplexAnalytic.AnalyticSpace.ofRestrict` themselves are guarded, and it loses on the same
+reading that puts `ComplexAnalytic.AnalyticSpace.isLocalIso_ofRestrict` and
+`ComplexAnalytic.AnalyticSpace.isIso_stalkMap_ofRestrict` in this file rather than beside them:
+the open subspace is the *space*, and a statement about what its inclusion does is about the
+*morphism*. Neither of the two below names a local model, a chart or a node.
+
+**The first is not a duplicate of `ComplexAnalytic.AnalyticSpace.base_ofRestrict`, which is not
+guarded anywhere.** That one computes the map at a point and is `rfl`; this one computes the image
+of the whole source, which is the form a factorisation hypothesis takes —
+`ComplexAnalytic.AnalyticSpace.liftRestrict` and
+`AlgebraicGeometry.LocallyRingedSpace.IsOpenImmersion.lift` both ask for a range containment and
+neither can be fed a point computation. **That `…base_ofRestrict` is unguarded is a fact about
+this file and not an argument**: `scripts/guard_coverage.py` counts it among the declarations no
+`## Main results` advertises, and this section adds no guard for it.
+
+**Nothing generated is guarded and neither push generated anything.** The two modules' tab-anchored
+row counts in `scripts/DumpOkaDecls.lean`'s output rise by exactly one each: no `_assoc` lemma, no
+`.eq_1` equation lemma, no match lemma and no congruence lemma. **One match lemma was avoided
+rather than absent** — `ComplexAnalytic.AnalyticSpace.range_base_ofRestrict` was first written
+with a destructuring `fun ⟨y, hy⟩ ↦ …`, which generated one, and its own docstring records why it
+is `Subtype.range_val` instead. Equation lemmas are generated on demand, so both sentences are
+about the environment at the commit that adds this section.
+
+**What consumes each of them is named and neither is unconsumed.**
+`ComplexAnalytic.AnalyticSpace.range_base_pullbackFst_ofRestrict` is spent once, in
+`ComplexAnalytic.AnalyticSpace.Pullback.range_base_ι` — the image computation that replaces
+Mathlib's `AlgebraicGeometry.Scheme.Pullback.pullbackP1Iso` — and
+`ComplexAnalytic.AnalyticSpace.range_base_ofRestrict` is spent once, inside the proof of the
+other. Both are guarded here and the consumer is guarded in
+`OkaTest/Axioms/AnalyticSpace.lean`, under that file's heading beginning
+*The gluing is the fibre product* — spelled without backticks here because the heading itself
+carries a backticked name; that section argues its own routing and says why these two are not
+there with it. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.range_base_ofRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.range_base_ofRestrict
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.range_base_pullbackFst_ofRestrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.range_base_pullbackFst_ofRestrict
