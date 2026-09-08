@@ -1485,3 +1485,357 @@ info: 'ComplexAnalytic.exists_restrict_eq_ofCutOut' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.exists_restrict_eq_ofCutOut
+
+/-! ### The double of an analytic space along an open, and the complex line with two origins
+
+Two copies of a space glued along an open subspace: the glue datum and the glued space one
+category down, the analytic structure on it, the fold, that the fold is finite étale, and that
+the double is not Hausdorff when a point outside the open is in its closure — with `ℂ¹` and its
+origin as the concrete instance.
+
+**Two modules, and the routing table sends both here.** `OkaTest/Axioms.lean`'s row *analytic
+spaces, local models, the node* is where a module is sent by what declares it.
+`Oka/AnalyticSpace/Double.lean` declares the analytic half;
+`Oka/Geometry/RingedSpace/PresheafedSpace/Double.lean` declares the rest and is a mirror-tree
+module, which `OkaTest/Axioms.lean` says has no row of its own — the same arrangement the section
+headed *The fields of `CategoryTheory.GlueData.ofGlueData'`* is under.
+
+**Why the finite-étale guards are here and not in `OkaTest/Axioms/Morphisms.lean`.** The module
+docstring above says the *classes* of morphisms are that file's. These guards are not about the
+classes: they are about one construction of a space and the morphism it comes with, which is the
+arrangement `ComplexAnalytic.AnalyticSpace.isFiniteEtale_sigmaFold` is already guarded in under a
+coproduct heading in this file. A guard here on `ComplexAnalytic.AnalyticSpace.IsFiniteEtale`
+itself, or on one of its closure properties, would belong there and there is none.
+
+**Two claims of the module docstring above were rechecked against this section and both survive.**
+*"which is the one heading below naming a property of a space rather than a construction of one"*
+is still exact: this heading names two constructions, and reading all twenty-two section headings
+at the commit that adds this section leaves *The analytic spaces this development constructs are
+Hausdorff* the only one naming a property. **A reader who takes that clause to be
+about subjects rather than about headings should read this sentence as its amendment**, because
+`ComplexAnalytic.AnalyticSpace.not_t2Space_doubledLine` is a guard on the negation of that
+property. And *"Two of the headings below are about morphisms after all"* is unmoved: this
+heading is about a space, in the sense the coproduct headings are.
+
+**Every numeral in the module docstring above is pinned to a commit, so this section repairs
+none of them** — including *"Six of the nineteen modules are not `Oka/AnalyticSpace/`'s"* and its
+*"four modules of `Oka/Geometry/RingedSpace/` fifteen"*, both of which are `883b62f`'s and both
+of which this section would have moved had they been live.
+
+**`Classical.choice` is in every guard below and none of it is this section's subject.** The
+axiom reaches `ComplexAnalytic.AnalyticSpace` and `AlgebraicGeometry.LocallyRingedSpace` alike,
+so every statement here carries it whatever its own proof does; what these guards record is that
+none of the constructions adds an axiom of its own — not the gluing, not the promotion to an
+analytic space, and not the two-origin witness.
+
+**The two `_assoc` lemmas the `reassoc` attribute generates are not guarded**, which is this
+repository's standing arrangement: at the commit that adds this section the declaration dump
+holds thirty-five names ending in `_assoc` — thirty-four of them at `d2ae161` and this section's
+one — and no `#print axioms` in `OkaTest/Axioms/` names any of them.
+
+**Named by file rather than counted**, in the spelling the section headed *The disjoint union is
+the coproduct* uses of itself, and for the reason this file gives for it. **Named and not
+located**: no sentence here says which section precedes or follows it.
+-/
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.double' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.double
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.doubleFold' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.doubleFold
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.doubleFoldPartialHomeomorph' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.doubleFoldPartialHomeomorph
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.doubleFold_base_comp_ι_base' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.doubleFold_base_comp_ι_base
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.doubleFold_base_ι_base' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.doubleFold_base_ι_base
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.doubleGlueData' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.doubleGlueData
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.doubleGlueData'' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.doubleGlueData'
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.doubleGlueData_U' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.doubleGlueData_U
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.doubleGlueData_V_of_ne' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.doubleGlueData_V_of_ne
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.doubleGlueData_comm' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.doubleGlueData_comm
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.doubleGlueData_f_eq_t_comp_f' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.doubleGlueData_f_eq_t_comp_f
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.doubleGlueData_f_of_ne' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.doubleGlueData_f_of_ne
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.doubleGlueData_t_comp_f_of_ne' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.doubleGlueData_t_comp_f_of_ne
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.doubleGlueData_ι_base_eq_iff' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.doubleGlueData_ι_base_eq_iff
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.doubleGlueData_ι_base_eq_iff_of_ne' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.doubleGlueData_ι_base_eq_iff_of_ne
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.finite_preimage_base_doubleFold' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.finite_preimage_base_doubleFold
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.image_base_doubleFold' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.image_base_doubleFold
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.injective_base_doubleGlueData_ι' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.injective_base_doubleGlueData_ι
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.isClosedMap_base_doubleFold' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.isClosedMap_base_doubleFold
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.isIso_stalkMap_doubleFold' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.isIso_stalkMap_doubleFold
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.isLocalHomeomorph_base_doubleFold' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.isLocalHomeomorph_base_doubleFold
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.not_t2Space_double' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.not_t2Space_double
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.preimage_base_doubleFold_singleton' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.preimage_base_doubleFold_singleton
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.ι_doubleFold' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.ι_doubleFold
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.double' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.double
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.doubleFold' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.doubleFold
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.double_toLocallyRingedSpace' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.double_toLocallyRingedSpace
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.doubledLine' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.doubledLine
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.doubledLineFold' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.doubledLineFold
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.doubledLineOver' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.doubledLineOver
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.exists_finiteEtaleOver_not_t2Space' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.exists_finiteEtaleOver_not_t2Space
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.glueDataCLinear_double' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.glueDataCLinear_double
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isFiniteEtale_doubleFold' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFiniteEtale_doubleFold
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isFiniteEtale_doubledLineFold' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFiniteEtale_doubledLineFold
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isFinite_doubleFold' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isFinite_doubleFold
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isLocalIso_doubleFold' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isLocalIso_doubleFold
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.neBot_nhdsWithin_compl_origin' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.neBot_nhdsWithin_compl_origin
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.not_t2Space_double' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.not_t2Space_double
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.not_t2Space_double_compl_singleton' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.not_t2Space_double_compl_singleton
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.not_t2Space_doubledLine' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.not_t2Space_doubledLine
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.not_t2Space_left_doubledLineOver' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.not_t2Space_left_doubledLineOver
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.origin' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.origin
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.toLRSHom_doubleFold' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.toLRSHom_doubleFold
+
