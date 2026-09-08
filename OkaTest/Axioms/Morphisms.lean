@@ -43,8 +43,9 @@ And a sixth kind is about the **category** rather than about any morphism in it:
 has a product — `### The terminal object and the product of two complex affine spaces`. **That
 clause was added by the push that added that section**, which is what this paragraph's own history
 says a description owes a section it does not reach. **Five further sections are of that kind
-and are named here for the same reason**: that the square a restriction over an open of the target
-sits in is a pullback, `### That restriction is a pullback square, and the base change it gives`;
+with `ComplexAnalytic.AnalyticSpace` itself as the category, and are named here for the same
+reason**: that the square a restriction over an open of the target sits in is a pullback,
+`### That restriction is a pullback square, and the base change it gives`;
 that a pair of open subspaces of complex affine spaces has a product,
 `### The product of two open subspaces of complex affine spaces`; that a pair of local models has
 one, `### The binary product of two local models`; that a cospan one of whose legs is finite
@@ -52,6 +53,34 @@ one, `### The binary product of two local models`; that a cospan one of whose le
 `### Base change of a finite étale morphism, and the fibre product it is the projection of`; and
 that a cospan of local models presented by cut-out data has one,
 `### The fibre product of two local models over a third`.
+
+**The enumeration is over that category and over no other, and a section of this kind about a
+*different* category is named by its own clause and not here.** So it is with
+`### The category of separated covers, and separatedness as a morphism property`: the clause
+opening *The sixth kind has a second category* below names the guards of that section which are
+about the category `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver` itself rather than
+about any morphism in it — the sixth kind's criterion read at that category — and assigns every
+other guard the section holds. That clause, and not this enumeration, is where it is accounted
+for. **The sentence opening *Two of those five hold statements of the first kind as well* is why
+the two are kept apart rather than merged**: it is a statement about the sections enumerated
+here, and that same clause assigns guards of the separated-covers section to the first kind as
+well — so admitting that section into the enumeration above would leave one sentence answering
+two questions, over two categories, with one numeral. Its *those five* is unaffected by the words
+added here and counts over the sections it counted over before.
+
+**The bounding words are the repair; no count changed and nothing was retired.** The sentence read
+*Five further sections are of that kind* with no category named, until 2026-09-08, when
+`### The category of separated covers, and separatedness as a morphism property` arrived and made
+a second reading of it available: a section holding guards *about the category rather than about
+any morphism in it* is, on that reading, a further section of that kind, and it is not among the
+sections named above. **Both readings were open to a reader and the sentence did not say which it
+meant, which is the defect independently of the count** — so the words added to that sentence are
+a boundary it never carried and not a recount, and this paragraph's dated records of *Four* and of
+*those four* are untouched by it. **Neither push could see the question**: that section
+arrived on lana-agents/oka#521, 2026-09-08, with a clause that touched nothing else in this
+paragraph, and this sentence had stood here since the day before, in the form the record below
+beginning **The sentence said** dates; the two halves were never in one diff.
+**Argued at taxis #1908.**
 
 **Two of those five hold statements of the *first* kind as well, and are named here for the limit
 and not for those.** `### Base change of a finite étale morphism, and the fibre product it is the
