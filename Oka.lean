@@ -80,6 +80,7 @@ import Oka.AnalyticSpace.OpenSubspace
 import Oka.AnalyticSpace.ProjectionStalk
 import Oka.AnalyticSpace.PullbackBlock
 import Oka.AnalyticSpace.PullbackGlue
+import Oka.AnalyticSpace.PullbackLift
 import Oka.AnalyticSpace.PullbackModulesStalk
 import Oka.AnalyticSpace.PullbackOpen
 import Oka.AnalyticSpace.Relations
