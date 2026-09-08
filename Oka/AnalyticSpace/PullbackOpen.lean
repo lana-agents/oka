@@ -108,12 +108,20 @@ equation of morphisms out of `CategoryTheory.Limits.pullback` of two members of 
 
 **It does not make `ComplexAnalytic.AnalyticSpace` a category with pullbacks, and it does not give
 base change along a general morphism.** `Oka/AnalyticSpace/FiniteEtaleOver.lean`'s
-`## What is not here` says that no `CategoryTheory.Limits.HasPullback` instance for analytic spaces
+`## What is not here` said that no `CategoryTheory.Limits.HasPullback` instance for analytic spaces
 is available and that base change is therefore unstatable for `isFiniteEtale`; after this file the
-first half of that is false as a universal and the second is false at this one leg, and the
-sentences there are narrowed to the general cospan rather than struck. The diagonal `A ⟶ A ×_B A`
-that a monomorphism argument wants is over a cospan neither of whose legs is an open immersion, so
-nothing here reaches it.
+first half of that was false as a universal and the second false at this one leg, and the sentences
+there were narrowed to the general cospan rather than struck. The diagonal `A ⟶ A ×_B A` that a
+monomorphism argument wants is over a cospan neither of whose legs is an open immersion, so nothing
+here reaches it.
+
+**This paragraph was in the present tense about that file until 2026-09-08**, when
+`Oka/AnalyticSpace/PullbackReduction.lean` made
+`CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` a theorem and that bullet was
+narrowed a second time, to the class and away from the limit; what this file did to it is what
+this paragraph records and is unchanged, and the tense is what moved. **The first sentence is a
+statement about *this* file and is untouched by any of it**: nothing declared below is that class,
+which is what a `What this does not do` heading is for.
 
 **And `ComplexAnalytic.AnalyticSpace.hasPullback_pullbackFst_ofRestrict'` adds no shape to the
 accounting three other files keep.** `Oka/AnalyticSpace/LocalIso.lean`,

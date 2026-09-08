@@ -145,8 +145,12 @@ coherence statement for arbitrary complex analytic spaces:
   sides (`…isFinite_iff_isProperMap_base_and_finite_fiber`). There is no `IsProper` class, and
   properness is not shown of anything except by way of finiteness. **What makes finiteness useful
   is Grauert's finite mapping theorem, that `f_*𝒪_X` is coherent for finite `f`, and that is not
-  proved here**, nor is there a fibre product over a general cospan to base-change along. **This
-  clause read *nor are there fibre products to base-change along* until
+  proved here**; the fibre product to base-change along is there, and what carries finiteness
+  across it at a general cospan is not. **The clause read *nor is there a fibre product over a
+  general cospan to base-change along* until 2026-09-08**, when
+  `Oka/AnalyticSpace/PullbackReduction.lean` landed
+  `ComplexAnalytic.AnalyticSpace.hasPullbacks`; what stays absent is the transfer of finiteness and
+  not the limit. **It read *nor are there fibre products to base-change along* until
   `Oka/AnalyticSpace/PullbackOpen.lean` landed the pullback along the inclusion of an open
   subspace**, over which `ComplexAnalytic.AnalyticSpace.isFinite_restrictHom` carries finiteness
   with no hypothesis on the open subset; `Oka/AnalyticSpace/FiniteEtaleBaseChange.lean` added a

@@ -142,6 +142,13 @@ below.
   `CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` still fails at the commit
   that adds that one, since a general analytic space is only locally a local model. This paragraph
   was added on 2026-09-07 by the push that added that file.
+
+  **Being only locally a local model turned out to be enough**, so the clause above records a run
+  and not a reason. `Oka/AnalyticSpace/PullbackReduction.lean` glued the local fibre products on
+  2026-09-08 and `CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` is a theorem
+  there, `ComplexAnalytic.AnalyticSpace.hasPullbacks`. **Both `#synth` sentences above are pinned
+  to their own commits and neither is retired**; what this note adds is that the *since* clause
+  says why the probe failed then and not why it would go on failing.
 * **No comparison with `ComplexAnalytic.AnalyticSpace.zeroLocus`.** At an ambient which is an open
   subspace of `ℂ^n`, `ComplexAnalytic.AnalyticSpace.zeroLocus` and
   `ComplexAnalytic.AnalyticSpace.zeroLocusSubspace` have the same underlying locally ringed space,

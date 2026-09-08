@@ -103,19 +103,33 @@ ascribes it in a `haveI` rather than a key being added to the instance graph.
 
 ## What this does not do
 
-* **It does not make `ComplexAnalytic.AnalyticSpace` a category with pullbacks.**
-  `ComplexAnalytic.AnalyticSpace.Pullback.hasPullback_of_cover` asks for a family of opens of `X`
-  which covers `X` **and along which the base change is already known** — the hypothesis
+* **It does not make `ComplexAnalytic.AnalyticSpace` a category with pullbacks, and nothing below
+  does.** `ComplexAnalytic.AnalyticSpace.Pullback.hasPullback_of_cover` asks for a family of opens
+  of `X` which covers `X` **and along which the base change is already known** — the hypothesis
   `[∀ i, HasPullback (X.ofRestrict (U i) ≫ f) g]`, inherited from
   `Oka/AnalyticSpace/PullbackBlock.lean` — and nothing here produces such a family for a general
   `f` and `g`. `#synth CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` fails at
   the commit that adds this file, run with the category positional and not grepped.
+
+  **The bullet ended there, and said in its own words that the probe fails, until 2026-09-08**,
+  when `Oka/AnalyticSpace/PullbackReduction.lean` produced that family and
+  `ComplexAnalytic.AnalyticSpace.hasPullbacks` made the probe succeed. The `#synth` sentence above
+  is pinned to the commit that adds *this* file and is unaffected; what is retired is the reading
+  of it as a claim about the tree, and the words *nothing below does* are what replace that
+  reading, `below` being this file.
 * **It does not do the reduction of a general cospan**, which is what would produce that family:
   Mathlib covers `X` by affines, then `Y`, then `Z`, and takes three theorems and two symmetry
-  arguments to do it. The analytic analogue would cover by local models, and its length is not
-  measured anywhere in this repository. **The three declarations named as still owed by
-  `Oka/AnalyticSpace/PullbackGlue.lean`'s *What this does not do* are the ones below; the fourth
-  item, the reduction, is untouched by this file and stays owed.**
+  arguments to do it. The analytic analogue covers by local models and is
+  `Oka/AnalyticSpace/PullbackReduction.lean`: six declarations for the reduction, of which four are
+  the transcribable ones — the base case, the two covers and the family a general cospan needs —
+  and two more for the predicate *is a local model on the nose* that the substitutions run on.
+
+  **This bullet read *The analytic analogue would cover by local models, and its length is not
+  measured anywhere in this repository* until 2026-09-08**, and *The three declarations named as
+  still owed by `Oka/AnalyticSpace/PullbackGlue.lean`'s* What this does not do *are the ones below;
+  the fourth item, the reduction, is untouched by this file and stays owed.* Both were exact when
+  written; taxis #1909 measured the length and the file above supplied it, and the fourth item is
+  no longer owed by anything.
 * **It states no `CategoryTheory.IsPullback`.** `…gluedIsLimit` is a
   `CategoryTheory.Limits.IsLimit` of the cone `…p_comm` presents, which is what
   `CategoryTheory.Limits.HasPullback` consumes; the `CategoryTheory.IsPullback` spelling would be
@@ -345,10 +359,14 @@ include hU in
 
 **The hypotheses are the point and they are two.** The `U i` cover `X`, which is `hU`; and the
 base change of `g` along each `Uᵢ ⟶ X ⟶ Z` already exists, which is the instance hypothesis this
-file inherits from `Oka/AnalyticSpace/PullbackBlock.lean`. **Neither is discharged anywhere in
-this repository for a general cospan**, so this does not give
-`CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` and the module docstring's
-*What this does not do* says what would. -/
+file inherits from `Oka/AnalyticSpace/PullbackBlock.lean`. **Neither is discharged in this file**,
+so nothing here gives `CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace`;
+`Oka/AnalyticSpace/PullbackReduction.lean` discharges both and this theorem is what it discharges
+them into, twice for a cover of a source and once for the cover of a base.
+
+**This paragraph read *Neither is discharged anywhere in this repository for a general cospan*
+until 2026-09-08**, and the words that replace it name this file rather than the tree, which is
+what a sentence in a docstring can check of itself. -/
 theorem hasPullback_of_cover : HasPullback f g :=
   ⟨⟨⟨_, gluedIsLimit U f g hU⟩⟩⟩
 

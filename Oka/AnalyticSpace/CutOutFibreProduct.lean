@@ -148,6 +148,16 @@ ring operation on global sections, or a lemma of `Oka/AnalyticSpace/CutOutProduc
   `Oka/AnalyticSpace/Glue.lean` and `Oka/Geometry/RingedSpace/PresheafedSpace/Gluing.lean`, and
   nothing below uses any of it. **A reader who takes this file for the general fibre product has
   been misled, and this paragraph is what prevents that.**
+
+  **The gluing happened and the prediction held exactly.**
+  `Oka/AnalyticSpace/PullbackReduction.lean` made
+  `CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` a theorem on 2026-09-08,
+  and `ComplexAnalytic.AnalyticSpace.hasPullback_of_isCutOutModel` — its base case — is
+  `ComplexAnalytic.AnalyticSpace.hasPullback_ofCutOut` below with three presentations substituted
+  in, so this file is the bottom rung of that ladder and not a detour from it. **Every sentence
+  above stands**: the `#synth` is pinned to the commit that adds this file, *below* is this file,
+  and a reader who takes this file for the general fibre product is still misled — the general one
+  is four declarations further on.
 * **Nothing about the fibre product on points.** The carrier of
   `ComplexAnalytic.AnalyticSpace.fibreProdCutOut` is the zero locus of the differences inside the
   carrier of the product, and no statement below identifies it with a set of pairs agreeing over

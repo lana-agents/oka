@@ -14,10 +14,15 @@ complex analytic spaces. Then the fibre product `E ×_B B'` exists, its projecti
 finite étale again, and the square is a pullback in `ComplexAnalytic.AnalyticSpace`.
 
 `Oka/AnalyticSpace/FiniteEtaleOver.lean` records the absence of this base change in its
-`## What is not here` bullet **No pullback over a general cospan, so no base change**, and again in
-the docstring of `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fintypeFiberFunctor`. **The bullet
-is narrowed by this file and is not narrowed to nothing, and this file does not make that category
-a Galois category.** Those axioms quantify over cospans of morphisms *of covers*, and a morphism of
+`## What is not here` bullet **No base change of the class over a general cospan**, and again in
+the docstring of `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fintypeFiberFunctor`. **That bullet
+was headed *No pullback over a general cospan, so no base change* when this sentence was written
+and until 2026-09-08**, when `Oka/AnalyticSpace/PullbackReduction.lean` made
+`CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` a theorem and the first half of
+the heading stopped being true; only the heading moved and what this file narrows is what it
+always narrowed. **The bullet is narrowed by this file and is not narrowed to nothing, and this
+file does not make that category a Galois category.** Those axioms quantify over cospans of
+morphisms *of covers*, and a morphism of
 covers is not known to be finite étale without `[T2Space]` of its target, which is taxis #1772's
 remaining half; nor is a cover's total space assumed Hausdorff anywhere in that file. The four
 further sentences of that file which cite the bullet by its heading are unaffected, and it says
@@ -97,7 +102,10 @@ for the square to be a pullback, because the space is built out of the covering 
   `#synth CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` **fails** at the
   commit that adds this file, on my own run, with the category positional so that it is fixed by
   the statement and not by a named argument. Gluing — taxis #1820's rung 3 — is what would close
-  that, and this file goes around it rather than through it.
+  that, and this file goes around it rather than through it. **That prediction held**: the class
+  became a theorem on 2026-09-08, in `Oka/AnalyticSpace/PullbackReduction.lean`, by gluing and by
+  nothing else. The `#synth` sentence above is pinned to the commit that adds *this* file and is
+  not retired; what this bullet still says is that no statement below is that class.
 * **`[T2Space E]` is not removed and nothing here tries.** It is Mathlib's hypothesis in the
   criterion that turns a proper local homeomorphism into a covering map, and
   `Oka/AnalyticSpace/CoveringMap.lean` records why.
