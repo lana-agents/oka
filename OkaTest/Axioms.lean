@@ -660,8 +660,9 @@ index-of-a-point shape, and one of these seven.
 * `Oka/Analytification/AffineCover.lean`'s *"Neither is needed by anything downstream"*, of a
   comparison theorem and of a choice among Mathlib's cover APIs — **true, and decided by the build
   and not by a grep.** The comparison theorem is described rather than named, so there is no token
-  to grep for at all; the three tokens of Mathlib's cover API that the bullet about this same file
-  greps for occur in the code of none of its **124** downstream modules, which reproduces. What
+  to grep for at all; the **four** tokens that the bullet about this same file greps for — its own
+  enumeration, the dotted module name together with the three API tokens — occur in the code of
+  none of its **124** downstream modules, which reproduces. What
   settles the claim is neither of those: every module downstream is proved without either subject,
   which the build establishes and a grep cannot.
 * `Oka/Analytification/CoverIndependence.lean`'s *"everything downstream of a presentation"* —
@@ -677,20 +678,53 @@ index-of-a-point shape, and one of these seven.
   only by `OkaTest/Axioms/LocalOkaRing.lean` and `OkaTest/GermQuotientDegreeOne.lean`.
 
 **Two instruments this rule still did not name, and one warning about which token to reach for.**
-Each of the two decides a shape the three instruments this rule already names cannot.
+Each of the two decides a shape the three instruments this rule already names do not settle.
 
-**The local-instance rebuild, for an anonymous instance.** An `instance` declared with no name has
-nothing to grep for, nothing a `#print axioms` line can guard, and no constant an environment walk
-can key on — so all three instruments this rule names go past it, and a claim about who consumes it
-looks undecidable. It is not. Leave the declarations in place and put them behind
-`attribute [local instance]`, so the module that declares them still sees them and no other module
-does, then build the library: **a green build is a proof that nothing outside that file consumes
-one**, and the errors of a red one name the consumers. On
-`ComplexAnalytic.AnalyticSpace.isFiniteEtale`'s four that is `lake build` exit 0 over 4153 jobs.
+**The local-instance rebuild, for an instance.** **No use site of an instance names it** — typeclass
+synthesis puts the term there and writes nothing in the source — so a grep decides who consumes one
+for a *named* instance no better than for an anonymous one, and neither the import walk nor the
+compiled scratch file is about declarations at all. **The build decides it.** Put `local` in front
+of each `instance` — Lean 4 takes `local instance : … where`, so an anonymous declaration stays
+anonymous and becomes file-scoped — change nothing else, and build the library: **a green build is
+a proof that nothing outside that file consumes one**, and the errors of a red one name the
+consumers. On `ComplexAnalytic.AnalyticSpace.isFiniteEtale`'s four that is `lake build` exit 0 over
+4153 jobs at `7a99bfc` and over 4154 at `2cf6efa`, the push that added a module to that same file's
+neighbourhood.
+
+**This paragraph prescribed `attribute [local instance]` until 2026-09-08, and that is not this
+instrument**: the attribute *promotes* a declaration that is not an instance, which is what
+`Oka/Analytification/SpecDistinguishedOpen.lean` uses it for and says so; applied to one that is
+already a global `instance` it adds a local one and **removes nothing**, so importers still
+synthesise it and **the build is green whatever the answer is**. Two modules settle it, and they
+are the cheapest way to check any claim of this shape:
+a module `A` declaring a one-field `Prop` class of a natural number and an anonymous
+`instance` of it at `0`; a module `B` importing `A` and asking `#synth` for that instance. With a
+plain `instance`, `B` resolves it; with **`local instance`**, `B` reports *failed to synthesize*;
+with a plain `instance` and the attribute beside it, `B` resolves it again. **Only the middle row
+is the instrument**, and the retired wording is kept here as a dated record because two review
+rounds re-ran the middle row while this file prescribed the third.
+
 **Deleting them outright is the weaker run and it is worth saying why**: the build stops at the
 first module that fails, which is the declaring one, so a deletion answers *who at all* and then
 tells you nothing about anything past the failure. The local-instance run answers *who outside*
 and reaches every module. A sweep should say which of the two it ran.
+
+**An anonymous instance is not nameless, which is worth knowing before reaching for a guard.** Lean
+generates a name for it and the name is not internal, so `scripts/DumpOkaDecls.lean` emits it like
+any other constant: `ComplexAnalytic.AnalyticSpace.isFiniteEtale`'s four appear in `oka-decls.txt`
+against `Oka.AnalyticSpace.FiniteEtaleOver` as
+`ComplexAnalytic.AnalyticSpace.instIsStableUnderCompositionIsFiniteEtale` and three formed the same
+way, and `#print axioms` elaborates on each. **What makes a guard the wrong instrument is not that
+there is nothing to guard**: the generated name is derived from the class and the argument rather
+than chosen, and a second anonymous instance of the same class takes that name with a numeric
+suffix after it, so **the name a guard would pin moves when a sibling is added above it** — which
+the two-module file above shows for the class it declares. A guard would also answer *does this
+exist*, which was never the question. The third instrument, the environment walk, is the one that
+could answer *who consumes it* by name, and on this toolchain it cannot be run as this rule states
+it: `Lean.ConstantInfo.value?` is `none` for every *imported* theorem — `Nat.add_comm` included —
+and a `Prop`-valued instance is a theorem, so a scan of the environment over values returns **0**
+for a positive control as readily as for the target. **Put a positive control in that walk**, for
+the same reason this rule asks for a deliberate control error at the foot of a scratch file.
 
 **When the subject of the claim does not exist, the build decides it and a grep cannot.** *"Nothing
 downstream needs `X`"* has two shapes. If `X` is in the tree, the reverse closure and a grep for `X`
@@ -710,9 +744,13 @@ which is where the discarded spelling's `restrictTopIso` enters — reports none
 
 **This block is matched by the pattern it reports on**, as the paragraph opening *The 21 is
 `d2ae161`'s* says of the third sweep's. The **31** it reports is `7a99bfc`'s and does not include
-what is written here; at the head that writes this the pattern returns **42**, and the whole of the
-difference is in this file, whose own count goes **11 → 22** while no other file's moves — the
-eleven added are this block's quotations of the sentences it decides. A fifth sweep should
+what is written here; at **`0c370e5`**, the head that wrote this block, the pattern returns **42**
+over a population of **324**, and the whole of the difference is in this file, whose own count goes
+**11 → 22** while no other file's moves — the eleven added are this block's quotations of the
+sentences it decides. **That figure was written as *at the head that writes this* and is now pinned
+to the commit instead**, because the phrase is inherited by every later push to this file while the
+measurement is not: the push repairing the instrument paragraph above re-derived it and it is still
+**42 / 22** over **324**, but that is a second run and not the same claim. A fifth sweep should
 re-derive its own figure at its own head and should expect to have raised it again.
 
 **Most mirror-tree material is routed by a row, and a small tail of it is deliberately routed by
