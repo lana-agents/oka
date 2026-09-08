@@ -27,7 +27,14 @@ the square is a pullback**, which is the sentence those four make and none of th
 `CategoryTheory.Limits.pullback` notation is usable at `ComplexAnalytic.AnalyticSpace` along a
 leg of this shape.
 
-## Why this is the shape that is reachable and the general one is not
+## Why this is the shape that was reachable first, and the general one was not
+
+**The heading read *Why this is the shape that is reachable and the general one is not* until
+2026-09-08**, when `Oka/AnalyticSpace/PullbackReduction.lean` made
+`CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` a theorem by gluing over a
+cover, which is the route the paragraph below names. Every measurement under this heading is
+pinned to `e8c5f03` and none of them is retired by that; what was false was the present tense of
+the heading itself.
 
 At `e8c5f03`, and so at the Mathlib revision `lakefile.toml` pins there, neither
 `CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` nor
@@ -108,25 +115,37 @@ equation of morphisms out of `CategoryTheory.Limits.pullback` of two members of 
 
 **It does not make `ComplexAnalytic.AnalyticSpace` a category with pullbacks, and it does not give
 base change along a general morphism.** `Oka/AnalyticSpace/FiniteEtaleOver.lean`'s
-`## What is not here` says that no `CategoryTheory.Limits.HasPullback` instance for analytic spaces
+`## What is not here` said that no `CategoryTheory.Limits.HasPullback` instance for analytic spaces
 is available and that base change is therefore unstatable for `isFiniteEtale`; after this file the
-first half of that is false as a universal and the second is false at this one leg, and the
-sentences there are narrowed to the general cospan rather than struck. The diagonal `A ⟶ A ×_B A`
-that a monomorphism argument wants is over a cospan neither of whose legs is an open immersion, so
-nothing here reaches it.
+first half of that was false as a universal and the second false at this one leg, and the sentences
+there were narrowed to the general cospan rather than struck. The diagonal `A ⟶ A ×_B A` that a
+monomorphism argument wants is over a cospan neither of whose legs is an open immersion, so nothing
+here reaches it.
+
+**This paragraph was in the present tense about that file until 2026-09-08**, when
+`Oka/AnalyticSpace/PullbackReduction.lean` made
+`CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` a theorem and that bullet was
+narrowed a second time, to the class and away from the limit; what this file did to it is what
+this paragraph records and is unchanged, and the tense is what moved. **The first sentence is a
+statement about *this* file and is untouched by any of it**: nothing declared below is that class,
+which is what a `What this does not do` heading is for.
 
 **And `ComplexAnalytic.AnalyticSpace.hasPullback_pullbackFst_ofRestrict'` adds no shape to the
-accounting three other files keep.** `Oka/AnalyticSpace/LocalIso.lean`,
-`Oka/AnalyticSpace/ZeroLocus.lean` and `Oka/AnalyticSpace/CutOutFibreProduct.lean` each quantify
-over cospans by whether a leg **is** the inclusion of an open subspace, is finite étale with
-Hausdorff source, or is a morphism between local models presented by cut-out data.
+accounting two other files keep.** `Oka/AnalyticSpace/ZeroLocus.lean` and
+`Oka/AnalyticSpace/CutOutFibreProduct.lean` each quantify over cospans by whether a leg **is** the
+inclusion of an open subspace, is finite étale with
+Hausdorff source, or is a morphism between local models presented by cut-out data. **This sentence
+said *three other files* and named `Oka/AnalyticSpace/LocalIso.lean` first, until 2026-09-08**,
+when that file retired its enumeration of shapes outright — an arbitrary cospan has a fibre
+product, so it keeps no list of shapes to be a member of — and the count here follows it down.
 `ComplexAnalytic.AnalyticSpace.restrictIsoPullbackOfRestrict_hom_fst` says that
 `CategoryTheory.Limits.pullback.fst f (Y.ofRestrict V)` is
 `ComplexAnalytic.AnalyticSpace.ofRestrict` of the preimage composed with an isomorphism of the
 source, so the leg this file's new instance sits at is a leg of the **first** of those three
-shapes up to that isomorphism, and no fourth shape appears. Those three sentences are left alone
-for that reason, and this paragraph is here rather than in them because it is a fact about
-declarations in this file.
+shapes up to that isomorphism, and no fourth shape appears. Both sentences are left alone for that
+reason, and this paragraph is here rather than in them because it is a fact about declarations in
+this file. **It read *Those three sentences* until 2026-09-08**, for the reason the record above
+gives: the three shapes are still three and it is the files keeping the accounting that are two.
 
 ## The finiteness lemma and the one already here are not the same statement
 
@@ -613,8 +632,14 @@ The two fields are `ComplexAnalytic.AnalyticSpace.isFinite_restrictHom` above an
 **Read with `ComplexAnalytic.AnalyticSpace.isPullback_ofRestrict`, this is base change of
 `ComplexAnalytic.AnalyticSpace.isFiniteEtale` along an open immersion**: the restriction is the
 pullback, so the pullback of a finite étale morphism along the inclusion of an open subspace is
-finite étale. It is not `CategoryTheory.MorphismProperty.IsStableUnderBaseChange`, which quantifies
-over every cospan and needs a fibre product this category does not have. -/
+finite étale. It is not `CategoryTheory.MorphismProperty.IsStableUnderBaseChange`, which
+quantifies over every cospan and asks for the class across each of them;
+`Oka/AnalyticSpace/FiniteEtaleOver.lean`'s `## No base change of the class over a general cospan`
+bullet is where that absence is stated and measured, and this sentence defers to it rather than
+restating it. **The clause closing this sentence read *and needs a fibre product this category does
+not have* until 2026-09-08**, when `Oka/AnalyticSpace/PullbackReduction.lean` gave the category
+`ComplexAnalytic.AnalyticSpace.hasPullbacks`: the limit is there and the class carried across it is
+what is not, which is the narrowing that bullet took on the same day. -/
 instance isFiniteEtale_restrictHom [IsFiniteEtale f] : IsFiniteEtale (restrictHom f V) where
   isFinite := isFinite_restrictHom f V
   isLocalIso := isLocalIso_restrictHom f V

@@ -93,23 +93,29 @@ the rung.
   arbitrary second factor, by `isProperMap_of_comp_of_t2` and the properness of a finite morphism,
   and no separatedness notion and no fibre product is needed at any point.
 
-  This repository still has no separatedness notion for `ComplexAnalytic.AnalyticSpace`, and no
-  fibre product over a cospan neither of whose legs is the inclusion of an open subspace, is
-  finite étale with Hausdorff source, or is a morphism between local models presented by cut-out
-  data — `Oka/AnalyticSpace/PullbackOpen.lean` builds the first of those three shapes,
-  `Oka/AnalyticSpace/FiniteEtaleBaseChange.lean` the second and
-  `Oka/AnalyticSpace/CutOutFibreProduct.lean` the third, and the first of those three files prices
-  the rest. **This sentence read *neither a separatedness notion … nor fibre
-  products* until `Oka/AnalyticSpace/PullbackOpen.lean` landed, and the second half of it is what
-  that file falsified; it then read *no fibre product over a cospan neither of whose legs is the
-  inclusion of an open subspace — `Oka/AnalyticSpace/PullbackOpen.lean` builds that one shape and
-  prices the rest* until 2026-09-07, when the second file added the second shape; and it named
-  those two shapes and no third until later the same day, when the third file added one.** The
-  remaining absence is the one
-  `Oka/AnalyticSpace/FiniteEtaleOver.lean` records as the reason base change is not statable
-  there. **None of the three shapes is the one this bullet is about**: the graph construction's
-  cospan has both legs out of an arbitrary analytic space, which need not be a local model and is
-  not an open subspace of one.
+  **This repository has both of the things this bullet used to say it has not, and it acquired
+  them on two different days.** `ComplexAnalytic.AnalyticSpace.isSeparatedMap`, declared in
+  `Oka/AnalyticSpace/SeparatedFiniteEtale.lean` on 2026-09-08, is the separatedness notion; and
+  `ComplexAnalytic.AnalyticSpace.hasPullback`, declared in
+  `Oka/AnalyticSpace/PullbackReduction.lean` later the same day, is the fibre product over an
+  arbitrary cospan, which includes the one the graph construction forms — both spellings taken from
+  `scripts/DumpOkaDecls.lean`'s output and not from a grep. **So the classical route is available
+  now and this bullet is still not about it**:
+  `ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp` is proved without either, at
+  `[T2Space Y]`, by `isProperMap_of_comp_of_t2` and the properness of a finite morphism, and
+  nothing below was changed by their arrival.
+
+  **This sentence read *neither a separatedness notion … nor fibre products* until
+  `Oka/AnalyticSpace/PullbackOpen.lean` landed, and the second half of it is what that file
+  falsified; it then read *no fibre product over a cospan neither of whose legs is the inclusion of
+  an open subspace — `Oka/AnalyticSpace/PullbackOpen.lean` builds that one shape and prices the
+  rest* until 2026-09-07, when `Oka/AnalyticSpace/FiniteEtaleBaseChange.lean` added a second shape;
+  and it named those two shapes and no third until later the same day, when
+  `Oka/AnalyticSpace/CutOutFibreProduct.lean` added a third; and it opened *This repository still
+  has no separatedness notion for `ComplexAnalytic.AnalyticSpace`, and no fibre product over a
+  cospan neither of whose legs is …* until 2026-09-08, when both halves were falsified in one
+  day.** The enumeration of shapes is retired with it: an arbitrary cospan has a fibre product, so
+  there is no longer a list of shapes to keep.
   **Neither was ever what obstructed this**; a
   separation axiom on `Y` is a hypothesis and not a construction, and it is the whole of what was
   missing.
@@ -357,7 +363,11 @@ additionally *finite* étale is not asked here — that witness has a second fac
 local isomorphism, so it does not settle the question.
 
 **It does not make the category Galois**, and `Oka/AnalyticSpace/FiniteEtaleOver.lean` says what
-else is wanted: no fibre product over a general cospan, hence no base change. **The fibre functor
+else is wanted: `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` is not carried across a general
+square. **This clause read *no fibre product over a general cospan, hence no base change* until
+2026-09-08**, when `Oka/AnalyticSpace/PullbackReduction.lean` gave the general cospan its fibre
+product; the base change that is still wanted is of the class and not of the limit, which is the
+narrowing that file's bullet took on the same day. **The fibre functor
 is no longer among it** — `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fintypeFiberFunctor` is in
 that file, and its
 fibres are finite with no hypothesis. **This sentence used to add *and every statement about that
@@ -366,8 +376,13 @@ removed it**: `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.base_eq_of_fiberFun
 falsified it — a statement about that functor, and neither of its laws — and nothing swept this
 file when it landed. What retires the clause outright rather than narrowing it is
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.hom_ext_of_fiberFunctor_map_eq`, which is
-faithfulness wherever its hypotheses hold. What is missing there is base change over a general
-cospan, and `CategoryTheory.Functor.Faithful` as a class. -/
+faithfulness wherever its hypotheses hold. What is missing there is base change of the class over
+a general cospan, and `CategoryTheory.Functor.Faithful` as a class. **That clause read *base change
+over a general cospan* until 2026-09-08**, and is narrowed for the reason
+`Oka/AnalyticSpace/FiniteEtaleOver.lean`'s `## No base change of the class over a general cospan`
+bullet gives — the limit exists and the class carried across it does not — which is the narrowing
+the clause of this docstring naming `Oka/AnalyticSpace/PullbackReduction.lean` took, in the same
+push and by the same landing. -/
 theorem isFiniteEtale_of_comp {X Y Z : AnalyticSpace.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
     [T2Space Y] [IsFiniteEtale (f ≫ g)] [IsLocalIso g] : IsFiniteEtale f where
   isFinite := isFinite_of_comp_of_t2Space f g

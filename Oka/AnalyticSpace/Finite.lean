@@ -117,6 +117,16 @@ object it wants rather than the shape of the legs. `CategoryTheory.Limits.HasPul
 ComplexAnalytic.AnalyticSpace` still does not synthesise, on a run at the commit carrying this
 record, so the absence is narrowed and not struck.
 
+**The absence is struck now.** `Oka/AnalyticSpace/PullbackReduction.lean` made that class a
+theorem on 2026-09-08, `ComplexAnalytic.AnalyticSpace.hasPullbacks`, so the cospan the graph
+construction forms has a fibre product like every other. **The clause repaired twice above is
+retired outright and nothing above is struck**: each of its three readings was exact at the run
+recorded beside it, and the last of them — *`CategoryTheory.Limits.HasPullbacks
+ComplexAnalytic.AnalyticSpace` still does not synthesise* — is pinned to the commit carrying the
+record and stays where it is. **What does not follow is that the classical route is now the one
+this file takes**: `ComplexAnalytic.AnalyticSpace.isFinite_of_comp_of_t2Space` proves the
+cancellation at `[T2Space Y]` with no fibre product at all, and that proof is unchanged.
+
 ## What is not here, and it is the whole of the subject
 
 **Grauert's finite mapping theorem** — that `f_*𝒪_X` is a coherent `𝒪_Y`-module for finite `f` —
@@ -130,9 +140,14 @@ second notion resting on this one.
 
 **Base change along a general morphism is absent, and along two particular shapes of leg it is
 elsewhere in this repository.** `AlgebraicGeometry.IsFinite`'s `IsStableUnderBaseChange`
-quantifies over every cospan and has no analogue below, because a fibre product over a general
-cospan is what `Oka/AnalyticSpace/PullbackOpen.lean`'s header prices and does not build. What that
-file does build is the pullback along the inclusion of an open subspace, and
+quantifies over every cospan and has no analogue below, because nothing here carries finiteness
+across a square whose base is arbitrary. **The reason clause read *because a fibre product over a
+general cospan is what `Oka/AnalyticSpace/PullbackOpen.lean`'s header prices and does not build*
+until 2026-09-08**, when `Oka/AnalyticSpace/PullbackReduction.lean` built one
+(`ComplexAnalytic.AnalyticSpace.hasPullbacks`); the absence stated here is unchanged and only its
+reason is, the missing thing being the transfer of the class and no longer the limit. What
+`Oka/AnalyticSpace/PullbackOpen.lean` does build is the pullback along the inclusion of an open
+subspace, and
 `ComplexAnalytic.AnalyticSpace.isFinite_restrictHom` there is finiteness carried across it, with
 no hypothesis on the open subset. **The words `and along the inclusion of an open subspace it is
 here` closed the sentence above until 2026-09-07**, when

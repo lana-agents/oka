@@ -18,9 +18,17 @@ the gluing, the fields of
 **coproduct** — the disjoint union of a family, the trivial `n`-sheeted cover, the sheet
 comparison, and the one-sheeted disjoint union; and that the spaces this development
 **constructs** are **Hausdorff**, which is the one heading below naming a property of a space
-rather than a construction of one. **Two of the headings below are about morphisms after all** —
-gluing one, and that a morphism to `ℂ^n` is determined by the pullbacks of the coordinates —
-because each is a statement about the space the construction produces; the *classes* of
+rather than a construction of one; and the **fibre product** — the gluing of the ambient pullbacks
+over a covering family, the limit cone it presents, the reduction of a general cospan to that
+shape, and `CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` itself, whose own
+heading says why it is guarded here. **Guards about the category rather than about an object or a
+morphism in it are `ComplexAnalytic.AnalyticSpace.hasCoproducts`, `…hasFiniteCoproducts` and
+`…hasPullbacks`**, the first two under `### The disjoint union is the coproduct`, whose own
+paragraph calls them *the two `Has…` instances*; so the last is the third of three and not the
+only one, and a category-level guard in this file is not an exception the routing recipe had to
+swallow. **Two of the headings below are about morphisms after all** — gluing one, and that a
+morphism to `ℂ^n` is determined by the pullbacks of the coordinates — because each is a statement
+about the space the construction produces; the *classes* of
 morphisms are `OkaTest/Axioms/Morphisms.lean`'s.
 
 **That is a description and not a list, and the headings below are the record**: each names the
@@ -1972,14 +1980,24 @@ way**: none of the thirty-three names under this heading mentions uniqueness, a 
 
 **What did not move is the synthesis probe.**
 `CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` still does not synthesise —
-re-run at the commit that adds the section below and not carried over, as it was re-run at the
+re-run at the commit that adds the section headed *The gluing is the fibre product: uniqueness of
+the lift, the limit cone, and `HasPullback`* and not carried over, as it was re-run at the
 commit that added the lift. The probe is
 `#synth CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace`, run rather than
 grepped, with the category **positional** — the form
 `Oka/AnalyticSpace/AffineProductOpen.lean` uses, and the form that asks about the class rather
 than about an object. `…hasPullback_of_cover` does not make it synthesise because it asks for a
 covering family along which the base change is already known, and nothing produces one for a
-general cospan. -/
+general cospan.
+
+**The probe moved on 2026-09-08 and this paragraph is the record of what it said before.** Both
+sentences above are pinned to the commits they were run at and neither is retired; what is retired
+is the reading of *still does not synthesise* as a claim about the tree.
+`Oka/AnalyticSpace/PullbackReduction.lean` produced the covering family, and
+`ComplexAnalytic.AnalyticSpace.hasPullbacks` is the class; it is guarded under the section headed
+*The reduction of a general cospan, and the category with pullbacks*. **No positional pointer is
+written here**: the paragraph above is about a *below* that reached past its own section, and this
+one names each section it mentions by its heading. -/
 
 /--
 info: 'ComplexAnalytic.AnalyticSpace.Pullback.t'_fac' depends on axioms:
@@ -2278,7 +2296,17 @@ has one — under two hypotheses, that the `U i` cover `X` and that the base cha
 each `U i ⟶ X ⟶ Z` already exists. **Neither hypothesis is discharged anywhere in this
 repository for a general cospan**, so
 `CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` still does not synthesise; the
-section above records the probe and it was re-run at this commit. -/
+section headed *The fibre product glued out of a family of opens, and its two projections* records
+the probe and it was re-run at this commit.
+
+**Both hypotheses are discharged now and the sentence above is kept as the record.** The section
+headed *The reduction of a general cospan, and the category with pullbacks* guards
+`ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict_comp`, which is the
+second hypothesis at the family the first is discharged by, and
+`ComplexAnalytic.AnalyticSpace.hasPullbacks`, which is what the probe now finds. **This is not a
+recount and the heading is unchanged**: what this section guards is still the cover-indexed
+statement and not the general one, and *the first heading in this file of which that is true* is
+still exact, because a first stays first. -/
 
 /--
 info: 'ComplexAnalytic.AnalyticSpace.Pullback.range_base_ι' depends on axioms:
@@ -2342,3 +2370,138 @@ info: 'ComplexAnalytic.AnalyticSpace.Pullback.hasPullback_of_cover' depends on a
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.Pullback.hasPullback_of_cover
+
+
+/-! ### The reduction of a general cospan, and the category with pullbacks
+
+`Oka/AnalyticSpace/PullbackReduction.lean`, the whole of it, in the order the declarations are
+made. **Eight names**, and the module is new.
+
+A space that *is* a local model on the nose and the neighbourhood of a point that is one; then a
+cospan of three of them, a cospan with the source of its first leg arbitrary, a cospan with only
+its base a local model, the covering family a general cospan needs, and the general cospan itself;
+then the category.
+
+**Every guard here is of one of three kinds and the three partition the eight.** Two are about a
+*space*: `ComplexAnalytic.IsCutOutModel` is a predicate on one and
+`ComplexAnalytic.exists_isCutOutModel_restrict` says every point of one has a neighbourhood
+satisfying it. Five say a *cospan has a fibre product* —
+`ComplexAnalytic.AnalyticSpace.hasPullback_of_isCutOutModel`, `…_right`, `…_base`,
+`…hasPullback_ofRestrict_comp` and `…hasPullback`. One is about the *category*:
+`ComplexAnalytic.AnalyticSpace.hasPullbacks`. Two plus five plus one is eight, which is the number
+of `#print axioms` lines below.
+
+**The routing is by module and the module rule is what puts the last of those three here.**
+`OkaTest/Axioms.lean`'s recipe resolves every `#print axioms` name of a file to the module the
+declaration lives in and asks whether the row's phrase covers what comes back; all eight resolve
+to `Oka/AnalyticSpace/PullbackReduction.lean`, and *analytic spaces, local models, the node*
+covers that module — two of its eight declarations are about local models by name, and the other
+six are the ladder that carries the fibre product from a cospan of local models to an arbitrary
+one. The section headed *The gluing is the fibre product: uniqueness of the lift, the limit cone,
+and `HasPullback`* took the same decision for
+`ComplexAnalytic.AnalyticSpace.Pullback.hasPullback_of_cover` and gives the same reason.
+
+**`ComplexAnalytic.AnalyticSpace.hasPullbacks` is about the category rather than about any
+morphism in it, which is the description `OkaTest/Axioms/Morphisms.lean` gives of a kind of its
+own, and it is here and not there.** That is a real tension and it is said rather than left to be
+found. What settles it is that the routing rule is over modules and not over statements: splitting
+one module's eight guards across two files to follow a kind would put a name in
+`OkaTest/Axioms/Morphisms.lean` whose module has no other guard there, which is the shape the
+section headed *The gluing is the fibre product: uniqueness of the lift, the limit cone, and
+`HasPullback`* declined for the opposite reason — it kept two names *out* of this file because
+their modules' other guards were already elsewhere. **And a category-level guard here is not a
+first**: `ComplexAnalytic.AnalyticSpace.hasCoproducts` and `…hasFiniteCoproducts`, under the
+section headed *The disjoint union is the coproduct*, are `CategoryTheory.Limits.HasCoproducts`
+and `CategoryTheory.Limits.HasFiniteCoproducts` of this same category and are guarded in this
+file, by the same module rule and with no tension recorded there. So this section is the third of
+three and the module rule has already decided the question twice. **A reader looking for
+`CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` in that file will not find it,
+and this paragraph is the pointer that stops the search there.**
+
+**This is not a third heading about morphisms.** The module docstring at the head of this file
+says **two** of the headings here are about morphisms after all and names them; the sections
+headed *The fibre product glued out of a family of opens, and its two projections* and *The gluing
+is the fibre product: uniqueness of the lift, the limit cone, and `HasPullback`* each argued they
+were not a further one, and this is not a further one either, on the same criterion. Nothing below
+names a *class* of morphisms — no `ComplexAnalytic.AnalyticSpace.IsFinite`,
+no `…IsFiniteEtale`, no `…IsLocalIso` — and a guard on one would belong in
+`OkaTest/Axioms/Morphisms.lean`.
+
+**Nothing generated is guarded and here there is nothing generated.** The module's tab-anchored row
+count in `scripts/DumpOkaDecls.lean`'s output is **eight** against eight guards: no `_assoc` lemma,
+no `.eq_1` equation lemma, no match lemma and no congruence lemma. `ComplexAnalytic.IsCutOutModel`
+is a `def` into `Prop` and generates none; the two `instance`s generate none either. Equation
+lemmas are generated on demand, so this is a statement about the environment at the commit that
+adds this section and not a prediction about later ones.
+
+**No `info:` line below reaches 100 characters** — the longest is
+`ComplexAnalytic.AnalyticSpace.hasPullback_of_isCutOutModel_right`'s, at 91 — so the count of
+over-long `info:` lines under `OkaTest/` that the section headed *The gluing is the fibre product:
+uniqueness of the lift, the limit cone, and `HasPullback`* states is unchanged by this push, and
+none of the eight `#print axioms` lines below is wrapped.
+
+**The synthesis probe succeeds at the commit that adds this section, and that is the change.**
+`#synth CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` answers
+`ComplexAnalytic.AnalyticSpace.hasPullbacks`, run rather than grepped, with the category
+**positional** — the same form the sections headed *The fibre product glued out of a family of
+opens, and its two projections* and *The gluing is the fibre product: uniqueness of the lift, the
+limit cone, and `HasPullback`* record it failing in — and with `example : False := trivial` at the
+foot of the probe file, which errored, so the file did elaborate and a green `#synth` is not the
+false alarm taxis #1821 records. **Those two records are pinned to their own commits and neither
+is retired by this**; what they say of the tree at those commits was exact. -/
+
+/--
+info: 'ComplexAnalytic.IsCutOutModel' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.IsCutOutModel
+
+/--
+info: 'ComplexAnalytic.exists_isCutOutModel_restrict' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.exists_isCutOutModel_restrict
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hasPullback_of_isCutOutModel' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hasPullback_of_isCutOutModel
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hasPullback_of_isCutOutModel_right' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hasPullback_of_isCutOutModel_right
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hasPullback_of_isCutOutModel_base' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hasPullback_of_isCutOutModel_base
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict_comp' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hasPullback_ofRestrict_comp
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hasPullback' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hasPullback
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.hasPullbacks' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.hasPullbacks
