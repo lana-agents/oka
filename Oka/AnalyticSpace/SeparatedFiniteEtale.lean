@@ -125,17 +125,27 @@ not give either.
   answers to still asks `[T2Space X]` of the base, which the axiom does not; and nothing here
   bears on the other fields — base change over a general cospan of morphisms of this category,
   quotients by finite group actions, or the preservation of epimorphisms by a fibre functor.
-* **The summand is produced in the covers and not inside this category.**
+* **The summand is produced in the covers and not inside this category, and a file this one does
+  not import now also produces it inside.**
   `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.inducesIsoOnDirectSummand_of_mono`
-  gives a `Z` in `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver X` and a colimit there. **The
-  obstruction is that the summand is existentially quantified where it is produced**:
-  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.inducesIsoOnDirectSummand_of_injective`
-  constructs it as the complementary clopen part at the range of the monomorphism, and
+  below gives a `Z` in `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver X` and a colimit there, and
+  that is still what it gives; **nothing in this file moved**.
+
+  **This bullet read as an open obstruction until 2026-09-12** and the diagnosis it gave was
+  right, so it is kept: *"the summand is existentially quantified where it is produced —
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.inducesIsoOnDirectSummand_of_injective` constructs
+  it as the complementary clopen part at the range of the monomorphism, and
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isSeparatedMap_restrictClopenCompl` says exactly
-  that object is separated over the base whenever the one it is cut out of is — but the
-  existential hides which object was taken, so this file cannot reach that lemma from the
-  statement. Landing the summand in this category needs the ambient statement restated with its
-  witness named, and that is a push on `Oka/AnalyticSpace/DirectSummand.lean` and not on this one.
+  that object is separated over the base whenever the one it is cut out of is — but the existential
+  hides which object was taken, so this file cannot reach that lemma from the statement. Landing
+  the summand in this category needs the ambient statement restated with its witness named, and
+  that is a push on `Oka/AnalyticSpace/DirectSummand.lean` and not on this one."* That push
+  happened: `Oka/AnalyticSpace/DirectSummand.lean` now names the witness as
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.directSummandCompl`, and
+  `Oka/AnalyticSpace/SeparatedDirectSummand.lean` — **downstream of this file, so nothing here can
+  cite its declarations** — gives that object the second component and reflects the colimit back
+  along the fully faithful inclusion. **The statement below is unchanged and this file gains no
+  import**; what a reader should take from this bullet now is which file to look in.
 * **No coproducts and no terminal-object-and-coproducts package.**
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isSeparatedMap_sigma` says a finite disjoint
   union of separated covers is separated, so the objects are available; what is not here is the
@@ -410,10 +420,15 @@ there is a cover `Z` and a morphism `Z ⟶ B` whose binary cofan with `i` is a c
 
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.inducesIsoOnDirectSummand_of_injective` with its
 injectivity hypothesis discharged by the theorem above and its `[T2Space]` by the object's own
-separatedness. **The summand and the colimit are in the covers and not in this category**, and the
-`## What is not here` section of this file says what stands between: the ambient statement
-quantifies its witness existentially, so the lemma that would make that witness separated cannot
-be reached from it. **The `haveI` is the comma category's and not this statement's** — the
+separatedness. **The summand and the colimit are in the covers and not in this category**, and they
+stay there: the ambient statement quantifies its witness existentially, so the lemma that would
+make that witness separated cannot be reached from *this* statement. **That is a fact about this
+theorem and no longer a gap in the repository** — `Oka/AnalyticSpace/SeparatedDirectSummand.lean`,
+which this file does not import, produces the summand and the colimit inside this category from the
+named witness `Oka/AnalyticSpace/DirectSummand.lean` now carries, and the
+`## What is not here` bullet of the same subject records what changed and when.
+
+**The `haveI` is the comma category's and not this statement's** — the
 inclusion's action on an object leaves `left` alone by `rfl` but not reducibly so, which is the
 seam `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.t2Space_left_of_isSeparatedMap`'s docstring
 describes. -/

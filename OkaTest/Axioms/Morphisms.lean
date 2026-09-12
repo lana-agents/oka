@@ -254,6 +254,39 @@ that clause already names. **This clause was added by the push that added that s
 2026-09-08, for the reason the clause naming
 `### The terminal object and the product of two complex affine spaces` gives.
 
+And one section more, which adds **no kind at all** and is named here because the convention this
+file's other clauses record is that a push appending a section owes the description one.
+`### The direct summand with its witness named, and the summand inside the separated covers` guards
+the six declarations `Oka/AnalyticSpace/DirectSummand.lean` gained when the witness of its
+existential was given a name, and the four of the new module
+`Oka/AnalyticSpace/SeparatedDirectSummand.lean` that land that summand and its colimit inside
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver`. **Ten guards, and they partition eight and
+two.** **Eight are of the first kind**, by the opening description's clause naming the category the
+finite étale ones form over a fixed base: an object of that category, a morphism of it, a
+topological property of the image of one of its morphisms, and the same two constructions in the
+separated category. **Two are of the fourth**, by the clause opening *The fourth kind has a second
+class, and it is the monomorphisms* —
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isColimitBinaryCofanDirectSummandCompl` and
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.inducesIsoOnDirectSummand_of_mono'`, whose
+hypothesis is `CategoryTheory.Mono` in that category, exactly as
+`### The category of separated covers, and separatedness as a morphism property` assigns its own
+two.
+
+**None of the ten is of the sixth kind**, so the clause opening *The sixth kind has a second
+category* is untouched and its *Five of that section's twenty-one guards* still counts what it
+counted: that kind is *about the category rather than about any morphism in it*, and every guard of
+the new section is about a morphism, an object named so that a morphism can be stated, or the
+decomposition of one morphism. **And none is of the kind opening *And a further kind, next to the
+separated-map one*, so that clause's *both of this file's* is untouched too**: that kind is *where
+a map lands as a set*, and the three range guards below say the image is clopen or package it as an
+open, which is a property of the image and not a computation of it —
+`ComplexAnalytic.AnalyticSpace.isClopen_range_of_isLocalIso_of_isFinite` and
+`ComplexAnalytic.AnalyticSpace.isClopen_range_of_isFiniteEtale` are already in this file on that
+reading, under `### The clopen image of a finite local isomorphism, and the direct summand it cuts
+out`, and neither is counted by that clause either. **This clause was added by the push that added
+that section**, 2026-09-12, for the reason the clause naming
+`### The terminal object and the product of two complex affine spaces` gives.
+
 **Named rather than counted from the end**, which is the repair and not the description. **The
 sentence this replaces called them *the last two***; they stopped being that when two further
 sections were appended past them — and one of those two was written across two lines, so no
@@ -5584,3 +5617,148 @@ info: 'ComplexAnalytic.AnalyticSpace.range_base_pullbackFst_ofRestrict' depends 
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.range_base_pullbackFst_ofRestrict
+
+/-! ### The direct summand with its witness named, and the summand inside the separated covers
+
+`Oka/AnalyticSpace/DirectSummand.lean`, the six declarations it gained when the witness of its
+existential was given a name, together with the whole of the new module
+`Oka/AnalyticSpace/SeparatedDirectSummand.lean`. **Ten names**: the image of a morphism of covers
+as a clopen set, as an open subspace and as a closed one; the complementary summand at that image
+and its inclusion into the target; the decomposition of the target as a binary coproduct at an
+injective morphism; and then, in `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver`, the same
+summand as an object of that category, its inclusion, the decomposition at a monomorphism **of that
+category**, and that decomposition's existential closure.
+
+**The routing, argued rather than assumed.** The topic table at the head of `OkaTest/Axioms.lean`
+routes *morphisms of analytic spaces* here, and that is the row for all ten: three are about where
+the underlying map of a morphism of covers lands and what kind of set that is, four are an object
+of a category of morphisms over a fixed base together with the inclusion that names it, and three
+are the decomposition of one morphism into a coproduct injection. **The competing row is *analytic
+spaces, local models, the node*, `OkaTest/Axioms/AnalyticSpace.lean`**, and it loses for the reason
+`### The category of separated covers, and separatedness as a morphism property` gives against the
+same competitor: nothing below is a local model, a chart or a node, and the objects below are named
+only so that morphisms into them can be stated. **The second competitor is
+`### The clopen image of a finite local isomorphism, and the direct summand it cuts out`**, which
+guards both spellings — the two-field and the class one — of the statement this section's first
+guard reads at a morphism of covers; that section is not extended, for the reason this file gives
+for appending — a section appended at the
+end cannot say which section is above it and stay true, since the next branch appends between them.
+
+**The kinds, and they partition ten as eight and two.** **Eight of the first**, by the head's
+clause naming the category the finite étale ones form over a fixed base:
+`…FiniteEtaleOver.isClopen_range_left`, `…FiniteEtaleOver.rangeOpens`,
+`…FiniteEtaleOver.isClosed_rangeOpens`, `…FiniteEtaleOver.directSummandCompl`,
+`…FiniteEtaleOver.directSummandComplι`,
+`…FiniteEtaleOver.isColimitBinaryCofanDirectSummandCompl`,
+`…SeparatedFiniteEtaleOver.directSummandCompl` and `…SeparatedFiniteEtaleOver.directSummandComplι`.
+**Two of the fourth**, by the head's clause opening *The fourth kind has a second class, and it is
+the monomorphisms*: `…SeparatedFiniteEtaleOver.isColimitBinaryCofanDirectSummandCompl` and
+`…SeparatedFiniteEtaleOver.inducesIsoOnDirectSummand_of_mono'`, the two whose hypothesis is
+`CategoryTheory.Mono`. **The sixth kind reaches none of them** and the image kind reaches none of
+them, both of which the head's clause naming this section argues rather than asserts.
+`…FiniteEtaleOver.isColimitBinaryCofanDirectSummandCompl` is of the first and not the fourth
+because its hypothesis is injectivity of a map and not a cancellation, which is the same line
+`### The clopen image of a finite local isomorphism, and the direct summand it cuts out` already
+draws for `…FiniteEtaleOver.inducesIsoOnDirectSummand_of_injective`.
+
+**`Classical.choice` is in every guard below for the reason the section
+`### The clopen part of a cover` gives** — `#print axioms` at `ComplexAnalytic.AnalyticSpace` itself
+lists it, so it reaches every statement about an analytic space without passing through any
+construction — and not because anything here chooses a witness. **The point of the push is the
+opposite of a choice**: the existential of
+`…FiniteEtaleOver.inducesIsoOnDirectSummand_of_injective` was already witnessed by a named
+construction, and what these guards record is that pulling that construction out into a declaration
+of its own added no axiom to it and none to the statement it now proves.
+
+**Nothing generated is guarded and this push generated nothing.** The two modules' tab-anchored row
+counts in `scripts/DumpOkaDecls.lean`'s output rise by exactly six and four: no `_assoc` lemma, no
+`.eq_1` equation lemma, no match lemma and no congruence lemma. **One equation lemma was avoided
+rather than absent**, and `Oka/AnalyticSpace/DirectSummand.lean`'s own docstring records the rule —
+a `simp only` naming `…FiniteEtaleOver.binaryCofanRestrictClopen` would generate that definition's
+equation lemma and an `exact` at default transparency does not; the proof moved into
+`…FiniteEtaleOver.isColimitBinaryCofanDirectSummandCompl` keeps the `exact`. Equation lemmas are
+generated on demand, so both sentences are about the environment at the commit that adds this
+section.
+
+**`…FiniteEtaleOver.inducesIsoOnDirectSummand_of_injective` is not guarded here**, being guarded
+already under `### The clopen image of a finite local isomorphism, and the direct summand it cuts
+out`; its statement is character for character what it was before this push and its guard is
+untouched, which is the check that says the two modules of `Oka/` that apply it see no change.
+
+Appended as its own section rather than merged into another, for the reason the sections in this
+file give for that: a section appended at the end cannot say which section is above it and stay
+true, since the next branch appends between them.
+
+**Named by file rather than counted**, for the reason this file's other sections give. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isClopen_range_left' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isClopen_range_left
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.rangeOpens' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.rangeOpens
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isClosed_rangeOpens' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isClosed_rangeOpens
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.directSummandCompl' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.directSummandCompl
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.directSummandComplι' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.directSummandComplι
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitBinaryCofanDirectSummandCompl'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitBinaryCofanDirectSummandCompl
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.directSummandCompl' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.directSummandCompl
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.directSummandComplι' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.directSummandComplι
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isColimitBinaryCofanDirectSummandCompl'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isColimitBinaryCofanDirectSummandCompl
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.inducesIsoOnDirectSummand_of_mono''
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.inducesIsoOnDirectSummand_of_mono'
