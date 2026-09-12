@@ -23,15 +23,37 @@ isomorphism is an isomorphism. So the source is isomorphic to the target restric
 subset, and `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitBinaryCofanRestrictClopen`
 already says a cover is the coproduct of a clopen part and its complement.
 
+## Main definitions
+
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.rangeOpens`: **the image of a morphism of covers,
+  as an open subset of the target's total space**, which is the shape
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen` and its complement are indexed by.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.directSummandCompl`: **the summand complementary
+  to a morphism of covers**, and
+  `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.directSummandComplι`: **its inclusion into the
+  target**. Neither asks for injectivity.
+
 ## Main results
 
 - `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isFiniteEtale_left`: **the underlying morphism of
   a morphism of covers is finite étale when the target cover's total space is Hausdorff**, which is
   `ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_comp` at the triangle a morphism of covers
   commutes.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isClopen_range_left`: **and so its image is
+  clopen**, which is where the decomposition comes from.
+- `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitBinaryCofanDirectSummandCompl`: **the
+  target is the coproduct of the source and that summand**, at an injective morphism and with both
+  objects named.
 - `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.inducesIsoOnDirectSummand_of_injective`: **the
   direct-summand statement itself**, in the shape `PreGaloisCategory`'s field is written in — an
   object and a morphism to `B` whose binary cofan with `i` is a colimit.
+
+**The named witness and the existential are both here on purpose.** The existential is the shape
+the field asks for and is what the two modules of `Oka/` that apply it cite; the named one is what
+a caller needing a *property* of the summand has to have, and
+`Oka/AnalyticSpace/SeparatedDirectSummand.lean` is the first such caller. **The witnesses were
+added on 2026-09-12 and nothing else in this file moved**: the existential's statement is character
+for character what it was.
 
 ## What is not here
 
@@ -126,20 +148,92 @@ theorem FiniteEtaleOver.isFiniteEtale_left {X : AnalyticSpace.{u}} {A B : Finite
 
 /-! ### The direct summand at an injective morphism of covers -/
 
-/-- **A morphism of covers that is injective on points exhibits its source as a direct summand of
-its target**: there is a cover `Z` and a morphism `Z ⟶ B` whose binary cofan with `i` is a
-colimit.
+/-- **The image of a morphism of covers is clopen**, when the total space of the target cover is
+Hausdorff.
 
-**This is the shape the `monoInducesIsoOnDirectSummand` field of
-`Mathlib/CategoryTheory/Galois/Basic.lean`'s pre-Galois-category class is written in, and it is not
-that field.** That field asks the same of every monomorphism and under
-no hypothesis at all; this asks for `[T2Space B.left]` and for `hinj`. The module docstring's
-`## What is not here` says what stands between the two and why nothing below derives either of
-them from `Mono i`.
+`ComplexAnalytic.AnalyticSpace.isClopen_range_of_isLocalIso_of_isFinite` at `i.left`, whose two
+instances come from `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isFiniteEtale_left`. **That
+statement asks no separation axiom of anything** — it is open because a local isomorphism is an
+open map and closed because a finite morphism is a closed map — so the `[T2Space B.left]` here is
+spent entirely on the cancellation above and not on the topology of the image. -/
+theorem FiniteEtaleOver.isClopen_range_left {X : AnalyticSpace.{u}} {A B : FiniteEtaleOver.{u} X}
+    (i : A ⟶ B) [T2Space (B.left : Type u)] :
+    IsClopen (Set.range (i.left.toLRSHom.base : A.left → B.left)) :=
+  haveI : IsFiniteEtale i.left := FiniteEtaleOver.isFiniteEtale_left i
+  isClopen_range_of_isLocalIso_of_isFinite i.left
+
+/-- **The image of a morphism of covers, as an open subset of the target's total space.**
+
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopen` and its complement are indexed by a
+`TopologicalSpace.Opens` together with a proof that it is closed, so the image has to be presented
+in that shape before it can be handed to them. The underlying set is `Set.range` on the nose, which
+is what makes `ComplexAnalytic.AnalyticSpace.liftRestrict` apply below at `subset_rfl`. -/
+def FiniteEtaleOver.rangeOpens {X : AnalyticSpace.{u}} {A B : FiniteEtaleOver.{u} X}
+    (i : A ⟶ B) [T2Space (B.left : Type u)] : B.left.Opens :=
+  ⟨Set.range (i.left.toLRSHom.base : A.left → B.left), (FiniteEtaleOver.isClopen_range_left i).2⟩
+
+/-- **And it is closed**, which is the second argument
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopenCompl` takes. -/
+theorem FiniteEtaleOver.isClosed_rangeOpens {X : AnalyticSpace.{u}} {A B : FiniteEtaleOver.{u} X}
+    (i : A ⟶ B) [T2Space (B.left : Type u)] :
+    IsClosed ((FiniteEtaleOver.rangeOpens i : B.left.Opens) : Set B.left) :=
+  (FiniteEtaleOver.isClopen_range_left i).1
+
+/-- **The direct summand complementary to a morphism of covers**, named.
+
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopenCompl` at the image of `i`. **It is
+defined at every morphism of covers and asks no injectivity**, because injectivity is what makes
+the cofan below a colimit and not what makes this object exist;
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitBinaryCofanDirectSummandCompl` is where it
+is spent.
+
+**Naming it is the whole point of this declaration and it is not a convenience.**
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.inducesIsoOnDirectSummand_of_injective` below
+quantifies its witness existentially, and a caller that needs a *property* of the summand — that it
+is separated over the base, say, which
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isSeparatedMap_restrictClopenCompl`
+(`Oka/AnalyticSpace/SeparatedOver.lean`) gives of exactly this object — cannot reach it through the
+existential. **That is the obstruction
+`Oka/AnalyticSpace/SeparatedFiniteEtale.lean`'s `## What is not here` states in terms**, and this
+declaration, `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.directSummandComplι` and
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitBinaryCofanDirectSummandCompl` are what
+close it. -/
+noncomputable def FiniteEtaleOver.directSummandCompl {X : AnalyticSpace.{u}}
+    {A B : FiniteEtaleOver.{u} X} (i : A ⟶ B) [T2Space (B.left : Type u)] :
+    FiniteEtaleOver.{u} X :=
+  B.restrictClopenCompl (FiniteEtaleOver.rangeOpens i) (FiniteEtaleOver.isClosed_rangeOpens i)
+
+/-- **Its inclusion into the target**,
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopenComplι` at the same open. It carries
+no content and exists so that the colimit below can name the second injection of its cofan. -/
+noncomputable def FiniteEtaleOver.directSummandComplι {X : AnalyticSpace.{u}}
+    {A B : FiniteEtaleOver.{u} X} (i : A ⟶ B) [T2Space (B.left : Type u)] :
+    FiniteEtaleOver.directSummandCompl i ⟶ B :=
+  B.restrictClopenComplι (FiniteEtaleOver.rangeOpens i) (FiniteEtaleOver.isClosed_rangeOpens i)
+
+/-- **The target is the coproduct of the source and that summand**, at an injective morphism of
+covers and with both of them named.
+
+**`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.inducesIsoOnDirectSummand_of_injective` below is
+the existential closure of this**, and the proof is that theorem's former tactic block with **two
+hunks** changed and the **twenty-four** lines between them unaltered: the two lines that introduce
+`U` and `hU`, which now cite the two declarations above instead of spelling the image out, and the
+closing five lines, which become six. It is a `def` and not a `theorem` because
+`CategoryTheory.Limits.IsColimit` is data — it carries the descent map — and a consumer that has to
+transport it along a functor, as `Oka/AnalyticSpace/SeparatedDirectSummand.lean` does, needs the
+witness and not its `Nonempty`.
+
+**The closing hunk is the one thing naming the witness cost, and the reason is worth recording.**
+The former body closed with `rw [← hei]` on a goal whose second injection was written out as
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopenComplι` at the image. Here that
+injection is `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.directSummandComplι` **at `i` itself**,
+so rewriting `i` backwards inside the goal rewrites it there too and the result is a cofan whose
+second leg is indexed by `e ≫ …restrictClopenι` rather than by `i`. Rewriting **forwards in the
+hypothesis** — `rw [hei] at key` — moves only the occurrence that has to move, because the pattern
+being rewritten does not occur inside the second leg at all.
 
 **The proof, in the order the steps are taken.**
-`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isFiniteEtale_left` makes `i.left` finite étale, so
-`ComplexAnalytic.AnalyticSpace.isClopen_range_of_isLocalIso_of_isFinite` makes its image clopen.
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isClopen_range_left` makes the image clopen.
 `ComplexAnalytic.AnalyticSpace.liftRestrict` factors `i.left` through the open subspace at that
 image, and the factor is a local isomorphism by
 `ComplexAnalytic.AnalyticSpace.isLocalIso_of_comp` and a bijection because `hinj` gives the
@@ -150,33 +244,27 @@ of covers, and
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitBinaryCofanRestrictClopen` together with
 `CategoryTheory.Limits.BinaryCofan.isColimitCompLeftIso` transports the decomposition along it.
 
-**The complement is `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopenCompl` at the
-image**, which is the object whose docstring already says it is what a direct-summand statement
-would need; this is the statement that consumes it.
-
 **`hinj` is stated about `i.left.toLRSHom.base` and not about a fibre map**, because that is the
 map the topology of the argument is about: `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.fiber`
 enters nowhere below and no fibre is counted.
 
 **The last step is an `exact` and not a `simp only`, and that is a measured choice rather than a
 style one.** `CategoryTheory.Limits.BinaryCofan.isColimitCompLeftIso` returns its conclusion at
-`(A.binaryCofanRestrictClopen U hU).inl` and `.inr`, which are the two inclusions by definition;
+`(B.binaryCofanRestrictClopen U hU).inl` and `.inr`, which are the two inclusions by definition;
 a `simp only` naming
 `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.binaryCofanRestrictClopen` closes the gap and
 **generates that definition's equation lemma, which then lands in
 `scripts/DumpOkaDecls.lean`'s output as a row this file did not write**. `exact` crosses the same
 gap at default transparency and plants nothing, so this proof's contribution to that dump is the
 declarations it states and no more. -/
-theorem FiniteEtaleOver.inducesIsoOnDirectSummand_of_injective {X : AnalyticSpace.{u}}
+noncomputable def FiniteEtaleOver.isColimitBinaryCofanDirectSummandCompl {X : AnalyticSpace.{u}}
     {A B : FiniteEtaleOver.{u} X} (i : A ⟶ B) [T2Space (B.left : Type u)]
     (hinj : Function.Injective (i.left.toLRSHom.base : A.left → B.left)) :
-    ∃ (Z : FiniteEtaleOver.{u} X) (u : Z ⟶ B),
-      Nonempty (Limits.IsColimit (Limits.BinaryCofan.mk i u)) := by
+    Limits.IsColimit
+      (Limits.BinaryCofan.mk i (FiniteEtaleOver.directSummandComplι i)) := by
   haveI hfe : IsFiniteEtale i.left := FiniteEtaleOver.isFiniteEtale_left i
-  set U : B.left.Opens :=
-    ⟨Set.range (i.left.toLRSHom.base : A.left → B.left),
-      (isClopen_range_of_isLocalIso_of_isFinite i.left).2⟩ with hUdef
-  have hU : IsClosed (U : Set B.left) := (isClopen_range_of_isLocalIso_of_isFinite i.left).1
+  set U : B.left.Opens := FiniteEtaleOver.rangeOpens i with hUdef
+  have hU : IsClosed (U : Set B.left) := FiniteEtaleOver.isClosed_rangeOpens i
   have hsub : Set.range (i.left.toLRSHom.base : A.left → B.left) ⊆ (U : Set B.left) := subset_rfl
   set j : A.left ⟶ B.left.restrict U := liftRestrict i.left U hsub with hjdef
   have hfac : j ≫ B.left.ofRestrict U = i.left := liftRestrict_fac _ _ _
@@ -201,10 +289,48 @@ theorem FiniteEtaleOver.inducesIsoOnDirectSummand_of_injective {X : AnalyticSpac
   haveI : IsIso e := FiniteEtaleOver.isIso_of_isIso_left e (by simpa [e] using ‹IsIso j›)
   have hei : e ≫ B.restrictClopenι U hU = i :=
     MorphismProperty.Over.Hom.ext (by simpa [e] using hfac)
-  refine ⟨B.restrictClopenCompl U hU, B.restrictClopenComplι U hU, ⟨?_⟩⟩
-  have hcolim := Limits.BinaryCofan.isColimitCompLeftIso
-    (B.binaryCofanRestrictClopen U hU) e (B.isColimitBinaryCofanRestrictClopen U hU)
-  rw [← hei]
-  exact hcolim
+  have key : Limits.IsColimit (Limits.BinaryCofan.mk (e ≫ B.restrictClopenι U hU)
+      (FiniteEtaleOver.directSummandComplι i)) :=
+    Limits.BinaryCofan.isColimitCompLeftIso
+      (B.binaryCofanRestrictClopen U hU) e (B.isColimitBinaryCofanRestrictClopen U hU)
+  rw [hei] at key
+  exact key
+
+
+/-- **A morphism of covers that is injective on points exhibits its source as a direct summand of
+its target**: there is a cover `Z` and a morphism `Z ⟶ B` whose binary cofan with `i` is a
+colimit.
+
+**This is the shape the `monoInducesIsoOnDirectSummand` field of
+`Mathlib/CategoryTheory/Galois/Basic.lean`'s pre-Galois-category class is written in, and it is not
+that field.** That field asks the same of every monomorphism and under
+no hypothesis at all; this asks for `[T2Space B.left]` and for `hinj`. The module docstring's
+`## What is not here` says what stands between the two and why nothing below derives either of
+them from `Mono i`.
+
+**The whole of the content is
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isColimitBinaryCofanDirectSummandCompl` above, and
+this is its existential closure.** The statement is unchanged — it is what the field's shape asks
+for and what the two modules of `Oka/` that apply it cite — but the witness it hides is now
+available under a name, which is what a caller needing a property of the summand has to have.
+
+**The complement is
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.restrictClopenCompl` at the image**, as it always
+was; `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.directSummandCompl` is that composite under one
+name and its docstring says why the name is load-bearing.
+
+**This proof was the block now above until 2026-09-12**, when it was moved out under a name; the
+statement of this theorem is character for character what it was, which is the measurement that
+says the modules that apply it are untouched by the move. **In the comment-stripped code of this
+repository the name occurs in four modules**: this one, which declares it,
+`Oka/AnalyticSpace/MonoDirectSummand.lean` and `Oka/AnalyticSpace/SeparatedFiniteEtale.lean`, which
+apply it, and `OkaTest/Axioms/Morphisms.lean`, whose `#print axioms` guard for it is unchanged. -/
+theorem FiniteEtaleOver.inducesIsoOnDirectSummand_of_injective {X : AnalyticSpace.{u}}
+    {A B : FiniteEtaleOver.{u} X} (i : A ⟶ B) [T2Space (B.left : Type u)]
+    (hinj : Function.Injective (i.left.toLRSHom.base : A.left → B.left)) :
+    ∃ (Z : FiniteEtaleOver.{u} X) (u : Z ⟶ B),
+      Nonempty (Limits.IsColimit (Limits.BinaryCofan.mk i u)) :=
+  ⟨FiniteEtaleOver.directSummandCompl i, FiniteEtaleOver.directSummandComplι i,
+    ⟨FiniteEtaleOver.isColimitBinaryCofanDirectSummandCompl i hinj⟩⟩
 
 end ComplexAnalytic.AnalyticSpace
