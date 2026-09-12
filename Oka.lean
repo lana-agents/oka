@@ -87,6 +87,7 @@ import Oka.AnalyticSpace.PullbackReduction
 import Oka.AnalyticSpace.Relations
 import Oka.AnalyticSpace.Restrict
 import Oka.AnalyticSpace.SeparatedFiniteEtale
+import Oka.AnalyticSpace.SeparatedFiniteEtaleLimits
 import Oka.AnalyticSpace.SeparatedOver
 import Oka.AnalyticSpace.Sigma
 import Oka.AnalyticSpace.SigmaFiniteEtale
