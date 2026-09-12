@@ -262,10 +262,16 @@ existential was given a name, and the four of the new module
 `Oka/AnalyticSpace/SeparatedDirectSummand.lean` that land that summand and its colimit inside
 `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver`. **Ten guards, and they partition eight and
 two.** **Eight are of the first kind**, by the opening description's clause naming the category the
-finite étale ones form over a fixed base: an object of that category, a morphism of it, a
+finite étale ones form over a fixed base: an object of that category, a morphism of it, the image
+of one of its morphisms in the three shapes that section guards it in, the decomposition of the
+target as a binary coproduct at an injective morphism, and the same object and morphism again in
+the separated category. **That list read *an object of that category, a morphism of it, a
 topological property of the image of one of its morphisms, and the same two constructions in the
-separated category. **Two are of the fourth**, by the clause opening *The fourth kind has a second
-class, and it is the monomorphisms* —
+separated category* until 2026-09-12**, which is seven of the eight: the decomposition was
+described by no clause of it, although the section below assigns it by name and argues its kind at
+length. **The numeral was exact when written and the assignment was right** — what was short was
+the account, and that is the shape taxis #1685 is filed for. **Two are of the fourth**, by the
+clause opening *The fourth kind has a second class, and it is the monomorphisms* —
 `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isColimitBinaryCofanDirectSummandCompl` and
 `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.inducesIsoOnDirectSummand_of_mono'`, whose
 hypothesis is `CategoryTheory.Mono` in that category, exactly as
