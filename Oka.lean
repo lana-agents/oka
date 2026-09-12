@@ -41,6 +41,7 @@ import Oka.AnalyticSpace.AffineProduct
 import Oka.AnalyticSpace.AffineProductOpen
 import Oka.AnalyticSpace.Basic
 import Oka.AnalyticSpace.Clopen
+import Oka.AnalyticSpace.ClopenEqLocus
 import Oka.AnalyticSpace.Coherent
 import Oka.AnalyticSpace.Continuity
 import Oka.AnalyticSpace.CoveringMap
