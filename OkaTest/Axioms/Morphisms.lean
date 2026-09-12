@@ -126,7 +126,23 @@ square in `AlgebraicGeometry.LocallyRingedSpace` added two such guards and did n
 clause, and this push adds three more at the cospan a glue datum's transition maps open over.
 **The clause names rather than counts, which is what this file's own rule asks for and is also
 what lets it go stale in silence** — the check is to list this file's `#print axioms` names whose
-declaration name contains *isPullback* and compare that list against the clause.
+declaration name contains *isPullback* and compare that list against the clause, **keeping only
+the ones whose category is `ComplexAnalytic.AnalyticSpace`**.
+
+**That filter is a boundary the published check never carried, added 2026-09-12, and it is not a
+recount**: the clause opens *Two of those five* and *those five* are sections over that one
+category, so the scope was always stated — what was not stated is that the check published for it
+quantifies over the whole file. Until 2026-09-12 the two agreed by accident, because every
+`isPullback_` and `HasPullback` guard in this file was over that category: the unfiltered lists at
+`0c370e5`, the commit that filter was written at, are **eight** and **six**, exactly the names
+that clause lists.
+`### Fibre products in the category of separated covers, and its finite limits` ends the accident
+— it adds `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isPullback_fibreProd` to the
+first and `…SeparatedFiniteEtaleOver.hasPullback` and `…SeparatedFiniteEtaleOver.hasPullbacks` to
+the second, making the unfiltered lists **nine** and **eight** — and that section's own paragraph
+accounts for all three. **The same filter is owed by the `HasPullback` half and is written into
+it here rather than left to a reader**, since the clause names six and an unfiltered run now
+returns eight.
 
 **It read *the five `HasPullback` guards* and named five of them, until 2026-09-07**, when
 `Oka/AnalyticSpace/PullbackOpen.lean` gained an instance stating that pullback in
@@ -238,6 +254,26 @@ kinds this description already has and none needs a clause of its own**; that se
 assigns every one of them by name, and the split is seven of the kind opening *And one kind more*,
 five of the first, two of the fourth and two of the mirror tree. **This clause was added by the
 push that added that section**, 2026-09-08, for the reason the clause naming
+`### The terminal object and the product of two complex affine spaces` gives.
+
+**And a second section is about that second category, and every one of its guards is of the sixth
+kind.** `### Fibre products in the category of separated covers, and its finite limits` guards
+`Oka/AnalyticSpace/SeparatedFiniteEtaleLimits.lean`, which gives
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver` fibre products over a Hausdorff base and
+assembles them with the terminal object named above into all finite limits. **All fifteen of its
+guards are of this kind and none is of any other**, which is why they are accounted for in one
+sentence here and by name in that section: the fibre product as an object
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.fibreProd` with its two projections
+`…fibreProdFst` and `…fibreProdSnd`, the square `…fibreProd_square`, the universal property
+`…fibreProdLift`, `…fibreProdLift_fst`, `…fibreProdLift_snd` and `…fibreProd_hom_ext`, the limit
+`…isPullback_fibreProd`, the two class forms `…hasPullback` and `…hasPullbacks`, the finite limits
+`…hasFiniteLimits`, and the three `rfl`s `…fibreProd_self`, `…fibreProdFst_self` and
+`…fibreProdSnd_self` identifying that category's existing self-product with this construction at a
+repeated leg. **The count *Five of that section's twenty-one guards* above is unaffected**: it
+counts over `### The category of separated covers, and separatedness as a morphism property`, and
+this push adds no guard to that section and removes none — `git diff` against `0c370e5` touches
+no line of it. **This clause was added by the push that added that
+section**, 2026-09-12, for the reason the clause naming
 `### The terminal object and the product of two complex affine spaces` gives.
 
 And a further kind, next to the separated-map one and distinct from it: statements about the
@@ -5584,3 +5620,207 @@ info: 'ComplexAnalytic.AnalyticSpace.range_base_pullbackFst_ofRestrict' depends 
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.range_base_pullbackFst_ofRestrict
+
+/-! ### Fibre products in the category of separated covers, and its finite limits
+
+`Oka/AnalyticSpace/SeparatedFiniteEtaleLimits.lean`, the whole of it. **Fifteen names and the
+module has fifteen declarations**: the fibre product of a cospan of
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver` as an object of that category, its two
+projections, the square they sit in, the lift a commuting square induces with its two triangles
+and the extensionality that makes it unique, the pullback square all of that assembles into, the
+two forms of *this category has fibre products*, the finite limits those give with the terminal
+object the category already had, and the three `rfl`s saying the self-product that category
+already had is this construction at a repeated leg.
+
+**The routing, argued rather than assumed, because the module is new.** The topic table at the
+head of `OkaTest/Axioms.lean` routes *morphisms of analytic spaces* here, and that is the row —
+the same row `### The category of separated covers, and separatedness as a morphism property`
+argued for the module this one is built on, and the argument transfers without change: every
+guard below is about a morphism of the category the finite étale ones form over a fixed base, or
+about an object of that category named so that those morphisms can be stated. **The competing row
+is *analytic spaces, local models, the node*, `OkaTest/Axioms/AnalyticSpace.lean`**, which is
+where `ComplexAnalytic.AnalyticSpace.hasPullbacks` — the ambient category's — is guarded, and
+that is the sharper version of the competition than the one
+`### The category of separated covers, and separatedness as a morphism property` faced. It still
+loses: what is routed to that file is a claim about the category **`ComplexAnalytic.AnalyticSpace`
+itself**, whose objects are analytic spaces, and nothing below is about that category. The objects
+of the category below are covers, which are morphisms, and the file this table routes morphisms to
+is this one.
+
+**Which kind each guard is, against the description at the head of this file. All fifteen are of
+the sixth kind and all fifteen are over the second category** — the one the clause opening *The
+sixth kind has a second category* names — so the split is one line rather than five. Each is a
+claim about `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver` rather than about any
+morphism in it: that a cospan of it has a fibre product, in the object form
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.fibreProd`, the projection forms
+`…fibreProdFst` and `…fibreProdSnd`, the square `…fibreProd_square`, the universal property
+`…fibreProdLift`, `…fibreProdLift_fst`, `…fibreProdLift_snd` and `…fibreProd_hom_ext`, the limit
+form `…isPullback_fibreProd` and the two class forms `…hasPullback` and `…hasPullbacks`; that it
+has all finite limits, `…hasFiniteLimits`; and that its existing self-product is this fibre
+product, `…fibreProd_self`, `…fibreProdFst_self` and `…fibreProdSnd_self`. **The sixth kind's
+criterion is *a cospan has a fibre product* in the words the head uses of
+`### Base change of a finite étale morphism, and the fibre product it is the projection of`, and
+every one of the fifteen answers to it**; what makes them a separate clause rather than an
+addition to that one is the category, which is the boundary the head states in terms.
+
+**None of the fifteen is of the *first* kind, and that is worth saying because the two sections
+of this file that look most like this one hold guards of both** —
+`### Base change of a finite étale morphism, and the fibre product it is the projection of` and
+`### That restriction is a pullback square, and the base change it gives`, which are the two the
+clause opening *Two of those five hold statements of the first kind as well* names. `…fibreProd`
+is an object of the
+category and not a morphism property statement: that the structure morphism it carries is finite
+étale and separated is proved inside `Oka/AnalyticSpace/SeparatedFiniteEtaleLimits.lean` and is
+**not** a separate declaration, so there is no `isFiniteEtale_fibreProd` here to be of that kind.
+`### The category of separated covers, and separatedness as a morphism property` has
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isFiniteEtale_left` and
+`…isSeparatedMap_left`, which are of the first and of the *And one kind more* kinds respectively,
+and this module states no analogue of either.
+
+**The boundary against the clause enumerating this file's pullback guards, said here and repaired
+there.** The clause opening *Two of those five hold statements of the first kind as well* names
+eight `isPullback_` guards and six `HasPullback` guards and publishes a check — list this file's
+`#print axioms` names containing *isPullback* and compare. **That check now needs the category
+filter the clause has been given**, because this section adds
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isPullback_fibreProd` to the first list and
+`…SeparatedFiniteEtaleOver.hasPullback` and `…SeparatedFiniteEtaleOver.hasPullbacks` to the
+second. At `0c370e5`, the commit this section is cut from, the unfiltered lists are **eight** and
+**six** and agree with the clause exactly; at the commit that adds this section they are **nine**
+and **eight**, and the three new ones are accounted for here. **The clause was not wrong and is
+not recounted** — its *those five* counts sections over `ComplexAnalytic.AnalyticSpace`, as its
+own opening words say.
+
+**Nothing generated is guarded and this push generated nothing.** The module's tab-anchored row
+count in `scripts/DumpOkaDecls.lean`'s output is exactly **fifteen**, one per name below: no
+`_assoc` lemma, no `.eq_1` equation lemma, no match lemma and no congruence lemma. **The three
+`instance` declarations are named rather than anonymous and that is what makes them guardable** —
+`…hasPullback`, `…hasPullbacks` and `…hasFiniteLimits` — which is the opposite choice from the
+anonymous `CategoryTheory.MorphismProperty` closure instances
+`### The category of separated covers, and separatedness as a morphism property` declines to
+guard, and it is not a disagreement with that practice: those assert closure of a property under
+composition and identities, these assert that a category has a limit, which is a statement this
+file guards by name everywhere it occurs.
+
+**What consumes each of them, said at the strength it has.**
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.hasFiniteLimits` is the module's purpose
+and has no consumer in this repository — `git grep` over `Oka/` and `OkaTest/` finds it in its own
+module and in this section and nowhere else — and what would consume it is a `PreGaloisCategory`
+instance, which this repository cannot state. `…hasPullbacks` is consumed by `…hasFiniteLimits`
+and `…hasPullback` by `…hasPullbacks`. `…isPullback_fibreProd` names the other **eight** in its
+statement or its proof — `…fibreProd`, `…fibreProdFst`, `…fibreProdSnd`, `…fibreProd_square`,
+`…fibreProdLift`, `…fibreProdLift_fst`, `…fibreProdLift_snd` and `…fibreProd_hom_ext` — and
+`…hasPullback` is built from it. The three `_self` statements are consumed by nothing and are
+there to keep the module header's *no second idea entered* claim from going stale in silence,
+which their own docstrings say. **So four of the fifteen are unconsumed inside this repository** —
+`…hasFiniteLimits` and the three `_self` statements — and that is a fact about a module written
+against a definition this repository cannot import rather than an omission.
+
+**The head of that module says `HasFiniteLimits` is not a field of `PreGaloisCategory` and this
+section does not restate the measurement**, only its consequence for the sentence above: the
+class has five fields, the module closes `hasPullbacks`, and `…hasFiniteLimits` is what that field
+and the `hasTerminal` the category already had give together. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.fibreProd' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.fibreProd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.fibreProdFst' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.fibreProdFst
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.fibreProdSnd' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.fibreProdSnd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.fibreProd_square' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.fibreProd_square
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.fibreProdLift' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.fibreProdLift
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.fibreProdLift_fst' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.fibreProdLift_fst
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.fibreProdLift_snd' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.fibreProdLift_snd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.fibreProd_hom_ext' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.fibreProd_hom_ext
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isPullback_fibreProd' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isPullback_fibreProd
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.hasPullback' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.hasPullback
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.hasPullbacks' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.hasPullbacks
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.hasFiniteLimits' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.hasFiniteLimits
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.fibreProd_self' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.fibreProd_self
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.fibreProdFst_self' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.fibreProdFst_self
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.fibreProdSnd_self' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.fibreProdSnd_self
