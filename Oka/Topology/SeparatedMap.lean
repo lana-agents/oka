@@ -6,14 +6,34 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten
 import Mathlib.Topology.SeparatedMap
 
 /-!
-# A continuous separated map into a Hausdorff space has Hausdorff source, and composites
+# A separated map: Hausdorff source, composites, and the clopen locus where two lifts agree
 
-Material for `Mathlib/Topology/SeparatedMap.lean`; see `README.md` on the mirror tree. Three
-statements, and each is a direction that file does not have: `IsSeparatedMap.t2Space`,
-`IsSeparatedMap.comp` and `IsSeparatedMap.of_comp` below. **The opening read *One statement, and
-it is the direction that file does not have* and named only the first, until 2026-09-08**, when
-the two composition statements were added; the record is kept because that sentence was exact for
-the file it described.
+**The title read *A continuous separated map into a Hausdorff space has Hausdorff source, and
+composites* until 2026-09-12**, and it was exact for the three statements it described; it is
+shortened rather than extended because a fourth conjunct would have put it over the hundred-column
+limit this repository keeps.
+
+Material for `Mathlib/Topology/SeparatedMap.lean`; see `README.md` on the mirror tree. Four
+statements, and each is something that file does not have: `IsSeparatedMap.t2Space`,
+`IsSeparatedMap.comp`, `IsSeparatedMap.of_comp` and `IsSeparatedMap.isClopen_eqLocus` below.
+**The opening read *One statement, and it is the direction that file does not have* and named only
+the first, until 2026-09-08**, when the two composition statements were added, **and read *Three
+statements, and each is a direction that file does not have* and named three, until 2026-09-12**,
+when the fourth was and *direction* stopped being exact of all of them; both records are kept
+because each sentence was exact for the file it described.
+
+**The first three are directions Mathlib lacks; the fourth is a conjunction Mathlib forms and does
+not name, and the difference is worth stating rather than hiding.**
+`IsSeparatedMap.isClosed_eqLocus` and `IsLocallyInjective.isOpen_eqLocus` are both Mathlib's, in
+that file, with exactly the binders below; what is not there is the **conjunction under a name**.
+It is formed inline at `Mathlib/Topology/SeparatedMap.lean:206`, the only line of that file
+carrying `IsClopen`, inside `IsSeparatedMap.eq_of_comp_eq`, and the term there —
+`⟨sep.isClosed_eqLocus h₁ h₂ he, inj.isOpen_eqLocus h₁ h₂ he⟩` — is character for character the
+whole of the proof below. **So this statement is not new mathematics and does not claim to be**,
+and a grep for `isClopen_eqLocus` over `.lake/packages/mathlib/Mathlib/` returns nothing at the
+pinned revision. What it buys is a caller that wants the clopen set itself rather than the
+equality on a preconnected space that Mathlib derives from it, which is what the consumer named
+below wants.
 
 `Mathlib/Topology/SeparatedMap.lean` has the converse, `T2Space.isSeparatedMap` — a map out of a
 Hausdorff space is separated, for any target — and the constant-map biconditional
@@ -53,6 +73,15 @@ import `IsSeparatedMap` and could not hold this without a new edge in the direct
 own imports run against. `Mathlib/Topology/Covering/Basic.lean` is not a destination at all: the
 statement mentions no covering map.
 
+**`IsSeparatedMap.isClopen_eqLocus` answers to the same paragraph and its consumer is a different
+one.** At the commit that adds it, what consumes it is
+`ComplexAnalytic.AnalyticSpace.isClopen_eqLocus_base_of_isLocalIso` in
+`Oka/AnalyticSpace/ClopenEqLocus.lean` — the one place in this repository where the conjunction
+is wanted as a set. The destination argument is unchanged and needs no rerun: it asks only
+`IsSeparatedMap`, `IsLocallyInjective` and `IsClopen`, which are that Mathlib file's own two
+notions and its own public import of `Mathlib/Topology/Connected/Clopen.lean`, so the import cost
+of upstreaming it is nil for the same reason and by the same measurement.
+
 ## The proof, and the case split is the whole of it
 
 `IsSeparatedMap f` separates two points with the **same** image; a Hausdorff target separates two
@@ -69,6 +98,11 @@ the points. Continuity of `f` is spent in exactly the one place it is spent abov
 `IsSeparatedMap.of_comp` needs no case split and no topology: two points with the same image under
 `f` have the same image under `g ∘ f`, so the hypothesis applies to them directly.
 
+**The heading above is about the three statements that predate 2026-09-12 and not about the file.**
+`IsSeparatedMap.isClopen_eqLocus` has no case split and no argument of its own — it is the pair of
+two Mathlib lemmas, one per half of `IsClopen` — and what is worth saying about it is which of its
+hypotheses does which half, which its own docstring says.
+
 ## Main results
 
 - `IsSeparatedMap.t2Space`: **a continuous separated map into a Hausdorff space has Hausdorff
@@ -77,6 +111,8 @@ the points. Continuity of `f` is spent in exactly the one place it is spent abov
   continuous.
 - `IsSeparatedMap.of_comp`: **and the first factor of a separated composite is separated**, with
   no hypothesis whatever on the second — its target is not even asked to be a topological space.
+- `IsSeparatedMap.isClopen_eqLocus`: **the locus where two continuous lifts of a map agree is
+  clopen**, when the map they lift along is separated and locally injective.
 
 ## What is not here
 
@@ -91,11 +127,17 @@ the points. Continuity of `f` is spent in exactly the one place it is spent abov
   its source, so the identity of a space that is not Hausdorff is a separated map whose source is
   not Hausdorff. `LineTwoOrigins.not_t2Space` (`OkaTest/FiniteEtaleCancel.lean`) is such a space
   at the commit that adds this file.
-* **Nothing about `IsLocallyInjective`**, the dual notion `Mathlib/Topology/SeparatedMap.lean`
-  introduces alongside `IsSeparatedMap`, and nothing about the covering maps that satisfy both.
-  The one application in this repository composes this with `IsCoveringMap.isSeparatedMap`, which
-  is Mathlib's and is in `Mathlib/Topology/Covering/Basic.lean`.
-* **No `instance`.** The *named* hypotheses of all three are explicit arguments and none is a
+* **This bullet read *Nothing about `IsLocallyInjective`* until 2026-09-12**, and what it said in
+  full was: *"**Nothing about `IsLocallyInjective`**, the dual notion
+  `Mathlib/Topology/SeparatedMap.lean` introduces alongside `IsSeparatedMap`, and nothing about the
+  covering maps that satisfy both. The one application in this repository composes this with
+  `IsCoveringMap.isSeparatedMap`, which is Mathlib's and is in
+  `Mathlib/Topology/Covering/Basic.lean`."* **The first half is closed by
+  `IsSeparatedMap.isClopen_eqLocus`**, which asks `IsLocallyInjective` of the same map it asks
+  `IsSeparatedMap` of. **The second half stands**: nothing here is about covering maps, and the
+  sentence about `IsCoveringMap.isSeparatedMap` still describes the one application that composes
+  along that route. The record is kept because the bullet was exact for the file it described.
+* **No `instance`.** The *named* hypotheses of all four are explicit arguments and none is a
   class, so instance search could not fire on any of them; a caller supplies them.
   `IsSeparatedMap.t2Space` does carry an instance argument, `[T2Space X]` on the target, and it is
   not one of them: what blocks the `instance` attribute is `hsep` and `hf`, which nothing can
@@ -152,3 +194,29 @@ hypothesis's binder nor the conclusion in a position elaboration could read it f
 theorem IsSeparatedMap.of_comp {X : Type*} {Y Z : Sort*} [TopologicalSpace X] {f : X → Y}
     (g : Y → Z) (h : IsSeparatedMap (g ∘ f)) : IsSeparatedMap f :=
   fun x₁ x₂ he hne ↦ h x₁ x₂ (congrArg g he) hne
+
+/-- **The locus where two continuous lifts agree is clopen**, when the map they lift along is
+separated and locally injective.
+
+`IsSeparatedMap.isClosed_eqLocus` and `IsLocallyInjective.isOpen_eqLocus` are both Mathlib's, with
+exactly these binders; this is their conjunction under a name. **Mathlib forms that conjunction
+and does not name it** — the term below is character for character the anonymous constructor
+inside `IsSeparatedMap.eq_of_comp_eq`, which then feeds it to `IsClopen.eq_univ` and concludes
+that the two lifts are equal on a preconnected space. A caller that wants the **set** rather than
+that conclusion has nothing to cite, which is what this statement is for. **A caller whose source
+is preconnected should use Mathlib's conclusion and not this**: `IsSeparatedMap.eq_of_comp_eq` is
+strictly more useful there, and the clopen set is only worth naming where preconnectedness is not
+available and the decomposition it gives is the point. The module docstring's
+`## Why here and not beside the consumer` names what consumes it here.
+
+**The two hypotheses are dual and neither is redundant.** `IsSeparatedMap f` closes the locus and
+`IsLocallyInjective f` opens it; `Mathlib/Topology/SeparatedMap.lean`'s own module docstring says
+so in terms of the diagonal of `f.Pullback f`, which is a closed embedding for the first and an
+open embedding for the second. Dropping either leaves a set with one half of the conclusion, and
+the statement below has no form with one hypothesis that is not already one of those two
+lemmas. -/
+theorem IsSeparatedMap.isClopen_eqLocus {X Y A : Type*} [TopologicalSpace X] [TopologicalSpace A]
+    {f : X → Y} {g₁ g₂ : A → X} (sep : IsSeparatedMap f) (inj : IsLocallyInjective f)
+    (h₁ : Continuous g₁) (h₂ : Continuous g₂) (he : f ∘ g₁ = f ∘ g₂) :
+    IsClopen {a | g₁ a = g₂ a} :=
+  ⟨sep.isClosed_eqLocus h₁ h₂ he, inj.isOpen_eqLocus h₁ h₂ he⟩

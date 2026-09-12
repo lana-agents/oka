@@ -344,6 +344,23 @@ no line of it. **This clause was added by the push that added that
 section**, 2026-09-12, for the reason the clause naming
 `### The terminal object and the product of two complex affine spaces` gives.
 
+And a kind that is the separated-map one's **dual**, and is not it: statements about a morphism's
+underlying map being **locally injective**, and about the **clopen** locus in a source where two
+morphisms into a common target agree. `IsLocallyInjective` is
+`Mathlib/Topology/SeparatedMap.lean`'s, introduced there alongside `IsSeparatedMap` as its dual,
+and it is neither one of the classes the opening description lists nor the subject of the clause
+opening *And one kind more* — that clause is about a map **being, or failing to be, a separated
+map, and about the separation axiom on its source**, and no guard of this kind is about either.
+**The agreement locus is not of the image kind either**, although both are sets: the clause
+opening *And a further kind, next to the separated-map one* is about *where a map lands as a set*,
+and this is about where two maps out of one space coincide, which is a subset of the **source**.
+The section is
+`### A local isomorphism is locally injective, and the clopen locus where two morphisms agree`,
+and the clause reaches four of its five guards; the fifth, `IsSeparatedMap.isClopen_eqLocus`, is
+of the **seventh**, the mirror tree, and that section's docstring argues its routing. **This
+clause was added by the push that added that section**, 2026-09-12, for the reason the clause
+naming `### The terminal object and the product of two complex affine spaces` gives.
+
 **Named rather than counted from the end**, which is the repair and not the description. **The
 sentence this replaces called them *the last two***; they stopped being that when two further
 sections were appended past them — and one of those two was written across two lines, so no
@@ -6027,3 +6044,160 @@ info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.fibreProdSnd_self'
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.fibreProdSnd_self
+
+/-! ### A local isomorphism is locally injective, and the clopen locus where two morphisms agree
+
+`Oka/AnalyticSpace/ClopenEqLocus.lean`, the whole of it, together with the one statement
+`Oka/Topology/SeparatedMap.lean` gained in the same push. **Five names**: the mirror-tree
+conjunction of Mathlib's closed and open agreement loci under a name, the local injectivity of the
+underlying map of a local isomorphism, the clopen agreement locus of two morphisms into a
+separated local isomorphism, the same at the category of separated covers where both hypotheses
+come out of an object's defining pair, and the fixed locus of an endomorphism of such an object.
+
+**The routing, argued rather than assumed, because the module is new.** The topic table at the
+head of `OkaTest/Axioms.lean` routes *morphisms of analytic spaces* here, and that is the row: the
+four analytic guards below are properties of the underlying map of a morphism of analytic spaces,
+or sets cut out in the source of one by a pair of morphisms, and the recipe that file gives
+resolves each to `Oka/AnalyticSpace/ClopenEqLocus.lean`. **The competing row is *analytic spaces,
+local models, the node*, `OkaTest/Axioms/AnalyticSpace.lean`**, and it loses on the reading
+`### The category of separated covers, and separatedness as a morphism property` won on: nothing
+below is a local model, a chart or a node, and the subject of every one of them is a morphism, a
+pair of morphisms, or a category of morphisms.
+
+**`IsSeparatedMap.isClopen_eqLocus` is of the mirror tree**, and it arrives by the same routing as
+`IsSeparatedMap.t2Space`, `IsSeparatedMap.comp` and `IsSeparatedMap.of_comp`, the other three
+statements of `Oka/Topology/SeparatedMap.lean`. That rule is `OkaTest/Axioms.lean`'s tail —
+*"Guard one in the file of the analytic result that motivated it, under that result's heading."*
+What motivated this one is the module below, so this is the heading, and it shares a section with
+the analytic statement that consumes it rather than taking one of its own. **What consumes it is
+named and it is not unconsumed**:
+`ComplexAnalytic.AnalyticSpace.isClopen_eqLocus_base_of_isLocalIso` is **the only declaration in
+this repository whose proof term names it** at the commit that adds it, and the two
+`…SeparatedFiniteEtaleOver` statements reach it only through that one. **Where else it occurs is
+counted with the instrument rather than characterised**: `git grep` over `Oka/` and `OkaTest/`
+returns **16** lines in **three** files at that commit — **four** in
+`Oka/AnalyticSpace/ClopenEqLocus.lean`, **six** in `Oka/Topology/SeparatedMap.lean` and **six in
+this file**, of which **two are not prose**: the `/-- info: … -/` expectation of its own guard and
+the `#print axioms` command under it.
+
+**That sentence read *Its other occurrences are prose, in its own module's docstrings and in the
+new module's*, until 2026-09-13**, and it was false in the file it was written in: a guard file's
+occurrences of a guarded name include the expectation and the command, and neither is prose.
+**The retired wording is kept because the contrast is the lesson.** The clause of this same section
+opening *`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isClopen_fixedLocus` has no
+consumer in this repository* does the same job in the careful form — *`git grep` over `Oka/` and
+`OkaTest/` finds it in its own module and in this section and nowhere else* — naming the
+instrument, naming the scope, and counting the guard section as a location. **When one sentence of
+a paragraph has that form and its neighbour does not, the loose one is an oversight and not a
+scoping choice.**
+
+**Which kind each guard is, against the description at the head of this file.** **Four** are of
+the kind the head's clause opens with *And a kind that is the separated-map one's dual, and is not
+it* — locally injective underlying maps and clopen agreement loci:
+`ComplexAnalytic.AnalyticSpace.isLocallyInjective_base_of_isLocalIso`,
+`ComplexAnalytic.AnalyticSpace.isClopen_eqLocus_base_of_isLocalIso`,
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isClopen_eqLocus` and
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isClopen_fixedLocus`. **One** is of the
+**seventh**, the mirror tree: `IsSeparatedMap.isClopen_eqLocus`. **By subject it is of the kind
+above as well**, and it is counted here and not there for the reason
+`### The category of separated covers, and separatedness as a morphism property` gives of its own
+two mirror-tree guards: the seventh kind is *a kind of routing rather than a kind of subject* in
+the head's own words, and routing is the question a guard file's placement answers. **Four and one
+sum to five**, which is the module's row count plus that one statement.
+
+**None of the five is of the first kind, and none is of the sixth**, which is worth saying because
+two of them carry `SeparatedFiniteEtaleOver` in their names and the clause opening *The sixth kind
+has a second category* is about that category. That kind's criterion is *about the category rather
+than about any morphism in it*, and both of these are about a **pair of morphisms** of it and
+about a set in the total space of one object; the sixth kind's *Five of that section's twenty-one
+guards* counts over
+`### The category of separated covers, and separatedness as a morphism property` and this push
+adds no guard to that section and removes none. **And the first kind's clause is about the covers
+and the cancellations that make a morphism of that category finite étale** — **no statement below
+concludes `ComplexAnalytic.AnalyticSpace.IsFiniteEtale` or
+`ComplexAnalytic.AnalyticSpace.IsLocalIso` of anything**: `IsLocalIso` occurs in two of them as an
+instance hypothesis and `IsFiniteEtale` in one proof as a `haveI` reading an object's defining
+pair, and neither occurs in any conclusion.
+
+**The published check on this file's pullback guards is unmoved and no clause of it needs a
+boundary for this push.** The clause opening *Two of those five hold statements of the first kind
+as well* names eight `isPullback_` guards and six `HasPullback` guards, and the check it publishes
+is to list this file's `#print axioms` names whose declaration name contains *isPullback*, dropping
+the ones over `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver`. **No name of this section
+carries either token**: the five are `isClopen_eqLocus`, `isLocallyInjective_base_of_isLocalIso`,
+`isClopen_eqLocus_base_of_isLocalIso`, `isClopen_eqLocus` and `isClopen_fixedLocus`, and the
+lists are **eight** and **six** at the commit this section is cut from and **eight** and **six**
+at the commit that adds it. That clause is not restated, not filtered and not touched.
+
+**Nothing generated is guarded and this push generated nothing.** The new module's tab-anchored
+row count in `scripts/DumpOkaDecls.lean`'s output is exactly **four**, one per analytic name
+below: no `_assoc` lemma, no `.eq_1` equation lemma, no match lemma and no congruence lemma. The
+fifth row is `Oka.Topology.SeparatedMap`'s, which gains exactly one.
+
+**No `instance` is declared by the new module and none is guarded here.** All four analytic
+statements are `theorem`s whose named hypotheses are explicit, and the class hypotheses that do
+occur are two instance binders of `ComplexAnalytic.AnalyticSpace.IsLocalIso`, one in each of the
+first two. **They are discharged by no instance of this push, and not by the same thing as each
+other.** The binder of
+`ComplexAnalytic.AnalyticSpace.isClopen_eqLocus_base_of_isLocalIso` is discharged at its call site
+by instance search out of `ComplexAnalytic.AnalyticSpace.IsFiniteEtale.isLocalIso`, which
+`Oka/AnalyticSpace/LocalIso.lean` already declares an instance, under the `haveI` that reads the
+object's defining pair. **The binder of
+`ComplexAnalytic.AnalyticSpace.isLocallyInjective_base_of_isLocalIso` is not**: that statement is
+applied inside `ComplexAnalytic.AnalyticSpace.isClopen_eqLocus_base_of_isLocalIso`, where the only
+`ComplexAnalytic.AnalyticSpace.IsLocalIso` in scope is that theorem's own binder and no
+`ComplexAnalytic.AnalyticSpace.IsFiniteEtale` is in the context at all.
+
+**This read *Both are discharged at the call sites by instance search out of
+`ComplexAnalytic.AnalyticSpace.IsFiniteEtale.isLocalIso`* until 2026-09-13.** The operative claim,
+*and by no instance of this push*, was true and is kept; the attribution was true of one binder and
+not of the other. **The general shape, which is why the retired wording is kept: when a chain of
+declarations discharges the same class, only the outermost link is discharged by the instance that
+starts the chain and the inner links are discharged by binders.**
+
+**What consumes each of them, said at the strength it has.**
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isClopen_fixedLocus` has no consumer in
+this repository — `git grep` over `Oka/` and `OkaTest/` finds it in its own module and in this
+section and nowhere else — and what would consume it is a quotient of an object of that category
+by a finite group of automorphisms over the base, which this repository does not state; the module
+docstring's `## What is not here` says so and says that `CategoryTheory.SingleObj` occurs in the
+comment-stripped code of no module of this repository at the commit that adds it.
+`…SeparatedFiniteEtaleOver.isClopen_eqLocus` is consumed by the fixed locus,
+`…isClopen_eqLocus_base_of_isLocalIso` by that, and `IsSeparatedMap.isClopen_eqLocus` and
+`…isLocallyInjective_base_of_isLocalIso` by that in turn. **So one of the five is unconsumed
+inside this repository**, and that is a fact about a rung written ahead of the construction that
+will read it rather than an omission. -/
+
+/--
+info: 'IsSeparatedMap.isClopen_eqLocus' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms IsSeparatedMap.isClopen_eqLocus
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isLocallyInjective_base_of_isLocalIso' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isLocallyInjective_base_of_isLocalIso
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.isClopen_eqLocus_base_of_isLocalIso' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.isClopen_eqLocus_base_of_isLocalIso
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isClopen_eqLocus' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isClopen_eqLocus
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isClopen_fixedLocus' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isClopen_fixedLocus
