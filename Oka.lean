@@ -89,6 +89,7 @@ import Oka.AnalyticSpace.Relations
 import Oka.AnalyticSpace.Restrict
 import Oka.AnalyticSpace.SeparatedDirectSummand
 import Oka.AnalyticSpace.SeparatedFiniteEtale
+import Oka.AnalyticSpace.SeparatedFiniteEtaleCoproducts
 import Oka.AnalyticSpace.SeparatedFiniteEtaleLimits
 import Oka.AnalyticSpace.SeparatedOver
 import Oka.AnalyticSpace.Sigma

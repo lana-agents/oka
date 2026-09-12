@@ -361,6 +361,47 @@ of the **seventh**, the mirror tree, and that section's docstring argues its rou
 clause was added by the push that added that section**, 2026-09-12, for the reason the clause
 naming `### The terminal object and the product of two complex affine spaces` gives.
 
+And one section more, at the second category
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver` and adding **no kind at all**, named here
+because the convention this file's other clauses record is that a push appending a section owes
+the description one.
+`### Finite coproducts of the category of separated covers` guards the six declarations of
+`Oka/AnalyticSpace/SeparatedFiniteEtaleCoproducts.lean`, which gives
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver` finite coproducts with no hypothesis on
+the base. **Six guards, and they partition four and two.** **Four are of the first kind**, by the
+opening description's clause naming the category the finite étale ones form over a fixed base,
+read at that second category: **the disjoint union of a finite family as an object of it**, **the
+inclusion of a member as a morphism of it**, **those inclusions bundled as a cofan**, and **the
+statement that that bundle is a coproduct**. **Two are of the sixth kind at that second
+category** — about the category rather than about any morphism in it — the colimit-of-shape
+statement at a finite index type and the `CategoryTheory.Limits.HasFiniteCoproducts` instance,
+exactly as the clause opening *The sixth kind has a second category* assigns
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.hasTerminal`. **The line between the two
+groups is whether the statement names the morphisms it is about or quantifies over all diagrams of
+a shape**, and the new section's own docstring draws it in those words.
+
+**Two claims elsewhere in this paragraph are untouched, and that is a measurement rather than an
+assumption.** The clause opening *The sixth kind has a second category* counts over
+`### The category of separated covers, and separatedness as a morphism property`, and its *Five of
+that section's twenty-one guards* still counts what it counted: this push appends a section and
+adds no guard to that one, which `git diff` against `077f6d5` shows by touching no line of it. And
+the check published by the clause about statements of a pullback square — *list this file's
+`#print axioms` names whose declaration name contains* isPullback *and compare that list against
+the clause, dropping the ones over `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver`* —
+returns what it returned, and so does the same list taken at `HasPullback`, of which that clause
+names six: **no name of the new section carries either token**, the six being a disjoint union, an
+inclusion, a cofan, a colimit, a colimit-of-shape and a coproducts instance. **The check is quoted
+here as it is published, exclusion included**, that exclusion having been added to it on
+2026-09-12 by the push that added
+`### Fibre products in the category of separated covers, and its finite limits`; the clause under
+it is the one the dated record opening *It read the five `HasPullback` guards* describes — *about
+the guards of this file and not about the category they are stated in* — which is why the exclusion
+is by the category the dropped guards are over and not by the category the kept ones are over.
+**Nine and eight unfiltered and eight and six with the exclusion at `077f6d5`, and the same four
+figures at the commit that adds this section**, all four runs mine.
+**This clause was added by the push that added that section**, 2026-09-13, for the reason the
+clause naming `### The terminal object and the product of two complex affine spaces` gives.
+
 **Named rather than counted from the end**, which is the repair and not the description. **The
 sentence this replaces called them *the last two***; they stopped being that when two further
 sections were appended past them — and one of those two was written across two lines, so no
@@ -6201,3 +6242,101 @@ info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isClopen_fixedLocu
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isClopen_fixedLocus
+
+/-! ### Finite coproducts of the category of separated covers
+
+`Oka/AnalyticSpace/SeparatedFiniteEtaleCoproducts.lean`, the whole of it. **Six names and the
+module has six declarations**: the disjoint union of a finite family of separated covers as an
+object of that category, the inclusion of a member, the cofan those inclusions make, the colimit
+statement that the cofan is the coproduct, the colimit-of-shape statement at a finite index type of
+the category's own universe, and the `CategoryTheory.Limits.HasFiniteCoproducts` instance that is
+the Galois-category field.
+
+**The routing, argued rather than assumed, because the module is new.** The topic table at the head
+of `OkaTest/Axioms.lean` routes *morphisms of analytic spaces* here, and that is the row for all
+six: four are about an object of a category of morphisms over a fixed base, or about morphisms of
+it, and two are about that category having colimits of a shape. **The competing row is *analytic
+spaces, local models, the node*, `OkaTest/Axioms/AnalyticSpace.lean`**, and it loses for the reason
+`### The category of separated covers, and separatedness as a morphism property` gives against the
+same competitor: nothing below is a local model, a chart or a node, and the objects below are named
+only so that morphisms into and out of them can be stated. **The second competitor is
+`### Finite coproducts of the category of covers`**, which guards the six declarations of
+`Oka/AnalyticSpace/FiniteEtaleOver.lean` that this module's six are read off one category out;
+that section is not extended, for the reason this file gives for appending — a section appended at
+the end cannot say which section is above it and stay true, since the next branch appends between
+them — and because its own opening sentence scopes it to that file.
+
+**The kinds, and they partition six as four and two.** **Four are of the first kind**, by the
+opening description's clause naming the category the finite étale ones form over a fixed base, read
+at the subcategory the clause opening *The sixth kind has a second category* introduces:
+`…SeparatedFiniteEtaleOver.sigma`, an object of that category built from a finite family of them;
+`…SeparatedFiniteEtaleOver.sigmaι`, a morphism of it; `…SeparatedFiniteEtaleOver.cofanSigma`, those
+morphisms bundled as a cocone; and `…SeparatedFiniteEtaleOver.isColimitCofanSigma`, the statement
+that that bundle is universal. **Two are of the sixth kind at that second category** — about the
+category rather than about any morphism in it —
+`…SeparatedFiniteEtaleOver.hasColimitsOfShape_discrete` and
+`…SeparatedFiniteEtaleOver.hasFiniteCoproducts`, exactly as
+`…SeparatedFiniteEtaleOver.hasTerminal` is assigned that kind by the clause that introduces the
+second category.
+
+**The line between the two groups is whether the statement names the morphisms or quantifies over
+them.** The four name a family and the morphisms out of its members, and are false of nothing if
+the category has other coproducts; the two say the category has a colimit for every diagram of a
+shape and name no morphism at all. That is the same line
+`### The terminal object and the product of two complex affine spaces` draws when it calls *has a
+terminal object* a statement about the category.
+
+**`Classical.choice` is in every guard below** and is introduced by none of them. It arrives
+through the covering-map rung, as the sections about the fibre functor record, and is present
+already in `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.sigma`, which
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.sigma` is the separated reading of.
+
+**Nothing generated is guarded and this push generated nothing.** The module's tab-anchored row
+count in `scripts/DumpOkaDecls.lean`'s output is six: no `_assoc` lemma, no `.eq_1` equation
+lemma, no match lemma and no congruence lemma. Equation lemmas are generated on demand, so that
+sentence is about the environment at the commit that adds this section.
+
+**Named by file rather than counted**, as the sections of this file say and for the reason they
+give. **Named and not located**: no sentence here says which section is above or below it. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.sigma' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.sigma
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.sigmaι' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.sigmaι
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.cofanSigma' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.cofanSigma
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isColimitCofanSigma' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isColimitCofanSigma
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.hasColimitsOfShape_discrete' depends
+  on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.hasColimitsOfShape_discrete
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.hasFiniteCoproducts' depends on
+  axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.hasFiniteCoproducts
