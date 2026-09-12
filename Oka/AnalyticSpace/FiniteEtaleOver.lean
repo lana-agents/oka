@@ -72,14 +72,20 @@ no declaration can mention it, while a plain grep for it is matched by this sent
 `Oka/AnalyticSpace/SeparatedFiniteEtale.lean` each say so of themselves in those words, and
 `Oka/AnalyticSpace/SeparatedFiniteEtale.lean` adds that the namespace is not in this repository's
 import closure at all; the comparison functor is taxis #1113 and is open. **Neither a grep nor a
-guard can decide who consumes these four**, because they carry no names — there is nothing to grep
-for and no `#print axioms` line can reach them. **The build decides it.** Left declared but made
-`attribute [local instance]`, so that no module but this one sees them, the library still reaches
-`lake build` exit 0 over **4153** jobs, which is a proof that nothing outside this file consumes
-one; removed outright they leave exactly **two** synthesis failures, both at
+guard can decide who consumes these four**, and not because they are nameless — Lean generates a
+name for an anonymous instance and `scripts/DumpOkaDecls.lean` emits all four, so
+`#print axioms ComplexAnalytic.AnalyticSpace.instRespectsIsoIsFiniteEtale` elaborates. It is that
+**no use site of an instance names it**, synthesis having put the term there, which is as true of a
+named instance as of these. **The build decides it.** Declared `local instance` instead, so that no
+module but this one sees them, the library still reaches `lake build` exit 0 over **4153** jobs at
+`7a99bfc` and **4154** at `2cf6efa`, which is a proof that nothing outside this file consumes one;
+removed outright they leave exactly **two** synthesis failures, both at
 `ComplexAnalytic.AnalyticSpace.isFiniteEtale_of_restrictHom_top`'s two `comp_mem` applications.
-Both runs are at `7a99bfc` with nothing altered but those four declarations, and the instrument
-is recorded as the sixth object of `OkaTest/Axioms.lean`.
+Each run alters nothing but those four declarations, and the instrument is recorded as the sixth
+object of `OkaTest/Axioms.lean`. **This paragraph said `attribute [local instance]` until
+2026-09-08**, which is a different command and not this instrument: on a declaration that is
+already a global `instance` it adds a local attribute and removes nothing, so the build stays green
+whatever consumes it. The retired wording is kept here as a dated record.
 
 Each is a quotation of a declaration that was already on `master`; nothing is proved here. (Those
 three are named in the instances' own vicinity rather than in this docstring, because
