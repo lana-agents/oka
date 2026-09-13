@@ -1219,11 +1219,13 @@ repository's history alone:
 
 * `lana-agents/oka#530` merged as `da72056` and put
   `SeparatedFiniteEtaleOver.hasFiniteCoproducts` into **2** modules, from **0** at `077f6d5` —
-  under a bullet saying that is as far as the tree goes. **That row is a run of the snippet below
-  at that token and not at the fully-qualified name**, which returns **1** of the two, the guard
-  file: the declaration site spells the name short, inside its namespace, and writes the long form
-  only in its docstring, which the stripper deletes. **Which spelling a token scan uses is part of
-  the figure**, and a row that does not say which is not re-derivable from it.
+  under a bullet saying that is as far as the tree goes. **That row is a run of the three-column
+  occurrence scan at that token and not at the fully-qualified name**, which returns **1** of the
+  two, the guard file: the declaration site spells the name short, inside its namespace, and the
+  long form occurs in that module **only in prose**, which the stripper deletes — four times in the
+  module docstring and once in a sibling declaration's, and not once in the instance's own, at
+  `da72056` and at `003e38f` alike. **Which spelling a token scan uses is part of the figure**, and
+  a row that does not say which is not re-derivable from it.
 * the same re-cut took `^And one section more` in `OkaTest/Axioms/Morphisms.lean` from **1** to
   **2**, and a citation of *the clause opening `And one section more`* stopped naming one clause.
   It is **3** at `003e38f`: the pointer class keeps degrading after the push that repairs it.
@@ -1257,18 +1259,29 @@ EOF
 **Three columns and not two**, because *unchanged at both bases* is the answer that lets the rest
 of a branch's column be carried across the re-cut rather than re-run.
 
-**That snippet is the instrument for one half of the class and not for both, and the half it
-cannot see is the worse-behaved one.** A name in code is counted comment-stripped and tree-wide,
-as above. A citation **by opening words** is counted **raw and line-anchored, in the one file it
-points into**, because there the text being counted *is* a comment and the stripper deletes it by
-design: run at `^And one section more`, the snippet above returns **0** at `077f6d5`, `da72056`
-and `003e38f` alike, while
+**The three-column occurrence scan is the instrument for one half of the class and not for both,
+and the half it cannot see is the worse-behaved one.** A name in code is counted comment-stripped
+and tree-wide, as above. A citation **by opening words** is counted **raw and line-anchored, in the
+one file it points into**, and there are two separate reasons that scan cannot produce that figure.
+
+**First, its test is `TOKEN in strip_comments(...)`, a substring test in which `^` is a literal
+character and not an anchor**, so it must be run at the bare token: at `^And one section more` it
+returns **0** at `077f6d5`, `da72056` and `003e38f` — and **0** with the stripper removed as well,
+so that run demonstrates nothing about stripping. At `And one section more` it returns **0**
+stripped and **1** raw, `OkaTest/Axioms/Morphisms.lean`, at each of the three. **That pair is the
+one that isolates the stripper**, and it isolates it because the text being counted *is* a comment
+and the stripper deletes it by design.
+
+**Second, the bare token's raw answer does not move either** — **1 / 1 / 1** across those three
+commits, because the scan counts *files* and every occurrence is in the same one. What moved is the
+count inside that file, which only a line-anchored run in it reaches:
 
 ```sh
 git show "$REV":OkaTest/Axioms/Morphisms.lean | grep -c '^And one section more'
 ```
 
-returns **1**, **2** and **3** at those same three commits, which is the second instance above.
+returns **1**, **2** and **3** at those same three commits, which is the `And one section more`
+instance of the three this section lists.
 
 **The added-line multiset test is necessary and is not sufficient.** Sorting the branch's added
 lines against the old base and against the new one and diffing the two is what proves a conflict
