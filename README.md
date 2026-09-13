@@ -1182,11 +1182,24 @@ no sentence about it anywhere** — which had already happened three times over:
 ### The `until <date>` record
 
 A clause that stops being true is **edited in place**, and a bolded paragraph beside it says what
-it read, until when, and what changed. At the commit that writes this there are **96** such
-records in **42** files under `Oka/` and `OkaTest/`, against **97** in the same 42 files at
-`91bbad8`: the push that added this section retired two records and wrote one, all three in
-`OkaTest/Axioms/Morphisms.lean`. **The counts here leave `README.md` out, and the two instruments
-have to be told apart before they can be.** This file holds **4** dated records — two in
+it read, until when, and what changed. **How many there are is a command and not a figure to
+carry here**, because any push that lands or retires one moves it:
+
+```sh
+git grep -ohE 'until 20[0-9]{2}-[0-9]{2}-[0-9]{2}' -- Oka/ OkaTest/ | wc -l   # records
+git grep -lE  'until 20[0-9]{2}-[0-9]{2}-[0-9]{2}' -- Oka/ OkaTest/ | wc -l   # files
+```
+
+**The digits are anchored rather than left as wildcards**, which would match the `git grep -l`
+line of this section's own scan; and **`git grep` reads one line at a time**, so a record whose
+`until` ends a wrapped line is matched by neither command. At `6442a4c` they return **97** and
+**43**, **15** records wrap out of reach of both there, and that same tree read with each file's
+whitespace collapsed holds **112** in **46**. At `91bbad8` it was **97** in **42** — the same
+total in one file fewer, and a coincidence of the only two pushes between them that moved either
+figure: the push that added this section retired two records and wrote one, all three in
+`OkaTest/Axioms/Morphisms.lean`, and `6442a4c` wrote one in a file whose only other record wraps.
+**The counts here leave `README.md` out, and the two instruments have to be told apart before they
+can be.** This file holds **4** dated records — two in
 `## Scope`'s `Finite morphisms` bullet, two in its `Local isomorphisms and finite étale morphisms`
 one — while the tree-wide `git grep` the board runs matches **6** of its lines at the commit that
 writes this. The other two are not records. One is the pattern **quoted**, and it is this section's
