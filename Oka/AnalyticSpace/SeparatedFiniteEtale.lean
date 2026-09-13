@@ -146,11 +146,23 @@ not give either.
   cite its declarations** — gives that object the second component and reflects the colimit back
   along the fully faithful inclusion. **The statement below is unchanged and this file gains no
   import**; what a reader should take from this bullet now is which file to look in.
-* **No coproducts and no terminal-object-and-coproducts package.**
+* **No coproducts, and a file this one does not import now has them.**
+
+  **This bullet read as an open absence until 2026-09-13** and what it said was right, so it is
+  kept: *"No coproducts and no terminal-object-and-coproducts package.
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.isSeparatedMap_sigma` says a finite disjoint
   union of separated covers is separated, so the objects are available; what is not here is the
   cofan, the colimit, and the `CategoryTheory.Limits.HasFiniteCoproducts` instance they would
-  give.
+  give."* All three arrived in `Oka/AnalyticSpace/SeparatedFiniteEtaleCoproducts.lean` — which
+  imports this file directly, so nothing here can cite its declarations — out of that same lemma
+  and with no hypothesis on the base. **Nothing in this file moved**: it gains no import, no
+  declaration and no statement, and what a reader should take from this bullet now is which file
+  to look in.
+  **The package this bullet's first sentence also named is not claimed there either**: that file
+  declares the coproducts and nothing that bundles them with the terminal object, and its
+  `## What is not here` names two of `Mathlib`'s converters into
+  `CategoryTheory.Limits.HasFiniteColimits` and measures, for each, what this repository does not
+  state.
 * **No `#print axioms` guards for the four instances below that carry no name.** They are the
   `CategoryTheory.MorphismProperty.IsStableUnderComposition`,
   `CategoryTheory.MorphismProperty.ContainsIdentities`,

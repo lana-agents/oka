@@ -119,6 +119,24 @@ docstring gives.
   `Oka/AnalyticSpace/SeparatedFiniteEtale.lean`'s bullet of the same subject, unchanged** — this
   file is about the summand of a monomorphism and produces no coproduct of two objects chosen
   freely.
+
+  **That rung landed on 2026-09-13**, and the sentences above are kept rather than rewritten
+  because two clauses of this docstring cite this bullet by its opening words.
+  `Oka/AnalyticSpace/SeparatedFiniteEtaleCoproducts.lean` — **a sibling of this module, which
+  neither imports it nor is imported by it, both importing
+  `Oka/AnalyticSpace/SeparatedFiniteEtale.lean`** — gives the cofan
+  `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.cofanSigma`, its colimit
+  `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isColimitCofanSigma` and the instance
+  `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.hasFiniteCoproducts`, out of that same
+  lemma and **with no hypothesis on the base**. **Nothing in this file moved**: it gains no import
+  and no declaration, and what is still true of it is the last sentence — it is about the summand
+  of a monomorphism and produces no coproduct of two objects chosen freely.
+
+  **The *does occur, in two* figure in this docstring's first bullet is pinned to `0eed5cd` and is
+  exact there.** At the commit that adds the coproducts the string `HasFiniteCoproducts` occurs in
+  the comment-stripped code of **three** modules, and the third is of this category — so the
+  distinction that figure draws is still the right one to draw and the count beside it is a record
+  of a commit and not a claim about the tree.
 * **The isomorphism onto the clopen part is still not exposed**, for the reason
   `Oka/AnalyticSpace/DirectSummand.lean`'s `## What is not here` gives; nothing below unfolds that
   proof.
