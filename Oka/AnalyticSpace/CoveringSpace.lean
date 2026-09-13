@@ -80,7 +80,7 @@ the closed field is the hypothesis, and the fibre field is the hypothesis at
 by finite fibres —
 `ComplexAnalytic.not_isFinite_puncturedInclCoveringSpaceHom` in `OkaTest/CoveringSpace.lean` is
 the witness, at an open embedding whose fibres have at most one point — so it has to be asked for,
-and asking for it is the whole of what this file spends on finiteness.
+and asking for it is the whole of what the general form spends on finiteness.
 
 **Where a covering map enters is the corollary and not the statement.**
 `ComplexAnalytic.AnalyticSpace.isFinite_coveringSpaceHom` is the covering-map form, and the one

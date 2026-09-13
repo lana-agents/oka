@@ -1531,8 +1531,9 @@ hypothesis and prove neither field; `ComplexAnalytic.AnalyticSpace.isFinite_cove
 map that finite fibres do not give. **That the closedness cannot in turn be dropped is
 `ComplexAnalytic.not_isFinite_puncturedInclCoveringSpaceHom`** in `OkaTest/CoveringSpace.lean`,
 which is a counterexample: no `#print axioms` under `OkaTest/Axioms/` names it, this sentence
-being its only occurrence there, because this file guards what a statement rests on and a
-counterexample is not rested on.
+being its only occurrence there, and what decides that is the module the declaration lives in and
+not what kind of statement it is — every name this directory guards is declared by a module of
+`Oka/`, counterexamples among them, and no declaration of an `OkaTest/` module is guarded there.
 
 It is not the only mirror-tree topology the construction consumes: the cover by sheets the first
 half is checked on is `IsLocalHomeomorph.sSup_sheetOpens`, guarded in
