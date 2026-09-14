@@ -44,11 +44,17 @@ file is for. Four things are checked and they are different things:
   is cited from `Oka/`.
 * **No `#synth` control, and the reason is that there is nothing to synthesise.** Taxis #1970's
   definition of done asks for one at both ends, on the model of the `HasPullbacks` control in
-  `Oka/AnalyticSpace/FiniteEtaleBaseChange.lean`. **That model does not transfer**: every
-  declaration this push adds is a theorem, none is an `instance` and none states a class, so a
-  planted `#synth` would have nothing to fail at and nothing to succeed at. **The control at the
-  base end is `scripts/DumpOkaDecls.lean` instead** — the nine names are absent from its output at
-  the branch's base and present at its head, which is a run and not a plant. This bullet is here
+  `Oka/AnalyticSpace/FiniteEtaleBaseChange.lean`. **That model does not transfer**: **no
+  declaration this push adds is an `instance`, none carries `@[instance]` and none declares a
+  `class`**, so a planted `#synth` would have nothing to fail at and nothing to succeed at. The
+  two `def`s below are `Opens`-valued and no instance search reaches either; every other
+  declaration this push adds is a theorem, and some of those do *state* one of the three classes
+  this file is about — `ComplexAnalytic.AnalyticSpace.IsFinite`,
+  `ComplexAnalytic.AnalyticSpace.IsLocalIso` and `ComplexAnalytic.AnalyticSpace.IsFiniteEtale`
+  are declared with `class` — which is why the clause above is about what a declaration *is* and
+  not about what it concludes. **The control at the base end is
+  `scripts/DumpOkaDecls.lean` instead** — the nine names are absent from its output at the
+  branch's base and present at its head, which is a run and not a plant. This bullet is here
   because a definition-of-done item silently dropped reads exactly like one silently missed.
 * **No cover over which a class is established that was not already known.** The positive
   instances below conclude things the tree has by other routes — `ComplexAnalytic.AnalyticSpace`'s
