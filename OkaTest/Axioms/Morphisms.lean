@@ -552,7 +552,13 @@ section is replaced, deprecated or reproved, and no guard of it moved.
 **This clause was added by the push that added that section**, 2026-09-14, for the reason the
 clause naming `### The terminal object and the product of two complex affine spaces` gives.
 
-And a second section of the seventh kind and of no other, the mirror tree again.
+And a section of **four** guards, every one of them of the **seventh** kind and of no other, the
+mirror tree again — **named by a count of its own guards and not by an ordinal among the
+sections of that kind**, because an ordinal there is a claim about a file anybody may append to,
+which is the failure this description's own *Named rather than counted from the end* paragraph
+records. The other clauses of this description opening on that kind are the ones opening *And
+one section more, of the seventh kind and of no other* and *And one section more, both of whose
+guards are of the seventh kind and of no other*, and this one displaces neither.
 `### The quotient of a covering map by a finite group over the base` guards the four declarations
 of `Oka/Topology/Covering/Quotient.lean`: that the descent of a covering map with finite fibres to
 the orbit space of a finite group acting continuously over the base is a covering map, that the
@@ -571,16 +577,24 @@ morphisms of analytic spaces, not a statement about the total space of a cover o
 statement about any category — so the argument that clause has to make against the sixth kind's
 criterion does not arise here.
 
-**The two clauses above this one each re-ran a published figure of this description on being
-added; this one re-runs neither, and the reason is that the argument here is structural.** The
+**The clauses opening *And one section more, of the seventh kind and of no other* and *And one
+section more, both of whose guards are of the seventh kind and of no other* each re-ran a
+published figure of this description on being added; this one re-runs neither, and the reason is
+that the argument here is structural.** They are named rather than counted, and the naming is what
+makes the sentence checkable: the clause standing between them and this one, the one opening
+*And one section more, adding no kind at all*, re-ran neither figure. The
 push that adds this clause adds exactly two hunks to this file — this clause and the section it
 names — and touches no line of `### The category of separated covers, and separatedness as a
 morphism property`, so the count *Five of that section's twenty-one guards* counts what it
-counted. And no form of the token `pullback` occurs anywhere in
-`Oka/Topology/Covering/Quotient.lean` or in the section this clause names, so the published
-pullback check's inputs are untouched whichever way taxis #1947 settles the literal form of its
+counted. And the published pullback check's inputs are this file's `#print axioms` names: this
+push adds **four** of them and **not one carries *isPullback* or *hasPullback***, so all four of
+that check's figures are untouched whichever way taxis #1947 settles the literal form of its
 `HasPullback` half; **that open question is why the check is not re-run here verbatim**, and what
-is claimed is only that this push moves none of its inputs. **This clause was added by the push
+is claimed is only that this push moves none of its inputs. **The inputs are names and not
+prose**, which is worth saying because the section this clause names does cite two statements
+whose names carry the token in prose, in the paragraph opening *One further section of this file
+reached its placement by that route*; no form of the token occurs in
+`Oka/Topology/Covering/Quotient.lean` at all. **This clause was added by the push
 that added `### The quotient of a covering map by a finite group over the base`**, 2026-09-13, for
 the reason the clause naming `### The terminal object and the product of two complex affine
 spaces` gives.
@@ -6954,6 +6968,18 @@ measuring that no module under `Oka/` imports it. **The subject is not shared**:
 about colimits in a category and this one is about covering maps of topological spaces, so neither
 is evidence about the other's row in the topic table. Only the tail rule both fall under is
 common, and the tail rule is the whole of the citation.
+
+**One further section of this file reached its placement by that route and no longer stands in
+it, which is why it is named here and not cited as a second precedent.**
+`### Base change of a local homeomorphism, and of a proper map` took a section of its own
+because the analytic result that would motivate its two guards did not exist. That result exists
+at the commit this section is cut from and consumes both, one line each:
+`Oka/AnalyticSpace/FiniteEtaleBaseChange.lean` applies `IsLocalHomeomorph.pullback_snd` in
+`ComplexAnalytic.AnalyticSpace.isLocalHomeomorph_baseChangeSndBase` and
+`IsProperMap.pullback_snd` in
+`ComplexAnalytic.AnalyticSpace.isClosedMap_baseChangeSndBase`. **Nothing here asks that section
+or its clause of the head description to be re-worded**: both are about the commit that added
+them, and this push touches no line of either.
 
 **Why this file and not another, with the competitors named.** What motivated the statement is the
 `PreGaloisCategory` field on quotients by finite group actions at
