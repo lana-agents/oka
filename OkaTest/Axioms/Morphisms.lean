@@ -887,7 +887,15 @@ among them.
 
 **Cited by opening words, this clause is the one whose opening runs *whose single guard adds no
 kind at all*; it opens *And a section more* and not *And one section more*, and that is forced and
-not a preference.** The clause above naming `### The quotient of a covering map by a finite group
+not a preference.** **A second clause of this description opens *And a section more* at the base
+this clause is now cut from**: the one naming `### The fibre functor at the separated covers, and
+the two axioms of it that are reachable`, which landed at `8d50165` after this clause was approved
+and before it was re-cut onto it. **That costs this clause nothing and the reason is the
+discriminator and not the opening** — the two agree for the **20** characters of
+*And a section more,* and then run to *at the second category named by* and to *whose single
+guard*, and the phrase this clause is cited by is the whole of the one this paragraph names below,
+which occurs in neither that clause nor its section. The clause above naming
+`### The quotient of a covering map by a finite group
 over the base` identifies a clause of this description as *the one opening «And one section more,
 adding no kind at all»* and says in terms that the naming is what makes its sentence checkable; the
 clause it so identifies is the one naming `### The three classes are local on the target, and the
@@ -910,17 +918,25 @@ own* draws it for a token **described rather than reached**, and this is that di
 opening described rather than cited — one of them names the form this opening does not take, one
 quotes the opening the clause above cites, and none of them is an identification of a clause made
 here. **With this paragraph's occurrences set aside, no citation of a clause opening in this
-description reaches two of them at this head**, and that is a run over every occurrence of either
-opening in this file and not a reading of this paragraph.
+description reaches two of them at this head**, and that is a run over every occurrence of each of
+the three openings in this file — this clause's, the one it declined to reproduce, and the one
+`8d50165` landed — and not a reading of this paragraph.
 
 **The published check on this file's statements of a pullback square is unmoved in both halves,
 and that is a run and not an assumption.** The one name this push adds carries neither *isPullback*
 nor *hasPullback*, so the four figures are what they were — **nine and eight unfiltered and eight
 and six with the exclusion, at the commit this section is cut from and at the one that adds it
 alike**. **The list those figures are read off has to be taken continuation-aware**, which is worth
-saying here because the obvious instrument is wrong: this file writes **eleven** of its
-`#print axioms` with the name on the following line, so it carries **591** guard names at the
-commit that adds this clause where a one-line `grep -E '^#print axioms .+$'` returns **580**. And
+saying here because the obvious instrument is wrong: this file writes **fifteen** of its
+`#print axioms` with the name on the following line, so it carries **608** guard names at the
+commit that adds this clause where a one-line `grep -E '^#print axioms .+$'` returns **593**.
+**Those three numerals read eleven, 591 and 580 while this clause was cut from `ddcc4c6`**, and all
+three moved at the re-cut onto `ebee177` rather than under an edit: four of the seventeen guards
+`8d50165` appends wrap, the namespace
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver` being 55 characters. **No dated record is
+owed for them and this is not a correction either** — the retired numerals never landed, and each
+was exact at the base it was measured at; **it is the numeral a re-cut moves without an edit**,
+which is what makes the continuation-aware instrument worth naming here rather than the figure. And
 the two claims the clause opening *And one section more, at the second category* makes are
 untouched by this push as well: its *Five of that section's twenty-one guards* counts over
 `### The category of separated covers, and separatedness as a morphism property`, no line of which
