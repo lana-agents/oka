@@ -96,10 +96,17 @@ below is said not to be.
   below says that `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.toQuotient` is a colimit
   cocone, that a `G`-invariant morphism out of the cover factors through the quotient, or that
   such a factorisation is unique. **`CategoryTheory.SingleObj` occurs in the comment-stripped code
-  of two modules of this repository at the commit that adds this file** — `Oka.lean`, the
-  aggregator `mk_all` generates, and `Oka/CategoryTheory/Limits/Shapes/SingleObj.lean`, the
-  mirror-tree module that reduces colimits of that shape to finite colimits — and neither of the
-  two is about this category. Nothing below cites either.
+  of exactly one module of this repository at the commit that adds this file** —
+  `Oka/CategoryTheory/Limits/Shapes/SingleObj.lean`, the mirror-tree module that reduces colimits
+  of that shape to finite colimits, which is not about this category, which this file does not
+  import and which nothing below cites. **The bare `SingleObj` is a second register and it returns
+  two**: the other module is `Oka.lean`, the aggregator `mk_all` generates, whose only hit is its
+  `import Oka.CategoryTheory.Limits.Shapes.SingleObj` line — a module path, which does not contain
+  the token this bullet is measured at. `README.md` puts that difference in terms in its account of
+  what a re-cut owes, *which spelling a token scan uses is part of the figure*, and the two
+  spellings answer differently here; the count above is the qualified one, which is the spelling
+  `Oka/AnalyticSpace/SeparatedFiberFunctor.lean` and `OkaTest/Axioms/Morphisms.lean` measure the
+  same absence at, and it agrees with both.
 * **No bridge from a group of automorphisms of the cover to the action taken here**, as the
   paragraph above says at length. A caller holding a homomorphism into
   `CategoryTheory.Aut` of an object has to build the three hypotheses itself, and no declaration

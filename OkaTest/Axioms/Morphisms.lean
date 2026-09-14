@@ -1047,7 +1047,7 @@ having gone false at `280bb67` for the same reason; that is a scope call and not
 either is sound.
 **These two clauses were added by the push that added
 `### Morphisms between the covering spaces of an analytic space` and
-`### The quotient of an analytic cover by a finite group acting over the base`**, 2026-09-14, for
+`### The quotient of an analytic cover by a finite group acting over the base`**, 2026-09-15, for
 the reason the clause naming `### The terminal object and the product of two complex affine
 spaces` gives.
 
