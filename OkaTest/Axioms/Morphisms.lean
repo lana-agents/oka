@@ -6977,9 +6977,16 @@ at the commit this section is cut from and consumes both, one line each:
 `Oka/AnalyticSpace/FiniteEtaleBaseChange.lean` applies `IsLocalHomeomorph.pullback_snd` in
 `ComplexAnalytic.AnalyticSpace.isLocalHomeomorph_baseChangeSndBase` and
 `IsProperMap.pullback_snd` in
-`ComplexAnalytic.AnalyticSpace.isClosedMap_baseChangeSndBase`. **Nothing here asks that section
-or its clause of the head description to be re-worded**: both are about the commit that added
-them, and this push touches no line of either.
+`ComplexAnalytic.AnalyticSpace.isClosedMap_baseChangeSndBase`. **This push repairs neither the
+section nor its clause of the head description, and that is a scope call and not a finding that
+either is sound.** Both are in the present tense and both went false at `280bb67`, the commit
+this section is cut from and the one that wrote both of the consumers this paragraph names, at
+`2026-09-14 07:52:28Z`: the clause of the head description says the analytic result that would
+motivate that section's two guards *does not exist yet*, and that section's docstring opens
+*Neither statement is consumed by anything*, a sentence whose supporting run is pinned to the
+commit that adds the section and which carries no pin itself. **Repairing them is a push of its
+own** — this one is a re-cut whose whole claim is that it moves nothing — **and it touches no
+line of either**, which is the only thing this paragraph asserts about them.
 
 **Why this file and not another, with the competitors named.** What motivated the statement is the
 `PreGaloisCategory` field on quotients by finite group actions at
