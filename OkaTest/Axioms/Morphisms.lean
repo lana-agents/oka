@@ -555,9 +555,16 @@ so a citation of either has to carry enough of it to tell them apart, and every 
 in this file does. **This clause was added by the push that added that section**,
 2026-09-14, for the reason the clause naming `### The terminal object and the product of two complex
 affine spaces` gives. **The date is the push's and not the draft's**: this clause and its section
-were written on 2026-09-13 against `003e38f` and re-cut onto `168ff30` the next day, and the
-convention every dated clause of this file follows is that the date belongs to the push that lands
-the text.
+were written on 2026-09-13 against `003e38f` and re-cut onto `168ff30` the next day, and the date
+written here is the one the landing push carries. **That is the convention and not a claim about
+every dated clause of this file**, and the clause above naming `### Base change of a local
+homeomorphism, and of a proper map` is one that does not follow it: it is dated 2026-09-13, and
+the push that added that section is `954b116` at `2026-09-14 01:34:48Z`. **It is not a defect** —
+a merge that crosses midnight UTC is what `README.md`'s section on the `until <date>` record names
+as a prose date legitimately behind its commit — and it is a counterexample all the same. **In the
+one register where the convention is a command rather than a reading, it holds of this file**:
+the blame scan that `README.md` section publishes returns no row of this file whose prose date
+differs from the `git blame` date of the line carrying it.
 
 **Named rather than counted from the end**, which is the repair and not the description. **The
 sentence this replaces called them *the last two***; they stopped being that when two further

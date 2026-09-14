@@ -116,11 +116,12 @@ obligation a single term** rather than the two-step `IsSeparatedMap.pullback`-th
 two `def`s each write out.
 
 **Both measurements above were first taken at `003e38f` and are re-derived at `168ff30` after a
-re-cut rather than carried across it.** Ten commits separate the two bases and **four** of them
-touch a file under `Oka/` — `Oka/AnalyticSpace/CoveringSpace.lean`,
+re-cut rather than carried across it.** Ten commits separate the two bases and **four** tracked
+files under `Oka/` change across them — `Oka/AnalyticSpace/CoveringSpace.lean`,
 `Oka/Topology/Covering/Basic.lean`, `Oka/Topology/IsLocalHomeomorph.lean` and
-`Oka/Topology/Maps/Proper/Basic.lean`, by `git diff --name-only 003e38f 168ff30 -- 'Oka/'` — and
-**none of the three files the twenty-two live in is among them**, which is why every figure, every
+`Oka/Topology/Maps/Proper/Basic.lean`, by `git diff --name-only 003e38f 168ff30 -- 'Oka/'`; **two
+of the ten commits touch a file under `Oka/` at all**, `954b116` and `7b7ce5a`. **None of the three
+files the twenty-two live in is among those four**, which is why every figure, every
 file split, every `comm` answer and every line number above is the same at the two commits. The
 `.pullback` sweep is re-run too: **239** hits under `Oka/` at each of the two bases, the same two
 of them applications of `IsSeparatedMap.pullback`, at the same two lines. **Nothing here is a
