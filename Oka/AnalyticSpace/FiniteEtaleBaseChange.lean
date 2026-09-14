@@ -15,7 +15,8 @@ spaces. Then the fibre product `E ×_B B'` exists, its projection to `B'` is fin
 and the square is a pullback in `ComplexAnalytic.AnalyticSpace`. **No separation axiom is asked
 of any of the three spaces**, and `ComplexAnalytic.AnalyticSpace.doubledLineFold` is a finite
 étale morphism whose source is not one — `OkaTest/FiniteEtaleBaseChangeNonHausdorff.lean`
-compiles every statement of this file at that leg.
+applies four of this file's statements at that leg, one in each of four of its five `example`s,
+which is what checks that they apply at all.
 
 **The opening sentence read *Let `q : E ⟶ B` be finite étale with `E` Hausdorff* and the file
 carried `[T2Space E]` in its `variable` block, until 2026-09-14**, when the route through
@@ -78,9 +79,9 @@ Nothing is assumed of `E`, of `B` or of `B'`, and `f` is an arbitrary morphism �
 
 **That paragraph opened *`[T2Space E]` is spent exactly once*, in
 `ComplexAnalytic.AnalyticSpace.isCoveringMap_baseChangeSndBase`, until 2026-09-14.** That lemma
-is still here and still true, and it is still the one place in this file where `[T2Space E]`
-appears; what changed is that nothing consumes it. It is kept rather than deleted because it is
-guarded, and because the covering-map statement is the one a reader coming from
+is still here and still true, and it is still the one declaration of this file that carries
+`[T2Space E]`; what changed is that nothing consumes it. It is kept rather than deleted because it
+is guarded, and because the covering-map statement is the one a reader coming from
 `Oka/AnalyticSpace/CoveringMap.lean` will look for.
 
 **`[IsFiniteEtale q]` is spent in both of its halves, and each half is spent twice.** Its
@@ -202,15 +203,16 @@ theorem baseChange_base_square :
 
 /-- **The second projection is a covering map.** `IsCoveringMap.pullback_snd` at
 `ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale`, whose `Continuous` hypothesis
-is `f`'s. **This is the one place `[T2Space E]` appears in this file, and nothing else in the file
-uses it** — `ComplexAnalytic.AnalyticSpace.isLocalHomeomorph_baseChangeSndBase` and
+is `f`'s. **This is the one declaration of this file that carries `[T2Space E]`, and nothing else
+in the file uses it** — `ComplexAnalytic.AnalyticSpace.isLocalHomeomorph_baseChangeSndBase` and
 `ComplexAnalytic.AnalyticSpace.isClosedMap_baseChangeSndBase` carry the same two halves of
 `[IsFiniteEtale q]` across the base change without it, and they are what the construction
 consumes.
 
 **This docstring closed *This is the one place `[T2Space E]` is used in this
-file*, until 2026-09-14**, when the construction stopped using this lemma; the wording is kept as
-far as *appears* because the count is still one. -/
+file*, until 2026-09-14**, when the construction stopped using this lemma; *place* is replaced by
+*declaration* because a grep for the token now returns this file's prose about it as well as its
+one binder. -/
 theorem isCoveringMap_baseChangeSndBase [IsFiniteEtale q] [T2Space E] :
     IsCoveringMap ⇑(baseChangeSndBase q f) :=
   (isCoveringMap_base_of_isFiniteEtale q).pullback_snd f.toLRSHom.base.hom.continuous

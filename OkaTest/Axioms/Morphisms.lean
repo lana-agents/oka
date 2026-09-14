@@ -4554,8 +4554,12 @@ two halves of `[IsFiniteEtale q]` across the base change and are what let that f
 `[T2Space E]`. They are guarded here and not in `OkaTest/Axioms/Sheaves.lean` for the same reason
 as everything else declared in that module: `OkaTest/Axioms.lean`'s rule routes a guard by the
 module that declares it. The statements they are built from are topological and are guarded under
-`### Base change of a local homeomorphism, and of a proper map`, which is a different section of
-this file and is not touched.
+`### Base change of a local homeomorphism, and of a proper map`, whose guards this push does not
+move: `grep -E '^[+-]#print axioms'` over this push's diff returns two added lines and no removed
+one, and both are in `### Base change of a finite étale morphism, and the fibre product it is the
+projection of`. **The local-homeomorphism section's prose does move** — its read-off of
+`Oka/AnalyticSpace/CoveringSpace.lean` closed by saying the hypothesis it would remove is not
+removed, and this push is what removes it.
 
 **Three of the guards below are of the mirror tree's shape and are here rather than in
 `OkaTest/Axioms/Sheaves.lean`**: `ComplexAnalytic.AnalyticSpace.isIso_toInverseImage_of_isLocalIso`,
