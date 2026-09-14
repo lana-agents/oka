@@ -162,18 +162,19 @@ git grep -n '\*hasPullback\*' -- OkaTest/Axioms/Morphisms.lean
 has a token of its own*, which gives the token rather than citing it**; everything else it returns
 is a citation.
 
-**At `168ff30`, the commit that added this paragraph, there were five citations and the wording
-this push retires said four.** That push reached three of them, and not in one way: one had
-published this half of the check at the class spelling and was brought to the token; **two
-published no second half at all and were given one**, keeping the backticked `HasPullback` with
-which they name the six guards, that being the describing use this paragraph's own rule allows.
-None of the three carries a record of its own, a citation brought level with its source being one
-retirement and not four. **The other two already ran the check at the token**: the one added at
-`003e38f`, by the push that added `### Colimits of shape SingleObj in a category with finite
-colimits`, which is the model this paragraph follows; and the one opening *The published check on
-this file's statements of a pullback square is unmoved in both halves*, added at `954b116` —
-**eighteen minutes before this paragraph landed, and after `659f148`, oka#541's own head, where
-there were four and the sentence was exact**.
+**At `168ff30` there were five citations and the wording this push retires said four.** That push
+reached three of them, and not in one way: one had published this half of the check at the class
+spelling and was brought to the token; **two published no second half at all and were given one**,
+keeping the backticked `HasPullback` with which they name the six guards, that being the
+describing use the rule in the paragraph opening *The second half of that check has a token of its
+own* allows. None of the three carries a record of its own, a citation brought level with its
+source being one retirement and not four. **The other two already ran the check at the token**:
+the one added at `003e38f`, by the push that added `### Colimits of shape SingleObj in a category
+with finite colimits`, which is the model the paragraph opening *The second half of that check
+has a token of its own* follows; and the one opening *The published check on this file's
+statements of a pullback square is unmoved in both halves*, added at `954b116` — **eighteen
+minutes before `168ff30` landed, and after `659f148`, oka#541's own head, where there were four
+and the sentence was exact**.
 
 **The retired wording read *Four clauses of this file cite that half* and decomposed them three
 and one, until 2026-09-14**, when the command took the count's place. `954b116` landed the fifth
