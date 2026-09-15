@@ -8993,9 +8993,11 @@ and no congruence lemma. **That the count is exactly the declarations is a measu
 a rounding**: the first green draft of that module held **twenty-five** declarations —
 `ComplexAnalytic.AnalyticSpace.quotientCoverDesc_eq` not being written yet — and anchored
 **twenty-eight** rows, `ComplexAnalytic.AnalyticSpace.quotientCoverDesc.eq_1` from a `rw` naming
-the definition and two congruence lemmas from a `congr 1`, one of the two for another module's
-definition and anchored to that one. The declaration docstring of that defining equation records
-the same two numerals and `Oka/AnalyticSpace/DirectSummand.lean` records the same choice twice.
+the definition and two congruence lemmas from a `congr 1`, one of those two standing for a
+definition of `Oka/AnalyticSpace/CoveringSpaceMap.lean` and anchored — like all three planted rows
+— to the module that planted it and not to the module that declares what it is about. The
+declaration docstring of that defining equation records the same two numerals and
+`Oka/AnalyticSpace/DirectSummand.lean` records the same choice twice.
 **Ten of the twenty-six are definitions, fifteen are theorems and one is an
 instance**, counted with a declaration keyword at the start of a line and an attribute allowed
 before it — the spelling matters, since `@[reducible] def` is one of the ten and a bare `^def `
