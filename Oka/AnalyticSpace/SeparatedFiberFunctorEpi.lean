@@ -135,7 +135,7 @@ here` says so.
   `Oka/AnalyticSpace/SeparatedFiberPullback.lean` the second, and **the one that remains is
   quotients by finite group actions**, which is absent from the tree at the commit that adds this
   file. **Measured rather than asserted**: `PreGaloisCategory` occurs in the comment-stripped code
-  of **no** module of this repository at that commit, over a population of **342** tracked `.lean`
+  of **no** module of this repository at that commit, over a population of **345** tracked `.lean`
   files, and `CategoryTheory.SingleObj` — the shape the quotients field is stated over — in
   exactly **one**, the mirror-tree module that declares colimits of that shape and which nothing
   under `Oka/` imports.

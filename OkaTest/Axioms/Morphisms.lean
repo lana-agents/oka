@@ -1110,7 +1110,7 @@ compare that list against the clause, dropping the ones over
 `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver`* — returns what it returned, and so does
 the same list taken at *hasPullback*: **no name of this section carries either token**, the five
 being one surjectivity of a base map, two of a fibre map and two preservation instances. **Nine
-and eight unfiltered and eight and six with the exclusion at `fbe1e95`, and the same four figures
+and eight unfiltered and eight and six with the exclusion at `e9bbdda`, and the same four figures
 at the commit that adds this section**, all four runs mine.
 
 **This clause's opening words occur in exactly one other place in this file, and that is
