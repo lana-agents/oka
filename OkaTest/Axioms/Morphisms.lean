@@ -1188,15 +1188,19 @@ and `…SeparatedFiniteEtaleOver.comp_toQuotient` takes an `m : A ⟶ A`.
 
 **The other thirteen are of the sixth kind at that second category**, by the clause opening *The
 sixth kind has a second category* and by that clause's own reading that a functor out of a category
-counts as being about it: every one of the thirteen binds a
-`CategoryTheory.SingleObj G ⥤ …SeparatedFiniteEtaleOver X` and **none of them binds a morphism of
-that category** — the endomorphism a group element names with its two laws, the action on points
-with its continuity and its commuting with the structure map, the quotient of that action with the
-quotient map onto it, the cocone they form, the morphism a competing cocone factors through with
-its factorisation, that the cocone is a colimit, and the `HasColimitsOfShape` instance those give.
-**The last of the thirteen is a statement that a category has colimits of a shape**, which is the
-subject the clause opening *And one section more, of the seventh kind and of no other* says would
-be of the sixth kind, and it is here at a named category rather than at a category variable.
+counts as being about it: **twelve of the thirteen bind a
+`CategoryTheory.SingleObj G ⥤ …SeparatedFiniteEtaleOver X`** and **none of the thirteen binds a
+morphism of that category** — the endomorphism a group element names with its two laws, the action
+on points with its continuity and its commuting with the structure map, the quotient of that action
+with the quotient map onto it, the cocone they form, the morphism a competing cocone factors
+through with its factorisation, and that the cocone is a colimit. **The thirteenth binds neither**,
+and that is a run of `#check` and not a reading of the source: the `HasColimitsOfShape` instance
+those twelve give quantifies over the base and the group and **takes no functor argument at all**,
+every functor of that shape being reached inside its one field rather than bound by its statement.
+It is of this kind by its subject — **a statement that a category has colimits of a shape**, which
+is what the clause opening *And one section more, of the seventh kind and of no other* says would
+be of the sixth kind — and it is here at a named category where that one is at a category
+variable.
 
 **The other reading is available and is not taken.** Two of the thirteen produce an object and a
 morphism of that category — `…SeparatedFiniteEtaleOver.singleObjQuotient` and
@@ -8986,14 +8990,19 @@ the section below it.
 **Twenty-six is the whole of the section**, which is the module's row count in
 `scripts/DumpOkaDecls.lean`'s output: no `_assoc` lemma, no `.eq_1` equation lemma, no match lemma
 and no congruence lemma. **That the count is exactly the declarations is a measured choice and not
-a rounding**: the draft that rewrote with the definition's name instead of with the defining
-equation `ComplexAnalytic.AnalyticSpace.quotientCoverDesc_eq` reported
-`ComplexAnalytic.AnalyticSpace.quotientCoverDesc.eq_1` as a twenty-seventh row, and the draft that
-closed one goal with `congr 1` reported two congruence lemmas beside it; the declaration docstring
-of that defining equation records the first and `Oka/AnalyticSpace/DirectSummand.lean` records the
-same choice twice. **Eleven of the twenty-six are definitions, fourteen are theorems and one is an
-instance**, and none of the twenty-six is `@[simp]` — where the module this one builds on has three
-that are, so the absence is this module's own and not the neighbourhood's.
+a rounding**: the first green draft of that module held **twenty-five** declarations —
+`ComplexAnalytic.AnalyticSpace.quotientCoverDesc_eq` not being written yet — and anchored
+**twenty-eight** rows, `ComplexAnalytic.AnalyticSpace.quotientCoverDesc.eq_1` from a `rw` naming
+the definition and two congruence lemmas from a `congr 1`, one of the two for another module's
+definition and anchored to that one. The declaration docstring of that defining equation records
+the same two numerals and `Oka/AnalyticSpace/DirectSummand.lean` records the same choice twice.
+**Ten of the twenty-six are definitions, fifteen are theorems and one is an
+instance**, counted with a declaration keyword at the start of a line and an attribute allowed
+before it — the spelling matters, since `@[reducible] def` is one of the ten and a bare `^def `
+returns nine, and `^structure ` returns two lines of prose and no declaration. By section that is
+two and seven, one and three, two and four, and five and one beside the instance. **None of the
+twenty-six is `@[simp]`** — where the module this one builds on has three that are, so the absence
+is this module's own and not the neighbourhood's.
 
 **The axiom triple is the same for all twenty-six.** `Classical.choice` is already carried by every
 statement of `Oka/AnalyticSpace/QuotientCover.lean` and by the analytic structure on a covering

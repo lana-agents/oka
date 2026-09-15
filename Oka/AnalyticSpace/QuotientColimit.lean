@@ -213,14 +213,19 @@ def quotientCoverDesc : quotientCover f hover ⟶ Z :=
       (isCoveringMap_orbitDesc f hover).isLocalHomeomorph (orbitLift u hinv)
       (orbitDesc_eq_orbitLift_comp f hover q u hinv hu) ≫ inv (toCoveringSpace q)
 
-/-- **Its defining equation**, published as a theorem because it is what the two proofs below
-rewrite with.
+/-- **Its defining equation**, published as a theorem for a caller: it is the shape a consumer of
+`ComplexAnalytic.AnalyticSpace.quotientCoverDesc` rewrites with, and **no proof of this file uses
+it** — the two below spell the `ComplexAnalytic.AnalyticSpace.coveringSpaceMap` term out instead,
+which is a `git grep` of this name and not a reading.
 
-**A `rw` naming the definition instead would ask Lean to generate that definition's equation
-lemma**, which then stands in `scripts/DumpOkaDecls.lean`'s output as a row this file did not
-write — measured and not expected: the draft that named it reported
-`ComplexAnalytic.AnalyticSpace.quotientCoverDesc.eq_1` as a twenty-sixth row against
-twenty-five declarations. `Oka/AnalyticSpace/DirectSummand.lean` makes the same measured choice
+**The reason it exists at all is what a `rw` naming the definition would cost.** Such a `rw` asks
+Lean to generate that definition's equation lemma, which then stands in
+`scripts/DumpOkaDecls.lean`'s output as a row this file did not write — measured and not expected:
+the first green draft of this file held **twenty-five** declarations, this one not among them, and
+anchored **twenty-eight** rows, `ComplexAnalytic.AnalyticSpace.quotientCoverDesc.eq_1` from that
+`rw` and two congruence lemmas from a `congr 1` beside it. The cure for the first was this theorem;
+the two proofs were then written without any rewrite at all, which is why nothing below cites it.
+`Oka/AnalyticSpace/DirectSummand.lean` makes the same measured choice
 twice and `Oka/Analytification/CrossMemberDatumGlue.lean` states it as a rule. -/
 theorem quotientCoverDesc_eq :
     quotientCoverDesc f hover q u hinv hu
