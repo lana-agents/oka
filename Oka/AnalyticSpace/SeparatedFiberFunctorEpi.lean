@@ -151,12 +151,20 @@ here` says so.
   not `epi_of_epi_map` — occurs in the comment-stripped code of **sixteen** modules of this
   repository at the commit that adds this file, this one among them, and the qualified spelling
   `CategoryTheory.Epi` occurs in **none**. **Of the other fifteen, not one carries `Epi` of a
-  morphism of either category of covers.** Two of them name `FiniteEtaleOver` at all —
-  `Oka/AnalyticSpace/Basic.lean`, where the token is `Epi` of a stalk map, and
-  `Oka/AnalyticSpace/LocalIso.lean`, where it is `Epi` of a `TopCat` morphism — and the remaining
-  thirteen name neither that category nor `ComplexAnalytic.AnalyticSpace.isFiniteEtale` anywhere,
-  which is a second run of the same stripper over the same fifteen files and not a reading of their
-  titles.
+  morphism of either category of covers**, which is a reading of the `Epi` context at every one of
+  the fifteen and not of their titles. **Two of them mention
+  `FiniteEtaleOver` at all** — `Oka/AnalyticSpace/Basic.lean`, where the token is `Epi` of a stalk
+  map, and `Oka/AnalyticSpace/LocalIso.lean`, where it is `Epi` of a `TopCat` morphism — **and the
+  remaining thirteen mention neither that category nor
+  `ComplexAnalytic.AnalyticSpace.isFiniteEtale` anywhere. That second scan is over the file text
+  and not over the stripped code**, which the first is and has to be, being a count of code.
+  **The two registers answer differently here and the difference is the whole of the reason to say
+  which is which**: both of those mentions stand in prose the stripper deletes — a module docstring
+  in one file and a declaration docstring in the other — so over the stripped code the first figure
+  is **none** and the second is **fourteen**, `Oka/AnalyticSpace/LocalIso.lean` being the
+  fifteenth because its own declarations are named `isFiniteEtale_id` and the like. **The question
+  this clause asks is whether a reader of those files would have met this category at all**, and
+  that is the one the file text answers.
 * **Nothing about the *image* of a non-surjective morphism.** The complementary clopen part is a
   named object of this category — it is
   `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.directSummandCompl`

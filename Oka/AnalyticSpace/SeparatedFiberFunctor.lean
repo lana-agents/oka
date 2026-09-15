@@ -32,8 +32,9 @@ it names every module — landed a third at these two functors, the
 preservation of finite coproducts. **That apposition read *the only module under `Oka/` whose own
 `import` lines name both*, until 2026-09-15**, when
 `Oka/AnalyticSpace/SeparatedFiberFunctorEpi.lean` made them two: it has the same two
-`import Oka…` lines, neither of the pair imports the other, and the two closures are therefore
-the same seventy-seven modules. **The instrument is unchanged and is the retired wording's own** —
+`import Oka…` lines, neither of the pair imports the other, and each of the two therefore has a
+closure of seventy-seven modules counting itself, the two agreeing on the seventy-six under them.
+**The instrument is unchanged and is the retired wording's own** —
 a scan of the `import Oka…` lines of the comment-stripped code of every tracked `.lean`, the
 aggregator excluded because it is not under `Oka/` — so what moved is the population and not the
 register.
