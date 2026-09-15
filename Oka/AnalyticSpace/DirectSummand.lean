@@ -393,10 +393,10 @@ the draft that spelled it that way reported **one** extra row,
 adds this theorem was `+4` against three declarations. **Both crossings here are ascriptions**, so
 that push's `Δdump` is the three declarations it states and no more.
 
-**Where the hypotheses go.** `[T2Space B.left]` is spent once, on the image being clopen;
-`[T2Space A.left]` once, on `card_fiber` of the source; and `[PreconnectedSpace X]` twice, on
-emptying the complementary summand and on `card_fiber` at each point of the base. **Neither total
-space is asked to be preconnected.** -/
+**Where the hypotheses go.** `[T2Space B.left]` is spent twice, on the image being clopen and on
+`card_fiber` of the target; `[T2Space A.left]` once, on `card_fiber` of the source; and
+`[PreconnectedSpace X]` twice, on emptying the complementary summand and on `card_fiber` at each
+point of the base. **Neither total space is asked to be preconnected.** -/
 theorem FiniteEtaleOver.isIso_of_bijective_fiberMap_of_t2 {X : AnalyticSpace.{u}}
     {A B : FiniteEtaleOver.{u} X} (f : A ⟶ B)
     [T2Space (A.left : Type u)] [T2Space (B.left : Type u)]
