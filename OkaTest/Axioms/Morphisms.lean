@@ -769,13 +769,19 @@ below — and `ddcc4c6`'s own head-description clause and section docstring cite
 between them, so a figure this clause was carrying moved under a push that touched no word of it.
 **The property above does not move that way**, which is why it and not the count is what is
 written. **This
-clause was added by the push that added that section**, 2026-09-14, for the reason the clause
+clause was added by the push that added that section**, 2026-09-15, for the reason the clause
 naming `### The terminal object and the product of two complex affine spaces` gives. **The date is
 the push's and not the draft's**: this clause and its section were written on 2026-09-13 against
 `003e38f`, re-cut onto `168ff30` the next day, onto `280bb67` the same day, onto `ddcc4c6` four
-hours after that and onto `ebee177` six and a half hours after *that*, and the date written here is
-the one the landing push carries. **The fourth re-cut does not move the numeral either**, `ddcc4c6`
-and `ebee177` being 2026-09-14 alike. **That is the
+hours after that, onto `ebee177` six and a half hours after *that* and onto `7577386` eight hours
+after *that*, and the date written here is the one the landing push carries. **The first four
+re-cuts did not move the numeral and the fifth does**: `ddcc4c6` and `ebee177` are 2026-09-14
+alike and this numeral read 2026-09-14 until that re-cut, which is the first to cross midnight
+UTC — and `e40a9d2`, which landed after this clause was last written, says in terms that a
+clause's self-date is the UTC date of the commit carrying it on `master` and that a branch
+landing on a later UTC day owes the numeral in its re-cut. **Repairing it is a correction and not
+one of this file's dated records**, the numeral never having been true of a commit that carried
+this clause on `master`, which is how that push repaired its own two sites. **That is the
 convention and not a claim about every dated clause of this file**, and the clause above naming
 `### Base change of a local homeomorphism, and of a proper map` is one that does not follow it:
 it is dated 2026-09-13,

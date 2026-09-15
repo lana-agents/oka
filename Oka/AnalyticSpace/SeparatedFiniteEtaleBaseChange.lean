@@ -55,7 +55,7 @@ self-product through it. **What no declaration of this repository stated before 
 a base change is separated**, and that is two measurements and not an account of what this tree's
 separatedness statements are about.
 
-**First, the declarations named after separatedness.** At `ddcc4c6`, the third of the four bases
+**First, the declarations named after separatedness.** At `ddcc4c6`, the third of the five bases
 this module has been cut from,
 `git grep -nE '^(theorem|lemma|def|instance|abbrev)' -- 'Oka/'` filtered on the token
 `isSeparatedMap` returns **twenty-two header lines in three files** — ten in
@@ -118,8 +118,9 @@ two `def`s each write out.
 
 **Both measurements above were first taken at `003e38f` and are re-run at every re-cut rather than
 carried across one.** The account below is the re-run at `280bb67`, after two of them; the
-paragraph below it is the re-run at `ddcc4c6`, after the third, and the one closing this section
-is the re-run at `ebee177`, after the fourth. Fifteen commits
+paragraph below it is the re-run at `ddcc4c6`, after the third; the one after that is the re-run
+at `ebee177`, after the fourth, and the one closing this section is the re-run at `7577386`, the
+base this module is now cut from, after the fifth. Fifteen commits
 separate `003e38f` from `280bb67` and **sixteen**
 tracked files under `Oka/` change across them, by
 `git diff --name-only 003e38f 280bb67 -- 'Oka/'`; **four of the fifteen commits touch a file under
@@ -169,7 +170,7 @@ prefix **four**, at `:197`, `:205`, `:259` and `:358`;
 `Oka/AnalyticSpace/SeparatedFiniteEtale.lean:372` with its application at `:379` and at
 `Oka/AnalyticSpace/SeparatedFiniteEtaleLimits.lean:249` with its application at `:255`.
 
-**And a fourth time at `ebee177`, the base this module is now cut from, three commits past
+**And a fourth time at `ebee177`, the base of the fourth re-cut, three commits past
 `ddcc4c6`, of which two touch a file under `Oka/`.**
 `git diff --name-only ddcc4c6 ebee177 -- 'Oka/'` returns **two** files:
 `Oka/AnalyticSpace/SeparatedFiberFunctor.lean`, which is **new** and is the whole of what
@@ -188,6 +189,31 @@ root-namespace prefix **four**, at `:197`, `:205`, `:259` and `:358`;
 file's paragraph on `attribute [local instance]`, and it touches no bullet the *What is not here*
 section below rests on: that is a `git diff` of the file and not a reading of it, and it is why the
 byte-identity named in that section is left pinned where it was rather than restated here.
+**And a fifth time at `7577386`, the base this module is now cut from, three commits past
+`ebee177`, of which two touch a file under `Oka/` and one touches none.**
+`git diff --name-only ebee177 7577386 -- 'Oka/'` returns **three** files:
+`Oka/AnalyticSpace/SeparatedFiberFunctor.lean`, which lana-agents/oka#558 edits and
+lana-agents/oka#560 edits again; `Oka/AnalyticSpace/SeparatedFiberFunctorCoproducts.lean`, which
+is **new** and is what that second push adds under `Oka/`; and
+`Oka/AnalyticSpace/SeparatedFiniteEtaleCoproducts.lean`, which it edits. lana-agents/oka#559 is
+the commit between them and touches no file under `Oka/` at all. **None of the three is one of
+the three the twenty-two live in, none is `Oka/AnalyticSpace/SeparatedFiniteEtale.lean`, and none
+is named by an `import` line of this module**, so the argument from disjointness the `280bb67`
+cut could not make is available at this one too — and each figure is still a run of mine beside
+it and not an inference from the file list: the header filter returns the same **twenty-two** in
+the same **ten, eleven and one** split, with `diff` of the two filtered outputs empty and no line
+number moving; `isSeparatedMap.{` matches **eight** lines and `IsSeparatedMap` written with a
+root-namespace prefix **four**, at `:197`, `:205`, `:259` and `:358`;
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver` is still declared at `:245`; and the
+`.pullback` sweep is **239** hits under `Oka/`, the same two of them applications of
+`IsSeparatedMap.pullback` at the four line numbers above. **What the two pushes that touch `Oka/`
+state is at the fibre functor of the separated covers and at the finite coproducts of that
+category, and neither states anything of a base change**; the two files the *What is not here*
+section below rests on, `Oka/AnalyticSpace/FiniteEtaleBaseChange.lean` and
+`Oka/AnalyticSpace/FiniteEtaleOver.lean`, are **byte-identical at `ebee177` and at `7577386`**,
+which is `git rev-parse` at the two blobs and not a reading, so the byte-identity that section
+names stays pinned where it was rather than being restated here.
+
 **Nothing here is a figure carried from a commit this module is no longer cut from.**
 
 ## The functoriality is free, and it is the *general* fibre product that makes it so
