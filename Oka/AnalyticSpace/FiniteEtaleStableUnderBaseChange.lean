@@ -49,11 +49,16 @@ without adding an import to it, and it cannot be written in
 the closure of every consumer of the category of covers.
 
 **What is *not* true is that nothing joined them already, and the measurement is the reason this
-file is placed where it is rather than merely that it exists.** The same walk reports **seven**
+file is placed where it is rather than merely that it exists.** The same walk reports **ten**
 modules under `Oka/` other than this one whose closure holds both, and exactly one of them is
-minimal for that property — `Oka/AnalyticSpace/MonoDirectSummand.lean`, which
-`Oka/AnalyticSpace/SeparatedOver.lean` is above and the remaining five reach through that file.
-The instance could have been written in any of the seven.
+minimal for that property — `Oka/AnalyticSpace/MonoDirectSummand.lean`, at 66, which
+`Oka/AnalyticSpace/SeparatedOver.lean` is above and the remaining eight reach through that file.
+The instance could have been written in any of the ten.
+**That count read seven while this file was cut from `ddcc4c6` and has moved three times since,
+under pushes touching no line of this file**: `8d50165`, `7577386` and `321879e` each add one
+module above `Oka/AnalyticSpace/SeparatedOver.lean`, and it is re-taken at every re-cut. **No
+dated record is owed and this is not one of this repository's** — no retired figure landed, and
+each was exact at the base it was measured at.
 **It is not, because each of them is about a narrower subject than the class**: monomorphisms and
 the direct summand one cuts out, or the category of separated covers. A statement about every
 finite étale morphism of `ComplexAnalytic.AnalyticSpace` placed in one of those is findable only

@@ -904,10 +904,18 @@ clause it so identifies is the one naming `### The three classes are local on th
 topology half of it`, whose opening runs on through the whole of this description's shared
 boilerplate before it reaches its section name. **An opening reproduced is an identification
 lost**: had this clause opened as that one does, that sentence would name two clauses where it
-names one, and nothing in this file would record the loss — **no count in this file is taken over
-these openings** at the commit this clause is cut from, no date moves, and the citing sentence's
+names one, and until `321879e` nothing in this file would have recorded the loss — no count was
+taken over these openings, no date moves, and the citing sentence's
 other half, *standing between them and this one*, goes on resolving, so a reader is handed an
-identification that has quietly stopped identifying. **The figures, with this file's whitespace
+identification that has quietly stopped identifying. **At the base this clause is now cut from
+there is such a count and it is `321879e`'s**: that push's own head-description clause counts
+*Six clauses of this description open «And one section more»* and publishes a run over every
+occurrence of that opening, asserting that no citation in this file reaches two of the six. A
+seventh clause reproducing one of those six openings is what that run would report, so the loss
+would now be recorded rather than go unrecorded. **That changes what makes the choice below
+forced and not the choice**: an instrument that catches a collision is a reason not to write one,
+and the identification the clause above makes is the thing this clause declines to break either
+way. **The figures, with this file's whitespace
 collapsed and its `*` marks stripped**: the two openings would have agreed for **181** characters,
 the whole of the boilerplate and the ``### `` that introduces the name, where as written they agree
 for **4**. And the discriminator over the openings of this description is the whole of *whose
@@ -930,13 +938,17 @@ nor *hasPullback*, so the four figures are what they were — **nine and eight u
 and six with the exclusion, at the commit this section is cut from and at the one that adds it
 alike**. **The list those figures are read off has to be taken continuation-aware**, which is worth
 saying here because the obvious instrument is wrong: this file writes **nineteen** of its
-`#print axioms` with the name on the following line, so it carries **613** guard names at the
-commit that adds this clause where a one-line `grep -E '^#print axioms .+$'` returns **594**.
-**Those three numerals read eleven, 591 and 580 while this clause was cut from `ddcc4c6`, and
-fifteen, 608 and 593 while it was cut from `ebee177`**, and all three moved at each re-cut rather
+`#print axioms` with the name on the following line, so it carries **620** guard names at the
+commit that adds this clause where a one-line `grep -E '^#print axioms .+$'` returns **601**.
+**Those three numerals read eleven, 591 and 580 while this clause was cut from `ddcc4c6`,
+fifteen, 608 and 593 while it was cut from `ebee177`, and nineteen, 613 and 594 while it was cut
+from `7577386`**, and each moved under a re-cut rather
 than under an edit: four of the seventeen guards `8d50165` appends wrap, and four of the five that
 `7577386` appends do, the namespace
-`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.` being 55 characters. **No dated record is
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.` being 55 characters. **The re-cut onto
+`321879e` is the first that moves two of the three and not all three**: none of the seven guards
+that push appends wraps, its longest line being 99 characters, so the count of continuations is
+the one numeral this base move leaves standing. **No dated record is
 owed for them and this is not a correction either** — none of the retired numerals landed, and
 each was exact at the base it was measured at; **it is the numeral a re-cut moves without an
 edit**, which is what makes the continuation-aware instrument worth naming here rather than the
@@ -7085,8 +7097,8 @@ under declarations at `:256` and `:265` — and each reaches its
 lemma by **projection notation on the receiver**, `(… ).pullback_snd`, so the qualified name is not
 written and a census over qualified names cannot see the use. **A name-occurrence run is evidence
 of absence only for the qualified spelling**, and the token that would have caught these two is the
-bare final component `pullback_snd`, which at this commit is in the code of **ten** tracked files
-and is not specific to either lemma. **The sentence above was in the present tense and said
+bare final component `pullback_snd`, which at this commit is in the code of **eleven** tracked
+files and is not specific to either lemma. **The sentence above was in the present tense and said
 *Neither statement is consumed by anything*, with the run pinned to the commit that adds this
 section, until 2026-09-14**: the figure was pinned, the sentence it supported was not, and the
 figure would not have moved even had the sentence been checked against it.
