@@ -19,7 +19,15 @@ import Mathlib.CategoryTheory.Galois.Basic
 statement at `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver` since the commit before this
 one, in ten modules under `Oka/AnalyticSpace/`, and none of them could say so**: until this file
 that namespace was outside this repository's import closure, so no module could name either class.
-**This file is the import and the two instances, and it is nothing else.**
+**This file is the import and the three instances, and it is nothing else.**
+
+**That sentence read *the import and the two instances* from the commit that added this file
+until this push, which is what falsifies it**, and the third instance is
+`CategoryTheory.GaloisCategory` — the class that commit declined in terms, priced at one hypothesis
+and left to a filing. taxis #2043 is the filing and this push is the decision being taken. **No
+field, no fibre functor and no statement about covers arrives with it**: the class is the two
+classes above together with the **existence** of a fibre functor, and the whole of the addition is
+`[Nonempty X]` and one term.
 
 ## This is the file that retires *cannot be cited by name here*
 
@@ -77,6 +85,12 @@ and the two are `Mathlib.CategoryTheory.Galois.Basic` itself and
 zero**, this file having paid it: 5508 plus the two plus this module. **A marginal import cost is a
 figure about the importer at a commit and is meaningless without one**, which is why both are
 dated here and neither is written in the present tense.
+
+**At the commit that adds the third instance the same pair of runs gives 5511 and 5511 again**,
+this push adding no `import` line to any module: the cost is zero and it is the same zero, not a
+re-derivation of one. **The run is what says so and not the diff** — a push can widen a closure
+through a module it edits rather than through an `import` line it writes — and it is a run of this
+push and not a carry.
 
 **That figure is a statement about this repository's closure and not about Mathlib's file**, so it
 falls whenever the closure grows: taxis #2027's filing priced it at **five** at `fbe1e95`, and
@@ -136,6 +150,55 @@ Hausdorff assumption lives; `Oka/AnalyticSpace/SeparatedFiniteEtale.lean` says s
 and `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.t2Space_left` is where the first is
 spent.
 
+## The third instance, and the hypothesis is the whole of it
+
+`CategoryTheory.GaloisCategory` is `PreGaloisCategory` together with the **existence** of a fibre
+functor to `FintypeCat`. Both of those are the two instances above, and the gap between them and
+the class is that **every fibre functor this repository has is taken at a point of the base**:
+`…SeparatedFiniteEtaleOver.fintypeFiberFunctor` has a point in its telescope and the class asks for
+a functor with no point in sight. **So the third instance carries `[Nonempty X]`, spends it on
+`Classical.arbitrary`, and adds nothing else.**
+
+**`[Nonempty X]` beside `[PreconnectedSpace X]`, and not `[ConnectedSpace X]` in place of the pair**
+— a choice, and a measured one. Mathlib's `ConnectedSpace` is `PreconnectedSpace` together with
+`Nonempty` and projects to both, so a caller holding `[ConnectedSpace X]` reaches this instance by
+search, which is an `example` in the control file and not a reading; a caller holding the pair
+reaches nothing stated over `[ConnectedSpace X]` without building the class first. **The weaker
+hypothesis is the one both callers reach**, and it is also the one that leaves the two instances
+above with exactly the hypotheses they already carried.
+
+**`[PreconnectedSpace X]` alone will not do, and the reason is that it does not imply `Nonempty`**:
+`IsPreconnected` holds of the empty set, so a preconnected base may be empty. **What happens over
+an empty base is an argument and not a run, and it is marked as one here rather than published as a
+figure.** Every cover of an empty base is empty, so the initial object of the category — the empty
+coproduct — is isomorphic to its terminal object; a `CategoryTheory.PreGaloisCategory.FiberFunctor`
+preserves finite coproducts and the terminal object, so it would have to send that one object to a
+`FintypeCat` that is both empty and a singleton. **So over an empty base the class looks not merely
+unreachable but false**, which would make `[Nonempty X]` a hypothesis of the mathematics rather
+than of the search — the distinction this file already draws for `[PreconnectedSpace X]` and the
+`reflectsIsos` field. **No line of that paragraph is formalised at the commit that adds this
+instance**, in this file or in any other of this repository, and no numeral of this file rests
+on it.
+
+## What the third instance buys, probed at both ends
+
+`Mathlib/CategoryTheory/Galois/Basic.lean` declares three instances and one definition under
+`[GaloisCategory C]`. **All three instances are synthesizable at this category with the
+third instance below and none of the three is without it**, which is six `#synth` runs — three at
+the commit that adds this file, where the instance is not yet declared, and three at the commit
+that adds it:
+
+* `CategoryTheory.Limits.MonoCoprod` at the category itself, which asks nothing of any object;
+* `Finite (A ⟶ Y)` and `Finite (Aut A)` for an `A` with `[CategoryTheory.IsConnected A]`.
+
+`CategoryTheory.PreGaloisCategory.GaloisCategory.getFiberFunctor` is the definition, and it
+elaborates here. **The control file carries an `example` for each of the three and a probe
+recording that they are still not found without `[Nonempty X]`**, which is the one hypothesis all
+three run through. **This is a larger purchase than the one this file records for the second
+instance**, which is `CategoryTheory.Functor.ReflectsMonomorphisms` at the fibre functor, and it is
+the reason to state the class at all: **no statement of this repository at the commit that adds
+this instance consumes the class**, and these three are what a consumer of it would get.
+
 ## Main results
 
 - `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.preGaloisCategory`: **the covers
@@ -143,18 +206,21 @@ spent.
 - `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.fintypeFiberFunctor_isFiberFunctor`:
   **the `FintypeCat`-valued fibre functor at a point of a preconnected Hausdorff base is a
   `CategoryTheory.PreGaloisCategory.FiberFunctor`.**
+- `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.galoisCategory`: **the covers separated
+  over a Hausdorff base that is in addition preconnected and nonempty form a
+  `CategoryTheory.GaloisCategory`.**
 
 ## What is not here
 
-* **No `CategoryTheory.GaloisCategory` instance**, and the reason is a hypothesis and not a proof.
-  That class asks for a fibre functor to **exist**, and every fibre functor this repository has is
-  taken at a point of the base, so the instance needs `[Nonempty X]` — which neither of the two
-  above needs and which nothing else in this neighbourhood carries. **The price is one line beyond
-  that hypothesis and it is compiled**: the field
-  `hasFiberFunctor := ⟨…fintypeFiberFunctor x, ⟨inferInstance⟩⟩`
-  elaborates at a given `x`, and `#synth` for the class fails at the commit that adds this file,
-  which the control file records. **Adding a hypothesis to reach a class is a decision and not a
-  step**, and it is left to the filing that wants the class rather than taken here.
+* **No hypothesis beyond `[Nonempty X]`, and that bullet used to say there was no class at all.**
+  This bullet read *No `CategoryTheory.GaloisCategory` instance, and the reason is a hypothesis and
+  not a proof* from the commit that added this file until this push, which is what falsifies it. It
+  priced the class at `[Nonempty X]` and one compiled line and left the decision to a filing; **the
+  price was exact**, and the instance below is that hypothesis, one term and no field. **What that
+  bullet pinned stays true where it was pinned**: `#synth` for the class does fail at the commit
+  that adds this file. **What it said about the control file does not, and the miss is recorded
+  there rather than here** — the probe it called a canary did not start failing when the instance
+  was declared, because it is keeper of a context that has no `[Nonempty X]` in it.
 * **Nothing at `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver`.** The ambient covers are not
   separated and the `monoInducesIsoOnDirectSummand` field is stated at the separated category, so
   `#synth` for `CategoryTheory.PreGaloisCategory` there fails at the commit that adds this file and
@@ -223,5 +289,27 @@ the module docstring gives. -/
 instance SeparatedFiniteEtaleOver.fintypeFiberFunctor_isFiberFunctor (x : X) :
     PreGaloisCategory.FiberFunctor (SeparatedFiniteEtaleOver.fintypeFiberFunctor.{u} x) where
   preservesQuotientsByFiniteGroups G := inferInstance
+
+variable [Nonempty (X : Type u)]
+
+/-- **The covers separated over a Hausdorff base that is in addition preconnected and nonempty form
+a `CategoryTheory.GaloisCategory`**, which is the two classes above together with the **existence**
+of a fibre functor and is, at the commit that adds it, the whole of what this repository states
+about that class.
+
+`hasFiberFunctor` is the only field. It is the instance above's fibre functor taken at
+`Classical.arbitrary`, and the `Nonempty` half of the field is `inferInstance`, which finds that
+instance: **the class asks for a functor and this repository's fibre functors ask for a point, so
+`[Nonempty X]` is exactly the gap** and it is spent here and nowhere else in this file.
+
+**`[PreconnectedSpace X]` does not give the point**, `IsPreconnected` holding of the empty set, for
+which reason the hypothesis is stated beside it rather than strengthened to `[ConnectedSpace X]` —
+the module docstring gives the argument and the control file the `example` that a
+`[ConnectedSpace]` base reaches this by search. -/
+instance SeparatedFiniteEtaleOver.galoisCategory :
+    GaloisCategory (SeparatedFiniteEtaleOver.{u} X) where
+  hasFiberFunctor :=
+    ⟨SeparatedFiniteEtaleOver.fintypeFiberFunctor.{u} (Classical.arbitrary (X : Type u)),
+      ⟨inferInstance⟩⟩
 
 end ComplexAnalytic.AnalyticSpace
