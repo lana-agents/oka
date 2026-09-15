@@ -191,20 +191,19 @@ Every `@`-application below is that, and none of them is a mathematical step.
 
   **One thing about the instrument, found by getting it wrong.** *A transitive walk of the
   `Oka`-prefixed `import` lines* is exact only if `public import` lines are followed as well: 29 of
-  the **243** tracked `.lean` files under `Oka/` **at the commit that repairs this numeral** open
+  the **244** tracked `.lean` files under `Oka/` **at the commit that repairs this numeral** open
   with `module` and write their imports that way,
   13 of them carrying a `public import Oka…` line, and a walk anchored on `^import Oka` alone
   returns **61** for this module where the closure is **75**, silently and with no unparsed line to
   report. **That population read 240 and was unpinned, until 2026-09-15**: it was exact at
-  `fbe1e95`, where this paragraph was written, and `f1e0d83` and `e9bbdda` added one module under
-  `Oka/` and two between them. **The other three numerals are unmoved and that is a run and not a
-  reading** — a `git grep -l '^public import'` over `Oka/*.lean` returns **29** at `fbe1e95` and
-  **29** here, thirteen of those naming an `Oka` module, and the two closure figures are this
-  module's own and are re-taken at this commit. **It is pinned now**, so the next push that adds a
-  module under `Oka/` owes it nothing. The figures above are right; what is under-specified is
-  the phrase, and the check that
-  needs no walk is `env.allImportedModuleNames` filtered to the `Oka` prefix in a file importing
-  the module.
+  `fbe1e95`, where this paragraph was written, and `f1e0d83`, `e9bbdda` and `998d5ad` added one
+  module under `Oka/`, two and one between them. **The other three numerals are unmoved
+  and that is a run and not a reading** — a `git grep -l '^public import'` over `Oka/*.lean`
+  returns **29** at `fbe1e95` and **29** here, thirteen of those naming an `Oka` module, and the
+  two closure figures are this module's own and are re-taken at this commit. **It is pinned now**,
+  so the next push that adds a module under `Oka/` owes it nothing. The figures above are right;
+  what is under-specified is the phrase, and the check that needs no walk is
+  `env.allImportedModuleNames` filtered to the `Oka` prefix in a file importing the module.
   **That sentence read *None of the six is about* that name, until 2026-09-14, and under the
   reading its own enumeration invites it was false when written rather than falsified later, so
   this is a correction and not one of this repository's dated records**: taken as a claim about the
