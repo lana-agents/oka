@@ -382,6 +382,17 @@ image lie over one point of the base, so injectivity of that one fibre map is in
 **The empty case is not a case here**, where the proof above splits on it: nothing in the route
 asks for a point, so a cover with empty total space is carried by the same two steps as any other.
 
+**Neither membership in the complement is crossed by a `simp` naming
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.rangeOpens`, and that is the same measured choice
+the paragraph above makes for `isColimitBinaryCofanDirectSummandCompl`.** Membership in that open
+is the range condition definitionally, so a type ascription crosses it; `simpa [rangeOpens]` also
+crosses it and **generates that definition's equation lemma**, which then stands in
+`scripts/DumpOkaDecls.lean`'s output as a row this file did not write — measured, not expected:
+the draft that spelled it that way reported **one** extra row,
+`ComplexAnalytic.AnalyticSpace.FiniteEtaleOver.rangeOpens.eq_1`, and `Δdump` for the push that
+adds this theorem was `+4` against three declarations. **Both crossings here are ascriptions**, so
+that push's `Δdump` is the three declarations it states and no more.
+
 **Where the hypotheses go.** `[T2Space B.left]` is spent once, on the image being clopen;
 `[T2Space A.left]` once, on `card_fiber` of the source; and `[PreconnectedSpace X]` twice, on
 emptying the complementary summand and on `card_fiber` at each point of the base. **Neither total
@@ -408,7 +419,8 @@ theorem FiniteEtaleOver.isIso_of_bijective_fiberMap_of_t2 {X : AnalyticSpace.{u}
     intro b
     by_contra hb
     exact hCleft.elim
-      (⟨b, fun hmem ↦ hb (by simpa [FiniteEtaleOver.rangeOpens] using hmem)⟩ :
+      (⟨b, fun hmem ↦ hb (hmem : (b : B.left) ∈
+          Set.range (f.left.toLRSHom.base : A.left → B.left))⟩ :
         ((FiniteEtaleOver.directSummandCompl f).left : Type u))
   have hAB : ∀ a : (A.left : Type u),
       (B.hom.toLRSHom.base : B.left → X) ((f.left.toLRSHom.base : A.left → B.left) a)
