@@ -1321,16 +1321,30 @@ numeral had to be that commit's own landing day, which `git show -s --date=short
 gives. **Among `behind` rows only the new-record case can be the third cause**, and at `998d5ad` every
 row of it is.
 
-**The second command is a question about the row's own date and not about the file's record list,
-and a push that reflows an old record while writing a new one in the same file is where the
-difference bites.** Such a push adds a date and removes none, so the file-level reading calls the
-old record new; the row's own numeral is in the list on both sides, which is what settles it.
-**Four rows at `998d5ad` are exactly that shape** — three in
-`Oka/AnalyticSpace/FiniteEtaleOver.lean` and one in `Oka/AnalyticSpace/LocalIso.lean`, all four
-reading 2026-09-08 and all four blamed to `f1e0d83`, which re-touched their lines and added nine
-and one records of its own respectively, none of them theirs. **So read the diff for the date the
-row carries**, and the first command's *empty is a reflow* is a sufficient test and not a
-necessary one: a reflow that rewrites the very line the date sits on is not empty there either.
+**The second command is a count of the row's own date and not a membership test, and a push that
+reflows an old record while writing a new one in the same file is where the difference bites.**
+Such a push adds a date and removes none, so a file-level reading of the diff above calls the old
+record new — and the row's date being in the list on both sides does **not** settle it either,
+because a push can write one record of a date the file already carried. **What decides it is
+whether the count of `until <prose date>` in that file goes up**: unchanged means the blamed push
+wrote no record of that date, so the row's record is older than its blame and the row is a
+**reflow**; increased means it wrote one, and only then can the row be the third cause. Both
+numbers come out of the same flattened list the command already builds,
+`| grep -c 'until <prose date>'` in place of the `diff`.
+
+**Both classes are live at `998d5ad` and each refutes one of the readings this replaces.** Four
+rows are reflows — three in `Oka/AnalyticSpace/FiniteEtaleOver.lean` and one in
+`Oka/AnalyticSpace/LocalIso.lean`, all four reading 2026-09-08, all four blamed to `f1e0d83`,
+which re-touched their lines while adding nine and one records of its own to those two files;
+their date's count is **9 → 9** and **3 → 3** across that commit, and it is the count and not the
+diff that says so, because re-wrapping a line makes it an added line and `f1e0d83`'s diff **does**
+carry that record's own date on **three** added lines in the first file and **one** in the second.
+And the two crossings below are the other way round: `d2ae161` wrote one of the two
+2026-09-07 records in `Oka/AnalyticSpace/PullbackOpen.lean` and one of the five in
+`OkaTest/Axioms/Morphisms.lean`, counts of **1 → 2** and **4 → 5**, **while that date was already
+in both files' lists on both sides** — which is exactly the case a membership test cannot see.
+**So the first command's *empty is a reflow* is sufficient and not necessary**, and the second is
+the one that decides, taken as a count.
 
 **A merge that crossed midnight excuses the row and never the numeral, and that is the boundary
 this section had left undrawn.** The numeral is the UTC date of the push that retires the wording,
