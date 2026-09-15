@@ -1231,8 +1231,9 @@ clause naming `### The terminal object and the product of two complex affine spa
 **One section further, at the two fibre functors and the colimit they carry.**
 `### Both fibre functors at the separated covers preserve quotients by finite group actions` guards
 the ten declarations of `Oka/AnalyticSpace/SeparatedFiberQuotient.lean`, which identifies the fibre
-of that quotient with the orbit set of the fibre and reads the colimit of the section above across
-both fibre functors, giving the sixth and last of the obligations
+of that quotient with the orbit set of the fibre and reads the colimit
+`### The quotient of a cover by a finite group is the colimit of the action` guards across both
+fibre functors, giving the sixth and last of the obligations
 `Mathlib/CategoryTheory/Galois/Basic.lean`'s `FiberFunctor` carries. **Ten guards, and they do not
 partition: all ten are of the sixth kind at that second category and none is of any other.**
 
@@ -1248,9 +1249,10 @@ assignment the clause naming `### The fibre functor at the separated covers pres
 makes of all nine of its guards, and it is why this clause publishes no partition where the two
 clauses above it do.
 
-**Outside the section it adds, this push touches no line of this file**, which `git diff` against
-the commit it is cut from shows. **The four counts the clause opening *A section beyond those, at
-the two fibre functors of that second category* lists as unmoved are unmoved by it too** — *Five of
+**This push adds this clause and the section it names and touches no other clause and no other
+section of this file**, which `git diff` against the commit it is cut from shows. **The four
+counts the clause opening *A section beyond those, at the two fibre functors of that second
+category* lists as unmoved are unmoved by it too** — *Five of
 that section's twenty-one guards*, *Seventeen guards, and they partition fourteen and three*, *Five
 guards, and they partition one and four*, and *All nine of its guards are of the sixth kind at that
 second category* — this push adding a guard to none of the four sections they count over. And the
@@ -9253,14 +9255,30 @@ competitor for the sibling module: nothing below is a local model, a chart or a 
 
 **All ten are of the sixth kind at that second category and none is of any other**, by the clause
 opening *The sixth kind has a second category* and by that clause's own reading that a functor out
-of a category counts as being about it: **every one of the ten binds a
-`CategoryTheory.SingleObj G ⥤ …SeparatedFiniteEtaleOver X` and none of them binds a morphism of
-that category**, which is a `#check` over the ten and not a reading. That is the same assignment
+of a category counts as being about it. **Eight of the ten bind a
+`CategoryTheory.SingleObj G ⥤ …SeparatedFiniteEtaleOver X`** — the fibre of the object such a
+functor names with the action on it, the quotient map read there with its value, the two halves of
+the identification, the identification itself and the colimit — **and none of the ten binds a
+morphism of that category**, which is the line this description draws between the first kind and
+the sixth. **The two instances bind neither**, and that is a run of `#check` and not a reading of
+the source: their telescopes are the base, the group and a point of the base, every functor of
+that shape being reached inside the `PreservesColimitsOfShape` they assert rather than bound by
+their statements. They are of this kind **by their subject**, which is
+`…SeparatedFiniteEtaleOver.fiberFunctor` and its `FintypeCat` twin, functors out of that category
+— the route the clause opening *The other thirteen are of the sixth kind at that second category*
+takes for the one guard of its section that binds no functor either. That is the same assignment
 `### The fibre functor at the separated covers preserves pullbacks` makes of all nine of its
 guards.
 
-**This push is `Oka/AnalyticSpace/QuotientColimit.lean`'s first importer and first consumer**, and
-no sentence of this file or of that module said it had neither — a `git grep` over both for *no
+**This push is `Oka/AnalyticSpace/QuotientColimit.lean`'s first importer other than the aggregator
+`Oka.lean`, and its first consumer outside the commit that added it.** The first half is
+`git grep -l 'import Oka.AnalyticSpace.QuotientColimit'` at the commit this section is cut from,
+which returns `Oka.lean` and nothing else. The second half is bounded deliberately:
+`OkaTest/QuotientColimit.lean` discharges
+`CategoryTheory.Limits.HasColimitsOfShape (CategoryTheory.SingleObj G)` at that category by
+`infer_instance`, which is what `…SeparatedFiniteEtaleOver.hasColimitsOfShape_singleObj` answers,
+and it landed in that same commit — **so it is a consumer this push does not precede**. No sentence
+of this file or of that module said the module had neither — a `git grep` over both for *no
 consumer*, *no importer* and *nothing imports* returns nothing of it — so nothing is repaired on
 that account here.
 
@@ -9268,7 +9286,9 @@ that account here.
 `scripts/DumpOkaDecls.lean`'s output: no `_assoc` lemma, no `.eq_1` equation lemma, no match lemma
 and no congruence lemma. **Five are definitions, three are theorems and two are instances**,
 counted with a declaration keyword at the start of a line and an attribute allowed before it. **The
-spelling matters here more than in the section above**: of the five definitions two are `abbrev`,
+spelling matters here more than it does under
+`### The quotient of a cover by a finite group is the colimit of the action`**: of the five
+definitions two are `abbrev`,
 one is a `@[reducible] def` and two are bare `def`, so a scan for `^def ` returns **two** and a
 scan for `^instance ` returns **three**, the third being a line of prose that opens with the word.
 **None of the ten is `@[simp]`.**
