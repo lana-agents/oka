@@ -1672,21 +1672,25 @@ one branch of the reset and sits inside it under the other**: after `by the push
 the `.{0,400}?` runs to the numeral and stops there, while after `on <date> by the push that
 added|wrote` the numeral is consumed early and *the push that added* closes the match — which is
 what the paragraph opening *The register's pattern is wider than the one this section was
-published with* says of the `paragraph` shape. Under
-that reading `aa50c8e` is 22 of 28 and `1252d8b` is 12 of 16, the published pattern having only the
-first branch. *The pattern's literal anchor* stops at *the push that added|wrote* or at *one push*,
-before the `.{0,400}?` that reaches the numeral, and under that reading `1252d8b` returns **7** of
-16 rather than 12. **So the two rows are not one series and neither continues the other**, and a
-wrap figure published without saying which of the two it is cannot be checked — which is the same
-defect as a count published under an instrument that did not take it.
+published with* says of the `paragraph` shape. Under that reading `aa50c8e` is 22 of 28 and
+`1252d8b` is 12 of 16, `e40a9d2`'s pattern having only the branch that ends with its numeral.
+*The pattern's literal anchor* stops at *the push that added|wrote* or at *one push*, which is
+**before the `.{0,400}?` under the branch that has one and is the end of the match under the branch
+that does not**: the four `paragraph` rows have no tail at all, so for them the two readings are
+the same span, and they are four of the fourteen that cell returns. Under that reading `1252d8b`
+returns **7** of 16 rather than 12. **So the two rows are not one series and neither continues the
+other**, and a wrap figure published without saying which of the two it is cannot be checked —
+which is the same defect as a count published under an instrument that did not take it.
 
 **A third span is neither of those two rows, and it is the one a reader of *the match* is likeliest
 to take.** Subject through the numeral — the whole match with the `paragraph` branch's tail cut off
 — returns **21** of the 28, one below the whole match, and **the row the two differ at is
 `Oka/AnalyticSpace/CutOutProduct.lean:138`**, whose match is *This paragraph was added on
-2026-09-07 by the push that added it* with the line break falling **after** *the push that*: the
-subject and the numeral are on the line the row is filed at and the match is not. The other three
-`paragraph` rows break before the numeral and so wrap under either span. **At `1252d8b` the whole
+2026-09-07 by the push that added* — the branch ends at `(?:added|wrote)\b`, so the file's next
+word, *it*, is outside what the pattern consumes — **with the line break falling between *that*
+and *added***: the subject and the numeral are on the line the row is filed at and the end of the
+match is not. The other three `paragraph` rows break before the numeral and so wrap under either
+span. **At `1252d8b` the whole
 match and this third span coincide at 12 of 16**, every match there ending with its numeral, so
 the pinned cell above cannot tell the two apart and neither can any figure taken under the pattern
 `e40a9d2` published. **A branch-reset pattern owes every prose description of what it matches to
