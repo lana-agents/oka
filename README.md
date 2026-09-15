@@ -1318,8 +1318,19 @@ diff <(git show "$h^:$f" | tr -s ' \t\n' ' ' | grep -o 'until 20[0-9-]*' | sort)
 **One date replaced by another is a repair**, whose numeral is the retiring push's and is older
 than the repair by construction; **a date added with none removed is a new record**, and then the
 numeral had to be that commit's own landing day, which `git show -s --date=short --format=%ad`
-gives. **Among `behind` rows only the new-record case can be the third cause**, and at `fbe1e95` every
+gives. **Among `behind` rows only the new-record case can be the third cause**, and at `998d5ad` every
 row of it is.
+
+**The second command is a question about the row's own date and not about the file's record list,
+and a push that reflows an old record while writing a new one in the same file is where the
+difference bites.** Such a push adds a date and removes none, so the file-level reading calls the
+old record new; the row's own numeral is in the list on both sides, which is what settles it.
+**Four rows at `998d5ad` are exactly that shape** — three in
+`Oka/AnalyticSpace/FiniteEtaleOver.lean` and one in `Oka/AnalyticSpace/LocalIso.lean`, all four
+reading 2026-09-08 and all four blamed to `f1e0d83`, which re-touched their lines and added nine
+and one records of its own respectively, none of them theirs. **So read the diff for the date the
+row carries**, and the first command's *empty is a reflow* is a sufficient test and not a
+necessary one: a reflow that rewrites the very line the date sits on is not empty there either.
 
 **A merge that crossed midnight excuses the row and never the numeral, and that is the boundary
 this section had left undrawn.** The numeral is the UTC date of the push that retires the wording,
@@ -1341,7 +1352,7 @@ push writing two dates for one landing.
 in the other register.** `954b116`'s self-date in `OkaTest/Axioms/Morphisms.lean` read 2026-09-13
 and was **corrected** to 2026-09-14, by the push that landed the self-date rule, whose clause beside
 it says in terms *The cause is a merge that crossed midnight*, by ninety-five minutes. **The four
-`until` records the same push wrote still read 2026-09-13 at `fbe1e95`** — one push, one landing,
+`until` records the same push wrote still read 2026-09-13 at `998d5ad`** — one push, one landing,
 two registers and two answers — and this section brings them level rather than reopening that one.
 
 **The price is stated here rather than discovered.** A branch that sits over a midnight owes every
@@ -1366,14 +1377,18 @@ always-wrong column is empty, and the fifteen the line-wise register cannot see 
 `scripts/guard_coverage.py`'s docstring gives the standing reason against adding a check somebody
 will want to switch off.
 
-**The boundary was drawn by sweeping, and this is the sweep.** At `fbe1e95`, the base this
-paragraph is written against, the unwrapped register returns **162** rows — the reach test, since
-the unwrapped census returns 162 there too — **151 matching, 11 behind, 0 ahead**. All eleven,
-classified by the one-command discriminator above:
+**The boundary was drawn by sweeping, and this is the sweep.** At `998d5ad`, the base this
+paragraph is written against, the unwrapped register returns **194** rows — the reach test, since
+the unwrapped census returns 194 there too — **179 matching, 15 behind, 0 ahead**. All fifteen,
+classified by the discriminator above:
 
 | row | prose / blame | cause | this push |
 |---|---|---|---|
 | `Oka/AnalyticSpace/LocalIso.lean:112` | 09-07 / 09-08 | reflow | unchanged |
+| `Oka/AnalyticSpace/LocalIso.lean:382` | 09-08 / 09-15 | reflow | unchanged |
+| `Oka/AnalyticSpace/FiniteEtaleOver.lean:318` | 09-08 / 09-15 | reflow | unchanged |
+| `Oka/AnalyticSpace/FiniteEtaleOver.lean:505` | 09-08 / 09-15 | reflow | unchanged |
+| `Oka/AnalyticSpace/FiniteEtaleOver.lean:1969` | 09-08 / 09-15 | reflow | unchanged |
 | `Oka/Topology/SeparatedMap.lean:20` | 09-08 / 09-12 | reflow | unchanged |
 | `Oka/AnalyticSpace/FiniteEtaleOver.lean:86` | 09-12 / 09-14 | repair | unchanged |
 | `OkaTest/Axioms.lean:734` | 09-12 / 09-14 | repair | unchanged |
@@ -1385,23 +1400,34 @@ classified by the one-command discriminator above:
 | `OkaTest/CoveringBaseChange.lean:36` | 09-13 / 09-14 | **crossing** | **→ 09-14** |
 | `OkaTest/SimpDiscrTree.lean:100` | 08-25 / 08-27 | **written earlier** | **→ 08-27** |
 
-**The four benign rows, with the push that wrote each record**: `69a54dd` wrote `LocalIso.lean`'s
-on 2026-09-07 and `2cf6efa` re-touched the line; `f57a910` wrote `SeparatedMap.lean`'s on
-2026-09-08 and `077f6d5` re-touched it; and the two `09-12 / 09-14` rows are one record and its
+**The eight benign rows, with the push that wrote each record**: `69a54dd` wrote
+`LocalIso.lean:112`'s on 2026-09-07 and `2cf6efa` re-touched the line; `f57a910` wrote
+`SeparatedMap.lean`'s on 2026-09-08 and `077f6d5` re-touched it; **`2cf6efa` itself wrote all four
+of the `09-08 / 09-15` rows**, on the day its numeral names, and `f1e0d83` re-touched their lines
+seven days later while adding ten records of its own, which is the pair of facts the refinement
+above is about; and the two `09-12 / 09-14` rows are one record and its
 twin, whose numerals `defff6e` moved from 09-08 to 09-12 on the fourteenth — the repair that the
 paragraph below on repaired records is about.
 
 **The six crossings are two pushes, and the population they sit in is six pushes.** `d2ae161`
 landed at `2026-09-08T00:10:27Z`, ten minutes past midnight, and wrote two records reading
 2026-09-07; `954b116` landed at `2026-09-14T01:34:48Z`, ninety-five minutes past, and wrote four
-reading 2026-09-13. **The run behind that is over every commit in `fbe1e95`'s history**, taking
+reading 2026-09-13. **The run behind that is over every commit in `998d5ad`'s history**, taking
 the records each adds from its own diff flattened, since one of `d2ae161`'s two wraps and a
-line-wise diff scan finds one of them: **51** pushes have added an `until` record, **six** of them
+line-wise diff scan finds one of them: **58** pushes have added an `until` record, **six** of them
 landing in the first four hours of a UTC day, and **four of those six dated to the day they
 landed** — `8bfb421` at `02:37:11Z` and `5a525bc` at `03:22:34Z` with two records each,
 `da72056` at `01:10:48Z` with one, and `7577386` at `00:55:21Z` with two. **So the practice this
 rule writes down is already four sixths of the practice**, and the two exceptions are the two the
 sweep above found.
+
+**The same run taken line-wise returns 54 and not 58, and the gap is named here because this
+paragraph is where a reader would otherwise carry the wrong one across.** The four pushes only the
+flattened run sees each write **only** a wrapped record, so a line-wise diff scan misses them
+whole rather than undercounting them: `0c370e5`, `13203b0`, `6b8d5cb` and `dd7e70e`. **Neither
+*six* nor *four* moves under either register**, both of the numerals this paragraph argues from
+belonging to pushes every scan sees, which is why the conclusion is the same figure whichever
+population is quoted and why only the population had to be named.
 
 **The seventh is older than this rule and is the third cause's first shape, not a crossing.**
 `ffed884` wrote `OkaTest/SimpDiscrTree.lean`'s sentence — and the third half of the file it is about — and landed
@@ -1418,12 +1444,12 @@ two sections now name one push for one reason.
 
 **The repairs do not empty the `behind` bucket and are not meant to.** A repaired numeral re-touches
 its line, so blame reports this push and the row stays `behind` under the second cause, and
-**every published column is the same on both sides of this push**: the censuses are **147** records
-in 51 files line-wise and **162** in 54 unwrapped at `fbe1e95` and at the commit that adds this
-paragraph alike, the line-wise register is **138 / 9 / 0** at both and the unwrapped one
-**151 / 11 / 0** at both. **So this push is invisible to every bucket count either register
+**every published column is the same on both sides of this push**: the censuses are **174** records
+in 55 files line-wise and **194** in 59 unwrapped at `998d5ad` and at the commit that adds this
+paragraph alike, the line-wise register is **161 / 13 / 0** at both and the unwrapped one
+**179 / 15 / 0** at both. **So this push is invisible to every bucket count either register
 publishes and visible only row by row**, which is the argument for classifying rows at all: what
-changed is that **every one of the eleven is now one of the two benign causes** — four that were
+changed is that **every one of the fifteen is now one of the two benign causes** — eight that were
 benign already and seven this push moved there. **That is the check this rule is worth having
 for**: the column a reader should ask about is no longer *how many are behind* but *whether any
 behind row is a crossing or a backwards-dating*, which the discriminator answers per row.
