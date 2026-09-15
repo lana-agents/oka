@@ -1321,16 +1321,26 @@ numeral had to be that commit's own landing day, which `git show -s --date=short
 gives. **Among `behind` rows only the new-record case can be the third cause**, and at `998d5ad` every
 row of it is.
 
-**The second command is a count of the row's own date and not a membership test, and a push that
-reflows an old record while writing a new one in the same file is where the difference bites.**
-Such a push adds a date and removes none, so a file-level reading of the diff above calls the old
-record new — and the row's date being in the list on both sides does **not** settle it either,
-because a push can write one record of a date the file already carried. **What decides it is
-whether the count of `until <prose date>` in that file goes up**: unchanged means the blamed push
-wrote no record of that date, so the row's record is older than its blame and the row is a
-**reflow**; increased means it wrote one, and only then can the row be the third cause. Both
-numbers come out of the same flattened list the command already builds,
-`| grep -c 'until <prose date>'` in place of the `diff`.
+**The second command asks two questions and not one, and the count is an addition to it rather
+than a replacement for it.** *Did the blamed push write a record of that date at all* is a
+**count** of the row's own date in that file. A membership test cannot answer it, because a push
+can write one record of a date the file already carried; and a file-level reading of the `diff`
+cannot either, because a push that reflows an old record while writing a new one in the same file
+adds a date and removes none, which reads as a new record wherever the reflowed one sits.
+**Unchanged means the blamed push wrote no record of that date**, so the row's record is older than
+its blame and the row is a **reflow**. **Increased means it wrote one** — and then the second
+question is the `diff`'s, exactly as stated above: one date replaced by another is a **repair**, a
+date added with none removed is a **new record**, and only the new-record case can be the third
+cause. Both numbers come out of the flattened list the `diff` already builds,
+`| grep -c 'until <prose date>'` **beside** it.
+
+**Retiring the `diff` in favour of the count would call two benign rows of the table below
+defects**, and they are the two that table classifies as repairs. `defff6e` moved the numeral of
+`Oka/AnalyticSpace/FiniteEtaleOver.lean:86` and of `OkaTest/Axioms.lean:734` from 2026-09-08 to
+2026-09-12 and landed on 2026-09-14, so the count of each row's own date in its file goes
+**0 → 1** — increased, and the landing day is neither numeral — while the `diff` reports **one
+date replaced by another** in both. **A count cannot see a replacement**, which is what it is not
+for; the two commands answer the two questions and neither answers both.
 
 **Both classes are live at `998d5ad` and each refutes one of the readings this replaces.** Four
 rows are reflows — three in `Oka/AnalyticSpace/FiniteEtaleOver.lean` and one in
@@ -1343,8 +1353,12 @@ And the two crossings below are the other way round: `d2ae161` wrote one of the 
 2026-09-07 records in `Oka/AnalyticSpace/PullbackOpen.lean` and one of the five in
 `OkaTest/Axioms/Morphisms.lean`, counts of **1 → 2** and **4 → 5**, **while that date was already
 in both files' lists on both sides** — which is exactly the case a membership test cannot see.
-**So the first command's *empty is a reflow* is sufficient and not necessary**, and the second is
-the one that decides, taken as a count.
+**So the first command's *empty is a reflow* is sufficient and not necessary** — a reflow that
+rewrites the line the date sits on is not empty either — **and it is blind to a wrapped record**,
+where `until` ends one line and the date opens the next, so that no single added line carries
+both. It is empty at `Oka/AnalyticSpace/FiniteEtaleOver.lean:86`, whose record wraps and which the
+table below calls a **repair** and not a reflow. **So run the count whenever it is empty, and
+the `diff` whenever the count has gone up.**
 
 **A merge that crossed midnight excuses the row and never the numeral, and that is the boundary
 this section had left undrawn.** The numeral is the UTC date of the push that retires the wording,
