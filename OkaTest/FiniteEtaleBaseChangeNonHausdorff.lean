@@ -28,7 +28,7 @@ of `Oka/AnalyticSpace/FiniteEtaleBaseChange.lean` or of
 `Oka/AnalyticSpace/FiniteEtaleStableUnderBaseChange.lean` to that cospan, which is the point —
 what is checked is that they apply.
 
-**The `## The morphism property at this cospan` section was added on 2026-09-14**, when
+**The `### The morphism property at this cospan` section was added on 2026-09-15**, when
 `ComplexAnalytic.AnalyticSpace.isFiniteEtale` became
 `CategoryTheory.MorphismProperty.IsStableUnderBaseChange`. That class quantifies over every cospan
 with a finite étale leg and asks no separation axiom, so this cospan is one of the ones it reaches
@@ -48,8 +48,8 @@ rather than citing it is what says so.
   not merely unavailable at this cospan, it is refutable.
 
   **This bullet was headed *No `#synth` control* and said that this file has none, until
-  2026-09-14**, when `Oka/AnalyticSpace/FiniteEtaleStableUnderBaseChange.lean` added a class and
-  the first `example` of `## The morphism property at this cospan` became exactly that control:
+  2026-09-15**, when `Oka/AnalyticSpace/FiniteEtaleStableUnderBaseChange.lean` added a class and
+  the first `example` of `### The morphism property at this cospan` became exactly that control:
   `inferInstance` at `(isFiniteEtale.{u}).IsStableUnderBaseChange`, which fails at the commit this
   section is cut from. What the bullet says of the hypothesis removal is unchanged and is why it
   is narrowed rather than struck.
@@ -86,7 +86,7 @@ example : Limits.HasPullback doubledLineFold.{u} doubledLineFold.{u} := inferIns
 /-- **And the base change is finite étale in the `CategoryTheory.Limits.pullback` spelling**,
 which is the one `CategoryTheory.MorphismProperty.IsStableUnderBaseChange` quantifies. It
 does not elaborate at all unless the instance above is found. **The verb read *would quantify*
-until 2026-09-14**, when that class became a theorem of this repository for
+until 2026-09-15**, when that class became a theorem of this repository for
 `ComplexAnalytic.AnalyticSpace.isFiniteEtale` and the section below started applying it; what
 this `example` checks is unchanged. -/
 example : IsFiniteEtale (Limits.pullback.snd doubledLineFold.{u} doubledLineFold.{u}) :=

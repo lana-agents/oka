@@ -82,7 +82,7 @@ touches a base map goes through it.
   `Oka/AnalyticSpace/FiniteEtaleStableUnderBaseChange.lean`, and nothing below is stated from it or
   proves it. **This clause read *`Oka/AnalyticSpace/FiniteEtaleOver.lean`'s
   `## No base change of the class over a general cospan` bullet is where that absence is stated,
-  and this file does not narrow it*, until 2026-09-14**, when the class stopped being an absence;
+  and this file does not narrow it*, until 2026-09-15**, when the class stopped being an absence;
   that bullet is now headed
   **No base change of the class over a cospan of morphisms of covers**, which is a statement about
   `ComplexAnalytic.AnalyticSpace.FiniteEtaleOver X` and not about the cospans of this file, and

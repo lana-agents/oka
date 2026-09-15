@@ -185,7 +185,7 @@ symmetry of the limit and not by rerunning this**, and no statement below says s
   say what they said before this file existed.
 
   **This bullet read *…, and the bullets recording that absence are not narrowed* until
-  2026-09-14**, when
+  2026-09-15**, when
   `Oka/AnalyticSpace/FiniteEtaleStableUnderBaseChange.lean` stated the class and there ceased to be
   an absence for a bullet to record. Nothing else in the bullet moves: what is here is still not
   that class, for the reason the sentence after the heading gives, and the two bullets named are

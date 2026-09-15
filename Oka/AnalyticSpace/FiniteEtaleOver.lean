@@ -317,7 +317,7 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   cospan of morphisms of covers is still among them. **This clause said *base change over a general
   cospan* until 2026-09-08**, when `Oka/AnalyticSpace/PullbackReduction.lean` gave the category the
   *limit* over a general cospan; what was absent then is the class being carried across it. **And
-  it said *base change of the class over a general cospan* until 2026-09-14**, when
+  it said *base change of the class over a general cospan* until 2026-09-15**, when
   `Oka/AnalyticSpace/FiniteEtaleStableUnderBaseChange.lean` carried the class across every cospan
   of `ComplexAnalytic.AnalyticSpace`; what a Galois category quantifies over is cospans of
   morphisms of this category, and that is what is absent now.
@@ -503,7 +503,7 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   actions, the axiom that a monomorphism induces an isomorphism onto a direct summand, and the
   preservation of epimorphisms by a fibre functor. **This sentence said *base change over a
   general cospan* until 2026-09-08 and *base change of the class over a general cospan* until
-  2026-09-14**, for the reason the bullet headed
+  2026-09-15**, for the reason the bullet headed
   *No base change of the class over a cospan of morphisms of covers*
   gives under that heading, which is where each of the two moves is dated.
 
@@ -624,7 +624,7 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   **The heading read *No base change of the class over a general cospan*, and the sentence under
   it read *`CategoryTheory.MorphismProperty.IsStableUnderBaseChange` — which quantifies over every
   cospan — is not statable for `isFiniteEtale`: nothing in this repository carries that class
-  across a square whose finite étale leg has an arbitrary source*, until 2026-09-14**, when
+  across a square whose finite étale leg has an arbitrary source*, until 2026-09-15**, when
   `Oka/AnalyticSpace/FiniteEtaleStableUnderBaseChange.lean` stated it. **The heading had to move
   and not only the sentence under it**, because *the class* there is `isFiniteEtale` and *a general
   cospan* is a cospan of `ComplexAnalytic.AnalyticSpace`, so the statement that landed carries both
@@ -659,7 +659,7 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   cospan of morphisms **of covers**, and a
   morphism of `FiniteEtaleOver X` is not known to be finite étale without `[T2Space]` of its
   target — which is taxis #1772's remaining half and is not this bullet's. **That sentence closed
-  *and the heading is unchanged because of it* until 2026-09-14**, when the heading did move: the
+  *and the heading is unchanged because of it* until 2026-09-15**, when the heading did move: the
   clause was exact while the heading read *over a general cospan* and no statement in the tree
   carried the class over one, and what retires it is that statement landing rather than any change
   in what this bullet is about. **The sentence that
@@ -694,7 +694,7 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
 
   **So the sentence `2cf6efa` wrote beside it — *All four were rewritten on 2026-09-08 to cite it
   under its new heading and to say `of the class`, and the count of four is unchanged by that* —
-  stood until 2026-09-14 and was false in the push that wrote it**, the count having moved from
+  stood until 2026-09-15 and was false in the push that wrote it**, the count having moved from
   four to five in that very diff. **That one is a correction and not one of this repository's dated
   records, and `69a54dd`'s sentence is the opposite case and is dated rather than corrected**: it
   was exact when it was written and was falsified by a later push, which is what a dated record
@@ -712,16 +712,16 @@ would make sense at every `CategoryTheory.MorphismProperty.Over` and not only at
   that a later seat renaming this heading again is not told four where there are five.
 
   **This sentence read *The four sentences in this file that cite this bullet by its heading are
-  unaffected* until 2026-09-14**, when the heading moved a second time and the count was written
+  unaffected* until 2026-09-15**, when the heading moved a second time and the count was written
   upward with it. **The date is the push that retires the wording and not the day it stopped being
-  true**, which is `README.md`'s rule and is why it is 2026-09-14 and not 2026-09-08: the count
+  true**, which is `README.md`'s rule and is why it is 2026-09-15 and not 2026-09-08: the count
   went to five at `2cf6efa`, for the reason the two paragraphs above give, and no push between that
   one and this one read the sentence against the file.
 
   **One further citation of the old heading
   stood in `Oka/AnalyticSpace/FiniteEtaleBaseChange.lean` and was rewritten in the same push, and
   it is not among them because that file is not this one.** That was the whole of the outside
-  on 2026-09-08. **It is not now, and this clause named only that file until 2026-09-14**: the
+  on 2026-09-08. **It is not now, and this clause named only that file until 2026-09-15**: the
   wrapped-and-joined scan over `Oka/` and `OkaTest/` returns **four** citations
   outside this file at the commit this push is cut from — that one, together with
   `Oka/AnalyticSpace/LocalAtTarget.lean`, `Oka/AnalyticSpace/LocalIso.lean` and
@@ -1967,7 +1967,7 @@ which is conservativity — the axiom that class asks of a fibre functor where f
 thing it hands back. **Base change of the class over a cospan of morphisms of covers is still
 absent** — the
 sentence read *Base change over a general cospan is still absent* until 2026-09-08 and
-*Base change of the class over a general cospan is still absent* until 2026-09-14 — for the
+*Base change of the class over a general cospan is still absent* until 2026-09-15 — for the
 reason the
 `## No base change of the class over a cospan of morphisms of covers` bullet gives, and nothing
 here bears on it. -/
@@ -2112,7 +2112,7 @@ a general cospan, so no base change* until 2026-09-08**, when
 `Oka/AnalyticSpace/PullbackReduction.lean` made
 `CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` a theorem and left the class
 where it was; that is a second narrowing of the same bullet and this citation follows it again.
-**And it was titled *No base change of the class over a general cospan* until 2026-09-14**, when
+**And it was titled *No base change of the class over a general cospan* until 2026-09-15**, when
 `Oka/AnalyticSpace/FiniteEtaleStableUnderBaseChange.lean` carried the class over every cospan of
 `ComplexAnalytic.AnalyticSpace` and left the cospans of morphisms of covers where they were; that
 is a third narrowing and this citation follows it a third time. **What this sentence asserts of

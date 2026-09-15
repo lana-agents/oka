@@ -509,7 +509,7 @@ docstring argues the routing and dates both halves.
 
 **This clause read *the analytic result that would motivate them does not exist yet*, and closed
 *That section's docstring argues the routing, names what it would take for either to have a
-consumer, and publishes the run behind its claim that neither is consumed*, until 2026-09-14.** It
+consumer, and publishes the run behind its claim that neither is consumed*, until 2026-09-15.** It
 was exact when written and was falsified by `280bb67`, already on `master` when the push that
 retires it was cut: that commit wrote both consumers, out of the very read-off that section
 publishes. **The routing verdict is unchanged by the retirement** — the rule fixes where a guard
@@ -928,27 +928,33 @@ own* draws it for a token **described rather than reached**, and this is that di
 opening described rather than cited — one of them names the form this opening does not take, one
 quotes the opening the clause above cites, and none of them is an identification of a clause made
 here. **With this paragraph's occurrences set aside, no citation of a clause opening in this
-description reaches two of them at this head**, and that is a run over every occurrence of each of
-the three openings in this file — this clause's, the one it declined to reproduce, and the one
-`8d50165` landed — and not a reading of this paragraph.
+description reaches two clauses by any of the three openings this paragraph is about**, and that is
+a run over every occurrence of each of those three in this file — this clause's, the one it
+declined to reproduce, and the one `8d50165` landed — and not a reading of this paragraph. **What
+was run is those openings and the sentence quantifies over no more, because an opening this
+description cites outside them does reach two at this head**: the one cited above as `954b116`'s,
+which the paragraph below this one opens with, opens two paragraphs of this description here where
+it opened one at the commit this clause is cut from. **That citation pins its referent and goes on
+resolving**, which is why this push records the collision rather than re-wording either clause.
 
 **The published check on this file's statements of a pullback square is unmoved in both halves,
 and that is a run and not an assumption.** The one name this push adds carries neither *isPullback*
 nor *hasPullback*, so the four figures are what they were — **nine and eight unfiltered and eight
 and six with the exclusion, at the commit this section is cut from and at the one that adds it
 alike**. **The list those figures are read off has to be taken continuation-aware**, which is worth
-saying here because the obvious instrument is wrong: this file writes **nineteen** of its
-`#print axioms` with the name on the following line, so it carries **620** guard names at the
-commit that adds this clause where a one-line `grep -E '^#print axioms .+$'` returns **601**.
+saying here because the obvious instrument is wrong: this file writes **twenty-five** of its
+`#print axioms` with the name on the following line, so it carries **629** guard names at the
+commit that adds this clause where a one-line `grep -E '^#print axioms .+$'` returns **604**.
 **Those three numerals read eleven, 591 and 580 while this clause was cut from `ddcc4c6`,
-fifteen, 608 and 593 while it was cut from `ebee177`, and nineteen, 613 and 594 while it was cut
-from `7577386`**, and each moved under a re-cut rather
-than under an edit: four of the seventeen guards `8d50165` appends wrap, and four of the five that
-`7577386` appends do, the namespace
+fifteen, 608 and 593 while it was cut from `ebee177`, nineteen, 613 and 594 while it was cut
+from `7577386`, and nineteen, 620 and 601 while it was cut from `321879e`**, and each moved under
+a re-cut rather than under an edit: four of the seventeen guards `8d50165` appends wrap, four of
+the five that `7577386` appends do, and six of the nine that `fbe1e95` appends do, the namespace
 `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.` being 55 characters. **The re-cut onto
-`321879e` is the first that moves two of the three and not all three**: none of the seven guards
-that push appends wraps, its longest line being 99 characters, so the count of continuations is
-the one numeral this base move leaves standing. **No dated record is
+`321879e` is the one of the four that moved two of the three and not all three**: none of the
+seven guards that push appends wraps, its longest line being 99 characters, so the count of
+continuations was the one numeral that base move left standing, where the re-cut onto `fbe1e95`
+moves all three again. **No dated record is
 owed for them and this is not a correction either** — none of the retired numerals landed, and
 each was exact at the base it was measured at; **it is the numeral a re-cut moves without an
 edit**, which is what makes the continuation-aware instrument worth naming here rather than the
@@ -7100,7 +7106,7 @@ of absence only for the qualified spelling**, and the token that would have caug
 bare final component `pullback_snd`, which at this commit is in the code of **eleven** tracked
 files and is not specific to either lemma. **The sentence above was in the present tense and said
 *Neither statement is consumed by anything*, with the run pinned to the commit that adds this
-section, until 2026-09-14**: the figure was pinned, the sentence it supported was not, and the
+section, until 2026-09-15**: the figure was pinned, the sentence it supported was not, and the
 figure would not have moved even had the sentence been checked against it.
 
 **What it would take for either to have a consumer, read off the declarations rather than argued.

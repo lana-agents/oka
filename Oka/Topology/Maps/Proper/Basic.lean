@@ -93,7 +93,7 @@ bijection with finite fibres and is not a closed map.
   both are downstream of this file rather than in it.
 
   **This bullet was headed *No consumer in this repository yet* and closed *That base change is not
-  in the tree and nothing below claims it*, until 2026-09-14.** It was exact when written and went
+  in the tree and nothing below claims it*, until 2026-09-15.** It was exact when written and went
   false in two steps, neither of them here: `280bb67` wrote
   `ComplexAnalytic.AnalyticSpace.isClosedMap_baseChangeSndBase` from this statement, and the push
   that retires this wording added the class. **The first step was already landed when this wording

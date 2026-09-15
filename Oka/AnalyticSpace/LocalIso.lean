@@ -385,7 +385,7 @@ gave — the limit exists and the class carried across it does not — which is 
 the clause of this docstring naming `Oka/AnalyticSpace/PullbackReduction.lean` took, in the same
 push and by the same landing. **And it read *base change of the class over a general cospan*, and
 named that bullet by the heading `## No base change of the class over a general cospan`, until
-2026-09-14**, when
+2026-09-15**, when
 `Oka/AnalyticSpace/FiniteEtaleStableUnderBaseChange.lean` stated the class over every cospan of
 `ComplexAnalytic.AnalyticSpace` and that bullet was re-headed
 **No base change of the class over a cospan of morphisms of covers**. What is missing where a

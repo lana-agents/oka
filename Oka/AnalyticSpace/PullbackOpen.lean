@@ -649,7 +649,7 @@ what is not, which is the narrowing
 `Oka/AnalyticSpace/FiniteEtaleOver.lean`'s bullet took on the same day. **And the sentence read
 *`Oka/AnalyticSpace/FiniteEtaleOver.lean`'s `## No base change of the class over a general cospan`
 bullet is where that absence is stated and measured, and this sentence defers to it rather than
-restating it* until 2026-09-14**, when the class stopped being an absence and that bullet was
+restating it* until 2026-09-15**, when the class stopped being an absence and that bullet was
 re-headed **No base change of the class over a cospan of morphisms of covers**, which is about a
 different category and is not what this sentence was deferring to. -/
 instance isFiniteEtale_restrictHom [IsFiniteEtale f] : IsFiniteEtale (restrictHom f V) where

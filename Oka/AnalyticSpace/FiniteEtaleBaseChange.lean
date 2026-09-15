@@ -39,7 +39,7 @@ and until 2026-09-08**, when `Oka/AnalyticSpace/PullbackReduction.lean` made
 `CategoryTheory.Limits.HasPullbacks ComplexAnalytic.AnalyticSpace` a theorem and the first half of
 the heading stopped being true; only the heading moved and what this file narrows is what it
 always narrowed. **And it was headed *No base change of the class over a general cospan* until
-2026-09-14**, when `Oka/AnalyticSpace/FiniteEtaleStableUnderBaseChange.lean` assembled the
+2026-09-15**, when `Oka/AnalyticSpace/FiniteEtaleStableUnderBaseChange.lean` assembled the
 statements below into
 `CategoryTheory.MorphismProperty.IsStableUnderBaseChange` for
 `ComplexAnalytic.AnalyticSpace.isFiniteEtale`; the heading moved again and what this file narrows
@@ -50,7 +50,7 @@ morphisms *of covers*, and a morphism of
 covers is not known to be finite étale without `[T2Space]` of its target, which is taxis #1772's
 remaining half; nor is a cover's total space assumed Hausdorff anywhere in that file. The four
 further sentences of that file which cite the bullet by its heading assert of it what they always
-asserted, and it says so. **That clause called them *unaffected* until 2026-09-14**, when the
+asserted, and it says so. **That clause called them *unaffected* until 2026-09-15**, when the
 heading moved a second time and all four were rewritten to name the new one — a rewriting of the
 pointer and not of the claim, which is the distinction the clause was making and now makes in
 words that do not also deny the edit.
@@ -167,7 +167,7 @@ what moved is the route and not the accounting rule.
   `ComplexAnalytic.AnalyticSpace.isFiniteEtale` is declared, and it is not in this file's import
   closure, which is why the assembly is not here and not merely why it is elsewhere.
   **The sentence ending *and the assembly is not here* read *is the statement it would be
-  assembled from* and stopped there, until 2026-09-14**, when the assembly was made and the
+  assembled from* and stopped there, until 2026-09-15**, when the assembly was made and the
   sentence naming where it is was added after it. What the bullet says of the statements *below*
   is unchanged, and the reason it is a bullet at all is that a reader looking here for the class
   should be sent somewhere rather than told it does not exist.
@@ -180,7 +180,7 @@ what moved is the route and not the accounting rule.
   a non-Hausdorff source. What is absent **from this file** is the
   `CategoryTheory.MorphismProperty` spelling and not the reach. **That last sentence read *What is
   still absent is the `CategoryTheory.MorphismProperty` spelling and not the reach*, with no file
-  named, until 2026-09-14**, when that spelling landed one module further on and *still absent*
+  named, until 2026-09-15**, when that spelling landed one module further on and *still absent*
   stopped being available as a reading of it.
 * **Nothing about the degree.** `ComplexAnalytic.AnalyticSpace.degree_eq_card_fiber` would say the
   base change has the same number of sheets; the fibres do correspond, by

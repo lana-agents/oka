@@ -189,7 +189,7 @@ this file is about them.
 
   **The second sentence of this bullet ended *The bullets recording that in
   `Oka/AnalyticSpace/FiniteEtaleBaseChange.lean` and `Oka/AnalyticSpace/FiniteEtaleOver.lean` are
-  untouched by this file and are not made weaker by it*, until 2026-09-14**, when the class was
+  untouched by this file and are not made weaker by it*, until 2026-09-15**, when the class was
   stated and *the bullets recording that* stopped naming what records it. What this bullet claims
   of this file is unchanged.
 -/
