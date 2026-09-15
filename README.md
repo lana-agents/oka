@@ -1209,9 +1209,9 @@ commands returned **97** in **42** — the same total in one file fewer, and a c
 only two pushes between them that moved either figure: the push that added this section retired two
 records and wrote one, all three in `OkaTest/Axioms/Morphisms.lean`, and `6442a4c` wrote one in a
 file whose only other record wraps. **The counts here leave `README.md` out, and a record count and
-a hit count have to be told apart before they can be.** This file holds **8** dated records — two
+a hit count have to be told apart before they can be.** This file holds **10** dated records — two
 in `## Scope`'s `Finite morphisms` bullet, two in its
-`Local isomorphisms and finite étale morphisms` one, and four in this section — while the wildcard
+`Local isomorphisms and finite étale morphisms` one, and six in this section — while the wildcard
 spelling these commands replace, run tree-wide, matched **6** of its lines at `6442a4c`, against
 **four** records there. **The other two are not records**, and they are the same two here. One
 is the pattern **quoted**, and it is this section's doing: the `git grep -l` line of its blame
@@ -1226,7 +1226,9 @@ until 2026-09-14**, when the push repairing `Oka/AnalyticSpace/FiniteEtaleOver.l
 wrote the first two in this section; it was exact from the commit that wrote it, and the over-read
 of **two** is what is unmoved by them, both being records and neither the pattern quoted or used.
 **That sentence then said *six* and *two in this section*, until 2026-09-15**, when the push that
-drew the midnight boundary below wrote the other two in this section, one of them this clause.
+drew the midnight boundary below wrote the other two in this section.
+**It then said *eight* and *four in this section*, until 2026-09-15**, when the push that widened
+this section's self-date register wrote two more in it, one of them this clause.
 **A count of records is moved by a record**, so the numeral counts the sentence you are reading,
 and the over-read is unmoved again: both additions are records, neither is the pattern quoted or
 used, and the wildcard line count and the record count therefore rise together — **8** and **10**
@@ -1569,14 +1571,18 @@ from the two registers above. It scans the self-dating phrase and takes the nume
 it, so a record of this section's own kind, and a historical reference to another push of the
 shape *that exclusion having been added to it on 2026-09-12 by the push that added `### …`*, are
 outside it by construction rather than by a reading. **It has to be wrap-aware in two places at
-once**: at `1252d8b` the phrase spans more than one line at **12** of the **16** dated clauses and
-the numeral opens a continuation line at **3** of them, so neither a line-anchored scan of the
-phrase nor one of the numeral reaches all sixteen.
+once**: at `1252d8b`, under the pattern `e40a9d2` published, the phrase spans more than one line
+at **12** of the **16** dated clauses and the numeral opens a continuation line at **3** of them,
+so neither a line-anchored scan of the phrase nor one of the numeral reaches all sixteen.
 
 ```sh
 for f in $(git ls-files 'Oka/*.lean' 'OkaTest/*.lean'); do
-  perl -0777 -ne 'while (/(?:This|That)\s+(?:clause|sentence)\s+was\s+added\s+by\s+the\s+push\s+
-                    that\s+(?:added|wrote)\b.{0,400}?\*\*(?:,\s*(\d{4}-\d{2}-\d{2}))?/gsx) {
+  perl -0777 -ne 'while (/(?:This|That|These|Those)\s+(?:\S+\s+)?
+                    (?:clauses?|sentences?|paragraphs?)(?:\s+and\s+[^*]{1,60}?)?
+                    \s+(?:was|were)\s+added\s+
+                    (?|on\s+(\d{4}-\d{2}-\d{2})\s+by\s+the\s+push\s+that\s+(?:added|wrote)\b
+                      |by\s+(?:the\s+push\s+that\s+(?:added|wrote)|one\s+push)\b
+                       .{0,400}?\*\*(?:,\s*(\d{4}-\d{2}-\d{2}))?)/gsx) {
                     next unless defined $1;
                     print "$ARGV ", (substr($_, 0, $-[1]) =~ tr/\n//) + 1, " $1\n" }' "$f"
 done | while read -r f n d; do
@@ -1587,14 +1593,149 @@ done
 ```
 
 **Its row count is its own reach test**, as the second register above is: the rows have to number
-the *dated* self-dating clauses, and the same `perl` run with the `next unless defined $1` line
-deleted numbers all of them — **16** and **18** at `1252d8b`, the two without a numeral being
-clauses of `OkaTest/Axioms/Morphisms.lean`, since the form is optional and this rule says what a
-numeral means rather than that one is owed. The register is **14** matching and **2** behind at
-that commit, and the two are the numerals the commit that writes this section repairs: the clauses
-naming `### Base change of a local homeomorphism, and of a proper map` and `### The quotient of a
+the *dated* self-dating sentences, and the run `e40a9d2` published, with its
+`next unless defined $1` line deleted, numbers all of them — **16** and **18** at `1252d8b`, the
+two without a numeral being clauses of `OkaTest/Axioms/Morphisms.lean`, since the form is optional
+and this rule says what a numeral means rather than that one is owed. The register `e40a9d2`
+published is **14** matching and **2** behind at that commit, and the two are the numerals the
+commit that writes this section repairs: the clauses naming
+`### Base change of a local homeomorphism, and of a proper map` and `### The quotient of a
 covering map by a finite group over the base`, each reading 2026-09-13 against `954b116` and
 `ddcc4c6`, which landed at `2026-09-14T01:34:48Z` and `2026-09-14T12:01:10Z`.
+
+**The paragraph opening *Its row count is its own reach test, as the second register above is*
+said *the same `perl` run* and *The register*, and the one opening *The register is one command*
+said *the phrase*, until 2026-09-15**, when this section's pattern was widened and those three
+stopped denoting what they were taken with; each names `e40a9d2` now, and no numeral of either
+paragraph moves, all three being pinned at `1252d8b`. **That quotation runs to fourteen words
+because eight do not separate it** from the paragraph of the same opening in the section above —
+the class taxis #2016 is about, and older than this push, which adds no opening this file did not
+already carry in prose. **The first of the two paragraphs also said the rows number the dated
+self-dating *clauses***, which is what a reader of `1252d8b` could check: every subject the
+register's pattern reaches there is a singular deictic — *This clause* fourteen times, *This
+paragraph* four, *That clause* twice and *This sentence* twice, **22** in all against **20**
+dated — so a sentence and a clause were the same row there. The paragraph opening *A sentence
+that self-dates two clauses is one row* is what separates them at a head where they are not.
+
+**The register's pattern is wider than the one this section was published with, and all of the
+widening is in the subject.** `e40a9d2` published it opening
+`(?:This|That)\s+(?:clause|sentence)\s+was\s+added\s+by\s+the\s+push\s+that\s+(?:added|wrote)`,
+and a push that adds two sections owes the head description two clauses and self-dates both in one
+sentence. `OkaTest/Axioms/Morphisms.lean` carries that sentence — **These two clauses were added
+by the push that added `### Morphisms between the covering spaces of an analytic space` and `###
+The quotient of an analytic cover by a finite group acting over the base`** — and carries a second
+shape beside it, **This clause and the section it names were added by one push**, whose subject is
+conjoined and whose predicate names no *push that added* at all. A singular subject with a
+singular verb reaches neither. What the pattern admits that the published one did not, in full: a
+deictic plural — `These`, `Those` — with an optional quantifier before the noun; a conjoined
+subject of at most sixty characters between the noun and the verb; `by one push` beside `by the
+push that added|wrote`; and `paragraph` beside `clause` and `sentence`, for which the numeral sits
+inside the sentence rather than closing it, the two numeral positions being a branch reset so that
+either one fills `$1`.
+
+**A sentence that self-dates two clauses is one row.** The row is a numeral checked against the
+blame of the line that carries it, and a sentence has one numeral on one line however many clauses
+it dates; a second row would put the same verdict in the register twice and would make the reach
+test count something the scan producing it cannot see. So the rows number the dated self-dating
+**sentences**, and the clause count can be the larger of the two — at `aa50c8e` it is larger by
+one, the *These two clauses* sentence quoted above being the only row of the register that dates
+two.
+
+**The subject has to be the prose that carries the numeral, and the anchor holds it there rather
+than for brevity.** A sentence whose subject is a *section*, a *guard*, a *witness* or a
+*statement* dates something that is not itself, and the push that added that thing need not be the
+push that wrote the sentence, so blame is not a check on its numeral.
+`Oka/AnalyticSpace/FiniteEtaleBaseChange.lean:27` is the case that settles it: *that statement was
+added to `Oka/AnalyticSpace/CoveringSpace.lean` on 2026-09-13 by `7b7ce5a`* names its own commit
+and is true of it, `7b7ce5a` being of that date, while the line blames to `280bb67` of 2026-09-14
+— so an anchor that dropped the subject and kept *was added … on `<date>`* would file that
+sentence `behind` and be wrong about it. **No row the register returns at `aa50c8e` is a
+historical reference to another push**: each of the **30** has a deictic prose subject and each of
+the **28** carrying a numeral is matching, which is what lets a `behind` row be read as a defect
+without a second reading.
+
+**The figures, at `aa50c8e`**, the population being `'Oka/*.lean' 'OkaTest/*.lean'` and every run
+mine:
+
+| | |
+|---|---|
+| rows | **28** |
+| the same `perl` with the `next unless defined $1` line deleted | **30** |
+| matching / behind | **28** / **0** |
+| the match spans more than one line | **22** of the 28 |
+| the pattern's literal anchor does | **14** of the 28 |
+| the numeral opens a continuation line | **3** of the 28 |
+
+**Two of those rows are two measurements and not one, and the paragraph above takes the first of
+them.** *The match* is the whole of what the pattern consumes, and **the numeral closes it under
+one branch of the reset and sits inside it under the other**: after `by the push that added|wrote`
+the `.{0,400}?` runs to the numeral and stops there, while after `on <date> by the push that
+added|wrote` the numeral is consumed early and *the push that added* closes the match — which is
+what the paragraph opening *The register's pattern is wider than the one this section was
+published with* says of the `paragraph` shape. Under that reading `aa50c8e` is 22 of 28 and
+`1252d8b` is 12 of 16, `e40a9d2`'s pattern having only the branch that ends with its numeral.
+*The pattern's literal anchor* stops at *the push that added|wrote* or at *one push*, which is
+**before the `.{0,400}?` under the branch that has one and is the end of the match under the branch
+that does not**: the four `paragraph` rows have no tail at all, so for them the two readings are
+the same span, and they are four of the fourteen that cell returns. Under that reading `1252d8b`
+returns **7** of 16 rather than 12. **So the two rows are not one series and neither continues the
+other**, and a wrap figure published without saying which of the two it is cannot be checked —
+which is the same defect as a count published under an instrument that did not take it.
+
+**A third span is neither of those two rows, and it is the one a reader of *the match* is likeliest
+to take.** Subject through the numeral — the whole match with the `paragraph` branch's tail cut off
+— returns **21** of the 28, one below the whole match, and **the row the two differ at is
+`Oka/AnalyticSpace/CutOutProduct.lean:138`**, whose match is *This paragraph was added on
+2026-09-07 by the push that added* — the branch ends at `(?:added|wrote)\b`, so the file's next
+word, *it*, is outside what the pattern consumes — **with the line break falling between *that*
+and *added***: the subject and the numeral are on the line the row is filed at and the end of the
+match is not. The other three `paragraph` rows break before the numeral and so wrap under either
+span. **At `1252d8b` the whole
+match and this third span coincide at 12 of 16**, every match there ending with its numeral, so
+the pinned cell above cannot tell the two apart and neither can any figure taken under the pattern
+`e40a9d2` published. **A branch-reset pattern owes every prose description of what it matches to
+both branches**, and the three spans here are 22, 21 and 14 of one population of 28.
+
+**This table had one wrap row, reading *the anchor spans more than one line* at 14 of the 28, and
+that is corrected here rather than dated.** `9422360` wrote it beside the pinned 12 of 16 above,
+which is the whole match; the two readings differ at this head by eight rows and differ at
+`1252d8b` by five, so the pair could not be read as one series at the commit that wrote it. **A
+figure published under a noun whose instrument is another sentence's was false when written**, and
+the paragraph opening *The wording this section repairs here is corrected and not dated* is the
+rule that puts it here rather than in a record.
+
+The two rows without a numeral are clauses of `OkaTest/Axioms/Morphisms.lean`, as the two at
+`1252d8b` were. **The pattern `e40a9d2` published returns 22 and 24 at `aa50c8e`**, so the
+widening is six rows: the two `OkaTest/Axioms/Morphisms.lean` sentences quoted above and four
+`paragraph` sentences, one in
+`Oka/AnalyticSpace/CutOutCompose.lean`, one in `Oka/AnalyticSpace/CutOutProduct.lean` and two in
+`Oka/AnalyticSpace/ZeroLocus.lean`. **All six are matching**, so the widening moves the reach and
+not the verdict. The `1252d8b` figures above are a pinned figure doing what a pinned figure does
+and are not a defect this repairs. **This push touches no file the register scans**, `README.md`
+not being in that population, so the column holds at the commit carrying this paragraph as well,
+unless another push lands between.
+
+**What the shape leaves outside, named rather than counted.** With the subject unconstrained the
+same population gives rows the register declines:
+
+```sh
+for f in $(git ls-files 'Oka/*.lean' 'OkaTest/*.lean'); do
+  perl -0777 -ne 'while (/(?:was|were)\s+added\s+(?:to\s+\S+(?:\s+\S+){0,3}?\s+)?
+                    on\s+(\d{4}-\d{2}-\d{2})/gsx) {
+                    print "$ARGV ", (substr($_, 0, $-[1]) =~ tr/\n//) + 1, " $1\n" }' "$f"
+done
+```
+
+**8** rows at `aa50c8e`, of which the four `paragraph` sentences are now the register's. The other
+four are `OkaTest/FiniteEtaleBaseChangeNonHausdorff.lean:31`'s *The `### The morphism property at
+this cospan` section was added on 2026-09-15*, `OkaTest/Axioms/Morphisms.lean:5290`'s *Two guards
+were added to this section on 2026-09-14*, `Oka/AnalyticSpace/DirectSummand.lean:61`'s *The
+witnesses were added on 2026-09-12*, and the `FiniteEtaleBaseChange.lean:27` sentence above. The
+first three blame to the day they name and the fourth does not; the subject of each of the four is
+something other than the prose that carries the numeral, so the paragraph opening *The subject has
+to be the prose that carries the numeral* is why they are out and not an oversight, and a rule for
+the first three is a question about what may date a
+*section* or a *guard* rather than about what may reach a clause.
 
 **A row that is not matching has three causes and two of them are the numeral wrong.** A later
 push that rewrote the line, so that blame names the rewriter and not the push the numeral is
