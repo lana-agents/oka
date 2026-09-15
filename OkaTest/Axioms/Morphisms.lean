@@ -7863,7 +7863,7 @@ seventy-five, which is the figure
 publishes for one of them and which still reproduces here.
 
 **A closure walk over this tree has to follow `public import` and not only `import`, and a walk
-that does not under-counts this root by fourteen.** Twenty-nine of the two hundred and thirty-nine
+that does not under-counts this root by fourteen.** Twenty-nine of the two hundred and forty
 tracked `.lean` files under `Oka/` open with `module` and write their imports as `public import`;
 thirteen of those carry at least one `public import Oka…` line, thirty such lines in all and none
 of them outside `Oka/`. A

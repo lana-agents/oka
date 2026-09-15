@@ -175,7 +175,7 @@ Every `@`-application below is that, and none of them is a mathematical step.
 
   **One thing about the instrument, found by getting it wrong.** *A transitive walk of the
   `Oka`-prefixed `import` lines* is exact only if `public import` lines are followed as well: 29 of
-  the 239 tracked `.lean` files under `Oka/` open with `module` and write their imports that way,
+  the 240 tracked `.lean` files under `Oka/` open with `module` and write their imports that way,
   13 of them carrying a `public import Oka…` line, and a walk anchored on `^import Oka` alone
   returns **61** for this module where the closure is **75**, silently and with no unparsed line to
   report. The figures above are right; what is under-specified is the phrase, and the check that

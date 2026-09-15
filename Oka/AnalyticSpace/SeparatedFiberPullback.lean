@@ -93,7 +93,7 @@ cone whose image is computed below exists only here, the limit is proved here, a
 ## The instrument the closure figures are taken with
 
 **A closure walk over this tree has to follow `public import` and not only `import`.** Twenty-nine
-of the two hundred and thirty-nine tracked `.lean` files under `Oka/` open with `module` and
+of the two hundred and forty tracked `.lean` files under `Oka/` open with `module` and
 write their imports as `public import`, thirteen of them carrying a `public import Oka…` line; a
 walk anchored on `^import Oka` alone returns **sixty-one** modules for
 `Oka/AnalyticSpace/SeparatedFiberFunctor.lean` where its closure is **seventy-five**, and it does
