@@ -591,7 +591,7 @@ any of the four and no object of this repository does**, which is what puts them
 kind, and that section had no consumer in this repository when it was written either, so it takes
 a section of its own rather than sharing one; its docstring measures both claims and gives the
 instruments. **That second half read *and that section has no consumer in this repository either*
-until 2026-09-14**, when `Oka/AnalyticSpace/QuotientCover.lean` became that module's first
+until 2026-09-15**, when `Oka/AnalyticSpace/QuotientCover.lean` became that module's first
 importer and first consumer; the section's own docstring carries the record, the re-run figure and
 the reason the four guards stay where they are, and nothing in this clause's other claims moves
 with it. **The clause
@@ -7434,7 +7434,7 @@ reader checking this sentence against the instrument should expect the head desc
 absent from its output rather than in it. So the guard takes a section of its own.
 
 **Those two sentences read in the present tense — *This one has no consumer to sit with*, *no
-module under `Oka/` imports*, *a grep … returns* — until 2026-09-14**, when
+module under `Oka/` imports*, *a grep … returns* — until 2026-09-15**, when
 `Oka/AnalyticSpace/QuotientCover.lean` became this module's first importer and first consumer. It
 reads `IsCoveringMap.of_comp_quotientMk` and `MulAction.finite_fiber_of_comp_quotientMk` off it,
 one application each, and cites both by name in prose. **Neither figure moves**: both were pinned
