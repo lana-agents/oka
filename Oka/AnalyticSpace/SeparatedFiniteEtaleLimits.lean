@@ -42,7 +42,7 @@ over a Hausdorff base. **At the commit that adds this module, three do**: those 
 `hasPullbacks`. The remaining two are `hasFiniteCoproducts` and `hasQuotientsByFiniteGroups`, and
 the `## What is not here` section below says where each of them stands.
 
-That namespace is not in this repository's import closure, so every name in the paragraph above is
+That namespace is not in this file's import closure, so every name in the paragraph above is
 prose and not a citation. **That is a measurement and not a convention**: no module reachable from
 `Oka.lean` imports anything under `Mathlib/CategoryTheory/Galois/`, on an import-graph walk of the
 whole tree, and `scripts/check_docstring_names.py` reports the dotted form —
@@ -147,7 +147,7 @@ symmetry of the limit and not by rerunning this**, and no statement below says s
 ## What is not here
 
 * **No `PreGaloisCategory` instance, and no claim that one is close.** That class is not in this
-  repository's import closure — measured at the head of this file rather than assumed — so it
+  file's import closure — measured at the head of this file rather than assumed — so it
   cannot be cited by name in a statement here, and **two of its five fields are untouched at the
   commit that adds this module**: `hasFiniteCoproducts`, which the bullet of this section opening
   *No finite coproducts* is about, and `hasQuotientsByFiniteGroups`, which is stated nowhere in
@@ -213,6 +213,18 @@ symmetry of the limit and not by rerunning this**, and no statement below says s
   `ComplexAnalytic.AnalyticSpace.isPullback_baseChange` is the ambient square. **What is missing
   is the statement and not the mathematics**, and a push that wants it should say which of the two
   functors it means.
+## The `Mathlib/CategoryTheory/Galois/Basic.lean` scoping, and the record for it
+
+**Every sentence of this file that scopes that namespace read *this repository's import closure*,
+until 2026-09-15**, when `Oka/AnalyticSpace/GaloisCategory.lean` imported that file and declared
+`CategoryTheory.PreGaloisCategory` at
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver` together with
+`CategoryTheory.PreGaloisCategory.FiberFunctor` at its `FintypeCat`-valued fibre functor. **From
+that commit the class is in this repository's import closure and is still not in this file's**,
+which is why those sentences now say *this file's*: no import of this module reaches the one that
+pays for the class, so nothing here can name it and every clause of this file that says so stays
+exact. The rescoping is this file's whole share of that push, and `git diff` against the commit it
+is cut from shows it.
 -/
 
 open CategoryTheory Topology TopologicalSpace AlgebraicGeometry
