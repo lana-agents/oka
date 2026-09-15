@@ -1662,8 +1662,26 @@ mine:
 | rows | **28** |
 | the same `perl` with the `next unless defined $1` line deleted | **30** |
 | matching / behind | **28** / **0** |
-| the anchor spans more than one line | **14** of the 28 |
+| the match spans more than one line | **22** of the 28 |
+| the pattern's literal anchor does | **14** of the 28 |
 | the numeral opens a continuation line | **3** of the 28 |
+
+**Two of those rows are two measurements and not one, and the paragraph above takes the first of
+them.** *The match* is the whole of what the pattern consumes, from the subject to the numeral
+that closes it, and that is the reading under which the wrap figure at `1252d8b` is 12 of 16: at
+`aa50c8e` it is 22 of 28. *The pattern's literal anchor* stops at *the push that added|wrote* or
+at *one push*, before the `.{0,400}?` that reaches the numeral, and under that reading `1252d8b`
+returns **7** of 16 rather than 12. **So the two rows are not one series and neither continues the
+other**, and a wrap figure published without saying which of the two it is cannot be checked —
+which is the same defect as a count published under an instrument that did not take it.
+
+**This table had one wrap row, reading *the anchor spans more than one line* at 14 of the 28, and
+that is corrected here rather than dated.** `9422360` wrote it beside the pinned 12 of 16 above,
+which is the whole match; the two readings differ at this head by eight rows and differ at
+`1252d8b` by five, so the pair could not be read as one series at the commit that wrote it. **A
+figure published under a noun whose instrument is another sentence's was false when written**, and
+the paragraph opening *The wording this section repairs here is corrected and not dated* is the
+rule that puts it here rather than in a record.
 
 The two rows without a numeral are clauses of `OkaTest/Axioms/Morphisms.lean`, as the two at
 `1252d8b` were. **The pattern `e40a9d2` published returns 22 and 24 at `aa50c8e`**, so the
