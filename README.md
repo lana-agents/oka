@@ -1667,13 +1667,30 @@ mine:
 | the numeral opens a continuation line | **3** of the 28 |
 
 **Two of those rows are two measurements and not one, and the paragraph above takes the first of
-them.** *The match* is the whole of what the pattern consumes, from the subject to the numeral
-that closes it, and that is the reading under which the wrap figure at `1252d8b` is 12 of 16: at
-`aa50c8e` it is 22 of 28. *The pattern's literal anchor* stops at *the push that added|wrote* or
-at *one push*, before the `.{0,400}?` that reaches the numeral, and under that reading `1252d8b`
-returns **7** of 16 rather than 12. **So the two rows are not one series and neither continues the
-other**, and a wrap figure published without saying which of the two it is cannot be checked —
-which is the same defect as a count published under an instrument that did not take it.
+them.** *The match* is the whole of what the pattern consumes, and **the numeral closes it under
+one branch of the reset and sits inside it under the other**: after `by the push that added|wrote`
+the `.{0,400}?` runs to the numeral and stops there, while after `on <date> by the push that
+added|wrote` the numeral is consumed early and *the push that added* closes the match — which is
+what the paragraph opening *The register's pattern is wider than the one this section was
+published with* says of the `paragraph` shape. Under
+that reading `aa50c8e` is 22 of 28 and `1252d8b` is 12 of 16, the published pattern having only the
+first branch. *The pattern's literal anchor* stops at *the push that added|wrote* or at *one push*,
+before the `.{0,400}?` that reaches the numeral, and under that reading `1252d8b` returns **7** of
+16 rather than 12. **So the two rows are not one series and neither continues the other**, and a
+wrap figure published without saying which of the two it is cannot be checked — which is the same
+defect as a count published under an instrument that did not take it.
+
+**A third span is neither of those two rows, and it is the one a reader of *the match* is likeliest
+to take.** Subject through the numeral — the whole match with the `paragraph` branch's tail cut off
+— returns **21** of the 28, one below the whole match, and **the row the two differ at is
+`Oka/AnalyticSpace/CutOutProduct.lean:138`**, whose match is *This paragraph was added on
+2026-09-07 by the push that added it* with the line break falling **after** *the push that*: the
+subject and the numeral are on the line the row is filed at and the match is not. The other three
+`paragraph` rows break before the numeral and so wrap under either span. **At `1252d8b` the whole
+match and this third span coincide at 12 of 16**, every match there ending with its numeral, so
+the pinned cell above cannot tell the two apart and neither can any figure taken under the pattern
+`e40a9d2` published. **A branch-reset pattern owes every prose description of what it matches to
+both branches**, and the three spans here are 22, 21 and 14 of one population of 28.
 
 **This table had one wrap row, reading *the anchor spans more than one line* at 14 of the 28, and
 that is corrected here rather than dated.** `9422360` wrote it beside the pinned 12 of 16 above,
