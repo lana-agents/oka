@@ -31,7 +31,7 @@ along an inclusion that is fully faithful.
 `PreGaloisCategory`, at this category, **with `[T2Space X]` added on the base and nothing else
 changed**. The field is written for every monomorphism under no hypothesis; the class asks five
 things of a category and this is one of them, so what is here is one field and not the class.
-**That namespace is not in this repository's import closure** — `#check` on it reports an unknown
+**That namespace is not in this file's import closure** — `#check` on it reports an unknown
 identifier from a file importing `Oka/AnalyticSpace/SeparatedFiniteEtale.lean` — which is the
 spelling `Oka/AnalyticSpace/SeparatedFiniteEtale.lean` and `Oka/AnalyticSpace/DirectSummand.lean`
 already use for it, and the reason no instance is declared anywhere below.
@@ -153,6 +153,18 @@ docstring gives.
 * **The isomorphism onto the clopen part is still not exposed**, for the reason
   `Oka/AnalyticSpace/DirectSummand.lean`'s `## What is not here` gives; nothing below unfolds that
   proof.
+## The `Mathlib/CategoryTheory/Galois/Basic.lean` scoping, and the record for it
+
+**Every sentence of this file that scopes that namespace read *this repository's import closure*,
+until 2026-09-15**, when `Oka/AnalyticSpace/GaloisCategory.lean` imported that file and declared
+`CategoryTheory.PreGaloisCategory` at
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver` together with
+`CategoryTheory.PreGaloisCategory.FiberFunctor` at its `FintypeCat`-valued fibre functor. **From
+that commit the class is in this repository's import closure and is still not in this file's**,
+which is why those sentences now say *this file's*: no import of this module reaches the one that
+pays for the class, so nothing here can name it and every clause of this file that says so stays
+exact. The rescoping is this file's whole share of that push, and `git diff` against the commit it
+is cut from shows it.
 -/
 
 open CategoryTheory
