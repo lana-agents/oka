@@ -892,9 +892,11 @@ this clause is now cut from**: the one naming `### The fibre functor at the sepa
 the two axioms of it that are reachable`, which landed at `8d50165` after this clause was approved
 and before it was re-cut onto it. **That costs this clause nothing and the reason is the
 discriminator and not the opening** — the two agree for the **20** characters of
-*And a section more,* and then run to *at the second category named by* and to *whose single
-guard*, and the phrase this clause is cited by is the whole of the one this paragraph names below,
-which occurs in neither that clause nor its section. The clause above naming
+*And a section more,* and the space after it, the italicised string being **19** and a trailing
+space being a thing an italicised quotation cannot carry, and then run to *at the second category
+named by* and to *whose single guard*, and the phrase this clause is cited by is the whole of the
+one this paragraph names below, which occurs in neither that clause nor its section. The clause
+above naming
 `### The quotient of a covering map by a finite group
 over the base` identifies a clause of this description as *the one opening «And one section more,
 adding no kind at all»* and says in terms that the naming is what makes its sentence checkable; the
@@ -927,21 +929,23 @@ and that is a run and not an assumption.** The one name this push adds carries n
 nor *hasPullback*, so the four figures are what they were — **nine and eight unfiltered and eight
 and six with the exclusion, at the commit this section is cut from and at the one that adds it
 alike**. **The list those figures are read off has to be taken continuation-aware**, which is worth
-saying here because the obvious instrument is wrong: this file writes **fifteen** of its
-`#print axioms` with the name on the following line, so it carries **608** guard names at the
-commit that adds this clause where a one-line `grep -E '^#print axioms .+$'` returns **593**.
-**Those three numerals read eleven, 591 and 580 while this clause was cut from `ddcc4c6`**, and all
-three moved at the re-cut onto `ebee177` rather than under an edit: four of the seventeen guards
-`8d50165` appends wrap, the namespace
-`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver` being 55 characters. **No dated record is
-owed for them and this is not a correction either** — the retired numerals never landed, and each
-was exact at the base it was measured at; **it is the numeral a re-cut moves without an edit**,
-which is what makes the continuation-aware instrument worth naming here rather than the figure. And
+saying here because the obvious instrument is wrong: this file writes **nineteen** of its
+`#print axioms` with the name on the following line, so it carries **613** guard names at the
+commit that adds this clause where a one-line `grep -E '^#print axioms .+$'` returns **594**.
+**Those three numerals read eleven, 591 and 580 while this clause was cut from `ddcc4c6`, and
+fifteen, 608 and 593 while it was cut from `ebee177`**, and all three moved at each re-cut rather
+than under an edit: four of the seventeen guards `8d50165` appends wrap, and four of the five that
+`7577386` appends do, the namespace
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.` being 55 characters. **No dated record is
+owed for them and this is not a correction either** — none of the retired numerals landed, and
+each was exact at the base it was measured at; **it is the numeral a re-cut moves without an
+edit**, which is what makes the continuation-aware instrument worth naming here rather than the
+figure. And
 the two claims the clause opening *And one section more, at the second category* makes are
 untouched by this push as well: its *Five of that section's twenty-one guards* counts over
 `### The category of separated covers, and separatedness as a morphism property`, no line of which
 this push touches, and that same pullback check. **This clause was added by the push that added
-`### Finite étaleness is stable under base change, as a morphism property`**, 2026-09-14, for the
+`### Finite étaleness is stable under base change, as a morphism property`**, 2026-09-15, for the
 reason the clause naming `### The terminal object and the product of two complex affine spaces`
 gives.
 
