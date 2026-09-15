@@ -1209,9 +1209,9 @@ commands returned **97** in **42** — the same total in one file fewer, and a c
 only two pushes between them that moved either figure: the push that added this section retired two
 records and wrote one, all three in `OkaTest/Axioms/Morphisms.lean`, and `6442a4c` wrote one in a
 file whose only other record wraps. **The counts here leave `README.md` out, and a record count and
-a hit count have to be told apart before they can be.** This file holds **6** dated records — two
+a hit count have to be told apart before they can be.** This file holds **8** dated records — two
 in `## Scope`'s `Finite morphisms` bullet, two in its
-`Local isomorphisms and finite étale morphisms` one, and two in this section — while the wildcard
+`Local isomorphisms and finite étale morphisms` one, and four in this section — while the wildcard
 spelling these commands replace, run tree-wide, matched **6** of its lines at `6442a4c`, against
 **four** records there. **The other two are not records**, and they are the same two here. One
 is the pattern **quoted**, and it is this section's doing: the `git grep -l` line of its blame
@@ -1223,8 +1223,14 @@ this file by two**, which is why no single number here is the one to subtract fr
 branch comparing itself against the library should run the census over `Oka/` and `OkaTest/` alone.
 **This sentence said this file holds *four* dated records and named two bullets of `## Scope`,
 until 2026-09-14**, when the push repairing `Oka/AnalyticSpace/FiniteEtaleOver.lean:85`–`:86`
-wrote the two in this section; it was exact from the commit that wrote it, and the over-read of
-**two** is what is unmoved by them, both being records and neither the pattern quoted or used.
+wrote the first two in this section; it was exact from the commit that wrote it, and the over-read
+of **two** is what is unmoved by them, both being records and neither the pattern quoted or used.
+**That sentence then said *six* and *two in this section*, until 2026-09-15**, when the push that
+drew the midnight boundary below wrote the other two in this section, one of them this clause.
+**A count of records is moved by a record**, so the numeral counts the sentence you are reading,
+and the over-read is unmoved again: both additions are records, neither is the pattern quoted or
+used, and the wildcard line count and the record count therefore rise together — **8** and **10**
+over this file at the commit that writes this clause, against 6 and 8 at the one before it.
 **The tense of the `6442a4c` figure is the same push's doing** and retires nothing: it is the
 figure that clause always published, put in the past so that two different sixes standing a line
 apart cannot be read as one measurement. **What it left standing was *The other two*, whose
@@ -1289,11 +1295,67 @@ itself carry a date, and `--porcelain` puts the commit first with nothing before
 
 `git blame` reports the commit that **last touched** a line, which can only be at or after the one
 that introduced it, and a pull request lands squashed, so the date blame reports is the merge's
-and not the branch commit's. A prose date **behind** the blame date is what a later reflow of the
-line, a merge that crossed midnight, or **a record dated to the day its retired wording was
-written rather than to the day it was retired** looks like. **The first two are not defects and
-the third is the rule opening *The date is the UTC date of the push that retires the wording*
-broken**, and the three are separated by a run and not by reading. A prose date **ahead** of it
+and not the branch commit's. A prose date **behind** the blame date has **three** causes, and they
+are the three the self-date section enumerates for its own register, which is not a coincidence:
+the two registers ask one question of two classes of numeral. **A later reflow of the line**, where
+blame names the rewriter and the numeral is untouched; **a repair of the numeral**, which
+re-touches the line and is why the paragraph below says such a row moves cause rather than column;
+and **the numeral naming a day that is not the landing day of the push that retired the wording**.
+**The first two leave the numeral right and the third is that rule broken**, and the third has
+three shapes in this tree — the branch written the day before, **a merge that crossed midnight**,
+and a numeral naming the day the retired wording *began* rather than the day it ended.
+
+**The discriminator is two commands per row and neither is a reading.** First, did the blamed
+commit write the line the numeral is on? `git show <blame> -- <file> | grep '^+' | grep 'until
+<prose date>'` — empty is a **reflow**, and the numeral belongs to an older push. If it is not
+empty, ask whether the *record* is new at that commit:
+
+```sh
+diff <(git show "$h^:$f" | tr -s ' \t\n' ' ' | grep -o 'until 20[0-9-]*' | sort) \
+     <(git show "$h:$f"  | tr -s ' \t\n' ' ' | grep -o 'until 20[0-9-]*' | sort)
+```
+
+**One date replaced by another is a repair**, whose numeral is the retiring push's and is older
+than the repair by construction; **a date added with none removed is a new record**, and then the
+numeral had to be that commit's own landing day, which `git show -s --date=short --format=%ad`
+gives. **Among `behind` rows only the new-record case can be the third cause**, and at `fbe1e95` every
+row of it is.
+
+**A merge that crossed midnight excuses the row and never the numeral, and that is the boundary
+this section had left undrawn.** The numeral is the UTC date of the push that retires the wording,
+so a push landing at `00:10:27Z` on the eighth retires it on the eighth whatever day the seat was
+working on, and the row it leaves behind is a fact about `git blame` rather than a licence.
+**There is no grace window, and the reason is that no width of one is defensible**: ten minutes
+past midnight is the worked case below and a branch that sat a day in review is the same shape one
+day further on, so a rule blessing the first would have to name a number that excludes the
+second, and such a number can only be chosen and not derived. **The sibling rule
+already decides it in terms** — the self-date section's paragraph on this same clause says the
+crossing classification *is about what a `behind` row of that register means rather than about
+whether a numeral may disagree with the date carried by the commit it names*, and prices the same
+repair at a commit ninety-five minutes past midnight and at one at midday alike. **And one push
+cannot land on two days**: a branch that crosses a midnight owes its self-dates the landing day
+under that section, so a reading that let its `until` records keep the earlier one would have one
+push writing two dates for one landing.
+
+**That is not a hypothetical, and it had already been decided once for one of the two pushes below,
+in the other register.** `954b116`'s self-date in `OkaTest/Axioms/Morphisms.lean` read 2026-09-13
+and was **corrected** to 2026-09-14, by the push that landed the self-date rule, whose clause beside
+it says in terms *The cause is a merge that crossed midnight*, by ninety-five minutes. **The four
+`until` records the same push wrote still read 2026-09-13 at `fbe1e95`** — one push, one landing,
+two registers and two answers — and this section brings them level rather than reopening that one.
+
+**The price is stated here rather than discovered.** A branch that sits over a midnight owes every
+`until` numeral it writes again, in the repair commit and not in the port; and the line-wise
+register reaches only the records that do not wrap, so the repair is not one `sed`. On the branch
+that forced this question, lana-agents/oka#554, that was **24** records of which **19** are
+line-wise and **5** wrap, and a `sed` on the bare date would have reached `master`'s 43 as well.
+
+**This paragraph enumerated *a later reflow of the line, a merge that crossed midnight, or a
+record dated to the day its retired wording was written* and said *The first two are not defects*,
+until 2026-09-15**, when the boundary was drawn against the crossing, the repaired-record case was
+brought up from the paragraph below that was the only place it stood, and the enumeration was
+brought level with the self-date section's, which had all three and called the crossing a shape of
+the numeral being wrong. A prose date **ahead** of it
 cannot be produced either way and is always wrong. At `91bbad8` the line-wise scan is
 **90 / 5 / 2** — matching, behind, ahead — and the two ahead are
 the records the commit that writes this section removes. At `b79ab9b` the two registers are
@@ -1303,6 +1365,77 @@ always-wrong column is empty, and the fifteen the line-wise register cannot see 
 `git blame` following reflows, which is the property the middle column measures, and
 `scripts/guard_coverage.py`'s docstring gives the standing reason against adding a check somebody
 will want to switch off.
+
+**The boundary was drawn by sweeping, and this is the sweep.** At `fbe1e95`, the base this
+paragraph is written against, the unwrapped register returns **162** rows — the reach test, since
+the unwrapped census returns 162 there too — **151 matching, 11 behind, 0 ahead**. All eleven,
+classified by the one-command discriminator above:
+
+| row | prose / blame | cause | this push |
+|---|---|---|---|
+| `Oka/AnalyticSpace/LocalIso.lean:112` | 09-07 / 09-08 | reflow | unchanged |
+| `Oka/Topology/SeparatedMap.lean:20` | 09-08 / 09-12 | reflow | unchanged |
+| `Oka/AnalyticSpace/FiniteEtaleOver.lean:86` | 09-12 / 09-14 | repair | unchanged |
+| `OkaTest/Axioms.lean:734` | 09-12 / 09-14 | repair | unchanged |
+| `Oka/AnalyticSpace/PullbackOpen.lean:403` | 09-07 / 09-08 | **crossing** | **→ 09-08** |
+| `OkaTest/Axioms/Morphisms.lean:126` | 09-07 / 09-08 | **crossing** | **→ 09-08** |
+| `Oka/Topology/Covering/Basic.lean:442` | 09-13 / 09-14 | **crossing** | **→ 09-14** |
+| `Oka/Topology/IsLocalHomeomorph.lean:32` | 09-13 / 09-14 | **crossing** | **→ 09-14** |
+| `OkaTest/CoveringBaseChange.lean:35` | 09-13 / 09-14 | **crossing** | **→ 09-14** |
+| `OkaTest/CoveringBaseChange.lean:36` | 09-13 / 09-14 | **crossing** | **→ 09-14** |
+| `OkaTest/SimpDiscrTree.lean:100` | 08-25 / 08-27 | **written earlier** | **→ 08-27** |
+
+**The four benign rows, with the push that wrote each record**: `69a54dd` wrote `LocalIso.lean`'s
+on 2026-09-07 and `2cf6efa` re-touched the line; `f57a910` wrote `SeparatedMap.lean`'s on
+2026-09-08 and `077f6d5` re-touched it; and the two `09-12 / 09-14` rows are one record and its
+twin, whose numerals `defff6e` moved from 09-08 to 09-12 on the fourteenth — the repair that the
+paragraph below on repaired records is about.
+
+**The six crossings are two pushes, and the population they sit in is six pushes.** `d2ae161`
+landed at `2026-09-08T00:10:27Z`, ten minutes past midnight, and wrote two records reading
+2026-09-07; `954b116` landed at `2026-09-14T01:34:48Z`, ninety-five minutes past, and wrote four
+reading 2026-09-13. **The run behind that is over every commit in `fbe1e95`'s history**, taking
+the records each adds from its own diff flattened, since one of `d2ae161`'s two wraps and a
+line-wise diff scan finds one of them: **51** pushes have added an `until` record, **six** of them
+landing in the first four hours of a UTC day, and **four of those six dated to the day they
+landed** — `8bfb421` at `02:37:11Z` and `5a525bc` at `03:22:34Z` with two records each,
+`da72056` at `01:10:48Z` with one, and `7577386` at `00:55:21Z` with two. **So the practice this
+rule writes down is already four sixths of the practice**, and the two exceptions are the two the
+sweep above found.
+
+**The seventh is older than this rule and is the third cause's first shape, not a crossing.**
+`ffed884` wrote `OkaTest/SimpDiscrTree.lean`'s sentence — and the third half of the file it is about — and landed
+at `2026-08-27T20:35:04Z`, nowhere near a midnight. That file has exactly two commits, `efee925`
+on 2026-08-20 and `ffed884`, so **no event on 2026-08-25 is in its history at all** and the
+numeral names the day the sentence was written rather than the day it landed.
+
+**Seven numerals, six of them one push's midnight and one of them older than this rule, and all
+seven are corrections rather than dated records** — each was false of the commit that carried it on
+the day it landed, which is the classification the paragraph opening *The wording this section
+repairs here is corrected and not dated* gives and the same one oka#559 gives for a self-date.
+**`954b116` is also the commit the self-date section works its own midnight example at**, so the
+two sections now name one push for one reason.
+
+**The repairs do not empty the `behind` bucket and are not meant to.** A repaired numeral re-touches
+its line, so blame reports this push and the row stays `behind` under the second cause, and
+**every published column is the same on both sides of this push**: the censuses are **147** records
+in 51 files line-wise and **162** in 54 unwrapped at `fbe1e95` and at the commit that adds this
+paragraph alike, the line-wise register is **138 / 9 / 0** at both and the unwrapped one
+**151 / 11 / 0** at both. **So this push is invisible to every bucket count either register
+publishes and visible only row by row**, which is the argument for classifying rows at all: what
+changed is that **every one of the eleven is now one of the two benign causes** — four that were
+benign already and seven this push moved there. **That is the check this rule is worth having
+for**: the column a reader should ask about is no longer *how many are behind* but *whether any
+behind row is a crossing or a backwards-dating*, which the discriminator answers per row.
+
+**On a branch this register cannot see the question at all, and that is `git blame`, not the
+scan.** `git show -s --format=%ad` reads the **author** date, which a rebase and a port both
+preserve, so a record written on the fourteenth on a branch that lands on the fifteenth is blamed
+to a branch commit whose author date is the fourteenth and reads **matching** — and the row turns
+`behind` only after the squash, when blame is the merge. **So a grader running this register on a
+branch gets a green column and meets none of this**, and the check that does is the rule and not
+the register: a branch that crosses a midnight repairs its numerals in its repair commit, exactly
+as the self-date section asks of a self-date, and for the same reason.
 
 **At `b79ab9b` the two behind rows only the unwrapped register sees do not have the same cause,
 which is why that register is worth having and not only worth counting.**
