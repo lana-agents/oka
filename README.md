@@ -1318,7 +1318,7 @@ diff <(git show "$h^:$f" | tr -s ' \t\n' ' ' | grep -o 'until 20[0-9-]*' | sort)
 **One date replaced by another is a repair**, whose numeral is the retiring push's and is older
 than the repair by construction; **a date added with none removed is a new record**, and then the
 numeral had to be that commit's own landing day, which `git show -s --date=short --format=%ad`
-gives. **Among `behind` rows only the new-record case can be the third cause**, and at `998d5ad` every
+gives. **Among `behind` rows only the new-record case can be the third cause**, and at `5dc5878` every
 row of it is.
 
 **The second command asks two questions and not one, and the count is an addition to it rather
@@ -1342,7 +1342,7 @@ defects**, and they are the two that table classifies as repairs. `defff6e` move
 date replaced by another** in both. **A count cannot see a replacement**, which is what it is not
 for; the two commands answer the two questions and neither answers both.
 
-**Both classes are live at `998d5ad` and each refutes one of the readings this replaces.** Four
+**Both classes are live at `5dc5878` and each refutes one of the readings this replaces.** Four
 rows are reflows — three in `Oka/AnalyticSpace/FiniteEtaleOver.lean` and one in
 `Oka/AnalyticSpace/LocalIso.lean`, all four reading 2026-09-08, all four blamed to `f1e0d83`,
 which re-touched their lines while adding nine and one records of its own to those two files;
@@ -1380,7 +1380,7 @@ push writing two dates for one landing.
 in the other register.** `954b116`'s self-date in `OkaTest/Axioms/Morphisms.lean` read 2026-09-13
 and was **corrected** to 2026-09-14, by the push that landed the self-date rule, whose clause beside
 it says in terms *The cause is a merge that crossed midnight*, by ninety-five minutes. **The four
-`until` records the same push wrote still read 2026-09-13 at `998d5ad`** — one push, one landing,
+`until` records the same push wrote still read 2026-09-13 at `5dc5878`** — one push, one landing,
 two registers and two answers — and this section brings them level rather than reopening that one.
 
 **The price is stated here rather than discovered.** A branch that sits over a midnight owes every
@@ -1405,9 +1405,9 @@ always-wrong column is empty, and the fifteen the line-wise register cannot see 
 `scripts/guard_coverage.py`'s docstring gives the standing reason against adding a check somebody
 will want to switch off.
 
-**The boundary was drawn by sweeping, and this is the sweep.** At `998d5ad`, the base this
-paragraph is written against, the unwrapped register returns **194** rows — the reach test, since
-the unwrapped census returns 194 there too — **179 matching, 15 behind, 0 ahead**. All fifteen,
+**The boundary was drawn by sweeping, and this is the sweep.** At `5dc5878`, the base this
+paragraph is written against, the unwrapped register returns **212** rows — the reach test, since
+the unwrapped census returns 212 there too — **197 matching, 15 behind, 0 ahead**. All fifteen,
 classified by the discriminator above:
 
 | row | prose / blame | cause | this push |
@@ -1440,16 +1440,16 @@ paragraph below on repaired records is about.
 **The six crossings are two pushes, and the population they sit in is six pushes.** `d2ae161`
 landed at `2026-09-08T00:10:27Z`, ten minutes past midnight, and wrote two records reading
 2026-09-07; `954b116` landed at `2026-09-14T01:34:48Z`, ninety-five minutes past, and wrote four
-reading 2026-09-13. **The run behind that is over every commit in `998d5ad`'s history**, taking
+reading 2026-09-13. **The run behind that is over every commit in `5dc5878`'s history**, taking
 the records each adds from its own diff flattened, since one of `d2ae161`'s two wraps and a
-line-wise diff scan finds one of them: **58** pushes have added an `until` record, **six** of them
+line-wise diff scan finds one of them: **59** pushes have added an `until` record, **six** of them
 landing in the first four hours of a UTC day, and **four of those six dated to the day they
 landed** — `8bfb421` at `02:37:11Z` and `5a525bc` at `03:22:34Z` with two records each,
 `da72056` at `01:10:48Z` with one, and `7577386` at `00:55:21Z` with two. **So the practice this
 rule writes down is already four sixths of the practice**, and the two exceptions are the two the
 sweep above found.
 
-**The same run taken line-wise returns 54 and not 58, and the gap is named here because this
+**The same run taken line-wise returns 55 and not 59, and the gap is named here because this
 paragraph is where a reader would otherwise carry the wrong one across.** The four pushes only the
 flattened run sees each write **only** a wrapped record, so a line-wise diff scan misses them
 whole rather than undercounting them: `0c370e5`, `13203b0`, `6b8d5cb` and `dd7e70e`. **Neither
@@ -1472,10 +1472,10 @@ two sections now name one push for one reason.
 
 **The repairs do not empty the `behind` bucket and are not meant to.** A repaired numeral re-touches
 its line, so blame reports this push and the row stays `behind` under the second cause, and
-**every published column is the same on both sides of this push**: the censuses are **174** records
-in 55 files line-wise and **194** in 59 unwrapped at `998d5ad` and at the commit that adds this
-paragraph alike, the line-wise register is **161 / 13 / 0** at both and the unwrapped one
-**179 / 15 / 0** at both. **So this push is invisible to every bucket count either register
+**every published column is the same on both sides of this push**: the censuses are **191** records
+in 57 files line-wise and **212** in 60 unwrapped at `5dc5878` and at the commit that adds this
+paragraph alike, the line-wise register is **178 / 13 / 0** at both and the unwrapped one
+**197 / 15 / 0** at both. **So this push is invisible to every bucket count either register
 publishes and visible only row by row**, which is the argument for classifying rows at all: what
 changed is that **every one of the fifteen is now one of the two benign causes** — eight that were
 benign already and seven this push moved there. **That is the check this rule is worth having
