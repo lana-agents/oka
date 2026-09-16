@@ -182,22 +182,36 @@ on it.
 
 ## What the third instance buys, probed at both ends
 
-`Mathlib/CategoryTheory/Galois/Basic.lean` declares three instances and one definition under
-`[GaloisCategory C]`. **All three instances are synthesizable at this category with the
-third instance below and none of the three is without it**, which is six `#synth` runs — three at
-the commit that adds this file, where the instance is not yet declared, and three at the commit
-that adds it:
+`Mathlib/CategoryTheory/Galois/Basic.lean` declares **four** instances and one definition under
+`[GaloisCategory C]`, and the count is one a reader takes by reading from the `variable` line at
+`Mathlib/CategoryTheory/Galois/Basic.lean:426` — which binds
+`(C : Type u₁) [Category.{u₂, u₁} C] [GaloisCategory C]` — down to the `end PreGaloisCategory` at
+`:457`, and not by reading the declarations one already knew about. **The `variable {C}` at `:436`
+re-binds the binder style of `C` and not the class**, so the three declarations between it and
+`:457` are under the hypothesis, and so is the one at `:433`. **All four instances are
+synthesizable at this category with the third instance below and none of the four is without it**,
+which is eight `#synth` runs —
+four at `642ae9b`, the commit this push is cut from and where the instance is not yet declared, and
+four at the commit that adds it:
 
 * `CategoryTheory.Limits.MonoCoprod` at the category itself, which asks nothing of any object;
-* `Finite (A ⟶ Y)` and `Finite (Aut A)` for an `A` with `[CategoryTheory.IsConnected A]`.
+* `Finite (A ⟶ Y)` and `Finite (Aut A)` for an `A` with
+  `[CategoryTheory.PreGaloisCategory.IsConnected A]` — **and not with
+  `[CategoryTheory.IsConnected A]`**, which is a class on *categories* and does not elaborate at an
+  object of one;
+* `CategoryTheory.PreGaloisCategory.FiberFunctor` at
+  `CategoryTheory.PreGaloisCategory.GaloisCategory.getFiberFunctor`, the anonymous instance at
+  `Mathlib/CategoryTheory/Galois/Basic.lean:433`, which stands between the definition and that
+  `variable {C}` line and is a declaration of its own and not part of the definition's paragraph.
 
 `CategoryTheory.PreGaloisCategory.GaloisCategory.getFiberFunctor` is the definition, and it
-elaborates here. **The control file carries an `example` for each of the three and a probe
-recording that they are still not found without `[Nonempty X]`**, which is the one hypothesis all
-three run through. **This is a larger purchase than the one this file records for the second
+elaborates here. **The control file carries an `example` for each of the four and a probe at one of
+them — `CategoryTheory.Limits.MonoCoprod` — recording that it is still not found without
+`[Nonempty X]`**, which is the one hypothesis all four run through; the other three have no failing
+counterpart there. **This is a larger purchase than the one this file records for the second
 instance**, which is `CategoryTheory.Functor.ReflectsMonomorphisms` at the fibre functor, and it is
 the reason to state the class at all: **no statement of this repository at the commit that adds
-this instance consumes the class**, and these three are what a consumer of it would get.
+this instance consumes the class**, and these four are what a consumer of it would get.
 
 ## Main results
 
@@ -234,8 +248,15 @@ this instance consumes the class**, and these three are what a consumer of it wo
   this push does not touch it.
 * **One thing the class does buy, and it is named rather than gestured at**:
   `(…SeparatedFiniteEtaleOver.fintypeFiberFunctor x).ReflectsMonomorphisms` is not synthesizable at
-  the base **even in a file that imports `Mathlib.CategoryTheory.Galois.Basic` directly**, and is
-  synthesizable here. The control file carries both halves of that.
+  `386d6ab` **even in a file that imports `Mathlib.CategoryTheory.Galois.Basic` directly**, and is
+  synthesizable here. The control file carries both halves of that. **That clause read *at the
+  base* until this push**, which is the second push to this file and so the first at which *the
+  base* names two commits: `386d6ab` for the push that wrote the clause and `642ae9b` for this one,
+  and the sentence is true at `386d6ab` and **false at `642ae9b`** — the `FiberFunctor` instance
+  the derivation runs through is declared at `6b295aa`, which is between them. **This is a referent
+  taken out from under a true sentence and not a clause that stopped being true**, which is the
+  case `README.md`'s section on the dated record names as neither of its two instruments, so no
+  dated record is owed and the pin is the whole of the repair.
 * **Nothing about the Riemann Existence Theorem and nothing about an equivalence.** The two
   instances are the statement that this category with this functor is a Galois category; the
   comparison functor is taxis #1113 and the equivalence is taxis #1115, and neither is narrowed by
