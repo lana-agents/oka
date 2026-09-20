@@ -51,7 +51,7 @@ nothing needs it.
 repository's practice, and the repair there is to the prescription alone — *not here* is still true
 of that file.
 
-## The three steps, and only one of them is about coproducts
+## The three steps, and only one of them takes a coproduct apart
 
 1. **The index type is non-empty.** `…SeparatedFiniteEtaleOver.isInitialCoprodId` below says a
    coproduct over an empty index type is initial — `CategoryTheory.Limits.IsInitial.ofUniqueHom` at
@@ -67,11 +67,19 @@ of that file.
 3. **One coprojection is enough.** Composed with the given isomorphism it is a mono into `A`, and
    (2) is the hypothesis `…IsConnected.noTrivialComponent` asks of its source.
 
-**Step 1 is where the finiteness of the index type is used and it is used by instance search and
-not by a proof step**: `CategoryTheory.Limits.MonoCoprod.mono_ι` asks for the coproduct of the
-family restricted to the complement of a point of the index type, which exists here because that
-complement is finite and a `CategoryTheory.GaloisCategory` has finite coproducts. Nothing below
-mentions that coproduct.
+**Step 3 is where the finiteness of the index type is spent inside the proof, and it is spent by
+instance search and not by a proof step**: `CategoryTheory.Limits.MonoCoprod.mono_ι` asks for the
+coproduct of the family restricted to the complement of a point of the index type, which exists
+here because that complement is finite and a `CategoryTheory.GaloisCategory` has finite coproducts.
+Nothing below mentions that coproduct. **Step 1 spends no finiteness at all** —
+`…SeparatedFiniteEtaleOver.isInitialCoprodId` binds `[IsEmpty ι]` and nothing else — and step 2 has
+no index type in it.
+
+**`[Finite ι]` is also what makes the statement it appears in a statement**, before any of the
+three runs: the `∐` of `…SeparatedFiniteEtaleOver.nonempty_iso_id_of_iso_coprod_id` needs
+`CategoryTheory.Limits.HasCoproduct` of the family, which a `CategoryTheory.GaloisCategory` gives
+for a finite index type. **So the hypothesis does not come off**, and a reader asking whether it
+can should read this paragraph and not the numbered list, in which it appears nowhere.
 
 ## What the import costs, measured in the environment and not by a scan
 
@@ -106,8 +114,8 @@ is advertised under `## Main definitions`, which that script does not read, so i
 *abbreviated citations, not counted* at **30, four of them dotted**, and *backticked tokens that
 resolve to nothing* at **719** with `--env-dump` given at both ends.
 
-`scripts/check_docstring_names.py` goes **18097 → 18148** backticked names (**4406 → 4419**
-distinct) and **350 → 381** elided citations (**164 → 170** distinct), with **0** unresolved at
+`scripts/check_docstring_names.py` goes **18097 → 18150** backticked names (**4406 → 4419**
+distinct) and **350 → 383** elided citations (**164 → 170** distinct), with **0** unresolved at
 both ends, **6** resolving under more than one namespace at both, and dotless **240 (120) → 244
 (124)**.
 
