@@ -178,13 +178,17 @@ ring operation on global sections, or a lemma of `Oka/AnalyticSpace/CutOutProduc
   every cospan with a leg in the class, including cospans of spaces that are not local models, and
   nothing below carries a class across the square built here.
 
-  **This bullet read *nothing below carries a class across a square* until 2026-09-20**, and the
-  narrower sentence above is what is left of it:
-  `ComplexAnalytic.AnalyticSpace.zeroLocusSubspaceHom` carries
-  `ComplexAnalytic.AnalyticSpace.IsFinite` across the square of a zero locus and its pulled-back
-  family, which is **not** the fibre-product square this file builds and is not a
-  statement about a limit at all. The class quantifier is untouched: one class across one shape of
-  square is not `IsStableUnderBaseChange` for any class.
+  **The sentence above is unchanged by the push that adds
+  `ComplexAnalytic.AnalyticSpace.isFinite_zeroLocusSubspaceHom` below, and this paragraph is why it
+  did not have to change.** That theorem *does* carry a class across a square: it carries
+  `ComplexAnalytic.AnalyticSpace.IsFinite` across
+  `ComplexAnalytic.AnalyticSpace.zeroLocusSubspaceHom_comp`, the square of a zero locus and the zero
+  locus of its pulled-back family. But that is not *the square built here* — the square built here
+  is the fibre-product one, and nothing below carries a class across **that**, which is what the
+  sentence says and said before. The square it does carry one across is a commuting square and not
+  a limit: nothing below identifies its source with a fibre product. **So nothing in this bullet is
+  retired by that push**, and the class quantifier is untouched either way, one class across one
+  shape of commuting square not being `IsStableUnderBaseChange` for any class.
 * **Independence of the presentations.** `ComplexAnalytic.AnalyticSpace.fibreProdCutOut` is indexed
   by the three cutting families and the two morphisms, exactly as
   `ComplexAnalytic.AnalyticSpace.prodCutOut` is indexed by two families; two presentations of the
