@@ -1095,12 +1095,28 @@ nothing struck. **One of the six was false**:
 `IsCoveringMap.comp_homeomorph_iff` is `IsCoveringMap (f ∘ g) ↔ IsCoveringMap f` at a homeomorphism
 `g` and its forward direction cancels one — and the clause offered in support named
 `comp_homeomorph` and `homeomorph_comp` and not the two `_iff` lemmas standing beside them in the
-same namespace. **The remaining 25 of the 31 are untouched**, and the nearest of them is
-named rather than left to be found: `Oka/Analysis/Complex/FundamentalGroup.lean` makes the same
-claim about `IsCoveringMap` and **stands**, because its bounded clause —
-*`Mathlib/Topology/Covering/Basic.lean` has only conjugation by a homeomorphism* — is form (c) and
-is true where the enumeration next door was short by two. That contrast is this object's argument
-for (c), and it is why the second site is named here instead of being swept in silence.
+same namespace. **The *at all* makes it false a second way**, since
+`IsCoveringMap.eq_of_comp_eq` and its three companions cancel the covering map out of an equality
+of composites at merely continuous companions.
+
+**The remaining 25 of the 31 are untouched**, and **the two nearest are named rather than left to
+be found**. `Oka/Analysis/Complex/FundamentalGroup.lean` and
+`Oka/AnalyticSpace/FiniteEtaleOver.lean` each say that Mathlib has no composition or cancellation
+lemma for `IsCoveringMap`, in a clause
+bounded to one file — *`Mathlib/Topology/Covering/Basic.lean` has only conjugation by a
+homeomorphism* — and **both stand, on a reading this push pins instead of assuming**: a composition
+or cancellation lemma *for `IsCoveringMap`* is one that writes `IsCoveringMap` of a composite, and
+the four in that file that do are the two builders and their two `_iff` forms, every one of them at
+a homeomorphism. **Under a wider reading of *cancellation* neither would stand**, because those
+four `_of_comp` lemmas cancel `f` out of an equality of composites; they write `IsCoveringMap` only
+as a hypothesis on `f` alone and conclude that two companions agree, which is what puts them
+outside the bounded reading and what makes saying so worth a clause. That is this object's own
+first question — *can the thing being denied be spelled another way?* — asked of a phrase rather
+than of a token, and the swept paragraph in `Oka/Topology/Covering/Basic.lean` now carries both
+halves of the split so that neither site rests on a reading nobody wrote down. **That is what form
+(c) buys**: each of the two clauses is settled by reading one named file, where the enumeration
+next door was not, and it is why the two sites are named here instead of being left in the 25 in
+silence.
 
 **Two figures that sweep leaves behind, and both are about the instrument rather than about the
 file.** `Oka/Topology/Covering/Basic.lean` carries **19** sentences naming Mathlib at `a414f61`
@@ -1116,8 +1132,8 @@ reports a rise should first check whether it is reading its own records.
 
 **This block is matched by the scan it publishes, as the fifth object's is matched by its own.**
 The **34 / 25** above is `a414f61`'s and does not include what the push writing this adds; at
-`a414f61` with that push applied the scan returns **52** over **27** files, and the whole of the
-rise is in three files — `OkaTest/Axioms.lean` **0 → 8**, this block's quotations of the sentences
+`a414f61` with that push applied the scan returns **53** over **27** files, and the whole of the
+rise is in three files — `OkaTest/Axioms.lean` **0 → 9**, this block's quotations of the sentences
 it decides; `scripts/mathlib_absence.py` **0 → 8**, its docstring's worked examples together with
 its self-test fixtures; and `Oka/Topology/Covering/Basic.lean` **6 → 8**. **No other file's count
 moves.** A later sweep should re-derive its own figure at its own head, and should expect to have
