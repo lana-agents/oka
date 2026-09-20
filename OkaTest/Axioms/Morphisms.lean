@@ -10697,6 +10697,17 @@ every tracked `.lean`, `.md`, `.py` and `.sh` of the tree returns **114** matche
 sentences in **55** files at `ae732d9`, of which the 35 above are three files', and the other 71
 are unopened — a bound and not a clean bill.
 
+**The two sentences before this one stood until 2026-09-20**, when
+`Oka/AnalyticSpace/SimplyConnectedPoint.lean` supplied that base and the section directly below
+this one guards it: the fundamental group of `ℂ⁰` is trivial, so the first of the four names above
+has a consumer that is neither a declaration nor a guard, and the criterion has a base to be read
+at. **The transports still carry nothing, and now for a different reason**: at a base whose
+underlying space has at most one point every point is every other point, so
+`…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_congr` there is `Subsingleton.elim` and
+carries nothing that was not already at hand. **The sentence opening this paragraph is pinned to
+the commit this section was written at and is unaffected**; what is dated here is the two
+present-tense sentences that closed it.
+
 **The routing.** The topic table at the head of `OkaTest/Axioms.lean` routes *morphisms of analytic
 spaces* here and these are statements about the covers of a base, which is where the four sections
 above this one are; the group of `OkaTest/Axioms/Analysis.lean`'s row — *`π₁(ℂ ∖ {0})`* — is
@@ -10913,3 +10924,138 @@ info: 'ComplexAnalytic.AnalyticSpace.isLocalIso_iff_isOpenCover_source' depends 
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.isLocalIso_iff_isOpenCover_source
+
+/-! ### The first base whose fundamental group is trivial, and it is a point
+
+`Oka/AnalyticSpace/SimplyConnectedPoint.lean`, the whole of it. **Nine names**: the fibre-level
+half of the section two above, `…SeparatedFiniteEtaleOver.nonempty_iso_id_of_subsingleton_fiber`;
+the finiteness and the discreteness that a base with at most one point buys,
+`…SeparatedFiniteEtaleOver.finite_left_of_subsingleton_base` and
+`…SeparatedFiniteEtaleOver.subsingleton_left_of_subsingleton_base`; the two they compose to,
+`…SeparatedFiniteEtaleOver.nonempty_iso_id_of_subsingleton_base` and
+`…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup`; the point of `ℂ⁰` and the instance
+saying it is the only one, `…AnalyticSpace.originZero` and
+`…AnalyticSpace.subsingleton_complexAffineSpace_zero`; and the two statements at that base,
+`…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_originZero` and
+`…SeparatedFiniteEtaleOver.exists_iso_coprod_id_originZero`.
+
+**This is the first consumer of the section directly above.** At the commit this section is written
+at, `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_of_iso_id` occurs in the
+comment-stripped code of **three** modules and **four** places — the module that declares it twice,
+this file once, and the new module once — against **two** modules and **three** places at
+`a414f61`, and the new occurrence is the only one in the tree that is neither a declaration nor a
+guard. `…SeparatedFiniteEtaleOver.exists_iso_coprod_id` moves the same way, **2 → 3** modules, and
+`…SeparatedFiniteEtaleOver.connectedSpace_of_isConnected` **3 → 4**. The population is every tracked
+`.lean` file under `Oka/` and `OkaTest/` with the two root modules, the stripper is
+`scripts/import_cost.py`'s `strip_comments`, and the token is not flanked by a letter, a digit or
+`_`. **The paragraph above this one said the transports have nothing to carry and that the base the
+criterion is for is one this repository does not have**; that is what the new module supplies, and
+the dated record there is the same push as this section.
+
+**What the telescopes bind, by `#check` over the nine and not by reading the file.** **Exactly one
+of the nine binds `[T2Space]` and `[PreconnectedSpace]`** — the first, which is the only statement
+of that module at a base that is not asked to have at most one point — and it binds **no**
+`[Nonempty]`, which it `omit`s. **Four bind `[Subsingleton (X : Type u)]` and none of those four
+binds any of the three**, which is the module's own finding: over such a base all three are free
+and are supplied inline. **Three bind `[CategoryTheory.PreGaloisCategory.IsConnected A]`**, the
+exceptions among the first five being `…SeparatedFiniteEtaleOver.finite_left_of_subsingleton_base`,
+which is true of every cover including the empty one, and
+`…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup`, which quantifies over covers inside its
+proof and not in its telescope. **Exactly one binds
+`[Subsingleton ((…SeparatedFiniteEtaleOver.fintypeFiberFunctor x).obj A)]`**, the first. **Not one
+of the nine binds `[Subsingleton (…SeparatedFiniteEtaleOver.fundamentalGroup x)]`**, and two of them
+*conclude* it — which is the difference from the section two above, where three of four bind it as a
+hypothesis. **Five take a point of the base explicitly and the last four take none**, the base being
+fixed and its point a term.
+
+**Seven of the nine are theorems, one is a `def` and one is an `instance`.**
+`…AnalyticSpace.originZero` is the `def` and is the only data here;
+`…AnalyticSpace.subsingleton_complexAffineSpace_zero` is the `instance` and is the only one that
+module declares. **None of the nine is `noncomputable`**, which is the other difference from the
+section two above, whose `…SeparatedFiniteEtaleOver.isTerminalFintypeFiber` is.
+
+**All nine lists below are the standard three**, the `def` included: its own term is a constant
+function, and what reaches choice is the type it inhabits, which is built through
+`ComplexAnalytic.AnalyticSpace.complexAffineSpace`.
+
+**What consumes them, outside their own module: nothing.** The two statements at that base are
+consumed by nothing, and the seven before them by nothing outside that file — the same position
+every name of the two sections above this one is in, and it is said here rather than left to be
+discovered.
+
+**The routing is the one the two sections above take.** The topic table at the head of
+`OkaTest/Axioms.lean` routes *morphisms of analytic spaces* here and these are statements about the
+covers of a base; `ComplexAnalytic.AnalyticSpace.complexAffineSpace` appearing in two of the nine
+does not move them, the space being the base and not the subject. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.nonempty_iso_id_of_subsingleton_fiber'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.nonempty_iso_id_of_subsingleton_fiber
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.finite_left_of_subsingleton_base'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.finite_left_of_subsingleton_base
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.subsingleton_left_of_subsingleton_base'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.subsingleton_left_of_subsingleton_base
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.nonempty_iso_id_of_subsingleton_base'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.nonempty_iso_id_of_subsingleton_base
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.originZero'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  ComplexAnalytic.AnalyticSpace.originZero
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.subsingleton_complexAffineSpace_zero'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  ComplexAnalytic.AnalyticSpace.subsingleton_complexAffineSpace_zero
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_originZero'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_originZero
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.exists_iso_coprod_id_originZero'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.exists_iso_coprod_id_originZero

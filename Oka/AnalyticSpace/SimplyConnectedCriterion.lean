@@ -156,12 +156,17 @@ ends of this push.
 
 ## What is not here
 
-* **No base is exhibited whose fundamental group is trivial, and none is claimed to exist.** That
-  is the first bullet of `Oka/AnalyticSpace/SimplyConnected.lean`'s own `## What is not here`, said
-  there of that file, and it is still true of the tree. **What this file changes is the shape of
-  the question and not its answer**: to exhibit one it is now enough to classify the connected
-  covers of a base, a statement in which
-  neither the group nor a point of the base occurs. Nothing below does that for any base.
+* **No base is exhibited in this file whose fundamental group is trivial.** That is the first
+  bullet of `Oka/AnalyticSpace/SimplyConnected.lean`'s own `## What is not here`, said there of
+  that file and true here of this one. **What this file changes is the shape of the question and
+  not its answer**: to exhibit one it is now enough to classify the connected covers of a base, a
+  statement in which neither the group nor a point of the base occurs. Nothing below does that for
+  any base. **The bullet ended *and it is still true of the tree* until 2026-09-20**, when
+  `Oka/AnalyticSpace/SimplyConnectedPoint.lean` did exactly what the sentence after it predicts:
+  it classifies the connected covers of a base whose underlying space has at most one point —
+  each is the base over itself, by a finiteness and a discreteness and no group — and then reads
+  `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_of_iso_id` below at it. **That base is
+  a point**, and the tree still exhibits none of positive dimension.
 * **The coproduct form of the criterion is not here.**
   `…SeparatedFiniteEtaleOver.exists_iso_coprod_id` says a trivial group makes every cover a finite
   coproduct of copies of the base over itself; the converse of *that* — from every cover being such

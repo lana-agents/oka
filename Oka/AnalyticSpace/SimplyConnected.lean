@@ -112,11 +112,21 @@ dotless at both.
 
 ## What is not here
 
-* **No base is exhibited whose fundamental group is trivial, and none is claimed to exist.** The
-  hypothesis of the three results above is satisfied by nothing in this repository. It is not
-  vacuous in the mathematics and it is unwitnessed here, and those are different sentences: what
-  the results say is that the hypothesis is *strong*, since over a base that meets it the category
-  has one isomorphism class of connected object.
+* **No base is exhibited in this file whose fundamental group is trivial.** The hypothesis of the
+  three results above is discharged by nothing below and by no object this file names; what the
+  results say is that the hypothesis is *strong*, since over a base that meets it the category has
+  one isomorphism class of connected object. **This bullet read *No base is exhibited whose
+  fundamental group is trivial, and none is claimed to exist. The hypothesis of the three results
+  above is satisfied by nothing in this repository. It is not vacuous in the mathematics and it is
+  unwitnessed here, and those are different sentences* until 2026-09-20**, when
+  `Oka/AnalyticSpace/SimplyConnectedPoint.lean` exhibited one: its
+  `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_originZero` says the fundamental group
+  of `ℂ⁰` is trivial, and its
+  `…SeparatedFiniteEtaleOver.exists_iso_coprod_id_originZero` is the third result above applied to
+  that base. **The base exhibited there is a point**, so what stopped being true is the clause
+  about the repository and not the mathematics of the bullet: no base of positive dimension is
+  known here to meet the hypothesis, and that module's own `## What is not here` says so at
+  length.
 * **The converse direction is the one this repository can witness, and it is not in this file.**
   A cover that is not isomorphic to the base over itself refutes the hypothesis, and
   `OkaTest/FundamentalGroup.lean` is where that is done, at the punctured line: the witness needs
