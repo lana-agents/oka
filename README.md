@@ -1079,6 +1079,35 @@ once by the script's own first draft — and there were 472. It carries a tripwi
 case, comparing the number of `#print axioms` commands against the number of names it managed to
 read, so that a layout it cannot parse is reported rather than silently dropped.
 
+A fourth tool, and also a tool and not a gate, is `python3 scripts/module_graph.py`, which
+answers a dependency question about **this repository's own** import graph:
+
+```sh
+python3 scripts/module_graph.py Oka/A.lean Oka/B.lean       # upstream, downstream or incomparable
+python3 scripts/module_graph.py --downstream Oka/A.lean --word --grep Token
+python3 scripts/module_graph.py --importers Oka/A.lean
+python3 scripts/module_graph.py --self-test
+```
+
+`OkaTest/Axioms.lean`'s sixth object says that a clause asserting a dependency relation between
+two named files has to be **measured** and names a graph walk as the instrument; until this script
+that walk was written from scratch in the session that needed it and thrown away afterwards, which
+is the same history `import_cost.py`'s docstring records of the Mathlib-side one. **The two are
+different graphs and the confusion between them is a recorded failure mode**: `import_cost.py`
+prices a mirror file against its Mathlib target, `module_graph.py` says which of two modules of
+this repository is above the other. It imports `import_cost.py`'s `IMPORT` and `strip_comments`
+rather than reimplementing them, so the two cannot disagree about what an `import` line is.
+
+**Both aggregators conduct and neither is tallied.** Every file under `OkaTest/` imports `Oka`,
+so deleting the roots from the graph would make no module under `OkaTest/` downstream of any
+module under `Oka/`; the walk therefore runs over the whole graph and subtracts the two roots from
+what it reports. `--include-aggregators` puts them back and adds 2 to a subject under `Oka/`, 1 to
+one under `OkaTest/`, and nothing else.
+
+**`--grep` is a substring test and `--word` is a token test, and which one a figure is taken with
+is part of the figure.** `OkaTest/Axioms.lean` records that `IsProper` occurs in the code of no
+module here; `--grep IsProper` returns three and every one of them is `IsProperMap`.
+
 Nothing checks the figures in docstrings against the script, and nothing can: they are English
 prose, phrased twenty different ways. This is for an author to run before writing one and a
 reviewer to run before believing one.
