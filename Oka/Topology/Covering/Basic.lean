@@ -113,12 +113,20 @@ figure whose counting rule is unstated is not reproducible**. The namespace is c
 `grep -cE '^(@\[[^]]*\] *)?(private |protected |noncomputable )*(theorem|lemma|def|alias)'`
 
 whose alternation is the declaration keywords that file uses and whose modifiers are the ones it
-writes before them. **The attribute prefix is load-bearing**: a count anchored on `^theorem`
-cannot see a `@[simp] theorem …` declared on one line, and that file carries exactly four of
-those, two in each of the two namespaces counted here.
+writes before them. **Both optional branches of it are load-bearing, and which one carries the
+figure differs by namespace**, which is why the pattern is printed whole rather than simplified.
+Over the three namespaces this docstring counts it gives **18 / 12 / 18** at `IsEvenlyCovered`
+(`:44–193`), `IsCoveringMapOn` (`:200–283`) and `IsCoveringMap` (`:308–408`); dropping the
+attribute branch gives **16 / 10 / 18**, and dropping the modifiers with it gives **12 / 7 / 14**.
+So what a count anchored on `^theorem` loses first is the one-line `@[simp] theorem`, of which that
+file carries exactly four — **two in `IsEvenlyCovered` (`:176`, `:188`), two in `IsCoveringMapOn`
+(`:269`, `:278`), and none at all in `IsCoveringMap`**, where the eighteen below is unchanged by
+dropping that branch and it is the `protected ` modifier that buys the four instead
+(`IsCoveringMap.continuous` at `:336`, `IsCoveringMap.isLocalHomeomorph` at `:339`,
+`IsCoveringMap.isOpenMap` at `:342` and `IsCoveringMap.isSeparatedMap` at `:348`).
 
-That gives **eighteen** declarations in `namespace IsCoveringMap` (`:308–408`), of which **eight**
-write a composite and they are two different things:
+Of those **eighteen** in `namespace IsCoveringMap`, **eight** write a composite, and they are two
+different things:
 
 * **Four conclude `IsCoveringMap` of a composite, and every one of the four is at a
   homeomorphism.** `IsCoveringMap.comp_homeomorph` (`:388`) and `IsCoveringMap.homeomorph_comp`
