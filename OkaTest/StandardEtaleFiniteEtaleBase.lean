@@ -50,12 +50,22 @@ completely:
   `ComplexAnalytic.hypersurfaceCommonZeroImage_sqSubOneTwoPair` below makes it **empty** — so
   every `V` is admissible, including `⊤`.
 
-**So the pair at which the local-isomorphism witness is not an isomorphism is also the pair at
-which the restriction is removable**, and that is why there is a `k ≥ 1` instance of the class
-rather than a `k ≥ 1` instance of a vacuous statement. The sibling file's reason for having two
-witnesses — that `ComplexAnalytic.sqSubOneRingEquiv` makes `ComplexAnalytic.sqSubOnePair`'s
-algebra the base — is a statement about the algebra; this is a second and independent reason,
-about the bad set, and it points the same way.
+**So the pair whose algebra is not the base is also the pair at which the restriction is
+removable.** The sibling file's reason for having two witnesses — that
+`ComplexAnalytic.sqSubOneRingEquiv` makes `ComplexAnalytic.sqSubOnePair`'s algebra the base — is a
+statement about the algebra; this is a second and independent reason, about the bad set, and it
+points the same way.
+
+**What keeps the instance below from being a `k ≥ 1` instance of a vacuous statement is the bad
+set and not the algebra**: it is empty, so `V = ⊤` is admissible and the restricted morphism is
+the whole of the unrestricted one, and the two non-emptiness witnesses cited below —
+`ComplexAnalytic.nonempty_analytification_etalePresentation_node` and
+`ComplexAnalytic.nonempty_analytification_nodeG` — say the source and the base have a point. At the
+other pair the bad set is all of `ℂ^n`, the only admissible `V` is empty, and an instance there
+would be a statement about empty spaces. **Whether either cover is an isomorphism is decided
+nowhere in this repository** — `OkaTest/StandardEtaleLocalIsoBase.lean` says so of its own two
+witnesses and `## What is not checked here` below says it again of this one — and no sentence
+here rests on it.
 
 ## Why the bad-set computation is here and not beside its mirror
 
@@ -86,8 +96,9 @@ neither is reproduced.
 restricts the source to the **preimage** of `V`, so a non-empty `V` does not by itself say the
 source of the restricted morphism is non-empty, and
 `ComplexAnalytic.nonempty_restrict_preimage_condGoodOpen` is what closes that at the `k = 0`
-witness. At `V = ⊤` the preimage is the whole source, and the second theorem below is about the
-unrestricted morphism in any case.
+witness. At `V = ⊤` the preimage is the whole source, and
+`ComplexAnalytic.isFiniteEtale_analytificationMap_etalePresHom_node` is about the unrestricted
+morphism in any case.
 
 ## Two elaboration facts, paid for once
 
@@ -158,8 +169,15 @@ exactly that purpose.
   `ComplexAnalytic.condPair` and `ComplexAnalytic.sqSubOnePair` are already unguarded under and
   the one `OkaTest/CondFiniteEtale.lean` states for its own contents.
 * **Nothing in `Oka/Analytification/Hausdorff.lean` is instantiated.** That file's covering-map and
-  Hausdorff corollaries are at `k = 0`; the theorems below would let the `k ≥ 1` counterparts be
-  stated, and stating them is a separate deliverable that this file does not start.
+  Hausdorff corollaries are at `k = 0` and are about the **composite to `ℂ^n`**; what the theorems
+  below would let be stated is the `k ≥ 1` counterpart **over `X^an`**, which is a different
+  morphism, and stating it is a separate deliverable that this file does not start. **The `ℂ^n`
+  composite at this very pair is not a local isomorphism** —
+  `ComplexAnalytic.not_isLocalIso_analytificationMap_etalePresHom_comp_node`
+  (`OkaTest/StandardEtaleNotLocalIso.lean`), at the same
+  `ComplexAnalytic.nodeEtaleF` and `ComplexAnalytic.nodeEtaleG` the instance below is at — so
+  nothing below is a step towards a `k ≥ 1` corollary of that shape and no reader should take it
+  for one.
 -/
 
 open MvPolynomial TopologicalSpace

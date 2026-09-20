@@ -174,11 +174,10 @@ the same declaration.
   `ComplexAnalytic.isFinite_restrictHom_analytificationMap_etalePresHom`
   (`Oka/Analytification/StandardEtaleFinitenessBase.lean`), and both of the files it named now
   carry dated records saying so instead. **The class is instantiated at
-  `ComplexAnalytic.sqSubOneTwoPair`, the first of the two pairs above, in
-  `OkaTest/StandardEtaleFiniteEtaleBase.lean`**, which imports this file. Unrestricted finiteness
-  quantified over pairs is still false, with the counterexample in
-  `Oka/Analytification/MonicHypersurface.lean`; what that instance turns on is that `g = 2`
-  inverts nothing, which is the one thing a reader should carry away from it.
+  `ComplexAnalytic.sqSubOneTwoPair` in `OkaTest/StandardEtaleFiniteEtaleBase.lean`**, which
+  imports this file. Unrestricted finiteness quantified over pairs is still false, with the
+  counterexample in `Oka/Analytification/MonicHypersurface.lean`; what that instance turns on is
+  that `g = 2` inverts nothing, which is the one thing a reader should carry away from it.
 * **No `#print axioms` guard.** `OkaTest/Axioms/` guards declarations of the `Oka` library;
   nothing below is one. `ComplexAnalytic.condPair` and `ComplexAnalytic.sqSubOnePair`, the two
   standard étale pairs this repository already has, are unguarded for the same reason.
