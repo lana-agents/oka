@@ -1434,6 +1434,27 @@ this one follows; the published check on the statements of a pullback square ret
 figures at both of that push's ends, **no name of the eight carrying** *isPullback* **or**
 *hasPullback*. **This clause and the section it names were added by one push**, 2026-09-20.
 
+**Appended after that one is the section that takes the step the one before it priced and did not
+take, and it is the first of this file whose guards are not all declarations of this
+repository's analytic side.**
+`### The pieces of the decomposition are the connected components of the total space`
+guards the six declarations of `Oka/AnalyticSpace/ConnectedComponents.lean`, which turns the
+categorical coproduct of `…SeparatedFiniteEtaleOver.exists_isConnected_decomposition` into a
+**homeomorphism** onto a disjoint union of spaces and concludes that the pieces are the connected
+components — together with the four mirror-tree topological statements those six consume, which
+are of no kind of the enumeration above and are routed here by `OkaTest/Axioms.lean`'s tail rule,
+*Guard one in the file of the analytic result that motivated it, under that result's heading*, as
+`IsSeparatedMap.t2Space` is. **Of the six, one is of the fourth kind** —
+`…SeparatedFiniteEtaleOver.homeoLeftOfIso`, which reads a topological consequence off
+`CategoryTheory.IsIso` exactly as the surjectivity in the section above does — **one is of the
+fifth**, `…SeparatedFiniteEtaleOver.finite_connectedComponents_left`, a statement about a
+topological property of a cover's total space and about no class of morphisms, **and the
+remaining four are of the sixth kind at that second category**. **No guard of the ten binds a
+point of the base**, and **four of the six bind neither base hypothesis while the other two bind
+all three**, `[Nonempty]` included — both `#check` runs over the names rather than readings of the
+file, and the four are the definitions, whose statements are about a coproduct and a disjoint
+union and ask nothing of the base.
+
 **Named rather than counted from the end**, which is the repair and not the description. **The
 sentence this replaces called them *the last two***; they stopped being that when two further
 sections were appended past them — and one of those two was written across two lines, so no
@@ -10226,3 +10247,138 @@ info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isPreconnected_of_
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isPreconnected_of_isConnected
+
+/-! ### The pieces of the decomposition are the connected components of the total space
+
+`Oka/AnalyticSpace/ConnectedComponents.lean`, the whole of it, **together with the four
+mirror-tree topological statements it consumes**. **Ten names, and six of them are this
+repository's analytic side**: the universe-crossing comparison of a coproduct with a disjoint
+union, `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.coprodIsoSigma`; an isomorphism of
+separated covers as a homeomorphism on total spaces,
+`…SeparatedFiniteEtaleOver.homeoLeftOfIso`; the two identifications of a total space with a
+`Sigma` type, `…SeparatedFiniteEtaleOver.sigmaHomeoLeft` and
+`…SeparatedFiniteEtaleOver.coprodHomeoLeft`; and the two theorems,
+`…SeparatedFiniteEtaleOver.exists_isConnected_homeomorph` and
+`…SeparatedFiniteEtaleOver.finite_connectedComponents_left`.
+
+**The other four are `connectedComponent_sigmaMk` (`Oka/Topology/Connected/Clopen.lean`) and
+`Homeomorph.image_connectedComponent`, `Homeomorph.connectedComponent_sigma` and
+`Homeomorph.finite_connectedComponents_of_sigma` (`Oka/Topology/Homeomorph/Lemmas.lean`)**, which
+name no analytic space and are about a bare family of topological spaces. `OkaTest/Axioms.lean`'s
+topic table has no row for them — its subject is neither a morphism of analytic spaces nor
+anything else it names — so they fall under the tail that file describes: *Guard one in the file
+of the analytic result that motivated it, under that result's heading*. **That is the same route
+`IsSeparatedMap.t2Space` takes**, three sections up, and the motivating result here is the second
+theorem of the six: a bijection carries no connected component, so the whole of the conclusion is
+carried by the two `Homeomorph` statements and the `Sigma` one under them.
+
+**What the routing of the six is, and it is not one kind.** The topic table routes *morphisms of
+analytic spaces* here, and the argument
+`### The covers separated over a Hausdorff base form a Galois category` gives is the argument for
+all six: each is about the category of covers separated over a fixed analytic space, or about an
+object or a morphism of it. Within the kinds this file's head description enumerates, **one is of
+the fourth** — `…SeparatedFiniteEtaleOver.homeoLeftOfIso` reads a topological consequence off
+`CategoryTheory.IsIso`, exactly as `…SeparatedFiniteEtaleOver.surjective_base_left_of_isIso` does
+one section up, and the two differ by the openness that the section above's own docstring says a
+bijection does not supply — **one is of the fifth**,
+`…SeparatedFiniteEtaleOver.finite_connectedComponents_left`, which is a statement about a
+topological property of a cover's total space and about no class of morphisms, beside
+`### Connectedness of the total space separates two covers of the same degree` — **and the
+remaining four are of the sixth kind at that second category**, being about objects of
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver` and the coproduct it has.
+
+**What the ten telescopes bind, by `#check` over the ten and not by reading the file.** **No name
+of the ten binds a point of the base.** **Four of the six analytic names bind neither base
+hypothesis** — the four definitions, whose statements are about a coproduct and a disjoint union
+and ask nothing of the base, and whose declarations carry an `omit` of both — **and the two
+theorems bind all three**, `[T2Space]`, `[PreconnectedSpace]` and `[Nonempty]` of the base: the
+third is inherited from
+`…SeparatedFiniteEtaleOver.exists_isConnected_decomposition`, which the module consumes, and
+neither theorem adds a hypothesis to it. **None of the four mirror-tree names binds an analytic
+space at all**, which is what makes them mirror-tree material and is the test `README.md` states.
+
+**Two of the ten index by `ULift`**, `…SeparatedFiniteEtaleOver.coprodHomeoLeft` in its statement
+and `…SeparatedFiniteEtaleOver.coprodIsoSigma` in its conclusion, and that is the universe
+crossing the section above priced as the expensive step of the three: the decomposition theorem's
+index type is in `Type` and `…SeparatedFiniteEtaleOver.sigma` takes one in `Type u`. **The two
+theorems quantify over a `Type u` index and not over that `ULift`**, which is what the crossing
+buys and is a `#check` over the two.
+
+**What the import costs, measured in the environment and not by a scan.** The module below adds
+three modules to `import Oka` and no Mathlib module: `Oka/AnalyticSpace/ConnectedComponents.lean`
+itself and the two mirror-tree files, whose imports are `Mathlib/Topology/Connected/Clopen.lean`
+and `Mathlib/Topology/Homeomorph/Lemmas.lean` — both already in the `Oka` closure. The module
+docstrings carry the figures and the set difference they are taken from.
+
+**Six is the whole of the module**, which is its row count in `scripts/DumpOkaDecls.lean`'s output
+and not a reading of the file: no equation lemma, no match lemma and no congruence lemma. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.coprodIsoSigma' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.coprodIsoSigma
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.homeoLeftOfIso' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.homeoLeftOfIso
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.sigmaHomeoLeft' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.sigmaHomeoLeft
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.coprodHomeoLeft' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.coprodHomeoLeft
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.exists_isConnected_homeomorph'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.exists_isConnected_homeomorph
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.finite_connectedComponents_left'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.finite_connectedComponents_left
+
+/--
+info: 'connectedComponent_sigmaMk' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms connectedComponent_sigmaMk
+
+/--
+info: 'Homeomorph.image_connectedComponent' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms Homeomorph.image_connectedComponent
+
+/--
+info: 'Homeomorph.connectedComponent_sigma' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms Homeomorph.connectedComponent_sigma
+
+/--
+info: 'Homeomorph.finite_connectedComponents_of_sigma' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms Homeomorph.finite_connectedComponents_of_sigma

@@ -39,6 +39,10 @@ are the same map. There is no analysis and no sheaf argument in it.
 - `ComplexAnalytic.AnalyticSpace.comapAlgMap_sigma`: **the disjoint union's `ℂ`-algebra structure
   pulls back to each member's own**, which is what says the object is the disjoint union and not
   an unrelated space with the right carrier.
+- `ComplexAnalytic.AnalyticSpace.sigmaHomeo`: **and its underlying space is the disjoint union of
+  the members' underlying spaces**, as a homeomorphism from the `Sigma` type —
+  `AlgebraicGeometry.LocallyRingedSpace.sigmaHomeo` read here, the carriers being the same type by
+  `ComplexAnalytic.AnalyticSpace.sigma_toLocallyRingedSpace`.
 - `ComplexAnalytic.isCLinearHom_sigmaDesc`: **a descent map out of a coproduct of locally ringed
   spaces is `ℂ`-linear as soon as its restrictions are**, with no agreement-on-overlaps
   hypothesis. Nothing in it is analytic, so it is stated for a family of locally ringed spaces.
@@ -260,6 +264,42 @@ def sigmaι (j : ι) : F j ⟶ sigma F where
 @[simp]
 lemma sigmaι_toLRSHom (j : ι) :
     (sigmaι F j).toLRSHom = Sigma.ι (fun i ↦ (F i).toLocallyRingedSpace) j := rfl
+
+/-- **The underlying space of a disjoint union of analytic spaces is the disjoint union of the
+underlying spaces**, as a homeomorphism from the `Sigma` type.
+
+`AlgebraicGeometry.LocallyRingedSpace.sigmaHomeo` at the members' underlying locally ringed
+spaces, and **there is nothing to transport**:
+`ComplexAnalytic.AnalyticSpace.sigma_toLocallyRingedSpace` is `rfl`, so the two carriers are the
+same type and not merely isomorphic ones. What this says
+that `ComplexAnalytic.AnalyticSpace.sigma`'s own docstring does not is that the *topology* is the
+disjoint-union topology as well as the carrier being the disjoint union of the carriers.
+
+**A bijection would not do for the consumer this is built for.**
+`Oka/AnalyticSpace/ConnectedComponents.lean` reads connected components off the pieces, and a
+continuous bijection carries neither components nor clopen sets; the openness half is exactly what
+`AlgebraicGeometry.LocallyRingedSpace.sigmaι_isOpenImmersion` supplies. -/
+def sigmaHomeo : (Σ i, (F i : Type u)) ≃ₜ (sigma F : Type u) :=
+  LocallyRingedSpace.sigmaHomeo fun i ↦ (F i).toLocallyRingedSpace
+
+/-- **The homeomorphism above is the inclusion of the member on each member.**
+
+**Not a `@[simp]` lemma, and the reason is a run of the `simpNF` linter rather than a
+preference**: `ComplexAnalytic.AnalyticSpace.sigma_toLocallyRingedSpace` is itself a simp lemma
+and rewrites the *type* of the right-hand side's ambient space, so the left-hand side here
+simplifies to the same term at the coproduct's spelling and is not in simp normal form. The
+analogous statement one level down,
+`AlgebraicGeometry.LocallyRingedSpace.sigmaHomeo_apply`, has no such neighbour and is a simp
+lemma there. -/
+lemma sigmaHomeo_apply (j : ι) (x : F j) :
+    sigmaHomeo F ⟨j, x⟩ = (sigmaι F j).toLRSHom.base x :=
+  rfl
+
+/-- **The image of a member under that homeomorphism is the range of its inclusion**, which is the
+form a statement about the pieces of the disjoint union consumes. -/
+lemma sigmaHomeo_image_range (j : ι) :
+    sigmaHomeo F '' Set.range (Sigma.mk j) = Set.range (sigmaι F j).toLRSHom.base :=
+  LocallyRingedSpace.sigmaHomeo_image_range _ j
 
 end AnalyticSpace
 

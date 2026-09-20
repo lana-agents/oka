@@ -561,7 +561,18 @@ still not a complete guard of it.** The sentence that stood here named `sigmaOpe
 unasserted ones and it is asserted below; what remains unasserted is what the file does not
 advertise — `exists_sigma_ι_base_eq`, `eq_of_sigmaι_base_eq`, `sigmaι_base_injective`,
 `disjoint_range_sigmaι` and the rest. `python3 scripts/guard_coverage.py --by-file` is what
-distinguishes the two, and it reports the advertised half only. -/
+distinguishes the two, and it reports the advertised half only.
+
+**Three guards were appended on 2026-09-20 and only the first of the three is advertised**:
+`AlgebraicGeometry.LocallyRingedSpace.sigmaHomeo`, which identifies that coproduct's underlying
+space with the `Sigma` type of the members' and is in that file's `## Main results`, together with
+its two unadvertised companions — the value of the homeomorphism on a member, which is `rfl`, and
+the image of a member's range under it, which is the form
+`Oka/AnalyticSpace/ConnectedComponents.lean` consumes. **So the sentence above stays exact and the
+count of unadvertised names guarded here goes up by two.** That file's own `## What is not here`
+had said such a homeomorphism was absent and would need a route through `TopCat.sigmaIsoSigma`;
+the declaration guarded here takes neither that route nor any part of it, and that paragraph now
+records the correction. -/
 
 /--
 info: 'AlgebraicGeometry.LocallyRingedSpace.isIso_stalkMap_of_comp' depends on axioms:
@@ -654,6 +665,27 @@ info: 'AlgebraicGeometry.LocallyRingedSpace.disjoint_opensRange_sigmaOpenCover' 
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms AlgebraicGeometry.LocallyRingedSpace.disjoint_opensRange_sigmaOpenCover
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.sigmaHomeo' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.sigmaHomeo
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.sigmaHomeo_apply' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.sigmaHomeo_apply
+
+/--
+info: 'AlgebraicGeometry.LocallyRingedSpace.sigmaHomeo_image_range' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms AlgebraicGeometry.LocallyRingedSpace.sigmaHomeo_image_range
 
 /-! ### The inverse image of a locally ringed space along a continuous map
 

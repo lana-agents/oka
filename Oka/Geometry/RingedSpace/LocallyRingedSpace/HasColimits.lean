@@ -76,6 +76,9 @@ fails to synthesise. Everything here is the transport across
   distinct members are disjoint**, so the index of a point of the coproduct is unique.
 - `AlgebraicGeometry.LocallyRingedSpace.sigmaι_base_eq_iff`: the two together — two points of the
   members have the same image exactly when they are the same point of the same member.
+- `AlgebraicGeometry.LocallyRingedSpace.sigmaHomeo`: **the underlying space of a coproduct is the
+  disjoint union of the underlying spaces of the members**, as a homeomorphism from the `Sigma`
+  type. It is the three results above and nothing further: a continuous open bijection.
 - `AlgebraicGeometry.LocallyRingedSpace.image_base_sigmaDesc`: **the image of a set under a
   descent map is the union of the images of its traces on the members**, which is the shape every
   statement in the section below is proved from.
@@ -116,6 +119,13 @@ universal property, and `AlgebraicGeometry.LocallyRingedSpace.eq_of_colimit_ι_b
 of its factorisations against each other. Nothing is inverted, so nothing has to be rewritten
 across `CategoryTheory.Discrete.natIsoFunctor`.
 
+**And the identification with the `Sigma` type is now here too, reached from the index map rather
+than from that chain.** `AlgebraicGeometry.LocallyRingedSpace.sigmaHomeo` is the homeomorphism,
+and it is built out of the three results the section above already proves — the open embedding,
+the injectivity-with-index and the covering — so the chain is not needed even for the statement
+it was said to be needed for. **The header's `## What is not here` said otherwise until
+2026-09-20**; the bullet there now records what it predicted and what it cost instead.
+
 ## What is not here
 
 **Nothing about a descent map being *injective*, *surjective* or an open map**, and no statement
@@ -124,9 +134,17 @@ finite étale morphism is built from, because those are what has a consumer; eac
 ones is a separate small argument from
 `AlgebraicGeometry.LocallyRingedSpace.fiberSigmaDescEquiv` or from the cover.
 
-**No analogue of `AlgebraicGeometry.sigmaMk`**: the index map built below is not shown to be part
-of a homeomorphism onto a `Sigma` type, only to exist. That statement is true and would need
-exactly the `TopCat.sigmaIsoSigma` chain described above; nothing in this repository asks for it.
+**The analogue of `AlgebraicGeometry.sigmaMk` is here, and it was not until 2026-09-20.** This
+paragraph read *the index map built below is not shown to be part of a homeomorphism onto a
+`Sigma` type, only to exist* — true when it was written, and it went on to say that such a
+statement *would need exactly the `TopCat.sigmaIsoSigma` chain described above*, which was
+**wrong**. `AlgebraicGeometry.LocallyRingedSpace.sigmaHomeo` is that homeomorphism, it names
+neither `TopCat.sigmaIsoSigma` nor `CategoryTheory.Discrete.natIsoFunctor`, and it is four lines
+over the three results the section above already had. What was actually missing was a consumer:
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.exists_isConnected_homeomorph`
+(`Oka/AnalyticSpace/ConnectedComponents.lean`) needs the connected components of a coproduct's
+space, and a bijection does not carry components — so it needs this and not
+`AlgebraicGeometry.LocallyRingedSpace.sigmaι_base_eq_iff`, which is what this one is built from.
 
 ## Implementation notes
 
@@ -351,6 +369,63 @@ theorem disjoint_opensRange_sigmaOpenCover {i j : ι} (h : i ≠ j) :
   rw [disjoint_iff, ← SetLike.coe_set_eq, TopologicalSpace.Opens.coe_inf,
     TopologicalSpace.Opens.coe_bot, OpenCover.coe_opensRange, OpenCover.coe_opensRange]
   exact Set.disjoint_iff_inter_eq_empty.mp (disjoint_range_sigmaι f h)
+
+/-- **The underlying space of a coproduct of locally ringed spaces is the disjoint union of the
+underlying spaces of the members**, as a homeomorphism from the `Sigma` type and not only as a
+bijection.
+
+**The three fields are the three facts above and nothing else.** Bijectivity is
+`AlgebraicGeometry.LocallyRingedSpace.sigmaι_base_eq_iff` for the injectivity — which is exactly
+the statement that a point of the coproduct determines *both* its index and its point of that
+member — and `AlgebraicGeometry.LocallyRingedSpace.exists_sigma_ι_base_eq` for the surjectivity;
+continuity and openness are `continuous_sigma` and `isOpenMap_sigma` at the two halves of
+`AlgebraicGeometry.LocallyRingedSpace.sigmaι_isOpenImmersion`'s open embedding. A continuous open
+bijection is a homeomorphism, which is `Equiv.toHomeomorphOfContinuousOpen`.
+
+**This is the analogue of `AlgebraicGeometry.sigmaMk` that this file's header records as absent,
+and the route the header names for it is not the route taken.** That paragraph says such a
+statement *would need exactly the `TopCat.sigmaIsoSigma` chain*, whose middle step it also records
+as not going through by `rw` or `simp` here. **That is false and this declaration is the
+refutation**: nothing below inverts a comparison isomorphism, transports along
+`CategoryTheory.Discrete.natIsoFunctor` or names `TopCat.sigmaIsoSigma`, because the index map the
+section above builds already carries the whole content — what was missing was a consumer, and
+`ComplexAnalytic.AnalyticSpace.sigmaHomeo` (`Oka/AnalyticSpace/Sigma.lean`) is now one.
+
+**The direction is from the `Sigma` type into the coproduct**, which is the direction the
+inclusions come in; a consumer wanting the other reads `.symm`.
+
+**This travels with the cost-0 group of the header's split and not with the one exception.** It
+adds no `import` line, and the two Mathlib files its proof reads outside the target —
+`Mathlib/Topology/Homeomorph/Defs.lean` for `Equiv.toHomeomorphOfContinuousOpen` and
+`Mathlib/Topology/Constructions.lean` for `continuous_sigma` and `isOpenMap_sigma` — are **both
+already in the target's closure of 1694**, each priced at **0** by
+`python3 scripts/import_cost.py --target
+Mathlib.Geometry.RingedSpace.LocallyRingedSpace.HasColimits`. So the header's *all of it but one
+declaration at cost 0* stays exact with this one added. -/
+noncomputable def sigmaHomeo : (Σ i, (f i : Type u)) ≃ₜ (∐ f : LocallyRingedSpace.{u}) :=
+  Equiv.toHomeomorphOfContinuousOpen
+    (Equiv.ofBijective (fun p ↦ (Sigma.ι f p.1).base p.2)
+      ⟨fun _ _ h ↦ (sigmaι_base_eq_iff f _ _ _ _).mp h, fun x ↦ by
+        obtain ⟨i, y, hy⟩ := exists_sigma_ι_base_eq f x
+        exact ⟨⟨i, y⟩, hy⟩⟩)
+    (continuous_sigma fun i ↦ (sigmaι_isOpenImmersion f i).base_open.continuous)
+    (isOpenMap_sigma.2 fun i ↦ (sigmaι_isOpenImmersion f i).base_open.isOpenMap)
+
+/-- **The homeomorphism above is the inclusion of the member on each member**, which is what makes
+it a statement about the coproduct and not merely a cardinality. -/
+@[simp]
+theorem sigmaHomeo_apply (i : ι) (x : f i) :
+    sigmaHomeo f ⟨i, x⟩ = (Sigma.ι f i).base x :=
+  rfl
+
+/-- **The image of a member under the homeomorphism above is the range of its inclusion.**
+
+The form a statement about connected components consumes: the pieces of the `Sigma` type are the
+ranges of the `Sigma.mk`, and this is what they become in the coproduct. -/
+theorem sigmaHomeo_image_range (i : ι) :
+    sigmaHomeo f '' Set.range (Sigma.mk i) = Set.range (Sigma.ι f i).base := by
+  rw [← Set.range_comp]
+  rfl
 
 
 /-! ### Descent maps out of a coproduct
