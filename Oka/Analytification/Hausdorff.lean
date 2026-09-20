@@ -57,7 +57,14 @@ are, and nothing about whether the base is nonempty; the last of those is a live
   is preconnected or even nonempty. That is a second hypothesis and a second deliverable.
 * **Nothing at `k ≥ 1`.** These are corollaries of
   `ComplexAnalytic.isFiniteEtale_restrictHom_analytificationMap_etalePresHom_comp` and inherit its
-  `g : Fin 0 → …`; the finiteness half over a presented base does not exist, so neither does this.
+  `g : Fin 0 → …`, and nothing below is stated at a presented base. **The reason given for that
+  read *the finiteness half over a presented base does not exist, so neither does this* until
+  2026-09-20**, when `5888ddb` wrote that half and
+  `ComplexAnalytic.isFiniteEtale_restrictHom_analytificationMap_etalePresHom`
+  (`Oka/Analytification/StandardEtaleFiniteEtaleBase.lean`) with it. **The absence is unchanged
+  and the ingredient the retired reason named is not.** The `k ≥ 1` counterparts of the two
+  corollaries below are stated nowhere in this repository; what stands between them and this file
+  is a deliverable rather than a missing theorem.
 * **Nothing about the unrestricted morphism.** It is not finite étale —
   `ComplexAnalytic.not_isFiniteEtale_condEtaleProj` (`OkaTest/StandardEtaleNotFinite.lean`) — so
   there is no covering-map statement to make about it, and the restriction to `V` is not an
