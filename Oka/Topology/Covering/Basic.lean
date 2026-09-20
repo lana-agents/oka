@@ -106,13 +106,16 @@ closed, for a `u` asked only to be continuous. **What Mathlib transports along a
 `v4.32.0` is a homeomorphism and nothing weaker; what it cancels a covering map out of is an
 equality of composites, and the conclusion there is uniqueness of the companion and not a property
 of it.** The instrument is a namespace and a count, and **both halves of it are printed, because a
-figure whose counting rule is unstated is not reproducible**: the namespace is cut with `sed -n
-'/^namespace IsCoveringMap$/,/^end IsCoveringMap$/p'` over `Mathlib/Topology/Covering/Basic.lean`
-and the count is `grep -cE '^(@\[[^]]*\] *)?(private |protected |nonrec |noncomputable
-)*(theorem|lemma|def|alias|instance|abbrev)'`. **The attribute prefix in that pattern is
-load-bearing**: a count anchored on `^theorem` cannot see a `@[simp] theorem …` declared on one
-line, and `Mathlib/Topology/Covering/Basic.lean` carries exactly four of those, two in each of the
-two namespaces counted here.
+figure whose counting rule is unstated is not reproducible**. The namespace is cut with
+`sed -n '/^namespace IsCoveringMap$/,/^end IsCoveringMap$/p'` over
+`Mathlib/Topology/Covering/Basic.lean`, and the count is
+
+`grep -cE '^(@\[[^]]*\] *)?(private |protected |noncomputable )*(theorem|lemma|def|alias)'`
+
+whose alternation is the declaration keywords that file uses and whose modifiers are the ones it
+writes before them. **The attribute prefix is load-bearing**: a count anchored on `^theorem`
+cannot see a `@[simp] theorem …` declared on one line, and that file carries exactly four of
+those, two in each of the two namespaces counted here.
 
 That gives **eighteen** declarations in `namespace IsCoveringMap` (`:308–408`), of which **eight**
 write a composite and they are two different things:

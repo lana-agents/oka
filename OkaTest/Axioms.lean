@@ -1102,9 +1102,9 @@ of composites at merely continuous companions.
 **The remaining 25 of the 31 are untouched**, and **the two nearest are named rather than left to
 be found**. `Oka/Analysis/Complex/FundamentalGroup.lean` and
 `Oka/AnalyticSpace/FiniteEtaleOver.lean` each say that Mathlib has no composition or cancellation
-lemma for `IsCoveringMap`, in a clause
-bounded to one file — *`Mathlib/Topology/Covering/Basic.lean` has only conjugation by a
-homeomorphism* — and **both stand, on a reading this push pins instead of assuming**: a composition
+lemma for `IsCoveringMap`, in a clause bounded to one file —
+*`Mathlib/Topology/Covering/Basic.lean` has only conjugation by a homeomorphism* — and
+**both stand, on a reading this push pins instead of assuming**: a composition
 or cancellation lemma *for `IsCoveringMap`* is one that writes `IsCoveringMap` of a composite, and
 the four in that file that do are the two builders and their two `_iff` forms, every one of them at
 a homeomorphism. **Under a wider reading of *cancellation* neither would stand**, because those
