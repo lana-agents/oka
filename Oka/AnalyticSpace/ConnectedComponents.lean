@@ -67,9 +67,9 @@ that landed.
   covers.
 - `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.coprodIsoULift`: **and a coproduct over
   an index type in `Type` is a coproduct over one in `Type u`**, which is the universe crossing.
-- `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.coprodLeftHomeoSigma`: **the three
-  together** — the total space of a coproduct of separated covers is the topological disjoint
-  union of the members' total spaces.
+- `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.coprodLeftHomeoSigma`: **the two above
+  together with the disjoint union's own space** — the total space of a coproduct of separated
+  covers is the topological disjoint union of the members' total spaces.
 
 ## Main results
 
@@ -222,7 +222,7 @@ declaration**: **700 → 702**, the two being the `simpNF` output quoted in the 
 docstrings added to `Oka/AnalyticSpace/Sigma.lean`, which contains dotted tokens that are terms
 and not names.
 
-**`scripts/check_docstring_names.py`** goes **17845 → 17897** backticked names
+**`scripts/check_docstring_names.py`** goes **17845 → 17899** backticked names
 (**4348 → 4364** distinct) and **306 → 311** elided citations (**155 → 156** distinct), with
 **0 unresolved at both ends** and **6** resolving under more than one namespace at both;
 **237 → 239** dotless occurrences are not checked.
@@ -232,8 +232,10 @@ and not names.
 goes **17 → 20** in **12 → 14**; the **2** occurrences inside `connectedComponentIn` are unmoved in
 number and have changed file, being in the mirror module's proof rather than in this one's.
 **`ConnectedComponents`, the quotient type, goes 0 → 5 occurrences in 2 files** — this module
-and `Oka/Topology/Homeomorph/Lemmas.lean` — and that is the census the sentence three paragraphs up
-dates.
+and `Oka/Topology/Homeomorph/Lemmas.lean` — and **the sentence that dates it is the one in
+`## What the statement says and what it does not` above**, the paragraph that ended *appears
+nowhere* in the present tense until 2026-09-20. It is named by its section and not reached by
+counting paragraphs, so the pointer survives the next push into this docstring.
 
 ## What is not here
 
@@ -350,11 +352,14 @@ theorem's own, re-indexed by `ULift`; their total spaces are connected by
 `…SeparatedFiniteEtaleOver.coprodLeftHomeoSigma` after the isomorphism `∐ f ≅ A` is inverted and
 crossed.
 
-**The last conjunct is the statement that the pieces are the components**, and it is
-`connectedComponent_sigmaMk` (`Oka/Topology/Connected/Clopen.lean`) transported along the
-homeomorphism: a homeomorphism carries connected components to connected components, which is
-`Homeomorph.image_connectedComponentIn` read at `Set.univ`, and the component of a point of a
-disjoint union of connected spaces is the member it lies in.
+**The last conjunct is one application of `Homeomorph.connectedComponent_sigma`**
+(`Oka/Topology/Homeomorph/Lemmas.lean`), which is that statement at an arbitrary space
+homeomorphic to a disjoint union of connected ones: the component of a point of such a disjoint
+union is the member it lies in, `connectedComponent_sigmaMk`
+(`Oka/Topology/Connected/Clopen.lean`), carried across by `Homeomorph.image_connectedComponent`,
+which is in turn `Homeomorph.image_connectedComponentIn` read at `Set.univ`. **Nothing of that is
+done here**: both steps are named lemmas of the mirror tree and this proof spends the first of
+them and no Mathlib lemma at all.
 
 **Read at a fixed `i` the last conjunct says the `i`-th piece is a component**: `e ⁻¹' Set.range
 (Sigma.mk i)` is the `i`-th piece's image in `A.left`, and every point `a` of it has
