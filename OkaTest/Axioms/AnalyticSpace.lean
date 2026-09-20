@@ -972,7 +972,23 @@ info: 'ComplexAnalytic.AnalyticSpace.ιCLinear' depends on axioms:
 
 `Oka/AnalyticSpace/Sigma.lean`. The object, its inclusions, the descent map, the non-vacuity
 statements — the disjoint union is empty at an empty index type and at empty members, and an
-inclusion is not surjective — and that an inclusion is not an isomorphism. -/
+inclusion is not surjective — and that an inclusion is not an isomorphism.
+
+**And, since 2026-09-20, that its underlying space is the disjoint union of the members'
+underlying spaces**: `ComplexAnalytic.AnalyticSpace.sigmaHomeo`, with the two lemmas beside it —
+the value of that homeomorphism on a member, and the image of a member's range under it. **That is
+a statement about the topology and not only about the carrier**, and the reason it is here rather
+than beside the object is that it is the first of this section's guards to say anything about the
+topology at all; `Oka/AnalyticSpace/ConnectedComponents.lean` is what consumes it, one level up at
+the covers separated over a base.
+
+**A fourth guard was appended by the same push and its declaration is older than the push**:
+`ComplexAnalytic.AnalyticSpace.sigma_toLocallyRingedSpace`, which is what makes that homeomorphism
+a *reading* of the locally-ringed-space one rather than a transport, and which that push
+**advertised for the first time** in `Oka/AnalyticSpace/Sigma.lean`'s `## Main results`.
+`scripts/guard_coverage.py`'s *unguarded* row is what said so — it went from 142 to 143 on the
+advertisement and back to 142 on this guard — which is the use this repository reads that script
+for. -/
 
 /--
 info: 'ComplexAnalytic.AnalyticSpace.sigma' depends on axioms:
@@ -994,6 +1010,34 @@ info: 'ComplexAnalytic.AnalyticSpace.sigmaι' depends on axioms:
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.sigmaι
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.sigma_toLocallyRingedSpace' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.sigma_toLocallyRingedSpace
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.sigmaHomeo' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.sigmaHomeo
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.sigmaHomeo_apply' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.sigmaHomeo_apply
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.sigmaHomeo_image_range' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.AnalyticSpace.sigmaHomeo_image_range
 
 /--
 info: 'ComplexAnalytic.isCLinearHom_sigmaDesc' depends on axioms:

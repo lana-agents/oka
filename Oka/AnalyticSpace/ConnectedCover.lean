@@ -17,8 +17,14 @@ absence in a bullet pinned to the commit that adds that file, and this file is w
 over a Hausdorff preconnected base the two conditions **agree**, so every piece of the
 decomposition theorem there has **connected total space**. **That is one step short of the pieces
 being the topological connected components of that total space**, which is a further statement and
-is proved nowhere in this repository; `## What is not here` prices the three steps between and says
-which of their instruments are already in the tree. taxis #2082 is the filing.
+was proved nowhere in this repository when this file landed; `## What is not here` priced the
+three steps between and said which of their instruments were already in the tree, and **all three
+were taken later the same day** by `Oka/AnalyticSpace/ConnectedComponents.lean`, whose
+`ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.exists_isConnected_homeomorph` is the
+statement this sentence says is one step further on. **The step is still a step and nothing here
+takes it**: that module imports this one, and everything below is the comparison of the two
+conditions and not a statement about components. taxis #2082 is this file's filing and taxis
+#2094 that one's.
 
 **The base hypotheses are exactly the ones under which the fibre functor is a fibre functor** —
 `[T2Space X]` and `[PreconnectedSpace X]`, which is what
@@ -185,9 +191,16 @@ lemma, no match lemma, no congruence lemma — and the dump total moves **4949 �
   records the failing
   `#synth` — so the categorical condition has no fibre-functor theory there and neither proof
   below transports. **Both statements are at the separated covers and only there.**
-* **Nothing that makes the pieces of the decomposition the topological connected components of
-  the total space, and the three steps it would take are named rather than gestured at.** What is
-  proved is `…SeparatedFiniteEtaleOver.isConnected_iff_connectedSpace` read at each piece: *every
+* **Nothing here makes the pieces of the decomposition the topological connected components of
+  the total space, and the three steps it takes were named rather than gestured at — and were
+  taken, on 2026-09-20, by `Oka/AnalyticSpace/ConnectedComponents.lean` (taxis #2094), whose
+  `…SeparatedFiniteEtaleOver.exists_isConnected_homeomorph` is the conclusion.** This bullet
+  opened *Nothing that makes the pieces … the topological connected components* until that push,
+  and **what is still true of this file is what it says of itself**: nothing below is a statement
+  about components, and that module imports this one rather than the other way round. The three
+  items are kept as they were written, and the paragraph after them says which of their
+  predictions held. What is proved here is
+  `…SeparatedFiniteEtaleOver.isConnected_iff_connectedSpace` read at each piece: *every
   `f i` has connected total space*. `Oka/AnalyticSpace/FundamentalGroup.lean`'s
   `…SeparatedFiniteEtaleOver.exists_isConnected_decomposition` gives an isomorphism `∐ f ≅ A` **in
   the category** and nothing about `A.left` as a space, so *the pieces are the components* needs
@@ -224,6 +237,24 @@ lemma, no match lemma, no congruence lemma — and the dump total moves **4949 �
      the surjectivity half only and `ComplexAnalytic.AnalyticSpace.bijective_base_of_isIso` the
      bijectivity, and **a bijection of spaces does not carry connected components**, which is why
      neither is enough.
+
+  **What the three cost, against what this bullet predicted, and one thing it did not name.**
+  Step 3 held exactly: one application of `AlgebraicGeometry.LocallyRingedSpace.homeoOfIso` to the
+  functor image, which is `…SeparatedFiniteEtaleOver.homeoLeftOfIso`. Step 1 held as a diagnosis
+  and **not as a price**: the universe crossing is real and is
+  `…SeparatedFiniteEtaleOver.coprodIsoSigma`, but it is two isomorphisms composed and **it is not
+  the expensive step of the three**, which this bullet said it was. **Step 2 is**, and its *every
+  instrument for this is in the tree* held only for the instruments: the conclusion is a new
+  declaration one level down, `AlgebraicGeometry.LocallyRingedSpace.sigmaHomeo`, and it spends
+  `AlgebraicGeometry.LocallyRingedSpace.sigmaι_base_eq_iff` — which this bullet does not name —
+  where the two it does name for the disjointness and the covering are used through it; neither
+  `…preservesColimitsOfShape_discrete_forgetToTop` nor
+  `ComplexAnalytic.AnalyticSpace.isClopen_range_sigmaι_base` is spent at all. **And the three
+  steps are not the whole of the conclusion**: with the homeomorphism in hand the components
+  statement is two further facts about bare topological spaces, `connectedComponent_sigmaMk`
+  (`Oka/Topology/Connected/Clopen.lean`) and `Homeomorph.connectedComponent_sigma`
+  (`Oka/Topology/Homeomorph/Lemmas.lean`), neither of which is in Mathlib and neither of which
+  this bullet foresaw.
 
   **The census that says this is an absence and not an oversight**: at the commit that adds this
   file the token `connectedComponent` occurs **0 times** in the comment-stripped code of `Oka/` and

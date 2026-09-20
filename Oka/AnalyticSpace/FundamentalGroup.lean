@@ -184,13 +184,19 @@ in both its figures — this file opens no gap, and now that is a reading and no
   what this narrowing buys. **It does not make the pieces the topological connected components of
   the total space**: that reading needs the categorical coproduct's total space to be the
   topological disjoint union of the pieces' and needs an isomorphism of this category to be a
-  homeomorphism on total spaces, and **neither is stated in this repository** — that module's
-  `## What is not here` names the three steps and says which of their instruments are already in
-  the tree. **So the misreading this bullet exists to stop is still a misreading, and what has
-  changed is that the true statement one step short of it is now a theorem.** **The clause this
-  bullet carried until 2026-09-20 was *nothing in this repository relates it to connectedness of
-  the space*, in the present tense, and the push that adds that module is what falsified it**; the
-  dated record is here rather than at the pinned sentence beside it, which needed none. **What is
+  homeomorphism on total spaces. **Both are stated in the tree since 2026-09-20 and the reading is
+  no longer a misreading**:
+  `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.exists_isConnected_homeomorph`
+  (`Oka/AnalyticSpace/ConnectedComponents.lean`, taxis #2094) is the decomposition theorem below
+  with its isomorphism replaced by a homeomorphism and the components clause added, and
+  `…SeparatedFiniteEtaleOver.finite_connectedComponents_left` beside it counts them. **The clause
+  this bullet carried until then read *neither is stated in this repository*, and it named the
+  three steps that module's `## What is not here` priced; all three are now taken, and the
+  sentence beside them said the misreading was still a misreading.** **This bullet has been
+  narrowed twice in one day and retired neither time**: what it records now is that the statement
+  the theorem below makes is still the categorical one, and that a reader wanting the components
+  reading has a second theorem to cite for it and should cite that one. The dated records are
+  here rather than at the pinned sentence beside them, which needed none. **What is
   still not proved is the comparison over a base that is not Hausdorff or not preconnected**, and
   that module's own `## What is not here` says so and says that neither hypothesis is shown to be
   needed. **That module neither imports
@@ -335,14 +341,17 @@ category**, and over this statement's own hypotheses it is equivalent to `Connec
 cover's total space —
 `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.isConnected_iff_connectedSpace` of
 `Oka/AnalyticSpace/ConnectedCover.lean`, a module this one neither imports nor is imported by. **So
-every piece this theorem produces has connected total space.** **It does not follow that the pieces
-are the topological connected components of `A.left`**, and that step is not taken anywhere in this
-repository: it asks for the total space of `∐ f` to be the topological disjoint union of the
-`(f i).left` and for the isomorphism above to be a homeomorphism, which are two further statements
-— the second cheap and the first not — and that module's `## What is not here` prices both. This
-sentence read *the module docstring's `## What is not here` records that nothing in this repository
-relates it to connectedness of the cover's total space* until 2026-09-20, when that comparison
-landed; the bullet it named carries the dated record and the pin beside it.
+every piece this theorem produces has connected total space.** **That the pieces are moreover the
+topological connected components of `A.left` does not follow from this statement and is a second
+theorem**, `…SeparatedFiniteEtaleOver.exists_isConnected_homeomorph`
+(`Oka/AnalyticSpace/ConnectedComponents.lean`, taxis #2094): it needs the total space of `∐ f` to
+be the topological disjoint union of the `(f i).left` and the isomorphism above to be a
+**homeomorphism**, both of which that module proves and neither of which is here. **A reader who
+wants the components is owed that citation and not this one**, the two differing by exactly those
+two steps. This sentence read *the module docstring's `## What is not here` records that nothing
+in this repository relates it to connectedness of the cover's total space* until 2026-09-20, when
+that comparison landed, and *that step is not taken anywhere in this repository* until later the
+same day, when it was; the bullet it named carries both dated records and the pin beside them.
 
 **No point of the base appears in the statement.** Mathlib's
 `CategoryTheory.PreGaloisCategory.has_decomp_connected_components'` takes the Galois category and
