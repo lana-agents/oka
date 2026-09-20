@@ -62,10 +62,14 @@ the whole of the unrestricted one, and the two non-emptiness witnesses cited bel
 `ComplexAnalytic.nonempty_analytification_etalePresentation_node` and
 `ComplexAnalytic.nonempty_analytification_nodeG` — say the source and the base have a point. At the
 other pair the bad set is all of `ℂ^n`, the only admissible `V` is empty, and an instance there
-would be a statement about empty spaces. **Whether either cover is an isomorphism is decided
-nowhere in this repository** — `OkaTest/StandardEtaleLocalIsoBase.lean` says so of its own two
-witnesses and `## What is not checked here` below says it again of this one — and no sentence
-here rests on it.
+would be a statement about empty spaces. **Whether this cover is an isomorphism is decided
+nowhere in this repository** — `OkaTest/StandardEtaleLocalIsoBase.lean`'s
+`## What is not checked here` says of the `ComplexAnalytic.sqSubOneTwoPair` witness that proving
+its cover to be anything other than the base is a separate statement nothing there attempts, and
+this file's own `## What is not checked here` says it again — and no sentence here rests on it.
+**The other pair is not in that position and this paragraph does not put it there**: that file's
+`## Two pairs` heading calls the cheapest pair's cover an isomorphism, on the strength of
+`ComplexAnalytic.sqSubOneRingEquiv`, which is the asymmetry the first sentence above turns on.
 
 ## Why the bad-set computation is here and not beside its mirror
 
@@ -168,10 +172,15 @@ exactly that purpose.
   the `Oka` library; every declaration below is in the test library, which is the rule
   `ComplexAnalytic.condPair` and `ComplexAnalytic.sqSubOnePair` are already unguarded under and
   the one `OkaTest/CondFiniteEtale.lean` states for its own contents.
-* **Nothing in `Oka/Analytification/Hausdorff.lean` is instantiated.** That file's covering-map and
-  Hausdorff corollaries are at `k = 0` and are about the **composite to `ℂ^n`**; what the theorems
-  below would let be stated is the `k ≥ 1` counterpart **over `X^an`**, which is a different
-  morphism, and stating it is a separate deliverable that this file does not start. **The `ℂ^n`
+* **Nothing in `Oka/Analytification/Hausdorff.lean` is instantiated.** That file's two
+  covering-map corollaries are at `k = 0` and are about the **composite to `ℂ^n`**; what the
+  theorems below would let be stated is the `k ≥ 1` counterpart **over `X^an`**, which is a
+  different morphism, and stating it is a separate deliverable that this file does not start.
+  **Its Hausdorff result is not in that position**: `ComplexAnalytic.t2Space_analytification` binds
+  `{n k : ℕ}`, is declared above that file's `noncomputable section` and so outside the `Fin 0`
+  block its two corollaries live in, and is about a space rather than a morphism — so it is at
+  every `k` already, and is what would discharge the separation hypothesis of the `X^an`
+  counterpart rather than something that counterpart owes. **The `ℂ^n`
   composite at this very pair is not a local isomorphism** —
   `ComplexAnalytic.not_isLocalIso_analytificationMap_etalePresHom_comp_node`
   (`OkaTest/StandardEtaleNotLocalIso.lean`), at the same
