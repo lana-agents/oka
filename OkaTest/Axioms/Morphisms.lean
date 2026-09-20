@@ -10773,18 +10773,34 @@ three**, which is not in tension with that: the proofs reach choice through the 
 through Mathlib's `CategoryTheory.PreGaloisCategory.autMulEquivAutGalois` behind the criterion they
 compose with, and through the `Nonempty.some` that opens the hypothesis.
 
-**At the commit this section is written at, this push is the first consumer of two names it does
-not declare.** `…SeparatedFiniteEtaleOver.exists_iso_coprod_id` occurred in the comment-stripped
-code of **two** modules — `Oka/AnalyticSpace/SimplyConnected.lean`, which declares it, and this
-file — and now occurs in **three**;
-`…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_of_iso_id` occurred in **two** —
-`Oka/AnalyticSpace/SimplyConnectedCriterion.lean`, twice, and this file — and now occurs in
-**three**. **So the sentence in the section above saying that no statement of this
-repository consumes any of that section's four names is falsified by this push**, and it survives
-as written because it is pinned to the commit that section was written at. The population is every
-tracked `.lean` under `Oka/` and `OkaTest/` with the two root modules, the stripper is
-`scripts/import_cost.py`'s `strip_comments`, and the token is the name not preceded or followed by
-a letter, a digit or `_`.
+**This push consumes two names it does not declare, and it is the first consumer of one of them
+and the second consumer of the other.** The population is every tracked `.lean` under `Oka/` and
+`OkaTest/` with the two root modules, the stripper is `scripts/import_cost.py`'s `strip_comments`,
+and the token is the name not preceded or followed by a letter, a digit or `_`; **what decides a
+consumer is the occurrence and not the module it is in**, which is the whole of the difference
+between the two rows. Line numbers are `ae732d9`'s, the commit this branch is cut from; this
+branch itself makes `Oka/AnalyticSpace/SimplyConnectedCriterion.lean` fifteen lines longer above
+them, so they must be re-taken and not copied.
+
+* `…SeparatedFiniteEtaleOver.exists_iso_coprod_id` occurred **once** in
+  `Oka/AnalyticSpace/SimplyConnected.lean`, at `:241`, and that occurrence is its own declaration;
+  its only other occurrence was in this file, as a guard. **This push is its first consumer.**
+* `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_of_iso_id` occurred **twice** in
+  `Oka/AnalyticSpace/SimplyConnectedCriterion.lean` — its declaration at `:234` and a **use** at
+  `:262`, in the proof term of `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_iff` —
+  and once in this file, as a guard. **This push is its second consumer**, and a count of modules
+  would have returned *two* for both names and decided neither.
+
+**So the sentence in the section above saying that no statement of this repository consumes any of
+that section's four names does not stand, and this push is not what falsifies it.** At the commit
+that sentence pins itself to, the four names form a chain in which every link is a consumption —
+the first consumed at `:262`, `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_iff` at
+`:277` and `:278`, `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_congr` at `:290` — and
+only `…SeparatedFiniteEtaleOver.nontrivial_fundamentalGroup_congr` is consumed by nothing. **That
+sentence is taxis #2120's subject and is not repaired here**; it is named because the new
+occurrence below must not be read as the first one, and because the derivation it rests on — a
+per-module occurrence count standing in for a consumption — is the one this paragraph declines to
+repeat.
 
 **The routing** is the section above's, unchanged: these are statements about the covers of a base
 and the topic table at the head of `OkaTest/Axioms.lean` routes those here. -/
