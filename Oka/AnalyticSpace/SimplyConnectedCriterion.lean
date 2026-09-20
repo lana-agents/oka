@@ -26,12 +26,17 @@ which uses it once, contrapositively, to say the punctured line's group is not t
 `…SeparatedFiniteEtaleOver.fundamentalGroup` occurs in **four** modules and **twelve** places.
 
 **Of those twelve, the three that say the group is trivial are all in one module and all three are
-hypotheses.** `Subsingleton (…SeparatedFiniteEtaleOver.fundamentalGroup …)` occurs **three** times
-in the comment-stripped code of the tree, all in `Oka/AnalyticSpace/SimplyConnected.lean` and all
-as the instance argument of one of its three theorems; **nothing under `Oka/` concludes it.** The
-one place the tree decides anything about the group at all is
-`OkaTest/FundamentalGroup.lean`'s `nontrivial_fundamentalGroup`, which concludes the *failure* of
-it at the punctured line. So a consumer that wanted the hypothesis had no way to get it, and one
+hypotheses.** At that same commit `Subsingleton (…SeparatedFiniteEtaleOver.fundamentalGroup …)`
+occurs **three** times in the comment-stripped code of the tree, all in
+`Oka/AnalyticSpace/SimplyConnected.lean` and all as the instance argument of one of its three
+theorems, and **no declaration under `Oka/` concluded it**. At the commit that adds this file it
+occurs **seven** times, the other four being in this file, and the first theorem below is the
+declaration that concludes it — **the sentence before this one is a figure about the base commit,
+and this push is what falsifies it**, which is why it is pinned and not written in the present
+tense. At both commits the one place the tree decides anything about the group with no hypothesis
+left over is `OkaTest/FundamentalGroup.lean`'s `nontrivial_fundamentalGroup`, which concludes the
+*failure* of it at the punctured line; what this file adds is an implication and decides nothing
+about any base on its own. So a consumer that wanted the hypothesis had no way to get it, and one
 that had it at a point had no way to move it.
 
 **Which spelling the scan counts is part of its figure.** The population is every tracked `.lean`
@@ -114,7 +119,7 @@ lands in the *guarded and advertised nowhere* row, which is flat at **645**. The
 flat at **142, in 60 files** — this file opens no gap — *advertised from another file* is flat at
 **86**, and *abbreviated citations, not counted* at **30, four of them dotted**.
 
-`scripts/check_docstring_names.py` goes **17962 → 17988** backticked names (**4374 → 4390**
+`scripts/check_docstring_names.py` goes **17962 → 17990** backticked names (**4374 → 4392**
 distinct) and **332 → 349** elided citations (**160 → 164** distinct), with **0** unresolved at
 both ends, **6** resolving under more than one namespace at both, and **239** dotless at both.
 **Both ends of every figure in this section are runs**: the base column is that script and
@@ -168,14 +173,27 @@ ends of this push.
   *triviality* of the group from one point to another, and its *failure* back, through a condition
   that mentions neither point; whether `…SeparatedFiniteEtaleOver.fundamentalGroup x` and
   `…SeparatedFiniteEtaleOver.fundamentalGroup y` are isomorphic as groups is neither stated nor
-  refuted below. **Nothing this file reads from Mathlib would give it either**: no declaration
-  under `Mathlib/CategoryTheory/Galois/` binds two fibre functors of one category — its **eleven**
-  files carry **37** occurrences of `⥤ FintypeCat` between them and **ten** of the eleven carry
-  all of them, no one line has two, every `variable` line among them binds exactly one, and
-  `Mathlib/CategoryTheory/Galois/Prorepresentability.lean`'s `F'` is local notation for
-  `F ⋙ FintypeCat.incl` and so is that one again. **A transport of a property is
-  not an isomorphism of the objects that have it**, and reading the second off the first is the
-  error this bullet exists to stop.
+  refuted below. **Mathlib does relate the automorphism groups of two fibre functors of one
+  category when the second is a whiskering of the first, and two points of one base do not give
+  such a pair.** `CategoryTheory.PreGaloisCategory.autEquivAutWhiskerRight` is an isomorphism of
+  topological groups between the automorphism groups of `F` and `F ⋙ G` at a fully faithful `G`,
+  and `CategoryTheory.PreGaloisCategory.FiberFunctor.comp_right` makes `F ⋙ E` a fibre functor
+  again when `E` is an equivalence, so a pair of fibre functors of one category *can* be compared
+  there — `Mathlib/CategoryTheory/Galois/Equivalence.lean` compares such a pair across a universe
+  switch. But `…SeparatedFiniteEtaleOver.fintypeFiberFunctor x` and
+  `…SeparatedFiniteEtaleOver.fintypeFiberFunctor y` are not a functor and a whiskering of it, and
+  nothing below makes them one. **A route to such a comparison does exist in
+  `Mathlib/CategoryTheory/Galois/`, and it is in the one module of that folder this repository
+  does not import.**
+  `Mathlib/CategoryTheory/Galois/IsFundamentalgroup.lean` makes a compact topological group acting
+  suitably on the fibres isomorphic to the automorphism group of the functor, so a single group
+  serving at two points would relate the two; **ten of the eleven modules under
+  `Mathlib/CategoryTheory/Galois/` are in the environment of `Oka` + `OkaTest` at the commit that
+  adds this file and that one is not**, which is why it is cited here by path — its declarations
+  resolve to nothing in the dump `scripts/check_docstring_names.py` checks against, so naming one
+  would fail that check rather than help a reader. **A transport of a property is not an
+  isomorphism of the objects that have it**, and reading the second off the first is the error
+  this bullet exists to stop.
 * **No comparison with the topologist's fundamental group**, for the reason
   `Oka/AnalyticSpace/FundamentalGroup.lean`'s own bullet gives.
   `Oka/Analysis/Complex/FundamentalGroup.lean` is a different group of a different kind and
