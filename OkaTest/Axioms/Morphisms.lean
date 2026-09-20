@@ -10510,14 +10510,116 @@ itself data**, which is not in tension with the first: the proofs reach choice t
 `Nonempty.some` that opens the criterion's hypothesis, and a `theorem` may use either.
 
 **At the commit this section is written at, the four names occur in the comment-stripped code of
-exactly two modules — the one that declares them and this file — and no statement of this
-repository consumes any of them.** That is the position
+exactly two modules — the one that declares them and this file — and nothing outside the module
+that declares them consumes any of them.** **The two halves are separately measured and the second
+does not follow from the first**: three of the four *are* consumed, and every consumer is another
+of the four, in the chain `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_of_iso_id` →
+`…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_iff` →
+`…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_congr` →
+`…SeparatedFiniteEtaleOver.nontrivial_fundamentalGroup_congr`, which is why the section's names are
+four and not one and is the code the paragraph above describes when it calls them *the hard
+direction of the criterion … the criterion itself … and the two transports between points it buys*.
+That is the position
 `…SeparatedFiniteEtaleOver.fundamentalGroup` was in until the section directly above this one was
 written, and it is said here rather than left to be discovered: **the transports have nothing to
 carry yet**, because the only base at which this repository computes anything about this group is
 `OkaTest/FundamentalGroup.lean`'s punctured line, whose `nontrivial_fundamentalGroup` is already
 proved at every point of it directly and needs no transport from one. What the criterion is for is
 the other direction, and that is a base this repository does not yet have.
+
+**That sentence's second half read *and no statement of this repository consumes any of them* until
+2026-09-20, and it is corrected here rather than dated, because it was false at the commit it pins
+itself to.** That commit is `6be2998`, the merge of `lana-agents/oka#597` that wrote this section,
+and `git show 6be2998:OkaTest/Axioms/Morphisms.lean` carries the retired wording — wrapped after
+*this*, so a line-anchored `git log -S` on the whole clause returns nothing where `-S` on
+`repository consumes any of them` returns that commit, which is the wrapped-clause trap this board
+has recorded before. **The census below returns the same four rows at `6be2998` as at `a414f61`**,
+so nothing happened in between: the register is a correction and not a narrowing, and *stopped
+being true on* would presuppose what it is not entitled to.
+
+**The instrument is this paragraph's own.** Every tracked `.lean` under `Oka/` and `OkaTest/` with
+the two root modules, comment-stripped by `scripts/import_cost.py`'s `strip_comments`, the token
+not flanked by a letter, a digit or `_`. In `Oka/AnalyticSpace/SimplyConnectedCriterion.lean`, at
+line numbers that are both commits' — that stripper preserves the line count —
+`…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_of_iso_id` is at `:234` and `:262`,
+`…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_iff` at `:257`, `:277` and `:278`,
+`…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_congr` at `:274` and `:290`, and
+`…SeparatedFiniteEtaleOver.nontrivial_fundamentalGroup_congr` at `:286`. **The first occurrence of
+each is its declaration and every other is a proof term of the next name in the chain**, and each
+of the four occurs in that module, in this one, and in no third — so the **placement** half is true
+and is kept unchanged.
+
+**Why the derivation was invalid, which is the reusable half and is the standing rule this section
+now carries.** *Occurs in exactly two modules* is a **placement** measurement; *nothing consumes
+it* is a **use** measurement; and a per-module occurrence count cannot decide the second, **because
+the declaring module's own occurrences are not all declarations and a set of names guarded together
+can consume one another**. `### Fibre products in the category of separated covers, and its finite
+limits` already records that *no consumer* and *no occurrence* are different claims, in the record
+opening *That parenthetical read* and in the paragraph above it; what this site adds is that a
+census keyed on **modules** rather than on occurrences collapses them in the direction that
+produces a false sentence rather than a weak one. **A clause of this shape owes the use figure**,
+and the cheapest honest form is the one those two paragraphs use: name the population, name the
+instrument, and count the declaring module's occurrences separately from everybody else's.
+
+**And the obvious second instrument does not rescue it either, which is a run and not a
+prediction.** A term census over the environment — the **4998** non-internal constants the modules
+of this repository declare, the population `scripts/DumpOkaDecls.lean` writes, counting a name as
+consumed when another of them names it in its type or in its value — returns **0** for all four of
+these names, and three of the four are consumed. **The reason is that a theorem's proof term is not
+in the imported environment at all**: `Lean.Environment.find?` on any of the four returns a
+`Lean.ConstantInfo` whose `Lean.ConstantInfo.value?` is `none` in the exporting view and in the
+private one alike, so such a census sees a consumption only when the target stands in a consumer's
+**type**. `#print axioms` is not evidence against this and is the first thing a reader will reach
+for: it reads pre-computed entries an environment extension writes when an olean is serialised,
+which is why it is transitive across a module boundary the bodies do not cross. The control is the
+same census at `…SeparatedFiniteEtaleOver.fundamentalGroup`, which returns **14**, every one of
+them the name standing in a consumer's type and none of them in a value.
+**So a census of this shape does not decide the question for a `theorem`**, and the
+comment-stripped token scan above, read per occurrence rather than per module, is what does.
+
+**The precedent clause is checked and not inherited, and it survives the correction.** *That is the
+position `…SeparatedFiniteEtaleOver.fundamentalGroup` was in until the section directly above this
+one was written* names `e6a49ab`, the merge of `lana-agents/oka#593` that wrote `### A base whose
+fundamental group is trivial has only trivial covers`. At its parent `0b2759b` that name occurs in
+**two** modules and **seven** places — `Oka/AnalyticSpace/FundamentalGroup.lean` at `:258`, `:270`,
+`:282`, `:297`, `:317` and `:333`, and this file once — with `:258` the `abbrev` and the other
+**five** statements of that module consuming it. **So the precedent is this same shape and not
+merely this same sentence**: true on the placement half, true on the corrected use half, and false
+on the half retired here. At `e6a49ab` it is **four** modules and **twelve** places,
+`Oka/AnalyticSpace/SimplyConnected.lean` and `OkaTest/FundamentalGroup.lean` being the entrants,
+which is what that push's own subject calls *the group's first consumer* and is what fixes *first
+consumer* there as the first from outside the declaring module.
+
+**The scan of this file for the class, published because a verdict per site is the half a scan is
+usually short of.** Population: the whitespace-normalised text of every tracked file under
+`OkaTest/Axioms/`, a sentence being the match extended to the nearest `. ` on each side, so that a
+clause wrapped across two lines cannot hide. Pattern: the *no consumer* / *no caller* / *consumes
+nothing* / *consumed by nothing* / *unconsumed* / *nothing consumes it* / *names it nowhere else*
+family. It returns **29** sentences at `a414f61`, **all of them in this file**, against the **17**
+lines a line-anchored `git grep -niE` on *no consumer|consumes (any of them|nothing|none)|consumed
+by nothing|has no consumer* returns over the same paths — the gap is what the normalisation buys.
+Of the 29, the live claims that a named declaration of this repository is unconsumed are about
+**seven** distinct names; the rest are dated records about an earlier such clause, clauses about
+the wording of one, statements that a name *is* consumed, or the two rules themselves.
+
+**Every one of the seven live claims is true at `a414f61` and the sentence corrected above is the
+only false one in the population**, by the token instrument run per name:
+`IsCoveringMap.isClosedMap_of_comp`, `…SeparatedFiniteEtaleOver.hasFiniteLimits`,
+`…SeparatedFiniteEtaleOver.isClopen_fixedLocus`, `…SeparatedFiniteEtaleOver.fibreProd_self`,
+`…SeparatedFiniteEtaleOver.fibreProdFst_self`, `…SeparatedFiniteEtaleOver.fibreProdSnd_self` and
+`CategoryTheory.Limits.hasColimitsOfShape_singleObj` each occur **exactly twice** in
+comment-stripped code — their declaration and their `#print axioms` line in this file — so no
+declaring module consumes any of them and the defect corrected above is absent at all seven. **Two
+of the seven are unfigured, and that is a note and not a repair**: the clause calling
+`IsCoveringMap.isClosedMap_of_comp` *mirror-tree material that nothing in this repository
+consumes*, and the clause calling the three `_self` statements *consumed by nothing*, name no
+population and no instrument, where the clauses for
+`…SeparatedFiniteEtaleOver.hasFiniteLimits`, `…SeparatedFiniteEtaleOver.isClopen_fixedLocus` and
+`CategoryTheory.Limits.hasColimitsOfShape_singleObj` each name theirs. **Nothing outside
+`OkaTest/Axioms/` is swept**: the same scan over every tracked `.lean`, `.md`, `.py` and `.sh` of
+the tree returns **98**
+sentences in **52** files, of which the 29 above are one file's, and the other 69 are unopened — a
+bound and not a clean bill.
 
 **The routing.** The topic table at the head of `OkaTest/Axioms.lean` routes *morphisms of analytic
 spaces* here and these are statements about the covers of a base, which is where the four sections
