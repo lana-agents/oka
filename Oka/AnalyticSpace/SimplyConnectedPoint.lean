@@ -84,12 +84,21 @@ alike. **Over a subsingleton base all three are free**, and each is one term:
 * `PreconnectedSpace` is `⟨Set.subsingleton_univ.isPreconnected⟩`;
 * `Nonempty` is `⟨x⟩`, the point the statement already takes.
 
-**So the statements below bind `[Subsingleton (X : Type u)]` and none of the three**, and a
-consumer supplies one instance where the siblings ask for three. **Neither of the first two is a
-declaration of this file.** Both are facts about an arbitrary topological space with no analytic
-space in them, so a named version is mirror-tree material for Mathlib rather than a result of this
-development, and nothing outside the three proofs below wants either; they are `haveI` at the three
-sites that need them and that is the whole of their occurrence in the tree.
+**So the four statements below that are about an arbitrary base with at most one point bind
+`[Subsingleton (X : Type u)]` and none of the three**, and a consumer supplies one instance where
+the siblings ask for three. The other five bind neither way round: the fibre-level statement binds
+two of the three and not `[Subsingleton]`, and the four declarations at `ℂ⁰` bind nothing, their
+base being a fixed object rather than a variable.
+
+**Neither of the first two terms is a declaration of this file.** Both are facts about an arbitrary
+topological space with no analytic space in them, so a named version is mirror-tree material for
+Mathlib rather than a result of this development, and nothing outside the proofs below wants
+either. **They are `haveI` at the sites that need them and occur nowhere else in the tree, and the
+two counts are not the same**: the `T2Space` term is at three sites and the `PreconnectedSpace`
+term at four. The fourth is `…SeparatedFiniteEtaleOver.exists_iso_coprod_id_originZero`, whose base
+is `ℂ⁰` rather than a variable and which therefore takes its separation from the instance
+`ComplexAnalytic.t2Space_complexAffineSpace` and only its preconnectedness from the term above.
+Four inline uses are no more of an argument for a named lemma than three.
 
 ## Why the witness is under `Oka/` where the punctured line's is under `OkaTest/`
 
@@ -105,11 +114,15 @@ under `Oka/`**, and the guards for it under `OkaTest/Axioms/` with the rest of t
 
 `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.` is **fifty-five** columns, a
 `## Main results` entry has to carry the whole name — an elided one resolves against nothing, which
-is the trap `Oka/AnalyticSpace/FundamentalGroup.lean` records at length — and `- `, the backticks
-and the `:` are four more, so a name in that namespace has **forty-two** columns before the
-hundred-column limit `lake exe lint-style` enforces. Six of the seven names in that namespace below
-carry a suffix naming the hypothesis that distinguishes them; the seventh cannot:
-`subsingleton_fundamentalGroup_of_subsingleton_base` is forty-nine. **It is
+is the trap `Oka/AnalyticSpace/FundamentalGroup.lean` records at length — and `- `, the two
+backticks and the `:` are **five** more, so a name in that namespace has **forty** columns before
+the hundred-column limit `lake exe lint-style` enforces. **That budget is spent exactly in the list
+below and not approximately**: `subsingleton_fundamentalGroup_originZero` is forty characters and
+its entry there is a hundred columns on the nose, which is inside the limit with nothing left over.
+Line length is a build linter here, so the figure is not advisory: a
+forty-one-character name in this namespace, advertised, fails `lake build --wfail`. Six of the
+seven names in that namespace below carry a suffix naming the hypothesis that distinguishes them;
+the seventh cannot: `subsingleton_fundamentalGroup_of_subsingleton_base` is **fifty**. **It is
 `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup` and the base condition is an instance
 argument**, which is the shape Mathlib omits from a name anyway and is the argument
 `Oka/AnalyticSpace/SimplyConnected.lean` makes for its own four names; nothing else in this
@@ -193,9 +206,15 @@ flat at **142, in 60 files**, *advertised from another file* flat at **89**, *ab
 citations, not counted* flat at **30, four of them dotted**, and *backticked tokens skipped* flat
 at **1 / 132 / 719**.
 
-`scripts/check_docstring_names.py` goes **18097 (4406) → 18143 (4419)** backticked names and
-**350 (164) → 395 (174)** elided citations, with **0** unresolved at both ends and **6** resolving
-under more than one namespace at both. **The dotless row goes 240 (120) → 242 (122) and the
+`scripts/check_docstring_names.py` goes **18097 (4406) → 18146 (4419)** backticked names and
+**350 (164) → 399 (174)** elided citations, with **0** unresolved at both ends and **6** resolving
+under more than one namespace at both. **The distinct halves are `--diff` and not arithmetic**:
+**13 added and 0 removed** on the backticked side — the nine declarations below,
+`Finite.instDiscreteTopology`, `PreconnectedSpace.constant` and this file's two `import`s, all of
+them cited in the prose — and **10 added and 0 removed** on the elided side, the nine declarations
+again in their elided spelling and `…FiniteEtaleOver.fiber`. The occurrence halves are larger than
+the distinct ones because most of these names are cited more than once, which is what a citation
+count is for. **The dotless row goes 240 (120) → 242 (122) and the
 two are this sentence's own**: a first draft of the paragraph above carried `…nonempty_iso_id` and
 a first draft of the guard section `…originZero`, each of which elides a prefix of a component
 rather than a namespace and each of which moved the row by one; both were repaired to the dotted
@@ -423,7 +442,8 @@ which is the first time in this repository that any statement of the simply-conn
 applied to one rather than quantified over one. The three instances its telescope asks of the base
 are supplied here: `T2Space` is already an instance at `ℂⁿ`
 (`ComplexAnalytic.t2Space_complexAffineSpace`), `PreconnectedSpace` is the subsingleton term this
-file uses three times above, `Nonempty` is `…AnalyticSpace.originZero`, and the trivial group is
+file uses three times above — **this is its fourth and last site, and the docstring's count of
+four is this one included** — `Nonempty` is `…AnalyticSpace.originZero`, and the trivial group is
 the theorem above.
 
 **The index type is existential and nothing below counts it.** That is exactly what the theorem

@@ -10700,13 +10700,19 @@ are unopened — a bound and not a clean bill.
 **The two sentences before this one stood until 2026-09-20**, when
 `Oka/AnalyticSpace/SimplyConnectedPoint.lean` supplied that base and the section directly below
 this one guards it: the fundamental group of `ℂ⁰` is trivial, so the first of the four names above
-has a consumer that is neither a declaration nor a guard, and the criterion has a base to be read
-at. **The transports still carry nothing, and now for a different reason**: at a base whose
-underlying space has at most one point every point is every other point, so
-`…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_congr` there is `Subsingleton.elim` and
-carries nothing that was not already at hand. **The sentence opening this paragraph is pinned to
-the commit this section was written at and is unaffected**; what is dated here is the two
-present-tense sentences that closed it.
+has a consumer **outside the module that declares it**, and the criterion has a base to be read at.
+**Inside that module it already had one at `a414f61`**, and the qualifier is not decoration:
+`…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_iff`'s proof term is
+`⟨fun _ A _ ↦ …nonempty_iso_id.{u} x A, …subsingleton_fundamentalGroup_of_iso_id.{u} x⟩`, which is
+a statement of this repository consuming the first name and is neither a declaration of it nor a
+guard. **What that says about the pinned sentence opening the paragraph above is a question about
+the commit that sentence names and not about this push**; it is filed as taxis #2120, and nothing
+here restates it, repairs it or relies on it. **The transports still carry nothing, and now for a
+different reason**: at a base whose underlying space has at most one point every point is every
+other point, so `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_congr` there is
+`Subsingleton.elim` and carries nothing that was not already at hand. **The sentence opening the
+paragraph above is pinned to the commit this section was written at and is unaffected**; what is
+dated here is the two present-tense sentences that closed it.
 
 **The routing.** The topic table at the head of `OkaTest/Axioms.lean` routes *morphisms of analytic
 spaces* here and these are statements about the covers of a base, which is where the four sections
@@ -10939,12 +10945,19 @@ saying it is the only one, `…AnalyticSpace.originZero` and
 `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_originZero` and
 `…SeparatedFiniteEtaleOver.exists_iso_coprod_id_originZero`.
 
-**This is the first consumer of the section directly above.** At the commit this section is written
-at, `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_of_iso_id` occurs in the
+**This is the first consumer of the section directly above from outside the module that declares
+it.** At the commit this section is written at,
+`…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_of_iso_id` occurs in the
 comment-stripped code of **three** modules and **four** places — the module that declares it twice,
 this file once, and the new module once — against **two** modules and **three** places at
-`a414f61`, and the new occurrence is the only one in the tree that is neither a declaration nor a
-guard. `…SeparatedFiniteEtaleOver.exists_iso_coprod_id` moves the same way, **2 → 3** modules, and
+`a414f61`, and the new occurrence is the only one in the tree that is neither a declaration, a
+guard, nor inside the declaring module. **The qualifier is what the breakdown above forces**: of
+that module's two places one is the declaration and the other is
+`…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_iff`'s proof term, which consumed the
+name at `a414f61` and consumes it still, so *first consumer* without the qualifier is false and is
+false by this paragraph's own arithmetic. What that says about the pinned sentence of the section
+above is taxis #2120's question and not this one's. `…SeparatedFiniteEtaleOver.exists_iso_coprod_id`
+moves the same way, **2 → 3** modules, and
 `…SeparatedFiniteEtaleOver.connectedSpace_of_isConnected` **3 → 4**. The population is every tracked
 `.lean` file under `Oka/` and `OkaTest/` with the two root modules, the stripper is
 `scripts/import_cost.py`'s `strip_comments`, and the token is not flanked by a letter, a digit or
