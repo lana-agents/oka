@@ -5970,12 +5970,15 @@ met with the *range* and the containment would give one inclusion of the two.
 `ComplexAnalytic.refineDatumMemberIota_image_coverOpen_of_ne`
 (`Oka/Analytification/RefineDatumRefinesCross.lean`) as the second consumer. **This is a narrowing
 and not a correction, and which of the two it is, is a run**: at `a6d78d3`, the commit that wrote
-the clause, that name occurred three times in the comment-stripped code of this repository — its
-`theorem` in `Oka/Analytification/AffineCover.lean`, one proof term in
+the clause, that name occurred **three** times in **three** modules of the comment-stripped code of
+this repository — its `theorem` in `Oka/Analytification/AffineCover.lean`, one proof term in
 `ComplexAnalytic.coverIota_image_inter_of_eq`, and the `#print axioms` line below — and at
-`ae732d9` it occurs **four** times in **three** modules, the fourth being that second consumer's
-proof term. The instrument is `scripts/import_cost.py`'s `strip_comments` with the token not
-flanked by a letter, a digit or `_`, over every tracked `.lean` under `Oka/` and `OkaTest/` with
+`ae732d9` it occurs **four** times in **four** modules, the fourth being that second consumer's
+proof term in `Oka/Analytification/RefineDatumRefinesCross.lean`. **Both module counts include this
+file**, because on the instrument below a `#print axioms` line is an occurrence like any other and
+both enumerations above name it; drop it and the pair is three and three, never four and three.
+The instrument is `scripts/import_cost.py`'s `strip_comments` with the token not flanked by a
+letter, a digit or `_`, over every tracked `.lean` under `Oka/` and `OkaTest/` with
 the two root modules, **read per occurrence and not per module**: a count of the *modules* a name
 occurs in cannot decide how many declarations consume it, because the declaring module's own
 occurrences are not all declarations. That is the standing rule

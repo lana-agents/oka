@@ -10528,7 +10528,7 @@ proved at every point of it directly and needs no transport from one. What the c
 the other direction, and that is a base this repository does not yet have.
 
 **That sentence's second half read *and no statement of this repository consumes any of them* until
-2026-09-20, and it is corrected here rather than dated, because it was false at the commit it pins
+2026-09-21, and it is corrected here rather than dated, because it was false at the commit it pins
 itself to.** That commit is `6be2998`, the merge of `lana-agents/oka#597` that wrote this section,
 and `git show 6be2998:OkaTest/Axioms/Morphisms.lean` carries the retired wording — wrapped after
 *this*, so a line-anchored `git log -S` on the whole clause returns nothing where `-S` on
@@ -10616,9 +10616,18 @@ that the pattern above is a choice and not an assumption**: `no caller`, `nothin
 
 **The pattern is a sample of the class and not the class, and its bound is one word.**
 `git grep -cinE consum` over `OkaTest/Axioms/` at `ae732d9` returns **127** lines in **seven**
-files; the pattern above reaches 39 of them, and the rest — sentences saying what *does* consume a
-name, or placing a guard beside its consumer — are unopened here. That is a bound and not a clean
-bill, in the same sense as the path bound at the end of this paragraph.
+files; the pattern above reaches **38** of those lines, and the other **89** — lines saying what
+*does* consume a name, or placing a guard beside its consumer — are unopened here. That is a bound
+and not a clean bill, in the same sense as the path bound at the end of this paragraph.
+
+**38 and not 39, because the subtraction is over lines and the 39 is over matches**, which are the
+two figures the paragraph above keeps apart and which do not become one here: the 39 matches touch
+**43** distinct lines, of which **five** carry no `consum` at all — they are the first halves of
+the five straddling matches named above, each holding the `no` or the `first` while the partner
+line holds the `consumer`. Run under the same normalisation as the pattern, so that one instrument
+decides both, `consum` returns **132** matches in **108** sentences over these paths at `ae732d9`,
+of which the pattern is **39** and **35**. Every alternative of the pattern contains the substring,
+so the inclusion is exact either way; what it is not is the same noun.
 
 **Of the 35, the live claims that a named declaration of this repository is unconsumed are about
 seven names, and every one of the seven is true at `ae732d9`**, by the token instrument run per
@@ -10647,6 +10656,22 @@ neighbourhood claim** of `### A base whose fundamental group is trivial has only
 whose reading the paragraph above fixes as *the first from outside the declaring module*; its three
 names occur in exactly two modules each at `0b2759b`, which is what it asserts.
 
+**That verdict turns on which commit *at the commit this section is written at* names, and this
+file now reads that phrase two ways — so the difference is said here rather than left in the
+figures.** Both readings are forced, and by different things. At the corrected sentence above, the
+four names do not exist before `6be2998`, so the pin can only be the merge that wrote the section,
+which is why that sentence is **false at the commit it pins itself to** and is corrected rather
+than dated. At the neighbourhood claim, the sentence is the ground of a *first consumer* claim
+about the push writing it, so the pin can only be that push's parent — otherwise the section
+asserts that nothing read the group at a commit whose own new module reads it. **On the first
+reading the neighbourhood claim is false and on the second it is true, and that is a run**: at
+`e6a49ab` the three names are in **four**, **two** and **three** modules, against **two**, **two**
+and **two** at `0b2759b`; every entrant is a file that push itself adds —
+`Oka/AnalyticSpace/SimplyConnected.lean` for the first and the third and
+`OkaTest/FundamentalGroup.lean` for the first alone. It is read here as its own claim requires and
+so it is not a site this push repairs; **a later run writing either phrase should pin the commit
+by name instead**, which costs seven characters and is what the rest of this section does.
+
 **The other four are declaration-level claims in the two other files, and one of the four is
 false.** True, each by the token instrument at `ae732d9`:
 `OkaTest/Axioms/AnalyticSpace.lean`'s *beside the statements about covers that are its only
@@ -10658,8 +10683,9 @@ consumer* — three occurrences, the one proof term in `Oka/Analytification/Hype
 which is that section's own subject; and the same file's clause making
 `ComplexAnalytic.base_condEtaleProj_ne_zero` the *first consumer* of
 `ComplexAnalytic.base_analytificationMap_etalePresHom_comp_apply`, which occurs three times and
-whose one proof term is in `OkaTest/StandardEtaleNotFinite.lean`, the declaration that clause
-names. **The false one is `### The refined datum refines the cover it refines`'s
+whose one proof term is inside `ComplexAnalytic.base_condEtaleProj_ne_zero` itself, the declaration
+that clause names, in `OkaTest/StandardEtaleNotFinite.lean`.
+**The false one is `### The refined datum refines the cover it refines`'s
 *it is the only consumer of `ComplexAnalytic.injective_base_coverIota`*, and this push repairs it
 in the file it is in** — that name has **two** consumers at `ae732d9`, and the record there says
 which commit added the second. **That site is a narrowing and this one is a correction**, and the
