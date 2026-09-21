@@ -173,7 +173,7 @@ the same declaration.
   anything other than the base. Two sheets is what the algebra says to a reader and not what any
   declaration here says; proving it, or proving the second cover is not an isomorphism, is a
   separate statement and nothing below attempts it.
-* **Neither of those two readings survives the zero ring, and the `variable` line admits it.**
+* **The *not the base* reading does not survive the zero ring, and the `variable` line admits it.**
   Both pairs are built over `variable (R : Type*) [CommRing R]` with no `[Nontrivial R]`, at
   `:226` here and at `OkaTest/OpenBaseFiniteness.lean:129`. At `R = PUnit` each pair's
   `StandardEtalePair.Ring` is a subsingleton — `Module.subsingleton` over a subsingleton base —
