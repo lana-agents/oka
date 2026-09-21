@@ -10778,9 +10778,12 @@ another.** The population is every tracked `.lean` under `Oka/` and `OkaTest/` w
 modules, the stripper is `scripts/import_cost.py`'s `strip_comments`, and the token is the name
 not preceded or followed by a letter, a digit or `_`; **what decides a consumer is the occurrence
 and not the module it is in**, which is the whole of the difference between the two rows. Line
-numbers are `ae732d9`'s, the commit this branch is cut from; this branch itself makes
-`Oka/AnalyticSpace/SimplyConnectedCriterion.lean` fifteen lines longer above them, so they must be
-re-taken and not copied.
+numbers are `6e0c610`'s, the commit this branch is cut from, and they were `ae732d9`'s and
+`66cf643`'s while it was cut from those: `Oka/AnalyticSpace/SimplyConnectedCriterion.lean` and
+`Oka/AnalyticSpace/SimplyConnected.lean` are the **same blobs** at all three commits — `499daf2c`
+and `896d5aaf` — so no landing in between could have moved a line of either. This branch itself
+makes the first of those files fifteen lines longer above them, so they must be re-taken and not
+copied.
 
 * `…SeparatedFiniteEtaleOver.exists_iso_coprod_id` occurred **once** in
   `Oka/AnalyticSpace/SimplyConnected.lean`, at `:241`, and that occurrence is its own declaration;
@@ -10806,16 +10809,29 @@ because nothing about any of them moves**: under the rule above the four occur, 
 them with a use outside the module that declares it, and the two types occur in the hundreds — so
 of those six this push is neither the first consumer nor the second.
 
-**So the sentence in the section above saying that no statement of this repository consumes any of
-that section's four names does not stand, and this push is not what falsifies it.** At the commit
-that sentence pins itself to, the four names form a chain in which every link is a consumption —
-the first consumed at `:262`, `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_iff` at
-`:277` and `:278`, `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_congr` at `:290` — and
-only `…SeparatedFiniteEtaleOver.nontrivial_fundamentalGroup_congr` is consumed by nothing. **That
-sentence is taxis #2120's subject and is not repaired here**; it is named because the new
-occurrence below must not be read as the first one, and because the derivation it rests on — a
-per-module occurrence count standing in for a consumption — is the one this paragraph declines to
-repeat.
+**The sentence in the section above that used to say no statement of this repository consumes any
+of that section's four names was corrected before this branch was replayed onto its present
+base**: `a3d656d` (taxis #2120) rewrote its second half to *nothing outside the module that
+declares them consumes any of them*, and that section carries the retirement itself, in the
+paragraph opening *That sentence's second half read*. **Nothing here restates that correction,
+repairs it or rests on it**, and neither that sentence nor its record is touched by this push. What
+this paragraph keeps is the chain, because it is the reason the new occurrence below is the
+**second** consumer of one of those names and not the first: at the commit that sentence pins
+itself to, the four names form a chain in which every link is a consumption — the first consumed at
+`:262`, `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_iff` at `:277` and `:278`,
+`…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_congr` at `:290` — and only
+`…SeparatedFiniteEtaleOver.nontrivial_fundamentalGroup_congr` is consumed by nothing.
+
+**One figure of that record this push moves, and it is the placement half**: *each of the four
+occurs in that module, in this one, and in no third* holds at `6be2998`, the commit that wrote the
+section, at `ae732d9` and `66cf643`, which were this branch's bases before it was replayed, and at
+`6e0c610`, which is its base now — all four names, **two** modules apiece, re-taken at the last of
+the four — and `Oka/AnalyticSpace/SimplyConnectedCoprod.lean` is a third module for the **first** of
+the four and for that one alone: **2** modules and **3** places at `6e0c610`, **3** and **4** here.
+**`lana-agents/oka#603` (taxis #2119) is in flight and does the same with
+`Oka/AnalyticSpace/SimplyConnectedPoint.lean`, for the same one of the four**, so whichever of the
+two lands second makes a **fourth** module of it rather than a third, and owes that figure rather
+than this one.
 
 **The routing** is the section above's, unchanged: these are statements about the covers of a base
 and the topic table at the head of `OkaTest/Axioms.lean` routes those here. -/

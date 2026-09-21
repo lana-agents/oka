@@ -99,9 +99,31 @@ tense.
 
 ## What the census scripts return
 
+**Both columns of every row below are pinned to a commit**: the before-column is `6e0c610`, the
+commit this file is cut from, and the after-column is the commit that adds it. The reason is the one
+the section above gives of the marginal import cost — *a figure about the importer at a commit is
+meaningless without one* — and it is as true of a tree-wide total as of a closure. **Every row below
+stood unpinned until 2026-09-21, and five of them were false at the head that carried them**: the
+two dump totals read *4998 → 5003* and *338274 → 338280*, and the three
+`scripts/check_docstring_names.py` rows read *18097 → 18150*, *350 → 383* and *240 (120) → 244
+(124)*. **Their before-columns are `a414f61`'s, and this branch has been cut from `ae732d9`, from
+`66cf643` and now from `6e0c610`**: at `ae732d9`, its first base, the backticked figure is **18142
+(4419)** and not **18097 (4406)**, so those three rows were already wrong at the before-column
+before any replay, and every replay since has moved it again. **That is what the pin is for** — an
+unpinned pair can be wrong at both ends at once and a reader cannot tell which end — and the five
+rows are re-taken here at `6e0c610` and at this head, each column a run. **What no replay has moved
+is a delta**: the five rows this module adds to the declaration dump, the six it adds to the
+environment dump and the `5 = 4 + 1` below are properties of this push and are stated without a pin,
+and that division is what the pin is for. **The `scripts/guard_coverage.py` rows came through every
+replay unmoved, and that is a fact about what landed in between rather than a property of that
+script**: every row of that report is byte-identical at `a3d656d`, `57e5a1a`, `d34b436`, `66cf643`
+and `6e0c610`, and the module `lana-agents/oka#601` adds carries no `#print axioms` of its own, so
+the guard row had nothing to miss there. **A row that happens to be flat is not a row that cannot
+move**, and they are pinned with the rest.
+
 `scripts/DumpOkaDecls.lean` writes **5** rows at this module — the five declarations, with **no**
-equation lemma, match lemma or congruence lemma — and the dump total moves **4998 → 5003**.
-`scripts/DumpEnvNames.lean` moves **338274 → 338280**, which is those five declarations and this
+equation lemma, match lemma or congruence lemma — and the dump total moves **5003 → 5008**.
+`scripts/DumpEnvNames.lean` moves **338280 → 338286**, which is those five declarations and this
 one module and nothing else.
 
 `scripts/guard_coverage.py` moves guards under `OkaTest/Axioms/` **2021 → 2026**, all five in
@@ -114,9 +136,9 @@ is advertised under `## Main definitions`, which that script does not read, so i
 *abbreviated citations, not counted* at **30, four of them dotted**, and *backticked tokens that
 resolve to nothing* at **719** with `--env-dump` given at both ends.
 
-`scripts/check_docstring_names.py` goes **18097 → 18150** backticked names (**4406 → 4419**
-distinct) and **350 → 383** elided citations (**164 → 170** distinct), with **0** unresolved at
-both ends, **6** resolving under more than one namespace at both, and dotless **240 (120) → 244
+`scripts/check_docstring_names.py` goes **18263 → 18317** backticked names (**4432 → 4445**
+distinct) and **367 → 408** elided citations (**169 → 175** distinct), with **0** unresolved at
+both ends, **6** resolving under more than one namespace at both, and dotless **240 (120) → 245
 (124)**.
 
 **Both ends of every figure in this section are runs**, with the base column taken in a

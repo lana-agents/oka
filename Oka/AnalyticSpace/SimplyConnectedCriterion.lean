@@ -172,7 +172,7 @@ ends of this push.
   `Oka/AnalyticSpace/SimplyConnectedCoprod.lean`, where both directions and the second criterion
   are.
 
-  **Until 2026-09-20 this bullet priced that step at one statement, and named the wrong one**: it
+  **Until 2026-09-21 this bullet priced that step at one statement, and named the wrong one**: it
   read *what it needs and this file does not have is that a connected object isomorphic to a finite
   coproduct of copies of a terminal object has a one-element index type.* That statement is true
   and **is not what the step needs**; the index type is never counted. A coprojection into a
