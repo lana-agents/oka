@@ -10701,7 +10701,7 @@ are unopened — a bound and not a clean bill.
 `Oka/AnalyticSpace/SimplyConnectedPoint.lean` supplied that base and the section directly below
 this one guards it: the fundamental group of `ℂ⁰` is trivial, so the first of the four names above
 has a consumer **outside the module that declares it**, and the criterion has a base to be read at.
-**Inside that module it already had one at `a414f61`**, and the qualifier is not decoration:
+**Inside that module it already had one at `ae732d9`**, and the qualifier is not decoration:
 `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_iff`'s proof term is
 `⟨fun _ A _ ↦ …nonempty_iso_id.{u} x A, …subsingleton_fundamentalGroup_of_iso_id.{u} x⟩`, which is
 a statement of this repository consuming the first name and is neither a declaration of it nor a
@@ -10950,11 +10950,11 @@ it.** At the commit this section is written at,
 `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_of_iso_id` occurs in the
 comment-stripped code of **three** modules and **four** places — the module that declares it twice,
 this file once, and the new module once — against **two** modules and **three** places at
-`a414f61`, and the new occurrence is the only one in the tree that is neither a declaration, a
+`ae732d9`, and the new occurrence is the only one in the tree that is neither a declaration, a
 guard, nor inside the declaring module. **The qualifier is what the breakdown above forces**: of
 that module's two places one is the declaration and the other is
 `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_iff`'s proof term, which consumed the
-name at `a414f61` and consumes it still, so *first consumer* without the qualifier is false and is
+name at `ae732d9` and consumes it still, so *first consumer* without the qualifier is false and is
 false by this paragraph's own arithmetic. What that says about the pinned sentence of the section
 above is taxis #2120's question and not this one's. `…SeparatedFiniteEtaleOver.exists_iso_coprod_id`
 moves the same way, **2 → 3** modules, and

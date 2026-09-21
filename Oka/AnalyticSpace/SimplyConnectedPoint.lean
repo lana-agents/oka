@@ -206,15 +206,23 @@ flat at **142, in 60 files**, *advertised from another file* flat at **89**, *ab
 citations, not counted* flat at **30, four of them dotted**, and *backticked tokens skipped* flat
 at **1 / 132 / 719**.
 
-`scripts/check_docstring_names.py` goes **18097 (4406) → 18146 (4419)** backticked names and
+`scripts/check_docstring_names.py` goes **18142 (4419) → 18194 (4432)** backticked names and
 **350 (164) → 399 (174)** elided citations, with **0** unresolved at both ends and **6** resolving
 under more than one namespace at both. **The distinct halves are `--diff` and not arithmetic**:
 **13 added and 0 removed** on the backticked side — the nine declarations below,
-`Finite.instDiscreteTopology`, `PreconnectedSpace.constant` and this file's two `import`s, all of
-them cited in the prose — and **10 added and 0 removed** on the elided side, the nine declarations
-again in their elided spelling and `…FiniteEtaleOver.fiber`. The occurrence halves are larger than
-the distinct ones because most of these names are cited more than once, which is what a citation
-count is for. **The dotless row goes 240 (120) → 242 (122) and the
+`Finite.instDiscreteTopology`, `PreconnectedSpace.constant`, and **two module names**,
+`Oka.AnalyticSpace.SimplyConnectedCriterion`, which is one of this file's two `import` lines, and
+`Oka.AnalyticSpace.EmptyBase`, which is not an `import` of this file at all but the only one of
+the other — and **10 added and 0 removed** on the elided side, the nine declarations again in
+their elided spelling and `…FiniteEtaleOver.fiber`. **`Oka.AnalyticSpace.ConnectedCover`, which is
+this file's other `import`, is cited in this file exactly as often as each of those two — once —
+and is not among the thirteen**: the tree backticks it already at the commit this file is cut
+from, twice in `Oka/AnalyticSpace/ConnectedCover.lean` and once in
+`OkaTest/Axioms/Morphisms.lean`. **A name the tree already cites adds nothing to the distinct
+count however often a new file cites it**, which is the whole of what separates the two halves and
+is why this row cannot be read off the list of what this file spells. The occurrence halves are
+larger than the distinct ones because most of these names are cited more than once, which is what
+a citation count is for. **The dotless row goes 240 (120) → 242 (122) and the
 two are this sentence's own**: a first draft of the paragraph above carried `…nonempty_iso_id` and
 a first draft of the guard section `…originZero`, each of which elides a prefix of a component
 rather than a namespace and each of which moved the row by one; both were repaired to the dotted
