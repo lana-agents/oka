@@ -30,9 +30,11 @@ gluing one only because that file is an import of this one.
 
 **Two independent commands agree, and that is what makes this a decision rather than a spelling
 accident.** The first is the token above. The second asks it the other way round:
-`grep -rn "LocallyRingedSpace" Mathlib/ | grep -ic cover` returns **2**, and neither hit is a
-structure — `Mathlib/AlgebraicGeometry/Cover/Open.lean:59` and
-`Mathlib/AlgebraicGeometry/Gluing.lean:771`, both uses inside proofs. The environment says the
+`grep -rn "LocallyRingedSpace" Mathlib/ | grep -ic cover` returns **2**, and neither hit declares
+a structure: `Mathlib/AlgebraicGeometry/Gluing.lean:771` is a rewrite inside a `by` block, and
+`Mathlib/AlgebraicGeometry/Cover/Open.lean:59` is the `f x := …` field of the structure *instance*
+in the body of `def affineCover … := by … exact { … }`, which is a definition written in tactic
+mode rather than a proof. The environment says the
 same pair: of the **380** non-internal declarations whose type mentions
 `AlgebraicGeometry.LocallyRingedSpace`, exactly **two** write *Cover* in their name and both are
 about `Scheme`, and of the **21** structures of that environment whose name writes *Cover* not
@@ -47,9 +49,9 @@ that structure's name in its own statement, whatever namespace is open; a `varia
 introducing a cover leaves the name still to be written, so nothing is inherited from a binder
 the scan does not read; and a structure is declared and not generated, so there is no
 elaborator-produced spelling to miss. **What is deliberately not claimed is that the notion is
-unreachable**: `AlgebraicGeometry.Scheme.Cover` is a `def` over a
-`CategoryTheory.Precoverage`, and whether it specialises to locally ringed spaces is a question
-this file does not ask and does not need.
+unreachable**: `AlgebraicGeometry.Scheme.Cover` is an `abbrev` over a `CategoryTheory.Precoverage`
+(`Mathlib/AlgebraicGeometry/Cover/MorphismProperty.lean:50`), and whether it specialises to
+locally ringed spaces is a question this file does not ask and does not need.
 
 **That clause read *Mathlib has no such structure* until 2026-09-21**, with no version and no
 instrument beside it;

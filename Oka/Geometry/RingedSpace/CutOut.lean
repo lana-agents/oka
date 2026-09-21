@@ -63,24 +63,30 @@ returns **0** occurrences in **0** files — but that token is *this repository'
 statement*, and Mathlib is under no obligation to have picked it. What a statement of full
 faithfulness cannot avoid is naming the functor and the property in its own type, whatever
 namespace is open and whatever the lemma is called, and the **0** above is a count of exactly
-that. **The one residue, named rather than left for a reader to find**: a lemma phrased as
+that. **The first residue, named rather than left for a reader to find**: a lemma phrased as
 injectivity or surjectivity of the action on hom-sets need not write `Full` or `Faithful` at all —
 so I asked that too, and of the **197**, exactly **one** has a type also mentioning
 `Function.Injective`, `Function.Bijective` or `Function.Surjective`
 (`AlgebraicGeometry.Scheme.Hom.stalkFunctor_toImage_injective`, which is about stalks), and only
 **three** have names writing *full*, *faith*, *inj* or *bij*, the other two being the generated
 `AlgebraicGeometry.PresheafedSpace.Hom.mk.inj` and
-`AlgebraicGeometry.PresheafedSpace.Hom.mk.injEq`.
+`AlgebraicGeometry.PresheafedSpace.Hom.mk.injEq`. **The second residue is the other functor of
+that name**: `TopCat.Sheaf.pushforward` (`Mathlib/Topology/Sheaves/Functors.lean:62`) is the
+nearest thing Mathlib has to the functor this claim is about and the claim does not name it, so I
+asked the same question of it — **17** declarations have a type mentioning it and **none** of
+them mentions `CategoryTheory.Functor.Full`, `CategoryTheory.Functor.Faithful` or
+`CategoryTheory.Functor.FullyFaithful` either.
 
 **Two positive controls, because a scan that finds nothing is worth nothing without one.** The
-**197** and the **1348** are the first: both halves of the question are pointed at something
-Mathlib has in quantity. In source, `grep -rn "Presheaf.pushforward" Mathlib/` returns **20**
-occurrences in **7** files, and `Mathlib/Topology/Sheaves/Functors.lean:146` carries
-`fullyFaithfulSheafToPresheaf` — a fully-faithful statement about a *different* functor in the
-very file this claim is about — so the shape of statement is one Mathlib does write. **The
-population of every command here is `Mathlib/` and not this tree**, and at this site that is the
-whole trap: the name denied is declared under `Oka/`, so the same `grep` run over this repository
-returns the declaration it names and decides nothing.
+**197** and the **1348** are the first: both halves of the question are pointed at something Mathlib
+has in quantity. In source, `grep -rn "Presheaf.pushforward" Mathlib/` returns **20** occurrences in
+**7** files, and `fullyFaithfulSheafToPresheaf` — an `abbrev` declared at
+`Mathlib/CategoryTheory/Sites/Sheaf.lean:341`, a fully-faithful statement about a *different*
+functor — is used in the very file this claim is about, at
+`Mathlib/Topology/Sheaves/Functors.lean:146`, so the shape of statement is one Mathlib does write.
+**The population of every command here is `Mathlib/` and not this tree**, and at this site that is
+the whole trap: the name denied is declared under `Oka/`, so the same `grep` run over this
+repository returns the declaration it names and decides nothing.
 
 **That clause read *That is not in Mathlib* until 2026-09-21**, with no version, no instrument and
 no verdict beside it; `git show c6bfc1f:Oka/Geometry/RingedSpace/CutOut.lean` carries the retired
