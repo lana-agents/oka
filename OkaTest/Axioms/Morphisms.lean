@@ -10773,14 +10773,14 @@ three**, which is not in tension with that: the proofs reach choice through the 
 through Mathlib's `CategoryTheory.PreGaloisCategory.autMulEquivAutGalois` behind the criterion they
 compose with, and through the `Nonempty.some` that opens the hypothesis.
 
-**This push consumes two names it does not declare, and it is the first consumer of one of them
-and the second consumer of the other.** The population is every tracked `.lean` under `Oka/` and
-`OkaTest/` with the two root modules, the stripper is `scripts/import_cost.py`'s `strip_comments`,
-and the token is the name not preceded or followed by a letter, a digit or `_`; **what decides a
-consumer is the occurrence and not the module it is in**, which is the whole of the difference
-between the two rows. Line numbers are `ae732d9`'s, the commit this branch is cut from; this
-branch itself makes `Oka/AnalyticSpace/SimplyConnectedCriterion.lean` fifteen lines longer above
-them, so they must be re-taken and not copied.
+**This push is the first consumer of one name it does not declare and the second consumer of
+another.** The population is every tracked `.lean` under `Oka/` and `OkaTest/` with the two root
+modules, the stripper is `scripts/import_cost.py`'s `strip_comments`, and the token is the name
+not preceded or followed by a letter, a digit or `_`; **what decides a consumer is the occurrence
+and not the module it is in**, which is the whole of the difference between the two rows. Line
+numbers are `ae732d9`'s, the commit this branch is cut from; this branch itself makes
+`Oka/AnalyticSpace/SimplyConnectedCriterion.lean` fifteen lines longer above them, so they must be
+re-taken and not copied.
 
 * `…SeparatedFiniteEtaleOver.exists_iso_coprod_id` occurred **once** in
   `Oka/AnalyticSpace/SimplyConnected.lean`, at `:241`, and that occurrence is its own declaration;
@@ -10790,6 +10790,21 @@ them, so they must be re-taken and not copied.
   `:262`, in the proof term of `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_iff` —
   and once in this file, as a guard. **This push is its second consumer**, and a count of modules
   would have returned *two* for both names and decided neither.
+
+**Those two rows are not everything this push consumes**, and the sentence above them is about
+the first-and-second-consumer relation and not about consumption. Joining this module's
+comment-stripped tokens against `scripts/DumpOkaDecls.lean`'s dump — the instrument that carries
+the declaring module of every name this repository owns, each matched as
+`Oka/AnalyticSpace/SimplyConnectedCoprod.lean` spells it inside its own namespace — gives
+**eight** names it consumes and does not declare. The other six are
+`…SeparatedFiniteEtaleOver.id`, `…SeparatedFiniteEtaleOver.fundamentalGroup`,
+`…SeparatedFiniteEtaleOver.fintypeFiberFunctor` and
+`…SeparatedFiniteEtaleOver.isTerminalFintypeFiberId`, together with the two types those are named
+in, `ComplexAnalytic.AnalyticSpace` and `…SeparatedFiniteEtaleOver`. **None of the six is a row
+because nothing about any of them moves**: under the rule above the four occur, at `ae732d9`,
+**17**, **18**, **42** and **4** times in **7**, **5**, **13** and **3** modules, every one of
+them with a use outside the module that declares it, and the two types occur in the hundreds — so
+of those six this push is neither the first consumer nor the second.
 
 **So the sentence in the section above saying that no statement of this repository consumes any of
 that section's four names does not stand, and this push is not what falsifies it.** At the commit
