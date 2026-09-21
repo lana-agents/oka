@@ -175,9 +175,10 @@ the same declaration.
   separate statement and nothing below attempts it.
 * **The *not the base* reading does not survive the zero ring, and the `variable` line admits it.**
   Both pairs are built over `variable (R : Type*) [CommRing R]` with no `[Nontrivial R]`, at
-  `:226` here and at `OkaTest/OpenBaseFiniteness.lean:129`. At `R = PUnit` each pair's
-  `StandardEtalePair.Ring` is a subsingleton — `Module.subsingleton` over a subsingleton base —
-  so `ComplexAnalytic.sqSubOneTwoPair`'s algebra **is** the base there, and
+  `:227` here and at the same binder above `ComplexAnalytic.sqSubOnePair` in
+  `OkaTest/OpenBaseFiniteness.lean`. At `R = PUnit` each pair's `StandardEtalePair.Ring` is a
+  subsingleton — `Module.subsingleton` over a subsingleton base — so
+  `ComplexAnalytic.sqSubOneTwoPair`'s algebra **is** the base there, and
   `ComplexAnalytic.sqSubOnePair`'s is too and lawfully, `2` being a unit of the zero ring.
   **So *not the base* needs a non-trivial `R`, *is the base* needs `2` inverted, and until
   2026-09-21 this file carried four of the second with no hypothesis and three of the first with
