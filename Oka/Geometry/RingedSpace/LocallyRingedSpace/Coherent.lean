@@ -72,6 +72,36 @@ does not reach, so written with their namespace separate — `SheafOfModules`'s 
 coherence's first half, and `SheafOfModules.IsFinitePresentation` asks for one local presentation
 where coherence asks that the kernel of *every* map from a finite free sheaf be of finite type.
 
+**Which telescope is a parameter of that scan, and the nine above are
+`Lean.Meta.forallTelescope`'s.** `Lean.Meta.forallTelescopeReducing` unfolds before it stops, and
+over the same environment it returns **eleven**: it adds `SheafOfModules.isQuasicoherent` and
+`SheafOfModules.isFinitePresentation`, lower-case `def`s whose type ends in
+`CategoryTheory.ObjectProperty (SheafOfModules R)`, which is `SheafOfModules R → Prop`, and which
+are siblings of two of the nine. **The verdict is invariant under the choice and the enumeration
+is not**: of the eleven, three write a form of *coherent* and eight write none, against two and
+seven of the nine, and still not one of the eleven is coherence. The list above is the
+non-reducing reading's and is left as it stands, the extra two being named here rather than folded
+into a list that would then mean two things at once. The filter is `Lean.Name.isInternalDetail`
+under both readings, and both telescopes are run on the whole type rather than on its head, which
+is the only way a type ending in `CategoryTheory.ObjectProperty` is reached at all. This
+repository already names the parameter at another type-keyed scan:
+`Oka/AnalyticSpace/PullbackGlue.lean` takes the head of a codomain under
+`Lean.Meta.forallTelescopeReducing` and says so where it states the scan, which is what the clause
+above brings here.
+
+**A positive control, which is why the parameter is load-bearing at this site and not merely in
+general.** The coherence predicate this repository itself provides is exposed in exactly the shape
+the non-reducing walk cannot see: beside the class `SheafOfModules.IsCoherent` sits the `abbrev`
+`SheafOfModules.isCoherent`, which packages it as a `CategoryTheory.ObjectProperty`. Over the
+environment of `import Oka` — a different environment from the `import Mathlib` one every other
+figure in this section is taken in — the same scan returns **661** declarations mentioning
+`SheafOfModules`, **twelve** of them Prop-valued under `forallTelescope` and **sixteen** under
+`forallTelescopeReducing`, and `SheafOfModules.isCoherent` is among the sixteen and not among the
+twelve. So the scan does find a coherence predicate when there is one to find, and only in the
+reducing reading; a predicate written the way this repository writes its own would have sat outside
+the nine above. That is a statement about the instrument and about this tree, and it leaves the
+verdict of this section, which the `import Mathlib` runs decide, exactly where it was.
+
 **The name-keyed run agrees with that verdict, and it is here as the narrowing run rather than the
 deciding one — but it has to be asked in both spellings.** Of the **228** non-internal declarations
 of that environment whose name writes some form of *coherent* in **any** case, **five** are
