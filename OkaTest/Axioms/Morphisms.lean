@@ -10712,8 +10712,10 @@ this push's second instance of the shape and the reason the wording changed betw
 decoration: `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_iff`'s proof term is
 `⟨fun _ A _ ↦ …nonempty_iso_id.{u} x A, …subsingleton_fundamentalGroup_of_iso_id.{u} x⟩`, which is
 a statement of this repository consuming the first name and is neither a declaration of it nor a
-guard. **That was taxis #2120's question and `a3d656d` answered it**, two commits before this one is
-written: the clause reading *and no statement of this repository consumes any of them* is corrected
+guard. **That was taxis #2120's question and `a3d656d` answered it**, in a commit this one has in
+its history rather than one ahead of it — said that way because a count of the commits between the
+two is a figure every rebase moves, and this branch has had three:
+the clause reading *and no statement of this repository consumes any of them* is corrected
 above rather than dated, for the reason the record above gives. **Nothing here restates that
 correction, repairs it or rests on it**, and neither the pinned sentence nor its record is touched
 by this push; what is dated here is only the two sentences named at the top of this paragraph.
@@ -10961,16 +10963,23 @@ saying it is the only one, `…AnalyticSpace.originZero` and
 it.** At the commit this section is written at,
 `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_of_iso_id` occurs in the comment-stripped
 code of **three** modules and **four** places — the module that declares it twice, this file once,
-and the new module once — against **two** modules and **three** places at `a3d656d`, which is this
+and the new module once — against **two** modules and **three** places at `d34b436`, which is this
 branch's parent, and the new occurrence is the only one in the tree that is neither a declaration, a
 guard, nor inside the declaring module. **The before-column is the parent and not merely an earlier
-commit, and the two the branch has had are equal**: at `a414f61`, at `ae732d9` and at `a3d656d` this
-token is **2** modules and **3** places, the token below is **2** and **2**, and the third is **3**
-and **5**, so re-pinning across two rebases re-pins and changes no figure. **The reason it cannot
-change is structural and is checked rather than assumed**: every `.lean` file that differs between
-those commits has byte-identical comment-stripped, whitespace-normalised residue, so a census run
-through this stripper cannot see either merge — `a3d656d` adds two occurrences of this very token to
-this file and **both are inside a docstring**. **The qualifier is what the breakdown above forces**:
+commit, and the four the branch has had are equal**: at `a414f61`, at `ae732d9`, at `a3d656d` and at
+`d34b436` this token is **2** modules and **3** places, the token below is **2** and **2**, and the
+third is **3** and **5**, so re-pinning across three rebases re-pins and changes no figure. **The
+reason it cannot change is structural and is checked rather than assumed, and the check is not the
+same one at every step**: every `.lean` file that differs between `a414f61` and `a3d656d` has
+byte-identical comment-stripped, whitespace-normalised residue, so a census run through this
+stripper cannot see those two merges at all — `a3d656d` adds two occurrences of this very token to
+this file and **both are inside a docstring**. **That argument does not reach the third rebase and
+saying so is the point of this clause**: between `a3d656d` and `d34b436` exactly **two** files move
+in the stripped residue — `OkaTest.lean`, which gains one `import` line, and
+`OkaTest/StandardEtaleFiniteEtaleBase.lean`, which is new — and what carries the column across is
+that **neither of the two contains any of the three tokens**, which is a `grep` and not a residue
+argument. **A structural reason has a domain, and a rebase can leave it.**
+**The qualifier is what the breakdown above forces**:
 of that module's two places one is the declaration and the other is
 `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_iff`'s proof term, which consumed the name
 at `a3d656d` and consumes it still, so *first consumer* without the qualifier is false and is false

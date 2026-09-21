@@ -192,9 +192,28 @@ which is why both are pinned here and neither is in the present tense.
 
 ## What the census scripts return
 
+**Both columns of every row below are pinned to a commit**: the before-column is `d34b436`, the
+commit this file is cut from, and the after-column is the commit that adds it. The reason is the
+one the section above gives of the marginal import cost — *a figure about the importer at a commit
+is meaningless without one* — and it is as true of a tree-wide total as of a closure, which this
+section learned the expensive way. **Every row below stood unpinned until 2026-09-21, and two
+successive landings falsified three of them**: `lana-agents/oka#606` moved the backticked row by
+ten occurrences and one distinct name, and `lana-agents/oka#601` moved it by a further eighty-seven
+and ten and moved both dump totals as well. The three read *the dump total moves
+**4998 → 5007***, ***338274 → 338284***, and ***18161 (4421) → 18213 (4434)*** — each of them a
+correct pair of runs at `a3d656d`, which was this branch's base for one round, and none of them a
+statement anyone could check a week later. **What no landing has ever moved is a delta**: the nine,
+the ten, the fifty-three and the thirteen below are properties of this push and are stated without a
+pin, and that division is what the pin is for. **The `scripts/guard_coverage.py` rows came through
+both landings unmoved, and that is a fact about those two pushes rather than a property of that
+script**: the module `lana-agents/oka#601` adds carries a `#print axioms` of its own, and the guard
+row misses it only because that file is not under `OkaTest/Axioms/`, while no `## Main results`
+line moved in either push. **A row that happens to be flat is not a row that cannot move**, and
+they are pinned with the rest.
+
 `scripts/DumpOkaDecls.lean` writes **9** rows at this module — the nine declarations, with **no**
-equation lemma, match lemma or congruence lemma — and the dump total moves **4998 → 5007**.
-`scripts/DumpEnvNames.lean` moves **338274 → 338284**, which is those nine declarations and this
+equation lemma, match lemma or congruence lemma — and the dump total moves **5003 → 5012**.
+`scripts/DumpEnvNames.lean` moves **338280 → 338290**, which is those nine declarations and this
 one module and nothing else.
 
 `scripts/guard_coverage.py` moves guards under `OkaTest/Axioms/` **2021 → 2030**, all nine in
@@ -206,7 +225,7 @@ flat at **142, in 60 files**, *advertised from another file* flat at **89**, *ab
 citations, not counted* flat at **30, four of them dotted**, and *backticked tokens skipped* flat
 at **1 / 132 / 719**.
 
-`scripts/check_docstring_names.py` goes **18161 (4421) → 18213 (4434)** backticked names and
+`scripts/check_docstring_names.py` goes **18258 (4432) → 18311 (4445)** backticked names and
 **367 (169) → 416 (179)** elided citations, with **0** unresolved at both ends and **6** resolving
 under more than one namespace at both. **The distinct halves are `--diff` and not arithmetic**:
 **13 added and 0 removed** on the backticked side — the nine declarations below,
