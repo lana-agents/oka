@@ -156,7 +156,7 @@ and a name that differed from it only by its instance arguments would be the wor
   **complex affine 0-space is such a base**, which is the witness this line has not had.
 - `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.exists_iso_coprod_id_originZero`: **so
   every cover separated over it is a finite coproduct of copies of it over itself**, which is the
-  third result of the module two files back applied to a base for the first time.
+  third result of `Oka/AnalyticSpace/SimplyConnected.lean` applied to a base for the first time.
 
 ## The list above is written in full, and carries no other backticked token at all
 
@@ -180,16 +180,21 @@ each. **What the second adds to the first is exactly two modules** — itself an
 `Oka.AnalyticSpace.EmptyBase`, which is its only `import` — so this module's own closure is
 **5030**: the criterion's 5027, those two, and this module. **Those three totals are properties of
 what this file imports and not of the tree**: the first two are the same run at `c6bfc1f` and at
-`ef9e5d2`, three landings later and this branch's base, and the third is the same run at this
-head, which is the only tree it can be taken in at all. **One of the two is in the closure and is
-read by nothing below**, and the `## What is not here` bullet on the empty base says why.
+`ef9e5d2`, three landings later, and the third is the same run at this head, which is the only
+tree it can be taken in at all. **Neither can have moved at `6a792ba`, this branch's base now**:
+`lana-agents/oka#616` is the only landing between the two and `git diff --name-only ef9e5d2
+6a792ba` returns four prose files and neither root module, so no module enters or leaves any
+closure — which is an argument and not a fourth run, and is labelled as one.
+**One of the two is in the closure and is read by nothing below**, and the `## What is not here`
+bullet on the empty base says why.
 
 **The marginal cost to `import Oka` is nevertheless one module, and that is a run and not a diff**:
 `import Oka` brings **5541** modules at `d34b436` and this push adds **one**, by a set difference
 over `Lean.Environment.allImportedModuleNames`, and the one module the difference contains is this
 one. **The total is what a landing moves and the one is not**: at `c6bfc1f` it is **5542** and at
-`ef9e5d2` — this branch's base, two landings further on, one of which adds a module — it is
-**5543**, while the same set difference against this head is still the **one** module.
+`ef9e5d2` — two landings further on, one of which adds a module — it is **5543**, and at
+`6a792ba`, this branch's base now, it is **5543** still for the reason above, while the same set
+difference against this head is at every one of them the **one** module.
 **No Mathlib module enters the closure**, and no `Oka` module does either — both imports were
 already there, `Oka.lean` naming every module of the library. **A marginal import cost is a figure
 about the importer at a commit and is meaningless without one**, which is why every total in this
@@ -199,7 +204,7 @@ is a delta.
 ## What the census scripts return
 
 **Every row below is a total at `d34b436`, named by hash, and the delta this push adds to it**, and
-**`d34b436` is an ancestor of this branch and no longer its parent** — the parent is `ef9e5d2` —
+**`d34b436` is an ancestor of this branch and no longer its parent** — the parent is `6a792ba` —
 which costs the rows nothing, because a total at a hash is checkable from any base and that is the
 whole reason they are written this way; what it does cost is one delta, three paragraphs down. And
 **no row states a total at the commit that will add it**: that commit does not exist while this is
@@ -228,10 +233,10 @@ on what the tree already cites in a way an occurrence count does not. **Of the t
 names below, nine are this push's own declarations and no landing can pre-empt a name that does not
 exist until this push writes it**; the other four are borrowed, and `lana-agents/oka#602` has since
 taken one of the four. **Each additive delta is measured twice and the two agree**: once against
-`d34b436` and once as the difference between `ef9e5d2` and a real merge of this branch with it —
+`d34b436` and once as the difference between `6a792ba` and this branch's head —
 the nine, the ten, the nine, the seven, the one, the seven and the two are each the same
 figure at both; **the distinct-name row is the exception and it is twelve at the second**, and the
-occurrence, elided and dotless rows are runs at `ef9e5d2` alone, this push having reworded itself
+occurrence, elided and dotless rows are runs at `6a792ba` alone, this push having reworded itself
 after the landing. **The `scripts/guard_coverage.py` rows came through the first two
 landings unmoved, and the two rows were flat for different reasons.** The module
 `lana-agents/oka#601` adds carries **no** `#print axioms` and says so itself, so the guard row had
@@ -245,28 +250,42 @@ advertised row **1519** in **234** files, which is a landing and not this push, 
 deltas on them are what they are at `d34b436`.
 
 `scripts/DumpOkaDecls.lean` writes **9** rows at this module — the nine declarations, with **no**
-equation lemma, match lemma or congruence lemma — and the dump total is **5010** at `ef9e5d2`, to
+equation lemma, match lemma or congruence lemma — and the dump total is **5010** at `6a792ba`, to
 which this push adds **9**; it was **5003** at `d34b436` and the **9** was the same there.
 `scripts/DumpEnvNames.lean` is **338289** here and **338280** there, and this push adds **10** at
 both, which is those nine declarations and this one module and nothing else.
 
 `scripts/guard_coverage.py` adds **9** guards under `OkaTest/Axioms/` to the **2028** at
-`ef9e5d2`, all nine in `OkaTest/Axioms/Morphisms.lean`; **7** advertised in a `## Main results` to
+`6a792ba`, all nine in `OkaTest/Axioms/Morphisms.lean`; **7** advertised in a `## Main results` to
 **1523**, in **1** file to **235**; **7** *in both lists* to **1381**; and **2** *guarded and
 advertised nowhere* to **647**, which is the two names of `## Main definitions` above, a section
 that script does not read. **`Δguards = Δ(in both) + Δ(nowhere)` closes at `9 = 7 + 2`**, and it
 closed on the same three deltas at `d34b436`, where the four totals were **2021**, **1517** in
 **233**, **1375** and **646** — which is a thing a pair of totals cannot say. The *unguarded* row
 is **flat** on **142, in 60 files**, *advertised from another file* flat on **89**, *abbreviated
-citations, not counted* flat on **30, four of them dotted**, and *backticked tokens skipped* flat
-on **1 / 132 / 721**. **Flat is the delta and not the total**: the last of those four reads **1 /
-132 / 719** at `d34b436`, moved by a landing and not by this push.
+citations, not counted* flat on **30, four of them dotted**, and *backticked tokens skipped*
+**1 / 132 / 721** to **1 / 132 / 722**. **Flat is the delta and not the total**: the last of those
+four reads **1 / 132 / 719** at `d34b436`, moved by a landing and not by this push. **The one this
+push adds to it is a repository path and not a name**, written into the `## Main definitions` list
+above by the round that stopped reaching a module by its distance in the import chain: that script
+counts a backticked path among the tokens it cannot resolve, and the docstring-name checker does
+not read it at all, the slashes putting it outside that population.
 
-`scripts/check_docstring_names.py` is **18449 (4480)** backticked names at `ef9e5d2` and this push
-adds **57 occurrences and 12 distinct names**; elided citations are **408 (175)** there and it adds
-**49 and 10**; **0** are unresolved and **6** resolve under more than one namespace at both ends of
-both. **The distinct half is the one row of this section that a landing moved, and it is the only
-row that is not a sum**: `--diff` returns **12 added and 0 removed** on the backticked side — the
+`scripts/check_docstring_names.py` is **18451 (4481)** backticked names at `6a792ba` and this push
+adds **58 occurrences and 12 distinct names**; elided citations are **408 (175)** there and it adds
+**51 and 10**; **0** are unresolved and **6** resolve under more than one namespace at both ends of
+both. **The backticked total is the one figure of this section that `lana-agents/oka#616` moved**,
+by **two occurrences and one distinct name**, `Function.pullbackDiagonal` in
+`Oka/Topology/SeparatedMap.lean`; it moved no delta of this push, and the elided total it did not
+move at all. **The elided delta is 51 and was 49 at the previous head**: the round that wrote this
+sentence spells `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_of_iso_id` twice more —
+once in the guard section's account of what consumes the borrowed name and once in this sentence —
+and that is a name the tree already elides, so the occurrence half moved and the distinct half did
+not, which is the same asymmetry the backticked side records two sentences below at the other end.
+**The occurrence delta on the backticked side moved for the same reason**, from **57** to **58**,
+and the two figures this paragraph adds to itself are counted rather than excused.
+**The distinct half is the one row of this section that a landing moved, and it is the only row
+that is not a sum**: `--diff` returns **12 added and 0 removed** on the backticked side — the
 nine declarations below, `Finite.instDiscreteTopology`, `PreconnectedSpace.constant` and the module
 name `Oka.AnalyticSpace.EmptyBase`, which is not an `import` of this file at all but the only one
 of the other. **It was 13 while this branch was cut from `d34b436`**, the thirteenth being
@@ -282,7 +301,7 @@ well — **three** times at this head, against `Oka.AnalyticSpace.EmptyBase`'s *
 `Oka.AnalyticSpace.SimplyConnectedCriterion`'s **four** — and is not among the twelve**: the
 tree backticks it already at `d34b436`, twice in
 `Oka/AnalyticSpace/ConnectedCover.lean` and once in `OkaTest/Axioms/Morphisms.lean`, and those
-three are still the three at `ef9e5d2`. **A name the tree already cites adds nothing to the
+three are still the three at `6a792ba`. **A name the tree already cites adds nothing to the
 distinct count however often a new file cites it**, which is the whole of what separates the two
 halves and is why this row cannot be read off the list of what this file spells. **That is what
 happened to `Oka.AnalyticSpace.SimplyConnectedCriterion` between two of this branch's bases**, and
@@ -294,7 +313,7 @@ all three names in it made false in the act of writing it — the same shape as 
 sentences below, one turn tighter, and a count inside a clause is as much a fixed point to check as
 a row. The occurrence halves are larger than the distinct ones because most of these names are
 cited more than once, which is what a citation count is for. **The dotless row is 246 (125) at
-`ef9e5d2` — 240 (120) at `d34b436` — and this push adds 2 (2) at either, and the two are this
+`6a792ba` — 240 (120) at `d34b436` — and this push adds 2 (2) at either, and the two are this
 sentence's own**: a first draft of the
 paragraph above carried `…nonempty_iso_id` and a first draft of the guard section `…originZero`,
 each of which elides a prefix of a component rather than a namespace and each of which moved the

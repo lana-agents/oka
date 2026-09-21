@@ -10954,7 +10954,8 @@ info: 'ComplexAnalytic.AnalyticSpace.isLocalIso_iff_isOpenCover_source' depends 
 /-! ### The first base whose fundamental group is trivial, and it is a point
 
 `Oka/AnalyticSpace/SimplyConnectedPoint.lean`, the whole of it. **Nine names**: the fibre-level
-half of the section two above, `…SeparatedFiniteEtaleOver.nonempty_iso_id_of_subsingleton_fiber`;
+half of the section headed *A base whose fundamental group is trivial has only trivial covers*,
+`…SeparatedFiniteEtaleOver.nonempty_iso_id_of_subsingleton_fiber`;
 the finiteness and the discreteness that a base with at most one point buys,
 `…SeparatedFiniteEtaleOver.finite_left_of_subsingleton_base` and
 `…SeparatedFiniteEtaleOver.subsingleton_left_of_subsingleton_base`; the two they compose to,
@@ -10969,20 +10970,27 @@ saying it is the only one, `…AnalyticSpace.originZero` and
 not of the point* from outside the module that declares it, and the first that reads it at a
 base.** `lana-agents/oka#602` is the first: its `Oka/AnalyticSpace/SimplyConnectedCoprod.lean`
 consumes the same name in a proof term and landed while this branch was in review, which the
-section directly above this one says of itself. At `ef9e5d2`, this branch's base,
+section headed *The coproduct form of that criterion, and the index type is never counted* says of
+itself. At `6a792ba`, this branch's base,
 `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_of_iso_id` occurs in the comment-stripped
 code of **three** modules and **four** places and this push makes it **four** and **five** — the
 module that declares it twice, this file once, `Oka/AnalyticSpace/SimplyConnectedCoprod.lean` once
 and the new module once — against **two** modules and **three** places at `d34b436`, the base this
 branch had for four rounds; and the new occurrence is one of the **two** in the tree that are
 neither a declaration, a guard, nor inside the declaring module, the other being `#602`'s.
-**The first four bases the branch had are equal and the fifth is not**: at `a414f61`, at `ae732d9`,
-at `a3d656d` and at
+**The first four bases the branch had are equal, the fifth is not, and the sixth is equal to the
+fifth**: at `a414f61`, at `ae732d9`, at `a3d656d` and at
 `d34b436` this token is **2** modules and **3** places, the token below is **2** and **2**, and the
 third is **3** and **5**, so re-pinning across three rebases re-pinned and changed no figure; at
 `ef9e5d2` the first is **3** and **4** and the second **3** and **3**, both moved by `#602`'s module
-and neither by a rebase. **A landing under a branch is not a rebase and the two fail differently**:
-a rebase moves the commit a figure is read at, and a landing moves the figure. **The
+and neither by a rebase; and at `6a792ba`, this branch's base now, all three are what they were at
+`ef9e5d2`. **The sixth base is where the structural reason below is worth the most**, because the
+landing between the two is `lana-agents/oka#616` and it edits
+`Oka/AnalyticSpace/SimplyConnectedCoprod.lean`, which carries two of the three tokens: the four
+files it touches all have byte-identical comment-stripped, whitespace-normalised residue, so
+this instrument cannot see that landing at all, and a figure it could have moved it did not.
+**A landing under a branch is not a rebase and the two fail differently**: a rebase moves the
+commit a figure is read at, and a landing moves the figure. **The
 reason it cannot change is structural and is checked rather than assumed, and the check is not the
 same one at every step**: every `.lean` file that differs between `a414f61` and `a3d656d` has
 byte-identical comment-stripped, whitespace-normalised residue, so a census run through this
@@ -10997,11 +11005,12 @@ argument. **A structural reason has a domain, and a rebase can leave it.**
 of that module's two places one is the declaration and the other is
 `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_iff`'s proof term, which consumed the name
 at `a3d656d` and consumes it still, so *first consumer* without the qualifier is false and is false
-by this paragraph's own arithmetic. What that says about the pinned sentence of the section above
-was taxis #2120's question, and `a3d656d` answered it: that sentence is corrected there and the
+by this paragraph's own arithmetic. What that says about the pinned sentence of the section headed
+*That hypothesis is a property of the base and not of the point* was taxis #2120's question, and
+`a3d656d` answered it: that sentence is corrected there and the
 record sits under it, so nothing is left here for this section to route.
 `…SeparatedFiniteEtaleOver.exists_iso_coprod_id` moves the same way, **3 → 4** modules at
-`ef9e5d2` and **2 → 3** at `d34b436`, and
+`6a792ba` and **2 → 3** at `d34b436`, and
 `…SeparatedFiniteEtaleOver.connectedSpace_of_isConnected` **3 → 4** at both. The population is
 every tracked
 `.lean` file under `Oka/` and `OkaTest/` with the two root modules, the stripper is
@@ -11025,15 +11034,16 @@ which is true of every cover including the empty one, and
 proof and not in its telescope. **Exactly one binds
 `[Subsingleton ((…SeparatedFiniteEtaleOver.fintypeFiberFunctor x).obj A)]`**, the first. **Not one
 of the nine binds `[Subsingleton (…SeparatedFiniteEtaleOver.fundamentalGroup x)]`**, and two of them
-*conclude* it — which is the difference from the section two above, where three of four bind it as a
-hypothesis. **Five take a point of the base explicitly and the last four take none**, the base being
-fixed and its point a term.
+*conclude* it — which is the difference from the section headed *A base whose fundamental group is
+trivial has only trivial covers*, where three of four bind it as a hypothesis. **Five take a point
+of the base explicitly and the last four take none**, the base being fixed and its point a term.
 
 **Seven of the nine are theorems, one is a `def` and one is an `instance`.**
 `…AnalyticSpace.originZero` is the `def` and is the only data here;
 `…AnalyticSpace.subsingleton_complexAffineSpace_zero` is the `instance` and is the only one that
 module declares. **None of the nine is `noncomputable`**, which is the other difference from the
-section two above, whose `…SeparatedFiniteEtaleOver.isTerminalFintypeFiber` is.
+section headed *A base whose fundamental group is trivial has only trivial covers*, whose
+`…SeparatedFiniteEtaleOver.isTerminalFintypeFiber` is.
 
 **All nine lists below are the standard three**, the `def` included: its own term is a constant
 function, and what reaches choice is the type it inhabits, which is built through
@@ -11041,10 +11051,17 @@ function, and what reaches choice is the type it inhabits, which is built throug
 
 **What consumes them, outside their own module: nothing.** The two statements at that base are
 consumed by nothing, and the seven before them by nothing outside that file — the same position
-every name of the two sections above this one is in, and it is said here rather than left to be
-discovered.
+every name of the section headed *The coproduct form of that criterion, and the index type is
+never counted* is in, and every name of the section headed *That hypothesis is a property of the
+base and not of the point* except
+`…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_of_iso_id`, whose two consumers
+outside its own module are `lana-agents/oka#602`'s and this push's own. It is said here rather than
+left to be discovered, and the exception is named rather than rounded away.
 
-**The routing is the one the two sections above take.** The topic table at the head of
+**The routing is the one the sections headed *A base whose fundamental group is trivial has only
+trivial covers*, *That hypothesis is a property of the base and not of the point* and *The
+coproduct form of that criterion, and the index type is never counted* take.** The topic table at
+the head of
 `OkaTest/Axioms.lean` routes *morphisms of analytic spaces* here and these are statements about the
 covers of a base; `ComplexAnalytic.AnalyticSpace.complexAffineSpace` appearing in two of the nine
 does not move them, the space being the base and not the subject. -/
