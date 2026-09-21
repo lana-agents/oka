@@ -177,10 +177,15 @@ the same declaration.
   `ComplexAnalytic.sqSubOneTwoPair`'s is `R[X]/(X² − 1)` **under that same hypothesis**, which is
   **not** shown below to be anything other than the base. Two sheets is what the algebra says to
   a reader and not what any declaration here says; proving it, or proving the second cover is not
-  an isomorphism, is a separate statement and nothing below attempts it.
+  an isomorphism, is a separate statement and nothing below attempts it. **That second clause read
+  *`ComplexAnalytic.sqSubOneTwoPair`'s is `R[X]/(X² − 1)`, which is not shown below to be anything
+  other than the base* until 2026-09-21**, naming the algebra with no hypothesis on `R` —
+  **corrected here rather than dated and kept**, on the same ground as the `## Main definitions`
+  row above: at `R = ℤ` the ring it names is `(ℤ[2⁻¹])[X]/(X² − 1)` and not `ℤ[X]/(X² − 1)`, so the
+  clause was false at an `R` this file admits and not merely unbounded.
 * **The *not the base* reading does not survive the zero ring, and the `variable` line admits it.**
   Both pairs are built over `variable (R : Type*) [CommRing R]` with no `[Nontrivial R]`, at
-  `:235` here and at the same binder above `ComplexAnalytic.sqSubOnePair` in
+  `:256` here and at the same binder above `ComplexAnalytic.sqSubOnePair` in
   `OkaTest/OpenBaseFiniteness.lean`. At `R = PUnit` each pair's `StandardEtalePair.Ring` is a
   subsingleton — `Module.subsingleton` over a subsingleton base — so
   `ComplexAnalytic.sqSubOneTwoPair`'s algebra **is** the base there, and
@@ -193,7 +198,23 @@ the same declaration.
   no bound.** All seven are repaired and none is deleted. The four are the `## Two pairs` first
   bullet, the `## Main results` row for the `ComplexAnalytic.sqSubOnePair` witness, the bullet
   above and that witness's own docstring; the three are the `## Two pairs` second bullet, the
-  `## Main definitions` row and the other witness's docstring. The hypothesis has been
+  `## Main definitions` row and the other witness's docstring.
+  **Naming the algebra is a third need and neither of those two counts reaches it**: *the algebra
+  is `R[X]/(X² − 1)`* wants `2` inverted too, and at an `R` where it is not the algebra is neither
+  that ring nor, in general, the base. **Five sentences of this file assert it** — the `## Two
+  pairs` second bullet, the `## Main definitions` row, the bullet above, the clause of this bullet
+  opening *A non-trivial `R` does not make the two-sheets picture right either*, and the other
+  witness's docstring — **and all five carry the bound; two of them landed without it, the bullet
+  above, dated where it stands, and the other witness's docstring, dated by this sentence.** The
+  `## Two pairs` one was scoped already, by *Inverting `2` changes nothing over a `ℂ`-algebra*, so
+  its bound generalises rather than corrects; the remaining two were written on the branch that
+  dated the seven and no consumer has read them. **So the other witness's docstring is in two of
+  these three lists** — its *rather than the base* half among the three above, and its naming of
+  the algebra here. **A `grep` for that ring returns eight and not five**, the other three being
+  the negative statement of the bound in the `## Two pairs` bullet, the quotation in the dated
+  record above and the name of this class in the sentence that opens this paragraph: a count of
+  claims is not a count of occurrences, and only the first is what a repair is measured by. The
+  hypothesis has been
   `ComplexAnalytic.sqSubOneRingEquiv`'s since it was written, and
   `ComplexAnalytic.isUnit_two_of_sqSubOneRingEquiv` proves it cannot be dropped.
 * **No proof that the composite with `ComplexAnalytic.analytificationInclHom` fails at this
