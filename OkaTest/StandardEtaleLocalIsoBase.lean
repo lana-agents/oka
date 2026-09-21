@@ -48,11 +48,19 @@ here`; the claim made is only that the witness sits where the question is live.
 * `ComplexAnalytic.sqSubOnePair` is `f = X² − 1`, `g = X − 1`. Its own file proves
   `ComplexAnalytic.sqSubOnePair_X : (sqSubOnePair R).X = -1` — both relations are used — and
   builds `ComplexAnalytic.sqSubOneRingEquiv` out of it, so **the standard étale algebra is the
-  base**. The morphism `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_node_sqSubOne`
-  is about is therefore an isomorphism, and a local isomorphism for a reason the theorem does not
-  need.
+  base wherever `2` is a unit of `R`**. That hypothesis is the equivalence's own and it is not
+  removable — `ComplexAnalytic.isUnit_two_of_sqSubOneRingEquiv` is its converse, so over `ℤ`
+  there is none — and it holds at the base this file instantiates the pair at, which is a
+  `ℂ`-algebra. The morphism
+  `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_node_sqSubOne` is about is therefore
+  an isomorphism there, and a local isomorphism for a reason the theorem does not need.
 * `ComplexAnalytic.sqSubOneTwoPair` is `f = X² − 1`, **`g = 2`**. Inverting `2` changes nothing
-  over a `ℂ`-algebra, so the algebra is `R[X]/(X² − 1)` — two sheets, and not the base.
+  over a `ℂ`-algebra, so the algebra is `R[X]/(X² − 1)` — two sheets, and not the base. **That
+  last clause is what the algebra says to a reader over a non-trivial `R` and not what any
+  declaration says**, and at the zero ring — which the `variable (R : Type*) [CommRing R]` below
+  admits — it is false: the pair's `StandardEtalePair.Ring` is a subsingleton there and so **is**
+  the base. `## What is not checked here` is where that stands in full. **The clause carried
+  neither bound until 2026-09-21.**
 
 **`g = 2` and not `g = 1`, and the difference is a `1/2`.** With `g = 1` the `cond` field asks for
 `derivative f * p₁ + f * p₂ = 1`, which needs `2` inverted in the coefficients and so a
@@ -118,7 +126,13 @@ absent, which is the second thing that draft learned.
 ## Main definitions
 
 - `ComplexAnalytic.sqSubOneTwoPair`: **the pair `f = X² − 1`, `g = 2`**, over an arbitrary
-  commutative ring — the pair whose algebra is not the base.
+  commutative ring — the pair whose algebra is not the base **over a non-trivial `R`**, which is
+  what the algebra `R[X]/(X² − 1)` says to a reader and not what any declaration of this
+  repository says. It is `ComplexAnalytic.sqSubOnePair` that has the equivalence,
+  `ComplexAnalytic.sqSubOneRingEquiv`, and that one carries a hypothesis. **This row read *the
+  pair whose algebra is not the base* until 2026-09-21**, with *over an arbitrary commutative
+  ring* in the same sentence — **corrected here rather than dated and kept**, because it was
+  false at an `R` the row admitted and not merely superseded.
 - `ComplexAnalytic.nodeEtaleF`, `ComplexAnalytic.nodeEtaleG` and
   `ComplexAnalytic.nodeEtaleGSubOne`: the lifts `Z² − 1`, `2` and `Z − 1` in the new variable.
 - `ComplexAnalytic.nodeEtalePt` and `ComplexAnalytic.nodeEtaleSqSubOnePt`: the tuples
@@ -138,7 +152,8 @@ the same declaration.
 - `ComplexAnalytic.isLocalIso_analytificationMap_etalePresHom_node_sqSubOne`: the same at
   `ComplexAnalytic.sqSubOnePair`, which is the instantiation
   `Oka/Analytification/StandardEtaleLocalIsoBase.lean` names as cheapest — and whose cover is the
-  base.
+  base, `2` being a unit of the `ℂ`-algebra the pair is instantiated at here. **That last clause
+  carried no hypothesis until 2026-09-21.**
 - `ComplexAnalytic.nonempty_analytification_nodeG`: **the base is not empty.**
 - `ComplexAnalytic.eval_etalePresentation_nodeEtalePt` and
   `ComplexAnalytic.nonempty_analytification_etalePresentation_node`: **the source of the
@@ -152,11 +167,26 @@ the same declaration.
 ## What is not checked here
 
 * **Nothing about how many sheets either cover has.** `ComplexAnalytic.sqSubOnePair`'s algebra is
-  the base — that is `ComplexAnalytic.sqSubOneRingEquiv`'s statement and it is quoted here, not
-  reproved — and `ComplexAnalytic.sqSubOneTwoPair`'s is `R[X]/(X² − 1)`, which is **not** shown
-  below to be anything other than the base. Two sheets is what the algebra says to a reader and
-  not what any declaration here says; proving it, or proving the second cover is not an
-  isomorphism, is a separate statement and nothing below attempts it.
+  the base **where `2` is a unit of the base** — that is `ComplexAnalytic.sqSubOneRingEquiv`'s
+  statement, hypothesis and all, and it is quoted here, not reproved — and
+  `ComplexAnalytic.sqSubOneTwoPair`'s is `R[X]/(X² − 1)`, which is **not** shown below to be
+  anything other than the base. Two sheets is what the algebra says to a reader and not what any
+  declaration here says; proving it, or proving the second cover is not an isomorphism, is a
+  separate statement and nothing below attempts it.
+* **Neither of those two readings survives the zero ring, and the `variable` line admits it.**
+  Both pairs are built over `variable (R : Type*) [CommRing R]` with no `[Nontrivial R]`, at
+  `:226` here and at `OkaTest/OpenBaseFiniteness.lean:129`. At `R = PUnit` each pair's
+  `StandardEtalePair.Ring` is a subsingleton — `Module.subsingleton` over a subsingleton base —
+  so `ComplexAnalytic.sqSubOneTwoPair`'s algebra **is** the base there, and
+  `ComplexAnalytic.sqSubOnePair`'s is too and lawfully, `2` being a unit of the zero ring.
+  **So *not the base* needs a non-trivial `R`, *is the base* needs `2` inverted, and until
+  2026-09-21 this file carried four of the second with no hypothesis and three of the first with
+  no bound.** All seven are repaired and none is deleted. The four are the `## Two pairs` first
+  bullet, the `## Main results` row for the `ComplexAnalytic.sqSubOnePair` witness, the bullet
+  above and that witness's own docstring; the three are the `## Two pairs` second bullet, the
+  `## Main definitions` row and the other witness's docstring. The hypothesis has been
+  `ComplexAnalytic.sqSubOneRingEquiv`'s since it was written, and
+  `ComplexAnalytic.isUnit_two_of_sqSubOneRingEquiv` proves it cannot be dropped.
 * **No proof that the composite with `ComplexAnalytic.analytificationInclHom` fails at this
   base.** `Oka/Analytification/StandardEtaleLocalIso.lean` argues that in prose, from a local
   isomorphism having open image and the node having empty interior in `ℂ²`. **The argument is not
@@ -246,8 +276,10 @@ def nodeEtaleGSubOne : MvPolynomial (ULift.{u} (Fin 3)) ℂ :=
 `Oka/Analytification/StandardEtaleLocalIsoBase.lean` records as missing.
 
 The pair is `ComplexAnalytic.sqSubOneTwoPair`, whose standard étale algebra is `R[X]/(X² − 1)`
-rather than the base; `hG` is `map_ofNat` twice, carrying the numeral through
-`Ideal.Quotient.mk` and then through `ComplexAnalytic.polyPresentedAlgebraEquiv`. -/
+— **which nothing in this repository shows to be other than the base**, here or at any other `R`,
+and which *is* the base at a trivial one; see `## What is not checked here` above. `hG` is
+`map_ofNat` twice, carrying the numeral through `Ideal.Quotient.mk` and then through
+`ComplexAnalytic.polyPresentedAlgebraEquiv`. -/
 theorem isLocalIso_analytificationMap_etalePresHom_node :
     AnalyticSpace.IsLocalIso
       (analytificationMap.{u} (etalePresHom.{u} nodeG.{u} nodeEtaleF.{u} nodeEtaleG.{u})) :=
@@ -262,9 +294,9 @@ theorem isLocalIso_analytificationMap_etalePresHom_node :
 `Oka/Analytification/StandardEtaleLocalIsoBase.lean` names as the cheapest.
 
 It is cheapest and it is the weaker of the two: `ComplexAnalytic.sqSubOneRingEquiv` identifies
-that pair's standard étale algebra with the base, so this morphism is an isomorphism and is a
-local isomorphism for a reason the theorem does not need. **That is why it is not the only witness
-here.** -/
+that pair's standard étale algebra with the base **wherever `2` is a unit of the base, as it is
+here**, so this morphism is an isomorphism and is a local isomorphism for a reason the theorem
+does not need. **That is why it is not the only witness here.** -/
 theorem isLocalIso_analytificationMap_etalePresHom_node_sqSubOne :
     AnalyticSpace.IsLocalIso
       (analytificationMap.{u} (etalePresHom.{u} nodeG.{u} nodeEtaleF.{u} nodeEtaleGSubOne.{u})) :=
