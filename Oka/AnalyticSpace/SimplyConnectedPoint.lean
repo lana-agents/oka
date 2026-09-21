@@ -158,7 +158,7 @@ and a name that differed from it only by its instance arguments would be the wor
   every cover separated over it is a finite coproduct of copies of it over itself**, which is the
   third result of `Oka/AnalyticSpace/SimplyConnected.lean` applied to a base for the first time.
 
-## The list above is written in full, and carries no other backticked token at all
+## The list above is written in full, and the one token in it that is not a name costs one row
 
 Every head in the list above is the whole name, with the house `…` elision kept for the prose
 outside it, because `scripts/guard_coverage.py` resolves a backticked token of a `## Main results`
@@ -166,9 +166,16 @@ section against the declaration dump and an elided one resolves to nothing. **Th
 every backticked token of such a section that resolves to nothing**, whether it is an elided name
 or notation, so `ℂ⁰` in a bullet raises the *backticked tokens skipped* row exactly as an elided
 citation does. **The first draft of that section carried four and the row moved by four**; the
-bullets above now carry the seven names and nothing else in backticks, which is what keeps the row
-flat, and the `## Main definitions` section above them is free to carry either because that tool
-does not read it.
+bullets above now carry the seven names **and one repository path**, and that path is the whole of
+why the row moves by **one** instead of staying flat. `## What the census scripts return` below
+prices it. **The row reads the same at every earlier head of this branch and moves at the one
+that wrote the path in** — one fixed dump pair, each head's own tree — so this bullet is the only
+thing on this branch that has ever touched it. That is what a citation in a bullet costs, and it is
+cheap at the price: the bullet it buys names the module it points at instead of counting import
+lines to it.
+**The `## Main definitions` section above them is free to carry either, because that tool does not
+read it** — the same fact read the other way, since a path written there could not have moved this
+row at all.
 
 ## What the import costs, measured in the environment and not by a scan
 
@@ -266,10 +273,12 @@ is **flat** on **142, in 60 files**, *advertised from another file* flat on **89
 citations, not counted* flat on **30, four of them dotted**, and *backticked tokens skipped*
 **1 / 132 / 721** to **1 / 132 / 722**. **Flat is the delta and not the total**: the last of those
 four reads **1 / 132 / 719** at `d34b436`, moved by a landing and not by this push. **The one this
-push adds to it is a repository path and not a name**, written into the `## Main definitions` list
+push adds to it is a repository path and not a name**, written into the `## Main results` list
 above by the round that stopped reaching a module by its distance in the import chain: that script
 counts a backticked path among the tokens it cannot resolve, and the docstring-name checker does
-not read it at all, the slashes putting it outside that population.
+not read it at all, the slashes putting it outside that population. **`## Main results` is the only
+section the row can be moved from**, the count being over the backticked tokens of those sections
+and of nothing else, so the section that names the list is the section that pays.
 
 `scripts/check_docstring_names.py` is **18451 (4481)** backticked names at `6a792ba` and this push
 adds **58 occurrences and 12 distinct names**; elided citations are **408 (175)** there and it adds
