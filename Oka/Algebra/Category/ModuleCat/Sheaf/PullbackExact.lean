@@ -49,9 +49,26 @@ finite limits (`ModuleCat.preservesFiniteLimits_extendScalars_of_flat`,
 `Mathlib/Algebra/Category/ModuleCat/Descent.lean`).
 
 **The short-complex route is available and is longer.** Concluding from `S.Exact` that the stalks
-are exact needs `SheafOfModules.toSheaf` to be *right* exact as well, which Mathlib does not have
-(recorded in `Sheaf/Stalk.lean`); going through monomorphisms needs only the direction that is
-there.
+are exact needs `SheafOfModules.toSheaf` to be *right* exact as well, which at `v4.32.0` — the
+revision `lakefile.toml` pins, resolved by `lake-manifest.json` to
+`81a5d257c8e410db227a6665ed08f64fea08e997` — Mathlib does not have; going through monomorphisms
+needs only the direction that is there.
+
+**That absence is measured in this repository already, and this sentence points at the run rather
+than repeating the claim.** The first bullet of
+`Oka/Algebra/Category/ModuleCat/Sheaf/Stalk.lean`'s *What is not here* carries the instrument, the
+verdict and a positive control: Mathlib has `CategoryTheory.Limits.PreservesFiniteLimits` for that
+functor (`Mathlib/Algebra/Category/ModuleCat/Sheaf/Limits.lean`) and `inferInstance` fails on both
+`CategoryTheory.Limits.PreservesFiniteColimits` and `CategoryTheory.Functor.PreservesHomology`.
+**What that bullet does not carry is the version**, which the rule in `OkaTest/Axioms.lean` asks
+of the sentence that measures as much as of the sentence that points; repairing it is a change to
+a file this push only reads, so it is filed and not made here.
+
+**That clause read *which Mathlib does not have (recorded in `Sheaf/Stalk.lean`)* until
+2026-09-21**, with no version and with a pointer naming a file rather than the passage in it;
+`git show c6bfc1f:Oka/Algebra/Category/ModuleCat/Sheaf/PullbackExact.lean` carries the retired
+wording at `:52–53`, wrapped after *does not have*. **The claim is unchanged and only its warrant
+is.**
 
 ## The check this file is built to pass
 
