@@ -5258,10 +5258,11 @@ info: 'ComplexAnalytic.exists_family_opensRange_presentationRefinedIota_eq' depe
 `Oka/Analytification/Hausdorff.lean`, the whole of it, appended as its own section for the reason
 the sections above give: a section moved is a conflict for somebody else.
 
-**The instance is one `inferInstanceAs` and the two theorems are one `haveI` each**, so every one
-of those axiom lists is a union of lists this file, `OkaTest/Axioms/AnalyticSpace.lean` and
-`OkaTest/Axioms/Morphisms.lean` already record — `ComplexAnalytic.t2Space_zeroLocus`
-(`OkaTest/Axioms/AnalyticSpace.lean:1383`) for `ComplexAnalytic.t2Space_analytification`, and
+**The instance is one `inferInstanceAs`, the first theorem is one `haveI`, and the second is that
+theorem at `subset_rfl`**, so every one of those axiom lists is a union of lists this file,
+`OkaTest/Axioms/AnalyticSpace.lean` and `OkaTest/Axioms/Morphisms.lean` already record —
+`ComplexAnalytic.t2Space_zeroLocus` (`OkaTest/Axioms/AnalyticSpace.lean:1383`) for
+`ComplexAnalytic.t2Space_analytification`, and
 `ComplexAnalytic.isFiniteEtale_restrictHom_analytificationMap_etalePresHom_comp`
 (`OkaTest/Axioms/Analytification.lean:4471`) together with
 `ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale`
@@ -5269,8 +5270,16 @@ of those axiom lists is a union of lists this file, `OkaTest/Axioms/AnalyticSpac
 `ComplexAnalytic.isCoveringMap_base_restrictHom_analytificationMap_etalePresHom_comp` and its
 `_compl` companion. **That list read *this file and `OkaTest/Axioms/AnalyticSpace.lean`* until
 2026-09-21**, which put the covering-map rung in the wrong file:
-`git grep -n "#print axioms ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale" --
-OkaTest/` returns exactly one line and it is in `OkaTest/Axioms/Morphisms.lean`.
+`git grep -nE '^[ \t]*#print axioms
+ComplexAnalytic\.AnalyticSpace\.isCoveringMap_base_of_isFiniteEtale' -- OkaTest/` returns exactly
+one line and it is in `OkaTest/Axioms/Morphisms.lean`. **The anchor and the escaped dots are what
+make that a check rather than a self-portrait**: unanchored and unescaped, the same pattern matches
+this sentence quoting it, because a `git grep` reads comments — and the sentence this one replaces
+said *exactly one line* of a command that returned two, the first of them being itself.
+**The opening clause of this paragraph also read *the two theorems are one `haveI` each* until
+2026-09-21, and is corrected in place rather than left standing with a date**, because it was false
+of the second theorem at the commit that wrote it: `Oka/Analytification/Hausdorff.lean:175–176` is
+the first theorem at `subset_rfl` and carries no `haveI`.
 **`OkaTest/Axioms/Morphisms.lean` carries the same mistake about the same name**, in the section
 docstring that names `IsCoveringMap.eq_of_comp_eq`, and this push does not touch that file.
 
@@ -6263,8 +6272,9 @@ application of the rung** — the same relation
 `ComplexAnalytic.isCoveringMap_base_restrictHom_analytificationMap_etalePresHom_comp_compl` has to
 `ComplexAnalytic.isCoveringMap_base_restrictHom_analytificationMap_etalePresHom_comp`.
 
-**The two theorems are one `haveI` each**, so both axiom lists are unions of lists already
-recorded — `ComplexAnalytic.isFiniteEtale_restrictHom_analytificationMap_etalePresHom`, guarded in
+**The first theorem is one `haveI` and the second is that theorem at `subset_rfl`**, so both axiom
+lists are unions of lists already recorded —
+`ComplexAnalytic.isFiniteEtale_restrictHom_analytificationMap_etalePresHom`, guarded in
 this file's *The finiteness half over a presented base, and the two halves at once*, together with
 `ComplexAnalytic.AnalyticSpace.isCoveringMap_base_of_isFiniteEtale`, guarded at
 `OkaTest/Axioms/Morphisms.lean:2163` and nowhere else — **not** in
