@@ -33,13 +33,47 @@ existing Mathlib file anything; the Mathlib part of its transitive closure is **
 which is 9 more than `Oka/Geometry/RingedSpace/LocallyRingedSpace/Modules.lean`'s 1852 — the
 coherence machinery it adds on top of that file is almost entirely this repository's own.
 
-**And that is the honest obstruction: `SheafOfModules.IsCoherent` is not in Mathlib.** It is
+**And that is the honest obstruction. At `v4.32.0` — the revision `lakefile.toml` pins, resolved
+by `lake-manifest.json` to `81a5d257c8e410db227a6665ed08f64fea08e997` —
+`SheafOfModules.IsCoherent` is not in Mathlib**: `grep -rn "SheafOfModules.IsCoherent" Mathlib/`,
+run over `.lake/packages/mathlib` at that rev, returns **0** occurrences in **0** files, and over
+the environment of `import Mathlib` at that rev the constant does not exist. It is
 `Oka/Algebra/Category/ModuleCat/Sheaf/Coherent/Basic.lean`, itself a mirror file for a Mathlib
 file that does not exist, and this file's `Oka` imports are that subtree plus
 `Oka/CategoryTheory/Sites/CoversTop/Over.lean` and
 `Oka/Geometry/RingedSpace/LocallyRingedSpace/Modules.lean`. So the mirror path is a claim about
 where this belongs and not a claim that it could be upstreamed tomorrow: the coherence API has to
 go first.
+
+**Two readings, and the cheap instrument decides only the narrower one.** As a claim about the
+**name** the `grep` decides outright, which is the verdict the three questions
+`OkaTest/Axioms.lean`'s seventh census object puts to a scan offered in support of an absence
+exist to reach: a consumer that wants `SheafOfModules.IsCoherent` has to write that token in its
+own statement, whatever namespace is open; a `variable` binder introducing a sheaf of modules
+leaves the predicate still to be written; and a `class` is declared and not generated, so there
+is no elaborator-produced spelling for a scan of source to miss. As the claim this paragraph
+needs — that Mathlib has no coherence predicate for sheaves of modules under **any** name — what
+decides is a scan of the environment rather than of source, and it is the one above: the
+namespace `SheafOfModules` carries **430** non-internal declarations, **91** declarations of that
+environment write *Coherent* in their name, and the **seven** that do both are
+`SheafOfModules.LocalGeneratorsData`'s `quasiCoherentData` and its projections —
+**quasi**-coherence, which is a different predicate and not the one this file's theorem needs.
+
+**The control is what stops the next reader running the shorter command and concluding this is
+wrong.** `grep -rn "IsCoherent" Mathlib/` returns **28** occurrences in **8** files and not one
+of them is about sheaves: **27** write `Topology.IsCoherentWith`, the structure declared at
+`Mathlib/Topology/Defs/Induced.lean:125` whose lemmas are in `Mathlib/Topology/Coherent.lean`,
+and the twenty-eighth is a `TODO` comment at
+`Mathlib/Topology/Compactness/CompactlyCoherentSpace.lean:123` naming the bare token. **So the
+bare token is not absent and the qualified name is**, and reporting the first run as a verdict
+about the second would have been false. Every command in this section is run over
+`.lake/packages/mathlib` at the rev above and not over this tree.
+
+**That clause read *`SheafOfModules.IsCoherent` is not in Mathlib* until 2026-09-21**, with no
+version, no instrument and no control beside it;
+`git show c6bfc1f:Oka/Geometry/RingedSpace/LocallyRingedSpace/Coherent.lean` carries the retired
+wording at `:36`, where it was the second half of the bolded lead. **The claim is unchanged and
+only its warrant is.**
 
 ## What is *not* here, and where it went instead
 
