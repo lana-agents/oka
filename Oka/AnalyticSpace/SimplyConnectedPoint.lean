@@ -173,95 +173,120 @@ does not read it.
 ## What the import costs, measured in the environment and not by a scan
 
 **This file has two `import` lines and neither is in the other's closure.**
-`Oka.AnalyticSpace.SimplyConnectedCriterion` brings **5027** modules at the commit this file is cut
-from and `Oka.AnalyticSpace.ConnectedCover` **5006**; the first does not contain the second and the
-second does not contain the first, by a membership test over
-`Lean.Environment.allImportedModuleNames` at each. **What the second adds to the first is exactly
-two modules** — itself and `Oka.AnalyticSpace.EmptyBase`, which is its only `import` — so this
-module's own closure is **5030**: the criterion's 5027, those two, and this module. **One of the
-two is in the closure and is read by nothing below**, and the `## What is not here` bullet on the
-empty base says why.
+`Oka.AnalyticSpace.SimplyConnectedCriterion` brings **5027** modules at `d34b436` and
+`Oka.AnalyticSpace.ConnectedCover` **5006**; the first does not contain the second and the second
+does not contain the first, by a membership test over `Lean.Environment.allImportedModuleNames` at
+each. **What the second adds to the first is exactly two modules** — itself and
+`Oka.AnalyticSpace.EmptyBase`, which is its only `import` — so this module's own closure is
+**5030**: the criterion's 5027, those two, and this module. **Those three totals are properties of
+what this file imports and not of the tree**: the first two are the same run at `c6bfc1f`, two
+landings later, and the third is the same run at the merge of this branch with it, which is the
+only tree it can be taken in at all. **One of the two is in the closure and is read by nothing
+below**, and the `## What is not here` bullet on the empty base says why.
 
 **The marginal cost to `import Oka` is nevertheless one module, and that is a run and not a diff**:
-at the commit this file is cut from `import Oka` brings **5541** modules and at the commit that adds
-it **5542**, by a set difference over `Lean.Environment.allImportedModuleNames`, and the one module
-the difference contains is this one. **No Mathlib module enters the closure**, and no `Oka` module
-does either — both imports were already there, `Oka.lean` naming every module of the library. **A
-marginal import cost is a figure about the importer at a commit and is meaningless without one**,
-which is why both are pinned here and neither is in the present tense.
+`import Oka` brings **5541** modules at `d34b436` and this push adds **one**, by a set difference
+over `Lean.Environment.allImportedModuleNames`, and the one module the difference contains is this
+one. **The total is what a landing moves and the one is not**: at `c6bfc1f` the total is **5542**,
+and the same set difference against the merge of this branch with it is still the **one** module.
+**No Mathlib module enters the closure**, and no `Oka` module does either — both imports were
+already there, `Oka.lean` naming every module of the library. **A marginal import cost is a figure
+about the importer at a commit and is meaningless without one**, which is why every total in this
+section and the next names its commit by hash, and why what the two of them state about this push
+is a delta.
 
 ## What the census scripts return
 
-**Both columns of every row below are pinned to a commit**: the before-column is `d34b436`, the
-commit this file is cut from, and the after-column is the commit that adds it. The reason is the
-one the section above gives of the marginal import cost — *a figure about the importer at a commit
-is meaningless without one* — and it is as true of a tree-wide total as of a closure, which this
-section learned the expensive way. **Every row below stood unpinned until 2026-09-21, and two
-successive landings falsified three of them**: `lana-agents/oka#606` moved the backticked row by
-ten occurrences and one distinct name, and `lana-agents/oka#601` moved it by a further eighty-seven
-and ten and moved both dump totals as well. The three read *the dump total moves
-**4998 → 5007***, ***338274 → 338284***, and ***18161 (4421) → 18213 (4434)*** — each of them a
-correct pair of runs at `a3d656d`, which was this branch's base for one round, and none of them a
-statement anyone could check a week later. **What no landing has ever moved is a delta**: the nine
-declaration rows, the ten environment rows, the fifty-three backticked occurrences and the thirteen
-distinct names this push adds are properties of the push rather than of any commit, and that
-division is what the pin is for. **The `scripts/guard_coverage.py` rows came through both landings
-unmoved, and the two rows were flat for different reasons.** The module `lana-agents/oka#601` adds
-carries **no** `#print axioms` and says so itself, so the guard row had nothing to miss: the one
-occurrence of that string in the file is a prose bullet, which a `git grep` counts and that
-script's comment-masked guard count does not. **The advertised row did have something to miss**:
-that module's `## Main results` advertises five declarations it declares, and the row misses them
-because that script's advertisement walk is the `Oka/` library and its root module and reaches no
-`OkaTest/` file at all. **A row that happens to be flat is not a row that cannot move**, and they
-are pinned with the rest.
+**Every row below is a total at `d34b436`, named by hash, and the delta this push adds to it**, and
+**no row states a total at the commit that will add it**: that commit does not exist while this is
+being written, and both earlier attempts at one were falsified by the next landing. The reason is
+the one the section above gives of the marginal import cost — *a figure about the importer at a
+commit is meaningless without one* — and it is as true of a tree-wide total as of a closure, which
+this section learned the expensive way and then learned again. **Every row below stood unpinned
+until 2026-09-21, and two successive landings falsified three of them**: `lana-agents/oka#606`
+moved the backticked row by ten occurrences and one distinct name, and `lana-agents/oka#601` moved
+it by a further eighty-seven and ten and moved both dump totals as well. The three read *the dump
+total moves **4998 → 5007***, ***338274 → 338284***, and ***18161 (4421) → 18213 (4434)*** — each
+of them a correct pair of runs at `a3d656d`, which was this branch's base for one round, and none
+of them a statement anyone could check a week later. **Pinning the before-column by hash was not
+enough, and that is why these rows are deltas and not pairs.** Until 2026-09-21 every row read
+*before* at `d34b436` and *after* at the head that adds it, and an after-column is a claim about a
+commit that does not exist while it is being written: `lana-agents/oka#610` landing as `6e0c610`
+falsified the backticked row's, which read ***18258 (4432) → 18311 (4445)***, and by `c6bfc1f`, one
+landing further on, eight more were false — both dump totals, the guard row, the advertised row and
+its file count, *in both lists*, the *backticked tokens skipped* figure this section calls flat,
+and the dotless row — without a line of this branch changing. **What no landing has ever moved is a
+delta**: the nine declaration rows, the ten environment rows, the fifty-three backticked
+occurrences and the thirteen distinct names this push adds are properties of the push rather than
+of any commit, and that division is what every row below is built on. **Each delta is measured
+twice and the two agree**: once against `d34b436`, this branch's base, and once as the difference
+between `c6bfc1f` and a real merge of this branch with it — the nine, the ten, the nine, the seven,
+the one, the seven, the two, the fifty-three, the thirteen, the forty-nine, the ten and the two are
+each the same figure at both. **The `scripts/guard_coverage.py` rows came through the first two
+landings unmoved, and the two rows were flat for different reasons.** The module
+`lana-agents/oka#601` adds carries **no** `#print axioms` and says so itself, so the guard row had
+nothing to miss: the one occurrence of that string in the file is a prose bullet, which a `git
+grep` counts and that script's comment-masked guard count does not. **The advertised row did have
+something to miss**: that module's `## Main results` advertises five declarations it declares, and
+the row misses them because that script's advertisement walk is the `Oka/` library and its root
+module and reaches no `OkaTest/` file at all. **A row that happens to be flat is not a row that
+cannot move, and a later landing moved both**: at `c6bfc1f` the guard row is **2023** and the
+advertised row **1519** in **234** files, which is a landing and not this push, and this push's
+deltas on them are what they are at `d34b436`.
 
 `scripts/DumpOkaDecls.lean` writes **9** rows at this module — the nine declarations, with **no**
-equation lemma, match lemma or congruence lemma — and the dump total moves **5003 → 5012**.
-`scripts/DumpEnvNames.lean` moves **338280 → 338290**, which is those nine declarations and this
-one module and nothing else.
+equation lemma, match lemma or congruence lemma — and the dump total is **5003** at `d34b436`, to
+which this push adds **9**. `scripts/DumpEnvNames.lean` is **338280** there and this push adds
+**10**, which is those nine declarations and this one module and nothing else.
 
-`scripts/guard_coverage.py` moves guards under `OkaTest/Axioms/` **2021 → 2030**, all nine in
-`OkaTest/Axioms/Morphisms.lean`; advertised in a `## Main results` **1517 → 1524**, in
-**233 → 234** files; *in both lists* **1375 → 1382**; and *guarded and advertised nowhere*
-**646 → 648**, which is the two names of `## Main definitions` above, a section that script does
-not read. **`Δguards = Δ(in both) + Δ(nowhere)` closes at `9 = 7 + 2`.** The *unguarded* row is
-flat at **142, in 60 files**, *advertised from another file* flat at **89**, *abbreviated
-citations, not counted* flat at **30, four of them dotted**, and *backticked tokens skipped* flat
-at **1 / 132 / 719**.
+`scripts/guard_coverage.py` adds **9** guards under `OkaTest/Axioms/` to the **2021** at `d34b436`,
+all nine in `OkaTest/Axioms/Morphisms.lean`; **7** advertised in a `## Main results` to **1517**,
+in **1** file to **233**; **7** *in both lists* to **1375**; and **2** *guarded and advertised
+nowhere* to **646**, which is the two names of `## Main definitions` above, a section that script
+does not read. **`Δguards = Δ(in both) + Δ(nowhere)` closes at `9 = 7 + 2`**, and it closes on the
+same three figures with both ends taken at `c6bfc1f` and the merge of this branch with it, which is
+a thing a pair of totals cannot say. The *unguarded* row is **flat** on **142, in 60 files**,
+*advertised from another file* flat on **89**, *abbreviated citations, not counted* flat on **30,
+four of them dotted**, and *backticked tokens skipped* flat on **1 / 132 / 719**. **Flat is the
+delta and not the total**: the first three totals are the same at `c6bfc1f` and the fourth is **1 /
+132 / 721** there, moved by a landing and not by this push.
 
-`scripts/check_docstring_names.py` goes **18258 (4432) → 18311 (4445)** backticked names and
-**367 (169) → 416 (179)** elided citations, with **0** unresolved at both ends and **6** resolving
-under more than one namespace at both. **The distinct halves are `--diff` and not arithmetic**:
-**13 added and 0 removed** on the backticked side — the nine declarations below,
-`Finite.instDiscreteTopology`, `PreconnectedSpace.constant`, and **two module names**,
+`scripts/check_docstring_names.py` is **18258 (4432)** backticked names at `d34b436` and this push
+adds **53 occurrences and 13 distinct names**; elided citations are **367 (169)** there and it adds
+**49 and 10**; **0** are unresolved and **6** resolve under more than one namespace at both ends of
+both. **The distinct halves are `--diff` and not arithmetic**: **13 added and 0 removed** on the
+backticked side — the nine declarations below, `Finite.instDiscreteTopology`,
+`PreconnectedSpace.constant`, and **two module names**,
 `Oka.AnalyticSpace.SimplyConnectedCriterion`, which is one of this file's two `import` lines, and
-`Oka.AnalyticSpace.EmptyBase`, which is not an `import` of this file at all but the only one of
-the other — and **10 added and 0 removed** on the elided side, the nine declarations again in
-their elided spelling and `…FiniteEtaleOver.fiber`. **`Oka.AnalyticSpace.ConnectedCover`, which is
-this file's other `import`, is cited in this file exactly as often as each of those two — **twice**
-each at this head, once in the import paragraph above and once in this sentence, which is the second
-— and is not among the thirteen**: the tree backticks it already at the commit this file is cut
-from, twice in `Oka/AnalyticSpace/ConnectedCover.lean` and once in `OkaTest/Axioms/Morphisms.lean`.
-**A name the tree already cites adds nothing to the distinct count however often a new file cites
-it**, which is the whole of what separates the two halves and is why this row cannot be read off the
-list of what this file spells. **The per-file figure is the head's and not the draft's, and saying
-so is not pedantry**: until the round that wrote this sentence the three were cited once each here
-and the clause read *once*, which spelling all three names in it made false in the act of writing it
-— the same shape as the dated record two sentences below, one turn tighter, and a count inside a
-clause is as much a fixed point to check as a row. The occurrence halves are larger than the
-distinct ones because most of these names are cited more than once, which is what a citation count
-is for. **The dotless row goes 240 (120) → 242 (122) and the two are this sentence's own**: a first
-draft of the paragraph above carried `…nonempty_iso_id` and a first draft of the guard section
-`…originZero`, each of which elides a prefix of a component rather than a namespace and each of
-which moved the row by one; both were repaired to the dotted spelling, and what the row counts at
-this head is the two quotations in this sentence and no live citation. **A dated record that quotes
-what it retires moves the count the retirement was for**, which is a shape this repository has met
-before in its sweeps and is worth publishing rather than rounding away.
+`Oka.AnalyticSpace.EmptyBase`, which is not an `import` of this file at all but the only one of the
+other — and **10 added and 0 removed** on the elided side, the nine declarations again in their
+elided spelling and `…FiniteEtaleOver.fiber`. **`Oka.AnalyticSpace.ConnectedCover`, which is this
+file's other `import`, is cited in this file exactly as often as each of those two — **twice** each
+at this head, once in the import paragraph above and once in this sentence, which is the second —
+and is not among the thirteen**: the tree backticks it already at `d34b436`, twice in
+`Oka/AnalyticSpace/ConnectedCover.lean` and once in `OkaTest/Axioms/Morphisms.lean`, and those
+three are still the three at `c6bfc1f`. **A name the tree already cites adds nothing to the
+distinct count however often a new file cites it**, which is the whole of what separates the two
+halves and is why this row cannot be read off the list of what this file spells. **The per-file
+figure is the head's and not the draft's, and saying so is not pedantry**: until the round that
+wrote this sentence the three were cited once each here and the clause read *once*, which spelling
+all three names in it made false in the act of writing it — the same shape as the dated record two
+sentences below, one turn tighter, and a count inside a clause is as much a fixed point to check as
+a row. The occurrence halves are larger than the distinct ones because most of these names are
+cited more than once, which is what a citation count is for. **The dotless row is 240 (120) at
+`d34b436` and this push adds 2 (2), and the two are this sentence's own**: a first draft of the
+paragraph above carried `…nonempty_iso_id` and a first draft of the guard section `…originZero`,
+each of which elides a prefix of a component rather than a namespace and each of which moved the
+row by one; both were repaired to the dotted spelling, and what this push adds to the row is the
+two quotations in this sentence and no live citation. **A dated record that quotes what it retires
+moves the count the retirement was for**, which is a shape this repository has met before in its
+sweeps and is worth publishing rather than rounding away.
 
-**Both ends of every figure in this section are runs**, the base column taken by running the base
+**Both halves of every figure in this section are runs** — the total in a worktree at `d34b436` and
+the delta as the difference between two of them — the base column taken by running the base
 worktree's own copy of each script rather than the head's: both set their repository root from
-`os.path.abspath(__file__)` and not from the working directory, so the head's copy run inside a base
-worktree returns the head's guard count against the base's advertised count.
+`os.path.abspath(__file__)` and not from the working directory, so the head's copy run inside a
+base worktree returns the head's guard count against the base's advertised count.
 
 ## What is not here
 
