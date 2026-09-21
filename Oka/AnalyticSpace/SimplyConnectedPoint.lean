@@ -206,8 +206,8 @@ flat at **142, in 60 files**, *advertised from another file* flat at **89**, *ab
 citations, not counted* flat at **30, four of them dotted**, and *backticked tokens skipped* flat
 at **1 / 132 / 719**.
 
-`scripts/check_docstring_names.py` goes **18142 (4419) → 18194 (4432)** backticked names and
-**350 (164) → 399 (174)** elided citations, with **0** unresolved at both ends and **6** resolving
+`scripts/check_docstring_names.py` goes **18161 (4421) → 18213 (4434)** backticked names and
+**367 (169) → 416 (179)** elided citations, with **0** unresolved at both ends and **6** resolving
 under more than one namespace at both. **The distinct halves are `--diff` and not arithmetic**:
 **13 added and 0 removed** on the backticked side — the nine declarations below,
 `Finite.instDiscreteTopology`, `PreconnectedSpace.constant`, and **two module names**,
@@ -215,21 +215,25 @@ under more than one namespace at both. **The distinct halves are `--diff` and no
 `Oka.AnalyticSpace.EmptyBase`, which is not an `import` of this file at all but the only one of
 the other — and **10 added and 0 removed** on the elided side, the nine declarations again in
 their elided spelling and `…FiniteEtaleOver.fiber`. **`Oka.AnalyticSpace.ConnectedCover`, which is
-this file's other `import`, is cited in this file exactly as often as each of those two — once —
-and is not among the thirteen**: the tree backticks it already at the commit this file is cut
-from, twice in `Oka/AnalyticSpace/ConnectedCover.lean` and once in
-`OkaTest/Axioms/Morphisms.lean`. **A name the tree already cites adds nothing to the distinct
-count however often a new file cites it**, which is the whole of what separates the two halves and
-is why this row cannot be read off the list of what this file spells. The occurrence halves are
-larger than the distinct ones because most of these names are cited more than once, which is what
-a citation count is for. **The dotless row goes 240 (120) → 242 (122) and the
-two are this sentence's own**: a first draft of the paragraph above carried `…nonempty_iso_id` and
-a first draft of the guard section `…originZero`, each of which elides a prefix of a component
-rather than a namespace and each of which moved the row by one; both were repaired to the dotted
-spelling, and what the row counts at this head is the two quotations in this sentence and no live
-citation. **A dated record that quotes what it retires moves the count the retirement was for**,
-which is a shape this repository has met before in its sweeps and is worth publishing rather than
-rounding away.
+this file's other `import`, is cited in this file exactly as often as each of those two — **twice**
+each at this head, once in the import paragraph above and once in this sentence, which is the second
+— and is not among the thirteen**: the tree backticks it already at the commit this file is cut
+from, twice in `Oka/AnalyticSpace/ConnectedCover.lean` and once in `OkaTest/Axioms/Morphisms.lean`.
+**A name the tree already cites adds nothing to the distinct count however often a new file cites
+it**, which is the whole of what separates the two halves and is why this row cannot be read off the
+list of what this file spells. **The per-file figure is the head's and not the draft's, and saying
+so is not pedantry**: until the round that wrote this sentence the three were cited once each here
+and the clause read *once*, which spelling all three names in it made false in the act of writing it
+— the same shape as the dated record two sentences below, one turn tighter, and a count inside a
+clause is as much a fixed point to check as a row. The occurrence halves are larger than the
+distinct ones because most of these names are cited more than once, which is what a citation count
+is for. **The dotless row goes 240 (120) → 242 (122) and the two are this sentence's own**: a first
+draft of the paragraph above carried `…nonempty_iso_id` and a first draft of the guard section
+`…originZero`, each of which elides a prefix of a component rather than a namespace and each of
+which moved the row by one; both were repaired to the dotted spelling, and what the row counts at
+this head is the two quotations in this sentence and no live citation. **A dated record that quotes
+what it retires moves the count the retirement was for**, which is a shape this repository has met
+before in its sweeps and is worth publishing rather than rounding away.
 
 **Both ends of every figure in this section are runs**, the base column taken by running the base
 worktree's own copy of each script rather than the head's: both set their repository root from
