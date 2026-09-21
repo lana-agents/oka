@@ -55,26 +55,32 @@ revision `lakefile.toml` pins, resolved by `lake-manifest.json` to
 needs only the direction that is there.
 
 **That absence is measured in this repository already, and this sentence points at the run rather
-than repeating the claim.** The first bullet of
-`Oka/Algebra/Category/ModuleCat/Sheaf/Stalk.lean`'s *What is not here* carries the instrument, the
-verdict and a positive control: Mathlib has `CategoryTheory.Limits.PreservesFiniteLimits` for that
-functor (`Mathlib/Algebra/Category/ModuleCat/Sheaf/Limits.lean`) and `inferInstance` fails on both
+than repeating the claim.** `Oka/Algebra/Category/ModuleCat/Sheaf/Stalk.lean`'s passage on the
+converse of `SheafOfModules.exact_of_stalk_exact` carries the instrument, the verdict and a
+positive control: Mathlib has `CategoryTheory.Limits.PreservesFiniteLimits` for that functor
+(`Mathlib/Algebra/Category/ModuleCat/Sheaf/Limits.lean`) and `inferInstance` fails on both
 `CategoryTheory.Limits.PreservesFiniteColimits` and `CategoryTheory.Functor.PreservesHomology`.
-**That bullet carried no version when this sentence was written, on 2026-09-21**, which the rule
+**That passage is named here by what it is about and not by where it sits**, because a pointer
+into another file's structure is falsified by any rearrangement of that file; at `6a792ba` it is
+the first bullet of that file's `## What is not here`.
+**That passage carried no version when this sentence was written, on 2026-09-21**, which the rule
 in `OkaTest/Axioms.lean` asks of the sentence that measures as much as of the sentence that
 points; repairing it is a change to a file this push only reads, and is filed as taxis #2152.
 
-**The absence is Mathlib's and not this repository's, and the bullet does not say so.**
+**The absence is Mathlib's and not this repository's, and when this sentence was written, on
+2026-09-21, that passage did not say so.**
 `Oka/Algebra/Category/ModuleCat/Sheaf/Colimits.lean` declares
 `SheafOfModules.preservesFiniteColimits_toSheaf`, so `inferInstance` for
 `CategoryTheory.Limits.PreservesFiniteColimits (SheafOfModules.toSheaf R)` **succeeds** under
 `import Oka` and **fails** under `import Mathlib` alone at the revision above; both were run.
 So what makes the short-complex route longer *here* is not that nobody has proved right
 exactness — it is that **this file does not import that module**, while the monomorphism route
-needs no import this file does not already have. **That bullet's closing sentence, that the
-converse of `SheafOfModules.exact_of_stalk_exact` is a theorem someone has to prove and not a
-transfer, is refuted by a module of this repository two days older than the file it sits in**;
-repairing it is taxis #2152's and not this push's, and that module is out of scope here as well.
+needs no import this file does not already have. **That passage then said *So the converse is a
+theorem someone has to prove and not a transfer*, which a module of this repository two days
+older than the file it sits in refutes**; repairing it is filed as taxis #2152, and that module
+is out of scope here as well. At `6a792ba` that is the fourth of its five sentences and not its
+last, and `git show 6a792ba:Oka/Algebra/Category/ModuleCat/Sheaf/Stalk.lean` carries it at
+`:84–85`, wrapped after *has to*.
 
 **That clause read *which Mathlib does not have (recorded in `Sheaf/Stalk.lean`)* until
 2026-09-21**, with no version and with a pointer naming a file rather than the passage in it;
