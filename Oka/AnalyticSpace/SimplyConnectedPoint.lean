@@ -202,14 +202,18 @@ ten occurrences and one distinct name, and `lana-agents/oka#601` moved it by a f
 and ten and moved both dump totals as well. The three read *the dump total moves
 **4998 → 5007***, ***338274 → 338284***, and ***18161 (4421) → 18213 (4434)*** — each of them a
 correct pair of runs at `a3d656d`, which was this branch's base for one round, and none of them a
-statement anyone could check a week later. **What no landing has ever moved is a delta**: the nine,
-the ten, the fifty-three and the thirteen below are properties of this push and are stated without a
-pin, and that division is what the pin is for. **The `scripts/guard_coverage.py` rows came through
-both landings unmoved, and that is a fact about those two pushes rather than a property of that
-script**: the module `lana-agents/oka#601` adds carries a `#print axioms` of its own, and the guard
-row misses it only because that file is not under `OkaTest/Axioms/`, while no `## Main results`
-line moved in either push. **A row that happens to be flat is not a row that cannot move**, and
-they are pinned with the rest.
+statement anyone could check a week later. **What no landing has ever moved is a delta**: the nine
+declaration rows, the ten environment rows, the fifty-three backticked occurrences and the thirteen
+distinct names this push adds are properties of the push rather than of any commit, and that
+division is what the pin is for. **The `scripts/guard_coverage.py` rows came through both landings
+unmoved, and the two rows were flat for different reasons.** The module `lana-agents/oka#601` adds
+carries **no** `#print axioms` and says so itself, so the guard row had nothing to miss: the one
+occurrence of that string in the file is a prose bullet, which a `git grep` counts and that
+script's comment-masked guard count does not. **The advertised row did have something to miss**:
+that module's `## Main results` advertises five declarations it declares, and the row misses them
+because that script's advertisement walk is the `Oka/` library and its root module and reaches no
+`OkaTest/` file at all. **A row that happens to be flat is not a row that cannot move**, and they
+are pinned with the rest.
 
 `scripts/DumpOkaDecls.lean` writes **9** rows at this module — the nine declarations, with **no**
 equation lemma, match lemma or congruence lemma — and the dump total moves **5003 → 5012**.
