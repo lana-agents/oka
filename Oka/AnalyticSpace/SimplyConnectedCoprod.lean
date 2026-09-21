@@ -108,18 +108,23 @@ two dump totals read *4998 → 5003* and *338274 → 338280*, and the three
 `scripts/check_docstring_names.py` rows read *18097 → 18150*, *350 → 383* and *240 (120) → 244
 (124)*. **Their before-columns are `a414f61`'s, and this branch has been cut from `ae732d9`, from
 `66cf643` and now from `6e0c610`**: at `ae732d9`, its first base, the backticked figure is **18142
-(4419)** and not **18097 (4406)**, so those three rows were already wrong at the before-column
-before any replay, and every replay since has moved it again. **That is what the pin is for** — an
-unpinned pair can be wrong at both ends at once and a reader cannot tell which end — and the five
-rows are re-taken here at `6e0c610` and at this head, each column a run. **What no replay has moved
-is a delta**: the five rows this module adds to the declaration dump, the six it adds to the
-environment dump and the `5 = 4 + 1` below are properties of this push and are stated without a pin,
-and that division is what the pin is for. **The `scripts/guard_coverage.py` rows came through every
-replay unmoved, and that is a fact about what landed in between rather than a property of that
-script**: every row of that report is byte-identical at `a3d656d`, `57e5a1a`, `d34b436`, `66cf643`
-and `6e0c610`, and the module `lana-agents/oka#601` adds carries no `#print axioms` of its own, so
-the guard row had nothing to miss there. **A row that happens to be flat is not a row that cannot
-move**, and they are pinned with the rest.
+(4419)** and not **18097 (4406)**, so **that** row was wrong at the before-column before any replay
+and has been wrong at every base since. **The other two were not, and the difference is the
+argument**: at `ae732d9` the elided row's before-column **350 (164)** and the dotless row's **240
+(120)** were both correct, and the dotless one is correct at `6e0c610` too — what falsified those
+two rows is the replays and this module's own prose growing under them, and not the commit their
+figures were taken at. **That is what the pin is for** — an unpinned pair can be wrong at both ends
+at once, or right at both and falsified later by a landing nobody editing this file touched, and a
+reader cannot tell which — and the five rows are re-taken here at `6e0c610` and at this head, each
+column a run. **What no replay has moved is a delta**: the five rows this module adds to the
+declaration dump, the six it adds to the environment dump and the `5 = 4 + 1` below are properties
+of this push and are stated without a pin, and that division is what the pin is for. **The
+`scripts/guard_coverage.py` rows came through every replay unmoved, and that is a fact about what
+landed in between rather than a property of that script**: every row of that report is
+byte-identical at `a3d656d`, `57e5a1a`, `d34b436`, `66cf643` and `6e0c610`, and the module
+`lana-agents/oka#601` adds carries no `#print axioms` of its own, so the guard row had nothing to
+miss there. **A row that happens to be flat is not a row that cannot move**, and they are pinned
+with the rest.
 
 `scripts/DumpOkaDecls.lean` writes **5** rows at this module — the five declarations, with **no**
 equation lemma, match lemma or congruence lemma — and the dump total moves **5003 → 5008**.
