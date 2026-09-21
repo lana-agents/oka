@@ -10699,9 +10699,10 @@ are unopened — a bound and not a clean bill.
 
 **The two sentences closing the corrected paragraph — *the transports have nothing to carry yet*
 and *that is a base this repository does not yet have* — stood until 2026-09-20**, when
-`Oka/AnalyticSpace/SimplyConnectedPoint.lean` supplied that base and the section directly below
-this one guards it: the fundamental group of `ℂ⁰` is trivial, so the first of the four names above
-has a consumer **outside the module that declares it**, and the criterion has a base to be read at.
+`Oka/AnalyticSpace/SimplyConnectedPoint.lean` supplied that base and the section headed *The first
+base whose fundamental group is trivial, and it is a point* guards it: the fundamental group of
+`ℂ⁰` is trivial, so the first of the four names above has a consumer **outside the module that
+declares it**, and the criterion has a base to be read at.
 **They are named here and not pointed at, because this record no longer adjoins them.** It did when
 it was written, against `ae732d9`; the correction and the record above were written against the
 same base by `lana-agents/oka#604` and landed first, as `a3d656d`, so this one is replayed after
@@ -10719,12 +10720,17 @@ the clause reading *and no statement of this repository consumes any of them* is
 above rather than dated, for the reason the record above gives. **Nothing here restates that
 correction, repairs it or rests on it**, and neither the pinned sentence nor its record is touched
 by this push; what is dated here is only the two sentences named at the top of this paragraph.
-**One figure of that record this push is the first to move, and it is the placement half**: *each of
+**One figure of that record this push moves, and it is the placement half**: *each of
 the four occurs in that module, in this one, and in no third* is pinned to `6be2998` and `a3d656d`
-and stays true of both, and `Oka/AnalyticSpace/SimplyConnectedPoint.lean` is a third module for the
-**first** of the four and for that one alone — which the section directly below states, measures at
-both ends and is the subject of. **The transports still carry nothing, and now for a different
-reason**: at a base whose underlying space has at most one point every point is every other point,
+and stays true of both; `lana-agents/oka#602` made `Oka/AnalyticSpace/SimplyConnectedCoprod.lean` a
+**third** module for the **first** of the four and says so in its own section below, and this push
+makes `Oka/AnalyticSpace/SimplyConnectedPoint.lean` a **fourth**, for that one alone — which the
+section headed *The first base whose fundamental group is trivial, and it is a point* states,
+measures at both ends and is the subject of. **This paragraph read *the first to move* and *a third
+module* until 2026-09-21**, when `#602` landed between this record and the section it points at,
+which is also why that pointer is a heading now and not a direction. **The transports still carry
+nothing, and now for a different reason**: at a base whose underlying space has at most one point
+every point is every other point,
 so `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_congr` there is `Subsingleton.elim` and
 carries nothing that was not already at hand.
 
@@ -10959,16 +10965,24 @@ saying it is the only one, `…AnalyticSpace.originZero` and
 `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_originZero` and
 `…SeparatedFiniteEtaleOver.exists_iso_coprod_id_originZero`.
 
-**This is the first consumer of the section directly above from outside the module that declares
-it.** At the commit this section is written at,
+**This is the second consumer of the section headed *That hypothesis is a property of the base and
+not of the point* from outside the module that declares it, and the first that reads it at a
+base.** `lana-agents/oka#602` is the first: its `Oka/AnalyticSpace/SimplyConnectedCoprod.lean`
+consumes the same name in a proof term and landed while this branch was in review, which the
+section directly above this one says of itself. At `ef9e5d2`, this branch's base,
 `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_of_iso_id` occurs in the comment-stripped
-code of **three** modules and **four** places — the module that declares it twice, this file once,
-and the new module once — against **two** modules and **three** places at `d34b436`, which is this
-branch's parent, and the new occurrence is the only one in the tree that is neither a declaration, a
-guard, nor inside the declaring module. **The before-column is the parent and not merely an earlier
-commit, and the four the branch has had are equal**: at `a414f61`, at `ae732d9`, at `a3d656d` and at
+code of **three** modules and **four** places and this push makes it **four** and **five** — the
+module that declares it twice, this file once, `Oka/AnalyticSpace/SimplyConnectedCoprod.lean` once
+and the new module once — against **two** modules and **three** places at `d34b436`, the base this
+branch had for four rounds; and the new occurrence is one of the **two** in the tree that are
+neither a declaration, a guard, nor inside the declaring module, the other being `#602`'s.
+**The first four bases the branch had are equal and the fifth is not**: at `a414f61`, at `ae732d9`,
+at `a3d656d` and at
 `d34b436` this token is **2** modules and **3** places, the token below is **2** and **2**, and the
-third is **3** and **5**, so re-pinning across three rebases re-pins and changes no figure. **The
+third is **3** and **5**, so re-pinning across three rebases re-pinned and changed no figure; at
+`ef9e5d2` the first is **3** and **4** and the second **3** and **3**, both moved by `#602`'s module
+and neither by a rebase. **A landing under a branch is not a rebase and the two fail differently**:
+a rebase moves the commit a figure is read at, and a landing moves the figure. **The
 reason it cannot change is structural and is checked rather than assumed, and the check is not the
 same one at every step**: every `.lean` file that differs between `a414f61` and `a3d656d` has
 byte-identical comment-stripped, whitespace-normalised residue, so a census run through this
@@ -10986,14 +11000,18 @@ at `a3d656d` and consumes it still, so *first consumer* without the qualifier is
 by this paragraph's own arithmetic. What that says about the pinned sentence of the section above
 was taxis #2120's question, and `a3d656d` answered it: that sentence is corrected there and the
 record sits under it, so nothing is left here for this section to route.
-`…SeparatedFiniteEtaleOver.exists_iso_coprod_id` moves the same way, **2 → 3** modules, and
-`…SeparatedFiniteEtaleOver.connectedSpace_of_isConnected` **3 → 4**. The population is every tracked
+`…SeparatedFiniteEtaleOver.exists_iso_coprod_id` moves the same way, **3 → 4** modules at
+`ef9e5d2` and **2 → 3** at `d34b436`, and
+`…SeparatedFiniteEtaleOver.connectedSpace_of_isConnected` **3 → 4** at both. The population is
+every tracked
 `.lean` file under `Oka/` and `OkaTest/` with the two root modules, the stripper is
 `scripts/import_cost.py`'s `strip_comments`, and the token is not flanked by a letter, a digit or
-`_`. **The section above this one said the transports have nothing to carry and that the base the
-criterion is for is one this repository does not have**, in the two sentences closing its corrected
-paragraph; that is what the new module supplies, and the dated record retiring them is the last
-paragraph of that section and is the same push as this one.
+`_`. **The section headed *That hypothesis is a property of the base and not of the point* said the
+transports have nothing to carry and that the base the criterion is for is one this repository does
+not have**, in the two sentences closing its corrected paragraph; that is what the new module
+supplies, and the dated record retiring them is the last paragraph of that section and is the same
+push as this one. **That section is no longer the one directly above** — `#602`'s coproduct section
+landed between them — which is why it is named here and not pointed at.
 
 **What the telescopes bind, by `#check` over the nine and not by reading the file.** **Exactly one
 of the nine binds `[T2Space]` and `[PreconnectedSpace]`** — the first, which is the only statement
