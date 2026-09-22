@@ -97,12 +97,15 @@ elaborates and then fails to find `PreservesZeroMorphisms`.
   written into `Mathlib/Algebra/Category/ModuleCat/Sheaf/Stalk.lean` until
   `Oka/Algebra/Category/ModuleCat/Sheaf/Colimits.lean` has landed upstream, and the fifteen below
   are the evidence that the obstruction is real rather than an oversight. **This bullet read *so
-  the converse is a theorem someone has to prove and not a transfer* until 2026-09-21**;
+  the converse is a theorem someone has to prove and not a transfer* until 2026-09-22**;
   `git show ef9e5d2:Oka/Algebra/Category/ModuleCat/Sheaf/Stalk.lean` carries it at `:84–85`,
   wrapped after *has to*. It was written on 2026-08-22 in this file's first commit, two days after
   the instance that refutes it. **One file points at this bullet** —
   `Oka/Algebra/Category/ModuleCat/Sheaf/PullbackExact.lean`, whose own paragraph taxis #2135 is
   repairing in the same direction — and nothing else in this tree leans on the retired sentence.
+  **That last clause has an instrument and here it is**: `grep -rn "someone has to"` over this
+  repository's `.lean` and `.md` files returns **two** hits, both in this file and both inside
+  this bullet — the verdict above, and this record quoting what it replaced.
 
   It is not needed by the intended consumer: an argument
   that a functor preserves kernels compares the canonical map with the kernel and checks it is an
@@ -188,8 +191,15 @@ elaborates and then fails to find `PreservesZeroMorphisms`.
   nothing is the content of the sentence, and an entry in `scripts/docstring-names-ignore.txt`
   would buy silence at the price of the same spelling being exempt tree-wide.
 
-  **Until today this bullet was invisible to `scripts/mathlib_absence.py`, and it is now two of
-  that scan's rows.** *Mathlib has X and not Y* matches none of the six shapes it looks for, so
+  **Until today this bullet was invisible to `scripts/mathlib_absence.py`, and it is now three of
+  that scan's rows**, all three inside it: the version-bearing claim at the head, the sentence
+  that locates the missing right exactness in Mathlib rather than in this repository, and the one
+  retiring the three spellings that do not exist. `--file` on this module prints those three and
+  nothing else, and this module contributed none before, so the scan's headline gains **three**
+  rows and **one** file. **Naming them by quotation rather than by description would make this
+  sentence a fourth row and false as written** — the scan matches text, so a repair that quotes
+  what it counts is counted. *Mathlib has X and not Y* matches none of the six shapes it looks
+  for, so
   the strongest absence claim in this directory sat in none of the buckets the census reconciles,
   while the pointer at it from
   `Oka/Algebra/Category/ModuleCat/Sheaf/PullbackExact.lean` is itself a row — the census could see
@@ -199,7 +209,7 @@ elaborates and then fails to find `PreservesZeroMorphisms`.
   **That bullet read *Mathlib has `PreservesFiniteLimits (SheafOfModules.toSheaf R)`
   (`Mathlib/Algebra/Category/ModuleCat/Sheaf/Limits.lean`) and **not**
   `CategoryTheory.Limits.PreservesFiniteColimits` — measured, `inferInstance` fails on both that
-  and `CategoryTheory.Functor.PreservesHomology`* until 2026-09-21**, with no revision named in
+  and `CategoryTheory.Functor.PreservesHomology`* until 2026-09-22**, with no revision named in
   it and with an instance probe standing as the warrant for a claim about contents;
   `git show 3f26e9d:Oka/Algebra/Category/ModuleCat/Sheaf/Stalk.lean` carries the retired wording
   at `:79–87`, wrapped after *on both that*. **Round 1 of this push changed only the warrant;
