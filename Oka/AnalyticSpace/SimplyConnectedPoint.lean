@@ -189,10 +189,10 @@ each. **What the second adds to the first is exactly two modules** — itself an
 what this file imports and not of the tree**: the first two are the same run at `c6bfc1f` and at
 `ef9e5d2`, three landings later, and the third is the same run at this head, which is the only
 tree it can be taken in at all. **Neither can have moved at any tip this branch has since been
-replayed onto**: over the whole interval from `ef9e5d2` to this push's parent, **every `.lean` file
-added under `Oka/` or `OkaTest/` is imported by `Oka.lean` and by nothing else** —
-`Oka/Analytification/SpecFiniteAnalytification.lean`, `lana-agents/oka#622`'s, is one — **and none
-is deleted**, so none of them enters either closure; every other difference is prose.
+replayed onto**: over the whole interval from `ef9e5d2` to this push's parent, **no module of
+either closure gains or loses an `import` line, and none is deleted**, so both closures are the
+sets of modules they were; and `Oka.lean`, which imports every module of the library, is in
+neither, which is why a module landing under `Oka/` or `OkaTest/` cannot reach them.
 **That is an argument and not a fourth run, and is labelled as one.** **It is stated over an
 interval and not at a named base deliberately**: a clause that names the branch's base is false one
 replay later.
