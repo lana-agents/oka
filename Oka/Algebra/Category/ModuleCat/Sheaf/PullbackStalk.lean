@@ -43,13 +43,13 @@ worth one clause, because it is a trap this neighbourhood sets: the namespace is
 `Mathlib/Algebra/Category/ModuleCat/Sheaf/`, so the functor is written `pullback` there and
 `grep -rn "SheafOfModules.pullback" Mathlib/` returns **7** occurrences in **1** file where the
 environment has **22** declarations whose type mentions it. The two figures are not a ratio:
-occurrences in source against declarations in an environment, several of the 22 being generated
-lemmas no source line writes. That is the point — the qualified grep is not a short count of the
-population these claims are about, it is a count of a different population.
+occurrences in source against declarations in an environment, several of those declarations
+being generated lemmas no source line writes. That is the point — the qualified grep is not a
+short count of the population these claims are about, it is a count of a different population.
 
-**Decomposes the functor.** Of those **22**, `SheafOfModules.pullbackIso` is the only one that
-writes the functor as a composite. The near misses are named here rather than left for a reader
-to rediscover, and each of them is a description that does not unfold it:
+**Decomposes the functor.** Of those declarations, `SheafOfModules.pullbackIso` is the only one
+that writes the functor as a composite. The near misses are named here rather than left for a
+reader to rediscover, and each of them is a description that does not unfold it:
 `SheafOfModules.sheafificationCompPullback` commutes it past sheafification,
 `SheafOfModules.pullbackObjFreeIso` and `SheafOfModules.freeFunctorCompPullbackIso` give its
 value on free sheaves, and `SheafOfModules.pullbackId` and `SheafOfModules.pullbackComp` are the
