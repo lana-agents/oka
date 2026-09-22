@@ -104,8 +104,13 @@ elaborates and then fails to find `PreservesZeroMorphisms`.
   `Oka/Algebra/Category/ModuleCat/Sheaf/PullbackExact.lean`, whose own paragraph taxis #2135 is
   repairing in the same direction — and nothing else in this tree leans on the retired sentence.
   **That last clause has an instrument and here it is**: `grep -rn "someone has to"` over this
-  repository's `.lean` and `.md` files returns **two** hits, both in this file and both inside
-  this bullet — the verdict above, and this record quoting what it replaced.
+  repository's `.lean` and `.md` files returns **three** matching lines, all in this file and all
+  inside this bullet — the verdict above, this record quoting what it replaced, and this
+  sentence, whose backticked command carries the pattern it publishes. **The sentence publishing
+  the instrument is one of the lines the instrument matches**, and that is why the figure is
+  given in *lines*: `grep -rn` reports matching lines and not occurrences, so a rewrap that moved
+  a second occurrence onto a line of its own would change the number with no word of the prose
+  changing — where a tool is keyed on lines, the wrapping of the file is part of the claim.
 
   It is not needed by the intended consumer: an argument
   that a functor preserves kernels compares the canonical map with the kernel and checks it is an
