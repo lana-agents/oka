@@ -10974,20 +10974,23 @@ not of the point* from outside the module that declares it, and the first that r
 base.** `lana-agents/oka#602` is the first: its `Oka/AnalyticSpace/SimplyConnectedCoprod.lean`
 consumes the same name in a proof term and landed while this branch was in review, which the
 section headed *The coproduct form of that criterion, and the index type is never counted* says of
-itself. At `6a792ba`, this branch's base,
+itself. At `6a792ba` and at every tip this branch has since been replayed onto,
 `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_of_iso_id` occurs in the comment-stripped
 code of **three** modules and **four** places and this push makes it **four** and **five** — the
 module that declares it twice, this file once, `Oka/AnalyticSpace/SimplyConnectedCoprod.lean` once
 and the new module once — against **two** modules and **three** places at `d34b436`, the base this
 branch had for four rounds; and the new occurrence is one of the **two** in the tree that are
 neither a declaration, a guard, nor inside the declaring module, the other being `#602`'s.
-**The first four bases the branch had are equal, the fifth is not, and the sixth is equal to the
-fifth**: at `a414f61`, at `ae732d9`, at `a3d656d` and at
+**The first four bases the branch had are equal, the fifth is not, and every base since is equal
+to the fifth**: at `a414f61`, at `ae732d9`, at `a3d656d` and at
 `d34b436` this token is **2** modules and **3** places, the token below is **2** and **2**, and the
 third is **3** and **5**, so re-pinning across three rebases re-pinned and changed no figure; at
 `ef9e5d2` the first is **3** and **4** and the second **3** and **3**, both moved by `#602`'s module
-and neither by a rebase; and at `6a792ba`, this branch's base now, all three are what they were at
-`ef9e5d2`. **The sixth base is where the structural reason below is worth the most**, because the
+and neither by a rebase; and at `6a792ba` and at every tip since, all three are what they were at
+`ef9e5d2`. **The clause counts no bases and names none after the fifth on purpose**: this branch
+has had eight, three of them acquired after the round that first wrote this enumeration, and a
+count of them is a figure every replay moves.
+**The step off the fifth is where the structural reason below is worth the most**, because the
 landing between the two is `lana-agents/oka#616` and it edits
 `Oka/AnalyticSpace/SimplyConnectedCoprod.lean`, which carries two of the three tokens: the four
 files it touches all have byte-identical comment-stripped, whitespace-normalised residue, so

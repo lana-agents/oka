@@ -188,20 +188,29 @@ each. **What the second adds to the first is exactly two modules** — itself an
 **5030**: the criterion's 5027, those two, and this module. **Those three totals are properties of
 what this file imports and not of the tree**: the first two are the same run at `c6bfc1f` and at
 `ef9e5d2`, three landings later, and the third is the same run at this head, which is the only
-tree it can be taken in at all. **Neither can have moved at `6a792ba`, this branch's base now**:
-`lana-agents/oka#616` is the only landing between the two and `git diff --name-only ef9e5d2
-6a792ba` returns four prose files and neither root module, so no module enters or leaves any
-closure — which is an argument and not a fourth run, and is labelled as one.
+tree it can be taken in at all. **Neither can have moved at any tip this branch has since been
+replayed onto**: over the whole interval from `ef9e5d2` to this push's parent, exactly one `.lean`
+file is added under `Oka/` or `OkaTest/` and none is deleted, and the one —
+`Oka/Analytification/SpecFiniteAnalytification.lean`, `lana-agents/oka#622`'s — is imported by
+`Oka.lean` and by nothing else, so it is in neither closure; every other difference is prose.
+**That is an argument and not a fourth run, and is labelled as one.** **It is stated over an
+interval and not at a named base deliberately**: a clause that names the branch's base is false
+one replay later, and this branch has had eight bases.
 **One of the two is in the closure and is read by nothing below**, and the `## What is not here`
 bullet on the empty base says why.
 
 **The marginal cost to `import Oka` is nevertheless one module, and that is a run and not a diff**:
 `import Oka` brings **5541** modules at `d34b436` and this push adds **one**, by a set difference
 over `Lean.Environment.allImportedModuleNames`, and the one module the difference contains is this
-one. **The total is what a landing moves and the one is not**: at `c6bfc1f` it is **5542** and at
-`ef9e5d2` — two landings further on, one of which adds a module — it is **5543**, and at
-`6a792ba`, this branch's base now, it is **5543** still for the reason above, while the same set
-difference against this head is at every one of them the **one** module.
+one. **The total is what a landing moves and the one is not**: at `c6bfc1f` it is **5542**, at
+`ef9e5d2` — two landings further on, one of which adds a module — **5543**, and at `6a792ba`
+**5543** still for the reason above. **The one is not read off any of those three.** It is the
+difference between this push's tree and its own parent, whichever tip that is, and it is one
+because `Oka.lean` gains exactly the line this push writes and no other. **A set difference taken
+against a commit that is not this push's parent counts every module landed in between as well** —
+taken against `6a792ba` at this head it is **two**, the second being `lana-agents/oka#622`'s —
+which is the same defect as an after-column seen from the other end, and is why the figure is
+stated as this push's own delta and never as a pair of totals.
 **No Mathlib module enters the closure**, and no `Oka` module does either — both imports were
 already there, `Oka.lean` naming every module of the library. **A marginal import cost is a figure
 about the importer at a commit and is meaningless without one**, which is why every total in this
@@ -211,7 +220,8 @@ is a delta.
 ## What the census scripts return
 
 **Every row below is a total at `d34b436`, named by hash, and the delta this push adds to it**, and
-**`d34b436` is an ancestor of this branch and no longer its parent** — the parent is `6a792ba` —
+**`d34b436` is an ancestor of this branch and not its parent** — the branch has been replayed onto
+four later tips since, and naming any one of them here would be false at the fifth —
 which costs the rows nothing, because a total at a hash is checkable from any base and that is the
 whole reason they are written this way; what it does cost is one delta, three paragraphs down. And
 **no row states a total at the commit that will add it**: that commit does not exist while this is
@@ -240,15 +250,18 @@ on what the tree already cites in a way an occurrence count does not. **Of the t
 names below, nine are this push's own declarations and no landing can pre-empt a name that does not
 exist until this push writes it**; the other four are borrowed, and `lana-agents/oka#602` has since
 taken one of the four. **Each additive delta is measured twice and the two agree**: once against
-`d34b436` and once as the difference between `6a792ba` and this branch's head —
+`d34b436` and once against this push's own parent, whichever tip that is —
 the nine, the ten, the nine, the seven, the one, the seven and the two are each the same
 figure at both; **the distinct-name row is the exception and it is twelve at the second**, and the
 occurrence, elided and dotless rows are runs at `6a792ba` alone, this push having reworded itself
-after the landing. **The `scripts/guard_coverage.py` rows came through the first two
-landings unmoved, and the two rows were flat for different reasons.** The module
-`lana-agents/oka#601` adds carries **no** `#print axioms` and says so itself, so the guard row had
-nothing to miss: the one occurrence of that string in the file is a prose bullet, which a `git
-grep` counts and that script's comment-masked guard count does not. **The advertised row did have
+after the landing. **The second measurement is named by its relation to this push and not by a
+hash for the reason the closure section gives**: against any commit that is not the parent it
+counts the landings in between, and a delta that does that is not a property of the push.
+**The `scripts/guard_coverage.py` rows came through the first two landings unmoved, and the two
+rows were flat for different reasons.** The module `lana-agents/oka#601` adds carries **no**
+`#print axioms` and says so itself, so the guard row had nothing to miss: the one occurrence of
+that string in the file is a prose bullet, which a `git grep` counts and that script's
+comment-masked guard count does not. **The advertised row did have
 something to miss**: that module's `## Main results` advertises five declarations it declares, and
 the row misses them because that script's advertisement walk is the `Oka/` library and its root
 module and reaches no `OkaTest/` file at all. **A row that happens to be flat is not a row that
@@ -281,7 +294,7 @@ section the row can be moved from**, the count being over the backticked tokens 
 and of nothing else, so the section that names the list is the section that pays.
 
 `scripts/check_docstring_names.py` is **18451 (4481)** backticked names at `6a792ba` and this push
-adds **58 occurrences and 12 distinct names**; elided citations are **408 (175)** there and it adds
+adds **61 occurrences and 12 distinct names**; elided citations are **408 (175)** there and it adds
 **51 and 10**; **0** are unresolved and **6** resolve under more than one namespace at both ends of
 both. **The backticked total is the one figure of this section that `lana-agents/oka#616` moved**,
 by **two occurrences and one distinct name**, `Function.pullbackDiagonal` in
@@ -291,8 +304,11 @@ sentence spells `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_of_is
 once in the guard section's account of what consumes the borrowed name and once in this sentence —
 and that is a name the tree already elides, so the occurrence half moved and the distinct half did
 not, which is the same asymmetry the backticked side records two sentences below at the other end.
-**The occurrence delta on the backticked side moved for the same reason**, from **57** to **58**,
-and the two figures this paragraph adds to itself are counted rather than excused.
+**The occurrence delta on the backticked side moved for the same reason**, from **57** to **58**
+and then to **61**: the round that took the named bases out of this section and the one above
+writes `` `Oka.lean` `` three times more — twice in the two paragraphs it rewrote and once in this
+sentence — and `--diff --sites` puts all three there. **The figures this paragraph adds to itself
+are counted rather than excused**, which is now three rounds' practice.
 **The distinct half is the one row of this section that a landing moved, and it is the only row
 that is not a sum**: `--diff` returns **12 added and 0 removed** on the backticked side — the
 nine declarations below, `Finite.instDiscreteTopology`, `PreconnectedSpace.constant` and the module
