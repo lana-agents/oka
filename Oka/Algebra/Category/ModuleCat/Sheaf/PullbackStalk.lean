@@ -73,7 +73,7 @@ presheaf of modules is not of that form; Mathlib's stalk API for one,
 **That clause read *Mathlib's only structural description of it, `SheafOfModules.pullbackIso`,
 decomposes it as a presheaf pullback followed by sheafification and so would drag in
 "sheafification does not change stalks", which Mathlib does not have in this generality* until
-2026-09-21**, with no version and no run behind either half;
+2026-09-22**, with no version and no run behind either half;
 `git show c6bfc1f:Oka/Algebra/Category/ModuleCat/Sheaf/PullbackStalk.lean` carries the retired
 wording at `:33–36`, wrapped after *in this*. **Both claims are unchanged in substance and only
 their warrant is**, save that *only structural description* is now *the one description that

@@ -83,7 +83,7 @@ last, and `git show 6a792ba:Oka/Algebra/Category/ModuleCat/Sheaf/Stalk.lean` car
 `:84–85`, wrapped after *has to*.
 
 **That clause read *which Mathlib does not have (recorded in `Sheaf/Stalk.lean`)* until
-2026-09-21**, with no version and with a pointer naming a file rather than the passage in it;
+2026-09-22**, with no version and with a pointer naming a file rather than the passage in it;
 `git show c6bfc1f:Oka/Algebra/Category/ModuleCat/Sheaf/PullbackExact.lean` carries the retired
 wording at `:52–53`, wrapped after *does not have*. **The claim is unchanged and only its warrant
 is.**

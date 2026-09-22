@@ -132,7 +132,7 @@ name a consumer could spell, no scan of Mathlib's source can see it, and a scan 
 environment that did not say so would be reporting two written declarations where there is one.
 
 **That clause read *because Mathlib does not name it either: it appears only inside the type of
-`SheafOfModules.Presentation.isColimit`* until 2026-09-21**, with no version, no instrument and
+`SheafOfModules.Presentation.isColimit`* until 2026-09-22**, with no version, no instrument and
 no account of the generated second occurrence;
 `git show c6bfc1f:Oka/Algebra/Category/ModuleCat/Sheaf/Quasicoherent.lean` carries the retired
 wording at `:113–114`, wrapped after *it appears*. **The claim is unchanged and only its warrant
@@ -286,7 +286,7 @@ module docstring**, with the version, the scan of types and its two controls; th
 carries the consequence for a consumer and not the absence a second time.
 
 **That clause read *Mathlib does not name it: it exists only inside the type of
-`SheafOfModules.Presentation.isColimit`* until 2026-09-21**, asserting in a declaration docstring
+`SheafOfModules.Presentation.isColimit`* until 2026-09-22**, asserting in a declaration docstring
 what the module docstring's *A presentation exhibits its sheaf as a cokernel of free sheaves*
 asserts as well; `git show c6bfc1f:Oka/Algebra/Category/ModuleCat/Sheaf/Quasicoherent.lean`
 carries the retired wording at `:260–262`, wrapped after *it exists only*. **The claim is
