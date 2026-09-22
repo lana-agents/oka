@@ -65,7 +65,7 @@ faithfulness cannot avoid is naming the functor and the property in its own type
 namespace is open and whatever the lemma is called, and the **0** above is a count of exactly
 that. **The first residue, named rather than left for a reader to find**: a lemma phrased as
 injectivity or surjectivity of the action on hom-sets need not write `Full` or `Faithful` at all —
-so I asked that too, and of the **197**, exactly **one** has a type also mentioning
+so I asked that too, and of those, exactly **one** has a type also mentioning
 `Function.Injective`, `Function.Bijective` or `Function.Surjective`
 (`AlgebraicGeometry.Scheme.Hom.stalkFunctor_toImage_injective`, which is about stalks), and only
 **three** have names writing *full*, *faith*, *inj* or *bij*, the other two being the generated
@@ -78,9 +78,9 @@ them mentions `CategoryTheory.Functor.Full`, `CategoryTheory.Functor.Faithful` o
 `CategoryTheory.Functor.FullyFaithful` either.
 
 **Two positive controls, because a scan that finds nothing is worth nothing without one.** The
-**197** and the **1348** are the first: both halves of the question are pointed at something Mathlib
-has in quantity. In source, `grep -rn "Presheaf.pushforward" Mathlib/` returns **20** occurrences in
-**7** files, and `fullyFaithfulSheafToPresheaf` — an `abbrev` declared at
+counts this section opens with are the first: both halves of the question are pointed at
+something Mathlib has in quantity. In source, `grep -rn "Presheaf.pushforward" Mathlib/` returns
+**20** occurrences in **7** files, and `fullyFaithfulSheafToPresheaf` — an `abbrev` declared at
 `Mathlib/CategoryTheory/Sites/Sheaf.lean:341`, a fully-faithful statement about a *different*
 functor — is used in the very file this claim is about, at
 `Mathlib/Topology/Sheaves/Functors.lean:146`, so the shape of statement is one Mathlib does write.

@@ -49,7 +49,7 @@ that in one line — *1 already in that closure -> cost 0*. `Mathlib/Data/Set/De
 `Set`, `setOf`, membership, `Set.univ` and `Set.image`, and is inside that closure of 90 already;
 under `import Mathlib.Logic.Equiv.Sum` alone `#check @Set.image`, `#check @setOf` and
 `#check @Set.univ` all elaborate, while `#check @Set.preimage` reports an unknown constant. So
-part of what the **6** buys is `Set.preimage` together with its `f ⁻¹' s` notation, which
+part of what that cost buys is `Set.preimage` together with its `f ⁻¹' s` notation, which
 `Mathlib/Data/Set/Operations.lean` declares — and lacking the notation
 `Set.preimageCompEquivSigma` does not fail to typecheck, it fails to lex, since the apostrophe
 opens a character literal.
@@ -70,7 +70,7 @@ mismatch … has type `Set Nat` but is expected to have type `Prop`*, a typechec
 lexing out of the picture — **and no import stands in for that deletion**, because the notation is
 declared at `Mathlib/Data/Set/Operations.lean:127` and that file's ninth line is
 `public import Mathlib.Data.Set.CoeSort`, so whatever reaches the notation reaches the instance.
-`import Mathlib.Data.Set.Operations` therefore clears both at once; the **6** is the price under
+`import Mathlib.Data.Set.Operations` therefore clears both at once; the price is the same under
 either account, and `Mathlib/Logic/Equiv/Sum.lean` is the wrong host for
 `Set.preimageCompEquivSigma` on two counts rather than one. **Both costs were measured and the
 reason offered under them was not.**

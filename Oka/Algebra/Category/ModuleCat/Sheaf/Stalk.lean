@@ -159,8 +159,8 @@ type mentioning `SheafOfModules.toSheaf`, **3044** have a type mentioning one of
 which says the scan is pointed at something there is in quantity — and **0** have a type
 mentioning both.
 
-**The 15 are few enough to list, and a complete list is a stronger warrant than a zero.** Two
-are simp lemmas for the functor (`SheafOfModules.toSheaf_obj_obj`,
+**The constants that mention the functor are few enough to list, and a complete list is a
+stronger warrant than a zero.** Two are simp lemmas for it (`SheafOfModules.toSheaf_obj_obj`,
 `SheafOfModules.toSheaf_map_hom`) and one names its composite with
 `CategoryTheory.sheafToPresheaf` (`SheafOfModules.toSheafCompSheafToPresheafIso`); two are
 faithfulness and additivity
@@ -201,9 +201,10 @@ without the name: the first is finite limits for the composite of `SheafOfModule
 the verdict needs of them; the others are written out and every one is checked.
 
 **The control's size depends on which names are counted internal and the verdict does not.** The
-**3044** filters with `Lean.Name.isInternalDetail`; filtering with `Lean.Name.isInternal`
-instead, over the same environment, gives **3145**. The **15** and the **0** are the
-same under either, which is the property that makes the control worth printing.
+control filters with `Lean.Name.isInternalDetail`; filtering with `Lean.Name.isInternal`
+instead, over the same environment, gives **3145**. The functor's own count and the count of
+the intersection are the same under either, which is the property that makes the control worth
+printing.
 
 **There is no third spelling to chase, and the three that do not exist are written here without
 backticks.** CategoryTheory.Functor.RightExact, CategoryTheory.Functor.PreservesFiniteColimits

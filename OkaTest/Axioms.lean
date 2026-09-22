@@ -227,6 +227,52 @@ it. The one site of that shape in this sweep read *five of the other twenty-one*
 population of twenty-two stated thirty lines above it in the same file, was found by hand and by
 no scan here, and is repaired with the rest.
 
+**The rule above is written over every spelling and the account of its silence is not, so the
+digit column needs a sentence of its own.** *A measured figure is stated once in a document*
+quantifies over how the figure is written; the paragraph before this one does not, being an
+argument about the spelled copy and about the digit-keyed instruments that cannot see it. A
+reader who takes that argument for the rule reads the rule as the spelled column's, and **the
+digit copy is not the self-repairing case that reading would make it**. What reaches a digit
+second copy is a `grep` for its own value, and what that grep returns is a property of the value
+rather than of the defect. Counting raw lines as a `grep` reads them, over the tracked files
+`scripts/mathlib_absence.py`'s own population walk returns — **376** of them at `e5d2a52` — a
+maximal run of digits reading `3044` is **2** lines in **1** file and one reading `0` is **3849**
+lines in **374**. At that commit `Oka/Algebra/Category/ModuleCat/Sheaf/Stalk.lean` carried a
+measured figure of each of those two values with the second copy of both in one paragraph of it,
+repaired below — **so one defect, in one paragraph, was decided by a grep at one of its values and
+buried by it at the other**. Rarity and not spelling is the discriminator, nothing in `scripts/`
+knows a value's rarity before it is measured, and a spelling exemption follows from neither.
+
+**The digit column, measured at that commit and over that population.** Read through the same
+script's comment content for `.lean` and its whole text otherwise, a value written in `**bold**`
+— this tree's own mark for a measurement — and stated twice or more in one document is **110**
+(file, value) pairs, **315** occurrences and **24** files; most of that is two different
+quantities sharing a value, which is what the spelled hazard column found and for the same
+reason. The column to read narrows it to the shape that sweep repaired, a determiner immediately
+before the numeral, and is **41** pairs, **67** occurrences and **12** files. **Both keys are
+published as literals rather than as prose**, for the reason the paragraph above gives about the
+two instruments whose headline totals nobody could rebuild: the hazard key is
+`\*\*\s*(\d{1,6})\s*\*\*` and the live one is
+`\b(?:[Tt]he|[Tt]hose|[Tt]hese)\s+(?:\*\*)?(\d{1,6})(?:\*\*)?\b`, and the ceiling of six digits
+and that determiner list are choices rather than findings.
+
+**11 sites of that column are dropped here**, in `Oka/Algebra/Category/ModuleCat/Sheaf/Stalk.lean`,
+`Oka/Algebra/Category/ModuleCat/Sheaf/PullbackStalk.lean`, `Oka/Geometry/RingedSpace/CutOut.lean`
+and `Oka/Logic/Equiv/Set.lean`, each rewritten to the pointer without the numeral and no pair
+synchronised. **What is left is named rather than left to be found, and the largest of it is this
+file**: `OkaTest/Axioms.lean` holds **26** of the column and `README.md` **17**, which between
+them is most of what remains, and both are documents whose numerals are overwhelmingly quotations
+of other files' measurements and rows of a register, where the numeral is the subject of its
+sentence rather than a second copy of one — the reason taxis #2171's own sweep gave for leaving
+the same two. `OkaTest/Axioms/Morphisms.lean`, `Oka/AlgebraicGeometry/Modules/Sheaf.lean` and
+`scripts/import_cost.py` carry **3** apiece and are next; none of the three is swept.
+**One site inside a file this push does sweep is left on purpose**:
+`Oka/Geometry/RingedSpace/CutOut.lean:65` points back with a bare numeral whose antecedent can be
+either of two figures above it, one of them written as a digit and one as a word, so dropping
+that numeral chooses between them, which is a claim about what the sentence means rather than a
+repair of its form.
+**Argued at taxis #2186.**
+
 **A proportion can be spelled as an adverb, and `most`, `bulk` and `largest` are the three tokens
 that spelling does not carry.** *Mostly*, *largely*, *chiefly* attach to the thing selected rather
 than to the population, so they carry no *of them* and no determiner either; a pattern written from
