@@ -63,7 +63,7 @@ here`; the claim made is only that the witness sits where the question is live.
   At the zero ring — which the `variable (R : Type*) [CommRing R]` below admits — the clause is
   false outright: the pair's `StandardEtalePair.Ring` is a subsingleton there and so **is** the
   base. `## What is not checked here` is where that stands in full. **The clause carried neither
-  bound until 2026-09-21.**
+  bound until 2026-09-22.**
 
 **`g = 2` and not `g = 1`, and the difference is a `1/2`.** With `g = 1` the `cond` field asks for
 `derivative f * p₁ + f * p₂ = 1`, which needs `2` inverted in the coefficients and so a
@@ -135,7 +135,7 @@ absent, which is the second thing that draft learned.
   what it inverts: at `R = ZMod 2` it is the zero ring, which is still not the base. It is
   `ComplexAnalytic.sqSubOnePair` that has the equivalence, `ComplexAnalytic.sqSubOneRingEquiv`,
   and that one carries the same hypothesis. **This row read *the pair whose algebra is not the
-  base* until 2026-09-21**, with *over an arbitrary commutative ring* in the same sentence —
+  base* until 2026-09-22**, with *over an arbitrary commutative ring* in the same sentence —
   **corrected here rather than dated and kept**, because it was false at an `R` the row admitted
   and not merely superseded.
 - `ComplexAnalytic.nodeEtaleF`, `ComplexAnalytic.nodeEtaleG` and
@@ -158,7 +158,7 @@ the same declaration.
   `ComplexAnalytic.sqSubOnePair`, which is the instantiation
   `Oka/Analytification/StandardEtaleLocalIsoBase.lean` names as cheapest — and whose cover is the
   base, `2` being a unit of the `ℂ`-algebra the pair is instantiated at here. **That last clause
-  carried no hypothesis until 2026-09-21.**
+  carried no hypothesis until 2026-09-22.**
 - `ComplexAnalytic.nonempty_analytification_nodeG`: **the base is not empty.**
 - `ComplexAnalytic.eval_etalePresentation_nodeEtalePt` and
   `ComplexAnalytic.nonempty_analytification_etalePresentation_node`: **the source of the
@@ -179,7 +179,7 @@ the same declaration.
   a reader and not what any declaration here says; proving it, or proving the second cover is not
   an isomorphism, is a separate statement and nothing below attempts it. **That second clause read
   *`ComplexAnalytic.sqSubOneTwoPair`'s is `R[X]/(X² − 1)`, which is not shown below to be anything
-  other than the base* until 2026-09-21**, naming the algebra with no hypothesis on `R` —
+  other than the base* until 2026-09-22**, naming the algebra with no hypothesis on `R` —
   **corrected here rather than dated and kept**, on the same ground as the `## Main definitions`
   row above: at `R = ℤ` the ring it names is `(ℤ[2⁻¹])[X]/(X² − 1)` and not `ℤ[X]/(X² − 1)`, so the
   clause was false at an `R` this file admits and not merely unbounded.
@@ -194,7 +194,7 @@ the same declaration.
   `StandardEtalePair.Ring` inverts, so the algebra is `R[X]/(X² − 1)` exactly where `2` is a unit
   of `R`, and at `R = ZMod 2` it is the zero ring — not the base there, for the other reason.
   **So *not the base* needs a non-trivial `R`, *is the base* needs `2` inverted, and until
-  2026-09-21 this file carried four of the second with no hypothesis and three of the first with
+  2026-09-22 this file carried four of the second with no hypothesis and three of the first with
   no bound.** All seven are repaired and none is deleted. The four are the `## Two pairs` first
   bullet, the `## Main results` row for the `ComplexAnalytic.sqSubOnePair` witness, the bullet
   above and that witness's own docstring; the three are the `## Two pairs` second bullet, the
