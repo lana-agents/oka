@@ -35,6 +35,11 @@ What is checked:
   whose left-hand side names no presentation at all, obtained from
   `ComplexAnalytic.analytificationFGAlgObjIso`. This is the test that the equivalence-based
   definition is not inert.
+* `finitePresentation_nodePresHom` and the two `example`s beside it — that
+  `ComplexAnalytic.finitePresentation_presentedAlgebra` is found by instance search at
+  `ComplexAnalytic.Presentation.alg`, which is the spelling every consumer in this category uses
+  and not the one the instance is stated at, and that
+  `ComplexAnalytic.PresHom.finitePresentation` elaborates at a morphism of this category.
 
 `AnalyticSpace.node` is `ComplexAnalytic.AnalyticSpace.analytification nodeTuple2` definitionally
 (`node_eq_analytification_nodeTuple2`, in the file this one imports), which is why the node can
@@ -112,5 +117,33 @@ node as well — reached through the functor of algebras rather than by comparin
 def nodeIsoAnalytificationFGAlg3 :
     analytificationFGAlg.{u}.obj (toFGAlg.{u}.obj nodePres3.{u}) ≅ AnalyticSpace.node.{u} :=
   (analytificationFGAlg.{u}.mapIso nodeAlgIso.{u}).symm ≪≫ nodeIsoAnalytificationFGAlg.{u}
+
+/-! ### Finite presentation, where instance search has to find it
+
+`ComplexAnalytic.finitePresentation_presentedAlgebra` is stated at
+`ComplexAnalytic.PresentedAlgebra`, which is what the relations are given as, and every consumer
+in the category speaks of `ComplexAnalytic.Presentation.alg` instead. The two are the same type,
+and search crosses between them only because that projection is an `abbrev` and so reducible —
+so this is a test of a fragility and not of a theorem: were it ever made a plain `def`, the
+instance below would stop being found and `ComplexAnalytic.finiteType_presentationAlg`, which is
+stated at the projection, would silently be the strongest thing available at an object of this
+category. -/
+
+/-- **The finite-presentation instance is found at an object of the category**, not only at the
+quotient it unfolds to. -/
+example : Algebra.FinitePresentation ℂ nodePres2.{u}.alg := inferInstance
+
+/-- **And at the other presentation of the same algebra**, whose relations are a different tuple
+of a different length: the instance is about the presentation and asks nothing of it. -/
+example : Algebra.FinitePresentation ℂ nodePres3.{u}.alg := inferInstance
+
+/-- **A morphism of presentations is of finite presentation as a ring map**, at the one in this
+file that is not an identity — `ComplexAnalytic.PresHom.finitePresentation` has no hypothesis, so
+what this pins is that its statement elaborates at a morphism the category actually holds, with
+the `Algebra` structure its own ring map defines and no `Algebra` instance in scope for the
+pair. -/
+theorem finitePresentation_nodePresHom :
+    (nodePresHom.{u} : PresHom.{u} nodeTuple2.{u} nodeTuple3.{u}).toRingHom.FinitePresentation :=
+  PresHom.finitePresentation.{u} _
 
 end

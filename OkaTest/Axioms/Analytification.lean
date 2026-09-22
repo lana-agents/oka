@@ -475,6 +475,47 @@ info: 'ComplexAnalytic.finiteType_presentationAlg' depends on axioms:
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.finiteType_presentationAlg
 
+/-! ### Finite presentation of a presented algebra, and of a map of them
+
+`Oka/Analytification/Functor.lean` strengthens the finite-type instance guarded above to finite
+*presentation*, absolutely over `ℂ` and relatively along a `ComplexAnalytic.PresHom`. **The four
+guards below record that neither costs an axiom the finite-type instance above does not already
+carry**, which is the whole of what a `#print axioms` on this line can say: the proofs are
+`Algebra.FinitePresentation.quotient` at a finitely generated ideal and descent along a tower,
+and both are ordinary commutative algebra.
+
+**The relative statement's `Algebra` instance is the one its own ring map defines**, so
+`ComplexAnalytic.PresHom.finitePresentation` is stated as `RingHom.FinitePresentation` and
+`ComplexAnalytic.PresHom.isScalarTower` under a `letI`; a `#print axioms` sees through both. -/
+
+/--
+info: 'ComplexAnalytic.fg_presentationIdeal' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.fg_presentationIdeal
+
+/--
+info: 'ComplexAnalytic.finitePresentation_presentedAlgebra' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.finitePresentation_presentedAlgebra
+
+/--
+info: 'ComplexAnalytic.PresHom.isScalarTower' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.PresHom.isScalarTower
+
+/--
+info: 'ComplexAnalytic.PresHom.finitePresentation' depends on axioms:
+  [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms ComplexAnalytic.PresHom.finitePresentation
+
 /--
 info: 'ComplexAnalytic.toFGAlg' depends on axioms:
   [propext, Classical.choice, Quot.sound]
