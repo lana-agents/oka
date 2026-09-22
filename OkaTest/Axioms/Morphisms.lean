@@ -11024,8 +11024,10 @@ every tracked
 transports have nothing to carry and that the base the criterion is for is one this repository does
 not have**, in the two sentences closing its corrected paragraph; that is what the new module
 supplies, and the dated record retiring them is the last paragraph of that section and is the same
-push as this one. **That section is no longer the one directly above** — `#602`'s coproduct section
-landed between them — which is why it is named here and not pointed at.
+push as this one. **That section is no longer the one directly above**, and has not been since
+`#602`'s coproduct section landed between them — which is why it is named here and not pointed at.
+**What has landed between them since is deliberately not enumerated here**: a list of it is
+falsified by the next append to this file, and this push is itself replayed over one.
 
 **What the telescopes bind, by `#check` over the nine and not by reading the file.** **Exactly one
 of the nine binds `[T2Space]` and `[PreconnectedSpace]`** — the first, which is the only statement
