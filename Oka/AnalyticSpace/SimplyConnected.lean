@@ -118,7 +118,7 @@ dotless at both.
   one isomorphism class of connected object. **This bullet read *No base is exhibited whose
   fundamental group is trivial, and none is claimed to exist. The hypothesis of the three results
   above is satisfied by nothing in this repository. It is not vacuous in the mathematics and it is
-  unwitnessed here, and those are different sentences* until 2026-09-20**, when
+  unwitnessed here, and those are different sentences* until 2026-09-22**, when
   `Oka/AnalyticSpace/SimplyConnectedPoint.lean` exhibited one: its
   `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_originZero` says the fundamental group
   of `ℂ⁰` is trivial, and its

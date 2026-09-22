@@ -161,7 +161,7 @@ ends of this push.
   that file and true here of this one. **What this file changes is the shape of the question and
   not its answer**: to exhibit one it is now enough to classify the connected covers of a base, a
   statement in which neither the group nor a point of the base occurs. Nothing below does that for
-  any base. **The bullet ended *and it is still true of the tree* until 2026-09-20**, when
+  any base. **The bullet ended *and it is still true of the tree* until 2026-09-22**, when
   `Oka/AnalyticSpace/SimplyConnectedPoint.lean` did exactly what the sentence after it predicts:
   it classifies the connected covers of a base whose underlying space has at most one point —
   each is the base over itself, by a finiteness and a discreteness and no group — and then reads

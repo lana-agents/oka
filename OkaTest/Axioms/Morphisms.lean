@@ -10698,7 +10698,7 @@ sentences in **55** files at `ae732d9`, of which the 35 above are three files', 
 are unopened — a bound and not a clean bill.
 
 **The two sentences closing the corrected paragraph — *the transports have nothing to carry yet*
-and *that is a base this repository does not yet have* — stood until 2026-09-20**, when
+and *that is a base this repository does not yet have* — stood until 2026-09-22**, when
 `Oka/AnalyticSpace/SimplyConnectedPoint.lean` supplied that base and the section headed *The first
 base whose fundamental group is trivial, and it is a point* guards it: the fundamental group of
 `ℂ⁰` is trivial, so the first of the four names above has a consumer **outside the module that
@@ -10727,8 +10727,11 @@ and stays true of both; `lana-agents/oka#602` made `Oka/AnalyticSpace/SimplyConn
 makes `Oka/AnalyticSpace/SimplyConnectedPoint.lean` a **fourth**, for that one alone — which the
 section headed *The first base whose fundamental group is trivial, and it is a point* states,
 measures at both ends and is the subject of. **This paragraph read *the first to move* and *a third
-module* until 2026-09-21**, when `#602` landed between this record and the section it points at,
-which is also why that pointer is a heading now and not a direction. **The transports still carry
+module* until 2026-09-22**, `#602` having landed on 2026-09-21 between this record and the
+section it points at, which is also why that pointer is a heading now and not a direction. **The
+two days are given separately because they are two days**: a record's numeral is the day its
+wording left the file, and the landing that made that wording false is a different push on a
+different day. **The transports still carry
 nothing, and now for a different reason**: at a base whose underlying space has at most one point
 every point is every other point,
 so `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_congr` there is `Subsingleton.elim` and
