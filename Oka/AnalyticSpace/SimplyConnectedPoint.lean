@@ -189,13 +189,13 @@ each. **What the second adds to the first is exactly two modules** — itself an
 what this file imports and not of the tree**: the first two are the same run at `c6bfc1f` and at
 `ef9e5d2`, three landings later, and the third is the same run at this head, which is the only
 tree it can be taken in at all. **Neither can have moved at any tip this branch has since been
-replayed onto**: over the whole interval from `ef9e5d2` to this push's parent, exactly one `.lean`
-file is added under `Oka/` or `OkaTest/` and none is deleted, and the one —
-`Oka/Analytification/SpecFiniteAnalytification.lean`, `lana-agents/oka#622`'s — is imported by
-`Oka.lean` and by nothing else, so it is in neither closure; every other difference is prose.
+replayed onto**: over the whole interval from `ef9e5d2` to this push's parent, **every `.lean` file
+added under `Oka/` or `OkaTest/` is imported by `Oka.lean` and by nothing else** —
+`Oka/Analytification/SpecFiniteAnalytification.lean`, `lana-agents/oka#622`'s, is one — **and none
+is deleted**, so none of them enters either closure; every other difference is prose.
 **That is an argument and not a fourth run, and is labelled as one.** **It is stated over an
-interval and not at a named base deliberately**: a clause that names the branch's base is false
-one replay later, and this branch has had eight bases.
+interval and not at a named base deliberately**: a clause that names the branch's base is false one
+replay later.
 **One of the two is in the closure and is read by nothing below**, and the `## What is not here`
 bullet on the empty base says why.
 
@@ -207,8 +207,7 @@ one. **The total is what a landing moves and the one is not**: at `c6bfc1f` it i
 **5543** still for the reason above. **The one is not read off any of those three.** It is the
 difference between this push's tree and its own parent, whichever tip that is, and it is one
 because `Oka.lean` gains exactly the line this push writes and no other. **A set difference taken
-against a commit that is not this push's parent counts every module landed in between as well** —
-taken against `6a792ba` at this head it is **two**, the second being `lana-agents/oka#622`'s —
+against a commit that is not this push's parent counts every module landed in between as well**,
 which is the same defect as an after-column seen from the other end, and is why the figure is
 stated as this push's own delta and never as a pair of totals.
 **No Mathlib module enters the closure**, and no `Oka` module does either — both imports were
@@ -220,8 +219,8 @@ is a delta.
 ## What the census scripts return
 
 **Every row below is a total at `d34b436`, named by hash, and the delta this push adds to it**, and
-**`d34b436` is an ancestor of this branch and not its parent** — the branch has been replayed onto
-four later tips since, and naming any one of them here would be false at the fifth —
+**`d34b436` is an ancestor of this branch and not its parent** — the branch has been replayed since
+and will be again, and naming any one of those tips here would be false at the next —
 which costs the rows nothing, because a total at a hash is checkable from any base and that is the
 whole reason they are written this way; what it does cost is one delta, three paragraphs down. And
 **no row states a total at the commit that will add it**: that commit does not exist while this is
@@ -242,8 +241,8 @@ falsified the backticked row's, which read ***18258 (4432) → 18311 (4445)***, 
 landing further on, eight more were false — both dump totals, the guard row, the advertised row and
 its file count, *in both lists*, the *backticked tokens skipped* figure this section calls flat,
 and the dotless row — without a line of this branch changing. **What no landing moves is an
-*additive* delta**: the nine declaration rows, the ten environment rows and the fifty-seven
-backticked occurrences this push adds are properties of the push rather than of any commit, and
+*additive* delta**: the nine declaration rows, the ten environment rows and the backticked
+occurrence delta this push adds are properties of the push rather than of any commit, and
 that division is what every row below is built on. **A count of *distinct* names added is not of
 that kind, and a landing has now moved one**: it is a set difference and not a sum, so it depends
 on what the tree already cites in a way an occurrence count does not. **Of the thirteen distinct

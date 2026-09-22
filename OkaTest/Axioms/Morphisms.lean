@@ -10987,9 +10987,8 @@ to the fifth**: at `a414f61`, at `ae732d9`, at `a3d656d` and at
 third is **3** and **5**, so re-pinning across three rebases re-pinned and changed no figure; at
 `ef9e5d2` the first is **3** and **4** and the second **3** and **3**, both moved by `#602`'s module
 and neither by a rebase; and at `6a792ba` and at every tip since, all three are what they were at
-`ef9e5d2`. **The clause counts no bases and names none after the fifth on purpose**: this branch
-has had eight, three of them acquired after the round that first wrote this enumeration, and a
-count of them is a figure every replay moves.
+`ef9e5d2`. **The clause counts no bases and names none after the fifth on purpose**: a count of
+them is a figure every replay moves, and this sentence is where it would be easiest to write one.
 **The step off the fifth is where the structural reason below is worth the most**, because the
 landing between the two is `lana-agents/oka#616` and it edits
 `Oka/AnalyticSpace/SimplyConnectedCoprod.lean`, which carries two of the three tokens: the four
