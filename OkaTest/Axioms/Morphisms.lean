@@ -10697,6 +10697,46 @@ every tracked `.lean`, `.md`, `.py` and `.sh` of the tree returns **114** matche
 sentences in **55** files at `ae732d9`, of which the 35 above are three files', and the other 71
 are unopened — a bound and not a clean bill.
 
+**The two sentences closing the corrected paragraph — *the transports have nothing to carry yet*
+and *that is a base this repository does not yet have* — stood until 2026-09-22**, when
+`Oka/AnalyticSpace/SimplyConnectedPoint.lean` supplied that base and the section headed *The first
+base whose fundamental group is trivial, and it is a point* guards it: the fundamental group of
+`ℂ⁰` is trivial, so the first of the four names above has a consumer **outside the module that
+declares it**, and the criterion has a base to be read at.
+**They are named here and not pointed at, because this record no longer adjoins them.** It did when
+it was written, against `ae732d9`; the correction and the record above were written against the
+same base by `lana-agents/oka#604` and landed first, as `a3d656d`, so this one is replayed after
+them and *the two sentences before this one* would now reach that record's closing paragraph
+instead. **A demonstrative is the part of a dated record a rebase can falsify in silence**, which is
+this push's second instance of the shape and the reason the wording changed between rounds.
+**Inside that module the first name already had a consumer at `a3d656d`**, and the qualifier is not
+decoration: `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_iff`'s proof term is
+`⟨fun _ A _ ↦ …nonempty_iso_id.{u} x A, …subsingleton_fundamentalGroup_of_iso_id.{u} x⟩`, which is
+a statement of this repository consuming the first name and is neither a declaration of it nor a
+guard. **That was taxis #2120's question and `a3d656d` answered it**, in a commit this one has in
+its history rather than one ahead of it — said that way because a count of the commits between the
+two is a figure every rebase moves, and this branch has had three:
+the clause reading *and no statement of this repository consumes any of them* is corrected
+above rather than dated, for the reason the record above gives. **Nothing here restates that
+correction, repairs it or rests on it**, and neither the pinned sentence nor its record is touched
+by this push; what is dated here is only the two sentences named at the top of this paragraph.
+**One figure of that record this push moves, and it is the placement half**: *each of
+the four occurs in that module, in this one, and in no third* is pinned to `6be2998` and `a3d656d`
+and stays true of both; `lana-agents/oka#602` made `Oka/AnalyticSpace/SimplyConnectedCoprod.lean` a
+**third** module for the **first** of the four and says so in its own section below, and this push
+makes `Oka/AnalyticSpace/SimplyConnectedPoint.lean` a **fourth**, for that one alone — which the
+section headed *The first base whose fundamental group is trivial, and it is a point* states,
+measures at both ends and is the subject of. **This paragraph read *the first to move* and *a third
+module* until 2026-09-22**, `#602` having landed on 2026-09-21 between this record and the
+section it points at, which is also why that pointer is a heading now and not a direction. **The
+two days are given separately because they are two days**: a record's numeral is the day its
+wording left the file, and the landing that made that wording false is a different push on a
+different day. **The transports still carry
+nothing, and now for a different reason**: at a base whose underlying space has at most one point
+every point is every other point,
+so `…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_congr` there is `Subsingleton.elim` and
+carries nothing that was not already at hand.
+
 **The routing.** The topic table at the head of `OkaTest/Axioms.lean` routes *morphisms of analytic
 spaces* here and these are statements about the covers of a base, which is where the four sections
 above this one are; the group of `OkaTest/Axioms/Analysis.lean`'s row — *`π₁(ℂ ∖ {0})`* — is
@@ -10913,3 +10953,194 @@ info: 'ComplexAnalytic.AnalyticSpace.isLocalIso_iff_isOpenCover_source' depends 
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms ComplexAnalytic.AnalyticSpace.isLocalIso_iff_isOpenCover_source
+
+/-! ### The first base whose fundamental group is trivial, and it is a point
+
+`Oka/AnalyticSpace/SimplyConnectedPoint.lean`, the whole of it. **Nine names**: the fibre-level
+half of the section headed *A base whose fundamental group is trivial has only trivial covers*,
+`…SeparatedFiniteEtaleOver.nonempty_iso_id_of_subsingleton_fiber`;
+the finiteness and the discreteness that a base with at most one point buys,
+`…SeparatedFiniteEtaleOver.finite_left_of_subsingleton_base` and
+`…SeparatedFiniteEtaleOver.subsingleton_left_of_subsingleton_base`; the two they compose to,
+`…SeparatedFiniteEtaleOver.nonempty_iso_id_of_subsingleton_base` and
+`…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup`; the point of `ℂ⁰` and the instance
+saying it is the only one, `…AnalyticSpace.originZero` and
+`…AnalyticSpace.subsingleton_complexAffineSpace_zero`; and the two statements at that base,
+`…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_originZero` and
+`…SeparatedFiniteEtaleOver.exists_iso_coprod_id_originZero`.
+
+**This is the second consumer of the section headed *That hypothesis is a property of the base and
+not of the point* from outside the module that declares it, and the first that reads it at a
+base.** `lana-agents/oka#602` is the first: its `Oka/AnalyticSpace/SimplyConnectedCoprod.lean`
+consumes the same name in a proof term and landed while this branch was in review, which the
+section headed *The coproduct form of that criterion, and the index type is never counted* says of
+itself. At `6a792ba` and at every tip this branch has since been replayed onto,
+`…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_of_iso_id` occurs in the comment-stripped
+code of **three** modules and **four** places and this push makes it **four** and **five** — the
+module that declares it twice, this file once, `Oka/AnalyticSpace/SimplyConnectedCoprod.lean` once
+and the new module once — against **two** modules and **three** places at `d34b436`, the base this
+branch had for four rounds; and the new occurrence is one of the **two** in the tree that are
+neither a declaration, a guard, nor inside the declaring module, the other being `#602`'s.
+**The first four bases the branch had are equal, the fifth is not, and every base since is equal
+to the fifth**: at `a414f61`, at `ae732d9`, at `a3d656d` and at
+`d34b436` this token is **2** modules and **3** places, the token below is **2** and **2**, and the
+third is **3** and **5**, so re-pinning across three rebases re-pinned and changed no figure; at
+`ef9e5d2` the first is **3** and **4** and the second **3** and **3**, both moved by `#602`'s module
+and neither by a rebase; and at `6a792ba` and at every tip since, all three are what they were at
+`ef9e5d2`. **The clause counts no bases and names none after the fifth on purpose**: a count of
+them is a figure every replay moves, and this sentence is where it would be easiest to write one.
+**The step off the fifth is where the structural reason below is worth the most**, because the
+landing between the two is `lana-agents/oka#616` and it edits
+`Oka/AnalyticSpace/SimplyConnectedCoprod.lean`, which carries two of the three tokens: the four
+files it touches all have byte-identical comment-stripped, whitespace-normalised residue, so
+this instrument cannot see that landing at all, and a figure it could have moved it did not.
+**A landing under a branch is not a rebase and the two fail differently**: a rebase moves the
+commit a figure is read at, and a landing moves the figure. **The
+reason it cannot change is structural and is checked rather than assumed, and the check is not the
+same one at every step**: every `.lean` file that differs between `a414f61` and `a3d656d` has
+byte-identical comment-stripped, whitespace-normalised residue, so a census run through this
+stripper cannot see those two merges at all — `a3d656d` adds two occurrences of this very token to
+this file and **both are inside a docstring**. **That argument does not reach the third rebase and
+saying so is the point of this clause**: between `a3d656d` and `d34b436` exactly **two** files move
+in the stripped residue — `OkaTest.lean`, which gains one `import` line, and
+`OkaTest/StandardEtaleFiniteEtaleBase.lean`, which is new — and what carries the column across is
+that **neither of the two contains any of the three tokens**, which is a `grep` and not a residue
+argument. **A structural reason has a domain, and a rebase can leave it.**
+**The qualifier is what the breakdown above forces**:
+of that module's two places one is the declaration and the other is
+`…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_iff`'s proof term, which consumed the name
+at `a3d656d` and consumes it still, so *first consumer* without the qualifier is false and is false
+by this paragraph's own arithmetic. What that says about the pinned sentence of the section headed
+*That hypothesis is a property of the base and not of the point* was taxis #2120's question, and
+`a3d656d` answered it: that sentence is corrected there and the
+record sits under it, so nothing is left here for this section to route.
+`…SeparatedFiniteEtaleOver.exists_iso_coprod_id` moves the same way, **3 → 4** modules at
+`6a792ba` and **2 → 3** at `d34b436`, and
+`…SeparatedFiniteEtaleOver.connectedSpace_of_isConnected` **3 → 4** at both. The population is
+every tracked
+`.lean` file under `Oka/` and `OkaTest/` with the two root modules, the stripper is
+`scripts/import_cost.py`'s `strip_comments`, and the token is not flanked by a letter, a digit or
+`_`. **The section headed *That hypothesis is a property of the base and not of the point* said the
+transports have nothing to carry and that the base the criterion is for is one this repository does
+not have**, in the two sentences closing its corrected paragraph; that is what the new module
+supplies, and the dated record retiring them is the last paragraph of that section and is the same
+push as this one. **That section is no longer the one directly above**, and has not been since
+`#602`'s coproduct section landed between them — which is why it is named here and not pointed at.
+**What has landed between them since is deliberately not enumerated here**: a list of it is
+falsified by the next append to this file, and this push is itself replayed over one.
+
+**What the telescopes bind, by `#check` over the nine and not by reading the file.** **Exactly one
+of the nine binds `[T2Space]` and `[PreconnectedSpace]`** — the first, which is the only statement
+of that module at a base that is not asked to have at most one point — and it binds **no**
+`[Nonempty]`, which it `omit`s. **Four bind `[Subsingleton (X : Type u)]` and none of those four
+binds any of the three**, which is the module's own finding: over such a base all three are free
+and are supplied inline. **Three bind `[CategoryTheory.PreGaloisCategory.IsConnected A]`**, the
+exceptions among the first five being `…SeparatedFiniteEtaleOver.finite_left_of_subsingleton_base`,
+which is true of every cover including the empty one, and
+`…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup`, which quantifies over covers inside its
+proof and not in its telescope. **Exactly one binds
+`[Subsingleton ((…SeparatedFiniteEtaleOver.fintypeFiberFunctor x).obj A)]`**, the first. **Not one
+of the nine binds `[Subsingleton (…SeparatedFiniteEtaleOver.fundamentalGroup x)]`**, and two of them
+*conclude* it — which is the difference from the section headed *A base whose fundamental group is
+trivial has only trivial covers*, where three of four bind it as a hypothesis. **Five take a point
+of the base explicitly and the last four take none**, the base being fixed and its point a term.
+
+**Seven of the nine are theorems, one is a `def` and one is an `instance`.**
+`…AnalyticSpace.originZero` is the `def` and is the only data here;
+`…AnalyticSpace.subsingleton_complexAffineSpace_zero` is the `instance` and is the only one that
+module declares. **None of the nine is `noncomputable`**, which is the other difference from the
+section headed *A base whose fundamental group is trivial has only trivial covers*, whose
+`…SeparatedFiniteEtaleOver.isTerminalFintypeFiber` is.
+
+**All nine lists below are the standard three**, the `def` included: its own term is a constant
+function, and what reaches choice is the type it inhabits, which is built through
+`ComplexAnalytic.AnalyticSpace.complexAffineSpace`.
+
+**What consumes them, outside their own module: nothing.** The two statements at that base are
+consumed by nothing, and the seven before them by nothing outside that file — the same position
+every name of the section headed *The coproduct form of that criterion, and the index type is
+never counted* is in, and every name of the section headed *That hypothesis is a property of the
+base and not of the point* except
+`…SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_of_iso_id`, whose two consumers
+outside its own module are `lana-agents/oka#602`'s and this push's own. It is said here rather than
+left to be discovered, and the exception is named rather than rounded away.
+
+**The routing is the one the sections headed *A base whose fundamental group is trivial has only
+trivial covers*, *That hypothesis is a property of the base and not of the point* and *The
+coproduct form of that criterion, and the index type is never counted* take.** The topic table at
+the head of
+`OkaTest/Axioms.lean` routes *morphisms of analytic spaces* here and these are statements about the
+covers of a base; `ComplexAnalytic.AnalyticSpace.complexAffineSpace` appearing in two of the nine
+does not move them, the space being the base and not the subject. -/
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.nonempty_iso_id_of_subsingleton_fiber'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.nonempty_iso_id_of_subsingleton_fiber
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.finite_left_of_subsingleton_base'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.finite_left_of_subsingleton_base
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.subsingleton_left_of_subsingleton_base'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.subsingleton_left_of_subsingleton_base
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.nonempty_iso_id_of_subsingleton_base'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.nonempty_iso_id_of_subsingleton_base
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.originZero'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  ComplexAnalytic.AnalyticSpace.originZero
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.subsingleton_complexAffineSpace_zero'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  ComplexAnalytic.AnalyticSpace.subsingleton_complexAffineSpace_zero
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_originZero'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.subsingleton_fundamentalGroup_originZero
+
+/--
+info: 'ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.exists_iso_coprod_id_originZero'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms
+  ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.exists_iso_coprod_id_originZero

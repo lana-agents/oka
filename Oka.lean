@@ -117,6 +117,7 @@ import Oka.AnalyticSpace.SimpleZeroTopology
 import Oka.AnalyticSpace.SimplyConnected
 import Oka.AnalyticSpace.SimplyConnectedCoprod
 import Oka.AnalyticSpace.SimplyConnectedCriterion
+import Oka.AnalyticSpace.SimplyConnectedPoint
 import Oka.AnalyticSpace.StalkLocalInverse
 import Oka.AnalyticSpace.ZeroLocus
 import Oka.Analytification.AffineCover
