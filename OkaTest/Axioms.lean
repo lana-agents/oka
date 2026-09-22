@@ -963,6 +963,94 @@ date on it, written before that rule was stated, and is left as it stands.
 `Oka/RingTheory/Localization/AtPrime/Basic.lean` are a different shape from the superlative and
 **none of them was read here**. The 161 the fifth sweep left unread are still unread.
 
+**The seventh sweep is a spelling keyed on the *closure* and not on an edge, and both instruments
+above are edge-keyed.** *The earliest module whose import closure contains both* is the shape: the
+branch list anchors on an inflected form of `import`, the literal on the bare infinitive, and a
+sentence of this shape carries neither, so neither pattern can reach it. **It is published here as
+a literal and not as prose**, for the reason the paragraph above gives when it publishes the
+other one: `\b(?:earliest|first|only|last)\b[^.?!]{0,80}\bimport closure\b`. **The window
+between the superlative and the closure is the part of it to distrust** — it is tuned to one
+sentence, it exists to keep the two inside one clause, and a longer subject between them defeats
+it.
+
+**The patterns of this rule were run together at `7495c8f`, over one population and one splitter,
+so that their totals are comparable with each other.** The population is
+`scripts/mathlib_absence.py`'s own `population()` — every tracked `.lean`, `.md`, `.py`, `.sh`,
+`.yml` and `.toml` under `Oka/`, `OkaTest/` and `scripts/`, with `Oka.lean`, `OkaTest.lean` and
+`README.md` — which is **378** files at that commit, and the splitter is that script's `sentences`,
+cutting at a full stop and a space and nowhere else. **That is a wider population and a coarser
+splitter than the paragraphs above use**, theirs being the tracked `.lean` under `Oka/` and
+`OkaTest/` with the two roots, **368** files at that commit, cut at a question mark and an
+exclamation mark as well.
+
+| pattern | sentences | files |
+| --- | --- | --- |
+| the published literal of the sixth sweep | 9 | 5 |
+| `\bimport closure\b`, the naive widening | 120 | 51 |
+| the superlative literal above | 1 | 1 |
+
+**The first row is the same pair of numerals the paragraph above reports at its own head, and two
+runs of one pattern at two commits are a fixed point and not a second copy of one figure.** Its
+files at `7495c8f` are `Oka/Analytification/FGAlgFinite.lean`,
+`Oka/Analytification/StandardEtaleLocalIso.lean`, `OkaTest/Axioms/Morphisms.lean`,
+`OkaTest/Axioms/Sheaves.lean` and this one. **The negative control is that
+`Oka/Analytification/HypersurfaceFinite.lean` is in neither the sentences of that row nor its
+files, and that the third row returns that file and returns nothing else.** On the narrower
+population the first and third rows are unmoved and the middle one is **119** in **50**: the file
+the wider population adds is `scripts/module_graph.py`, where the hit is in code rather than in a
+claim about the tree. **The middle row is not a sweep and is not offered as one** — *import
+closure* is this tree's ordinary vocabulary for a measured figure — and what is read here is one
+sentence of it.
+
+**Running the three one commit earlier moves the middle row and neither of the others, which is
+that point from the other side.** The commit this block sits on added
+`Oka/Analytification/DistinguishedOpenCover.lean`, whose docstring uses the phrase for a measured
+figure of its own; against its parent the middle row is a sentence and a file smaller in both
+populations, and the first and third rows are identical. **A row that unrelated work raises is a
+vocabulary row and not a population of undecided sites**, and anyone re-running it at a later
+commit should expect the same and not read the difference as a defect.
+
+**That sentence is decided and it is true, which is an outcome this block has not had to record
+before.** `Oka/Analytification/HypersurfaceFinite.lean` says
+`Oka/Analytification/MonicHypersurface.lean` is the earliest module whose import closure contains
+both `Oka/AnalyticSpace/ProjectionStalk.lean` and `Oka/AnalyticSpace/HomToComplex.lean`. At
+`7495c8f`, over the narrower population: **116** modules have both in closure;
+`Oka.Analytification.MonicHypersurface` is one of them and lies in the closure of every other
+member of it, so it is a minimum; it is the **unique** minimum, since two minima would each lie in
+the other's closure and the graph is acyclic; and neither of the two named modules is in the
+other's closure, so that clause's *the import in the other direction is absent too* is exact as
+well. **Nothing there is repaired and nothing is owed.** *Undecided* and *measured true* are
+different outcomes, and a block that records only the first reads as a list of debts.
+
+**The reflex that repaired the clauses above would repair this one into a weaker claim, and that is
+why the two spellings need different treatment rather than a wider pattern.** Every repair the
+sixth sweep made turns on `Oka.lean` importing every module of the library and so importing every
+pair, which refutes a **first-importer** superlative outright. **A closure-minimal superlative
+survives it**: `Oka.lean` is one of the modules that have both in closure, and it has that minimum
+in its own closure exactly as the others do, so it is not a counterexample, and excluding it moves
+no part of the verdict.
+**A sweep that reaches the closure spelling carrying the first-importer reflex will weaken a true
+sentence**, and it will do it without anything on this board seeing that it has.
+
+**What this sweep did not do.** It decides the superlative sub-shape of the closure spelling and
+nothing else: the rest of the middle row is unread, and so are the shapes the paragraph opening
+*What this sweep did not decide* leaves — *the only file that imports*, *the only module this file
+imports* and *already imports both* — and the residue the fifth sweep left unread, whose count is
+printed there. **The closure spelling is not swept.**
+
+**One hit of the middle row is this file's own and is decided where it stands, not here.** The
+bullet on `Oka/AnalyticSpace/GaloisCategory.lean` in this block states a *whose import closure
+contains* sentence and measures it in place, with the counts printed there; a later sweep reaching
+it through the naive pattern would be deciding a decided one a second time.
+
+**This block raises the figures it publishes, as the sixth sweep's did.** At `7495c8f` with this
+block applied the superlative row is **3** in **2** — the founding site and **2** sentences here,
+the one naming the shape and the one quoting what it decides — and the middle row is **124** in
+**51**, this file being in that set already. **The first row is unmoved.**
+**The superlative literal matches its own quoted example** — the shape sentence above is one of
+the hits in this file — which is the test taxis #1712 exists for and which a pattern published
+as prose cannot be given.
+
 **Over the whole population, not only the residue, the downstream-set pattern returns 44, of which
 22 are in this file.** The **22** outside it are the twenty the paragraph opening *The fourth sweep,
 at `7a99bfc`* accounts for, plus exactly **two** written since, and both are in
