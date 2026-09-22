@@ -87,6 +87,14 @@ functor would be a definition nothing can be computed from.
 - `ComplexAnalytic.toFGAlg_comp_analytificationFGAlg_map`: **the functor's morphism at a
   presentation is the presentation-level analytification conjugated by that isomorphism**, which
   is what any property stable under composing with isomorphisms travels across.
+- `ComplexAnalytic.finitePresentation_presentedAlgebra`: **a presented algebra is of finite
+  *presentation* over `ℂ`**, and not merely of finite type — a polynomial ring in finitely many
+  variables modulo a finitely generated ideal. It is the hypothesis Mathlib's local structure
+  theorem for étale algebras carries, and taxis #2178 records it as the one hypothesis of that
+  theorem nobody here had discharged.
+- `ComplexAnalytic.PresHom.finitePresentation`: **and every `ℂ`-algebra map of presented algebras
+  is of finite presentation as a ring map**, with no hypothesis on the map — the relative form,
+  which is the one a statement about a morphism needs.
 - `ComplexAnalytic.Presentation.isoOfAlgEquiv_algEquivOfIso` and
   `ComplexAnalytic.Presentation.algEquivOfIso_isoOfAlgEquiv`: **the two constructions above are
   mutually inverse**, both by `rfl`. The first is the one on a consumer's path: a caller who
@@ -108,6 +116,11 @@ functor would be a definition nothing can be computed from.
   one by gluing, and nothing here glues.
 * **Anything analytic.** Every proof in this file is category-theoretic bookkeeping or
   commutative algebra; the analytic content is upstream, in the universal property.
+* **Anything étale, and in particular Stacks 00UE.** The local structure theorem for étale
+  algebras is what the finite-presentation instance below is an ingredient for, and it is not
+  imported here: `Mathlib/RingTheory/Unramified/LocalStructure.lean` is outside this file's
+  import closure and this file does not bring it in. Which file pays that import is the decision
+  taxis #2178 asks for, and it is not made here.
 
 ## Design notes
 
@@ -316,6 +329,89 @@ section can cite it. -/
 instance finiteType_presentationAlg (P : Presentation.{u}) : Algebra.FiniteType ℂ P.alg :=
   Algebra.FiniteType.of_surjective (Ideal.Quotient.mkₐ ℂ (presentationIdeal.{u} P.g))
     Ideal.Quotient.mk_surjective
+
+/-! ### Finite presentation, over `ℂ` and over another presented algebra -/
+
+/-- **The ideal a tuple generates is finitely generated**, by the tuple itself: the relations are
+indexed by `Fin k`, so `Set.range g` is the coercion of a `Finset`. -/
+theorem fg_presentationIdeal {n k : ℕ} (g : Fin k → MvPolynomial (ULift.{u} (Fin n)) ℂ) :
+    (presentationIdeal.{u} g).FG :=
+  ⟨Finset.univ.image g, by simp [presentationIdeal, Set.image_univ]⟩
+
+/-- **A presented algebra is of finite *presentation* over `ℂ`**, and not merely of finite type:
+it is a polynomial ring in finitely many variables modulo a finitely generated ideal, which is
+what `Algebra.FinitePresentation.quotient` asks for.
+
+**This file's opening paragraph already says it in prose** — *that is why "finitely generated"
+and "finitely presented" are the same condition here* — and `Algebra.FinitePresentation` was
+named in no file of this repository until this instance, so the sentence had no statement under
+it.
+
+**This is strictly stronger than `ComplexAnalytic.finiteType_presentationAlg` above**, which it
+does not replace: that instance is cited by name in
+`Oka/Analytification/SpecAffineCover.lean`, and `Algebra.FiniteType` is a proposition, so the two
+search paths to it cannot disagree.
+
+**What it is for.** `Algebra.FinitePresentation` is the hypothesis Mathlib's local structure
+theorem for étale algebras carries — Stacks 00UE, in
+`Mathlib/RingTheory/Unramified/LocalStructure.lean` — and taxis #2178's map of the Zariski-local
+route records it as the one hypothesis of that theorem nobody in this repository had discharged.
+**Nothing here imports that theorem**; this is the ingredient and not the consumer, and the
+theorem's own name is not backticked anywhere in this file because it resolves nowhere in the
+environment of `Oka` + `OkaTest`, which is what `scripts/check_docstring_names.py` reads. -/
+instance finitePresentation_presentedAlgebra {n k : ℕ}
+    (g : Fin k → MvPolynomial (ULift.{u} (Fin n)) ℂ) :
+    Algebra.FinitePresentation ℂ (PresentedAlgebra.{u} n k g) :=
+  Algebra.FinitePresentation.quotient (fg_presentationIdeal.{u} g)
+
+section Relative
+
+variable {n k n' k' : ℕ} {g : Fin k → MvPolynomial (ULift.{u} (Fin n)) ℂ}
+  {g' : Fin k' → MvPolynomial (ULift.{u} (Fin n')) ℂ}
+
+/-- **The two actions of `ℂ` agree along a `ℂ`-algebra map of presented algebras**, for the
+algebra structure that map itself defines.
+
+The `letI` in the statement is what makes it a statement at all: `ComplexAnalytic.PresHom` is a
+ring map plus a commutation and carries no `Algebra` instance, and instance search does not
+compose two algebra structures — the same point
+`ComplexAnalytic.standardEtalePairRingIsScalarTower` is stated for in
+`Oka/Analytification/StandardEtale.lean`.
+
+The proof is `Algebra.smul_def` on both sides and then the commutation field. It is written out
+rather than handed to `IsScalarTower.of_algebraMap_eq` because the `ℂ`-action instance search
+finds on a presented algebra is `Submodule.Quotient.instSMul'` and not `Algebra.toSMul`, so that
+lemma's conclusion does not unify with this statement even though the two actions are
+definitionally equal. -/
+theorem PresHom.isScalarTower (ψ : PresHom.{u} g g') :
+    letI := ψ.toRingHom.toAlgebra
+    IsScalarTower ℂ (PresentedAlgebra.{u} n' k' g') (PresentedAlgebra.{u} n k g) := by
+  letI := ψ.toRingHom.toAlgebra
+  refine ⟨fun x y z ↦ ?_⟩
+  rw [Algebra.smul_def x y, Algebra.smul_def x (y • z), Algebra.smul_def y z,
+    Algebra.smul_def (algebraMap ℂ _ x * y) z, map_mul, mul_assoc]
+  congr 1
+  exact RingHom.congr_fun ψ.commutes x
+
+/-- **A `ℂ`-algebra map of presented algebras is of finite presentation**, as a ring map: the
+target is finitely presented over the *source*, and not only over `ℂ`.
+
+This is the relative form, and it is the one a statement about a morphism needs. It comes from
+the absolute one by descent along the tower `ℂ → A → B`
+(`Algebra.FinitePresentation.of_restrict_scalars_finitePresentation`, Stacks 0561), whose two
+hypotheses are `ComplexAnalytic.finitePresentation_presentedAlgebra` at the target and finite
+type at the source — and the latter is the former again, through
+`Algebra.FiniteType.of_finitePresentation`.
+
+**Every `ComplexAnalytic.PresHom` is of finite presentation, with no hypothesis on it**, which is
+what makes this worth a name: a route that has to produce `Algebra.FinitePresentation` for a map
+of presented algebras has nothing to check. -/
+theorem PresHom.finitePresentation (ψ : PresHom.{u} g g') : ψ.toRingHom.FinitePresentation := by
+  letI := ψ.toRingHom.toAlgebra
+  haveI := ψ.isScalarTower
+  exact Algebra.FinitePresentation.of_restrict_scalars_finitePresentation ℂ _ _
+
+end Relative
 
 /-- **A presentation, read as the finitely generated `ℂ`-algebra it presents.**
 
