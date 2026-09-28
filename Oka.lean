@@ -731,6 +731,7 @@ import Oka.Uniformization.EllipticPoly
 import Oka.Uniformization.Generators
 import Oka.Uniformization.HalfPlaneAut
 import Oka.Uniformization.Holomorphic
+import Oka.Uniformization.Integrality
 import Oka.Uniformization.KoebeIteration
 import Oka.Uniformization.KoebeMap
 import Oka.Uniformization.LatticeComplement
