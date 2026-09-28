@@ -724,6 +724,7 @@ import Oka.Uniformization.Cayley
 import Oka.Uniformization.CommutatorTrace
 import Oka.Uniformization.CoveringLift
 import Oka.Uniformization.CoveringLimit
+import Oka.Uniformization.Cusp
 import Oka.Uniformization.DeckGroup
 import Oka.Uniformization.Generators
 import Oka.Uniformization.HalfPlaneAut
