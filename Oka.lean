@@ -726,6 +726,8 @@ import Oka.Uniformization.CoveringLift
 import Oka.Uniformization.CoveringLimit
 import Oka.Uniformization.Cusp
 import Oka.Uniformization.DeckGroup
+import Oka.Uniformization.Depth
+import Oka.Uniformization.EllipticPoly
 import Oka.Uniformization.Generators
 import Oka.Uniformization.HalfPlaneAut
 import Oka.Uniformization.Holomorphic
@@ -735,6 +737,7 @@ import Oka.Uniformization.LatticeComplement
 import Oka.Uniformization.ModularCovering
 import Oka.Uniformization.OncePunctured
 import Oka.Uniformization.Peripheral
+import Oka.Uniformization.PmDeck
 import Oka.Uniformization.SL2Facts
 import Oka.Uniformization.Uniqueness
 import Oka.Weierstrass

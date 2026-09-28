@@ -184,8 +184,11 @@ theorem exists_cusp_normalForm :
     ∃ M : SL(2, ℝ), ∃ κ : ℝ, 0 < κ ∧ (∀ z : ℍ, (((M⁻¹ * Cm U * M) • z : ℍ) : ℂ) = z + κ) ∧
       ∃ r₁ : ℝ, 0 < r₁ ∧ r₁ ≤ r₀ t ∧ ∃ φ : ℂ → ℂ, ∃ Φ : ℝ,
         (∀ w ∈ ball (0 : ℂ) r₁, ‖φ w‖ ≤ Φ) ∧
-        ∀ s : ℂ, s.re < Real.log r₁ →
-          τ' U M s = (κ / (2 * π * I)) * (s + φ (Complex.exp s)) := by
+        (∀ s : ℂ, s.re < Real.log r₁ →
+          τ' U M s = (κ / (2 * π * I)) * (s + φ (Complex.exp s))) ∧
+        ∃ G : ℂ → ℂ, DifferentiableOn ℂ G (ball 0 r₁) ∧ G 0 = 0 ∧ deriv G 0 ≠ 0 ∧
+          ∀ s : ℂ, s.re < Real.log r₁ →
+            Complex.exp (2 * π * I * τ' U M s / κ) = G (Complex.exp s) := by
   obtain ⟨M, κ, hκ, hM⟩ := exists_conj_translation U
   set a : ℝ := |κ|
   have ha : 0 < a := abs_pos.mpr hκ
@@ -320,7 +323,8 @@ theorem exists_cusp_normalForm :
           Complex.exp (ℓ₀ + Complex.log (G p / L)) := by
         rw [Complex.exp_add, hℓ₀, Complex.exp_log hGp, mul_div_cancel₀ _ hL, hGg p hp]
       obtain ⟨n, hn⟩ := Complex.exp_eq_exp_iff_exists_int.mp h1
-      have hτ : τ' U M (Complex.log p) - n * a = (a / (2 * π * I)) * (ℓ₀ + Complex.log (G p / L)) := by
+      have hτ : τ' U M (Complex.log p) - n * a =
+          (a / (2 * π * I)) * (ℓ₀ + Complex.log (G p / L)) := by
         field_simp at hn ⊢; linear_combination hn
       rcases abs_choice κ with h | h
       · exact ⟨n, by rw [← hτ]; simp [a, h]⟩
@@ -453,13 +457,17 @@ theorem exists_cusp_normalForm :
   obtain ⟨Φ, hΦ⟩ := (isCompact_closedBall (0 : ℂ) r₁).exists_bound_of_continuousOn
     ((hφ₀c.mono (closedBall_subset_ball hr₁₂)).add continuousOn_const
       (g := fun _ ↦ k₀))
-  refine ⟨M, κ, hκpos ▸ ha, hM, r₁, hr₁, ?_, fun w ↦ φ₀ w + k₀, Φ,
-    fun w hw ↦ hΦ w (ball_subset_closedBall hw), fun s hs ↦ ?_⟩
-  · exact hr₁₂.le.trans (min_le_right _ _)
-  · have hsS : s ∈ S := by
-      simp only [S, mem_setOf_eq]
-      exact hs.trans (Real.log_lt_log hr₁ hr₁₂)
-    rw [hform s hsS, hκpos]
+  have hr₁₀ : r₁ ≤ r₀ t := hr₁₂.le.trans (min_le_right _ _)
+  have hsS : ∀ s : ℂ, s.re < Real.log r₁ → s ∈ S := fun s hs ↦ by
+    simp only [S, mem_setOf_eq]
+    exact hs.trans (Real.log_lt_log hr₁ hr₁₂)
+  refine ⟨M, κ, hκpos ▸ ha, hM, r₁, hr₁, hr₁₀, fun w ↦ φ₀ w + k₀, Φ,
+    fun w hw ↦ hΦ w (ball_subset_closedBall hw), fun s hs ↦ ?_, G,
+    hGd.mono (ball_subset_ball hr₁₀), hG0, hG'0, fun s hs ↦ ?_⟩
+  · rw [hform s (hsS s hs), hκpos]
+  · have hsHr := hSHr (hsS s hs)
+    rw [hκpos, hGg _ (exp_mem_Dst hsHr)]
+    exact (hgexp s hsHr).symm
 
 end Peripheral
 
