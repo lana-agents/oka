@@ -100,19 +100,27 @@ theorem hasDerivAt_wp' {z : ℂ} (hz : z ∉ (Lt τ₀).lattice) :
     HasDerivAt (Lt τ₀).derivWeierstrassP (deriv (Lt τ₀).derivWeierstrassP z) z :=
   ((Lt τ₀).analyticOnNhd_derivWeierstrassP z hz).differentiableAt.hasDerivAt
 
-/-- **Uniformisation of once-punctured elliptic curves** (U1 of [CanLift] Prop. 2.7). -/
-theorem uniformization_oncePunctured (W : WeierstrassCurve ℂ) [W.IsElliptic] :
-    ∃ (A B : SL(2, ℝ)) (π : ℂ → ℂ × ℂ),
-      Matrix.trace ((A * B * A⁻¹ * B⁻¹ : SL(2, ℝ)) : Matrix (Fin 2) (Fin 2) ℝ) = -2 ∧
-      Matrix.trace (A : Matrix (Fin 2) (Fin 2) ℝ) ≠ 0 ∧
-      (∀ z : ℍ, DifferentiableAt ℂ π z ∧ deriv π z ≠ 0) ∧
-      (∀ z : ℍ, W.toAffine.Equation (π z).1 (π z).2) ∧
-      (∀ x y : ℂ, W.toAffine.Equation x y → ∃ z : ℍ, π z = (x, y)) ∧
-      (∀ z w : ℍ, π z = π w ↔ ∃ γ ∈ Subgroup.closure {A, B}, γ • z = w) := by
-  -- the lattice curve isomorphic to `W`
-  obtain ⟨τ₀, hτ₀⟩ := Heights.modularJ_surjective W.j
-  obtain ⟨C, hC⟩ := WeierstrassCurve.exists_variableChange_of_j_eq
-    (Heights.latticeWeierstrassCurve τ₀) W (by rw [Heights.latticeWeierstrassCurve_j, hτ₀])
+/-- The uniformisation map `z ↦ C⁻¹ (℘(ψ z), ℘'(ψ z)/2)` of `W = E_{τ₀}^C`, for the chosen
+uniformisation `ψ` of `ℂ ∖ Λ_{τ₀}` and a change of variables `C`. -/
+noncomputable def uniformizationMap (C : WeierstrassCurve.VariableChange ℂ) (z : ℂ) : ℂ × ℂ :=
+  ((C.u⁻¹ : ℂ) ^ 2 * ((wpt τ₀ ((unifOf (Lt τ₀)).Ψ z)).1 - C.r),
+    (C.u⁻¹ : ℂ) ^ 3 * ((wpt τ₀ ((unifOf (Lt τ₀)).Ψ z)).2 - C.s * ((wpt τ₀ ((unifOf (Lt τ₀)).Ψ z)).1
+      - C.r) - C.t))
+
+/-- **Uniformisation of `W = E_{τ₀}^C`** by the explicit map `uniformizationMap τ₀ C`. -/
+theorem uniformization_of_variableChange (W : WeierstrassCurve ℂ) [W.IsElliptic]
+    (C : WeierstrassCurve.VariableChange ℂ)
+    (hC : C • Heights.latticeWeierstrassCurve τ₀ = W) :
+    Matrix.trace ((A (unifOf (Lt τ₀)) * B (unifOf (Lt τ₀)) * (A (unifOf (Lt τ₀)))⁻¹ *
+        (B (unifOf (Lt τ₀)))⁻¹ : SL(2, ℝ)) : Matrix (Fin 2) (Fin 2) ℝ) = -2 ∧
+      Matrix.trace (A (unifOf (Lt τ₀)) : Matrix (Fin 2) (Fin 2) ℝ) ≠ 0 ∧
+      (∀ z : ℍ, DifferentiableAt ℂ (uniformizationMap τ₀ C) z ∧
+        deriv (uniformizationMap τ₀ C) z ≠ 0) ∧
+      (∀ z : ℍ, W.toAffine.Equation (uniformizationMap τ₀ C z).1
+        (uniformizationMap τ₀ C z).2) ∧
+      (∀ x y : ℂ, W.toAffine.Equation x y → ∃ z : ℍ, uniformizationMap τ₀ C z = (x, y)) ∧
+      (∀ z w : ℍ, uniformizationMap τ₀ C z = uniformizationMap τ₀ C w ↔
+        ∃ γ ∈ Subgroup.closure {A (unifOf (Lt τ₀)), B (unifOf (Lt τ₀))}, γ • z = w) := by
   set U := unifOf (Lt τ₀)
   set u : ℂ := (C.u : ℂ)
   have hu : u ≠ 0 := C.u.ne_zero
@@ -137,8 +145,10 @@ theorem uniformization_oncePunctured (W : WeierstrassCurve ℂ) [W.IsElliptic] :
     have := h.2; field_simp at this
     exact Prod.ext rfl (by linear_combination this)
   set π : ℂ → ℂ × ℂ := fun z ↦ T (wpt τ₀ (U.Ψ z))
+  have hπdef : uniformizationMap τ₀ C = π := rfl
+  rw [hπdef]
   have hΨ : ∀ z : ℍ, U.Ψ z ∉ (Lt τ₀).lattice := fun z ↦ U.notMem z z.im_pos
-  refine ⟨A U, B U, π, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩
   · -- the commutator trace
     rw [← trSL_eq_trace, show A U * B U * (A U)⁻¹ * (B U)⁻¹ =
       (A U * B U) * ((A U)⁻¹ * (B U)⁻¹) by group, trSL_mul_comm, ← trace_Cm U, Cm]
@@ -247,5 +257,19 @@ theorem uniformization_oncePunctured (W : WeierstrassCurve ℂ) [W.IsElliptic] :
       exact ⟨h', hh', by rw [e, hgz]⟩
     · rintro ⟨γ, hγ, rfl⟩
       exact U.smul_mem_iff (hABΓ hγ) z
+
+/-- **Uniformisation of once-punctured elliptic curves** (U1 of [CanLift] Prop. 2.7). -/
+theorem uniformization_oncePunctured (W : WeierstrassCurve ℂ) [W.IsElliptic] :
+    ∃ (A B : SL(2, ℝ)) (π : ℂ → ℂ × ℂ),
+      Matrix.trace ((A * B * A⁻¹ * B⁻¹ : SL(2, ℝ)) : Matrix (Fin 2) (Fin 2) ℝ) = -2 ∧
+      Matrix.trace (A : Matrix (Fin 2) (Fin 2) ℝ) ≠ 0 ∧
+      (∀ z : ℍ, DifferentiableAt ℂ π z ∧ deriv π z ≠ 0) ∧
+      (∀ z : ℍ, W.toAffine.Equation (π z).1 (π z).2) ∧
+      (∀ x y : ℂ, W.toAffine.Equation x y → ∃ z : ℍ, π z = (x, y)) ∧
+      (∀ z w : ℍ, π z = π w ↔ ∃ γ ∈ Subgroup.closure {A, B}, γ • z = w) := by
+  obtain ⟨τ₀, hτ₀⟩ := Heights.modularJ_surjective W.j
+  obtain ⟨C, hC⟩ := WeierstrassCurve.exists_variableChange_of_j_eq
+    (Heights.latticeWeierstrassCurve τ₀) W (by rw [Heights.latticeWeierstrassCurve_j, hτ₀])
+  exact ⟨_, _, _, uniformization_of_variableChange τ₀ W C hC⟩
 
 end Uniformization
