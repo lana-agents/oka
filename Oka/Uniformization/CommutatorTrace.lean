@@ -133,6 +133,146 @@ theorem trace_sq_le : trSL (Cm U) ^ 2 ≤ 4 := by
       _ = Δ * N' ^ 2 := by field_simp
   exact lt_irrefl _ h7
 
+theorem log_mem_Hr {p : ℂ} (hp : p ∈ Dst t) : Complex.log p ∈ Hr t := by
+  have hp0 : 0 < ‖p‖ := norm_pos_iff.mpr hp.2
+  have hpr : ‖p‖ < r₀ t := mem_ball_zero_iff.mp hp.1
+  simp only [Hr, mem_setOf_eq, Complex.log_re]
+  exact Real.log_lt_log hp0 hpr
+
+theorem add_int_mem_Hr {s : ℂ} (hs : s ∈ Hr t) (k : ℤ) : s + k * (2 * π * I) ∈ Hr t := by
+  simpa [Hr] using hs
+
+/-- **`C` acts nontrivially on `ℍ`.** -/
+theorem not_forall_smul_eq_self : ¬ ∀ ν : ℍ, Cm U • ν = ν := by
+  intro htriv
+  -- `Σ` is `2π i`-periodic
+  have hper : ∀ s ∈ Hr t, ∀ k : ℤ, Sig U (s + k * (2 * π * I)) = Sig U s := by
+    intro s hs k
+    induction k using Int.induction_on with
+    | zero => simp
+    | succ n ih =>
+      have h1 := Sig_add_two_pi U (add_int_mem_Hr hs n)
+      rw [htriv] at h1
+      rw [← ih, ← h1]; congr 1; push_cast; ring
+    | pred n ih =>
+      have h1 := Sig_add_two_pi U (add_int_mem_Hr hs (-n - 1))
+      rw [htriv] at h1
+      rw [← ih, ← h1]; congr 1; push_cast; ring
+  set h : ℂ → ℂ := fun p ↦ cayley (Sig U (Complex.log p))
+  have hexp : ∀ s ∈ Hr t, h (Complex.exp s) = cayley (Sig U s) := by
+    intro s hs
+    obtain ⟨n, hn⟩ := Complex.exp_eq_exp_iff_exists_int.mp
+      (Complex.exp_log (Complex.exp_ne_zero s))
+    simp only [h]; rw [hn, hper s hs n]
+  have hd : DifferentiableOn ℂ h (Dst t) := by
+    intro p hp
+    set s₁ := Complex.log p
+    have hs₁ := log_mem_Hr hp
+    have hps : Complex.exp s₁ = p := Complex.exp_log hp.2
+    have hexps : HasStrictDerivAt Complex.exp (Complex.exp s₁) s₁ :=
+      Complex.hasStrictDerivAt_exp s₁
+    have hne : Complex.exp s₁ ≠ 0 := Complex.exp_ne_zero s₁
+    set L := hexps.localInverse Complex.exp (Complex.exp s₁) s₁ hne
+    have hL : HasStrictDerivAt L (Complex.exp s₁)⁻¹ (Complex.exp s₁) :=
+      hexps.to_localInverse hne
+    have hLs : L (Complex.exp s₁) = s₁ := (hexps.eventually_left_inverse hne).self_of_nhds
+    have hLc : ContinuousAt L (Complex.exp s₁) := hL.hasDerivAt.continuousAt
+    have hev : ∀ᶠ q in 𝓝 (Complex.exp s₁), h q = cayley (Sig U (L q)) := by
+      filter_upwards [hexps.eventually_right_inverse hne,
+        hLc.preimage_mem_nhds (by rw [hLs]; exact isOpen_Hr.mem_nhds hs₁)] with q hq1 hq2
+      rw [← hexp _ hq2, hq1]
+    rw [← hps] at hp ⊢
+    refine (DifferentiableAt.congr_of_eventuallyEq ?_ hev).differentiableWithinAt
+    have h1 : DifferentiableAt ℂ (fun s ↦ (Sig U s : ℂ)) (L (Complex.exp s₁)) := by
+      rw [hLs]; exact (differentiableOn_Sig U).differentiableAt (isOpen_Hr.mem_nhds hs₁)
+    have h2 : DifferentiableAt ℂ cayley ((Sig U (L (Complex.exp s₁)) : ℍ) : ℂ) :=
+      differentiableOn_cayley.differentiableAt (isOpen_upper.mem_nhds (Sig U _).im_pos)
+    exact h2.comp (Complex.exp s₁) (h1.comp (Complex.exp s₁) hL.hasDerivAt.differentiableAt)
+  have hbound : ∀ p, ‖h p‖ < 1 := fun p ↦ mem_ball_zero_iff.mp (cayley_mem_ball (Sig U _).im_pos)
+  have hinj : InjOn h (Dst t) := by
+    intro p hp q hq hpq
+    have h1 : (Sig U (Complex.log p) : ℂ) = Sig U (Complex.log q) := by
+      have := congrArg cayleyInv hpq
+      simp only [h] at this
+      rwa [cayleyInv_cayley (Sig U _).im_pos, cayleyInv_cayley (Sig U _).im_pos] at this
+    have h2 := congrArg U.Ψ h1
+    change U.ψ (Sig U _) = U.ψ (Sig U _) at h2
+    rw [ψ_Sig U (log_mem_Hr hp), ψ_Sig U (log_mem_Hr hq), Complex.exp_log hp.2,
+      Complex.exp_log hq.2] at h2
+    exact h2
+  -- the removable singularity
+  set G := Function.update h 0 (limUnder (𝓝[≠] (0 : ℂ)) h)
+  have hball : ball (0 : ℂ) (r₀ t) ∈ 𝓝 (0 : ℂ) := ball_mem_nhds 0 r₀_pos
+  have hGd : DifferentiableOn ℂ G (ball 0 (r₀ t)) :=
+    Complex.differentiableOn_update_limUnder_of_bddAbove hball hd
+      ⟨1, by rintro _ ⟨p, -, rfl⟩; exact (hbound p).le⟩
+  have hGh : ∀ p ∈ Dst t, G p = h p := fun p hp ↦ Function.update_of_ne hp.2 _ _
+  -- `G` is not constant
+  have hnc : ¬ ∃ w, ∀ z ∈ ball (0 : ℂ) (r₀ t), G z = w := by
+    rintro ⟨w, hw⟩
+    have hp : ((r₀ t / 2 : ℝ) : ℂ) ∈ Dst t := ⟨by
+      rw [mem_ball_zero_iff]; simp [abs_of_pos r₀_pos]; linarith [r₀_pos (t := t)],
+      by simp [r₀_pos.ne']⟩
+    have hq : ((r₀ t / 3 : ℝ) : ℂ) ∈ Dst t := ⟨by
+      rw [mem_ball_zero_iff]; simp [abs_of_pos r₀_pos]; linarith [r₀_pos (t := t)],
+      by simp [r₀_pos.ne']⟩
+    have := hinj hp hq (by rw [← hGh _ hp, ← hGh _ hq, hw _ hp.1, hw _ hq.1])
+    have := congrArg Complex.re this
+    simp at this
+    linarith [r₀_pos (t := t)]
+  have hopen := ((hGd.analyticOnNhd isOpen_ball).is_constant_or_isOpen
+    (convex_ball (0 : ℂ) (r₀ t)).isPreconnected).resolve_left hnc
+  have himage : G '' ball 0 (r₀ t) ⊆ closedBall 0 1 := by
+    rintro _ ⟨z, hz, rfl⟩
+    by_cases hz0 : z = 0
+    · subst hz0
+      have hGc : ContinuousAt G 0 := (hGd.differentiableAt hball).continuousAt
+      have hlim : Tendsto G (𝓝[≠] 0) (𝓝 (G 0)) := hGc.tendsto.mono_left nhdsWithin_le_nhds
+      refine isClosed_closedBall.mem_of_tendsto hlim ?_
+      filter_upwards [inter_mem_nhdsWithin _ hball] with p hp
+      rw [hGh p ⟨hp.2, hp.1⟩]
+      exact mem_closedBall_zero_iff.mpr (hbound p).le
+    · rw [hGh z ⟨hz, hz0⟩]; exact mem_closedBall_zero_iff.mpr (hbound z).le
+  have hG0 : G 0 ∈ ball (0 : ℂ) 1 := by
+    have h1 : G '' ball 0 (r₀ t) ⊆ interior (closedBall 0 1) :=
+      interior_maximal himage (hopen _ subset_rfl isOpen_ball)
+    rw [interior_closedBall _ one_ne_zero] at h1
+    exact h1 ⟨0, mem_ball_self r₀_pos, rfl⟩
+  -- `Σ (log p)` converges in `ℍ`
+  set u : ℂ := cayleyInv (G 0)
+  have hu : 0 < u.im := im_cayleyInv_pos hG0
+  have hconv : Tendsto (fun p ↦ (Sig U (Complex.log p) : ℂ)) (𝓝[≠] 0) (𝓝 u) := by
+    have hGc : ContinuousAt (fun p ↦ cayleyInv (G p)) 0 :=
+      (differentiableOn_cayleyInv.continuousOn.continuousAt (isOpen_ball.mem_nhds hG0)).comp
+        (hGd.differentiableAt hball).continuousAt
+    refine (hGc.tendsto.mono_left nhdsWithin_le_nhds).congr' ?_
+    filter_upwards [inter_mem_nhdsWithin _ hball] with p hp
+    rw [hGh p ⟨hp.2, hp.1⟩]
+    exact cayleyInv_cayley (Sig U _).im_pos
+  have hΨc : ContinuousAt U.Ψ u :=
+    U.differentiableOn.continuousOn.continuousAt (isOpen_upper.mem_nhds hu)
+  have hlim1 : Tendsto (fun p ↦ U.Ψ (Sig U (Complex.log p))) (𝓝[≠] 0) (𝓝 (U.Ψ u)) :=
+    hΨc.tendsto.comp hconv
+  have hlim2 : Tendsto (fun p ↦ U.Ψ (Sig U (Complex.log p))) (𝓝[≠] 0) (𝓝 0) := by
+    refine (tendsto_id.mono_left nhdsWithin_le_nhds).congr' ?_
+    filter_upwards [inter_mem_nhdsWithin _ hball] with p hp
+    change p = U.ψ (Sig U (Complex.log p))
+    rw [ψ_Sig U (log_mem_Hr ⟨hp.2, hp.1⟩), Complex.exp_log hp.1]
+  have := tendsto_nhds_unique hlim1 hlim2
+  exact U.notMem u hu (by rw [this]; exact zero_mem _)
+
+/-- **`C` has no fixed point in `ℍ`.** -/
+theorem Cm_smul_ne (ν : ℍ) : Cm U • ν ≠ ν := fun h ↦
+  not_forall_smul_eq_self U (U.smul_eq_self_of_fixed (Cm_mem U) h)
+
+/-- **`(tr C)² = 4`.** -/
+theorem trace_sq_eq : trSL (Cm U) ^ 2 = 4 := by
+  refine le_antisymm (trace_sq_le U) ?_
+  by_contra h
+  push Not at h
+  obtain ⟨ν, hν⟩ := exists_smul_eq_self_of_trace_sq_lt (Cm U) h
+  exact Cm_smul_ne U ν hν
+
 end Peripheral
 
 end Uniformization
