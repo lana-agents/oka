@@ -727,6 +727,7 @@ import Oka.UliftCoord
 import Oka.Uniformization.Cayley
 import Oka.Uniformization.CoveringLift
 import Oka.Uniformization.CoveringLimit
+import Oka.Uniformization.DeckGroup
 import Oka.Uniformization.HalfPlaneAut
 import Oka.Uniformization.Holomorphic
 import Oka.Uniformization.KoebeIteration
