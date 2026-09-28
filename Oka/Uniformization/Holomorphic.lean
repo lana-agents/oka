@@ -213,4 +213,17 @@ theorem eventually_eq_of_tendstoLocallyUniformlyOn {F : ℕ → ℂ → ℂ} {f 
   have := (inv_le_inv₀ (norm_pos_iff.mpr hne0) (by positivity)).mp hbound
   linarith
 
+/-- **Inverse function theorem, section form.** If `f` has a nonzero strict derivative at `a`,
+then `f` has a continuous section over a disc about `f a` taking the value `a` at `f a`. -/
+theorem exists_localSection {f : ℂ → ℂ} {f' a : ℂ} (hf : HasStrictDerivAt f f' a) (hf' : f' ≠ 0) :
+    ∃ ε > 0, ∃ s : ℂ → ℂ, ContinuousOn s (ball (f a) ε) ∧ (∀ y ∈ ball (f a) ε, f (s y) = y) ∧
+      s (f a) = a := by
+  set e := (hf.hasStrictFDerivAt_equiv hf').toOpenPartialHomeomorph f
+  have hsrc : a ∈ e.source := (hf.hasStrictFDerivAt_equiv hf').mem_toOpenPartialHomeomorph_source
+  have htgt : f a ∈ e.target :=
+    (hf.hasStrictFDerivAt_equiv hf').image_mem_toOpenPartialHomeomorph_target
+  obtain ⟨ε, hε, hball⟩ := Metric.isOpen_iff.mp e.open_target _ htgt
+  refine ⟨ε, hε, e.symm, e.continuousOn_symm.mono hball, fun y hy ↦ e.right_inv (hball hy), ?_⟩
+  exact e.left_inv hsrc
+
 end Uniformization
