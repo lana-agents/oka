@@ -594,7 +594,8 @@ theorem cusp_estimates (c : CuspData U) : ∃ ε > 0, ε ≤ c.r₁ ∧ ∃ A B 
       rw [e]; gcongr
     have hA : K ≤ max (4 * π * H / c.κ) (max K 1) :=
       (le_max_left _ _).trans (le_max_right _ _)
-    have hL : 0 ≤ Real.log (2 + P) := Real.log_nonneg (by linarith [norm_nonneg ((Lt t).weierstrassP w)])
+    have hL : 0 ≤ Real.log (2 + P) :=
+      Real.log_nonneg (by linarith [norm_nonneg ((Lt t).weierstrassP w)])
     have hl2 : 0 ≤ Real.log 2 := Real.log_nonneg (by norm_num)
     have h7 : K * (ℓ + Φ) ≤ K * Real.log (2 + P) + K * (Φ + Real.log 2) := by
       have : ℓ + Φ ≤ Real.log (2 + P) + (Φ + Real.log 2) := by linarith
@@ -604,6 +605,73 @@ theorem cusp_estimates (c : CuspData U) : ∃ ε > 0, ε ≤ c.r₁ ∧ ∃ A B 
       mul_le_mul_of_nonneg_right hA hL
     have hl3' : 0 ≤ |Real.log 3| := abs_nonneg _
     linarith only [hE, hzz, h7, h9, hl3', hΦ0]
+
+variable (U) in
+/-- `℘ ∘ ψ` on `ℍ`. -/
+noncomputable def wpΨ (τ : ℍ) : ℂ := (Lt t).weierstrassP (U.ψ τ)
+
+theorem wpΨ_smul {γ : SL(2, ℝ)} (hγ : γ ∈ U.deckGroup) (τ : ℍ) :
+    wpΨ U (γ • τ) = wpΨ U τ := by
+  obtain ⟨l, hl, hψ⟩ := hγ
+  simp only [wpΨ, hψ τ]
+  exact (Lt t).weierstrassP_add_coe _ ⟨l, hl⟩
+
+/-- **Growth of `℘ ∘ ψ` against the depth.** -/
+theorem exists_growth : ∃ A B : ℝ, 0 ≤ A ∧ ∀ τ : ℍ,
+    Real.log (1 + ‖wpΨ U τ‖) ≤ A * Real.exp (depth U τ) + B ∧
+      Real.exp (depth U τ) ≤ A * Real.log (2 + ‖wpΨ U τ‖) + B := by
+  set c := cuspData U
+  obtain ⟨ε, hε, hεr, A₁, B₁, hest⟩ := cusp_estimates c
+  have hεr₀ : ε ≤ r₀ t := hεr.trans c.r₁_le
+  have hKc := isCompact_Kε (t := t) ε
+  have hKK := Kε_subset (t := t) hε
+  obtain ⟨C₁, hC₁⟩ := hKc.exists_bound_of_continuousOn (f := (Lt t).weierstrassP)
+    (((Lt t).analyticOnNhd_weierstrassP.continuousOn).mono fun k hk ↦ K_subset t (hKK hk))
+  obtain ⟨C₂, hC₂⟩ := hKc.exists_bound_of_continuousOn (f := fun k ↦ dist (sK U k) (e₀ U))
+    (continuous_dist.comp_continuousOn (((continuousOn_sK U).mono hKK).prodMk continuousOn_const))
+  refine ⟨max A₁ 1, max B₁ 0 + Real.log (1 + |C₁|) + Real.exp |C₂|, by positivity,
+    fun τ ↦ ?_⟩
+  have hA : A₁ ≤ max A₁ 1 := le_max_left _ _
+  have hA0 : 0 ≤ max A₁ 1 := by positivity
+  have hB : B₁ ≤ max B₁ 0 := le_max_left _ _
+  have hB0 : 0 ≤ max B₁ 0 := le_max_right _ _
+  have hL1 : 0 ≤ Real.log (1 + |C₁|) := Real.log_nonneg (by linarith [abs_nonneg C₁])
+  have hE2 : 0 ≤ Real.exp |C₂| := (Real.exp_pos _).le
+  have hlog2 : 0 ≤ Real.log (2 + ‖wpΨ U τ‖) :=
+    Real.log_nonneg (by linarith [norm_nonneg (wpΨ U τ)])
+  have hexpD := Real.exp_pos (depth U τ)
+  rcases compact_or_cusp (U := U) hεr₀ τ with ⟨γ, hγ, k, hk, hγτ⟩ | ⟨γ, hγ, w, hw, hw0, hγτ⟩
+  · have h℘ : ‖wpΨ U τ‖ ≤ |C₁| := by
+      rw [← wpΨ_smul hγ, hγτ]
+      simp only [wpΨ, ψ_sK U (hKK hk)]
+      exact (hC₁ k hk).trans (le_abs_self _)
+    have hD : depth U τ ≤ |C₂| := by
+      rw [← depth_smul hγ, hγτ]
+      have := depth_le (U := U) (τ := sK U k) (γ := 1) (one_mem _)
+      rw [one_smul] at this
+      have h2 := hC₂ k hk
+      rw [Real.norm_eq_abs, abs_of_nonneg dist_nonneg] at h2
+      exact this.trans (h2.trans (le_abs_self _))
+    constructor
+    · have : Real.log (1 + ‖wpΨ U τ‖) ≤ Real.log (1 + |C₁|) :=
+        Real.log_le_log (by positivity) (by linarith)
+      nlinarith
+    · have : Real.exp (depth U τ) ≤ Real.exp |C₂| := Real.exp_le_exp.mpr hD
+      nlinarith
+  · have hψ : wpΨ U τ = (Lt t).weierstrassP w := by
+      rw [← wpΨ_smul hγ, hγτ]
+      simp only [wpΨ]
+      rw [ψ_Sig U (log_mem_Hr ⟨ball_subset_ball hεr₀ hw, hw0⟩), Complex.exp_log hw0]
+    have hD : depth U τ = depth U (Sig U (Complex.log w)) := by rw [← depth_smul hγ, hγτ]
+    obtain ⟨h1, h2⟩ := hest w hw hw0
+    rw [hψ, hD]
+    rw [← hψ, ← hD] at h1 h2
+    rw [← hψ, ← hD]
+    constructor
+    · have := mul_le_mul_of_nonneg_right hA hexpD.le
+      linarith
+    · have := mul_le_mul_of_nonneg_right hA hlog2
+      linarith
 
 end Peripheral
 
