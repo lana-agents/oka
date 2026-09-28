@@ -732,6 +732,7 @@ import Oka.Uniformization.EllipticPoly
 import Oka.Uniformization.FEtAut
 import Oka.Uniformization.FEtCovering
 import Oka.Uniformization.FEtCurve
+import Oka.Uniformization.FEtLattice
 import Oka.Uniformization.FEtLocal
 import Oka.Uniformization.FEtTransitive
 import Oka.Uniformization.Generators
