@@ -42,7 +42,7 @@ open Generators
 
 variable {t : ℍ} (U : Unif (Lt t))
 
-/-- The pseudo-hyperbolic distance quotient `(u - z) / (u - z̄)`. -/
+/-- The pseudo-hyperbolic distance quotient `(u - z) / (u - conj z)`. -/
 noncomputable def phq (z u : ℂ) : ℂ := (u - z) / (u - (starRingEnd ℂ) z)
 
 theorem sub_conj_ne_zero {z u : ℂ} (hz : 0 < z.im) (hu : 0 < u.im) :

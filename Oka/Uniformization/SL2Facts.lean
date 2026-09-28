@@ -13,8 +13,8 @@ that `g • z = z` iff `Q_g(z) = 0`.
 
 * `exists_smul_eq_self_of_trace_sq_lt`: if `(tr g)² < 4` then `g` fixes a point of `ℍ`.
 * `displacement_lower_bound`: with `Δ = (tr g)² - 4`,
-  `Δ |g z - z̄|² ≤ (Δ + 4) |g z - z|²`; for `Δ > 0` the pseudo-hyperbolic displacement
-  `|g z - z| / |g z - z̄|` is bounded below by `√(Δ / (Δ + 4)) > 0`, uniformly in `z`.
+  `Δ |g z - conj z|² ≤ (Δ + 4) |g z - z|²`; for `Δ > 0` the pseudo-hyperbolic displacement
+  `|g z - z| / |g z - conj z|` is bounded below by `√(Δ / (Δ + 4)) > 0`, uniformly in `z`.
 * `conjFix`: conjugation by `[[η, -1], [1, 0]]` makes an element fixing the real point `η` upper
   triangular (its lower-left entry is `Q_g(η)`).
 * `trace_commutator_sub_two`: for upper triangular `Y = [[y, s], [0, w]]`,
@@ -114,7 +114,7 @@ theorem displacement_lower_bound (g : SL(2, ℝ)) (z : ℍ) :
   have hw : w ≠ 0 := denom_SL2R_ne_zero g z.im_pos
   have hw2 : 0 < normSq w := normSq_pos.mpr hw
   have h1 : ((g • z : ℍ) : ℂ) - z = -fixPoly g z / w := coe_smul_sub g z
-  -- `|g z - z̄|² = |g z - z|² + 4 Im(g z) Im z`
+  -- `|g z - conj z|² = |g z - z|² + 4 Im(g z) Im z`
   have h2 : normSq ((g • z : ℍ) - (starRingEnd ℂ) (z : ℂ)) =
       normSq ((g • z : ℍ) - (z : ℂ)) + 4 * (g • z).im * z.im := by
     simp only [normSq_apply, sub_re, sub_im, conj_re, conj_im, UpperHalfPlane.coe_im,

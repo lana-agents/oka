@@ -160,7 +160,31 @@ U1.1–U1.4 (plane uniformisation); U1.5–U1.6 (`ℂ ∖ Λ`); U1.7–U1.10 (th
 
 ## 3. Status
 
-| piece | status |
-|---|---|
-| blueprint | this file |
-| U1.1–U1.11 | not started |
+**Done** (branch `wp-uniformization`): `Uniformization.uniformization_oncePunctured`
+(`Oka/Uniformization/OncePunctured.lean`), the target of §0 verbatim (with `tr` spelled
+`Matrix.trace`), axioms `propext`, `Classical.choice`, `Quot.sound` only. About 4.9k lines, well
+under the estimate: `heights` supplied `j` with its fibres and the lattice parametrisation, and
+oka supplied Montel.
+
+| piece | file | lines |
+|---|---|---|
+| lifting through coverings; local sections ⇒ covering | `CoveringLift.lean` | 248 |
+| injective ⇒ `f′ ≠ 0`; holomorphic lifts; Hurwitz; local sections | `Holomorphic.lean` | 229 |
+| U1.1 Koebe map, covering, modulus estimate | `KoebeMap.lean` | 454 |
+| U1.3 the iteration, lifts, in-radius → 1 | `KoebeIteration.lean` | 340 |
+| U1.4 limit is a covering `𝔻 → Ω` (`PlaneData.exists_covering`) | `CoveringLimit.lean` | 360 |
+| U1.5 `j` has sections off `{j(i), j(ρ)}` | `ModularCovering.lean` | 187 |
+| Cayley map | `Cayley.lean` | 84 |
+| U1.6 universal covering `ℍ → ℂ ∖ Λ` (`PeriodPair.exists_uniformization`) | `LatticeComplement.lean` | 300 |
+| U1.7 `Aut(ℍ) = PSL(2, ℝ)` (`exists_SL2R_eq_of_holomorphic`) | `HalfPlaneAut.lean` | 213 |
+| U1.8 deck group, fibres = orbits, free action | `DeckGroup.lean` | 183 |
+| U1.9 `Γ = ⟨A, B, -1⟩` (`Generators.deckGroup_le`) | `Generators.lean` | 778 |
+| SL(2, ℝ) facts (elliptic fixed points, displacement bound, commutator trace) | `SL2Facts.lean` | 256 |
+| U1.10 monodromy `Σ(s + 2πi) = A⁻¹B⁻¹AB • Σ(s)` | `Peripheral.lean` | 517 |
+| U1.10 not hyperbolic (Schwarz), not trivial (removable singularity), not elliptic, `tr ≠ 2` | `CommutatorTrace.lean` | 504 |
+| U1.11 the Weierstrass map for arbitrary `W`; the target | `OncePunctured.lean` | 251 |
+
+Deviations from §1 (b′) as planned: no discreteness of `𝔻 ∖ U₀` is needed (Hurwitz applies to every
+value omitted by all `projₙ`); `j` is made a covering directly through local sections instead of
+through the quotient `ℍ / SL(2, ℤ)`; the hyperbolic case of the commutator is excluded by the
+Schwarz lemma and an explicit displacement bound instead of an annulus argument.

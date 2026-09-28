@@ -11,12 +11,12 @@ import Mathlib.Topology.Covering.Basic
 /-!
 # Koebe's square-root map
 
-For `t` in the unit disc `𝔻`, `mob t z = (z + t) / (1 + t̄ z)` is an automorphism of `𝔻` with
+For `t` in the unit disc `𝔻`, `mob t z = (z + t) / (1 + conj t z)` is an automorphism of `𝔻` with
 inverse `mob (-t)`. For `b ∈ 𝔻` the **Koebe map**
 `koebe b = mob (-b²) ∘ (· ^ 2) ∘ mob b` on `𝔻` (and `2` outside `𝔻`, so that no point outside
 `𝔻` lands in `𝔻`) is a 2-sheeted covering `𝔻 ∖ {-b} → 𝔻 ∖ {-b²}`
-(`isCoveringMapOn_koebe`), and it is a Blaschke product: `koebe b z = z (z - c) / (1 - c̄ z)` with
-`c = -2b / (1 + |b|²)` (`koebe_eq_blaschke`).
+(`isCoveringMapOn_koebe`), and it is a Blaschke product:
+`koebe b z = z (z - c) / (1 - conj c z)` with `c = -2b / (1 + |b|²)` (`koebe_eq_blaschke`).
 
 If `|b|² = r` the Blaschke form gives `|koebe b z| < r` as soon as `|z| < koebeRadius r`, where
 `koebeRadius r > r` for `0 < r < 1` (`norm_koebe_lt`, `lt_koebeRadius`). This is the estimate that
@@ -33,7 +33,7 @@ namespace Uniformization
 
 /-! ### Disc automorphisms -/
 
-/-- The disc automorphism `z ↦ (z + t) / (1 + t̄ z)`. -/
+/-- The disc automorphism `z ↦ (z + t) / (1 + conj t z)`. -/
 noncomputable def mob (t z : ℂ) : ℂ := (z + t) / (1 + conj t * z)
 
 theorem normSq_one_add_conj_mul_sub (t z : ℂ) :
@@ -270,7 +270,7 @@ theorem differentiableOn_koebe {b : ℂ} (hb : b ∈ ball (0 : ℂ) 1) :
 /-- The second zero of the Koebe map. -/
 noncomputable def koebeZero (b : ℂ) : ℂ := -2 * b / (1 + normSq b)
 
-/-- The Koebe map is the Blaschke product `z (z - c) / (1 - c̄ z)` with `c = koebeZero b`. -/
+/-- The Koebe map is the Blaschke product `z (z - c) / (1 - conj c z)` with `c = koebeZero b`. -/
 theorem koebe_eq_blaschke {b z : ℂ} (hb : b ∈ ball (0 : ℂ) 1) (hz : z ∈ ball (0 : ℂ) 1) :
     koebe b z = z * (z - koebeZero b) / (1 - conj (koebeZero b) * z) := by
   rw [koebe_of_mem hz]
@@ -285,7 +285,7 @@ theorem koebe_eq_blaschke {b z : ℂ} (hb : b ∈ ball (0 : ℂ) 1) (hz : z ∈ 
   have hD : 1 - conj (koebeZero b) * z = (1 + normSq b + 2 * conj b * z) / (1 + normSq b) := by
     rw [hconj]; field_simp; ring
   have hD' : (1 + normSq b + 2 * conj b * z : ℂ) ≠ 0 := by
-    -- `1 - c̄ z ≠ 0` since `|c| < 1`, `|z| < 1`
+    -- `1 - conj c z ≠ 0` since `|c| < 1`, `|z| < 1`
     have hcball : -koebeZero b ∈ ball (0 : ℂ) 1 := by
       rw [mem_ball_zero_iff, norm_neg, koebeZero, norm_div, norm_mul]
       have h1 : ‖(1 + normSq b : ℂ)‖ = 1 + normSq b := by
@@ -339,7 +339,7 @@ theorem koebeGamma_lt_one {r : ℝ} (hr0 : 0 ≤ r) (hr1 : r < 1) : koebeGamma r
     rw [show (1 : ℝ) = Real.sqrt 1 by simp]; exact Real.sqrt_lt_sqrt hr0 hr1
   nlinarith [Real.sqrt_nonneg r]
 
-/-- `|z - c| (1 + |c| |z|) ≤ (|z| + |c|) |1 - c̄ z|` in the disc: the pseudo-hyperbolic triangle
+/-- `|z - c| (1 + |c| |z|) ≤ (|z| + |c|) |1 - conj c z|` in the disc: the pseudo-hyperbolic triangle
 inequality. -/
 theorem norm_sub_mul_le {c z : ℂ} (hc : c ∈ ball (0 : ℂ) 1) (hz : z ∈ ball (0 : ℂ) 1) :
     ‖z - c‖ * (1 + ‖c‖ * ‖z‖) ≤ (‖z‖ + ‖c‖) * ‖1 - conj c * z‖ := by

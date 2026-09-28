@@ -16,8 +16,9 @@ and maps `qₙ₊₁ : Uₙ₊₁ → Uₙ` which are covering maps: if `a` is a
 and `|a| < 1`, then `qₙ₊₁ = koebe b` with `b² = -a` and `Uₙ₊₁ = qₙ₊₁ ⁻¹' Uₙ` (the Koebe map is a
 covering off its critical value `a ∉ Uₙ`); if `|a| ≥ 1` then `Uₙ = 𝔻` and `qₙ₊₁` is the identity.
 The composites `projₙ = q₁ ∘ ⋯ ∘ qₙ : Uₙ → U₀` lift maps from convex sets
-(`KoebeSeq.exists_lift`), are holomorphic and locally injective, and — by the Koebe estimate
-`norm_koebe_lt` — the in-radius of `Uₙ` about `0` tends to `1` (`KoebeSeq.exists_ball_subset`).
+(`Uniformization.Good.exists_lift`), are holomorphic and locally injective, and — by the Koebe
+estimate `norm_koebe_lt` — the in-radius of `Uₙ` about `0` tends to `1`
+(`Uniformization.Good.exists_ball_subset`).
 
 This is the construction of [Fisher–Hubbard–Wittner, *A proof of the uniformization theorem for
 arbitrary plane domains*, Proc. AMS 104 (1988)], §3, parts b and c, with the abstract universal
