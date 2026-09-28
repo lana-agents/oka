@@ -720,4 +720,9 @@ import Oka.Topology.Sheaves.SectionModelCech
 import Oka.Topology.Sheaves.Stalks
 import Oka.UFD
 import Oka.UliftCoord
+import Oka.Uniformization.CoveringLift
+import Oka.Uniformization.CoveringLimit
+import Oka.Uniformization.Holomorphic
+import Oka.Uniformization.KoebeIteration
+import Oka.Uniformization.KoebeMap
 import Oka.Weierstrass
