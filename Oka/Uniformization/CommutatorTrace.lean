@@ -273,6 +273,113 @@ theorem trace_sq_eq : trSL (Cm U) ^ 2 = 4 := by
   obtain ⟨ν, hν⟩ := exists_smul_eq_self_of_trace_sq_lt (Cm U) h
   exact Cm_smul_ne U ν hν
 
+/-! ### The sign of the trace -/
+
+theorem A_smul_ne (τ : ℍ) : A U • τ ≠ τ := by
+  intro h
+  have := ψ_A_smul U τ
+  rw [h] at this
+  simp at this
+
+theorem trace_sq_A : 4 ≤ trSL (A U) ^ 2 := by
+  by_contra h
+  push Not at h
+  obtain ⟨τ, hτ⟩ := exists_smul_eq_self_of_trace_sq_lt (A U) h
+  exact A_smul_ne U τ hτ
+
+theorem trSL_A_ne_zero : trSL (A U) ≠ 0 := by
+  intro h
+  have := trace_sq_A U
+  rw [h] at this; norm_num at this
+
+/-- `ψ` is injective near every point. -/
+theorem exists_nhds_injOn (ν : ℍ) : ∃ W ∈ 𝓝 ν, InjOn U.ψ W := by
+  obtain ⟨φ, hν, hφ⟩ := U.covering.isLocalHomeomorphOn ν (U.ψ_notMem ν)
+  refine ⟨φ.source, φ.open_source.mem_nhds hν, fun a ha b hb hab ↦ φ.injOn ha hb ?_⟩
+  rw [← hφ]; exact hab
+
+theorem ψ_conj_smul {X g : SL(2, ℝ)} (hX : X ∈ U.deckGroup) (hg : ∀ ν, U.ψ (g • ν) = U.ψ ν)
+    (ν : ℍ) : U.ψ ((X * g * X⁻¹) • ν) = U.ψ ν := by
+  obtain ⟨l, -, hl⟩ := hX
+  have h1 : U.ψ (X⁻¹ • ν) = U.ψ ν - l := by
+    have := hl (X⁻¹ • ν); rw [smul_inv_smul] at this; rw [this]; ring
+  rw [mul_smul, mul_smul, hl, hg, h1]; ring
+
+theorem ψ_pow_conj_smul {X : SL(2, ℝ)} (hX : X ∈ U.deckGroup) (n : ℕ) (ν : ℍ) :
+    U.ψ ((X ^ n * Cm U * (X ^ n)⁻¹) • ν) = U.ψ ν := by
+  induction n generalizing ν with
+  | zero => simpa using ψ_Cm_smul U ν
+  | succ n ih =>
+    have e : X ^ (n + 1) * Cm U * (X ^ (n + 1))⁻¹ = X * (X ^ n * Cm U * (X ^ n)⁻¹) * X⁻¹ := by
+      rw [pow_succ', mul_inv_rev]; group
+    rw [e]; exact ψ_conj_smul U hX ih ν
+
+/-- The upper unipotent normal form of `C` after conjugation by `M`. -/
+def Unipotent (V : SL(2, ℝ)) : Prop := V 1 0 = 0 ∧ V 0 0 = 1 ∧ V 1 1 = 1
+
+/-- **No accumulation**: a deck transformation `X`, upper triangular after conjugation by `M` with
+upper left entry of modulus `< 1`, cannot exist when `M⁻¹ C M` is a nontrivial translation. -/
+theorem no_accumulation {X M : SL(2, ℝ)} (hX : X ∈ U.deckGroup) (hX0 : (M⁻¹ * X * M) 1 0 = 0)
+    (hx : |(M⁻¹ * X * M) 0 0| < 1) (hC : Unipotent (M⁻¹ * Cm U * M))
+    (hτ : (M⁻¹ * Cm U * M) 0 1 ≠ 0) : False := by
+  set X₀ := M⁻¹ * X * M
+  set C₀ := M⁻¹ * Cm U * M
+  set x := X₀ 0 0
+  set τ := C₀ 0 1
+  have hx0 : x ≠ 0 := by
+    intro h
+    have := det_SL X₀
+    rw [hX0, show X₀ 0 0 = x from rfl, h] at this
+    simp at this
+  have hconj : ∀ n : ℕ, M⁻¹ * (X ^ n * Cm U * (X ^ n)⁻¹) * M = X₀ ^ n * C₀ * (X₀ ^ n)⁻¹ := by
+    intro n
+    have hpow : X₀ ^ n = M⁻¹ * X ^ n * M := by
+      induction n with
+      | zero => simp
+      | succ n ih => rw [pow_succ, ih, pow_succ]; simp only [X₀]; group
+    rw [hpow]; simp only [C₀]; group
+  set ν₀ : ℍ := M • UpperHalfPlane.I
+  have hact : ∀ n : ℕ, (X ^ n * Cm U * (X ^ n)⁻¹) • ν₀ =
+      M • ((X₀ ^ n * C₀ * (X₀ ^ n)⁻¹) • UpperHalfPlane.I) := by
+    intro n
+    rw [← hconj n, ← mul_smul, ← mul_smul]
+    congr 1
+    group
+  have hcoe : ∀ n : ℕ, (((X₀ ^ n * C₀ * (X₀ ^ n)⁻¹) • UpperHalfPlane.I : ℍ) : ℂ) =
+      I + (x ^ (2 * n) * τ : ℝ) := by
+    intro n
+    obtain ⟨h1, h2, h3, h4⟩ := pow_conj_unipotent hX0 hC n
+    rw [coe_unipotent_smul_I ⟨h1, h2, h3⟩, h4]
+  -- convergence
+  have hlim0 : Tendsto (fun n : ℕ ↦ x ^ (2 * n) * τ) atTop (𝓝 0) := by
+    have : Tendsto (fun n : ℕ ↦ (x ^ 2) ^ n) atTop (𝓝 0) :=
+      tendsto_pow_atTop_nhds_zero_of_abs_lt_one (by
+        rw [abs_of_nonneg (sq_nonneg x)]
+        nlinarith [abs_nonneg x, sq_abs x, abs_mul_abs_self x])
+    have := this.mul_const τ
+    simpa [pow_mul] using this
+  have hlimH : Tendsto (fun n : ℕ ↦ (X₀ ^ n * C₀ * (X₀ ^ n)⁻¹) • UpperHalfPlane.I) atTop
+      (𝓝 UpperHalfPlane.I) := by
+    rw [isOpenEmbedding_coe.isInducing.tendsto_nhds_iff]
+    simp only [Function.comp_def, hcoe]
+    have : Tendsto (fun n : ℕ ↦ I + ((x ^ (2 * n) * τ : ℝ) : ℂ)) atTop (𝓝 (I + ((0 : ℝ) : ℂ))) :=
+      tendsto_const_nhds.add (Complex.continuous_ofReal.continuousAt.tendsto.comp hlim0)
+    simpa using this
+  have hlim : Tendsto (fun n : ℕ ↦ (X ^ n * Cm U * (X ^ n)⁻¹) • ν₀) atTop (𝓝 ν₀) := by
+    simp only [hact]
+    exact ((continuous_const_smul M).tendsto _).comp hlimH
+  obtain ⟨W, hW, hinj⟩ := exists_nhds_injOn U ν₀
+  obtain ⟨n, hn⟩ := (hlim.eventually (show W ∈ 𝓝 ν₀ from hW)).exists_forall_of_atTop
+  have hmem := hn (n + 1) (by omega)
+  have heq := hinj hmem (mem_of_mem_nhds hW) (ψ_pow_conj_smul U hX (n + 1) ν₀)
+  rw [hact, smul_left_cancel_iff] at heq
+  have := congrArg (fun z : ℍ ↦ (z : ℂ)) heq
+  simp only [hcoe, UpperHalfPlane.coe_I] at this
+  have h0 : (x ^ (2 * (n + 1)) * τ : ℝ) = 0 := by exact_mod_cast (by simpa using this)
+  rcases mul_eq_zero.mp h0 with h | h
+  · exact hx0 (pow_eq_zero_iff (by omega) |>.mp h)
+  · exact hτ h
+
 end Peripheral
 
 end Uniformization

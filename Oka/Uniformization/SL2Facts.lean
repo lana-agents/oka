@@ -161,4 +161,96 @@ theorem trace_commutator_sub_two (X Y : SL(2, ℝ)) (hY : Y 1 0 = 0) :
   simp
   linear_combination (2 * Y 0 0 * Y 1 1) * hX + 2 * hYd
 
+/-! ### Traces, conjugation and upper triangular matrices -/
+
+theorem trSL_eq_trace (g : SL(2, ℝ)) : trSL g = Matrix.trace (g : Matrix (Fin 2) (Fin 2) ℝ) := by
+  simp [trSL, Matrix.trace_fin_two]
+
+theorem trSL_mul_comm (g h : SL(2, ℝ)) : trSL (g * h) = trSL (h * g) := by
+  rw [trSL_eq_trace, trSL_eq_trace, Matrix.SpecialLinearGroup.coe_mul,
+    Matrix.SpecialLinearGroup.coe_mul, Matrix.trace_mul_comm]
+
+theorem trSL_conj (M g : SL(2, ℝ)) : trSL (M⁻¹ * g * M) = trSL g := by
+  rw [trSL_mul_comm, ← mul_assoc, mul_inv_cancel, one_mul]
+
+theorem trSL_inv (g : SL(2, ℝ)) : trSL g⁻¹ = trSL g := by
+  simp [trSL, Matrix.SpecialLinearGroup.coe_inv, Matrix.adjugate_fin_two]; ring
+
+theorem inv_apply_zero_zero (g : SL(2, ℝ)) : g⁻¹ 0 0 = g 1 1 := by
+  simp [Matrix.SpecialLinearGroup.coe_inv, Matrix.adjugate_fin_two]
+
+theorem inv_apply_one_zero (g : SL(2, ℝ)) : g⁻¹ 1 0 = -g 1 0 := by
+  simp [Matrix.SpecialLinearGroup.coe_inv, Matrix.adjugate_fin_two]
+
+theorem inv_apply_one_one (g : SL(2, ℝ)) : g⁻¹ 1 1 = g 0 0 := by
+  simp [Matrix.SpecialLinearGroup.coe_inv, Matrix.adjugate_fin_two]
+
+theorem inv_apply_zero_one (g : SL(2, ℝ)) : g⁻¹ 0 1 = -g 0 1 := by
+  simp [Matrix.SpecialLinearGroup.coe_inv, Matrix.adjugate_fin_two]
+
+theorem mul_apply_SL (g h : SL(2, ℝ)) (i j : Fin 2) :
+    (g * h) i j = g i 0 * h 0 j + g i 1 * h 1 j := by
+  simp [Matrix.SpecialLinearGroup.coe_mul, Matrix.mul_apply, Fin.sum_univ_two]
+
+/-- The commutator `X⁻¹ Y⁻¹ X Y` of two upper triangular elements is upper unipotent. -/
+theorem commutator_unipotent {X Y : SL(2, ℝ)} (hX : X 1 0 = 0) (hY : Y 1 0 = 0) :
+    (X⁻¹ * Y⁻¹ * X * Y) 1 0 = 0 ∧ (X⁻¹ * Y⁻¹ * X * Y) 0 0 = 1 ∧
+      (X⁻¹ * Y⁻¹ * X * Y) 1 1 = 1 := by
+  have dX := det_SL X
+  have dY := det_SL Y
+  rw [hX] at dX; rw [hY] at dY
+  simp only [mul_apply_SL, inv_apply_zero_zero, inv_apply_one_zero, inv_apply_one_one,
+    inv_apply_zero_one, hX, hY]
+  refine ⟨by ring, ?_, ?_⟩
+  · linear_combination (Y 1 1 * Y 0 0) * dX + dY
+  · linear_combination (Y 1 1 * Y 0 0) * dX + dY
+
+/-- Conjugating an upper unipotent element by an upper triangular one multiplies its upper right
+entry by the square of the upper left entry. -/
+theorem conj_unipotent {X V : SL(2, ℝ)} (hX : X 1 0 = 0) (hV : V 1 0 = 0 ∧ V 0 0 = 1 ∧ V 1 1 = 1) :
+    (X * V * X⁻¹) 1 0 = 0 ∧ (X * V * X⁻¹) 0 0 = 1 ∧ (X * V * X⁻¹) 1 1 = 1 ∧
+      (X * V * X⁻¹) 0 1 = X 0 0 ^ 2 * V 0 1 := by
+  have dX := det_SL X
+  rw [hX] at dX
+  obtain ⟨h1, h2, h3⟩ := hV
+  simp only [mul_apply_SL, inv_apply_zero_zero, inv_apply_one_zero, inv_apply_one_one,
+    inv_apply_zero_one, hX, h1, h2, h3]
+  refine ⟨by ring, ?_, ?_, ?_⟩
+  · linear_combination dX
+  · linear_combination dX
+  · ring
+
+theorem pow_conj_unipotent {X V : SL(2, ℝ)} (hX : X 1 0 = 0)
+    (hV : V 1 0 = 0 ∧ V 0 0 = 1 ∧ V 1 1 = 1) (n : ℕ) :
+    (X ^ n * V * (X ^ n)⁻¹) 1 0 = 0 ∧ (X ^ n * V * (X ^ n)⁻¹) 0 0 = 1 ∧
+      (X ^ n * V * (X ^ n)⁻¹) 1 1 = 1 ∧ (X ^ n * V * (X ^ n)⁻¹) 0 1 = X 0 0 ^ (2 * n) * V 0 1 := by
+  induction n with
+  | zero => simpa using ⟨hV.1, hV.2.1, hV.2.2⟩
+  | succ n ih =>
+    have e : X ^ (n + 1) * V * (X ^ (n + 1))⁻¹ = X * (X ^ n * V * (X ^ n)⁻¹) * X⁻¹ := by
+      rw [pow_succ', mul_inv_rev]; group
+    obtain ⟨h1, h2, h3, h4⟩ := conj_unipotent hX ⟨ih.1, ih.2.1, ih.2.2.1⟩
+    rw [e]
+    refine ⟨h1, h2, h3, ?_⟩
+    rw [h4, ih.2.2.2]; ring
+
+theorem coe_unipotent_smul_I {V : SL(2, ℝ)} (hV : V 1 0 = 0 ∧ V 0 0 = 1 ∧ V 1 1 = 1) :
+    ((V • UpperHalfPlane.I : ℍ) : ℂ) = I + V 0 1 := by
+  rw [coe_SL2R_smul, hV.1, hV.2.1, hV.2.2]; simp
+
+/-- A real fixed point of a non-elliptic element with nonzero lower-left entry. -/
+theorem exists_real_fix (g : SL(2, ℝ)) (h : 4 ≤ trSL g ^ 2) (hc : g 1 0 ≠ 0) :
+    ∃ η : ℝ, g 1 0 * η ^ 2 + (g 1 1 - g 0 0) * η - g 0 1 = 0 := by
+  set a := g 0 0; set b := g 0 1; set c := g 1 0; set d := g 1 1
+  have hdet : a * d - b * c = 1 := det_SL g
+  set D := (a + d) ^ 2 - 4
+  have hD : 0 ≤ D := by simp only [D]; simp only [trSL] at h; linarith
+  have hs := Real.sq_sqrt hD
+  refine ⟨((a - d) + Real.sqrt D) / (2 * c), ?_⟩
+  have hb : b = (a * d - 1) / c := by field_simp; linarith
+  rw [hb]
+  field_simp
+  simp only [D] at hs
+  nlinarith [hs]
+
 end Uniformization
