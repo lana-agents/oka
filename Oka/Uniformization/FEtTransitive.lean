@@ -265,7 +265,7 @@ theorem exists_smul_eq (hhol : ∀ a, Unif.HolH (ι₀ a)) {n : ℕ}
       _ ≤ (Q.map (FEt.pt ι₀ τ₀ : A →+* ℂ)).natDegree := card_roots' _
       _ = m := by
         rw [hQm.natDegree_map]
-        show (X ^ m + ∑ i : Fin m, C (a i) * X ^ (i : ℕ)).natDegree = m
+        change (X ^ m + ∑ i : Fin m, C (a i) * X ^ (i : ℕ)).natDegree = m
         rw [natDegree_add_eq_left_of_degree_lt, natDegree_X_pow]
         exact (degree_sum_fin_lt _).trans_eq (degree_X_pow m).symm
   have hmO : m = Nat.card {f // f ∈ O} := by
