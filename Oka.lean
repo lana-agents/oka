@@ -94,12 +94,9 @@ import Oka.Analysis.Complex.KummerCoverPi
 import Oka.Analysis.Complex.KummerExtension
 import Oka.Analysis.Complex.KummerExtensionPi
 import Oka.Analysis.Complex.LiouvillePolynomial
-import Oka.Analysis.Complex.PolynomialSimpleRoot
-import Oka.Analysis.Complex.RiemannExtensionPolynomial
 import Oka.Analysis.LocallyConvex.Schwartz
 import Oka.Analysis.Normed.Operator.Compact.Pi
 import Oka.Analysis.Normed.Operator.Compact.Schwartz
-import Oka.Analysis.Polynomial.RootBound
 import Oka.Analytic.DifferentiableTsum
 import Oka.Analytic.DividedDifference
 import Oka.Analytic.Hartogs
@@ -686,7 +683,6 @@ import Oka.Topology.Algebra.Polynomial
 import Oka.Topology.Category.TopCat.Opens
 import Oka.Topology.Connected.Clopen
 import Oka.Topology.Covering.Basic
-import Oka.Topology.Covering.PuncturedDisc
 import Oka.Topology.Covering.Quotient
 import Oka.Topology.Homeomorph.Lemmas
 import Oka.Topology.IrreducibleChain
