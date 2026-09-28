@@ -735,4 +735,5 @@ import Oka.Uniformization.ModularCovering
 import Oka.Uniformization.OncePunctured
 import Oka.Uniformization.Peripheral
 import Oka.Uniformization.SL2Facts
+import Oka.Uniformization.Uniqueness
 import Oka.Weierstrass
