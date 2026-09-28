@@ -368,6 +368,52 @@ theorem orbifold_count [DecidableEq K] [IsAlgClosed K] [CharZero K] {s : K[X]}
   · exact finish v₁ v₂ hv₁ hv₂ hne hV12 h1 h2 hA2
   · exact finish v₂ v₁ hv₂ hv₁ hne.symm (by rw [hV12, Finset.pair_comm]) h2 h1 (by rw [add_comm]; exact hA2)
 
+/-- A quadratic polynomial vanishing at three distinct points is zero. -/
+theorem quadratic_eq_zero [DecidableEq K] {α β γ : K} {E : Finset K} (hE : E.card = 3)
+    (h : ∀ w ∈ E, α * w ^ 2 + β * w + γ = 0) : α = 0 ∧ β = 0 ∧ γ = 0 := by
+  obtain ⟨x, y, z, hxy, hxz, hyz, rfl⟩ := Finset.card_eq_three.mp hE
+  have hx := h x (by simp)
+  have hy := h y (by simp)
+  have hz := h z (by simp)
+  have h1 : α * (x + y) + β = 0 := by
+    have : (x - y) * (α * (x + y) + β) = 0 := by linear_combination hx - hy
+    exact (mul_eq_zero.mp this).resolve_left (sub_ne_zero.mpr hxy)
+  have h2 : α * (x + z) + β = 0 := by
+    have : (x - z) * (α * (x + z) + β) = 0 := by linear_combination hx - hz
+    exact (mul_eq_zero.mp this).resolve_left (sub_ne_zero.mpr hxz)
+  have hα : α = 0 := by
+    have : (y - z) * α = 0 := by linear_combination h1 - h2
+    exact (mul_eq_zero.mp this).resolve_left (sub_ne_zero.mpr hyz)
+  have hβ : β = 0 := by rw [hα] at h1; linear_combination h1
+  refine ⟨hα, hβ, ?_⟩
+  rw [hα, hβ] at hx; linear_combination hx
+
+/-- If the roots of `4X³ - g₂X - g₃` are symmetric about a point, then `g₃ = 0`. -/
+theorem g₃_eq_zero_of_symm [DecidableEq K] [CharZero K] {g₂ g₃ : K} {E : Finset K}
+    (hE : E.card = 3) (hroot : ∀ w ∈ E, 4 * w ^ 3 - g₂ * w - g₃ = 0) {c : K}
+    (hsym : ∀ w ∈ E, 2 * c - w ∈ E) : g₃ = 0 := by
+  obtain ⟨h1, -, h3⟩ := quadratic_eq_zero (α := 24 * c) (β := -48 * c ^ 2)
+    (γ := 32 * c ^ 3 - 2 * g₂ * c - 2 * g₃) hE fun w hw ↦ by
+      linear_combination hroot w hw + hroot _ (hsym w hw)
+  have hc : c = 0 := by
+    have : (24 : K) ≠ 0 := by norm_num
+    exact (mul_eq_zero.mp h1).resolve_left this
+  rw [hc] at h3
+  linear_combination -h3 / 2
+
+/-- If the roots of `4X³ - g₂X - g₃` are `c + ρ^{1/3} ζ` (cube roots), then `g₂ = 0`. -/
+theorem g₂_eq_zero_of_cube [DecidableEq K] [CharZero K] {g₂ g₃ : K} {E : Finset K}
+    (hE : E.card = 3) (hroot : ∀ w ∈ E, 4 * w ^ 3 - g₂ * w - g₃ = 0) {c ρ : K}
+    (hcube : ∀ w ∈ E, (w - c) ^ 3 = ρ) : g₂ = 0 := by
+  obtain ⟨h1, h2, -⟩ := quadratic_eq_zero (α := 12 * c) (β := -12 * c ^ 2 - g₂)
+    (γ := 4 * ρ + 4 * c ^ 3 - g₃) hE fun w hw ↦ by
+      linear_combination hroot w hw - 4 * hcube w hw
+  have hc : c = 0 := by
+    have : (12 : K) ≠ 0 := by norm_num
+    exact (mul_eq_zero.mp h1).resolve_left this
+  rw [hc] at h2
+  linear_combination -h2
+
 end RatFuncPoly
 
 end Uniformization
