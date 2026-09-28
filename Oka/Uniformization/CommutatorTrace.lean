@@ -380,6 +380,125 @@ theorem no_accumulation {X M : SL(2, ℝ)} (hX : X ∈ U.deckGroup) (hX0 : (M⁻
   · exact hx0 (pow_eq_zero_iff (by omega) |>.mp h)
   · exact hτ h
 
+theorem trSL_BA_comm : trSL (B U * A U * (B U)⁻¹ * (A U)⁻¹) = trSL (Cm U) := by
+  have e : B U * A U * (B U)⁻¹ * (A U)⁻¹ =
+      ((A U)⁻¹ * (B U)⁻¹)⁻¹ * (Cm U)⁻¹ * ((A U)⁻¹ * (B U)⁻¹) := by
+    simp only [Cm]; group
+  rw [e, trSL_conj, trSL_inv]
+
+theorem exists_upper_A : ∃ M₁ : SL(2, ℝ), (M₁⁻¹ * A U * M₁) 1 0 = 0 := by
+  by_cases hc : A U 1 0 = 0
+  · exact ⟨1, by simpa using hc⟩
+  · obtain ⟨η, hη⟩ := exists_real_fix (A U) (trace_sq_A U) hc
+    exact ⟨conjFix η, by rw [conjFix_lowerLeft]; exact hη⟩
+
+/-- If `tr C = 2`, then `A` and `B` have a common fixed point on `∂ℍ`. -/
+theorem exists_common_upper (h2 : trSL (Cm U) = 2) :
+    ∃ M : SL(2, ℝ), (M⁻¹ * A U * M) 1 0 = 0 ∧ (M⁻¹ * B U * M) 1 0 = 0 := by
+  obtain ⟨M₁, hA₁⟩ := exists_upper_A U
+  set A₁ := M₁⁻¹ * A U * M₁
+  set B₁ := M₁⁻¹ * B U * M₁
+  have htr : trSL (B₁ * A₁ * B₁⁻¹ * A₁⁻¹) = 2 := by
+    have e : B₁ * A₁ * B₁⁻¹ * A₁⁻¹ = M₁⁻¹ * (B U * A U * (B U)⁻¹ * (A U)⁻¹) * M₁ := by
+      simp only [A₁, B₁]; group
+    rw [e, trSL_conj, trSL_BA_comm, h2]
+  have hkey := trace_commutator_sub_two B₁ A₁ hA₁
+  rw [htr, sub_self] at hkey
+  rcases mul_eq_zero.mp hkey.symm with hB | hE
+  · exact ⟨M₁, hA₁, hB⟩
+  set y := A₁ 0 0; set s := A₁ 0 1; set w := A₁ 1 1
+  have hdet : y * w = 1 := by have := det_SL A₁; rw [hA₁] at this; linarith
+  by_cases hwy : w = y
+  · -- then `s = 0` (unless `B₁` is upper triangular) and `A₁ = ±1` fixes `i`
+    by_cases hB : B₁ 1 0 = 0
+    · exact ⟨M₁, hA₁, hB⟩
+    exfalso
+    have hs : s = 0 := by
+      have : B₁ 1 0 * s ^ 2 = 0 := by
+        have := hE; simp only [hwy, sub_self] at this; linarith
+      rcases mul_eq_zero.mp this with h | h
+      · exact absurd h hB
+      · exact pow_eq_zero_iff two_ne_zero |>.mp h
+    have hy : y ≠ 0 := by rintro h; rw [h, zero_mul] at hdet; exact zero_ne_one hdet
+    have hfix : A₁ • UpperHalfPlane.I = UpperHalfPlane.I := by
+      apply UpperHalfPlane.ext
+      rw [coe_SL2R_smul, hA₁, show A₁ 0 1 = s from rfl, hs, show A₁ 1 1 = w from rfl, hwy]
+      simp only [UpperHalfPlane.coe_I]
+      change ((y : ℂ) * I + ((0 : ℝ) : ℂ)) / (((0 : ℝ) : ℂ) * I + y) = I
+      push_cast
+      have hy' : (y : ℂ) ≠ 0 := by exact_mod_cast hy
+      rw [add_zero, zero_mul, zero_add, mul_div_cancel_left₀ _ hy']
+    apply A_smul_ne U (M₁ • UpperHalfPlane.I)
+    rw [← mul_smul, show A U * M₁ = M₁ * A₁ by simp only [A₁]; group, mul_smul, hfix]
+  · -- the second fixed point `η = s / (w - y)` of `A₁` is fixed by `B₁`
+    have hwy' : w - y ≠ 0 := sub_ne_zero.mpr hwy
+    set η := s / (w - y)
+    refine ⟨M₁ * conjFix η, ?_, ?_⟩
+    · rw [show (M₁ * conjFix η)⁻¹ * A U * (M₁ * conjFix η) = (conjFix η)⁻¹ * A₁ * conjFix η by
+        simp only [A₁]; group, conjFix_lowerLeft, hA₁]
+      simp only [η, show A₁ 1 1 = w from rfl, show A₁ 0 0 = y from rfl, show A₁ 0 1 = s from rfl]
+      field_simp; ring
+    · rw [show (M₁ * conjFix η)⁻¹ * B U * (M₁ * conjFix η) = (conjFix η)⁻¹ * B₁ * conjFix η by
+        simp only [B₁]; group, conjFix_lowerLeft]
+      simp only [η]
+      field_simp
+      linear_combination hE
+
+/-- **The trace of the monodromy is `-2`.** -/
+theorem trace_Cm : trSL (Cm U) = -2 := by
+  have h4 := trace_sq_eq U
+  have : (trSL (Cm U) - 2) * (trSL (Cm U) + 2) = 0 := by linear_combination h4
+  rcases mul_eq_zero.mp this with h | h
+  swap; · linarith
+  exfalso
+  have h2 : trSL (Cm U) = 2 := by linarith
+  obtain ⟨M, hA0, hB0⟩ := exists_common_upper U h2
+  set A₀ := M⁻¹ * A U * M
+  set B₀ := M⁻¹ * B U * M
+  have hC0 : M⁻¹ * Cm U * M = A₀⁻¹ * B₀⁻¹ * A₀ * B₀ := by simp only [A₀, B₀, Cm]; group
+  have hC : Unipotent (M⁻¹ * Cm U * M) := by rw [hC0]; exact commutator_unipotent hA0 hB0
+  have hτ : (M⁻¹ * Cm U * M) 0 1 ≠ 0 := by
+    intro hτ
+    have h1 : M⁻¹ * Cm U * M = 1 := by
+      ext i j; fin_cases i <;> fin_cases j <;> simp [hC.1, hC.2.1, hC.2.2, hτ]
+    have h2 : Cm U = 1 := by
+      have := congrArg (fun g ↦ M * g * M⁻¹) h1
+      rw [show M * (M⁻¹ * Cm U * M) * M⁻¹ = Cm U by group] at this
+      simpa using this
+    exact Cm_smul_ne U UpperHalfPlane.I (by rw [h2, one_smul])
+  -- the upper left entries
+  have hdetA : A₀ 0 0 * A₀ 1 1 = 1 := by have := det_SL A₀; rw [hA0] at this; linarith
+  have hdetB : B₀ 0 0 * B₀ 1 1 = 1 := by have := det_SL B₀; rw [hB0] at this; linarith
+  have case_lt : ∀ {X : SL(2, ℝ)}, X ∈ U.deckGroup → (M⁻¹ * X * M) 1 0 = 0 →
+      (M⁻¹ * X * M) 0 0 * (M⁻¹ * X * M) 1 1 = 1 → |(M⁻¹ * X * M) 0 0| ≠ 1 → False := by
+    intro X hX hX0 hdet hne
+    rcases lt_or_gt_of_ne hne with hlt | hgt
+    · exact no_accumulation U hX hX0 hlt hC hτ
+    · have hinv : M⁻¹ * X⁻¹ * M = (M⁻¹ * X * M)⁻¹ := by group
+      refine no_accumulation U (X := X⁻¹) (inv_mem hX) ?_ ?_ hC hτ
+      · rw [hinv, inv_apply_one_zero, hX0, neg_zero]
+      · rw [hinv, inv_apply_zero_zero]
+        have h1 : (M⁻¹ * X * M) 1 1 = ((M⁻¹ * X * M) 0 0)⁻¹ := eq_inv_of_mul_eq_one_right hdet
+        rw [h1, abs_inv]
+        exact inv_lt_one_of_one_lt₀ hgt
+  by_cases hα : |A₀ 0 0| = 1
+  · by_cases hβ : |B₀ 0 0| = 1
+    · -- `A₀`, `B₀` are `±` unipotent, so they commute and `C = 1`
+      have hα2 : A₀ 1 1 = A₀ 0 0 := by
+        have hsq : A₀ 0 0 ^ 2 = 1 := by rw [← sq_abs, hα, one_pow]
+        linear_combination (-(A₀ 1 1)) * hsq + (A₀ 0 0) * hdetA
+      have hβ2 : B₀ 1 1 = B₀ 0 0 := by
+        have hsq : B₀ 0 0 ^ 2 = 1 := by rw [← sq_abs, hβ, one_pow]
+        linear_combination (-(B₀ 1 1)) * hsq + (B₀ 0 0) * hdetB
+      apply hτ
+      rw [hC0]
+      simp only [mul_apply_SL, inv_apply_zero_zero, inv_apply_one_zero, inv_apply_one_one,
+        inv_apply_zero_one, hA0, hB0, hα2, hβ2]
+      rw [hα2] at hdetA; rw [hβ2] at hdetB
+      ring_nf
+    · exact case_lt (B_mem U) hB0 hdetB hβ
+  · exact case_lt (A_mem U) hA0 hdetA hα
+
 end Peripheral
 
 end Uniformization

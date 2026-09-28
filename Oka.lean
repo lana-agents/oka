@@ -725,6 +725,7 @@ import Oka.Topology.Sheaves.Stalks
 import Oka.UFD
 import Oka.UliftCoord
 import Oka.Uniformization.Cayley
+import Oka.Uniformization.CommutatorTrace
 import Oka.Uniformization.CoveringLift
 import Oka.Uniformization.CoveringLimit
 import Oka.Uniformization.DeckGroup
@@ -735,4 +736,6 @@ import Oka.Uniformization.KoebeIteration
 import Oka.Uniformization.KoebeMap
 import Oka.Uniformization.LatticeComplement
 import Oka.Uniformization.ModularCovering
+import Oka.Uniformization.Peripheral
+import Oka.Uniformization.SL2Facts
 import Oka.Weierstrass
