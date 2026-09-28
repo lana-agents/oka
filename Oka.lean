@@ -729,6 +729,7 @@ import Oka.Uniformization.Cusp
 import Oka.Uniformization.DeckGroup
 import Oka.Uniformization.Depth
 import Oka.Uniformization.EllipticPoly
+import Oka.Uniformization.FEtAut
 import Oka.Uniformization.FEtCovering
 import Oka.Uniformization.FEtLocal
 import Oka.Uniformization.FEtTransitive
