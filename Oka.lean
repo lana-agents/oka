@@ -739,6 +739,7 @@ import Oka.Uniformization.ModularCovering
 import Oka.Uniformization.OncePunctured
 import Oka.Uniformization.Peripheral
 import Oka.Uniformization.PmDeck
+import Oka.Uniformization.R3Count
 import Oka.Uniformization.RatFuncPoly
 import Oka.Uniformization.SL2Facts
 import Oka.Uniformization.Uniqueness
