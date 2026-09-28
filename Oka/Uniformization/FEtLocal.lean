@@ -28,7 +28,6 @@ namespace Uniformization
 namespace FEt
 
 variable {A B : Type*} [CommRing A] [Algebra ℂ A] [CommRing B] [Algebra ℂ B] [Algebra A B]
-  [IsScalarTower ℂ A B]
 
 /-- The point `a ↦ ι₀ a τ`. -/
 def pt (ι₀ : A →ₐ[ℂ] (ℍ → ℂ)) (τ : ℍ) : A →ₐ[ℂ] ℂ :=

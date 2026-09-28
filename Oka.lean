@@ -729,6 +729,8 @@ import Oka.Uniformization.Cusp
 import Oka.Uniformization.DeckGroup
 import Oka.Uniformization.Depth
 import Oka.Uniformization.EllipticPoly
+import Oka.Uniformization.FEtCovering
+import Oka.Uniformization.FEtLocal
 import Oka.Uniformization.Generators
 import Oka.Uniformization.HalfPlaneAut
 import Oka.Uniformization.Holomorphic
