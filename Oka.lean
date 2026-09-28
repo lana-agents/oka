@@ -94,6 +94,7 @@ import Oka.Analysis.Complex.KummerCoverPi
 import Oka.Analysis.Complex.KummerExtension
 import Oka.Analysis.Complex.KummerExtensionPi
 import Oka.Analysis.Complex.LiouvillePolynomial
+import Oka.Analysis.Complex.PolynomialSimpleRoot
 import Oka.Analysis.LocallyConvex.Schwartz
 import Oka.Analysis.Normed.Operator.Compact.Pi
 import Oka.Analysis.Normed.Operator.Compact.Schwartz
