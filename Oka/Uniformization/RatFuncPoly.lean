@@ -234,7 +234,7 @@ theorem exists_poly_generator [IsAlgClosed K] (R : Subalgebra K K[X])
       have hcop₁ : IsCoprime qq n₁ := by
         have h := (RatFunc.isCoprime_num_denom g).symm.add_mul_left_right (-C c)
         have e : n₁ = g.num + g.denom * -C c := by
-          show g.num - C c * g.denom = _; ring
+          change g.num - C c * g.denom = _; ring
         rwa [e]
       have hn₁' : ι n₁ ≠ 0 := by rwa [ne_eq, map_eq_zero_iff _ hinj]
       refine ⟨qq, n₁, hcop₁, hn₁, hdeg₁, ?_⟩

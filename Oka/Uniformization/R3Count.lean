@@ -259,7 +259,7 @@ theorem orbifold_count [DecidableEq K] [IsAlgClosed K] [CharZero K] {s : K[X]}
     simp only [T] at h1
     have hMle : M v ≤ 3 := by
       by_contra hc
-      have : (2 : ℤ) ≤ (M v : ℤ) - 2 := by push_cast; omega
+      have : (2 : ℤ) ≤ (M v : ℤ) - 2 := by omega
       nlinarith
     interval_cases hMv : M v
     · norm_num at h1
@@ -275,7 +275,7 @@ theorem orbifold_count [DecidableEq K] [IsAlgClosed K] [CharZero K] {s : K[X]}
     simp only [T] at h2
     have hMle : M i ≤ 4 := by
       by_contra hc
-      have : (3 : ℤ) ≤ (M i : ℤ) - 2 := by push_cast; omega
+      have : (3 : ℤ) ≤ (M i : ℤ) - 2 := by omega
       nlinarith
     interval_cases hMi : M i
     · norm_num at h2
@@ -292,7 +292,7 @@ theorem orbifold_count [DecidableEq K] [IsAlgClosed K] [CharZero K] {s : K[X]}
     simp only [T] at h0
     rcases mul_eq_zero.mp h0 with h | h
     · omega
-    · have : (1 : ℤ) ≤ 2 * n j + a j := by push_cast; omega
+    · have : (1 : ℤ) ≤ 2 * n j + a j := by omega
       linarith
   -- the extraction
   have hlc : ∀ v, (s - C v).natDegree = D := fun v ↦ natDegree_sub_C_of_pos s v
@@ -335,7 +335,7 @@ theorem orbifold_count [DecidableEq K] [IsAlgClosed K] [CharZero K] {s : K[X]}
       refine ⟨hD2', ?_⟩
       have haj : a j = 2 := by omega
       have hnj : n j = 0 := by omega
-      obtain ⟨c, hc⟩ : (F i ∩ E₂).Nonempty := Finset.card_pos.mp (by show 0 < a i; omega)
+      obtain ⟨c, hc⟩ : (F i ∩ E₂).Nonempty := Finset.card_pos.mp (by change 0 < a i; omega)
       have hcF := (Finset.mem_inter.mp hc).1
       have hcE := (Finset.mem_inter.mp hc).2
       have hs2 := hsingle i c hcF (by rw [hcardF]; omega)
@@ -366,11 +366,13 @@ theorem orbifold_count [DecidableEq K] [IsAlgClosed K] [CharZero K] {s : K[X]}
     have h3 := hT01 v₁ hv₁; have h4 := hT01 v₂ hv₂
     omega : (T v₁ = 2 ∧ T v₂ = 0) ∨ (T v₁ = 0 ∧ T v₂ = 2)) with ⟨h1, h2⟩ | ⟨h1, h2⟩
   · exact finish v₁ v₂ hv₁ hv₂ hne hV12 h1 h2 hA2
-  · exact finish v₂ v₁ hv₂ hv₁ hne.symm (by rw [hV12, Finset.pair_comm]) h2 h1 (by rw [add_comm]; exact hA2)
+  · exact finish v₂ v₁ hv₂ hv₁ hne.symm (by rw [hV12, Finset.pair_comm]) h2 h1
+      (by rw [add_comm]; exact hA2)
 
 /-- A quadratic polynomial vanishing at three distinct points is zero. -/
-theorem quadratic_eq_zero [DecidableEq K] {α β γ : K} {E : Finset K} (hE : E.card = 3)
+theorem quadratic_eq_zero {α β γ : K} {E : Finset K} (hE : E.card = 3)
     (h : ∀ w ∈ E, α * w ^ 2 + β * w + γ = 0) : α = 0 ∧ β = 0 ∧ γ = 0 := by
+  classical
   obtain ⟨x, y, z, hxy, hxz, hyz, rfl⟩ := Finset.card_eq_three.mp hE
   have hx := h x (by simp)
   have hy := h y (by simp)
@@ -389,7 +391,7 @@ theorem quadratic_eq_zero [DecidableEq K] {α β γ : K} {E : Finset K} (hE : E.
   rw [hα, hβ] at hx; linear_combination hx
 
 /-- If the roots of `4X³ - g₂X - g₃` are symmetric about a point, then `g₃ = 0`. -/
-theorem g₃_eq_zero_of_symm [DecidableEq K] [CharZero K] {g₂ g₃ : K} {E : Finset K}
+theorem g₃_eq_zero_of_symm [CharZero K] {g₂ g₃ : K} {E : Finset K}
     (hE : E.card = 3) (hroot : ∀ w ∈ E, 4 * w ^ 3 - g₂ * w - g₃ = 0) {c : K}
     (hsym : ∀ w ∈ E, 2 * c - w ∈ E) : g₃ = 0 := by
   obtain ⟨h1, -, h3⟩ := quadratic_eq_zero (α := 24 * c) (β := -48 * c ^ 2)
@@ -402,7 +404,7 @@ theorem g₃_eq_zero_of_symm [DecidableEq K] [CharZero K] {g₂ g₃ : K} {E : F
   linear_combination -h3 / 2
 
 /-- If the roots of `4X³ - g₂X - g₃` are `c + ρ^{1/3} ζ` (cube roots), then `g₂ = 0`. -/
-theorem g₂_eq_zero_of_cube [DecidableEq K] [CharZero K] {g₂ g₃ : K} {E : Finset K}
+theorem g₂_eq_zero_of_cube [CharZero K] {g₂ g₃ : K} {E : Finset K}
     (hE : E.card = 3) (hroot : ∀ w ∈ E, 4 * w ^ 3 - g₂ * w - g₃ = 0) {c ρ : K}
     (hcube : ∀ w ∈ E, (w - c) ^ 3 = ρ) : g₂ = 0 := by
   obtain ⟨h1, h2, -⟩ := quadratic_eq_zero (α := 12 * c) (β := -12 * c ^ 2 - g₂)
