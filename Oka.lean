@@ -96,7 +96,10 @@ import Oka.Analysis.Complex.KummerExtension
 import Oka.Analysis.Complex.KummerExtensionPi
 import Oka.Analysis.Complex.LiouvillePolynomial
 import Oka.Analysis.LocallyConvex.Schwartz
+import Oka.Analysis.Lojasiewicz.ComplexZeroSet
 import Oka.Analysis.Lojasiewicz.GradientCurve
+import Oka.Analysis.Lojasiewicz.RealAlgebraic
+import Oka.Analysis.Lojasiewicz.Retraction
 import Oka.Analysis.Normed.LocallyContractibleRetract
 import Oka.Analysis.Normed.Operator.Compact.Pi
 import Oka.Analysis.Normed.Operator.Compact.Schwartz
