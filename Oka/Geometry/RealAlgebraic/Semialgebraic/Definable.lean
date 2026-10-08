@@ -122,6 +122,12 @@ theorem setOf_iff (hP : IsSemialgebraic {x | P x}) (hQ : IsSemialgebraic {x | Q 
     IsSemialgebraic {x | P x ↔ Q x} :=
   ((setOf_imp hP hQ).inter (setOf_imp hQ hP)).congr (by ext x; simp [iff_iff_implies_and_implies])
 
+/-- A set defined by a formula not depending on the point. -/
+theorem setOf_const (p : Prop) : IsSemialgebraic {_x : ι → ℝ | p} := by
+  by_cases hp : p
+  · exact univ.congr (by ext; simp [hp])
+  · exact empty.congr (by ext; simp [hp])
+
 theorem setOf_true : IsSemialgebraic {_x : ι → ℝ | True} := univ.congr (by ext; simp)
 
 theorem setOf_false : IsSemialgebraic {_x : ι → ℝ | False} := empty.congr (by ext; simp)
@@ -184,6 +190,7 @@ end IsSemialgebraic
 
 /-- One step of `semialg`: apply the closure lemma matching the head of the formula. -/
 macro "semialg_step" : tactic => `(tactic| first
+  | exact IsSemialgebraic.setOf_const _
   | apply IsSemialgebraic.setOf_and
   | apply IsSemialgebraic.setOf_or
   | apply IsSemialgebraic.setOf_imp

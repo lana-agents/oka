@@ -87,6 +87,7 @@ import Oka.AlgebraicGeometry.SmoothLocus
 import Oka.AlgebraicGeometry.Spec
 import Oka.AlgebraicTopology.SimplexCochain
 import Oka.Analysis.Calculus.Implicit
+import Oka.Analysis.Calculus.MvPolynomialPath
 import Oka.Analysis.Complex.CoveringMap
 import Oka.Analysis.Complex.FundamentalGroup
 import Oka.Analysis.Complex.KummerCover
@@ -579,7 +580,9 @@ import Oka.Data.Fin.Tuple.Basic
 import Oka.Data.Real.OrderIsoExtend
 import Oka.FieldTheory.IsAlgClosed.Basic
 import Oka.Geometry.RealAlgebraic.Semialgebraic.Basic
+import Oka.Geometry.RealAlgebraic.Semialgebraic.Choice
 import Oka.Geometry.RealAlgebraic.Semialgebraic.Definable
+import Oka.Geometry.RealAlgebraic.Semialgebraic.Growth
 import Oka.Geometry.RealAlgebraic.Semialgebraic.Monotonicity
 import Oka.Geometry.RealAlgebraic.Semialgebraic.OneVariable
 import Oka.Geometry.RingedSpace.Basic
