@@ -86,6 +86,7 @@ import Oka.AlgebraicGeometry.SmoothLocus
 import Oka.AlgebraicGeometry.Spec
 import Oka.AlgebraicTopology.SimplexCochain
 import Oka.Analysis.Calculus.Implicit
+import Oka.Analysis.Calculus.MvPolynomialDeriv
 import Oka.Analysis.Complex.CoveringMap
 import Oka.Analysis.Complex.FundamentalGroup
 import Oka.Analysis.Complex.KummerCover
@@ -95,8 +96,11 @@ import Oka.Analysis.Complex.KummerExtension
 import Oka.Analysis.Complex.KummerExtensionPi
 import Oka.Analysis.Complex.LiouvillePolynomial
 import Oka.Analysis.LocallyConvex.Schwartz
+import Oka.Analysis.Lojasiewicz.GradientCurve
+import Oka.Analysis.Normed.LocallyContractibleRetract
 import Oka.Analysis.Normed.Operator.Compact.Pi
 import Oka.Analysis.Normed.Operator.Compact.Schwartz
+import Oka.Analysis.ODE.GlobalFlow
 import Oka.Analytic.DifferentiableTsum
 import Oka.Analytic.DividedDifference
 import Oka.Analytic.Hartogs
@@ -685,6 +689,7 @@ import Oka.Topology.Connected.Clopen
 import Oka.Topology.Covering.Basic
 import Oka.Topology.Covering.Quotient
 import Oka.Topology.Homeomorph.Lemmas
+import Oka.Topology.Homotopy.LocallyContractible
 import Oka.Topology.IrreducibleChain
 import Oka.Topology.IsLocalHomeomorph
 import Oka.Topology.JacobsonSpace
