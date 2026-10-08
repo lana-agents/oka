@@ -1,5 +1,10 @@
 # Blueprint: π₁ᵉᵗ(X, x̄) ≅ π₁^top(X^an, x)^ for X connected, locally of finite type over ℂ
 
+**Status: done** (`ComplexAnalytic.etaleFundamentalGroupEquivCompletion`). Stages 1–3 and 4a on
+`wp-pi1-comparison`; 4b by H1 (`wp-pi1-semialgebraic`, ~3.1k lines, the gradient inequality) and
+H2 (`wp-pi1-lojasiewicz`, ~1.2k lines, flow retraction and charts) — far below the estimate
+below, which assumed full curve selection and growth asymptotics.
+
 Branch: `lana-agents/oka` `wp-pi1-comparison` (off `origin/master` at `da228a2`), worktree
 `/home/christian/oka-pi1`. Helper branches `wp-pi1-*` (§4b).
 

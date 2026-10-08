@@ -97,7 +97,7 @@ end IsPolynomialFun
 
 /-- Discharge goals `IsPolynomialFun f` for `f` built from coordinates, constants, ring operations
 and evaluation of fixed polynomials. -/
-macro "poly_fun" : tactic => `(tactic| repeat' (first
+macro (name := polyFun) "poly_fun" : tactic => `(tactic| repeat' (first
   | exact IsPolynomialFun.coord _
   | exact IsPolynomialFun.const _
   | apply IsPolynomialFun.add
@@ -208,7 +208,7 @@ theorem setOf_ne' (hf : IsPolynomialFun f) (hg : IsPolynomialFun g) :
 end IsSemialgebraic
 
 /-- One step of `semialg`: apply the closure lemma matching the head of the formula. -/
-macro "semialg_step" : tactic => `(tactic| first
+macro (name := semialgStep) "semialg_step" : tactic => `(tactic| first
   | exact IsSemialgebraic.setOf_const _
   | apply IsSemialgebraic.setOf_and
   | apply IsSemialgebraic.setOf_or

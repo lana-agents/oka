@@ -25,21 +25,17 @@ Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten.
   covers of `X^an` with separated structure map. The proof extends covers across boundary divisors
   by a formalisation of the Grauert–Remmert extension theorem and algebraises them with GAGA.
 * **The comparison theorem `π₁ᵉᵗ ≅ π₁^top(X^an)^`**
-  (`ComplexAnalytic.etaleFundamentalGroupContinuousMulEquiv`,
-  `Oka/Analytification/Pi1/Comparison.lean`): for a connected scheme `X` locally of finite type
-  over `ℂ` and `x : X^an`, the étale fundamental group of `X` at the geometric point at `x`
-  (`Aut (AlgebraicGeometry.FiniteEtale.fiber ξₓ)`, from pi1) is isomorphic as a topological group
-  to the profinite completion of the topological fundamental group `π₁(X^an, x)`, **provided
-  `X^an` is locally contractible**. That hypothesis is discharged
-  - for `X` smooth over `ℂ`: `ComplexAnalytic.etaleFundamentalGroupContinuousMulEquivOfSmooth`
-    (`Oka/Analytification/Pi1/Smooth.lean`), unconditionally;
-  - for arbitrary `X` (singular, non-reduced, non-separated), given the Łojasiewicz gradient
-    inequality for real polynomials (`MvPolynomial.LojasiewiczGradient`, in progress):
-    `ComplexAnalytic.etaleFundamentalGroupContinuousMulEquivOfLojasiewicz`, through Łojasiewicz's
-    gradient-flow retraction onto real algebraic sets (`Oka/Analysis/Lojasiewicz/`).
-
-  The topological input is a covering-space construction for subgroups of `π₁`
-  (`Oka/Topology/Covering/PathCover.lean`) and the criterion
-  `CategoryTheory.PreGaloisCategory.isFundamentalGroup_completion`; the analytic one is the Riemann
-  existence theorem. The analytic analogue is
+  (`ComplexAnalytic.etaleFundamentalGroupEquivCompletion`,
+  `Oka/Analytification/Pi1/General.lean`): for every connected scheme `X` locally of finite type
+  over `ℂ` (possibly singular, non-reduced or non-separated) and `x : X^an`, the étale fundamental
+  group of `X` at the geometric point at `x` (`Aut (AlgebraicGeometry.FiniteEtale.fiber ξₓ)`,
+  from pi1) is isomorphic as a topological group to the profinite completion of the topological
+  fundamental group `π₁(X^an, x)`. The proof combines the Riemann existence theorem, a
+  covering-space construction for subgroups of `π₁` (`Oka/Topology/Covering/PathCover.lean`), the
+  criterion `CategoryTheory.PreGaloisCategory.isFundamentalGroup_completion`, and local
+  contractibility of `X^an` (`ComplexAnalytic.locallyContractibleSpace_analytification`), proved
+  by Łojasiewicz's gradient-flow retraction onto real algebraic sets
+  (`Oka/Analysis/Lojasiewicz/`) from the Łojasiewicz gradient inequality
+  (`MvPolynomial.exists_lojasiewicz_gradient`, `Oka/Geometry/RealAlgebraic/`, via Tarski–Seidenberg
+  and the monotonicity theorem for semialgebraic functions). The analytic analogue is
   `ComplexAnalytic.AnalyticSpace.SeparatedFiniteEtaleOver.fundamentalGroupContinuousMulEquiv`.
