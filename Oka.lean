@@ -30,6 +30,7 @@ import Oka.Algebra.MvPolynomial.Equiv
 import Oka.Algebra.MvPolynomial.Funext
 import Oka.Algebra.MvPolynomial.PDeriv
 import Oka.Algebra.MvPolynomial.Taylor
+import Oka.Algebra.Polynomial.PseudoDivision
 import Oka.AlgebraicGeometry.AlgClosed.Basic
 import Oka.AlgebraicGeometry.Chow
 import Oka.AlgebraicGeometry.GammaSpecAdjunction
@@ -97,6 +98,8 @@ import Oka.Analysis.Complex.LiouvillePolynomial
 import Oka.Analysis.LocallyConvex.Schwartz
 import Oka.Analysis.Normed.Operator.Compact.Pi
 import Oka.Analysis.Normed.Operator.Compact.Schwartz
+import Oka.Analysis.Polynomial.SignDiagram
+import Oka.Analysis.Polynomial.SignGap
 import Oka.Analytic.DifferentiableTsum
 import Oka.Analytic.DividedDifference
 import Oka.Analytic.Hartogs
@@ -572,6 +575,7 @@ import Oka.ChangeOfCoordinates
 import Oka.Completion
 import Oka.ComplexSpace
 import Oka.Data.Fin.Tuple.Basic
+import Oka.Data.Real.OrderIsoExtend
 import Oka.FieldTheory.IsAlgClosed.Basic
 import Oka.Geometry.RingedSpace.Basic
 import Oka.Geometry.RingedSpace.CutOut
