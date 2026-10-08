@@ -79,17 +79,22 @@ lemma isNaturalSMul_transport [IsNaturalSMul F' π] :
     rw [fiberEquivOfIso_naturality, fiberEquivOfIso_smul, fiberEquivOfIso_smul,
       fiberEquivOfIso_naturality, IsNaturalSMul.naturality]⟩
 
+lemma isPretransitive_transport_obj (X : C)
+    (h : MulAction.IsPretransitive π (F'.obj (e.obj X))) :
+    letI := transportMulAction e φ π
+    MulAction.IsPretransitive π (F.obj X) := by
+  letI := transportMulAction e φ π
+  refine ⟨fun x y ↦ ?_⟩
+  obtain ⟨g, hg⟩ := h.exists_smul_eq (fiberEquivOfIso e φ X x) (fiberEquivOfIso e φ X y)
+  exact ⟨g, (fiberEquivOfIso e φ X).injective (by rw [fiberEquivOfIso_smul, hg])⟩
+
 lemma isPretransitive_transport [e.IsEquivalence]
     (htrans : ∀ (Y : D) [IsConnected Y], MulAction.IsPretransitive π (F'.obj Y)) (X : C)
     [IsConnected X] :
     letI := transportMulAction e φ π
     MulAction.IsPretransitive π (F.obj X) := by
-  letI := transportMulAction e φ π
   haveI := isConnected_obj_of_isEquivalence e X
-  refine ⟨fun x y ↦ ?_⟩
-  obtain ⟨g, hg⟩ := (htrans (e.obj X)).exists_smul_eq (fiberEquivOfIso e φ X x)
-    (fiberEquivOfIso e φ X y)
-  exact ⟨g, (fiberEquivOfIso e φ X).injective (by rw [fiberEquivOfIso_smul, hg])⟩
+  exact isPretransitive_transport_obj e φ π X (htrans (e.obj X))
 
 lemma exists_ker_le_transport [e.IsEquivalence] [IsNaturalSMul F' π] {N : Subgroup π}
     (hN : ∃ Y : D, ∀ h : π, (∀ y : F'.obj Y, h • y = y) → h ∈ N) :

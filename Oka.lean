@@ -179,6 +179,7 @@ import Oka.AnalyticSpace.LocalTupleRelations
 import Oka.AnalyticSpace.MonicProjection
 import Oka.AnalyticSpace.MonicSplitting
 import Oka.AnalyticSpace.MonoDirectSummand
+import Oka.AnalyticSpace.Monodromy
 import Oka.AnalyticSpace.NoetherGerm
 import Oka.AnalyticSpace.NoetherProperty
 import Oka.AnalyticSpace.Noetherian
@@ -368,6 +369,10 @@ import Oka.Analytification.ModuleFiniteAnalytification
 import Oka.Analytification.MonicHypersurface
 import Oka.Analytification.OpenBaseFiniteness
 import Oka.Analytification.OverSpec
+import Oka.Analytification.Pi1.Comparison
+import Oka.Analytification.Pi1.ConnectedCover
+import Oka.Analytification.Pi1.Fiber
+import Oka.Analytification.Pi1.FiniteEtale
 import Oka.Analytification.Presentation
 import Oka.Analytification.PresentationFlatness
 import Oka.Analytification.PresentationStalk
@@ -690,6 +695,7 @@ import Oka.Topology.Covering.LocallyContractible
 import Oka.Topology.Covering.Monodromy
 import Oka.Topology.Covering.PathCover
 import Oka.Topology.Covering.Quotient
+import Oka.Topology.Covering.Separated
 import Oka.Topology.Homeomorph.Lemmas
 import Oka.Topology.IrreducibleChain
 import Oka.Topology.IsLocalHomeomorph
