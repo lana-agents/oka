@@ -37,6 +37,8 @@ section Transport
 
 variable {Z : Finset ℝ} (ψ : ℝ ≃o ℝ) {p q : ℝ[X]} {y : ℝ}
 
+/-- Left anchors are transported by an order automorphism `ψ` that preserves the signs of
+`p` on `Z` and of `p'` at `y`. -/
 lemma leftAnchor_image_iff (hZ : ∀ z ∈ Z, SignType.sign (q.eval (ψ z)) = SignType.sign (p.eval z))
     (hd : SignType.sign ((derivative q).eval (ψ y)) = SignType.sign ((derivative p).eval y)) :
     LeftAnchor (Z.image ψ) q (ψ y) ↔ LeftAnchor Z p y := by
@@ -53,6 +55,8 @@ lemma leftAnchor_image_iff (hZ : ∀ z ∈ Z, SignType.sign (q.eval (ψ z)) = Si
     exact h a ha (ψ.lt_iff_lt.1 hay) (fun z hz hzy =>
       ψ.le_iff_le.1 (hmax (ψ z) (Finset.mem_image_of_mem ψ hz) (ψ.lt_iff_lt.2 hzy)))
 
+/-- Right anchors are transported by an order automorphism `ψ` that preserves the signs of
+`p` on `Z` and of `p'` at `y`. -/
 lemma rightAnchor_image_iff (hZ : ∀ z ∈ Z, SignType.sign (q.eval (ψ z)) = SignType.sign (p.eval z))
     (hd : SignType.sign ((derivative q).eval (ψ y)) = SignType.sign ((derivative p).eval y)) :
     RightAnchor (Z.image ψ) q (ψ y) ↔ RightAnchor Z p y := by
@@ -69,6 +73,7 @@ lemma rightAnchor_image_iff (hZ : ∀ z ∈ Z, SignType.sign (q.eval (ψ z)) = S
     exact h b hb (ψ.lt_iff_lt.1 hyb) (fun z hz hzy =>
       ψ.le_iff_le.1 (hmin (ψ z) (Finset.mem_image_of_mem ψ hz) (ψ.lt_iff_lt.2 hzy)))
 
+/-- An order automorphism carries gaps of `Z` to gaps of `ψ '' Z`. -/
 lemma sameGap_image_iff {y' : ℝ} : SameGap (Z.image ψ) (ψ y) (ψ y') ↔ SameGap Z y y' := by
   constructor
   · intro h z hz
@@ -77,6 +82,7 @@ lemma sameGap_image_iff {y' : ℝ} : SameGap (Z.image ψ) (ψ y) (ψ y') ↔ Sam
     obtain ⟨z, hz, rfl⟩ := Finset.mem_image.1 hz'
     simpa only [ψ.lt_iff_lt] using h z hz
 
+/-- An order automorphism preserves the sign of differences. -/
 lemma sign_sub_orderIso (a b : ℝ) : SignType.sign (ψ a - ψ b) = SignType.sign (a - b) := by
   rcases lt_trichotomy a b with h | rfl | h
   · rw [sign_neg (sub_neg.2 (ψ.lt_iff_lt.2 h)), sign_neg (sub_neg.2 h)]

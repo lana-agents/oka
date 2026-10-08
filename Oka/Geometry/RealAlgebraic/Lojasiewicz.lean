@@ -56,16 +56,20 @@ noncomputable def ballPoly (p : Fin n → ℝ) : MvPolynomial (Fin n) ℝ := ∑
 noncomputable def gradSq (f : MvPolynomial (Fin n) ℝ) : MvPolynomial (Fin n) ℝ :=
   ∑ i, pderiv i f ^ 2
 
+/-- Evaluation of `ballPoly`. -/
 lemma eval_ballPoly (p y : Fin n → ℝ) : eval y (ballPoly p) = ∑ i, (y i - p i) ^ 2 := by
   simp [ballPoly]
 
+/-- Evaluation of `gradSq`. -/
 lemma eval_gradSq (f : MvPolynomial (Fin n) ℝ) (y : Fin n → ℝ) :
     eval y (gradSq f) = ∑ i, eval y (pderiv i f) ^ 2 := by
   simp [gradSq]
 
+/-- `gradSq` is invariant under `f ↦ -f`. -/
 lemma gradSq_neg (f : MvPolynomial (Fin n) ℝ) : gradSq (-f) = gradSq f := by
   simp [gradSq]
 
+/-- Points of the unit ball are within distance `1` of `p` in each coordinate. -/
 lemma abs_sub_le_one {p y : Fin n → ℝ} (hy : eval y (ballPoly p) ≤ 1) (i : Fin n) :
     |y i - p i| ≤ 1 := by
   rw [eval_ballPoly] at hy
@@ -73,6 +77,7 @@ lemma abs_sub_le_one {p y : Fin n → ℝ} (hy : eval y (ballPoly p) ≤ 1) (i :
     (fun j _ => sq_nonneg _) (Finset.mem_univ i)).trans hy
   exact (sq_le_one_iff_abs_le_one _).1 this
 
+/-- The fibres of `f` in the closed unit ball around `p` are compact. -/
 lemma isCompact_fiber (f : MvPolynomial (Fin n) ℝ) (p : Fin n → ℝ) (u : ℝ) :
     IsCompact {y | eval y (ballPoly p) ≤ 1 ∧ eval y f = u} := by
   refine Metric.isCompact_of_isClosed_isBounded ((isClosed_le (continuous_eval _)

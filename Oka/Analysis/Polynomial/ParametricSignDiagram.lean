@@ -51,10 +51,12 @@ def ControlsOn (Q : Finset A) (F : Multiset A[X]) (H : Finset A) : Prop :=
   ∀ f g : A →+* ℝ, (∀ h ∈ H, f h ≠ 0) → (∀ h ∈ H, g h ≠ 0) → SignsAgree Q f g →
     ∃ φ, SignMatch f g F φ
 
+/-- Agreement of signs on `Q'` implies agreement on any `Q ⊆ Q'`. -/
 lemma SignsAgree.mono {Q Q' : Finset A} {f g : A →+* ℝ} (h : Q ⊆ Q') (hQ : SignsAgree Q' f g) :
     SignsAgree Q f g :=
   fun a ha => hQ a (h ha)
 
+/-- Control persists when the controlling set or the region conditions are enlarged. -/
 lemma ControlsOn.mono {Q Q' : Finset A} {F : Multiset A[X]} {H H' : Finset A} (hQ : Q ⊆ Q')
     (hH : H ⊆ H') (h : ControlsOn Q F H) : ControlsOn Q' F H' :=
   fun f g hf hg hQ' => h f g (fun x hx => hf x (hH hx)) (fun x hx => hg x (hH hx)) (hQ'.mono hQ)

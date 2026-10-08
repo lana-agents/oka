@@ -44,10 +44,13 @@ namespace SameGap
 
 variable {Z : Finset ℝ} {y y' y'' : ℝ}
 
+/-- Every point lies in its own gap. -/
 @[refl] lemma refl (Z : Finset ℝ) (y : ℝ) : SameGap Z y y := fun _ _ => Iff.rfl
 
+/-- `SameGap Z` is symmetric. -/
 lemma symm (h : SameGap Z y y') : SameGap Z y' y := fun z hz => (h z hz).symm
 
+/-- `SameGap Z` is transitive. -/
 lemma trans (h : SameGap Z y y') (h' : SameGap Z y' y'') : SameGap Z y y'' :=
   fun z hz => (h z hz).trans (h' z hz)
 

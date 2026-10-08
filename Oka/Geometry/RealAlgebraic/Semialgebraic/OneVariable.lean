@@ -64,8 +64,10 @@ namespace IsSemialgebraic₁
 
 variable {S : Set ℝ}
 
+/-- Unfolding `IsSemialgebraic₁`. -/
 lemma iff : IsSemialgebraic₁ S ↔ IsSemialgebraic {x : Unit → ℝ | x () ∈ S} := Iff.rfl
 
+/-- Transport semialgebraicity along an equality of sets. -/
 lemma congr {T : Set ℝ} (h : IsSemialgebraic₁ S) (hST : S = T) : IsSemialgebraic₁ T := hST ▸ h
 
 private lemma eval_univ (p : MvPolynomial Unit ℝ) (t : ℝ) :
