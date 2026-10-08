@@ -143,11 +143,9 @@ lemma Fiber.extend_injective {y z : B} (δ : FundamentalGroupoid.mk y ⟶ Fundam
 abbrev hom {x y : B} (γ : Path x y) : FundamentalGroupoid.mk x ⟶ FundamentalGroupoid.mk y :=
   Path.Homotopic.Quotient.mk γ
 
-@[simp]
 lemma hom_trans {x y z : B} (γ : Path x y) (γ' : Path y z) : hom (γ.trans γ') = hom γ ≫ hom γ' :=
   rfl
 
-@[simp]
 lemma hom_refl (x : B) : hom (Path.refl x) = 𝟙 (FundamentalGroupoid.mk x) :=
   rfl
 
@@ -216,11 +214,9 @@ lemma isOpenMap_proj [LocallyPathConnectedSpace B] : IsOpenMap (proj H) := by
   rw [proj_image_nbhd]
   exact hU.pathComponentIn _
 
-@[simp]
 lemma hom_symm_comp {x y : B} (γ : Path x y) : hom γ.symm ≫ hom γ = 𝟙 _ :=
   Path.Homotopic.Quotient.symm_trans _
 
-@[simp]
 lemma hom_comp_symm {x y : B} (γ : Path x y) : hom γ ≫ hom γ.symm = 𝟙 _ :=
   Path.Homotopic.Quotient.trans_symm _
 

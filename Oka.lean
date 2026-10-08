@@ -381,6 +381,7 @@ import Oka.Analytification.Pi1.Comparison
 import Oka.Analytification.Pi1.ConnectedCover
 import Oka.Analytification.Pi1.Fiber
 import Oka.Analytification.Pi1.FiniteEtale
+import Oka.Analytification.Pi1.Smooth
 import Oka.Analytification.Presentation
 import Oka.Analytification.PresentationFlatness
 import Oka.Analytification.PresentationStalk
