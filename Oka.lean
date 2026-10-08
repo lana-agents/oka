@@ -98,6 +98,7 @@ import Oka.Analysis.Complex.LiouvillePolynomial
 import Oka.Analysis.LocallyConvex.Schwartz
 import Oka.Analysis.Normed.Operator.Compact.Pi
 import Oka.Analysis.Normed.Operator.Compact.Schwartz
+import Oka.Analysis.Polynomial.ParametricSignDiagram
 import Oka.Analysis.Polynomial.SignDiagram
 import Oka.Analysis.Polynomial.SignGap
 import Oka.Analytic.DifferentiableTsum
@@ -577,6 +578,8 @@ import Oka.ComplexSpace
 import Oka.Data.Fin.Tuple.Basic
 import Oka.Data.Real.OrderIsoExtend
 import Oka.FieldTheory.IsAlgClosed.Basic
+import Oka.Geometry.RealAlgebraic.Semialgebraic.Basic
+import Oka.Geometry.RealAlgebraic.Semialgebraic.Definable
 import Oka.Geometry.RingedSpace.Basic
 import Oka.Geometry.RingedSpace.CutOut
 import Oka.Geometry.RingedSpace.LocallyRingedSpace
