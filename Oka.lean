@@ -561,6 +561,8 @@ import Oka.Analytification.SurjectionFinite
 import Oka.Analytification.UniversalProperty
 import Oka.CategoryTheory.Abelian.Basic
 import Oka.CategoryTheory.Functor.MapBijective
+import Oka.CategoryTheory.Galois.ProfiniteCompletion
+import Oka.CategoryTheory.Galois.Transport
 import Oka.CategoryTheory.GlueData
 import Oka.CategoryTheory.Limits.Shapes.KernelBiprod
 import Oka.CategoryTheory.Limits.Shapes.SingleObj
@@ -683,6 +685,7 @@ import Oka.Topology.Algebra.Polynomial
 import Oka.Topology.Category.TopCat.Opens
 import Oka.Topology.Connected.Clopen
 import Oka.Topology.Covering.Basic
+import Oka.Topology.Covering.Monodromy
 import Oka.Topology.Covering.Quotient
 import Oka.Topology.Homeomorph.Lemmas
 import Oka.Topology.IrreducibleChain
