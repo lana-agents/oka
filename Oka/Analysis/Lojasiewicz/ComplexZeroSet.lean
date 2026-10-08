@@ -80,6 +80,8 @@ noncomputable def complexEquivReal : (σ → ℂ) ≃ₜ (σ ⊕ σ → ℝ) whe
     | inr i => exact continuous_im.comp (continuous_apply i)
   continuous_invFun := by fun_prop
 
+section Fintype
+
 variable {ι : Type*} [Fintype ι]
 
 /-- **The real polynomial `∑ⱼ (Re gⱼ)² + (Im gⱼ)²`**, whose value at the real point corresponding
@@ -106,13 +108,16 @@ noncomputable def complexZeroSetHomeomorph (g : ι → MvPolynomial σ ℂ) :
     rw [eval_normSqSum, Finset.sum_eq_zero_iff_of_nonneg fun j _ ↦ normSq_nonneg _]
     simp only [Finset.mem_univ, true_imp_iff, normSq_eq_zero]
 
+end Fintype
+
 /-- **Complex algebraic sets are locally contractible if real algebraic sets are.** -/
-theorem locallyContractibleSpace_complexZeroSet [Fintype σ]
+theorem locallyContractibleSpace_complexZeroSet {ι : Type*} [Finite ι] [Finite σ]
     (h : ∀ (n : ℕ) (f : MvPolynomial (Fin n) ℝ),
       LocallyContractibleSpace {x : Fin n → ℝ // MvPolynomial.eval x f = 0})
     (g : ι → MvPolynomial σ ℂ) :
-    LocallyContractibleSpace {z : σ → ℂ // ∀ j, eval z (g j) = 0} :=
-  (complexZeroSetHomeomorph g).symm.locallyContractibleSpace
+    LocallyContractibleSpace {z : σ → ℂ // ∀ j, eval z (g j) = 0} := by
+  cases nonempty_fintype ι
+  exact (complexZeroSetHomeomorph g).symm.locallyContractibleSpace
     (locallyContractibleSpace_zeroSet_of_fin h _)
 
 end MvPolynomial

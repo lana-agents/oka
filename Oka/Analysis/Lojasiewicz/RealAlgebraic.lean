@@ -59,8 +59,8 @@ theorem locallyContractibleSpace_zeroSet_of_lojasiewicz {n : ℕ} (f : MvPolynom
     fun x ↦
     ((hasFDerivAt_eval f x).mul (hasFDerivAt_eval f x)).congr_fderiv
       (ContinuousLinearMap.ext fun v ↦ by
-        simp only [hG]
-        simp [Finset.mul_sum, ← Finset.sum_add_distrib]
+        simp only [hG, add_apply, smul_apply, sum_apply, proj_apply, smul_eq_mul, Finset.mul_sum,
+          ← Finset.sum_add_distrib]
         exact Finset.sum_congr rfl fun i _ ↦ by ring)
   have hGc : ContDiff ℝ 1 G := contDiff_pi.2 fun i ↦
     (contDiff_const.mul (contDiff_eval f)).mul (contDiff_eval _)
@@ -102,8 +102,9 @@ the variables of any finite type. -/
 theorem locallyContractibleSpace_zeroSet_of_fin
     (h : ∀ (n : ℕ) (f : MvPolynomial (Fin n) ℝ),
       LocallyContractibleSpace {x : Fin n → ℝ // MvPolynomial.eval x f = 0})
-    {σ : Type*} [Fintype σ] (f : MvPolynomial σ ℝ) :
+    {σ : Type*} [Finite σ] (f : MvPolynomial σ ℝ) :
     LocallyContractibleSpace {x : σ → ℝ // MvPolynomial.eval x f = 0} := by
+  cases nonempty_fintype σ
   set e := Fintype.equivFin σ
   let H : (Fin (Fintype.card σ) → ℝ) ≃ₜ (σ → ℝ) :=
     { toFun := fun y ↦ y ∘ e
