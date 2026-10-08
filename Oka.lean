@@ -580,6 +580,8 @@ import Oka.Data.Real.OrderIsoExtend
 import Oka.FieldTheory.IsAlgClosed.Basic
 import Oka.Geometry.RealAlgebraic.Semialgebraic.Basic
 import Oka.Geometry.RealAlgebraic.Semialgebraic.Definable
+import Oka.Geometry.RealAlgebraic.Semialgebraic.Monotonicity
+import Oka.Geometry.RealAlgebraic.Semialgebraic.OneVariable
 import Oka.Geometry.RingedSpace.Basic
 import Oka.Geometry.RingedSpace.CutOut
 import Oka.Geometry.RingedSpace.LocallyRingedSpace
@@ -696,6 +698,7 @@ import Oka.Topology.IrreducibleChain
 import Oka.Topology.IsLocalHomeomorph
 import Oka.Topology.JacobsonSpace
 import Oka.Topology.Maps.Proper.Basic
+import Oka.Topology.Order.LocalMonotone
 import Oka.Topology.SeparatedMap
 import Oka.Topology.Sheaves.Cohomology.BaseChange
 import Oka.Topology.Sheaves.Cohomology.Basic

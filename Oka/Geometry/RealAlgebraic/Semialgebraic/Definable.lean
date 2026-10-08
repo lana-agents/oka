@@ -182,9 +182,8 @@ theorem setOf_ne' (hf : IsPolynomialFun f) (hg : IsPolynomialFun g) :
 
 end IsSemialgebraic
 
-/-- Prove `IsSemialgebraic {x | φ x}` by recursion on the formula `φ`. Leaves unsolved the atoms
-it cannot handle. -/
-macro "semialg" : tactic => `(tactic| repeat' (first
+/-- One step of `semialg`: apply the closure lemma matching the head of the formula. -/
+macro "semialg_step" : tactic => `(tactic| first
   | apply IsSemialgebraic.setOf_and
   | apply IsSemialgebraic.setOf_or
   | apply IsSemialgebraic.setOf_imp
@@ -201,7 +200,18 @@ macro "semialg" : tactic => `(tactic| repeat' (first
   | (apply IsSemialgebraic.setOf_lt' <;> (poly_fun; done))
   | (apply IsSemialgebraic.setOf_le' <;> (poly_fun; done))
   | (apply IsSemialgebraic.setOf_eq' <;> (poly_fun; done))
-  | (apply IsSemialgebraic.setOf_ne' <;> (poly_fun; done))))
+  | (apply IsSemialgebraic.setOf_ne' <;> (poly_fun; done)))
+
+/-- Prove `IsSemialgebraic {x | φ x}` by recursion on the formula `φ`. Leaves unsolved the atoms
+it cannot handle. `semialg using h₁, h₂` first tries to close each subgoal with `exact hᵢ`
+(for instance graphs of semialgebraic functions, `IsSemialgebraicFun.setOf_graph`). -/
+syntax "semialg" (" using " term,+)? : tactic
+
+macro_rules
+  | `(tactic| semialg) => `(tactic| repeat' semialg_step)
+  | `(tactic| semialg using $ts,*) => do
+    let extra ← ts.getElems.mapM fun t => `(Lean.Parser.Tactic.tacticSeq| exact $t)
+    `(tactic| repeat' (first $[| $extra]* | semialg_step))
 
 /-- A subset of `ℝ` is semialgebraic if it is semialgebraic as a subset of `ℝ^Unit`. -/
 def IsSemialgebraic₁ (S : Set ℝ) : Prop := IsSemialgebraic {x : Unit → ℝ | x () ∈ S}
