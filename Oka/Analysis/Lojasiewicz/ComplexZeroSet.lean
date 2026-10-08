@@ -63,6 +63,8 @@ theorem eval_map_im (w : σ → ℝ) (q : MvPolynomial σ ℂ) :
 noncomputable def realify (q : MvPolynomial σ ℂ) : MvPolynomial (σ ⊕ σ) ℂ :=
   bind₁ (fun i ↦ X (Sum.inl i) + X (Sum.inr i) * C I) q
 
+/-- Evaluating the substitution `xᵢ ↦ uᵢ + vᵢ * i` at `w` is evaluating at
+`wₗ + wᵣ * i`. -/
 theorem eval_realify (w : σ ⊕ σ → ℂ) (q : MvPolynomial σ ℂ) :
     eval w (realify q) = eval (fun i ↦ w (Sum.inl i) + w (Sum.inr i) * I) q := by
   have := eval₂Hom_bind₁ (RingHom.id ℂ) w (fun i ↦ X (Sum.inl i) + X (Sum.inr i) * C I) q
@@ -90,6 +92,7 @@ noncomputable def normSqSum (g : ι → MvPolynomial σ ℂ) : MvPolynomial (σ 
   ∑ j, (AddMonoidAlgebra.map reAddGroupHom (realify (g j)) ^ 2 +
     AddMonoidAlgebra.map imAddGroupHom (realify (g j)) ^ 2)
 
+/-- **The value of `normSqSum g` at the real point of `z` is `∑ⱼ |gⱼ(z)|²`.** -/
 theorem eval_normSqSum (g : ι → MvPolynomial σ ℂ) (z : σ → ℂ) :
     eval (complexEquivReal z) (normSqSum g) = ∑ j, normSq (eval z (g j)) := by
   simp only [normSqSum, map_sum, map_add, map_pow, eval_map_re, eval_map_im, eval_realify]

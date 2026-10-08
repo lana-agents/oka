@@ -58,6 +58,7 @@ variable {ι : Type*} [Fintype ι] {F : (ι → ℝ) → ℝ} {G : (ι → ℝ) 
 noncomputable def clamp (p : ι → ℝ) (r : ℝ) (x : ι → ℝ) : ι → ℝ :=
   fun i ↦ max (p i - r) (min (p i + r) (x i))
 
+/-- `clamp p r` takes values in the closed ball `B̄(p, r)`. -/
 theorem clamp_mem_closedBall (p : ι → ℝ) {r : ℝ} (hr : 0 ≤ r) (x : ι → ℝ) :
     clamp p r x ∈ closedBall p r := by
   rw [mem_closedBall, dist_pi_le_iff hr]
@@ -67,6 +68,7 @@ theorem clamp_mem_closedBall (p : ι → ℝ) {r : ℝ} (hr : 0 ≤ r) (x : ι �
   rw [Real.dist_eq, abs_sub_le_iff]
   constructor <;> linarith
 
+/-- `clamp p r` is the identity on the closed ball `B̄(p, r)`. -/
 theorem clamp_eq_self {p : ι → ℝ} {r : ℝ} {x : ι → ℝ} (hx : x ∈ closedBall p r) :
     clamp p r x = x := by
   have hr : 0 ≤ r := dist_nonneg.trans hx
@@ -77,6 +79,7 @@ theorem clamp_eq_self {p : ι → ℝ} {r : ℝ} {x : ι → ℝ} (hx : x ∈ cl
   simp only [clamp]
   rw [min_eq_right (by linarith), max_eq_right (by linarith)]
 
+/-- `clamp p r` is `1`-Lipschitz for the sup norm. -/
 theorem lipschitzWith_clamp (p : ι → ℝ) (r : ℝ) : LipschitzWith 1 (clamp p r) :=
   LipschitzWith.of_dist_le_mul fun x y ↦ by
     rw [NNReal.coe_one, one_mul]
