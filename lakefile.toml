@@ -21,3 +21,11 @@ rev = "v4.32.0"
 
 [[lean_lib]]
 name = "Oka"
+
+# The étale fundamental group of a scheme (`AlgebraicGeometry.FiniteEtale.galoisCategory`,
+# `AlgebraicGeometry.FiniteEtale.fiber`): the algebraic side of the comparison theorem in
+# `Oka/Analytification/Pi1/`. Pinned at the commit the IUT development uses.
+[[require]]
+name = "pi1"
+git = "https://github.com/lana-agents/pi1"
+rev = "ca7def953193f861a462aa0831eec8f0a31ff69f"
