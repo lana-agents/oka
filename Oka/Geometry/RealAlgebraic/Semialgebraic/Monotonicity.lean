@@ -34,6 +34,7 @@ namespace IsSemialgebraicFun
 
 variable {h : ℝ → ℝ} {a b : ℝ}
 
+/-- The negative of a semialgebraic function is semialgebraic. -/
 theorem neg (hh : IsSemialgebraicFun h) : IsSemialgebraicFun (fun t => -h t) := by
   have : IsSemialgebraic {w : Fin 2 → ℝ | ∃ v, h (w 0) = v ∧ -v = w 1} := by
     semialg using hh.setOf_graph

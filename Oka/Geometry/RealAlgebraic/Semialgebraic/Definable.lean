@@ -37,35 +37,43 @@ def IsPolynomialFun (f : (ι → ℝ) → ℝ) : Prop := ∃ p : MvPolynomial ι
 
 namespace IsPolynomialFun
 
+/-- Constants are polynomial functions. -/
 theorem const (c : ℝ) : IsPolynomialFun (fun _ : ι → ℝ => c) := ⟨C c, fun _ => by simp⟩
 
+/-- Coordinates are polynomial functions. -/
 theorem coord (i : ι) : IsPolynomialFun (fun x : ι → ℝ => x i) := ⟨X i, fun _ => by simp⟩
 
+/-- Sums of polynomial functions are polynomial functions. -/
 theorem add {f g : (ι → ℝ) → ℝ} (hf : IsPolynomialFun f) (hg : IsPolynomialFun g) :
     IsPolynomialFun (fun x => f x + g x) := by
   obtain ⟨p, hp⟩ := hf
   obtain ⟨q, hq⟩ := hg
   exact ⟨p + q, fun x => by simp [hp, hq]⟩
 
+/-- Products of polynomial functions are polynomial functions. -/
 theorem mul {f g : (ι → ℝ) → ℝ} (hf : IsPolynomialFun f) (hg : IsPolynomialFun g) :
     IsPolynomialFun (fun x => f x * g x) := by
   obtain ⟨p, hp⟩ := hf
   obtain ⟨q, hq⟩ := hg
   exact ⟨p * q, fun x => by simp [hp, hq]⟩
 
+/-- Negatives of polynomial functions are polynomial functions. -/
 theorem neg {f : (ι → ℝ) → ℝ} (hf : IsPolynomialFun f) : IsPolynomialFun (fun x => -f x) := by
   obtain ⟨p, hp⟩ := hf
   exact ⟨-p, fun x => by simp [hp]⟩
 
+/-- Differences of polynomial functions are polynomial functions. -/
 theorem sub {f g : (ι → ℝ) → ℝ} (hf : IsPolynomialFun f) (hg : IsPolynomialFun g) :
     IsPolynomialFun (fun x => f x - g x) := by
   simpa [sub_eq_add_neg] using hf.add hg.neg
 
+/-- Powers of polynomial functions are polynomial functions. -/
 theorem pow {f : (ι → ℝ) → ℝ} (hf : IsPolynomialFun f) (n : ℕ) :
     IsPolynomialFun (fun x => f x ^ n) := by
   obtain ⟨p, hp⟩ := hf
   exact ⟨p ^ n, fun x => by simp [hp]⟩
 
+/-- Finite sums of polynomial functions are polynomial functions. -/
 theorem sum {α : Type*} (s : Finset α) {f : α → (ι → ℝ) → ℝ}
     (hf : ∀ a ∈ s, IsPolynomialFun (f a)) : IsPolynomialFun (fun x => ∑ a ∈ s, f a x) := by
   classical
@@ -103,21 +111,26 @@ namespace IsSemialgebraic
 
 variable {P Q : (ι → ℝ) → Prop}
 
+/-- Conjunction. -/
 theorem setOf_and (hP : IsSemialgebraic {x | P x}) (hQ : IsSemialgebraic {x | Q x}) :
     IsSemialgebraic {x | P x ∧ Q x} :=
   hP.inter hQ
 
+/-- Disjunction. -/
 theorem setOf_or (hP : IsSemialgebraic {x | P x}) (hQ : IsSemialgebraic {x | Q x}) :
     IsSemialgebraic {x | P x ∨ Q x} :=
   hP.union hQ
 
+/-- Negation. -/
 theorem setOf_not (hP : IsSemialgebraic {x | P x}) : IsSemialgebraic {x | ¬ P x} :=
   hP.compl
 
+/-- Implication. -/
 theorem setOf_imp (hP : IsSemialgebraic {x | P x}) (hQ : IsSemialgebraic {x | Q x}) :
     IsSemialgebraic {x | P x → Q x} :=
   (hP.compl.union hQ).congr (by ext x; simp [imp_iff_not_or])
 
+/-- Equivalence. -/
 theorem setOf_iff (hP : IsSemialgebraic {x | P x}) (hQ : IsSemialgebraic {x | Q x}) :
     IsSemialgebraic {x | P x ↔ Q x} :=
   ((setOf_imp hP hQ).inter (setOf_imp hQ hP)).congr (by ext x; simp [iff_iff_implies_and_implies])
@@ -128,8 +141,10 @@ theorem setOf_const (p : Prop) : IsSemialgebraic {_x : ι → ℝ | p} := by
   · exact univ.congr (by ext; simp [hp])
   · exact empty.congr (by ext; simp [hp])
 
+/-- The formula `True`. -/
 theorem setOf_true : IsSemialgebraic {_x : ι → ℝ | True} := univ.congr (by ext; simp)
 
+/-- The formula `False`. -/
 theorem setOf_false : IsSemialgebraic {_x : ι → ℝ | False} := empty.congr (by ext; simp)
 
 /-- Existential quantification over a real variable (Tarski–Seidenberg). -/
@@ -168,20 +183,24 @@ theorem setOf_exists_finite {α : Type*} [Finite α] {P : (ι → ℝ) → α �
 
 variable {f g : (ι → ℝ) → ℝ}
 
+/-- The atomic formula `f x < g x` for polynomial functions. -/
 theorem setOf_lt' (hf : IsPolynomialFun f) (hg : IsPolynomialFun g) :
     IsSemialgebraic {x | f x < g x} := by
   obtain ⟨p, hp⟩ := hf
   obtain ⟨q, hq⟩ := hg
   exact (setOf_lt p q).congr (by ext x; simp [hp, hq])
 
+/-- The atomic formula `f x ≤ g x` for polynomial functions. -/
 theorem setOf_le' (hf : IsPolynomialFun f) (hg : IsPolynomialFun g) :
     IsSemialgebraic {x | f x ≤ g x} :=
   (setOf_lt' hg hf).compl.congr (by ext x; simp)
 
+/-- The atomic formula `f x = g x` for polynomial functions. -/
 theorem setOf_eq' (hf : IsPolynomialFun f) (hg : IsPolynomialFun g) :
     IsSemialgebraic {x | f x = g x} :=
   ((setOf_le' hf hg).inter (setOf_le' hg hf)).congr (by ext x; simp [le_antisymm_iff])
 
+/-- The atomic formula `f x ≠ g x` for polynomial functions. -/
 theorem setOf_ne' (hf : IsPolynomialFun f) (hg : IsPolynomialFun g) :
     IsSemialgebraic {x | f x ≠ g x} :=
   (setOf_eq' hf hg).compl

@@ -48,12 +48,15 @@ namespace IsSemialgebraic
 
 variable {S T : Set (ι → ℝ)}
 
+/-- Transport semialgebraicity along an equality of sets. -/
 lemma congr (h : IsSemialgebraic S) (hST : S = T) : IsSemialgebraic T := hST ▸ h
 
+/-- The complement of a semialgebraic set is semialgebraic. -/
 theorem compl (h : IsSemialgebraic S) : IsSemialgebraic Sᶜ := by
   obtain ⟨F, hF⟩ := h
   exact ⟨F, fun x y hxy hx hy => hx (hF y x (fun p hp => (hxy p hp).symm) hy)⟩
 
+/-- The intersection of two semialgebraic sets is semialgebraic. -/
 theorem inter (hS : IsSemialgebraic S) (hT : IsSemialgebraic T) : IsSemialgebraic (S ∩ T) := by
   classical
   obtain ⟨F, hF⟩ := hS
@@ -61,19 +64,24 @@ theorem inter (hS : IsSemialgebraic S) (hT : IsSemialgebraic T) : IsSemialgebrai
   exact ⟨F ∪ G, fun x y hxy hx => ⟨hF x y (fun p hp => hxy p (Finset.mem_union_left _ hp)) hx.1,
     hG x y (fun p hp => hxy p (Finset.mem_union_right _ hp)) hx.2⟩⟩
 
+/-- The union of two semialgebraic sets is semialgebraic. -/
 theorem union (hS : IsSemialgebraic S) (hT : IsSemialgebraic T) : IsSemialgebraic (S ∪ T) := by
   have := (hS.compl.inter hT.compl).compl
   rwa [← Set.compl_union, compl_compl] at this
 
+/-- The difference of two semialgebraic sets is semialgebraic. -/
 theorem diff (hS : IsSemialgebraic S) (hT : IsSemialgebraic T) : IsSemialgebraic (S \ T) :=
   hS.inter hT.compl
 
+/-- The whole space is semialgebraic. -/
 theorem univ : IsSemialgebraic (Set.univ : Set (ι → ℝ)) :=
   ⟨∅, fun _ _ _ _ => Set.mem_univ _⟩
 
+/-- The empty set is semialgebraic. -/
 theorem empty : IsSemialgebraic (∅ : Set (ι → ℝ)) := by
   simpa using (univ (ι := ι)).compl
 
+/-- A finite intersection of semialgebraic sets is semialgebraic. -/
 theorem biInter {α : Type*} (s : Finset α) {S : α → Set (ι → ℝ)}
     (h : ∀ a ∈ s, IsSemialgebraic (S a)) : IsSemialgebraic (⋂ a ∈ s, S a) := by
   classical
@@ -84,16 +92,19 @@ theorem biInter {α : Type*} (s : Finset α) {S : α → Set (ι → ℝ)}
     exact (h a (Finset.mem_insert_self _ _)).inter
       (ih fun b hb => h b (Finset.mem_insert_of_mem hb))
 
+/-- A finite union of semialgebraic sets is semialgebraic. -/
 theorem biUnion {α : Type*} (s : Finset α) {S : α → Set (ι → ℝ)}
     (h : ∀ a ∈ s, IsSemialgebraic (S a)) : IsSemialgebraic (⋃ a ∈ s, S a) := by
   have := (biInter s (fun a ha => (h a ha).compl)).compl
   simpa [Set.compl_iInter] using this
 
+/-- An intersection of semialgebraic sets indexed by a finite type is semialgebraic. -/
 theorem iInter {α : Type*} [Finite α] {S : α → Set (ι → ℝ)} (h : ∀ a, IsSemialgebraic (S a)) :
     IsSemialgebraic (⋂ a, S a) := by
   have := Fintype.ofFinite α
   simpa using biInter Finset.univ (fun a _ => h a)
 
+/-- A union of semialgebraic sets indexed by a finite type is semialgebraic. -/
 theorem iUnion {α : Type*} [Finite α] {S : α → Set (ι → ℝ)} (h : ∀ a, IsSemialgebraic (S a)) :
     IsSemialgebraic (⋃ a, S a) := by
   have := Fintype.ofFinite α
@@ -106,15 +117,19 @@ theorem setOf_pos (p : MvPolynomial ι ℝ) : IsSemialgebraic {x | 0 < eval x p}
   rw [sign_pos hx] at this
   exact sign_eq_one_iff.1 this.symm
 
+/-- The set where one polynomial is smaller than another. -/
 theorem setOf_lt (p q : MvPolynomial ι ℝ) : IsSemialgebraic {x | eval x p < eval x q} :=
   (setOf_pos (q - p)).congr (by ext x; simp)
 
+/-- The set where one polynomial is at most another. -/
 theorem setOf_le (p q : MvPolynomial ι ℝ) : IsSemialgebraic {x | eval x p ≤ eval x q} :=
   (setOf_lt q p).compl.congr (by ext x; simp)
 
+/-- The set where two polynomials agree. -/
 theorem setOf_eq (p q : MvPolynomial ι ℝ) : IsSemialgebraic {x | eval x p = eval x q} :=
   ((setOf_le p q).inter (setOf_le q p)).congr (by ext x; simp [le_antisymm_iff])
 
+/-- The set where two polynomials differ. -/
 theorem setOf_ne (p q : MvPolynomial ι ℝ) : IsSemialgebraic {x | eval x p ≠ eval x q} :=
   (setOf_eq p q).compl
 

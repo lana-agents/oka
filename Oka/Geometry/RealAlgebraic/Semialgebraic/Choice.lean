@@ -35,6 +35,7 @@ namespace Pi.LexLt
 
 variable {n : ℕ}
 
+/-- The lexicographic order is irreflexive. -/
 theorem irrefl (y : Fin n → ℝ) : ¬ LexLt y y := fun ⟨_, _, h⟩ => lt_irrefl _ h
 
 /-- Totality of the lexicographic order. -/
@@ -98,6 +99,8 @@ noncomputable def lexMin (D : Set ℝ) (M : ℝ → Set (Fin n → ℝ)) (u : �
   exact if h : u ∈ D ∧ IsCompact (M u) ∧ (M u).Nonempty then
     (h.2.1.exists_lexMin h.2.2).choose else 0
 
+/-- For `u ∈ D` with `M u` compact and nonempty, `lexMin D M u` is the lexicographically
+smallest point of `M u`. -/
 theorem lexMin_spec {D : Set ℝ} {M : ℝ → Set (Fin n → ℝ)} {u : ℝ} (hu : u ∈ D)
     (hc : IsCompact (M u)) (hne : (M u).Nonempty) :
     lexMin D M u ∈ M u ∧ ∀ z ∈ M u, ¬ Pi.LexLt z (lexMin D M u) := by
