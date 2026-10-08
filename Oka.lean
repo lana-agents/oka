@@ -685,7 +685,9 @@ import Oka.Topology.Algebra.Polynomial
 import Oka.Topology.Category.TopCat.Opens
 import Oka.Topology.Connected.Clopen
 import Oka.Topology.Covering.Basic
+import Oka.Topology.Covering.LocallyContractible
 import Oka.Topology.Covering.Monodromy
+import Oka.Topology.Covering.PathCover
 import Oka.Topology.Covering.Quotient
 import Oka.Topology.Homeomorph.Lemmas
 import Oka.Topology.IrreducibleChain
