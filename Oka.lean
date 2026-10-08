@@ -579,6 +579,7 @@ import Oka.ComplexSpace
 import Oka.Data.Fin.Tuple.Basic
 import Oka.Data.Real.OrderIsoExtend
 import Oka.FieldTheory.IsAlgClosed.Basic
+import Oka.Geometry.RealAlgebraic.Lojasiewicz
 import Oka.Geometry.RealAlgebraic.Semialgebraic.Basic
 import Oka.Geometry.RealAlgebraic.Semialgebraic.Choice
 import Oka.Geometry.RealAlgebraic.Semialgebraic.Definable
