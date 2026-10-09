@@ -108,7 +108,7 @@ noncomputable def uniformizationMap (C : WeierstrassCurve.VariableChange ℂ) (z
       - C.r) - C.t))
 
 /-- **Uniformisation of `W = E_{τ₀}^C`** by the explicit map `uniformizationMap τ₀ C`. -/
-theorem uniformization_of_variableChange (W : WeierstrassCurve ℂ) [W.IsElliptic]
+theorem uniformization_of_variableChange (W : WeierstrassCurve ℂ)
     (C : WeierstrassCurve.VariableChange ℂ)
     (hC : C • Heights.latticeWeierstrassCurve τ₀ = W) :
     Matrix.trace ((A (unifOf (Lt τ₀)) * B (unifOf (Lt τ₀)) * (A (unifOf (Lt τ₀)))⁻¹ *

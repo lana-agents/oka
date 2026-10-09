@@ -32,7 +32,7 @@ open Generators Peripheral
 variable {t : ℍ} {C : WeierstrassCurve.VariableChange ℂ} {W : WeierstrassCurve ℂ}
 
 /-- The explicit uniformisation is a uniformisation. -/
-theorem isUniformization_map [W.IsElliptic] (hC : C • Heights.latticeWeierstrassCurve t = W) :
+theorem isUniformization_map (hC : C • Heights.latticeWeierstrassCurve t = W) :
     IsUniformization W (A (unifOf (Lt t))) (B (unifOf (Lt t))) (uniformizationMap t C) := by
   obtain ⟨-, -, h3, h4, h5, h6⟩ := uniformization_of_variableChange t W C hC
   exact ⟨h3, h4, h5, h6⟩
@@ -101,7 +101,7 @@ theorem aeval_pi_apply (f : ℍ → ℂ) (p : ℂ[X]) (τ : ℍ) : (aeval f p) �
   exact this.symm
 
 /-- **Invariant holomorphic functions of polynomial growth are regular functions on `W`.** -/
-theorem exists_coord_of_invariant [W.IsElliptic] (hC : C • Heights.latticeWeierstrassCurve t = W)
+theorem exists_coord_of_invariant (hC : C • Heights.latticeWeierstrassCurve t = W)
     {g : ℍ → ℂ} (hg : Unif.HolH g)
     (hinv : ∀ γ ∈ Subgroup.closure {A (unifOf (Lt t)), B (unifOf (Lt t))}, ∀ τ, g (γ • τ) = g τ)
     (hb : PolyBdd (fun τ ↦ (uniformizationMap t C τ).1) fun τ ↦ ‖g τ‖) :
