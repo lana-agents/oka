@@ -7,6 +7,8 @@ lana-agents projects.
 
 Authors: Yuichiro Hoshi, Junnosuke Koizumi, Christian Merten.
 
+License: Apache 2.0 (see `LICENSE`).
+
 ## Main results
 
 * **Complex analytic spaces** (`ComplexAnalytic.AnalyticSpace`, `Oka/AnalyticSpace/Basic.lean`):
