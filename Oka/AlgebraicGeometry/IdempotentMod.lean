@@ -37,6 +37,11 @@ def IsIdemMod {V : X.Opens} (τ : Γ(X, V)) (n : ℕ) (e : Γ(X, V)) : Prop :=
 
 variable {Z₁}
 
+lemma mem_basicOpen_restrict_iff {T : Γ(X, ⊤)} {V : X.Opens} {x : X} (hx : x ∈ V) :
+    x ∈ X.basicOpen (T |_ V) ↔ x ∈ X.basicOpen T := by
+  rw [TopCat.Presheaf.restrictOpen, TopCat.Presheaf.restrict, Scheme.basicOpen_res]
+  exact ⟨fun h => h.2, fun h => ⟨hx, h⟩⟩
+
 lemma IsIdemMod.mono {V : X.Opens} {τ : Γ(X, V)} {m n : ℕ} (hmn : n ≤ m) {e : Γ(X, V)}
     (he : IsIdemMod Z₁ τ m e) : IsIdemMod Z₁ τ n e := by
   refine ⟨?_, he.2⟩

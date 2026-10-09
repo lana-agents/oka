@@ -436,6 +436,104 @@ theorem cechFinite_of_cocycles [IsNoetherianRing R] (F : X.Modules) (p : ℕ) {N
   change _ - 0 = _
   rw [sub_zero]
 
+omit [CommRing R] in
+lemma exists_toCycles_eq_of_homologyπ_eq_zero (K : CochainComplex AddCommGrpCat.{u} ℕ) (p : ℕ)
+    (z : K.cycles (p + 1)) (hz : K.homologyπ (p + 1) z = 0) :
+    ∃ b : K.X p, K.toCycles p (p + 1) b = z := by
+  have hex := ShortComplex.exact_of_g_is_cokernel
+    (ShortComplex.mk (K.toCycles p (p + 1)) (K.homologyπ (p + 1))
+      (K.toCycles_comp_homologyπ p (p + 1)))
+    (K.homologyIsCokernel p (p + 1) (by simp))
+  exact (ShortComplex.ab_exact_iff _).1 hex z hz
+
+/-- **Bounded torsion.** If `Ȟᵖ⁺¹(U, F)` is a finite module over the noetherian ring `R`, then for
+every `t ∈ R` there is `N` such that every `(p+1)`-cocycle `y` with `tᵏ y` a coboundary for some
+`k` has `t^N y` a coboundary. -/
+theorem CechFinite.exists_pow_smul_eq_d [IsNoetherianRing R] {F : X.Modules} {p : ℕ}
+    (h : CechFinite U ρ F (p + 1)) (t : R) :
+    ∃ N : ℕ, ∀ y : (cech U F).X (p + 1), (cech U F).d (p + 1) (p + 2) y = 0 →
+      ∀ (k : ℕ) (c : (cech U F).X p),
+        (cechSmul U F (ρ (t ^ k))).f (p + 1) y = (cech U F).d p (p + 1) c →
+        ∃ c' : (cech U F).X p,
+          (cechSmul U F (ρ (t ^ N))).f (p + 1) y = (cech U F).d p (p + 1) c' := by
+  letI := cechHomologyModule U ρ F (p + 1)
+  haveI : Module.Finite R ((cech U F).homology (p + 1)) := h
+  let K := cech U F
+  let f : ℕ →o Submodule R (K.homology (p + 1)) :=
+    { toFun := fun k => LinearMap.ker (t ^ k • LinearMap.id)
+      monotone' := fun k l hkl x hx => by
+        simp only [LinearMap.mem_ker, LinearMap.smul_apply, LinearMap.id_apply] at hx ⊢
+        rw [← Nat.sub_add_cancel hkl, pow_add, mul_smul, hx, smul_zero] }
+  obtain ⟨N, hN⟩ := (monotone_stabilizes_iff_noetherian.mpr inferInstance) f
+  refine ⟨N, fun y hy k c hc => ?_⟩
+  obtain ⟨cy, hcy⟩ := exists_iCycles_eq K (p + 1) y hy
+  have hiinj : Function.Injective (K.iCycles (p + 1)) :=
+    (AddCommGrpCat.mono_iff_injective _).1 inferInstance
+  have hsmul (r : R) : r • K.homologyπ (p + 1) cy = K.homologyπ (p + 1)
+      (HomologicalComplex.cyclesMap (cechSmul U F (ρ r)) (p + 1) cy) := by
+    rw [cechHomology_smul_def, ← ConcreteCategory.comp_apply, ← ConcreteCategory.comp_apply,
+      HomologicalComplex.homologyπ_naturality]
+  have hi (r : R) : K.iCycles (p + 1)
+      (HomologicalComplex.cyclesMap (cechSmul U F (ρ r)) (p + 1) cy) =
+        (cechSmul U F (ρ r)).f (p + 1) y := by
+    rw [← ConcreteCategory.comp_apply, HomologicalComplex.cyclesMap_i,
+      ConcreteCategory.comp_apply, hcy]
+  have hk : K.homologyπ (p + 1) cy ∈ f k := by
+    change t ^ k • K.homologyπ (p + 1) cy = 0
+    rw [hsmul]
+    have : HomologicalComplex.cyclesMap (cechSmul U F (ρ (t ^ k))) (p + 1) cy =
+        K.toCycles p (p + 1) c := by
+      apply hiinj
+      rw [hi, hc, ← ConcreteCategory.comp_apply, HomologicalComplex.toCycles_i]
+    rw [this, ← ConcreteCategory.comp_apply, HomologicalComplex.toCycles_comp_homologyπ]
+    rfl
+  have hN' : K.homologyπ (p + 1) cy ∈ f N := by
+    rw [hN (max k N) (le_max_right k N)]
+    exact f.monotone (le_max_left k N) hk
+  change t ^ N • K.homologyπ (p + 1) cy = 0 at hN'
+  rw [hsmul] at hN'
+  obtain ⟨c', hc'⟩ := exists_toCycles_eq_of_homologyπ_eq_zero K p _ hN'
+  refine ⟨c', ?_⟩
+  rw [← hi, ← hc', ← ConcreteCategory.comp_apply, HomologicalComplex.toCycles_i]
+
+lemma cechSmul_f_comm (F : X.Modules) (a : Γ(X, ⊤)) (p : ℕ) (z : (cech U F).X p) :
+    (cech U F).d p (p + 1) ((cechSmul U F a).f p z) =
+      (cechSmul U F a).f (p + 1) ((cech U F).d p (p + 1) z) := by
+  rw [← ConcreteCategory.comp_apply, ← ConcreteCategory.comp_apply, (cechSmul U F a).comm]
+
+lemma cechSmul_f_mul (F : X.Modules) (a b : Γ(X, ⊤)) (p : ℕ) (z : (cech U F).X p) :
+    (cechSmul U F (a * b)).f p z = (cechSmul U F a).f p ((cechSmul U F b).f p z) := by
+  rw [cechSmul_mul, HomologicalComplex.comp_f, ConcreteCategory.comp_apply]
+
+/-- **The degree-zero formal-functions chase.** Let `t ∈ R` act injectively on `Č²(U, F)`, and let
+`N` bound the `t`-power torsion of `Ȟ¹(U, F)` (`CechFinite.exists_pow_smul_eq_d`). If `x₁, xₘ` are
+`0`-cochains with `d xₘ ∈ t^{N+1} Č¹` and `xₘ ≡ x₁ mod t`, then `x₁` is congruent modulo `t` to a
+`0`-cocycle. -/
+theorem exists_cocycle_sub_eq_smul {F : X.Modules} (t : R) (N : ℕ)
+    (hinj : ∀ (k : ℕ) (z : (cech U F).X 2), (cechSmul U F (ρ (t ^ k))).f 2 z = 0 → z = 0)
+    (hN : ∀ y : (cech U F).X 1, (cech U F).d 1 2 y = 0 →
+      ∀ (k : ℕ) (c : (cech U F).X 0),
+        (cechSmul U F (ρ (t ^ k))).f 1 y = (cech U F).d 0 1 c →
+        ∃ c' : (cech U F).X 0, (cechSmul U F (ρ (t ^ N))).f 1 y = (cech U F).d 0 1 c')
+    (x₁ xₘ : (cech U F).X 0)
+    (hdm : ∃ y, (cech U F).d 0 1 xₘ = (cechSmul U F (ρ (t ^ (N + 1)))).f 1 y)
+    (hdiff : ∃ w, xₘ - x₁ = (cechSmul U F (ρ t)).f 0 w) :
+    ∃ a : (cech U F).X 0, (cech U F).d 0 1 a = 0 ∧
+      ∃ z, x₁ - a = (cechSmul U F (ρ t)).f 0 z := by
+  let K := cech U F
+  obtain ⟨y, hy⟩ := hdm
+  obtain ⟨w, hw⟩ := hdiff
+  have hdy : K.d 1 2 y = 0 := by
+    apply hinj (N + 1)
+    rw [← cechSmul_f_comm, ← hy]
+    exact ConcreteCategory.congr_hom (K.d_comp_d 0 1 2) xₘ
+  obtain ⟨c, hc⟩ := hN y hdy (N + 1) xₘ hy.symm
+  refine ⟨x₁ - (cechSmul U F (ρ t)).f 0 (c - w), ?_, c - w, by abel⟩
+  have hx₁ : x₁ = xₘ - (cechSmul U F (ρ t)).f 0 w := by rw [← hw]; abel
+  rw [hx₁, map_sub, map_sub, hy, cechSmul_f_comm, cechSmul_f_comm, map_sub, map_sub, ← hc,
+    ← cechSmul_f_mul, ← map_mul, ← pow_succ']
+  abel
+
 /-! ### Degree zero -/
 
 section DegreeZero
