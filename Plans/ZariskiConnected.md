@@ -115,3 +115,18 @@ Total ≈ 2700–3200 lines (oka ≈ 2300–2500, tfg ≈ 400–600).
 * H-tfg (`tfg wp-zariski-dvr`): T1.
 
 The lead does S1, S2, S4, S5, S6 and T2.
+
+## 8. Status (2026-10-09): done
+
+| Stage | Result |
+|-------|--------|
+| S1 | `TopCat.Sheaf.cech_exactAt_of_H_eq_zero` (`Topology/Sheaves/Cohomology/LerayCech.lean`) |
+| S2 | `Scheme.Modules.CechFinite`, `cechFinite_X₃`, `cechFinite_of_cocycles`, `cechFinite_zero_iff`, `CechFinite.exists_pow_smul_eq_d`, `exists_cocycle_sub_eq_smul` (`AlgebraicGeometry/Modules/CechModule.lean`) |
+| S3 | `ProjectiveSpace.exists_eq_sum_cechSmul_add_cechD` (`ProjectiveSpace/TwistCohomologyTop.lean`, `RingTheory/MvPolynomial/CechProjectiveTop.lean`; helper H-top) |
+| S4 | `ProjectiveSpace.cechFinite_of_isCoherent` (`ProjectiveSpace/SerreFiniteness.lean`) |
+| S5/S6 | `Scheme.IsIdemMod` (`AlgebraicGeometry/IdempotentMod.lean`), `IsAdicComplete.of_finite`, `eq_zero_or_eq_one_mod_of_finite` (`RingTheory/AdicCompletion/FiniteComplete.lean`), `ProjectiveSpace.not_split`, `ProjectiveSpace.isPreconnected_closedFibre` (`ProjectiveSpace/ZariskiConnected.lean`) |
+| T1 | tfg `ZariskiDVR.isAdicComplete_maximalIdeal`, `ZariskiDVR.finite` (helper H-tfg) |
+| T2 | tfg `SemistableReduction.Statement.zariskiConnected` (`SemistableReduction/ZariskiConnectedProof.lean`) |
+
+Actual size: about 2000 lines in oka and 250 in tfg. Normality and semistability turned out not
+to be needed.

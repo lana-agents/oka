@@ -40,17 +40,23 @@ variable {t : ℍ} (U : Unif (Lt t))
 
 /-- The data of the cusp normal form. -/
 structure CuspData where
+  /-- The matrix conjugating the parabolic generator `Cm U` to a translation. -/
   M : SL(2, ℝ)
+  /-- The translation length of the conjugated parabolic generator. -/
   κ : ℝ
   κ_pos : 0 < κ
   conj : ∀ z : ℍ, (((M⁻¹ * Cm U * M) • z : ℍ) : ℂ) = z + κ
+  /-- The radius of the punctured disc on which the normal form holds. -/
   r₁ : ℝ
   r₁_pos : 0 < r₁
   r₁_le : r₁ ≤ r₀ t
+  /-- The holomorphic correction term of the normal form. -/
   φ : ℂ → ℂ
+  /-- A bound for `φ` on the disc of radius `r₁`. -/
   Φ : ℝ
   φ_le : ∀ w ∈ ball (0 : ℂ) r₁, ‖φ w‖ ≤ Φ
   normal : ∀ s : ℂ, s.re < Real.log r₁ → τ' U M s = (κ / (2 * π * I)) * (s + φ (Complex.exp s))
+  /-- The local coordinate at the cusp. -/
   G : ℂ → ℂ
   G_diff : DifferentiableOn ℂ G (ball 0 r₁)
   G_zero : G 0 = 0

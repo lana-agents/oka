@@ -599,7 +599,7 @@ theorem exists_linearEquiv_cech_zero (F : X.Modules) :
     exact (ht s).trans hs
 
 include hU in
-lemma cechFinite_zero_iff [IsNoetherianRing R] (F : X.Modules) :
+lemma cechFinite_zero_iff (F : X.Modules) :
     CechFinite U ρ F 0 ↔ (letI := sectionsModule ρ F; Module.Finite R Γ(F, ⊤)) := by
   letI := sectionsModule ρ F
   letI := cechHomologyModule U ρ F 0
