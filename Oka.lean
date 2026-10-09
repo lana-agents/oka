@@ -36,6 +36,7 @@ import Oka.AlgebraicGeometry.Chow
 import Oka.AlgebraicGeometry.GammaSpecAdjunction
 import Oka.AlgebraicGeometry.GraphClosure
 import Oka.AlgebraicGeometry.IdealSheaf.StalkIdeal
+import Oka.AlgebraicGeometry.IdempotentMod
 import Oka.AlgebraicGeometry.IrreducibleChain
 import Oka.AlgebraicGeometry.Modules.AffineVanishing
 import Oka.AlgebraicGeometry.Modules.CechModule
@@ -677,6 +678,7 @@ import Oka.Polynomial.Germ
 import Oka.Regular
 import Oka.RenameIndex
 import Oka.RingTheory.AdicCompletion.Algebra
+import Oka.RingTheory.AdicCompletion.FiniteComplete
 import Oka.RingTheory.EtaleNilpotentLift
 import Oka.RingTheory.Filtration
 import Oka.RingTheory.FiniteNormalization
