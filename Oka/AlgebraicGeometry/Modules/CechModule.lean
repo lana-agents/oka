@@ -337,53 +337,104 @@ lemma exists_iCycles_eq (K : CochainComplex AddCommGrpCat.{u} ℕ) (i : ℕ) (z 
     (K.cyclesIsKernel i (i + 1) (by simp))
   exact (ShortComplex.ab_exact_iff _).1 hex z hz
 
-/-- **A cochain-level criterion for finiteness.** If there are finitely many `(p+1)`-cocycles
-`s j` such that every `(p+1)`-cocycle is an `R`-combination of them up to a coboundary, then
-`Ȟᵖ⁺¹(U, F)` is finite. -/
-theorem cechFinite_of_cocycles (F : X.Modules) (p : ℕ) {N : ℕ} (s : Fin N → (cech U F).X (p + 1))
-    (hs : ∀ j, (cech U F).d (p + 1) (p + 2) (s j) = 0)
+/-- The action of `R` on the Čech cochains of degree `q`, through `ρ`. -/
+noncomputable def cechCochainAct (F : X.Modules) (q : ℕ) :
+    R →+* AddMonoid.End ((cech U F).X q) where
+  toFun r := ((cechSmul U F (ρ r)).f q).hom
+  map_one' := by
+    rw [map_one, cechSmul_one]
+    rfl
+  map_mul' r s := by
+    rw [map_mul, cechSmul_mul, HomologicalComplex.comp_f]
+    rfl
+  map_zero' := by
+    rw [map_zero, cechSmul_zero]
+    rfl
+  map_add' r s := by
+    rw [map_add, cechSmul_add, HomologicalComplex.add_f_apply]
+    rfl
+
+/-- The Čech cochains of degree `q` as an `R`-module through `ρ`. -/
+noncomputable abbrev cechCochainModule (F : X.Modules) (q : ℕ) : Module R ((cech U F).X q) :=
+  Module.compHom _ (cechCochainAct U ρ F q)
+
+/-- **A cochain-level criterion for finiteness.** Let `R` be noetherian. If there are finitely many
+`(p+1)`-cochains `s j` such that every `(p+1)`-cocycle is an `R`-combination of them up to a
+coboundary, then `Ȟᵖ⁺¹(U, F)` is finite. -/
+theorem cechFinite_of_cocycles [IsNoetherianRing R] (F : X.Modules) (p : ℕ) {N : ℕ}
+    (s : Fin N → (cech U F).X (p + 1))
     (h : ∀ z : (cech U F).X (p + 1), (cech U F).d (p + 1) (p + 2) z = 0 →
       ∃ (r : Fin N → R) (c : (cech U F).X p),
         z = ∑ j, (cechSmul U F (ρ (r j))).f (p + 1) (s j) + (cech U F).d p (p + 1) c) :
     CechFinite U ρ F (p + 1) := by
   classical
   letI := cechHomologyModule U ρ F (p + 1)
+  letI := cechCochainModule U ρ F (p + 1)
+  letI := cechCochainModule U ρ F (p + 2)
   let K := cech U F
-  choose t ht using fun j => exists_iCycles_eq K (p + 1) (s j) (hs j)
-  let cls : Fin N → K.homology (p + 1) := fun j => K.homologyπ (p + 1) (t j)
-  refine ⟨⟨Finset.univ.image cls, ?_⟩⟩
-  rw [eq_top_iff]
-  rintro x -
+  have hiinj : Function.Injective (K.iCycles (p + 1)) :=
+    (AddCommGrpCat.mono_iff_injective _).1 inferInstance
+  let dL : K.X (p + 1) →ₗ[R] K.X (p + 2) :=
+    { toFun := K.d (p + 1) (p + 2)
+      map_add' := map_add _
+      map_smul' := fun r x => by
+        change K.d (p + 1) (p + 2) ((cechSmul U F (ρ r)).f (p + 1) x) =
+          (cechSmul U F (ρ r)).f (p + 2) (K.d (p + 1) (p + 2) x)
+        rw [← ConcreteCategory.comp_apply, ← ConcreteCategory.comp_apply,
+          (cechSmul U F (ρ r)).comm] }
+  let M : Submodule R (K.X (p + 1)) := Submodule.span R (Set.range s)
+  let P : Submodule R (K.X (p + 1)) := M ⊓ LinearMap.ker dL
+  have hM : M.FG := Submodule.fg_span (Set.finite_range s)
+  haveI : _root_.IsNoetherian R M := isNoetherian_of_fg_of_noetherian M hM
+  have hP : P.FG := by
+    have h1 := _root_.IsNoetherian.noetherian (P.comap M.subtype)
+    have h2 := h1.map M.subtype
+    rwa [Submodule.map_comap_subtype, inf_eq_right.mpr inf_le_left] at h2
+  haveI : Module.Finite R P := Module.Finite.iff_fg.mpr hP
+  have hcyc (x : P) : K.d (p + 1) (p + 2) (x : K.X (p + 1)) = 0 := x.2.2
+  choose t ht using fun x : P => exists_iCycles_eq K (p + 1) (x : K.X (p + 1)) (hcyc x)
+  let θ : P →ₗ[R] K.homology (p + 1) :=
+    { toFun := fun x => K.homologyπ (p + 1) (t x)
+      map_add' := fun a b => by
+        rw [← map_add]
+        congr 1
+        apply hiinj
+        rw [map_add, ht, ht, ht]
+        rfl
+      map_smul' := fun r a => by
+        rw [cechHomology_smul_def, RingHom.id_apply, ← ConcreteCategory.comp_apply,
+          HomologicalComplex.homologyπ_naturality, ConcreteCategory.comp_apply]
+        congr 1
+        apply hiinj
+        rw [← ConcreteCategory.comp_apply, HomologicalComplex.cyclesMap_i,
+          ConcreteCategory.comp_apply, ht, ht]
+        rfl }
+  refine Module.Finite.of_surjective θ fun x => ?_
   obtain ⟨c, rfl⟩ := (AddCommGrpCat.epi_iff_surjective (K.homologyπ (p + 1))).1 inferInstance x
-  obtain ⟨r, b, hzb⟩ := h (K.iCycles (p + 1) c) (by
+  have hz : K.d (p + 1) (p + 2) (K.iCycles (p + 1) c) = 0 := by
     rw [← ConcreteCategory.comp_apply, K.iCycles_d]
-    rfl)
-  have hsmul (j : Fin N) : r j • cls j = K.homologyπ (p + 1)
-      (HomologicalComplex.cyclesMap (cechSmul U F (ρ (r j))) (p + 1) (t j)) := by
-    rw [cechHomology_smul_def, ← ConcreteCategory.comp_apply, ← ConcreteCategory.comp_apply,
-      HomologicalComplex.homologyπ_naturality]
-  have hc : c - ∑ j, HomologicalComplex.cyclesMap (cechSmul U F (ρ (r j))) (p + 1) (t j) =
-      K.toCycles p (p + 1) b := by
-    apply (AddCommGrpCat.mono_iff_injective (K.iCycles (p + 1))).1 inferInstance
-    have e1 (j : Fin N) : K.iCycles (p + 1)
-        (HomologicalComplex.cyclesMap (cechSmul U F (ρ (r j))) (p + 1) (t j)) =
-          (cechSmul U F (ρ (r j))).f (p + 1) (s j) := by
-      rw [← ConcreteCategory.comp_apply, HomologicalComplex.cyclesMap_i,
-        ConcreteCategory.comp_apply, ht]
-    have e2 : K.iCycles (p + 1) (K.toCycles p (p + 1) b) = K.d p (p + 1) b := by
-      rw [← ConcreteCategory.comp_apply, HomologicalComplex.toCycles_i]
-    rw [map_sub, map_sum]
-    simp only [e1]
-    rw [e2, hzb]
-    abel
-  have hx : K.homologyπ (p + 1) c = ∑ j, r j • cls j := by
-    simp only [hsmul, ← map_sum]
-    rw [← sub_eq_zero, ← map_sub, hc, ← ConcreteCategory.comp_apply,
-      HomologicalComplex.toCycles_comp_homologyπ]
     rfl
-  rw [hx]
-  exact Submodule.sum_mem _ fun j _ => Submodule.smul_mem _ _
-    (Submodule.subset_span (Finset.mem_coe.2 (Finset.mem_image_of_mem _ (Finset.mem_univ j))))
+  obtain ⟨r, b, hzb⟩ := h _ hz
+  let m : K.X (p + 1) := ∑ j, (cechSmul U F (ρ (r j))).f (p + 1) (s j)
+  have hmM : m ∈ M := Submodule.sum_mem _ fun j _ =>
+    Submodule.smul_mem M (r j) (Submodule.subset_span ⟨j, rfl⟩)
+  have hdb : K.iCycles (p + 1) (K.toCycles p (p + 1) b) = K.d p (p + 1) b := by
+    rw [← ConcreteCategory.comp_apply, HomologicalComplex.toCycles_i]
+  have hm : m = K.iCycles (p + 1) (c - K.toCycles p (p + 1) b) := by
+    rw [map_sub, hdb, hzb]
+    abel
+  have hmZ : m ∈ LinearMap.ker dL := by
+    rw [LinearMap.mem_ker, hm]
+    change K.d (p + 1) (p + 2) _ = 0
+    rw [← ConcreteCategory.comp_apply, K.iCycles_d]
+    rfl
+  refine ⟨⟨m, hmM, hmZ⟩, ?_⟩
+  change K.homologyπ (p + 1) (t ⟨m, hmM, hmZ⟩) = _
+  have htm : t ⟨m, hmM, hmZ⟩ = c - K.toCycles p (p + 1) b := hiinj ((ht _).trans hm)
+  rw [htm, map_sub, ← ConcreteCategory.comp_apply (K.toCycles p (p + 1)),
+    HomologicalComplex.toCycles_comp_homologyπ]
+  change _ - 0 = _
+  rw [sub_zero]
 
 /-! ### Degree zero -/
 

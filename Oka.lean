@@ -77,6 +77,7 @@ import Oka.AlgebraicGeometry.ProjectiveSpace.RelativeSerre
 import Oka.AlgebraicGeometry.ProjectiveSpace.RelativeSerreFinite
 import Oka.AlgebraicGeometry.ProjectiveSpace.RelativeSerreMorphism
 import Oka.AlgebraicGeometry.ProjectiveSpace.RelativeSerreSections
+import Oka.AlgebraicGeometry.ProjectiveSpace.SerreFiniteness
 import Oka.AlgebraicGeometry.ProjectiveSpace.SerreVanishing
 import Oka.AlgebraicGeometry.ProjectiveSpace.TheoremA
 import Oka.AlgebraicGeometry.ProjectiveSpace.Twist
