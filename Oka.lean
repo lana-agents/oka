@@ -703,8 +703,8 @@ import Oka.RingTheory.Localization.CechRadical
 import Oka.RingTheory.Localization.Module
 import Oka.RingTheory.MilnorPatching
 import Oka.RingTheory.MvPolynomial.CechProjective
-import Oka.RingTheory.MvPolynomial.CechProjectiveTop
 import Oka.RingTheory.MvPolynomial.CechProjectiveAway
+import Oka.RingTheory.MvPolynomial.CechProjectiveTop
 import Oka.RingTheory.MvPolynomial.HomogeneousLocalization
 import Oka.RingTheory.MvPolynomial.Ideal
 import Oka.RingTheory.MvPolynomial.LaurentAway
