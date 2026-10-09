@@ -317,4 +317,151 @@ lemma cechFinite_sigma {I : Type u} [Finite I] (G : I → X.Modules) (q : ℕ)
   simp only [Φ, LinearMap.coe_sum, Finset.sum_apply, LinearMap.comp_apply, LinearMap.proj_apply,
     cechHomologyLinear_comp_apply]
 
+/-! ### Cochain-level descriptions -/
+
+lemma cechSmul_f_apply (F : X.Modules) (a : Γ(X, ⊤)) (q : ℕ) (z : (cech U F).X q)
+    (σ : Fin (q + 1) → ι) :
+    ((cechSmul U F a).f q z : TopCat.Presheaf.CechCochain U
+      ((SheafOfModules.toSheaf X.ringCatSheaf).obj F).obj q) σ =
+      (a |ₒ TopCat.Presheaf.cechOpen U σ) •
+        (show Γ(F, TopCat.Presheaf.cechOpen U σ) from
+          (z : TopCat.Presheaf.CechCochain U
+            ((SheafOfModules.toSheaf X.ringCatSheaf).obj F).obj q) σ) :=
+  rfl
+
+omit [CommRing R] in
+lemma exists_iCycles_eq (K : CochainComplex AddCommGrpCat.{u} ℕ) (i : ℕ) (z : K.X i)
+    (hz : K.d i (i + 1) z = 0) : ∃ c, K.iCycles i c = z := by
+  have hex := ShortComplex.exact_of_f_is_kernel
+    (ShortComplex.mk (K.iCycles i) (K.d i (i + 1)) (K.iCycles_d i (i + 1)))
+    (K.cyclesIsKernel i (i + 1) (by simp))
+  exact (ShortComplex.ab_exact_iff _).1 hex z hz
+
+/-- **A cochain-level criterion for finiteness.** If there are finitely many `(p+1)`-cocycles
+`s j` such that every `(p+1)`-cocycle is an `R`-combination of them up to a coboundary, then
+`Ȟᵖ⁺¹(U, F)` is finite. -/
+theorem cechFinite_of_cocycles (F : X.Modules) (p : ℕ) {N : ℕ} (s : Fin N → (cech U F).X (p + 1))
+    (hs : ∀ j, (cech U F).d (p + 1) (p + 2) (s j) = 0)
+    (h : ∀ z : (cech U F).X (p + 1), (cech U F).d (p + 1) (p + 2) z = 0 →
+      ∃ (r : Fin N → R) (c : (cech U F).X p),
+        z = ∑ j, (cechSmul U F (ρ (r j))).f (p + 1) (s j) + (cech U F).d p (p + 1) c) :
+    CechFinite U ρ F (p + 1) := by
+  classical
+  letI := cechHomologyModule U ρ F (p + 1)
+  let K := cech U F
+  choose t ht using fun j => exists_iCycles_eq K (p + 1) (s j) (hs j)
+  let cls : Fin N → K.homology (p + 1) := fun j => K.homologyπ (p + 1) (t j)
+  refine ⟨⟨Finset.univ.image cls, ?_⟩⟩
+  rw [eq_top_iff]
+  rintro x -
+  obtain ⟨c, rfl⟩ := (AddCommGrpCat.epi_iff_surjective (K.homologyπ (p + 1))).1 inferInstance x
+  obtain ⟨r, b, hzb⟩ := h (K.iCycles (p + 1) c) (by
+    rw [← ConcreteCategory.comp_apply, K.iCycles_d]
+    rfl)
+  have hsmul (j : Fin N) : r j • cls j = K.homologyπ (p + 1)
+      (HomologicalComplex.cyclesMap (cechSmul U F (ρ (r j))) (p + 1) (t j)) := by
+    rw [cechHomology_smul_def, ← ConcreteCategory.comp_apply, ← ConcreteCategory.comp_apply,
+      HomologicalComplex.homologyπ_naturality]
+  have hc : c - ∑ j, HomologicalComplex.cyclesMap (cechSmul U F (ρ (r j))) (p + 1) (t j) =
+      K.toCycles p (p + 1) b := by
+    apply (AddCommGrpCat.mono_iff_injective (K.iCycles (p + 1))).1 inferInstance
+    have e1 (j : Fin N) : K.iCycles (p + 1)
+        (HomologicalComplex.cyclesMap (cechSmul U F (ρ (r j))) (p + 1) (t j)) =
+          (cechSmul U F (ρ (r j))).f (p + 1) (s j) := by
+      rw [← ConcreteCategory.comp_apply, HomologicalComplex.cyclesMap_i,
+        ConcreteCategory.comp_apply, ht]
+    have e2 : K.iCycles (p + 1) (K.toCycles p (p + 1) b) = K.d p (p + 1) b := by
+      rw [← ConcreteCategory.comp_apply, HomologicalComplex.toCycles_i]
+    rw [map_sub, map_sum]
+    simp only [e1]
+    rw [e2, hzb]
+    abel
+  have hx : K.homologyπ (p + 1) c = ∑ j, r j • cls j := by
+    simp only [hsmul, ← map_sum]
+    rw [← sub_eq_zero, ← map_sub, hc, ← ConcreteCategory.comp_apply,
+      HomologicalComplex.toCycles_comp_homologyπ]
+    rfl
+  rw [hx]
+  exact Submodule.sum_mem _ fun j _ => Submodule.smul_mem _ _
+    (Submodule.subset_span (Finset.mem_coe.2 (Finset.mem_image_of_mem _ (Finset.mem_univ j))))
+
+/-! ### Degree zero -/
+
+section DegreeZero
+
+variable (hU : ⨆ i, U i = ⊤)
+
+/-- The global sections `Γ(F, ⊤)` as an `R`-module through `ρ`. -/
+noncomputable abbrev sectionsModule (F : X.Modules) : Module R Γ(F, ⊤) :=
+  Module.compHom _ ρ
+
+include hU in
+/-- `Γ(F, ⊤) → Ȟ⁰(U, F)`, `R`-linearly, is bijective. -/
+theorem exists_linearEquiv_cech_zero (F : X.Modules) :
+    letI := sectionsModule ρ F
+    letI := cechHomologyModule U ρ F 0
+    Nonempty (Γ(F, ⊤) ≃ₗ[R] (cech U F).homology 0) := by
+  letI := sectionsModule ρ F
+  letI := cechHomologyModule U ρ F 0
+  let K := cech U F
+  let G := (SheafOfModules.toSheaf X.ringCatSheaf).obj F
+  have hW : ∀ i, U i ≤ ⊤ := fun _ => le_top
+  have hcov : (⊤ : X.Opens) ≤ ⨆ i, U i := hU.ge
+  have haug (s : Γ(F, ⊤)) : K.d 0 1 (TopCat.Presheaf.cechAugment U G.obj hW s) = 0 :=
+    (funext (TopCat.Presheaf.cechComplex_d_apply U G.obj 0 _)).trans
+      (TopCat.Presheaf.cechD_cechAugment U G.obj hW s)
+  choose t ht using fun s : Γ(F, ⊤) =>
+    exists_iCycles_eq K 0 (TopCat.Presheaf.cechAugment U G.obj hW s) (haug s)
+  have hπ : IsIso (K.homologyπ 0) := K.isIso_homologyπ 0 0 (by simp) (by simp)
+  have hπinj : Function.Injective (K.homologyπ 0) :=
+    (AddCommGrpCat.mono_iff_injective _).1 inferInstance
+  have hiinj : Function.Injective (K.iCycles 0) :=
+    (AddCommGrpCat.mono_iff_injective _).1 inferInstance
+  let ψ : Γ(F, ⊤) →ₗ[R] K.homology 0 :=
+    { toFun := fun s => K.homologyπ 0 (t s)
+      map_add' := fun a b => by
+        rw [← map_add]
+        congr 1
+        apply hiinj
+        rw [map_add, ht, ht, ht, map_add]
+      map_smul' := fun r a => by
+        rw [cechHomology_smul_def, RingHom.id_apply, ← ConcreteCategory.comp_apply,
+          HomologicalComplex.homologyπ_naturality, ConcreteCategory.comp_apply]
+        congr 1
+        apply hiinj
+        rw [← ConcreteCategory.comp_apply, HomologicalComplex.cyclesMap_i,
+          ConcreteCategory.comp_apply, ht, ht]
+        funext σ
+        change TopCat.Presheaf.restrictOpen (F := F.presheaf)
+            ((ρ r) • (show Γ(F, ⊤) from a)) (TopCat.Presheaf.cechOpen U σ) le_top =
+          (ρ r |ₒ TopCat.Presheaf.cechOpen U σ) • TopCat.Presheaf.restrictOpen (F := F.presheaf)
+            (show Γ(F, ⊤) from a) (TopCat.Presheaf.cechOpen U σ) le_top
+        rw [mres_smul] }
+  refine ⟨LinearEquiv.ofBijective ψ ⟨fun a b hab => ?_, fun x => ?_⟩⟩
+  · apply TopCat.Presheaf.cechAugment_injective U hW G hcov
+    rw [← ht, ← ht]
+    exact congrArg _ (hπinj hab)
+  · obtain ⟨c, rfl⟩ := (AddCommGrpCat.epi_iff_surjective (K.homologyπ 0)).1 inferInstance x
+    have hc : TopCat.Presheaf.cechD U G.obj 0 (K.iCycles 0 c) = 0 := by
+      have h1 := ConcreteCategory.congr_hom (K.iCycles_d 0 1) c
+      exact (funext (TopCat.Presheaf.cechComplex_d_apply U G.obj 0 _)).symm.trans h1
+    obtain ⟨s, hs⟩ := TopCat.Presheaf.exists_cechAugment_eq U hW G hcov _ hc
+    refine ⟨s, congrArg (K.homologyπ 0) (hiinj ?_)⟩
+    exact (ht s).trans hs
+
+include hU in
+lemma cechFinite_zero_iff [IsNoetherianRing R] (F : X.Modules) :
+    CechFinite U ρ F 0 ↔ (letI := sectionsModule ρ F; Module.Finite R Γ(F, ⊤)) := by
+  letI := sectionsModule ρ F
+  letI := cechHomologyModule U ρ F 0
+  obtain ⟨e⟩ := exists_linearEquiv_cech_zero U ρ hU F
+  constructor
+  · intro h
+    haveI : Module.Finite R ((cech U F).homology 0) := h
+    exact Module.Finite.equiv e.symm
+  · intro h
+    exact Module.Finite.equiv e
+
+end DegreeZero
+
 end AlgebraicGeometry.Scheme.Modules
