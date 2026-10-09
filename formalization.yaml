@@ -239,10 +239,10 @@ review:
     All results are machine-checked by the Lean kernel (axioms as listed under status). The axioms
     were checked with `#print axioms` on built checkouts of this code for all main results (for
     the two uniformisation results, a checkout just before a 6-line addition to
-    Oka/Uniformization/Depth.lean) except etaleFundamentalGroupEquivCompletion, locallyContractibleSpace_analytification
-    and exists_lojasiewicz_gradient, for which no built checkout was available when this file was
-    updated; for those the claim rests on CI (`lake build --wfail`) and on the repository
-    containing no `sorry`, `axiom` or `opaque` declaration (checked by grep).
+    Oka/Uniformization/Depth.lean). For etaleFundamentalGroupEquivCompletion,
+    locallyContractibleSpace_analytification and exists_lojasiewicz_gradient, `#print axioms` was
+    run on 2026-10-09 in a built checkout at 192edb0, an ancestor of this revision; the repository
+    contains no `sorry`, `axiom` or `opaque` declaration (checked by grep).
 
 alignment:
   namespace: "ComplexAnalytic"
