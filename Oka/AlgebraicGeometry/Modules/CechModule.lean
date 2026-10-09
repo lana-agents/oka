@@ -1,0 +1,320 @@
+/-
+Copyright (c) 2026 Christian Merten. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Christian Merten
+-/
+import Oka.AlgebraicGeometry.ProjectiveSpace.RelativeSerre
+import Mathlib.Algebra.Homology.HomologySequenceLemmas
+
+/-!
+# Čech cohomology of `𝒪_X`-modules as modules over a ring of constants
+
+Let `X` be a scheme, `ρ : R →+* Γ(X, ⊤)` a ring of global constants, `U : ι → X.Opens` a family of
+opens and `F` an `𝒪_X`-module. Multiplication by `ρ r` is an endomorphism of the underlying
+abelian sheaf of `F` (`Scheme.Modules.smulAb`), hence of the Čech complex `Č•(U, F)`
+(`Scheme.Modules.cechSmul`). This makes the Čech cohomology `Ȟᵠ(U, F)` an `R`-module
+(`Scheme.Modules.cechHomologyModule`, not an instance), and the maps in the long exact sequence
+of a short exact sequence of `𝒪_X`-modules are `R`-linear.
+
+## Main results
+
+* `Scheme.Modules.CechFinite ρ U F q`: `Ȟᵠ(U, F)` is a finitely generated `R`-module.
+* `Scheme.Modules.cechFinite_X₃`: for a short exact sequence `0 → F₁ → F₂ → F₃ → 0` of
+  `𝒪_X`-modules which is surjective on all `U_σ`, and `R` noetherian, finiteness of `Ȟᵠ(F₂)` and
+  `Ȟᵠ⁺¹(F₁)` implies finiteness of `Ȟᵠ(F₃)`.
+* `Scheme.Modules.cechFinite_of_iso`, `Scheme.Modules.cechFinite_sigma`: invariance under
+  isomorphisms and finite coproducts.
+* `Scheme.Modules.cechFinite_of_exactAt`, `Scheme.Modules.cechFinite_of_cocycles`: criteria.
+-/
+
+universe u
+
+open CategoryTheory Limits TopologicalSpace Opposite
+
+set_option backward.isDefEq.respectTransparency false
+
+namespace AlgebraicGeometry.Scheme.Modules
+
+variable {X : Scheme.{u}}
+
+/-! ### Multiplication by global functions -/
+
+section SMul
+
+lemma ores_add {V W : X.Opens} (h : W ≤ V) (r s : Γ(X, V)) :
+    TopCat.Presheaf.restrictOpen (r + s) W h =
+      TopCat.Presheaf.restrictOpen r W h + TopCat.Presheaf.restrictOpen s W h := by
+  simp [TopCat.Presheaf.restrictOpen, TopCat.Presheaf.restrict]
+
+variable (F : X.Modules)
+
+lemma smulAb_app_apply (a : Γ(X, ⊤)) (V : X.Opensᵒᵖ) (s : Γ(F, V.unop)) :
+    (smulAb F a).app V s = (a |ₒ V.unop) • s :=
+  rfl
+
+lemma smulAb_add (a b : Γ(X, ⊤)) : smulAb F (a + b) = smulAb F a + smulAb F b := by
+  ext V s
+  change ((a + b) |ₒ V.unop) • (show Γ(F, V.unop) from s) =
+    (a |ₒ V.unop) • (show Γ(F, V.unop) from s) + (b |ₒ V.unop) • (show Γ(F, V.unop) from s)
+  rw [ores_add, add_smul]
+
+lemma smulAb_mul (a b : Γ(X, ⊤)) : smulAb F (a * b) = smulAb F b ≫ smulAb F a := by
+  ext V s
+  change ((a * b) |ₒ V.unop) • (show Γ(F, V.unop) from s) =
+    (a |ₒ V.unop) • (b |ₒ V.unop) • (show Γ(F, V.unop) from s)
+  rw [ores_mul, mul_smul]
+
+lemma smulAb_one : smulAb F 1 = 𝟙 _ := by
+  ext V s
+  change ((1 : Γ(X, ⊤)) |ₒ V.unop) • (show Γ(F, V.unop) from s) = s
+  rw [ores_one, one_smul]
+
+lemma smulAb_zero : smulAb F 0 = 0 := by
+  ext V s
+  change ((0 : Γ(X, ⊤)) |ₒ V.unop) • (show Γ(F, V.unop) from s) = 0
+  rw [ores_zero, zero_smul]
+
+variable {F} in
+lemma smulAb_naturality {G : X.Modules} (φ : F ⟶ G) (a : Γ(X, ⊤)) :
+    smulAb F a ≫ ((SheafOfModules.toSheaf X.ringCatSheaf).map φ).hom =
+      ((SheafOfModules.toSheaf X.ringCatSheaf).map φ).hom ≫ smulAb G a := by
+  ext V s
+  change φ.val.app V ((a |ₒ V.unop) • (show Γ(F, V.unop) from s)) =
+    (a |ₒ V.unop) • φ.val.app V s
+  exact (φ.val.app V).hom.map_smul _ _
+
+end SMul
+
+/-! ### The action on Čech cohomology -/
+
+variable {ι : Type u} (U : ι → X.Opens)
+
+/-- The Čech complex functor `F ↦ Č•(U, F)` on `𝒪_X`-modules. -/
+noncomputable abbrev cechFunctor : X.Modules ⥤ CochainComplex AddCommGrpCat.{u} ℕ :=
+  SheafOfModules.toSheaf X.ringCatSheaf ⋙ sheafToPresheaf _ _ ⋙
+    TopCat.Presheaf.cechComplexFunctor U
+
+instance : (cechFunctor U).Additive := by
+  dsimp only [cechFunctor]
+  infer_instance
+
+/-- The Čech complex `Č•(U, F)` of the underlying abelian sheaf of `F`. -/
+noncomputable abbrev cech (F : X.Modules) : CochainComplex AddCommGrpCat.{u} ℕ :=
+  (cechFunctor U).obj F
+
+/-- The map of Čech complexes induced by a morphism of `𝒪_X`-modules. -/
+noncomputable abbrev cechMap {F G : X.Modules} (φ : F ⟶ G) : cech U F ⟶ cech U G :=
+  (cechFunctor U).map φ
+
+/-- Multiplication by a global function on the Čech complex. -/
+noncomputable abbrev cechSmul (F : X.Modules) (a : Γ(X, ⊤)) : cech U F ⟶ cech U F :=
+  (TopCat.Presheaf.cechComplexFunctor U).map (smulAb F a)
+
+lemma cechSmul_naturality {F G : X.Modules} (φ : F ⟶ G) (a : Γ(X, ⊤)) :
+    cechSmul U F a ≫ cechMap U φ = cechMap U φ ≫ cechSmul U G a := by
+  change (TopCat.Presheaf.cechComplexFunctor U).map _ ≫
+      (TopCat.Presheaf.cechComplexFunctor U).map
+        ((SheafOfModules.toSheaf X.ringCatSheaf).map φ).hom = _ ≫ _
+  rw [← CategoryTheory.Functor.map_comp, smulAb_naturality]
+  rfl
+
+lemma cechSmul_one (F : X.Modules) : cechSmul U F 1 = 𝟙 _ := by
+  rw [cechSmul, smulAb_one]
+  exact (TopCat.Presheaf.cechComplexFunctor U).map_id _
+
+lemma cechSmul_mul (F : X.Modules) (a b : Γ(X, ⊤)) :
+    cechSmul U F (a * b) = cechSmul U F b ≫ cechSmul U F a := by
+  rw [cechSmul, smulAb_mul]
+  exact (TopCat.Presheaf.cechComplexFunctor U).map_comp _ _
+
+lemma cechSmul_zero (F : X.Modules) : cechSmul U F 0 = 0 := by
+  rw [cechSmul, smulAb_zero]
+  exact (TopCat.Presheaf.cechComplexFunctor U).map_zero _ _
+
+lemma cechSmul_add (F : X.Modules) (a b : Γ(X, ⊤)) :
+    cechSmul U F (a + b) = cechSmul U F a + cechSmul U F b := by
+  rw [cechSmul, smulAb_add]
+  exact (TopCat.Presheaf.cechComplexFunctor U).map_add
+
+variable {R : Type u} [CommRing R] (ρ : R →+* Γ(X, ⊤))
+
+/-- The action of `R` on `Ȟᵠ(U, F)` through `ρ`. -/
+noncomputable def cechHomologyAct (F : X.Modules) (q : ℕ) :
+    R →+* AddMonoid.End ((cech U F).homology q) where
+  toFun r := (HomologicalComplex.homologyMap (cechSmul U F (ρ r)) q).hom
+  map_one' := by
+    rw [map_one, cechSmul_one, HomologicalComplex.homologyMap_id]
+    rfl
+  map_mul' r s := by
+    rw [map_mul, cechSmul_mul, HomologicalComplex.homologyMap_comp]
+    rfl
+  map_zero' := by
+    rw [map_zero, cechSmul_zero, HomologicalComplex.homologyMap_zero]
+    rfl
+  map_add' r s := by
+    rw [map_add, cechSmul_add, HomologicalComplex.homologyMap_add]
+    rfl
+
+/-- `Ȟᵠ(U, F)` as an `R`-module through `ρ`. -/
+noncomputable abbrev cechHomologyModule (F : X.Modules) (q : ℕ) :
+    Module R ((cech U F).homology q) :=
+  Module.compHom _ (cechHomologyAct U ρ F q)
+
+lemma cechHomology_smul_def (F : X.Modules) (q : ℕ) (r : R) (x : (cech U F).homology q) :
+    letI := cechHomologyModule U ρ F q
+    r • x = HomologicalComplex.homologyMap (cechSmul U F (ρ r)) q x :=
+  rfl
+
+/-- **Finiteness of Čech cohomology**: `Ȟᵠ(U, F)` is a finitely generated `R`-module. -/
+def CechFinite (F : X.Modules) (q : ℕ) : Prop :=
+  letI := cechHomologyModule U ρ F q
+  Module.Finite R ((cech U F).homology q)
+
+/-- The `R`-linear map `Ȟᵠ(U, F) → Ȟᵠ(U, G)` induced by a morphism of `𝒪_X`-modules. -/
+noncomputable def cechHomologyLinear {F G : X.Modules} (φ : F ⟶ G) (q : ℕ) :
+    letI := cechHomologyModule U ρ F q
+    letI := cechHomologyModule U ρ G q
+    (cech U F).homology q →ₗ[R] (cech U G).homology q :=
+  letI := cechHomologyModule U ρ F q
+  letI := cechHomologyModule U ρ G q
+  { toFun := HomologicalComplex.homologyMap (cechMap U φ) q
+    map_add' := map_add _
+    map_smul' r x := by
+      simp only [cechHomology_smul_def, RingHom.id_apply]
+      rw [← ConcreteCategory.comp_apply, ← ConcreteCategory.comp_apply,
+        ← HomologicalComplex.homologyMap_comp, ← HomologicalComplex.homologyMap_comp,
+        cechSmul_naturality] }
+
+lemma cechHomologyLinear_apply {F G : X.Modules} (φ : F ⟶ G) (q : ℕ)
+    (x : (cech U F).homology q) :
+    cechHomologyLinear U ρ φ q x = HomologicalComplex.homologyMap (cechMap U φ) q x :=
+  rfl
+
+/-! ### Short exact sequences -/
+
+section ShortExact
+
+variable {S : ShortComplex X.Modules}
+  (hS : (S.map (SheafOfModules.toSheaf X.ringCatSheaf)).ShortExact)
+  (hsurj : ∀ (n : ℕ) (σ : Fin (n + 1) → ι),
+    Function.Surjective (S.g.val.app (op (TopCat.Presheaf.cechOpen U σ))))
+
+include hS hsurj
+
+/-- The short exact sequence of Čech complexes of a short exact sequence of `𝒪_X`-modules which
+is surjective on all `U_σ`. -/
+lemma cech_shortExact : (S.map (cechFunctor U)).ShortExact :=
+  TopCat.Presheaf.cechComplex_shortExact_of_sheaf hS hsurj
+
+/-- The connecting map `Ȟᵠ(U, S.X₃) → Ȟᵠ⁺¹(U, S.X₁)` is `R`-linear. -/
+noncomputable def cechδLinear (q : ℕ) :
+    letI := cechHomologyModule U ρ S.X₃ q
+    letI := cechHomologyModule U ρ S.X₁ (q + 1)
+    (cech U S.X₃).homology q →ₗ[R] (cech U S.X₁).homology (q + 1) :=
+  letI := cechHomologyModule U ρ S.X₃ q
+  letI := cechHomologyModule U ρ S.X₁ (q + 1)
+  { toFun := (cech_shortExact U hS hsurj).δ q (q + 1) (by simp)
+    map_add' := map_add _
+    map_smul' r x := by
+      simp only [cechHomology_smul_def, RingHom.id_apply]
+      let Φ : S.map (cechFunctor U) ⟶ S.map (cechFunctor U) :=
+        { τ₁ := cechSmul U S.X₁ (ρ r)
+          τ₂ := cechSmul U S.X₂ (ρ r)
+          τ₃ := cechSmul U S.X₃ (ρ r)
+          comm₁₂ := (cechSmul_naturality U S.f (ρ r))
+          comm₂₃ := (cechSmul_naturality U S.g (ρ r)) }
+      have h := HomologicalComplex.HomologySequence.δ_naturality Φ (cech_shortExact U hS hsurj)
+        (cech_shortExact U hS hsurj) q (q + 1) (by simp)
+      have hx := ConcreteCategory.congr_hom h x
+      simp only [ConcreteCategory.comp_apply] at hx
+      exact hx.symm }
+
+lemma cechδLinear_apply (q : ℕ) (x : (cech U S.X₃).homology q) :
+    cechδLinear U ρ hS hsurj q x = (cech_shortExact U hS hsurj).δ q (q + 1) (by simp) x :=
+  rfl
+
+/-- **Finiteness along a short exact sequence.** If `R` is noetherian, `Ȟᵠ(U, S.X₂)` and
+`Ȟᵠ⁺¹(U, S.X₁)` are finite, then so is `Ȟᵠ(U, S.X₃)`. -/
+theorem cechFinite_X₃ [IsNoetherianRing R] (q : ℕ) (h₂ : CechFinite U ρ S.X₂ q)
+    (h₁ : CechFinite U ρ S.X₁ (q + 1)) : CechFinite U ρ S.X₃ q := by
+  letI := cechHomologyModule U ρ S.X₁ (q + 1)
+  letI := cechHomologyModule U ρ S.X₂ q
+  letI := cechHomologyModule U ρ S.X₃ q
+  have : Module.Finite R ((cech U S.X₂).homology q) := h₂
+  have : Module.Finite R ((cech U S.X₁).homology (q + 1)) := h₁
+  let g := cechHomologyLinear U ρ S.g q
+  let δ := cechδLinear U ρ hS hsurj q
+  have hex : Function.Exact g δ := by
+    have e := (cech_shortExact U hS hsurj).homology_exact₃ q (q + 1) (by simp)
+    exact (ShortComplex.ab_exact_iff_function_exact _).1 e
+  have : Module.Finite R (LinearMap.range δ) := Module.Finite.of_injective
+    (LinearMap.range δ).subtype Subtype.val_injective
+  exact Module.Finite.of_exact (f := g) (g := δ.rangeRestrict)
+    (fun x => by
+      rw [← hex x]
+      simp [LinearMap.rangeRestrict, Subtype.ext_iff])
+    δ.surjective_rangeRestrict
+
+end ShortExact
+
+/-! ### Criteria -/
+
+/-- Exactness implies finiteness. -/
+lemma cechFinite_of_exactAt (F : X.Modules) (q : ℕ) (h : (cech U F).ExactAt q) :
+    CechFinite U ρ F q := by
+  letI := cechHomologyModule U ρ F q
+  rw [HomologicalComplex.exactAt_iff_isZero_homology, AddCommGrpCat.isZero_iff_subsingleton] at h
+  exact Module.Finite.of_finite
+
+lemma cechHomologyLinear_comp_apply {F G K : X.Modules} (φ : F ⟶ G) (ψ : G ⟶ K) (q : ℕ)
+    (x : (cech U F).homology q) :
+    cechHomologyLinear U ρ ψ q (cechHomologyLinear U ρ φ q x) =
+      cechHomologyLinear U ρ (φ ≫ ψ) q x := by
+  simp only [cechHomologyLinear_apply]
+  rw [← ConcreteCategory.comp_apply, ← HomologicalComplex.homologyMap_comp,
+    ← CategoryTheory.Functor.map_comp]
+
+lemma cechHomologyLinear_id_apply (F : X.Modules) (q : ℕ) (x : (cech U F).homology q) :
+    cechHomologyLinear U ρ (𝟙 F) q x = x := by
+  simp only [cechHomologyLinear_apply, CategoryTheory.Functor.map_id,
+    HomologicalComplex.homologyMap_id]
+  rfl
+
+lemma cechHomologyLinear_sum_apply {F G : X.Modules} {J : Type*} (s : Finset J)
+    (φ : J → (F ⟶ G)) (q : ℕ) (x : (cech U F).homology q) :
+    cechHomologyLinear U ρ (∑ j ∈ s, φ j) q x = ∑ j ∈ s, cechHomologyLinear U ρ (φ j) q x := by
+  simp only [cechHomologyLinear_apply, CategoryTheory.Functor.map_sum]
+  rw [← HomologicalComplex.homologyFunctor_map, CategoryTheory.Functor.map_sum]
+  simp only [HomologicalComplex.homologyFunctor_map, AddCommGrpCat.finsetSum_apply]
+
+/-- Finiteness is invariant under isomorphisms of `𝒪_X`-modules. -/
+lemma cechFinite_of_iso {F G : X.Modules} (e : F ≅ G) (q : ℕ) (h : CechFinite U ρ F q) :
+    CechFinite U ρ G q := by
+  letI := cechHomologyModule U ρ F q
+  letI := cechHomologyModule U ρ G q
+  have : Module.Finite R ((cech U F).homology q) := h
+  refine Module.Finite.of_surjective (cechHomologyLinear U ρ e.hom q) fun y =>
+    ⟨cechHomologyLinear U ρ e.inv q y, ?_⟩
+  rw [cechHomologyLinear_comp_apply, e.inv_hom_id, cechHomologyLinear_id_apply]
+
+/-- Finiteness for a finite coproduct. -/
+lemma cechFinite_sigma {I : Type u} [Finite I] (G : I → X.Modules) (q : ℕ)
+    (h : ∀ i, CechFinite U ρ (G i) q) : CechFinite U ρ (∐ G) q := by
+  have := Fintype.ofFinite I
+  have := HasBiproduct.of_hasCoproduct G
+  refine cechFinite_of_iso U ρ (biproduct.isoCoproduct G) q ?_
+  letI := cechHomologyModule U ρ (⨁ G) q
+  letI (i : I) := cechHomologyModule U ρ (G i) q
+  have (i : I) : Module.Finite R ((cech U (G i)).homology q) := h i
+  let Φ : (∀ i, (cech U (G i)).homology q) →ₗ[R] (cech U (⨁ G)).homology q :=
+    ∑ i, (cechHomologyLinear U ρ (biproduct.ι G i) q).comp (LinearMap.proj i)
+  refine Module.Finite.of_surjective Φ fun x =>
+    ⟨fun i => cechHomologyLinear U ρ (biproduct.π G i) q x, ?_⟩
+  have htot : ∑ i, biproduct.π G i ≫ biproduct.ι G i = 𝟙 (⨁ G) :=
+    IsBilimit.total (biproduct.isBilimit G)
+  conv_rhs => rw [← cechHomologyLinear_id_apply U ρ (⨁ G) q x, ← htot,
+    cechHomologyLinear_sum_apply]
+  simp only [Φ, LinearMap.coe_sum, Finset.sum_apply, LinearMap.comp_apply, LinearMap.proj_apply,
+    cechHomologyLinear_comp_apply]
+
+end AlgebraicGeometry.Scheme.Modules

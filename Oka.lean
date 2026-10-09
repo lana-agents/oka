@@ -38,6 +38,7 @@ import Oka.AlgebraicGeometry.GraphClosure
 import Oka.AlgebraicGeometry.IdealSheaf.StalkIdeal
 import Oka.AlgebraicGeometry.IrreducibleChain
 import Oka.AlgebraicGeometry.Modules.AffineVanishing
+import Oka.AlgebraicGeometry.Modules.CechModule
 import Oka.AlgebraicGeometry.Modules.CocycleTwist
 import Oka.AlgebraicGeometry.Modules.CocycleTwistComap
 import Oka.AlgebraicGeometry.Modules.CocycleTwistPullback
