@@ -738,6 +738,7 @@ import Oka.Topology.Sheaves.Cohomology.ClosedEmbeddingOpen
 import Oka.Topology.Sheaves.Cohomology.Dimension
 import Oka.Topology.Sheaves.Cohomology.Exhaustion
 import Oka.Topology.Sheaves.Cohomology.Leray
+import Oka.Topology.Sheaves.Cohomology.LerayCech
 import Oka.Topology.Sheaves.Cohomology.LocalVanishing
 import Oka.Topology.Sheaves.Cohomology.MayerVietoris
 import Oka.Topology.Sheaves.Cohomology.MayerVietorisNatural
