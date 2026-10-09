@@ -87,6 +87,7 @@ import Oka.AlgebraicGeometry.ProjectiveSpace.TwistCohomology
 import Oka.AlgebraicGeometry.ProjectiveSpace.TwistCohomologyTop
 import Oka.AlgebraicGeometry.ProjectiveSpace.TwistSections
 import Oka.AlgebraicGeometry.ProjectiveSpace.Vanishing
+import Oka.AlgebraicGeometry.ProjectiveSpace.ZariskiConnected
 import Oka.AlgebraicGeometry.SmoothLocus
 import Oka.AlgebraicGeometry.Spec
 import Oka.AlgebraicTopology.SimplexCochain
