@@ -69,6 +69,17 @@ License: Apache 2.0 (see `LICENSE`).
   `g₂ = 0` (`Uniformization.Peripheral.commensurator_eq_pmDeck_or`). These are the complex-analytic
   inputs of `CanLift27` over `ℂ`, which is assembled in `orbicurve-cores`.
 
+* **The étale fundamental group of a once-punctured elliptic curve over `ℂ`**
+  (`Uniformization.nonempty_etaleFundamentalGroup_equiv`,
+  `Oka/Uniformization/EtaleFundamentalGroup.lean`): for `E ∖ O = Spec ℂ[x, y] ⧸ (W(x, y))`
+  (`Uniformization.oncePunctured`) and every point `x` of its analytification,
+  `π₁ᵉᵗ(E ∖ O, ξₓ) ≃ₜ* F̂₂`, the profinite completion of the free group of rank two
+  (`= Π̂_{1,1}`). The deck group `⟨A, B⟩` of the uniformisation `ℍ → E(ℂ) ∖ {O}` is free modulo
+  `±1` by ping-pong for the Fricke normal form (`Uniformization.Fricke.eq_one_of_lift_eq_pm_one`,
+  ported from `orbicurve-cores`), so `F₂` acts freely on `ℍ` with quotient `E(ℂ) ∖ {O}` and
+  `π₁(E(ℂ) ∖ {O}) ≃* F₂` (`Uniformization.IsUniformization.fundamentalGroupEquiv`); the comparison
+  theorem finishes the proof.
+
 All of these are proved without `sorry`.
 
 ## Dependencies

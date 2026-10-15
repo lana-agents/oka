@@ -15,7 +15,7 @@ For an elliptic curve `W` over `ℂ`, let `E ∖ O = Spec ℂ[x, y] ⧸ (W(x, y)
 (`Uniformization.oncePunctured W`, a scheme locally of finite type over `ℂ`). Then for every
 point `x` of its analytification, with `ξₓ` the geometric point at `x`,
 
-  `π₁ᵉᵗ(E ∖ O, ξₓ) ≃ₜ* F̂₂`   (`Uniformization.etaleFundamentalGroupEquiv`),
+  `π₁ᵉᵗ(E ∖ O, ξₓ) ≃ₜ* F̂₂`   (`Uniformization.nonempty_etaleFundamentalGroup_equiv`),
 
 the profinite completion of the free group on two generators, i.e. of the surface group
 `Π_{1,1} = ⟨a, b, c | [a, b] c = 1⟩ ≅ F(a, b)`. This is the case `(g, r) = (1, 1)` of the
@@ -87,7 +87,7 @@ lemma span_weierstrassMv :
   congr 1
   simp [weierstrassMv, mvEquiv]
 
-lemma isDomain_quotient [W.IsElliptic] :
+lemma isDomain_quotient :
     IsDomain (MvPolynomial (ULift.{0} (Fin 2)) ℂ ⧸ Ideal.span (Set.range (weierstrassMv W))) := by
   have e := Ideal.quotientEquiv (Ideal.span {W.toAffine.polynomial})
     (Ideal.span (Set.range (weierstrassMv W))) mvEquiv (span_weierstrassMv W)
@@ -106,7 +106,7 @@ of finite type over `ℂ`. -/
 noncomputable abbrev oncePunctured : SchemeLFTℂ.{0} :=
   SchemeLFTℂ.specPresentation (weierstrassMv W)
 
-instance [W.IsElliptic] : ConnectedSpace (oncePunctured W).obj.left := by
+instance : ConnectedSpace (oncePunctured W).obj.left := by
   haveI := isDomain_quotient W
   change ConnectedSpace (PrimeSpectrum (PresentedAlgebra 2 1 (weierstrassMv W)))
   infer_instance

@@ -17,7 +17,7 @@ covering map (`IsUniformization.isCoveringMap`), and by the ping-pong argument o
 `a ↦ A`, `b ↦ B`, acts **freely** with quotient `V W` (`IsUniformization.isQuotientCoveringMap`).
 Since `ℍ` is simply connected, Mathlib's `IsQuotientCoveringMap.fundamentalGroupEquiv` gives
 
-  `π₁(E(ℂ) ∖ {O}, x) ≃* F₂`   (`Uniformization.fundamentalGroupEquivFreeGroup`),
+  `π₁(E(ℂ) ∖ {O}, x) ≃* F₂`   (`Uniformization.IsUniformization.fundamentalGroupEquiv`),
 
 the topological fundamental group of a once-punctured elliptic curve is the surface group
 `Π_{1,1} = ⟨a, b, c | [a, b] c = 1⟩ ≅ F(a, b)`.

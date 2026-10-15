@@ -30,12 +30,12 @@ Proof:
 * **ping-pong** for the normal form (`pp_disjoint`): every nontrivial reduced word moves the open
   ideal quadrilateral `Q°` with vertices `-y/(xz), 0, x/(yz), ∞` off itself.
 
-This file is a port of `OrbicurveCores.Fricke`, `OrbicurveCores.FrickeRigidity`,
-`OrbicurveCores.exists_sign_normalize`, `OrbicurveCores.four_lt_sq_of_fricke`, the normal form
-`OrbicurveCores.Fuchsian.nA`, `nB` and `OrbicurveCores/Fuchsian/PingPong.lean` from the
-lana-agents repository `orbicurve-cores` (which depends on `oka` and so cannot be imported here),
-restricted to what the freeness statement needs. The Nielsen descent of `orbicurve-cores` is not
-needed: ping-pong only uses `x, y, z > 0`.
+This file is a port, restricted to what the freeness statement needs, of the files Fricke.lean,
+FrickeRigidity.lean, Fuchsian/PingPong.lean and parts of FourGroups.lean,
+Fuchsian/Commensurator.lean and Fuchsian/OneInftyLattice.lean (the sign normalisation, the
+bound `x² > 4` and the normal form) of the lana-agents repository orbicurve-cores, which depends
+on `oka` and so cannot be imported here. The Nielsen descent of orbicurve-cores is not needed:
+ping-pong only uses `x, y, z > 0`.
 -/
 
 open Matrix Matrix.SpecialLinearGroup UpperHalfPlane Set Filter Topology
