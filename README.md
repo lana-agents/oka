@@ -86,7 +86,7 @@ All of these are proved without `sorry`.
 
 Lean 4 `leanprover/lean4:v4.32.0`, Mathlib `v4.32.0`, and (`lakefile.toml`):
 
-* [`pi1`](https://github.com/lana-agents/pi1) at `4996dc3`: the étale fundamental group of a scheme
+* [`pi1`](https://github.com/lana-agents/pi1) at `8e0239a`: the étale fundamental group of a scheme
   (`AlgebraicGeometry.FiniteEtale.galoisCategory`, `AlgebraicGeometry.FiniteEtale.fiber`), the
   algebraic side of the comparison theorem in `Oka/Analytification/Pi1/`.
 * [`heights`](https://github.com/lana-agents/heights) at `3539e2a`: the modular `j`-function with
