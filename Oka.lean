@@ -769,6 +769,9 @@ import Oka.Topology.Sheaves.QuotientPresheaf
 import Oka.Topology.Sheaves.SectionModel
 import Oka.Topology.Sheaves.SectionModelCech
 import Oka.Topology.Sheaves.Stalks
+import Oka.Topology.VanKampen.Basic
+import Oka.Topology.VanKampen.Cover
+import Oka.Topology.VanKampen.PathClassHom
 import Oka.UFD
 import Oka.UliftCoord
 import Oka.Uniformization.Cayley

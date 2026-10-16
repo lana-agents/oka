@@ -79,6 +79,14 @@ License: Apache 2.0 (see `LICENSE`).
   ported from `orbicurve-cores`), so `F₂` acts freely on `ℍ` with quotient `E(ℂ) ∖ {O}` and
   `π₁(E(ℂ) ∖ {O}) ≃* F₂` (`Uniformization.IsUniformization.fundamentalGroupEquiv`); the comparison
   theorem finishes the proof.
+* **The Seifert–van Kampen theorem** (`VanKampen.pushoutEquiv`,
+  `Oka/Topology/VanKampen/Basic.lean`): for open `U, V` with `U ∪ V = X`, `x₀ ∈ U ∩ V` and `U`,
+  `V`, `U ∩ V` path connected, `π₁(X, x₀)` is the amalgamated free product
+  `Monoid.PushoutI` of `π₁(U, x₀)` and `π₁(V, x₀)` over `π₁(U ∩ V, x₀)`, with the universal
+  property `VanKampen.existsUnique_lift`, and the free product `Monoid.CoprodI` if `U ∩ V` is
+  simply connected (`VanKampen.coprodEquiv`). The proof glues group-valued functions on path
+  classes along the cover by Lebesgue subdivision (`Oka/Topology/VanKampen/Cover.lean`); Mathlib
+  has no van Kampen theorem.
 
 All of these are proved without `sorry`.
 
