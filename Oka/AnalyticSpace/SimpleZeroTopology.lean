@@ -97,9 +97,9 @@ uniform in the point, and nothing needs to be.
 * **No statement about the image.** A local homeomorphism need not be surjective and need not be
   injective, and nothing below says which points of `ℂ^n` are hit or how often.
 * **Nothing here is a statement about the projection alone, and the hypersurface is what makes
-  the difference.** `ComplexAnalytic.proj` itself is **not** a local isomorphism, so no result
-  below is an instance of one about `p`, and the simple-zero hypothesis is what rules out the
-  collapsing the projection exhibits.
+  the difference.** `ComplexAnalytic.AnalyticSpace.proj` itself is **not** a local isomorphism,
+  so no result below is an instance of one about `p`, and the simple-zero hypothesis is what
+  rules out the collapsing the projection exhibits.
 * **Nothing is moved.** `ComplexAnalytic.not_mem_range_uliftCastSuccEmb` and
   `ComplexAnalytic.mem_range_uliftCastSuccEmb` are facts about `ComplexAnalytic.uliftCastSuccEmb`
   alone and their home is `Oka/AnalyticSpace/ProjectionStalk.lean`, where that embedding is

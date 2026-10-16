@@ -319,21 +319,21 @@ variable {𝒢} {B₀ : Opens (Fin m → ℂ)} {S : ℝ} (d : BundleData.{u} �
 
 open scoped AlgebraicGeometry.Scheme.Modules in
 /-- **Splitting sections of `𝒢(k)` from a splitting of the vector bundle.** Let
-`B ≤ B₀`, `r₀, r₁ ≤ S`, and let `ĥ` be sections of `𝒪` over `D₀ ∩ D₁`, `D₀ = discBox 0 B r₀`,
-`D₁ = discBox 1 B r₁`, whose values split as `ĥ = φ₀ - zᵏ g φ₁(z⁻¹)` with `φ₀` holomorphic on
-`B × {‖z‖ < r₀}` and `φ₁` on `B × {‖w‖ < r₁}`. Then `∑ ĥₐ u₀ₐ = Φ₀ - zᵏ Φ₁` on `D₀ ∩ D₁` for
+`B ≤ B₀`, `r₀, r₁ ≤ S`, and let `hhat` be sections of `𝒪` over `D₀ ∩ D₁`, `D₀ = discBox 0 B r₀`,
+`D₁ = discBox 1 B r₁`, whose values split as `hhat = φ₀ - zᵏ g φ₁(z⁻¹)` with `φ₀` holomorphic on
+`B × {‖z‖ < r₀}` and `φ₁` on `B × {‖w‖ < r₁}`. Then `∑ hhatₐ u₀ₐ = Φ₀ - zᵏ Φ₁` on `D₀ ∩ D₁` for
 sections `Φ₀` of `𝒢` over `D₀` and `Φ₁` over `D₁`. -/
 theorem exists_split {B : Opens (Fin m → ℂ)} (hB : B ≤ B₀) {r₀ r₁ : ℝ} (hr₁ : 0 < r₁)
-    (hr₀S : r₀ ≤ S) (hr₁S : r₁ ≤ S) (k : ℕ) (ĥ : d.I₀ ⊕ d.I₁ → Γₚ(discOverlap B r₀ r₁))
+    (hr₀S : r₀ ≤ S) (hr₁S : r₁ ≤ S) (k : ℕ) (hhat : d.I₀ ⊕ d.I₁ → Γₚ(discOverlap B r₀ r₁))
     (φ₀ φ₁ : (Fin m → ℂ) × ℂ → d.I₀ ⊕ d.I₁ → ℂ)
     (hφ₀ : DifferentiableOn ℂ φ₀ ((B : Set (Fin m → ℂ)) ×ˢ Metric.ball 0 r₀))
     (hφ₁ : DifferentiableOn ℂ φ₁ ((B : Set (Fin m → ℂ)) ×ˢ Metric.ball 0 r₁))
     (hrel : ∀ y ∈ B, ∀ w ∈ annulusSet r₀ r₁,
-      (fun a ↦ f0 (ĥ a) (y, w)) = φ₀ (y, w) - w ^ k • d.G (y, w) *ᵥ φ₁ (y, w⁻¹)) :
+      (fun a ↦ f0 (hhat a) (y, w)) = φ₀ (y, w) - w ^ k • d.G (y, w) *ᵥ φ₁ (y, w⁻¹)) :
     ∃ (ψ₀ : d.I₀ ⊕ d.I₁ → Γₚ(discBox 0 B r₀)) (ψ₁ : d.I₀ ⊕ d.I₁ → Γₚ(discBox 1 B r₁)),
       (∀ a, ∀ p ∈ prodOpens B (ballOpens r₀), f0 (ψ₀ a) p = φ₀ p a) ∧
       (∀ b, ∀ p ∈ prodOpens B (ballOpens r₁), f1 (ψ₁ b) p = φ₁ p b) ∧
-      ∑ a, ĥ a • modRes (d.u₀ a) (discOverlap B r₀ r₁)
+      ∑ a, hhat a • modRes (d.u₀ a) (discOverlap B r₀ r₁)
           ((discOverlap_le_sqOverlap hB hr₀S hr₁S).trans d.sqOverlap_le_N₀) =
         modRes (∑ a, ψ₀ a • modRes (d.u₀ a) _ ((discBox_le_sqBox 0 hB hr₀S).trans d.hN₀))
             (discOverlap B r₀ r₁) ((discOverlap_eq B r₀ r₁).le.trans inf_le_left) -
@@ -357,7 +357,7 @@ theorem exists_split {B : Opens (Fin m → ℂ)} (hB : B ≤ B₀) {r₀ r₁ : 
     ((differentiableOn_pi.1 hφ₁) a)
   refine ⟨ψ₀, ψ₁, hψ₀, hψ₁, ?_⟩
   -- the splitting as sections of `𝒪` over the intersection
-  have key : ∀ a, ĥ a = (ψ₀ a |ₒ discOverlap B r₀ r₁) - (zSec k |ₒ discOverlap B r₀ r₁) *
+  have key : ∀ a, hhat a = (ψ₀ a |ₒ discOverlap B r₀ r₁) - (zSec k |ₒ discOverlap B r₀ r₁) *
       ∑ b, (d.M b a |ₒ discOverlap B r₀ r₁) * (ψ₁ b |ₒ discOverlap B r₀ r₁) := by
     intro a
     refine eq_of_f0_eq fun p hp ↦ ?_
@@ -390,7 +390,7 @@ theorem exists_split {B : Opens (Fin m → ℂ)} (hB : B ≤ B₀) {r₀ r₁ : 
     have e := congrArg (fun x ↦ modRes x (discOverlap B r₀ r₁) hOS) (d.sum_M_smul_u₀ b)
     simp only [modRes_sum, modRes_smul, modRes_res] at e
     exact e
-  have e1 : ∀ a, ĥ a • modRes (d.u₀ a) (discOverlap B r₀ r₁) (hOS.trans hSN₀) =
+  have e1 : ∀ a, hhat a • modRes (d.u₀ a) (discOverlap B r₀ r₁) (hOS.trans hSN₀) =
       (ψ₀ a |ₒ discOverlap B r₀ r₁) • modRes (d.u₀ a) (discOverlap B r₀ r₁) (hOS.trans hSN₀) -
         ∑ b, ((zSec k |ₒ discOverlap B r₀ r₁) * (ψ₁ b |ₒ discOverlap B r₀ r₁)) •
           ((d.M b a |ₒ discOverlap B r₀ r₁) •
@@ -542,22 +542,22 @@ theorem exists_sub_eq (hs : IsAcyclicGenerating 𝒢 d.s) {B : Opens (Fin m → 
   have hD₁V : discBox.{u} 1 B (ρ / l) ≤ sqBox 1 B S := discBox_le_sqBox 1 le_rfl hr₁S
   have hOV : discOverlap.{u} B (l * ρ) (ρ / l) ≤ sqBox 0 B S ⊓ sqBox 1 B S :=
     hOD.le.trans (inf_le_inf hD₀V hD₁V)
-  let ĥ : d.I₀ ⊕ d.I₁ → Γₚ(discOverlap.{u} B (l * ρ) (ρ / l)) :=
+  let hhat : d.I₀ ⊕ d.I₁ → Γₚ(discOverlap.{u} B (l * ρ) (ρ / l)) :=
     Sum.elim (fun j ↦ TopCat.Presheaf.restrictOpen (cf j) _ hOV) 0
-  have hĥ : DifferentiableOn ℂ (fun p a ↦ f0 (ĥ a) p)
+  have hhhat : DifferentiableOn ℂ (fun p a ↦ f0 (hhat a) p)
       ((B : Set (Fin m → ℂ)) ×ˢ annulusSet (l * ρ) (ρ / l)) :=
-    differentiableOn_pi.2 fun a ↦ (differentiableOn_f0 (ĥ a)).mono fun p hp ↦
+    differentiableOn_pi.2 fun a ↦ (differentiableOn_f0 (hhat a)).mono fun p hp ↦
       (mem_overlapOpens_ballOpens hr₁).2 hp
-  obtain ⟨φ₀, φ₁, hφ₀, hφ₁, hrel⟩ := hsplit _ hĥ
-  obtain ⟨ψ₀, ψ₁, -, -, hΦ⟩ := d.exists_split hBB₀ hr₁ hr₀S hr₁S k ĥ φ₀ φ₁ hφ₀ hφ₁
+  obtain ⟨φ₀, φ₁, hφ₀, hφ₁, hrel⟩ := hsplit _ hhhat
+  obtain ⟨ψ₀, ψ₁, -, -, hΦ⟩ := d.exists_split hBB₀ hr₁ hr₀S hr₁S k hhat φ₀ φ₁ hφ₀ hφ₁
     fun y hy w hw ↦ hrel y hy w hw
   set Φ₀ := ∑ a, ψ₀ a • modRes (d.u₀ a) _ ((discBox_le_sqBox 0 hBB₀ hr₀S).trans d.hN₀)
   set Φ₁ := ∑ b, ψ₁ b • modRes (d.u₁ b) _ ((discBox_le_sqBox 1 hBB₀ hr₁S).trans d.hN₁)
-  have hsum : ∑ a, ĥ a • modRes (d.u₀ a) (discOverlap.{u} B (l * ρ) (ρ / l))
+  have hsum : ∑ a, hhat a • modRes (d.u₀ a) (discOverlap.{u} B (l * ρ) (ρ / l))
       ((discOverlap_le_sqOverlap hBB₀ hr₀S hr₁S).trans d.sqOverlap_le_N₀) =
       modRes (modTwistSectionsEquiv (N := 𝒢) (twistModCocycle.{u} m 1 k) 0 hW0 σ) _ hOV := by
     rw [hcf, modRes_sum, Fintype.sum_sum_type]
-    simp only [ĥ, BundleData.u₀, Sum.elim_inl, Sum.elim_inr, Pi.zero_apply, zero_smul,
+    simp only [hhat, BundleData.u₀, Sum.elim_inl, Sum.elim_inr, Pi.zero_apply, zero_smul,
       Finset.sum_const_zero, add_zero, modRes_smul, modRes_res]
   have hD₀st : discBox.{u} 0 B (l * ρ) ≤ stdOpen.{u} m 1 0 := hD₀V.trans hV₀st
   have hD₁st : discBox.{u} 1 B (ρ / l) ≤ stdOpen.{u} m 1 1 := hD₁V.trans hV₁st

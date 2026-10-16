@@ -9,7 +9,7 @@ import Oka.Analytification.RET.ES.KummerSectionsGlue
 # The canonical extension of a finite étale cover of `B × Δ*` across `t = 0`
 
 Let `S ⊆ ℂ^{m+1}` be the open subspace `{b ∈ B, ‖t‖ < 1}`, `S° ⊆ S` the complement of
-`D = {t = 0}` and `p : W → S°` a finite étale cover. The **canonical extension** `𝒞̄` of `p_* 𝒪_W`
+`D = {t = 0}` and `p : W → S°` a finite étale cover. The **canonical extension** `𝒞‾` of `p_* 𝒪_W`
 is the sheaf of rings on `S` whose sections over `V` are the sections of `𝒪_W` over
 `p⁻¹(V ∩ S°)` which are bounded near `D` (`ComplexAnalytic.KummerModel.IsBoundedNearZero`). The
 defining condition is local on `S` and does not refer to any decomposition of `W`, so the
@@ -19,12 +19,12 @@ extensions over overlapping charts agree.
 
 - `ComplexAnalytic.KummerModel.disc hB`: the open subspace `S` of `ℂ^{m+1}`.
 - `ComplexAnalytic.KummerModel.boundedSubring W V`: the bounded sections over `V`.
-- `ComplexAnalytic.KummerModel.extensionPresheaf W`: the presheaf of rings `V ↦ 𝒞̄(V)` on `S`.
+- `ComplexAnalytic.KummerModel.extensionPresheaf W`: the presheaf of rings `V ↦ 𝒞‾(V)` on `S`.
 - `ComplexAnalytic.KummerModel.extensionSheaf W hW`: the same, as a sheaf.
 
 ## Main results
 
-- `ComplexAnalytic.KummerModel.isSheaf_extensionPresheaf`: `𝒞̄` is a sheaf.
+- `ComplexAnalytic.KummerModel.isSheaf_extensionPresheaf`: `𝒞‾` is a sheaf.
 -/
 
 open CategoryTheory Opposite AlgebraicGeometry Topology TopologicalSpace Filter
@@ -122,7 +122,7 @@ lemma map_mem_boundedSubring {V V' : (disc hB).Opens} (h : V' ≤ V)
   rw [eval_presheaf_map]
   exact hM w (preim_mono W h hw) hwN
 
-/-- The presheaf of rings `V ↦ 𝒞̄(V)` of sections of `p_* 𝒪_W` bounded near `t = 0`. -/
+/-- The presheaf of rings `V ↦ 𝒞‾(V)` of sections of `p_* 𝒪_W` bounded near `t = 0`. -/
 def extensionPresheaf :
     TopCat.Presheaf CommRingCat.{u} (disc hB).toLocallyRingedSpace.toTopCat where
   obj V := CommRingCat.of (boundedSubring W V.unop)
@@ -205,7 +205,7 @@ theorem isSheaf_extensionPresheaf (hW : IsLocallyOpenInAffine W.left) :
       (this.trans ((hf i w hi).symm.trans (hs w hw).symm))
 
 variable (W) in
-/-- **The canonical extension** `𝒞̄` of `p_* 𝒪_W` across `t = 0`, as a sheaf of rings on `S`. -/
+/-- **The canonical extension** `𝒞‾` of `p_* 𝒪_W` across `t = 0`, as a sheaf of rings on `S`. -/
 def extensionSheaf (hW : IsLocallyOpenInAffine W.left) :
     TopCat.Sheaf CommRingCat.{u} (disc hB).toLocallyRingedSpace.toTopCat :=
   ⟨extensionPresheaf W, isSheaf_extensionPresheaf hW⟩

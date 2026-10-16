@@ -10,16 +10,16 @@ import Oka.Uniformization.EllipticPoly
 # Integrality of `℘ ∘ ψ ∘ δ` over `ℂ[℘ ∘ ψ]` for `δ` in the commensurator
 
 Let `ψ : ℍ → ℂ ∖ Λ` be the uniformisation of the once-punctured torus `ℂ/Λ ∖ {0}`,
-`Γ̃ = pmDeck` its `±`-deck group and `F = ℘ ∘ ψ` (`Peripheral.wpΨ`).
+`Γ~ = pmDeck` its `±`-deck group and `F = ℘ ∘ ψ` (`Peripheral.wpΨ`).
 
-* `Peripheral.eq_poly_of_bound`: a `Γ̃`-invariant holomorphic function `g` on `ℍ` with
+* `Peripheral.eq_poly_of_bound`: a `Γ~`-invariant holomorphic function `g` on `ℍ` with
   `|g| ≤ C (2 + |F|)^N` is a polynomial in `F`. (It descends to an even elliptic function with a
   pole of order at most `2N` at `0`; `Peripheral.exists_poly_weierstrassP`.)
-* `Peripheral.exists_poly_bound_smul`: for `σ` in the commensurator of `Γ̃`,
+* `Peripheral.exists_poly_bound_smul`: for `σ` in the commensurator of `Γ~`,
   `|F ∘ σ| ≤ C (2 + |F|)^N` (depth moves by a bounded amount, and `log |F| ≍ e^{depth}`).
-* `Peripheral.exists_monic_wpΨ_smul` (**key lemma K2**): for `δ` in the commensurator of `Γ̃`,
+* `Peripheral.exists_monic_wpΨ_smul` (**key lemma K2**): for `δ` in the commensurator of `Γ~`,
   `F ∘ δ` is a root of a monic polynomial with coefficients in `ℂ[F]`. The polynomial is
-  `∏_{q ∈ Γ̃ / (Γ̃ ∩ δ⁻¹ Γ̃ δ)} (X - F ∘ δ ∘ q⁻¹)`: its coefficients are `Γ̃`-invariant, holomorphic
+  `∏_{q ∈ Γ~ / (Γ~ ∩ δ⁻¹ Γ~ δ)} (X - F ∘ δ ∘ q⁻¹)`: its coefficients are `Γ~`-invariant, holomorphic
   and polynomially bounded in `F`.
 -/
 
@@ -121,7 +121,7 @@ open Generators
 
 variable {t : ℍ} {U : Unif (Lt t)}
 
-/-- **Polynomially bounded `Γ̃`-invariant holomorphic functions are polynomials in `℘ ∘ ψ`.** -/
+/-- **Polynomially bounded `Γ~`-invariant holomorphic functions are polynomials in `℘ ∘ ψ`.** -/
 theorem eq_poly_of_bound {g : ℍ → ℂ} (hinv : Unif.PmInvariant (U := U) g) (hh : Unif.HolH g)
     {C : ℝ} {N : ℕ} (hb : ∀ τ, ‖g τ‖ ≤ C * (2 + ‖wpΨ U τ‖) ^ N) :
     ∃ p : ℂ[X], ∀ τ, g τ = p.eval (wpΨ U τ) := by
@@ -214,7 +214,7 @@ theorem le_commensurator {G : Type*} [Group G] (Γ : Subgroup G) :
       exact Γ.mul_mem (Γ.mul_mem (Γ.inv_mem hg) h) hg
   rw [this]
 
-/-- **Key lemma K2**: for `δ` in the commensurator of `Γ̃`, `℘ ∘ ψ ∘ δ` is integral over
+/-- **Key lemma K2**: for `δ` in the commensurator of `Γ~`, `℘ ∘ ψ ∘ δ` is integral over
 `ℂ[℘ ∘ ψ]`. -/
 theorem exists_monic_wpΨ_smul {δ : SL(2, ℝ)}
     (hδ : δ ∈ Subgroup.Commensurable.commensurator U.pmDeck) :

@@ -14,7 +14,7 @@ For `W = C • E_t` and the explicit uniformisation `π = uniformizationMap t C`
 `x`-coordinate lies in the image of `ℂ[W]` (`FEt.exists_coord_of_invariant`).
 
 Write `P = ℘ ∘ ψ`, `D = ℘' ∘ ψ`, and `ι` for the lift of `z ↦ -z`. The even part `g + g ∘ ι` and
-`(g - g ∘ ι) D` are invariant under `Γ̃ = pmDeck`, hence polynomials in `P`
+`(g - g ∘ ι) D` are invariant under `Γ~ = pmDeck`, hence polynomials in `P`
 (`Peripheral.eq_poly_of_bound`); the second vanishes at the roots of the cubic, so it is divisible
 by `4P³ - g₂P - g₃ = D²`.
 -/
@@ -74,7 +74,7 @@ theorem holH_derΨ (U : Unif (Lt t)) : Unif.HolH (derΨ U) := by
   · change (Lt t).derivWeierstrassP (U.Ψ (ofComplex z : ℂ)) = (Lt t).derivWeierstrassP (U.Ψ z)
     rw [ofComplex_of_im_pos hz]
 
-/-- Elements of `Γ̃` act on `(P, D)` by `(P, D) ↦ (P, ε D)`. -/
+/-- Elements of `Γ~` act on `(P, D)` by `(P, D) ↦ (P, ε D)`. -/
 theorem wpΨ_derΨ_smul (U : Unif (Lt t)) {γ : SL(2, ℝ)} {ε l : ℂ} (hε : ε = 1 ∨ ε = -1)
     (hl : l ∈ (Lt t).lattice) (hγ : ∀ τ, U.ψ (γ • τ) = ε * U.ψ τ + l) (τ : ℍ) :
     wpΨ U (γ • τ) = wpΨ U τ ∧ derΨ U (γ • τ) = ε * derΨ U τ := by

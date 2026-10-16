@@ -10,17 +10,17 @@ import Oka.Analytification.RET.ES.CurveSections
 # Sections of an algebraisation of the canonical extension over `U₀ ⊆ ℙⁿ`
 
 Keep the notation of `Oka/Analytification/RET/ES/SmoothExtension.lean`: `ρ₀ : W ⟶ ℂⁿ`,
-`ρ : W ⟶ ℙⁿ_an` its composite with the chart `0` and `𝒞̄` the sheaf of sections of `ρ_* 𝒪_W`
+`ρ : W ⟶ ℙⁿ_an` its composite with the chart `0` and `𝒞‾` the sheaf of sections of `ρ_* 𝒪_W`
 bounded near the hyperplane at infinity `H_∞`. Let `F` be a coherent sheaf on `ℙⁿ` with an
-isomorphism `e : F^an ≅ 𝒞̄`. A section `m` of `F` over `U₀ = D₊(X₀)` gives the function `e(m^an)`
+isomorphism `e : F^an ≅ 𝒞‾`. A section `m` of `F` over `U₀ = D₊(X₀)` gives the function `e(m^an)`
 on `W` (`ComplexAnalytic.ProjectiveCompletion.sectionFun`). These are exactly the functions of
 polynomial growth in `z = ρ₀` (`ComplexAnalytic.ProjectiveCompletion.HasPolyGrowth`):
 
 - `ComplexAnalytic.ProjectiveCompletion.hasPolyGrowth_sectionFun`: for every `i`, some
-  `(X₀ / Xᵢ)ᵏ m` extends to a section of `F` over `Uᵢ`, whose image in `𝒞̄` is bounded near
+  `(X₀ / Xᵢ)ᵏ m` extends to a section of `F` over `Uᵢ`, whose image in `𝒞‾` is bounded near
   `H_∞ ∩ Uᵢ`; finitely many such neighbourhoods cover the compact `H_∞`;
 - `ComplexAnalytic.ProjectiveCompletion.exists_sectionFun_eq`: a function `f` with
-  `‖f‖ ≤ C ‖z‖ᵏ` near `H_∞` gives a morphism `𝒪(-k)^an ⟶ 𝒞̄`, `t ↦ t₀ f`
+  `‖f‖ ≤ C ‖z‖ᵏ` near `H_∞` gives a morphism `𝒪(-k)^an ⟶ 𝒞‾`, `t ↦ t₀ f`
   (`ComplexAnalytic.ProjectiveCompletion.psi`); by GAGA-2 it is the analytification of a morphism
   `𝒪(-k) ⟶ F`, and the image of the frame of `𝒪(-k)` over `U₀` is a section of `F` mapping to `f`.
 -/
@@ -494,7 +494,7 @@ def psiApp (V : (projectiveSpaceAn.{u} n).Opens) :
     exact left_eq_add.1 h)
   map_add' t t' := Subtype.ext (growthVal_add ρ₀ f k t t')
 
-/-- **The morphism `𝒪(-k)^an ⟶ 𝒞̄` given by a function `f` with `‖f‖ ≤ C ‖z‖ᵏ`**:
+/-- **The morphism `𝒪(-k)^an ⟶ 𝒞‾` given by a function `f` with `‖f‖ ≤ C ‖z‖ᵏ`**:
 `t ↦ t₀ · f`. -/
 def psi : pbTwist πP (twistCocycle.{u} k) ⟶ extension ρ₀ :=
   modHomMk (psiApp ρ₀ f k C R hR hf)
@@ -517,7 +517,7 @@ lemma psi_frame :
 end Psi
 
 /-- **Sections with polynomial growth come from `F`**: if `‖f‖ ≤ C ‖z‖ᵏ` near `H_∞`, then
-`t ↦ t₀ · f` is a morphism `𝒪(-k)^an ⟶ 𝒞̄ ≅ F^an`, which by GAGA-2 is the analytification of a
+`t ↦ t₀ · f` is a morphism `𝒪(-k)^an ⟶ 𝒞‾ ≅ F^an`, which by GAGA-2 is the analytification of a
 morphism `𝒪(-k) ⟶ F`; its value on the frame of `𝒪(-k)` over `U₀` is a section of `F` over `U₀`
 mapping to `f`. -/
 theorem exists_sectionFun_eq

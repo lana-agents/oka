@@ -297,17 +297,17 @@ theorem exists_section_chart_zero {B : Opens (Fin m → ℂ)} (hBB₀ : B ≤ B�
   have hsup : discBox.{u} 0 B (l * ρ) ⊔ discBox 1 B (ρ / l) = tube.{u} (N := 1) B :=
     chartBox_sup B _ _ (zero_mem_ballOpens hr₀) (zero_mem_ballOpens hr₁)
       (ballOpens_or_inv hr₀ hr)
-  let ĥ : d.I₀ ⊕ d.I₁ → Γₚ(discOverlap.{u} B (l * ρ) (ρ / l)) :=
+  let hhat : d.I₀ ⊕ d.I₁ → Γₚ(discOverlap.{u} B (l * ρ) (ρ / l)) :=
     Sum.elim (fun j' ↦ if j' = j then q else 0) 0
-  obtain ⟨φ₀, φ₁, hφ₀, hφ₁, hrel⟩ := hsplit (fun p a ↦ f0 (ĥ a) p)
-    (differentiableOn_pi.2 fun a ↦ differentiableOn_f0_discOverlap hr₁ (ĥ a))
-  obtain ⟨ψ₀, ψ₁, -, -, hΦ⟩ := d.exists_split hBB₀ hr₁ hr₀S hr₁S k ĥ φ₀ φ₁ hφ₀ hφ₁
+  obtain ⟨φ₀, φ₁, hφ₀, hφ₁, hrel⟩ := hsplit (fun p a ↦ f0 (hhat a) p)
+    (differentiableOn_pi.2 fun a ↦ differentiableOn_f0_discOverlap hr₁ (hhat a))
+  obtain ⟨ψ₀, ψ₁, -, -, hΦ⟩ := d.exists_split hBB₀ hr₁ hr₀S hr₁S k hhat φ₀ φ₁ hφ₀ hφ₁
     fun y hy w hw ↦ hrel y hy w hw
-  have hL : ∑ a, ĥ a • modRes (d.u₀ a) (discOverlap.{u} B (l * ρ) (ρ / l))
+  have hL : ∑ a, hhat a • modRes (d.u₀ a) (discOverlap.{u} B (l * ρ) (ρ / l))
       ((discOverlap_le_sqOverlap hBB₀ hr₀S hr₁S).trans d.sqOverlap_le_N₀) =
       q • modRes (d.s j) (discOverlap.{u} B (l * ρ) (ρ / l))
         ((discOverlap_le_sqOverlap hBB₀ hr₀S hr₁S).trans d.sqOverlap_le_N₀) := by
-    simp only [ĥ, Fintype.sum_sum_type, BundleData.u₀, Sum.elim_inl, Sum.elim_inr,
+    simp only [hhat, Fintype.sum_sum_type, BundleData.u₀, Sum.elim_inl, Sum.elim_inr,
       Pi.zero_apply, zero_smul, Finset.sum_const_zero, add_zero, ite_smul,
       Finset.sum_ite_eq', Finset.mem_univ, if_true]
   have hD₀N : discBox.{u} 0 B (l * ρ) ≤ d.N₀ := (discBox_le_sqBox 0 hBB₀ hr₀S).trans d.hN₀
@@ -485,19 +485,19 @@ theorem exists_section_chart_one {B : Opens (Fin m → ℂ)} (hBB₀ : B ≤ B�
   have hsup : discBox.{u} 0 B (l * ρ) ⊔ discBox 1 B (ρ / l) = tube.{u} (N := 1) B :=
     chartBox_sup B _ _ (zero_mem_ballOpens hr₀) (zero_mem_ballOpens hr₁)
       (ballOpens_or_inv hr₀ hr)
-  let ĥ : d.I₀ ⊕ d.I₁ → Γₚ(discOverlap.{u} B (l * ρ) (ρ / l)) :=
+  let hhat : d.I₀ ⊕ d.I₁ → Γₚ(discOverlap.{u} B (l * ρ) (ρ / l)) :=
     Sum.elim (fun j ↦ r * TopCat.Presheaf.restrictOpen (d.A l₁ j) _ hOS) 0
-  obtain ⟨φ₀, φ₁, hφ₀, hφ₁, hrel⟩ := hsplit (fun p a ↦ f0 (ĥ a) p)
-    (differentiableOn_pi.2 fun a ↦ differentiableOn_f0_discOverlap hr₁ (ĥ a))
-  obtain ⟨ψ₀, ψ₁, -, -, hΦ⟩ := d.exists_split hBB₀ hr₁ hr₀S hr₁S k ĥ φ₀ φ₁ hφ₀ hφ₁
+  obtain ⟨φ₀, φ₁, hφ₀, hφ₁, hrel⟩ := hsplit (fun p a ↦ f0 (hhat a) p)
+    (differentiableOn_pi.2 fun a ↦ differentiableOn_f0_discOverlap hr₁ (hhat a))
+  obtain ⟨ψ₀, ψ₁, -, -, hΦ⟩ := d.exists_split hBB₀ hr₁ hr₀S hr₁S k hhat φ₀ φ₁ hφ₀ hφ₁
     fun y hy w hw ↦ hrel y hy w hw
-  have hL : ∑ a, ĥ a • modRes (d.u₀ a) (discOverlap.{u} B (l * ρ) (ρ / l))
+  have hL : ∑ a, hhat a • modRes (d.u₀ a) (discOverlap.{u} B (l * ρ) (ρ / l))
       (hOS.trans d.sqOverlap_le_N₀) =
       r • modRes (d.t l₁) (discOverlap.{u} B (l * ρ) (ρ / l)) (hOS.trans d.sqOverlap_le_N₁) := by
     have e := congrArg (fun y ↦ modRes y (discOverlap.{u} B (l * ρ) (ρ / l)) hOS) (d.hA l₁)
     simp only [modRes_sum, modRes_smul, modRes_res] at e
     rw [e, Finset.smul_sum]
-    simp only [ĥ, Fintype.sum_sum_type, BundleData.u₀, Sum.elim_inl, Sum.elim_inr,
+    simp only [hhat, Fintype.sum_sum_type, BundleData.u₀, Sum.elim_inl, Sum.elim_inr,
       Pi.zero_apply, zero_smul, Finset.sum_const_zero, add_zero, mul_smul]
   have hD₀N : discBox.{u} 0 B (l * ρ) ≤ d.N₀ := (discBox_le_sqBox 0 hBB₀ hr₀S).trans d.hN₀
   have hD₁N : discBox.{u} 1 B (ρ / l) ≤ d.N₁ := (discBox_le_sqBox 1 hBB₀ hr₁S).trans d.hN₁

@@ -16,14 +16,14 @@ centre `c₀` of the fundamental parallelogram, and
 
 the hyperbolic distance from `τ₀` to the orbit of `τ` (its *depth*). This file proves:
 
-* `Peripheral.depth_smul_le`: for `δ` in the commensurator of `Γ`, `D (δ τ) ≤ D τ + c_δ`.
+* `Peripheral.exists_depth_smul_le`: for `δ` in the commensurator of `Γ`, `D (δ τ) ≤ D τ + c_δ`.
 * `Peripheral.exists_growth`: two-sided comparison between the depth and the size of `℘ ∘ ψ`:
   `log (1 + |℘ (ψ τ)|) ≤ α e^{D τ} + β` and `e^{D τ} ≤ α log (2 + |℘ (ψ τ)|) + β`.
 
 Both come from the cusp normal form (`Peripheral.exists_cusp_normalForm`): near a lattice point
 `w`, the orbit of `τ` contains `Σ (log w)`, whose height in the cusp coordinate is
 `(κ / 2π) (log (1/|w|) + O(1))`, while the whole orbit of `τ₀` stays below a fixed height `h`
-(`Peripheral.im_le_of_orbit_base`), and `|℘ w| ≍ |w|⁻²`.
+(`Peripheral.exists_orbit_height`), and `|℘ w| ≍ |w|⁻²`.
 -/
 
 open Complex Metric Set Filter Topology

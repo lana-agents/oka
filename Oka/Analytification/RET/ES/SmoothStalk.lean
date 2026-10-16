@@ -11,15 +11,15 @@ import Oka.Analytification.RET.ES.CurveStalk
 
 Keep the notation of `Oka/Analytification/RET/ES/SmoothSections.lean`: `ρ₀ : W ⟶ ℂⁿ` is finite
 with Hausdorff source and `ρ : W ⟶ ℙⁿ_an` is its composite with the chart `0`; suppose that the
-canonical extension `𝒞̄` of `ρ₀_* 𝒪_W` to `ℙⁿ_an` is coherent. The global sections of `𝒪_W` of
+canonical extension `𝒞‾` of `ρ₀_* 𝒪_W` to `ℙⁿ_an` is coherent. The global sections of `𝒪_W` of
 polynomial growth in `z = ρ₀` form a ring `P` (`ComplexAnalytic.ProjectiveCompletion.polyGrowth`).
-By GAGA-3, `𝒞̄ = F^an` for a coherent `F` on `ℙⁿ`, and `P` is the image of `Γ(F, U₀)`. Hence:
+By GAGA-3, `𝒞‾ = F^an` for a coherent `F` on `ℙⁿ`, and `P` is the image of `Γ(F, U₀)`. Hence:
 
 - `ComplexAnalytic.ProjectiveCompletion.module_finite_polyGrowth`: `P` is a finite module over
   `Γ(ℙⁿ, U₀) ≅ ℂ[z₁, …, zₙ]`;
 - `ComplexAnalytic.ProjectiveCompletion.bijective_polyGrowthStalkMap`: for `x` in the chart `0`,
   the map `𝒪_{ℙⁿ_an,x} ⊗[Γ(ℙⁿ, U₀)] P → ∏_{w ∈ ρ⁻¹ x} 𝒪_{W,w}` is bijective. It factors through
-  `𝒪_{ℙⁿ_an,x} ⊗ Γ(F, U₀) ≅ (F^an)_x ≅ 𝒞̄_x` and the map `𝒞̄_x → ∏_{w ∈ ρ⁻¹ x} 𝒪_{W,w}`
+  `𝒪_{ℙⁿ_an,x} ⊗ Γ(F, U₀) ≅ (F^an)_x ≅ 𝒞‾_x` and the map `𝒞‾_x → ∏_{w ∈ ρ⁻¹ x} 𝒪_{W,w}`
   (`ComplexAnalytic.ProjectiveCompletion.extensionStalkToPi`), which is bijective since `ρ` is
   finite over the chart `0`.
 -/

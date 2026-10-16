@@ -19,7 +19,7 @@ The proof is the degree-zero case of the theorem on formal functions, in Čech f
 the image of a uniformizer `t` in `Γ(X, ⊤)` and `Z = V(T)`. A splitting `Z = Z₁ ⊔ Z₂` gives on
 every affine chart `Vᵢ = X ∩ D₊(xᵢ)` idempotents modulo `Tⁿ` (`Scheme.exists_isIdemMod`), unique
 modulo `Tⁿ` (`Scheme.IsIdemMod.sub_mem`), hence Čech `0`-cochains `xₙ` of `𝒪_X` with
-`d xₙ ∈ Tⁿ Č¹` and `xₙ ≡ x₁ mod T`. The Čech cohomology `Ȟ¹(𝒪_X)` is a finite `R`-module
+`d xₙ ∈ Tⁿ Č¹` and `xₙ ≡ x₁ mod T`. The Čech cohomology `Ĥ¹(𝒪_X)` is a finite `R`-module
 (Serre, `ProjectiveSpace.cechFinite_of_isCoherent`), so its `t`-power torsion is killed by some
 `t^N`; this lets one correct `x₁` by a multiple of `T` to a cocycle, i.e. a global function `g`
 with `g² ≡ g mod T` and `g` nontrivial modulo `T`. As `Γ(X, 𝒪_X)` is a domain finite over the

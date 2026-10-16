@@ -13,16 +13,16 @@ import Oka.AlgebraicGeometry.ProjectiveSpace.TheoremA
 # Sections of an algebraisation of the canonical extension over `U₀`
 
 Keep the notation of `Oka/Analytification/RET/ES/CurveExtension.lean`: `ρ₀ : W ⟶ ℂ¹`,
-`ρ : W ⟶ ℙ¹_an` its composite with the chart `0` and `𝒞̄` the sheaf of sections of `ρ_* 𝒪_W`
-bounded near `∞`. Let `F` be a coherent sheaf on `ℙ¹` with an isomorphism `e : F^an ≅ 𝒞̄`. A
+`ρ : W ⟶ ℙ¹_an` its composite with the chart `0` and `𝒞‾` the sheaf of sections of `ρ_* 𝒪_W`
+bounded near `∞`. Let `F` be a coherent sheaf on `ℙ¹` with an isomorphism `e : F^an ≅ 𝒞‾`. A
 section `m` of `F` over `U₀ = D₊(X₀)` gives the function `e(m^an)` on `W`
 (`ComplexAnalytic.ProjectiveLine.sectionFun`). We show that these are exactly the functions of
 polynomial growth in the coordinate `z` (`ComplexAnalytic.ProjectiveLine.HasPolyGrowth`):
 
 - `ComplexAnalytic.ProjectiveLine.hasPolyGrowth_sectionFun`: some `(X₀ / X₁)ᵏ m` extends to a
-  section of `F` over `U₁`, whose image in `𝒞̄` is bounded near `∞`;
+  section of `F` over `U₁`, whose image in `𝒞‾` is bounded near `∞`;
 - `ComplexAnalytic.ProjectiveLine.exists_sectionFun_eq`: a function `f` with `‖f‖ ≤ C ‖z‖ᵏ` near
-  `∞` gives a morphism `𝒪(-k)^an ⟶ 𝒞̄`, `t ↦ t₀ f` (`ComplexAnalytic.ProjectiveLine.psi`); by
+  `∞` gives a morphism `𝒪(-k)^an ⟶ 𝒞‾`, `t ↦ t₀ f` (`ComplexAnalytic.ProjectiveLine.psi`); by
   GAGA-2 it is the analytification of a morphism `𝒪(-k) ⟶ F`, and the image of the frame of
   `𝒪(-k)` over `U₀` is a section of `F` mapping to `f`.
 -/
@@ -407,7 +407,7 @@ def psiApp (V : (projectiveSpaceAn.{u} 1).Opens) :
     exact left_eq_add.1 h)
   map_add' t t' := Subtype.ext (growthVal_add ρ₀ f k t t')
 
-/-- **The morphism `𝒪(-k)^an ⟶ 𝒞̄` given by a function `f` with `‖f‖ ≤ C ‖z‖ᵏ`**:
+/-- **The morphism `𝒪(-k)^an ⟶ 𝒞‾` given by a function `f` with `‖f‖ ≤ C ‖z‖ᵏ`**:
 `t ↦ t₀ · f`. -/
 def psi : pbTwist πP (twistCocycle.{u} k) ⟶ extension ρ₀ :=
   modHomMk (psiApp ρ₀ f k C R hR hf)
@@ -432,7 +432,7 @@ lemma psi_frame (f : W.presheaf.obj (op ⊤)) (k : ℕ) (C R : ℝ) (hR : 0 < R)
   exact presheaf_map_map_of_le (X := W) _ _ f
 
 /-- **Sections with polynomial growth come from `F`**: if `‖f‖ ≤ C ‖z‖ᵏ` near `∞`, then
-`t ↦ t₀ · f` is a morphism `𝒪(-k)^an ⟶ 𝒞̄ ≅ F^an`, which by GAGA-2 is the analytification of a
+`t ↦ t₀ · f` is a morphism `𝒪(-k)^an ⟶ 𝒞‾ ≅ F^an`, which by GAGA-2 is the analytification of a
 morphism `𝒪(-k) ⟶ F`; its value on the frame of `𝒪(-k)` over `U₀` is a section of `F` over `U₀`
 mapping to `f`. -/
 theorem exists_sectionFun_eq

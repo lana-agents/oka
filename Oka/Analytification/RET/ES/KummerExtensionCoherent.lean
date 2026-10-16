@@ -11,24 +11,24 @@ import Oka.Algebra.Category.ModuleCat.Sheaf.Free
 # The canonical extension is a coherent sheaf of `𝒪_S`-modules
 
 Keep the notation of `Oka/Analytification/RET/ES/KummerExtensionSheaf.lean`. Restricting scalars
-along `𝒪_S ⟶ 𝒞̄` makes the canonical extension a sheaf of `𝒪_S`-modules
+along `𝒪_S ⟶ 𝒞‾` makes the canonical extension a sheaf of `𝒪_S`-modules
 (`ComplexAnalytic.KummerModel.extensionModule`). For a decomposition `e` of `W` into Kummer covers
 of degrees `kᵢ`, the monomials `uʲ`, `j < kᵢ`, on the Kummer covers form a basis: the induced
 morphism from the free sheaf of rank `∑ kᵢ` is an isomorphism
-(`ComplexAnalytic.KummerModel.isIso_extensionFreeHom`). Hence `𝒞̄` is coherent
+(`ComplexAnalytic.KummerModel.isIso_extensionFreeHom`). Hence `𝒞‾` is coherent
 (`ComplexAnalytic.KummerModel.isCoherent_extensionModule`).
 
 ## Main definitions
 
-- `ComplexAnalytic.KummerModel.extensionRingSheaf hW`: `𝒞̄` as a sheaf of rings on the site of `S`.
-- `ComplexAnalytic.KummerModel.extensionModule hW`: `𝒞̄` as a sheaf of `𝒪_S`-modules.
-- `ComplexAnalytic.KummerModel.extensionFreeHom e hW`: the morphism `𝒪_S^{∑ kᵢ} ⟶ 𝒞̄`.
+- `ComplexAnalytic.KummerModel.extensionRingSheaf hW`: `𝒞‾` as a sheaf of rings on the site of `S`.
+- `ComplexAnalytic.KummerModel.extensionModule hW`: `𝒞‾` as a sheaf of `𝒪_S`-modules.
+- `ComplexAnalytic.KummerModel.extensionFreeHom e hW`: the morphism `𝒪_S^{∑ kᵢ} ⟶ 𝒞‾`.
 
 ## Main results
 
 - `ComplexAnalytic.KummerModel.isIso_extensionFreeHom`,
-  `ComplexAnalytic.KummerModel.extensionModuleIsoFree`: `𝒞̄ ≅ 𝒪_S^{∑ kᵢ}`.
-- `ComplexAnalytic.KummerModel.isCoherent_extensionModule`: `𝒞̄` is coherent.
+  `ComplexAnalytic.KummerModel.extensionModuleIsoFree`: `𝒞‾ ≅ 𝒪_S^{∑ kᵢ}`.
+- `ComplexAnalytic.KummerModel.isCoherent_extensionModule`: `𝒞‾` is coherent.
 -/
 
 open CategoryTheory Opposite AlgebraicGeometry TopologicalSpace Polynomial
@@ -51,7 +51,7 @@ def extensionRingSheaf (hW : IsLocallyOpenInAffine W.left) :
     (TopCat.Presheaf.isSheaf_iff_isSheaf_comp (forget₂ CommRingCat.{u} RingCat.{u})
       (extensionPresheaf W)).1 (isSheaf_extensionPresheaf hW)⟩
 
-/-- The structure morphism `𝒪_S ⟶ 𝒞̄` of sheaves of rings. -/
+/-- The structure morphism `𝒪_S ⟶ 𝒞‾` of sheaves of rings. -/
 def extensionRingHom (hW : IsLocallyOpenInAffine W.left) :
     (disc hB).toLocallyRingedSpace.ringSheaf ⟶ extensionRingSheaf hW :=
   ⟨Functor.whiskerRight (extensionAlgebraHom hW) (forget₂ CommRingCat.{u} RingCat.{u})⟩
@@ -69,7 +69,7 @@ open Classical in
 def basisSection (p : Σ i, Fin (k i)) : boundedSubring W ⊤ :=
   coeffEquiv e ⊤ (Pi.single p.1 (Pi.single p.2 1))
 
-/-- The morphism `𝒪_S^{∑ kᵢ} ⟶ 𝒞̄` given by the monomials `uʲ` on the Kummer covers. -/
+/-- The morphism `𝒪_S^{∑ kᵢ} ⟶ 𝒞‾` given by the monomials `uʲ` on the Kummer covers. -/
 def extensionFreeHom :
     SheafOfModules.free (Σ i, Fin (k i)) ⟶ extensionModule hW :=
   (extensionModule hW).freeHomEquiv.symm fun p ↦
@@ -115,7 +115,7 @@ lemma extensionFreeHom_app (V : (disc hB).Opens)
     · simp [Ne.symm hj]
   · simp [Ne.symm hi]
 
-/-- **The monomials `uʲ` on the Kummer covers form a basis of `𝒞̄`.** -/
+/-- **The monomials `uʲ` on the Kummer covers form a basis of `𝒞‾`.** -/
 theorem isIso_extensionFreeHom : IsIso (extensionFreeHom e hW) := by
   classical
   haveI := Fintype.ofFinite ι

@@ -13,7 +13,7 @@ With the hypotheses of `FEtLocal` at every point of `ℍ`, the space of pairs `(
 point of `B` over `χ_τ` is a covering of `ℍ` (`FEt.isCoveringMap_proj`); since `ℍ` is simply
 connected, every point `ψ₀` over `χ_{τ₀}` lies on a global section, i.e. extends to an
 `A`-algebra map `ι : B → (ℍ → ℂ)` into holomorphic functions (`FEt.exists_lift`), unique among
-continuous ones (`FEt.lift_unique`).
+continuous ones (`FEt.IsLift.eq`).
 -/
 
 open Complex Metric Set Filter Topology Polynomial

@@ -12,16 +12,16 @@ import Mathlib.Algebra.Homology.HomologySequenceLemmas
 Let `X` be a scheme, `ρ : R →+* Γ(X, ⊤)` a ring of global constants, `U : ι → X.Opens` a family of
 opens and `F` an `𝒪_X`-module. Multiplication by `ρ r` is an endomorphism of the underlying
 abelian sheaf of `F` (`Scheme.Modules.smulAb`), hence of the Čech complex `Č•(U, F)`
-(`Scheme.Modules.cechSmul`). This makes the Čech cohomology `Ȟᵠ(U, F)` an `R`-module
+(`Scheme.Modules.cechSmul`). This makes the Čech cohomology `Ĥᵠ(U, F)` an `R`-module
 (`Scheme.Modules.cechHomologyModule`, not an instance), and the maps in the long exact sequence
 of a short exact sequence of `𝒪_X`-modules are `R`-linear.
 
 ## Main results
 
-* `Scheme.Modules.CechFinite ρ U F q`: `Ȟᵠ(U, F)` is a finitely generated `R`-module.
+* `Scheme.Modules.CechFinite ρ U F q`: `Ĥᵠ(U, F)` is a finitely generated `R`-module.
 * `Scheme.Modules.cechFinite_X₃`: for a short exact sequence `0 → F₁ → F₂ → F₃ → 0` of
-  `𝒪_X`-modules which is surjective on all `U_σ`, and `R` noetherian, finiteness of `Ȟᵠ(F₂)` and
-  `Ȟᵠ⁺¹(F₁)` implies finiteness of `Ȟᵠ(F₃)`.
+  `𝒪_X`-modules which is surjective on all `U_σ`, and `R` noetherian, finiteness of `Ĥᵠ(F₂)` and
+  `Ĥᵠ⁺¹(F₁)` implies finiteness of `Ĥᵠ(F₃)`.
 * `Scheme.Modules.cechFinite_of_iso`, `Scheme.Modules.cechFinite_sigma`: invariance under
   isomorphisms and finite coproducts.
 * `Scheme.Modules.cechFinite_of_exactAt`, `Scheme.Modules.cechFinite_of_cocycles`: criteria.
@@ -138,7 +138,7 @@ lemma cechSmul_add (F : X.Modules) (a b : Γ(X, ⊤)) :
 
 variable {R : Type u} [CommRing R] (ρ : R →+* Γ(X, ⊤))
 
-/-- The action of `R` on `Ȟᵠ(U, F)` through `ρ`. -/
+/-- The action of `R` on `Ĥᵠ(U, F)` through `ρ`. -/
 noncomputable def cechHomologyAct (F : X.Modules) (q : ℕ) :
     R →+* AddMonoid.End ((cech U F).homology q) where
   toFun r := (HomologicalComplex.homologyMap (cechSmul U F (ρ r)) q).hom
@@ -155,7 +155,7 @@ noncomputable def cechHomologyAct (F : X.Modules) (q : ℕ) :
     rw [map_add, cechSmul_add, HomologicalComplex.homologyMap_add]
     rfl
 
-/-- `Ȟᵠ(U, F)` as an `R`-module through `ρ`. -/
+/-- `Ĥᵠ(U, F)` as an `R`-module through `ρ`. -/
 noncomputable abbrev cechHomologyModule (F : X.Modules) (q : ℕ) :
     Module R ((cech U F).homology q) :=
   Module.compHom _ (cechHomologyAct U ρ F q)
@@ -165,12 +165,12 @@ lemma cechHomology_smul_def (F : X.Modules) (q : ℕ) (r : R) (x : (cech U F).ho
     r • x = HomologicalComplex.homologyMap (cechSmul U F (ρ r)) q x :=
   rfl
 
-/-- **Finiteness of Čech cohomology**: `Ȟᵠ(U, F)` is a finitely generated `R`-module. -/
+/-- **Finiteness of Čech cohomology**: `Ĥᵠ(U, F)` is a finitely generated `R`-module. -/
 def CechFinite (F : X.Modules) (q : ℕ) : Prop :=
   letI := cechHomologyModule U ρ F q
   Module.Finite R ((cech U F).homology q)
 
-/-- The `R`-linear map `Ȟᵠ(U, F) → Ȟᵠ(U, G)` induced by a morphism of `𝒪_X`-modules. -/
+/-- The `R`-linear map `Ĥᵠ(U, F) → Ĥᵠ(U, G)` induced by a morphism of `𝒪_X`-modules. -/
 noncomputable def cechHomologyLinear {F G : X.Modules} (φ : F ⟶ G) (q : ℕ) :
     letI := cechHomologyModule U ρ F q
     letI := cechHomologyModule U ρ G q
@@ -206,7 +206,7 @@ is surjective on all `U_σ`. -/
 lemma cech_shortExact : (S.map (cechFunctor U)).ShortExact :=
   TopCat.Presheaf.cechComplex_shortExact_of_sheaf hS hsurj
 
-/-- The connecting map `Ȟᵠ(U, S.X₃) → Ȟᵠ⁺¹(U, S.X₁)` is `R`-linear. -/
+/-- The connecting map `Ĥᵠ(U, S.X₃) → Ĥᵠ⁺¹(U, S.X₁)` is `R`-linear. -/
 noncomputable def cechδLinear (q : ℕ) :
     letI := cechHomologyModule U ρ S.X₃ q
     letI := cechHomologyModule U ρ S.X₁ (q + 1)
@@ -233,8 +233,8 @@ lemma cechδLinear_apply (q : ℕ) (x : (cech U S.X₃).homology q) :
     cechδLinear U ρ hS hsurj q x = (cech_shortExact U hS hsurj).δ q (q + 1) (by simp) x :=
   rfl
 
-/-- **Finiteness along a short exact sequence.** If `R` is noetherian, `Ȟᵠ(U, S.X₂)` and
-`Ȟᵠ⁺¹(U, S.X₁)` are finite, then so is `Ȟᵠ(U, S.X₃)`. -/
+/-- **Finiteness along a short exact sequence.** If `R` is noetherian, `Ĥᵠ(U, S.X₂)` and
+`Ĥᵠ⁺¹(U, S.X₁)` are finite, then so is `Ĥᵠ(U, S.X₃)`. -/
 theorem cechFinite_X₃ [IsNoetherianRing R] (q : ℕ) (h₂ : CechFinite U ρ S.X₂ q)
     (h₁ : CechFinite U ρ S.X₁ (q + 1)) : CechFinite U ρ S.X₃ q := by
   letI := cechHomologyModule U ρ S.X₁ (q + 1)
@@ -360,7 +360,7 @@ noncomputable abbrev cechCochainModule (F : X.Modules) (q : ℕ) : Module R ((ce
 
 /-- **A cochain-level criterion for finiteness.** Let `R` be noetherian. If there are finitely many
 `(p+1)`-cochains `s j` such that every `(p+1)`-cocycle is an `R`-combination of them up to a
-coboundary, then `Ȟᵖ⁺¹(U, F)` is finite. -/
+coboundary, then `Ĥᵖ⁺¹(U, F)` is finite. -/
 theorem cechFinite_of_cocycles [IsNoetherianRing R] (F : X.Modules) (p : ℕ) {N : ℕ}
     (s : Fin N → (cech U F).X (p + 1))
     (h : ∀ z : (cech U F).X (p + 1), (cech U F).d (p + 1) (p + 2) z = 0 →
@@ -446,7 +446,7 @@ lemma exists_toCycles_eq_of_homologyπ_eq_zero (K : CochainComplex AddCommGrpCat
     (K.homologyIsCokernel p (p + 1) (by simp))
   exact (ShortComplex.ab_exact_iff _).1 hex z hz
 
-/-- **Bounded torsion.** If `Ȟᵖ⁺¹(U, F)` is a finite module over the noetherian ring `R`, then for
+/-- **Bounded torsion.** If `Ĥᵖ⁺¹(U, F)` is a finite module over the noetherian ring `R`, then for
 every `t ∈ R` there is `N` such that every `(p+1)`-cocycle `y` with `tᵏ y` a coboundary for some
 `k` has `t^N y` a coboundary. -/
 theorem CechFinite.exists_pow_smul_eq_d [IsNoetherianRing R] {F : X.Modules} {p : ℕ}
@@ -506,7 +506,7 @@ lemma cechSmul_f_mul (F : X.Modules) (a b : Γ(X, ⊤)) (p : ℕ) (z : (cech U F
   rw [cechSmul_mul, HomologicalComplex.comp_f, ConcreteCategory.comp_apply]
 
 /-- **The degree-zero formal-functions chase.** Let `t ∈ R` act injectively on `Č²(U, F)`, and let
-`N` bound the `t`-power torsion of `Ȟ¹(U, F)` (`CechFinite.exists_pow_smul_eq_d`). If `x₁, xₘ` are
+`N` bound the `t`-power torsion of `Ĥ¹(U, F)` (`CechFinite.exists_pow_smul_eq_d`). If `x₁, xₘ` are
 `0`-cochains with `d xₘ ∈ t^{N+1} Č¹` and `xₘ ≡ x₁ mod t`, then `x₁` is congruent modulo `t` to a
 `0`-cocycle. -/
 theorem exists_cocycle_sub_eq_smul {F : X.Modules} (t : R) (N : ℕ)
@@ -545,7 +545,7 @@ noncomputable abbrev sectionsModule (F : X.Modules) : Module R Γ(F, ⊤) :=
   Module.compHom _ ρ
 
 include hU in
-/-- `Γ(F, ⊤) → Ȟ⁰(U, F)`, `R`-linearly, is bijective. -/
+/-- `Γ(F, ⊤) → Ĥ⁰(U, F)`, `R`-linearly, is bijective. -/
 theorem exists_linearEquiv_cech_zero (F : X.Modules) :
     letI := sectionsModule ρ F
     letI := cechHomologyModule U ρ F 0

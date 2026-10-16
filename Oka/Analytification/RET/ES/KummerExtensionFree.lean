@@ -12,8 +12,8 @@ Keep the notation of `Oka/Analytification/RET/ES/KummerExtensionSheaf.lean`, and
 decompose `W` into Kummer covers of degrees `kᵢ`. For an open `V ⊆ S`, a family of polynomials
 `Pᵢ ∈ 𝒪_S(V)[u]` gives the section of `𝒪_W` which is `Pᵢ(t)` with coefficients evaluated at
 `(b, tᵏⁱ)` on the `i`-th Kummer cover; it is bounded near `t = 0`. This is a surjective ring
-homomorphism `∏ᵢ 𝒪_S(V)[u] → 𝒞̄(V)` (`ComplexAnalytic.KummerModel.evExt`) with kernel generated
-by the `u^{kᵢ} - t` (`ComplexAnalytic.KummerModel.ker_evExt`). Hence `𝒞̄(V)` is a free
+homomorphism `∏ᵢ 𝒪_S(V)[u] → 𝒞‾(V)` (`ComplexAnalytic.KummerModel.evExt`) with kernel generated
+by the `u^{kᵢ} - t` (`ComplexAnalytic.KummerModel.ker_evExt`). Hence `𝒞‾(V)` is a free
 `𝒪_S(V)`-module with basis the monomials `uʲ`, `j < kᵢ`, on the Kummer covers
 (`ComplexAnalytic.KummerModel.coeffEquiv`), and in particular every bounded section is integral
 over `𝒪_S(V)`.
@@ -22,9 +22,9 @@ over `𝒪_S(V)`.
 
 - `ComplexAnalytic.KummerModel.polyFun k P`: the function `x ↦ P(t)` with coefficients evaluated
   at `(b, tᵏ)`.
-- `ComplexAnalytic.KummerModel.evExt e V`: the ring homomorphism `∏ᵢ 𝒪_S(V)[u] → 𝒞̄(V)`.
+- `ComplexAnalytic.KummerModel.evExt e V`: the ring homomorphism `∏ᵢ 𝒪_S(V)[u] → 𝒞‾(V)`.
 - `ComplexAnalytic.KummerModel.coeffEquiv e V`: the `𝒪_S(V)`-linear isomorphism
-  `∏ᵢ 𝒪_S(V)^{kᵢ} ≃ 𝒞̄(V)`.
+  `∏ᵢ 𝒪_S(V)^{kᵢ} ≃ 𝒞‾(V)`.
 
 ## Main results
 
@@ -33,7 +33,7 @@ over `𝒪_S(V)`.
   compatible with restriction.
 - `ComplexAnalytic.KummerModel.isLocallyOpenInAffine_of_convex`: the hypothesis of
   `ComplexAnalytic.KummerModel.extensionSheaf` holds for `B` convex.
-- `ComplexAnalytic.KummerModel.extensionRingEquiv`: `𝒞̄(V) ≃+* (∏ᵢ 𝒪_S(V)[u]) / (u^{kᵢ} - t)ᵢ`.
+- `ComplexAnalytic.KummerModel.extensionRingEquiv`: `𝒞‾(V) ≃+* (∏ᵢ 𝒪_S(V)[u]) / (u^{kᵢ} - t)ᵢ`.
 - `ComplexAnalytic.KummerModel.free_boundedSubring`,
   `ComplexAnalytic.KummerModel.finite_boundedSubring`,
   `ComplexAnalytic.KummerModel.isIntegral_boundedSubring`.
@@ -224,7 +224,7 @@ lemma boundedSubring_ext {a b : boundedSubring W V}
   exact h i y hw
 
 variable (e V) in
-/-- The ring homomorphism `∏ᵢ 𝒪_S(V)[u] → 𝒞̄(V)`, `(Pᵢ) ↦` the section which is `Pᵢ(t)`, with
+/-- The ring homomorphism `∏ᵢ 𝒪_S(V)[u] → 𝒞‾(V)`, `(Pᵢ) ↦` the section which is `Pᵢ(t)`, with
 coefficients evaluated at `(b, tᵏⁱ)`, on the `i`-th Kummer cover. -/
 def evExt : (ι → ((disc hB).presheaf.obj (op V))[X]) →+* boundedSubring W V where
   toFun P := ⟨secPoly e V P, secPoly_mem P⟩
@@ -388,7 +388,7 @@ lemma evExt_C (a : (disc hB).presheaf.obj (op V)) :
 
 variable (e V) in
 /-- **The canonical extension is free**: `(gᵢⱼ) ↦ ∑ gᵢⱼ uʲ` is an isomorphism of
-`𝒪_S(V)`-modules `∏ᵢ 𝒪_S(V)^{kᵢ} ≃ 𝒞̄(V)`. -/
+`𝒪_S(V)`-modules `∏ᵢ 𝒪_S(V)^{kᵢ} ≃ 𝒞‾(V)`. -/
 def coeffEquiv : (∀ i, Fin (k i) → (disc hB).presheaf.obj (op V)) ≃ₗ[(disc hB).presheaf.obj (op V)]
     boundedSubring W V := by
   refine LinearEquiv.ofBijective
@@ -434,7 +434,7 @@ lemma coeffEquiv_apply (g : ∀ i, Fin (k i) → (disc hB).presheaf.obj (op V)) 
     coeffEquiv e V g = evExt e V (coeffPoly g) :=
   rfl
 
-/-- **The isomorphisms `coeffEquiv` are compatible with restriction**, so that `𝒞̄` is isomorphic
+/-- **The isomorphisms `coeffEquiv` are compatible with restriction**, so that `𝒞‾` is isomorphic
 to the free `𝒪_S`-module of rank `∑ kᵢ`. -/
 theorem extensionPresheaf_map_coeffEquiv {V' : (disc hB).Opens} (h : V' ≤ V)
     (g : ∀ i, Fin (k i) → (disc hB).presheaf.obj (op V)) :

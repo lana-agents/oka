@@ -20,9 +20,9 @@ inequality** `c * F x ^ θ ≤ ‖G x‖` holds for some `0 ≤ θ < 1` and `c >
 
 ## The construction (Łojasiewicz)
 
-Fix a zero `p` and a closed ball `B = B̄(p, r₀)` on which the inequality holds.
+Fix a zero `p` and a closed ball `B = closedBall(p, r₀)` on which the inequality holds.
 
-1. **The field.** The gradient flow `ẋ = -G x` is only good inside `B`, so the field is cut off:
+1. **The field.** The gradient flow `dx/dt = -G x` is only good inside `B`, so the field is cut off:
    `V x = -G (clamp x)`, with `clamp` the coordinatewise projection onto the box `B` (sup norm). `V`
    is bounded and globally Lipschitz (`G` is Lipschitz on the compact convex `B`), so it has a
    global flow `φ` with continuous time-`t` maps (`Oka/Analysis/ODE/GlobalFlow.lean`).
@@ -54,11 +54,11 @@ namespace Lojasiewicz
 
 variable {ι : Type*} [Fintype ι] {F : (ι → ℝ) → ℝ} {G : (ι → ℝ) → ι → ℝ}
 
-/-- The coordinatewise projection onto the closed sup-norm ball `B̄(p, r)`. -/
+/-- The coordinatewise projection onto the closed sup-norm ball `closedBall(p, r)`. -/
 noncomputable def clamp (p : ι → ℝ) (r : ℝ) (x : ι → ℝ) : ι → ℝ :=
   fun i ↦ max (p i - r) (min (p i + r) (x i))
 
-/-- `clamp p r` takes values in the closed ball `B̄(p, r)`. -/
+/-- `clamp p r` takes values in the closed ball `closedBall(p, r)`. -/
 theorem clamp_mem_closedBall (p : ι → ℝ) {r : ℝ} (hr : 0 ≤ r) (x : ι → ℝ) :
     clamp p r x ∈ closedBall p r := by
   rw [mem_closedBall, dist_pi_le_iff hr]
@@ -68,7 +68,7 @@ theorem clamp_mem_closedBall (p : ι → ℝ) {r : ℝ} (hr : 0 ≤ r) (x : ι �
   rw [Real.dist_eq, abs_sub_le_iff]
   constructor <;> linarith
 
-/-- `clamp p r` is the identity on the closed ball `B̄(p, r)`. -/
+/-- `clamp p r` is the identity on the closed ball `closedBall(p, r)`. -/
 theorem clamp_eq_self {p : ι → ℝ} {r : ℝ} {x : ι → ℝ} (hx : x ∈ closedBall p r) :
     clamp p r x = x := by
   have hr : 0 ≤ r := dist_nonneg.trans hx

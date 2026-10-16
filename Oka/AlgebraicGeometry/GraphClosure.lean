@@ -13,7 +13,7 @@ import Mathlib.AlgebraicGeometry.Morphisms.SchemeTheoreticallyDominant
 For morphisms `sY : Y ⟶ S`, `sP : P ⟶ S`, an open `U ⊆ Y` and `g : U ⟶ P` over `S`, the graph
 `U ⟶ Y ×_S P` is an immersion (`AlgebraicGeometry.graphMap`). If `U ⟶ Y` is quasi-compact and
 `P` is separated over `S`, the preimage of `U` is scheme-theoretically dense in the
-scheme-theoretic image `Γ̄` of the graph, and the first projection `Γ̄ ⟶ Y` restricts to an
+scheme-theoretic image `Γ‾` of the graph, and the first projection `Γ‾ ⟶ Y` restricts to an
 isomorphism over `U` (`AlgebraicGeometry.isIso_graphClosureFst_restrict`). Morphisms to a
 separated scheme agreeing on a scheme-theoretically dense open agree
 (`AlgebraicGeometry.ext_of_isSchemeTheoreticallyDominant_of_isSeparated`).
@@ -191,11 +191,11 @@ lemma quasiCompact_graphMap [QuasiCompact U.ι] [QuasiSeparated sP] :
 
 variable [QuasiCompact U.ι] [IsSeparated sP]
 
-/-- The projection `Γ̄ ⟶ Y` from the scheme-theoretic image of the graph. -/
+/-- The projection `Γ‾ ⟶ Y` from the scheme-theoretic image of the graph. -/
 noncomputable abbrev graphClosureFst : (graphMap sY sP U g hg).image ⟶ Y :=
   (graphMap sY sP U g hg).imageι ≫ pullback.fst sY sP
 
-/-- The projection `Γ̄ ⟶ P` from the scheme-theoretic image of the graph. -/
+/-- The projection `Γ‾ ⟶ P` from the scheme-theoretic image of the graph. -/
 noncomputable abbrev graphClosureSnd : (graphMap sY sP U g hg).image ⟶ P :=
   (graphMap sY sP U g hg).imageι ≫ pullback.snd sY sP
 

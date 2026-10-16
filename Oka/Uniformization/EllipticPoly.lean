@@ -87,27 +87,27 @@ theorem const_of_bounded {H : ℂ → ℂ} (hd : DifferentiableOn ℂ H ((Lt t).
         rintro _ ⟨w, hw, rfl⟩
         exact hb w hw.2 ((mem_ball_zero_iff.mp hw.1).trans_le (min_le_left _ _))⟩
   classical
-  set Ĥ : ℂ → ℂ := fun z ↦ if z ∈ (Lt t).lattice then H₀ 0 else H z
-  have hĤper : ∀ z, ∀ l ∈ (Lt t).lattice, Ĥ (z + l) = Ĥ z := by
+  set Hhat : ℂ → ℂ := fun z ↦ if z ∈ (Lt t).lattice then H₀ 0 else H z
+  have hHhatper : ∀ z, ∀ l ∈ (Lt t).lattice, Hhat (z + l) = Hhat z := by
     intro z l hl
     by_cases hz : z ∈ (Lt t).lattice
-    · simp [Ĥ, hz, add_mem hz hl]
+    · simp [Hhat, hz, add_mem hz hl]
     · have : z + l ∉ (Lt t).lattice := fun h ↦ hz (by simpa using sub_mem h hl)
-      simp only [Ĥ, hz, this, if_false]
+      simp only [Hhat, hz, this, if_false]
       exact hper z l hl
-  have hĤd : Differentiable ℂ Ĥ := by
+  have hHhatd : Differentiable ℂ Hhat := by
     intro z
     by_cases hz : z ∈ (Lt t).lattice
-    · have hev : Ĥ =ᶠ[𝓝 z] fun v ↦ H₀ (v - z) := by
+    · have hev : Hhat =ᶠ[𝓝 z] fun v ↦ H₀ (v - z) := by
         filter_upwards [ball_mem_nhds z hρ'] with v hv
         by_cases hvz : v = z
-        · subst hvz; simp [Ĥ, hz]
+        · subst hvz; simp [Hhat, hz]
         · have h1 : v - z ≠ 0 := sub_ne_zero.mpr hvz
           have h2 : ‖v - z‖ < r₀ t := by
             rw [← dist_eq_norm]; exact hv.trans_le (min_le_right _ _)
           have h3 : v ∉ (Lt t).lattice := fun h ↦
             notMem_lattice_of_small h1 h2 (sub_mem h hz)
-          simp only [Ĥ, h3, if_false, H₀, Function.update_of_ne h1]
+          simp only [Hhat, h3, if_false, H₀, Function.update_of_ne h1]
           have := hper (v - z) z hz
           rw [sub_add_cancel] at this
           exact this
@@ -117,21 +117,21 @@ theorem const_of_bounded {H : ℂ → ℂ} (hd : DifferentiableOn ℂ H ((Lt t).
       exact DifferentiableAt.comp (g := H₀) (f := fun v ↦ v - z) z this
         (differentiableAt_id.sub_const z)
     · have hopen : IsOpen ((Lt t).lattice : Set ℂ)ᶜ := (Lt t).isClosed_lattice.isOpen_compl
-      have hev : Ĥ =ᶠ[𝓝 z] H := by
+      have hev : Hhat =ᶠ[𝓝 z] H := by
         filter_upwards [hopen.mem_nhds hz] with v hv
-        simp [Ĥ, show v ∉ (Lt t).lattice from hv]
+        simp [Hhat, show v ∉ (Lt t).lattice from hv]
       exact ((hd.differentiableAt (hopen.mem_nhds hz)).congr_of_eventuallyEq hev)
-  have hbdd : Bornology.IsBounded (range Ĥ) := by
-    refine ((isCompact_Pbar (t := t)).image hĤd.continuous).isBounded.subset ?_
+  have hbdd : Bornology.IsBounded (range Hhat) := by
+    refine ((isCompact_Pbar (t := t)).image hHhatd.continuous).isBounded.subset ?_
     rintro _ ⟨z, rfl⟩
     obtain ⟨l, hl, hzl⟩ := exists_sub_mem_Pbar (t := t) z
     refine ⟨z - l, hzl, ?_⟩
-    have := hĤper (z - l) l hl
+    have := hHhatper (z - l) l hl
     rw [sub_add_cancel] at this
     exact this.symm
-  refine ⟨Ĥ 0, fun w hw ↦ ?_⟩
-  have := hĤd.apply_eq_apply_of_bounded hbdd w 0
-  simpa [Ĥ, hw] using this
+  refine ⟨Hhat 0, fun w hw ↦ ?_⟩
+  have := hHhatd.apply_eq_apply_of_bounded hbdd w 0
+  simpa [Hhat, hw] using this
 
 /-- The derivative of an even function at `0` vanishes. -/
 theorem deriv_zero_of_even {f : ℂ → ℂ} (hf : DifferentiableAt ℂ f 0)

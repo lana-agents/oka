@@ -13,20 +13,20 @@ import Oka.Topology.Sheaves.Cohomology.LerayCech
 # Serre's finiteness theorem on projective space
 
 Let `R` be a noetherian ring and `F` a coherent sheaf on `ℙⁿ = ℙ(n; R)`. Then the Čech cohomology
-`Ȟᵠ(U, F)` for the standard cover `Uᵢ = D₊(Xᵢ)` is a finitely generated `R`-module for every `q`
+`Ĥᵠ(U, F)` for the standard cover `Uᵢ = D₊(Xᵢ)` is a finitely generated `R`-module for every `q`
 (`ProjectiveSpace.cechFinite_of_isCoherent`). Here `R` acts through the constants
 `ProjectiveSpace.globalRingHom` (`Scheme.Modules.CechFinite`).
 
 The proof is Serre's descending induction on `q`:
 
-* for `q ≥ n + 1`, `Ȟᵠ(U, F) = 0` for quasi-coherent `F`: sheaf cohomology vanishes in these
+* for `q ≥ n + 1`, `Ĥᵠ(U, F) = 0` for quasi-coherent `F`: sheaf cohomology vanishes in these
   degrees, and the converse direction of Leray's theorem (`TopCat.Sheaf.cech_exactAt_of_H_eq_zero`)
   applies since the `U_σ` are affine;
-* `Ȟᵠ(U, O(k))` is finite for all `q` and `k` (`ProjectiveSpace.cechFinite_twistingSheaf`): in
+* `Ĥᵠ(U, O(k))` is finite for all `q` and `k` (`ProjectiveSpace.cechFinite_twistingSheaf`): in
   degree `0` these are the sections `Γ(O(k))`, in positive degrees this is
   `ProjectiveSpace.exists_eq_sum_cechSmul_add_cechD`;
 * Theorem A gives `0 → K → ⊕ O(-m) → F → 0` with `K` coherent, which is surjective on the affine
-  `U_σ`, and finiteness of `Ȟᵠ(⊕ O(-m))` and `Ȟᵠ⁺¹(K)` gives finiteness of `Ȟᵠ(F)`
+  `U_σ`, and finiteness of `Ĥᵠ(⊕ O(-m))` and `Ĥᵠ⁺¹(K)` gives finiteness of `Ĥᵠ(F)`
   (`Scheme.Modules.cechFinite_X₃`).
 -/
 
@@ -113,7 +113,7 @@ theorem cechFinite_aux (k : ℕ) :
       (ih (Limits.kernel π) (q + 1) (by omega))
 
 /-- **Serre's finiteness theorem on `ℙⁿ`** (Čech form): for `R` noetherian and `F` coherent on
-`ℙ(n; R)`, the Čech cohomology `Ȟᵠ(U, F)` of the standard cover is a finitely generated
+`ℙ(n; R)`, the Čech cohomology `Ĥᵠ(U, F)` of the standard cover is a finitely generated
 `R`-module for every `q`. -/
 theorem cechFinite_of_isCoherent (F : ℙ(n; R).Modules) [F.IsCoherent] (q : ℕ) :
     CechFinite U ρ F q :=

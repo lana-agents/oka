@@ -439,8 +439,8 @@ end CoverModel
 /-! ### Recognising a finite étale cover through a closed surjection -/
 
 /-- **Recognising a finite étale cover through a closed surjection.** Let `V` and `W` be finite
-étale covers of `T`, `q : Ṽ ⟶ V` a morphism which is closed and surjective on points and
-`g : Ṽ ⟶ W` a morphism over `T`. If `g` is constant on the fibres of `q`, surjective, and
+étale covers of `T`, `q : V₁ ⟶ V` a morphism which is closed and surjective on points and
+`g : V₁ ⟶ W` a morphism over `T`. If `g` is constant on the fibres of `q`, surjective, and
 `g a = g b` implies `q a = q b`, then `V ≅ W`. -/
 theorem AnalyticSpace.FiniteEtaleOver.nonempty_iso_of_closed_surjective {T : AnalyticSpace.{u}}
     (V W : AnalyticSpace.FiniteEtaleOver T) {V' : AnalyticSpace.{u}} (q : V' ⟶ V.left)

@@ -13,16 +13,16 @@ Keep the notation of `Oka/Analytification/RET/ES/CurveSections.lean`: `ρ₀ : W
 with Hausdorff source, a local isomorphism over `{‖z‖ > 1}`, with `ρ₀_* 𝒪_W` coherent, and
 `ρ : W ⟶ ℙ¹_an` is its composite with the chart `0`. The global sections of `𝒪_W` of polynomial
 growth in `z` form a ring `P` (`ComplexAnalytic.ProjectiveLine.polyGrowth`). By GAGA-3 the
-canonical extension `𝒞̄` of `ρ₀_* 𝒪_W` to `ℙ¹_an` is `F^an` for a coherent `F` on `ℙ¹`, and `P` is
+canonical extension `𝒞‾` of `ρ₀_* 𝒪_W` to `ℙ¹_an` is `F^an` for a coherent `F` on `ℙ¹`, and `P` is
 the image of `Γ(F, U₀)`. Hence:
 
 - `ComplexAnalytic.ProjectiveLine.module_finite_polyGrowth`: `P` is a finite module over
   `Γ(ℙ¹, U₀) ≅ ℂ[z]`;
 - `ComplexAnalytic.ProjectiveLine.bijective_polyGrowthStalkMap`: for `x` in the chart `0`, the map
   `𝒪_{ℙ¹_an,x} ⊗[Γ(ℙ¹, U₀)] P → ∏_{w ∈ ρ⁻¹ x} 𝒪_{W,w}` is bijective. It factors through
-  `𝒪_{ℙ¹_an,x} ⊗ Γ(F, U₀) ≅ (F^an)_x ≅ 𝒞̄_x`
+  `𝒪_{ℙ¹_an,x} ⊗ Γ(F, U₀) ≅ (F^an)_x ≅ 𝒞‾_x`
   (`ComplexAnalytic.isBaseChange_analytificationGermLinearMap`)
-  and the map `𝒞̄_x → ∏_{w ∈ ρ⁻¹ x} 𝒪_{W,w}` (`ComplexAnalytic.ProjectiveLine.extensionStalkToPi`),
+  and the map `𝒞‾_x → ∏_{w ∈ ρ⁻¹ x} 𝒪_{W,w}` (`ComplexAnalytic.ProjectiveLine.extensionStalkToPi`),
   which is bijective since `ρ` is finite over the chart `0`.
 -/
 

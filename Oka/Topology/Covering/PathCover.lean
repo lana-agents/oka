@@ -31,7 +31,7 @@ set with the same end points are homotopic in `B`.
 - `PathCover.isCoveringMap`: `PathCover.proj H` is a covering map.
 - `PathCover.monodromy_eq`: the monodromy of the class of a path `γ : y ⟶ z` sends the class of
   `α : b ⟶ y` to the class of `α ≫ γ`.
-- `PathCover.mem_of_forall_monodromy_eq`: an element of `π₁(B, b)` acting trivially on the fibre
+- `PathCover.mem_of_monodromy_eq`: an element of `π₁(B, b)` acting trivially on the fibre
   over `b` lies in `H`.
 - `PathCover.t2Space`: the total space is Hausdorff if `B` is.
 -/

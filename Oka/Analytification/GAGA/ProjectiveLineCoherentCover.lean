@@ -26,7 +26,7 @@ The latter follows from the Mayer–Vietoris sequence, since `Hᵠ(B × ℙ¹, �
 - `TopCat.Sheaf.H_sup_eq_zero`, `TopCat.Sheaf.H_one_sup_eq_zero`, `TopCat.Sheaf.H_inf_eq_zero`:
   vanishing statements from the Mayer–Vietoris sequence of two opens.
 - `ComplexAnalytic.relProjectiveLine.subsingleton_H_chartBox`: Theorem B on chart boxes.
-- `ComplexAnalytic.relProjectiveLine.subsingleton_H_tube_structureSheafAb`:
+- `ComplexAnalytic.relProjectiveLine.H_tube_structureSheafAb_eq_zero`:
   `Hᵠ(B × ℙ¹, 𝒪) = 0` for `q ≥ 2`.
 - `ComplexAnalytic.relProjectiveLine.subsingleton_H_chartBox_inf`: Theorem B on the intersection
   of two chart boxes covering `B × ℙ¹`.

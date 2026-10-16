@@ -11,19 +11,19 @@ import Heights.WeierstrassFibers
 import Heights.WeierstrassDifferential
 
 /-!
-# R3: the commensurator of `Γ̃` is `Γ̃` unless `j ∈ {0, 1728}`
+# R3: the commensurator of `Γ~` is `Γ~` unless `j ∈ {0, 1728}`
 
-Let `N` be a group with `Γ̃ ≤ N ≤ Comm(Γ̃)` and `[N : Γ̃] < ∞`, where `Γ̃ = pmDeck` is the
+Let `N` be a group with `Γ~ ≤ N ≤ Comm(Γ~)` and `[N : Γ~] < ∞`, where `Γ~ = pmDeck` is the
 `±`-deck group of the uniformisation of `ℂ/Λ ∖ {0}` and `F = ℘ ∘ ψ`.
 
 1. The `N`-invariant polynomials `R_N = {p | p ∘ F is N-invariant}` form a subalgebra of `ℂ[X]`
-   containing the coefficients of `∏_{q ∈ N/Γ̃} (X - F ∘ q⁻¹)`; these are not all constant.
+   containing the coefficients of `∏_{q ∈ N/Γ~} (X - F ∘ q⁻¹)`; these are not all constant.
 2. By Lüroth, `R_N ⊆ ℂ[s]` for a non-constant polynomial `s` with `s ∘ F` `N`-invariant; the
    fibres of `s ∘ F` are the `N`-orbits.
 3. Local orders: at `τ` over `w = F τ`, `s ∘ F - s(w)` vanishes to order `e_s(w) m(w)` with
    `m(w) = 2` iff `w` is a root of `4X³ - g₂X - g₃`; this order is `N`-invariant.
 4. The orbifold Riemann–Hurwitz count (`RatFuncPoly.orbifold_count`) gives `deg s = 1`, or
-   `g₃ = 0`, or `g₂ = 0`; if `deg s = 1`, `F` is `N`-invariant and `N = Γ̃`.
+   `g₃ = 0`, or `g₂ = 0`; if `deg s = 1`, `F` is `N`-invariant and `N = Γ~`.
 -/
 
 open Complex Metric Set Filter Topology Polynomial
@@ -67,7 +67,7 @@ theorem wpΨ_surjective (U : Unif (Lt t)) : Function.Surjective (wpΨ U) := by
   obtain ⟨τ, hτ⟩ := U.surj z hz
   exact ⟨τ, by rw [wpΨ, Unif.ψ, hτ, hzw]⟩
 
-/-- The fibres of `℘ ∘ ψ` are the `Γ̃`-orbits. -/
+/-- The fibres of `℘ ∘ ψ` are the `Γ~`-orbits. -/
 theorem exists_mem_pmDeck_of_wpΨ_eq {τ₁ τ₂ : ℍ} (h : wpΨ U τ₁ = wpΨ U τ₂) :
     ∃ γ ∈ U.pmDeck, γ • τ₁ = τ₂ := by
   rcases (Heights.weierstrassP_eq_iff_sub_mem_or_add_mem (Lt t) (U.ψ τ₂) (U.ψ τ₁)
@@ -267,7 +267,7 @@ variable {N : Subgroup SL(2, ℝ)}
 theorem mem_invPoly {p : ℂ[X]} :
     p ∈ invPoly U N ↔ ∀ n ∈ N, ∀ τ, p.eval (wpΨ U (n • τ)) = p.eval (wpΨ U τ) := Iff.rfl
 
-/-- **The coset polynomial** `∏_{q ∈ N/Γ̃} (X - F ∘ q⁻¹)`: its coefficients are polynomials in `F`
+/-- **The coset polynomial** `∏_{q ∈ N/Γ~} (X - F ∘ q⁻¹)`: its coefficients are polynomials in `F`
 lying in `R_N`. -/
 theorem exists_cosetPoly (hΓN : U.pmDeck ≤ N)
     (hNC : N ≤ Subgroup.Commensurable.commensurator U.pmDeck)
@@ -389,7 +389,7 @@ theorem exists_generator (hΓN : U.pmDeck ≤ N)
     obtain ⟨γ, hγ, hγτ⟩ := exists_mem_pmDeck_of_wpΨ_eq hi.symm
     exact ⟨γ * g i, N.mul_mem (hΓN hγ) (hgN i), by rw [mul_smul, hγτ]⟩
 
-/-- An element preserving `F = ℘ ∘ ψ` lies in `Γ̃`. -/
+/-- An element preserving `F = ℘ ∘ ψ` lies in `Γ~`. -/
 theorem mem_pmDeck_of_wpΨ_smul {n : SL(2, ℝ)} (hn : ∀ σ, wpΨ U (n • σ) = wpΨ U σ) :
     n ∈ U.pmDeck := by
   classical
@@ -500,7 +500,7 @@ theorem orbifold_condition {s : ℂ[X]} (hs : 0 < s.natDegree)
   rw [analyticOrderAt_sΦ_smul (hinv n hn)] at h2
   exact_mod_cast h1.symm.trans h2
 
-/-- **R3.** If `Γ̃ ≤ N ≤ Comm(Γ̃)` with `[N : Γ̃] < ∞`, then `N = Γ̃`, unless `g₃ = 0`
+/-- **R3.** If `Γ~ ≤ N ≤ Comm(Γ~)` with `[N : Γ~] < ∞`, then `N = Γ~`, unless `g₃ = 0`
 (`j = 1728`) or `g₂ = 0` (`j = 0`). -/
 theorem le_pmDeck_or (hΓN : U.pmDeck ≤ N)
     (hNC : N ≤ Subgroup.Commensurable.commensurator U.pmDeck)
@@ -527,8 +527,8 @@ theorem le_pmDeck_or (hΓN : U.pmDeck ≤ N)
   · exact Or.inr (Or.inl (RatFuncPoly.g₃_eq_zero_of_symm (card_E₂ hΔ) hroot hc))
   · exact Or.inr (Or.inr (RatFuncPoly.g₂_eq_zero_of_cube (card_E₂ hΔ) hroot hc))
 
-/-- **R3 for the commensurator.** If `Γ̃` has finite index in its commensurator, the
-commensurator is `Γ̃`, unless `g₃ = 0` or `g₂ = 0`. -/
+/-- **R3 for the commensurator.** If `Γ~` has finite index in its commensurator, the
+commensurator is `Γ~`, unless `g₃ = 0` or `g₂ = 0`. -/
 theorem commensurator_eq_pmDeck_or
     (hfin : U.pmDeck.relIndex (Subgroup.Commensurable.commensurator U.pmDeck) ≠ 0) :
     Subgroup.Commensurable.commensurator U.pmDeck = U.pmDeck ∨ (Lt t).g₃ = 0 ∨

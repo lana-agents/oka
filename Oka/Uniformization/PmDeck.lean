@@ -11,10 +11,10 @@ import Oka.Uniformization.Depth
 For the uniformisation `ψ : ℍ → ℂ ∖ Λ` (`Uniformization.Unif`), the maps `z ↦ ± z + l` (`l ∈ Λ`)
 of `ℂ ∖ Λ` lift to Möbius transformations of `ℍ`. They form the group
 
-`Γ̃ = {g ∈ SL(2, ℝ) | ∃ ε = ±1, ∃ l ∈ Λ, ψ ∘ g = ε ψ + l}`
+`Γ~ = {g ∈ SL(2, ℝ) | ∃ ε = ±1, ∃ l ∈ Λ, ψ ∘ g = ε ψ + l}`
 
 (`Unif.pmDeck`), which contains the deck group `Γ` with index at most `2`, contains a lift `ι`
-of `z ↦ -z`, and leaves `℘ ∘ ψ` invariant. Every function on `ℍ` invariant under `Γ̃` descends
+of `z ↦ -z`, and leaves `℘ ∘ ψ` invariant. Every function on `ℍ` invariant under `Γ~` descends
 to an even `Λ`-periodic function on `ℂ ∖ Λ` (`Unif.descend`), holomorphic if the function is.
 -/
 
@@ -90,7 +90,7 @@ theorem deckGroup_le_pmDeck : U.deckGroup ≤ U.pmDeck := by
   rintro g ⟨l, hl, hg⟩
   exact ⟨1, Or.inl rfl, l, hl, fun τ ↦ by rw [hg, one_mul]⟩
 
-/-- **Transitivity**: if `ψ τ' = ± ψ τ` modulo `Λ`, some element of `Γ̃` moves `τ` to `τ'`. -/
+/-- **Transitivity**: if `ψ τ' = ± ψ τ` modulo `Λ`, some element of `Γ~` moves `τ` to `τ'`. -/
 theorem exists_mem_pmDeck {ε : ℂ} (hε : ε = 1 ∨ ε = -1) {τ τ' : ℍ}
     (h : U.ψ τ' - ε * U.ψ τ ∈ L.lattice) :
     ∃ g : SL(2, ℝ), (∀ σ, U.ψ (g • σ) = ε * U.ψ σ + (U.ψ τ' - ε * U.ψ τ)) ∧ g • τ = τ' := by
@@ -136,7 +136,7 @@ theorem wp_ψ_smul_pm {g : SL(2, ℝ)} (hg : g ∈ U.pmDeck) (τ : ℍ) :
   · rw [one_mul]
   · rw [neg_one_mul, L.weierstrassP_neg]
 
-/-- The deck group has finite index in `Γ̃`. -/
+/-- The deck group has finite index in `Γ~`. -/
 theorem relIndex_deckGroup_pmDeck_ne_zero : U.deckGroup.relIndex U.pmDeck ≠ 0 := by
   obtain ⟨ι, hι, hιψ⟩ := U.exists_iota
   classical
@@ -169,14 +169,14 @@ theorem commensurator_pmDeck :
   refine Subgroup.Commensurable.eq ⟨?_, U.relIndex_deckGroup_pmDeck_ne_zero⟩
   rw [Subgroup.relIndex_eq_one.mpr (U.deckGroup_le_pmDeck)]; exact one_ne_zero
 
-/-- A `Γ̃`-invariant function on `ℍ` as a function on `ℂ ∖ Λ` (and `0` on `Λ`). -/
+/-- A `Γ~`-invariant function on `ℍ` as a function on `ℂ ∖ Λ` (and `0` on `Λ`). -/
 noncomputable def descend (g : ℍ → ℂ) (w : ℂ) : ℂ := by
   classical
   exact if h : w ∉ L.lattice then g (U.surj w h).choose else 0
 
 variable {U}
 
-/-- `Γ̃`-invariance. -/
+/-- `Γ~`-invariance. -/
 def PmInvariant (g : ℍ → ℂ) : Prop := ∀ γ ∈ U.pmDeck, ∀ τ, g (γ • τ) = g τ
 
 theorem descend_ψ {g : ℍ → ℂ} (hg : PmInvariant (U := U) g) (τ : ℍ) :

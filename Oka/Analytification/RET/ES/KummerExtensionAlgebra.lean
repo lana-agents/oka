@@ -9,21 +9,21 @@ import Oka.Analytification.RET.ES.KummerExtensionSheaf
 # The canonical extension as an `𝒪_S`-algebra
 
 Keep the notation of `Oka/Analytification/RET/ES/KummerExtensionSheaf.lean`. Pulling back
-holomorphic functions on `V ⊆ S` along `p : W → S°` makes `𝒞̄(V)` an `𝒪_S(V)`-algebra
+holomorphic functions on `V ⊆ S` along `p : W → S°` makes `𝒞‾(V)` an `𝒪_S(V)`-algebra
 (`ComplexAnalytic.KummerModel.extensionAlgebraMap`), compatibly with restriction. Off `t = 0`
-every section is bounded, so `𝒞̄` restricts to `p_* 𝒪_W` there
+every section is bounded, so `𝒞‾` restricts to `p_* 𝒪_W` there
 (`ComplexAnalytic.KummerModel.boundedSubring_eq_top`).
 
 ## Main definitions
 
 - `ComplexAnalytic.KummerModel.pullbackHom W V`: pulling back sections of `𝒪_S` over `V` to
   sections of `𝒪_W` over `p⁻¹(V ∩ S°)`.
-- `ComplexAnalytic.KummerModel.extensionAlgebraMap W V`: the structure map `𝒪_S(V) → 𝒞̄(V)`.
+- `ComplexAnalytic.KummerModel.extensionAlgebraMap W V`: the structure map `𝒪_S(V) → 𝒞‾(V)`.
 - `ComplexAnalytic.KummerModel.extensionAlgebraHom`: the same, as a morphism of presheaves.
 
 ## Main results
 
-- `ComplexAnalytic.KummerModel.boundedSubring_eq_top`: off `t = 0`, `𝒞̄ = p_* 𝒪_W`.
+- `ComplexAnalytic.KummerModel.boundedSubring_eq_top`: off `t = 0`, `𝒞‾ = p_* 𝒪_W`.
 - `ComplexAnalytic.KummerModel.mem_boundedSubring_of_isIntegralElem`: integral sections are
   bounded.
 -/
@@ -90,7 +90,7 @@ lemma pullbackHom_mem_boundedSubring (V : (disc hB).Opens) (g : (disc hB).preshe
   rw [eval_pullbackHom]
   exact le_of_lt hwN
 
-/-- The structure map `𝒪_S(V) → 𝒞̄(V)`: pulling back holomorphic functions along `p`. -/
+/-- The structure map `𝒪_S(V) → 𝒞‾(V)`: pulling back holomorphic functions along `p`. -/
 def extensionAlgebraMap (V : (disc hB).Opens) :
     (disc hB).presheaf.obj (op V) →+* boundedSubring W V :=
   (pullbackHom W V).codRestrict _ (pullbackHom_mem_boundedSubring W V)
@@ -123,7 +123,7 @@ theorem boundedSubring_eq_top {V : (disc hB).Opens}
   eq_top_iff.2 fun _ _ x hx hx0 ↦ absurd hx0 (hV x hx)
 
 variable {W} in
-/-- The structure morphism `𝒪_S ⟶ 𝒞̄` of presheaves of rings. -/
+/-- The structure morphism `𝒪_S ⟶ 𝒞‾` of presheaves of rings. -/
 def extensionAlgebraHom (hW : IsLocallyOpenInAffine W.left) :
     (disc hB).presheaf ⟶ extensionPresheaf W where
   app V := CommRingCat.ofHom (extensionAlgebraMap W V.unop)
