@@ -30,7 +30,7 @@ sense of `Oka/Topology/Covering/BranchedDiscData.lean`:
 
 Hence (`ComplexAnalytic.exists_fundamentalGroup_analytification_mulEquiv_freeGroup`), for `V`
 connected, **`π₁(V^an)` is free of rank `d (|S| - 1) + 1 - #(z^an)⁻¹(S)`**, `d` the number of
-points of a fibre of `z^an` over `ℂ ∖ S`. For `V = X̄ ∖ D` and `z` a Belyi function with pole set
+points of a fibre of `z^an` over `ℂ ∖ S`. For `V = X ∖ D` and `z` a Belyi function with pole set
 exactly `D` (`S = {0, 1}`) this is the free group of rank `d + 1 - c₀ - c₁`, which equals
 `2g + |D| - 1` by Riemann–Hurwitz.
 -/
