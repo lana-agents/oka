@@ -728,6 +728,7 @@ import Oka.Topology.Category.TopCat.Opens
 import Oka.Topology.Connected.Clopen
 import Oka.Topology.Covering.Basic
 import Oka.Topology.Covering.BranchedFill
+import Oka.Topology.Covering.BranchedOrbits
 import Oka.Topology.Covering.FreeRank
 import Oka.Topology.Covering.LocallyContractible
 import Oka.Topology.Covering.Monodromy
