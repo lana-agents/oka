@@ -28,8 +28,8 @@ pieces `C ∩ {ℓ < c₂}`, `C ∩ {ℓ > c₁}` are again regions of the same 
   a small circle around `a`), and under `π₁(ℂ ∖ {0}) ≅ ℤ` (lifting along `exp`) the circle goes
   to a generator: its lift starting at `e` ends at `e + 2πi` (monodromy computation);
 * `|S| ≥ 2`: `VanKampen.coprodEquiv`; loops around `s` in a piece map to loops around `s` in
-  `C ∖ S` (`Complex.PuncturedPlane.IsLoopAround.map`), and changing the base point along a path preserves loops around
-  `s` (`Complex.PuncturedPlane.IsLoopAround.conj`).
+  `C ∖ S` (`Complex.PuncturedPlane.IsLoopAround.map`), and changing the base point along a
+  path preserves loops around `s` (`Complex.PuncturedPlane.IsLoopAround.conj`).
 
 ## References
 
@@ -138,7 +138,7 @@ lemma IsLoopAround.map {C' : Set ℂ} {S' : Finset ℂ} (hC : C ⊆ C')
       FundamentalGroupoid.mk (circleBase h') := congrArg FundamentalGroupoid.mk hb
   have hc : (FundamentalGroupoid.map f).map (circleArrow h) =
       eqToHom e ≫ circleArrow h' ≫ eqToHom e.symm := by
-    rw [FundamentalGroupoid.conj_eqToHom]
+    refine Eq.trans ?_ (FundamentalGroupoid.conj_eqToHom (p := circleArrow h') hb hb).symm
     change Path.Homotopic.Quotient.mk ((circlePath h).map f.continuous) = _
     have : (circlePath h).map f.continuous = (circlePath h').cast hb hb := by
       ext t
