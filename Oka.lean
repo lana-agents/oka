@@ -772,6 +772,7 @@ import Oka.Topology.Sheaves.Stalks
 import Oka.Topology.VanKampen.Basic
 import Oka.Topology.VanKampen.Cover
 import Oka.Topology.VanKampen.PathClassHom
+import Oka.Topology.VanKampen.PuncturedPlane
 import Oka.UFD
 import Oka.UliftCoord
 import Oka.Uniformization.Cayley
