@@ -393,6 +393,7 @@ import Oka.Analytification.ModuleFiniteAnalytification
 import Oka.Analytification.MonicHypersurface
 import Oka.Analytification.OpenBaseFiniteness
 import Oka.Analytification.OverSpec
+import Oka.Analytification.Pi1.BranchedCoordinate
 import Oka.Analytification.Pi1.Comparison
 import Oka.Analytification.Pi1.ConnectedCover
 import Oka.Analytification.Pi1.Fiber
@@ -727,6 +728,7 @@ import Oka.Topology.Algebra.Polynomial
 import Oka.Topology.Category.TopCat.Opens
 import Oka.Topology.Connected.Clopen
 import Oka.Topology.Covering.Basic
+import Oka.Topology.Covering.BranchedDiscData
 import Oka.Topology.Covering.BranchedFill
 import Oka.Topology.Covering.BranchedOrbits
 import Oka.Topology.Covering.FreeRank

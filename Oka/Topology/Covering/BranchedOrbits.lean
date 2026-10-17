@@ -94,14 +94,14 @@ universe u
 variable {X : Type u} [TopologicalSpace X] {f : C(X, ℂ)} {S : Finset ℂ}
   (D : DiscData f S) (cov : IsCoveringMap (punctMap f S))
 
-/-- **Lifts of paths in `B(s, ρ s)` stay in one disc.** -/
+/-- **Lifts of paths in `B(s, σ s)` stay in one disc.** -/
 theorem monodromy_mem_disc {s : ℂ} (hs : s ∈ S) {z z' : Region Set.univ S} (γ : Path z z')
-    (hγ : ∀ t, (γ t : ℂ) ∈ ball s (D.ρ s)) (e : punctMap f S ⁻¹' {z}) {P : X} (hP : f P = s)
+    (hγ : ∀ t, (γ t : ℂ) ∈ ball s (D.σ s)) (e : punctMap f S ⁻¹' {z}) {P : X} (hP : f P = s)
     (he : e.1.1 ∈ D.V P) :
     (cov.monodromy (⟦γ⟧ : Path.Homotopic.Quotient z z') e).1.1 ∈ D.V P := by
   have h0 : γ.toContinuousMap 0 = punctMap f S e.1 := γ.source.trans e.2.symm
   set L := cov.liftPath γ.toContinuousMap e.1 h0
-  have hL : ∀ t, f (L t).1 ∈ ball s (D.ρ s) := fun t ↦ by
+  have hL : ∀ t, f (L t).1 ∈ ball s (D.σ s) := fun t ↦ by
     have := congrFun (cov.liftPath_lifts γ.toContinuousMap e.1 h0) t
     have hfe : (punctMap f S (L t) : ℂ) = f (L t).1 := rfl
     rw [← hfe]
@@ -138,6 +138,24 @@ theorem eq_of_mem_disc {s : ℂ} {P Q : X} (hP : f P = s) (hQ : f Q = s) (hs : s
   by_contra hPQ
   exact Set.disjoint_left.mp (D.disjoint P Q (hP ▸ hs) (hQ ▸ hs) hPQ) hyP hyQ
 
+/-- Every neighbourhood of the centre `P` of a disc `V P` contains points of `V P ∖ {P}`. -/
+theorem exists_mem_disc_ne_of_mem {P : X} (hPS : f P ∈ S) {W : Set X} (hW : IsOpen W)
+    (hPW : P ∈ W) : ∃ y, y ∈ D.V P \ {P} ∧ y ∈ W := by
+  let e := D.e P hPS
+  let W' : Set (D.V P) := Subtype.val ⁻¹' W
+  have hW' : IsOpen W' := hW.preimage continuous_subtype_val
+  let O : Set ℂ := Subtype.val '' (e '' W')
+  have hO : IsOpen O :=
+    isOpen_ball.isOpenMap_subtype_val _ (e.isOpenMap _ hW')
+  have h0 : (0 : ℂ) ∈ O := ⟨e ⟨P, D.mem P hPS⟩, ⟨_, hPW, rfl⟩, D.e_center P hPS⟩
+  obtain ⟨w, hwO, hw0⟩ := Filter.nonempty_of_mem (Filter.inter_mem
+    (mem_nhdsWithin_of_mem_nhds (hO.mem_nhds h0)) (self_mem_nhdsWithin : {(0 : ℂ)}ᶜ ∈ 𝓝[≠] 0))
+  obtain ⟨_, ⟨z, hz, rfl⟩, rfl⟩ := hwO
+  refine ⟨z.1, ⟨z.2, fun hzP ↦ hw0 ?_⟩, hz⟩
+  have : z = ⟨P, D.mem P hPS⟩ := Subtype.ext hzP
+  rw [this]
+  exact D.e_center P hPS
+
 section Orbits
 
 variable {x : Region Set.univ S} (ψ : FundamentalGroup (Region Set.univ S) x ≃* FreeGroup S)
@@ -153,9 +171,10 @@ theorem card_orbits_eq (hψ : ∀ s : S, IsLoopAround (ψ.symm (FreeGroup.of s))
   classical
   obtain ⟨s, hs⟩ := a
   obtain ⟨r, h, δ, hX⟩ := hψ ⟨s, hs⟩
-  have hρ := D.ρ_pos s hs
-  set r' := min r (D.ρ s / 2)
-  have hr' : r' < D.ρ s := lt_of_le_of_lt (min_le_right _ _) (half_lt_self hρ)
+  have hρ := D.σ_pos s hs
+  set r' := min r (D.σ s / 2)
+  have hr' : r' < D.σ s := lt_of_le_of_lt (min_le_right _ _) (half_lt_self hρ)
+  have hr'ρ : r' < D.ρ s := lt_of_lt_of_le hr' (D.σ_le s hs)
   have h' : Admissible Set.univ S s r' := ⟨lt_min h.pos (half_pos hρ), subset_univ _,
     fun s' hs' hb ↦ h.isolated s' hs' (closedBall_subset_closedBall (min_le_left _ _) hb)⟩
   obtain ⟨β, hβ⟩ := circleArrow_eq_conj h h'
@@ -165,14 +184,14 @@ theorem card_orbits_eq (hψ : ∀ s : S, IsLoopAround (ψ.symm (FreeGroup.of s))
     rw [hX, hβ, conjArrow_apply]
     simp [δ', Groupoid.inv_eq_inv]
     rfl
-  have hc'B : ((circleBase h' : Region Set.univ S) : ℂ) ∈ ball s (D.ρ s) := by
-    change s + (r' : ℂ) ∈ ball s (D.ρ s)
+  have hc'B : ((circleBase h' : Region Set.univ S) : ℂ) ∈ ball s (D.σ s) := by
+    change s + (r' : ℂ) ∈ ball s (D.σ s)
     rw [mem_ball, dist_eq_norm, add_sub_cancel_left, Complex.norm_real, Real.norm_eq_abs,
       abs_of_pos h'.pos]
     exact hr'
   -- the disc of a fibre point
   let e₁ : (punctMap f S ⁻¹' {x}) → (punctMap f S ⁻¹' {circleBase h'}) := cov.monodromy δ'
-  have hfz : ∀ z : punctMap f S ⁻¹' {circleBase h'}, f z.1.1 ∈ ball s (D.ρ s) := fun z ↦ by
+  have hfz : ∀ z : punctMap f S ⁻¹' {circleBase h'}, f z.1.1 ∈ ball s (D.σ s) := fun z ↦ by
     have : (punctMap f S z.1 : ℂ) = f z.1.1 := rfl
     rw [← this, z.2]
     exact hc'B
@@ -241,7 +260,7 @@ theorem card_orbits_eq (hψ : ∀ s : S, IsLoopAround (ψ.symm (FreeGroup.of s))
       change f (q t) ∈ _
       have := D.mapsTo _ hPS _ (hq t).1
       rwa [(Φ e).2] at this
-    obtain ⟨k, hk⟩ := exists_eq_zpow_circleArrow hs (D.ρ_isolated s hs) h' hr' pq hpq
+    obtain ⟨k, hk⟩ := exists_eq_zpow_circleArrow hs (D.ρ_isolated s hs) h' hr'ρ pq hpq
     have hk' : (⟦pq⟧ : Path.Homotopic.Quotient _ _) = C' ^ k := hk
     have hmon : cov.monodromy (C' ^ k) (e₁ e) = e₁ e' := by
       apply cov.monodromy_eq_of_map_eq (⟦q'⟧ : Path.Homotopic.Quotient _ _)
@@ -257,23 +276,23 @@ theorem card_orbits_eq (hψ : ∀ s : S, IsLoopAround (ψ.symm (FreeGroup.of s))
   have hsurj : Function.Surjective Ψ := by
     rintro ⟨P, hP⟩
     have hPS : f P ∈ S := by rw [hP]; exact hs
-    obtain ⟨y, hy⟩ := (VanKampen.isPathConnected_diff_of_disc (D.e P hPS) (D.mem P hPS)
-      (D.e_center P hPS)).nonempty
+    obtain ⟨y, hy, hyB⟩ := exists_mem_disc_ne_of_mem D hPS (isOpen_ball.preimage f.continuous)
+      (show f P ∈ ball s (D.σ s) by rw [hP]; exact mem_ball_self (D.σ_pos s hs))
     have hyS : f y ∉ S := fun hS ↦ hy.2 (D.eq_of_mem P hPS y hy.1 hS)
     let y' : Punct f S := ⟨y, hyS⟩
-    have hyB : f y ∈ ball s (D.ρ s) := by rw [← hP]; exact D.mapsTo P hPS y hy.1
-    have hB' : Admissible (ball s (D.ρ s)) {s} s r' :=
+    have hB' : Admissible (ball s (D.σ s)) {s} s r' :=
       ⟨h'.pos, closedBall_subset_ball hr', fun s' hs' _ ↦ Finset.mem_singleton.1 hs'⟩
-    haveI := pathConnectedSpace_region_single (convex_ball s (D.ρ s)) hB'
-    let ι : C(Region (ball s (D.ρ s)) {s}, Region Set.univ S) :=
+    haveI := pathConnectedSpace_region_single (convex_ball s (D.σ s)) hB'
+    let ι : C(Region (ball s (D.σ s)) {s}, Region Set.univ S) :=
       ⟨fun w ↦ ⟨w.1, trivial, fun hw ↦ w.2.2 (by
-        rw [Finset.mem_singleton]; exact D.ρ_isolated s hs _ hw w.2.1)⟩, by fun_prop⟩
+        rw [Finset.mem_singleton]; exact D.ρ_isolated s hs _ hw
+          (ball_subset_ball (D.σ_le s hs) w.2.1))⟩, by fun_prop⟩
     have hne : f y ∉ ({s} : Finset ℂ) := fun h ↦ hyS (by
       rw [Finset.mem_singleton] at h; rw [h]; exact hs)
-    let yB : Region (ball s (D.ρ s)) {s} := ⟨f y, hyB, hne⟩
+    let yB : Region (ball s (D.σ s)) {s} := ⟨f y, hyB, hne⟩
     let γB := PathConnectedSpace.somePath yB (circleBase hB')
     let γ : Path (punctMap f S y') (circleBase h') := γB.map ι.continuous
-    have hγ : ∀ t, (γ t : ℂ) ∈ ball s (D.ρ s) := fun t ↦ (γB t).2.1
+    have hγ : ∀ t, (γ t : ℂ) ∈ ball s (D.σ s) := fun t ↦ (γB t).2.1
     let z := cov.monodromy (⟦γ⟧ : Path.Homotopic.Quotient _ _)
       (⟨y', rfl⟩ : punctMap f S ⁻¹' {punctMap f S y'})
     have hz : z.1.1 ∈ D.V P := monodromy_mem_disc D cov hs γ hγ ⟨y', rfl⟩ hP hy.1

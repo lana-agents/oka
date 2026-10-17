@@ -13,10 +13,10 @@ import Oka.Topology.VanKampen.LoopsAround
 Let `f : X → ℂ` be continuous, `S ⊆ ℂ` finite, and assume that `f` restricts to a covering map
 `p : X ∖ f⁻¹(S) → ℂ ∖ S` with path-connected total space, and that every point `P` over `S` has a
 disc neighbourhood `V P` (`BranchedCover.DiscData`) mapped by `f` into a disc `B(f P, ρ)` around
-`f P` containing no other point of `S`, such that `f⁻¹(B(s, ρ))` is covered by the (pairwise
-disjoint) discs `V P` over `s`. This is the topological situation of a finite branched covering
-`X → ℂ` (e.g. the analytification of a finite morphism of smooth curves to `𝔸¹`, étale over
-`𝔸¹ ∖ S`).
+`f P` containing no other point of `S`, such that `f⁻¹(B(s, σ))` is covered by the (pairwise
+disjoint) discs `V P` over `s` for some smaller radius `0 < σ ≤ ρ`. This is the topological
+situation of a finite branched covering `X → ℂ` (e.g. the analytification of a finite morphism of
+smooth curves to `𝔸¹`, étale over `𝔸¹ ∖ S`).
 
 Choose free generators of `π₁(ℂ ∖ S, x) ≅ F(S)` that are loops around the points of `S`
 (`Complex.exists_isLoopAround_basis`). Then the kernel of `π₁(X ∖ f⁻¹(S), e₀) → π₁(X, e₀)` is the
@@ -32,7 +32,7 @@ conjugate to loops in the discs `V P ∖ {P}`. Such a loop maps to a loop in the
 (`Complex.PuncturedPlane.exists_eq_conj_zpow`). Conversely, a conjugate `g aᵏ g⁻¹` of a power of
 the generator `a` (a loop around `s`, whose circle we may shrink into `B(s, ρ)` by
 `Complex.PuncturedPlane.circleArrow_eq_conj`) lying in the stabiliser lifts to `γ' c' γ'⁻¹`, where
-`c'` is the closed lift of the `k`-th power of the small circle; `c'` lies in `f⁻¹(B(s, ρ))`, hence
+`c'` is the closed lift of the `k`-th power of the small circle; `c'` lies in `f⁻¹(B(s, σ))`, hence
 (by connectedness) in a single disc `V P`.
 -/
 
@@ -119,8 +119,12 @@ noncomputable def punctMap : C(Punct f S, Region Set.univ S) :=
   ⟨fun y ↦ ⟨f y.1, trivial, y.2⟩, by fun_prop⟩
 
 /-- **Disc data of a branched covering**: disc neighbourhoods `V P` of the points over `S`, and
-radii `ρ s` such that `f` maps `V P` into `B(f P, ρ (f P))`, these discs contain no other point of
-`S`, and `f⁻¹(B(s, ρ s))` is covered by the pairwise disjoint `V P` with `f P = s`. -/
+radii `σ s ≤ ρ s` such that `f` maps `V P` into `B(f P, ρ (f P))`, these discs contain no other
+point of `S`, and `f⁻¹(B(s, σ s))` is covered by the pairwise disjoint `V P` with `f P = s`.
+
+(The two radii make the data constructible from disc charts and properness alone,
+`BranchedCover.nonempty_discData`: with a single radius, `V P` would have to be a whole
+connected component of `f⁻¹(B(s, ρ))`.) -/
 structure DiscData where
   /-- The disc neighbourhoods. -/
   V : X → Set X
@@ -137,7 +141,11 @@ structure DiscData where
   ρ_pos : ∀ s ∈ S, 0 < ρ s
   ρ_isolated : ∀ s ∈ S, ∀ s' ∈ S, s' ∈ ball s (ρ s) → s' = s
   mapsTo : ∀ P, f P ∈ S → ∀ y ∈ V P, f y ∈ ball (f P) (ρ (f P))
-  cover : ∀ y, ∀ s ∈ S, f y ∈ ball s (ρ s) → ∃ P, f P = s ∧ y ∈ V P
+  /-- The inner radii around the points of `S`. -/
+  σ : ℂ → ℝ
+  σ_pos : ∀ s ∈ S, 0 < σ s
+  σ_le : ∀ s ∈ S, σ s ≤ ρ s
+  cover : ∀ y, ∀ s ∈ S, f y ∈ ball s (σ s) → ∃ P, f P = s ∧ y ∈ V P
 
 variable {f S}
 
@@ -208,9 +216,9 @@ theorem exists_mem_conjLoops_of_eq (hψ : ∀ s : S, IsLoopAround (ψ.symm (Free
     ∃ P, f P = a ∧ g ∈ VanKampen.conjLoops Subtype.val (D.V P) e₀.1 := by
   obtain ⟨s, hs⟩ := a
   obtain ⟨r, h, δ, hX⟩ := hψ ⟨s, hs⟩
-  -- shrink the circle into `B(s, ρ s)`
-  have hρ := D.ρ_pos s hs
-  set r' := min r (D.ρ s / 2) with hr'
+  -- shrink the circle into `B(s, σ s)`
+  have hρ := D.σ_pos s hs
+  set r' := min r (D.σ s / 2) with hr'
   have h' : Admissible Set.univ S s r' := ⟨lt_min h.pos (half_pos hρ), subset_univ _,
     fun s' hs' hb ↦ h.isolated s' hs' (closedBall_subset_closedBall (min_le_left _ _) hb)⟩
   obtain ⟨β, hβ⟩ := circleArrow_eq_conj h h'
@@ -253,7 +261,7 @@ theorem exists_mem_conjLoops_of_eq (hψ : ∀ s : S, IsLoopAround (ψ.symm (Free
   let cpk : Path (circleBase h') (circleBase h') := (circlePath h').zpowLoop k
   have hcpk : (⟦cpk⟧ : FundamentalGroupoid.mk (circleBase h') ⟶ _) = C' ^ k :=
     (circlePath h').class_zpowLoop k
-  have hcpkB : ∀ t, (cpk t : ℂ) ∈ ball s (D.ρ s) := by
+  have hcpkB : ∀ t, (cpk t : ℂ) ∈ ball s (D.σ s) := by
     intro t
     obtain ⟨t', ht'⟩ := (circlePath h').mem_range_zpowLoop k t
     rw [← ht', coe_circlePath, mem_ball, dist_eq_norm, norm_circleFun_sub s h'.pos.le]
@@ -270,7 +278,7 @@ theorem exists_mem_conjLoops_of_eq (hψ : ∀ s : S, IsLoopAround (ψ.symm (Free
     rw [hcpk]
     exact congrArg Subtype.val hmono
   let L : Path e₁.1 e₁.1 := ⟨L₀, cov.liftPath_zero .., hL₁⟩
-  have hLf : ∀ t, f (L t).1 ∈ ball s (D.ρ s) := fun t ↦ by
+  have hLf : ∀ t, f (L t).1 ∈ ball s (D.σ s) := fun t ↦ by
     have := hL₀ t
     have hfe : (punctMap f S (L₀ t) : ℂ) = f (L₀ t).1 := rfl
     change f (L₀ t).1 ∈ _
