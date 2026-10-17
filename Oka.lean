@@ -727,6 +727,7 @@ import Oka.Topology.Algebra.Polynomial
 import Oka.Topology.Category.TopCat.Opens
 import Oka.Topology.Connected.Clopen
 import Oka.Topology.Covering.Basic
+import Oka.Topology.Covering.BranchedFill
 import Oka.Topology.Covering.FreeRank
 import Oka.Topology.Covering.LocallyContractible
 import Oka.Topology.Covering.Monodromy
@@ -776,6 +777,7 @@ import Oka.Topology.VanKampen.Cover
 import Oka.Topology.VanKampen.Fill
 import Oka.Topology.VanKampen.FillFinite
 import Oka.Topology.VanKampen.FillPoint
+import Oka.Topology.VanKampen.LoopsAround
 import Oka.Topology.VanKampen.PathClassHom
 import Oka.Topology.VanKampen.PuncturedLoops
 import Oka.Topology.VanKampen.PuncturedPlane
