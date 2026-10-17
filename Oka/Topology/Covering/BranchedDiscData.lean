@@ -219,7 +219,8 @@ theorem isConnected_punct [ConnectedSpace X] : IsConnected {y : X | f y ∉ S} :
   have hdisc : ∀ P, f P ∈ S → (D.V P \ {P}).Nonempty ∧ IsConnected (D.V P \ {P}) ∧
       D.V P \ {P} ⊆ O := fun P hP ↦
     ⟨(exists_mem_disc_ne_of_mem D hP isOpen_univ (mem_univ P)).imp fun _ h ↦ h.1,
-      (VanKampen.isPathConnected_diff_of_disc (D.e P hP) (D.mem P hP) (D.e_center P hP)).isConnected,
+      (VanKampen.isPathConnected_diff_of_disc (D.e P hP) (D.mem P hP)
+        (D.e_center P hP)).isConnected,
       fun _ hy ↦ notMem_of_mem_disc_diff D hP hy⟩
   have hne : O.Nonempty := by
     obtain ⟨x⟩ := (inferInstance : Nonempty X)

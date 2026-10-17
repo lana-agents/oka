@@ -23,7 +23,8 @@ sense of `Oka/Topology/Covering/BranchedDiscData.lean`:
 * `ComplexAnalytic.exists_chart_analytification`: hence every point of `V^an` lies in the source
   of a chart `V^an ⇀ ℂ`;
 * `ComplexAnalytic.isClosedMap_coordFun`, `ComplexAnalytic.finite_coordFun_fiber`: `z^an` is
-  closed with finite fibres (`s` finite, `ComplexAnalytic.isFinite_analytification_map_of_isFinite`);
+  closed with finite fibres (`s` finite,
+  `ComplexAnalytic.isFinite_analytification_map_of_isFinite`);
 * `ComplexAnalytic.isLocalHomeomorphOn_coordFun`: `z^an` is a local homeomorphism outside
   `(z^an)⁻¹(S)` (étale morphisms analytify to local isomorphisms).
 
