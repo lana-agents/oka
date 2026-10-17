@@ -28,6 +28,9 @@ sense of `Oka/Topology/Covering/BranchedDiscData.lean`:
 * `ComplexAnalytic.isLocalHomeomorphOn_coordFun`: `z^an` is a local homeomorphism outside
   `(z^an)⁻¹(S)` (étale morphisms analytify to local isomorphisms).
 
+The points of `V^an` over `c ∈ ℂ` are the maximal ideals of `Γ(V, 𝒪_V)` containing `z - c`
+(`ComplexAnalytic.coordFunFiberEquiv`).
+
 Hence (`ComplexAnalytic.exists_fundamentalGroup_analytification_mulEquiv_freeGroup`), for `V`
 connected, **`π₁(V^an)` is free of rank `d (|S| - 1) + 1 - #(z^an)⁻¹(S)`**, `d` the number of
 points of a fibre of `z^an` over `ℂ ∖ S`. For `V = X ∖ D` and `z` a Belyi function with pole set
@@ -223,6 +226,38 @@ theorem isLocalHomeomorphOn_coordFun [IsAffine V.obj.left] (S : Finset ℂ)
   intro a ha h0
   rw [sub_eq_zero] at h0
   exact hv (h0 ▸ ha)
+
+/-- On an affine `V`, a point of `V^an` is determined by its ideal of functions vanishing at it. -/
+theorem idealOfPoint_injective [IsAffine V.obj.left] : Function.Injective (idealOfPoint V) := by
+  intro v w h
+  rw [idealOfPoint_eq, idealOfPoint_eq] at h
+  have h' : V.obj.left.toSpecΓ.base ((analytificationπLRS V).base v) =
+      V.obj.left.toSpecΓ.base ((analytificationπLRS V).base w) := PrimeSpectrum.ext h
+  have hinj : Function.Injective V.obj.left.toSpecΓ.base :=
+    (Scheme.homeoOfIso (asIso V.obj.left.toSpecΓ)).injective
+  exact analytificationπ_base_injective V (hinj h')
+
+/-- **The points of `V^an` over `c` are the maximal ideals of `Γ(V, 𝒪_V)` containing `z - c`**,
+for `V` affine. -/
+noncomputable def coordFunFiberEquiv [IsAffine V.obj.left] (c : ℂ) :
+    coordFun s hs ⁻¹' {c} ≃
+      {M : MaximalSpectrum Γ(V.obj.left, ⊤) //
+        s (MvPolynomial.X 0 - MvPolynomial.C ⟨c⟩) ∈ M.asIdeal} :=
+  have hmem : ∀ v, coordFun s hs v = c ↔
+      s (MvPolynomial.X 0 - MvPolynomial.C ⟨c⟩) ∈ idealOfPoint V v := fun v ↦ by
+    rw [← ker_evalPoint, RingHom.mem_ker, evalPoint_eq_eval_coordFun s hs]
+    simp only [map_sub, MvPolynomial.map_X, MvPolynomial.map_C, MvPolynomial.eval_X,
+      MvPolynomial.eval_C]
+    exact sub_eq_zero.symm
+  Equiv.ofBijective
+    (fun v ↦ ⟨⟨idealOfPoint V v.1, isMaximal_idealOfPoint V v.1⟩, (hmem v.1).1 v.2⟩)
+    ⟨fun v w h ↦ Subtype.ext (idealOfPoint_injective (V := V)
+        (congrArg (fun M ↦ M.1.asIdeal) h)),
+      fun M ↦ by
+        haveI := M.1.isMaximal
+        obtain ⟨v, hv⟩ := exists_idealOfPoint_eq V M.1.asIdeal
+        refine ⟨⟨v, (hmem v).2 (hv ▸ M.2)⟩, Subtype.ext ?_⟩
+        exact MaximalSpectrum.ext hv⟩
 
 /-- **`π₁` of a smooth connected affine curve with a branched coordinate is free.** Let `V` be
 affine, connected and smooth of relative dimension one over `ℂ`, and `s : ℂ[X₀] → Γ(V, 𝒪_V)`
