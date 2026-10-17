@@ -394,6 +394,7 @@ import Oka.Analytification.MonicHypersurface
 import Oka.Analytification.OpenBaseFiniteness
 import Oka.Analytification.OverSpec
 import Oka.Analytification.Pi1.BranchedCoordinate
+import Oka.Analytification.Pi1.BranchedCoordinateSpec
 import Oka.Analytification.Pi1.Comparison
 import Oka.Analytification.Pi1.ConnectedCover
 import Oka.Analytification.Pi1.Fiber
