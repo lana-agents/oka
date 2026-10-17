@@ -732,6 +732,7 @@ import Oka.Topology.Covering.Monodromy
 import Oka.Topology.Covering.PathCover
 import Oka.Topology.Covering.Quotient
 import Oka.Topology.Covering.Separated
+import Oka.Topology.Covering.Stabilizer
 import Oka.Topology.Homeomorph.Lemmas
 import Oka.Topology.Homotopy.LocallyContractible
 import Oka.Topology.IrreducibleChain
