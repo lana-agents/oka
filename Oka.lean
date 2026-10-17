@@ -774,6 +774,7 @@ import Oka.Topology.Sheaves.Stalks
 import Oka.Topology.VanKampen.Basic
 import Oka.Topology.VanKampen.Cover
 import Oka.Topology.VanKampen.Fill
+import Oka.Topology.VanKampen.FillFinite
 import Oka.Topology.VanKampen.FillPoint
 import Oka.Topology.VanKampen.PathClassHom
 import Oka.Topology.VanKampen.PuncturedLoops
