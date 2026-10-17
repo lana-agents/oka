@@ -36,4 +36,4 @@ rev = "3539e2a12dd3470c057a4eb531dc3fd627d4c97b"
 [[require]]
 name = "pi1"
 git = "https://github.com/lana-agents/pi1"
-rev = "23fc12c09d107505f9dba0a3f4d0ab55c571c9a4"
+rev = "67456a68126079eb05681b6f5f3a9505e26fb266"
