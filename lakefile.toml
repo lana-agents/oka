@@ -31,9 +31,10 @@ rev = "3539e2a12dd3470c057a4eb531dc3fd627d4c97b"
 
 # The étale fundamental group of a scheme (`AlgebraicGeometry.FiniteEtale.galoisCategory`,
 # `AlgebraicGeometry.FiniteEtale.fiber`): the algebraic side of the comparison theorem in
-# `Oka/Analytification/Pi1/`. Pinned at `wp-pi1-warnings` (ca7def9, the commit the IUT development
-# uses, plus a cosmetic commit that makes pi1 build under `--wfail`).
+# `Oka/Analytification/Pi1/`, and the Reidemeister–Schreier / surface-group results used in
+# `Oka/Topology/Covering/`. Pinned at pi1 master (1f01e28, which has
+# `Pi1.ReidemeisterSchreier.exists_quotient_sup_mulEquiv_surfaceGroup_zero`).
 [[require]]
 name = "pi1"
 git = "https://github.com/lana-agents/pi1"
-rev = "147aa53b824d2665fefa8f6759ae7b2b6ce391df"
+rev = "1f01e28501d2a0a5fd6851ac26f25fd0c7783cdd"
