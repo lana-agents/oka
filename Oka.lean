@@ -785,6 +785,7 @@ import Oka.Topology.VanKampen.LoopsAround
 import Oka.Topology.VanKampen.PathClassHom
 import Oka.Topology.VanKampen.PuncturedLoops
 import Oka.Topology.VanKampen.PuncturedPlane
+import Oka.Topology.VanKampen.ZeroOneBasis
 import Oka.UFD
 import Oka.UliftCoord
 import Oka.Uniformization.Cayley
