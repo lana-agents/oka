@@ -394,6 +394,7 @@ import Oka.Analytification.MonicHypersurface
 import Oka.Analytification.OpenBaseFiniteness
 import Oka.Analytification.OverSpec
 import Oka.Analytification.Pi1.BranchedCoordinate
+import Oka.Analytification.Pi1.BranchedCoordinateProper
 import Oka.Analytification.Pi1.BranchedCoordinateSpec
 import Oka.Analytification.Pi1.Comparison
 import Oka.Analytification.Pi1.ConnectedCover
@@ -731,7 +732,9 @@ import Oka.Topology.Connected.Clopen
 import Oka.Topology.Covering.Basic
 import Oka.Topology.Covering.BranchedDiscData
 import Oka.Topology.Covering.BranchedFill
+import Oka.Topology.Covering.BranchedFillInfty
 import Oka.Topology.Covering.BranchedOrbits
+import Oka.Topology.Covering.BranchedSurface
 import Oka.Topology.Covering.FreeRank
 import Oka.Topology.Covering.LocallyContractible
 import Oka.Topology.Covering.Monodromy
@@ -778,6 +781,7 @@ import Oka.Topology.Sheaves.SectionModelCech
 import Oka.Topology.Sheaves.Stalks
 import Oka.Topology.VanKampen.Basic
 import Oka.Topology.VanKampen.Cover
+import Oka.Topology.VanKampen.ExteriorLoops
 import Oka.Topology.VanKampen.Fill
 import Oka.Topology.VanKampen.FillFinite
 import Oka.Topology.VanKampen.FillPoint
